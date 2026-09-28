@@ -1,18 +1,17 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Event observer collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Framework\Event\Observer;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Collection
 {
@@ -60,7 +59,8 @@ class Collection
      */
     public function addObserver(\Magento\Framework\Event\Observer $observer)
     {
-        $this->_observers[$observer->getName()] = $observer;
+        $observerName = $observer->getName() ?? '';
+        $this->_observers[$observerName] = $observer;
         return $this;
     }
 

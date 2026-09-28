@@ -1,14 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option;
 
 /**
  * Bundle selection product block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Search extends \Magento\Backend\Block\Widget
 {
@@ -18,6 +16,8 @@ class Search extends \Magento\Backend\Block\Widget
     protected $_template = 'Magento_Bundle::product/edit/bundle/option/search.phtml';
 
     /**
+     * Initialise the block
+     *
      * @return void
      */
     protected function _construct()

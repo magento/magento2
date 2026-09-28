@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Checkout\Block\Cart\Item;
 
@@ -11,6 +11,7 @@ namespace Magento\Checkout\Block\Cart\Item;
  *
  * @api
  * @module     Checkout
+ * @since 100.0.2
  */
 class Configure extends \Magento\Framework\View\Element\Template
 {

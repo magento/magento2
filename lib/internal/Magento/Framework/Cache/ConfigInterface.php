@@ -1,15 +1,16 @@
 <?php
 /**
- * Cache configuration model. Provides cache configuration data to the application
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Cache;
 
 /**
  * Interface \Magento\Framework\Cache\ConfigInterface
  *
+ * @api
  */
 interface ConfigInterface
 {

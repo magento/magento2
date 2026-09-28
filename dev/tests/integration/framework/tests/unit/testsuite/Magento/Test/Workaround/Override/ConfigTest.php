@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Test\Workaround\Override;
 
 use Magento\TestFramework\Workaround\Override\Config;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Provide tests for \Magento\TestFramework\Workaround\Override\Config.
@@ -27,17 +28,16 @@ class ConfigTest extends TestCase
 
         $this->object = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getClassConfig', 'getMethodConfig', 'getDataSetConfig'])
+            ->onlyMethods(['getClassConfig', 'getMethodConfig', 'getDataSetConfig'])
             ->getMock();
     }
 
     /**
-     * @dataProvider skipValuesProvider
-     *
      * @param bool $skip
      * @param string $skipMessage
      * @return void
      */
+    #[DataProvider('skipValuesProvider')]
     public function testSkippedClass(bool $skip, string $skipMessage): void
     {
         $this->object->expects($this->once())
@@ -51,13 +51,12 @@ class ConfigTest extends TestCase
         }
     }
 
-    /**
-     * @dataProvider skipValuesProvider
-     *
+    /**     *
      * @param bool $skip
      * @param string $skipMessage
      * @return void
      */
+    #[DataProvider('skipValuesProvider')]
     public function testSkippedMethod(bool $skip, string $skipMessage): void
     {
         $this->object->expects($this->once())
@@ -76,12 +75,11 @@ class ConfigTest extends TestCase
     }
 
     /**
-     * @dataProvider skipValuesProvider
-     *
      * @param bool $skip
      * @param string $skipMessage
      * @return void
      */
+    #[DataProvider('skipValuesProvider')]
     public function testSkippedDataSet(bool $skip, string $skipMessage): void
     {
         $this->object->expects($this->once())
@@ -106,7 +104,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function skipValuesProvider(): array
+    public static function skipValuesProvider(): array
     {
         return [
             'skipped' => [

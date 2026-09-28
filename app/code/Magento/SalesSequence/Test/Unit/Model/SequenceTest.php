@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,8 @@ namespace Magento\SalesSequence\Test\Unit\Model;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Adapter\Pdo\Mysql;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\SalesSequence\Model\Meta;
 use Magento\SalesSequence\Model\Profile;
@@ -18,6 +20,8 @@ use PHPUnit\Framework\TestCase;
 
 class SequenceTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var AdapterInterface|MockObject
      */
@@ -43,43 +47,47 @@ class SequenceTest extends TestCase
      */
     private $sequence;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
-        $this->meta = $this->getMockBuilder(Meta::class)
-            ->addMethods(['getSequenceTable', 'getActiveProfile'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->profile = $this->getMockBuilder(Profile::class)
-            ->addMethods(['getSuffix', 'getPrefix', 'getStep', 'getStartValue'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->resource = $this->createPartialMock(ResourceConnection::class, ['getConnection']);
-        $this->connectionMock = $this->getMockForAbstractClass(
-            AdapterInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['insert', 'lastInsertId']
+        $this->meta = $this->createPartialMockWithReflection(
+            Meta::class,
+            ['getSequenceTable', 'getActiveProfile']
         );
+        $this->profile = $this->createPartialMockWithReflection(
+            Profile::class,
+            ['getSuffix', 'getPrefix', 'getStep', 'getStartValue']
+        );
+        $this->resource = $this->createPartialMock(ResourceConnection::class, ['getConnection']);
+        $this->connectionMock = $this->getMockBuilder(Mysql::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['insert', 'lastInsertId'])
+            ->getMock();
         $this->resource->expects($this->any())->method('getConnection')->willReturn($this->connectionMock);
         $helper = new ObjectManager($this);
         $this->sequence = $helper->getObject(
             Sequence::class,
             [
                 'meta' => $this->meta,
-                'resource' => $this->resource,
+                'resource' => $this->resource
             ]
         );
     }
 
-    public function testSequenceInitialNull()
+    /**
+     * @return void
+     */
+    public function testSequenceInitialNull(): void
     {
         $this->assertNull($this->sequence->getCurrentValue());
     }
 
-    public function testSequenceNextValue()
+    /**
+     * @return void
+     */
+    public function testSequenceNextValue(): void
     {
         $step = 777;
         $startValue = 3;
@@ -106,24 +114,38 @@ class SequenceTest extends TestCase
             $this->sequenceParameters()->prefix
         );
         $this->profile->expects($this->exactly(3))->method('getStep')->willReturn($step);
-        $lastInsertId = $this->nextIncrementStep($lastInsertId, 780);
-        $lastInsertId = $this->nextIncrementStep($lastInsertId, 1557);
-        $this->nextIncrementStep($lastInsertId, 2334);
+        $withArgs = $willReturnArgs = [];
+
+        $withArgs[] = [$this->sequenceParameters()->testTable];
+        $willReturnArgs[] = ++$lastInsertId;
+
+        $withArgs[] = [$this->sequenceParameters()->testTable];
+        $willReturnArgs[] = ++$lastInsertId;
+
+        $withArgs[] = [$this->sequenceParameters()->testTable];
+        $willReturnArgs[] = ++$lastInsertId;
+
+        $this->connectionMock
+            ->method('lastInsertId')
+            ->willReturnCallback(function (...$withArgs) use ($willReturnArgs) {
+                if (!empty($withArgs)) {
+                    static $callCount = 0;
+                    $returnValue = $willReturnArgs[$callCount];
+                    $callCount++;
+                    return $returnValue;
+                }
+            });
+
+        $this->nextIncrementStep(780);
+        $this->nextIncrementStep(1557);
+        $this->nextIncrementStep(2334);
     }
 
     /**
-     * @param $lastInsertId
      * @param $sequenceNumber
-     * @return mixed
      */
-    private function nextIncrementStep($lastInsertId, $sequenceNumber)
+    private function nextIncrementStep($sequenceNumber)
     {
-        $lastInsertId++;
-        $this->connectionMock->expects($this->at(1))->method('lastInsertId')->with(
-            $this->sequenceParameters()->testTable
-        )->willReturn(
-            $lastInsertId
-        );
         $this->assertEquals(
             sprintf(
                 Sequence::DEFAULT_PATTERN,
@@ -133,13 +155,12 @@ class SequenceTest extends TestCase
             ),
             $this->sequence->getNextValue()
         );
-        return $lastInsertId;
     }
 
     /**
      * @return \stdClass
      */
-    private function sequenceParameters()
+    private function sequenceParameters(): \stdClass
     {
         $data = new \stdClass();
         $data->prefix = 'AA-';

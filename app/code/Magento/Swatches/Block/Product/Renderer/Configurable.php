@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types = 1);
 namespace Magento\Swatches\Block\Product\Renderer;
@@ -81,7 +81,7 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
     /**
      * Indicate if product has one or more Swatch attributes
      *
-     * @deprecated 100.1.5 unused
+     * @deprecated 100.1.0 unused
      *
      * @var boolean
      */
@@ -125,8 +125,8 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
         SwatchData $swatchHelper,
         Media $swatchMediaHelper,
         array $data = [],
-        SwatchAttributesProvider $swatchAttributesProvider = null,
-        UrlBuilder $imageUrlBuilder = null
+        ?SwatchAttributesProvider $swatchAttributesProvider = null,
+        ?UrlBuilder $imageUrlBuilder = null
     ) {
         $this->swatchHelper = $swatchHelper;
         $this->swatchMediaHelper = $swatchMediaHelper;
@@ -250,7 +250,7 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
     /**
      * Init isProductHasSwatchAttribute.
      *
-     * @deprecated 100.1.5 Method isProductHasSwatchAttribute() is used instead of this.
+     * @deprecated 100.2.0 Method isProductHasSwatchAttribute() is used instead of this.
      *
      * @codeCoverageIgnore
      * @return void
@@ -427,7 +427,10 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
                 $productAttribute = $attribute->getProductAttribute();
                 $productAttributeId = $productAttribute->getId();
                 if (isset($attributeData[$productAttributeId])) {
-                    $ids[$product->getData($productAttribute->getAttributeCode())] = 1;
+                    $attributeValue = $product->getData($productAttribute->getAttributeCode());
+                    if ($attributeValue !== null) {
+                        $ids[$attributeValue] = 1;
+                    }
                 }
             }
         }
@@ -510,6 +513,7 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
      * Get Swatch image size config data.
      *
      * @return string
+     * @since 100.2.5
      */
     public function getJsonSwatchSizeConfig()
     {

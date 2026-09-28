@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\EntityManager;
@@ -64,7 +64,7 @@ class EntityMetadata implements EntityMetadataInterface
         ResourceConnection $resourceConnection,
         $entityTableName,
         $identifierField,
-        SequenceInterface $sequence = null,
+        ?SequenceInterface $sequence = null,
         $eavEntityType = null,
         $connectionName = null,
         $entityContext = []

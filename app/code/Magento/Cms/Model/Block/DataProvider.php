@@ -1,8 +1,10 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
+
 namespace Magento\Cms\Model\Block;
 
 use Magento\Cms\Model\ResourceModel\Block\CollectionFactory;
@@ -10,7 +12,7 @@ use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Ui\DataProvider\Modifier\PoolInterface;
 
 /**
- * Class DataProvider
+ * CMS block data provider for admin UI forms.
  */
 class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
 {
@@ -49,7 +51,7 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
         DataPersistorInterface $dataPersistor,
         array $meta = [],
         array $data = [],
-        PoolInterface $pool = null
+        ?PoolInterface $pool = null
     ) {
         $this->collection = $blockCollectionFactory->create();
         $this->dataPersistor = $dataPersistor;
@@ -69,14 +71,20 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
         $items = $this->collection->getItems();
         /** @var \Magento\Cms\Model\Block $block */
         foreach ($items as $block) {
-            $this->loadedData[$block->getId()] = $block->getData();
+            $blockId = $block->getId();
+            if ($blockId !== null) {
+                $this->loadedData[$blockId] = $block->getData();
+            }
         }
 
         $data = $this->dataPersistor->get('cms_block');
         if (!empty($data)) {
             $block = $this->collection->getNewEmptyItem();
             $block->setData($data);
-            $this->loadedData[$block->getId()] = $block->getData();
+            $blockId = $block->getId();
+            if ($blockId !== null) {
+                $this->loadedData[$blockId] = $block->getData();
+            }
             $this->dataPersistor->clear('cms_block');
         }
 

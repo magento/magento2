@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class JsonTest extends TestCase
 {
@@ -27,9 +28,8 @@ class JsonTest extends TestCase
 
     /**
      * @param string|int|float|bool|array|null $value
-     * @param string $expected
-     * @dataProvider serializeDataProvider
-     */
+     * @param string $expected     */
+    #[DataProvider('serializeDataProvider')]
     public function testSerialize($value, $expected)
     {
         $this->assertEquals(
@@ -41,7 +41,7 @@ class JsonTest extends TestCase
     /**
      * @return array
      */
-    public function serializeDataProvider()
+    public static function serializeDataProvider()
     {
         $dataObject = new DataObject(['something']);
         return [
@@ -58,9 +58,8 @@ class JsonTest extends TestCase
 
     /**
      * @param string $value
-     * @param string|int|float|bool|array|null $expected
-     * @dataProvider unserializeDataProvider
-     */
+     * @param string|int|float|bool|array|null $expected     */
+    #[DataProvider('unserializeDataProvider')]
     public function testUnserialize($value, $expected)
     {
         $this->assertEquals(
@@ -72,7 +71,7 @@ class JsonTest extends TestCase
     /**
      * @return array
      */
-    public function unserializeDataProvider()
+    public static function unserializeDataProvider()
     {
         return [
             ['""', ''],
@@ -94,25 +93,29 @@ class JsonTest extends TestCase
     }
 
     /**
-     * @dataProvider unserializeExceptionDataProvider
-     */
-    public function testUnserializeException($value)
+     * Method to test unserialize exception.
+     *
+     * @param string|bool|null $value
+     * @param string $errorMessage
+     *     */
+    #[DataProvider('unserializeExceptionDataProvider')]
+    public function testUnserializeException($value, $errorMessage)
     {
         $this->expectException('InvalidArgumentException');
-        $this->expectExceptionMessage('Unable to unserialize value.');
+        $this->expectExceptionMessage($errorMessage);
         $this->json->unserialize($value);
     }
 
     /**
      * @return array
      */
-    public function unserializeExceptionDataProvider()
+    public static function unserializeExceptionDataProvider()
     {
         return [
-            [''],
-            [false],
-            [null],
-            ['{']
+            ['', 'Unable to unserialize value.'],
+            [false, 'Unable to unserialize value.'],
+            [null, 'Unable to unserialize value. Error: Parameter must be a string type, null given.'],
+            ['{', 'Unable to unserialize value.']
         ];
     }
 }

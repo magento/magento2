@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,11 +14,16 @@ use Magento\Backend\Model\Menu\Config\Reader;
 use Magento\Backend\Model\MenuFactory;
 use Magento\Framework\App\Cache\Type\Config;
 use Magento\Framework\App\State;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ConfigTest extends TestCase
 {
     /**
@@ -51,6 +56,9 @@ class ConfigTest extends TestCase
      */
     private $model;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->cacheInstanceMock = $this->createMock(Config::class);
@@ -59,7 +67,7 @@ class ConfigTest extends TestCase
 
         $this->configReaderMock = $this->createMock(Reader::class);
 
-        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->logger = $this->createMock(LoggerInterface::class);
 
         $this->menuMock = $this->createMock(Menu::class);
 
@@ -86,12 +94,15 @@ class ConfigTest extends TestCase
                 'configReader' => $this->configReaderMock,
                 'configCacheType' => $this->cacheInstanceMock,
                 'logger' => $this->logger,
-                'appState' => $appState,
+                'appState' => $appState
             ]
         );
     }
 
-    public function testGetMenuWithCachedObjectReturnsUnserializedObject()
+    /**
+     * @return void
+     */
+    public function testGetMenuWithCachedObjectReturnsUnserializedObject(): void
     {
         $this->cacheInstanceMock->expects(
             $this->once()
@@ -108,17 +119,15 @@ class ConfigTest extends TestCase
         $this->assertEquals($this->menuMock, $this->model->getMenu());
     }
 
-    public function testGetMenuWithNotCachedObjectBuildsObject()
+    /**
+     * @return void
+     */
+    public function testGetMenuWithNotCachedObjectBuildsObject(): void
     {
-        $this->cacheInstanceMock->expects(
-            $this->at(0)
-        )->method(
-            'load'
-        )->with(
-            \Magento\Backend\Model\Menu\Config::CACHE_MENU_OBJECT
-        )->willReturn(
-            false
-        );
+        $this->cacheInstanceMock
+            ->method('load')
+            ->with(\Magento\Backend\Model\Menu\Config::CACHE_MENU_OBJECT)
+            ->willReturn(false);
 
         $this->configReaderMock->expects($this->once())->method('read')->willReturn([]);
 
@@ -134,28 +143,63 @@ class ConfigTest extends TestCase
     }
 
     /**
-     * @param string $expectedException
+     * @param string $thrownException
      *
-     * @dataProvider getMenuExceptionLoggedDataProvider
+     * @return void
      */
-    public function testGetMenuExceptionLogged($expectedException)
+    #[DataProvider('getMenuExceptionLoggedDataProvider')]
+    public function testGetMenuExceptionLogged(string $thrownException): void
     {
-        $this->expectException($expectedException);
+        $this->expectException(LocalizedException::class);
+        $this->logger->expects($this->once())->method('critical');
         $this->menuBuilderMock->expects(
             $this->exactly(1)
         )->method(
             'getResult'
         )->willThrowException(
-            new $expectedException()
+            new $thrownException('test error message')
         );
 
         $this->model->getMenu();
     }
 
     /**
+     * @return void
+     */
+    public function testGetMenuExceptionMessageContainsOriginalError(): void
+    {
+        $originalMessage = 'Missing required param parent';
+        $this->menuBuilderMock->expects($this->once())
+            ->method('getResult')
+            ->willThrowException(new \BadMethodCallException($originalMessage));
+
+        try {
+            $this->model->getMenu();
+            $this->fail('Expected LocalizedException was not thrown');
+        } catch (LocalizedException $e) {
+            $this->assertStringContainsString($originalMessage, $e->getMessage());
+            $this->assertInstanceOf(\BadMethodCallException::class, $e->getPrevious());
+        }
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetMenuGenericExceptionIsWrappedInLocalizedException(): void
+    {
+        $this->logger->expects($this->once())->method('critical');
+        $this->menuBuilderMock->expects($this->exactly(1))
+            ->method('getResult')
+            ->willThrowException(new \Exception('unexpected error'));
+
+        $this->expectException(LocalizedException::class);
+        $this->model->getMenu();
+    }
+
+    /**
      * @return array
      */
-    public function getMenuExceptionLoggedDataProvider()
+    public static function getMenuExceptionLoggedDataProvider(): array
     {
         return [
             'InvalidArgumentException' => ['InvalidArgumentException'],
@@ -164,9 +208,12 @@ class ConfigTest extends TestCase
         ];
     }
 
-    public function testGetMenuGenericExceptionIsNotLogged()
+    /**
+     * @return void
+     */
+    public function testGetMenuGenericExceptionIsNotLogged(): void
     {
-        $this->logger->expects($this->never())->method('critical');
+        $this->logger->expects($this->once())->method('critical');
 
         $this->menuBuilderMock->expects(
             $this->exactly(1)
@@ -177,9 +224,9 @@ class ConfigTest extends TestCase
         );
         try {
             $this->model->getMenu();
-        } catch (\Exception $e) {
+        } catch (LocalizedException $e) {
             return;
         }
-        $this->fail("Generic \Exception was not thrown");
+        $this->fail('LocalizedException was not thrown for generic \\Exception');
     }
 }

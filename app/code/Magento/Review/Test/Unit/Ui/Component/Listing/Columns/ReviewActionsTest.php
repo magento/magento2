@@ -1,16 +1,16 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Review\Test\Unit\Ui\Component\Listing\Columns;
 
-use Magento\Catalog\Test\Unit\Ui\Component\Listing\Columns\AbstractColumnTest;
+use Magento\Catalog\Test\Unit\Ui\Component\Listing\Columns\AbstractColumnTestCase;
 use Magento\Review\Ui\Component\Listing\Columns\ReviewActions;
 
-class ReviewActionsTest extends AbstractColumnTest
+class ReviewActionsTest extends AbstractColumnTestCase
 {
     /**
      * {@inheritdoc}

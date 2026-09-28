@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -14,6 +14,7 @@ use Magento\Framework\View\Element\Block\ArgumentInterface;
  * Swagger Schema Type.
  *
  * @api
+ * @since 100.2.4
  */
 interface SchemaTypeInterface extends ArgumentInterface
 {
@@ -21,6 +22,7 @@ interface SchemaTypeInterface extends ArgumentInterface
      * Retrieve the available types of Swagger schema.
      *
      * @return string
+     * @since 100.2.4
      */
     public function getCode();
 
@@ -29,6 +31,7 @@ interface SchemaTypeInterface extends ArgumentInterface
      *
      * @param  string|null $store
      * @return string
+     * @since 100.2.4
      */
     public function getSchemaUrlPath($store = null);
 }

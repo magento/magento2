@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -60,21 +60,21 @@ class CollectionFilterTest extends TestCase
 
         $this->collectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
-            ->setMethods(['addSearchFilter'])
+            ->onlyMethods(['addSearchFilter'])
             ->getMock();
         $this->categoryMock = $this->getMockBuilder(Category::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->queryFactoryMock = $this->getMockBuilder(QueryFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['get'])
+            ->onlyMethods(['get'])
             ->getMock();
         $this->collectionFilterMock = $this->getMockBuilder(CollectionFilter::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->queryMock = $this->getMockBuilder(Query::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isQueryTextShort', 'getQueryText'])
+            ->onlyMethods(['isQueryTextShort', 'getQueryText'])
             ->getMock();
 
         $this->plugin = $this->objectManager->getObject(

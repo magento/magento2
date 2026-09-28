@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,7 +9,7 @@ namespace Magento\Security\Test\Unit\Observer;
 
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Security\Model\ResourceModel\UserExpiration;
 use Magento\Security\Model\UserExpirationFactory;
 use Magento\Security\Observer\AfterAdminUserSave;
@@ -22,6 +22,7 @@ use PHPUnit\Framework\TestCase;
  */
 class AfterAdminUserSaveTest extends TestCase
 {
+    use MockCreationTrait;
 
     /**
      * @var MockObject|UserExpirationFactory
@@ -37,11 +38,6 @@ class AfterAdminUserSaveTest extends TestCase
      * @var AfterAdminUserSave
      */
     private $observer;
-
-    /**
-     * @var ObjectManager
-     */
-    private $objectManager;
 
     /**
      * @var MockObject|Observer
@@ -65,43 +61,44 @@ class AfterAdminUserSaveTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->objectManager = new ObjectManager($this);
-
         $this->userExpirationFactoryMock = $this->createMock(UserExpirationFactory::class);
         $this->userExpirationResourceMock = $this->createPartialMock(
             UserExpiration::class,
             ['load', 'save', 'delete']
         );
-        $this->observer = $this->objectManager->getObject(
-            AfterAdminUserSave::class,
-            [
-                'userExpirationFactory' => $this->userExpirationFactoryMock,
-                'userExpirationResource' => $this->userExpirationResourceMock,
-            ]
+        $this->observer = new AfterAdminUserSave(
+            $this->userExpirationFactoryMock,
+            $this->userExpirationResourceMock
         );
         $this->eventObserverMock = $this->createPartialMock(Observer::class, ['getEvent']);
-        $this->eventMock = $this->getMockBuilder(Event::class)
-            ->addMethods(['getObject'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->userMock = $this->getMockBuilder(User::class)
-            ->addMethods(['getExpiresAt'])
-            ->onlyMethods(['getId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->eventMock = $this->createPartialMockWithReflection(
+            Event::class,
+            ['getObject']
+        );
+        $this->userMock = $this->createPartialMockWithReflection(
+            User::class,
+            ['getExpiresAt', 'getId', 'hasData']
+        );
         $this->userExpirationMock = $this->createPartialMock(
             \Magento\Security\Model\UserExpiration::class,
             ['getId', 'getExpiresAt', 'setId', 'setExpiresAt']
         );
     }
 
-    public function testSaveNewUserExpiration()
+    /**
+     * @return void
+     */
+    public function testSaveNewUserExpiration(): void
     {
         $userId = '123';
         $this->eventObserverMock->expects(static::once())->method('getEvent')->willReturn($this->eventMock);
         $this->eventMock->expects(static::once())->method('getObject')->willReturn($this->userMock);
         $this->userMock->expects(static::exactly(3))->method('getId')->willReturn($userId);
         $this->userMock->expects(static::once())->method('getExpiresAt')->willReturn($this->getExpiresDateTime());
+        $this->userMock->expects(static::once())
+            ->method('hasData')
+            ->with('expires_at')
+            ->willReturn(true);
         $this->userExpirationFactoryMock->expects(static::once())->method('create')
             ->willReturn($this->userExpirationMock);
         $this->userExpirationResourceMock->expects(static::once())->method('load')
@@ -119,7 +116,7 @@ class AfterAdminUserSaveTest extends TestCase
     /**
      * @throws \Exception
      */
-    public function testClearUserExpiration()
+    public function testClearUserExpiration(): void
     {
         $userId = '123';
         $this->userExpirationMock->setId($userId);
@@ -128,6 +125,10 @@ class AfterAdminUserSaveTest extends TestCase
         $this->eventMock->expects(static::once())->method('getObject')->willReturn($this->userMock);
         $this->userMock->expects(static::exactly(2))->method('getId')->willReturn($userId);
         $this->userMock->expects(static::once())->method('getExpiresAt')->willReturn(null);
+        $this->userMock->expects(static::once())
+            ->method('hasData')
+            ->with('expires_at')
+            ->willReturn(true);
         $this->userExpirationFactoryMock->expects(static::once())->method('create')
             ->willReturn($this->userExpirationMock);
         $this->userExpirationResourceMock->expects(static::once())->method('load')
@@ -139,7 +140,10 @@ class AfterAdminUserSaveTest extends TestCase
         $this->observer->execute($this->eventObserverMock);
     }
 
-    public function testChangeUserExpiration()
+    /**
+     * @return void
+     */
+    public function testChangeUserExpiration(): void
     {
         $userId = '123';
         $this->userExpirationMock->setId($userId);
@@ -148,6 +152,10 @@ class AfterAdminUserSaveTest extends TestCase
         $this->eventMock->expects(static::once())->method('getObject')->willReturn($this->userMock);
         $this->userMock->expects(static::exactly(2))->method('getId')->willReturn($userId);
         $this->userMock->expects(static::once())->method('getExpiresAt')->willReturn($this->getExpiresDateTime());
+        $this->userMock->expects(static::once())
+            ->method('hasData')
+            ->with('expires_at')
+            ->willReturn(true);
         $this->userExpirationFactoryMock->expects(static::once())->method('create')
             ->willReturn($this->userExpirationMock);
         $this->userExpirationResourceMock->expects(static::once())->method('load')
@@ -162,10 +170,34 @@ class AfterAdminUserSaveTest extends TestCase
     }
 
     /**
+     * @return void
+     */
+    public function testExecuteWithoutUserExpiration(): void
+    {
+        $userId = '123';
+        $this->userExpirationMock->setId($userId);
+
+        $this->eventObserverMock->expects(static::once())->method('getEvent')->willReturn($this->eventMock);
+        $this->eventMock->expects(static::once())->method('getObject')->willReturn($this->userMock);
+        $this->userMock->expects(static::once())->method('getId')->willReturn($userId);
+        $this->userMock->expects(static::once())
+            ->method('hasData')
+            ->with('expires_at')
+            ->willReturn(false);
+        $this->userExpirationFactoryMock->expects(static::never())->method('create');
+        $this->userExpirationResourceMock->expects(static::never())->method('load');
+
+        $this->userExpirationMock->expects(static::never())->method('getId');
+        $this->userExpirationMock->expects(static::never())->method('setExpiresAt');
+        $this->userExpirationResourceMock->expects(static::never())->method('save');
+        $this->observer->execute($this->eventObserverMock);
+    }
+
+    /**
      * @return string
      * @throws \Exception
      */
-    private function getExpiresDateTime()
+    private function getExpiresDateTime(): string
     {
         $testDate = new \DateTime();
         $testDate->modify('+10 days');

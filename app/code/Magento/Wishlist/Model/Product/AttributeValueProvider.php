@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -36,7 +36,7 @@ class AttributeValueProvider
      * @param int|null $storeId
      * @return null|string
      */
-    public function getRawAttributeValue(int $productId, string $attributeCode, int $storeId = null):? string
+    public function getRawAttributeValue(int $productId, string $attributeCode, ?int $storeId = null):? string
     {
         $collection = $this->productCollectionFactory->create();
         $collection->addIdFilter($productId)

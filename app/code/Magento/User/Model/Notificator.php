@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -107,6 +107,7 @@ class Notificator implements NotificatorInterface
             $this->sendNotification(
                 'admin/emails/forgot_email_template',
                 [
+                    'username' => $user->getFirstName().' '.$user->getLastName(),
                     'user' => $user,
                     'store' => $this->storeManager->getStore(
                         Store::DEFAULT_STORE_ID

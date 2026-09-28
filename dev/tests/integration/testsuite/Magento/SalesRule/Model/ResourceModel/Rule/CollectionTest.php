@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\SalesRule\Model\ResourceModel\Rule;
 
@@ -9,6 +9,7 @@ use Magento\Config\Model\Config\Backend\Admin\Custom as AdminBackendConfig;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -41,11 +42,11 @@ class CollectionTest extends TestCase
     /**
      * @magentoDataFixture Magento/SalesRule/_files/rules.php
      * @magentoDataFixture Magento/SalesRule/_files/coupons.php
-     * @dataProvider setValidationFilterDataProvider()
      * @param string $couponCode
      * @param array $expectedItems
      * @magentoDbIsolation disabled
      */
+    #[DataProvider('setValidationFilterDataProvider')]
     public function testSetValidationFilter($couponCode, $expectedItems)
     {
         /** @var \Magento\SalesRule\Model\Rule[] $items */
@@ -72,7 +73,7 @@ class CollectionTest extends TestCase
      * data provider for testSetValidationFilter
      * @return array
      */
-    public function setValidationFilterDataProvider()
+    public static function setValidationFilterDataProvider()
     {
         return [
             'Check type COUPON' => ['coupon_code', ['#1', '#2', '#5']],
@@ -264,10 +265,10 @@ class CollectionTest extends TestCase
     /**
      * @magentoAppIsolation disabled
      * @magentoDataFixture Magento/SalesRule/_files/multi_websites_rules.php
-     * @dataProvider addWebsiteFilterDataProvider
      * @param string[] $websiteCodes
      * @param int $count
      */
+    #[DataProvider('addWebsiteFilterDataProvider')]
     public function testAddWebsiteFilter(array $websiteCodes, int $count)
     {
         $websiteRepository = Bootstrap::getObjectManager()->get(WebsiteRepositoryInterface::class);
@@ -284,7 +285,7 @@ class CollectionTest extends TestCase
     /**
      * @return array
      */
-    public function addWebsiteFilterDataProvider(): array
+    public static function addWebsiteFilterDataProvider(): array
     {
         return [
             [

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -19,6 +19,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Phrase;
 use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -62,13 +63,13 @@ class DocumentTest extends TestCase
     {
         $this->initAttributeValueFactoryMock();
 
-        $this->groupRepository = $this->getMockForAbstractClass(GroupRepositoryInterface::class);
+        $this->groupRepository = $this->createMock(GroupRepositoryInterface::class);
 
-        $this->customerMetadata = $this->getMockForAbstractClass(CustomerMetadataInterface::class);
+        $this->customerMetadata = $this->createMock(CustomerMetadataInterface::class);
 
-        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
 
-        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
 
         $this->document = new Document(
             $this->attributeValueFactory,
@@ -80,11 +81,16 @@ class DocumentTest extends TestCase
     }
 
     /**
-     * @covers \Magento\Customer\Ui\Component\DataProvider\Document::getCustomAttribute
+     * @covers       \Magento\Customer\Ui\Component\DataProvider\Document::getCustomAttribute
+     * @param int $genderId
+     * @param string $attributeValue
+     * @param string $attributeLabel
      */
-    public function testGetGenderAttribute()
+    #[DataProvider('getGenderAttributeDataProvider')]
+    public function testGetGenderAttribute(int $genderId, string $attributeValue, string $attributeLabel): void
     {
-        $genderId = 1;
+        $expectedResult = !empty($attributeValue) ? $attributeLabel : $genderId;
+
         $this->document->setData('gender', $genderId);
 
         $this->groupRepository->expects(static::never())
@@ -93,24 +99,50 @@ class DocumentTest extends TestCase
         $this->storeManager->expects(static::never())
             ->method('getWebsites');
 
-        $metadata = $this->getMockForAbstractClass(AttributeMetadataInterface::class);
+        $metadata = $this->createMock(AttributeMetadataInterface::class);
 
         $this->customerMetadata->expects(static::once())
             ->method('getAttributeMetadata')
             ->willReturn($metadata);
 
-        $option = $this->getMockForAbstractClass(OptionInterface::class);
+        $option = $this->createMock(OptionInterface::class);
 
         $metadata->expects(static::once())
             ->method('getOptions')
             ->willReturn([$genderId => $option]);
 
         $option->expects(static::once())
+            ->method('getValue')
+            ->willReturn($attributeValue);
+
+        $option->expects(static::any())
             ->method('getLabel')
-            ->willReturn('Male');
+            ->willReturn($attributeLabel);
 
         $attribute = $this->document->getCustomAttribute('gender');
-        static::assertEquals('Male', $attribute->getValue());
+        static::assertEquals($expectedResult, $attribute->getValue());
+    }
+
+    /**
+     * Data provider for testGetGenderAttribute
+     * @return array
+     */
+    public static function getGenderAttributeDataProvider()
+    {
+        return [
+            'with valid gender label and value' => [
+                1, '1', 'Male'
+            ],
+            'with empty gender label' => [
+                2, '2', ''
+            ],
+            'with empty gender value' => [
+                3, '', 'test'
+            ],
+            'with empty gender label and value' => [
+                4, '', ''
+            ]
+        ];
     }
 
     /**
@@ -126,18 +158,33 @@ class DocumentTest extends TestCase
         $this->storeManager->expects(static::never())
             ->method('getWebsites');
 
-        $group = $this->getMockForAbstractClass(GroupInterface::class);
+        $group1 = $this->createMock(GroupInterface::class);
+        $group2 = $this->createMock(GroupInterface::class);
 
-        $this->groupRepository->expects(static::once())
+        $this->groupRepository->expects(static::exactly(2))
             ->method('getById')
-            ->willReturn($group);
+            ->willReturnMap([[1, $group1], [2, $group2]]);
 
-        $group->expects(static::once())
+        $group1->expects(static::once())
             ->method('getCode')
             ->willReturn('General');
 
+        $group2->expects(static::once())
+            ->method('getCode')
+            ->willReturn('Wholesale');
+
         $attribute = $this->document->getCustomAttribute('group_id');
         static::assertEquals('General', $attribute->getValue());
+
+        // Check that the group code is resolved from cache
+        $this->document->setData('group_id', 1);
+        $attribute = $this->document->getCustomAttribute('group_id');
+        static::assertEquals('General', $attribute->getValue());
+
+        // Check that the group code is resolved from repository if missing in the cache
+        $this->document->setData('group_id', 2);
+        $attribute = $this->document->getCustomAttribute('group_id');
+        static::assertEquals('Wholesale', $attribute->getValue());
     }
 
     /**
@@ -154,7 +201,7 @@ class DocumentTest extends TestCase
         $this->customerMetadata->expects(static::never())
             ->method('getAttributeMetadata');
 
-        $website = $this->getMockForAbstractClass(WebsiteInterface::class);
+        $website = $this->createMock(WebsiteInterface::class);
 
         $this->storeManager->expects(static::once())
             ->method('getWebsites')
@@ -211,7 +258,7 @@ class DocumentTest extends TestCase
     {
         $this->attributeValueFactory = $this->getMockBuilder(AttributeValueFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $attributeValue = new AttributeValue();

@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Structure description for webapi.xml configuration files.
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
@@ -55,8 +53,9 @@
 
     <xs:complexType name="dataType" >
         <xs:sequence>
-            <xs:element name="parameter" type="parameterType" maxOccurs="unbounded"/>
+            <xs:element name="parameter" type="parameterType" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
+        <xs:attribute name="input-array-size-limit" type="xs:nonNegativeInteger" use="optional" />
     </xs:complexType>
 
     <xs:complexType name="parameterType">

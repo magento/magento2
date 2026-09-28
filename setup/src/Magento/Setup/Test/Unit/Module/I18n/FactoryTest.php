@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Setup\Module\I18n\Dictionary\Writer\Csv;
 use Magento\Setup\Module\I18n\Dictionary\Writer\Csv\Stdo;
 use Magento\Setup\Module\I18n\Factory;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class FactoryTest extends TestCase
 {
@@ -29,8 +30,8 @@ class FactoryTest extends TestCase
     /**
      * @param string $expectedInstance
      * @param string $fileName
-     * @dataProvider createDictionaryWriterDataProvider
      */
+    #[DataProvider('createDictionaryWriterDataProvider')]
     public function testCreateDictionaryWriter($expectedInstance, $fileName)
     {
         $this->assertInstanceOf(
@@ -42,7 +43,7 @@ class FactoryTest extends TestCase
     /**
      * @return array
      */
-    public function createDictionaryWriterDataProvider()
+    public static function createDictionaryWriterDataProvider()
     {
         return [
             [

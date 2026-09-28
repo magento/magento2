@@ -1,14 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\ResourceModel\Report\Refunded\Collection;
 
 /**
  * Sales report refunded collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Refunded extends Order
 {
@@ -26,7 +24,7 @@ class Refunded extends Order
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Sales\Model\ResourceModel\Report $resource,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
+        ?\Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $resource, $connection);
         $resource->init('sales_refunded_aggregated');

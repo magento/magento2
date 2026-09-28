@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\App\Action;
@@ -23,13 +23,14 @@ use Magento\Framework\UrlInterface;
  * It contains standard action behavior (event dispatching, flag checks)
  * Action classes that do not extend from this class will lose this behavior and might not function correctly
  *
- * @deprecated Inheritance in controllers should be avoided in favor of composition
+ * @deprecated 103.0.0 Inheritance in controllers should be avoided in favor of composition
  * @see \Magento\Framework\App\ActionInterface
  *
  * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @since 100.0.2
  */
 abstract class Action extends AbstractAction
 {
@@ -123,7 +124,7 @@ abstract class Action extends AbstractAction
      * @param array|null $params
      * @return void
      */
-    protected function _forward($action, $controller = null, $module = null, array $params = null)
+    protected function _forward($action, $controller = null, $module = null, ?array $params = null)
     {
         $request = $this->getRequest();
 

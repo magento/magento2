@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Indexer;
@@ -16,7 +16,7 @@ use Magento\Framework\Search\Request\Dimension;
 /**
  * Full text search index structure.
  *
- * @deprecated
+ * @deprecated 102.0.0
  * @see \Magento\ElasticSearch
  */
 class IndexStructure implements IndexStructureInterface

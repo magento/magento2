@@ -2,8 +2,8 @@
 /**
  * Implementation of a test service for error handling testing
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\TestModule3\Service\V1;

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -20,14 +20,12 @@ use PHPUnit\Framework\TestCase;
 class ImageEntryConverterTest extends TestCase
 {
     /**
-     * @var MockObject
-     * |\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory
+     * @var ProductAttributeMediaGalleryEntryInterfaceFactory|MockObject
      */
     protected $mediaGalleryEntryFactoryMock;
 
     /**
-     * @var MockObject
-     * |\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntry
+     * @var ProductAttributeMediaGalleryEntryInterface|MockObject
      */
     protected $mediaGalleryEntryMock;
 
@@ -43,7 +41,6 @@ class ImageEntryConverterTest extends TestCase
 
     /**
      * @var ImageEntryConverter
-     * |\Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $modelObject;
 
@@ -77,7 +74,7 @@ class ImageEntryConverterTest extends TestCase
                 'setExtensionAttributes'
             ]);
 
-        $this->mediaGalleryEntryFactoryMock->expects($this->any())->method('create')->willReturn(
+        $this->mediaGalleryEntryFactoryMock->method('create')->willReturn(
             $this->mediaGalleryEntryMock
         );
 
@@ -123,7 +120,7 @@ class ImageEntryConverterTest extends TestCase
             'swatch_image' => '/s/a/sample_3.jpg',
         ];
 
-        $this->productMock->expects($this->any())->method('getMediaAttributeValues')->willReturn($productImages);
+        $this->productMock->method('getMediaAttributeValues')->willReturn($productImages);
 
         $object = $this->modelObject->convertTo($this->productMock, $rowData);
         $this->assertNotNull($object);
@@ -174,7 +171,7 @@ class ImageEntryConverterTest extends TestCase
                 1 => 'swatch_image',
             ]
         );
-        $imageContentInterface = $this->getMockForAbstractClass(ImageContentInterface::class);
+        $imageContentInterface = $this->createMock(ImageContentInterface::class);
 
         $imageContentInterface->expects($this->once())->method('getBase64EncodedData')->willReturn(
             base64_encode('some_content')

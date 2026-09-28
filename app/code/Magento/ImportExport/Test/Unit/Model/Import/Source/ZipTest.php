@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\ImportExport\Test\Unit\Model\Import\Source;
 
 use Magento\Framework\Filesystem\Directory\Write;
 use Magento\ImportExport\Model\Import\Source\Zip;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -17,52 +18,59 @@ class ZipTest extends TestCase
     /**
      * @var Write|MockObject
      */
-    protected $directory;
+    private $directory;
 
     /**
      * @var Zip|MockObject
      */
-    protected $zip;
+    private $zip;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
-        $this->directory = $this->getMockBuilder(Write::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getRelativePath'])
+        $this->directory = $this->getMockBuilder(Write::class)->disableOriginalConstructor()
+            ->onlyMethods(['getRelativePath'])
             ->getMock();
     }
 
     /**
      * Test destination argument for the second getRelativePath after preg_replace.
      *
-     * @dataProvider constructorFileDestinationMatchDataProvider
+     * @return void
      */
-    public function testConstructorFileDestinationMatch($fileName, $expectedfileName)
+    #[DataProvider('constructorFileDestinationMatchDataProvider')]
+    public function testConstructorFileDestinationMatch($fileName, $expectedfileName): void
     {
-        $this->markTestIncomplete('The implementation of constructor has changed. Rewrite test to cover changes.');
+        $this->markTestSkipped('The implementation of constructor has changed. Rewrite test to cover changes.');
 
-        $this->directory->expects($this->at(0))->method('getRelativePath')->with($fileName);
-        $this->directory->expects($this->at(1))->method('getRelativePath')->with($expectedfileName);
-        $this->_invokeConstructor($fileName);
+        $this->directory->method('getRelativePath')
+            ->willReturnCallback(function ($arg) use ($fileName, $expectedfileName) {
+                if ($arg == $fileName || $arg == $expectedfileName) {
+                    return null;
+                }
+            });
+        $this->invokeConstructor($fileName);
     }
 
     /**
      * @return array
      */
-    public function constructorFileDestinationMatchDataProvider()
+    public static function constructorFileDestinationMatchDataProvider(): array
     {
         return [
             [
-                '$fileName' => 'test_file.txt',
-                '$expectedfileName' => 'test_file.txt',
+                'fileName' => 'test_file.txt',
+                'expectedfileName' => 'test_file.txt'
             ],
             [
-                '$fileName' => 'test_file.zip',
-                '$expectedfileName' => 'test_file.csv',
+                'fileName' => 'test_file.zip',
+                'expectedfileName' => 'test_file.csv'
             ],
             [
-                '$fileName' => '.ziptest_.zip.file.zip.ZIP',
-                '$expectedfileName' => '.ziptest_.zip.file.zip.csv',
+                'fileName' => '.ziptest_.zip.file.zip.ZIP',
+                'expectedfileName' => '.ziptest_.zip.file.zip.csv'
             ]
         ];
     }
@@ -70,9 +78,10 @@ class ZipTest extends TestCase
     /**
      * Instantiate zip mock and invoke its constructor.
      *
+     * @return void
      * @param string $fileName
      */
-    protected function _invokeConstructor($fileName)
+    private function invokeConstructor($fileName): void
     {
         try {
             $this->zip = $this->getMockBuilder(

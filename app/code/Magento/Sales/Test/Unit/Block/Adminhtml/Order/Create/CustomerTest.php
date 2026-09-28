@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,10 +15,11 @@ use PHPUnit\Framework\TestCase;
 
 class CustomerTest extends TestCase
 {
+
     public function testGetButtonsHtml()
     {
         $contextMock = $this->createPartialMock(Context::class, ['getAuthorization']);
-        $authorizationMock = $this->getMockForAbstractClass(AuthorizationInterface::class);
+        $authorizationMock = $this->createMock(AuthorizationInterface::class);
         $contextMock->expects($this->any())->method('getAuthorization')->willReturn($authorizationMock);
         $arguments = ['context' => $contextMock];
 

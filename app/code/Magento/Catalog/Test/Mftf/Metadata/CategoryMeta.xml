@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 <operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataOperation.xsd">
@@ -56,5 +56,13 @@
 
     <operation name="DeleteCategory" dataType="category" type="delete" auth="adminOauth" url="/V1/categories/{id}" method="DELETE">
         <contentType>application/json</contentType>
+    </operation>
+
+    <operation name="AssignProductToCategory" dataType="category_product_link" type="create" auth="adminOauth" url="/V1/categories/{id}/products" method="POST">
+        <contentType>application/json</contentType>
+        <object key="productLink" dataType="category_product_link">
+            <field key="sku">string</field>
+            <field key="category_id">string</field>
+        </object>
     </operation>
 </operations>

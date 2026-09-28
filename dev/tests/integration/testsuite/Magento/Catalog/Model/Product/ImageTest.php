@@ -1,10 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Model\Product;
+
+use PHPUnit\Framework\Attributes\Depends;
 
 /**
  * Class \Magento\Catalog\Model\Product\ImageTest
@@ -36,8 +38,8 @@ class ImageTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param \Magento\Catalog\Model\Product\Image $model
-     * @depends testSetBaseFilePlaceholder
      */
+    #[Depends('testSetBaseFilePlaceholder')]
     public function testSaveFilePlaceholder($model)
     {
         $processor = $this->createPartialMock(\Magento\Framework\Image::class, ['save']);
@@ -47,12 +49,12 @@ class ImageTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param \Magento\Catalog\Model\Product\Image $model
-     * @depends testSetBaseFilePlaceholder
      */
+    #[Depends('testSetBaseFilePlaceholder')]
     public function testGetUrlPlaceholder($model)
     {
         $this->assertStringMatchesFormat(
-            'http://localhost/pub/static/%s/frontend/%s/Magento_Catalog/images/product/placeholder/image.jpg',
+            'http://localhost/static/%s/frontend/%s/Magento_Catalog/images/product/placeholder/image.jpg',
             $model->getUrl()
         );
     }

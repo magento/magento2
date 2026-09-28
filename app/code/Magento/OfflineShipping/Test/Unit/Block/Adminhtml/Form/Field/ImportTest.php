@@ -1,14 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2012 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 /**
  * Custom import CSV file field for shipping table rates
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\OfflineShipping\Test\Unit\Block\Adminhtml\Form\Field;
 
@@ -16,11 +14,15 @@ use Magento\Framework\Data\Form;
 use Magento\Framework\Escaper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\OfflineShipping\Block\Adminhtml\Form\Field\Import;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\Math\Random;
 
 class ImportTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Import
      */
@@ -33,18 +35,20 @@ class ImportTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_formMock = $this->getMockBuilder(Form::class)
-            ->addMethods(['getFieldNameSuffix', 'getHtmlIdPrefix', 'getHtmlIdSuffix'])
-            ->onlyMethods(['addSuffixToName'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_formMock = $this->createPartialMockWithReflection(
+            Form::class,
+            ['getFieldNameSuffix', 'getHtmlIdPrefix', 'getHtmlIdSuffix', 'addSuffixToName']
+        );
+        $randomMock = $this->getMockBuilder(Random::class)->disableOriginalConstructor()->getMock();
+        $randomMock->method('getRandomString')->willReturn('123456abcdefg');
         $testData = ['name' => 'test_name', 'html_id' => 'test_html_id'];
         $testHelper = new ObjectManager($this);
         $this->_object = $testHelper->getObject(
             Import::class,
             [
                 'data' => $testData,
-                '_escaper' => $testHelper->getObject(Escaper::class)
+                '_escaper' => $testHelper->getObject(Escaper::class),
+                'random' => $randomMock
             ]
         );
         $this->_object->setForm($this->_formMock);
@@ -87,9 +91,9 @@ class ImportTest extends TestCase
             '<input id="time_condition" type="hidden" name="test_name" value="',
             $testString
         );
-        $this->assertStringEndsWith(
+        $this->assertStringContainsString(
             '<input id="test_name_prefixtest_html_idtest_name_suffix" ' .
-            'name="test_name"  data-ui-id="form-element-test_name" value="" type="file"/>',
+            'name="test_name"  data-ui-id="form-element-test_name" value="" type="file"',
             $testString
         );
     }

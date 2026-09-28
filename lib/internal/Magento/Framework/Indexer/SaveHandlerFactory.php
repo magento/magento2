@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Indexer;
 
@@ -10,6 +10,7 @@ use Magento\Framework\Indexer\SaveHandler\IndexerInterface as SaveHandlerInterfa
 
 /**
  * @api Instantiate save handler when implementing custom Indexer\Action
+ * @since 100.0.2
  */
 class SaveHandlerFactory
 {

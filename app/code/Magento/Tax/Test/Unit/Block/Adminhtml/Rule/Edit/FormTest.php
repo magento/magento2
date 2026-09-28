@@ -1,14 +1,16 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Tax\Test\Unit\Block\Adminhtml\Rule\Edit;
 
 use Magento\Backend\Block\Template\Context;
+use Magento\Framework\App\ObjectManager as AppObjectManager;
 use Magento\Framework\Data\FormFactory;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
@@ -18,6 +20,7 @@ use Magento\Tax\Block\Adminhtml\Rule\Edit\Form;
 use Magento\Tax\Model\Rate\Source;
 use Magento\Tax\Model\TaxClass\Source\Customer;
 use Magento\Tax\Model\TaxClass\Source\Product;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -25,6 +28,7 @@ use PHPUnit\Framework\TestCase;
  * Test for Tax Rule Edit Form
  *
  * Class FormTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class FormTest extends TestCase
 {
@@ -80,6 +84,10 @@ class FormTest extends TestCase
 
     protected function setUp(): void
     {
+        // Mock ObjectManager to prevent initialization errors
+        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        AppObjectManager::setInstance($objectManagerMock);
+
         $objectManagerHelper = new ObjectManager($this);
 
         $this->context = $this->getMockBuilder(Context::class)
@@ -98,13 +106,9 @@ class FormTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->taxRuleRepository = $this->getMockBuilder(TaxRuleRepositoryInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->taxRuleRepository = $this->createMock(TaxRuleRepositoryInterface::class);
 
-        $this->taxClassRepository = $this->getMockBuilder(TaxClassRepositoryInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->taxClassRepository = $this->createMock(TaxClassRepositoryInterface::class);
 
         $this->taxClassCustomer = $this->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
@@ -114,9 +118,7 @@ class FormTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->urlBuilder = $this->getMockBuilder(UrlInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->urlBuilder = $this->createMock(UrlInterface::class);
 
         $this->form = $objectManagerHelper->getObject(Form::class, [
             'context' => $this->context,
@@ -136,7 +138,7 @@ class FormTest extends TestCase
      *
      * @see \Magento\Tax\Block\Adminhtml\Rule\Edit\Form::getTaxRatesPageUrl
      */
-    public function testTaxRatesPageUrl()
+    public function testTaxRatesPageUrl(): void
     {
         $this->urlBuilder->expects($this->once())
             ->method('getUrl')
@@ -152,9 +154,9 @@ class FormTest extends TestCase
      * @param array $formValue
      * @param array $expected
      * @see \Magento\Tax\Block\Adminhtml\Rule\Edit\Form::getTaxRatesSelectConfig
-     * @dataProvider formValuesDataProvider
      */
-    public function testTaxRatesSelectConfig($formValue, $expected)
+    #[DataProvider('formValuesDataProvider')]
+    public function testTaxRatesSelectConfig(array $formValue, array $expected): void
     {
         $config = $this->form->getTaxRatesSelectConfig($formValue);
 
@@ -166,9 +168,9 @@ class FormTest extends TestCase
     /**
      * Provider of form values and config data expectations.
      *
-     * @return array
+     * @return array<int, array<int, array<int, int|string>|null>>
      */
-    public function formValuesDataProvider()
+    public static function formValuesDataProvider(): array
     {
         return [
             [['tax_rate' => [1, 2, 3]], [1, 2, 3]],

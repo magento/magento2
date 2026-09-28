@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -46,7 +46,7 @@ class SynonymActionsTest extends TestCase
      */
     protected function setup(): void
     {
-        $this->urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->urlBuilderMock = $this->createStub(UrlInterface::class);
 
         $objectManager = new ObjectManager($this);
 
@@ -112,6 +112,7 @@ class SynonymActionsTest extends TestCase
                                         self::STUB_SYNONYM_GROUP_ID
                                     )
                                 ],
+                                'post' => true
                             ],
                             'edit' => [
                                 'href' => sprintf(

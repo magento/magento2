@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\LayeredNavigation\Block\Navigation\AbstractFiltersTest;
 use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
 use Magento\Catalog\Model\Layer\Filter\Item;
 use Magento\Store\Model\Store;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Provides tests for custom price filter in navigation block on category page.
@@ -25,12 +26,12 @@ class DecimalFilterTest extends AbstractFiltersTest
     /**
      * @magentoDataFixture Magento/Catalog/_files/product_decimal_attribute.php
      * @magentoDataFixture Magento/Catalog/_files/category_with_different_price_products.php
-     * @dataProvider getFiltersWithCustomAttributeDataProvider
      * @param array $products
      * @param array $attributeData
      * @param array $expectation
      * @return void
      */
+    #[DataProvider('getFiltersWithCustomAttributeDataProvider')]
     public function testGetFiltersWithCustomAttribute(array $products, array $attributeData, array $expectation): void
     {
         $this->getCategoryFiltersAndAssert($products, $attributeData, $expectation, 'Category 999');
@@ -74,12 +75,12 @@ class DecimalFilterTest extends AbstractFiltersTest
     /**
      * @return array
      */
-    public function getFiltersWithCustomAttributeDataProvider(): array
+    public static function getFiltersWithCustomAttributeDataProvider(): array
     {
         return [
             'not_used_in_navigation' => [
-                'products_data' => [],
-                'attribute_data' => ['is_filterable' => 0],
+                'products' => [],
+                'attributeData' => ['is_filterable' => 0],
                 'expectation' => [],
             ],
 

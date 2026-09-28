@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Paypal\Model;
 
@@ -223,8 +223,8 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
         \Magento\Framework\Exception\LocalizedExceptionFactory $exception,
         \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository,
         \Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface $transactionBuilder,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         parent::__construct(
@@ -276,6 +276,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
                 ApiProcessableException::API_MAXIMUM_AMOUNT_FILTER_DECLINE,
                 ApiProcessableException::API_OTHER_FILTER_DECLINE,
                 ApiProcessableException::API_ADDRESS_MATCH_FAIL,
+                ApiProcessableException::API_TRANSACTION_HAS_BEEN_COMPLETED,
                 self::$authorizationExpiredCode
             ]
         );
@@ -347,7 +348,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
      * @param \Magento\Quote\Api\Data\CartInterface|Quote|null $quote
      * @return bool
      */
-    public function isAvailable(\Magento\Quote\Api\Data\CartInterface $quote = null)
+    public function isAvailable(?\Magento\Quote\Api\Data\CartInterface $quote = null)
     {
         return parent::isAvailable($quote) && $this->_pro->getConfig()->isMethodAvailable();
     }
@@ -842,7 +843,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
         $transactionClosingDate->setTime(11, 49, 00);
         $transactionClosingDate->modify('+' . $period . ' days');
 
-        $currentTime = new \DateTime(null, new \DateTimeZone('US/Pacific'));
+        $currentTime = new \DateTime('now', new \DateTimeZone('US/Pacific'));
 
         if ($currentTime > $transactionClosingDate) {
             return true;

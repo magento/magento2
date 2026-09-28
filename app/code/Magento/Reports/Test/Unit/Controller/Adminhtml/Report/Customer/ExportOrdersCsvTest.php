@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,9 +9,9 @@ namespace Magento\Reports\Test\Unit\Controller\Adminhtml\Report\Customer;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Reports\Controller\Adminhtml\Report\Customer\ExportOrdersCsv;
-use Magento\Reports\Test\Unit\Controller\Adminhtml\Report\AbstractControllerTest;
+use Magento\Reports\Test\Unit\Controller\Adminhtml\Report\AbstractControllerTestCase;
 
-class ExportOrdersCsvTest extends AbstractControllerTest
+class ExportOrdersCsvTest extends AbstractControllerTestCase
 {
     /**
      * @var ExportOrdersCsv

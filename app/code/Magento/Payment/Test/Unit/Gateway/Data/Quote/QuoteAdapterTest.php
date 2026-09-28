@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -39,7 +39,7 @@ class QuoteAdapterTest extends TestCase
 
         $this->addressAdapterFactoryMock =
             $this->getMockBuilder(AddressAdapterFactory::class)
-                ->setMethods(['create'])
+                ->onlyMethods(['create'])
                 ->disableOriginalConstructor()
                 ->getMock();
 
@@ -52,7 +52,7 @@ class QuoteAdapterTest extends TestCase
         /** @var CurrencyInterface $currencyMock */
         $currencyMock = $this->getMockBuilder(
             CurrencyInterface::class
-        )->getMockForAbstractClass();
+        )->getMock();
         $currencyMock->expects($this->once())->method('getBaseCurrencyCode')->willReturn($expected);
         $this->quoteMock->expects($this->once())->method('getCurrency')->willReturn($currencyMock);
         $this->assertEquals($expected, $this->model->getCurrencyCode());
@@ -71,7 +71,7 @@ class QuoteAdapterTest extends TestCase
         /** @var CustomerInterface $customerMock */
         $customerMock = $this->getMockBuilder(
             CustomerInterface::class
-        )->getMockForAbstractClass();
+        )->getMock();
         $customerMock->expects($this->once())->method('getId')->willReturn($expected);
         $this->quoteMock->expects($this->once())->method('getCustomer')->willReturn($customerMock);
         $this->assertEquals($expected, $this->model->getCustomerId());
@@ -88,10 +88,10 @@ class QuoteAdapterTest extends TestCase
     {
         /** @var AddressAdapterInterface $addressAdapterMock */
         $addressAdapterMock = $this->getMockBuilder(AddressAdapterInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         /** @var AddressInterface $quoteAddressMock */
         $quoteAddressMock = $this->getMockBuilder(AddressInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->addressAdapterFactoryMock->expects($this->once())
             ->method('create')
             ->with(['address' => $quoteAddressMock])
@@ -112,10 +112,10 @@ class QuoteAdapterTest extends TestCase
     {
         /** @var AddressAdapterInterface $addressAdapterMock */
         $addressAdapterMock = $this->getMockBuilder(AddressAdapterInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         /** @var AddressInterface $quoteAddressMock */
         $quoteAddressMock = $this->getMockBuilder(AddressInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->addressAdapterFactoryMock->expects($this->once())
             ->method('create')
             ->with(['address' => $quoteAddressMock])

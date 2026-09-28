@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminRemoveOptionsFromColorAttributeActionGroup">
+        <annotations>
+            <description>Remove options from color attribute</description>
+        </annotations>
+        <click stepKey="deleteOption1" selector="{{AdminNewAttributePanel.deleteOptionByName('black')}}"/>
+        <click stepKey="deleteOption2" selector="{{AdminNewAttributePanel.deleteOptionByName('red')}}"/>
+        <!-- Save attribute -->
+        <click selector="{{AdminNewAttributePanel.saveAttribute}}" stepKey="clickOnNewAttributePanel"/>
+        <waitForPageLoad time="30" stepKey="waitForSaveAttribute"/>
+        <switchToIFrame stepKey="switchOutOfIFrame"/>
+    </actionGroup>
+</actionGroups>

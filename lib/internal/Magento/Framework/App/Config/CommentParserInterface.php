@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\App\Config;
 
@@ -9,6 +9,8 @@ use Magento\Framework\Exception\FileSystemException;
 
 /**
  * Interface for parsing comments in the configuration file.
+ *
+ * @api
  */
 interface CommentParserInterface
 {

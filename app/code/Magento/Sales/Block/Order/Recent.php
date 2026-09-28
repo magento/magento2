@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Block\Order;
 
 use Magento\Framework\View\Element\Template\Context;
-use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 use Magento\Customer\Model\Session;
 use Magento\Sales\Model\Order\Config;
+use Magento\Sales\Model\ResourceModel\Order\CollectionFactoryInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\ObjectManager;
 
@@ -23,10 +23,10 @@ class Recent extends \Magento\Framework\View\Element\Template
     /**
      * Limit of orders
      */
-    const ORDER_LIMIT = 5;
+    public const ORDER_LIMIT = 5;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory
+     * @var CollectionFactoryInterface
      */
     protected $_orderCollectionFactory;
 
@@ -47,7 +47,7 @@ class Recent extends \Magento\Framework\View\Element\Template
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory
+     * @param CollectionFactoryInterface $orderCollectionFactory
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Sales\Model\Order\Config $orderConfig
      * @param array $data
@@ -55,11 +55,11 @@ class Recent extends \Magento\Framework\View\Element\Template
      */
     public function __construct(
         Context $context,
-        CollectionFactory $orderCollectionFactory,
+        CollectionFactoryInterface $orderCollectionFactory,
         Session $customerSession,
         Config $orderConfig,
         array $data = [],
-        StoreManagerInterface $storeManager = null
+        ?StoreManagerInterface $storeManager = null
     ) {
         $this->_orderCollectionFactory = $orderCollectionFactory;
         $this->_customerSession = $customerSession;
@@ -84,14 +84,12 @@ class Recent extends \Magento\Framework\View\Element\Template
      */
     private function getRecentOrders()
     {
-        $orders = $this->_orderCollectionFactory->create()->addAttributeToSelect(
+        $customerId = $this->_customerSession->getCustomerId();
+        $orders = $this->_orderCollectionFactory->create($customerId)->addAttributeToSelect(
             '*'
         )->addAttributeToFilter(
             'customer_id',
-            $this->_customerSession->getCustomerId()
-        )->addAttributeToFilter(
-            'store_id',
-            $this->storeManager->getStore()->getId()
+            $customerId
         )->addAttributeToFilter(
             'status',
             ['in' => $this->_orderConfig->getVisibleOnFrontStatuses()]
@@ -120,7 +118,9 @@ class Recent extends \Magento\Framework\View\Element\Template
      *
      * @param object $order
      * @return string
-     * @deprecated Action does not exist
+     * @deprecated 102.0.3 Action does not exist
+     * @see This method is not used anymore
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getTrackUrl($order)

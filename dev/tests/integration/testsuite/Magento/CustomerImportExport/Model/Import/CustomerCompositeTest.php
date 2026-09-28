@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CustomerImportExport\Model\Import;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for CustomerComposite import class
@@ -16,18 +17,18 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
     /**#@+
      * Attributes used in test assertions
      */
-    const ATTRIBUTE_CODE_FIRST_NAME = 'firstname';
+    public const ATTRIBUTE_CODE_FIRST_NAME = 'firstname';
 
-    const ATTRIBUTE_CODE_LAST_NAME = 'lastname';
+    public const ATTRIBUTE_CODE_LAST_NAME = 'lastname';
 
     /**#@-*/
 
     /**#@+
      * Source *.csv file names for different behaviors
      */
-    const UPDATE_FILE_NAME = 'customer_composite_update.csv';
+    public const UPDATE_FILE_NAME = 'customer_composite_update.csv';
 
-    const DELETE_FILE_NAME = 'customer_composite_delete.csv';
+    public const DELETE_FILE_NAME = 'customer_composite_delete.csv';
 
     /**#@-*/
 
@@ -57,7 +58,7 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
      *
      * @var array
      */
-    protected $_beforeImport = [
+    protected static $_beforeImport = [
         'betsyparker@example.com' => [
             'addresses' => ['19107', '72701'],
             'data' => [self::ATTRIBUTE_CODE_FIRST_NAME => 'Betsy', self::ATTRIBUTE_CODE_LAST_NAME => 'Parker'],
@@ -69,7 +70,7 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
      *
      * @var array
      */
-    protected $_afterImport = [
+    protected static $_afterImport = [
         'betsyparker@example.com' => [
             'addresses' => ['19107', '72701', '19108'],
             'data' => [
@@ -139,9 +140,8 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
      *
      * @magentoDataFixture Magento/Customer/_files/import_export/customers_for_address_import.php
      * @magentoAppIsolation enabled
-     *
-     * @dataProvider importDataDataProvider
      */
+    #[DataProvider('importDataDataProvider')]
     public function testImportData(
         $behavior,
         $sourceFile,
@@ -200,31 +200,46 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function importDataDataProvider()
+    public static function importDataDataProvider()
     {
         $filesDirectory = __DIR__ . '/_files/';
-        $sourceData = [
-            'delete_behavior' => [
-                '$behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE,
-                '$sourceFile' => $filesDirectory . self::DELETE_FILE_NAME,
-                '$dataBefore' => $this->_beforeImport,
-                '$dataAfter' => [],
-                '$updatedItemsCount' => 0,
-                '$createdItemsCount' => 0,
-                '$deletedItemsCount' => 1,
-                '$errors' => [],
+        $beforeImport = [
+            'betsyparker@example.com' => [
+                'addresses' => ['19107', '72701'],
+                'data' => ['firstname' => 'Betsy', 'lastname' => 'Parker'],
             ],
         ];
+        $afterImport = [
+            'betsyparker@example.com' => [
+                'addresses' => ['19107', '72701', '19108'],
+                'data' => ['firstname' => 'NotBetsy', 'lastname' => 'NotParker'],
+            ],
+            'anthonyanealy@magento.com' => ['addresses' => ['72701', '92664']],
+            'loribbanks@magento.com' => ['addresses' => ['98801']],
+            'kellynilson@magento.com' => ['addresses' => []],
+        ];
 
-        $sourceData['add_update_behavior'] = [
-            '$behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE,
-            '$sourceFile' => $filesDirectory . self::UPDATE_FILE_NAME,
-            '$dataBefore' => $this->_beforeImport,
-            '$dataAfter' => $this->_afterImport,
-            '$updatedItemsCount' => 1,
-            '$createdItemsCount' => 3,
-            '$deletedItemsCount' => 0,
-            '$errors' => [],
+        $sourceData = [
+            'delete_behavior' => [
+                \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE,  // $behavior
+                $filesDirectory . self::DELETE_FILE_NAME,  // $sourceFile
+                $beforeImport,  // $dataBefore
+                [],  // $dataAfter
+                0,  // $updatedItemsCount
+                0,  // $createdItemsCount
+                1,  // $deletedItemsCount
+                []  // $errors
+            ],
+            'add_update_behavior' => [
+                \Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE,  // $behavior
+                $filesDirectory . self::UPDATE_FILE_NAME,  // $sourceFile
+                $beforeImport,  // $dataBefore
+                $afterImport,  // $dataAfter
+                1,  // $updatedItemsCount
+                3,  // $createdItemsCount
+                0,  // $deletedItemsCount
+                []  // $errors
+            ]
         ];
 
         return $sourceData;

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Paypal\Model\Report;
@@ -195,10 +195,10 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->_tmpDirectory = $filesystem->getDirectoryWrite(DirectoryList::SYS_TMP);
         $this->_storeManager = $storeManager;
@@ -595,6 +595,7 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
     protected function _fileNameToDate($filename)
     {
         // Currently filenames look like STL-YYYYMMDD, so that is what we care about.
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $dateSnippet = substr(basename($filename), 4, 8);
         $result = substr($dateSnippet, 0, 4) . '-' . substr($dateSnippet, 4, 2) . '-' . substr($dateSnippet, 6, 2);
         return $result;
@@ -603,13 +604,16 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
     /**
      * Filter SFTP file list by filename format
      *
+     * Single Account format = STL-yyyymmdd.sequenceNumber.version.format
+     * Multiple Account format = STL-yyyymmdd.reportingWindow.sequenceNumber.totalFiles.version.format
+     *
      * @param array $list List of files as per $connection->rawls()
      * @return array Trimmed down list of files
      */
     protected function _filterReportsList($list)
     {
         $result = [];
-        $pattern = '/^STL-(\d{8,8})\.(\d{2,2})\.(.{3,3})\.CSV$/';
+        $pattern = '/^STL-(\d{8,8})\.((\d{2,2})|(([A-Z])\.(\d{2,2})\.(\d{2,2})))\.(.{3,3})\.CSV$/';
         foreach ($list as $filename => $data) {
             if (preg_match($pattern, $filename)) {
                 $result[$filename] = $data;

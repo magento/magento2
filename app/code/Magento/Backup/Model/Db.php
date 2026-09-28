@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Backup\Model;
 
@@ -16,7 +16,7 @@ use Magento\Framework\Exception\RuntimeException;
  *
  * @api
  * @since 100.0.2
- * @deprecated Backup module is to be removed.
+ * @deprecated 100.2.6 Backup module is to be removed.
  */
 class Db implements \Magento\Framework\Backup\Db\BackupDbInterface
 {

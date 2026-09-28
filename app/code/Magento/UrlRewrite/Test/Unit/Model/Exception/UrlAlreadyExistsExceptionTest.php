@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -27,9 +27,7 @@ class UrlAlreadyExistsExceptionTest extends TestCase
     protected function setUp(): void
     {
         $this->defaultRenderer = Phrase::getRenderer();
-        $rendererMock = $this->getMockBuilder(Placeholder::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $rendererMock = $this->createMock(Placeholder::class);
         $this->renderedMessage = 'rendered message';
         $rendererMock->expects($this->once())
             ->method('render')

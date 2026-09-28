@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Framework\App\Test\Unit;
 
 use Magento\Framework\App\SetupInfo;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class SetupInfoTest extends TestCase
@@ -19,11 +20,9 @@ class SetupInfoTest extends TestCase
      */
     private static $fixture = ['DOCUMENT_ROOT' => '/doc/root', 'SCRIPT_FILENAME' => '/doc/root/dir/file.php'];
 
-    /**
-     * @param array $server
-     * @param string $expectedError
-     * @dataProvider constructorExceptionsDataProvider
+    /**     * @param string $expectedError
      */
+    #[DataProvider('constructorExceptionsDataProvider')]
     public function testConstructorExceptions($server, $expectedError)
     {
         $this->expectException('\InvalidArgumentException');
@@ -34,7 +33,7 @@ class SetupInfoTest extends TestCase
     /**
      * @return array
      */
-    public function constructorExceptionsDataProvider()
+    public static function constructorExceptionsDataProvider()
     {
         $docRootErr = 'DOCUMENT_ROOT variable is unavailable.';
         $projectRootErr = 'Project root cannot be automatically detected.';
@@ -46,11 +45,9 @@ class SetupInfoTest extends TestCase
         ];
     }
 
-    /**
-     * @param array $server
-     * @param string $expected
-     * @dataProvider getUrlDataProvider
+    /**     * @param string $expected
      */
+    #[DataProvider('getUrlDataProvider')]
     public function testGetUrl($server, $expected)
     {
         $info = new SetupInfo($server);
@@ -60,7 +57,7 @@ class SetupInfoTest extends TestCase
     /**
      * @return array
      */
-    public function getUrlDataProvider()
+    public static function getUrlDataProvider()
     {
         return [
             [
@@ -78,11 +75,9 @@ class SetupInfoTest extends TestCase
         ];
     }
 
-    /**
-     * @param array $server
-     * @param string $expected
-     * @dataProvider getProjectUrlDataProvider
+    /**     * @param string $expected
      */
+    #[DataProvider('getProjectUrlDataProvider')]
     public function testGetProjectUrl($server, $expected)
     {
         $info = new SetupInfo($server);
@@ -92,7 +87,7 @@ class SetupInfoTest extends TestCase
     /**
      * @return array
      */
-    public function getProjectUrlDataProvider()
+    public static function getProjectUrlDataProvider()
     {
         return [
             [self::$fixture, ''],
@@ -109,12 +104,9 @@ class SetupInfoTest extends TestCase
         ];
     }
 
-    /**
-     * @param array $server
-     * @param string $projectRoot
-     * @param string $expected
-     * @dataProvider getDirDataProvider
+    /**     * @param string $expected
      */
+    #[DataProvider('getDirDataProvider')]
     public function testGetDir($server, $projectRoot, $expected)
     {
         $info = new SetupInfo($server);
@@ -124,7 +116,7 @@ class SetupInfoTest extends TestCase
     /**
      * @return array
      */
-    public function getDirDataProvider()
+    public static function getDirDataProvider()
     {
         return [
             [
@@ -145,11 +137,9 @@ class SetupInfoTest extends TestCase
         ];
     }
 
-    /**
-     * @param array $server
-     * @param bool $expected
-     * @dataProvider isAvailableDataProvider
+    /**     * @param bool $expected
      */
+    #[DataProvider('isAvailableDataProvider')]
     public function testIsAvailable($server, $expected)
     {
         $info = new SetupInfo($server);
@@ -159,7 +149,7 @@ class SetupInfoTest extends TestCase
     /**
      * @return array
      */
-    public function isAvailableDataProvider()
+    public static function isAvailableDataProvider()
     {
         $server = ['DOCUMENT_ROOT' => __DIR__, 'SCRIPT_FILENAME' => __FILE__];
         return [

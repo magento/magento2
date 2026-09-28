@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\TestFramework;
 
@@ -13,7 +13,7 @@ namespace Magento\TestFramework;
 class WebApiApplication extends Application
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function run()
     {
@@ -24,7 +24,7 @@ class WebApiApplication extends Application
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function install($cleanup)
     {
@@ -45,19 +45,27 @@ class WebApiApplication extends Application
                     }
                     continue;
                 }
-                if (!empty($optionValue)) {
-                    $installCmd .= " --$optionName=%s";
-                    $installArgs[] = $optionValue;
-                }
+                $installCmd .= " --$optionName=%s";
+                $installArgs[] = $optionValue;
             }
             $this->_shell->execute($installCmd, $installArgs);
         }
+        /* Set Indexer mode as "Update on Save" & Reindex all the Indexers */
+        $this->_shell->execute(
+            'php -f ' . BP . '/bin/magento indexer:set-mode realtime -vvv'
+        );
+        $this->_shell->execute(
+            'php -f ' . BP . '/bin/magento indexer:reindex -vvv'
+        );
+
+        $this->runPostInstallCommands();
     }
 
     /**
-     * Use the application as is
+     * @inheritdoc
      *
-     * {@inheritdoc}
+     * Return empty array of custom directories
+     * @return array
      */
     protected function getCustomDirs()
     {

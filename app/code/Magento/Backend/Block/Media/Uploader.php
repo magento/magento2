@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -46,7 +46,7 @@ class Uploader extends \Magento\Backend\Block\Widget
 
     /**
      * @var UploadConfigInterface
-     * @deprecated
+     * @deprecated 101.0.1
      * @see \Magento\Backend\Model\Image\UploadResizeConfigInterface
      */
     private $imageConfig;
@@ -55,17 +55,17 @@ class Uploader extends \Magento\Backend\Block\Widget
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\File\Size $fileSize
      * @param array $data
-     * @param Json $jsonEncoder
-     * @param UploadConfigInterface $imageConfig
-     * @param UploadResizeConfigInterface $imageUploadConfig
+     * @param Json|null $jsonEncoder
+     * @param UploadConfigInterface|null $imageConfig
+     * @param UploadResizeConfigInterface|null $imageUploadConfig
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\File\Size $fileSize,
         array $data = [],
-        Json $jsonEncoder = null,
-        UploadConfigInterface $imageConfig = null,
-        UploadResizeConfigInterface $imageUploadConfig = null
+        ?Json $jsonEncoder = null,
+        ?UploadConfigInterface $imageConfig = null,
+        ?UploadResizeConfigInterface $imageUploadConfig = null
     ) {
         $this->_fileSizeService = $fileSize;
         $this->jsonEncoder = $jsonEncoder ?: ObjectManager::getInstance()->get(Json::class);
@@ -120,6 +120,7 @@ class Uploader extends \Magento\Backend\Block\Widget
      * Get Image Upload Maximum Width Config.
      *
      * @return int
+     * @since 100.2.7
      */
     public function getImageUploadMaxWidth()
     {
@@ -130,6 +131,7 @@ class Uploader extends \Magento\Backend\Block\Widget
      * Get Image Upload Maximum Height Config.
      *
      * @return int
+     * @since 100.2.7
      */
     public function getImageUploadMaxHeight()
     {
@@ -143,7 +145,7 @@ class Uploader extends \Magento\Backend\Block\Widget
      */
     protected function _prepareLayout()
     {
-        $this->pageConfig->addPageAsset('jquery/fileUploader/css/jquery.fileupload-ui.css');
+        $this->pageConfig->addPageAsset('jquery/uppy/dist/uppy.fileupload-ui.css');
         return parent::_prepareLayout();
     }
 

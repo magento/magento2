@@ -5,11 +5,11 @@ use Magento\CatalogSearch\Block\Result;
 use Magento\Framework\Module\Setup\Migration;
 
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 return [
-    '$replaceRules' => [
+    'replaceRules' => [
         [
             'table',
             'field',
@@ -17,12 +17,12 @@ return [
             Migration::FIELD_CONTENT_TYPE_XML,
         ],
     ],
-    '$tableData' => [
+    'tableData' => [
         ['field' => '<reference><block class="catalog/product_newProduct" /></reference>'],
         ['field' => '<reference><block class="catalogSearch/result" /></reference>'],
         ['field' => '<reference></reference>'],
     ],
-    '$expected' => [
+    'expected' => [
         'updates' => [
             [
                 'table' => 'table',

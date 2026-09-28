@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Setup\Module\Di\Code\Scanner;
 
@@ -9,6 +9,16 @@ use Magento\Framework\App\Area;
 
 class ConfigurationScanner
 {
+    /**
+     * @var \Magento\Framework\App\Config\FileResolver
+     */
+    private $fileResolver;
+
+    /**
+     * @var \Magento\Framework\App\AreaList
+     */
+    private $areaList;
+
     /**
      * ConfigurationScanner constructor.
      *

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,20 +12,14 @@ use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\LoginAsCustomerApi\Api\AuthenticateCustomerBySecretInterface;
-use Magento\LoginAsCustomerApi\Api\GetAuthenticationDataBySecretInterface;
 
 /**
- * Remove all items from guest shopping cart before execute. Mark customer cart as not-guest after execute
+ * Remove all items from guest shopping cart and mark cart as not-guest
  *
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class ProcessShoppingCartPlugin
 {
-    /**
-     * @var GetAuthenticationDataBySecretInterface
-     */
-    private $getAuthenticationDataBySecret;
-
     /**
      * @var CustomerSession
      */
@@ -42,25 +36,22 @@ class ProcessShoppingCartPlugin
     private $quoteRepository;
 
     /**
-     * @param GetAuthenticationDataBySecretInterface $getAuthenticationDataBySecret
      * @param CustomerSession $customerSession
      * @param CheckoutSession $checkoutSession
      * @param CartRepositoryInterface $quoteRepository
      */
     public function __construct(
-        GetAuthenticationDataBySecretInterface $getAuthenticationDataBySecret,
         CustomerSession $customerSession,
         CheckoutSession $checkoutSession,
         CartRepositoryInterface $quoteRepository
     ) {
-        $this->getAuthenticationDataBySecret = $getAuthenticationDataBySecret;
         $this->customerSession = $customerSession;
         $this->checkoutSession = $checkoutSession;
         $this->quoteRepository = $quoteRepository;
     }
 
     /**
-     * Remove all items from guest shopping cart
+     * Remove all items from guest shopping cart and mark cart as not-guest
      *
      * @param AuthenticateCustomerBySecretInterface $subject
      * @param string $secret
@@ -73,35 +64,13 @@ class ProcessShoppingCartPlugin
         AuthenticateCustomerBySecretInterface $subject,
         string $secret
     ) {
-        if (!$this->customerSession->getId()) {
+        if (!$this->customerSession->getId() && $this->checkoutSession->getQuote()->getId()) {
             $quote = $this->checkoutSession->getQuote();
             /* Remove items from guest cart */
             $quote->removeAllItems();
+            $quote->setCustomerIsGuest(0);
             $this->quoteRepository->save($quote);
         }
         return null;
-    }
-
-    /**
-     * Mark customer cart as not-guest
-     *
-     * @param AuthenticateCustomerBySecretInterface $subject
-     * @param void $result
-     * @param string $secret
-     * @return void
-     * @throws LocalizedException
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function afterExecute(
-        AuthenticateCustomerBySecretInterface $subject,
-        $result,
-        string $secret
-    ) {
-        $this->checkoutSession->loadCustomerQuote();
-        $quote = $this->checkoutSession->getQuote();
-
-        $quote->setCustomerIsGuest(0);
-        $this->quoteRepository->save($quote);
     }
 }

@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Block\Address;
 
 use Magento\Customer\Api\AddressMetadataInterface;
+use Magento\Customer\Helper\Address;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
 
@@ -69,6 +70,7 @@ class Edit extends \Magento\Directory\Block\Data
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param array $data
      * @param AddressMetadataInterface|null $addressMetadata
+     * @param Address|null $addressHelper
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -85,7 +87,8 @@ class Edit extends \Magento\Directory\Block\Data
         \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         array $data = [],
-        AddressMetadataInterface $addressMetadata = null
+        ?AddressMetadataInterface $addressMetadata = null,
+        ?Address $addressHelper = null
     ) {
         $this->_customerSession = $customerSession;
         $this->_addressRepository = $addressRepository;
@@ -93,6 +96,8 @@ class Edit extends \Magento\Directory\Block\Data
         $this->currentCustomer = $currentCustomer;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->addressMetadata = $addressMetadata ?: ObjectManager::getInstance()->get(AddressMetadataInterface::class);
+        $data['addressHelper'] = $addressHelper ?: ObjectManager::getInstance()->get(Address::class);
+        $data['directoryHelper'] = $directoryHelper;
         parent::__construct(
             $context,
             $directoryHelper,
@@ -120,7 +125,7 @@ class Edit extends \Magento\Directory\Block\Data
         if ($postedData = $this->_customerSession->getAddressFormData(true)) {
             $postedData['region'] = [
                 'region_id' => isset($postedData['region_id']) ? $postedData['region_id'] : null,
-                'region' => $postedData['region'],
+                'region' => $postedData['region'] ?? null,
             ];
             $this->dataObjectHelper->populateWithArray(
                 $this->_address,

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -52,7 +52,6 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        CacheCleaner::cleanAll();
         $this->objectManager = Bootstrap::getObjectManager();
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
         $this->attributeRepository = $this->objectManager->get(AttributeRepository::class);

@@ -1,7 +1,7 @@
-// /**
-//  * Copyright © Magento, Inc. All rights reserved.
-//  * See COPYING.txt for license details.
-//  */
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
 
 //
 //  Variables
@@ -19,8 +19,8 @@
 @checkout-shipping-item__margin: 0 0 @indent__base;
 @checkout-shipping-item__padding: @indent__base (@indent__l + 5px) @indent__base @indent__base;
 @checkout-shipping-item__transition: .3s border-color;
-@checkout-shipping-item__width: 100%/3;
-@checkout-shipping-item-tablet__width: 100%/2;
+@checkout-shipping-item__width: (100%/3);
+@checkout-shipping-item-tablet__width: (100%/2);
 @checkout-shipping-item-mobile__width: 100%;
 @checkout-shipping-item__active__border-color: @active__color;
 
@@ -32,7 +32,7 @@
 @checkout-shipping-item-mobile__active__padding: 15px (@indent__l + 5px) 15px 18px;
 
 @checkout-shipping-item-before__border-color: @color-gray80;
-@checkout-shipping-item-before__height: calc(~'100% - 20px');
+@checkout-shipping-item-before__height: ~"calc(100% - 20px)";
 
 @checkout-shipping-method__border: @checkout-step-title__border;
 @checkout-shipping-method__padding: @indent__base;

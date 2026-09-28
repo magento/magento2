@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -21,6 +21,7 @@ use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * Test ot to save currency symbol controller
@@ -28,6 +29,7 @@ use PHPUnit\Framework\TestCase;
  */
 class SaveTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Save
      */
@@ -79,19 +81,16 @@ class SaveTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->requestMock = $this->createMock(RequestInterface::class);
         $this->helperMock = $this->createMock(Data::class);
-        $this->redirectMock = $this->getMockForAbstractClass(RedirectInterface::class);
-        $this->responseMock = $this->getMockBuilder(ResponseInterface::class)
-            ->addMethods(['setRedirect'])
-            ->onlyMethods(['sendResponse'])
-            ->getMockForAbstractClass();
-        $this->messageManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->redirectMock = $this->createMock(RedirectInterface::class);
+        $this->responseMock = $this->createPartialMockWithReflection(
+            ResponseInterface::class,
+            ['setRedirect', 'sendResponse']
+        );
+        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
         $this->resultRedirectFactory = $this->createMock(RedirectFactory::class);
-        $this->filterManager = $this->getMockBuilder(FilterManager::class)
-            ->addMethods(['stripTags'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->filterManager = $this->createPartialMockWithReflection(FilterManager::class, ['stripTags']);
         $this->currencySymbolFactory = $this->createMock(CurrencysymbolFactory::class);
 
         $this->action = $objectManager->getObject(

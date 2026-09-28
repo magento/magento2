@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontAssertCategoryNameIsShownInMenuActionGroup">
+        <annotations>
+            <description>Validate that the Category is present in menu on Frontend.</description>
+        </annotations>
+        <arguments>
+            <argument name="categoryName" type="string"/>
+        </arguments>
+
+        <waitForElementVisible selector="{{StorefrontHeaderSection.NavigationCategoryByName(categoryName)}}" stepKey="waitForCatName" time="120"/>
+        <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(categoryName)}}"
+                    stepKey="seeCatergoryInStoreFront"/>
+    </actionGroup>
+</actionGroups>

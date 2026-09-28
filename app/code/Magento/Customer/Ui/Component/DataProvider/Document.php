@@ -1,22 +1,27 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Ui\Component\DataProvider;
 
+use Exception;
 use Magento\Customer\Api\CustomerMetadataInterface;
+use Magento\Customer\Api\Data\OptionInterface;
+use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Customer\Model\AccountManagement;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class Document
+ *
+ * Set the attribute label and value for UI Component
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Document extends \Magento\Framework\View\Element\UiComponent\DataProvider\Document
 {
@@ -49,6 +54,11 @@ class Document extends \Magento\Framework\View\Element\UiComponent\DataProvider\
      * @var string
      */
     private static $accountLockAttributeCode = 'lock_expires';
+
+    /**
+     * @var array
+     */
+    private static $customerGroupCodeById = [];
 
     /**
      * @var CustomerMetadataInterface
@@ -84,7 +94,7 @@ class Document extends \Magento\Framework\View\Element\UiComponent\DataProvider\
         GroupRepositoryInterface $groupRepository,
         CustomerMetadataInterface $customerMetadata,
         StoreManagerInterface $storeManager,
-        ScopeConfigInterface $scopeConfig = null
+        ?ScopeConfigInterface $scopeConfig = null
     ) {
         parent::__construct($attributeValueFactory);
         $this->customerMetadata = $customerMetadata;
@@ -127,7 +137,7 @@ class Document extends \Magento\Framework\View\Element\UiComponent\DataProvider\
     private function setGenderValue()
     {
         $value = $this->getData(self::$genderAttributeCode);
-        
+
         if (!$value) {
             $this->setCustomAttribute(self::$genderAttributeCode, 'N/A');
             return;
@@ -135,8 +145,15 @@ class Document extends \Magento\Framework\View\Element\UiComponent\DataProvider\
 
         try {
             $attributeMetadata = $this->customerMetadata->getAttributeMetadata(self::$genderAttributeCode);
-            $option = $attributeMetadata->getOptions()[$value];
-            $this->setCustomAttribute(self::$genderAttributeCode, $option->getLabel());
+            $options = $attributeMetadata->getOptions();
+            array_walk(
+                $options,
+                function (OptionInterface $option) use ($value) {
+                    if ($option->getValue() == $value) {
+                        $this->setCustomAttribute(self::$genderAttributeCode, $option->getLabel());
+                    }
+                }
+            );
         } catch (NoSuchEntityException $e) {
             $this->setCustomAttribute(self::$genderAttributeCode, 'N/A');
         }
@@ -152,8 +169,11 @@ class Document extends \Magento\Framework\View\Element\UiComponent\DataProvider\
     {
         $value = $this->getData(self::$groupAttributeCode);
         try {
-            $group = $this->groupRepository->getById($value);
-            $this->setCustomAttribute(self::$groupAttributeCode, $group->getCode());
+            if (!isset(static::$customerGroupCodeById[$value])) {
+                static::$customerGroupCodeById[$value] = $this->groupRepository->getById($value)->getCode();
+            }
+            $this->setCustomAttribute(self::$groupAttributeCode, static::$customerGroupCodeById[$value]);
+
         } catch (NoSuchEntityException $e) {
             $this->setCustomAttribute(self::$groupAttributeCode, 'N/A');
         }
@@ -199,6 +219,7 @@ class Document extends \Magento\Framework\View\Element\UiComponent\DataProvider\
      * Update lock expires value. Method set account lock text value to match what is shown in grid
      *
      * @return void
+     * @throws Exception
      */
     private function setAccountLockValue()
     {

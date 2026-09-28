@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Sidebar;
 
@@ -9,7 +9,6 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create\Sidebar;
  * Adminhtml sales order create sidebar compared block
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Compared extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar
@@ -46,23 +45,15 @@ class Compared extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abstr
         $collection = $this->getData('item_collection');
         if ($collection === null) {
             if ($collection = $this->getCreateOrderModel()->getCustomerCompareList()) {
-                $collection = $collection->getItemCollection()->useProductItem(
-                    true
-                )->setStoreId(
-                    $this->getQuote()->getStoreId()
-                )->addStoreFilter(
-                    $this->getQuote()->getStoreId()
-                )->setCustomerId(
-                    $this->getCustomerId()
-                )->addAttributeToSelect(
-                    'name'
-                )->addAttributeToSelect(
-                    'price'
-                )->addAttributeToSelect(
-                    'image'
-                )->addAttributeToSelect(
-                    'status'
-                )->load();
+                $collection = $collection->getItemCollection()
+                    ->useProductItem()
+                    ->setStoreId($this->getQuote()->getStoreId())
+                    ->addStoreFilter($this->getQuote()->getStoreId())
+                    ->setCustomerId($this->getCustomerId())
+                    ->addAttributeToSelect('name')
+                    ->addAttributeToSelect('price')->addAttributeToSelect('image')
+                    ->addAttributeToSelect('status')
+                    ->load();
             }
             $this->setData('item_collection', $collection);
         }

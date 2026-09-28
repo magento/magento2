@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\CatalogRule\Block\Adminhtml\Edit;
@@ -11,14 +11,14 @@ use Magento\CatalogRule\Controller\RegistryConstants;
 class GenericButton
 {
     /**
-     * Url Builder
+     * Service for generating URLs
      *
      * @var \Magento\Framework\UrlInterface
      */
     protected $urlBuilder;
 
     /**
-     * Registry
+     * Application data storage
      *
      * @var \Magento\Framework\Registry
      */

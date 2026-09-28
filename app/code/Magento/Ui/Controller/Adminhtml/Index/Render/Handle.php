@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Ui\Controller\Adminhtml\Index\Render;
 
@@ -34,7 +34,7 @@ class Handle extends AbstractAction implements HttpGetActionInterface
     public function __construct(
         Context $context,
         UiComponentFactory $factory,
-        ContextFactory $contextFactory = null
+        ?ContextFactory $contextFactory = null
     ) {
         parent::__construct($context, $factory);
         $this->contextFactory = $contextFactory

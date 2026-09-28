@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,5 +15,5 @@ class IdType extends \GraphQL\Type\Definition\IDType implements InputTypeInterfa
     /**
      * @var string
      */
-    public $name = "Magento_Id";
+    public string $name = "Magento_Id";
 }

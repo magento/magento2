@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\CatalogSearch\Model\Indexer\Scope;
@@ -13,7 +13,7 @@ use Magento\Framework\Exception\LocalizedException;
  *
  * @api
  * @since 100.2.0
- * @deprecated
+ * @deprecated 101.0.0
  * @see \Magento\ElasticSearch
  */
 class UnknownStateException extends LocalizedException

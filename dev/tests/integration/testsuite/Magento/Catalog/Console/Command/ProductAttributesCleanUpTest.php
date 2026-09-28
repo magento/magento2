@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Console\Command;
@@ -104,6 +104,7 @@ class ProductAttributesCleanUpTest extends \PHPUnit\Framework\TestCase
         $storeGroup = $this->objectManager->create(\Magento\Store\Model\Group::class);
         $storeGroup->setWebsiteId($website->getId());
         $storeGroup->setName('Fixture Store Group');
+        $storeGroup->setCode('fixturestoregroup');
         $storeGroup->setRootCategoryId(2);
         $storeGroup->setDefaultStoreId($store->getId());
         $storeGroup->save();

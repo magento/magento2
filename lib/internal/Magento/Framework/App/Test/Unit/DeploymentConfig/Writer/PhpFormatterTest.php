@@ -1,23 +1,24 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Framework\App\Test\Unit\DeploymentConfig\Writer;
 
 use Magento\Framework\App\DeploymentConfig\Writer\PhpFormatter;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class PhpFormatterTest extends TestCase
 {
     /**
-     * @dataProvider formatWithCommentDataProvider
      * @param string[] $data
      * @param string[] $comments
      * @param string $expectedResult
      */
+    #[DataProvider('formatWithCommentDataProvider')]
     public function testFormat($data, $comments, $expectedResult)
     {
         $formatter = new PhpFormatter();
@@ -27,7 +28,7 @@ class PhpFormatterTest extends TestCase
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function formatWithCommentDataProvider()
+    public static function formatWithCommentDataProvider()
     {
         $array = [
             'ns1' => [

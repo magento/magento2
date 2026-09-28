@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontNavigateToCategoryUrlActionGroup">
+        <annotations>
+            <description>Goes to the Storefront Category page for the provided Category URL.</description>
+        </annotations>
+        <arguments>
+            <argument name="categoryUrl" type="string"/>
+        </arguments>
+        <amOnPage url="{{StorefrontCategoryPage.url(categoryUrl)}}" stepKey="goToStorefrontCategoryPage"/>
+    </actionGroup>
+</actionGroups>

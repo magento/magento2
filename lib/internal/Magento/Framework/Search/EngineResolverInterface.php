@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Search;
 
 /**
  * @api
+ * @since 102.0.0
  */
 interface EngineResolverInterface
 {
@@ -16,6 +17,7 @@ interface EngineResolverInterface
      * It returns string identifier of Search Engine that is currently chosen in configuration
      *
      * @return string
+     * @since 102.0.0
      */
     public function getCurrentSearchEngine();
 }

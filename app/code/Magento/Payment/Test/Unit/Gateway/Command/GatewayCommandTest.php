@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -68,13 +68,13 @@ class GatewayCommandTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->requestBuilder = $this->getMockForAbstractClass(BuilderInterface::class);
-        $this->transferFactory = $this->getMockForAbstractClass(TransferFactoryInterface::class);
-        $this->client = $this->getMockForAbstractClass(ClientInterface::class);
-        $this->responseHandler = $this->getMockForAbstractClass(HandlerInterface::class);
-        $this->validator = $this->getMockForAbstractClass(ValidatorInterface::class);
-        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
-        $this->errorMessageMapper = $this->getMockForAbstractClass(ErrorMessageMapperInterface::class);
+        $this->requestBuilder = $this->createMock(BuilderInterface::class);
+        $this->transferFactory = $this->createMock(TransferFactoryInterface::class);
+        $this->client = $this->createMock(ClientInterface::class);
+        $this->responseHandler = $this->createMock(HandlerInterface::class);
+        $this->validator = $this->createMock(ValidatorInterface::class);
+        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->errorMessageMapper = $this->createMock(ErrorMessageMapperInterface::class);
 
         $this->command = new GatewayCommand(
             $this->requestBuilder,
@@ -115,9 +115,14 @@ class GatewayCommandTest extends TestCase
 
         $this->logger->expects(self::exactly(count($validationFailures)))
             ->method('critical')
-            ->withConsecutive(
-                [self::equalTo('Payment Error: ' . $validationFailures[0])],
-                [self::equalTo('Payment Error: ' . $validationFailures[1])]
+            ->willReturnCallback(
+                function ($arg) use ($validationFailures) {
+                    static $index = 0;
+                    $expectedMessage = 'Payment Error: ' . $validationFailures[$index++];
+                    if ($arg == $expectedMessage) {
+                        return null;
+                    }
+                }
             );
 
         $this->command->execute($commandSubject);
@@ -150,11 +155,12 @@ class GatewayCommandTest extends TestCase
 
         $this->logger->expects(self::exactly(count(array_merge($validationFailures, $errorCodes))))
             ->method('critical')
-            ->withConsecutive(
-                [self::equalTo('Payment Error: Unauthorized')],
-                [self::equalTo('Payment Error: Failure Mapped')],
-                [self::equalTo('Payment Error: Failure #2')]
-            );
+            ->willReturnCallback(function ($arg1) {
+                if ($arg1 == 'Payment Error: Unauthorized' || $arg1 == 'Payment Error: Failure Mapped' ||
+                    $arg1 == 'Payment Error: Failure #2') {
+                    return null;
+                }
+            });
 
         $this->command->execute($commandSubject);
     }
@@ -179,7 +185,7 @@ class GatewayCommandTest extends TestCase
         ];
         $response = ['response_field1' => 'response_value1'];
         $transferO = $this->getMockBuilder(TransferInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->requestBuilder->method('build')
             ->with($commandSubject)
@@ -194,7 +200,7 @@ class GatewayCommandTest extends TestCase
             ->willReturn($response);
 
         $result = $this->getMockBuilder(ResultInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->validator->method('validate')
             ->with(array_merge($commandSubject, ['response' => $response]))

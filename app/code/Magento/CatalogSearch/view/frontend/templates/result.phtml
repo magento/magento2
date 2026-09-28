@@ -1,10 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
+// @codingStandardsIgnoreFile
 
-/** This changes need to valid applying filters and configuration before search process is started. */
+use Magento\CatalogSearch\Block\Result;
+
+/** These changes need to valid applying filters and configuration before search process is started. */
+
+/** @var $block  Result*/
 $productList = $block->getProductListHtml();
 ?>
 <?php if ($block->getResultCount()) : ?>

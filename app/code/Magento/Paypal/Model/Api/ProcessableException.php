@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Paypal\Model\Api;
@@ -38,7 +38,7 @@ class ProcessableException extends LocalizedException
      * @param \Exception $cause
      * @param int $code
      */
-    public function __construct(Phrase $phrase, \Exception $cause = null, $code = 0)
+    public function __construct(Phrase $phrase, ?\Exception $cause = null, $code = 0)
     {
         parent::__construct($phrase, $cause, $code);
         $this->code = $code;
@@ -65,6 +65,12 @@ class ProcessableException extends LocalizedException
                 $message = __(
                     'I\'m sorry - but we are not able to complete your transaction.'
                     . ' Please contact us so we can assist you.'
+                );
+                break;
+            case self::API_TRANSACTION_HAS_BEEN_COMPLETED:
+                $message = __(
+                    'A successful payment transaction has already been completed.'
+                    . ' Please, check if the order has been placed.'
                 );
                 break;
             case self::API_ADDRESS_MATCH_FAIL:

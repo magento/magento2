@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Cms\Test\Unit\Controller\Adminhtml\Page;
 
+use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Backend\Model\View\Result\RedirectFactory;
 use Magento\Cms\Api\PageRepositoryInterface;
@@ -18,7 +19,8 @@ use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Message\ManagerInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -27,6 +29,7 @@ use PHPUnit\Framework\TestCase;
  */
 class SaveTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var RequestInterface|MockObject
      */
@@ -58,7 +61,7 @@ class SaveTest extends TestCase
     private $messageManagerMock;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface|MockObject
+     * @var EventManagerInterface|MockObject
      */
     private $eventManagerMock;
 
@@ -82,13 +85,14 @@ class SaveTest extends TestCase
      */
     private $pageId = 1;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
-        $objectManager = new ObjectManager($this);
-
         $this->resultRedirectFactory = $this->getMockBuilder(RedirectFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->resultRedirect = $this->getMockBuilder(Redirect::class)
             ->disableOriginalConstructor()
@@ -98,37 +102,42 @@ class SaveTest extends TestCase
             ->willReturn($this->resultRedirect);
         $this->dataProcessorMock = $this->getMockBuilder(
             PostDataProcessor::class
-        )->setMethods(['filter'])->disableOriginalConstructor()
+        )->onlyMethods(['filter'])->disableOriginalConstructor()
             ->getMock();
         $this->dataPersistorMock = $this->getMockBuilder(DataPersistorInterface::class)
             ->getMock();
-        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->setMethods(['getParam', 'getPostValue'])
-            ->getMockForAbstractClass();
-        $this->messageManagerMock = $this->getMockBuilder(ManagerInterface::class)
-            ->getMockForAbstractClass();
-        $this->eventManagerMock = $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)
-            ->setMethods(['dispatch'])
-            ->getMockForAbstractClass();
+        // Use MockCreationTrait to add non-existent methods like getPostValue
+        $this->requestMock = $this->createPartialMockWithReflection(
+            RequestInterface::class,
+            ['getPostValue', 'getParam', 'isPost', 'getFullActionName', 'setParam',
+             'getModuleName', 'setModuleName', 'getActionName', 'setActionName',
+             'getCookie', 'getBeforeForwardInfo', 'getPathInfo', 'setPathInfo',
+             'getOriginalPathInfo', 'getFrontName', 'getControllerName', 'getRouteName',
+             'setParams', 'getParams', 'isSecure']
+        );
+        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
+        $this->eventManagerMock = $this->createPartialMock(
+            EventManagerInterface::class,
+            ['dispatch']
+        );
         $this->pageFactory = $this->getMockBuilder(PageFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
-        $this->pageRepository = $this->getMockBuilder(PageRepositoryInterface::class)
+        $this->pageRepository = $this->createMock(PageRepositoryInterface::class);
+        $context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->saveController = $objectManager->getObject(
-            Save::class,
-            [
-                'request' => $this->requestMock,
-                'messageManager' => $this->messageManagerMock,
-                'eventManager' => $this->eventManagerMock,
-                'resultRedirectFactory' => $this->resultRedirectFactory,
-                'dataProcessor' => $this->dataProcessorMock,
-                'dataPersistor' => $this->dataPersistorMock,
-                'pageFactory' => $this->pageFactory,
-                'pageRepository' => $this->pageRepository
-            ]
+            ->getMock();
+        $context->method('getRequest')->willReturn($this->requestMock);
+        $context->method('getMessageManager')->willReturn($this->messageManagerMock);
+        $context->method('getEventManager')->willReturn($this->eventManagerMock);
+        $context->method('getResultRedirectFactory')->willReturn($this->resultRedirectFactory);
+        $this->saveController = new Save(
+            $context,
+            $this->dataProcessorMock,
+            $this->dataPersistorMock,
+            $this->pageFactory,
+            $this->pageRepository
         );
     }
 
@@ -140,7 +149,7 @@ class SaveTest extends TestCase
             'stores' => ['0'],
             'is_active' => true,
             'content' => '"><script>alert("cookie: "+document.cookie)</script>',
-            'back' => 'close'
+            'back' => 'close',
         ];
 
         $filteredPostData = [
@@ -149,7 +158,7 @@ class SaveTest extends TestCase
             'stores' => ['0'],
             'is_active' => true,
             'content' => '&quot;&gt;&lt;script&gt;alert(&quot;cookie: &quot;+document.cookie)&lt;/script&gt;',
-            'back' => 'close'
+            'back' => 'close',
         ];
 
         $this->dataProcessorMock->expects($this->any())
@@ -236,7 +245,7 @@ class SaveTest extends TestCase
             'stores' => ['0'],
             'is_active' => true,
             'content' => '"><script>alert("cookie: "+document.cookie)</script>',
-            'back' => 'continue'
+            'back' => 'continue',
         ];
         $this->requestMock->expects($this->any())->method('getPostValue')->willReturn($postData);
         $this->requestMock->expects($this->atLeastOnce())
@@ -304,12 +313,13 @@ class SaveTest extends TestCase
         $this->pageRepository->expects($this->once())->method('getById')->with($this->pageId)->willReturn($page);
         $page->expects($this->once())->method('setData');
         $this->pageRepository->expects($this->once())->method('save')->with($page)
-            ->willThrowException(new \Exception('Error message.'));
+            ->willThrowException(new \Error('Error message.'));
 
         $this->messageManagerMock->expects($this->never())
             ->method('addSuccessMessage');
         $this->messageManagerMock->expects($this->once())
-            ->method('addExceptionMessage');
+            ->method('addErrorMessage')
+            ->with('Something went wrong while saving the page.');
 
         $this->dataPersistorMock->expects($this->any())
             ->method('set')
@@ -318,13 +328,89 @@ class SaveTest extends TestCase
                 [
                     'page_id' => $this->pageId,
                     'layout_update_xml' => null,
-                    'custom_layout_update_xml' => null
+                    'custom_layout_update_xml' => null,
                 ]
             );
 
         $this->resultRedirect->expects($this->atLeastOnce())
             ->method('setPath')
             ->with('*/*/edit', ['page_id' => $this->pageId])
+            ->willReturnSelf();
+
+        $this->assertSame($this->resultRedirect, $this->saveController->execute());
+    }
+
+    /**
+     * Test that layout_update_selected is cleared when duplicating a page.
+     *
+     * @return void
+     */
+    public function testDuplicateClearsLayoutUpdateSelected(): void
+    {
+        $postData = [
+            'title' => 'Original Page',
+            'identifier' => 'original-page',
+            'stores' => ['0'],
+            'is_active' => true,
+            'content' => 'Page content',
+            'layout_update_selected' => 'Default',
+        ];
+
+        $this->dataProcessorMock->expects($this->any())
+            ->method('filter')
+            ->with($postData)
+            ->willReturn($postData);
+
+        $this->requestMock->expects($this->any())->method('getPostValue')->willReturn($postData);
+        $this->requestMock->expects($this->atLeastOnce())
+            ->method('getParam')
+            ->willReturnMap(
+                [
+                    ['page_id', null, $this->pageId],
+                    ['back', false, 'duplicate'],
+                ]
+            );
+
+        $originalPage = $this->getMockBuilder(Page::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $originalPage->method('getIdentifier')->willReturn('original-page');
+        $originalPage->method('getId')->willReturn($this->pageId);
+        $originalPage->method('getLayoutUpdateXml')->willReturn(null);
+        $originalPage->method('getCustomLayoutUpdateXml')->willReturn(null);
+
+        $newPage = $this->getMockBuilder(Page::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $newPage->method('getId')->willReturn(2);
+
+        $this->pageFactory->expects($this->exactly(2))
+            ->method('create')
+            ->willReturnOnConsecutiveCalls($originalPage, $newPage);
+
+        $this->pageRepository->expects($this->once())
+            ->method('getById')
+            ->with($this->pageId)
+            ->willReturn($originalPage);
+
+        $originalPage->expects($this->once())->method('setData');
+
+        // Verify that layout_update_selected is set to null on the duplicate
+        $newPage->expects($this->once())
+            ->method('setData')
+            ->with('layout_update_selected', null);
+
+        $newPage->expects($this->once())->method('setId')->with(null);
+        $newPage->expects($this->once())->method('setIdentifier');
+        $newPage->expects($this->once())->method('setIsActive')->with(false);
+
+        $this->pageRepository->expects($this->exactly(2))->method('save');
+
+        $this->messageManagerMock->expects($this->exactly(2))
+            ->method('addSuccessMessage');
+
+        $this->resultRedirect->expects($this->atLeastOnce())
+            ->method('setPath')
             ->willReturnSelf();
 
         $this->assertSame($this->resultRedirect, $this->saveController->execute());

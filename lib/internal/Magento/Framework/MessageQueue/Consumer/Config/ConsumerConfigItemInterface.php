@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\MessageQueue\Consumer\Config;
 
@@ -9,6 +9,7 @@ use Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItem\HandlerInt
 
 /**
  * Items of this class represent config items declared in etc/queue_consumer.xsd
+ * @api
  */
 interface ConsumerConfigItemInterface
 {
@@ -53,4 +54,25 @@ interface ConsumerConfigItemInterface
      * @return int
      */
     public function getMaxMessages();
+
+    /**
+     * Get maximal time (in seconds) for waiting new messages from queue before terminating consumer.
+     *
+     * @return int|null
+     */
+    public function getMaxIdleTime();
+
+    /**
+     * Get time to sleep (in seconds) before checking if a new message is available in the queue.
+     *
+     * @return int|null
+     */
+    public function getSleep();
+
+    /**
+     * Get is consumer have to be spawned only if there are messages in the queue.
+     *
+     * @return boolean|null
+     */
+    public function getOnlySpawnWhenMessageAvailable();
 }

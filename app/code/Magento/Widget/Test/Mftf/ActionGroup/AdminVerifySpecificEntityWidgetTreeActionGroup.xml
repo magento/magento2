@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminVerifySpecificEntityWidgetTreeActionGroup" extends="AdminCreateWidgetActionGroup">
+        <annotations>
+            <description>Fill widget main fields and widget layout for anchor categories DisplayOn option. Verify the tree categories selected</description>
+        </annotations>
+        <selectOption selector="{{AdminNewWidgetSection.specificEntitySelectContainer}}" userInput="{{widget.container}}" stepKey="setContainer"/>
+        <seeElement selector="{{AdminNewWidgetSection.specificEntitySelectRadio}}" stepKey="seeSpecificEntityRadio" after="waitForPageLoad"/>
+        <click selector="{{AdminNewWidgetSection.specificEntitySelectRadio}}" stepKey="clickSpecificEntityRadio" after="seeSpecificEntityRadio"/>
+        <seeElement selector="{{AdminNewWidgetSection.specificEntityOptionsChooser}}" stepKey="seeChooserTrigger" after="clickSpecificEntityRadio"/>
+        <click selector="{{AdminNewWidgetSection.specificEntityOptionsChooser}}" stepKey="clickChooserTrigger" after="seeChooserTrigger"/>
+        <remove keyForRemoval="scrollToTopOfPage"/>
+        <remove keyForRemoval="clickWidgetOptions"/>
+        <remove keyForRemoval="waitForWidgetOptions"/>
+    </actionGroup>
+</actionGroups>

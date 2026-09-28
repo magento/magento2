@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Setup\Model\FixtureGenerator;
@@ -39,7 +39,7 @@ class SimpleProductTemplateGenerator implements TemplateEntityGeneratorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function generateEntity()
     {
@@ -70,6 +70,9 @@ class SimpleProductTemplateGenerator implements TemplateEntityGeneratorInterface
                 'name' => 'template name' . $productRandomizerNumber,
                 'url_key' => 'template-url' . $productRandomizerNumber,
                 'sku' => 'template_sku_simple' . $productRandomizerNumber,
+                'meta_description' => 'Simple Product',
+                'meta_keyword' => $productRandomizerNumber,
+                'meta_title' => $productRandomizerNumber,
                 'price' => 10,
                 'visibility' => Visibility::VISIBILITY_BOTH,
                 'status' => Status::STATUS_ENABLED,

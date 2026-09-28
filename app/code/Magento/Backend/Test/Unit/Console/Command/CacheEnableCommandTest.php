@@ -1,16 +1,17 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Backend\Test\Unit\Console\Command;
 
 use Magento\Backend\Console\Command\CacheEnableCommand;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class CacheEnableCommandTest extends AbstractCacheSetCommandTest
+class CacheEnableCommandTest extends AbstractCacheSetCommandTestCase
 {
     protected function setUp(): void
     {
@@ -23,8 +24,8 @@ class CacheEnableCommandTest extends AbstractCacheSetCommandTest
      * @param array $enable
      * @param array $result
      * @param string $output
-     * @dataProvider executeDataProvider
      */
+    #[DataProvider('executeDataProvider')]
     public function testExecute($param, $enable, $result, $output)
     {
         $this->cacheManagerMock->expects($this->once())->method('getAvailableTypes')->willReturn(['A', 'B', 'C']);
@@ -46,9 +47,9 @@ class CacheEnableCommandTest extends AbstractCacheSetCommandTest
     /**
      * {@inheritdoc}
      */
-    public function getExpectedExecutionOutput(array $enabled)
+    public static function getExpectedExecutionOutput(array $enabled)
     {
-        $output = $this->getExpectedChangeOutput($enabled, true);
+        $output = static::getExpectedChangeOutput($enabled, true);
         if ($enabled) {
             $output .= 'Cleaned cache types:' . PHP_EOL;
             $output .= implode(PHP_EOL, $enabled) . PHP_EOL;

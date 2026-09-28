@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Deploy\Model;
@@ -100,10 +100,10 @@ class Mode
         Reader $reader,
         MaintenanceMode $maintenanceMode,
         Filesystem $filesystem,
-        ConfigProvider $configProvider = null,
-        ProcessorFacadeFactory $processorFacadeFactory = null,
-        EmulatedAdminhtmlAreaProcessor $emulatedAreaProcessor = null,
-        MaintenanceModeEnabler $maintenanceModeEnabler = null
+        ?ConfigProvider $configProvider = null,
+        ?ProcessorFacadeFactory $processorFacadeFactory = null,
+        ?EmulatedAdminhtmlAreaProcessor $emulatedAreaProcessor = null,
+        ?MaintenanceModeEnabler $maintenanceModeEnabler = null
     ) {
         $this->input = $input;
         $this->output = $output;

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,15 +15,19 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Message\Manager;
+use Exception;
 use Magento\Framework\Url;
 use Magento\Store\App\Response\Redirect;
 use Magento\Wishlist\Controller\Index\Remove;
 use Magento\Wishlist\Controller\WishlistProvider;
 use Magento\Wishlist\Helper\Data;
 use Magento\Wishlist\Model\Item;
+use Magento\Wishlist\Model\Product\AttributeValueProvider;
 use Magento\Wishlist\Model\Wishlist;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\Controller\Result\Redirect as ResultRedirect;
+use Magento\Framework\Event\Manager as EventManager;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -71,7 +75,7 @@ class RemoveTest extends TestCase
     protected $resultFactoryMock;
 
     /**
-     * @var \Magento\Framework\Controller\Result\Redirect|MockObject
+     * @var ResultRedirect|MockObject
      */
     protected $resultRedirectMock;
 
@@ -80,6 +84,14 @@ class RemoveTest extends TestCase
      */
     protected $formKeyValidator;
 
+    /**
+     * @var AttributeValueProvider|MockObject
+     */
+    protected $attributeValueProvider;
+
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->context = $this->createMock(Context::class);
@@ -89,23 +101,21 @@ class RemoveTest extends TestCase
         $this->om = $this->createMock(ObjectManager::class);
         $this->messageManager = $this->createMock(Manager::class);
         $this->url = $this->createMock(Url::class);
-        $this->resultFactoryMock = $this->getMockBuilder(ResultFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->resultRedirectMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\Redirect::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resultFactoryMock = $this->createMock(ResultFactory::class);
+        $this->resultRedirectMock = $this->createMock(ResultRedirect::class);
 
         $this->resultFactoryMock->expects($this->any())
             ->method('create')
             ->with(ResultFactory::TYPE_REDIRECT, [])
             ->willReturn($this->resultRedirectMock);
 
-        $this->formKeyValidator = $this->getMockBuilder(Validator::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->formKeyValidator = $this->createMock(Validator::class);
+        $this->attributeValueProvider = $this->createMock(AttributeValueProvider::class);
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function tearDown(): void
     {
         unset(
@@ -119,9 +129,12 @@ class RemoveTest extends TestCase
         );
     }
 
-    protected function prepareContext()
+    /**
+     * @return void
+     */
+    protected function prepareContext(): void
     {
-        $eventManager = $this->createMock(\Magento\Framework\Event\Manager::class);
+        $eventManager = $this->createMock(EventManager::class);
         $actionFlag = $this->createMock(ActionFlag::class);
 
         $this->context
@@ -160,7 +173,7 @@ class RemoveTest extends TestCase
     /**
      * @return Remove
      */
-    public function getController()
+    public function getController(): Remove
     {
         $this->prepareContext();
 
@@ -172,11 +185,15 @@ class RemoveTest extends TestCase
         return new Remove(
             $this->context,
             $this->wishlistProvider,
-            $this->formKeyValidator
+            $this->formKeyValidator,
+            $this->attributeValueProvider
         );
     }
 
-    public function testExecuteWithInvalidFormKey()
+    /**
+     * @return void
+     */
+    public function testExecuteWithInvalidFormKey(): void
     {
         $this->prepareContext();
 
@@ -193,13 +210,17 @@ class RemoveTest extends TestCase
         $controller = new Remove(
             $this->context,
             $this->wishlistProvider,
-            $this->formKeyValidator
+            $this->formKeyValidator,
+            $this->attributeValueProvider
         );
 
         $this->assertSame($this->resultRedirectMock, $controller->execute());
     }
 
-    public function testExecuteWithoutItem()
+    /**
+     * @return void
+     */
+    public function testExecuteWithoutItem(): void
     {
         $this->expectException('Magento\Framework\Exception\NotFoundException');
         $item = $this->createMock(Item::class);
@@ -228,7 +249,10 @@ class RemoveTest extends TestCase
         $this->getController()->execute();
     }
 
-    public function testExecuteWithoutWishlist()
+    /**
+     * @return void
+     */
+    public function testExecuteWithoutWishlist(): void
     {
         $this->expectException('Magento\Framework\Exception\NotFoundException');
         $item = $this->createMock(Item::class);
@@ -248,7 +272,6 @@ class RemoveTest extends TestCase
             ->willReturn(2);
 
         $this->request
-            ->expects($this->at(0))
             ->method('getParam')
             ->with('item')
             ->willReturn(1);
@@ -268,7 +291,10 @@ class RemoveTest extends TestCase
         $this->getController()->execute();
     }
 
-    public function testExecuteCanNotSaveWishlist()
+    /**
+     * @return void
+     */
+    public function testExecuteCanNotSaveWishlist(): void
     {
         $referer = 'http://referer-url.com';
 
@@ -351,11 +377,14 @@ class RemoveTest extends TestCase
         $this->assertSame($this->resultRedirectMock, $this->getController()->execute());
     }
 
-    public function testExecuteCanNotSaveWishlistAndWithRedirect()
+    /**
+     * @return void
+     */
+    public function testExecuteCanNotSaveWishlistAndWithRedirect(): void
     {
         $referer = 'http://referer-url.com';
 
-        $exception = new \Exception('Message');
+        $exception = new Exception('Message');
         $wishlist = $this->createMock(Wishlist::class);
         $wishlist
             ->expects($this->once())

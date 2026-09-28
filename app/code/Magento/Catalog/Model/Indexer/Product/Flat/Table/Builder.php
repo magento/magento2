@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\Indexer\Product\Flat\Table;
 
 /**
- * Class Builder
+ * Build table structure based on provided columns
  */
 class Builder implements BuilderInterface
 {

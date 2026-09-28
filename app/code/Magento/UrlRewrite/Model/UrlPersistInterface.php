@@ -1,12 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\UrlRewrite\Model;
 
 /**
- * Url Persist Interface
  * @api
  * @since 100.0.2
  */
@@ -26,7 +25,6 @@ interface UrlPersistInterface
      *
      * @param array $data
      * @return void
-     * @api
      */
     public function deleteByData(array $data);
 }

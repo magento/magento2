@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\DB\Adapter;
@@ -12,69 +12,70 @@ use Magento\Framework\DB\Ddl\Table;
  * Magento Database Adapter Interface
  *
  * @api
+ * @since 100.0.2
  */
 interface AdapterInterface
 {
-    const INDEX_TYPE_PRIMARY = 'primary';
+    public const INDEX_TYPE_PRIMARY = 'primary';
 
-    const INDEX_TYPE_UNIQUE = 'unique';
+    public const INDEX_TYPE_UNIQUE = 'unique';
 
-    const INDEX_TYPE_INDEX = 'index';
+    public const INDEX_TYPE_INDEX = 'index';
 
-    const INDEX_TYPE_FULLTEXT = 'fulltext';
+    public const INDEX_TYPE_FULLTEXT = 'fulltext';
 
-    const FK_ACTION_CASCADE = 'CASCADE';
+    public const FK_ACTION_CASCADE = 'CASCADE';
 
-    const FK_ACTION_SET_NULL = 'SET NULL';
+    public const FK_ACTION_SET_NULL = 'SET NULL';
 
-    const FK_ACTION_NO_ACTION = 'NO ACTION';
+    public const FK_ACTION_NO_ACTION = 'NO ACTION';
 
-    const FK_ACTION_RESTRICT = 'RESTRICT';
+    public const FK_ACTION_RESTRICT = 'RESTRICT';
 
-    const FK_ACTION_SET_DEFAULT = 'SET DEFAULT';
+    public const FK_ACTION_SET_DEFAULT = 'SET DEFAULT';
 
-    const INSERT_ON_DUPLICATE = 1;
+    public const INSERT_ON_DUPLICATE = 1;
 
-    const INSERT_IGNORE = 2;
-    
+    public const INSERT_IGNORE = 2;
+
     /** Strategy for updating data in table. See https://dev.mysql.com/doc/refman/5.7/en/replace.html */
-    const REPLACE = 4;
+    public const REPLACE = 4;
 
-    const ISO_DATE_FORMAT = 'yyyy-MM-dd';
+    public const ISO_DATE_FORMAT = 'yyyy-MM-dd';
 
-    const ISO_DATETIME_FORMAT = 'yyyy-MM-dd HH-mm-ss';
+    public const ISO_DATETIME_FORMAT = 'yyyy-MM-dd HH-mm-ss';
 
-    const INTERVAL_SECOND = 'SECOND';
+    public const INTERVAL_SECOND = 'SECOND';
 
-    const INTERVAL_MINUTE = 'MINUTES';
+    public const INTERVAL_MINUTE = 'MINUTES';
 
-    const INTERVAL_HOUR = 'HOURS';
+    public const INTERVAL_HOUR = 'HOURS';
 
-    const INTERVAL_DAY = 'DAYS';
+    public const INTERVAL_DAY = 'DAYS';
 
-    const INTERVAL_MONTH = 'MONTHS';
+    public const INTERVAL_MONTH = 'MONTHS';
 
-    const INTERVAL_YEAR = 'YEARS';
+    public const INTERVAL_YEAR = 'YEARS';
 
     /**
      * Error message for DDL query in transactions
      */
-    const ERROR_DDL_MESSAGE = 'DDL statements are not allowed in transactions';
+    public const ERROR_DDL_MESSAGE = 'DDL statements are not allowed in transactions';
 
     /**
      * Error message for unfinished rollBack transaction
      */
-    const ERROR_ROLLBACK_INCOMPLETE_MESSAGE = 'Rolled back transaction has not been completed correctly.';
+    public const ERROR_ROLLBACK_INCOMPLETE_MESSAGE = 'Rolled back transaction has not been completed correctly.';
 
     /**
      * Error message for asymmetric transaction rollback
      */
-    const ERROR_ASYMMETRIC_ROLLBACK_MESSAGE = 'Asymmetric transaction rollback.';
+    public const ERROR_ASYMMETRIC_ROLLBACK_MESSAGE = 'Asymmetric transaction rollback.';
 
     /**
      * Error message for asymmetric transaction commit
      */
-    const ERROR_ASYMMETRIC_COMMIT_MESSAGE = 'Asymmetric transaction commit.';
+    public const ERROR_ASYMMETRIC_COMMIT_MESSAGE = 'Asymmetric transaction commit.';
 
     /**
      * Begin new DB transaction for connection
@@ -258,7 +259,7 @@ interface AdapterInterface
      *
      * @param string $tableName
      * @param string $columnName
-     * @param array|string $definition  string specific or universal array DB Server definition
+     * @param array|string $definition string specific or universal array DB Server definition
      * @param string $schemaName
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
      */
@@ -273,7 +274,7 @@ interface AdapterInterface
      * @param string $oldColumnName
      * @param string $newColumnName
      * @param array|string $definition
-     * @param boolean $flushData        flush table statistic
+     * @param boolean $flushData flush table statistic
      * @param string $schemaName
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
      */
@@ -323,8 +324,8 @@ interface AdapterInterface
      *
      * @param string $tableName
      * @param string $indexName
-     * @param string|array $fields  the table column name or array of ones
-     * @param string $indexType     the index type
+     * @param string|array $fields the table column name or array of ones
+     * @param string $indexType the index type
      * @param string $schemaName
      * @return \Zend_Db_Statement_Interface
      */
@@ -468,7 +469,7 @@ interface AdapterInterface
      *      array('value1', 'value2')
      *
      * @param   string $table
-     * @param   string[] $columns  the data array column map
+     * @param   string[] $columns the data array column map
      * @param   array $data
      * @return  int
      */
@@ -550,7 +551,7 @@ interface AdapterInterface
      * @param string|\Magento\Framework\DB\Select $sql An SQL SELECT statement.
      * @param mixed $bind Data to bind into SELECT placeholders.
      * @param mixed $fetchMode Override current fetch mode.
-     * @return array
+     * @return mixed Array, object, or scalar depending on fetch mode.
      */
     public function fetchRow($sql, $bind = [], $fetchMode = null);
 
@@ -662,7 +663,7 @@ interface AdapterInterface
      * Quote a column identifier and alias.
      *
      * @param string|array|\Zend_Db_Expr $ident The identifier or expression.
-     * @param string $alias An alias for the column.
+     * @param string|null $alias An alias for the column.
      * @param boolean $auto If true, heed the AUTO_QUOTE_IDENTIFIERS config option.
      * @return string The quoted identifier and alias.
      */
@@ -750,7 +751,7 @@ interface AdapterInterface
      * Return false if cache does not exists
      *
      * @param string $tableCacheKey the table cache key
-     * @param int $ddlType          the DDL constant
+     * @param int $ddlType the DDL constant
      * @return string|array|int|false
      */
     public function loadDdlCache($tableCacheKey, $ddlType);
@@ -864,7 +865,7 @@ interface AdapterInterface
      *
      * @see INTERVAL_* constants for $unit
      *
-     * @param \Zend_Db_Expr|string $date   quoted field name or SQL statement
+     * @param \Zend_Db_Expr|string $date quoted field name or SQL statement
      * @param int $interval
      * @param string $unit
      * @return \Zend_Db_Expr
@@ -876,7 +877,7 @@ interface AdapterInterface
      *
      * @see INTERVAL_* constants for $unit
      *
-     * @param \Zend_Db_Expr|string $date   quoted field name or SQL statement
+     * @param \Zend_Db_Expr|string $date quoted field name or SQL statement
      * @param int|string $interval
      * @param string $unit
      * @return \Zend_Db_Expr
@@ -895,7 +896,7 @@ interface AdapterInterface
      * %m   Month, numeric (00..12)
      * %Y   Year, numeric, four digits
      *
-     * @param \Zend_Db_Expr|string $date   quoted field name or SQL statement
+     * @param \Zend_Db_Expr|string $date quoted field name or SQL statement
      * @param string $format
      * @return \Zend_Db_Expr
      */
@@ -932,7 +933,7 @@ interface AdapterInterface
      *
      * @see INTERVAL_* constants for $unit
      *
-     * @param \Zend_Db_Expr|string $date   quoted field name or SQL statement
+     * @param \Zend_Db_Expr|string $date quoted field name or SQL statement
      * @param string $unit
      * @return \Zend_Db_Expr
      */
@@ -951,9 +952,9 @@ interface AdapterInterface
     /**
      * Build a trigger name based on table name and trigger details
      *
-     * @param string $tableName  The table that is the subject of the trigger
-     * @param string $time  Either "before" or "after"
-     * @param string $event  The DB level event which activates the trigger, i.e. "update" or "insert"
+     * @param string $tableName The table that is the subject of the trigger
+     * @param string $time Either "before" or "after"
+     * @param string $event The DB level event which activates the trigger, i.e. "update" or "insert"
      * @return string
      */
     public function getTriggerName($tableName, $time, $event);
@@ -964,7 +965,7 @@ interface AdapterInterface
      * Check index name length and allowed symbols
      *
      * @param string $tableName
-     * @param string|array $fields  the columns list
+     * @param string|array $fields the columns list
      * @param string $indexType
      * @return string
      */

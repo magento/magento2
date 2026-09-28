@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -43,8 +43,8 @@ class DirectoryScannerTest extends TestCase
             'php' => [
                 $this->_testDir . '/additional.php',
                 $this->_testDir . '/app/bootstrap.php',
-                $this->_testDir . '/app/code/Magento/SomeModule/Helper/Test.php',
-                $this->_testDir . '/app/code/Magento/SomeModule/Model/Test.php',
+                $this->_testDir . '/app/code/Magento/SomeModule/Helper/TestHelper.php',
+                $this->_testDir . '/app/code/Magento/SomeModule/Model/TestHelper.php',
             ],
             'config' => [
                 $this->_testDir . '/app/code/Magento/SomeModule/etc/adminhtml/system.xml',

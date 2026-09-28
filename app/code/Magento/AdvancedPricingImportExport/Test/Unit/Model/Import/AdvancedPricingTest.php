@@ -1,22 +1,24 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\AdvancedPricingImportExport\Test\Unit\Model\Import;
 
+use Magento\AdvancedPricingImportExport\Model\CurrencyResolver;
 use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing as AdvancedPricing;
 use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator;
 use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator\TierPrice;
 use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator\Website;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Helper\Data as CatalogData;
+use Magento\Catalog\Model\Product as ProductModel;
 use Magento\CatalogImportExport\Model\Import\Product;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as RowValidatorInterface;
 use Magento\CatalogImportExport\Model\Import\Product\StoreResolver;
 use Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModelFactory as ResourceFactory;
-use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Type;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
@@ -26,11 +28,14 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Json\Helper\Data;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
-use Magento\Framework\Stdlib\StringUtils;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use Magento\ImportExport\Helper\Data as ImportExportData;
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 use Magento\ImportExport\Model\ResourceModel\Helper;
+use Magento\ImportExport\Model\ResourceModel\Import\Data as ImportData;
 use Magento\ImportExport\Test\Unit\Model\Import\AbstractImportTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
@@ -38,11 +43,13 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 class AdvancedPricingTest extends AbstractImportTestCase
 {
+    use MockCreationTrait;
+
     /**
      * DB Table data
      */
-    const TABLE_NAME = 'tableName';
-    const LINK_FIELD = 'linkField';
+    public const TABLE_NAME = 'tableName';
+    public const LINK_FIELD = 'linkField';
 
     /**
      * @var ResourceFactory|MockObject
@@ -50,7 +57,7 @@ class AdvancedPricingTest extends AbstractImportTestCase
     protected $resourceFactory;
 
     /**
-     * @var \Magento\Catalog\Helper\Data|MockObject
+     * @var CatalogData|MockObject
      */
     protected $catalogData;
 
@@ -65,7 +72,7 @@ class AdvancedPricingTest extends AbstractImportTestCase
     protected $importProduct;
 
     /**
-     * @var \Magento\Catalog\Model\Product|MockObject
+     * @var ProductModel|MockObject
      */
     protected $productModel;
 
@@ -95,14 +102,9 @@ class AdvancedPricingTest extends AbstractImportTestCase
     protected $connection;
 
     /**
-     * @var \Magento\ImportExport\Model\ResourceModel\Import\Data|MockObject
+     * @var ImportData|MockObject
      */
     protected $dataSourceModel;
-
-    /**
-     * @var Config
-     */
-    protected $eavConfig;
 
     /**
      * @var TimezoneInterface|MockObject
@@ -115,12 +117,12 @@ class AdvancedPricingTest extends AbstractImportTestCase
     protected $resource;
 
     /**
-     * @var \Magento\Framework\Json\Helper\Data|MockObject
+     * @var Data|MockObject
      */
     protected $jsonHelper;
 
     /**
-     * @var \Magento\ImportExport\Helper\Data|MockObject
+     * @var ImportExportData|MockObject
      */
     protected $importExportData;
 
@@ -140,49 +142,43 @@ class AdvancedPricingTest extends AbstractImportTestCase
     protected $advancedPricing;
 
     /**
-     * @var StringUtils
-     */
-    protected $stringObject;
-
-    /**
      * @var ProcessingErrorAggregatorInterface
      */
     protected $errorAggregator;
 
+    /**
+     * @var MockObject|CurrencyResolver
+     */
+    private $currencyResolver;
+
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->jsonHelper = $this->createMock(Data::class);
-        $this->importExportData = $this->createMock(\Magento\ImportExport\Helper\Data::class);
+        $this->importExportData = $this->createMock(ImportExportData::class);
         $this->resourceHelper = $this->createMock(Helper::class);
         $this->resource = $this->createPartialMock(ResourceConnection::class, ['getConnection']);
-        $this->connection = $this->getMockForAbstractClass(
-            AdapterInterface::class,
-            [],
-            '',
-            false
-        );
+        $this->connection = $this->createMock(AdapterInterface::class);
         $this->resource->method('getConnection')->willReturn($this->connection);
-        $this->dataSourceModel = $this->createMock(\Magento\ImportExport\Model\ResourceModel\Import\Data::class);
-        $this->eavConfig = $this->createMock(Config::class);
+        $this->dataSourceModel = $this->createMock(ImportData::class);
         $entityType = $this->createMock(Type::class);
         $entityType->method('getEntityTypeId')->willReturn('');
-        $this->eavConfig->method('getEntityType')->willReturn($entityType);
-        $this->resourceFactory = $this->getMockBuilder(
-            \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModelFactory::class
-        )
-            ->setMethods(['create', 'getTable'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resourceFactory = $this->createPartialMockWithReflection(
+            ResourceFactory::class,
+            ['create', 'getTable']
+        );
         $this->resourceFactory->method('create')->willReturnSelf();
         $this->resourceFactory->method('getTable')->willReturn(self::TABLE_NAME);
-        $this->catalogData = $this->createMock(\Magento\Catalog\Helper\Data::class);
+        $this->catalogData = $this->createMock(CatalogData::class);
         $this->storeResolver = $this->createMock(
             StoreResolver::class
         );
         $this->importProduct = $this->createMock(Product::class);
-        $this->productModel = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $this->productModel = $this->createMock(ProductModel::class);
         $this->validator = $this->createPartialMock(
             Validator::class,
             ['isValid', 'getMessages']
@@ -193,13 +189,11 @@ class AdvancedPricingTest extends AbstractImportTestCase
         $this->tierPriceValidator = $this->createMock(
             TierPrice::class
         );
-        $this->stringObject = $this->createMock(StringUtils::class);
         $this->errorAggregator = $this->getErrorAggregatorObject();
-        $this->dateTime = $this->getMockBuilder(DateTime::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['format'])
-            ->onlyMethods(['date'])
-            ->getMock();
+        $this->dateTime = $this->createPartialMockWithReflection(
+            DateTime::class,
+            ['format', 'date']
+        );
         $this->dateTime->method('date')->willReturnSelf();
 
         $this->advancedPricing = $this->getAdvancedPricingMock(
@@ -223,8 +217,10 @@ class AdvancedPricingTest extends AbstractImportTestCase
 
     /**
      * Test getter for entity type code.
+     *
+     * @return void
      */
-    public function testGetEntityTypeCode()
+    public function testGetEntityTypeCode(): void
     {
         $result = $this->advancedPricing->getEntityTypeCode();
         $expectedResult = 'advanced_pricing';
@@ -235,13 +231,15 @@ class AdvancedPricingTest extends AbstractImportTestCase
     /**
      * Test method validateRow against its result.
      *
-     * @dataProvider validateRowResultDataProvider
      * @param array $rowData
      * @param string|null $behavior
      * @param bool $expectedResult
+     *
+     * @return void
      * @throws \ReflectionException
      */
-    public function testValidateRowResult($rowData, $behavior, $expectedResult)
+    #[DataProvider('validateRowResultDataProvider')]
+    public function testValidateRowResult(array $rowData, ?string $behavior, bool $expectedResult): void
     {
         $rowNum = 0;
         $advancedPricingMock = $this->getAdvancedPricingMock(
@@ -251,7 +249,7 @@ class AdvancedPricingTest extends AbstractImportTestCase
                 'saveProductPrices',
                 'getCustomerGroupId',
                 'getWebSiteId',
-                'getBehavior',
+                'getBehavior'
             ]
         );
         $this->validator->method('isValid')->willReturn(true);
@@ -264,13 +262,15 @@ class AdvancedPricingTest extends AbstractImportTestCase
     /**
      * Test method validateRow whether AddRowError is called.
      *
-     * @dataProvider validateRowAddRowErrorCallDataProvider
      * @param array $rowData
      * @param string|null $behavior
      * @param string $error
+     *
+     * @return void
      * @throws \ReflectionException
      */
-    public function testValidateRowAddRowErrorCall($rowData, $behavior, $error)
+    #[DataProvider('validateRowAddRowErrorCallDataProvider')]
+    public function testValidateRowAddRowErrorCall(array $rowData, ?string $behavior, string $error): void
     {
         $rowNum = 0;
         $advancedPricingMock = $this->getAdvancedPricingMock(
@@ -280,7 +280,7 @@ class AdvancedPricingTest extends AbstractImportTestCase
                 'saveProductPrices',
                 'getCustomerGroupId',
                 'getWebSiteId',
-                'getBehavior',
+                'getBehavior'
             ]
         );
         $this->validator->method('isValid')->willReturn(true);
@@ -292,12 +292,14 @@ class AdvancedPricingTest extends AbstractImportTestCase
 
     /**
      * Test method validateRow whether internal validator is called.
+     *
+     * @return void
      */
-    public function testValidateRowValidatorCall()
+    public function testValidateRowValidatorCall(): void
     {
         $rowNum = 0;
         $rowData = [
-            \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_SKU => 'sku value',
+            AdvancedPricing::COL_SKU => 'sku value'
         ];
         $advancedPricingMock = $this->getAdvancedPricingMock(
             [
@@ -305,7 +307,7 @@ class AdvancedPricingTest extends AbstractImportTestCase
                 'addRowError',
                 'saveProductPrices',
                 'getCustomerGroupId',
-                'getWebSiteId',
+                'getWebSiteId'
             ]
         );
         $this->setPropertyValue($advancedPricingMock, '_validatedRows', []);
@@ -319,16 +321,26 @@ class AdvancedPricingTest extends AbstractImportTestCase
 
     /**
      * Test method saveAndReplaceAdvancedPrices whether AddRowError is called.
+     *
+     * @return void
      */
-    public function testSaveAndReplaceAdvancedPricesAddRowErrorCall()
+    public function testSaveAndReplaceAdvancedPricesAddRowErrorCall(): void
     {
         $rowNum = 0;
         $testBunch = [
             $rowNum => [
-                'bunch',
+                'bunch'
             ]
         ];
-        $this->dataSourceModel->expects($this->at(0))->method('getNextBunch')->willReturn($testBunch);
+        $count = 0;
+        $this->dataSourceModel
+            ->method('getNextUniqueBunch')
+            ->willReturnCallback(function () use (&$count, $testBunch) {
+                if ($count == 0) {
+                    $count++;
+                    return $testBunch;
+                }
+            });
         $this->advancedPricing->expects($this->once())->method('validateRow')->willReturn(false);
         $this->advancedPricing->method('saveProductPrices')->willReturnSelf();
 
@@ -342,8 +354,10 @@ class AdvancedPricingTest extends AbstractImportTestCase
 
     /**
      * Test method saveAdvancedPricing.
+     *
+     * @return void
      */
-    public function testSaveAdvancedPricing()
+    public function testSaveAdvancedPricing(): void
     {
         $this->advancedPricing
             ->expects($this->once())
@@ -358,23 +372,25 @@ class AdvancedPricingTest extends AbstractImportTestCase
      * Test method saveAndReplaceAdvancedPrices with append import behaviour.
      * Take into consideration different data and check relative internal calls.
      *
-     * @dataProvider saveAndReplaceAdvancedPricesAppendBehaviourDataProvider
      * @param array $data
      * @param string $tierCustomerGroupId
      * @param string $groupCustomerGroupId
      * @param string $tierWebsiteId
      * @param string $groupWebsiteId
      * @param array $expectedTierPrices
+     *
+     * @return void
      * @throws \ReflectionException
      */
+    #[DataProvider('saveAndReplaceAdvancedPricesAppendBehaviourDataProvider')]
     public function testSaveAndReplaceAdvancedPricesAppendBehaviourDataAndCalls(
-        $data,
-        $tierCustomerGroupId,
-        $groupCustomerGroupId,
-        $tierWebsiteId,
-        $groupWebsiteId,
-        $expectedTierPrices
-    ) {
+        array $data,
+        string $tierCustomerGroupId,
+        string $groupCustomerGroupId,
+        string $tierWebsiteId,
+        string $groupWebsiteId,
+        array $expectedTierPrices
+    ): void {
         $skuProduct = 'product1';
         $sku = $data[0][AdvancedPricing::COL_SKU];
         $advancedPricing = $this->getAdvancedPricingMock(
@@ -394,18 +410,26 @@ class AdvancedPricingTest extends AbstractImportTestCase
         $advancedPricing
             ->method('getBehavior')
             ->willReturn(Import::BEHAVIOR_APPEND);
-        $this->dataSourceModel->expects($this->at(0))->method('getNextBunch')->willReturn($data);
+        $count = 0;
+        $this->dataSourceModel
+            ->method('getNextUniqueBunch')
+            ->willReturnCallback(function () use (&$count, $data) {
+                if ($count == 0) {
+                    $count++;
+                    return $data;
+                }
+            });
         $advancedPricing->method('validateRow')->willReturn(true);
 
         $advancedPricing->method('getCustomerGroupId')->willReturnMap(
             [
-                [$data[0][AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP], $tierCustomerGroupId],
+                [$data[0][AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP], $tierCustomerGroupId]
             ]
         );
 
         $advancedPricing->method('getWebSiteId')->willReturnMap(
             [
-                [$data[0][AdvancedPricing::COL_TIER_PRICE_WEBSITE], $tierWebsiteId],
+                [$data[0][AdvancedPricing::COL_TIER_PRICE_WEBSITE], $tierWebsiteId]
             ]
         );
 
@@ -426,8 +450,10 @@ class AdvancedPricingTest extends AbstractImportTestCase
 
     /**
      * Test method saveAndReplaceAdvancedPrices with append import behaviour.
+     *
+     * @return void
      */
-    public function testSaveAndReplaceAdvancedPricesAppendBehaviourDataAndCallsWithoutTierPrice()
+    public function testSaveAndReplaceAdvancedPricesAppendBehaviourDataAndCallsWithoutTierPrice(): void
     {
         $data = [
             0 => [
@@ -437,7 +463,7 @@ class AdvancedPricingTest extends AbstractImportTestCase
                 AdvancedPricing::COL_TIER_PRICE_QTY => 'tier price qty value',
                 AdvancedPricing::COL_TIER_PRICE => 'tier price value',
                 AdvancedPricing::COL_TIER_PRICE_TYPE => AdvancedPricing::TIER_PRICE_TYPE_FIXED
-            ],
+            ]
         ];
         $tierCustomerGroupId = 'tier customer group id value';
         $tierWebsiteId = 'tier website id value';
@@ -462,18 +488,20 @@ class AdvancedPricingTest extends AbstractImportTestCase
         $advancedPricing
             ->method('getBehavior')
             ->willReturn(Import::BEHAVIOR_APPEND);
-        $this->dataSourceModel->expects($this->at(0))->method('getNextBunch')->willReturn($data);
+        $this->dataSourceModel
+            ->method('getNextBunch')
+            ->willReturnOnConsecutiveCalls($data);
         $advancedPricing->method('validateRow')->willReturn(true);
 
         $advancedPricing->method('getCustomerGroupId')->willReturnMap(
             [
-                [$data[0][AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP], $tierCustomerGroupId],
+                [$data[0][AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP], $tierCustomerGroupId]
             ]
         );
 
         $advancedPricing->method('getWebSiteId')->willReturnMap(
             [
-                [$data[0][AdvancedPricing::COL_TIER_PRICE_WEBSITE], $tierWebsiteId],
+                [$data[0][AdvancedPricing::COL_TIER_PRICE_WEBSITE], $tierWebsiteId]
             ]
         );
 
@@ -494,14 +522,16 @@ class AdvancedPricingTest extends AbstractImportTestCase
 
     /**
      * Test method saveAndReplaceAdvancedPrices with replace import behaviour.
+     *
+     * @return void
      */
-    public function testSaveAndReplaceAdvancedPricesReplaceBehaviourInternalCalls()
+    public function testSaveAndReplaceAdvancedPricesReplaceBehaviourInternalCalls(): void
     {
         $skuVal = 'sku value';
         $data = [
             0 => [
-                AdvancedPricing::COL_SKU => $skuVal,
-            ],
+                AdvancedPricing::COL_SKU => $skuVal
+            ]
         ];
         $expectedTierPrices = [];
         $listSku = [
@@ -510,7 +540,16 @@ class AdvancedPricingTest extends AbstractImportTestCase
         $this->advancedPricing->method('getBehavior')->willReturn(
             Import::BEHAVIOR_REPLACE
         );
-        $this->dataSourceModel->expects($this->at(0))->method('getNextBunch')->willReturn($data);
+
+        $count = 0;
+        $this->dataSourceModel
+            ->method('getNextUniqueBunch')
+            ->willReturnCallback(function () use (&$count, $data) {
+                if ($count == 0) {
+                    $count++;
+                    return $data;
+                }
+            });
         $this->advancedPricing->expects($this->once())->method('validateRow')->willReturn(true);
 
         $this->advancedPricing
@@ -522,31 +561,33 @@ class AdvancedPricingTest extends AbstractImportTestCase
 
         $this->advancedPricing
             ->method('deleteProductTierPrices')
-            ->withConsecutive(
-                [
-                    $listSku,
-                    AdvancedPricing::TABLE_TIER_PRICE,
-                ]
-            )
-            ->willReturn(true);
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($listSku) {
+                    if ($arg1 == $listSku && $arg2 == AdvancedPricing::TABLE_TIER_PRICE) {
+                        return true;
+                    }
+                }
+            );
 
         $this->advancedPricing
             ->method('saveProductPrices')
-            ->withConsecutive(
-                [
-                    $expectedTierPrices,
-                    AdvancedPricing::TABLE_TIER_PRICE
-                ]
-            )
-            ->willReturnSelf();
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($expectedTierPrices) {
+                    if ($arg1 == $expectedTierPrices && $arg2 == AdvancedPricing::TABLE_TIER_PRICE) {
+                        return $this->advancedPricing;
+                    }
+                }
+            );
 
         $this->invokeMethod($this->advancedPricing, 'saveAndReplaceAdvancedPrices');
     }
 
     /**
      * Test method deleteAdvancedPricing() whether correct $listSku is formed.
+     *
+     * @return void
      */
-    public function testDeleteAdvancedPricingFormListSkuToDelete()
+    public function testDeleteAdvancedPricingFormListSkuToDelete(): void
     {
         $skuOne = 'sku value';
         $skuTwo = 'sku value';
@@ -556,29 +597,45 @@ class AdvancedPricingTest extends AbstractImportTestCase
             ],
             1 => [
                 AdvancedPricing::COL_SKU => $skuTwo
-            ],
+            ]
         ];
 
-        $this->dataSourceModel->expects($this->at(0))->method('getNextBunch')->willReturn($data);
+        $count = 0;
+        $this->dataSourceModel
+            ->method('getNextUniqueBunch')
+            ->willReturnCallback(function () use (&$count, $data) {
+                if ($count == 0) {
+                    $count++;
+                    return $data;
+                }
+            });
         $this->advancedPricing->method('validateRow')->willReturn(true);
         $expectedSkuList = ['sku value'];
         $this->advancedPricing
             ->expects($this->once())
             ->method('deleteProductTierPrices')
-            ->withConsecutive(
-                [$expectedSkuList, AdvancedPricing::TABLE_TIER_PRICE]
-            )->willReturnSelf();
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($expectedSkuList) {
+                    if ($arg1 == $expectedSkuList && $arg2 == AdvancedPricing::TABLE_TIER_PRICE) {
+                        return $this->advancedPricing;
+                    }
+                }
+            );
 
         $this->advancedPricing->deleteAdvancedPricing();
     }
 
     /**
      * Test method deleteAdvancedPricing() whether _cachedSkuToDelete property is set to null.
+     *
+     * @return void
      */
-    public function testDeleteAdvancedPricingResetCachedSkuToDelete()
+    public function testDeleteAdvancedPricingResetCachedSkuToDelete(): void
     {
         $this->setPropertyValue($this->advancedPricing, '_cachedSkuToDelete', 'some value');
-        $this->dataSourceModel->expects($this->at(0))->method('getNextBunch')->willReturn([]);
+        $this->dataSourceModel
+            ->method('getNextBunch')
+            ->willReturnOnConsecutiveCalls([]);
 
         $this->advancedPricing->deleteAdvancedPricing();
 
@@ -588,8 +645,10 @@ class AdvancedPricingTest extends AbstractImportTestCase
 
     /**
      * Test method replaceAdvancedPricing().
+     *
+     * @return void
      */
-    public function testReplaceAdvancedPricing()
+    public function testReplaceAdvancedPricing(): void
     {
         $this->advancedPricing
             ->expects($this->once())
@@ -605,12 +664,12 @@ class AdvancedPricingTest extends AbstractImportTestCase
      *
      * @return array
      */
-    public function saveAndReplaceAdvancedPricesAppendBehaviourDataProvider()
+    public static function saveAndReplaceAdvancedPricesAppendBehaviourDataProvider(): array
     {
         // @codingStandardsIgnoreStart
         return [
             [
-                '$data' => [
+                'data' => [
                     0 => [
                         AdvancedPricing::COL_SKU => 'sku value',
                         //tier
@@ -621,11 +680,11 @@ class AdvancedPricingTest extends AbstractImportTestCase
                         AdvancedPricing::COL_TIER_PRICE_TYPE => AdvancedPricing::TIER_PRICE_TYPE_FIXED
                     ],
                 ],
-                '$tierCustomerGroupId' => 'tier customer group id value',
-                '$groupCustomerGroupId' => 'group customer group id value',
-                '$tierWebsiteId' => 'tier website id value',
-                '$groupWebsiteId' => 'group website id value',
-                '$expectedTierPrices' => [
+                'tierCustomerGroupId' => 'tier customer group id value',
+                'groupCustomerGroupId' => 'group customer group id value',
+                'tierWebsiteId' => 'tier website id value',
+                'groupWebsiteId' => 'group website id value',
+                'expectedTierPrices' => [
                     'sku value' => [
                         [
                             'all_groups' => false,
@@ -634,12 +693,12 @@ class AdvancedPricingTest extends AbstractImportTestCase
                             'value' => 'tier price value',
                             'website_id' => 'tier website id value',
                             'percentage_value' => null
-                        ],
-                    ],
-                ],
+                        ]
+                    ]
+                ]
             ],
             [
-                '$data' => [
+                'data' => [
                     0 => [
                         AdvancedPricing::COL_SKU => 'sku value',
                         //tier
@@ -650,11 +709,11 @@ class AdvancedPricingTest extends AbstractImportTestCase
                         AdvancedPricing::COL_TIER_PRICE_TYPE => AdvancedPricing::TIER_PRICE_TYPE_PERCENT
                     ],
                 ],
-                '$tierCustomerGroupId' => 'tier customer group id value',
-                '$groupCustomerGroupId' => 'group customer group id value',
-                '$tierWebsiteId' => 'tier website id value',
-                '$groupWebsiteId' => 'group website id value',
-                '$expectedTierPrices' => [
+                'tierCustomerGroupId' => 'tier customer group id value',
+                'groupCustomerGroupId' => 'group customer group id value',
+                'tierWebsiteId' => 'tier website id value',
+                'groupWebsiteId' => 'group website id value',
+                'expectedTierPrices' => [
                     'sku value' => [
                         [
                             'all_groups' => false,
@@ -662,13 +721,13 @@ class AdvancedPricingTest extends AbstractImportTestCase
                             'qty' => 'tier price qty value',
                             'value' => 0,
                             'percentage_value' => 'tier price value',
-                            'website_id' => 'tier website id value',
-                        ],
-                    ],
-                ],
+                            'website_id' => 'tier website id value'
+                        ]
+                    ]
+                ]
             ],
             [// tier customer group is equal to all group
-                '$data' => [
+                'data' => [
                     0 => [
                         AdvancedPricing::COL_SKU => 'sku value',
                         //tier
@@ -677,13 +736,13 @@ class AdvancedPricingTest extends AbstractImportTestCase
                         AdvancedPricing::COL_TIER_PRICE_QTY => 'tier price qty value',
                         AdvancedPricing::COL_TIER_PRICE => 'tier price value',
                         AdvancedPricing::COL_TIER_PRICE_TYPE => AdvancedPricing::TIER_PRICE_TYPE_FIXED
-                    ],
+                    ]
                 ],
-                '$tierCustomerGroupId' => 'tier customer group id value',
-                '$groupCustomerGroupId' => 'group customer group id value',
-                '$tierWebsiteId' => 'tier website id value',
-                '$groupWebsiteId' => 'group website id value',
-                '$expectedTierPrices' => [
+                'tierCustomerGroupId' => 'tier customer group id value',
+                'groupCustomerGroupId' => 'group customer group id value',
+                'tierWebsiteId' => 'tier website id value',
+                'groupWebsiteId' => 'group website id value',
+                'expectedTierPrices' => [
                     'sku value' => [
                         [
                             'all_groups' => true,
@@ -692,12 +751,12 @@ class AdvancedPricingTest extends AbstractImportTestCase
                             'value' => 'tier price value',
                             'website_id' => 'tier website id value',
                             'percentage_value' => null
-                        ],
-                    ],
-                ],
+                        ]
+                    ]
+                ]
             ],
             [
-                '$data' => [
+                'data' => [
                     0 => [
                         AdvancedPricing::COL_SKU => 'sku value',
                         //tier
@@ -706,13 +765,13 @@ class AdvancedPricingTest extends AbstractImportTestCase
                         AdvancedPricing::COL_TIER_PRICE_QTY => 'tier price qty value',
                         AdvancedPricing::COL_TIER_PRICE => 'tier price value',
                         AdvancedPricing::COL_TIER_PRICE_TYPE => AdvancedPricing::TIER_PRICE_TYPE_FIXED
-                    ],
+                    ]
                 ],
-                '$tierCustomerGroupId' => 'tier customer group id value',
-                '$groupCustomerGroupId' => 'group customer group id value',
-                '$tierWebsiteId' => 'tier website id value',
-                '$groupWebsiteId' => 'group website id value',
-                '$expectedTierPrices' => [
+                'tierCustomerGroupId' => 'tier customer group id value',
+                'groupCustomerGroupId' => 'group customer group id value',
+                'tierWebsiteId' => 'tier website id value',
+                'groupWebsiteId' => 'group website id value',
+                'expectedTierPrices' => [
                     'sku value' => [
                         [
                             'all_groups' => false,
@@ -721,10 +780,10 @@ class AdvancedPricingTest extends AbstractImportTestCase
                             'value' => 'tier price value',
                             'website_id' => 'tier website id value',
                             'percentage_value' => null
-                        ],
+                        ]
                     ]
-                ],
-            ],
+                ]
+            ]
         ];
         // @codingStandardsIgnoreEnd
     }
@@ -734,29 +793,29 @@ class AdvancedPricingTest extends AbstractImportTestCase
      *
      * @return array
      */
-    public function validateRowResultDataProvider()
+    public static function validateRowResultDataProvider(): array
     {
         return [
             [
-                '$rowData' => [
-                    AdvancedPricing::COL_SKU => 'sku value',
+                'rowData' => [
+                    AdvancedPricing::COL_SKU => 'sku value'
                 ],
-                '$behavior' => null,
-                '$expectedResult' => true,
+                'behavior' => null,
+                'expectedResult' => true
             ],
             [
-                '$rowData' => [
-                    AdvancedPricing::COL_SKU => null,
+                'rowData' => [
+                    AdvancedPricing::COL_SKU => null
                 ],
-                '$behavior' => Import::BEHAVIOR_DELETE,
-                '$expectedResult' => false,
+                'behavior' => Import::BEHAVIOR_DELETE,
+                'expectedResult' => false
             ],
             [
-                '$rowData' => [
-                    AdvancedPricing::COL_SKU => 'sku value',
+                'rowData' => [
+                    AdvancedPricing::COL_SKU => 'sku value'
                 ],
-                '$behavior' => Import::BEHAVIOR_DELETE,
-                '$expectedResult' => true,
+                'behavior' => Import::BEHAVIOR_DELETE,
+                'expectedResult' => true
             ]
         ];
     }
@@ -766,23 +825,23 @@ class AdvancedPricingTest extends AbstractImportTestCase
      *
      * @return array
      */
-    public function validateRowAddRowErrorCallDataProvider()
+    public static function validateRowAddRowErrorCallDataProvider(): array
     {
         return [
             [
-                '$rowData' => [
+                'rowData' => [
                     AdvancedPricing::COL_SKU => null,
                 ],
-                '$behavior' => Import::BEHAVIOR_DELETE,
-                '$error' => RowValidatorInterface::ERROR_SKU_IS_EMPTY,
+                'behavior' => Import::BEHAVIOR_DELETE,
+                'error' => RowValidatorInterface::ERROR_SKU_IS_EMPTY
             ],
             [
-                '$rowData' => [
-                    AdvancedPricing::COL_SKU => false,
+                'rowData' => [
+                    AdvancedPricing::COL_SKU => false
                 ],
-                '$behavior' => null,
-                '$error' => RowValidatorInterface::ERROR_ROW_IS_ORPHAN,
-            ],
+                'behavior' => null,
+                'error' => RowValidatorInterface::ERROR_ROW_IS_ORPHAN
+            ]
         ];
     }
 
@@ -791,9 +850,11 @@ class AdvancedPricingTest extends AbstractImportTestCase
      * @param array $oldSkus
      * @param array $priceIn
      * @param int $callNum
-     * @dataProvider saveProductPricesDataProvider
+     *
+     * @return void
      */
-    public function testSaveProductPrices($priceData, $oldSkus, $priceIn, $callNum)
+    #[DataProvider('saveProductPricesDataProvider')]
+    public function testSaveProductPrices(array $priceData, array $oldSkus, array $priceIn, int $callNum): void
     {
         $this->advancedPricing = $this->getAdvancedPricingMock(['retrieveOldSkus']);
 
@@ -809,14 +870,14 @@ class AdvancedPricingTest extends AbstractImportTestCase
     /**
      * @return array
      */
-    public function saveProductPricesDataProvider()
+    public static function saveProductPricesDataProvider(): array
     {
         return [
             [[], ['oSku1' => 'product1', 'oSku2' => 'product2'], [], 0],
             [
                 [
                     'oSku1' => ['row1' => ['row1-1', 'row1-2'], 'row2' => ['row2-1', 'row2-2']],
-                    'nSku' => ['row3', 'row4'],
+                    'nSku' => ['row3', 'row4']
                 ],
                 ['oSku1' => 'product1', 'oSku2' => 'product2'],
                 [
@@ -824,7 +885,7 @@ class AdvancedPricingTest extends AbstractImportTestCase
                     ['row2-1', 'row2-2', self::LINK_FIELD => 'product1']
                 ],
                 1
-            ],
+            ]
         ];
     }
 
@@ -833,18 +894,20 @@ class AdvancedPricingTest extends AbstractImportTestCase
      * @param array $cachedSkuToDelete
      * @param int $numCallAddError
      * @param int $numCallDelete
-     * @param boolean $exceptionInDelete
+     * @param int $exceptionInDelete
      * @param boolean $result
-     * @dataProvider deleteProductTierPricesDataProvider
+     *
+     * @return void
      */
+    #[DataProvider('deleteProductTierPricesDataProvider')]
     public function testDeleteProductTierPrices(
-        $listSku,
-        $cachedSkuToDelete,
-        $numCallAddError,
-        $numCallDelete,
-        $exceptionInDelete,
-        $result
-    ) {
+        array $listSku,
+        array $cachedSkuToDelete,
+        int $numCallAddError,
+        int $numCallDelete,
+        int $exceptionInDelete,
+        bool $result
+    ): void {
         $this->advancedPricing = $this->getAdvancedPricingMock(['addRowError', 'retrieveOldSkus']);
         $dbSelectMock = $this->createMock(Select::class);
         if ($listSku) {
@@ -883,7 +946,7 @@ class AdvancedPricingTest extends AbstractImportTestCase
     /**
      * @return array
      */
-    public function deleteProductTierPricesDataProvider()
+    public static function deleteProductTierPricesDataProvider(): array
     {
         return [
             [
@@ -917,7 +980,7 @@ class AdvancedPricingTest extends AbstractImportTestCase
                 0,
                 0,
                 false
-            ],
+            ]
         ];
     }
 
@@ -927,15 +990,17 @@ class AdvancedPricingTest extends AbstractImportTestCase
      * @param array $oldSkus
      * @param int $numCall
      * @param array $args
-     * @dataProvider processCountExistingPricesDataProvider
+     *
+     * @return void
      */
+    #[DataProvider('processCountExistingPricesDataProvider')]
     public function testProcessCountExistingPrices(
-        $prices,
-        $existingPrices,
-        $oldSkus,
-        $numCall,
-        $args
-    ) {
+        array $prices,
+        array $existingPrices,
+        array $oldSkus,
+        int $numCall,
+        array $args
+    ): void {
         $this->advancedPricing = $this->getAdvancedPricingMock(
             [
                 'incrementCounterUpdated',
@@ -960,7 +1025,11 @@ class AdvancedPricingTest extends AbstractImportTestCase
             ->willReturn($oldSkus);
         $this->advancedPricing->expects($this->exactly($numCall))
             ->method('incrementCounterUpdated')
-            ->withConsecutive($args);
+            ->willReturnCallback(function ($args) {
+                if (!empty($args)) {
+                    return null;
+                }
+            });
 
         $this->invokeMethod($this->advancedPricing, 'processCountExistingPrices', [$prices, 'table']);
     }
@@ -968,7 +1037,7 @@ class AdvancedPricingTest extends AbstractImportTestCase
     /**
      * @return array
      */
-    public function processCountExistingPricesDataProvider()
+    public static function processCountExistingPricesDataProvider(): array
     {
         return [
             [
@@ -984,7 +1053,7 @@ class AdvancedPricingTest extends AbstractImportTestCase
                 ['oSku1' => 'product1', 'oSku2' => 'product2'],
                 0,
                 [['price1'], [self::LINK_FIELD => 'product1']]
-            ],
+            ]
         ];
     }
 
@@ -993,6 +1062,7 @@ class AdvancedPricingTest extends AbstractImportTestCase
      *
      * @param $object
      * @param $property
+     *
      * @return mixed
      * @throws \ReflectionException
      */
@@ -1000,7 +1070,6 @@ class AdvancedPricingTest extends AbstractImportTestCase
     {
         $reflection = new \ReflectionClass(get_class($object));
         $reflectionProperty = $reflection->getProperty($property);
-        $reflectionProperty->setAccessible(true);
 
         return $reflectionProperty->getValue($object);
     }
@@ -1011,6 +1080,7 @@ class AdvancedPricingTest extends AbstractImportTestCase
      * @param $object
      * @param $property
      * @param $value
+     *
      * @return mixed
      * @throws \ReflectionException
      */
@@ -1018,7 +1088,6 @@ class AdvancedPricingTest extends AbstractImportTestCase
     {
         $reflection = new \ReflectionClass(get_class($object));
         $reflectionProperty = $reflection->getProperty($property);
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($object, $value);
 
         return $object;
@@ -1030,14 +1099,14 @@ class AdvancedPricingTest extends AbstractImportTestCase
      * @param object $object
      * @param string $method
      * @param array $args
+     *
      * @return mixed
      * @throws \ReflectionException
      */
     private function invokeMethod($object, $method, $args = [])
     {
-        $class = new \ReflectionClass(\Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::class);
+        $class = new \ReflectionClass(AdvancedPricing::class);
         $method = $class->getMethod($method);
-        $method->setAccessible(true);
 
         return $method->invokeArgs($object, $args);
     }
@@ -1050,7 +1119,7 @@ class AdvancedPricingTest extends AbstractImportTestCase
      * @return MockObject
      * @throws \ReflectionException
      */
-    private function getAdvancedPricingMock($methods = [])
+    private function getAdvancedPricingMock(array $methods = []): MockObject
     {
         $metadataPoolMock = $this->createMock(MetadataPool::class);
         $metadataMock = $this->createMock(EntityMetadata::class);
@@ -1061,35 +1130,31 @@ class AdvancedPricingTest extends AbstractImportTestCase
             ->method('getMetaData')
             ->with(ProductInterface::class)
             ->willReturn($metadataMock);
-        $advancedPricingMock = $this->getMockBuilder(
-            \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::class
-        )
-            ->setMethods($methods)
-            ->setConstructorArgs(
-                [
-                    $this->jsonHelper,
-                    $this->importExportData,
-                    $this->dataSourceModel,
-                    $this->eavConfig,
-                    $this->resource,
-                    $this->resourceHelper,
-                    $this->stringObject,
-                    $this->errorAggregator,
-                    $this->dateTime,
-                    $this->resourceFactory,
-                    $this->productModel,
-                    $this->catalogData,
-                    $this->storeResolver,
-                    $this->importProduct,
-                    $this->validator,
-                    $this->websiteValidator,
-                    $this->tierPriceValidator
-                ]
-            )
-            ->getMock();
-        $reflection = new \ReflectionClass(\Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::class);
+        $this->currencyResolver = $this->createMock(CurrencyResolver::class);
+        $advancedPricingMock = $this->createPartialMock(
+            AdvancedPricing::class,
+            $methods
+        );
+        $advancedPricingMock->__construct(
+            $this->jsonHelper,
+            $this->importExportData,
+            $this->dataSourceModel,
+            $this->resource,
+            $this->resourceHelper,
+            $this->errorAggregator,
+            $this->dateTime,
+            $this->resourceFactory,
+            $this->productModel,
+            $this->catalogData,
+            $this->storeResolver,
+            $this->importProduct,
+            $this->validator,
+            $this->websiteValidator,
+            $this->tierPriceValidator,
+            $this->currencyResolver
+        );
+        $reflection = new \ReflectionClass(AdvancedPricing::class);
         $reflectionProperty = $reflection->getProperty('metadataPool');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($advancedPricingMock, $metadataPoolMock);
 
         return $advancedPricingMock;

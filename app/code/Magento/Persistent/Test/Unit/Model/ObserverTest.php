@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Persistent\Test\Unit\Model;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Helper\View;
 use Magento\Framework\Escaper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\LayoutInterface;
@@ -20,6 +21,8 @@ use PHPUnit\Framework\TestCase;
 
 class ObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Observer
      */
@@ -61,22 +64,18 @@ class ObserverTest extends TestCase
         $this->persistentSessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->customerRepositoryMock = $this->getMockBuilder(CustomerRepositoryInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->customerRepositoryMock = $this->createMock(CustomerRepositoryInterface::class);
         $this->customerViewHelperMock = $this->getMockBuilder(View::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->escaperMock = $this->getMockBuilder(Escaper::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->layoutMock = $this->getMockBuilder(LayoutInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->sessionMock = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getCustomerId'])
-            ->getMock();
+        $this->layoutMock = $this->createMock(LayoutInterface::class);
+        $this->sessionMock = $this->createPartialMockWithReflection(
+            Session::class,
+            ['getCustomerId']
+        );
         $this->observer = $objectManagerHelper->getObject(
             Observer::class,
             [
@@ -95,10 +94,10 @@ class ObserverTest extends TestCase
     public function testEmulateWelcomeBlock(): void
     {
         $welcomeMessage =  __('&nbsp;');
-        $block = $this->getMockBuilder(AbstractBlock::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setWelcome'])
-            ->getMock();
+        $block = $this->createPartialMockWithReflection(
+            AbstractBlock::class,
+            ['setWelcome']
+        );
         $block->expects($this->once())->method('setWelcome')->with($welcomeMessage);
 
         $this->observer->emulateWelcomeBlock($block);

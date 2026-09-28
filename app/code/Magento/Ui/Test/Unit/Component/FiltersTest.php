@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Ui\Test\Unit\Component;
 
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
@@ -14,6 +15,7 @@ use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Ui\Component\Filters;
 use Magento\Ui\Component\Listing\Columns\ColumnInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -21,6 +23,8 @@ use PHPUnit\Framework\TestCase;
  */
 class FiltersTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var Filters|MockObject */
     private $filters;
 
@@ -39,15 +43,9 @@ class FiltersTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->uiComponentInterface = $this->getMockBuilder(UiComponentInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->uiComponentFactory = $this->getMockBuilder(UiComponentFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->context = $this->getMockBuilder(ContextInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->uiComponentInterface = $this->createMock(UiComponentInterface::class);
+        $this->uiComponentFactory = $this->createMock(UiComponentFactory::class);
+        $this->context = $this->createMock(ContextInterface::class);
         $this->filters = $objectManager->getObject(
             Filters::class,
             [
@@ -63,31 +61,46 @@ class FiltersTest extends TestCase
      *
      * @param string $filterType
      * @param string $filterName
-     * @dataProvider updateDataProvider
+     * @param bool $userDefined
      */
-    public function testUpdate(string $filterType, string $filterName)
+    #[DataProvider('updateDataProvider')]
+    public function testUpdate(string $filterType, string $filterName, bool $userDefined)
     {
         $componentName = 'component_name';
         $componentConfig = [0, 1, 2];
-        $columnInterface = $this->getMockBuilder(ColumnInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getData', 'getName', 'getConfiguration'])
-            ->getMockForAbstractClass();
+        $columnInterface = $this->createPartialMockWithReflection(
+            ColumnInterface::class,
+            [
+                'getName', 'getComponentName', 'getConfiguration', 'render', 'addComponent',
+                'getComponent', 'getChildComponents', 'getTemplate', 'getContext',
+                'renderChildComponent', 'setData', 'getData', 'prepare', 'prepareDataSource',
+                'getDataSourceData', 'toHtml'
+            ]
+        );
         $columnInterface->expects($this->atLeastOnce())
             ->method('getData')
-            ->with('config/filter')
-            ->willReturn($filterType);
+            ->willReturnOnConsecutiveCalls(
+                $filterType,
+                ['userDefined' => $userDefined],
+                $filterType,
+                ['userDefined' => $userDefined]
+            );
         $columnInterface->expects($this->atLeastOnce())->method('getName')->willReturn($componentName);
         $columnInterface->expects($this->once())->method('getConfiguration')->willReturn($componentConfig);
-        $filterComponent = $this->getMockBuilder(UiComponentInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setData', 'prepare'])
-            ->getMockForAbstractClass();
+        $filterComponent = $this->createPartialMockWithReflection(
+            UiComponentInterface::class,
+            [
+                'getName', 'getComponentName', 'getConfiguration', 'render', 'addComponent',
+                'getComponent', 'getChildComponents', 'getTemplate', 'getContext',
+                'renderChildComponent', 'setData', 'getData', 'prepare', 'prepareDataSource',
+                'getDataSourceData', 'toHtml'
+            ]
+        );
         $filterComponent->expects($this->once())->method('setData')->with('config', $componentConfig)
             ->willReturnSelf();
         $filterComponent->expects($this->once())->method('prepare')->willReturnSelf();
         $this->uiComponentFactory->expects($this->once())->method('create')
-            ->with($componentName, $filterName, ['context' => $this->context])
+            ->with($componentName, $filterName, ['context' => $this->context, 'userDefined' => $userDefined])
             ->willReturn($filterComponent);
 
         $this->filters->update($columnInterface);
@@ -98,11 +111,11 @@ class FiltersTest extends TestCase
     /**
      * @return array
      */
-    public function updateDataProvider(): array
+    public static function updateDataProvider(): array
     {
         return [
-            ['text', 'filterInput'],
-            ['datetimeRange', 'filterDate'],
+            ['text', 'filterInput', false],
+            ['datetimeRange', 'filterDate', true],
         ];
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -23,12 +23,8 @@ class BuilderTest extends TestCase
 
     public function testAddColumn()
     {
-        $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $table = $this->getMockBuilder(Table::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->connectionMock = $this->createMock(AdapterInterface::class);
+        $table = $this->createMock(Table::class);
         $table->expects($this->once())->method('addColumn')
             ->with('test', Table::TYPE_INTEGER)
             ->willReturnSelf();

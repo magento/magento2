@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Helper\Product;
 
@@ -41,35 +41,35 @@ class Compare extends \Magento\Framework\Url\Helper\Data
     protected $_allowUsedFlat = true;
 
     /**
-     * Customer id
+     * Customer id for Compare Helper
      *
      * @var null|int
      */
     protected $_customerId = null;
 
     /**
-     * Catalog session
+     * Catalog session for Compare Helper
      *
      * @var \Magento\Catalog\Model\Session
      */
     protected $_catalogSession;
 
     /**
-     * Customer session
+     * Customer session for Compare Helper
      *
      * @var \Magento\Customer\Model\Session
      */
     protected $_customerSession;
 
     /**
-     * Customer visitor
+     * Customer visitor for Compare Helper
      *
      * @var \Magento\Customer\Model\Visitor
      */
     protected $_customerVisitor;
 
     /**
-     * Catalog product visibility
+     * Catalog product visibility for Compare Helper
      *
      * @var \Magento\Catalog\Model\Product\Visibility
      */
@@ -279,7 +279,7 @@ class Compare extends \Magento\Framework\Url\Helper\Data
             // cannot be placed in constructor because of the cyclic dependency which cannot be fixed with proxy class
             // collection uses this helper in constructor when calling isEnabledFlat() method
             $this->_itemCollection = $this->_itemCollectionFactory->create();
-            $this->_itemCollection->useProductItem(true)->setStoreId($this->_storeManager->getStore()->getId());
+            $this->_itemCollection->useProductItem()->setStoreId($this->_storeManager->getStore()->getId());
 
             if ($this->_customerSession->isLoggedIn()) {
                 $this->_itemCollection->setCustomerId($this->_customerSession->getCustomerId());
@@ -297,7 +297,10 @@ class Compare extends \Magento\Framework\Url\Helper\Data
             $this->_itemCollection->addAttributeToSelect('name')->addUrlRewrite()->load();
 
             /* update compare items count */
-            $this->_catalogSession->setCatalogCompareItemsCount(count($this->_itemCollection));
+            $count = count($this->_itemCollection);
+            $counts[$this->_storeManager->getStore()->getId()] = $count;
+            $this->_catalogSession->setCatalogCompareItemsCountPerStoreView($counts);
+            $this->_catalogSession->setCatalogCompareItemsCount($count); //deprecated
         }
 
         return $this->_itemCollection;
@@ -313,7 +316,7 @@ class Compare extends \Magento\Framework\Url\Helper\Data
     {
         /** @var $collection Collection */
         $collection = $this->_itemCollectionFactory->create()
-            ->useProductItem(true);
+            ->useProductItem();
         if (!$logout && $this->_customerSession->isLoggedIn()) {
             $collection->setCustomerId($this->_customerSession->getCustomerId());
         } elseif ($this->_customerId) {
@@ -327,7 +330,9 @@ class Compare extends \Magento\Framework\Url\Helper\Data
             ->setVisibility($this->_catalogProductVisibility->getVisibleInSiteIds());
 
         $count = $collection->getSize();
-        $this->_catalogSession->setCatalogCompareItemsCount($count);
+        $counts[$this->_storeManager->getStore()->getId()] = $count;
+        $this->_catalogSession->setCatalogCompareItemsCountPerStoreView($counts);
+        $this->_catalogSession->setCatalogCompareItemsCount($count); //deprecated
 
         return $this;
     }
@@ -339,11 +344,13 @@ class Compare extends \Magento\Framework\Url\Helper\Data
      */
     public function getItemCount()
     {
-        if (!$this->_catalogSession->hasCatalogCompareItemsCount()) {
+        $counts = $this->_catalogSession->getCatalogCompareItemsCountPerStoreView() ?: [];
+        if (!isset($counts[$this->_storeManager->getStore()->getId()])) {
             $this->calculate();
+            $counts = $this->_catalogSession->getCatalogCompareItemsCountPerStoreView() ?: [];
         }
 
-        return $this->_catalogSession->getCatalogCompareItemsCount();
+        return $counts[$this->_storeManager->getStore()->getId()] ?? 0;
     }
 
     /**

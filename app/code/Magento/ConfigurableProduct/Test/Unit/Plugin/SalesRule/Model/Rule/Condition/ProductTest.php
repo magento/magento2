@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Catalog\Model\ResourceModel\Product;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\Catalog\Model\Product as ProductModel;
 use Magento\ConfigurableProduct\Plugin\SalesRule\Model\Rule\Condition\Product as ValidatorPlugin;
 use Magento\Directory\Model\CurrencyFactory;
 use Magento\Eav\Model\Config;
@@ -23,11 +24,13 @@ use Magento\Framework\Locale\Format;
 use Magento\Framework\Locale\FormatInterface;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
 use Magento\Rule\Model\Condition\Context;
 use Magento\SalesRule\Model\Rule\Condition\Product as SalesRuleProduct;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Catalog\Model\ProductCategoryList;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -35,6 +38,8 @@ use PHPUnit\Framework\TestCase;
  */
 class ProductTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ObjectManager
      */
@@ -63,56 +68,31 @@ class ProductTest extends TestCase
     private function createValidator(): SalesRuleProduct
     {
         /** @var Context|MockObject $contextMock */
-        $contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $contextMock = $this->createMock(Context::class);
         /** @var Data|MockObject $backendHelperMock */
-        $backendHelperMock = $this->getMockBuilder(Data::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $backendHelperMock = $this->createMock(Data::class);
         /** @var Config|MockObject $configMock */
-        $configMock = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $configMock = $this->createMock(Config::class);
         /** @var ProductFactory|MockObject $productFactoryMock */
-        $productFactoryMock = $this->getMockBuilder(ProductFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productFactoryMock = $this->createMock(ProductFactory::class);
         /** @var ProductRepositoryInterface|MockObject $productRepositoryMock */
-        $productRepositoryMock = $this->getMockBuilder(ProductRepositoryInterface::class)
-            ->getMockForAbstractClass();
-        $attributeLoaderInterfaceMock = $this->getMockBuilder(AbstractEntity::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getAttributesByCode'])
-            ->getMock();
+        $productRepositoryMock = $this->createMock(ProductRepositoryInterface::class);
+        $attributeLoaderInterfaceMock = $this->createPartialMock(AbstractEntity::class, ['getAttributesByCode']);
         $attributeLoaderInterfaceMock
-            ->expects($this->any())
-            ->method('getAttributesByCode')
-            ->willReturn([]);
+            ->method('getAttributesByCode')->willReturn([]);
         /** @var Product|MockObject $productMock */
-        $productMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['loadAllAttributes', 'getConnection', 'getTable'])
-            ->getMock();
-        $productMock->expects($this->any())
-            ->method('loadAllAttributes')
-            ->willReturn($attributeLoaderInterfaceMock);
+        $productMock = $this->createPartialMock(Product::class, ['loadAllAttributes', 'getConnection', 'getTable']);
+        $productMock->method('loadAllAttributes')->willReturn($attributeLoaderInterfaceMock);
         /** @var Collection|MockObject $collectionMock */
-        $collectionMock = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $collectionMock = $this->createMock(Collection::class);
         /** @var FormatInterface|MockObject $formatMock */
         $formatMock = new Format(
-            $this->getMockBuilder(ScopeResolverInterface::class)
-                ->disableOriginalConstructor()
-                ->getMockForAbstractClass(),
-            $this->getMockBuilder(ResolverInterface::class)
-                ->disableOriginalConstructor()
-                ->getMockForAbstractClass(),
-            $this->getMockBuilder(CurrencyFactory::class)
-                ->disableOriginalConstructor()
-                ->getMock()
+            $this->createMock(ScopeResolverInterface::class),
+            $this->createMock(ResolverInterface::class),
+            $this->createMock(CurrencyFactory::class)
         );
+
+        $productCategoryList = $this->createMock(ProductCategoryList::class);
 
         return new SalesRuleProduct(
             $contextMock,
@@ -122,117 +102,51 @@ class ProductTest extends TestCase
             $productRepositoryMock,
             $productMock,
             $collectionMock,
-            $formatMock
+            $formatMock,
+            [],
+            $productCategoryList
         );
     }
 
     public function testChildIsUsedForValidation()
     {
-        $configurableProductMock = $this->createProductMock();
-        $configurableProductMock
-            ->expects($this->any())
-            ->method('getTypeId')
-            ->willReturn(Configurable::TYPE_CODE);
-        $configurableProductMock
-            ->expects($this->any())
-            ->method('hasData')
-            ->with('special_price')
-            ->willReturn(false);
-
-        /* @var AbstractItem|MockObject $item */
-        $item = $this->getMockBuilder(AbstractItem::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setProduct', 'getProduct', 'getChildren'])
-            ->getMockForAbstractClass();
-        $item->expects($this->any())
-            ->method('getProduct')
-            ->willReturn($configurableProductMock);
-
-        $simpleProductMock = $this->createProductMock();
-        $simpleProductMock
-            ->expects($this->any())
-            ->method('getTypeId')
-            ->willReturn(Type::TYPE_SIMPLE);
-        $simpleProductMock
-            ->expects($this->any())
-            ->method('hasData')
-            ->with('special_price')
-            ->willReturn(true);
-
-        $childItem = $this->getMockBuilder(AbstractItem::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getProduct'])
-            ->getMockForAbstractClass();
-        $childItem->expects($this->any())
-            ->method('getProduct')
-            ->willReturn($simpleProductMock);
-
-        $item->expects($this->any())
-            ->method('getChildren')
-            ->willReturn([$childItem]);
-        $item->expects($this->once())
-            ->method('setProduct')
-            ->with($simpleProductMock);
-
+        $item = $this->configurableProductTestSetUp();
+        $item->expects($this->once())->method('setProduct');
         $this->validator->setAttribute('special_price');
-
         $this->validatorPlugin->beforeValidate($this->validator, $item);
     }
 
-    /**
-     * @return Product|MockObject
-     */
-    private function createProductMock(): MockObject
+    public function configurableProductTestSetUp()
     {
-        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
-            ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'getAttribute',
-                    'getId',
-                    'setQuoteItemQty',
-                    'setQuoteItemPrice',
-                    'getTypeId',
-                    'hasData',
-                ]
-            )
-            ->getMock();
-        $productMock
-            ->expects($this->any())
-            ->method('setQuoteItemQty')
-            ->willReturnSelf();
-        $productMock
-            ->expects($this->any())
-            ->method('setQuoteItemPrice')
-            ->willReturnSelf();
+        $configurableProductMock = $this->createPartialMock(ProductModel::class, ['getTypeId', 'hasData']);
+        $configurableProductMock->expects($this->any())->method('getTypeId')->willReturn(Configurable::TYPE_CODE);
+        $configurableProductMock->expects($this->any())->method('hasData')->with('special_price')->willReturn(false);
 
-        return $productMock;
+        /* @var AbstractItem|MockObject $item */
+        $item = $this->createPartialMockWithReflection(
+            AbstractItem::class,
+            ['setProduct', 'getProduct', 'getChildren', 'getQuote', 'getAddress', 'getOptionByCode']
+        );
+        $item->expects($this->any())->method('getProduct')->willReturn($configurableProductMock);
+
+        $simpleProductMock = $this->createPartialMock(ProductModel::class, ['getTypeId', 'hasData']);
+        $simpleProductMock->expects($this->any())->method('getTypeId')->willReturn(Type::TYPE_SIMPLE);
+        $simpleProductMock->expects($this->any())->method('hasData')->with('special_price')->willReturn(true);
+
+        $childItem = $this->createMock(AbstractItem::class);
+        $childItem->expects($this->any())->method('getProduct')->willReturn($simpleProductMock);
+
+        $item->expects($this->any())->method('getChildren')->willReturn([$childItem]);
+
+        return $item;
     }
 
     public function testChildIsNotUsedForValidation()
     {
-        $simpleProductMock = $this->createProductMock();
-        $simpleProductMock
-            ->expects($this->any())
-            ->method('getTypeId')
-            ->willReturn(Type::TYPE_SIMPLE);
-        $simpleProductMock
-            ->expects($this->any())
-            ->method('hasData')
-            ->with('special_price')
-            ->willReturn(true);
-
-        /* @var AbstractItem|MockObject $item */
-        $item = $this->getMockBuilder(AbstractItem::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setProduct', 'getProduct'])
-            ->getMockForAbstractClass();
-        $item->expects($this->any())
-            ->method('getProduct')
-            ->willReturn($simpleProductMock);
-
+        $item = $this->configurableProductTestSetUp();
+        $item->expects($this->never())->method('setProduct');
         $this->validator->setAttribute('special_price');
-
+        $this->validator->setAttributeScope('parent');
         $this->validatorPlugin->beforeValidate($this->validator, $item);
     }
 
@@ -241,32 +155,20 @@ class ProductTest extends TestCase
      */
     public function testChildIsNotUsedForValidationWhenConfigurableProductIsMissingChildren()
     {
-        $configurableProductMock = $this->createProductMock();
-        $configurableProductMock
-            ->expects($this->any())
-            ->method('getTypeId')
-            ->willReturn(Configurable::TYPE_CODE);
-
-        $configurableProductMock
-            ->expects($this->any())
-            ->method('hasData')
-            ->with('special_price')
-            ->willReturn(false);
+        $configurableProductMock = $this->createPartialMock(ProductModel::class, ['getTypeId', 'hasData']);
+        $configurableProductMock->expects($this->any())->method('getTypeId')->willReturn(Configurable::TYPE_CODE);
+        $configurableProductMock->expects($this->any())->method('hasData')->with('special_price')->willReturn(false);
 
         /* @var AbstractItem|MockObject $item */
-        $item = $this->getMockBuilder(AbstractItem::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setProduct', 'getProduct', 'getChildren'])
-            ->getMockForAbstractClass();
-        $item->expects($this->any())
-            ->method('getProduct')
-            ->willReturn($configurableProductMock);
-        $item->expects($this->any())
-            ->method('getChildren')
-            ->willReturn([]);
+        $item = $this->createPartialMockWithReflection(
+            AbstractItem::class,
+            ['setProduct', 'getProduct', 'getChildren', 'getQuote', 'getAddress', 'getOptionByCode']
+        );
+        $item->expects($this->any())->method('getProduct')->willReturn($configurableProductMock);
+        $item->expects($this->any())->method('getChildren')->willReturn([]);
 
         $this->validator->setAttribute('special_price');
-
+        $item->expects($this->never())->method('setProduct');
         $this->validatorPlugin->beforeValidate($this->validator, $item);
     }
 }

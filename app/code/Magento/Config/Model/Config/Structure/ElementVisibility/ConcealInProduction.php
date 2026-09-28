@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,7 @@ use Magento\Framework\App\State;
  * Defines status of visibility of form elements on Stores > Settings > Configuration page
  * in Admin Panel in Production mode.
  * @api
+ * @since 101.0.6
  */
 class ConcealInProduction implements ElementVisibilityInterface
 {
@@ -80,11 +81,11 @@ class ConcealInProduction implements ElementVisibilityInterface
 
     /**
      * @inheritdoc
-     * @since 100.2.0
+     * @since 101.0.6
      */
     public function isHidden($path)
     {
-        $path = $this->normalizePath($path);
+        $path = $path !== null ? $this->normalizePath($path) : '';
         if ($this->state->getMode() === State::MODE_PRODUCTION
             && preg_match('/(?<group>(?<section>.*?)\/.*?)\/.*?/', $path, $match)) {
             $group = $match['group'];
@@ -105,11 +106,11 @@ class ConcealInProduction implements ElementVisibilityInterface
 
     /**
      * @inheritdoc
-     * @since 100.2.0
+     * @since 101.0.6
      */
     public function isDisabled($path)
     {
-        $path = $this->normalizePath($path);
+        $path = $path !== null ? $this->normalizePath($path) : '';
         if ($this->state->getMode() === State::MODE_PRODUCTION) {
             while (true) {
                 if (!empty($this->configs[$path])) {

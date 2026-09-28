@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Block\Product\ProductList;
@@ -143,11 +143,11 @@ class Related extends AbstractProduct implements IdentityInterface
      */
     public function getIdentities()
     {
-        $identities = [[]];
+        $identities = [];
         foreach ($this->getItems() as $item) {
             $identities[] = $item->getIdentities();
         }
-        return array_merge(...$identities);
+        return array_merge([], ...$identities);
     }
 
     /**

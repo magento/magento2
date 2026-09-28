@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+<suites xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Suite/etc/suiteSchema.xsd">
+    <suite name="AdminConfigurePaypalPayflowLinkSuite">
+        <before>
+            <!-- Login -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+            <!--Config PayPal Payflow Link-->
+            <actionGroup ref="AdminEnablePayPalPayFlowLinkActionGroup" stepKey="ConfigPayPalPayFlowLink">
+                <argument name="credentials" value="SamplePaypalPaymentsFlowLinkConfig"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Cleanup Paypal configurations -->
+            <actionGroup ref="AdminTermsConditionsOpenGridActionGroup" stepKey="openTermsGridToDelete"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanFullPageCache">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+        </after>
+        <include>
+            <group name="paypalPayflowLink"/>
+        </include>
+    </suite>
+</suites>

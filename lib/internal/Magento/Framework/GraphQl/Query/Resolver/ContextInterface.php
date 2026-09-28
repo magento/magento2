@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,8 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
  *
  * GraphQL will pass the same instance of this interface to each field resolver, so these resolvers could have
  * shared access to the same data for ease of implementation purposes.
+ *
+ * @api
  */
 interface ContextInterface
 {

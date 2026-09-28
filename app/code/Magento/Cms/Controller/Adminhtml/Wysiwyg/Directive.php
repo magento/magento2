@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -13,6 +12,9 @@ use Magento\Backend\App\Action;
 use Magento\Cms\Model\Template\Filter;
 use Magento\Cms\Model\Wysiwyg\Config;
 use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\Filesystem\DirectoryResolver;
+use Magento\Framework\Filesystem;
 use Magento\Framework\Image\Adapter\AdapterInterface;
 use Magento\Framework\Image\AdapterFactory;
 use Psr\Log\LoggerInterface;
@@ -22,11 +24,13 @@ use Magento\Framework\Controller\Result\RawFactory;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Filesystem\Driver\File;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Process template text for wysiwyg editor.
  *
  * Class Directive
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects) usage of $this->file eliminated, but it's still there due to BC
  */
 class Directive extends Action implements HttpGetActionInterface
 {
@@ -36,7 +40,7 @@ class Directive extends Action implements HttpGetActionInterface
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Cms::media_gallery';
+    public const ADMIN_RESOURCE = 'Magento_Cms::media_gallery';
 
     /**
      * @var DecoderInterface
@@ -70,8 +74,19 @@ class Directive extends Action implements HttpGetActionInterface
 
     /**
      * @var File
+     * @deprecated use $filesystem instead
+     * @see use filesystem instead
      */
     private $file;
+    /**
+     * @var Filesystem|null
+     */
+    private $filesystem;
+
+    /**
+     * @var DirectoryResolver
+     */
+    private $directoryResolver;
 
     /**
      * Constructor
@@ -84,16 +99,21 @@ class Directive extends Action implements HttpGetActionInterface
      * @param Config|null $config
      * @param Filter|null $filter
      * @param File|null $file
+     * @param Filesystem|null $filesystem
+     * @param DirectoryResolver|null $directoryResolver
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Context $context,
         DecoderInterface $urlDecoder,
         RawFactory $resultRawFactory,
-        AdapterFactory $adapterFactory = null,
-        LoggerInterface $logger = null,
-        Config $config = null,
-        Filter $filter = null,
-        File $file = null
+        ?AdapterFactory $adapterFactory = null,
+        ?LoggerInterface $logger = null,
+        ?Config $config = null,
+        ?Filter $filter = null,
+        ?File $file = null,
+        ?Filesystem $filesystem = null,
+        ?DirectoryResolver $directoryResolver = null
     ) {
         parent::__construct($context);
         $this->urlDecoder = $urlDecoder;
@@ -103,32 +123,47 @@ class Directive extends Action implements HttpGetActionInterface
         $this->config = $config ?: ObjectManager::getInstance()->get(Config::class);
         $this->filter = $filter ?: ObjectManager::getInstance()->get(Filter::class);
         $this->file = $file ?: ObjectManager::getInstance()->get(File::class);
+        $this->filesystem = $filesystem ?: ObjectManager::getInstance()->get(Filesystem::class);
+        $this->directoryResolver = $directoryResolver ?: ObjectManager::getInstance()->get(DirectoryResolver::class);
     }
 
     /**
      * Template directives callback
      *
      * @return Raw
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function execute()
     {
         $directive = $this->getRequest()->getParam('___directive');
         $directive = $this->urlDecoder->decode($directive);
+
+        /** @var AdapterInterface $image */
+        $image = $this->adapterFactory->create();
+        /** @var Raw $resultRaw */
+        $resultRaw = $this->resultRawFactory->create();
+
         try {
             /** @var Filter $filter */
             $imagePath = $this->filter->filter($directive);
-            /** @var AdapterInterface $image */
-            $image = $this->adapterFactory->create();
-            /** @var Raw $resultRaw */
-            $resultRaw = $this->resultRawFactory->create();
-            $image->open($imagePath);
+            $imagePath = str_replace('\\', '/', $imagePath);
+
+            $urlPath = $this->filesystem->getUri(DirectoryList::MEDIA);
+            $relativeFilePath = str_replace(rtrim($urlPath, '/') . '/', '', $imagePath);
+            $mediaDirectory = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
+            $absolutePath = $mediaDirectory->getAbsolutePath($relativeFilePath);
+
+            if (!$this->directoryResolver->validatePath($absolutePath, DirectoryList::MEDIA)) {
+                throw new LocalizedException(__('Invalid Path'));
+            }
+            $image->open($absolutePath);
             $resultRaw->setHeader('Content-Type', $image->getMimeType());
             $resultRaw->setContents($image->getImage());
         } catch (\Exception $e) {
             /** @var Config $config */
-            $imagePath = $this->config->getSkinImagePlaceholderPath();
+            $absolutePath = $this->config->getSkinImagePlaceholderPath();
             try {
-                $image->open($imagePath);
+                $image->open($absolutePath);
                 $resultRaw->setHeader('Content-Type', $image->getMimeType());
                 $resultRaw->setContents($image->getImage());
                 $this->logger->warning($e);
@@ -141,7 +176,8 @@ class Directive extends Action implements HttpGetActionInterface
         // To avoid issues with PNG images with alpha blending we return raw file
         // after validation as an image source instead of generating the new PNG image
         // with image adapter
-        $content = $this->file->fileGetContents($imagePath);
+        $content = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA)->getDriver()
+            ->fileGetContents($absolutePath);
         $resultRaw->setHeader('Content-Type', $mimeType);
         $resultRaw->setContents($content);
 

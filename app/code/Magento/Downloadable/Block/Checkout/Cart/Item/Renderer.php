@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Shopping cart downloadable item render block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Downloadable\Block\Checkout\Cart\Item;
 

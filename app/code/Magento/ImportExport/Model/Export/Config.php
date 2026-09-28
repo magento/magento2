@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\ImportExport\Model\Export;
 
@@ -25,7 +25,7 @@ class Config extends \Magento\Framework\Config\Data implements \Magento\ImportEx
         \Magento\ImportExport\Model\Export\Config\Reader $reader,
         \Magento\Framework\Config\CacheInterface $cache,
         $cacheId = 'export_config_cache',
-        SerializerInterface $serializer = null
+        ?SerializerInterface $serializer = null
     ) {
         parent::__construct($reader, $cache, $cacheId, $serializer);
     }

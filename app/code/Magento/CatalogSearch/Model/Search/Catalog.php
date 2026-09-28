@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CatalogSearch\Model\Search;
 
@@ -27,8 +27,6 @@ class Catalog extends \Magento\Framework\DataObject
     protected $string;
 
     /**
-     * Adminhtml data
-     *
      * @var \Magento\Backend\Helper\Data
      */
     protected $_adminhtmlData = null;
@@ -71,7 +69,7 @@ class Catalog extends \Magento\Framework\DataObject
             ->load();
 
         foreach ($collection as $product) {
-            $description = strip_tags($product->getDescription());
+            $description = $product->getDescription() !== null ? strip_tags($product->getDescription()) : '';
             $result[] = [
                 'id' => 'product/1/' . $product->getId(),
                 'type' => __('Product'),

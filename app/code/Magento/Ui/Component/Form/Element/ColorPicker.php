@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -17,6 +17,7 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
  * Prepares Color Picker UI component with mode and format
  *
  * @api
+ * @since 101.1.0
  */
 class ColorPicker extends AbstractElement
 {
@@ -54,6 +55,7 @@ class ColorPicker extends AbstractElement
      * Get component name
      *
      * @return string
+     * @since 101.1.0
      */
     public function getComponentName(): string
     {
@@ -64,6 +66,7 @@ class ColorPicker extends AbstractElement
      * Prepare component configuration
      *
      * @return void
+     * @since 101.1.0
      */
     public function prepare() : void
     {

@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 define([
@@ -76,7 +76,6 @@ define([
         continueToPayPal: function () {
             if (additionalValidators.validate()) {
                 //update payment method information if additional data was changed
-                this.selectPaymentMethod();
                 setPaymentMethodAction(this.messageContainer).done(
                     function () {
                         customerData.invalidate(['cart']);

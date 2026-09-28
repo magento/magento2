@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Checkout\Controller\Account;
 
@@ -10,7 +10,7 @@ use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
- * @deprecated
+ * @deprecated 100.2.5
  * @see DelegateCreate
  */
 class Create extends \Magento\Framework\App\Action\Action

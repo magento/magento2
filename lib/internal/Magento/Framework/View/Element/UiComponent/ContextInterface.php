@@ -1,8 +1,10 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Element\UiComponent;
 
 use Magento\Framework\View\Element\UiComponentInterface;
@@ -13,6 +15,8 @@ use Magento\Framework\View\Element\UiComponentFactory;
 
 /**
  * Interface ContextInterface
+ *
+ * @api
  */
 interface ContextInterface
 {

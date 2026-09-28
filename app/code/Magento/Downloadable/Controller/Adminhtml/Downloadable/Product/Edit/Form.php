@@ -1,15 +1,14 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Downloadable\Controller\Adminhtml\Downloadable\Product\Edit;
 
 /**
  * Class Form
  *
- * @deprecated since downloadable information rendering moved to UI components.
+ * @deprecated 100.3.1 since downloadable information rendering moved to UI components.
  * @see \Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier\Composite
  * @package Magento\Downloadable\Controller\Adminhtml\Downloadable\Product\Edit
  */

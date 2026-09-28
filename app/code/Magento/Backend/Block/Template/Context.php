@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Backend\Block\Template;
 
@@ -122,7 +122,7 @@ class Context extends \Magento\Framework\View\Element\Template\Context
         \Magento\Framework\Math\Random $mathRandom,
         \Magento\Framework\Data\Form\FormKey $formKey,
         \Magento\Framework\Code\NameBuilder $nameBuilder,
-        LockGuardedCacheLoader $lockQuery = null
+        ?LockGuardedCacheLoader $lockQuery = null
     ) {
         $this->_authorization = $authorization;
         $this->_backendSession = $backendSession;

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -224,5 +224,19 @@ class AddOptionToAttributeTest extends TestCase
         $optionsAfter = $this->getAttributeOptions();
         $this->assertEquals($optionsAfter[0], 'updatedValue');
         $this->assertSame(array_slice($optionsBefore, 1), array_slice($optionsAfter, 1));
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        $reflection = new \ReflectionObject($this);
+        foreach ($reflection->getProperties() as $property) {
+            if (!$property->isStatic() && 0 !== strpos($property->getDeclaringClass()->getName(), 'PHPUnit')) {
+                $property->setValue($this, null);
+            }
+        }
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\Data\Helper\PostHelper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Url;
 use Magento\Framework\Url\EncoderInterface;
@@ -22,8 +23,9 @@ use PHPUnit\Framework\TestCase;
 
 class CompareTest extends TestCase
 {
+    use MockCreationTrait;
     /**
-     * @var \Magento\Catalog\Helper\Product\Compare
+     * @var Compare
      */
     protected $compareHelper;
 
@@ -61,18 +63,23 @@ class CompareTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->urlBuilder = $this->createPartialMock(Url::class, ['getUrl']);
+        $this->urlBuilder = $this->createPartialMock(Url::class, ['getUrl', 'getCurrentUrl']);
         $this->request = $this->createPartialMock(
             Http::class,
             ['getServer', 'isSecure']
         );
+        $this->request->method('getServer')->willReturnMap([
+            [null, ['HTTP_HOST' => 'magento.com', 'SERVER_PORT' => 80]],
+            ['HTTP_HOST', 'magento.com'],
+            ['SERVER_PORT', 80],
+        ]);
+        $this->request->method('isSecure')->willReturn(false);
         /** @var Context $context */
         $this->context = $this->createPartialMock(
             Context::class,
             ['getUrlBuilder', 'getRequest', 'getUrlEncoder']
         );
-        $this->urlEncoder = $this->getMockBuilder(EncoderInterface::class)
-            ->getMock();
+        $this->urlEncoder = $this->createMock(EncoderInterface::class);
         $this->urlEncoder->expects($this->any())
             ->method('encode')
             ->willReturnCallback(
@@ -93,10 +100,10 @@ class CompareTest extends TestCase
             PostHelper::class,
             ['getPostData']
         );
-        $this->catalogSessionMock = $this->getMockBuilder(Session::class)
-            ->addMethods(['getBeforeCompareUrl'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->catalogSessionMock = $this->createPartialMockWithReflection(
+            Session::class,
+            ['getBeforeCompareUrl']
+        );
 
         $this->compareHelper = $objectManager->getObject(
             Compare::class,
@@ -190,13 +197,16 @@ class CompareTest extends TestCase
         ];
 
         $productMock = $this->createMock(Product::class);
-        $this->catalogSessionMock->expects($this->once())->method('getBeforeCompareUrl')->willReturn($beforeCompareUrl);
+    
         $productMock->expects($this->once())->method('getId')->willReturn($productId);
+        $this->catalogSessionMock->expects($this->once())->method('getBeforeCompareUrl')
+            ->willReturn($beforeCompareUrl);
         $this->urlEncoder->expects($this->once())->method('encode')->with($beforeCompareUrl)
             ->willReturn($encodedCompareUrl);
         $this->request->expects($this->once())->method('isSecure')->willReturn($isRequestSecure);
 
-        $this->urlBuilder->expects($this->once())->method('getUrl')->with('checkout/cart/add', $expectedResult);
+        $this->urlBuilder->expects($this->once())->method('getUrl')
+            ->with('checkout/cart/add', $expectedResult);
         $this->compareHelper->getAddToCartUrl($productMock);
     }
 }

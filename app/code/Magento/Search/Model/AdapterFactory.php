@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Search\Model;
 
@@ -17,7 +17,7 @@ class AdapterFactory
      * Scope configuration
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @deprecated since it is not used anymore
+     * @deprecated 101.0.0 since it is not used anymore
      */
     protected $scopeConfig;
 
@@ -32,13 +32,13 @@ class AdapterFactory
      * Config path
      *
      * @var string
-     * @deprecated since it is not used anymore
+     * @deprecated 101.0.0 since it is not used anymore
      */
     protected $path;
 
     /**
      * Config Scope
-     * @deprecated since it is not used anymore
+     * @deprecated 101.0.0 since it is not used anymore
      */
     protected $scope;
 

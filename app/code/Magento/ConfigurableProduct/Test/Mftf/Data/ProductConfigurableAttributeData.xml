@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -64,5 +64,67 @@
         <data key="visibility">1</data>
         <data key="quantity">10</data>
         <data key="weight">1</data>
+    </entity>
+
+    <entity name="colorConfigurableProductAttribute3" type="product_attribute">
+        <data key="name" unique="suffix">Black</data>
+        <data key="sku" unique="suffix">sku-black</data>
+        <data key="type_id">simple</data>
+        <data key="price">2</data>
+        <data key="visibility">1</data>
+        <data key="quantity">6</data>
+        <data key="weight">1</data>
+    </entity>
+    <entity name="sizeAttribute" type="attribute">
+        <data key="default_label" unique="suffix">Size</data>
+        <data key="input_type">Dropdown</data>
+        <data key="attribute_code" unique="suffix">size</data>
+    </entity>
+    <entity name="colorProductAttributeWithOptions" extends="colorProductAttribute" type="ProductAttribute">
+        <data key="input_type">Text Swatch</data>
+        <data key="scope">Global</data>
+        <data key="option1">Black</data>
+        <data key="option2">Blue</data>
+        <data key="option3">White</data>
+    </entity>
+    <entity name="colorProductVisualAttributeWithOptions" extends="colorProductAttribute" type="ProductAttribute">
+        <data key="default_label" unique="suffix">Color</data>
+        <data key="input_type">swatch_visual</data>
+        <data key="scope">Global</data>
+    </entity>
+    <entity name="sizeProductAttributeWithOptions" extends="sizeAttribute" type="ProductAttribute">
+        <data key="default_label" unique="suffix">Size</data>
+        <data key="input_type">swatch_text</data>
+        <data key="scope">Global</data>
+        <data key="option1">Small</data>
+        <data key="option2">Medium</data>
+        <data key="option3">Large</data>
+        <data key="option4">XL</data>
+        <data key="option5">XXL</data>
+        <data key="option6">XXXL</data>
+    </entity>
+    <entity name="Red" type="SwatchOption">
+        <data key="admin_label">Red</data>
+        <data key="default_label">Red</data>
+    </entity>
+    <entity name="Blue" type="SwatchOption">
+        <data key="admin_label">Blue</data>
+        <data key="default_label">Blue</data>
+    </entity>
+    <entity name="Black" type="SwatchOption">
+        <data key="admin_label">Black</data>
+        <data key="default_label">Black</data>
+    </entity>
+    <entity name="White" type="SwatchOption">
+        <data key="admin_label">White</data>
+        <data key="default_label">White</data>
+    </entity>
+    <entity name="Green" type="SwatchOption">
+        <data key="admin_label">Green</data>
+        <data key="default_label">Green</data>
+    </entity>
+    <entity name="Yellow" type="SwatchOption">
+        <data key="admin_label">Yellow</data>
+        <data key="default_label">Yellow</data>
     </entity>
 </entities>

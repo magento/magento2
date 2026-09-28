@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Acl\Data;
@@ -10,7 +10,7 @@ namespace Magento\Framework\Acl\Data;
  * Interface for caching ACL data
  *
  * @api
- * @since 100.2.0
+ * @since 101.0.0
  */
 interface CacheInterface extends \Magento\Framework\Cache\FrontendInterface
 {

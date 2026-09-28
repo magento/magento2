@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -19,6 +19,7 @@ use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
 use Magento\Framework\Session\Generic;
 use Magento\Framework\Stdlib\DateTime;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Reports\Model\Product\Index\Compared;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -29,6 +30,8 @@ use PHPUnit\Framework\TestCase;
  */
 class ComparedTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Compared
      */
@@ -119,10 +122,10 @@ class ComparedTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->resourceMock = $this->getMockBuilder(AbstractResource::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getIdFieldName', '_construct', 'getConnection'])
-            ->getMockForAbstractClass();
+        $this->resourceMock = $this->createPartialMockWithReflection(
+            AbstractResource::class,
+            ['getIdFieldName', '_construct', 'getConnection']
+        );
         $this->dbMock = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -147,15 +150,15 @@ class ComparedTest extends TestCase
      */
     public function testGetExcludeProductIds()
     {
-        $collection = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getEntityId'])
-            ->getMock();
+        $collection = $this->createPartialMockWithReflection(
+            Collection::class,
+            ['getEntityId']
+        );
         $collection->expects($this->once())->method('getEntityId')->willReturn(1);
 
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId'])
+            ->onlyMethods(['getId'])
             ->getMock();
         $product->expects($this->once())->method('getId')->willReturn(2);
 

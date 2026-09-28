@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -65,7 +65,9 @@ class GetAssetsByIds implements GetAssetsByIdsInterface
                         'id' => $assetData['id'],
                         'path' => $assetData['path'],
                         'title' => $assetData['title'],
+                        'description' => $assetData['description'],
                         'source' => $assetData['source'],
+                        'hash' => $assetData['hash'],
                         'contentType' => $assetData['content_type'],
                         'width' => $assetData['width'],
                         'height' => $assetData['height'],

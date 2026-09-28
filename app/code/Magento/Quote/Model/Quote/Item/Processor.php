@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Quote\Model\Quote\Item;
 
@@ -96,9 +96,12 @@ class Processor
         }
         $item->addQty($candidate->getCartQty());
 
+        if (!$item->getParentItem() || $item->getParentItem()->isChildrenCalculated()) {
+            $item->setPrice($candidate->getFinalPrice());
+        }
+
         $customPrice = $request->getCustomPrice();
-        $item->setPrice($candidate->getFinalPrice());
-        if (!empty($customPrice)) {
+        if ($customPrice !== null && !$candidate->getParentProductId()) {
             $item->setCustomPrice($customPrice);
             $item->setOriginalCustomPrice($customPrice);
         }

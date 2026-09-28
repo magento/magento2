@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -30,7 +30,7 @@ class TablerateTest extends TestCase
         $this->tableateFactoryMock =
             $this->getMockBuilder(TablerateFactory::class)
                 ->disableOriginalConstructor()
-                ->setMethods(['create'])
+                ->onlyMethods(['create'])
                 ->getMock();
 
         $helper = new ObjectManager($this);
@@ -44,7 +44,7 @@ class TablerateTest extends TestCase
     {
         $tablerateMock = $this->getMockBuilder(\Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate::class)
             ->disableOriginalConstructor()
-            ->setMethods(['uploadAndImport'])
+            ->onlyMethods(['uploadAndImport'])
             ->getMock();
 
         $this->tableateFactoryMock->expects($this->once())

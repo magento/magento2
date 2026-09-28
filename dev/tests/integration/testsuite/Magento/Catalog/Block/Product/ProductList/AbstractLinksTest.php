@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -66,6 +66,12 @@ abstract class AbstractLinksTest extends TestCase
     /** @var string */
     protected $linkType;
 
+    /** @var string */
+    protected $titleName;
+
+    /** @var string */
+    protected $titleXpath = "//strong[@id = 'block-%s-heading'][contains(text(), '%s')]";
+
     /**
      * @inheritdoc
      */
@@ -83,7 +89,7 @@ abstract class AbstractLinksTest extends TestCase
      *
      * @return array
      */
-    public function displayLinkedProductsProvider(): array
+    public static function displayLinkedProductsProvider(): array
     {
         return [
             'product_all_displayed' => [
@@ -155,7 +161,7 @@ abstract class AbstractLinksTest extends TestCase
      *
      * @return array
      */
-    public function multipleWebsitesLinkedProductsProvider(): array
+    public static function multipleWebsitesLinkedProductsProvider(): array
     {
         return [
             'first_website' => [
@@ -297,7 +303,7 @@ abstract class AbstractLinksTest extends TestCase
      *
      * @return array
      */
-    protected function prepareWebsiteIdsProducts(): array
+    protected function prepareProductsWebsiteIds(): array
     {
         $websiteId = $this->storeManager->getWebsite('test')->getId();
         $defaultWebsiteId = $this->storeManager->getWebsite('base')->getId();

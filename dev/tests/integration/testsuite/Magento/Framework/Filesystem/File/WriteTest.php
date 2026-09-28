@@ -2,12 +2,13 @@
 /**
  * Test for \Magento\Framework\Filesystem\File\Write
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Filesystem\File;
 
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class WriteTest extends \PHPUnit\Framework\TestCase
 {
@@ -32,10 +33,10 @@ class WriteTest extends \PHPUnit\Framework\TestCase
     /**
      * Test exceptions on attempt to open existing file with x mode
      *
-     * @dataProvider fileExistProvider
      * @param $path
      * @param $mode
      */
+    #[DataProvider('fileExistProvider')]
     public function testFileExistException($path, $mode)
     {
         $this->expectException(\Magento\Framework\Exception\FileSystemException::class);
@@ -48,7 +49,7 @@ class WriteTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function fileExistProvider()
+    public static function fileExistProvider()
     {
         return [['popup.csv', 'x'], ['popup.csv', 'x+']];
     }
@@ -56,12 +57,12 @@ class WriteTest extends \PHPUnit\Framework\TestCase
     /**
      * Test for write method
      *
-     * @dataProvider writeProvider
      * @param string $path
      * @param string $mode
      * @param string $write
      * @param string $expectedResult
      */
+    #[DataProvider('writeProvider')]
     public function testWriteOnly($path, $mode, $write, $expectedResult)
     {
         $file = $this->getFileInstance($path, $mode);
@@ -76,7 +77,7 @@ class WriteTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function writeProvider()
+    public static function writeProvider()
     {
         return [
             ['new1.csv', 'w', 'write check', 11],
@@ -89,12 +90,12 @@ class WriteTest extends \PHPUnit\Framework\TestCase
     /**
      * Test for write method
      *
-     * @dataProvider writeAndReadProvider
      * @param string $path
      * @param string $mode
      * @param string $write
      * @param string $expectedResult
      */
+    #[DataProvider('writeAndReadProvider')]
     public function testWriteAndRead($path, $mode, $write, $expectedResult)
     {
         $file = $this->getFileInstance($path, $mode);
@@ -112,7 +113,7 @@ class WriteTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function writeAndReadProvider()
+    public static function writeAndReadProvider()
     {
         return [
             ['new2.csv', 'w+', 'write check', 11],
@@ -125,13 +126,13 @@ class WriteTest extends \PHPUnit\Framework\TestCase
     /**
      * Writes one CSV row to the file.
      *
-     * @dataProvider csvDataProvider
      * @param array $expectedData
      * @param string $path
      * @param array $data
      * @param string $delimiter
      * @param string $enclosure
      */
+    #[DataProvider('csvDataProvider')]
     public function testWriteCsv($expectedData, $path, array $data, $delimiter = ',', $enclosure = '"')
     {
         $file = $this->getFileInstance($path, 'w+');
@@ -148,7 +149,7 @@ class WriteTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function csvDataProvider()
+    public static function csvDataProvider()
     {
         return [
             [['field1', 'field2'], 'newcsv1.csv', ['field1', 'field2'], ',', '"'],

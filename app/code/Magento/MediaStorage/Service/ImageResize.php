@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -97,6 +97,11 @@ class ImageResize
     private $storeManager;
 
     /**
+     * @var array[]
+     */
+    private array $paramsWebsitesMap;
+
+    /**
      * @param State $appState
      * @param MediaConfig $imageConfig
      * @param ProductImage $productImage
@@ -124,8 +129,8 @@ class ImageResize
         ThemeCustomizationConfig $themeCustomizationConfig,
         ThemeCollection $themeCollection,
         Filesystem $filesystem,
-        FileStorageDatabase $fileStorageDatabase = null,
-        StoreManagerInterface $storeManager = null
+        ?FileStorageDatabase $fileStorageDatabase = null,
+        ?StoreManagerInterface $storeManager = null
     ) {
         $this->appState = $appState;
         $this->imageConfig = $imageConfig;
@@ -146,10 +151,15 @@ class ImageResize
      * Create resized images of different sizes from an original image.
      *
      * @param string $originalImageName
+     * @param bool $skipHiddenImages
+     * @param string $onlyCacheFileName
      * @throws NotFoundException
      */
-    public function resizeFromImageName(string $originalImageName)
-    {
+    public function resizeFromImageName(
+        string $originalImageName,
+        bool $skipHiddenImages = false,
+        string $onlyCacheFileName = ''
+    ) {
         $mediastoragefilename = $this->imageConfig->getMediaPath($originalImageName);
         $originalImagePath = $this->mediaDirectory->getAbsolutePath($mediastoragefilename);
 
@@ -162,8 +172,18 @@ class ImageResize
         if (!$this->mediaDirectory->isFile($originalImagePath)) {
             throw new NotFoundException(__('Cannot resize image "%1" - original image not found', $originalImagePath));
         }
-        foreach ($this->getViewImages($this->getThemesInUse()) as $viewImage) {
-            $this->resize($viewImage, $originalImagePath, $originalImageName);
+
+        $viewImages = $this->getViewImages($this->getThemesInUse());
+        if ($skipHiddenImages) {
+            $websiteIds = $this->productImage->getRelatedWebsiteIds($originalImageName);
+            $viewImages = array_filter(
+                $viewImages,
+                fn (string $index) => array_intersect($websiteIds, $this->paramsWebsitesMap[$index]),
+                ARRAY_FILTER_USE_KEY
+            );
+        }
+        foreach ($viewImages as $viewImage) {
+            $this->resize($viewImage, $originalImagePath, $originalImageName, $onlyCacheFileName);
         }
     }
 
@@ -171,22 +191,32 @@ class ImageResize
      * Create resized images of different sizes from themes.
      *
      * @param array|null $themes
+     * @param bool $skipHiddenImages
      * @return Generator
      * @throws NotFoundException
      */
-    public function resizeFromThemes(array $themes = null): Generator
+    public function resizeFromThemes(?array $themes = null, bool $skipHiddenImages = false): Generator
     {
-        $count = $this->productImage->getCountUsedProductImages();
+        $count = $this->getCountProductImages($skipHiddenImages);
         if (!$count) {
             throw new NotFoundException(__('Cannot resize images - product images not found'));
         }
 
-        $productImages = $this->productImage->getUsedProductImages();
+        $productImages = $this->getProductImages($skipHiddenImages);
         $viewImages = $this->getViewImages($themes ?? $this->getThemesInUse());
 
         foreach ($productImages as $image) {
             $error = '';
             $originalImageName = $image['filepath'];
+
+            $websiteIds = isset($image['website_ids'])
+                ? array_map('intval', explode(',', $image['website_ids']))
+                : [];
+            $relevantViewImages = $skipHiddenImages ? array_filter(
+                $viewImages,
+                fn ($index) => array_intersect($this->paramsWebsitesMap[$index], $websiteIds),
+                ARRAY_FILTER_USE_KEY
+            ) : $viewImages;
 
             $mediastoragefilename = $this->imageConfig->getMediaPath($originalImageName);
             $originalImagePath = $this->mediaDirectory->getAbsolutePath($mediastoragefilename);
@@ -195,15 +225,43 @@ class ImageResize
                 $this->fileStorageDatabase->saveFileToFilesystem($mediastoragefilename);
             }
             if ($this->mediaDirectory->isFile($originalImagePath)) {
-                foreach ($viewImages as $viewImage) {
-                    $this->resize($viewImage, $originalImagePath, $originalImageName);
+                try {
+                    foreach ($relevantViewImages as $viewImage) {
+                        $this->resize($viewImage, $originalImagePath, $originalImageName);
+                    }
+                } catch (\Exception $e) {
+                    $error = $e->getMessage();
                 }
             } else {
                 $error = __('Cannot resize image "%1" - original image not found', $originalImagePath);
             }
 
-            yield ['filename' => $originalImageName, 'error' => $error] => $count;
+            yield ['filename' => $originalImageName, 'error' => (string) $error] => $count;
         }
+    }
+
+    /**
+     * Get count of product images.
+     *
+     * @param bool $skipHiddenImages
+     * @return int
+     */
+    public function getCountProductImages(bool $skipHiddenImages = false): int
+    {
+        return $skipHiddenImages ?
+            $this->productImage->getCountUsedProductImages() : $this->productImage->getCountAllProductImages();
+    }
+
+    /**
+     * Get product images.
+     *
+     * @param bool $skipHiddenImages
+     * @return Generator
+     */
+    public function getProductImages(bool $skipHiddenImages = false): \Generator
+    {
+        return $skipHiddenImages ?
+            $this->productImage->getUsedProductImages() : $this->productImage->getAllProductImages();
     }
 
     /**
@@ -250,6 +308,8 @@ class ImageResize
                     $uniqIndex = $this->getUniqueImageIndex($data);
                     $data['id'] = $imageId;
                     $viewImages[$uniqIndex] = $data;
+                    $websiteId = (int) $store->getWebsiteId();
+                    $this->paramsWebsitesMap[$uniqIndex][$websiteId] = $websiteId;
                 }
             }
         }
@@ -276,6 +336,7 @@ class ImageResize
      * @param string $originalImagePath
      * @param array $imageParams
      * @return Image
+     * @throws \InvalidArgumentException
      */
     private function makeImage(string $originalImagePath, array $imageParams): Image
     {
@@ -290,14 +351,38 @@ class ImageResize
     }
 
     /**
+     * Check if need make resize image
+     *
+     * @param string $imageAssetPath
+     * @param string $cacheFileName
+     * @return bool
+     */
+    private function needResize(string $imageAssetPath, string $cacheFileName): bool
+    {
+        if (empty($cacheFileName)) {
+            return true;
+        }
+
+        if (str_ends_with($imageAssetPath, $cacheFileName)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Resize image if not already resized before
      *
      * @param array $imageParams
      * @param string $originalImagePath
      * @param string $originalImageName
+     * @param string $onlyCacheFileName
      */
-    private function resize(array $imageParams, string $originalImagePath, string $originalImageName)
-    {
+    private function resize(
+        array $imageParams,
+        string $originalImagePath,
+        string $originalImageName,
+        string $onlyCacheFileName = ''
+    ) {
         unset($imageParams['id']);
         $imageAsset = $this->assertImageFactory->create(
             [
@@ -306,21 +391,24 @@ class ImageResize
             ]
         );
         $imageAssetPath = $imageAsset->getPath();
-        $usingDbAsStorage = $this->fileStorageDatabase->checkDbUsage();
-        $mediaStorageFilename = $this->mediaDirectory->getRelativePath($imageAssetPath);
 
-        $alreadyResized = $usingDbAsStorage ?
-            $this->fileStorageDatabase->fileExists($mediaStorageFilename) :
-            $this->mediaDirectory->isFile($imageAssetPath);
+        if ($this->needResize($imageAssetPath, $onlyCacheFileName)) {
+            $usingDbAsStorage = $this->fileStorageDatabase->checkDbUsage();
+            $mediaStorageFilename = $this->mediaDirectory->getRelativePath($imageAssetPath);
 
-        if (!$alreadyResized) {
-            $this->generateResizedImage(
-                $imageParams,
-                $originalImagePath,
-                $imageAssetPath,
-                $usingDbAsStorage,
-                $mediaStorageFilename
-            );
+            $alreadyResized = $usingDbAsStorage ?
+                $this->fileStorageDatabase->fileExists($mediaStorageFilename) :
+                $this->mediaDirectory->isFile($imageAssetPath);
+
+            if (!$alreadyResized) {
+                $this->generateResizedImage(
+                    $imageParams,
+                    $originalImagePath,
+                    $imageAssetPath,
+                    $usingDbAsStorage,
+                    $mediaStorageFilename
+                );
+            }
         }
     }
 

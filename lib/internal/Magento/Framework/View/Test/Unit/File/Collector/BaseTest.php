@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,9 +16,12 @@ use Magento\Framework\View\File\Collector\Base;
 use Magento\Framework\View\File\Factory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class BaseTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Base
      */
@@ -44,9 +47,7 @@ class BaseTest extends TestCase
         $this->fileFactoryMock = $this->getMockBuilder(Factory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->themeMock = $this->getMockBuilder(ThemeInterface::class)
-            ->setMethods(['getData'])
-            ->getMockForAbstractClass();
+        $this->themeMock = $this->createMock(ThemeInterface::class);
 
         $this->dirSearch = $this->createMock(DirSearch::class);
 
@@ -85,8 +86,7 @@ class BaseTest extends TestCase
             ->method('create')
             ->willReturn($this->createFileMock());
         $this->themeMock->expects($this->once())
-            ->method('getData')
-            ->with('area')
+            ->method('getArea')
             ->willReturn('frontend');
 
         $result = $this->fileCollector->getFiles($this->themeMock, '*.xml');

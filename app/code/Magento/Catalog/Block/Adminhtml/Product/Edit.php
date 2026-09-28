@@ -1,21 +1,22 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Customer edit block
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 namespace Magento\Catalog\Block\Adminhtml\Product;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Escaper;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
 
 /**
- * Class Edit
+ * Class for Product Edit.
  */
 class Edit extends \Magento\Backend\Block\Widget
 {
@@ -30,8 +31,6 @@ class Edit extends \Magento\Backend\Block\Widget
     protected $_template = 'Magento_Catalog::catalog/product/edit.phtml';
 
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
@@ -59,6 +58,7 @@ class Edit extends \Magento\Backend\Block\Widget
      * @param \Magento\Catalog\Helper\Product $productHelper
      * @param Escaper $escaper
      * @param array $data
+     * @param JsonHelper|null $jsonHelper
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -67,13 +67,15 @@ class Edit extends \Magento\Backend\Block\Widget
         \Magento\Framework\Registry $registry,
         \Magento\Catalog\Helper\Product $productHelper,
         Escaper $escaper,
-        array $data = []
+        array $data = [],
+        ?JsonHelper $jsonHelper = null
     ) {
         $this->_productHelper = $productHelper;
         $this->_attributeSetFactory = $attributeSetFactory;
         $this->_coreRegistry = $registry;
         $this->jsonEncoder = $jsonEncoder;
         $this->escaper = $escaper;
+        $data['jsonHelper'] = $jsonHelper ?? ObjectManager::getInstance()->get(JsonHelper::class);
         parent::__construct($context, $data);
     }
 
@@ -288,7 +290,8 @@ class Edit extends \Magento\Backend\Block\Widget
     /**
      * Retrieve product header
      *
-     * @deprecated 101.1.0
+     * @deprecated 102.0.0
+     * @see nothing
      * @return string
      */
     public function getHeader()

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -116,6 +116,7 @@ class ImageResizeCommandTest extends \PHPUnit\Framework\TestCase
      *
      * @magentoDataFixture Magento/MediaStorage/_files/database_mode.php
      * @magentoDataFixture Magento/MediaStorage/_files/product_with_missed_image.php
+     * @magentoDbIsolation disabled
      */
     public function testDatabaseStorageMissingFile()
     {

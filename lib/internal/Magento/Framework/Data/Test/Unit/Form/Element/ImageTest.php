@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,11 +15,19 @@ use Magento\Framework\Data\Form\Element\Factory;
 use Magento\Framework\Data\Form\Element\Image;
 use Magento\Framework\DataObject;
 use Magento\Framework\Escaper;
+use Magento\Framework\Math\Random;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Url;
-use Magento\Framework\UrlInterface;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\UrlInterface;
 
+/**
+ * Test for the widget.
+ *
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+ */
 class ImageTest extends TestCase
 {
     /**
@@ -37,21 +45,56 @@ class ImageTest extends TestCase
      */
     protected $_image;
 
+    /**
+     * @var array
+     */
+    protected $testData;
+
     protected function setUp(): void
     {
+        $objectManager = new ObjectManager($this);
         $factoryMock = $this->createMock(Factory::class);
         $collectionFactoryMock = $this->createMock(CollectionFactory::class);
-        $escaperMock = $this->createMock(Escaper::class);
         $this->urlBuilder = $this->createMock(Url::class);
-        $this->_image = new Image(
-            $factoryMock,
-            $collectionFactoryMock,
-            $escaperMock,
-            $this->urlBuilder
+        $randomMock = $this->createMock(Random::class);
+        $randomMock->method('getRandomString')->willReturn('some-rando-string');
+        $secureRendererMock = $this->createMock(SecureHtmlRenderer::class);
+        $secureRendererMock->method('renderEventListenerAsTag')
+            ->willReturnCallback(
+                function (string $event, string $listener, string $selector): string {
+                    return "<script>document.querySelector('{$selector}').{$event} = () => { {$listener} };</script>";
+                }
+            );
+        $secureRendererMock->method('renderTag')
+            ->willReturnCallback(
+                function (string $tag, array $attrs, ?string $content): string {
+                    $attrs = new DataObject($attrs);
+
+                    return "<$tag {$attrs->serialize()}>$content</$tag>";
+                }
+            );
+        $this->_image = $objectManager->getObject(
+            Image::class,
+            [
+                'factoryMock'=>$factoryMock,
+                'collectionFactoryMock'=>$collectionFactoryMock,
+                'urlBuilder' => $this->urlBuilder,
+                '_escaper' => $objectManager->getObject(Escaper::class),
+                'random' => $randomMock,
+                'secureRenderer' => $secureRendererMock,
+            ]
         );
+        $this->testData = [
+            'html_id_prefix' => 'test_id_prefix_',
+            'html_id' => 'test_id',
+            'html_id_suffix' => '_test_id_suffix',
+            'path' => 'catalog/product/placeholder',
+            'value' => 'test_value',
+        ];
+
         $formMock = new DataObject();
-        $formMock->getHtmlIdPrefix('id_prefix');
-        $formMock->getHtmlIdPrefix('id_suffix');
+        $formMock->getHtmlIdPrefix($this->testData['html_id_prefix']);
+        $formMock->getHtmlIdPrefix($this->testData['html_id_suffix']);
         $this->_image->setForm($formMock);
     }
 
@@ -90,20 +133,32 @@ class ImageTest extends TestCase
      */
     public function testGetElementHtmlWithValue()
     {
-        $this->_image->setValue('test_value');
-        $this->urlBuilder->expects($this->once())
-            ->method('getBaseUrl')
-            ->with(['_type' => UrlInterface::URL_TYPE_MEDIA])
-            ->willReturn('http://localhost/media/');
+        $url = 'http://test.example.com/media/';
+
+        $this->_image->setValue($this->testData['value']);
+        $this->_image->setHtmlId($this->testData['html_id']);
+
+        $this->urlBuilder->expects($this->once())->method('getBaseUrl')
+            ->with(['_type' => UrlInterface::URL_TYPE_MEDIA])->willReturn($url);
+
+        $expectedHtmlId = $this->testData['html_id'];
+
         $html = $this->_image->getElementHtml();
+
         $this->assertStringContainsString('class="input-file"', $html);
         $this->assertStringContainsString('<input', $html);
         $this->assertStringContainsString('type="file"', $html);
         $this->assertStringContainsString('value="test_value"', $html);
+
         $this->assertStringContainsString(
-            '<a href="http://localhost/media/test_value" onclick="imagePreview(\'_image\'); return false;"',
+            '<a previewlinkid="linkIdsome-rando-string" href="'
+            . $url
+            . $this->testData['value']
+            . '"',
             $html
         );
+
+        $this->assertStringContainsString("imagePreview('{$expectedHtmlId}_image');\nreturn false;", $html);
         $this->assertStringContainsString('<input type="checkbox"', $html);
     }
 }

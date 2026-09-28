@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Downloadable\Api;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Product;
 use Magento\Downloadable\Model\Sample;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -36,8 +37,17 @@ class SampleRepositoryTest extends WebapiAbstract
      */
     protected $deleteServiceInfo;
 
+    /**
+     * @var DomainManagerInterface
+     */
+    private $domainManager;
+
     protected function setUp(): void
     {
+        $objectManager = Bootstrap::getObjectManager();
+        $this->domainManager = $objectManager->get(DomainManagerInterface::class);
+        $this->domainManager->addDomains(['example.com']);
+
         $this->createServiceInfo = [
             'rest' => [
                 'resourcePath' => '/V1/products/downloadable-product/downloadable-links/samples',
@@ -73,6 +83,15 @@ class SampleRepositoryTest extends WebapiAbstract
         ];
 
         $this->testImagePath = __DIR__ . str_replace('/', DIRECTORY_SEPARATOR, '/_files/test_image.jpg');
+    }
+
+    /**
+     * Remove example domain from whitelist and call parent restore configuration
+     */
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        $this->domainManager->removeDomains(['example.com']);
     }
 
     /**
@@ -153,58 +172,6 @@ class SampleRepositoryTest extends WebapiAbstract
         $this->assertEquals($requestData['sample']['sample_type'], $sample->getSampleType());
         $this->assertStringEndsWith('.jpg', $sample->getSampleFile());
         $this->assertNull($sample->getSampleUrl());
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable.php
-     */
-    public function testCreateSavesTitleInStoreViewScope()
-    {
-        $requestData = [
-            'isGlobalScopeContent' => false,
-            'sku' => 'downloadable-product',
-            'sample' => [
-                'title' => 'Store View Title',
-                'sort_order' => 1,
-                'sample_url' => 'http://www.sample.example.com/',
-                'sample_type' => 'url',
-            ],
-        ];
-
-        $newSampleId = $this->_webApiCall($this->createServiceInfo, $requestData);
-        $sample = $this->getTargetSample($this->getTargetProduct(), $newSampleId);
-        $globalScopeSample = $this->getTargetSample($this->getTargetProduct(true), $newSampleId);
-        $this->assertNotNull($sample);
-        $this->assertEquals($requestData['sample']['title'], $sample->getTitle());
-        $this->assertEquals($requestData['sample']['sort_order'], $sample->getSortOrder());
-        $this->assertEquals($requestData['sample']['sample_url'], $sample->getSampleUrl());
-        $this->assertEquals($requestData['sample']['sample_type'], $sample->getSampleType());
-        $this->assertEmpty($globalScopeSample->getTitle());
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable.php
-     */
-    public function testCreateSavesProvidedUrls()
-    {
-        $requestData = [
-            'isGlobalScopeContent' => false,
-            'sku' => 'downloadable-product',
-            'sample' => [
-                'title' => 'Sample with URL resource',
-                'sort_order' => 1,
-                'sample_url' => 'http://www.sample.example.com/',
-                'sample_type' => 'url',
-            ],
-        ];
-
-        $newSampleId = $this->_webApiCall($this->createServiceInfo, $requestData);
-        $sample = $this->getTargetSample($this->getTargetProduct(), $newSampleId);
-        $this->assertNotNull($sample);
-        $this->assertEquals($requestData['sample']['title'], $sample->getTitle());
-        $this->assertEquals($requestData['sample']['sort_order'], $sample->getSortOrder());
-        $this->assertEquals($requestData['sample']['sample_type'], $sample->getSampleType());
-        $this->assertEquals($requestData['sample']['sample_url'], $sample->getSampleUrl());
     }
 
     /**
@@ -328,8 +295,8 @@ class SampleRepositoryTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable.php
-     * @dataProvider getInvalidSortOrder
      */
+    #[DataProvider('getInvalidSortOrder')]
     public function testCreateThrowsExceptionIfSortOrderIsInvalid($sortOrder)
     {
         $this->expectException(\Exception::class);
@@ -351,7 +318,7 @@ class SampleRepositoryTest extends WebapiAbstract
     /**
      * @return array
      */
-    public function getInvalidSortOrder()
+    public static function getInvalidSortOrder()
     {
         return [
             [-1],
@@ -446,8 +413,8 @@ class SampleRepositoryTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable_with_files.php
-     * @dataProvider getInvalidSortOrder
      */
+    #[DataProvider('getInvalidSortOrder')]
     public function testUpdateThrowsExceptionIfSortOrderIsInvalid($sortOrder)
     {
         $this->expectException(\Exception::class);
@@ -487,8 +454,8 @@ class SampleRepositoryTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable_with_files.php
-     * @dataProvider getListForAbsentProductProvider
      */
+    #[DataProvider('getListForAbsentProductProvider')]
     public function testGetList($urlTail, $method, $expectations)
     {
         $sku = 'downloadable-product';
@@ -518,7 +485,7 @@ class SampleRepositoryTest extends WebapiAbstract
         $this->assertNotEmpty($link['sample_file']);
     }
 
-    public function getListForAbsentProductProvider()
+    public static function getListForAbsentProductProvider()
     {
         $sampleExpectation = [
             'fields' => [
@@ -583,11 +550,6 @@ class SampleRepositoryTest extends WebapiAbstract
      */
     public function testCreateThrowsExceptionIfTargetProductDoesNotExist()
     {
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage(
-            'The product that was requested doesn\'t exist. Verify the product and try again.'
-        );
-
         $this->createServiceInfo['rest']['resourcePath'] = '/V1/products/wrong-sku/downloadable-links/samples';
         $requestData = [
             'isGlobalScopeContent' => false,
@@ -599,18 +561,22 @@ class SampleRepositoryTest extends WebapiAbstract
                 'sample_url' => 'http://example.com/',
             ],
         ];
-        $this->_webApiCall($this->createServiceInfo, $requestData);
+
+        $expectedMessage = 'The product with SKU "%1" does not exist.';
+        try {
+            $this->_webApiCall($this->createServiceInfo, $requestData);
+        } catch (\SoapFault $e) {
+            $this->assertEquals($expectedMessage, $e->getMessage());
+        } catch (\Exception $e) {
+            $errorObj = $this->processRestExceptionResult($e);
+            $this->assertEquals($expectedMessage, $errorObj['message']);
+        }
     }
 
     /**
      */
     public function testUpdateThrowsExceptionIfTargetProductDoesNotExist()
     {
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage(
-            'The product that was requested doesn\'t exist. Verify the product and try again.'
-        );
-
         $this->updateServiceInfo['rest']['resourcePath'] = '/V1/products/wrong-sku/downloadable-links/samples/1';
         $requestData = [
             'isGlobalScopeContent' => true,
@@ -622,6 +588,15 @@ class SampleRepositoryTest extends WebapiAbstract
                 'sample_type' => 'url',
             ],
         ];
-        $this->_webApiCall($this->updateServiceInfo, $requestData);
+
+        $expectedMessage = 'The product with SKU "%1" does not exist.';
+        try {
+            $this->_webApiCall($this->updateServiceInfo, $requestData);
+        } catch (\SoapFault $e) {
+            $this->assertEquals($expectedMessage, $e->getMessage());
+        } catch (\Exception $e) {
+            $errorObj = $this->processRestExceptionResult($e);
+            $this->assertEquals($expectedMessage, $errorObj['message']);
+        }
     }
 }

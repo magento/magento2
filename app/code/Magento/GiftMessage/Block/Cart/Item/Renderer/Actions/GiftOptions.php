@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\GiftMessage\Block\Cart\Item\Renderer\Actions;
 
-use Magento\Backend\Block\Template\Context;
 use Magento\Checkout\Block\Cart\Item\Renderer\Actions\Generic;
 use Magento\Framework\Json\Encoder;
+use Magento\Framework\View\Element\Template\Context;
 
 /**
  * @api

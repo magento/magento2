@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\Product\Attribute\Backend;
 
@@ -10,7 +10,7 @@ use Magento\Catalog\Model\Product;
 /**
  * Quantity and Stock Status attribute processing
  *
- * @deprecated 101.1.0 as this attribute should be removed
+ * @deprecated 102.0.0 as this attribute should be removed
  * @see StockItemInterface when you want to change the stock data
  * @see StockStatusInterface when you want to read the stock data for representation layer (storefront)
  * @see StockItemRepositoryInterface::save as extension point for customization of saving process

@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 define([
@@ -13,6 +13,7 @@ define([
     'Magento_Checkout/js/model/quote',
     'Magento_Checkout/js/checkout-data',
     'Magento_Checkout/js/model/full-screen-loader',
+    'Magento_Checkout/js/view/shipping',
     'mage/validation'
 ], function ($, Component, ko, customer, checkEmailAvailability, loginAction, quote, checkoutData, fullScreenLoader) {
     'use strict';
@@ -53,6 +54,7 @@ define([
         isCustomerLoggedIn: customer.isLoggedIn,
         forgotPasswordUrl: window.checkoutConfig.forgotPasswordUrl,
         emailCheckTimeout: 0,
+        emailInputId: '#customer-email',
 
         /**
          * Initializes regular properties of instance.
@@ -108,11 +110,14 @@ define([
         checkEmailAvailability: function () {
             this.validateRequest();
             this.isEmailCheckComplete = $.Deferred();
+            // Clean up errors on email
+            $(this.emailInputId).removeClass('mage-error').parent().find('.mage-error').remove();
             this.isLoading(true);
             this.checkRequest = checkEmailAvailability(this.isEmailCheckComplete, this.email());
 
             $.when(this.isEmailCheckComplete).done(function () {
                 this.isPasswordVisible(false);
+                checkoutData.setCheckedEmailValue('');
             }.bind(this)).fail(function () {
                 this.isPasswordVisible(true);
                 checkoutData.setCheckedEmailValue(this.email());
@@ -160,9 +165,13 @@ define([
                 return valid;
             }
 
-            validator = loginForm.validate();
+            if (loginForm.is(':visible')) {
+                validator = loginForm.validate();
 
-            return validator.check(usernameSelector);
+                return validator.check(usernameSelector);
+            }
+
+            return true;
         },
 
         /**
@@ -192,7 +201,7 @@ define([
          * @returns {Boolean} - initial visibility state.
          */
         resolveInitialPasswordVisibility: function () {
-            if (checkoutData.getInputFieldEmailValue() !== '' && checkoutData.getCheckedEmailValue() === '') {
+            if (checkoutData.getInputFieldEmailValue() !== '' && checkoutData.getCheckedEmailValue() !== '') {
                 return true;
             }
 

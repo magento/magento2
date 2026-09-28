@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Config\Model\Config\Export;
 
@@ -44,7 +44,7 @@ class Comment implements CommentInterface
     public function __construct(
         PlaceholderFactory $placeholderFactory,
         DumpConfigSourceInterface $source,
-        TypePool $typePool = null
+        ?TypePool $typePool = null
     ) {
         $this->placeholder = $placeholderFactory->create(PlaceholderFactory::TYPE_ENVIRONMENT);
         $this->source = $source;

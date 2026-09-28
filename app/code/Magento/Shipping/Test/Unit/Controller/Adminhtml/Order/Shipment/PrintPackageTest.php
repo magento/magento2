@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -20,6 +20,7 @@ use Magento\Sales\Model\Order\Shipment;
 use Magento\Shipping\Controller\Adminhtml\Order\Shipment\PrintPackage;
 use Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader;
 use Magento\Shipping\Model\Order\Pdf\Packaging;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -28,6 +29,7 @@ use PHPUnit\Framework\TestCase;
  */
 class PrintPackageTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var ShipmentLoader|MockObject
      */
@@ -73,6 +75,9 @@ class PrintPackageTest extends TestCase
      */
     protected $controller;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $orderId = 1;
@@ -80,18 +85,17 @@ class PrintPackageTest extends TestCase
         $shipment = [];
         $tracking = [];
 
-        $this->shipmentLoaderMock = $this->getMockBuilder(ShipmentLoader::class)
-            ->addMethods(['setOrderId', 'setShipmentId', 'setShipment', 'setTracking'])
-            ->onlyMethods(['load'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->shipmentLoaderMock = $this->createPartialMockWithReflection(
+            ShipmentLoader::class,
+            ['setOrderId', 'setShipmentId', 'setShipment', 'setTracking', 'load']
+        );
         $this->requestMock = $this->createPartialMock(Http::class, ['getParam']);
-        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $this->responseMock = $this->createMock(\Magento\Framework\App\Response\Http::class);
-        $this->sessionMock = $this->getMockBuilder(Session::class)
-            ->addMethods(['setIsUrlNotice'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->sessionMock = $this->createPartialMockWithReflection(
+            Session::class,
+            ['setIsUrlNotice']
+        );
         $this->actionFlag = $this->createPartialMock(ActionFlag::class, ['get']);
         $this->shipmentMock = $this->createPartialMock(Shipment::class, ['__wakeup']);
         $this->fileFactoryMock = $this->createPartialMock(
@@ -112,22 +116,14 @@ class PrintPackageTest extends TestCase
         $contextMock->expects($this->any())->method('getSession')->willReturn($this->sessionMock);
         $contextMock->expects($this->any())->method('getActionFlag')->willReturn($this->actionFlag);
 
-        $this->requestMock->expects($this->at(0))
+        $this->requestMock
             ->method('getParam')
-            ->with('order_id')
-            ->willReturn($orderId);
-        $this->requestMock->expects($this->at(1))
-            ->method('getParam')
-            ->with('shipment_id')
-            ->willReturn($shipmentId);
-        $this->requestMock->expects($this->at(2))
-            ->method('getParam')
-            ->with('shipment')
-            ->willReturn($shipment);
-        $this->requestMock->expects($this->at(3))
-            ->method('getParam')
-            ->with('tracking')
-            ->willReturn($tracking);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['order_id'] => $orderId,
+                ['shipment_id'] => $shipmentId,
+                ['shipment'] => $shipment,
+                ['tracking'] =>  $tracking
+            });
         $this->shipmentLoaderMock->expects($this->once())
             ->method('setOrderId')
             ->with($orderId);
@@ -150,8 +146,10 @@ class PrintPackageTest extends TestCase
 
     /**
      * Run test execute method
+     *
+     * @return void
      */
-    public function testExecute()
+    public function testExecute(): void
     {
         $date = '9999-99-99_77-77-77';
         $content = 'PDF content';
@@ -191,8 +189,10 @@ class PrintPackageTest extends TestCase
 
     /**
      * Run test execute method (fail print)
+     *
+     * @return void
      */
-    public function testExecuteFail()
+    public function testExecuteFail(): void
     {
         $this->shipmentLoaderMock->expects($this->once())
             ->method('load')

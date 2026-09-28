@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Amqp;
 
 /**
  * Factory class for @see Config
+ *
+ * @api
  */
 class ConfigFactory
 {

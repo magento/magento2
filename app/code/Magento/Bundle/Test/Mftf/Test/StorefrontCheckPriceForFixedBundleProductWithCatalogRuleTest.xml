@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCheckPriceForFixedBundleProductWithCatalogRuleTest">
+        <annotations>
+            <features value="Bundle"/>
+            <stories value="View bundle product price"/>
+            <title value="Check prices for bundle product with catalog rule"/>
+            <description value="To Verify Catalog Rules Prices for Fixed Bundle Product on Storefront"/>
+            <testCaseId value="AC-3973"/>
+            <severity value="MAJOR"/>
+        </annotations>
+        <before>
+            <!-- Precondition step1,2: create category, catalog rule price with data and apply to products -->
+            <createData entity="_defaultCategory" stepKey="category1"/>
+            <!-- login to backend -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="clearExistingCatalogPriceRules"/>
+            <actionGroup ref="AdminOpenNewCatalogPriceRuleFormPageActionGroup" stepKey="openNewCatalogPriceRulePage"/>
+            <actionGroup ref="AdminCatalogPriceRuleFillMainInfoActionGroup" stepKey="fillMainInfoForCatalogPriceRule"/>
+            <actionGroup ref="AdminFillCatalogRuleConditionActionGroup" stepKey="fillConditionsForCatalogPriceRule">
+                <argument name="conditionValue" value="$category1.id$"/>
+            </actionGroup>
+            <actionGroup ref="AdminCatalogPriceRuleFillActionsActionGroup" stepKey="fillActionsForCatalogPriceRule">
+                <argument name="apply" value="by_percent"/>
+                <argument name="discountAmount" value="10"/>
+            </actionGroup>
+            <actionGroup ref="AdminCatalogPriceRuleSaveAndApplyActionGroup" stepKey="saveAndApplyFirstPriceRule"/>
+            <!-- Precondition step3: create 6 simple products -->
+            <!-- Precondition step3.1: create first product -->
+            <createData entity="_defaultProduct" stepKey="firstProduct">
+                <field key="price">10.25</field>
+                <field key="quantity">100</field>
+                <requiredEntity createDataKey="category1"/>
+            </createData>
+            <!-- Precondition step3.2: create second product -->
+            <createData entity="_defaultProduct" stepKey="secondProduct">
+                <field key="price">15.50</field>
+                <field key="status">0</field>
+                <field key="quantity">100</field>
+                <requiredEntity createDataKey="category1"/>
+            </createData>
+            <!-- Precondition step3.3: create third product -->
+            <createData entity="_defaultProduct" stepKey="thirdProduct">
+                <field key="price">20.75</field>
+                <field key="quantity">100</field>
+                <requiredEntity createDataKey="category1"/>
+            </createData>
+            <!-- Precondition step3.4: create fourth product -->
+            <createData entity="_defaultProduct" stepKey="fourthProduct">
+                <field key="price">25.15</field>
+                <field key="quantity">100</field>
+                <requiredEntity createDataKey="category1"/>
+            </createData>
+            <!-- Precondition step3.5: create fifth product -->
+            <createData entity="_defaultProduct" stepKey="fifthProduct">
+                <field key="price">30.45</field>
+                <field key="status">0</field>
+                <field key="quantity">100</field>
+                <requiredEntity createDataKey="category1"/>
+            </createData>
+            <!-- Precondition step3.6: create sixth product -->
+            <createData entity="_defaultProduct" stepKey="sixthProduct">
+                <field key="price">35.65</field>
+                <field key="quantity">100</field>
+                <requiredEntity createDataKey="category1"/>
+            </createData>
+            <!-- Precondition step4: Create Bundle product -->
+            <createData entity="FixedBundleProduct" stepKey="createFixedBundleProduct">
+                <requiredEntity createDataKey="category1"/>
+                <field key="price">110.25</field>
+            </createData>
+            <!-- Precondition step4.6: Add options to the product -->
+            <createData entity="MultipleSelectOption" stepKey="createBundleOption1_1">
+                <requiredEntity createDataKey="createFixedBundleProduct"/>
+                <field key="required">true</field>
+            </createData>
+            <createData entity="DropDownBundleOption" stepKey="createBundleOption1_2">
+                <requiredEntity createDataKey="createFixedBundleProduct"/>
+                <field key="required">false</field>
+            </createData>
+            <!-- Precondition step4.6.1: add products to multiselect option -->
+            <createData entity="ApiBundleLinkFixed" stepKey="linkOptionToFirstProduct">
+                <requiredEntity createDataKey="createFixedBundleProduct"/>
+                <requiredEntity createDataKey="createBundleOption1_1"/>
+                <requiredEntity createDataKey="firstProduct"/>
+                <field key="qty">2</field>
+                <field key="price">25.15</field>
+            </createData>
+            <createData entity="ApiBundleLinkFixed" stepKey="linkOptionToSecondProduct">
+                <requiredEntity createDataKey="createFixedBundleProduct"/>
+                <requiredEntity createDataKey="createBundleOption1_1"/>
+                <requiredEntity createDataKey="secondProduct"/>
+                <field key="qty">5</field>
+                <field key="price">5</field>
+                <field key="price_type">1</field>
+            </createData>
+            <createData entity="ApiBundleLinkFixed" stepKey="linkOptionToThirdProduct">
+                <requiredEntity createDataKey="createFixedBundleProduct"/>
+                <requiredEntity createDataKey="createBundleOption1_1"/>
+                <requiredEntity createDataKey="thirdProduct"/>
+                <field key="qty">2</field>
+                <field key="price">30</field>
+                <field key="price_type">1</field>
+            </createData>
+            <!-- Precondition step4.6.2: add products to single select option -->
+            <createData entity="ApiBundleLinkFixed" stepKey="linkOptionToFourthProduct">
+                <requiredEntity createDataKey="createFixedBundleProduct"/>
+                <requiredEntity createDataKey="createBundleOption1_2"/>
+                <requiredEntity createDataKey="fourthProduct"/>
+                <field key="qty">2</field>
+                <field key="price">10</field>
+                <field key="price_type">1</field>
+            </createData>
+            <createData entity="ApiBundleLinkFixed" stepKey="linkOptionToFifthProduct">
+                <requiredEntity createDataKey="createFixedBundleProduct"/>
+                <requiredEntity createDataKey="createBundleOption1_2"/>
+                <requiredEntity createDataKey="fifthProduct"/>
+                <field key="qty">5</field>
+                <field key="price">20.55</field>
+            </createData>
+            <createData entity="ApiBundleLinkFixed" stepKey="linkOptionToSixthProduct">
+                <requiredEntity createDataKey="createFixedBundleProduct"/>
+                <requiredEntity createDataKey="createBundleOption1_2"/>
+                <requiredEntity createDataKey="sixthProduct"/>
+                <field key="qty">1</field>
+                <field key="price">45</field>
+                <field key="price_type">1</field>
+            </createData>
+        </before>
+        <after>
+            <!-- delete created product data -->
+            <deleteData createDataKey="firstProduct" stepKey="deleteFirstProduct"/>
+            <deleteData createDataKey="secondProduct" stepKey="deleteSecondProduct"/>
+            <deleteData createDataKey="thirdProduct" stepKey="deleteThirdProduct"/>
+            <deleteData createDataKey="fourthProduct" stepKey="deleteFourthProduct"/>
+            <deleteData createDataKey="fifthProduct" stepKey="deleteFifthProduct"/>
+            <deleteData createDataKey="sixthProduct" stepKey="deleteSixthProduct"/>
+            <!-- delete created bundle product and catalog rule -->
+            <deleteData createDataKey="createFixedBundleProduct" stepKey="deleteBundleProduct"/>
+            <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteCatalogPriceRules"/>
+            <!-- logout admin -->
+            <deleteData createDataKey="category1" stepKey="deletecategory1"/> 
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- check product prices on category and product page -->
+        <!-- step1: Go to storefront category page -->
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="amOnCategoryPage">
+            <argument name="category" value="$$category1$$"/>
+        </actionGroup>
+        <!-- step2: check price for fixed bundled on category page -->
+        <grabTextFrom selector="{{StorefrontCategoryProductSection.priceAsLowAsFinalPriceByProductId($$createFixedBundleProduct.id$$)}}" stepKey="grabProductFinalPriceOnCategory"/>
+        <assertEquals message="ExpectedFinalPriceOnCategory" stepKey="assertBundleProductFinalPriceOnCategory">
+            <actualResult type="variable">grabProductFinalPriceOnCategory</actualResult>
+            <expectedResult type="string">$149.53</expectedResult>
+        </assertEquals>
+        <grabTextFrom selector="{{StorefrontCategoryProductSection.oldPriceByProductId($$createFixedBundleProduct.id$$)}}" stepKey="grabProductOldPriceOnCategory"/>
+        <assertEquals message="ExpectedOldPriceOnCategory" stepKey="assertBundleProductOldPriceOnCategory">
+            <actualResult type="variable">grabProductOldPriceOnCategory</actualResult>
+            <expectedResult type="string">Regular Price $160.55</expectedResult>
+        </assertEquals>
+        <grabTextFrom selector="{{StorefrontCategoryProductSection.priceAsLowAsLabelByProductId($$createFixedBundleProduct.id$$)}}" stepKey="grabProductFinalPriceLabelOnCategory"/>
+        <assertEquals message="ExpectedFinalPriceLabelOnCategory" stepKey="assertBundleProductFinalPriceLabelOnCategory">
+            <actualResult type="variable">grabProductFinalPriceLabelOnCategory</actualResult>
+            <expectedResult type="string">As low as</expectedResult>
+        </assertEquals>
+        <!-- step3: Go to fixed bundled product page -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openBundleProductPage">
+            <argument name="productUrl" value="$$createFixedBundleProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <!-- step4: check price for fixed Bundle on product page -->
+        <grabTextFrom selector="{{StorefrontProductInfoMainSection.oldPrice}}" stepKey="grabProductOldPrice"/>
+        <assertEquals message="ExpectedOldPrice" stepKey="assertBundleProductOldPrice">
+            <actualResult type="variable">grabProductOldPrice</actualResult>
+            <expectedResult type="string">Regular Price $160.55</expectedResult>
+        </assertEquals>
+        <grabTextFrom selector="{{StorefrontProductInfoMainSection.asLowAsFinalPrice}}" stepKey="grabProductFinalPrice"/>
+        <assertEquals message="ExpectedFinalPrice" stepKey="assertBundleProductPrice">
+            <actualResult type="variable">grabProductFinalPrice</actualResult>
+            <expectedResult type="string">$149.53</expectedResult>
+        </assertEquals>
+        <grabTextFrom selector="{{StorefrontProductInfoMainSection.asLowAsFinalPriceLabel}}" stepKey="grabProductPriceLabel"/>
+        <assertEquals message="ExpectedPriceLabel" stepKey="assertProductPriceLabel">
+            <actualResult type="variable">grabProductPriceLabel</actualResult>
+            <expectedResult type="string">As low as</expectedResult>
+        </assertEquals>
+    </test>
+</tests>

@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -43,12 +43,12 @@ define([
             var date;
 
             if (this.storeLocale !== undefined) {
-                moment.locale(this.storeLocale, utils.extend({}, this.calendarConfig));
+                moment.updateLocale(this.storeLocale, utils.extend({}, this.calendarConfig));
             }
 
             date = moment.utc(this._super());
 
-            if (!_.isUndefined(this.timezone)) {
+            if (!_.isUndefined(this.timezone) && moment.tz.zone(this.timezone) !== null) {
                 date = date.tz(this.timezone);
             }
 

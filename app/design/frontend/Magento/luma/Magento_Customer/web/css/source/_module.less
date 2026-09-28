@@ -1,6 +1,6 @@
 // /**
-//  * Copyright © Magento, Inc. All rights reserved.
-//  * See COPYING.txt for license details.
+//  * Copyright 2015 Adobe
+//  * All Rights Reserved.
 //  */
 
 //
@@ -82,6 +82,11 @@
     .form-edit-account {
         .fieldset.password {
             display: none;
+        }
+        fieldset {
+            &.additional_info {
+                clear: both;
+            }
         }
     }
 
@@ -349,9 +354,9 @@
         }
     }
 
-    .additional-addresses { 
+    .additional-addresses {
         table > thead > tr > th {
-            white-space: nowrap;  
+            white-space: nowrap;
         }
     }
 }

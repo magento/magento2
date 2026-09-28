@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model;
 
@@ -48,31 +48,33 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * Entity code.
      * Can be used as part of method name for entity processing
      */
-    const ENTITY = 'catalog_category';
+    public const ENTITY = 'catalog_category';
 
     /**#@+
      * Category display modes
      */
-    const DM_PRODUCT = 'PRODUCTS';
+    public const DM_PRODUCT = 'PRODUCTS';
 
-    const DM_PAGE = 'PAGE';
+    public const DM_PAGE = 'PAGE';
 
-    const DM_MIXED = 'PRODUCTS_AND_PAGE';
+    public const DM_MIXED = 'PRODUCTS_AND_PAGE';
     /**#@-*/
 
     /**
      * Id of root category
      */
-    const ROOT_CATEGORY_ID = 0;
+    public const ROOT_CATEGORY_ID = 0;
 
     /**
      * Id of category tree root
      */
-    const TREE_ROOT_ID = 1;
+    public const TREE_ROOT_ID = 1;
 
-    const CACHE_TAG = 'cat_c';
+    public const CACHE_TAG = 'cat_c';
 
-    /**#@-*/
+    /**
+     * @var string
+     */
     protected $_eventPrefix = 'catalog_category';
 
     /**
@@ -87,7 +89,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @var string
      */
-    protected $_cacheTag = self::CACHE_TAG;
+    protected $_cacheTag = false;
 
     /**
      * URL Model instance
@@ -98,6 +100,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
 
     /**
      * @var ResourceModel\Category
+     * @since 102.0.6
      */
     protected $_resource;
 
@@ -105,7 +108,8 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * URL rewrite model
      *
      * @var \Magento\UrlRewrite\Model\UrlRewrite
-     * @deprecated 101.1.0
+     * @deprecated 102.0.0
+     * @see \Magento\UrlRewrite\Model\UrlFinderInterface
      */
     protected $_urlRewrite;
 
@@ -135,7 +139,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Attributes are that part of interface
      *
-     * @deprecated
+     * @deprecated 103.0.0
      * @see CategoryInterface::ATTRIBUTES
      * @var array
      */
@@ -156,29 +160,21 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     protected $filter;
 
     /**
-     * Catalog config
-     *
      * @var \Magento\Catalog\Model\Config
      */
     protected $_catalogConfig;
 
     /**
-     * Product collection factory
-     *
      * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
      */
     protected $_productCollectionFactory;
 
     /**
-     * Store collection factory
-     *
      * @var \Magento\Store\Model\ResourceModel\Store\CollectionFactory
      */
     protected $_storeCollectionFactory;
 
     /**
-     * Category tree factory
-     *
      * @var \Magento\Catalog\Model\ResourceModel\Category\TreeFactory
      */
     protected $_categoryTreeFactory;
@@ -256,8 +252,8 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         UrlFinderInterface $urlFinder,
         \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry,
         CategoryRepositoryInterface $categoryRepository,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->metadataService = $metadataService;
@@ -319,8 +315,10 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Catalog\Model\ResourceModel\Category
-     * @deprecated because resource models should be used directly
+     * @deprecated 102.0.6 because resource models should be used directly
+     * @see \Magento\Catalog\Model\ResourceModel\Category
      * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
+     * @since 102.0.6
      */
     protected function _getResource()
     {
@@ -619,6 +617,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
                     UrlRewrite::ENTITY_ID => $this->getId(),
                     UrlRewrite::ENTITY_TYPE => CategoryUrlRewriteGenerator::ENTITY_TYPE,
                     UrlRewrite::STORE_ID => $this->getStoreId(),
+                    UrlRewrite::REDIRECT_TYPE => 0
                 ]
             );
             if ($rewrite) {
@@ -850,7 +849,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     {
         $ids = $this->getData('path_ids');
         if ($ids === null) {
-            $ids = explode('/', $this->getPath());
+            $ids = $this->getPath() !== null ? explode('/', $this->getPath()) : [''];
             $this->setData('path_ids', $ids);
         }
         return $ids;
@@ -864,7 +863,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     public function getLevel()
     {
         if (!$this->hasLevel()) {
-            return count(explode('/', $this->getPath())) - 1;
+            return $this->getPath() !== null ? count(explode('/', $this->getPath())) - 1 : 0;
         }
         return $this->getData(self::KEY_LEVEL);
     }
@@ -1035,7 +1034,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     {
         $available = $this->getData(self::KEY_AVAILABLE_SORT_BY);
         if (empty($available)) {
-            return [];
+            return null;
         }
         if ($available && !is_array($available)) {
             $available = explode(',', $available);
@@ -1112,6 +1111,17 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
+     * @inheritDoc
+     */
+    public function getCacheTags()
+    {
+        $identities = $this->getIdentities();
+        $cacheTags = !empty($identities) ? (array) $identities : parent::getCacheTags();
+
+        return $cacheTags;
+    }
+
+    /**
      * Init indexing process after category save
      *
      * @return void
@@ -1146,7 +1156,10 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function afterDeleteCommit()
     {
-        $this->reindex();
+        if ($this->getIsActive() || $this->getDeletedChildrenIds()) {
+            $this->reindex();
+        }
+
         return parent::afterDeleteCommit();
     }
 
@@ -1471,7 +1484,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * @param \Magento\Catalog\Api\Data\CategoryTreeInterface[] $childrenData
      * @return $this
      */
-    public function setChildrenData(array $childrenData = null)
+    public function setChildrenData(?array $childrenData = null)
     {
         return $this->setData(self::KEY_CHILDREN_DATA, $childrenData);
     }

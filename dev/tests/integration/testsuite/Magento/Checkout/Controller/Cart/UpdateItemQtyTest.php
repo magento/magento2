@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Data\Form\FormKey;
 use Magento\Framework\Serialize\Serializer\Json;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class UpdateItemQtyTest extends \Magento\TestFramework\TestCase\AbstractController
 {
@@ -55,8 +56,8 @@ class UpdateItemQtyTest extends \Magento\TestFramework\TestCase\AbstractControll
      * @magentoDbIsolation enabled
      * @magentoAppArea frontend
      * @magentoDataFixture Magento/Checkout/_files/quote_with_simple_product.php
-     * @dataProvider requestDataProvider
      */
+    #[DataProvider('requestDataProvider')]
     public function testExecute($requestQuantity, $expectedResponse)
     {
         try {
@@ -87,35 +88,53 @@ class UpdateItemQtyTest extends \Magento\TestFramework\TestCase\AbstractControll
         $this->dispatch('checkout/cart/updateItemQty');
         $response = $this->getResponse()->getBody();
 
-        $this->assertEquals($this->json->unserialize($response), $expectedResponse);
+        $this->assertEquals($this->getErrorMessage($response), $this->getErrorMessage($expectedResponse));
+    }
+
+    /**
+     * @param $response
+     * @return string
+     */
+    protected function getErrorMessage($response)
+    {
+        $error = '';
+        try {
+            $data = is_array($response) ? $response : $this->json->unserialize($response);
+            $error = $this->json->unserialize($data['error_message'])[0]['error'];
+        } catch (\Exception $e) {
+            if (!empty($data['error_message'])) {
+                $error = $data['error_message'];
+            }
+        }
+        return $error;
     }
 
     /**
      * Variations of request data.
      * @returns array
      */
-    public function requestDataProvider(): array
+    public static function requestDataProvider(): array
     {
         return [
             [
-                'request' => [],
-                'response' => [
+                'requestQuantity' => [],
+                'expectedResponse' => [
                     'success' => false,
                     'error_message' => 'Something went wrong while saving the page.'.
                         ' Please refresh the page and try again.'
                 ]
             ],
             [
-                'request' => ['qty' => 2],
-                'response' => [
+                'requestQuantity' => ['qty' => 2],
+                'expectedResponse' => [
                     'success' => true,
                 ]
             ],
             [
-                'request' => ['qty' => 230],
-                'response' => [
+                'requestQuantity' => ['qty' => 230],
+                'expectedResponse' => [
                     'success' => false,
-                    'error_message' => 'The requested qty is not available']
+                    'error_message' => '[{"error":"Not enough items for sale","itemId":3}]']
             ],
         ];
     }

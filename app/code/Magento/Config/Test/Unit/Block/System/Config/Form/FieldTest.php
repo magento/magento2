@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,15 +11,19 @@ use Magento\Backend\Model\Url;
 use Magento\Config\Block\System\Config\Form\Field;
 use Magento\Framework\Data\Form\Element\Text;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Store\Model\StoreManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
 /**
  * Test how class render field html element in Stores Configuration
  */
 class FieldTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Field
      */
@@ -48,12 +52,27 @@ class FieldTest extends TestCase
     protected function setUp(): void
     {
         $this->_storeManagerMock = $this->createMock(StoreManager::class);
+        $secureRendererMock = $this->createMock(SecureHtmlRenderer::class);
+        $secureRendererMock->method('renderEventListenerAsTag')
+            ->willReturnCallback(
+                function (string $event, string $js, string $selector): string {
+                    return "<script>document.querySelector('$selector').$event = function () { $js };</script>";
+                }
+            );
+        $secureRendererMock->method('renderStyleAsTag')
+            ->willReturnCallback(
+                function (string $style, string $selector): string {
+                    return "<style>$selector { $style }</style>";
+                }
+            );
 
         $data = [
             'storeManager' => $this->_storeManagerMock,
             'urlBuilder' => $this->createMock(Url::class),
+            'secureRenderer' => $secureRendererMock
         ];
         $helper = new ObjectManager($this);
+        $helper->prepareObjectManager();
         $this->_object = $helper->getObject(Field::class, $data);
 
         $this->_testData = [
@@ -63,8 +82,9 @@ class FieldTest extends TestCase
             'elementHTML' => 'test_html',
         ];
 
-        $this->_elementMock = $this->getMockBuilder(Text::class)
-            ->addMethods([
+        $this->_elementMock = $this->createPartialMockWithReflection(
+            Text::class,
+            [
                 'getLabel',
                 'getComment',
                 'getHint',
@@ -75,11 +95,13 @@ class FieldTest extends TestCase
                 'getCanUseWebsiteValue',
                 'getCanUseDefaultValue',
                 'setDisabled',
-                'getTooltip'
-            ])
-            ->onlyMethods(['getHtmlId', 'getName', 'getElementHtml', 'setReadonly'])
-            ->disableOriginalConstructor()
-            ->getMock();
+                'getTooltip',
+                'getHtmlId',
+                'getName',
+                'getElementHtml',
+                'setReadonly'
+            ]
+        );
 
         $this->_elementMock->expects(
             $this->any()
@@ -157,7 +179,7 @@ class FieldTest extends TestCase
     {
         $testHint = 'test_hint';
         $this->_elementMock->expects($this->any())->method('getHint')->willReturn($testHint);
-        $expected = '<td class=""><div class="hint"><div style="display: none;">' . $testHint . '</div></div>';
+        $expected = '<td class=""><div class="hint"><div id="hint_test_field_id">' . $testHint . '</div></div>';
         $actual = $this->_object->render($this->_elementMock);
         $this->assertStringContainsString($expected, $actual);
     }
@@ -194,8 +216,9 @@ class FieldTest extends TestCase
             '_inherit" name="' .
             $this->_testData['name'] .
             '[inherit]" type="checkbox" value="1"' .
-            ' class="checkbox config-inherit" checked="checked"' . ' disabled="disabled"' . ' readonly="1"' .
-            ' onclick="toggleValueElements(this, Element.previous(this.parentNode))" /> ';
+            ' class="checkbox config-inherit" checked="checked"' . ' disabled="disabled"' . ' readonly="1" />' .
+            '<script>document.querySelector(\'input#test_field_id_inherit\').onclick = function () '.
+            '{ toggleValueElements(this, Element.previous(this.parentNode)) };</script>';
 
         $expected .= '<label for="' . $this->_testData['htmlId'] . '_inherit" class="inherit">Use Website</label>';
         $actual = $this->_object->render($this->_elementMock);

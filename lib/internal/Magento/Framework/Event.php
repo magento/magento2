@@ -1,18 +1,17 @@
 <?php
+
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
+
+namespace Magento\Framework;
 
 /**
  * Event object and dispatcher
  *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
-namespace Magento\Framework;
-
-/**
  * @api
+ * @since 100.0.2
  */
 class Event extends \Magento\Framework\DataObject
 {
@@ -24,8 +23,6 @@ class Event extends \Magento\Framework\DataObject
     protected $_observers;
 
     /**
-     * Constructor
-     *
      * Initializes observers collection
      *
      * @param array $data
@@ -50,6 +47,7 @@ class Event extends \Magento\Framework\DataObject
      * Register an observer for the event
      *
      * @param \Magento\Framework\Event\Observer $observer
+     *
      * @return $this
      */
     public function addObserver(\Magento\Framework\Event\Observer $observer)
@@ -62,6 +60,7 @@ class Event extends \Magento\Framework\DataObject
      * Removes an observer by its name
      *
      * @param string $observerName
+     *
      * @return $this
      */
     public function removeObserverByName($observerName)
@@ -92,7 +91,10 @@ class Event extends \Magento\Framework\DataObject
     }
 
     /**
+     * Set name
+     *
      * @param string $data
+     *
      * @return $this
      */
     public function setName($data)
@@ -102,6 +104,8 @@ class Event extends \Magento\Framework\DataObject
     }
 
     /**
+     * Get block
+     *
      * @return mixed
      */
     public function getBlock()

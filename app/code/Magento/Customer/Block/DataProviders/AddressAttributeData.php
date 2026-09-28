@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -52,7 +52,7 @@ class AddressAttributeData implements ArgumentInterface
     {
         try {
             $attribute =  $this->addressMetadata->getAttributeMetadata($attributeCode);
-            $frontendLabel = $attribute->getFrontendLabel();
+            $frontendLabel = $attribute->getStoreLabel() ?: $attribute->getFrontendLabel();
         } catch (NoSuchEntityException $e) {
             $frontendLabel = '';
         }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\SalesRule\Model\Rule\Condition;
 
@@ -62,6 +62,7 @@ class Address extends \Magento\Rule\Model\Condition\AbstractCondition
     {
         $attributes = [
             'base_subtotal_with_discount' => __('Subtotal (Excl. Tax)'),
+            'base_subtotal_total_incl_tax' => __('Subtotal (Incl. Tax)'),
             'base_subtotal' => __('Subtotal'),
             'total_qty' => __('Total Items Quantity'),
             'weight' => __('Total Weight'),
@@ -99,6 +100,7 @@ class Address extends \Magento\Rule\Model\Condition\AbstractCondition
     {
         switch ($this->getAttribute()) {
             case 'base_subtotal':
+            case 'base_subtotal_total_incl_tax':
             case 'weight':
             case 'total_qty':
                 return 'numeric';

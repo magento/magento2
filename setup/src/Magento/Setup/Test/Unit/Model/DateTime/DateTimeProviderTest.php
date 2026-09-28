@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -27,12 +27,7 @@ class DateTimeProviderTest extends TestCase
         $timeZoneProvider->expects($this->any())
             ->method('get')
             ->willReturn($timeZone);
-        $objectManager = $this->getMockForAbstractClass(
-            ObjectManagerInterface::class,
-            [],
-            '',
-            false
-        );
+        $objectManager = $this->createMock(ObjectManagerInterface::class);
         $objectManager->expects($this->once())
             ->method('create')
             ->with(

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Review\Controller\Adminhtml;
 
@@ -41,7 +41,7 @@ abstract class Rating extends Action
     }
 
     /**
-     * @deprecated Misspelled method
+     * @deprecated 100.3.0 Misspelled method
      * @see initEntityId
      */
     protected function initEnityId()

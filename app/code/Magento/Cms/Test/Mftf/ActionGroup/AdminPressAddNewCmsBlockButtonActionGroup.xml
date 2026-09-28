@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminPressAddNewCmsBlockButtonActionGroup">
+        <annotations>
+            <description>Press Add new block button on Cms Blocks gid page</description>
+        </annotations>
+
+        <click selector="{{BlockPageActionsSection.addNewBlock}}" stepKey="clickOnAddNewBlockButton"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+    </actionGroup>
+</actionGroups>

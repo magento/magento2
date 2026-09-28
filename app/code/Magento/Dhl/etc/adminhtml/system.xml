@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
@@ -17,6 +17,10 @@
                 <field id="title" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Title</label>
                 </field>
+                <field id="type" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" canRestore="1">
+                    <label>DHL Type</label>
+                    <source_model>Magento\Dhl\Model\Config\Source\Type</source_model>
+                </field>
                 <field id="id" translate="label" type="obscure" sortOrder="50" showInDefault="1" showInWebsite="1">
                     <label>Access ID</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
@@ -25,9 +29,18 @@
                     <label>Password</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                 </field>
+                <field id="api_key" translate="label" type="obscure" sortOrder="55" showInDefault="1" showInWebsite="1">
+                    <label>API KEY</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                </field>
+                <field id="api_secret" translate="label" type="obscure" sortOrder="65" showInDefault="1" showInWebsite="1">
+                    <label>API Secret</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                </field>
                 <field id="account" translate="label" type="text" sortOrder="70" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Account Number</label>
                 </field>
+
                 <field id="content_type" translate="label comment" type="select" sortOrder="90" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Content Type (Non Domestic)</label>
                     <comment>Whether to use Documents or NonDocuments service for non domestic shipments. (Shipments within the EU are classed as domestic)</comment>

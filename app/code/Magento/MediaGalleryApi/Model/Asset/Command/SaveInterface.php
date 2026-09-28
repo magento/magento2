@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -12,7 +12,7 @@ use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 
 /**
  * A command which executes the media gallery asset save operation.
- * @deprecated use \Magento\MediaGalleryApi\Api\SaveAssetsInterface instead
+ * @deprecated 101.0.0 use \Magento\MediaGalleryApi\Api\SaveAssetsInterface instead
  * @see \Magento\MediaGalleryApi\Api\SaveAssetsInterface
  */
 interface SaveInterface

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -48,7 +48,7 @@ class ExportPostTest extends TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->fileFactoryMock = $this->createMock(FileFactory::class);
-        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $this->controller = $this->objectManagerHelper->getObject(
             ExportPost::class,
             [
@@ -101,10 +101,11 @@ class ExportPostTest extends TestCase
         ]);
         $rateCollectionMock->expects($this->once())->method('joinCountryTable')->willReturnSelf();
         $rateCollectionMock->expects($this->once())->method('joinRegionTable')->willReturnSelf();
+        $fileContent = ['type' => 'string', 'value' => $content, 'rm' => true];
         $this->fileFactoryMock
             ->expects($this->once())
             ->method('create')
-            ->with('tax_rates.csv', $content, DirectoryList::VAR_DIR);
+            ->with('tax_rates.csv', $fileContent, DirectoryList::VAR_DIR);
         $this->controller->execute();
     }
 }

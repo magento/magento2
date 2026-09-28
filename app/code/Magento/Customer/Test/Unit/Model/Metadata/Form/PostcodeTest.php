@@ -1,18 +1,25 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Customer\Test\Unit\Model\Metadata\Form;
 
+use Magento\Customer\Api\Data\ValidationRuleInterface;
 use Magento\Customer\Model\Metadata\Form\Postcode;
 use Magento\Directory\Helper\Data as DirectoryHelper;
+use Magento\Framework\Phrase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\Stdlib\StringUtils;
 
 class PostcodeTest extends AbstractFormTestCase
 {
+    /** @var StringUtils */
+    private StringUtils $stringHelper;
+
     /**
      * @var DirectoryHelper|MockObject
      */
@@ -21,10 +28,8 @@ class PostcodeTest extends AbstractFormTestCase
     protected function setUp(): void
     {
         parent::setUp();
-
-        $this->directoryHelper = $this->getMockBuilder(\Magento\Directory\Helper\Data::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->stringHelper = new StringUtils();
+        $this->directoryHelper = $this->createMock(\Magento\Directory\Helper\Data::class);
     }
 
     /**
@@ -43,7 +48,8 @@ class PostcodeTest extends AbstractFormTestCase
             $value,
             0,
             false,
-            $this->directoryHelper
+            $this->directoryHelper,
+            $this->stringHelper
         );
     }
 
@@ -52,13 +58,12 @@ class PostcodeTest extends AbstractFormTestCase
      * @param bool $expected text output
      * @param string $countryId
      * @param bool $isOptional
-     *
-     * @dataProvider validateValueDataProvider
-     */
+     * */
+    #[DataProvider('validateValueDataProvider')]
     public function testValidateValue($value, $expected, $countryId, $isOptional)
     {
         $storeLabel = 'Zip/Postal Code';
-        $this->attributeMetadataMock->expects($this->once())
+        $this->attributeMetadataMock->expects($this->atLeastOnce())
             ->method('getStoreLabel')
             ->willReturn($storeLabel);
 
@@ -78,13 +83,112 @@ class PostcodeTest extends AbstractFormTestCase
     /**
      * @return array
      */
-    public function validateValueDataProvider()
+    public static function validateValueDataProvider()
     {
         return [
             ['', ['"Zip/Postal Code" is a required value.'], 'US', false],
             ['90034', true, 'US', false],
             ['', true, 'IE', true],
             ['90034', true, 'IE', true],
+        ];
+    }
+
+    /**
+     * @param string|int|bool|null $value to assign to boolean
+     * @param string|bool $expected text output */
+    #[DataProvider('validateValueLengthDataProvider')]
+    public function testValidateValueLength($value, $expected)
+    {
+        $minTextLengthRule = $this->createMock(ValidationRuleInterface::class);
+        $minTextLengthRule->expects($this->any())
+            ->method('getName')
+            ->willReturn('min_text_length');
+        $minTextLengthRule->expects($this->any())
+            ->method('getValue')
+            ->willReturn(5);
+
+        $maxTextLengthRule = $this->createMock(ValidationRuleInterface::class);
+        $maxTextLengthRule->expects($this->any())
+            ->method('getName')
+            ->willReturn('max_text_length');
+        $maxTextLengthRule->expects($this->any())
+            ->method('getValue')
+            ->willReturn(6);
+
+        $inputValidationRule = $this->createMock(ValidationRuleInterface::class);
+        $inputValidationRule->expects($this->any())
+            ->method('getName')
+            ->willReturn('input_validation');
+        $inputValidationRule->expects($this->any())
+            ->method('getValue')
+            ->willReturn('numeric');
+
+        $validationRules = [
+            'input_validation' => $inputValidationRule,
+            'min_text_length' => $minTextLengthRule,
+            'max_text_length' => $maxTextLengthRule,
+        ];
+
+        $this->attributeMetadataMock->expects(
+            $this->any()
+        )->method(
+            'getValidationRules'
+        )->willReturn(
+            $validationRules
+        );
+
+        $sut = $this->getClass($value);
+        $actual = $sut->validateValue($value);
+
+        if (is_bool($actual)) {
+            $this->assertEquals($expected, $actual);
+        } else {
+            if (is_array($actual)) {
+                $actual = array_map(function ($message) {
+                    return $message instanceof Phrase ? $message->__toString() : $message;
+                }, $actual);
+            }
+
+            if (is_array($expected)) {
+                foreach ($expected as $key => $row) {
+                    $this->assertEquals($row, $actual[$key]);
+                }
+            } else {
+                $this->assertContains($expected, $actual);
+            }
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public static function validateValueLengthDataProvider(): array
+    {
+        return [
+            'false' => [false, ['"" is a required value.', '"" length must be equal or greater than 5 characters.']],
+            'empty' => ['', ['"" is a required value.', '"" length must be equal or greater than 5 characters.']],
+            'null' => [null, ['"" is a required value.', '"" length must be equal or greater than 5 characters.']],
+            'one' => [1, '"" length must be equal or greater than 5 characters.'],
+            'L1' => ['6', '"" length must be equal or greater than 5 characters.'],
+            'L2' => ['66', '"" length must be equal or greater than 5 characters.'],
+            'L5' => ['66666', true],
+            'thousand' => ['10000', true],
+            'L6' => ['666666', true],
+            'L7' => ['6666666', '"" length must be equal or less than 6 characters.'],
+            'S1' => ['s',
+                [
+                    '"" length must be equal or greater than 5 characters.',
+                    "notDigits" => '"" contains non-numeric characters.'
+                ]
+            ],
+            'S6' => ['string', ["notDigits" => '"" contains non-numeric characters.']],
+            'S7' => ['strings',
+                [
+                    '"" length must be equal or less than 6 characters.',
+                    "notDigits" => '"" contains non-numeric characters.'
+                ]
+            ],
+            'L6s' => ['66666s', ["notDigits" => '"" contains non-numeric characters.']],
         ];
     }
 }

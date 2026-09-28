@@ -1,15 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Api\Code\Generator;
 
-use Magento\Framework\ObjectManager\Code\Generator\Factory;
+use Magento\Framework\Code\Generator\CodeGeneratorInterface;
 use Magento\Framework\Code\Generator\DefinedClasses;
 use Magento\Framework\Code\Generator\Io;
-use Magento\Framework\Code\Generator\CodeGeneratorInterface;
+use Magento\Framework\ObjectManager\Code\Generator\Factory;
 
 class ExtensionAttributesInterfaceFactoryGenerator extends Factory
 {
@@ -17,11 +17,6 @@ class ExtensionAttributesInterfaceFactoryGenerator extends Factory
      * {@inheritdoc}
      */
     const ENTITY_TYPE = 'extensionInterfaceFactory';
-
-    /**
-     * @var string
-     */
-    private static $suffix = 'InterfaceFactory';
 
     /**
      * Initialize dependencies.
@@ -35,9 +30,9 @@ class ExtensionAttributesInterfaceFactoryGenerator extends Factory
     public function __construct(
         $sourceClassName = null,
         $resultClassName = null,
-        Io $ioObject = null,
-        CodeGeneratorInterface $classGenerator = null,
-        DefinedClasses $definedClasses = null
+        ?Io $ioObject = null,
+        ?CodeGeneratorInterface $classGenerator = null,
+        ?DefinedClasses $definedClasses = null
     ) {
         $sourceClassName .= 'Extension';
         parent::__construct(
@@ -50,21 +45,10 @@ class ExtensionAttributesInterfaceFactoryGenerator extends Factory
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    protected function _validateData()
+    protected function getResultClassSuffix()
     {
-        $result = true;
-        $sourceClassName = $this->getSourceClassName();
-        $resultClassName = $this->_getResultClassName();
-
-        if ($resultClassName !== $sourceClassName . self::$suffix) {
-            $this->_addError(
-                'Invalid Factory class name [' . $resultClassName . ']. Use ' . $sourceClassName . self::$suffix
-            );
-            $result = false;
-        }
-
-        return $result;
+        return 'InterfaceFactory';
     }
 }

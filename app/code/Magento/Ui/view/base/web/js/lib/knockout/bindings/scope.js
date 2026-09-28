@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 /** Creates scope binding and registers in to ko.bindingHandlers object */
 define([
@@ -29,7 +29,7 @@ define([
             $t: $t
         });
 
-        ko.utils.arrayForEach(el.childNodes, ko.cleanNode);
+        ko.utils.arrayForEach(ko.virtualElements.childNodes(el), ko.cleanNode);
 
         ko.applyBindingsToDescendants(component, el);
     }

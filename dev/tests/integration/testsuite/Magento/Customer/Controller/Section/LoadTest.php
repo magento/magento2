@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,7 +16,7 @@ use Magento\Framework\Escaper;
 /**
  * Load customer data test class.
  *
- * @magentoDbIsolation enabled
+ * @magentoDbIsolation disabled
  * @magentoAppArea frontend
  */
 class LoadTest extends AbstractController
@@ -47,7 +47,7 @@ class LoadTest extends AbstractController
      */
     protected function tearDown(): void
     {
-        $this->customerSession->setCustomerId(null);
+        $this->customerSession->logout();
 
         parent::tearDown();
     }
@@ -73,7 +73,7 @@ class LoadTest extends AbstractController
      */
     public function testWishListCounterUseQty(): void
     {
-        $this->customerSession->setCustomerId(1);
+        $this->customerSession->loginById(1);
         $response = $this->performWishListSectionRequest();
         $this->assertEquals('3 items', $response['wishlist']['counter']);
     }
@@ -86,7 +86,7 @@ class LoadTest extends AbstractController
      */
     public function testWishListCounterNotUseQty(): void
     {
-        $this->customerSession->setCustomerId(1);
+        $this->customerSession->loginById(1);
         $response = $this->performWishListSectionRequest();
         $this->assertEquals('1 item', $response['wishlist']['counter']);
     }

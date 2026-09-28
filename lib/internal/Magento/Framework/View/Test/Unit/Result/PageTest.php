@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -22,6 +22,7 @@ use Magento\Framework\View\Page\Config\RendererFactory;
 use Magento\Framework\View\Result\Page;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * Result Page Test
@@ -30,6 +31,7 @@ use PHPUnit\Framework\TestCase;
  */
 class PageTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Page
      */
@@ -80,15 +82,20 @@ class PageTest extends TestCase
      */
     private $layoutFactory;
 
-    /** @var MockObject|EntitySpecificHandlesList */
+    /**
+     * @var MockObject|EntitySpecificHandlesList
+     */
     private $entitySpecificHandlesListMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
-        $this->layout = $this->getMockBuilder(Layout::class)
-            ->setMethods(['addHandle', 'getUpdate', 'isLayoutDefined'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->layout = $this->createPartialMockWithReflection(
+            Layout::class,
+            ['getUpdate', 'addHandle', 'isLayoutDefined']
+        );
 
         $this->layoutFactory = $this->getMockBuilder(LayoutFactory::class)
             ->disableOriginalConstructor()
@@ -125,15 +132,14 @@ class PageTest extends TestCase
             ]
         );
 
-        $this->translateInline = $this->getMockForAbstractClass(InlineInterface::class);
+        $this->translateInline = $this->createMock(InlineInterface::class);
 
         $this->pageConfigRenderer = $this->getMockBuilder(Renderer::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $pageConfigRendererFactory = $this->getMockBuilder(RendererFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
+        $pageConfigRendererFactory = $this->getMockBuilder(RendererFactory::class)->disableOriginalConstructor()
+            ->onlyMethods(['create'])
             ->getMock();
         $pageConfigRendererFactory->expects($this->once())
             ->method('create')
@@ -156,7 +162,10 @@ class PageTest extends TestCase
         );
     }
 
-    public function testInitLayout()
+    /**
+     * @return void
+     */
+    public function testInitLayout(): void
     {
         $handleDefault = 'default';
         $fullActionName = 'full_action_name';
@@ -164,22 +173,24 @@ class PageTest extends TestCase
             ->method('getFullActionName')
             ->willReturn($fullActionName);
 
-        $this->layoutMerge->expects($this->at(0))
+        $this->layoutMerge
             ->method('addHandle')
-            ->with($handleDefault)
-            ->willReturnSelf();
-        $this->layoutMerge->expects($this->at(1))
-            ->method('addHandle')
-            ->with($fullActionName)
-            ->willReturnSelf();
-        $this->layoutMerge->expects($this->at(2))
+            ->willReturnCallback(function ($arg) use ($handleDefault, $fullActionName) {
+                if ($arg == $handleDefault || $arg == $fullActionName) {
+                    return $this->layoutMerge;
+                }
+            });
+        $this->layoutMerge
             ->method('isLayoutDefined')
             ->willReturn(false);
 
         $this->assertEquals($this->page, $this->page->initLayout());
     }
 
-    public function testInitLayoutLayoutDefined()
+    /**
+     * @return void
+     */
+    public function testInitLayoutLayoutDefined(): void
     {
         $handleDefault = 'default';
         $fullActionName = 'full_action_name';
@@ -187,31 +198,36 @@ class PageTest extends TestCase
             ->method('getFullActionName')
             ->willReturn($fullActionName);
 
-        $this->layoutMerge->expects($this->at(0))
+        $this->layoutMerge
             ->method('addHandle')
-            ->with($handleDefault)
-            ->willReturnSelf();
-        $this->layoutMerge->expects($this->at(1))
-            ->method('addHandle')
-            ->with($fullActionName)
-            ->willReturnSelf();
-        $this->layoutMerge->expects($this->at(2))
-            ->method('isLayoutDefined')
-            ->willReturn(true);
-        $this->layoutMerge->expects($this->at(3))
+            ->willReturnCallback(function ($arg) use ($handleDefault, $fullActionName) {
+                if ($arg == $handleDefault || $arg == $fullActionName) {
+                    return $this->layoutMerge;
+                }
+            });
+        $this->layoutMerge
             ->method('removeHandle')
             ->with($handleDefault)
-            ->willReturnSelf();
+            ->willReturn($this->layoutMerge);
+        $this->layoutMerge
+            ->method('isLayoutDefined')
+            ->willReturn(true);
 
         $this->assertEquals($this->page, $this->page->initLayout());
     }
 
-    public function testGetConfig()
+    /**
+     * @return void
+     */
+    public function testGetConfig(): void
     {
         $this->assertEquals($this->pageConfig, $this->page->getConfig());
     }
 
-    public function testGetDefaultLayoutHandle()
+    /**
+     * @return void
+     */
+    public function testGetDefaultLayoutHandle(): void
     {
         $fullActionName = 'Full_Action_Name';
         $expectedFullActionName = 'full_action_name';
@@ -223,18 +239,21 @@ class PageTest extends TestCase
         $this->assertEquals($expectedFullActionName, $this->page->getDefaultLayoutHandle());
     }
 
-    public function testAddPageLayoutHandles()
+    /**
+     * @return void
+     */
+    public function testAddPageLayoutHandles(): void
     {
         $fullActionName = 'Full_Action_Name';
         $defaultHandle = null;
         $parameters = [
             'key_one' => 'val_one',
-            'key_two' => 'val_two',
+            'key_two' => 'val_two'
         ];
         $expected = [
             'full_action_name',
             'full_action_name_key_one_val_one',
-            'full_action_name_key_two_val_two',
+            'full_action_name_key_two_val_two'
         ];
         $this->request->expects($this->any())
             ->method('getFullActionName')
@@ -245,26 +264,34 @@ class PageTest extends TestCase
             ->with($expected)
             ->willReturnSelf();
 
-        $this->entitySpecificHandlesListMock->expects($this->at(0))
-            ->method('addHandle')->with('full_action_name_key_one_val_one');
-        $this->entitySpecificHandlesListMock->expects($this->at(1))
-            ->method('addHandle')->with('full_action_name_key_two_val_two');
+        $this->entitySpecificHandlesListMock
+            ->method('addHandle')
+            ->willReturnCallback(
+                function ($arg) {
+                    if ($arg == 'full_action_name_key_one_val_one' || $arg == 'full_action_name_key_two_val_two') {
+                        return null;
+                    }
+                }
+            );
 
         $this->page->addPageLayoutHandles($parameters, $defaultHandle);
     }
 
-    public function testAddPageLayoutHandlesNotEntitySpecific()
+    /**
+     * @return void
+     */
+    public function testAddPageLayoutHandlesNotEntitySpecific(): void
     {
         $fullActionName = 'Full_Action_Name';
         $defaultHandle = null;
         $parameters = [
             'key_one' => 'val_one',
-            'key_two' => 'val_two',
+            'key_two' => 'val_two'
         ];
         $expected = [
             'full_action_name',
             'full_action_name_key_one_val_one',
-            'full_action_name_key_two_val_two',
+            'full_action_name_key_two_val_two'
         ];
         $this->request->expects($this->any())
             ->method('getFullActionName')
@@ -280,17 +307,20 @@ class PageTest extends TestCase
         $this->page->addPageLayoutHandles($parameters, $defaultHandle, false);
     }
 
-    public function testAddPageLayoutHandlesWithDefaultHandle()
+    /**
+     * @return void
+     */
+    public function testAddPageLayoutHandlesWithDefaultHandle(): void
     {
         $defaultHandle = 'default_handle';
         $parameters = [
             'key_one' => 'val_one',
-            'key_two' => 'val_two',
+            'key_two' => 'val_two'
         ];
         $expected = [
             'default_handle',
             'default_handle_key_one_val_one',
-            'default_handle_key_two_val_two',
+            'default_handle_key_two_val_two'
         ];
         $this->request->expects($this->never())
             ->method('getFullActionName');

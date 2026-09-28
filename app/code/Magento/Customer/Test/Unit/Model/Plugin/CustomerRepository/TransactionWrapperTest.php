@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -51,18 +51,18 @@ class TransactionWrapperTest extends TestCase
      */
     protected $passwordHash = true;
 
-    const ERROR_MSG = "error occurred";
+    private const ERROR_MSG = "error occurred";
 
     protected function setUp(): void
     {
         $this->resourceMock = $this->createMock(Customer::class);
-        $this->subjectMock = $this->getMockForAbstractClass(CustomerRepositoryInterface::class);
-        $this->customerMock = $this->getMockForAbstractClass(CustomerInterface::class);
+        $this->subjectMock = $this->createMock(CustomerRepositoryInterface::class);
+        $this->customerMock = $this->createMock(CustomerInterface::class);
         $customerMock = $this->customerMock;
         $this->closureMock = function () use ($customerMock) {
             return $customerMock;
         };
-        $this->rollbackClosureMock = function () use ($customerMock) {
+        $this->rollbackClosureMock = function () {
             throw new \Exception(self::ERROR_MSG);
         };
 

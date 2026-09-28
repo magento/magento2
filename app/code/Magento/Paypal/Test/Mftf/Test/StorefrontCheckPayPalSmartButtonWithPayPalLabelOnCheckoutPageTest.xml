@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -18,9 +18,7 @@
             <testCaseId value="MC-28711"/>
             <group value="paypal"/>
             <group value="paypalExpress"/>
-            <skip>
-                <issueId value="MC-33951"/>
-            </skip>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <createData entity="_defaultCategory" before="createProduct" stepKey="createCategory"/>
@@ -36,7 +34,9 @@
             <magentoCLI command="config:set {{StorefrontPaypalCheckoutPageButtonVerticalLayoutConfigData.path}} {{StorefrontPaypalCheckoutPageButtonVerticalLayoutConfigData.value}}" stepKey="setLayoutForPayPalSmartButton"/>
             <magentoCLI command="config:set {{StorefrontPaypalCheckoutPageButtonPillShapeConfigData.path}} {{StorefrontPaypalCheckoutPageButtonPillShapeConfigData.value}}" stepKey="setShapeForPayPalSmartButton"/>
             <magentoCLI command="config:set {{StorefrontPaypalCheckoutPageButtonBlueColorConfigData.path}} {{StorefrontPaypalCheckoutPageButtonBlueColorConfigData.value}}" stepKey="setColorForPayPalSmartButton"/>
-            <magentoCLI command="cache:clean" arguments="full_page" stepKey="cleanFullPageCache"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanFullPageCache">
+                <argument name="tags" value="full_page"/>
+            </actionGroup>
         </before>
         <after>
             <magentoCLI command="config:set {{StorefrontPaypalCheckoutPageDisableCustomizeButtonConfigData.path}} {{StorefrontPaypalCheckoutPageDisableCustomizeButtonConfigData.value}}" stepKey="disableCustomizeButton"/>

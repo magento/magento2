@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Model\ResourceModel;
 
@@ -15,17 +15,19 @@ use Magento\Framework\Serialize\Serializer\Json;
  *
  * phpcs:disable Magento2.Classes.AbstractApi
  * @api
+ * @since 100.0.2
  */
 abstract class AbstractResource
 {
     /**
-     * @var Json
-     * @since 100.2.0
+     * @var Json|null
+     * @since 101.0.0
      */
     protected $serializer;
 
     /**
      * @var \Psr\Log\LoggerInterface
+     * @since 102.0.0
      */
     protected $_logger;
 
@@ -58,7 +60,6 @@ abstract class AbstractResource
      * Start resource transaction
      *
      * @return $this
-     * @api
      */
     public function beginTransaction()
     {
@@ -71,7 +72,6 @@ abstract class AbstractResource
      *
      * @param callable|array $callback
      * @return $this
-     * @api
      */
     public function addCommitCallback($callback)
     {
@@ -82,9 +82,9 @@ abstract class AbstractResource
     /**
      * Commit resource transaction
      *
-     * @deprecated see \Magento\Framework\Model\ExecuteCommitCallbacks::afterCommit
+     * @deprecated
+     * @see \Magento\Framework\Model\ExecuteCommitCallbacks::afterCommit
      * @return $this
-     * @api
      */
     public function commit()
     {
@@ -110,7 +110,6 @@ abstract class AbstractResource
      * Roll back resource transaction
      *
      * @return $this
-     * @api
      */
     public function rollBack()
     {
@@ -201,7 +200,7 @@ abstract class AbstractResource
      */
     protected function _prepareTableValueForSave($value, $type)
     {
-        $type = strtolower($type);
+        $type = $value !== null ? strtolower($type) : '';
         if ($type == 'decimal' || $type == 'numeric' || $type == 'float') {
             $value = \Magento\Framework\App\ObjectManager::getInstance()->get(
                 \Magento\Framework\Locale\FormatInterface::class
@@ -209,6 +208,11 @@ abstract class AbstractResource
                 $value
             );
         }
+
+        if (is_array($value)) {
+            $value = $this->getSerializer()->serialize($value);
+        }
+
         return $value;
     }
 
@@ -250,8 +254,7 @@ abstract class AbstractResource
      * Get serializer
      *
      * @return Json
-     * @deprecated 100.2.0
-     * @since 100.2.0
+     * @since 101.0.0
      */
     protected function getSerializer()
     {
@@ -265,7 +268,6 @@ abstract class AbstractResource
      * Get logger
      *
      * @return \Psr\Log\LoggerInterface
-     * @deprecated
      */
     private function getLogger()
     {

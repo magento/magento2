@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Setup\Declaration\Schema\Dto\Columns;
 
@@ -70,9 +70,9 @@ class Real extends Column implements
         int $scale,
         bool $nullable = true,
         bool $unsigned = false,
-        float $default = null,
-        string $comment = null,
-        string $onCreate = null
+        ?float $default = null,
+        ?string $comment = null,
+        ?string $onCreate = null
     ) {
         parent::__construct($name, $type, $table, $comment, $onCreate);
         $this->precision = $precision;

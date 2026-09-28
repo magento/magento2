@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 /* Delete attribute  with multiselect_attribute code */
 $registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\Registry');
@@ -12,6 +12,9 @@ $attribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create
     'Magento\Catalog\Model\ResourceModel\Eav\Attribute'
 );
 $attribute->load('multiselect_attribute', 'attribute_code');
+$attribute->delete();
+
+$attribute->load('multiselect_attribute_text', 'attribute_code');
 $attribute->delete();
 
 $registry->unregister('isSecureArea');

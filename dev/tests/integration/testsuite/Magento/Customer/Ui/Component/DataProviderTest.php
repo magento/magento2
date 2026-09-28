@@ -1,16 +1,20 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Customer\Ui\Component;
 
 use Magento\Backend\Model\Locale\Resolver;
+use Magento\Customer\Model\Customer;
+use Magento\Customer\Ui\Component\DataProvider;
 use Magento\Framework\Api\Filter;
+use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider as DataProviderAttribute;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -37,6 +41,9 @@ class DataProviderTest extends TestCase
     protected function setUp(): void
     {
         $this->initLocaleResolverMock();
+        $indexerRegistry = Bootstrap::getObjectManager()->create(IndexerRegistry::class);
+        $indexer = $indexerRegistry->get(Customer::CUSTOMER_GRID_INDEXER_ID);
+        $indexer->reindexAll();
     }
 
     /**
@@ -46,9 +53,9 @@ class DataProviderTest extends TestCase
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Customer/_files/customer_address.php
      * @magentoDataFixture Magento/Directory/_files/region_name_jp.php
-     * @dataProvider getDataByRegionDataProvider
      * @magentoDbIsolation disabled
      */
+    #[DataProviderAttribute('getDataByRegionDataProvider')]
     public function testGetDataByRegion(array $filterData)
     {
         $locale = 'JA_jp';
@@ -76,7 +83,7 @@ class DataProviderTest extends TestCase
     /**
      * @return array
      */
-    public function getDataByRegionDataProvider(): array
+    public static function getDataByRegionDataProvider(): array
     {
         return [
             [['condition_type' => 'fulltext', 'field' => 'fulltext', 'value' => 'アラバマ']],

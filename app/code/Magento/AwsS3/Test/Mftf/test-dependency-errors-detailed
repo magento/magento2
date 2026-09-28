@@ -1,0 +1,273 @@
+
+File "/var/www/html/app/code/Magento/AwsS3/Test/Mftf/Test/AdminAwsS3ExportTaxRatesTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminExportTaxRatesTest from module(s): magento/module-tax-import-export
+
+File "/var/www/html/app/code/Magento/AwsS3/Test/Mftf/Test/AdminAwsS3ImportBundleProductTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 ImportProduct_Bundle from module(s): magento/module-bundle-import-export
+	 ImportProductSimple1_Bundle from module(s): magento/module-bundle-import-export
+	 ImportProductSimple2_Bundle from module(s): magento/module-bundle-import-export
+	 ImportProductSimple3_Bundle from module(s): magento/module-bundle-import-export
+	 CliCacheFlushActionGroup from module(s): magento/module-backend
+	 AdminFillImportFormActionGroup from module(s): magento/module-import-export
+
+File "/var/www/html/app/code/Magento/AwsS3/Test/Mftf/Test/AdminAwsS3ImportDownloadableProductsWithFileLinksTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 ImportProduct_Downloadable_FileLinks from module(s): magento/module-downloadable-import-export
+	 CliCacheFlushActionGroup from module(s): magento/module-backend
+	 AdminFillImportFormActionGroup from module(s): magento/module-import-export
+
+File "/var/www/html/app/code/Magento/AwsS3/Test/Mftf/Test/AdminAwsS3ImportDownloadableProductsWithUrlLinksTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 ImportProduct_Downloadable_UrlLinks from module(s): magento/module-downloadable-import-export
+	 CliCacheFlushActionGroup from module(s): magento/module-backend
+	 AdminFillImportFormActionGroup from module(s): magento/module-import-export
+
+File "/var/www/html/app/code/Magento/AwsS3/Test/Mftf/Test/AdminAwsS3ImportGroupedProductTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 ImportProduct_Grouped from module(s): magento/module-grouped-import-export
+	 ImportProductSimple1_Grouped from module(s): magento/module-grouped-import-export
+	 ImportProductSimple2_Grouped from module(s): magento/module-grouped-import-export
+	 ImportProductSimple3_Grouped from module(s): magento/module-grouped-import-export
+	 CliCacheFlushActionGroup from module(s): magento/module-backend
+	 AdminFillImportFormActionGroup from module(s): magento/module-import-export
+
+File "/var/www/html/app/code/Magento/AwsS3/Test/Mftf/Test/AdminAwsS3ImportSimpleAndConfigurableProductsWithAssignedImagesTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 ImportProduct_Configurable from module(s): magento/module-configurable-import-export
+	 ImportProductSimple1_Configurable from module(s): magento/module-configurable-import-export
+	 ImportProductSimple2_Configurable from module(s): magento/module-configurable-import-export
+	 ImportProductSimple3_Configurable from module(s): magento/module-configurable-import-export
+	 CliCacheFlushActionGroup from module(s): magento/module-backend
+	 AdminFillImportFormActionGroup from module(s): magento/module-import-export
+
+File "/var/www/html/app/code/Magento/AwsS3/Test/Mftf/Test/AdminAwsS3ImportSimpleProductImagesDuplicationTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 placeholderBaseImage from module(s): magento/module-catalog
+	 placeholderSmallImage from module(s): magento/module-catalog
+	 placeholderThumbnailImage from module(s): magento/module-catalog
+	 CliCacheFlushActionGroup from module(s): magento/module-backend
+
+File "/var/www/html/app/code/Magento/AwsS3/Test/Mftf/Test/AdminAwsS3ImportTaxRatesTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminImportTaxRatesTest from module(s): magento/module-tax-import-export
+
+File "/var/www/html/app/code/Magento/AwsS3/Test/Mftf/Test/AdminAwsS3MediaGalleryDeleteFolderTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminMediaGalleryFolderData from module(s): magento/module-media-gallery-ui
+	 AdminMediaGalleryFolder2Data from module(s): magento/module-media-gallery-ui
+	 ImageUpload from module(s): magento/module-cms
+	 AdminLoginActionGroup from module(s): magento/module-admin-analytics, magento/module-backend, magento/module-two-factor-auth
+	 AdminOpenStandaloneMediaGalleryActionGroup from module(s): magento/module-media-gallery-ui
+	 ResetAdminDataGridToDefaultViewActionGroup from module(s): magento/module-ui
+	 AdminMediaGalleryFolderSelectActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminMediaGalleryOpenNewFolderFormActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminMediaGalleryCreateNewFolderActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminEnhancedMediaGalleryUploadImageActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminExpandMediaGalleryFolderActionGroup from module(s): magento/module-cms
+	 AdminMediaGalleryFolderDeleteActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminLogoutActionGroup from module(s): magento/module-backend
+	 NavigateToCreatedCMSPageActionGroup from module(s): magento/module-cms
+	 AdminOpenMediaGalleryFromPageNoEditorActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminMediaGalleryClickImageInGridActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminMediaGalleryClickAddSelectedActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminSaveAndContinueEditCmsPageActionGroup from module(s): magento/module-cms
+	 NavigateToStorefrontForCreatedPageActionGroup from module(s): magento/module-cms
+	 AdminMediaGalleryAssertFolderDoesNotExistActionGroup from module(s): magento/module-media-gallery-ui
+
+File "/var/www/html/app/code/Magento/AwsS3/Test/Mftf/Test/AdminAwsS3MediaGalleryDeleteImageTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminMediaGalleryFolderData from module(s): magento/module-media-gallery-ui
+	 ImageUpload from module(s): magento/module-cms
+	 AdminLoginActionGroup from module(s): magento/module-admin-analytics, magento/module-backend, magento/module-two-factor-auth
+	 AdminOpenStandaloneMediaGalleryActionGroup from module(s): magento/module-media-gallery-ui
+	 ResetAdminDataGridToDefaultViewActionGroup from module(s): magento/module-ui
+	 AdminMediaGalleryFolderSelectActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminMediaGalleryOpenNewFolderFormActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminMediaGalleryCreateNewFolderActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminEnhancedMediaGalleryUploadImageActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminExpandMediaGalleryFolderActionGroup from module(s): magento/module-cms
+	 AdminMediaGalleryFolderDeleteActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminLogoutActionGroup from module(s): magento/module-backend
+	 NavigateToCreatedCMSPageActionGroup from module(s): magento/module-cms
+	 AdminOpenMediaGalleryFromPageNoEditorActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminMediaGalleryClickImageInGridActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminMediaGalleryClickAddSelectedActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminSaveAndContinueEditCmsPageActionGroup from module(s): magento/module-cms
+	 NavigateToStorefrontForCreatedPageActionGroup from module(s): magento/module-cms
+	 AdminEnhancedMediaGalleryImageDeleteActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminMediaGalleryAssertImageNotExistsInTheGridActionGroup from module(s): magento/module-media-gallery-ui
+
+File "/var/www/html/app/code/Magento/AwsS3/Test/Mftf/Test/AdminAwsS3SyncMediaFilesTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontProductMediaSection from module(s): magento/module-catalog
+	 RedPngImageContent from module(s): magento/module-catalog
+	 BluePngImageContent from module(s): magento/module-catalog
+	 MagentoPlaceHolderImageContent from module(s): magento/module-catalog
+	 AdminLogoutActionGroup from module(s): magento/module-backend
+	 StorefrontOpenProductEntityPageActionGroup from module(s): magento/module-catalog
+	 AdminLoginActionGroup from module(s): magento/module-admin-analytics, magento/module-backend, magento/module-two-factor-auth
+	 AdminGoToCacheManagementPageActionGroup from module(s): magento/module-backend
+	 AdminClickFlushCatalogImagesCacheActionGroup from module(s): magento/module-backend
+	 CliCacheFlushActionGroup from module(s): magento/module-backend
+
+File "/var/www/html/app/code/Magento/AwsS3/Test/Mftf/Test/AdminImportBundleProductTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 ImportProduct_Bundle from module(s): magento/module-bundle-import-export
+	 ImportProductSimple1_Bundle from module(s): magento/module-bundle-import-export
+	 ImportProductSimple2_Bundle from module(s): magento/module-bundle-import-export
+	 ImportProductSimple3_Bundle from module(s): magento/module-bundle-import-export
+
+File "/var/www/html/app/code/Magento/AwsS3/Test/Mftf/Test/AdminImportDownloadableProductsWithFileLinksTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 ImportProduct_Downloadable_FileLinks from module(s): magento/module-downloadable-import-export
+
+File "/var/www/html/app/code/Magento/AwsS3/Test/Mftf/Test/AdminImportDownloadableProductsWithUrlLinksTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 ImportProduct_Downloadable_UrlLinks from module(s): magento/module-downloadable-import-export
+
+File "/var/www/html/app/code/Magento/AwsS3/Test/Mftf/Test/AdminImportGroupedProductTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 ImportProduct_Grouped from module(s): magento/module-grouped-import-export
+	 ImportProductSimple1_Grouped from module(s): magento/module-grouped-import-export
+	 ImportProductSimple2_Grouped from module(s): magento/module-grouped-import-export
+	 ImportProductSimple3_Grouped from module(s): magento/module-grouped-import-export
+
+File "/var/www/html/app/code/Magento/AwsS3/Test/Mftf/Test/AdminImportSimpleAndConfigurableProductsWithAssignedImagesTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 ImportProduct_Configurable from module(s): magento/module-configurable-import-export
+	 ImportProductSimple1_Configurable from module(s): magento/module-configurable-import-export
+	 ImportProductSimple2_Configurable from module(s): magento/module-configurable-import-export
+	 ImportProductSimple3_Configurable from module(s): magento/module-configurable-import-export
+
+File "/var/www/html/app/code/Magento/AwsS3/Test/Mftf/Test/AdminImportSimpleProductImageLongNameTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 placeholderBaseImageLongName from module(s): magento/module-catalog-import-export
+
+File "/var/www/html/app/code/Magento/AwsS3/Test/Mftf/Test/AdminImportSimpleProductImagesDuplicationTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 placeholderBaseImage from module(s): magento/module-catalog
+	 placeholderSmallImage from module(s): magento/module-catalog
+	 placeholderThumbnailImage from module(s): magento/module-catalog
+
+File "/var/www/html/app/code/Magento/AwsS3/Test/Mftf/Test/AwsS3AdminAddImageForCategoryTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminAddImageForCategoryTest from module(s): magento/module-catalog
+
+File "/var/www/html/app/code/Magento/AwsS3/Test/Mftf/Test/AwsS3AdminAddImageToWYSIWYGBlockTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminAddImageToWYSIWYGBlockTest from module(s): magento/module-cms, magento/module-page-builder
+
+File "/var/www/html/app/code/Magento/AwsS3/Test/Mftf/Test/AwsS3AdminAddImageToWYSIWYGCMSTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminAddImageToWYSIWYGCMSTest from module(s): magento/module-cms, magento/module-page-builder
+
+File "/var/www/html/app/code/Magento/AwsS3/Test/Mftf/Test/AwsS3AdminAddImageToWYSIWYGNewsletterTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminAddImageToWYSIWYGNewsletterTest from module(s): magento/module-newsletter
+
+File "/var/www/html/app/code/Magento/AwsS3/Test/Mftf/Test/AwsS3AdminAddRemoveDefaultVideoSimpleProductTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminAddRemoveDefaultVideoSimpleProductTest from module(s): magento/module-product-video
+
+File "/var/www/html/app/code/Magento/AwsS3/Test/Mftf/Test/AwsS3AdminCreateDownloadableProductWithLinkTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminProductFormSection from module(s): magento/module-catalog, magento/module-catalog-inventory, magento/module-catalog-staging, magento/module-gift-card
+	 AdminProductDownloadableSection from module(s): magento/module-downloadable
+	 downloadableData from module(s): magento/module-downloadable
+	 StorefrontProductInfoMainSection from module(s): magento/module-bundle, magento/module-catalog, magento/module-checkout, magento/module-configurable-product, magento/module-gift-card, magento/module-grouped-product, magento/module-inventory-bundle-product, magento/module-inventory-configurable-product-frontend-ui, magento/module-product-video, magento/module-swatches, magento/module-wishlist
+	 DownloadableProduct from module(s): magento/module-downloadable
+	 StorefrontDownloadableProductSection from module(s): magento/module-downloadable
+	 StorefrontDownloadableLinkSection from module(s): magento/module-downloadable
+	 CheckoutCartProductSection from module(s): magento/module-checkout, magento/module-requisition-list
+	 StorefrontCustomerDownloadableProductsSection from module(s): magento/module-downloadable
+	 downloadableLinkWithMaxDownloads from module(s): magento/module-downloadable
+	 downloadableLink from module(s): magento/module-downloadable
+	 downloadableSampleFile from module(s): magento/module-downloadable
+	 AdminLoginActionGroup from module(s): magento/module-admin-analytics, magento/module-backend, magento/module-two-factor-auth
+	 StorefrontCustomerLogoutActionGroup from module(s): magento/module-customer
+	 DeleteProductUsingProductGridActionGroup from module(s): magento/module-catalog
+	 ResetAdminDataGridToDefaultViewActionGroup from module(s): magento/module-ui
+	 AdminLogoutActionGroup from module(s): magento/module-backend
+	 AdminOpenProductIndexPageActionGroup from module(s): magento/module-catalog
+	 GoToSpecifiedCreateProductPageActionGroup from module(s): magento/module-catalog
+	 FillMainProductFormNoWeightActionGroup from module(s): magento/module-catalog
+	 AddDownloadableProductLinkWithMaxDownloadsActionGroup from module(s): magento/module-downloadable
+	 AddDownloadableProductLinkActionGroup from module(s): magento/module-downloadable
+	 AddDownloadableSampleFileActionGroup from module(s): magento/module-downloadable
+	 SaveProductFormActionGroup from module(s): magento/module-catalog
+	 CliIndexerReindexActionGroup from module(s): magento/module-indexer
+	 LoginToStorefrontActionGroup from module(s): magento/module-customer
+	 StorefrontCheckProductPriceInCategoryActionGroup from module(s): magento/module-catalog
+	 AssertProductNameAndSkuInStorefrontProductPageActionGroup from module(s): magento/module-catalog
+	 AssertStorefrontSeeElementActionGroup from module(s): magento/module-checkout
+	 StorefrontAddProductToCartActionGroup from module(s): magento/module-checkout
+	 StorefrontCartPageOpenActionGroup from module(s): magento/module-checkout
+	 StorefrontOpenCheckoutPageActionGroup from module(s): magento/module-checkout
+	 CheckoutSelectCheckMoneyOrderPaymentActionGroup from module(s): magento/module-checkout
+	 ClickPlaceOrderActionGroup from module(s): magento/module-checkout
+	 StorefrontClickOrderLinkFromCheckoutSuccessPageActionGroup from module(s): magento/module-checkout
+	 AdminOpenOrderByEntityIdActionGroup from module(s): magento/module-sales
+	 StartCreateInvoiceFromOrderPageActionGroup from module(s): magento/module-sales
+	 SubmitInvoiceActionGroup from module(s): magento/module-sales
+	 StorefrontAssertDownloadableProductIsPresentInCustomerAccount from module(s): magento/module-downloadable
+
+File "/var/www/html/app/code/Magento/AwsS3/Test/Mftf/Test/AwsS3AdminMarketingCreateSitemapEntityTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminMarketingCreateSitemapEntityTest from module(s): magento/module-sitemap
+
+File "/var/www/html/app/code/Magento/AwsS3/Test/Mftf/Test/AwsS3AdminMarketingSiteMapCreateNewTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminMarketingSiteMapCreateNewTest from module(s): magento/module-sitemap
+
+File "/var/www/html/app/code/Magento/AwsS3/Test/Mftf/Test/AwsS3CheckingRMAPrintTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 CheckingRMAPrintTest from module(s): magento/module-rma
+
+File "/var/www/html/app/code/Magento/AwsS3/Test/Mftf/Test/AwsS3ConfigurableProductChildImageShouldBeShownOnWishListTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 ConfigurableProductChildImageShouldBeShownOnWishListTest from module(s): magento/module-wishlist
+
+File "/var/www/html/app/code/Magento/AwsS3/Test/Mftf/Test/AwsS3StorefrontCaptchaOnCustomerLoginTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontCaptchaOnCustomerLoginTest from module(s): magento/module-captcha
+
+File "/var/www/html/app/code/Magento/AwsS3/Test/Mftf/Test/AwsS3StorefrontPrintOrderGuestTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontPrintOrderGuestTest from module(s): magento/module-sales
+
+File "/var/www/html/app/code/Magento/AwsS3/Test/Mftf/Test/AwsS3UpdateImageFileCustomerAttributeTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 UpdateImageFileCustomerAttributeTest from module(s): magento/module-customer-custom-attributes

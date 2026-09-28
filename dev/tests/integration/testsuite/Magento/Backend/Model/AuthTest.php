@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Backend\Model;
 
 use Magento\Framework\Data\Form\FormKey;
 use Magento\Framework\Exception\AuthenticationException;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test class for \Magento\Backend\Model\Auth.
@@ -33,10 +34,10 @@ class AuthTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider getLoginDataProvider
      * @param string $userName
      * @param string $password
      */
+    #[DataProvider('getLoginDataProvider')]
     public function testLoginFailed($userName, $password)
     {
         $this->expectException(\Magento\Framework\Exception\AuthenticationException::class);
@@ -44,7 +45,7 @@ class AuthTest extends \PHPUnit\Framework\TestCase
         $this->_model->login($userName, $password);
     }
 
-    public function getLoginDataProvider()
+    public static function getLoginDataProvider()
     {
         return [
             'Invalid credentials' => ['not_exists', 'not_exists'],

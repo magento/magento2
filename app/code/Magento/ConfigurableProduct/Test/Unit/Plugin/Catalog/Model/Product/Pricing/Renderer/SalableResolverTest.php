@@ -1,16 +1,19 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Test\Unit\Plugin\Catalog\Model\Product\Pricing\Renderer;
 
+use Closure;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Product\Pricing\Renderer\SalableResolver;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable as TypeConfigurable;
 use Magento\ConfigurableProduct\Plugin\Catalog\Model\Product\Pricing\Renderer\SalableResolver as SalableResolverPlugin;
 use Magento\Framework\Pricing\SaleableInterface;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -33,15 +36,21 @@ class SalableResolverTest extends TestCase
     }
 
     /**
-     * @param SaleableInterface|MockObject $salableItem
+     * @param Closure $salableItem
      * @param bool $isSalable
      * @param bool $typeIsSalable
      * @param bool $expectedResult
      * @return void
-     * @dataProvider afterIsSalableDataProvider
+     * @throws Exception
      */
-    public function testAfterIsSalable($salableItem, bool $isSalable, bool $typeIsSalable, bool $expectedResult): void
-    {
+    #[DataProvider('afterIsSalableDataProvider')]
+    public function testAfterIsSalable(
+        Closure $salableItem,
+        bool $isSalable,
+        bool $typeIsSalable,
+        bool $expectedResult
+    ): void {
+        $salableItem = $salableItem($this);
         $salableResolver = $this->createMock(SalableResolver::class);
 
         $this->typeConfigurable->method('isSalable')
@@ -51,20 +60,22 @@ class SalableResolverTest extends TestCase
         $this->assertEquals($expectedResult, $result);
     }
 
+    protected function getMockForSalableInterface($type)
+    {
+        $salableItem = $this->createMock(SaleableInterface::class);
+        $salableItem->expects($this->once())
+            ->method('getTypeId')
+            ->willReturn($type);
+        return $salableItem;
+    }
     /**
      * @return array
      */
-    public function afterIsSalableDataProvider(): array
+    public static function afterIsSalableDataProvider(): array
     {
-        $simpleSalableItem = $this->getMockForAbstractClass(SaleableInterface::class);
-        $simpleSalableItem->expects($this->once())
-            ->method('getTypeId')
-            ->willReturn('simple');
+        $simpleSalableItem = static fn (self $testCase) => $testCase->getMockForSalableInterface('simple');
 
-        $configurableSalableItem = $this->getMockForAbstractClass(SaleableInterface::class);
-        $configurableSalableItem->expects($this->once())
-            ->method('getTypeId')
-            ->willReturn('configurable');
+        $configurableSalableItem = static fn (self $testCase) => $testCase->getMockForSalableInterface('configurable');
 
         return [
             [

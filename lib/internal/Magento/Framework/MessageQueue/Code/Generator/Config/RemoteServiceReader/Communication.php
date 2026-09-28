@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\MessageQueue\Code\Generator\Config\RemoteServiceReader;
 
@@ -96,7 +96,7 @@ class Communication implements \Magento\Framework\Config\ReaderInterface
      * @param string $methodName
      * @return string
      *
-     * @deprecated 100.2.0
+     * @deprecated 103.0.0
      * @see \Magento\Framework\Communication\Config\ReflectionGenerator::generateTopicName
      */
     public function generateTopicName($typeName, $methodName)

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\AdvancedSearch\Block;
 
@@ -53,7 +53,7 @@ abstract class SearchData extends Template implements SearchDataInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getItems()
     {
@@ -61,7 +61,7 @@ abstract class SearchData extends Template implements SearchDataInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isShowResultsCount()
     {
@@ -69,7 +69,7 @@ abstract class SearchData extends Template implements SearchDataInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getLink($queryText)
     {
@@ -77,7 +77,7 @@ abstract class SearchData extends Template implements SearchDataInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getTitle()
     {

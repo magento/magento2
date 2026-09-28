@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -25,7 +25,7 @@ class DataTest extends TestCase
             Xml::class
         )->disableOriginalConstructor()
             ->getMock();
-        $cache = $this->getMockForAbstractClass(CacheInterface::class);
+        $cache = $this->createMock(CacheInterface::class);
         $dbReader = $this->getMockBuilder(
             Db::class
         )->disableOriginalConstructor()
@@ -48,7 +48,7 @@ class DataTest extends TestCase
 
         $dbReader->expects($this->once())->method('get')->willReturn($dbReaderData);
 
-        $serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
+        $serializerMock = $this->createMock(SerializerInterface::class);
         $serializerMock->method('unserialize')
             ->willReturn($jobs);
 

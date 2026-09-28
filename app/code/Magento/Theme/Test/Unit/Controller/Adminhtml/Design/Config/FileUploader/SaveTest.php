@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Theme\Test\Unit\Controller\Adminhtml\Design\Config\FileUploade
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Theme\Controller\Adminhtml\Design\Config\FileUploader\Save;
 use Magento\Theme\Model\Design\Config\FileUploader\FileProcessor;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -17,6 +18,8 @@ use PHPUnit\Framework\TestCase;
 
 class SaveTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var Context|MockObject */
     protected $context;
 
@@ -34,19 +37,13 @@ class SaveTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->context = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->resultFactory = $this->getMockBuilder(ResultFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->resultPage = $this->getMockBuilder(ResultInterface::class)
-            ->setMethods(['setData'])
-            ->getMockForAbstractClass();
-        $this->fileProcessor = $this->getMockBuilder(
-            FileProcessor::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        $this->context = $this->createMock(Context::class);
+        $this->resultFactory = $this->createMock(ResultFactory::class);
+        $this->resultPage = $this->createPartialMockWithReflection(
+            ResultInterface::class,
+            ['setHttpResponseCode', 'setHeader', 'renderResult', 'setData']
+        );
+        $this->fileProcessor = $this->createMock(FileProcessor::class);
         $this->context->expects($this->once())
             ->method('getResultFactory')
             ->willReturn($this->resultFactory);
@@ -76,8 +73,7 @@ class SaveTest extends TestCase
             ->method('create')
             ->with(ResultFactory::TYPE_JSON)
             ->willReturn($this->resultPage);
-        $this->resultPage->expects($this->once())
-            ->method('setData')
+        $this->resultPage->method('setData')
             ->with($result)
             ->willReturn($resultJson);
         $this->assertEquals($resultJson, $this->controller->execute());

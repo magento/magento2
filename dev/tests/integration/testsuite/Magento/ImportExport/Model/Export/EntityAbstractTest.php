@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -16,21 +16,24 @@ class EntityAbstractTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         parent::setUp();
 
         /** @var \Magento\TestFramework\ObjectManager  $objectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->_model = $this->getMockForAbstractClass(
-            \Magento\ImportExport\Model\Export\AbstractEntity::class,
-            [
+        $this->_model = $this->getMockBuilder(\Magento\ImportExport\Model\Export\AbstractEntity::class)
+            ->setConstructorArgs([
                 $objectManager->get(\Magento\Framework\App\Config\ScopeConfigInterface::class),
                 $objectManager->get(\Magento\Store\Model\StoreManager::class),
                 $objectManager->get(\Magento\ImportExport\Model\Export\Factory::class),
                 $objectManager->get(\Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory::class)
-            ]
-        );
+            ])
+            ->onlyMethods(['export', 'exportItem', 'getEntityTypeCode', '_getHeaderColumns', '_getEntityCollection'])
+            ->getMock();
     }
 
     /**
@@ -100,22 +103,3 @@ class EntityAbstractTest extends \PHPUnit\Framework\TestCase
         }
     }
 }
-/**
- * @codingStandardsIgnoreStart
- * Stub abstract class which provide to change protected property "$_disabledAttrs" and test methods depended on it
- */
-abstract class Stub_Magento_ImportExport_Model_Export_AbstractEntity extends
-    \Magento\ImportExport\Model\Export\AbstractEntity
-{
-    public function __construct(
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\ImportExport\Model\Export\Factory $collectionFactory,
-        \Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory $resourceColFactory,
-        array $data = []
-    ) {
-        parent::__construct($scopeConfig, $storeManager, $collectionFactory, $resourceColFactory, $data);
-        $this->_disabledAttrs = ['default_billing', 'default_shipping'];
-    }
-}
-// @codingStandardsIgnoreEnd

@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\HTTP;
+
+use Laminas\Http\Response;
 
 /**
  * A factory for an HTTP response.
@@ -11,13 +13,13 @@ namespace Magento\Framework\HTTP;
 class ResponseFactory
 {
     /**
-     * Creates a new \Zend_Http_Response object from a string.
+     * Creates a new Response object from a string.
      *
      * @param string $response
-     * @return \Zend_Http_Response
+     * @return Response
      */
     public function create($response)
     {
-        return \Zend_Http_Response::fromString($response);
+        return Response::fromString($response);
     }
 }

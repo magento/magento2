@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,13 +14,17 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\GraphQl\Model\Query\ContextExtensionInterface;
 use Magento\Wishlist\Model\Wishlist;
+use Magento\Wishlist\Model\Wishlist\Config;
 use Magento\Wishlist\Model\WishlistFactory;
 use Magento\WishlistGraphQl\Model\Resolver\CustomerWishlistResolver;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class CustomerWishlistResolverTest extends TestCase
 {
+    use MockCreationTrait;
+
     private const STUB_CUSTOMER_ID = 1;
 
     /**
@@ -49,34 +53,41 @@ class CustomerWishlistResolverTest extends TestCase
     private $resolver;
 
     /**
+     * @var Config|MockObject
+     */
+    private $wishlistConfigMock;
+
+    /**
      * Build the Testing Environment
      */
     protected function setUp(): void
     {
-        $this->contextMock = $this->getMockBuilder(ContextInterface::class)
-            ->setMethods(['getExtensionAttributes', 'getUserId'])
-            ->getMockForAbstractClass();
+        $this->contextMock = $this->createPartialMockWithReflection(
+            ContextInterface::class,
+            ['getExtensionAttributes', 'getUserId']
+        );
 
-        $this->extensionAttributesMock = $this->getMockBuilder(ContextExtensionInterface::class)
-            ->setMethods(['getStore', 'setStore', 'getIsCustomer', 'setIsCustomer'])
-            ->getMockForAbstractClass();
+        $this->extensionAttributesMock = $this->createPartialMockWithReflection(
+            ContextExtensionInterface::class,
+            ['getStore', 'setStore', 'getIsCustomer', 'setIsCustomer']
+        );
 
         $this->contextMock->method('getExtensionAttributes')
             ->willReturn($this->extensionAttributesMock);
 
-        $this->wishlistFactoryMock = $this->getMockBuilder(WishlistFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
+        $this->wishlistFactoryMock = $this->createPartialMock(WishlistFactory::class, ['create']);
 
-        $this->wishlistMock = $this->getMockBuilder(Wishlist::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['loadByCustomerId', 'getId', 'getSharingCode', 'getUpdatedAt', 'getItemsCount'])
-            ->getMock();
+        $this->wishlistMock = $this->createPartialMockWithReflection(
+            Wishlist::class,
+            ['getSharingCode', 'getUpdatedAt', 'loadByCustomerId', 'getId', 'getItemsCount']
+        );
+
+        $this->wishlistConfigMock = $this->createMock(Config::class);
 
         $objectManager = new ObjectManager($this);
         $this->resolver = $objectManager->getObject(CustomerWishlistResolver::class, [
-            'wishlistFactory' => $this->wishlistFactoryMock
+            'wishlistFactory' => $this->wishlistFactoryMock,
+            'wishlistConfig' => $this->wishlistConfigMock
         ]);
     }
 
@@ -85,6 +96,8 @@ class CustomerWishlistResolverTest extends TestCase
      */
     public function testThrowExceptionWhenUserNotAuthorized(): void
     {
+        $this->wishlistConfigMock->method('isEnabled')->willReturn(true);
+
         // Given
         $this->extensionAttributesMock->method('getIsCustomer')
             ->willReturn(false);
@@ -107,6 +120,8 @@ class CustomerWishlistResolverTest extends TestCase
      */
     public function testFactoryCreatesWishlistByAuthorizedCustomerId(): void
     {
+        $this->wishlistConfigMock->method('isEnabled')->willReturn(true);
+
         // Given
         $this->extensionAttributesMock->method('getIsCustomer')
             ->willReturn(true);
@@ -140,9 +155,7 @@ class CustomerWishlistResolverTest extends TestCase
     private function getFieldStub(): Field
     {
         /** @var MockObject|Field $fieldMock */
-        $fieldMock = $this->getMockBuilder(Field::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $fieldMock = $this->createMock(Field::class);
 
         return $fieldMock;
     }
@@ -155,9 +168,7 @@ class CustomerWishlistResolverTest extends TestCase
     private function getResolveInfoStub(): ResolveInfo
     {
         /** @var MockObject|ResolveInfo $resolveInfoMock */
-        $resolveInfoMock = $this->getMockBuilder(ResolveInfo::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $resolveInfoMock = $this->createMock(ResolveInfo::class);
 
         return $resolveInfoMock;
     }

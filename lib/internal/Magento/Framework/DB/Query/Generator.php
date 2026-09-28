@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\DB\Query;
@@ -31,7 +31,7 @@ class Generator
      */
     public function __construct(
         BatchIteratorFactory $iteratorFactory,
-        BatchRangeIteratorFactory $rangeIteratorFactory = null
+        ?BatchRangeIteratorFactory $rangeIteratorFactory = null
     ) {
         $this->iteratorFactory = $iteratorFactory;
         $this->rangeIteratorFactory = $rangeIteratorFactory ?: \Magento\Framework\App\ObjectManager::getInstance()
@@ -134,7 +134,7 @@ class Generator
      * @return BatchIteratorInterface
      * @throws LocalizedException Throws if incorrect "FROM" part in \Select exists
      * @see \Magento\Framework\DB\Query\Generator
-     * @deprecated 100.2.0 This is a temporary solution which is made due to the fact that we
+     * @deprecated 100.1.8 This is a temporary solution which is made due to the fact that we
      *             can't change method generate() in version 2.1 due to a backwards incompatibility.
      *             In 2.2 version need to use original method generate() with additional parameter.
      */

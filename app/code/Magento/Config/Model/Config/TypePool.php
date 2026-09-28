@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Config\Model\Config;
 
@@ -13,7 +13,7 @@ use Magento\Config\Model\Config\Export\ExcludeList;
  * Used when you need to know if the configuration path belongs to a certain type.
  * Participates in the mechanism for creating the configuration dump file.
  * @api
- * @since 100.2.0
+ * @since 101.0.0
  */
 class TypePool
 {
@@ -52,7 +52,7 @@ class TypePool
      * Checks if the configuration path is contained in exclude list.
      *
      * @var ExcludeList
-     * @deprecated 100.2.0 We use it only to support backward compatibility. If some configurations
+     * @deprecated 101.0.0 We use it only to support backward compatibility. If some configurations
      *             were set to this list before, we need to read them.
      *             It will be supported for next 2 minor releases or until a major release.
      *             TypePool should be used to mark configurations with types.
@@ -65,7 +65,7 @@ class TypePool
      * @param array $environment List of environment configuration fields paths
      * @param ExcludeList $excludeList Checks if the configuration path is contained in exclude list
      */
-    public function __construct(array $sensitive = [], array $environment = [], ExcludeList $excludeList = null)
+    public function __construct(array $sensitive = [], array $environment = [], ?ExcludeList $excludeList = null)
     {
         $this->sensitive = $sensitive;
         $this->environment = $environment;
@@ -83,7 +83,7 @@ class TypePool
      * @param string $path Configuration field path. For example, 'contact/email/recipient_email'
      * @param string $type Type of configuration fields
      * @return bool True when the path belongs to requested type, false otherwise
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function isPresent($path, $type)
     {

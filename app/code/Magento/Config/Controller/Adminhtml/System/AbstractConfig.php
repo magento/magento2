@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Config\Controller\Adminhtml\System;
@@ -31,7 +31,7 @@ abstract class AbstractConfig extends \Magento\Backend\App\AbstractAction
     protected $_configStructure;
 
     /**
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     protected $_sectionChecker;
 

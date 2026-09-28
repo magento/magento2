@@ -1,8 +1,10 @@
 <?php
+
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
+
 namespace Magento\Framework\Data;
 
 use Magento\Framework\Data\Tree\Node;
@@ -12,7 +14,8 @@ use Magento\Framework\Data\Tree\Node\Collection as NodeCollection;
  * Data tree
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
+ * phpcs:disable Magento2.CodeAnalysis.EmptyBlock
  */
 class Tree
 {
@@ -24,8 +27,7 @@ class Tree
     protected $_nodes;
 
     /**
-     * Enter description here...
-     *
+     * Initialize Tree
      */
     public function __construct()
     {
@@ -46,6 +48,7 @@ class Tree
      * Enter description here...
      *
      * @param Node $parentNode
+     *
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -57,6 +60,7 @@ class Tree
      * Enter description here...
      *
      * @param int|string $nodeId
+     *
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -70,6 +74,7 @@ class Tree
      * @param array|Node $data
      * @param Node $parentNode
      * @param Node $prevNode
+     *
      * @return Node
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -80,6 +85,7 @@ class Tree
         } elseif ($data instanceof Node) {
             $node = $this->addNode($data, $parentNode);
         }
+
         return $node;
     }
 
@@ -88,6 +94,7 @@ class Tree
      *
      * @param Node $node
      * @param Node $parent
+     *
      * @return Node
      */
     public function addNode($node, $parent = null)
@@ -97,6 +104,7 @@ class Tree
         if ($parent !== null && $parent instanceof Node) {
             $parent->addChild($node);
         }
+
         return $node;
     }
 
@@ -106,6 +114,7 @@ class Tree
      * @param Node $node
      * @param Node $parentNode
      * @param Node $prevNode
+     *
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -119,6 +128,7 @@ class Tree
      * @param Node $node
      * @param Node $parentNode
      * @param Node $prevNode
+     *
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -130,6 +140,7 @@ class Tree
      * Remove node
      *
      * @param Node $node
+     *
      * @return $this
      */
     public function removeNode($node)
@@ -138,6 +149,7 @@ class Tree
         if ($node->getParent()) {
             $node->getParent()->removeChild($node);
         }
+
         unset($node);
         return $this;
     }
@@ -147,6 +159,7 @@ class Tree
      *
      * @param Node $parentNode
      * @param Node $prevNode
+     *
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -158,6 +171,7 @@ class Tree
      * Get child
      *
      * @param Node $node
+     *
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -169,6 +183,7 @@ class Tree
      * Get children
      *
      * @param Node $node
+     *
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -190,6 +205,7 @@ class Tree
      * Enter description here...
      *
      * @param Node $nodeId
+     *
      * @return Node
      */
     public function getNodeById($nodeId)
@@ -201,6 +217,7 @@ class Tree
      * Get path
      *
      * @param Node $node
+     *
      * @return array
      */
     public function getPath($node)
@@ -211,6 +228,7 @@ class Tree
                 return $_node->getPath();
             }
         }
+
         return [];
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\AdminNotification\Model\System;
 
@@ -13,7 +13,7 @@ namespace Magento\AdminNotification\Model\System;
 class Message extends \Magento\Framework\Model\AbstractModel implements \Magento\Framework\Notification\MessageInterface
 {
     /**
-     * @return void
+     * @inheritdoc
      */
     protected function _construct()
     {

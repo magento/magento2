@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 define([
     'Magento_Ui/js/grid/columns/column',
@@ -53,6 +53,16 @@ define([
          */
         isSalable: function (row) {
             return row['is_salable'];
+        },
+
+        /**
+         * Depends on this option, stock status text can be "In stock" or "Out Of Stock"
+         *
+         * @param {Object} row
+         * @returns {Boolean}
+         */
+        isAvailable: function (row) {
+            return row['is_available'];
         },
 
         /**

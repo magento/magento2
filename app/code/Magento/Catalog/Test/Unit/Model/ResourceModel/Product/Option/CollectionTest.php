@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -106,7 +106,7 @@ class CollectionTest extends TestCase
             EntityFactory::class,
             ['create']
         );
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->fetchStrategyMock = $this->createPartialMock(
             Query::class,
             ['fetchAll']
@@ -117,10 +117,7 @@ class CollectionTest extends TestCase
             ['create']
         );
         $this->storeManagerMock = $this->createMock(StoreManager::class);
-        $this->joinProcessor = $this->getMockBuilder(
-            JoinProcessorInterface::class
-        )->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->joinProcessor = $this->createMock(JoinProcessorInterface::class);
         $this->resourceMock = $this->createPartialMock(
             Option::class,
             ['getConnection', 'getMainTable', 'getTable']
@@ -139,19 +136,14 @@ class CollectionTest extends TestCase
             ->willReturn('test_main_table');
         $this->resourceMock->expects($this->exactly(3))
             ->method('getTable')
-            ->withConsecutive(
-                ['test_main_table'],
-                ['catalog_product_entity'],
-                ['catalog_product_entity']
-            )->willReturnOnConsecutiveCalls(
-                $this->returnValue('test_main_table'),
-                'catalog_product_entity',
-                'catalog_product_entity'
-            );
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['test_main_table'] => 'test_main_table',
+                ['catalog_product_entity'] => 'catalog_product_entity'
+            });
         $this->metadataPoolMock = $this->createMock(MetadataPool::class);
         $metadata = $this->createMock(EntityMetadata::class);
-        $metadata->expects($this->any())->method('getLinkField')->willReturn('id');
-        $this->metadataPoolMock->expects($this->any())->method('getMetadata')->willReturn($metadata);
+        $metadata->method('getLinkField')->willReturn('id');
+        $this->metadataPoolMock->method('getMetadata')->willReturn($metadata);
         $this->selectMock->expects($this->exactly(2))->method('join');
 
         $this->collection = new Collection(

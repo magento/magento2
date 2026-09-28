@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,16 +13,23 @@ use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
+use Magento\CatalogImportExport\Model\Import\Product;
 use Magento\CatalogUrlRewrite\Model\Map\DataProductUrlRewriteDatabaseMap;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
+use Magento\ImportExport\Model\Import;
+use Magento\ImportExport\Model\Import\Source\Csv;
 use Magento\Store\Model\ScopeInterface;
 use Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException;
 use Magento\UrlRewrite\Model\OptionProvider;
+use Psr\Log\LoggerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class for product url rewrites tests
  *
  * @magentoDbIsolation enabled
- * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProductUrlRewriteTest extends AbstractUrlRewriteTest
 {
@@ -55,10 +62,11 @@ class ProductUrlRewriteTest extends AbstractUrlRewriteTest
     }
 
     /**
-     * @dataProvider productDataProvider
+     * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
      * @param array $data
      * @return void
      */
+    #[DataProvider('productDataProvider')]
     public function testUrlRewriteOnProductSave(array $data): void
     {
         $product = $this->saveProduct($data['data']);
@@ -73,7 +81,7 @@ class ProductUrlRewriteTest extends AbstractUrlRewriteTest
     /**
      * @return array
      */
-    public function productDataProvider(): array
+    public static function productDataProvider(): array
     {
         return [
             'without_url_key' => [
@@ -85,6 +93,7 @@ class ProductUrlRewriteTest extends AbstractUrlRewriteTest
                         'sku' => 'test-product',
                         'name' => 'test product',
                         'price' => 150,
+                        'website_ids' => [1]
                     ],
                     'expected_data' => [
                         [
@@ -104,6 +113,7 @@ class ProductUrlRewriteTest extends AbstractUrlRewriteTest
                         'name' => 'test product',
                         'price' => 150,
                         'url_key' => 'test-product-url-key',
+                        'website_ids' => [1]
                     ],
                     'expected_data' => [
                         [
@@ -123,6 +133,7 @@ class ProductUrlRewriteTest extends AbstractUrlRewriteTest
                         'name' => 'test product',
                         'price' => 150,
                         'url_key' => 'test-product-url-key',
+                        'website_ids' => [1]
                     ],
                     'expected_data' => [],
                 ],
@@ -131,11 +142,12 @@ class ProductUrlRewriteTest extends AbstractUrlRewriteTest
     }
 
     /**
+     * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
      * @magentoDataFixture Magento/CatalogUrlRewrite/_files/product_simple.php
-     * @dataProvider productEditProvider
      * @param array $expectedData
      * @return void
      */
+    #[DataProvider('productEditProvider')]
     public function testUrlRewriteOnProductEdit(array $expectedData): void
     {
         $product = $this->productRepository->get('simple');
@@ -155,11 +167,11 @@ class ProductUrlRewriteTest extends AbstractUrlRewriteTest
     /**
      * @return array
      */
-    public function productEditProvider(): array
+    public static function productEditProvider(): array
     {
         return [
             [
-                'expected_data' => [
+                'expectedData' => [
                     [
                         'request_path' => 'new-url-key%suffix%',
                         'target_path' => 'catalog/product/view/id/%id%',
@@ -175,60 +187,76 @@ class ProductUrlRewriteTest extends AbstractUrlRewriteTest
     }
 
     /**
+     * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
      * @magentoDataFixture Magento/CatalogUrlRewrite/_files/category_with_products.php
-     * @dataProvider existingUrlKeyProvider
-     * @param array $data
+     * @param array $data1
+     * @param array $data2
+     * @param array $data3
+     * @param array $data4
      * @return void
      */
-    public function testUrlRewriteOnProductSaveWithExistingUrlKey(array $data): void
-    {
+    #[DataProvider('existingUrlKeyProvider')]
+    public function testUrlRewriteOnProductSaveWithExistingUrlKey(
+        array $data1,
+        array $data2,
+        array $data3,
+        array $data4
+    ): void {
         $this->expectException(UrlAlreadyExistsException::class);
         $this->expectExceptionMessage((string)__('URL key for specified store already exists.'));
-        $this->saveProduct($data);
+        $this->saveProduct($data1);
+        $this->saveProduct($data2);
+        $this->saveProduct($data3);
+        $this->saveProduct($data4);
     }
 
     /**
      * @return array
      */
-    public function existingUrlKeyProvider(): array
+    public static function existingUrlKeyProvider(): array
     {
         return [
             [
-                'with_specified_existing_product_url_key' => [
+                [
                     'type_id' => Type::TYPE_SIMPLE,
                     'attribute_set_id' => 4,
                     'sku' => 'test-simple-product',
                     'name' => 'test-simple-product',
                     'price' => 150,
                     'url_key' => 'simple-product',
+                    'store_ids' => [1]
                 ],
-                'with_autogenerated_existing_product_url_key' => [
+                [
                     'type_id' => Type::TYPE_SIMPLE,
                     'attribute_set_id' => 4,
                     'sku' => 'test-simple-product',
                     'name' => 'simple product',
                     'price' => 150,
+                    'store_ids' => [1]
                 ],
-                'with_specified_existing_category_url_key' => [
+                [
                     'type_id' => Type::TYPE_SIMPLE,
                     'attribute_set_id' => 4,
                     'sku' => 'test-simple-product',
                     'name' => 'test-simple-product',
                     'price' => 150,
                     'url_key' => 'category-1',
+                    'store_ids' => [1]
                 ],
-                'with_autogenerated_existing_category_url_key' => [
+                [
                     'type_id' => Type::TYPE_SIMPLE,
                     'attribute_set_id' => 4,
                     'sku' => 'test-simple-product',
                     'name' => 'category 1',
                     'price' => 150,
+                    'store_ids' => [1]
                 ],
             ],
         ];
     }
 
     /**
+     * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
      * @magentoAppArea adminhtml
      * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
      */
@@ -244,6 +272,7 @@ class ProductUrlRewriteTest extends AbstractUrlRewriteTest
     }
 
     /**
+     * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
      * @magentoDbIsolation disabled
      * @magentoDataFixture Magento/Store/_files/second_store.php
      * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
@@ -260,11 +289,82 @@ class ProductUrlRewriteTest extends AbstractUrlRewriteTest
             $product
         );
         $urlRewriteItems = $this->getEntityRewriteCollection($product->getId())->getItems();
-        $this->assertTrue(count($urlRewriteItems) == 2);
+        $this->assertTrue(count($urlRewriteItems) == 3);
         foreach ($urlRewriteItems as $item) {
+            if ((int) $item->getRedirectType() == OptionProvider::PERMANENT) {
+                continue;
+            }
             $item->getData('store_id') == $secondStoreId
                 ? $this->assertEquals($urlKeySecondStore . $this->suffix, $item->getRequestPath())
                 : $this->assertEquals($urlKeyFirstStore . $this->suffix, $item->getRequestPath());
+        }
+    }
+
+    /**
+     * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
+     * Check if redirects are generated correctly while product urls are changed during import process.
+     *
+     * @magentoDataFixture Magento/Catalog/_files/multiple_products.php
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
+     */
+    public function testImportProductRewrites()
+    {
+        $data = [
+            ['sku' => 'simple1', 'request_path' => 'simple-product1', 'target_path' => 'product-1-updated'],
+            ['sku' => 'simple2', 'request_path' => 'simple-product2', 'target_path' => 'product-2-updated'],
+            ['sku' => 'simple3', 'request_path' => 'simple-product3', 'target_path' => 'product-3-updated'],
+        ];
+
+        $logger = $this->createMock(LoggerInterface::class);
+        $productImport = $this->objectManager->create(
+            Product::class,
+            ['logger' => $logger]
+        );
+        $filesystem = $this->objectManager->get(Filesystem::class);
+
+        foreach ($data as $datum) {
+            $this->assertEquals(
+                $datum['request_path'],
+                $this->productRepository->get($datum['sku'], false, null, true)->getUrlKey()
+            );
+        }
+
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $source = $this->objectManager->create(
+            Csv::class,
+            [
+                'file' => __DIR__ . '/../_files/products_to_import_with_rewrites.csv',
+                'directory' => $directory
+            ]
+        );
+        $errors = $productImport->setParameters(
+            ['behavior' => Import::BEHAVIOR_APPEND, 'entity' => 'catalog_product']
+        )->setSource(
+            $source
+        )->validateData();
+        $this->assertTrue($errors->getErrorsCount() === 0);
+        $productImport->importData();
+
+        foreach ($data as $datum) {
+            $product = $this->productRepository->get($datum['sku'], false, null, true);
+            $this->assertEquals(
+                $datum['target_path'],
+                $product->getUrlKey()
+            );
+
+            $productUrlRewriteCollection = $this->getEntityRewriteCollection($product->getId());
+            $rewriteExists = false;
+            foreach ($productUrlRewriteCollection as $item) {
+                if ($item->getTargetPath() === $datum['target_path'] . $this->suffix &&
+                    $item->getRequestPath() === $datum['request_path'] . $this->suffix) {
+                    $rewriteExists = true;
+                    break;
+                }
+
+            }
+
+            $this->assertTrue($rewriteExists);
         }
     }
 

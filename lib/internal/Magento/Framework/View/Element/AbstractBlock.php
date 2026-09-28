@@ -1,14 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Framework\View\Element;
 
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Cache\LockGuardedCacheLoader;
+use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\DataObject\IdentityInterface;
+use Magento\Framework\Exception\RuntimeException;
 
 /**
  * Base class for all blocks.
@@ -24,38 +28,39 @@ use Magento\Framework\DataObject\IdentityInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @since 100.0.2
  */
 abstract class AbstractBlock extends \Magento\Framework\DataObject implements BlockInterface
 {
     /**
      * Cache group Tag
      */
-    const CACHE_GROUP = \Magento\Framework\App\Cache\Type\Block::TYPE_IDENTIFIER;
+    public const CACHE_GROUP = \Magento\Framework\App\Cache\Type\Block::TYPE_IDENTIFIER;
 
     /**
      * Prefix for cache key of block
      */
-    const CACHE_KEY_PREFIX = 'BLOCK_';
+    public const CACHE_KEY_PREFIX = 'BLOCK_';
 
     /**
-     * Design
-     *
+     * Prefix for custom cache key of block
+     */
+    public const CUSTOM_CACHE_KEY_PREFIX = 'CUSTOM_BLOCK_';
+
+    /**
      * @var \Magento\Framework\View\DesignInterface
      */
     protected $_design;
 
     /**
-     * Session
-     *
      * @var \Magento\Framework\Session\SessionManagerInterface
      */
     protected $_session;
 
     /**
-     * SID Resolver
-     *
      * @var \Magento\Framework\Session\SidResolverInterface
-     * @deprecated Not used anymore.
+     * @deprecated 102.0.5 Not used anymore.
+     * @see Session Id's In URL
      */
     protected $_sidResolver;
 
@@ -81,15 +86,11 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     protected $jsLayout = [];
 
     /**
-     * Request
-     *
      * @var \Magento\Framework\App\RequestInterface
      */
     protected $_request;
 
     /**
-     * Url Builder
-     *
      * @var \Magento\Framework\UrlInterface
      */
     protected $_urlBuilder;
@@ -124,29 +125,21 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     protected $_viewConfig;
 
     /**
-     * Cache State
-     *
      * @var \Magento\Framework\App\Cache\StateInterface
      */
     protected $_cacheState;
 
     /**
-     * Logger
-     *
      * @var \Psr\Log\LoggerInterface
      */
     protected $_logger;
 
     /**
-     * Escaper
-     *
      * @var \Magento\Framework\Escaper
      */
     protected $_escaper;
 
     /**
-     * Filter manager
-     *
      * @var \Magento\Framework\Filter\FilterManager
      */
     protected $filterManager;
@@ -165,7 +158,10 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * The property is used to define content-scope of block. Can be private or public.
      * If it isn't defined then application considers it as false.
      *
+     * @see https://developer.adobe.com/commerce/php/development/cache/page/private-content/
      * @var bool
+     * @deprecated
+     * @since 103.0.1
      */
     protected $_isScopePrivate = false;
 
@@ -176,9 +172,14 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
 
     /**
      * @var \Magento\Framework\App\CacheInterface
-     * @since 100.2.0
+     * @since 101.0.0
      */
     protected $_cache;
+
+    /**
+     * @var DeploymentConfig
+     */
+    private $deploymentConfig;
 
     /**
      * @var LockGuardedCacheLoader
@@ -213,6 +214,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
         $this->_localeDate = $context->getLocaleDate();
         $this->inlineTranslation = $context->getInlineTranslation();
         $this->lockQuery = $context->getLockGuardedCacheLoader();
+
         if (isset($data['jsLayout'])) {
             $this->jsLayout = $data['jsLayout'];
             unset($data['jsLayout']);
@@ -890,10 +892,11 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     /**
      * Escape HTML entities
      *
-     * @param string|array $data
+     * @param string|int|float|\Stringable|array<string|int|float|\Stringable> $data
      * @param array|null $allowedTags
-     * @return string
-     * @deprecated Use $escaper directly in templates and in blocks.
+     * @return ($data is array ? string[] : string)
+     * @deprecated 103.0.0 Use $escaper directly in templates and in blocks.
+     * @see Escaper Usage
      */
     public function escapeHtml($data, $allowedTags = null)
     {
@@ -903,10 +906,11 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     /**
      * Escape string for the JavaScript context
      *
-     * @param string $string
+     * @param string|int|float|\Stringable $string
      * @return string
-     * @since 100.2.0
-     * @deprecated Use $escaper directly in templates and in blocks.
+     * @since 101.0.0
+     * @deprecated 103.0.0 Use $escaper directly in templates and in blocks.
+     * @see Escaper Usage
      */
     public function escapeJs($string)
     {
@@ -916,11 +920,12 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     /**
      * Escape a string for the HTML attribute context
      *
-     * @param string $string
+     * @param string|int|float|\Stringable $string
      * @param boolean $escapeSingleQuote
      * @return string
-     * @since 100.2.0
-     * @deprecated Use $escaper directly in templates and in blocks.
+     * @since 101.0.0
+     * @deprecated 103.0.0 Use $escaper directly in templates and in blocks.
+     * @see Escaper Usage
      */
     public function escapeHtmlAttr($string, $escapeSingleQuote = true)
     {
@@ -932,8 +937,9 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      *
      * @param string $string
      * @return string
-     * @since 100.2.0
-     * @deprecated Use $escaper directly in templates and in blocks.
+     * @since 101.0.0
+     * @deprecated 103.0.0 Use $escaper directly in templates and in blocks.
+     * @see Escaper Usage
      */
     public function escapeCss($string)
     {
@@ -950,10 +956,9 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      */
     public function stripTags($data, $allowableTags = null, $allowHtmlEntities = false)
     {
-        return $this->filterManager->stripTags(
-            $data,
-            ['allowableTags' => $allowableTags, 'escape' => $allowHtmlEntities]
-        );
+        $params = ['allowableTags' => $allowableTags, 'escape' => $allowHtmlEntities];
+
+        return $data ? $this->filterManager->stripTags($data, $params) : $data;
     }
 
     /**
@@ -961,7 +966,8 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      *
      * @param string $string
      * @return string
-     * @deprecated Use $escaper directly in templates and in blocks.
+     * @deprecated 103.0.0 Use $escaper directly in templates and in blocks.
+     * @see Escaper Usage
      */
     public function escapeUrl($string)
     {
@@ -973,7 +979,8 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      *
      * @param string $data
      * @return string
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
+     * @see Escaper Usage
      */
     public function escapeXssInUrl($data)
     {
@@ -988,7 +995,8 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * @param string $data
      * @param bool $addSlashes
      * @return string
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
+     * @see Escaper Usage
      */
     public function escapeQuote($data, $addSlashes = false)
     {
@@ -1002,7 +1010,8 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * @param string $quote
      *
      * @return string|array
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
+     * @see Escaper Usage
      */
     public function escapeJsQuote($data, $quote = '\'')
     {
@@ -1035,11 +1044,16 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * Get Key for caching block content
      *
      * @return string
+     * @throws RuntimeException
      */
     public function getCacheKey()
     {
         if ($this->hasData('cache_key')) {
-            return static::CACHE_KEY_PREFIX . $this->getData('cache_key');
+            if (preg_match('/[^a-z0-9\-\_]/i', $this->getData('cache_key'))) {
+                throw new RuntimeException(__('Please enter cache key with only alphanumeric or hash string.'));
+            }
+
+            return static::CUSTOM_CACHE_KEY_PREFIX . $this->getData('cache_key');
         }
 
         /**
@@ -1050,8 +1064,12 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
 
         $key = array_values($key);  // ignore array keys
 
+        $key[] = (string)$this->getDeploymentConfig()->get(
+            ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY
+        );
+
         $key = implode('|', $key);
-        $key = sha1($key); // use hashing to hide potentially private data
+        $key = hash('sha256', $key); // use hashing to hide potentially private data
         return static::CACHE_KEY_PREFIX . $key;
     }
 
@@ -1189,9 +1207,26 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * Returns true if scope is private, false otherwise
      *
      * @return bool
+     * @deprecated
+     * @see https://developer.adobe.com/commerce/php/development/cache/page/private-content
+     * @since 103.0.1
      */
     public function isScopePrivate()
     {
         return $this->_isScopePrivate;
+    }
+
+    /**
+     * Get DeploymentConfig
+     *
+     * @return DeploymentConfig
+     */
+    private function getDeploymentConfig() : DeploymentConfig
+    {
+        if ($this->deploymentConfig === null) {
+            $this->deploymentConfig = ObjectManager::getInstance()
+                ->get(DeploymentConfig::class);
+        }
+        return $this->deploymentConfig;
     }
 }

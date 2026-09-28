@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\Store;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Verify generate url rewrites for anchor categories.
@@ -56,8 +57,8 @@ class AnchorUrlRewriteGeneratorTest extends TestCase
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @magentoDataFixture Magento/CatalogUrlRewrite/_files/product_with_stores.php
      * @magentoDbIsolation disabled
-     * @dataProvider getConfigGenerate
      */
+    #[DataProvider('getConfigGenerate')]
     public function testGenerate(string $expect): void
     {
         $product = $this->productRepository->get('simple');
@@ -81,7 +82,7 @@ class AnchorUrlRewriteGeneratorTest extends TestCase
      *
      * @return array
      */
-    public function getConfigGenerate(): array
+    public static function getConfigGenerate(): array
     {
         return [
             [

@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 define([
     'jquery',
@@ -39,6 +39,20 @@ define([
             }
 
             return expiredSections;
+        },
+
+        /**
+         * @param {Object} settings
+         * @constructor
+         */
+        'Magento_Customer/js/customer-data': function (originFn) {
+            let mageCacheTimeout = new Date($.localStorage.get('mage-cache-timeout')),
+                mageCacheSessId = $.cookieStorage.isSet('mage-cache-sessid');
+
+            originFn();
+            if (window.persistent !== undefined && (mageCacheTimeout < new Date() || !mageCacheSessId)) {
+                this.reload(['persistent','cart'],true);
+            }
         }
     };
 

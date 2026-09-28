@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    /**
+     * Copyright 2024 Adobe
+     * All Rights Reserved.
+     */
+   -->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminNavigateToConfigurationPaymentMethodSectionActionGroup">
+        <annotations>
+            <description>Navigates to the specified section in admin on the Stores > Settings > Configuration > Sales > Payment Methods page.</description>
+        </annotations>
+        <arguments>
+            <argument name="section" defaultValue="" type="string"/>
+        </arguments>
+        <amOnPage url="{{AdminConfigPaymentMethodsPage.url(section)}}" stepKey="navigateToPaymentConfigurationPage"/>
+    </actionGroup>
+</actionGroups>

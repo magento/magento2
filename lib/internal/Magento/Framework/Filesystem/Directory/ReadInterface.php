@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Filesystem\Directory;
 
 /**
  * Interface \Magento\Framework\Filesystem\Directory\ReadInterface
  * @api
+ * @since 100.0.2
  */
 interface ReadInterface
 {

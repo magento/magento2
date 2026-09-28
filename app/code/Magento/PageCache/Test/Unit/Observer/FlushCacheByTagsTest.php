@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\PageCache\Test\Unit\Observer;
 
 use Magento\Framework\App\Cache\Tag\Resolver;
+use Magento\Framework\Cache\CacheConstants;
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -16,6 +17,8 @@ use Magento\PageCache\Model\Config;
 use Magento\PageCache\Observer\FlushCacheByTags;
 use Magento\Store\Model\Store;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -23,6 +26,8 @@ use PHPUnit\Framework\TestCase;
  */
 class FlushCacheByTagsTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var FlushCacheByTags
      */
@@ -67,9 +72,9 @@ class FlushCacheByTagsTest extends TestCase
     /**
      * Test case for cache invalidation
      *
-     * @dataProvider flushCacheByTagsDataProvider
      * @param $cacheState
      */
+    #[DataProvider('flushCacheByTagsDataProvider')]
     public function testExecute($cacheState)
     {
         $this->configMock->method('isEnabled')->willReturn($cacheState);
@@ -80,10 +85,7 @@ class FlushCacheByTagsTest extends TestCase
             $tags = ['cache_1', 'cache_group'];
             $expectedTags = ['cache_1', 'cache_group'];
 
-            $eventMock = $this->getMockBuilder(Event::class)
-                ->addMethods(['getObject'])
-                ->disableOriginalConstructor()
-                ->getMock();
+            $eventMock = $this->createPartialMockWithReflection(Event::class, ['getObject']);
             $eventMock->expects($this->once())->method('getObject')->willReturn($observedObject);
             $observerObject->expects($this->once())->method('getEvent')->willReturn($eventMock);
             $this->configMock->expects($this->once())
@@ -93,7 +95,7 @@ class FlushCacheByTagsTest extends TestCase
 
             $this->fullPageCacheMock->expects($this->once())
                 ->method('clean')
-                ->with(\Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, $expectedTags);
+                ->with(CacheConstants::CLEANING_MODE_MATCHING_ANY_TAG, $expectedTags);
         }
 
         $result = $this->model->execute($observerObject);
@@ -103,7 +105,7 @@ class FlushCacheByTagsTest extends TestCase
     /**
      * @return array
      */
-    public function flushCacheByTagsDataProvider()
+    public static function flushCacheByTagsDataProvider()
     {
         return [
             'full_page cache type is enabled' => [true],
@@ -122,10 +124,7 @@ class FlushCacheByTagsTest extends TestCase
 
         $tags = [];
 
-        $eventMock = $this->getMockBuilder(Event::class)
-            ->addMethods(['getObject'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $eventMock = $this->createPartialMockWithReflection(Event::class, ['getObject']);
         $eventMock->expects($this->once())->method('getObject')->willReturn($observedObject);
         $observerObject->expects($this->once())->method('getEvent')->willReturn($eventMock);
         $this->configMock->expects(

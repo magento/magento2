@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CatalogUrlRewrite\Plugin\Catalog\Block\Adminhtml\Category\Tab;
 
@@ -9,6 +9,9 @@ use Magento\Catalog\Model\Category\DataProvider;
 use Magento\Eav\Model\Config as EavConfig;
 use Magento\TestFramework\Helper\Bootstrap;
 
+/**
+ * @magentoAppArea adminhtml
+ */
 class AttributesTest extends \PHPUnit\Framework\TestCase
 {
     /**

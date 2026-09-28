@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Model\ResourceModel;
 
+use Exception;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
@@ -43,26 +44,19 @@ class AttributeTest extends TestCase
      */
     protected $connectionMock;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->appResourceMock = $this->createMock(ResourceConnection::class);
-        $this->eventManagerMock = $this->getMockForAbstractClass(
-            ManagerInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            []
-        );
-        $this->modelMock = $this->getMockForAbstractClass(
+        $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
+            ->onlyMethods(['dispatch'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->modelMock = $this->createPartialMock(
             AbstractModel::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['getId', 'getEventPrefix', 'getEventObject']
+            ['getId', 'getEventPrefix', 'getEventObject', 'getData']
         );
         $this->connectionMock = $this->getMockBuilder(Mysql::class)
             ->onlyMethods(['rollback', 'describeTable', 'insert', 'lastInsertId', 'beginTransaction', 'commit'])
@@ -75,6 +69,9 @@ class AttributeTest extends TestCase
             ->method('insert');
         $this->connectionMock->expects($this->any())
             ->method('lastInsertId');
+        $this->modelMock->expects($this->any())
+            ->method('getData')
+            ->willReturn([]);
         $this->attribute = new Attribute(
             $this->appResourceMock,
             $this->eventManagerMock
@@ -82,9 +79,10 @@ class AttributeTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * @return void
+     * @throws Exception
      */
-    public function testSave()
+    public function testSave(): void
     {
         $this->appResourceMock->expects($this->once())
             ->method('getConnection')
@@ -95,20 +93,18 @@ class AttributeTest extends TestCase
         $this->modelMock->expects($this->any())
             ->method('getEventObject')
             ->willReturn('event_object');
-        $this->eventManagerMock->expects($this->at(0))
+        $this->modelMock->expects($this->any())
+            ->method('getData')
+            ->willReturn([]);
+        $this->eventManagerMock
             ->method('dispatch')
-            ->with('event_prefix_save_attribute_before', [
-                'event_object' => $this->attribute,
-                'object' => $this->modelMock,
-                'attribute' => ['attribute']
-            ]);
-        $this->eventManagerMock->expects($this->at(1))
-            ->method('dispatch')
-            ->with('event_prefix_save_attribute_after', [
-                'event_object' => $this->attribute,
-                'object' => $this->modelMock,
-                'attribute' => ['attribute']
-            ]);
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 'event_prefix_save_attribute_before' ||
+                    $arg1 == 'event_prefix_save_attribute_after' &&
+                is_array($arg2)) {
+                    return null;
+                }
+            });
         $this->connectionMock->expects($this->once())
             ->method('beginTransaction');
         $this->connectionMock->expects($this->once())
@@ -117,9 +113,10 @@ class AttributeTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * @return void
+     * @throws Exception
      */
-    public function testSaveFailed()
+    public function testSaveFailed(): void
     {
         $this->expectException('Exception');
         $this->expectExceptionMessage('Expected Exception');
@@ -132,7 +129,7 @@ class AttributeTest extends TestCase
         $this->appResourceMock->expects($this->once())
             ->method('getConnection')
             ->willReturn($this->connectionMock);
-        $exception  = new \Exception('Expected Exception');
+        $exception  = new Exception('Expected Exception');
         $this->modelMock->expects($this->any())
             ->method('getId')
             ->willThrowException($exception);

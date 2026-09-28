@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Sales\Model\ResourceModel\Order\Handler;
@@ -9,9 +9,6 @@ namespace Magento\Sales\Model\ResourceModel\Order\Handler;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\ResourceModel\Attribute;
 
-/**
- * Class Address
- */
 class Address
 {
     /**
@@ -69,7 +66,7 @@ class Address
                 $attributesForSave[] = 'billing_address_id';
             }
             $shippingAddress = $order->getShippingAddress();
-            if ($shippingAddress && $order->getShippigAddressId() != $shippingAddress->getId()) {
+            if ($shippingAddress && $order->getShippingAddressId() != $shippingAddress->getId()) {
                 $order->setShippingAddressId($shippingAddress->getId());
                 $attributesForSave[] = 'shipping_address_id';
             }

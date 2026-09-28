@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\Order\Invoice\Sender;
 
@@ -94,7 +94,7 @@ class EmailSender extends Sender implements SenderInterface
     public function send(
         \Magento\Sales\Api\Data\OrderInterface $order,
         \Magento\Sales\Api\Data\InvoiceInterface $invoice,
-        \Magento\Sales\Api\Data\InvoiceCommentCreationInterface $comment = null,
+        ?\Magento\Sales\Api\Data\InvoiceCommentCreationInterface $comment = null,
         $forceSyncMode = false
     ) {
         $invoice->setSendEmail($this->identityContainer->isEnabled());
@@ -104,13 +104,21 @@ class EmailSender extends Sender implements SenderInterface
 
             $transport = [
                 'order' => $order,
+                'order_id' => $order->getId(),
                 'invoice' => $invoice,
+                'invoice_id' => $invoice->getId(),
                 'comment' => $comment ? $comment->getComment() : '',
                 'billing' => $order->getBillingAddress(),
                 'payment_html' => $this->getPaymentHtml($order),
                 'store' => $order->getStore(),
                 'formattedShippingAddress' => $this->getFormattedShippingAddress($order),
                 'formattedBillingAddress' => $this->getFormattedBillingAddress($order),
+                'order_data' => [
+                    'customer_name' => $order->getCustomerName(),
+                    'is_not_virtual' => $order->getIsNotVirtual(),
+                    'email_customer_note' => $order->getEmailCustomerNote(),
+                    'frontend_status_label' => $order->getFrontendStatusLabel()
+                ]
             ];
             $transportObject = new DataObject($transport);
 

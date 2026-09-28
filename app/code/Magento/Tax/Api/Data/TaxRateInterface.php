@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Tax\Api\Data;
@@ -177,7 +176,7 @@ interface TaxRateInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      * @param \Magento\Tax\Api\Data\TaxRateTitleInterface[] $titles
      * @return $this
      */
-    public function setTitles(array $titles = null);
+    public function setTitles(?array $titles = null);
 
     /**
      * Retrieve existing extension attributes object or create a new one.

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,8 +11,10 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\ActionFlag;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Request\Http;
+use Magento\Framework\App\Response\Http as ResponseHttp;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Event\Manager;
+use Magento\Framework\Message\Manager as MessageManager;
 use Magento\Framework\Url;
 use Magento\Framework\View\Layout;
 use Magento\Framework\View\Result\Page;
@@ -39,7 +41,7 @@ class IndexTest extends TestCase
     protected $request;
 
     /**
-     * @var \Magento\Framework\App\Response\Http|MockObject
+     * @var ResponseHttp|MockObject
      */
     protected $response;
 
@@ -72,18 +74,12 @@ class IndexTest extends TestCase
     {
         $this->context = $this->createMock(Context::class);
         $this->request = $this->createMock(Http::class);
-        $this->response = $this->createMock(\Magento\Framework\App\Response\Http::class);
+        $this->response = $this->createMock(ResponseHttp::class);
         $this->wishlistProvider = $this->createMock(WishlistProvider::class);
         $this->redirect = $this->createMock(Redirect::class);
-        $this->resultFactoryMock = $this->getMockBuilder(ResultFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->resultPageMock = $this->getMockBuilder(Page::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->layoutMock = $this->getMockBuilder(Layout::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resultFactoryMock = $this->createMock(ResultFactory::class);
+        $this->resultPageMock = $this->createMock(Page::class);
+        $this->layoutMock = $this->createMock(Layout::class);
 
         $this->resultFactoryMock->expects($this->any())
             ->method('create')
@@ -100,7 +96,7 @@ class IndexTest extends TestCase
         $eventManager = $this->createMock(Manager::class);
         $url = $this->createMock(Url::class);
         $actionFlag = $this->createMock(ActionFlag::class);
-        $messageManager = $this->createMock(\Magento\Framework\Message\Manager::class);
+        $messageManager = $this->createMock(MessageManager::class);
 
         $this->context
             ->expects($this->any())

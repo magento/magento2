@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -31,10 +31,10 @@ class ModularSwitchTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->ruleNonModular = $this->getMockForAbstractClass(
+        $this->ruleNonModular = $this->createMock(
             RuleInterface::class
         );
-        $this->ruleModular = $this->getMockForAbstractClass(
+        $this->ruleModular = $this->createMock(
             RuleInterface::class
         );
         $this->object = new ModularSwitch($this->ruleNonModular, $this->ruleModular);

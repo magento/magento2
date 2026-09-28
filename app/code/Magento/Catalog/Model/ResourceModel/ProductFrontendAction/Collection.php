@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\ResourceModel\ProductFrontendAction;
 
@@ -36,6 +36,9 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             $this->addFieldToFilter('customer_id', $customerId);
         } elseif ($visitorId) {
             $this->addFieldToFilter('visitor_id', $visitorId);
+        } else {
+            $this->_totalRecords = 0;
+            $this->_setIsLoaded(true);
         }
 
         return $this;

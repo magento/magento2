@@ -1,16 +1,16 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CatalogInventory\Model\Spi;
 
 /**
  * Interface StockRegistryProviderInterface
  *
- * @deprecated 2.3.0 Replaced with Multi Source Inventory
- * @link https://devdocs.magento.com/guides/v2.3/inventory/index.html
- * @link https://devdocs.magento.com/guides/v2.3/inventory/catalog-inventory-replacements.html
+ * @deprecated 100.3.2 Replaced with Multi Source Inventory
+ * @link https://developer.adobe.com/commerce/webapi/rest/inventory/index.html
+ * @link https://developer.adobe.com/commerce/webapi/rest/inventory/inventory-api-reference.html
  */
 interface StockRegistryProviderInterface
 {

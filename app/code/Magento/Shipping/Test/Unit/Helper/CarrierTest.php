@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Framework\App\Helper\Context;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Shipping\Helper\Carrier;
 use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -45,8 +46,8 @@ class CarrierTest extends TestCase
     /**
      * @param array $result
      * @param array $carriers
-     * @dataProvider getOnlineCarrierCodesDataProvider
      */
+    #[DataProvider('getOnlineCarrierCodesDataProvider')]
     public function testGetOnlineCarrierCodes($result, $carriers)
     {
         $this->scopeConfig->expects(
@@ -67,7 +68,7 @@ class CarrierTest extends TestCase
      *
      * @return array
      */
-    public function getOnlineCarrierCodesDataProvider()
+    public static function getOnlineCarrierCodesDataProvider()
     {
         return [
             [[], ['carrier1' => []]],

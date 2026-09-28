@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 define([
     'underscore',
@@ -30,9 +30,13 @@ define([
          * @returns {Object} Chainable.
          */
         initialize: function () {
-            this._super()
-                .initIdsStorage()
-                .initDataStorage();
+            this._super();
+
+            if (window.checkout && window.checkout.baseUrl) {
+                this.initIdsStorage();
+            }
+
+            this.initDataStorage();
 
             return this;
         },

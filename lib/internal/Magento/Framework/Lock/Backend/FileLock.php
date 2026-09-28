@@ -1,16 +1,16 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Framework\Lock\Backend;
 
-use Magento\Framework\Lock\LockManagerInterface;
-use Magento\Framework\Filesystem\Driver\File as FileDriver;
-use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Exception\RuntimeException;
+use Magento\Framework\Filesystem\Driver\File as FileDriver;
+use Magento\Framework\Lock\LockManagerInterface;
 use Magento\Framework\Phrase;
 
 /**
@@ -42,7 +42,7 @@ class FileLock implements LockManagerInterface
     /**
      * The mapping list of the path lock with the file resource
      *
-     * @var array
+     * @var array<string, resource>
      */
     private $locks = [];
 
@@ -83,8 +83,14 @@ class FileLock implements LockManagerInterface
      */
     public function lock(string $name, int $timeout = -1): bool
     {
+        $lockFile = $this->getLockPath($name);
+
+        // If already held by this process, don't open a second fd on the same file.
+        if (isset($this->locks[$lockFile])) {
+            return true;
+        }
+
         try {
-            $lockFile = $this->getLockPath($name);
             $fileResource = $this->fileDriver->fileOpen($lockFile, 'w+');
             $skipDeadline = $timeout < 0;
             $deadline = microtime(true) + $timeout;
@@ -103,6 +109,49 @@ class FileLock implements LockManagerInterface
 
         $this->locks[$lockFile] = $fileResource;
         return true;
+    }
+
+    /**
+     * Find lock files that haven't been touched in the last 24 hours, are 0 bytes and are unlocked, then delete those
+     */
+    public function cleanupOldLocks(): int
+    {
+        if (!$this->fileDriver->isExists($this->path)) {
+            return 0;
+        }
+
+        $numberOfLocksDeleted = 0;
+        $timestamp24HoursAgo = strtotime('24 hours ago');
+
+        $lockFiles = $this->fileDriver->readDirectory($this->path);
+        foreach ($lockFiles as $lockFile) {
+            if (!$this->fileDriver->isFile($lockFile)) {
+                continue;
+            }
+
+            $modifiedTimestamp = filemtime($lockFile);
+            if ($timestamp24HoursAgo < $modifiedTimestamp) {
+                continue;
+            }
+
+            $filesize = filesize($lockFile);
+            if ($filesize !== 0) {
+                continue;
+            }
+
+            if ($this->isLocked(basename($lockFile))) {
+                continue;
+            }
+
+            try {
+                $this->fileDriver->deleteFile($lockFile);
+                ++$numberOfLocksDeleted;
+            } catch (FileSystemException $exception) { // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
+                // do nothing
+            }
+        }
+
+        return $numberOfLocksDeleted;
     }
 
     /**

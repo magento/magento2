@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\GraphQl\Model\Query\ContextInterface;
+use Magento\Sales\Model\Order;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactoryInterface;
 
 /**
@@ -34,14 +35,14 @@ class Orders implements ResolverInterface
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function resolve(
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         /** @var ContextInterface $context */
         if (false === $context->getExtensionAttributes()->getIsCustomer()) {
@@ -51,15 +52,17 @@ class Orders implements ResolverInterface
         $items = [];
         $orders = $this->collectionFactory->create($context->getUserId());
 
-        /** @var \Magento\Sales\Model\Order $order */
+        /** @var Order $order */
         foreach ($orders as $order) {
             $items[] = [
                 'id' => $order->getId(),
                 'increment_id' => $order->getIncrementId(),
                 'order_number' => $order->getIncrementId(),
+                'number' => $order->getIncrementId(),
                 'created_at' => $order->getCreatedAt(),
                 'grand_total' => $order->getGrandTotal(),
                 'status' => $order->getStatus(),
+                'model' => $order
             ];
         }
         return ['items' => $items];

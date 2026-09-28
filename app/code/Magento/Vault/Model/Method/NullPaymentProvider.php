@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Vault\Model\Method;
 
@@ -458,7 +458,7 @@ class NullPaymentProvider implements MethodInterface
      * @param CartInterface|null $quote
      * @return bool
      */
-    public function isAvailable(CartInterface $quote = null)
+    public function isAvailable(?CartInterface $quote = null)
     {
         return false;
     }

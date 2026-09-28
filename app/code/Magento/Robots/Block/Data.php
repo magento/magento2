@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Robots\Block;
 
@@ -19,7 +19,7 @@ use Magento\Store\Model\StoreManagerInterface;
  * Prepares base content for robots.txt and implements Page Cache functionality.
  *
  * @api
- * @since 100.2.0
+ * @since 100.1.0
  */
 class Data extends AbstractBlock implements IdentityInterface
 {
@@ -46,7 +46,7 @@ class Data extends AbstractBlock implements IdentityInterface
         Context $context,
         Robots $robots,
         StoreResolver $storeResolver,
-        StoreManagerInterface $storeManager = null,
+        ?StoreManagerInterface $storeManager = null,
         array $data = []
     ) {
         $this->robots = $robots;
@@ -60,7 +60,7 @@ class Data extends AbstractBlock implements IdentityInterface
      * Retrieve base content for robots.txt file
      *
      * @return string
-     * @since 100.2.0
+     * @since 100.1.0
      */
     protected function _toHtml()
     {
@@ -71,7 +71,7 @@ class Data extends AbstractBlock implements IdentityInterface
      * Get unique page cache identities
      *
      * @return array
-     * @since 100.2.0
+     * @since 100.1.0
      */
     public function getIdentities()
     {

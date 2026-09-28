@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,6 +18,7 @@ use Magento\Framework\Api\SearchResults;
 use Magento\Framework\EntityManager\EntityMetadata;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class CustomAttributesMapperTest extends TestCase
@@ -36,7 +37,7 @@ class CustomAttributesMapperTest extends TestCase
     {
         $searchResult = $this->getMockBuilder(SearchResults::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getItems'])
+            ->onlyMethods(['getItems'])
             ->getMock();
         $searchResult->expects($this->any())
             ->method('getItems')
@@ -44,7 +45,7 @@ class CustomAttributesMapperTest extends TestCase
 
         $attributeRepository = $this->getMockBuilder(AttributeRepository::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getList'])
+            ->onlyMethods(['getList'])
             ->getMock();
         $attributeRepository->expects($this->any())
             ->method('getList')
@@ -61,7 +62,7 @@ class CustomAttributesMapperTest extends TestCase
 
         $metadataPool = $this->getMockBuilder(MetadataPool::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getMetadata', 'hasConfiguration'])
+            ->onlyMethods(['getMetadata', 'hasConfiguration'])
             ->getMock();
         $metadataPool->expects($this->any())
             ->method('hasConfiguration')
@@ -76,7 +77,7 @@ class CustomAttributesMapperTest extends TestCase
 
         $searchCriteriaBuilder = $this->getMockBuilder(SearchCriteriaBuilder::class)
             ->disableOriginalConstructor()
-            ->setMethods(['addFilter', 'create'])
+            ->onlyMethods(['addFilter', 'create'])
             ->getMock();
         $searchCriteria = $this->getMockBuilder(SearchCriteria::class)
             ->disableOriginalConstructor()
@@ -135,7 +136,7 @@ class CustomAttributesMapperTest extends TestCase
     {
         $searchResult = $this->getMockBuilder(SearchResults::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getItems'])
+            ->onlyMethods(['getItems'])
             ->getMock();
         $searchResult->expects($this->any())
             ->method('getItems')
@@ -143,7 +144,7 @@ class CustomAttributesMapperTest extends TestCase
 
         $attributeRepository = $this->getMockBuilder(AttributeRepository::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getList'])
+            ->onlyMethods(['getList'])
             ->getMock();
         $attributeRepository->expects($this->any())
             ->method('getList')
@@ -160,7 +161,7 @@ class CustomAttributesMapperTest extends TestCase
 
         $metadataPool = $this->getMockBuilder(MetadataPool::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getMetadata'])
+            ->onlyMethods(['getMetadata'])
             ->getMock();
         $metadataPool->expects($this->any())
             ->method('getMetadata')
@@ -169,7 +170,7 @@ class CustomAttributesMapperTest extends TestCase
 
         $searchCriteriaBuilder = $this->getMockBuilder(SearchCriteriaBuilder::class)
             ->disableOriginalConstructor()
-            ->setMethods(['addFilter', 'create'])
+            ->onlyMethods(['addFilter', 'create'])
             ->getMock();
         $searchCriteria = $this->getMockBuilder(SearchCriteria::class)
             ->disableOriginalConstructor()
@@ -218,8 +219,7 @@ class CustomAttributesMapperTest extends TestCase
         /* Attribute with the code we want to copy */
         $attribute = $this->getMockBuilder(AbstractAttribute::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isStatic', 'getAttributeCode'])
-            ->getMockForAbstractClass();
+            ->onlyMethods(['isStatic', 'getAttributeCode'])->getMock();
         $attribute->expects($this->any())
             ->method('isStatic')
             ->willReturn(false);
@@ -230,8 +230,7 @@ class CustomAttributesMapperTest extends TestCase
         /* Attribute with the code we don't want to copy */
         $attribute1 = $this->getMockBuilder(AbstractAttribute::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isStatic', 'getAttributeCode'])
-            ->getMockForAbstractClass();
+            ->onlyMethods(['isStatic', 'getAttributeCode'])->getMock();
         $attribute1->expects($this->any())
             ->method('isStatic')
             ->willReturn(false);
@@ -242,8 +241,7 @@ class CustomAttributesMapperTest extends TestCase
         /* Static attribute but with the code which exists in custom attributes */
         $attribute2 = $this->getMockBuilder(AbstractAttribute::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isStatic', 'getAttributeCode'])
-            ->getMockForAbstractClass();
+            ->onlyMethods(['isStatic', 'getAttributeCode'])->getMock();
         $attribute2->expects($this->any())
             ->method('isStatic')
             ->willReturn(true);

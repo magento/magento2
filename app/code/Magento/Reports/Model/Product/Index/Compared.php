@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Reports\Model\Product\Index;
 
@@ -16,7 +16,7 @@ namespace Magento\Reports\Model\Product\Index;
  * @method string getAddedAt()
  * @method \Magento\Reports\Model\Product\Index\Compared setAddedAt(string $value)
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @api
  * @since 100.0.2
  */
@@ -61,8 +61,8 @@ class Compared extends \Magento\Reports\Model\Product\Index\AbstractIndex
         \Magento\Catalog\Model\Product\Visibility $productVisibility,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Catalog\Helper\Product\Compare $productCompare,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         parent::__construct(

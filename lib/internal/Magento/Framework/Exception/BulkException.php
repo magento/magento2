@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Exception;
@@ -12,6 +12,7 @@ use Magento\Framework\Phrase;
  * Exception thrown while processing bulk of entities
  *
  * @api
+ * @since 101.0.7
  */
 class BulkException extends AbstractAggregateException
 {
@@ -30,7 +31,7 @@ class BulkException extends AbstractAggregateException
      * @param \Exception $cause
      * @param int $code
      */
-    public function __construct(Phrase $phrase = null, \Exception $cause = null, $code = 0)
+    public function __construct(?Phrase $phrase = null, ?\Exception $cause = null, $code = 0)
     {
         if ($phrase === null) {
             $phrase = new Phrase('One or more input exceptions have occurred while processing bulk.');
@@ -42,6 +43,7 @@ class BulkException extends AbstractAggregateException
      * Add data
      *
      * @param array $data
+     * @since 101.0.7
      */
     public function addData($data)
     {
@@ -52,6 +54,7 @@ class BulkException extends AbstractAggregateException
      * Retrieve data
      *
      * @return array
+     * @since 101.0.7
      */
     public function getData()
     {

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\DB;
 
@@ -12,7 +12,7 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
  * Use this class to create an index with that you want to query later for quick data access
  *
  * @api
- * @since 100.2.0
+ * @since 100.1.8
  */
 class TemporaryTableService
 {
@@ -43,7 +43,6 @@ class TemporaryTableService
      * @param \Magento\Framework\Math\Random $random
      * @param string[] $allowedIndexMethods
      * @param string[] $allowedEngines
-     * @since 100.2.0
      */
     public function __construct(
         \Magento\Framework\Math\Random $random,
@@ -79,7 +78,7 @@ class TemporaryTableService
      * @param string $dbEngine
      * @return string
      * @throws \InvalidArgumentException
-     * @since 100.2.0
+     * @since 100.1.8
      */
     public function createFromSelect(
         Select $select,
@@ -150,7 +149,7 @@ class TemporaryTableService
      *
      * @param string $name
      * @return bool
-     * @since 100.2.0
+     * @since 100.1.8
      */
     public function dropTable($name)
     {

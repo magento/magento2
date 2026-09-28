@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Webapi;
 
@@ -17,6 +17,7 @@ use Laminas\Code\Reflection\ClassReflection;
  * Data object converter
  *
  * @api
+ * @since 100.0.2
  */
 class ServiceOutputProcessor implements ServicePayloadConverterInterface
 {
@@ -43,7 +44,7 @@ class ServiceOutputProcessor implements ServicePayloadConverterInterface
     public function __construct(
         DataObjectProcessor $dataObjectProcessor,
         MethodsMap $methodsMapProcessor,
-        TypeProcessor $typeProcessor = null
+        ?TypeProcessor $typeProcessor = null
     ) {
         $this->dataObjectProcessor = $dataObjectProcessor;
         $this->methodsMapProcessor = $methodsMapProcessor;
@@ -110,7 +111,7 @@ class ServiceOutputProcessor implements ServicePayloadConverterInterface
     {
         if (is_array($data)) {
             $result = [];
-            $arrayElementType = substr($type, 0, -2);
+            $arrayElementType = $type !== null ? substr($type, 0, -2) : '';
             foreach ($data as $datum) {
                 if (is_object($datum)) {
                     $datum = $this->processDataObject(

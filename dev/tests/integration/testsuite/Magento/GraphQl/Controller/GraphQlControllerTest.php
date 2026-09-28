@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,23 +9,30 @@ namespace Magento\GraphQl\Controller;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\App\Area;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\TestFramework\Fixture\AppArea;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Tests the dispatch method in the GraphQl Controller class using a simple product query
  *
- * @magentoAppArea graphql
- * @magentoDataFixture Magento/Catalog/_files/product_simple_with_url_key.php
- * @magentoDbIsolation disabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
+#[
+    CoversClass(GraphQl::class),
+    AppArea(Area::AREA_GRAPHQL),
+    DbIsolation(false),
+    DataFixture('Magento/Catalog/_files/product_simple_with_url_key.php'),
+]
 class GraphQlControllerTest extends \Magento\TestFramework\Indexer\TestCase
 {
-    const CONTENT_TYPE = 'application/json';
-
     /** @var \Magento\Framework\ObjectManagerInterface */
     private $objectManager;
 
@@ -56,8 +63,8 @@ class GraphQlControllerTest extends \Magento\TestFramework\Indexer\TestCase
 
     protected function setUp(): void
     {
-        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->graphql = $this->objectManager->get(\Magento\GraphQl\Controller\GraphQl::class);
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->graphql = $this->objectManager->get(GraphQl::class);
         $this->jsonSerializer = $this->objectManager->get(SerializerInterface::class);
         $this->metadataPool = $this->objectManager->get(MetadataPool::class);
         $this->request = $this->objectManager->get(Http::class);
@@ -175,7 +182,7 @@ query GetProducts(\$filterInput:ProductAttributeFilterInput){
             id
             name
             sku
-        }  
+        }
     }
 }
 QUERY;
@@ -223,12 +230,12 @@ QUERY;
     }
   ])
     {
-      items{        
+      items{
       attribute_code
       attribute_type
       entity_type
-    }      
-    }  
+    }
+    }
   }
 QUERY;
 
@@ -245,24 +252,152 @@ QUERY;
             ->addHeaders(['Content-Type' => 'application/json']);
         $this->request->setHeaders($headers);
         $response = $this->graphql->dispatch($this->request);
+        self::assertEquals(200, $response->getStatusCode());
+
         $outputResponse = $this->jsonSerializer->unserialize($response->getContent());
-        if (isset($outputResponse['errors'][0])) {
-            if (is_array($outputResponse['errors'][0])) {
-                foreach ($outputResponse['errors'] as $error) {
-                    $this->assertEquals(
-                        \Magento\Framework\GraphQl\Exception\GraphQlInputException::EXCEPTION_CATEGORY,
-                        $error['extensions']['category']
-                    );
-                    if (isset($error['message'])) {
-                        $this->assertEquals($error['message'], 'Invalid entity_type specified: invalid');
-                    }
-                    if (isset($error['trace'])) {
-                        if (is_array($error['trace'])) {
-                            $this->assertNotEmpty($error['trace']);
-                        }
-                    }
-                }
-            }
+        self::assertArrayHasKey('errors', $outputResponse);
+        self::assertNotEmpty($outputResponse['errors']);
+
+        $error = $outputResponse['errors'][0];
+        self::assertEquals(GraphQlInputException::EXCEPTION_CATEGORY, $error['extensions']['category']);
+        self::assertEquals('Invalid entity_type specified: invalid', $error['message']);
+        if (isset($error['trace']) && is_array($error['trace'])) {
+            self::assertNotEmpty($error['trace']);
         }
+    }
+
+    public function testDispatchOptions(): void
+    {
+        $this->request->setPathInfo('/graphql');
+        $this->request->setMethod('OPTIONS');
+        $response = $this->graphql->dispatch($this->request);
+        self::assertEquals(204, $response->getStatusCode());
+        self::assertEmpty($response->getContent());
+    }
+
+    public function testDispatchGetWithoutQuery(): void
+    {
+        $this->request->setPathInfo('/graphql');
+        $this->request->setMethod('GET');
+        $response = $this->graphql->dispatch($this->request);
+        self::assertEquals(400, $response->getStatusCode());
+        $output = $this->jsonSerializer->unserialize($response->getContent());
+        self::assertArrayHasKey('errors', $output);
+        self::assertNotEmpty($output['errors']);
+        self::assertArrayHasKey('message', $output['errors'][0]);
+        self::assertStringStartsWith('Syntax Error:', $output['errors'][0]['message']);
+    }
+
+    public function testDispatchGetWithInvalidQuery(): void
+    {
+        $query = <<<QUERY
+{
+    products(filter: {sku: {eq: "simple1"}
+}
+QUERY;
+
+        $this->request->setPathInfo('/graphql');
+        $this->request->setMethod('GET');
+        $this->request->setQueryValue('query', $query);
+        $response = $this->graphql->dispatch($this->request);
+        self::assertEquals(400, $response->getStatusCode());
+        $output = $this->jsonSerializer->unserialize($response->getContent());
+        self::assertArrayHasKey('errors', $output);
+        self::assertNotEmpty($output['errors']);
+        self::assertArrayHasKey('message', $output['errors'][0]);
+        self::assertStringStartsWith('Syntax Error:', $output['errors'][0]['message']);
+    }
+
+    public function testDispatchPostWithoutQuery(): void
+    {
+        $this->request->setPathInfo('/graphql');
+        $this->request->setMethod('POST');
+        $headers = $this->objectManager->create(\Laminas\Http\Headers::class)
+            ->addHeaders(['Content-Type' => 'application/json']);
+        $this->request->setHeaders($headers);
+        $response = $this->graphql->dispatch($this->request);
+        self::assertEquals(400, $response->getStatusCode());
+        $output = $this->jsonSerializer->unserialize($response->getContent());
+        self::assertArrayHasKey('errors', $output);
+        self::assertNotEmpty($output['errors']);
+        self::assertArrayHasKey('message', $output['errors'][0]);
+        self::assertStringStartsWith('Syntax Error:', $output['errors'][0]['message']);
+    }
+
+    public function testDispatchPostWithInvalidJson(): void
+    {
+        $query = <<<QUERY
+{
+    products(filter: {sku: {eq: "simple1"}}) {
+        items {
+            id
+            name
+            sku
+        }
+    }
+}
+QUERY;
+        $postData = ['query' => $query];
+
+        $this->request->setPathInfo('/graphql');
+        $this->request->setMethod('POST');
+        $this->request->setContent(http_build_query($postData));
+        $headers = $this->objectManager->create(\Laminas\Http\Headers::class)
+            ->addHeaders(['Content-Type' => 'application/json']);
+        $this->request->setHeaders($headers);
+        $response = $this->graphql->dispatch($this->request);
+        self::assertEquals(400, $response->getStatusCode());
+        $output = $this->jsonSerializer->unserialize($response->getContent());
+        self::assertArrayHasKey('errors', $output);
+        self::assertNotEmpty($output['errors']);
+        self::assertArrayHasKey('message', $output['errors'][0]);
+        self::assertEquals('Syntax Error: Unable to parse the request.', $output['errors'][0]['message']);
+    }
+
+    public function testDispatchPostWithWrongContentType(): void
+    {
+        $query = <<<QUERY
+{
+    products(filter: {sku: {eq: "simple1"}}) {
+        items {
+            id
+            name
+            sku
+        }
+    }
+}
+QUERY;
+        $postData = ['query' => $query];
+
+        $this->request->setPathInfo('/graphql');
+        $this->request->setMethod('POST');
+        $this->request->setContent(json_encode($postData));
+        $response = $this->graphql->dispatch($this->request);
+        self::assertEquals(415, $response->getStatusCode());
+        $output = $this->jsonSerializer->unserialize($response->getContent());
+        self::assertArrayHasKey('errors', $output);
+        self::assertNotEmpty($output['errors']);
+        self::assertArrayHasKey('message', $output['errors'][0]);
+        self::assertEquals('Request content type must be application/json', $output['errors'][0]['message']);
+    }
+
+    public function testDispatchGetWithMutation(): void
+    {
+        $query = <<<QUERY
+mutation {
+    createEmptyCart
+}
+QUERY;
+
+        $this->request->setPathInfo('/graphql');
+        $this->request->setMethod('GET');
+        $this->request->setQueryValue('query', $query);
+        $response = $this->graphql->dispatch($this->request);
+        self::assertEquals(405, $response->getStatusCode());
+        $output = $this->jsonSerializer->unserialize($response->getContent());
+        self::assertArrayHasKey('errors', $output);
+        self::assertNotEmpty($output['errors']);
+        self::assertArrayHasKey('message', $output['errors'][0]);
+        self::assertEquals('Mutation requests allowed only for POST requests', $output['errors'][0]['message']);
     }
 }

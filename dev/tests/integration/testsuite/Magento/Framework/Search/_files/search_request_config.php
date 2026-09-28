@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 return [
     "suggested_search_container" => [
@@ -135,6 +135,12 @@ return [
                 ],
                 "type" => "rangeBucket",
             ],
+            'dynamic_bucket' => [
+                'name' => 'dynamic_bucket',
+                'field' => 'price',
+                'method' => 'auto',
+                'type' => 'dynamicBucket'
+            ]
         ],
         "from" => "10",
         "size" => "10",

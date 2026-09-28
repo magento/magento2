@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Paypal\Model\Hostedpro;
 
@@ -15,8 +15,6 @@ use Magento\Tax\Helper\Data;
 
 /**
  *  Website Payments Pro Hosted Solution request model to get token.
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Request extends DataObject
 {
@@ -25,14 +23,14 @@ class Request extends DataObject
     /**
      * Request's order model
      *
-     * @var \Magento\Sales\Model\Order
+     * @var Order
      */
     protected $order;
 
     /**
      * Request's Hosted Pro payment method model
      *
-     * @var \Magento\Paypal\Model\Hostedpro
+     * @var Hostedpro
      */
     protected $paymentMethod;
 
@@ -51,30 +49,24 @@ class Request extends DataObject
     protected $notButtonVars = ['METHOD', 'BUTTONCODE', 'BUTTONTYPE'];
 
     /**
-     * Customer address
-     *
-     * @var \Magento\Customer\Helper\Address
+     * @var Address
      */
     protected $customerAddress = null;
 
     /**
-     * Tax data
-     *
-     * @var \Magento\Tax\Helper\Data
+     * @var Data
      */
     protected $taxData;
 
     /**
-     * Locale Resolver
-     *
-     * @var \Magento\Framework\Locale\Resolver
+     * @var Resolver
      */
     protected $localeResolver;
 
     /**
-     * @param \Magento\Framework\Locale\Resolver $localeResolver
-     * @param \Magento\Customer\Helper\Address $customerAddress
-     * @param \Magento\Tax\Helper\Data $taxData
+     * @param Resolver $localeResolver
+     * @param Address $customerAddress
+     * @param Data $taxData
      * @param array $data
      */
     public function __construct(
@@ -118,7 +110,7 @@ class Request extends DataObject
     /**
      * Append payment data to request
      *
-     * @param \Magento\Paypal\Model\Hostedpro $paymentMethod
+     * @param Hostedpro $paymentMethod
      * @return $this
      */
     public function setPaymentMethod($paymentMethod)
@@ -133,7 +125,7 @@ class Request extends DataObject
     /**
      * Append order data to request
      *
-     * @param \Magento\Sales\Model\Order $order
+     * @param Order $order
      * @return $this
      */
     public function setOrder(Order $order)
@@ -149,7 +141,7 @@ class Request extends DataObject
      * Add amount data to request
      *
      * @access public
-     * @param \Magento\Sales\Model\Order $order
+     * @param Order $order
      * @return $this
      */
     public function setAmount(Order $order)
@@ -160,7 +152,8 @@ class Request extends DataObject
 
     /**
      * Calculate amount for order
-     * @param \Magento\Sales\Model\Order $order
+     *
+     * @param Order $order
      * @return array
      * @throws \Exception
      */
@@ -176,7 +169,8 @@ class Request extends DataObject
 
     /**
      * Get payment amount data with excluded tax
-     * @param \Magento\Sales\Model\Order $order
+     *
+     * @param Order $order
      * @return array
      */
     private function getNonTaxableAmount(Order $order)
@@ -189,13 +183,14 @@ class Request extends DataObject
             'total' => $this->formatPrice($order->getPayment()->getBaseAmountAuthorized()),
             'tax' => $this->formatPrice($order->getBaseTaxAmount()),
             'shipping' => $this->formatPrice($order->getBaseShippingAmount()),
-            'discount' => $this->formatPrice(abs($order->getBaseDiscountAmount()))
+            'discount' => $this->formatPrice(abs((float) $order->getBaseDiscountAmount()))
         ];
     }
 
     /**
      * Get order amount data with included tax
-     * @param \Magento\Sales\Model\Order $order
+     *
+     * @param Order $order
      * @return array
      */
     private function getTaxableAmount(Order $order)
@@ -211,13 +206,14 @@ class Request extends DataObject
     /**
      * Get payment request data as array
      *
-     * @param \Magento\Paypal\Model\Hostedpro $paymentMethod
+     * @param Hostedpro $paymentMethod
      * @return array
      */
     protected function getPaymentData(Hostedpro $paymentMethod)
     {
+        $paymentAction = $paymentMethod->getConfigData('payment_action');
         $request = [
-            'paymentaction' => strtolower($paymentMethod->getConfigData('payment_action')),
+            'paymentaction' => $paymentAction !== null ? strtolower($paymentAction) : '',
             'notify_url' => $paymentMethod->getNotifyUrl(),
             'cancel_return' => $paymentMethod->getCancelUrl(),
             'return' => $paymentMethod->getReturnUrl(),
@@ -238,7 +234,7 @@ class Request extends DataObject
     /**
      * Get order request data as array
      *
-     * @param \Magento\Sales\Model\Order $order
+     * @param Order $order
      * @return array
      */
     protected function getOrderData(Order $order)

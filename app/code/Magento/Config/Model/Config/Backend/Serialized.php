@@ -1,10 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Config\Model\Config\Backend;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Json;
 
@@ -38,10 +39,10 @@ class Serialized extends \Magento\Framework\App\Config\Value
         \Magento\Framework\Registry $registry,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        Json $serializer = null
+        ?Json $serializer = null
     ) {
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         parent::__construct($context, $registry, $config, $cacheTypeList, $resource, $resourceCollection, $data);
@@ -83,5 +84,27 @@ class Serialized extends \Magento\Framework\App\Config\Value
         }
         parent::beforeSave();
         return $this;
+    }
+
+    /**
+     * Get old value from existing config
+     *
+     * @return string
+     */
+    public function getOldValue()
+    {
+        // If the value is retrieved from defaults defined in config.xml
+        // it may be returned as an array.
+        $value = $this->_config->getValue(
+            $this->getPath(),
+            $this->getScope() ?: ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+            $this->getScopeCode()
+        );
+
+        if (is_array($value)) {
+            return $this->serializer->serialize($value);
+        }
+
+        return (string)$value;
     }
 }

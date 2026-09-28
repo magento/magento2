@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,22 +16,19 @@ use Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class AbstractAttributeTest extends TestCase
 {
+    use MockCreationTrait;
+
     public function testGetOptionWhenOptionsAreSet()
     {
-        $model = $this->getMockForAbstractClass(
+        $model = $this->createPartialMockWithReflection(
             AbstractAttribute::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            [
-                '_getData', 'usesSource', 'getSource', 'convertToObjects'
-            ]
+            ['_getData', 'usesSource', 'getSource', 'convertToObjects']
         );
 
         $model->expects($this->once())
@@ -50,16 +46,9 @@ class AbstractAttributeTest extends TestCase
 
     public function testGetOptionWhenOptionsAreEmptyWithoutSource()
     {
-        $model = $this->getMockForAbstractClass(
+        $model = $this->createPartialMockWithReflection(
             AbstractAttribute::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            [
-                '_getData', 'usesSource', 'getSource', 'convertToObjects'
-            ]
+            ['_getData', 'usesSource', 'getSource', 'convertToObjects']
         );
 
         $model->expects($this->once())
@@ -78,16 +67,9 @@ class AbstractAttributeTest extends TestCase
 
     public function testGetOptionWhenOptionsAreEmptyWithSource()
     {
-        $model = $this->getMockForAbstractClass(
+        $model = $this->createPartialMockWithReflection(
             AbstractAttribute::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            [
-                '_getData', 'usesSource', 'getSource', 'convertToObjects', 'getAllOptions'
-            ]
+            ['_getData', 'usesSource', 'getSource', 'convertToObjects', 'getAllOptions']
         );
 
         $model->expects($this->once())
@@ -107,14 +89,15 @@ class AbstractAttributeTest extends TestCase
 
     public function testConvertToObjects()
     {
-        $attributeOptionMock = $this->getMockForAbstractClass(AttributeOptionInterface::class);
+        $attributeOptionMock = $this->createMock(AttributeOptionInterface::class);
         $dataFactoryMock = $this->createPartialMock(
             AttributeOptionInterfaceFactory::class,
             ['create']
         );
-        $dataObjectHelperMock = $this->getMockBuilder(DataObjectHelper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $dataObjectHelperMock = $this->createPartialMock(
+            DataObjectHelper::class,
+            ['populateWithArray']
+        );
         $objectManagerHelper = new ObjectManager($this);
         $model = $objectManagerHelper->getObject(
             Attribute::class,
@@ -157,13 +140,15 @@ class AbstractAttributeTest extends TestCase
         $expected = ['some value'];
 
         $modelClassName = AbstractAttribute::class;
-        $model = $this->getMockForAbstractClass($modelClassName, [], '', false);
+        $model = $this->getMockBuilder($modelClassName)
+            ->disableOriginalConstructor()
+            ->onlyMethods([]) // Don't mock any methods, use real implementations
+            ->getMock();
 
-        $serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
+        $serializerMock = $this->createMock(SerializerInterface::class);
 
         $reflection = new \ReflectionClass($modelClassName);
         $reflectionProperty = $reflection->getProperty('serializer');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($model, $serializerMock);
 
         $model->setData(AttributeInterface::VALIDATE_RULES, $rule);
@@ -202,32 +187,18 @@ class AbstractAttributeTest extends TestCase
      * @param bool $isEmpty
      * @param mixed $value
      * @param string $attributeType
-     * @dataProvider attributeValueDataProvider
      */
+    #[DataProvider('attributeValueDataProvider')]
     public function testIsValueEmpty($isEmpty, $value, $attributeType)
     {
         /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $model */
-        $model = $this->getMockForAbstractClass(
+        $model = $this->createPartialMock(
             AbstractAttribute::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            [
-                'getBackend'
-            ]
+            ['getBackend']
         );
-        $backendModelMock = $this->getMockForAbstractClass(
+        $backendModelMock = $this->createPartialMock(
             AbstractBackend::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            [
-                'getType'
-            ]
+            ['getType']
         );
         $backendModelMock->expects($this->any())->method('getType')->willReturn($attributeType);
         $model->expects($this->any())->method('getBackend')->willReturn($backendModelMock);
@@ -237,7 +208,7 @@ class AbstractAttributeTest extends TestCase
     /**
      * @return array
      */
-    public function attributeValueDataProvider()
+    public static function attributeValueDataProvider()
     {
         return [
             [true, '', 'int'],

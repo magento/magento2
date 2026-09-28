@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -28,6 +28,21 @@ class Website
     private $websites;
 
     /**
+     * @var LocatorInterface
+     */
+    private $locator;
+
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
+     * @var DirectoryHelper
+     */
+    private $directoryHelper;
+
+    /**
      * @var Data
      */
     private $catalogHelper;
@@ -42,7 +57,7 @@ class Website
         LocatorInterface $locator,
         StoreManagerInterface $storeManager,
         DirectoryHelper $directoryHelper,
-        Data $catalogHelper = null
+        ?Data $catalogHelper = null
     ) {
         $this->locator = $locator;
         $this->storeManager = $storeManager;

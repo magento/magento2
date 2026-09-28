@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Framework\App\Helper\Context;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Multishipping\Helper\Data;
 use Magento\Quote\Model\Quote;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -36,14 +37,14 @@ class DataTest extends TestCase
     protected $scopeConfigMock;
 
     /**
-     * Quote mock
+     * Mock object for quote model
      *
      * @var MockObject|\Magento\Quote\Model\Quote
      */
     protected $quoteMock;
 
     /**
-     * Checkout session mock
+     * Mock object for checkout session
      *
      * @var MockObject|Session
      */
@@ -62,6 +63,11 @@ class DataTest extends TestCase
         $this->scopeConfigMock = $context->getScopeConfig();
     }
 
+    /**
+     * Test getting maximum quantity for multishipping
+     *
+     * @return void
+     */
     public function testGetMaximumQty()
     {
         $maximumQty = 10;
@@ -79,6 +85,8 @@ class DataTest extends TestCase
     }
 
     /**
+     * Test multishipping checkout availability
+     *
      * @param bool $result
      * @param bool $quoteHasItems
      * @param bool $isMultiShipping
@@ -87,8 +95,8 @@ class DataTest extends TestCase
      * @param int $itemsSummaryQty
      * @param int $itemVirtualQty
      * @param int $maximumQty
-     * @dataProvider isMultishippingCheckoutAvailableDataProvider
      */
+    #[DataProvider('isMultishippingCheckoutAvailableDataProvider')]
     public function testIsMultishippingCheckoutAvailable(
         $result,
         $quoteHasItems,
@@ -161,11 +169,11 @@ class DataTest extends TestCase
     }
 
     /**
-     * Data provider
+     * Data provider for testIsMultishippingCheckoutAvailable
      *
      * @return array
      */
-    public function isMultishippingCheckoutAvailableDataProvider()
+    public static function isMultishippingCheckoutAvailableDataProvider(): array
     {
         return [
             [true, false, true, null, null, null, null, null],

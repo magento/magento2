@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Backend\Model\Widget\Grid;
@@ -117,7 +117,7 @@ abstract class AbstractTotals implements \Magento\Backend\Model\Widget\Grid\Tota
         foreach ($parsedExpression as $operand) {
             if ($this->_parser->isOperation($operand)) {
                 $this->_checkOperandsSet($firstOperand, $secondOperand, $tmpResult, $result);
-                $result = $this->_operate($firstOperand, $secondOperand, $operand, $tmpResult, $result);
+                $result = $this->_operate($firstOperand, $secondOperand, $operand);
                 $firstOperand = $secondOperand = null;
             } else {
                 if (null === $firstOperand) {
@@ -133,9 +133,9 @@ abstract class AbstractTotals implements \Magento\Backend\Model\Widget\Grid\Tota
     /**
      * Check if operands in not null and set operands values if they are empty
      *
-     * @param float|int &$firstOperand
-     * @param float|int &$secondOperand
-     * @param float|int &$tmpResult
+     * @param float|int $firstOperand
+     * @param float|int $secondOperand
+     * @param float|int $tmpResult
      * @param float|int $result
      * @return void
      */

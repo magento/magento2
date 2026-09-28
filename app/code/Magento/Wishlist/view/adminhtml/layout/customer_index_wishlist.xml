@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/layout_generic.xsd">
@@ -99,6 +99,7 @@
                                 <item name="caption" xsi:type="string" translate="true">Delete</item>
                                 <item name="url" xsi:type="string">#</item>
                                 <item name="onclick" xsi:type="string">return wishlistControl.removeItem($wishlist_item_id);</item>
+                                <item name="class" xsi:type="string">wishlist-remove-button</item>
                             </item>
                         </argument>
                     </arguments>

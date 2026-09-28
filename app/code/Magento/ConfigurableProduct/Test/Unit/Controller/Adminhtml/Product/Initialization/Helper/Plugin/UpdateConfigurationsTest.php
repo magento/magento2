@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -54,16 +54,10 @@ class UpdateConfigurationsTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->getMockForAbstractClass();
-        $this->productRepositoryMock = $this->getMockBuilder(ProductRepositoryInterface::class)
-            ->getMockForAbstractClass();
-        $this->variationHandlerMock = $this->getMockBuilder(VariationHandler::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->subjectMock = $this->getMockBuilder(ProductInitializationHelper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->productRepositoryMock = $this->createMock(ProductRepositoryInterface::class);
+        $this->variationHandlerMock = $this->createMock(VariationHandler::class);
+        $this->subjectMock = $this->createMock(ProductInitializationHelper::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->updateConfigurations = $this->objectManagerHelper->getObject(
@@ -119,6 +113,22 @@ class UpdateConfigurationsTest extends TestCase
                 'price' => '3.33',
                 'weight' => '5.55',
             ],
+            [
+                'newProduct' => false,
+                'id' => 'product5',
+                'status' => 'simple5_status',
+                'sku' => 'simple5_sku',
+                'name' => 'simple5_name',
+                'price' => '3.33',
+                'configurable_attribute' => 'simple5_configurable_attribute',
+                'weight' => '',
+                'media_gallery' => 'simple5_media_gallery',
+                'swatch_image' => 'simple5_swatch_image',
+                'small_image' => 'simple5_small_image',
+                'thumbnail' => 'simple5_thumbnail',
+                'image' => 'simple5_image',
+                'was_changed' => true,
+            ],
         ];
     }
 
@@ -144,12 +154,26 @@ class UpdateConfigurationsTest extends TestCase
             ],
             'product3' => [
                 'quantity_and_stock_status' => ['qty' => '3']
-            ]
+            ],
+            'product5' => [
+                'status' => 'simple5_status',
+                'sku' => 'simple5_sku',
+                'name' => 'simple5_name',
+                'price' => '3.33',
+                'configurable_attribute' => 'simple5_configurable_attribute',
+                'weight' => '',
+                'media_gallery' => 'simple5_media_gallery',
+                'swatch_image' => 'simple5_swatch_image',
+                'small_image' => 'simple5_small_image',
+                'thumbnail' => 'simple5_thumbnail',
+                'image' => 'simple5_image',
+            ],
         ];
         /** @var Product[]|MockObject[] $productMocks */
         $productMocks = [
             'product2' => $this->getProductMock($configurations['product2'], true, true),
             'product3' => $this->getProductMock($configurations['product3'], false, true),
+            'product5' => $this->getProductMock($configurations['product5'], false, true),
         ];
 
         $this->requestMock->expects(static::any())
@@ -169,7 +193,8 @@ class UpdateConfigurationsTest extends TestCase
             ->willReturnMap(
                 [
                     ['product2', false, 0, false, $productMocks['product2']],
-                    ['product3', false, 0, false, $productMocks['product3']]
+                    ['product3', false, 0, false, $productMocks['product3']],
+                    ['product5', false, 0, false, $productMocks['product5']],
                 ]
             );
         $this->variationHandlerMock->expects(static::any())
@@ -177,7 +202,8 @@ class UpdateConfigurationsTest extends TestCase
             ->willReturnMap(
                 [
                     [$productMocks['product2'], $configurations['product2'], $configurations['product2']],
-                    [$productMocks['product3'], $configurations['product3'], $configurations['product3']]
+                    [$productMocks['product3'], $configurations['product3'], $configurations['product3']],
+                    [$productMocks['product5'], $configurations['product5'], $configurations['product5']]
                 ]
             );
 
@@ -192,11 +218,9 @@ class UpdateConfigurationsTest extends TestCase
      * @param bool $wasChanged
      * @return Product|MockObject
      */
-    protected function getProductMock(array $expectedData = null, $hasDataChanges = false, $wasChanged = false)
+    protected function getProductMock(?array $expectedData = null, $hasDataChanges = false, $wasChanged = false)
     {
-        $productMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productMock = $this->createMock(Product::class);
 
         if ($wasChanged !== false) {
             if ($expectedData !== null) {

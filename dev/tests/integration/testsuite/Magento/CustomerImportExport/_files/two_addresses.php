@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -38,6 +38,16 @@ $customer->setId(1)
 
 $customer->isObjectNew(true);
 $customer->save();
+/** @var \Magento\JwtUserToken\Api\RevokedRepositoryInterface $revokedRepo */
+$revokedRepo = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->get(\Magento\JwtUserToken\Api\RevokedRepositoryInterface::class);
+$revokedRepo->saveRevoked(
+    new \Magento\JwtUserToken\Api\Data\Revoked(
+        \Magento\Authorization\Model\UserContextInterface::USER_TYPE_CUSTOMER,
+        (int) $customer->getId(),
+        time() - 3600 * 24
+    )
+);
 //Second for second website
 /** @var Website $secondWebsite */
 $secondWebsite = $objectManager->create(Website::class);

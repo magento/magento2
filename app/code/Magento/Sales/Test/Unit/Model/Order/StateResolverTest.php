@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Test\Unit\Model\Order;
 
@@ -25,9 +25,7 @@ class StateResolverTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->orderMock = $this->getMockBuilder(Order::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->orderMock = $this->createMock(Order::class);
 
         $this->orderStateResolver = new StateResolver();
     }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 use Magento\Catalog\Api\CategoryListInterface;
@@ -45,6 +45,8 @@ foreach ($categories as $category) {
 /** @var UrlRewrite $urlRewrite */
 $urlRewrite = $objectManager->create(UrlRewrite::class);
 $urlRewrite->load('non-exist-product.html', 'request_path');
+$urlRewrite->delete();
+$urlRewrite->load('.html', 'request_path');
 $urlRewrite->delete();
 
 $registry->unregister('isSecureArea');

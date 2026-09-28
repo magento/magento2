@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Search\Request;
 
 use Magento\Framework\Api\SortOrder;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\Search\RequestInterface;
@@ -16,8 +17,9 @@ use Magento\Framework\Search\RequestInterface;
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
-class Builder
+class Builder implements ResetAfterRequestInterface
 {
     /**
      * @var ObjectManagerInterface
@@ -55,8 +57,12 @@ class Builder
      * @param Binder $binder
      * @param Cleaner $cleaner
      */
-    public function __construct(ObjectManagerInterface $objectManager, Config $config, Binder $binder, Cleaner $cleaner)
-    {
+    public function __construct(
+        ObjectManagerInterface $objectManager,
+        Config $config,
+        Binder $binder,
+        Cleaner $cleaner
+    ) {
         $this->objectManager = $objectManager;
         $this->config = $config;
         $this->binder = $binder;
@@ -104,6 +110,7 @@ class Builder
      *
      * @param \Magento\Framework\Api\SortOrder[] $sort
      * @return $this
+     * @since 102.0.2
      */
     public function setSort($sort)
     {
@@ -150,6 +157,7 @@ class Builder
         $requestName = $this->data['requestName'];
         /** @var array $data */
         $data = $this->config->get($requestName);
+
         if ($data === null) {
             throw new NonExistingRequestNameException(new Phrase("Request name '%1' doesn't exist.", [$requestName]));
         }
@@ -256,5 +264,13 @@ class Builder
             );
         }
         return $dimensions;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->data = [];
     }
 }

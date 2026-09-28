@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Search\Response;
 
@@ -11,6 +11,7 @@ use Magento\Framework\Api\Search\BucketInterface;
 /**
  * Faceted data
  * @api
+ * @since 100.0.2
  */
 class Aggregation implements AggregationInterface, \IteratorAggregate
 {
@@ -34,6 +35,7 @@ class Aggregation implements AggregationInterface, \IteratorAggregate
      *
      * @return \ArrayIterator
      */
+    #[\ReturnTypeWillChange]
     public function getIterator()
     {
         return new \ArrayIterator($this->buckets);

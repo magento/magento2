@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
@@ -12,7 +12,7 @@
         <element name="rowByIndex" type="text" selector="tr[data-repeat-index='{{var1}}']" parameterized="true"/>
 
         <element name="editByValue" type="button" selector="//a[ancestor::tr[contains(., '{{var1}}')]]" parameterized="true"/>
-
+        <element name="editByRow" type="text" selector="//div[contains(text(), '{{var1}}')]" parameterized="true"/>
         <element name="checkboxByValue" type="checkbox" selector="//input[ancestor::tr[contains(., '{{var1}}')]]" parameterized="true"/>
         <element name="checkboxByIndex" type="checkbox" selector=".data-row[data-repeat-index='{{var1}}'] .admin__control-checkbox" parameterized="true"/>
     </section>

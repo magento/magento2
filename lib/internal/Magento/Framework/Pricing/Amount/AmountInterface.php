@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Pricing\Amount;
@@ -10,6 +10,7 @@ namespace Magento\Framework\Pricing\Amount;
  * Amount interface, the amount values are in display currency
  *
  * @api
+ * @since 100.0.2
  */
 interface AmountInterface
 {

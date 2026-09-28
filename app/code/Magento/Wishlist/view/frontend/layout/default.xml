@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
@@ -18,7 +18,11 @@
             </block>
         </referenceBlock>
         <referenceContainer name="sidebar.additional">
-            <block class="Magento\Wishlist\Block\Customer\Sidebar" name="wishlist_sidebar" as="wishlist" template="Magento_Wishlist::sidebar.phtml" ifconfig="wishlist/general/show_in_sidebar"/>
+            <block class="Magento\Wishlist\Block\Customer\Sidebar" name="wishlist_sidebar" as="wishlist" template="Magento_Wishlist::sidebar.phtml" ifconfig="wishlist/general/show_in_sidebar">
+                <arguments>
+                    <argument name="wishlistDataViewModel" xsi:type="object">Magento\Wishlist\ViewModel\WishlistData</argument>
+                </arguments>
+            </block>
         </referenceContainer>
     </body>
 </page>

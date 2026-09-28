@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -49,10 +49,15 @@ class CouponUsagesDecrement
      */
     public function afterCancel(OrderService $subject, bool $result, $orderId): bool
     {
-        $order = $this->orderRepository->get($orderId);
-        if ($result) {
-            $this->updateCouponUsages->execute($order, false);
+        if (!$result) {
+            return $result;
         }
+
+        $order = $this->orderRepository->get($orderId);
+        if (!empty($order->getDiscountInvoiced())) {
+            return $result;
+        }
+        $this->updateCouponUsages->execute($order, false);
 
         return $result;
     }

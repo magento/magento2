@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,19 +11,23 @@ use Magento\Config\Model\Config\Backend\File\RequestData\RequestDataInterface;
 use Magento\Framework\App\Cache\TypeListInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\File\Mime;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\Filesystem\Io\File as IoFileSystem;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+
 use Magento\Framework\UrlInterface;
 use Magento\MediaStorage\Helper\File\Storage\Database;
 use Magento\Theme\Model\Design\Backend\File;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -31,13 +35,16 @@ use PHPUnit\Framework\TestCase;
 class FileTest extends TestCase
 {
     /** @var WriteInterface|MockObject */
-    protected $mediaDirectory;
+    private $mediaDirectory;
 
     /** @var UrlInterface|MockObject */
-    protected $urlBuilder;
+    private $urlBuilder;
 
     /** @var File */
-    protected $fileBackend;
+    private $fileBackend;
+
+    /** @var IoFileSystem|\PHPUnit\Framework\MockObject\MockObject */
+    private $ioFileSystem;
 
     /**
      * @var Mime|MockObject
@@ -49,6 +56,9 @@ class FileTest extends TestCase
      */
     private $databaseHelper;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $context = $this->getMockObject(Context::class);
@@ -59,34 +69,21 @@ class FileTest extends TestCase
         $requestData = $this->getMockObjectForAbstractClass(
             RequestDataInterface::class
         );
-        $filesystem = $this->getMockBuilder(Filesystem::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->mediaDirectory = $this->getMockBuilder(WriteInterface::class)
-            ->getMockForAbstractClass();
-
+        $filesystem = $this->createMock(Filesystem::class);
+        $this->mediaDirectory = $this->createMock(WriteInterface::class);
         $filesystem->expects($this->once())
             ->method('getDirectoryWrite')
             ->with(DirectoryList::MEDIA)
             ->willReturn($this->mediaDirectory);
-        $this->urlBuilder = $this->getMockBuilder(UrlInterface::class)
-            ->getMockForAbstractClass();
+        $this->urlBuilder = $this->createMock(UrlInterface::class);
+        $this->ioFileSystem = $this->createMock(IoFileSystem::class);
+        $this->mime = $this->createMock(Mime::class);
 
-        $this->mime = $this->getMockBuilder(Mime::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->databaseHelper = $this->createMock(Database::class);
 
-        $this->databaseHelper = $this->getMockBuilder(Database::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $abstractResource = $this->createMock(AbstractResource::class);
 
-        $abstractResource = $this->getMockBuilder(AbstractResource::class)
-            ->getMockForAbstractClass();
-
-        $abstractDb = $this->getMockBuilder(AbstractDb::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-
+        $abstractDb = $this->createMock(AbstractDb::class);
         $this->fileBackend = new File(
             $context,
             $registry,
@@ -99,7 +96,8 @@ class FileTest extends TestCase
             $abstractResource,
             $abstractDb,
             [],
-            $this->databaseHelper
+            $this->databaseHelper,
+            $this->ioFileSystem
         );
 
         $objectManager = new ObjectManager($this);
@@ -110,36 +108,43 @@ class FileTest extends TestCase
         );
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function tearDown(): void
     {
         unset($this->fileBackend);
     }
 
     /**
+     * Gets the mock object.
+     *
      * @param string $class
      * @param array $methods
      * @return MockObject
      */
-    protected function getMockObject($class, $methods = [])
+    private function getMockObject(string $class, array $methods = []): \PHPUnit\Framework\MockObject\MockObject
     {
-        $builder =  $this->getMockBuilder($class)
-            ->disableOriginalConstructor();
         if (count($methods)) {
-            $builder->setMethods($methods);
+            return $this->createPartialMock($class, $methods);
         }
-        return  $builder->getMock();
+        return $this->createMock($class);
     }
 
     /**
+     * Gets mock objects for abstract class.
+     *
      * @param string $class
      * @return MockObject
      */
-    protected function getMockObjectForAbstractClass($class)
+    private function getMockObjectForAbstractClass(string $class): \PHPUnit\Framework\MockObject\MockObject
     {
-        return  $this->getMockBuilder($class)
-            ->getMockForAbstractClass();
+        return $this->createMock($class);
     }
 
+    /**
+     * Test for afterLoad method.
+     */
     public function testAfterLoad()
     {
         $value = 'filename.jpg';
@@ -147,16 +152,18 @@ class FileTest extends TestCase
 
         $absoluteFilePath = '/absolute_path/' . $value;
 
-        $this->fileBackend->setValue($value);
-        $this->fileBackend->setFieldConfig(
+        $this->fileBackend->setData(
             [
-                'upload_dir' => [
-                    'value' => 'value',
-                    'config' => 'system/filesystem/media',
-                ],
-                'base_url' => [
-                    'type' => 'media',
-                    'value' => 'design/file'
+                'value' => $value,
+                'field_config' => [
+                    'upload_dir' => [
+                        'value' => 'value',
+                        'config' => 'system/filesystem/media',
+                    ],
+                    'base_url' => [
+                        'type' => 'media',
+                        'value' => 'design/file'
+                    ],
                 ],
             ]
         );
@@ -169,11 +176,10 @@ class FileTest extends TestCase
             ->method('getAbsolutePath')
             ->with('value/' . $value)
             ->willReturn($absoluteFilePath);
-
         $this->urlBuilder->expects($this->once())
             ->method('getBaseUrl')
             ->with(['_type' => UrlInterface::URL_TYPE_MEDIA])
-            ->willReturn('http://magento2.com/pub/media/');
+            ->willReturn('http://magento2.com/media/');
         $this->mediaDirectory->expects($this->once())
             ->method('getRelativePath')
             ->with('value')
@@ -182,17 +188,15 @@ class FileTest extends TestCase
             ->method('stat')
             ->with('value/' . $value)
             ->willReturn(['size' => 234234]);
-
         $this->mime->expects($this->once())
             ->method('getMimeType')
             ->with($absoluteFilePath)
             ->willReturn($mime);
-
         $this->fileBackend->afterLoad();
         $this->assertEquals(
             [
                 [
-                    'url' => 'http://magento2.com/pub/media/design/file/' . $value,
+                    'url' => 'http://magento2.com/media/design/file/' . $value,
                     'file' => $value,
                     'size' => 234234,
                     'exists' => true,
@@ -205,29 +209,32 @@ class FileTest extends TestCase
     }
 
     /**
-     * @dataProvider beforeSaveDataProvider
+     * Test for beforeSave method.
+     *
      * @param string $fileName
+     * @throws LocalizedException
      */
-    public function testBeforeSave($fileName)
+    #[DataProvider('beforeSaveDataProvider')]
+    public function testBeforeSave(string $fileName)
     {
         $expectedFileName = basename($fileName);
         $expectedTmpMediaPath = 'tmp/design/file/' . $expectedFileName;
-        $this->fileBackend->setScope('store');
-        $this->fileBackend->setScopeId(1);
-        $this->fileBackend->setValue(
+        $this->fileBackend->setData(
             [
-                [
-                    'url' => 'http://magento2.com/pub/media/tmp/image/' . $fileName,
-                    'file' => $fileName,
-                    'size' => 234234,
-                ]
-            ]
-        );
-        $this->fileBackend->setFieldConfig(
-            [
-                'upload_dir' => [
-                    'value' => 'value',
-                    'config' => 'system/filesystem/media',
+                'scope' => 'store',
+                'scope_id' => 1,
+                'value' => [
+                    [
+                        'url' => 'http://magento2.com/media/tmp/image/' . $fileName,
+                        'file' => $fileName,
+                        'size' => 234234,
+                    ]
+                ],
+                'field_config' => [
+                    'upload_dir' => [
+                        'value' => 'value',
+                        'config' => 'system/filesystem/media',
+                    ],
                 ],
             ]
         );
@@ -250,13 +257,15 @@ class FileTest extends TestCase
     }
 
     /**
+     * Data provider for testBeforeSave.
+     *
      * @return array
      */
-    public function beforeSaveDataProvider()
+    public static function beforeSaveDataProvider(): array
     {
         return [
             'Normal file name' => ['filename.jpg'],
-            'Vulnerable file name' => ['../../../../../../../../etc/passwd'],
+            'Vulnerable file name' => ['../../../../../../../../etc/pass'],
         ];
     }
 
@@ -277,19 +286,27 @@ class FileTest extends TestCase
         $this->fileBackend->beforeSave();
     }
 
+    /**
+     * Test for beforeSave method with existing file.
+     *
+     * @throws LocalizedException
+     */
     public function testBeforeSaveWithExistingFile()
     {
         $value = 'filename.jpg';
-        $this->fileBackend->setValue(
+        $this->fileBackend->setData(
             [
-                [
-                    'url' => 'http://magento2.com/pub/media/tmp/image/' . $value,
-                    'file' => $value,
-                    'size' => 234234,
-                    'exists' => true
-                ]
+                'value' => [
+                    [
+                        'url' => 'http://magento2.com/media/tmp/image/' . $value,
+                        'file' => $value,
+                        'size' => 234234,
+                        'exists' => true
+                    ]
+                ],
             ]
         );
+
         $this->fileBackend->beforeSave();
         $this->assertEquals(
             $value,
@@ -302,13 +319,13 @@ class FileTest extends TestCase
      *
      * @param string $path
      * @param string $filename
-     * @dataProvider getRelativeMediaPathDataProvider
+     * @throws \ReflectionException
      */
+    #[DataProvider('getRelativeMediaPathDataProvider')]
     public function testGetRelativeMediaPath(string $path, string $filename)
     {
         $reflection = new \ReflectionClass($this->fileBackend);
         $method = $reflection->getMethod('getRelativeMediaPath');
-        $method->setAccessible(true);
         $this->assertEquals(
             $filename,
             $method->invoke($this->fileBackend, $path . $filename)
@@ -320,11 +337,11 @@ class FileTest extends TestCase
      *
      * @return array
      */
-    public function getRelativeMediaPathDataProvider(): array
+    public static function getRelativeMediaPathDataProvider(): array
     {
         return [
             'Normal path' => ['pub/media/', 'filename.jpg'],
-            'Complex path' => ['somepath/pub/media/', 'filename.jpg'],
+            'Complex path' => ['some_path/media/', 'filename.jpg'],
         ];
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Payment\Block\Info;
 
@@ -42,7 +42,7 @@ class Cc extends \Magento\Payment\Block\Info
     public function getCcTypeName()
     {
         $types = $this->_paymentConfig->getCcTypes();
-        $ccType = $this->getInfo()->getCcType();
+        $ccType = $this->getInfo()->getCcType() ?? '';
         if (isset($types[$ccType])) {
             return $types[$ccType];
         }

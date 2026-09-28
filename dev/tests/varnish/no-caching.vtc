@@ -1,0 +1,95 @@
+varnishtest "X-Magento-Cache-Debug header"
+
+server s1 {
+    # first request will be the probe, handle it and be on our way
+    rxreq
+    expect req.url == "/health_check.php"
+    txresp
+
+    # the probe expects the connection to close
+    close
+    accept
+
+    # the client will send 2 requests for each url, the server should only see one
+    # of each in the cacheable case, and two otherwise
+
+    # 405, Cache-Control doesn't matter
+    loop 2 {
+        rxreq
+        expect req.url == "/405uncacheable"
+        txresp -status 405
+    }
+
+    # 200, private Cache-Control
+    loop 2 {
+        rxreq
+        expect req.url == "/200uncacheable"
+        txresp -status 200 -hdr "cache-control: private"
+    }
+
+    # 404, private Cache-Control
+    loop 2 {
+        rxreq
+        expect req.url == "/404uncacheable"
+        txresp -status 200 -hdr "cache-control: private"
+    }
+
+    # 200, no Cache-Control
+    rxreq
+    expect req.url == "/200cacheable"
+    txresp -status 200
+
+    # 404, but still no Cache-Control
+    rxreq
+    expect req.url == "/404cacheable"
+    txresp -status 404
+} -start
+
+# generate usable VCL pointing towards s1
+# mostly, we replace the place-holders, but we also jack up the probe
+# interval to avoid further interference
+shell {
+    # testdir is automatically set to the directory containing the present vtc
+    sed \
+        -e 's@\.interval = 5s;@.interval = 5m; .initial = 10;@' \
+        -e 's@/\* {{ host }} \*/@${s1_addr}@' \
+        -e 's@/\* {{ port }} \*/@${s1_port}@' \
+        -e 's@/\* {{ ssl_offloaded_header }} \*/@unused@' \
+        -e 's@/\* {{ grace_period }} \*/@0@' \
+        ${testdir}/../../../app/code/Magento/PageCache/etc/varnish6.vcl > ${tmpdir}/output.vcl
+}
+
+varnish v1 -arg "-f" -arg "${tmpdir}/output.vcl" -start
+
+# make sure the probe request fired
+delay 1
+
+client c1 {
+    loop 2 {
+        txreq -url /405uncacheable
+        rxresp
+    }
+
+    loop 2 {
+        txreq -url /200uncacheable
+        rxresp
+    }
+
+    loop 2 {
+        txreq -url /404uncacheable
+        rxresp
+    }
+
+    loop 2 {
+        txreq -url /200cacheable
+        rxresp
+    }
+
+    loop 2 {
+        txreq -url /404cacheable
+        rxresp
+    }
+} -run
+
+# make sure s1 saw all the requests it was expecting
+server s1 -wait

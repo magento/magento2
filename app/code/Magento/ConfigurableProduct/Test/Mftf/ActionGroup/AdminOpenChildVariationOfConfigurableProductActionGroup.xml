@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminOpenChildVariationOfConfigurableProductActionGroup">
+        <annotations>
+            <description>Admin open child  variation of configurable product</description>
+        </annotations>
+        <arguments>
+            <argument name="variation" type="string" defaultValue="S"/>
+        </arguments>
+        <waitForElementClickable selector="{{AdminProductFormConfigurationsSection.variationProductLinkByName(variation)}}" stepKey="waitToClickOnFirstProductLink"/>
+        <click selector="{{AdminProductFormConfigurationsSection.variationProductLinkByName(variation)}}" stepKey="clickOnFirstProductLink"/>
+    </actionGroup>
+</actionGroups>

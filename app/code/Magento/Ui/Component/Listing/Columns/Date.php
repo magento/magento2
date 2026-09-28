@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Ui\Component\Listing\Columns;
@@ -64,8 +64,8 @@ class Date extends Column
         BooleanUtils $booleanUtils,
         array $components = [],
         array $data = [],
-        ResolverInterface $localeResolver = null,
-        DataBundle $dataBundle = null
+        ?ResolverInterface $localeResolver = null,
+        ?DataBundle $dataBundle = null
     ) {
         $this->timezone = $timezone;
         $this->booleanUtils = $booleanUtils;
@@ -77,6 +77,7 @@ class Date extends Column
 
     /**
      * @inheritdoc
+     * @since 101.1.1
      */
     public function prepare()
     {

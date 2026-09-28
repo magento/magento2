@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -95,7 +95,7 @@ define([
                 this.options.actions.cancel(event);
             }
             this.options.actions.always(event);
-            this.element.bind('confirmclosed', _.bind(this._remove, this));
+            this.element.on('confirmclosed', _.bind(this._remove, this));
 
             return this._super();
         }

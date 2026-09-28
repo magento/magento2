@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -42,7 +42,7 @@ class UiComponentFactoryTest extends TestCase
      */
     private function createFactory(array $mockConfig): UiComponentFactory
     {
-        $dataMock = $this->getMockForAbstractClass(ConfigData::class);
+        $dataMock = $this->createMock(ConfigData::class);
         $dataMock->method('get')->willReturnCallback(
             function (string $id) use ($mockConfig) : array {
                 return $mockConfig[$id];
@@ -130,7 +130,7 @@ class UiComponentFactoryTest extends TestCase
     private function generateMockProvider(): DataProviderInterface
     {
         /** @var DataProviderInterface|MockObject $mock */
-        $mock = $this->getMockForAbstractClass(DataProviderInterface::class);
+        $mock = $this->createMock(DataProviderInterface::class);
         $mock->method('getName')->willReturn('test');
         $mock->method('getPrimaryFieldName')->willReturn('id');
         $mock->method('getRequestFieldName')->willReturn('id');

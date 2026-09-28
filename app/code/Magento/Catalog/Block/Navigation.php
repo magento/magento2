@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Block;
@@ -152,6 +152,8 @@ class Navigation extends \Magento\Framework\View\Element\Template implements
 
         $shortCacheId = array_values($shortCacheId);
         $shortCacheId = implode('|', $shortCacheId);
+        // md5() here is not for cryptographic use.
+        // phpcs:ignore Magento2.Security.InsecureFunction
         $shortCacheId = md5($shortCacheId);
 
         $cacheId['category_path'] = $this->getCurrentCategoryKey();

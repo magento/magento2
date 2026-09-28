@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,8 @@ namespace Magento\Framework\App;
 
 /**
  * Feed interface
+ *
+ * @api
  */
 interface FeedInterface
 {
@@ -17,5 +19,5 @@ interface FeedInterface
      *
      * @return string
      */
-    public function getFormattedContent() : string;
+    public function getFormattedContent(): string;
 }

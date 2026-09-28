@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,46 +13,51 @@ use Magento\Framework\Config\ValidationStateInterface;
 use Magento\Paypal\Helper\Backend;
 use Magento\Paypal\Model\Config\Rules\Converter;
 use Magento\Paypal\Model\Config\Rules\Reader;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class ReaderTest extends TestCase
 {
-    /** @var  Reader */
+    /**
+     * @var  Reader
+     */
     protected $reader;
 
-    /** @var  FileResolverInterface|MockObject */
+    /**
+     * @var  FileResolverInterface|MockObject
+     */
     protected $fileResolver;
 
-    /** @var  Converter|MockObject */
+    /**
+     * @var  Converter|MockObject
+     */
     protected $converter;
 
-    /** @var  SchemaLocatorInterface|MockObject */
+    /**
+     * @var  SchemaLocatorInterface|MockObject
+     */
     protected $schemaLocator;
 
-    /** @var  ValidationStateInterface|MockObject */
+    /**
+     * @var  ValidationStateInterface|MockObject
+     */
     protected $validationState;
 
-    /** @var Backend|MockObject */
+    /**
+     * @var Backend|MockObject
+     */
     protected $helper;
 
     /**
-     * Set up
-     *
-     * @return void
+     * @inheritdoc
      */
     protected function setUp(): void
     {
-        $this->fileResolver = $this->getMockForAbstractClass(
-            FileResolverInterface::class
-        );
+        $this->fileResolver = $this->createMock(FileResolverInterface::class);
         $this->converter = $this->createMock(Converter::class);
-        $this->schemaLocator = $this->getMockForAbstractClass(
-            SchemaLocatorInterface::class
-        );
-        $this->validationState = $this->getMockForAbstractClass(
-            ValidationStateInterface::class
-        );
+        $this->schemaLocator = $this->createMock(SchemaLocatorInterface::class);
+        $this->validationState = $this->createMock(ValidationStateInterface::class);
         $this->helper = $this->createMock(Backend::class);
     }
 
@@ -60,9 +65,11 @@ class ReaderTest extends TestCase
      * @param string $countryCode
      * @param string $xml
      * @param string $expected
-     * @dataProvider dataProviderReadExistingCountryConfig
+     *
+     * @return void
      */
-    public function testReadExistingCountryConfig($countryCode, $xml, $expected)
+    #[DataProvider('dataProviderReadExistingCountryConfig')]
+    public function testReadExistingCountryConfig($countryCode, $xml, $expected): void
     {
         $this->helper->expects($this->once())
             ->method('getConfigurationCountryCode')
@@ -88,21 +95,27 @@ class ReaderTest extends TestCase
      * @param string $countryCode
      * @param string $xml
      * @param string $expected
-     * @dataProvider dataProviderReadOtherCountryConfig
+     *
+     * @return void
      */
-    public function testReadOtherCountryConfig($countryCode, $xml, $expected)
+    #[DataProvider('dataProviderReadOtherCountryConfig')]
+    public function testReadOtherCountryConfig($countryCode, $xml, $expected): void
     {
         $this->helper->expects($this->once())
             ->method('getConfigurationCountryCode')
             ->willReturn($countryCode);
 
-        $this->fileResolver->expects($this->at(0))
+        $this->fileResolver
             ->method('get')
-            ->willReturn([]);
-        $this->fileResolver->expects($this->at(1))
-            ->method('get')
-            ->with($expected)
-            ->willReturn($xml);
+            ->willReturnCallback(
+                function ($arg1) use ($expected, $xml) {
+                    if ($arg1 == $expected) {
+                        return $xml;
+                    } else {
+                        return [];
+                    }
+                }
+            );
 
         $this->reader = new Reader(
             $this->fileResolver,
@@ -118,7 +131,7 @@ class ReaderTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderReadExistingCountryConfig()
+    public static function dataProviderReadExistingCountryConfig(): array
     {
         return [
             ['us', ['<payment/>'], 'adminhtml/rules/payment_us.xml'],
@@ -131,17 +144,17 @@ class ReaderTest extends TestCase
             ['es', ['<payment/>'], 'adminhtml/rules/payment_es.xml'],
             ['hk', ['<payment/>'], 'adminhtml/rules/payment_hk.xml'],
             ['nz', ['<payment/>'], 'adminhtml/rules/payment_nz.xml'],
-            ['de', ['<payment/>'], 'adminhtml/rules/payment_de.xml'],
+            ['de', ['<payment/>'], 'adminhtml/rules/payment_de.xml']
         ];
     }
 
     /**
      * @return array
      */
-    public function dataProviderReadOtherCountryConfig()
+    public static function dataProviderReadOtherCountryConfig(): array
     {
         return [
-            ['no', ['<payment/>'], 'adminhtml/rules/payment_other.xml'],
+            ['no', ['<payment/>'], 'adminhtml/rules/payment_other.xml']
         ];
     }
 }

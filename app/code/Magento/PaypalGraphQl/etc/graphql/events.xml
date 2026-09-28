@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
@@ -11,5 +11,8 @@
     </event>
     <event name="payment_method_assign_data_payflow_advanced">
         <observer name="payflow_advanced_data_assigner" instance="Magento\PaypalGraphQl\Observer\PayflowLinkSetAdditionalData"/>
+    </event>
+    <event name="payment_method_assign_data_payflowpro">
+        <observer name="payflowpro_cc_data_assigner" instance="Magento\PaypalGraphQl\Observer\PayflowProSetCcData" />
     </event>
 </config>

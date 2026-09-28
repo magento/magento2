@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Paypal\Controller\Express\AbstractExpress;
 
@@ -31,6 +30,7 @@ class Cancel extends \Magento\Paypal\Controller\Express\AbstractExpress
                     ->unsLastSuccessQuoteId()
                     ->unsLastOrderId()
                     ->unsLastRealOrderId();
+                $this->_getSession()->unsQuoteId(); // clean quote from session that was set in OnAuthorization
                 $this->messageManager->addSuccessMessage(
                     __('Express Checkout and Order have been canceled.')
                 );

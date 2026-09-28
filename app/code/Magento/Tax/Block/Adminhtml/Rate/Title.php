@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Tax\Block\Adminhtml\Rate;
@@ -10,8 +10,6 @@ use Magento\Tax\Controller\RegistryConstants;
 
 /**
  * Tax Rate Titles Renderer
- *
- * @author Magento Core Team <core@magentocommerce.com>
  */
 class Title extends \Magento\Framework\View\Element\Template
 {
@@ -92,6 +90,8 @@ class Title extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Return all the stores
+     *
      * @return mixed
      */
     public function getStores()

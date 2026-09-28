@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Data\Form\Element;
 
@@ -9,8 +9,6 @@ use Magento\Framework\Escaper;
 
 /**
  * Form select element
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Checkboxes extends AbstractElement
 {
@@ -110,15 +108,16 @@ class Checkboxes extends AbstractElement
     }
 
     /**
-     * @param mixed $value
-     * @return string|void
+     * Was given value selected?
+     *
+     * @param string $value
+     * @return string|null
      */
     public function getChecked($value)
     {
-        if ($checked = $this->getValue()) {
-        } elseif ($checked = $this->getData('checked')) {
-        } else {
-            return;
+        $checked = $this->getValue() ?? $this->getData('checked');
+        if (!$checked) {
+            return null;
         }
         if (!is_array($checked)) {
             $checked = [(string)$checked];
@@ -130,12 +129,14 @@ class Checkboxes extends AbstractElement
         if (in_array((string)$value, $checked)) {
             return 'checked';
         }
-        return;
+        return null;
     }
 
     /**
-     * @param mixed $value
-     * @return string
+     * Was value disabled for selection?
+     *
+     * @param string $value
+     * @return string|null
      */
     public function getDisabled($value)
     {
@@ -151,34 +152,40 @@ class Checkboxes extends AbstractElement
                 return 'disabled';
             }
         }
-        return;
+        return null;
     }
 
     /**
-     * @param mixed $value
-     * @return mixed
+     * Get onclick event handler.
+     *
+     * @param string $value
+     * @return string|null
      */
-    public function getOnclick($value)
+    public function getOnclick($value = '$value')
     {
         if ($onclick = $this->getData('onclick')) {
             return str_replace('$value', $value, $onclick);
         }
-        return;
+        return null;
     }
 
     /**
-     * @param mixed $value
-     * @return mixed
+     * Get onchange event handler.
+     *
+     * @param string $value
+     * @return string|null
      */
-    public function getOnchange($value)
+    public function getOnchange($value = '$value')
     {
         if ($onchange = $this->getData('onchange')) {
             return str_replace('$value', $value, $onchange);
         }
-        return;
+        return null;
     }
 
     /**
+     * Render a checkbox.
+     *
      * @param array $option
      * @return string
      */

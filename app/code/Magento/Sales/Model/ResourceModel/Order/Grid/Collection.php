@@ -1,19 +1,22 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\ResourceModel\Order\Grid;
 
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface as FetchStrategy;
 use Magento\Framework\Data\Collection\EntityFactoryInterface as EntityFactory;
 use Magento\Framework\Event\ManagerInterface as EventManager;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult;
+use Magento\Sales\Model\ResourceModel\Order;
 use Psr\Log\LoggerInterface as Logger;
 
 /**
  * Order grid collection
  */
-class Collection extends \Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult
+class Collection extends SearchResult
 {
     /**
      * Initialize dependencies.
@@ -24,6 +27,8 @@ class Collection extends \Magento\Framework\View\Element\UiComponent\DataProvide
      * @param EventManager $eventManager
      * @param string $mainTable
      * @param string $resourceModel
+     * @throws LocalizedException
+     * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod.Found
      */
     public function __construct(
         EntityFactory $entityFactory,
@@ -31,7 +36,7 @@ class Collection extends \Magento\Framework\View\Element\UiComponent\DataProvide
         FetchStrategy $fetchStrategy,
         EventManager $eventManager,
         $mainTable = 'sales_order_grid',
-        $resourceModel = \Magento\Sales\Model\ResourceModel\Order::class
+        $resourceModel = Order::class
     ) {
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $mainTable, $resourceModel);
     }

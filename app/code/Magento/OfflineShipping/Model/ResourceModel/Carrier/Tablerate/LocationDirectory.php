@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate;
@@ -155,7 +155,7 @@ class LocationDirectory
      * @param int $countryId
      * @param string $regionCode
      * @return string
-     * @deprecated
+     * @deprecated 100.3.1
      */
     public function getRegionId($countryId, $regionCode)
     {

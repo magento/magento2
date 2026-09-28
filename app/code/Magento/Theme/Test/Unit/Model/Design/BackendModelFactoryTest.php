@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Theme\Test\Unit\Model\Design;
 
 use Magento\Framework\App\Config\Value;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Theme\Model\Design\Backend\Exceptions;
 use Magento\Theme\Model\Design\BackendModelFactory;
 use Magento\Theme\Model\Design\Config\MetadataProvider;
@@ -18,6 +19,8 @@ use PHPUnit\Framework\TestCase;
 
 class BackendModelFactoryTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var BackendModelFactory */
     protected $model;
 
@@ -40,24 +43,19 @@ class BackendModelFactoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->getMockForAbstractClass();
-        $this->metadataProviderMock = $this->getMockBuilder(MetadataProvider::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->metadataProviderMock = $this->createMock(MetadataProvider::class);
         $this->collectionFactoryMock = $this->getMockBuilder(
             \Magento\Theme\Model\ResourceModel\Design\Config\CollectionFactory::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
-        $this->collection = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->backendModel = $this->getMockBuilder(Value::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setValue'])
-            ->getMock();
+        $this->collection = $this->createMock(Collection::class);
+        $this->backendModel = $this->createPartialMockWithReflection(
+            Value::class,
+            ['setValue']
+        );
 
         $this->model = new BackendModelFactory(
             $this->objectManagerMock,
@@ -131,9 +129,7 @@ class BackendModelFactoryTest extends TestCase
     {
         $path = 'design/head/default_title';
         $backendModelType = Exceptions::class;
-        $backendModel = $this->getMockBuilder($backendModelType)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $backendModel = $this->createMock($backendModelType);
 
         $this->metadataProviderMock->expects($this->once())
             ->method('get')

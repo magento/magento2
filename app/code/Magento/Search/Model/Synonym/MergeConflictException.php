@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Search\Model\Synonym;
 
@@ -31,7 +31,7 @@ class MergeConflictException extends LocalizedException
      * @param \Exception|null $cause
      * @param int $code
      */
-    public function __construct(array $conflictingSynonyms, Phrase $phrase = null, \Exception $cause = null, $code = 0)
+    public function __construct(array $conflictingSynonyms, ?Phrase $phrase = null, ?\Exception $cause = null, $code = 0)
     {
         parent::__construct($phrase, $cause, $code);
         $this->conflictingSynonyms = $conflictingSynonyms;

@@ -1,0 +1,22 @@
+<?php
+/**
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
+ */
+declare(strict_types=1);
+
+namespace Magento\SomeModule\Model\NamedArguments;
+
+require_once __DIR__ . '/TestParentClass.php';
+
+class TestNamedParameters extends TestParentClass
+{
+    /**
+     * @param \stdClass $stdClassObject
+     * @param array $arrayVariable
+     */
+    public function __construct(\stdClass $stdClassObject, array $arrayVariable)
+    {
+        parent::__construct(arrayVariable: $arrayVariable, stdClassObject: $stdClassObject);
+    }
+}

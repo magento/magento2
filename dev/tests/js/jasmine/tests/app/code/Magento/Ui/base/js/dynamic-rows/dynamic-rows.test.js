@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 /* eslint-disable max-nested-callbacks */
@@ -170,6 +170,71 @@ define([
                 children: labels
             };
             expect(JSON.stringify(model.labels())).toEqual(JSON.stringify(result));
+        });
+
+        it('Check _updatePagesQuantity method call.', function () {
+            model._updatePagesQuantity = jasmine.createSpy();
+
+            model.reload();
+
+            expect(model._updatePagesQuantity).toHaveBeenCalled();
+        });
+
+        it('Check number of pages is updated after reloading dynamic-rows.', function () {
+            model.pageSize = 1;
+            model.relatedData = [
+                {
+                    name: 'first'
+                },
+                {
+                    name: 'second'
+                },
+                {
+                    name: 'third'
+                }
+            ];
+
+            model.reload();
+            expect(model.pages()).toEqual(3);
+
+            model.currentPage(3);
+            model.pageSize = 2;
+
+            model.reload();
+            expect(model.pages()).toEqual(2);
+            expect(model.currentPage()).toEqual(2);
+        });
+
+        it('should process pages before addChild', function () {
+            var ctx = {},
+                index = 5,
+                prop = 'someProp';
+
+            model.pageSize = 2;
+            model.relatedData = [
+                {
+                    name: 'first'
+                },
+                {
+                    name: 'second'
+                },
+                {
+                    name: 'third'
+                },
+                {
+                    name: 'fourth'
+                },
+                {
+                    name: 'fifth'
+                }
+            ];
+            model.bubble = jasmine.createSpy();
+            model.addChild = jasmine.createSpy();
+            model.processingAddChild(ctx, index, prop);
+            expect(model.bubble).toHaveBeenCalledWith('addChild', false);
+            expect(model.pages()).toEqual(3);
+            expect(model.currentPage()).toEqual(3);
+            expect(model.addChild).toHaveBeenCalledWith(ctx, index, prop);
         });
     });
 });

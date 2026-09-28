@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -20,11 +20,14 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Serialize\Serializer\FormData;
 use Magento\Framework\View\LayoutFactory;
 use Magento\Framework\View\LayoutInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
+#[CoversClass(Validate::class)]
 class ValidateTest extends AttributeTest
 {
     /**
@@ -80,34 +83,16 @@ class ValidateTest extends AttributeTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->resultJsonFactoryMock = $this->getMockBuilder(ResultJsonFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->resultJson = $this->getMockBuilder(ResultJson::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->layoutFactoryMock = $this->getMockBuilder(LayoutFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->getMockForAbstractClass();
-        $this->attributeMock = $this->getMockBuilder(Attribute::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->attributeSetMock = $this->getMockBuilder(AttributeSet::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->escaperMock = $this->getMockBuilder(Escaper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->layoutMock = $this->getMockBuilder(LayoutInterface::class)
-            ->getMockForAbstractClass();
-        $this->formDataSerializerMock = $this->getMockBuilder(FormData::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->attributeCodeValidatorMock = $this->getMockBuilder(AttributeCodeValidator::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resultJsonFactoryMock = $this->createMock(ResultJsonFactory::class);
+        $this->resultJson = $this->createMock(ResultJson::class);
+        $this->layoutFactoryMock = $this->createMock(LayoutFactory::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->attributeMock = $this->createMock(Attribute::class);
+        $this->attributeSetMock = $this->createMock(AttributeSet::class);
+        $this->escaperMock = $this->createMock(Escaper::class);
+        $this->layoutMock = $this->createMock(LayoutInterface::class);
+        $this->formDataSerializerMock = $this->createMock(FormData::class);
+        $this->attributeCodeValidatorMock = $this->createMock(AttributeCodeValidator::class);
 
         $this->contextMock->expects($this->any())
             ->method('getObjectManager')
@@ -153,7 +138,7 @@ class ValidateTest extends AttributeTest
             ->willReturnMap(
                 [
                     [Attribute::class, [], $this->attributeMock],
-                    [\Magento\Eav\Model\Entity\Attribute\Set::class, [], $this->attributeSetMock]
+                    [AttributeSet::class, [], $this->attributeSetMock]
                 ]
             );
         $this->attributeMock->expects($this->once())
@@ -189,11 +174,74 @@ class ValidateTest extends AttributeTest
     }
 
     /**
-     * @dataProvider provideUniqueData
+     * Test that editing existing attribute loads attribute by id
+     *
+     * @return void
+     * @throws NotFoundException
+     */
+    public function testExecuteEditExisting(): void
+    {
+        $serializedOptions = '{"key":"value"}';
+        $this->requestMock->expects($this->any())
+            ->method('getParam')
+            ->willReturnMap(
+                [
+                    ['frontend_label', null, 'test_frontend_label'],
+                    ['attribute_id', null, 10],
+                    ['attribute_code', null, 'test_attribute_code'],
+                    ['new_attribute_set_name', null, 'test_attribute_set_name'],
+                    ['serialized_options', '[]', $serializedOptions],
+                ]
+            );
+        $this->objectManagerMock->expects($this->exactly(2))
+            ->method('create')
+            ->willReturnMap(
+                [
+                    [Attribute::class, [], $this->attributeMock],
+                    [AttributeSet::class, [], $this->attributeSetMock]
+                ]
+            );
+        $this->attributeMock->expects($this->once())
+            ->method('load')
+            ->willReturnSelf();
+        $this->attributeMock->expects($this->once())
+            ->method('getAttributeCode')
+            ->willReturn('test_attribute_code');
+
+        $this->attributeCodeValidatorMock->expects($this->once())
+            ->method('isValid')
+            ->with('test_attribute_code')
+            ->willReturn(true);
+
+        $this->requestMock->expects($this->once())
+            ->method('has')
+            ->with('new_attribute_set_name')
+            ->willReturn(true);
+        $this->attributeSetMock->expects($this->once())
+            ->method('setEntityTypeId')
+            ->willReturnSelf();
+        $this->attributeSetMock->expects($this->once())
+            ->method('load')
+            ->willReturnSelf();
+        $this->attributeSetMock->expects($this->once())
+            ->method('getId')
+            ->willReturn(false);
+        $this->resultJsonFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->resultJson);
+        $this->resultJson->expects($this->once())
+            ->method('setJsonData')
+            ->willReturnSelf();
+
+        $this->assertInstanceOf(ResultJson::class, $this->getModel()->execute());
+    }
+
+    /**
      * @param        array   $options
      * @param        boolean $isError
      * @throws       NotFoundException
      */
+    #[DataProvider('provideUniqueData')]
     public function testUniqueValidation(array $options, $isError)
     {
         $serializedOptions = '{"key":"value"}';
@@ -248,7 +296,7 @@ class ValidateTest extends AttributeTest
     /**
      * @return array
      */
-    public function provideUniqueData()
+    public static function provideUniqueData()
     {
         return [
             'no values' => [
@@ -332,10 +380,10 @@ class ValidateTest extends AttributeTest
     /**
      * Check that empty admin scope labels will trigger error.
      *
-     * @dataProvider provideEmptyOption
      * @param        array $options
      * @throws       NotFoundException
      */
+    #[DataProvider('provideEmptyOption')]
     public function testEmptyOption(array $options, $result)
     {
         $serializedOptions = '{"key":"value"}';
@@ -389,7 +437,7 @@ class ValidateTest extends AttributeTest
      *
      * @return array
      */
-    public function provideEmptyOption()
+    public static function provideEmptyOption()
     {
         return [
             'empty admin scope options' => [
@@ -454,11 +502,11 @@ class ValidateTest extends AttributeTest
     /**
      * Check that admin scope labels which only contain spaces will trigger error.
      *
-     * @dataProvider provideWhitespaceOption
      * @param        array  $options
      * @param        $result
      * @throws       NotFoundException
      */
+    #[DataProvider('provideWhitespaceOption')]
     public function testWhitespaceOption(array $options, $result)
     {
         $serializedOptions = '{"key":"value"}';
@@ -512,7 +560,7 @@ class ValidateTest extends AttributeTest
      *
      * @return array
      */
-    public function provideWhitespaceOption()
+    public static function provideWhitespaceOption()
     {
         return [
             'whitespace admin scope options' => [
@@ -605,7 +653,7 @@ class ValidateTest extends AttributeTest
             ->willReturnMap(
                 [
                     [Attribute::class, [], $this->attributeMock],
-                    [\Magento\Eav\Model\Entity\Attribute\Set::class, [], $this->attributeSetMock]
+                    [AttributeSet::class, [], $this->attributeSetMock]
                 ]
             );
 
@@ -640,11 +688,11 @@ class ValidateTest extends AttributeTest
     /**
      * Test execute with an invalid attribute code
      *
-     * @dataProvider provideInvalidAttributeCodes
      * @param        string $attributeCode
      * @param        $result
      * @throws       NotFoundException
      */
+    #[DataProvider('provideInvalidAttributeCodes')]
     public function testExecuteWithInvalidAttributeCode($attributeCode, $result)
     {
         $serializedOptions = '{"key":"value"}';
@@ -703,7 +751,7 @@ class ValidateTest extends AttributeTest
      *
      * @return array
      */
-    public function provideInvalidAttributeCodes()
+    public static function provideInvalidAttributeCodes()
     {
         return [
             'invalid attribute code' => [

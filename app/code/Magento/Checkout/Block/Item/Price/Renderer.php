@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Checkout\Block\Item\Price;
 
@@ -12,6 +12,7 @@ use Magento\Quote\Model\Quote\Item\AbstractItem;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Renderer extends \Magento\Framework\View\Element\Template
 {

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Cms\Model\Wysiwyg;
@@ -153,7 +153,7 @@ class CompositeConfigProvider
      */
     private function updateConfig($config, array $configProviders)
     {
-        $adapterType = $this->getActiveEditorPath($config);
+        $adapterType = $this->getActiveEditorPath($config) ?? '';
         //Extension point to update plugin settings by adapter type
         $providerClass = isset($configProviders[$adapterType])
             ? $configProviders[$adapterType]

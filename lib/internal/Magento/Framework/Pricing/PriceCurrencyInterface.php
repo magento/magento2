@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Pricing;
@@ -10,6 +10,7 @@ namespace Magento\Framework\Pricing;
  * Interface PriceCurrencyInterface
  *
  * @api
+ * @since 100.0.2
  */
 interface PriceCurrencyInterface
 {
@@ -75,7 +76,7 @@ interface PriceCurrencyInterface
     /**
      * Round price
      *
-     * @deprecated
+     * @deprecated 102.0.1
      * @param float $price
      * @return float
      */

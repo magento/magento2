@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -68,12 +68,12 @@ class ValueProviderTest extends TestCase
         $expectedData = include __DIR__ . '/_files/MetaData.php';
         $this->searchCriteriaBuilderMock = $this->createMock(SearchCriteriaBuilder::class);
         $this->storeMock = $this->createMock(Store::class);
-        $this->groupRepositoryMock = $this->getMockForAbstractClass(GroupRepositoryInterface::class);
+        $this->groupRepositoryMock = $this->createMock(GroupRepositoryInterface::class);
         $this->dataObjectMock = $this->createMock(DataObject::class);
         $this->simpleActionOptionsProviderMock = $this->createMock(SimpleActionOptionsProvider::class);
-        $searchCriteriaMock = $this->getMockForAbstractClass(SearchCriteriaInterface::class);
-        $groupSearchResultsMock = $this->getMockForAbstractClass(GroupSearchResultsInterface::class);
-        $groupsMock = $this->getMockForAbstractClass(GroupInterface::class);
+        $searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);
+        $groupSearchResultsMock = $this->createMock(GroupSearchResultsInterface::class);
+        $groupsMock = $this->createMock(GroupInterface::class);
 
         $this->searchCriteriaBuilderMock->expects($this->once())->method('create')->willReturn($searchCriteriaMock);
         $this->groupRepositoryMock->expects($this->once())->method('getList')->with($searchCriteriaMock)

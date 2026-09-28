@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Api;
 
 /**
  * @api
- * @since 100.0.2
+ * @since 104.0.0
  */
 interface CategoryListDeleteBySkuInterface
 {
@@ -22,6 +22,7 @@ interface CategoryListDeleteBySkuInterface
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\InputException
+     * @since 104.0.0
      */
     public function deleteBySkus(int $categoryId, array $productSkuList): bool;
 }

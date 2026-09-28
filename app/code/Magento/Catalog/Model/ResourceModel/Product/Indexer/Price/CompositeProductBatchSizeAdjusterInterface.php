@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Price;
@@ -9,7 +9,7 @@ namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Price;
 /**
  * Correct batch size according to number of composite related items.
  * @api
- * @since 101.1.0
+ * @since 102.0.0
  */
 interface CompositeProductBatchSizeAdjusterInterface
 {
@@ -18,7 +18,7 @@ interface CompositeProductBatchSizeAdjusterInterface
      *
      * @param int $batchSize
      * @return int
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function adjust($batchSize);
 }

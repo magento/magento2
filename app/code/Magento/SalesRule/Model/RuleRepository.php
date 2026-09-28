@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\SalesRule\Model;
 
@@ -91,7 +91,7 @@ class RuleRepository implements \Magento\SalesRule\Api\RuleRepositoryInterface
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor,
         \Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory $ruleCollectionFactory,
         \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
-        CollectionProcessorInterface $collectionProcessor = null
+        ?CollectionProcessorInterface $collectionProcessor = null
     ) {
         $this->ruleFactory = $ruleFactory;
         $this->ruleDataFactory = $ruleDataFactory;
@@ -184,7 +184,7 @@ class RuleRepository implements \Magento\SalesRule\Api\RuleRepositoryInterface
      *
      * @param FilterGroup $filterGroup
      * @param Collection $collection
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      * @return void
      */
     protected function addFilterGroupToCollection(
@@ -206,7 +206,7 @@ class RuleRepository implements \Magento\SalesRule\Api\RuleRepositoryInterface
     /**
      * Retrieve collection processor
      *
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      * @return CollectionProcessorInterface
      */
     private function getCollectionProcessor()

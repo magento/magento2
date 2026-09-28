@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Deploy\Console\Command\App;
 
@@ -26,27 +26,27 @@ class SensitiveConfigSetCommand extends Command
     /**
      * Name of "interactive" input option
      */
-    const INPUT_OPTION_INTERACTIVE = 'interactive';
+    public const INPUT_OPTION_INTERACTIVE = 'interactive';
 
     /**
      * Name of "configuration scope" input option
      */
-    const INPUT_OPTION_SCOPE = 'scope';
+    public const INPUT_OPTION_SCOPE = 'scope';
 
     /**
      * Name of "configuration scope code" input option
      */
-    const INPUT_OPTION_SCOPE_CODE = 'scope-code';
+    public const INPUT_OPTION_SCOPE_CODE = 'scope-code';
 
     /**
      * Name of "configuration path" input argument
      */
-    const INPUT_ARGUMENT_PATH = 'path';
+    public const INPUT_ARGUMENT_PATH = 'path';
 
     /**
      * Name of "configuration value" input argument
      */
-    const INPUT_ARGUMENT_VALUE = 'value';
+    public const INPUT_ARGUMENT_VALUE = 'value';
 
     /**
      * The config change detector.
@@ -139,7 +139,7 @@ class SensitiveConfigSetCommand extends Command
     /**
      * @inheritdoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if ($this->changeDetector->hasChanges(System::CONFIG_TYPE)) {
             $output->writeln(

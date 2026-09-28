@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Api;
 
 /**
  * @api
- * @since 101.1.0
+ * @since 102.0.0
  */
 interface CategoryListInterface
 {
@@ -16,7 +16,7 @@ interface CategoryListInterface
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\Catalog\Api\Data\CategorySearchResultsInterface
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 }

@@ -1,0 +1,37 @@
+
+File "/var/www/html/app/code/Magento/Shipping/Test/Mftf/Test/MultiShippingWithCreationNewCustomerAndAddressesDuringCheckoutTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminProductFormConfigurationsSection from module(s): magento/module-configurable-product
+	 AdminCreateProductConfigurationsPanel from module(s): magento/module-configurable-product, magento/module-inventory-configurable-product-admin-ui
+	 AdminChooseAffectedAttributeSetPopup from module(s): magento/module-configurable-product
+	 MultishippingSection from module(s): magento/module-multishipping
+	 ShippingMethodSection from module(s): magento/module-multishipping
+	 StorefrontMultipleShippingMethodSection from module(s): magento/module-multishipping
+	 CreateOptionsForAttributeActionGroup from module(s): magento/module-configurable-product
+	 AdminDeleteCreatedColorAttributeActionGroup from module(s): magento/module-inventory-admin-ui
+	 StorefrontAddConfigurableProductToTheCartActionGroup from module(s): magento/module-configurable-product
+	 StorefrontSelectAddressActionGroup from module(s): magento/module-multishipping
+	 StorefrontChangeMultishippingItemQtyActionGroup from module(s): magento/module-multishipping
+	 StorefrontSaveAddressActionGroup from module(s): magento/module-multishipping
+	 StorefrontLeaveDefaultShippingMethodsAndGoToBillingInfoActionGroup from module(s): magento/module-multishipping
+	 SelectBillingInfoActionGroup from module(s): magento/module-multishipping
+	 PlaceOrderActionGroup from module(s): magento/module-multishipping
+
+File "/var/www/html/app/code/Magento/Shipping/Test/Mftf/Test/MultipleAddressCheckoutWithTwoDifferentRatesTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 MultishippingSection from module(s): magento/module-multishipping
+	 ShippingMethodSection from module(s): magento/module-multishipping
+	 StorefrontSelectAddressActionGroup from module(s): magento/module-multishipping
+	 StorefrontSaveAddressActionGroup from module(s): magento/module-multishipping
+
+File "/var/www/html/app/code/Magento/Shipping/Test/Mftf/Test/StorefrontAssertShippingPricesPresentAfterApplyingCartRuleTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 CartPriceRuleConditionForSubtotalForMultiShipping from module(s): magento/module-multishipping
+
+File "/var/www/html/app/code/Magento/Shipping/Test/Mftf/ActionGroup/AdminOpenShippingMethodsConfigPageActionGroup.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminShippingMethodsConfigPage from module(s): magento/module-ups

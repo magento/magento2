@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -22,7 +22,15 @@ class BatchProductLinks implements BatchServiceContractResolverInterface
     /**
      * @var string[]
      */
-    private static $linkTypes = ['related', 'upsell', 'crosssell'];
+    private $linkTypes;
+
+    /**
+     * @param array $linkTypes
+     */
+    public function __construct(array $linkTypes)
+    {
+        $this->linkTypes = $linkTypes;
+    }
 
     /**
      * @inheritDoc
@@ -44,7 +52,7 @@ class BatchProductLinks implements BatchServiceContractResolverInterface
         /** @var \Magento\Catalog\Model\Product $product */
         $product = $value['model'];
 
-        return new ListCriteria((string)$product->getId(), self::$linkTypes, $product);
+        return new ListCriteria((string)$product->getId(), $this->linkTypes, $product);
     }
 
     /**

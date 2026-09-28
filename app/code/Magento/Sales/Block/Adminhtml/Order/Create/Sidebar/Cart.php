@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,7 +15,6 @@ use Magento\Store\Model\ScopeInterface;
  * Adminhtml sales order create sidebar cart block
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Cart extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar
@@ -66,13 +65,15 @@ class Cart extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractS
 
     /**
      * @inheritdoc
+     * @since 102.0.1
      */
     public function getItemPrice(Product $product)
     {
         $customPrice = $this->getCartItemCustomPrice($product);
-        $price = $customPrice ?? $product->getPriceInfo()->getPrice(FinalPrice::PRICE_CODE)->getValue();
 
-        return $this->convertPrice($price);
+        return $customPrice !== null
+            ? $this->convertPrice($customPrice)
+            : $this->priceCurrency->format($product->getPriceInfo()->getPrice(FinalPrice::PRICE_CODE)->getValue());
     }
 
     /**
@@ -116,7 +117,9 @@ class Cart extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractS
      */
     protected function _prepareLayout()
     {
-        $deleteAllConfirmString = __('Are you sure you want to delete all items from shopping cart?');
+        $deleteAllConfirmString = $this->escapeJs(
+            $this->escapeHtml(__('Are you sure you want to delete all items from shopping cart?'))
+        );
         $this->addChild(
             'empty_customer_cart_button',
             \Magento\Backend\Block\Widget\Button::class,
@@ -150,6 +153,7 @@ class Cart extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractS
 
     /**
      * @inheritdoc
+     * @since 102.0.4
      */
     public function getItemCount()
     {

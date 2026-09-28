@@ -1,17 +1,20 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Product;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Entity\Attribute;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\ReservedAttributeList;
 use PHPUnit\Framework\TestCase;
 
+#[CoversClass(ReservedAttributeList::class)]
 class ReservedAttributeListTest extends TestCase
 {
     /**
@@ -28,10 +31,7 @@ class ReservedAttributeListTest extends TestCase
         );
     }
 
-    /**
-     * @covers \Magento\Catalog\Model\Product\ReservedAttributeList::isReservedAttribute
-     * @dataProvider dataProvider
-     */
+    #[DataProvider('dataProvider')]
     public function testIsReservedAttribute($isUserDefined, $attributeCode, $expected)
     {
         $attribute = $this->createPartialMock(
@@ -40,7 +40,7 @@ class ReservedAttributeListTest extends TestCase
         );
 
         $attribute->expects($this->once())->method('getIsUserDefined')->willReturn($isUserDefined);
-        $attribute->expects($this->any())->method('getAttributeCode')->willReturn($attributeCode);
+        $attribute->method('getAttributeCode')->willReturn($attributeCode);
 
         $this->assertEquals($expected, $this->model->isReservedAttribute($attribute));
     }
@@ -48,7 +48,7 @@ class ReservedAttributeListTest extends TestCase
     /**
      * @return array
      */
-    public function dataProvider()
+    public static function dataProvider()
     {
         return [
             [false, 'some_code', false],

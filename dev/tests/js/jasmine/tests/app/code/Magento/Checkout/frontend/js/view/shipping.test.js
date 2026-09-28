@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 /* eslint max-nested-callbacks: 0 */
@@ -60,7 +60,12 @@ define(['squire', 'ko', 'jquery', 'jquery/validate'], function (Squire, ko, $) {
             ),
             'Magento_Checkout/js/checkout-data': jasmine.createSpyObj(
                 'checkoutData',
-                ['setSelectedShippingAddress', 'setNewCustomerShippingAddress', 'setSelectedShippingRate']
+                [
+                    'setSelectedShippingAddress',
+                    'setNewCustomerShippingAddress',
+                    'setSelectedShippingRate',
+                    'getSelectedShippingRate'
+                ]
             ),
             'Magento_Ui/js/lib/registry/registry': {
                 async: jasmine.createSpy().and.returnValue(function () {}),

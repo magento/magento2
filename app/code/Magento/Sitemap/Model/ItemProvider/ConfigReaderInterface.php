@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Sitemap\Model\ItemProvider;
@@ -10,6 +10,7 @@ namespace Magento\Sitemap\Model\ItemProvider;
  * Item resolver config reader interface
  *
  * @api
+ * @since 100.3.0
  */
 interface ConfigReaderInterface
 {
@@ -18,6 +19,7 @@ interface ConfigReaderInterface
      *
      * @param int $storeId
      * @return string
+     * @since 100.3.0
      */
     public function getPriority($storeId);
 
@@ -26,6 +28,7 @@ interface ConfigReaderInterface
      *
      * @param int $storeId
      * @return string
+     * @since 100.3.0
      */
     public function getChangeFrequency($storeId);
 }

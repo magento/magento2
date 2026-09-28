@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\ResourceModel\Provider;
 
 /**
  * Interface provides entities id list that should be updated in grid
+ * @api
  */
 interface NotSyncedDataProviderInterface
 {

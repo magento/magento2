@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Payment\Test\Unit\Model\Method;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\ExtensionAttributesFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
@@ -20,6 +21,7 @@ use Magento\Payment\Model\Method\Logger;
 use Magento\Quote\Model\Quote;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -27,24 +29,35 @@ use Psr\Log\LoggerInterface;
  */
 class FreeTest extends TestCase
 {
-    /** @var Free */
+    /**
+     * @var Free
+     */
     protected $methodFree;
 
-    /**  @var MockObject */
+    /**
+     * @var MockObject
+     */
     protected $scopeConfig;
 
-    /**  @var MockObject */
+    /**
+     * @var MockObject
+     */
     protected $currencyPrice;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
+        $objectManagerMock = $this->createMock(ObjectManager::class);
+        ObjectManager::setInstance($objectManagerMock);
+
         $paymentData  = $this->createMock(Data::class);
-        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
-        $this->currencyPrice = $this->getMockBuilder(PriceCurrencyInterface::class)
-            ->getMock();
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $this->currencyPrice = $this->createMock(PriceCurrencyInterface::class);
 
         $context = $this->createPartialMock(Context::class, ['getEventDispatcher']);
-        $eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $eventManagerMock = $this->createMock(ManagerInterface::class);
         $context->expects($this->any())->method('getEventDispatcher')->willReturn($eventManagerMock);
 
         $registry = $this->createMock(Registry::class);
@@ -52,7 +65,7 @@ class FreeTest extends TestCase
         $customAttributeFactory = $this->createMock(AttributeValueFactory::class);
 
         $loggerMock = $this->getMockBuilder(Logger::class)
-            ->setConstructorArgs([$this->getMockForAbstractClass(LoggerInterface::class)])
+            ->setConstructorArgs([$this->createMock(LoggerInterface::class)])
             ->getMock();
 
         $this->methodFree = new Free(
@@ -68,34 +81,41 @@ class FreeTest extends TestCase
     }
 
     /**
+     * Test get config payment action
+     *
      * @param string $orderStatus
      * @param string $paymentAction
-     * @param mixed $result
-     * @dataProvider getConfigPaymentActionProvider
+     * @param string|null $result
+     * @return void
      */
-    public function testGetConfigPaymentAction($orderStatus, $paymentAction, $result)
+    #[DataProvider('getConfigPaymentActionProvider')]
+    public function testGetConfigPaymentAction($orderStatus, $paymentAction, $result): void
     {
-        $this->scopeConfig->expects($this->at(0))
-            ->method('getValue')
-            ->willReturn($orderStatus);
 
         if ($orderStatus != 'pending') {
-            $this->scopeConfig->expects($this->at(1))
+            $this->scopeConfig
                 ->method('getValue')
-                ->willReturn($paymentAction);
+                ->willReturnOnConsecutiveCalls($orderStatus, $paymentAction);
         }
         $this->assertEquals($result, $this->methodFree->getConfigPaymentAction());
     }
 
     /**
+     * Test is available
+     *
      * @param float $grandTotal
      * @param bool $isActive
      * @param bool $notEmptyQuote
      * @param bool $result
-     * @dataProvider getIsAvailableProvider
+     * @return void
      */
-    public function testIsAvailable($grandTotal, $isActive, $notEmptyQuote, $result)
-    {
+    #[DataProvider('getIsAvailableProvider')]
+    public function testIsAvailable(
+        float $grandTotal,
+        bool $isActive,
+        bool $notEmptyQuote,
+        bool $result
+    ): void {
         $quote = null;
         if ($notEmptyQuote) {
             $quote = $this->createMock(Quote::class);
@@ -119,7 +139,7 @@ class FreeTest extends TestCase
     /**
      * @return array
      */
-    public function getIsAvailableProvider()
+    public static function getIsAvailableProvider(): array
     {
         return [
             [0, true, true, true],
@@ -133,7 +153,7 @@ class FreeTest extends TestCase
     /**
      * @return array
      */
-    public function getConfigPaymentActionProvider()
+    public static function getConfigPaymentActionProvider(): array
     {
         return [
             ['pending', 'action', null],

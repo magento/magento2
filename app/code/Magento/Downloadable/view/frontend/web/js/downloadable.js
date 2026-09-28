@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 /**
  * @api
@@ -17,7 +17,19 @@ define([
      */
     $.widget('mage.downloadable', {
         options: {
-            priceHolderSelector: '.price-box'
+            priceHolderSelector: '.price-box',
+            linkElement: '',
+            allElements: ''
+        },
+
+        /**
+         * @inheritdoc
+         */
+        _init: function initLinks() {
+            var element = this.element,
+                options = $(this.options.linkElement, element);
+
+            options.trigger('change');
         },
 
         /**

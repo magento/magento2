@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Eav\Model;
@@ -487,11 +487,11 @@ abstract class Form
     {
         $validator = $this->_getValidator($data);
         if (!$validator->isValid($this->getEntity())) {
-            $messages = [[]];
+            $messages = [];
             foreach ($validator->getMessages() as $errorMessages) {
                 $messages[] = (array)$errorMessages;
             }
-            return array_merge(...$messages);
+            return array_merge([], ...$messages);
         }
         return true;
     }

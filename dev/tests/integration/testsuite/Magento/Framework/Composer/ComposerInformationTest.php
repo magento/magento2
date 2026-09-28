@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Composer;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Tests Magento\Framework\ComposerInformation
@@ -34,6 +35,9 @@ class ComposerInformationTest extends \PHPUnit\Framework\TestCase
      */
     private $composerFactory;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
@@ -57,20 +61,14 @@ class ComposerInformationTest extends \PHPUnit\Framework\TestCase
             ['root' => __DIR__ . '/_files/' . $composerDir, 'config' => $directories]
         );
 
-        $this->filesystem = $this->objectManager->create(
-            \Magento\Framework\Filesystem::class,
-            ['directoryList' => $this->directoryList]
-        );
-
         $this->composerJsonFinder = new ComposerJsonFinder($this->directoryList);
         $this->composerFactory = new ComposerFactory($this->directoryList, $this->composerJsonFinder);
     }
 
     /**
      * @param $composerDir string Directory under _files that contains composer files
-     *
-     * @dataProvider getRequiredPhpVersionDataProvider
      */
+    #[DataProvider('getRequiredPhpVersionDataProvider')]
     public function testGetRequiredPhpVersion($composerDir)
     {
         $this->setupDirectory($composerDir);
@@ -81,14 +79,13 @@ class ComposerInformationTest extends \PHPUnit\Framework\TestCase
             ['composerFactory' => $this->composerFactory]
         );
 
-        $this->assertEquals("~7.1.3||~7.2.0", $composerInfo->getRequiredPhpVersion());
+        $this->assertEquals("~8.1.0", $composerInfo->getRequiredPhpVersion());
     }
 
     /**
      * @param $composerDir string Directory under _files that contains composer files
-     *
-     * @dataProvider getRequiredPhpVersionDataProvider
      */
+    #[DataProvider('getRequiredPhpVersionDataProvider')]
     public function testGetRequiredExtensions($composerDir)
     {
         $this->setupDirectory($composerDir);
@@ -108,9 +105,8 @@ class ComposerInformationTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param $composerDir string Directory under _files that contains composer files
-     *
-     * @dataProvider getRequiredPhpVersionDataProvider
      */
+    #[DataProvider('getRequiredPhpVersionDataProvider')]
     public function testGetSuggestedPackages($composerDir)
     {
         $this->setupDirectory($composerDir);
@@ -124,9 +120,8 @@ class ComposerInformationTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param $composerDir string Directory under _files that contains composer files
-     *
-     * @dataProvider getRequiredPhpVersionDataProvider
      */
+    #[DataProvider('getRequiredPhpVersionDataProvider')]
     public function testGetRootRequiredPackagesAndTypes($composerDir)
     {
         $this->setupDirectory($composerDir);
@@ -148,7 +143,7 @@ class ComposerInformationTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function getRequiredPhpVersionDataProvider()
+    public static function getRequiredPhpVersionDataProvider()
     {
         return [
             'Skeleton Composer' => ['testSkeleton'],
@@ -175,9 +170,8 @@ class ComposerInformationTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param $composerDir string Directory under _files that contains composer files
-     *
-     * @dataProvider getRequiredPhpVersionDataProvider
      */
+    #[DataProvider('getRequiredPhpVersionDataProvider')]
     public function testGetRootRepositories($composerDir)
     {
         $this->setupDirectory($composerDir);
@@ -196,9 +190,8 @@ class ComposerInformationTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param $composerDir string Directory under _files that contains composer files
-     *
-     * @dataProvider getRequiredPhpVersionDataProvider
      */
+    #[DataProvider('getRequiredPhpVersionDataProvider')]
     public function testIsMagentoRoot($composerDir)
     {
         $this->setupDirectory($composerDir);

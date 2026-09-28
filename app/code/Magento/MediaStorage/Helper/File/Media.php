@@ -1,16 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\MediaStorage\Helper\File;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-/**
- * Class Media
- */
 class Media extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
@@ -56,7 +53,7 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function collectFileInfo($mediaDirectory, $path)
     {
-        $path = ltrim($path, '\\/');
+        $path = $path !== null ? ltrim($path, '\\/') : '';
         $fullPath = $mediaDirectory . '/' . $path;
 
         $dir = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
@@ -71,6 +68,7 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
         }
 
         $path = str_replace(['/', '\\'], '/', $path);
+        // phpcs:disable Magento2.Functions.DiscouragedFunction
         $directory = dirname($path);
         if ($directory == '.') {
             $directory = null;

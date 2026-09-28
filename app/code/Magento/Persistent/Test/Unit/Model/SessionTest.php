@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,13 +16,17 @@ use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\Cookie\PublicCookieMetadata;
 use Magento\Framework\Stdlib\Cookie\SensitiveCookieMetadata;
 use Magento\Framework\Stdlib\CookieManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Persistent\Model\Session;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class SessionTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Session
      */
@@ -46,21 +50,25 @@ class SessionTest extends TestCase
     protected function setUp(): void
     {
         $helper = new ObjectManager($this);
-        $this->configMock = $this->getMockForAbstractClass(ConfigInterface::class);
-        $this->cookieManagerMock = $this->getMockForAbstractClass(CookieManagerInterface::class);
+        $this->configMock = $this->createMock(ConfigInterface::class);
+        $this->cookieManagerMock = $this->createMock(CookieManagerInterface::class);
         $this->cookieMetadataFactoryMock = $this->getMockBuilder(
             CookieMetadataFactory::class
         )->disableOriginalConstructor()
             ->getMock();
 
-        $resourceMock = $this->getMockForAbstractClass(
+        $resourceMock = $this->createPartialMock(
             AbstractDb::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['__wakeup', 'getIdFieldName', 'getConnection', 'beginTransaction', 'delete', 'commit', 'rollBack']
+            [
+                '__wakeup',
+                'getIdFieldName',
+                'getConnection',
+                'beginTransaction',
+                'delete',
+                'commit',
+                'rollBack',
+                '_construct'
+            ]
         );
 
         $actionValidatorMock = $this->createMock(RemoveAction::class);
@@ -96,7 +104,7 @@ class SessionTest extends TestCase
     }
 
     /**
-     * @covers \Magento\Persistent\Model\Session::removePersistentCookie
+     * Test afterDeleteCommit removes persistent cookie
      */
     public function testAfterDeleteCommit()
     {
@@ -143,6 +151,9 @@ class SessionTest extends TestCase
         $cookieMetadataMock->expects($this->once())
             ->method('setHttpOnly')
             ->with(true)->willReturnSelf();
+        $cookieMetadataMock->expects($this->once())
+            ->method('setSameSite')
+            ->with('Lax')->willReturnSelf();
         $this->cookieMetadataFactoryMock->expects($this->once())
             ->method('createPublicCookieMetadata')
             ->willReturn($cookieMetadataMock);
@@ -162,8 +173,8 @@ class SessionTest extends TestCase
      * @param int $cookieDuration
      * @param string $cookieValue
      * @param string $cookiePath
-     * @dataProvider renewPersistentCookieDataProvider
      */
+    #[DataProvider('renewPersistentCookieDataProvider')]
     public function testRenewPersistentCookie(
         $numGetCookieCalls,
         $numCalls,
@@ -186,6 +197,9 @@ class SessionTest extends TestCase
         $cookieMetadataMock->expects($this->exactly($numCalls))
             ->method('setHttpOnly')
             ->with(true)->willReturnSelf();
+        $cookieMetadataMock->expects($this->exactly($numCalls))
+            ->method('setSameSite')
+            ->with('Lax')->willReturnSelf();
         $this->cookieMetadataFactoryMock->expects($this->exactly($numCalls))
             ->method('createPublicCookieMetadata')
             ->willReturn($cookieMetadataMock);
@@ -208,7 +222,7 @@ class SessionTest extends TestCase
      *
      * @return array
      */
-    public function renewPersistentCookieDataProvider()
+    public static function renewPersistentCookieDataProvider()
     {
         return [
             'no duration' => [0, 0, null ],

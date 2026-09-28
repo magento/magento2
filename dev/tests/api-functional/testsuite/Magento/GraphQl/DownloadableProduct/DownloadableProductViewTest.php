@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -33,12 +33,9 @@ class DownloadableProductViewTest extends GraphQlAbstract
   {
        items{
            id
-           attribute_set_id
-           created_at
            name
            sku
            type_id
-           updated_at
         price{
         regularPrice{
           amount{
@@ -110,12 +107,9 @@ QUERY;
   {
        items{
            id
-           attribute_set_id
-           created_at
            name
            sku
            type_id
-           updated_at
            ...on PhysicalProductInterface{
           weight
           }

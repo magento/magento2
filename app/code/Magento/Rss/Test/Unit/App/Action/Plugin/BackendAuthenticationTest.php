@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -21,13 +21,16 @@ use PHPUnit\Framework\TestCase;
 
 class BackendAuthenticationTest extends TestCase
 {
-    public function testAroundDispatch()
+    /**
+     * @return void
+     */
+    public function testAroundDispatch(): void
     {
         /** @var AbstractAction|MockObject $subject */
         $subject = $this->createMock(AbstractAction::class);
 
         /** @var ResponseInterface|MockObject $response */
-        $response = $this->getMockForAbstractClass(ResponseInterface::class);
+        $response = $this->createMock(ResponseInterface::class);
 
         $proceed = function () use ($response) {
             return $response;
@@ -40,9 +43,10 @@ class BackendAuthenticationTest extends TestCase
         $request->expects($this->once())->method('getParam')->with('type')->willReturn('notifystock');
 
         /** @var StorageInterface|MockObject $session */
-        $session = $this->getMockForAbstractClass(StorageInterface::class);
-        $session->expects($this->at(0))->method('isLoggedIn')->willReturn(false);
-        $session->expects($this->at(1))->method('isLoggedIn')->willReturn(true);
+        $session = $this->createMock(StorageInterface::class);
+        $session
+            ->method('isLoggedIn')
+            ->willReturnOnConsecutiveCalls(false, true);
 
         $username = 'admin';
         $password = '123123qa';
@@ -56,11 +60,13 @@ class BackendAuthenticationTest extends TestCase
             ->willReturn([$username, $password]);
         $httpAuthentication->expects($this->once())->method('setAuthenticationFailed')->with('RSS Feeds');
 
-        $authorization = $this->getMockForAbstractClass(AuthorizationInterface::class);
-        $authorization->expects($this->at(0))->method('isAllowed')->with('Magento_Rss::rss')
-            ->willReturn(true);
-        $authorization->expects($this->at(1))->method('isAllowed')->with('Magento_Catalog::catalog_inventory')
-            ->willReturn(false);
+        $authorization = $this->createMock(AuthorizationInterface::class);
+        $authorization
+            ->method('isAllowed')
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['Magento_Rss::rss'] => true,
+                ['Magento_Catalog::catalog_inventory'] => false
+            });
 
         $aclResources = [
             'feed' => 'Magento_Rss::rss',

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Robots\Model\Config;
@@ -23,7 +23,7 @@ use Magento\Store\Model\StoreManagerInterface;
  * Required to implement Page Cache functionality.
  *
  * @api
- * @since 100.2.0
+ * @since 100.1.0
  */
 class Value extends ConfigValue implements IdentityInterface
 {
@@ -35,7 +35,7 @@ class Value extends ConfigValue implements IdentityInterface
     /**
      * @inheritdoc
      *
-     * @since 100.2.0
+     * @since 100.1.0
      */
     protected $_cacheTag = [self::CACHE_TAG];
 
@@ -63,9 +63,9 @@ class Value extends ConfigValue implements IdentityInterface
         ScopeConfigInterface $config,
         TypeListInterface $cacheTypeList,
         StoreResolver $storeResolver,
-        StoreManagerInterface $storeManager = null,
-        AbstractResource $resource = null,
-        AbstractDb $resourceCollection = null,
+        ?StoreManagerInterface $storeManager = null,
+        ?AbstractResource $resource = null,
+        ?AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->storeManager = $storeManager ?: \Magento\Framework\App\ObjectManager::getInstance()
@@ -86,7 +86,7 @@ class Value extends ConfigValue implements IdentityInterface
      * Get unique page cache identities
      *
      * @return array
-     * @since 100.2.0
+     * @since 100.1.0
      */
     public function getIdentities()
     {

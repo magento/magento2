@@ -2,8 +2,8 @@
 /**
  * Creates a simple product to be used for test cases.
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 use Magento\Catalog\Api\CategoryLinkManagementInterface;
@@ -75,7 +75,14 @@ $product->setTypeId(Type::TYPE_SIMPLE)
         ]
     )->setCanSaveCustomOptions(true)
     ->setHasOptions(true)
-    ->setCustomAttribute('test_configurable', 42);
+    ->setCustomAttribute(
+        'test_configurable',
+        Bootstrap::getObjectManager()
+            ->create(\Magento\Eav\Api\AttributeRepositoryInterface::class)
+            ->get('catalog_product', 'test_configurable')
+            ->getOptions()[1]
+            ->getValue()
+    );
 
 $oldOptions = [
     [

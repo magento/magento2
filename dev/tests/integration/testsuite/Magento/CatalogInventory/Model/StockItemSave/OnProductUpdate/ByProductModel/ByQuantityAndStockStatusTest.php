@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CatalogInventory\Model\StockItemSave\OnProductUpdate\ByProductModel;
 
@@ -44,7 +44,7 @@ class ByQuantityAndStockStatusTest extends \PHPUnit\Framework\TestCase
      * model (deprecated)
      *
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
-     * @magentoDbIsolation disabled
+     * @magentoDbIsolation enabled
      */
     public function testSaveBySetQuantityAndStockStatus()
     {
@@ -61,7 +61,7 @@ class ByQuantityAndStockStatusTest extends \PHPUnit\Framework\TestCase
      * via product model (deprecated)
      *
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
-     * @magentoDbIsolation disabled
+     * @magentoDbIsolation enabled
      */
     public function testSaveBySetData()
     {

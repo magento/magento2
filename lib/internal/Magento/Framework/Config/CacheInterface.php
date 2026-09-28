@@ -2,8 +2,8 @@
 /**
  * Configuration cache interface
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Config;
 
@@ -11,6 +11,7 @@ namespace Magento\Framework\Config;
  * Config cache interface.
  *
  * @api
+ * @since 100.0.2
  */
 interface CacheInterface extends \Magento\Framework\Cache\FrontendInterface
 {

@@ -1,18 +1,21 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\SendFriend\Test\Unit\Model;
 
+use Magento\Framework\Stdlib\Cookie\CookieMetadata;
+use Magento\Framework\Stdlib\Cookie\SensitiveCookieMetadata;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\SendFriend\Helper\Data;
 use Magento\SendFriend\Model\SendFriend;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 
 /**
  * Test SendFriend
@@ -35,19 +38,24 @@ class SendFriendTest extends TestCase
      */
     protected $sendfriendDataMock;
 
+    /**
+     * @var MockObject|CookieMetadataFactory
+     */
+    protected $cookieMetadataFactoryMock;
+
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->sendfriendDataMock = $this->getMockBuilder(Data::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->cookieManagerMock = $this->getMockForAbstractClass(CookieManagerInterface::class);
+        $this->sendfriendDataMock = $this->createMock(Data::class);
+        $this->cookieManagerMock = $this->createMock(CookieManagerInterface::class);
+        $this->cookieMetadataFactoryMock = $this->createMock(CookieMetadataFactory::class);
 
         $this->model = $objectManager->getObject(
             SendFriend::class,
             [
                 'sendfriendData' => $this->sendfriendDataMock,
                 'cookieManager' => $this->cookieManagerMock,
+                'cookieMetadataFactory' => $this->cookieMetadataFactoryMock
             ]
         );
     }
@@ -69,15 +77,23 @@ class SendFriendTest extends TestCase
     public function testSentCountByCookies()
     {
         $cookieName = 'testCookieName';
+        $sensitiveCookieMetadataMock = $this->createMock(SensitiveCookieMetadata::class);
         $this->sendfriendDataMock->expects($this->once())->method('getCookieName')->with()->willReturn(
             $cookieName
         );
 
         $this->cookieManagerMock->expects($this->once())->method('getCookie')->with($cookieName);
         $this->cookieManagerMock->expects($this->once())->method('setSensitiveCookie');
+        $this->cookieMetadataFactoryMock->expects($this->once())
+            ->method('createSensitiveCookieMetadata')
+            ->with(
+                [
+                    CookieMetadata::KEY_SAME_SITE => 'Lax'
+                ]
+            )
+            ->willReturn($sensitiveCookieMetadataMock);
         $sendFriendClass = new \ReflectionClass(SendFriend::class);
         $method = $sendFriendClass->getMethod('_sentCountByCookies');
-        $method->setAccessible(true);
         $method->invokeArgs($this->model, [true]);
     }
 }

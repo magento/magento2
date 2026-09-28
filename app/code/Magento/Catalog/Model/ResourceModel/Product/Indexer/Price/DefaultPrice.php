@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Price;
 
@@ -15,10 +15,9 @@ use Magento\Framework\Indexer\DimensionalIndexerInterface;
  *
  * @api
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
- * @deprecated Not used anymore for price indexation. Class left for backward compatibility
+ * @deprecated 102.0.6 Not used anymore for price indexation. Class left for backward compatibility
  * @see DimensionalIndexerInterface
  */
 class DefaultPrice extends AbstractIndexer implements PriceInterface
@@ -85,7 +84,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\Module\Manager $moduleManager,
         $connectionName = null,
-        IndexTableStructureFactory $indexTableStructureFactory = null,
+        ?IndexTableStructureFactory $indexTableStructureFactory = null,
         array $priceModifiers = []
     ) {
         $this->_eventManager = $eventManager;
@@ -240,7 +239,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
      * Prepare final price temporary index table
      *
      * @return $this
-     * @deprecated
+     * @deprecated 102.0.5
      * @see prepareFinalPriceTable()
      */
     protected function _prepareDefaultFinalPriceTable()
@@ -775,7 +774,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         $select = $connection->select()->from($table, $columns);
 
         if ($entityIds !== null) {
-            $select->where('entity_id in (?)', count($entityIds) > 0 ? $entityIds : 0);
+            $select->where('entity_id in (?)', count($entityIds) > 0 ? $entityIds : 0, \Zend_Db::INT_TYPE);
         }
 
         $query = $select->insertFromSelect($this->getIdxTable(), [], false);

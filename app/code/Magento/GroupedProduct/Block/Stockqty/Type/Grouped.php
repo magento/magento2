@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\GroupedProduct\Block\Stockqty\Type;
 
@@ -32,10 +32,10 @@ class Grouped extends \Magento\CatalogInventory\Block\Stockqty\Composite impleme
      */
     public function getIdentities()
     {
-        $identities = [[]];
+        $identities = [];
         foreach ($this->getChildProducts() as $item) {
             $identities[] = $item->getIdentities();
         }
-        return array_merge(...$identities);
+        return array_merge([], ...$identities);
     }
 }

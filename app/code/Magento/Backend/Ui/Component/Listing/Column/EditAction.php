@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Backend\Ui\Component\Listing\Column;
 
@@ -14,6 +14,7 @@ use Magento\Ui\Component\Listing\Columns\Column;
  * Represents Edit link in grid for entity by its identifier field
  *
  * @api
+ * @since 101.0.0
  */
 class EditAction extends Column
 {
@@ -43,6 +44,7 @@ class EditAction extends Column
     /**
      * @param array $dataSource
      * @return array
+     * @since 101.0.0
      */
     public function prepareDataSource(array $dataSource)
     {

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab;
@@ -61,7 +61,7 @@ class Advanced extends Generic
         \Magento\Framework\Data\FormFactory $formFactory,
         Yesno $yesNo,
         Data $eavData,
-        array $disableScopeChangeList = ['sku'],
+        array $disableScopeChangeList = [],
         array $data = []
     ) {
         $this->_yesNo = $yesNo;

@@ -1,14 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Bundle\Helper;
 
 /**
  * Bundle helper
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {

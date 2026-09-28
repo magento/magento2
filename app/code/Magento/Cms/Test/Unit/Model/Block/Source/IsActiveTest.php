@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Cms\Test\Unit\Model\Block\Source;
 use Magento\Cms\Model\Block;
 use Magento\Cms\Model\Block\Source\IsActive;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -38,7 +39,7 @@ class IsActiveTest extends TestCase
         $this->objectManagerHelper = new ObjectManager($this);
         $this->cmsBlockMock = $this->getMockBuilder(Block::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAvailableStatuses'])
+            ->onlyMethods(['getAvailableStatuses'])
             ->getMock();
 
         $this->object = $this->objectManagerHelper->getObject($this->getSourceClassName(), [
@@ -58,8 +59,8 @@ class IsActiveTest extends TestCase
      * @param array $availableStatuses
      * @param array $expected
      * @return void
-     * @dataProvider getAvailableStatusesDataProvider
      */
+    #[DataProvider('getAvailableStatusesDataProvider')]
     public function testToOptionArray(array $availableStatuses, array $expected)
     {
         $this->cmsBlockMock->expects($this->once())
@@ -72,7 +73,7 @@ class IsActiveTest extends TestCase
     /**
      * @return array
      */
-    public function getAvailableStatusesDataProvider()
+    public static function getAvailableStatusesDataProvider()
     {
         return [
             [

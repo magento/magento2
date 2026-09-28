@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductTypes\ConfigInterface;
 use Magento\Catalog\Model\ResourceModel\Url;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\Context;
@@ -23,14 +24,20 @@ use Magento\Wishlist\Model\Item\Option;
 use Magento\Wishlist\Model\Item\OptionFactory;
 use Magento\Wishlist\Model\ResourceModel\Item\Collection;
 use Magento\Wishlist\Model\ResourceModel\Item\Option\CollectionFactory;
+use Magento\Wishlist\Model\ResourceModel\Item as ItemResource;
+use Magento\Quote\Model\Quote\Item as QuoteItem;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ItemTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Registry|MockObject
      */
@@ -47,7 +54,7 @@ class ItemTest extends TestCase
     protected $productTypeConfig;
 
     /**
-     * @var \Magento\Wishlist\Model\ResourceModel\Item|MockObject
+     * @var ItemResource|MockObject
      */
     protected $resource;
 
@@ -86,40 +93,26 @@ class ItemTest extends TestCase
      */
     protected $model;
 
+    /**
+     * @var Json
+     */
+    protected $serializer;
+
     protected function setUp(): void
     {
-        $context = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->registry = $this->getMockBuilder(Registry::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
-            ->getMock();
-        $this->date = $this->getMockBuilder(DateTime::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->catalogUrl = $this->getMockBuilder(Url::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->optionFactory = $this->getMockBuilder(OptionFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $this->itemOptFactory =
-            $this->getMockBuilder(CollectionFactory::class)
-                ->disableOriginalConstructor()
-                ->setMethods(['create'])
-                ->getMock();
-        $this->productTypeConfig = $this->getMockBuilder(ConfigInterface::class)
-            ->getMock();
-        $this->productRepository = $this->getMockForAbstractClass(ProductRepositoryInterface::class);
-        $this->resource = $this->getMockBuilder(\Magento\Wishlist\Model\ResourceModel\Item::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->collection = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $context = $this->createMock(Context::class);
+        $this->registry = $this->createMock(Registry::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->date = $this->createMock(DateTime::class);
+        $this->catalogUrl = $this->createMock(Url::class);
+        $this->optionFactory = $this->createPartialMock(OptionFactory::class, ['create']);
+        $this->itemOptFactory = $this->createPartialMock(CollectionFactory::class, ['create']);
+        $this->productTypeConfig = $this->createMock(ConfigInterface::class);
+        $this->productRepository = $this->createMock(ProductRepositoryInterface::class);
+        $this->resource = $this->createMock(ItemResource::class);
+        $this->collection = $this->createMock(Collection::class);
+
+        $this->serializer = $this->createMock(Json::class);
 
         $this->model = new Item(
             $context,
@@ -133,20 +126,24 @@ class ItemTest extends TestCase
             $this->productRepository,
             $this->resource,
             $this->collection,
-            []
+            [],
+            $this->serializer
         );
     }
 
     /**
-     * @dataProvider getOptionsDataProvider
      */
+    #[DataProvider('getOptionsDataProvider')]
     public function testAddGetOptions($code, $option)
     {
+        if (is_callable($option)) {
+            $option = $option($this);
+        }
         $this->assertEmpty($this->model->getOptions());
-        $optionMock = $this->getMockBuilder(Option::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setData', 'getCode', '__wakeup'])
-            ->getMock();
+        $optionMock = $this->createPartialMockWithReflection(
+            Option::class,
+            ['getCode', 'setData', '__wakeup']
+        );
         $optionMock->expects($this->any())
             ->method('setData')
             ->willReturnSelf();
@@ -162,15 +159,18 @@ class ItemTest extends TestCase
     }
 
     /**
-     * @dataProvider getOptionsDataProvider
      */
+    #[DataProvider('getOptionsDataProvider')]
     public function testRemoveOptionByCode($code, $option)
     {
+        if (is_callable($option)) {
+            $option = $option($this);
+        }
         $this->assertEmpty($this->model->getOptions());
-        $optionMock = $this->getMockBuilder(Option::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setData', 'getCode', '__wakeup'])
-            ->getMock();
+        $optionMock = $this->createPartialMockWithReflection(
+            Option::class,
+            ['getCode', 'setData', '__wakeup']
+        );
         $optionMock->expects($this->any())
             ->method('setData')
             ->willReturnSelf();
@@ -189,26 +189,36 @@ class ItemTest extends TestCase
         $this->assertTrue($actualOption->isDeleted());
     }
 
-    /**
-     * @return array
-     */
-    public function getOptionsDataProvider()
+    protected function getMockForOptionClass()
     {
-        $optionMock = $this->getMockBuilder(Option::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getCode', '__wakeup'])
-            ->getMock();
+        $optionMock = $this->createPartialMockWithReflection(
+            Option::class,
+            ['getCode', '__wakeup']
+        );
         $optionMock->expects($this->any())
             ->method('getCode')
             ->willReturn('second_key');
+        return $optionMock;
+    }
 
-        $productMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+    protected function getMockForProductClass()
+    {
+        $productMock = $this->createMock(Product::class);
+        return new DataObject(['code' => 'third_key', 'product' => $productMock]);
+    }
+
+    /**
+     * @return array
+     */
+    public static function getOptionsDataProvider()
+    {
+        $optionMock = static fn (self $testCase) => $testCase->getMockForOptionClass();
+
+        $productMock = static fn (self $testCase) => $testCase->getMockForProductClass();
         return [
             ['first_key', ['code' => 'first_key', 'value' => 'first_data']],
             ['second_key', $optionMock],
-            ['third_key', new DataObject(['code' => 'third_key', 'product' => $productMock])],
+            ['third_key', $productMock],
         ];
     }
 
@@ -216,14 +226,14 @@ class ItemTest extends TestCase
     {
         $code = 'someOption';
         $optionValue = 100;
-        $optionsOneMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getCode', '__wakeup', 'getValue'])
-            ->getMock();
-        $optionsTwoMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['__wakeup', 'getValue'])
-            ->getMock();
+        $optionsOneMock = $this->createPartialMockWithReflection(
+            QuoteItem::class,
+            ['getCode', 'getValue', '__wakeup']
+        );
+        $optionsTwoMock = $this->createPartialMockWithReflection(
+            QuoteItem::class,
+            ['getValue', '__wakeup']
+        );
 
         $optionsOneMock->expects($this->once())->method('getCode')->willReturn($code);
         $optionsOneMock->expects($this->once())->method('getValue')->willReturn($optionValue);
@@ -242,14 +252,14 @@ class ItemTest extends TestCase
         $code = 'someOption';
         $optionOneValue = 100;
         $optionTwoValue = 200;
-        $optionsOneMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getCode', '__wakeup', 'getValue'])
-            ->getMock();
-        $optionsTwoMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['__wakeup', 'getValue'])
-            ->getMock();
+        $optionsOneMock = $this->createPartialMockWithReflection(
+            QuoteItem::class,
+            ['getCode', 'getValue', '__wakeup']
+        );
+        $optionsTwoMock = $this->createPartialMockWithReflection(
+            QuoteItem::class,
+            ['getValue', '__wakeup']
+        );
 
         $optionsOneMock->expects($this->once())->method('getCode')->willReturn($code);
         $optionsOneMock->expects($this->once())->method('getValue')->willReturn($optionOneValue);
@@ -266,14 +276,14 @@ class ItemTest extends TestCase
     public function testCompareOptionsNegativeOptionsTwoHaveNotOption()
     {
         $code = 'someOption';
-        $optionsOneMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getCode', '__wakeup'])
-            ->getMock();
-        $optionsTwoMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['__wakeup'])
-            ->getMock();
+        $optionsOneMock = $this->createPartialMockWithReflection(
+            QuoteItem::class,
+            ['getCode', '__wakeup']
+        );
+        $optionsTwoMock = $this->createPartialMockWithReflection(
+            QuoteItem::class,
+            ['__wakeup']
+        );
 
         $optionsOneMock->expects($this->once())->method('getCode')->willReturn($code);
 
@@ -288,10 +298,10 @@ class ItemTest extends TestCase
     public function testSetAndSaveItemOptions()
     {
         $this->assertEmpty($this->model->getOptions());
-        $firstOptionMock = $this->getMockBuilder(Option::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getCode', 'isDeleted', 'delete', '__wakeup'])
-            ->getMock();
+        $firstOptionMock = $this->createPartialMockWithReflection(
+            Option::class,
+            ['getCode', 'isDeleted', 'delete', '__wakeup']
+        );
         $firstOptionMock->expects($this->any())
             ->method('getCode')
             ->willReturn('first_code');
@@ -301,10 +311,10 @@ class ItemTest extends TestCase
         $firstOptionMock->expects($this->once())
             ->method('delete');
 
-        $secondOptionMock = $this->getMockBuilder(Option::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getCode', 'save', '__wakeup'])
-            ->getMock();
+        $secondOptionMock = $this->createPartialMockWithReflection(
+            Option::class,
+            ['getCode', 'save', '__wakeup']
+        );
         $secondOptionMock->expects($this->any())
             ->method('getCode')
             ->willReturn('second_code');
@@ -330,10 +340,10 @@ class ItemTest extends TestCase
         $storeId = 0;
         $this->model->setData('product_id', $productId);
         $this->model->setData('store_id', $storeId);
-        $productMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setCustomOptions', 'setFinalPrice'])
-            ->getMock();
+        $productMock = $this->createPartialMock(
+            Product::class,
+            ['setCustomOptions', 'setFinalPrice']
+        );
         $productMock->expects($this->any())
             ->method('setFinalPrice')
             ->with(null);

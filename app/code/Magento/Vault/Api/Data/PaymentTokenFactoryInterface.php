@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Vault\Api\Data;
@@ -9,7 +9,7 @@ namespace Magento\Vault\Api\Data;
 /**
  * Interface PaymentTokenFactoryInterface
  * @api
- * @since 100.3.0
+ * @since 101.0.0
  */
 interface PaymentTokenFactoryInterface
 {
@@ -24,7 +24,7 @@ interface PaymentTokenFactoryInterface
      * Create payment token entity
      * @param $type string|null
      * @return PaymentTokenInterface
-     * @since 100.3.0
+     * @since 101.0.0
      */
     public function create($type = null);
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Pricing\Price;
@@ -12,6 +12,7 @@ use Magento\Framework\Pricing\Amount\AmountInterface;
  * Catalog price interface
  *
  * @api
+ * @since 100.0.2
  */
 interface PriceInterface
 {

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Helper;
 
@@ -9,6 +9,7 @@ use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Phrase;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class OutputTest extends TestCase
@@ -73,10 +74,10 @@ class OutputTest extends TestCase
     /**
      * Tests if string has directives.
      *
-     * @dataProvider isDirectiveDataProvider
      * @param string|Phrase $html
      * @param bool $expectedResult
      */
+    #[DataProvider('isDirectiveDataProvider')]
     public function testIsDirectivesExists($html, bool $expectedResult): void
     {
         $this->assertEquals($expectedResult, $this->_helper->isDirectivesExists($html));
@@ -87,7 +88,7 @@ class OutputTest extends TestCase
      *
      * @return array
      */
-    public function isDirectiveDataProvider(): array
+    public static function isDirectiveDataProvider(): array
     {
         return [
             'attribute_html_without_directive' => ['Test string', false],

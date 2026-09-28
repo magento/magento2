@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -82,9 +82,9 @@ class ConditionsToSearchCriteriaMapper
      */
     private function mapConditionToFilterGroup(ConditionInterface $condition)
     {
-        if ($condition->getType() === CombinedCondition::class) {
+        if ($condition instanceof CombinedCondition) {
             return $this->mapCombinedConditionToFilterGroup($condition);
-        } elseif ($condition->getType() === SimpleCondition::class) {
+        } elseif ($condition instanceof SimpleCondition) {
             return $this->mapSimpleConditionToFilterGroup($condition);
         }
 

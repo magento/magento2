@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -129,7 +129,7 @@ class Authorization
                 //No new value
                 continue;
             }
-            if (!in_array($newValue, $oldValues, true)) {
+            if ($newValue !== null && !in_array($newValue, $oldValues, true)) {
                 return true;
             }
         }
@@ -159,7 +159,7 @@ class Authorization
                     if (!$savedProduct->getSku()) {
                         throw NoSuchEntityException::singleField('id', $product->getId());
                     }
-                    $oldData = $product->getOrigData();
+                    $oldData = $savedProduct->getData();
                 }
             }
             if ($this->hasProductChanged($product, $oldData)) {

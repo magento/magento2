@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\
 /**
  * @api
  * Field type converter from internal data types to elastic service.
+ * @since 100.3.0
  */
 interface ConverterInterface
 {
@@ -28,6 +29,7 @@ interface ConverterInterface
      *
      * @param string $internalType
      * @return string
+     * @since 100.3.0
      */
     public function convert(string $internalType): string;
 }

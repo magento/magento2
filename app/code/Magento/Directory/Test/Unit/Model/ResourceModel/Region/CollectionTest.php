@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -42,20 +42,12 @@ class CollectionTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
         $entityFactoryMock = $this->createMock(EntityFactory::class);
-        $loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
-        $fetchStrategyMock = $this->getMockForAbstractClass(FetchStrategyInterface::class);
-        $eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
-        $localeResolverMock = $this->getMockForAbstractClass(ResolverInterface::class);
+        $loggerMock = $this->createMock(LoggerInterface::class);
+        $fetchStrategyMock = $this->createMock(FetchStrategyInterface::class);
+        $eventManagerMock = $this->createMock(ManagerInterface::class);
+        $localeResolverMock = $this->createMock(ResolverInterface::class);
         $connectionMock = $this->createMock(Mysql::class);
-        $resourceMock = $this->getMockForAbstractClass(
-            AbstractDb::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['getConnection', 'getMainTable', 'getTable', '__wakeup']
-        );
+        $resourceMock = $this->createMock(AbstractDb::class);
         $this->allowedCountries = $this->createMock(AllowedCountries::class);
 
         $selectMock = $this->createMock(Select::class);

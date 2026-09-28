@@ -1,14 +1,16 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Ups\Block\Backend\System;
 
 use Magento\Backend\Block\Template;
 use Magento\Backend\Block\Template\Context as TemplateContext;
+use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\Website;
 use Magento\Ups\Helper\Config as ConfigHelper;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
 
 /**
  * Backend shipping UPS content block
@@ -35,15 +37,18 @@ class CarrierConfig extends Template
      * @param \Magento\Ups\Helper\Config $carrierConfig
      * @param \Magento\Store\Model\Website $websiteModel
      * @param array $data
+     * @param JsonHelper|null $jsonHelper
      */
     public function __construct(
         TemplateContext $context,
         ConfigHelper $carrierConfig,
         Website $websiteModel,
-        array $data = []
+        array $data = [],
+        ?JsonHelper $jsonHelper = null
     ) {
         $this->carrierConfig = $carrierConfig;
         $this->_websiteModel = $websiteModel;
+        $data['jsonHelper'] = $jsonHelper ?? ObjectManager::getInstance()->get(JsonHelper::class);
         parent::__construct($context, $data);
     }
 

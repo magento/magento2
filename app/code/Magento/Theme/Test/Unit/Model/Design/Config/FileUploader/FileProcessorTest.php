@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\UrlInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\MediaStorage\Model\File\Uploader;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
@@ -26,6 +27,8 @@ use PHPUnit\Framework\TestCase;
  */
 class FileProcessorTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var \Magento\MediaStorage\Model\File\UploaderFactory|MockObject */
     protected $uploaderFactory;
 
@@ -57,7 +60,7 @@ class FileProcessorTest extends TestCase
     {
         $this->uploaderFactory = $this->getMockBuilder(\Magento\MediaStorage\Model\File\UploaderFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->uploader = $this->getMockBuilder(Uploader::class)
             ->disableOriginalConstructor()
@@ -74,17 +77,21 @@ class FileProcessorTest extends TestCase
         $filesystem = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->directoryWrite = $this->getMockBuilder(WriteInterface::class)
-            ->getMockForAbstractClass();
+        $this->directoryWrite = $this->createMock(WriteInterface::class);
         $filesystem->expects($this->once())
             ->method('getDirectoryWrite')
             ->with(DirectoryList::MEDIA)
             ->willReturn($this->directoryWrite);
-        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
-            ->getMockForAbstractClass();
-        $this->store = $this->getMockBuilder(StoreInterface::class)
-            ->setMethods(['getBaseUrl'])
-            ->getMockForAbstractClass();
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->store = $this->createPartialMockWithReflection(
+            StoreInterface::class,
+            [
+                'getId', 'setId', 'getCode', 'setCode', 'getName', 'setName',
+                'getWebsiteId', 'setWebsiteId', 'getStoreGroupId', 'setIsActive',
+                'getIsActive', 'setStoreGroupId', 'getExtensionAttributes',
+                'setExtensionAttributes', 'getBaseUrl'
+            ]
+        );
 
         $this->fileProcessor = new FileProcessor(
             $this->uploaderFactory,
@@ -111,7 +118,7 @@ class FileProcessorTest extends TestCase
         $this->store->expects($this->once())
             ->method('getBaseUrl')
             ->with(UrlInterface::URL_TYPE_MEDIA)
-            ->willReturn('http://magento2.com/pub/media/');
+            ->willReturn('http://magento2.com/media/');
         $this->directoryWrite->expects($this->once())
             ->method('getAbsolutePath')
             ->with('tmp/' . FileProcessor::FILE_DIR)
@@ -160,7 +167,7 @@ class FileProcessorTest extends TestCase
                 'name' => 'file.jpg',
                 'size' => '234234',
                 'type' => 'image/jpg',
-                'url' => 'http://magento2.com/pub/media/tmp/' . FileProcessor::FILE_DIR . '/file.jpg'
+                'url' => 'http://magento2.com/media/tmp/' . FileProcessor::FILE_DIR . '/file.jpg'
             ],
             $this->fileProcessor->saveToTmp($fieldCode)
         );

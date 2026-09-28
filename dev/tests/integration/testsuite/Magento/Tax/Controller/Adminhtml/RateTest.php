@@ -1,10 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Tax\Controller\Adminhtml;
+
+use Magento\Framework\App\Request\Http as HttpRequest;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoAppArea adminhtml
@@ -12,9 +15,9 @@ namespace Magento\Tax\Controller\Adminhtml;
 class RateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
-     * @dataProvider ajaxSaveActionDataProvider
      * @magentoDbIsolation enabled
      */
+    #[DataProvider('ajaxSaveActionDataProvider')]
     public function testAjaxSaveAction($postData, $expectedData)
     {
         $this->getRequest()->setPostValue($postData)->setMethod('POST');
@@ -50,7 +53,7 @@ class RateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
      *
      * @return array
      */
-    public function ajaxSaveActionDataProvider()
+    public static function ajaxSaveActionDataProvider()
     {
         $postData = ['rate' => '10.0000', 'tax_country_id' => 'US', 'tax_region_id' => '1'];
         return [
@@ -80,9 +83,9 @@ class RateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
     /**
      * Test wrong data conditions
      *
-     * @dataProvider ajaxSaveActionDataInvalidDataProvider
      * @magentoDbIsolation enabled
      */
+    #[DataProvider('ajaxSaveActionDataInvalidDataProvider')]
     public function testAjaxSaveActionInvalidData($postData, $expectedData)
     {
         $this->getRequest()->setPostValue($postData)->setMethod('POST');
@@ -106,7 +109,7 @@ class RateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
      *
      * @return array
      */
-    public function ajaxSaveActionDataInvalidDataProvider()
+    public static function ajaxSaveActionDataInvalidDataProvider()
     {
         $expectedData = [
             'success' => false,
@@ -187,13 +190,15 @@ class RateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
     }
 
     /**
-     * @dataProvider ajaxSaveActionDataProvider
      * @magentoDbIsolation enabled
      *
      * @param array $rateClassData
+     * @param array $expectedData
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function testAjaxLoadAction($rateClassData)
+    #[DataProvider('ajaxSaveActionDataProvider')]
+    public function testAjaxLoadAction($rateClassData, $expectedData)
     {
         /** @var \Magento\Tax\Api\Data\TaxRateInterfaceFactory $rateClassFactory */
         $rateClassFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
@@ -282,5 +287,35 @@ class RateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         $this->assertTrue(!array_key_exists('result', $result));
         $this->assertArrayHasKey('error_message', $result);
         $this->assertTrue(strlen($result['error_message'])>0);
+    }
+
+    /** Test Delete Tax Rate
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
+     * @return void
+     */
+    public function testDeleteRate(): void
+    {
+        $rateId = 2;
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
+        $this->getRequest()->setPostValue(['rate' => $rateId]);
+        $this->dispatch('backend/tax/rate/delete');
+        $successMessage = (string)__('You deleted the tax rate.');
+        $this->assertSessionMessages($this->equalTo([$successMessage]));
+    }
+
+    /** Test Delete Incorrect Tax Rate
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
+     * @return void
+     */
+    public function testDeleteIncorrectRate(): void
+    {
+        $incorrectRateId = 20999;
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
+        $this->getRequest()->setPostValue(['rate' => $incorrectRateId]);
+        $this->dispatch('backend/tax/rate/delete');
+        $errorMessage = (string)_("We can't delete this rate because of an incorrect rate ID.");
+        $this->assertSessionMessages($this->equalTo([$errorMessage]));
     }
 }

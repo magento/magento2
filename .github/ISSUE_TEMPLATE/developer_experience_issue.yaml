@@ -1,0 +1,45 @@
+name: Developer experience issue
+description: Issues related to customization, extensibility, modularity
+labels: ['Triage: Dev.Experience']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please read [our guidelines](https://developer.adobe.com/commerce/contributor/guides/code-contributions/#report-an-issue) before submitting the issue.
+  - type: textarea
+    attributes:
+      label: Summary
+      description: |
+        Describe the issue you are experiencing.
+        Include general information, error messages, environments, and so on.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Examples
+      description: |
+        Provide code examples or a patch with a test (recommended) to clearly indicate the problem.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Proposed solution
+      description: |
+        Suggest your potential solutions for this issue.
+  - type: textarea
+    attributes:
+      label: Release note
+      description: |
+        Help us to provide meaningful release notes to the community.
+  - type: checkboxes
+    attributes:
+      label: Triage and priority
+      description: |
+        Provide [Severity](https://developer.adobe.com/commerce/contributor/guides/code-contributions/#community-backlog-priority) assessment for the Issue as a Reporter.
+        This information helps us during the Confirmation and Issue triage processes.
+      options:
+        - label: 'Severity: **S0** _- Affects critical data or functionality and leaves users without workaround._'
+        - label: 'Severity: **S1** _- Affects critical data or functionality and forces users to employ a workaround._'
+        - label: 'Severity: **S2** _- Affects non-critical data or functionality and forces users to employ a workaround._'
+        - label: 'Severity: **S3** _- Affects non-critical data or functionality and does not force users to employ a workaround._'
+        - label: 'Severity: **S4** _- Affects aesthetics, professional look and feel, “quality” or “usability”._'

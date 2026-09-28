@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Wishlist\Observer;
@@ -15,7 +15,7 @@ use Magento\Wishlist\Model\WishlistFactory;
 
 /**
  * Class AddToCart
- * @deprecated 100.2.0
+ * @deprecated 101.0.0
  * @package Magento\Wishlist\Observer
  */
 class AddToCart implements ObserverInterface

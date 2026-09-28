@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,24 +10,19 @@ namespace Magento\Framework\Cache\Test\Unit\Backend;
 use Magento\Framework\Cache\Backend\Database;
 use Magento\Framework\Cache\Backend\RemoteSynchronizedCache;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class RemoteSynchronizedCacheTest extends TestCase
 {
     /**
-     * @var ObjectManager
-     */
-    protected $objectManager;
-
-    /**
-     * @var \Cm_Cache_Backend_File|MockObject
+     * @var \Zend_Cache_Backend_ExtendedInterface|MockObject
      */
     private $localCacheMockExample;
 
     /**
-     * @var Database|MockObject
+     * @var \Zend_Cache_Backend_ExtendedInterface|MockObject
      */
     private $remoteCacheMockExample;
 
@@ -36,142 +31,97 @@ class RemoteSynchronizedCacheTest extends TestCase
      */
     private $remoteSyncCacheInstance;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
-        $this->objectManager = new ObjectManager($this);
-
-        $this->localCacheMockExample = $this->getMockBuilder(\Cm_Cache_Backend_File::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->remoteCacheMockExample = $this->getMockBuilder(Database::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        /** @var \Magento\Framework\Cache\Backend\Database $databaseCacheInstance */
-
-        $this->remoteSyncCacheInstance = $this->objectManager->getObject(
-            RemoteSynchronizedCache::class,
+        $this->localCacheMockExample = $this->createMock(\Zend_Cache_Backend_ExtendedInterface::class);
+        $this->remoteCacheMockExample = $this->createMock(\Zend_Cache_Backend_ExtendedInterface::class);
+        $this->remoteSyncCacheInstance = new RemoteSynchronizedCache(
             [
-                'options' => [
-                    'remote_backend' => $this->remoteCacheMockExample,
-                    'local_backend' => $this->localCacheMockExample,
-                ],
+                'remote_backend' => $this->remoteCacheMockExample,
+                'local_backend' => $this->localCacheMockExample
             ]
         );
     }
 
     /**
-     * @param array $options
+     * Test that exception is thrown if cache is not configured.
      *
-     * @dataProvider initializeWithExceptionDataProvider
+     * @param array $options
+     * @return void
      */
-    public function testInitializeWithException($options)
+    #[DataProvider('initializeWithExceptionDataProvider')]
+    public function testInitializeWithException($options): void
     {
-        $this->expectException('Zend_Cache_Exception');
-        $this->objectManager->getObject(
-            RemoteSynchronizedCache::class,
-            [
-                'options' => $options,
-            ]
-        );
+        $this->expectException(\Zend_Cache_Exception::class);
+        new RemoteSynchronizedCache($options);
     }
 
     /**
      * @return array
      */
-    public function initializeWithExceptionDataProvider()
+    public static function initializeWithExceptionDataProvider(): array
     {
         return [
             'empty_backend_option' => [
                 'options' => [
                     'remote_backend' => null,
-                    'local_backend' => null,
-                ],
+                    'local_backend' => null
+                ]
             ],
             'empty_remote_backend_option' => [
                 'options' => [
                     'remote_backend' => Database::class,
-                    'local_backend' => null,
-                ],
+                    'local_backend' => null
+                ]
             ],
             'empty_local_backend_option' => [
                 'options' => [
                     'remote_backend' => null,
-                    'local_backend' => \Cm_Cache_Backend_File::class,
-                ],
-            ],
+                    'local_backend' => 'InvalidBackend'
+                ]
+            ]
         ];
     }
 
     /**
-     * @param array $options
+     * Test that exception is not thrown if cache is configured.
      *
-     * @dataProvider initializeWithOutExceptionDataProvider
+     * @return void
      */
-    public function testInitializeWithOutException($options)
+    public function testInitializeWithOutException(): void
     {
-        $result = $this->objectManager->getObject(
-            RemoteSynchronizedCache::class,
-            [
-                'options' => $options,
-            ]
-        );
+        $remoteMock = $this->createMock(\Zend_Cache_Backend_ExtendedInterface::class);
+        $localMock = $this->createMock(\Zend_Cache_Backend_ExtendedInterface::class);
+        
+        $options = [
+            'remote_backend' => $remoteMock,
+            'local_backend' => $localMock
+        ];
+        
+        $result = new RemoteSynchronizedCache($options);
         $this->assertInstanceOf(RemoteSynchronizedCache::class, $result);
     }
 
     /**
-     * @return array
+     * Test that load will return the newest data.
+     *
+     * @return void
      */
-    public function initializeWithOutExceptionDataProvider()
+    public function testLoad(): void
     {
-        $connectionMock = $this->getMockBuilder(Mysql::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        return [
-            'not_empty_backend_option' => [
-                'options' => [
-                    'remote_backend' => Database::class,
-                    'remote_backend_options' => [
-                        'adapter_callback' => '',
-                        'data_table' => 'data_table',
-                        'data_table_callback' => 'data_table_callback',
-                        'tags_table' => 'tags_table',
-                        'tags_table_callback' => 'tags_table_callback',
-                        'store_data' => '',
-                        'adapter' => $connectionMock,
-                    ],
-                    'local_backend' => \Cm_Cache_Backend_File::class,
-                    'local_backend_options' => [
-                        'cache_dir' => '/tmp',
-                    ],
-                ],
-            ],
-        ];
-    }
-
-    /**
-     * Test that load will always return newest data.
-     */
-    public function testLoadWithLocalData()
-    {
-        $localData = 1;
-        $remoteData = 2;
+        $localData = '1';
+        $remoteData = '2';
 
         $this->localCacheMockExample
-            ->expects($this->at(0))
             ->method('load')
             ->willReturn($localData);
 
         $this->remoteCacheMockExample
-            ->expects($this->at(0))
             ->method('load')
-            ->willReturn(\hash('sha256', (string)$remoteData));
-
-        $this->remoteCacheMockExample
-            ->expects($this->at(1))
-            ->method('load')
-            ->willReturn($remoteData);
+            ->willReturnOnConsecutiveCalls(\hash('sha256', (string)$remoteData), $remoteData);
 
         $this->localCacheMockExample
             ->expects($this->atLeastOnce())
@@ -179,31 +129,39 @@ class RemoteSynchronizedCacheTest extends TestCase
             ->with($remoteData)
             ->willReturn(true);
 
-        $this->assertEquals($remoteData, $this->remoteSyncCacheInstance->load(1));
+        $this->assertEquals($remoteData, $this->remoteSyncCacheInstance->load('1'));
     }
 
-    public function testLoadWithNoLocalAndNoRemoteData()
+    /**
+     * Test that load will not return data when no local data and no remote data exist.
+     *
+     * @return void
+     */
+    public function testLoadWithNoLocalAndNoRemoteData(): void
     {
         $localData = false;
         $remoteData = false;
 
         $this->localCacheMockExample
-            ->expects($this->at(0))
             ->method('load')
             ->willReturn($localData);
 
         $this->remoteCacheMockExample
-            ->expects($this->at(0))
             ->method('load')
             ->willReturn($remoteData);
 
-        $this->assertEquals($remoteData, $this->remoteSyncCacheInstance->load(1));
+        $this->assertEquals(false, $this->remoteSyncCacheInstance->load('1'));
     }
 
-    public function testLoadWithNoLocalAndRemoteData()
+    /**
+     * Test that load will return the newest data when only remote data exists.
+     *
+     * @return void
+     */
+    public function testLoadWithNoLocalAndWithRemoteData(): void
     {
         $localData = false;
-        $remoteData = 1;
+        $remoteData = '1';
 
         $this->localCacheMockExample
             ->expects($this->atLeastOnce())
@@ -211,7 +169,6 @@ class RemoteSynchronizedCacheTest extends TestCase
             ->willReturn($localData);
 
         $this->remoteCacheMockExample
-            ->expects($this->at(0))
             ->method('load')
             ->willReturn($remoteData);
 
@@ -220,10 +177,91 @@ class RemoteSynchronizedCacheTest extends TestCase
             ->method('save')
             ->willReturn(true);
 
-        $this->assertEquals($remoteData, $this->remoteSyncCacheInstance->load(1));
+        $this->assertEquals($remoteData, $this->remoteSyncCacheInstance->load('1'));
     }
 
-    public function testRemove()
+    /**
+     * Test that load will return the newest data when local data and remote data are the same.
+     *
+     * @return void
+     */
+    public function testLoadWithEqualLocalAndRemoteData(): void
+    {
+        $localData = '1';
+        $remoteData = '1';
+
+        $this->localCacheMockExample
+            ->method('load')
+            ->willReturn($localData);
+
+        $this->remoteCacheMockExample
+            ->method('load')
+            ->willReturn(\hash('sha256', (string)$remoteData));
+
+        $this->assertEquals($localData, $this->remoteSyncCacheInstance->load('1'));
+    }
+
+    /**
+     * Test that load will return stale cache.
+     *
+     * @return void
+     */
+    public function testLoadWithStaleCache(): void
+    {
+        $localData = '1';
+
+        $this->localCacheMockExample
+            ->method('load')
+            ->willReturn($localData);
+
+        $closure = \Closure::bind(function ($cacheInstance) {
+            $cacheInstance->_options['use_stale_cache'] = true;
+        }, null, $this->remoteSyncCacheInstance);
+        $closure($this->remoteSyncCacheInstance);
+
+        $this->remoteCacheMockExample
+            ->method('load')
+            ->willReturnOnConsecutiveCalls(false, true);
+
+        $this->assertEquals($localData, $this->remoteSyncCacheInstance->load('1'));
+    }
+
+    /**
+     * Test that load will generate data on the first attempt.
+     *
+     * @return void
+     */
+    public function testLoadWithoutStaleCache(): void
+    {
+        $localData = '1';
+
+        $this->localCacheMockExample
+            ->method('load')
+            ->willReturnOnConsecutiveCalls($localData);
+
+        $closure = \Closure::bind(function ($cacheInstance) {
+            $cacheInstance->_options['use_stale_cache'] = true;
+        }, null, $this->remoteSyncCacheInstance);
+        $closure($this->remoteSyncCacheInstance);
+
+        $closure = \Closure::bind(function ($cacheInstance) {
+            return $cacheInstance->lockSign;
+        }, null, $this->remoteSyncCacheInstance);
+        $lockSign = $closure($this->remoteSyncCacheInstance);
+
+        $this->remoteCacheMockExample
+            ->method('load')
+            ->willReturnOnConsecutiveCalls(null, false, false, $lockSign, false, false, false, false);
+
+        $this->assertEquals(false, $this->remoteSyncCacheInstance->load('1'));
+    }
+
+    /**
+     * Test data remove.
+     *
+     * @return void
+     */
+    public function testRemove(): void
     {
         $this->remoteCacheMockExample
             ->expects($this->exactly(2))
@@ -235,51 +273,140 @@ class RemoteSynchronizedCacheTest extends TestCase
             ->method('remove')
             ->willReturn(true);
 
-        $this->remoteSyncCacheInstance->remove(1);
+        $this->remoteSyncCacheInstance->remove('1');
     }
 
-    public function testClean()
+    /**
+     * Test data clean.
+     *
+     * @return void
+     */
+    public function testClean(): void
     {
+        $mode = 'clean_tags';
+        $tags = ['MAGE'];
         $this->remoteCacheMockExample
             ->expects($this->exactly(1))
             ->method('clean')
+            ->with($mode, $tags)
             ->willReturn(true);
 
-        $this->remoteSyncCacheInstance->clean();
+        $this->localCacheMockExample
+            ->expects($this->once())
+            ->method('clean')
+            ->with($mode, [])
+            ->willReturn(true);
+
+        $this->remoteSyncCacheInstance->clean($mode, $tags);
     }
 
-    public function testSaveWithRemoteData()
+    /**
+     * Test data save when remote data exist.
+     *
+     * @return void
+     */
+    public function testSaveWithEqualRemoteData(): void
     {
-        $remoteData = 1;
+        $remoteData = '1';
+        $tags = ['MAGE'];
 
         $this->remoteCacheMockExample
-            ->expects($this->at(0))
             ->method('load')
-            ->willReturn(\hash('sha256', (string)$remoteData));
-
-        $this->remoteCacheMockExample
-            ->expects($this->at(1))
-            ->method('load')
-            ->willReturn($remoteData);
+            ->willReturnOnConsecutiveCalls(\hash('sha256', (string)$remoteData), $remoteData);
 
         $this->localCacheMockExample
             ->expects($this->once())
             ->method('save')
+            ->with($remoteData, 1, [])
             ->willReturn(true);
 
-        $this->remoteSyncCacheInstance->save($remoteData, 1);
+        $this->remoteSyncCacheInstance->save($remoteData, '1', $tags);
     }
 
-    public function testSaveWithoutRemoteData()
+    /**
+     * Test data save when remote data are missed but hash exists.
+     *
+     * @return void
+     */
+    public function testSaveWithEqualHashesAndMissedRemoteData(): void
+    {
+        $cacheKey = 'key';
+        $dataToSave = '2';
+        $remoteData = '1';
+        $tags = ['MAGE'];
+
+        $this->remoteCacheMockExample
+            ->method('load')
+            ->willReturnOnConsecutiveCalls(\hash('sha256', $dataToSave), $remoteData);
+
+        $this->remoteCacheMockExample
+            ->expects($this->exactly(2))
+            ->method('save')
+            ->willReturnCallback(
+                function ($arg1, $arg2, $arg3) use ($dataToSave, $cacheKey, $tags) {
+                    if ($arg1 === $dataToSave &&
+                        $arg2 === $cacheKey &&
+                        $arg3 === $tags) {
+                        return true;
+                    } elseif ($arg1 === \hash('sha256', $dataToSave) &&
+                        $arg2 === $cacheKey . ':hash' && $arg3 === $tags) {
+                        return true;
+                    }
+                }
+            );
+
+        $this->localCacheMockExample
+            ->expects($this->once())
+            ->method('save')
+            ->with($dataToSave, $cacheKey, [])
+            ->willReturn(true);
+
+        $this->remoteSyncCacheInstance->save($dataToSave, $cacheKey, $tags);
+    }
+
+    /**
+     * @return void
+     */
+    public function testSaveWithMismatchedRemoteData(): void
+    {
+        $remoteData = '1';
+
+        $this->remoteCacheMockExample
+            ->method('load')
+            ->willReturn(\hash('sha256', $remoteData));
+
+        $this->remoteCacheMockExample->expects($this->exactly(2))->method('save');
+        $this->localCacheMockExample->expects($this->once())->method('save');
+
+        $this->remoteSyncCacheInstance->save('2', '1');
+    }
+
+    /**
+     * Test data save when remote data is not exist.
+     *
+     * @return void
+     */
+    public function testSaveWithoutRemoteData(): void
     {
         $this->remoteCacheMockExample
-            ->expects($this->at(0))
             ->method('load')
             ->willReturn(false);
 
         $this->remoteCacheMockExample->expects($this->exactly(2))->method('save');
         $this->localCacheMockExample->expects($this->once())->method('save');
 
-        $this->remoteSyncCacheInstance->save(1, 1);
+        $this->remoteSyncCacheInstance->save('1', '1');
+    }
+
+    public function testTest(): void
+    {
+        $this->localCacheMockExample
+            ->method('test')
+            ->willReturn(true);
+        $this->remoteCacheMockExample
+            ->method('test')
+            ->willReturn(false);
+
+        $this->assertFalse($this->remoteSyncCacheInstance->test('1'));
     }
 }

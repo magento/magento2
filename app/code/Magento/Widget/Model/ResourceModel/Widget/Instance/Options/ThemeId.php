@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Widget\Model\ResourceModel\Widget\Instance\Options;
@@ -9,7 +9,7 @@ namespace Magento\Widget\Model\ResourceModel\Widget\Instance\Options;
 /**
  * Widget Instance Theme Id Options
  *
- * @deprecated 100.2.0 created new class that correctly loads theme options and whose name follows naming convention
+ * @deprecated 100.1.7 created new class that correctly loads theme options and whose name follows naming convention
  * @see \Magento\Widget\Model\ResourceModel\Widget\Instance\Options\Themes
  */
 class ThemeId implements \Magento\Framework\Option\ArrayInterface

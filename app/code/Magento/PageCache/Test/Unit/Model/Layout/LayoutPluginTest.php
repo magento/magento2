@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,8 +15,10 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\Framework\View\Layout;
 use Magento\PageCache\Model\Config;
 use Magento\PageCache\Model\Layout\LayoutPlugin;
+use Magento\PageCache\Model\Spi\PageCacheTagsPreprocessorInterface;
 use Magento\PageCache\Test\Unit\Block\Controller\StubBlock;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -58,6 +60,8 @@ class LayoutPluginTest extends TestCase
         $this->responseMock = $this->createMock(Http::class);
         $this->configMock = $this->createMock(Config::class);
         $this->maintenanceModeMock = $this->createMock(MaintenanceMode::class);
+        $preprocessor = $this->createMock(PageCacheTagsPreprocessorInterface::class);
+        $preprocessor->method('process')->willReturnArgument(0);
 
         $this->model = (new ObjectManagerHelper($this))->getObject(
             LayoutPlugin::class,
@@ -65,6 +69,7 @@ class LayoutPluginTest extends TestCase
                 'response' => $this->responseMock,
                 'config' => $this->configMock,
                 'maintenanceMode' => $this->maintenanceModeMock,
+                'pageCacheTagsPreprocessor' => $preprocessor
             ]
         );
     }
@@ -74,8 +79,8 @@ class LayoutPluginTest extends TestCase
      * @param $layoutIsCacheable
      * @param $maintenanceModeIsEnabled
      * @return void
-     * @dataProvider afterGenerateElementsDataProvider
      */
+    #[DataProvider('afterGenerateElementsDataProvider')]
     public function testAfterGenerateElements($cacheState, $layoutIsCacheable, $maintenanceModeIsEnabled): void
     {
         $maxAge = 180;
@@ -98,7 +103,7 @@ class LayoutPluginTest extends TestCase
     /**
      * @return array
      */
-    public function afterGenerateElementsDataProvider(): array
+    public static function afterGenerateElementsDataProvider(): array
     {
         return [
             'Full_cache state is true, Layout is cache-able' => [true, true, false],
@@ -116,8 +121,8 @@ class LayoutPluginTest extends TestCase
      * @param $configCacheType
      * @param $ttl
      * @return void
-     * @dataProvider afterGetOutputDataProvider
      */
+    #[DataProvider('afterGetOutputDataProvider')]
     public function testAfterGetOutput($cacheState, $layoutIsCacheable, $expectedTags, $configCacheType, $ttl): void
     {
         $html = 'html';
@@ -145,7 +150,7 @@ class LayoutPluginTest extends TestCase
     /**
      * @return array
      */
-    public function afterGetOutputDataProvider(): array
+    public static function afterGetOutputDataProvider(): array
     {
         $tags = 'identity1,identity2';
         return [

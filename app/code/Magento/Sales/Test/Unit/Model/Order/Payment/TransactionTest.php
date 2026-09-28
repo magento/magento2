@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,7 @@ use PHPUnit\Framework\TestCase;
 
 class TransactionTest extends TestCase
 {
+
     /** @var  Transaction */
     protected $transaction;
 
@@ -31,12 +32,12 @@ class TransactionTest extends TestCase
     protected function setUp(): void
     {
         $this->contextMock = $this->getMockBuilder(Context::class)
-            ->setMethods(['getEventDispatcher'])
+            ->onlyMethods(['getEventDispatcher'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
-            ->setMethods(['dispatch'])
-            ->getMockForAbstractClass();
+            ->onlyMethods(['dispatch'])
+            ->getMock();
 
         $this->contextMock->expects($this->once())
             ->method('getEventDispatcher')

@@ -1,0 +1,14 @@
+<?php
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
+
+/**
+ * @var \Magento\Customer\Block\Account\Link $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
+?>
+<li class="link my-account-link">
+    <a <?= /* @noEscape */ $block->getLinkAttributes() ?>><?= $escaper->escapeHtml($block->getLabel()) ?></a>
+</li>

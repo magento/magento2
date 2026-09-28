@@ -1,11 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Block\Product\View\Attribute;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class checks multi select attribute displaying on frontend
@@ -47,7 +49,6 @@ class MultiSelectAttributeTest extends AbstractAttributeTest
     }
 
     /**
-     * @dataProvider attributeWithTagsProvider
      * @magentoAppArea frontend
      * @magentoDataFixture Magento/Catalog/_files/multiselect_attribute_with_html.php
      * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
@@ -56,6 +57,7 @@ class MultiSelectAttributeTest extends AbstractAttributeTest
      * @param string $expectedAttributeValue
      * @return void
      */
+    #[DataProvider('attributeWithTagsProvider')]
     public function testAttributeWithHtmlTags(
         bool $allowHtmlTags,
         string $attributeValue,
@@ -69,18 +71,18 @@ class MultiSelectAttributeTest extends AbstractAttributeTest
     /**
      * @return array
      */
-    public function attributeWithTagsProvider(): array
+    public static function attributeWithTagsProvider(): array
     {
         return [
             'allow_html_tags' => [
-                'allow_html_tags' => true,
-                'attribute_value' => '<h2>Option 2</h2>',
-                'expected_attribute_value' => '<h2>Option 2</h2>',
+                'allowHtmlTags' => true,
+                'attributeValue' => '<h2>Option 2</h2>',
+                'expectedAttributeValue' => '<h2>Option 2</h2>',
             ],
             'disallow_html_tags' => [
-                'allow_html_tags' => false,
-                'attribute_value' => '<h2>Option 2</h2>',
-                'expected_attribute_value' => '&lt;h2&gt;Option 2&lt;/h2&gt;',
+                'allowHtmlTags' => false,
+                'attributeValue' => '<h2>Option 2</h2>',
+                'expectedAttributeValue' => '&lt;h2&gt;Option 2&lt;/h2&gt;',
             ],
         ];
     }

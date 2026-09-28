@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,11 +18,14 @@ use Magento\Framework\Encryption\Encryptor;
 use Magento\Framework\Event\Observer;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /** for testing upgrade password observer
  */
 class UpgradeCustomerPasswordObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var UpgradeCustomerPasswordObserver
      */
@@ -50,7 +53,7 @@ class UpgradeCustomerPasswordObserverTest extends TestCase
     {
         $this->customerRepository = $this
             ->getMockBuilder(CustomerRepositoryInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->customerRegistry = $this->getMockBuilder(CustomerRegistry::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -75,16 +78,16 @@ class UpgradeCustomerPasswordObserverTest extends TestCase
         $passwordHash = 'hash:salt:999';
         $model = $this->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId'])
+            ->onlyMethods(['getId'])
             ->getMock();
-        $customer = $this->getMockBuilder(CustomerInterface::class)
-            ->setMethods(['setData'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $customerSecure = $this->getMockBuilder(CustomerSecure::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getPasswordHash', 'setPasswordHash'])
-            ->getMock();
+        $customer = $this->createPartialMockWithReflection(
+            \Magento\Customer\Model\Data\Customer::class,
+            ['setData', 'getId', 'getEmail']
+        );
+        $customerSecure = $this->createPartialMockWithReflection(
+            CustomerSecure::class,
+            ['getPasswordHash', 'setPasswordHash']
+        );
         $model->expects($this->exactly(2))
             ->method('getId')
             ->willReturn($customerId);

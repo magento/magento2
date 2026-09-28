@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -69,35 +69,21 @@ class StoreCookieTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMockForAbstractClass();
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
 
-        $this->storeCookieManagerMock = $this->getMockBuilder(StoreCookieManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMockForAbstractClass();
+        $this->storeCookieManagerMock = $this->createMock(StoreCookieManagerInterface::class);
 
         $this->storeMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
 
         $this->subjectMock = $this->getMockBuilder(FrontController::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
 
-        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMockForAbstractClass();
+        $this->requestMock = $this->createMock(RequestInterface::class);
 
-        $this->storeRepositoryMock = $this->getMockBuilder(StoreRepositoryInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMockForAbstractClass();
+        $this->storeRepositoryMock = $this->createMock(StoreRepositoryInterface::class);
 
         $this->plugin = (new ObjectManager($this))->getObject(
             StoreCookie::class,

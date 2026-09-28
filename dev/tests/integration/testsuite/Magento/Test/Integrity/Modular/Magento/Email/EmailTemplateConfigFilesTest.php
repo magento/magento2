@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Test\Integrity\Modular\Magento\Email;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class EmailTemplateConfigFilesTest extends \PHPUnit\Framework\TestCase
 {
@@ -11,8 +13,8 @@ class EmailTemplateConfigFilesTest extends \PHPUnit\Framework\TestCase
      * Test that email template configuration file matches the format
      *
      * @param string $file
-     * @dataProvider fileFormatDataProvider
      */
+    #[DataProvider('fileFormatDataProvider')]
     public function testFileFormat($file)
     {
         $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
@@ -28,7 +30,7 @@ class EmailTemplateConfigFilesTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function fileFormatDataProvider()
+    public static function fileFormatDataProvider()
     {
         return \Magento\Framework\App\Utility\Files::init()->getConfigFiles('email_templates.xml');
     }
@@ -37,8 +39,8 @@ class EmailTemplateConfigFilesTest extends \PHPUnit\Framework\TestCase
      * Test that email template configuration contains references to existing template files
      *
      * @param string $templateId
-     * @dataProvider templateReferenceDataProvider
      */
+    #[DataProvider('templateReferenceDataProvider')]
     public function testTemplateReference($templateId)
     {
         /** @var \Magento\Email\Model\Template\Config $emailConfig */
@@ -62,7 +64,7 @@ class EmailTemplateConfigFilesTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function templateReferenceDataProvider()
+    public static function templateReferenceDataProvider()
     {
         $data = [];
         /** @var \Magento\Email\Model\Template\Config $emailConfig */

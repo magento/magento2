@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,6 +18,20 @@ use Magento\Framework\DB\Adapter\DeadlockException;
 class DeadlockRetrier implements DeadlockRetrierInterface
 {
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * @param \Psr\Log\LoggerInterface $logger
+     */
+    public function __construct(
+        \Psr\Log\LoggerInterface $logger
+    ) {
+        $this->logger = $logger;
+    }
+
+    /**
      * @inheritdoc
      */
     public function execute(callable $callback, AdapterInterface $connection)
@@ -30,6 +44,7 @@ class DeadlockRetrier implements DeadlockRetrierInterface
             try {
                 return $callback();
             } catch (DeadlockException $e) {
+                $this->logger->warning(sprintf("Deadlock detected in cron: %s", $e->getMessage()));
                 continue;
             }
         }

@@ -1,0 +1,15 @@
+<!--
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<each args="{ data: actionsList, as: 'action' }">
+    <li>
+        <a  href="#" text="action.title"
+           click="$parent[action.handler].bind($parent, $row())"
+           attr="{'data-action': 'item-' + action.name, class: action.classes}">
+        </a>
+    </li>
+</each>

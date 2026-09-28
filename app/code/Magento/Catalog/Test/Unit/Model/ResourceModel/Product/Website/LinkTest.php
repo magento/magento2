@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -41,16 +41,10 @@ class LinkTest extends TestCase
     {
         $this->resource = $this->createMock(ResourceConnection::class);
         $this->connection =
-            $this->getMockForAbstractClass(AdapterInterface::class);
-        $this->dbSelect = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->connection->expects($this->any())
-            ->method('select')
-            ->willReturn($this->dbSelect);
-        $this->resource->expects($this->any())
-            ->method('getConnection')
-            ->willReturn($this->connection);
+            $this->createMock(AdapterInterface::class);
+        $this->dbSelect = $this->createMock(Select::class);
+        $this->connection->method('select')->willReturn($this->dbSelect);
+        $this->resource->method('getConnection')->willReturn($this->connection);
         $this->resource->expects($this->atLeastOnce())
             ->method('getTableName')
             ->with('catalog_product_website')
@@ -81,7 +75,7 @@ class LinkTest extends TestCase
         $newWebsiteIds = [2,3];
         $websiteIds = [1,2];
         $productId = 1;
-        $product = $this->getMockForAbstractClass(ProductInterface::class);
+        $product = $this->createMock(ProductInterface::class);
         $product->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn($productId);

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -26,7 +26,7 @@ class DeveloperTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->interceptionConfig = $this->getMockForAbstractClass(ConfigInterface::class);
+        $this->interceptionConfig = $this->createMock(ConfigInterface::class);
         $this->model = new Developer();
     }
 
@@ -57,5 +57,23 @@ class DeveloperTest extends TestCase
 
         $this->assertEquals('SomeClass\Interceptor', $this->model->getInstanceType('SomeClass'));
         $this->assertEquals('SomeClass', $this->model->getOriginalInstanceType('SomeClass'));
+    }
+
+    /**
+     * Test correct instance type is returned when plugins are created for virtual type parents
+     *
+     * @return void
+     */
+    public function testGetInstanceTypeWithPluginOnVirtualTypeParent() : void
+    {
+        $reflectionClass = new \ReflectionClass(get_class($this->model));
+        $reflectionProperty = $reflectionClass->getProperty('_virtualTypes');
+        $reflectionProperty->setValue($this->model, ['SomeVirtualClass' => 'SomeClass']);
+
+        $this->interceptionConfig->expects($this->once())->method('hasPlugins')->with('SomeClass')->willReturn(true);
+        $this->model->setInterceptionConfig($this->interceptionConfig);
+
+        $instanceType = $this->model->getInstanceType('SomeVirtualClass');
+        $this->assertEquals('SomeClass\Interceptor', $instanceType);
     }
 }

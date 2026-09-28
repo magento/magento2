@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
@@ -16,5 +16,8 @@
         <element name="resetFilter" type="button" selector=".action-default.scalable.action-reset.action-tertiary"/>
         <element name="searchResultFirstRow" type="text" selector=".data-grid>tbody>tr"/>
         <element name="messageByType" type="block" selector="#messages .message-{{messageType}}" parameterized="true"/>
+        <element name="action" type="select" selector=".admin__control-select"/>
+        <element name="queueNewsletterOption" type="input" selector="//option[contains(text(),'Queue Newsletter')]"/>
+        <element name="Preview" type="text" selector="//td[contains(text(),'{{var1}}')]//following-sibling::td/select//option[contains(text(), 'Preview')]" parameterized="true" timeout="60"/>
     </section>
 </sections>

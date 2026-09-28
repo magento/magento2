@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Ui\DataProvider\Product\Listing\Collector;
@@ -23,16 +23,16 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 class Price implements ProductRenderCollectorInterface
 {
     /** FInal Price key */
-    const KEY_FINAL_PRICE = "final_price";
+    public const KEY_FINAL_PRICE = "final_price";
 
     /** Minimal Price key */
-    const KEY_MINIMAL_PRICE = "minimal_price";
+    public const KEY_MINIMAL_PRICE = "minimal_price";
 
     /** Regular Price key */
-    const KEY_REGULAR_PRICE = "regular_price";
+    public const KEY_REGULAR_PRICE = "regular_price";
 
     /** Max Price key */
-    const KEY_MAX_PRICE = "max_price";
+    public const KEY_MAX_PRICE = "max_price";
 
     /**
      * @var PriceCurrencyInterface

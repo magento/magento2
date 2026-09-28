@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminImportCustomOptionsBetweenProductsTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Import customizable options between products "/>
+            <title value="Import customizable options from Product A to Product B and verify order "/>
+            <description value="This test case verifies whether customizable options in simple product displaying in order while importing from other product."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-6349"/>
+            <group value="catalog"/>
+        </annotations>
+        <before>
+            <!-- Pre-condition 2: Create two products -->
+            <createData entity="_defaultProduct" stepKey="productA"/>
+            <createData entity="_defaultProduct" stepKey="productB"/>
+            <!-- Step 1: Login as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Pre-condition 1: Create store view -->
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createFrenchStoreView">
+                <argument name="customStore" value="customStoreFR"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Delete products, store view -->
+            <deleteData createDataKey="productA" stepKey="deleteProductA"/>
+            <deleteData createDataKey="productB" stepKey="deleteProductB"/>
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteFrenchStoreView">
+                <argument name="customStore" value="customStoreFR"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Step 2: Edit product A -->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductEdit">
+            <argument name="productId" value="$$productA.id$$"/>
+        </actionGroup>
+        <!-- Step 3: Expand Customizable options -->
+        <scrollTo selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" stepKey="scrollToCustomizableOptionsA"/>
+        <waitForElementClickable selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" stepKey="waitForCustomizableOptionsA"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" stepKey="openCustomizableOptionsA"/>
+        <!-- Step 4,5: Click on Add options button and Add options -->
+        <actionGroup ref="AdminAddProductCustomOptionActionGroup" stepKey="addProductCustomFieldOption1">
+            <argument name="customOptionTitle" value="Option1"/>
+            <argument name="customOptionType" value="Field"/>
+        </actionGroup>
+        <actionGroup ref="AdminAddProductCustomOptionActionGroup" stepKey="addProductCustomFieldOption2">
+            <argument name="customOptionTitle" value="Option2"/>
+            <argument name="customOptionType" value="Field"/>
+        </actionGroup>
+        <actionGroup ref="AdminAddProductCustomOptionActionGroup" stepKey="addProductCustomFieldOption3">
+            <argument name="customOptionTitle" value="Option3"/>
+            <argument name="customOptionType" value="Field"/>
+        </actionGroup>
+        <actionGroup ref="AdminAddProductCustomOptionActionGroup" stepKey="addProductCustomFieldOption4">
+            <argument name="customOptionTitle" value="Option4"/>
+            <argument name="customOptionType" value="Field"/>
+        </actionGroup>
+        <scrollToTopOfPage stepKey="scrollToTopOfThePage"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProductA"/>
+        <!-- Step 6: Change the store view, and in customization option change the title -->
+        <waitForElementClickable selector="{{AdminProductFormActionSection.changeStoreButton}}" stepKey="waitForStoreSwitch"/>
+        <click selector="{{AdminProductFormActionSection.changeStoreButton}}" stepKey="clickStoreSwitcher"/>
+        <waitForElementClickable selector="{{AdminProductFormActionSection.selectStoreView(customStoreFR.name)}}" stepKey="waitForFrenchStore"/>
+        <click selector="{{AdminProductFormActionSection.selectStoreView(customStoreFR.name)}}" stepKey="selectFrenchStoreView"/>
+        <waitForElementClickable selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitForAcceptStoreSwitch"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="acceptStoreSwitch"/>
+        <waitForPageLoad stepKey="waitForFrenchStoreView"/>
+        <scrollTo selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" stepKey="scrollToCustomOptions"/>
+        <waitForElementClickable selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" stepKey="waitForCustomizableOptions"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" stepKey="openCustomizableOptions"/>
+        <actionGroup ref="AdminEditFieldTitleCustomOptionsActionGroup" stepKey="editOption1">
+            <argument name="optionNumber" value="1"/>
+            <argument name="optionInputFieldNumber" value="0"/>
+            <argument name="title" value="Option1FR"/>
+        </actionGroup>
+        <actionGroup ref="AdminEditFieldTitleCustomOptionsActionGroup" stepKey="editOption2">
+            <argument name="optionNumber" value="2"/>
+            <argument name="optionInputFieldNumber" value="1"/>
+            <argument name="title" value="Option2FR"/>
+        </actionGroup>
+        <actionGroup ref="AdminEditFieldTitleCustomOptionsActionGroup" stepKey="editOption3">
+            <argument name="optionNumber" value="3"/>
+            <argument name="optionInputFieldNumber" value="2"/>
+            <argument name="title" value="Option3FR"/>
+        </actionGroup>
+        <actionGroup ref="AdminEditFieldTitleCustomOptionsActionGroup" stepKey="editOption4">
+            <argument name="optionNumber" value="4"/>
+            <argument name="optionInputFieldNumber" value="3"/>
+            <argument name="title" value="Option4FR"/>
+        </actionGroup>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProductAFR"/>
+        <!--Step 7,8,9: Edit product B and import options from product A -->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductEditPage">
+            <argument name="productId" value="$$productB.id$$"/>
+        </actionGroup>
+        <waitForElementClickable selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" stepKey="waitForCustomizableOptionsForProductB"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" stepKey="openCustomizableOptionsForProductB"/>
+        <actionGroup ref="ImportProductCustomizableOptionsActionGroup" stepKey="importOptions">
+            <argument name="productName" value="$$productA.name$$"/>
+        </actionGroup>
+        <!--Step 10: Save product B-->
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProductB"/>
+        <!-- Navigate to custom options and set pagination display-->
+        <scrollTo selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" stepKey="scrollToTheCustomOptions"/>
+        <waitForElementClickable selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" stepKey="waitForTheCustomizableOptions"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" stepKey="openTheCustomizableOptions"/>
+        <actionGroup ref="AdminOpenAndApplyCustomOptionRecordsPerPageActionGroup" stepKey="setCustomPageSize">
+            <argument name="perPageInputValue" value="2"/>
+        </actionGroup>
+        <!-- Step 11: Verify options in product B are in correct order and have correct titles  -->
+        <actionGroup ref="AdminAssertCustomOptionBasedOnPositionActionGroup" stepKey="seeOption1Title">
+            <argument name="positionNumber" value="1"/>
+            <argument name="title" value="Option1"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertCustomOptionBasedOnPositionActionGroup" stepKey="seeOption2Title">
+            <argument name="positionNumber" value="2"/>
+            <argument name="title" value="Option2"/>
+        </actionGroup>
+        <!-- Click on custom options pagination next button-->
+        <scrollTo selector="{{AdminProductCustomizableOptionsSection.paginationNextButton}}" x="0" y="-80" stepKey="scrollToPagination"/>
+        <waitForElementClickable selector="{{AdminProductCustomizableOptionsSection.paginationNextButton}}" stepKey="waitForPaginationToBecomeActive"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.paginationNextButton}}" stepKey="clickNextButton"/>
+        <waitForPageLoad stepKey="waitForPaginationToLoad"/>
+        <actionGroup ref="AdminAssertCustomOptionBasedOnPositionActionGroup" stepKey="seeOption3Title">
+            <argument name="positionNumber" value="1"/>
+            <argument name="title" value="Option3"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertCustomOptionBasedOnPositionActionGroup" stepKey="seeOption4Title">
+            <argument name="positionNumber" value="2"/>
+            <argument name="title" value="Option4"/>
+        </actionGroup>
+    </test>
+</tests>

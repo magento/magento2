@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Bundle\Block\Catalog\Product\View\Type\Bundle;
@@ -205,7 +205,7 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
     protected function _getSelectedQty()
     {
         if ($this->getProduct()->hasPreconfiguredValues()) {
-            $selectedQty = (double)$this->getProduct()->getPreconfiguredValues()->getData(
+            $selectedQty = (float)$this->getProduct()->getPreconfiguredValues()->getData(
                 'bundle_option_qty/' . $this->getOption()->getId()
             );
             if ($selectedQty < 0) {

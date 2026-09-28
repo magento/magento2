@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\CatalogSearch\Controller\Result;
 
 use Magento\TestFramework\TestCase\AbstractController;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test cases for catalog quick search using search engine.
@@ -23,11 +24,11 @@ class IndexTest extends AbstractController
      * @magentoAppArea frontend
      * @magentoDataFixture Magento/CatalogSearch/_files/product_for_search.php
      * @magentoDataFixture Magento/CatalogSearch/_files/full_reindex.php
-     * @dataProvider searchStringDataProvider
      *
      * @param string $searchString
      * @return void
      */
+    #[DataProvider('searchStringDataProvider')]
     public function testExecute(string $searchString): void
     {
         $this->getRequest()->setParam('q', $searchString);
@@ -41,7 +42,7 @@ class IndexTest extends AbstractController
      *
      * @return array
      */
-    public function searchStringDataProvider(): array
+    public static function searchStringDataProvider(): array
     {
         return [
             'search_product_by_name' => ['Simple product name'],

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,6 +17,7 @@ use Magento\Catalog\Api\Data\ProductOptionExtensionFactory;
  * Adds product option to the order item according to product options processors pool.
  *
  * @api
+ * @since 102.0.1
  */
 class ProductOption
 {
@@ -54,6 +55,7 @@ class ProductOption
      * Adds product option to the order item.
      *
      * @param OrderItemInterface $orderItem
+     * @since 102.0.1
      */
     public function add(OrderItemInterface $orderItem): void
     {
@@ -61,7 +63,7 @@ class ProductOption
         $request = $orderItem->getBuyRequest();
         $request->setProductOptions($orderItem->getProductOptions());
 
-        $productType = $orderItem->getProductType();
+        $productType = $orderItem->getProductType() ?? '';
         if (isset($this->processorPool[$productType])
             && !$orderItem->getParentItemId()) {
             $data = $this->processorPool[$productType]->convertToProductOption($request);

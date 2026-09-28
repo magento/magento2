@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,11 +9,14 @@ namespace Magento\Checkout\Test\Unit\Block\Cart;
 
 use Magento\Checkout\Block\Cart\Link;
 use Magento\Checkout\Helper\Cart;
+use Magento\Framework\Math\Random;
 use Magento\Framework\Module\Manager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\Template\Context;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class LinkTest extends TestCase
 {
@@ -25,6 +28,18 @@ class LinkTest extends TestCase
     protected function setUp(): void
     {
         $this->_objectManagerHelper = new ObjectManager($this);
+
+        $objects = [
+            [
+                SecureHtmlRenderer::class,
+                $this->createMock(SecureHtmlRenderer::class)
+            ],
+            [
+                Random::class,
+                $this->createMock(Random::class)
+            ]
+        ];
+        $this->_objectManagerHelper->prepareObjectManager($objects);
     }
 
     public function testGetUrl()
@@ -32,7 +47,7 @@ class LinkTest extends TestCase
         $path = 'checkout/cart';
         $url = 'http://example.com/';
 
-        $urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
+        $urlBuilder = $this->createMock(UrlInterface::class);
         $urlBuilder->expects($this->once())->method('getUrl')->with($path)->willReturn($url . $path);
 
         $context = $this->_objectManagerHelper->getObject(
@@ -51,7 +66,7 @@ class LinkTest extends TestCase
         $moduleManager = $this->getMockBuilder(
             Manager::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['isOutputEnabled']
             )->getMock();
         $helper = $this->getMockBuilder(Cart::class)
@@ -76,14 +91,14 @@ class LinkTest extends TestCase
     }
 
     /**
-     * @dataProvider getLabelDataProvider
      */
+    #[DataProvider('getLabelDataProvider')]
     public function testGetLabel($productCount, $label)
     {
         $helper = $this->getMockBuilder(
             Cart::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['getSummaryCount']
             )->getMock();
 
@@ -92,14 +107,14 @@ class LinkTest extends TestCase
             Link::class,
             ['cartHelper' => $helper]
         );
-        $helper->expects($this->any())->method('getSummaryCount')->willReturn($productCount);
+        $helper->method('getSummaryCount')->willReturn($productCount);
         $this->assertSame($label, (string)$block->getLabel());
     }
 
     /**
      * @return array
      */
-    public function getLabelDataProvider()
+    public static function getLabelDataProvider()
     {
         return [[1, 'My Cart (1 item)'], [2, 'My Cart (2 items)'], [0, 'My Cart']];
     }

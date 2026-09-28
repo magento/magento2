@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\DB\Sql;
 
@@ -10,7 +10,7 @@ namespace Magento\Framework\DB\Sql;
  *
  * Just a wrapper over Expression for implementing the specific type of expression.
  * @api
- * @since 100.2.0
+ * @since 100.1.8
  */
 class ColumnValueExpression extends Expression
 {

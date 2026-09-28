@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,16 +10,15 @@ namespace Magento\Catalog\Test\Unit\Model\Product\Option;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Option;
 use Magento\Catalog\Model\Product\Option\Value;
+use Magento\Catalog\Model\ResourceModel\Product\Option\Value as OptionValue;
 use Magento\Catalog\Model\ResourceModel\Product\Option\Value\Collection;
 use Magento\Catalog\Model\ResourceModel\Product\Option\Value\CollectionFactory;
-use Magento\Catalog\Pricing\Price\CalculateCustomOptionCatalogRule;
-use Magento\Catalog\Pricing\Price\CustomOptionPriceCalculator;
-
 use Magento\Framework\Pricing\Price\PriceInterface;
 use Magento\Framework\Pricing\PriceInfoInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Catalog\Pricing\Price\CustomOptionPriceCalculator;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Test for \Magento\Catalog\Model\Product\Option\Value class.
@@ -32,15 +31,13 @@ class ValueTest extends TestCase
     private $model;
 
     /**
-     * @var CustomOptionPriceCalculator
+     * @var CustomOptionPriceCalculator|MockObject
      */
     private $customOptionPriceCalculatorMock;
 
     /**
-     * @var CalculateCustomOptionCatalogRule|MockObject
+     * @inheritDoc
      */
-    private $CalculateCustomOptionCatalogRule;
-
     protected function setUp(): void
     {
         $mockedResource = $this->getMockedResource();
@@ -50,18 +47,13 @@ class ValueTest extends TestCase
             CustomOptionPriceCalculator::class
         );
 
-        $this->CalculateCustomOptionCatalogRule = $this->createMock(
-            CalculateCustomOptionCatalogRule::class
-        );
-
         $helper = new ObjectManager($this);
         $this->model = $helper->getObject(
             Value::class,
             [
                 'resource' => $mockedResource,
                 'valueCollectionFactory' => $mockedCollectionFactory,
-                'customOptionPriceCalculator' => $this->customOptionPriceCalculatorMock,
-                'CalculateCustomOptionCatalogRule' => $this->CalculateCustomOptionCatalogRule
+                'customOptionPriceCalculator' => $this->customOptionPriceCalculatorMock
             ]
         );
         $this->model->setOption($this->getMockedOption());
@@ -89,8 +81,8 @@ class ValueTest extends TestCase
         $this->assertEquals($price, $this->model->getPrice(false));
 
         $percentPrice = 100.0;
-        $this->CalculateCustomOptionCatalogRule->expects($this->atLeastOnce())
-            ->method('execute')
+        $this->customOptionPriceCalculatorMock->expects($this->atLeastOnce())
+            ->method('getOptionPriceByPriceCode')
             ->willReturn($percentPrice);
         $this->assertEquals($percentPrice, $this->model->getPrice(true));
     }
@@ -138,15 +130,9 @@ class ValueTest extends TestCase
     {
         $mockedCollection = $this->getMockedValueCollection();
 
-        $mockBuilder =
-            $this->getMockBuilder(CollectionFactory::class)
-                ->setMethods(['create'])
-                ->disableOriginalConstructor();
-        $mock = $mockBuilder->getMock();
+        $mock = $this->createPartialMock(CollectionFactory::class, ['create']);
 
-        $mock->expects($this->any())
-            ->method('create')
-            ->willReturn($mockedCollection);
+        $mock->method('create')->willReturn($mockedCollection);
 
         return $mock;
     }
@@ -156,22 +142,16 @@ class ValueTest extends TestCase
      */
     private function getMockedValueCollection()
     {
-        $mockBuilder = $this->getMockBuilder(
-            Collection::class
-        )->setMethods(['addFieldToFilter', 'getValuesByOption', 'getValues'])->disableOriginalConstructor();
-        $mock = $mockBuilder->getMock();
+        $mock = $this->createPartialMock(
+            Collection::class,
+            ['addFieldToFilter', 'getValuesByOption', 'getValues']
+        );
 
-        $mock->expects($this->any())
-            ->method('addFieldToFilter')
-            ->willReturn($mock);
+        $mock->method('addFieldToFilter')->willReturn($mock);
 
-        $mock->expects($this->any())
-            ->method('getValuesByOption')
-            ->willReturn($mock);
+        $mock->method('getValuesByOption')->willReturn($mock);
 
-        $mock->expects($this->any())
-            ->method('getValues')
-            ->willReturn($mock);
+        $mock->method('getValues')->willReturn($mock);
 
         return $mock;
     }
@@ -183,13 +163,9 @@ class ValueTest extends TestCase
     {
         $mockedProduct = $this->getMockedProduct();
 
-        $mockBuilder = $this->getMockBuilder(Option::class)
-            ->disableOriginalConstructor();
-        $mock = $mockBuilder->getMock();
+        $mock = $this->createMock(Option::class);
 
-        $mock->expects($this->any())
-            ->method('getProduct')
-            ->willReturn($mockedProduct);
+        $mock->method('getProduct')->willReturn($mockedProduct);
 
         return $mock;
     }
@@ -199,53 +175,33 @@ class ValueTest extends TestCase
      */
     private function getMockedProduct()
     {
-        $mockBuilder = $this->getMockBuilder(Product::class)
-            ->setMethods(['getPriceInfo'])
-            ->disableOriginalConstructor();
-        $mock = $mockBuilder->getMock();
+        $mock = $this->createPartialMock(Product::class, ['getPriceInfo']);
 
-        $priceInfoMock = $this->getMockForAbstractClass(
-            PriceInfoInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['getPrice']
-        );
+        $priceInfoMock = $this->createMock(PriceInfoInterface::class);
 
-        $priceMock = $this->getMockForAbstractClass(PriceInterface::class);
+        $priceMock = $this->createMock(PriceInterface::class);
 
-        $priceInfoMock->expects($this->any())->method('getPrice')->willReturn($priceMock);
+        $priceInfoMock->method('getPrice')->willReturn($priceMock);
 
-        $mock->expects($this->any())->method('getPriceInfo')->willReturn($priceInfoMock);
+        $mock->method('getPriceInfo')->willReturn($priceInfoMock);
 
-        $priceMock->expects($this->any())->method('getValue')->willReturn(10);
+        $priceMock->method('getValue')->willReturn(10);
 
         return $mock;
     }
 
     /**
-     * @return \Magento\Catalog\Model\ResourceModel\Product\Option\Value
+     * @return OptionValue
      */
     private function getMockedResource()
     {
-        $mockBuilder = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\Option\Value::class)
-            ->setMethods(
-                [
-                    'duplicate',
-                    'getIdFieldName',
-                    'deleteValues',
-                    'deleteValue',
-                    'beginTransaction',
-                    'delete',
-                    'commit',
-                    'save',
-                    'addCommitCallback',
-                ]
-            )
-            ->disableOriginalConstructor();
-        $mock = $mockBuilder->getMock();
+        $mock = $this->createPartialMock(
+            OptionValue::class,
+            [
+                'duplicate', 'getIdFieldName', 'deleteValues', 'deleteValue', 'beginTransaction',
+                'delete', 'commit', 'save', 'addCommitCallback'
+            ]
+        );
 
         $mock->expects($this->any())
             ->method('duplicate');
@@ -265,16 +221,12 @@ class ValueTest extends TestCase
         $mock->expects($this->any())
             ->method('commit');
 
-        $mock->expects($this->any())
-            ->method('addCommitCallback')
-            ->willReturn($mock);
+        $mock->method('addCommitCallback')->willReturn($mock);
 
         $mock->expects($this->any())
             ->method('beginTransaction');
 
-        $mock->expects($this->any())
-            ->method('getIdFieldName')
-            ->willReturn('testField');
+        $mock->method('getIdFieldName')->willReturn('testField');
 
         return $mock;
     }

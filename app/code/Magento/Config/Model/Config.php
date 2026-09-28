@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Config\Model;
 
@@ -19,7 +19,6 @@ use Magento\Store\Model\ScopeTypeNormalizer;
  *
  * Used to save configuration
  *
- * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
  * @since 100.0.2
@@ -74,8 +73,6 @@ class Config extends \Magento\Framework\DataObject
     protected $_objectFactory;
 
     /**
-     * TransactionFactory
-     *
      * @var \Magento\Framework\DB\TransactionFactory
      */
     protected $_transactionFactory;
@@ -142,11 +139,11 @@ class Config extends \Magento\Framework\DataObject
         \Magento\Config\Model\Config\Loader $configLoader,
         \Magento\Framework\App\Config\ValueFactory $configValueFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        SettingChecker $settingChecker = null,
+        ?SettingChecker $settingChecker = null,
         array $data = [],
-        ScopeResolverPool $scopeResolverPool = null,
-        ScopeTypeNormalizer $scopeTypeNormalizer = null,
-        \Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface $pillPut = null
+        ?ScopeResolverPool $scopeResolverPool = null,
+        ?ScopeTypeNormalizer $scopeTypeNormalizer = null,
+        ?\Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface $pillPut = null
     ) {
         parent::__construct($data);
         $this->_eventManager = $eventManager;
@@ -184,6 +181,10 @@ class Config extends \Magento\Framework\DataObject
             return $this;
         }
 
+        /**
+         * Reload config to make sure config data is consistent with the database at this point.
+         */
+        $this->_appConfig->reinit();
         $oldConfig = $this->_getConfig(true);
 
         /** @var \Magento\Framework\DB\Transaction $deleteTransaction */
@@ -207,9 +208,9 @@ class Config extends \Magento\Framework\DataObject
                 $deleteTransaction
             );
 
-            $groupChangedPaths = $this->getChangedPaths($sectionId, $groupId, $groupData, $oldConfig, $extraOldGroups);
-            $changedPaths = \array_merge($changedPaths, $groupChangedPaths);
+            $changedPaths[] = $this->getChangedPaths($sectionId, $groupId, $groupData, $oldConfig, $extraOldGroups);
         }
+        $changedPaths = array_merge([], ...$changedPaths);
 
         try {
             $deleteTransaction->delete();
@@ -355,7 +356,7 @@ class Config extends \Magento\Framework\DataObject
                 $field = $this->getField($sectionId, $groupId, $fieldId);
                 $path = $this->getFieldPath($field, $fieldId, $oldConfig, $extraOldGroups);
                 if ($this->isValueChanged($oldConfig, $path, $fieldData)) {
-                    $changedPaths[] = $path;
+                    $changedPaths[] = [$path];
                 }
             }
         }
@@ -370,11 +371,11 @@ class Config extends \Magento\Framework\DataObject
                     $oldConfig,
                     $extraOldGroups
                 );
-                $changedPaths = \array_merge($changedPaths, $subGroupChangedPaths);
+                $changedPaths[] = $subGroupChangedPaths;
             }
         }
 
-        return $changedPaths;
+        return \array_merge([], ...$changedPaths);
     }
 
     /**
@@ -435,11 +436,11 @@ class Config extends \Magento\Framework\DataObject
                 if (!isset($fieldData['value'])) {
                     $fieldData['value'] = null;
                 }
-                
+
                 if ($field->getType() == 'multiline' && is_array($fieldData['value'])) {
                     $fieldData['value'] = trim(implode(PHP_EOL, $fieldData['value']));
                 }
-                
+
                 $data = [
                     'field' => $fieldId,
                     'groups' => $groups,
@@ -453,7 +454,7 @@ class Config extends \Magento\Framework\DataObject
                 $backendModel->addData($data);
                 $this->_checkSingleStoreMode($field, $backendModel);
 
-                $path = $this->getFieldPath($field, $fieldId, $extraOldGroups, $oldConfig);
+                $path = $this->getFieldPath($field, $fieldId, $oldConfig, $extraOldGroups);
                 $backendModel->setPath($path)->setValue($fieldData['value']);
 
                 $inherit = !empty($fieldData['inherit']);
@@ -532,7 +533,7 @@ class Config extends \Magento\Framework\DataObject
      */
     public function setDataByPath($path, $value)
     {
-        $path = trim($path);
+        $path = $path !== null ? trim($path) : '';
         if ($path === '') {
             throw new \UnexpectedValueException('Path must not be empty');
         }

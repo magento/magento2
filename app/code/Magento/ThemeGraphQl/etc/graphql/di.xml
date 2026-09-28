@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
@@ -26,5 +26,8 @@
                 <item name="copyright" xsi:type="string">design/footer/copyright</item>
             </argument>
         </arguments>
+    </type>
+    <type name="Magento\Framework\Data\Collection">
+        <plugin name="currentPageDetection" disabled="true"/>
     </type>
 </config>

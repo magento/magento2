@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\App;
 
@@ -13,7 +13,7 @@ namespace Magento\Framework\App;
  * To read already parsed request data use \Magento\Framework\App\RequestInterface.
  *
  * @api
- * @since 100.2.0
+ * @since 101.0.0
  */
 interface PlainTextRequestInterface
 {
@@ -21,7 +21,7 @@ interface PlainTextRequestInterface
      * Returns textual representation of request to Magento.
      *
      * @return string
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function getContent();
 }

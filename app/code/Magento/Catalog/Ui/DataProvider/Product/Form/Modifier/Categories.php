@@ -1,29 +1,33 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 
+use Magento\Backend\Model\Auth\Session;
+use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Catalog\Model\Category as CategoryModel;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\CacheInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\AuthorizationInterface;
+use Magento\Framework\Data\Collection;
 use Magento\Framework\DB\Helper as DbHelper;
-use Magento\Catalog\Model\Category as CategoryModel;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Framework\UrlInterface;
 use Magento\Framework\Stdlib\ArrayManager;
-use Magento\Framework\AuthorizationInterface;
+use Magento\Framework\UrlInterface;
 
 /**
  * Data provider for categories field of product page
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @since 101.0.0
  */
 class Categories extends AbstractModifier
@@ -31,7 +35,7 @@ class Categories extends AbstractModifier
     /**#@+
      * Category tree cache id
      */
-    const CATEGORY_TREE_ID = 'CATALOG_PRODUCT_CATEGORY_TREE';
+    public const CATEGORY_TREE_ID = 'CATALOG_PRODUCT_CATEGORY_TREE';
     /**#@-*/
 
     /**
@@ -48,7 +52,8 @@ class Categories extends AbstractModifier
 
     /**
      * @var array
-     * @deprecated 101.0.3
+     * @deprecated 101.0.0
+     * @see Nothing
      * @since 101.0.0
      */
     protected $categoriesTrees = [];
@@ -87,6 +92,11 @@ class Categories extends AbstractModifier
     private $authorization;
 
     /**
+     * @var Session
+     */
+    private $session;
+
+    /**
      * @param LocatorInterface $locator
      * @param CategoryCollectionFactory $categoryCollectionFactory
      * @param DbHelper $dbHelper
@@ -94,6 +104,7 @@ class Categories extends AbstractModifier
      * @param ArrayManager $arrayManager
      * @param SerializerInterface $serializer
      * @param AuthorizationInterface $authorization
+     * @param Session $session
      */
     public function __construct(
         LocatorInterface $locator,
@@ -101,8 +112,9 @@ class Categories extends AbstractModifier
         DbHelper $dbHelper,
         UrlInterface $urlBuilder,
         ArrayManager $arrayManager,
-        SerializerInterface $serializer = null,
-        AuthorizationInterface $authorization = null
+        ?SerializerInterface $serializer = null,
+        ?AuthorizationInterface $authorization = null,
+        ?Session $session = null
     ) {
         $this->locator = $locator;
         $this->categoryCollectionFactory = $categoryCollectionFactory;
@@ -111,6 +123,7 @@ class Categories extends AbstractModifier
         $this->arrayManager = $arrayManager;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
         $this->authorization = $authorization ?: ObjectManager::getInstance()->get(AuthorizationInterface::class);
+        $this->session = $session ?: ObjectManager::getInstance()->get(Session::class);
     }
 
     /**
@@ -118,6 +131,7 @@ class Categories extends AbstractModifier
      *
      * @return CacheInterface
      * @deprecated 101.0.3
+     * @see getCategoriesTree
      */
     private function getCacheManager(): CacheInterface
     {
@@ -302,13 +316,11 @@ class Categories extends AbstractModifier
                                     'actionName' => 'toggleModal',
                                 ],
                                 [
-                                    'targetName' =>
-                                        'product_form.product_form.create_category_modal.create_category',
+                                    'targetName' => 'product_form.product_form.create_category_modal.create_category',
                                     'actionName' => 'render'
                                 ],
                                 [
-                                    'targetName' =>
-                                        'product_form.product_form.create_category_modal.create_category',
+                                    'targetName' => 'product_form.product_form.create_category_modal.create_category',
                                     'actionName' => 'resetForm'
                                 ]
                             ],
@@ -370,10 +382,16 @@ class Categories extends AbstractModifier
      * @param string $filter
      * @return string
      */
-    private function getCategoriesTreeCacheId(int $storeId, string $filter = '') : string
+    private function getCategoriesTreeCacheId(int $storeId, string $filter = ''): string
     {
+        if ($this->session->getUser() !== null) {
+            return self::CATEGORY_TREE_ID
+                . '_' . (string)$storeId
+                . '_' . $this->session->getUser()->getAclRole()
+                . '_' . $filter;
+        }
         return self::CATEGORY_TREE_ID
-            . '_' . (string) $storeId
+            . '_' . (string)$storeId
             . '_' . $filter;
     }
 
@@ -405,7 +423,7 @@ class Categories extends AbstractModifier
 
         /** @var \Magento\Catalog\Model\Category $category */
         foreach ($matchingNamesCollection as $category) {
-            foreach (explode('/', $category->getPath()) as $parentId) {
+            foreach (explode('/', $category->getPath() ?? '') as $parentId) {
                 $shownCategoriesIds[$parentId] = 1;
             }
         }
@@ -428,6 +446,8 @@ class Categories extends AbstractModifier
 
         $collection->addAttributeToFilter('entity_id', ['in' => array_keys($shownCategoriesIds)])
             ->addAttributeToSelect(['name', 'is_active', 'parent_id'])
+            ->addAttributeToSort(CategoryInterface::KEY_LEVEL, Collection::SORT_ORDER_ASC)
+            ->addAttributeToSort(CategoryInterface::KEY_POSITION, Collection::SORT_ORDER_ASC)
             ->setStoreId($storeId);
 
         $categoryById = [

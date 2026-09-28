@@ -1,18 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
 
 /**
  * Checkbox grid column filter
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Checkbox extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
 {
     /**
+     * Return formatted HTML
+     *
      * @return string
      */
     public function getHtml()
@@ -21,6 +21,8 @@ class Checkbox extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
     }
 
     /**
+     * Return an array of options
+     *
      * @return array
      */
     protected function _getOptions()
@@ -33,6 +35,8 @@ class Checkbox extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
     }
 
     /**
+     * Return expression for SQL 'where' clause
+     *
      * @return array
      */
     public function getCondition()
@@ -42,6 +46,5 @@ class Checkbox extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
         } else {
             return [['neq' => $this->getColumn()->getValue()], ['is' => new \Zend_Db_Expr('NULL')]];
         }
-        // return array('like'=>'%'.$this->getValue().'%');
     }
 }

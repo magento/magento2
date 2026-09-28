@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
 
 namespace Magento\Sales\Controller\AbstractController;
 
+use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Framework\App\Action;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\ObjectManager;
@@ -36,6 +37,11 @@ abstract class Reorder extends Action\Action implements HttpPostActionInterface
     private $reorder;
 
     /**
+     * @var CheckoutSession
+     */
+    private $checkoutSession;
+
+    /**
      * Constructor
      *
      * @param Action\Context $context
@@ -43,19 +49,22 @@ abstract class Reorder extends Action\Action implements HttpPostActionInterface
      * @param Registry $registry
      * @param ReorderHelper|null $reorderHelper
      * @param \Magento\Sales\Model\Reorder\Reorder|null $reorder
+     * @param CheckoutSession|null $checkoutSession
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         Action\Context $context,
         OrderLoaderInterface $orderLoader,
         Registry $registry,
-        ReorderHelper $reorderHelper = null,
-        \Magento\Sales\Model\Reorder\Reorder $reorder = null
+        ?ReorderHelper $reorderHelper = null,
+        ?\Magento\Sales\Model\Reorder\Reorder $reorder = null,
+        ?CheckoutSession $checkoutSession = null
     ) {
         $this->orderLoader = $orderLoader;
         $this->_coreRegistry = $registry;
         parent::__construct($context);
         $this->reorder = $reorder ?: ObjectManager::getInstance()->get(\Magento\Sales\Model\Reorder\Reorder::class);
+        $this->checkoutSession = $checkoutSession ?: ObjectManager::getInstance()->get(CheckoutSession::class);
     }
 
     /**
@@ -81,15 +90,9 @@ abstract class Reorder extends Action\Action implements HttpPostActionInterface
             return $resultRedirect->setPath('checkout/cart');
         }
 
-        $errors = $reorderOutput->getErrors();
-        if (!empty($errors)) {
-            $useNotice = $this->_objectManager->get(\Magento\Checkout\Model\Session::class)->getUseNotice(true);
-            foreach ($errors as $error) {
-                $useNotice
-                    ? $this->messageManager->addNoticeMessage($error->getMessage())
-                    : $this->messageManager->addErrorMessage($error->getMessage());
-            }
-        }
+        // Set quote id for guest session: \Magento\Quote\Api\CartRepositoryInterface::save doesn't set quote id
+        // to session for guest customer, as it does \Magento\Checkout\Model\Cart::save which is deprecated.
+        $this->checkoutSession->setQuoteId($reorderOutput->getCart()->getId());
 
         return $resultRedirect->setPath('checkout/cart');
     }

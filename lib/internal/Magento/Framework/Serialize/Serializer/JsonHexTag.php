@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -16,13 +16,13 @@ use Magento\Framework\Serialize\SerializerInterface;
  * unserialize JSON encoded data
  *
  * @api
- * @since 100.2.0
+ * @since 102.0.1
  */
 class JsonHexTag extends Json implements SerializerInterface
 {
     /**
      * @inheritDoc
-     * @since 100.2.0
+     * @since 102.0.1
      */
     public function serialize($data): string
     {

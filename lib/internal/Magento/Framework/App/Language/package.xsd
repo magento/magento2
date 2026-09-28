@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
@@ -29,7 +29,7 @@
 
     <xs:simpleType name="codeType">
         <xs:restriction base="xs:string">
-            <xs:pattern value="[a-z]{2}_([a-zA-Z]{4}_)?[A-Z]{2}"/>
+            <xs:pattern value="[a-z]{2,3}_([a-zA-Z]{4}_)?[A-Z]{2}"/>
         </xs:restriction>
     </xs:simpleType>
 

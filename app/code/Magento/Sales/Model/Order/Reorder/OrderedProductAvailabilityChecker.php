@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\Order\Reorder;
 
@@ -16,7 +16,7 @@ use Magento\Framework\Exception\ConfigurationMismatchException;
  * of the array $productAvailabilityChecks(constructor argument). A product type should be a key for the new element.
  *
  * @api
- * @since 100.2.0
+ * @since 101.0.0
  */
 class OrderedProductAvailabilityChecker implements OrderedProductAvailabilityCheckerInterface
 {
@@ -36,7 +36,7 @@ class OrderedProductAvailabilityChecker implements OrderedProductAvailabilityChe
 
     /**
      * @inheritdoc
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function isAvailable(Item $item)
     {

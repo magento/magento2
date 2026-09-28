@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Exception;
 
@@ -10,6 +10,7 @@ namespace Magento\Framework\Exception;
  * not mandating to inherit from AbstractAggregateException class
  *
  * @api
+ * @since 101.0.7
  */
 interface AggregateExceptionInterface
 {
@@ -20,6 +21,7 @@ interface AggregateExceptionInterface
      * @see the \Magento\Framework\Webapi\Exception which receives $errors as a set of Localized Exceptions
      *
      * @return LocalizedException[]
+     * @since 101.0.7
      */
     public function getErrors();
 }

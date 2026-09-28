@@ -1,30 +1,31 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
+
+namespace Magento\TestFramework;
 
 /**
  * Bootstrap for the integration testing environment
  */
-namespace Magento\TestFramework;
-
 class Bootstrap
 {
     /**#@+
      * Predefined admin user credentials
      */
-    const ADMIN_NAME = 'user';
-    const ADMIN_PASSWORD = 'password1';
-    const ADMIN_EMAIL = 'admin@example.com';
-    const ADMIN_FIRSTNAME = 'firstname';
-    const ADMIN_LASTNAME = 'lastname';
+    public const ADMIN_NAME = 'user';
+    public const ADMIN_PASSWORD = 'password1';
+    public const ADMIN_EMAIL = 'admin@example.com';
+    public const ADMIN_FIRSTNAME = 'firstname';
+    public const ADMIN_LASTNAME = 'lastname';
     /**#@- */
 
     /**
      * Predefined admin user role name
      */
-    const ADMIN_ROLE_NAME = 'Administrators';
+    public const ADMIN_ROLE_NAME = 'Administrators';
+    public const ADMIN_ROLE_ID = 1;
 
     /**
      * @var \Magento\TestFramework\Bootstrap\Settings

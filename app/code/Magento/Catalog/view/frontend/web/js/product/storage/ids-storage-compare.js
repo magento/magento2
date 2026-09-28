@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 define([
     'underscore',
@@ -28,7 +28,7 @@ define([
                 this.data = ko.observable({});
             }
 
-            if (this.provider) {
+            if (this.provider && window.checkout && window.checkout.baseUrl) {
                 this.providerDataHandler(customerData.get(this.provider)());
                 this.initProviderListener();
             }

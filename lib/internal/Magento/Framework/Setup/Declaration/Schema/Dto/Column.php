@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Setup\Declaration\Schema\Dto;
 
@@ -45,8 +45,8 @@ class Column extends GenericElement implements
         string $name,
         string $type,
         Table $table,
-        string $comment = null,
-        string $onCreate = null
+        ?string $comment = null,
+        ?string $onCreate = null
     ) {
         parent::__construct($name, $type);
         $this->table = $table;

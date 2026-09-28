@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
@@ -15,5 +15,6 @@
         <element name="search" type="button" selector="//div[@id='promo_catalog_grid']//button[@title='Search']" timeout="30"/>
         <element name="selectRowByRuleName" type="text" selector="//tr[@data-role='row']//td[contains(.,'{{ruleName}}')]" parameterized="true"/>
         <element name="firstRow" type="text" selector="//tr[@data-role='row']"/>
+        <element name="firstNotEmptyRow" type="text" selector="tr[data-role='row']:not([class*='no-data'])"/>
     </section>
 </sections>

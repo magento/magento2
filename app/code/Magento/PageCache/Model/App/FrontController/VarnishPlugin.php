@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\PageCache\Model\App\FrontController;
 
@@ -56,7 +56,7 @@ class VarnishPlugin
      */
     public function afterDispatch(FrontControllerInterface $subject, $result)
     {
-        if ($this->config->getType() == Config::VARNISH && $this->config->isEnabled()
+        if ($this->config->getType() === Config::VARNISH && $this->config->isEnabled()
             && $result instanceof ResponseHttp
         ) {
             $this->version->process();

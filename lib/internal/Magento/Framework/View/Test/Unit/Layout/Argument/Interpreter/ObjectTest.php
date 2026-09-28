@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Framework\Stdlib\BooleanUtils;
 use Magento\Framework\View\Layout\Argument\Interpreter\DataObject;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Tests layout argument interpreter data object.
@@ -43,7 +44,7 @@ class ObjectTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->_objectManager = $this->createMock(ObjectManagerInterface::class);
         $this->_booleanUtils = $this->createMock(BooleanUtils::class);
         $this->_model = new DataObject($this->_objectManager, self::EXPECTED_CLASS, $this->_booleanUtils);
     }
@@ -90,9 +91,8 @@ class ObjectTest extends TestCase
         $this->assertSame($this, $actual);
     }
 
-    /**
-     * @dataProvider evaluateWrongClassDataProvider
-     */
+    /**     */
+    #[DataProvider('evaluateWrongClassDataProvider')]
     public function testEvaluateWrongClass($input, $expectedException, $expectedExceptionMessage)
     {
         $this->expectException($expectedException);
@@ -107,9 +107,8 @@ class ObjectTest extends TestCase
         $this->_model->evaluate($input);
     }
 
-    /**
-     * @dataProvider evaluateWrongClassDataProvider
-     */
+    /**     */
+    #[DataProvider('evaluateWrongClassDataProvider')]
     public function testEvaluateShareEnabledWrongClass($input, $expectedException, $expectedExceptionMessage)
     {
         $this->expectException($expectedException);
@@ -129,9 +128,8 @@ class ObjectTest extends TestCase
         $this->_model->evaluate($input);
     }
 
-    /**
-     * @dataProvider evaluateWrongClassDataProvider
-     */
+    /**     */
+    #[DataProvider('evaluateWrongClassDataProvider')]
     public function testEvaluateShareDisabledWrongClass($input, $expectedException, $expectedExceptionMessage)
     {
         $this->expectException($expectedException);
@@ -154,7 +152,7 @@ class ObjectTest extends TestCase
     /**
      * @return array
      */
-    public function evaluateWrongClassDataProvider()
+    public static function evaluateWrongClassDataProvider()
     {
         return [
             'no class' => [[], '\InvalidArgumentException', 'Object class name is missing'],

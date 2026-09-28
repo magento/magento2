@@ -2,8 +2,8 @@
 /**
  * Magento session manager interface
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Session;
 
@@ -11,6 +11,7 @@ namespace Magento\Framework\Session;
  * Session Manager Interface
  *
  * @api
+ * @since 100.0.2
  */
 interface SessionManagerInterface
 {
@@ -68,7 +69,7 @@ interface SessionManagerInterface
      * @param  array $options
      * @return void
      */
-    public function destroy(array $options = null);
+    public function destroy(?array $options = null);
 
     /**
      * Unset session data

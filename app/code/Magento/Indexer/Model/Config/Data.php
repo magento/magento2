@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Indexer\Model\Config;
 
@@ -32,7 +32,7 @@ class Data extends \Magento\Framework\Config\Data
         \Magento\Framework\Config\CacheInterface $cache,
         \Magento\Indexer\Model\ResourceModel\Indexer\State\Collection $stateCollection,
         $cacheId = 'indexer_config',
-        SerializerInterface $serializer = null
+        ?SerializerInterface $serializer = null
     ) {
         $this->stateCollection = $stateCollection;
 

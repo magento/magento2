@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -25,7 +25,7 @@ function posix_getpgid($pid)
  * @param array|null $output
  * @param null $return_var
  */
-function exec($command, array &$output = null, &$return_var = null)
+function exec($command, ?array &$output = null, &$return_var = null)
 {
     $output = ['PID TTY TIME CMD'];
     $return_var = 1;

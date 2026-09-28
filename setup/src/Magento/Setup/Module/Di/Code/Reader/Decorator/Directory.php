@@ -1,17 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Setup\Module\Di\Code\Reader\Decorator;
 
 use Magento\Setup\Module\Di\Compiler\Log\Log;
 
-/**
- * Class Directory
- *
- * @package Magento\Setup\Module\Di\Code\Reader\Decorator
- */
 class Directory implements \Magento\Setup\Module\Di\Code\Reader\ClassesScannerInterface
 {
     /**
@@ -45,6 +40,11 @@ class Directory implements \Magento\Setup\Module\Di\Code\Reader\ClassesScannerIn
     private $classesScanner;
 
     /**
+     * @var string
+     */
+    private $generationDir;
+
+    /**
      * @param \Magento\Setup\Module\Di\Compiler\Log\Log $log Logging object
      * @param \Magento\Framework\Code\Reader\ClassReader $classReader
      * @param \Magento\Setup\Module\Di\Code\Reader\ClassesScanner $classesScanner
@@ -64,7 +64,7 @@ class Directory implements \Magento\Setup\Module\Di\Code\Reader\ClassesScannerIn
         $this->validator = $validator;
         $this->generationDir = $generationDir;
 
-        set_error_handler([$this, 'errorHandler'], E_STRICT);
+        set_error_handler([$this, 'errorHandler'], E_NOTICE);
     }
 
     /**
@@ -107,6 +107,8 @@ class Directory implements \Magento\Setup\Module\Di\Code\Reader\ClassesScannerIn
     }
 
     /**
+     * Retrieves relations
+     *
      * @return array
      */
     public function getRelations()

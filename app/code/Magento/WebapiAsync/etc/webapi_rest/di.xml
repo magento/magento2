@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -16,5 +16,8 @@
                 <item name="asyncBulk" xsi:type="object" sortOrder="200">Magento\WebapiAsync\Controller\Rest\VirtualType\AsynchronousBulkRequestProcessor</item>
             </argument>
         </arguments>
+    </type>
+    <type name="Magento\Webapi\Model\Rest\Config" >
+        <plugin name="overrideInputArraySizeLimit" type="Magento\WebapiAsync\Plugin\Rest\Config" />
     </type>
 </config>

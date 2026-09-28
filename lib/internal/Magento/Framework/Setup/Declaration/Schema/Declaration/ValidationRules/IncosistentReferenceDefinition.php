@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Setup\Declaration\Schema\Declaration\ValidationRules;
 
@@ -40,7 +40,7 @@ class IncosistentReferenceDefinition implements ValidationInterface
          * Columns should have the same types
          */
         if ($column->getType() !== $referenceColumn->getType()) {
-            return true;
+            return false;
         }
 
         return $this->assertUnsigned($column, $referenceColumn) &&

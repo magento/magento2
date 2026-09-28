@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminExpandCategoryTreeWidgetActionGroup">
+        <annotations>
+            <description>This action group expands a specified category in the admin category tree widget by clicking on the expand icon and waiting for the page to load.</description>
+        </annotations>
+        <arguments>
+            <argument name="CategoryName" type="string" defaultValue="Category 1"/>
+        </arguments>
+        <click selector="{{CmsNewWidgetUpdateLayoutSection.BranchCat(CategoryName)}}" stepKey="clickExpandCategory"/>
+        <waitForPageLoad stepKey="waitForCategoryExpand"/>
+    </actionGroup>
+</actionGroups>

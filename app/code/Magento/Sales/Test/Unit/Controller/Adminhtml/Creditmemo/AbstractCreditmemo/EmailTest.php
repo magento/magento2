@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,17 +16,24 @@ use Magento\Framework\App\ActionFlag;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Message\Manager;
+use Magento\Framework\ObjectManager\ObjectManager as FrameworkObjectManager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Sales\Api\CreditmemoManagementInterface;
 use Magento\Sales\Controller\Adminhtml\Creditmemo\AbstractCreditmemo\Email;
+use Magento\Sales\Api\CreditmemoRepositoryInterface;
+use Magento\Sales\Model\Order\Creditmemo;
+use Magento\Store\Model\Store;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class EmailTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Email
      */
@@ -99,36 +106,29 @@ class EmailTest extends TestCase
             'getHelper',
             'getResultRedirectFactory'
         ]);
-        $this->response = $this->getMockBuilder(ResponseInterface::class)
-            ->addMethods(['setRedirect'])
-            ->onlyMethods(['sendResponse'])
-            ->getMockForAbstractClass();
+        $this->response = $this->createPartialMockWithReflection(
+            ResponseInterface::class,
+            ['setRedirect', 'sendResponse']
+        );
 
-        $this->request = $this->getMockBuilder(Http::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->request = $this->createMock(Http::class);
         $this->objectManager = $this->createPartialMock(
-            \Magento\Framework\ObjectManager\ObjectManager::class,
+            FrameworkObjectManager::class,
             ['create']
         );
         $this->messageManager = $this->createPartialMock(
             Manager::class,
-            ['addSuccessMessage']
+            ['addSuccessMessage', 'addWarningMessage']
         );
-        $this->session = $this->getMockBuilder(Session::class)
-            ->addMethods(['setIsUrlNotice'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->session = $this->createPartialMockWithReflection(Session::class, ['setIsUrlNotice']);
         $this->actionFlag = $this->createPartialMock(ActionFlag::class, ['get']);
         $this->helper = $this->createPartialMock(Data::class, ['getUrl']);
         $this->resultRedirectFactoryMock = $this->getMockBuilder(
             RedirectFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
-        $this->resultRedirectMock = $this->getMockBuilder(Redirect::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resultRedirectMock = $this->createMock(Redirect::class);
         $this->context->expects($this->once())->method('getMessageManager')->willReturn($this->messageManager);
         $this->context->expects($this->once())->method('getRequest')->willReturn($this->request);
         $this->context->expects($this->once())->method('getResponse')->willReturn($this->response);
@@ -155,19 +155,42 @@ class EmailTest extends TestCase
         $cmId = 10000031;
         $cmManagement = CreditmemoManagementInterface::class;
         $cmManagementMock = $this->createMock($cmManagement);
+
+        $creditmemoRepository = $this->createMock(CreditmemoRepositoryInterface::class);
+        $creditmemo = $this->createMock(Creditmemo::class);
+        $store = $this->createMock(Store::class);
+        $store->expects($this->once())
+            ->method('getConfig')
+            ->with('sales_email/creditmemo/enabled')
+            ->willReturn(true);
+        $creditmemo->expects($this->once())
+            ->method('getStore')
+            ->willReturn($store);
+        $creditmemoRepository->expects($this->once())
+            ->method('get')
+            ->with($cmId)
+            ->willReturn($creditmemo);
+
         $this->prepareRedirect($cmId);
 
         $this->request->expects($this->once())
             ->method('getParam')
             ->with('creditmemo_id')
             ->willReturn($cmId);
-        $this->objectManager->expects($this->once())
+
+        $this->objectManager->expects($this->exactly(2))
             ->method('create')
-            ->with($cmManagement)
-            ->willReturn($cmManagementMock);
+            ->willReturnCallback(fn($param) => match ($param) {
+                CreditmemoRepositoryInterface::class => $creditmemoRepository,
+                $cmManagement => $cmManagementMock,
+                default => throw new \Exception("Unexpected create() parameter: $param")
+            });
+
         $cmManagementMock->expects($this->once())
             ->method('notify')
+            ->with($cmId)
             ->willReturn(true);
+        
         $this->messageManager->expects($this->once())
             ->method('addSuccessMessage')
             ->with('You sent the message.');
@@ -177,6 +200,56 @@ class EmailTest extends TestCase
             $this->creditmemoEmail->execute()
         );
         $this->assertEquals($this->response, $this->creditmemoEmail->getResponse());
+    }
+
+    /**
+     * testEmailDisabled
+     */
+    public function testEmailDisabled()
+    {
+        $cmId = 10000031;
+
+        $creditmemoRepository = $this->createMock(CreditmemoRepositoryInterface::class);
+
+        $creditmemo = $this->createMock(Creditmemo::class);
+
+        $store = $this->createMock(Store::class);
+        $store->expects($this->once())
+            ->method('getConfig')
+            ->with('sales_email/creditmemo/enabled')
+            ->willReturn(false);
+
+        $creditmemo->expects($this->once())
+            ->method('getStore')
+            ->willReturn($store);
+
+        $creditmemoRepository->expects($this->once())
+            ->method('get')
+            ->with($cmId)
+            ->willReturn($creditmemo);
+
+        $this->prepareRedirect($cmId);
+
+        $this->request->expects($this->once())
+            ->method('getParam')
+            ->with('creditmemo_id')
+            ->willReturn($cmId);
+
+        $this->objectManager->expects($this->once())
+            ->method('create')
+            ->willReturnCallback(fn($param) => match ($param) {
+                CreditmemoRepositoryInterface::class => $creditmemoRepository,
+                default => null
+            });
+
+        $this->messageManager->expects($this->once())
+            ->method('addWarningMessage')
+            ->with('Credit memo emails are disabled for this store. No email was sent.');
+
+        $this->assertInstanceOf(
+            Redirect::class,
+            $this->creditmemoEmail->execute()
+        );
     }
 
     /**

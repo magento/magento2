@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\SalesRule\Model\Service;
 
@@ -19,7 +19,7 @@ class CouponManagementService implements \Magento\SalesRule\Api\CouponManagement
 {
     /**
      * @var \Magento\SalesRule\Model\CouponFactory
-     * @deprecated
+     * @deprecated 101.1.2
      */
     protected $couponFactory;
 
@@ -30,7 +30,7 @@ class CouponManagementService implements \Magento\SalesRule\Api\CouponManagement
 
     /**
      * @var \Magento\SalesRule\Model\ResourceModel\Coupon\CollectionFactory
-     * @deprecated
+     * @deprecated 101.1.2
      */
     protected $collectionFactory;
 
@@ -41,7 +41,7 @@ class CouponManagementService implements \Magento\SalesRule\Api\CouponManagement
 
     /**
      * @var \Magento\SalesRule\Model\Spi\CouponResourceInterface
-     * @deprecated
+     * @deprecated 101.1.2
      */
     protected $resourceModel;
 

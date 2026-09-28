@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -44,12 +44,13 @@ class DimensionCollectionFactory
 
     /**
      * Create MultiDimensionProvider for specified "dimension mode".
+     *
      * By default return multiplication of dimensions by current set mode
      *
      * @param string|null $dimensionsMode
      * @return MultiDimensionProvider
      */
-    public function create(string $dimensionsMode = null): MultiDimensionProvider
+    public function create(?string $dimensionsMode = null): MultiDimensionProvider
     {
         $dimensionConfiguration = $this->dimensionModeConfiguration->getDimensionConfiguration($dimensionsMode);
 

@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\ResourceModel\Report\Bestsellers;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class CollectionTest extends \PHPUnit\Framework\TestCase
 {
@@ -36,13 +38,12 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider tableForPeriodDataProvider
-     *
      * @param $period
      * @param $expectedTable
      * @param $dateFrom
      * @param $dateTo
      */
+    #[DataProvider('tableForPeriodDataProvider')]
     public function testTableSelection($period, $expectedTable, $dateFrom, $dateTo)
     {
         $dbTableName = $this->_collection->getTable($expectedTable);
@@ -64,58 +65,58 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function tableForPeriodDataProvider()
+    public static function tableForPeriodDataProvider(): array
     {
         $dateNow = date('Y-m-d', time());
         $dateYearAgo = date('Y-m-d', strtotime($dateNow . ' -1 year'));
         return [
             [
                 'period'    => 'year',
-                'table'     => 'sales_bestsellers_aggregated_yearly',
-                'date_from' => null,
-                'date_to'   => null,
+                'expectedTable'     => 'sales_bestsellers_aggregated_yearly',
+                'dateFrom' => null,
+                'dateTo'   => null,
             ],
             [
                 'period'    => 'month',
-                'table'     => 'sales_bestsellers_aggregated_monthly',
-                'date_from' => null,
-                'date_to'   => null
+                'expectedTable'     => 'sales_bestsellers_aggregated_monthly',
+                'dateFrom' => null,
+                'dateTo'   => null
             ],
             [
                 'period'    => 'day',
-                'table'     => 'sales_bestsellers_aggregated_daily',
-                'date_from' => null,
-                'date_to'   => null
+                'expectedTable'     => 'sales_bestsellers_aggregated_daily',
+                'dateFrom' => null,
+                'dateTo'   => null
             ],
             [
                 'period'    => 'undefinedPeriod',
-                'table'     => 'sales_bestsellers_aggregated_daily',
-                'date_from' => null,
-                'date_to'   => null
+                'expectedTable'     => 'sales_bestsellers_aggregated_daily',
+                'dateFrom' => null,
+                'dateTo'   => null
             ],
             [
                 'period'    => null,
-                'table'     => 'sales_bestsellers_aggregated_daily',
-                'date_from' => $dateYearAgo,
-                'date_to'   => $dateNow
+                'expectedTable'     => 'sales_bestsellers_aggregated_daily',
+                'dateFrom' => $dateYearAgo,
+                'dateTo'   => $dateNow
             ],
             [
                 'period'    => null,
-                'table'     => 'sales_bestsellers_aggregated_daily',
-                'date_from' => $dateNow,
-                'date_to'   => $dateNow
+                'expectedTable'     => 'sales_bestsellers_aggregated_daily',
+                'dateFrom' => $dateNow,
+                'dateTo'   => $dateNow
             ],
             [
                 'period'    => null,
-                'table'     => 'sales_bestsellers_aggregated_daily',
-                'date_from' => $dateYearAgo,
-                'date_to'   => $dateYearAgo
+                'expectedTable'     => 'sales_bestsellers_aggregated_daily',
+                'dateFrom' => $dateYearAgo,
+                'dateTo'   => $dateYearAgo
             ],
             [
                 'period'    => null,
-                'table'     => 'sales_bestsellers_aggregated_yearly',
-                'date_from' => null,
-                'date_to'   => null
+                'expectedTable'     => 'sales_bestsellers_aggregated_yearly',
+                'dateFrom' => null,
+                'dateTo'   => null
             ],
         ];
     }

@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
@@ -16,6 +16,7 @@
     <preference for="Magento\MediaContentApi\Api\Data\ContentIdentityInterface" type="Magento\MediaContent\Model\ContentIdentity"/>
     <preference for="Magento\MediaContentApi\Api\Data\ContentAssetLinkInterface" type="Magento\MediaContent\Model\ContentAssetLink"/>
     <preference for="Magento\MediaContentApi\Model\SearchPatternConfigInterface" type="Magento\MediaContent\Model\Content\SearchPatternConfig"/>
+    <preference for="Magento\MediaContentApi\Api\GetAssetIdsByContentFieldInterface" type="Magento\MediaContentApi\Model\Composite\GetAssetIdsByContentField"/>
     <type name="Magento\MediaGalleryApi\Api\DeleteAssetsByPathsInterface">
         <plugin name="remove_media_content_after_asset_is_removed_by_path" type="Magento\MediaContent\Plugin\MediaGalleryAssetDeleteByPath" />
     </type>

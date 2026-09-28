@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Report Customers Review collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Reports\Model\ResourceModel\Review\Customer;
 
@@ -49,8 +47,8 @@ class Collection extends \Magento\Review\Model\ResourceModel\Review\Collection
         \Magento\Review\Model\Rating\Option\VoteFactory $voteFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Customer\Model\ResourceModel\Customer $customerResource,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
+        ?\Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
+        ?\Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
     ) {
         $this->_customerResource = $customerResource;
         parent::__construct(
@@ -113,6 +111,7 @@ class Collection extends \Magento\Review\Model\ResourceModel\Review\Collection
      *
      * Additional processing of 'customer_name' field is required, as it is a concat field, which can not be aliased.
      * @see _joinCustomers
+     * @since 100.2.2
      */
     public function addFieldToFilter($field, $condition = null)
     {

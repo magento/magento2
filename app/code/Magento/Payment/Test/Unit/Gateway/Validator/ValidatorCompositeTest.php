@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -21,12 +21,12 @@ class ValidatorCompositeTest extends TestCase
     {
         $validationSubject = [];
         $validator1 = $this->getMockBuilder(ValidatorInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $validator2 = $this->getMockBuilder(ValidatorInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $tMapFactory = $this->getMockBuilder(TMapFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $tMap = $this->getMockBuilder(TMap::class)
             ->disableOriginalConstructor()
@@ -49,12 +49,12 @@ class ValidatorCompositeTest extends TestCase
             ->willReturn(new \ArrayIterator([$validator1, $validator2]));
 
         $resultSuccess = $this->getMockBuilder(ResultInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $resultSuccess->expects(static::once())
             ->method('isValid')
             ->willReturn(true);
         $resultFail = $this->getMockBuilder(ResultInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $resultFail->expects(static::once())
             ->method('isValid')
             ->willReturn(false);
@@ -75,10 +75,10 @@ class ValidatorCompositeTest extends TestCase
             ->willReturn($resultFail);
 
         $compositeResult = $this->getMockBuilder(ResultInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $resultFactory = $this->getMockBuilder(ResultInterfaceFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $resultFactory->expects(static::once())
             ->method('create')
@@ -106,12 +106,12 @@ class ValidatorCompositeTest extends TestCase
     {
         $validationSubject = [];
         $validator1 = $this->getMockBuilder(ValidatorInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $validator2 = $this->getMockBuilder(ValidatorInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $tMapFactory = $this->getMockBuilder(TMapFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $tMap = $this->getMockBuilder(TMap::class)
             ->disableOriginalConstructor()
@@ -134,7 +134,7 @@ class ValidatorCompositeTest extends TestCase
             ->willReturn(new \ArrayIterator([$validator1, $validator2]));
 
         $resultFail = $this->getMockBuilder(ResultInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $resultFail->expects($this->once())
             ->method('isValid')
             ->willReturn(false);
@@ -155,10 +155,10 @@ class ValidatorCompositeTest extends TestCase
             ->method('validate');
 
         $compositeResult = $this->getMockBuilder(ResultInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $resultFactory = $this->getMockBuilder(ResultInterfaceFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $resultFactory->expects($this->once())
             ->method('create')

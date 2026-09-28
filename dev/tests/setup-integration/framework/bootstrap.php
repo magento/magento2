@@ -1,19 +1,26 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
-use Magento\Framework\Autoload\AutoloaderRegistry;
+
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Autoload\AutoloaderRegistry;
 
 require_once __DIR__ . '/../../../../app/bootstrap.php';
 require_once __DIR__ . '/autoload.php';
 //to handle different types of errors on CI
 require __DIR__ . '/../../error_handler.php';
 
+error_reporting(E_ALL);
+
+if (extension_loaded('xdebug')) {
+    ini_set('xdebug.max_nesting_level', '200');
+}
+
 $testsBaseDir = dirname(__DIR__);
 $integrationTestsDir = realpath("{$testsBaseDir}/../integration");
-$fixtureBaseDir = $integrationTestsDir. '/testsuite';
+$fixtureBaseDir = $integrationTestsDir . '/testsuite';
 
 if (!defined('TESTS_BASE_DIR')) {
     define('TESTS_BASE_DIR', $testsBaseDir);
@@ -30,8 +37,11 @@ if (!defined('TESTS_MODULES_PATH')) {
 if (!defined('MAGENTO_MODULES_PATH')) {
     define('MAGENTO_MODULES_PATH', __DIR__ . '/../../../../app/code/Magento/');
 }
-$settings = new \Magento\TestFramework\Bootstrap\Settings($testsBaseDir, get_defined_constants());
 
+if (!defined('INTEGRATION_TESTS_BASE_DIR')) {
+    define('INTEGRATION_TESTS_BASE_DIR', $integrationTestsDir);
+}
+$settings = new \Magento\TestFramework\Bootstrap\Settings($testsBaseDir, get_defined_constants());
 
 try {
     setCustomErrorHandler();
@@ -79,7 +89,10 @@ try {
     $application->createInstallDir();
     //We do not want to install anything
     $application->initialize([]);
-    $application->cleanup();
+
+    if ($settings->getAsBoolean('TESTS_CLEANUP')) {
+        $application->cleanup();
+    }
 
     \Magento\TestFramework\Helper\Bootstrap::setInstance(new \Magento\TestFramework\Helper\Bootstrap($bootstrap));
 
@@ -96,8 +109,10 @@ try {
     );
 
     /* Unset declared global variables to release the PHPUnit from maintaining their values between tests */
-    unset($testsBaseDir, $logWriter, $settings, $shell, $application, $bootstrap);
+    unset($testsBaseDir, $settings, $shell, $application, $bootstrap);
 } catch (\Exception $e) {
+    // phpcs:disable Magento2.Security.LanguageConstruct
     echo $e . PHP_EOL;
     exit(1);
+    // phpcs:enable Magento2.Security.LanguageConstruct
 }

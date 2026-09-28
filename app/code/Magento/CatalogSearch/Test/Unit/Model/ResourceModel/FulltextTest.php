@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\CatalogSearch\Test\Unit\Model\ResourceModel;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext;
 use Magento\Framework\App\ResourceConnection;
@@ -19,6 +20,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+#[CoversClass(Fulltext::class)]
 class FulltextTest extends TestCase
 {
     /**
@@ -59,9 +61,7 @@ class FulltextTest extends TestCase
         $this->context->expects($this->once())
             ->method('getResources')
             ->willReturn($this->resource);
-        $this->connection = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->connection = $this->createMock(AdapterInterface::class);
         $this->resource->expects($this->once())
             ->method('getConnection')
             ->willReturn($this->connection);
@@ -93,9 +93,6 @@ class FulltextTest extends TestCase
         $this->assertEquals($this->target, $result);
     }
 
-    /**
-     * @covers \Magento\CatalogSearch\Model\ResourceModel\Fulltext::getRelationsByChild()
-     */
     public function testGetRelationsByChild()
     {
         $ids = [1, 2, 3];
@@ -148,14 +145,15 @@ class FulltextTest extends TestCase
 
         $this->resource->expects($this->exactly(2))
             ->method('getTableName')
-            ->withConsecutive(
-                ['catalog_product_relation', ResourceConnection::DEFAULT_CONNECTION],
-                ['catalog_product_entity', ResourceConnection::DEFAULT_CONNECTION]
-            )
-            ->will($this->onConsecutiveCalls(
-                $testTable1,
-                $testTable2
-            ));
+            ->willReturnCallback(function ($tableName, $connectionName) use ($testTable1, $testTable2) {
+                if ($tableName == 'catalog_product_relation'
+                    && $connectionName == ResourceConnection::DEFAULT_CONNECTION) {
+                    return $testTable1;
+                } elseif ($tableName == 'catalog_product_entity'
+                    && $connectionName == ResourceConnection::DEFAULT_CONNECTION) {
+                    return $testTable2;
+                }
+            });
 
         self::assertSame($ids, $this->target->getRelationsByChild($ids));
     }

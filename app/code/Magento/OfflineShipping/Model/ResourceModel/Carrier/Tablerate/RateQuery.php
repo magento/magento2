@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate;
@@ -108,7 +108,7 @@ class RateQuery
             }
         } else {
             $bind[':condition_name'] = $this->request->getConditionName();
-            $bind[':condition_value'] = round($this->request->getData($this->request->getConditionName()), 4);
+            $bind[':condition_value'] = round((float) $this->request->getData($this->request->getConditionName()), 4);
         }
 
         return $bind;
@@ -131,7 +131,7 @@ class RateQuery
      */
     private function getDestPostcodePrefix()
     {
-        if (!preg_match("/^(.+)-(.+)$/", $this->request->getDestPostcode(), $zipParts)) {
+        if (!preg_match("/^(.+)-(.+)$/", $this->request->getDestPostcode() ?? '', $zipParts)) {
             return $this->request->getDestPostcode();
         }
 

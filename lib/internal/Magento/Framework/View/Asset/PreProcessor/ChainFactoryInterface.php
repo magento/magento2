@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\View\Asset\PreProcessor;
 
@@ -9,6 +9,7 @@ namespace Magento\Framework\View\Asset\PreProcessor;
  * Interface ChainFactoryInterface
  *
  * @api
+ * @since 100.0.2
  */
 interface ChainFactoryInterface
 {

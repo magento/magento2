@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,8 @@ use Magento\Framework\Phrase;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Url\ScopeInterface;
+use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Framework\View\EntitySpecificHandlesList;
 use Magento\Framework\View\Layout\LayoutCacheKeyInterface;
 use Magento\Framework\View\Model\Layout\Merge;
 use Magento\Framework\View\Model\Layout\Update\Validator;
@@ -21,6 +23,9 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class MergeTest extends TestCase
 {
     /**
@@ -67,26 +72,32 @@ class MergeTest extends TestCase
      * @var LayoutCacheKeyInterface|MockObject
      */
     protected $layoutCacheKeyMock;
+    /**
+     * @var ThemeInterface|MockObject
+     */
+    private $theme;
 
     protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManager($this);
 
-        $this->scope = $this->getMockForAbstractClass(ScopeInterface::class);
-        $this->cache = $this->getMockForAbstractClass(FrontendInterface::class);
+        $this->scope = $this->createMock(ScopeInterface::class);
+        $this->cache = $this->createMock(FrontendInterface::class);
         $this->layoutValidator = $this->getMockBuilder(Validator::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
-        $this->serializer = $this->getMockForAbstractClass(SerializerInterface::class);
+        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->serializer = $this->createMock(SerializerInterface::class);
         $this->appState = $this->getMockBuilder(State::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->layoutCacheKeyMock = $this->getMockForAbstractClass(LayoutCacheKeyInterface::class);
+        $this->layoutCacheKeyMock = $this->createMock(LayoutCacheKeyInterface::class);
         $this->layoutCacheKeyMock->expects($this->any())
             ->method('getCacheKeys')
             ->willReturn([]);
+
+        $this->theme = $this->createMock(ThemeInterface::class);
 
         $this->model = $this->objectManagerHelper->getObject(
             Merge::class,
@@ -98,6 +109,7 @@ class MergeTest extends TestCase
                 'appState' => $this->appState,
                 'layoutCacheKey' => $this->layoutCacheKeyMock,
                 'serializer' => $this->serializer,
+                'theme' => $this->theme,
             ]
         );
     }
@@ -133,7 +145,12 @@ class MergeTest extends TestCase
     public function testSaveToCache()
     {
         $this->scope->expects($this->once())->method('getId')->willReturn(1);
-        $this->cache->expects($this->once())->method('save');
+        $this->theme->method('getArea')->willReturn('frontend');
+        $this->theme->method('getId')->willReturn(1);
+        $cacheKey = 'LAYOUT_frontend_STORE1_1d41d8cd98f00b204e9800998ecf8427e_page_layout_merged';
+        $this->cache->expects($this->once())
+            ->method('save')
+            ->with(null, $cacheKey, [], 31536000);
 
         $this->model->load();
     }
@@ -154,5 +171,81 @@ class MergeTest extends TestCase
         $this->cache->expects($this->never())->method('save');
 
         $this->model->load();
+    }
+
+    /**
+     * Entity-specific handles with no DB content must be excluded from the cache key.
+     */
+    public function testGetCacheIdExcludesEntitySpecificHandlesWithNoDbContent()
+    {
+        $this->theme->method('getArea')->willReturn('frontend');
+        $this->theme->method('getId')->willReturn(1);
+        $this->scope->method('getId')->willReturn(1);
+
+        $buildModel = function (array $pageHandles, array $entityHandles): Merge {
+            $entitySpecificHandlesList = $this->createMock(EntitySpecificHandlesList::class);
+            $entitySpecificHandlesList->method('getHandles')->willReturn($entityHandles);
+            $model = $this->objectManagerHelper->getObject(
+                Merge::class,
+                [
+                    'scope' => $this->scope,
+                    'cache' => $this->cache,
+                    'layoutValidator' => $this->layoutValidator,
+                    'logger' => $this->logger,
+                    'appState' => $this->appState,
+                    'layoutCacheKey' => $this->layoutCacheKeyMock,
+                    'serializer' => $this->serializer,
+                    'theme' => $this->theme,
+                    'entitySpecificHandlesList' => $entitySpecificHandlesList,
+                ]
+            );
+            $model->addHandle($pageHandles);
+            return $model;
+        };
+
+        $productA = $buildModel(
+            ['default', 'catalog_product_view', 'catalog_product_view_id_1', 'catalog_product_view_sku_sku-a'],
+            ['catalog_product_view_id_1', 'catalog_product_view_sku_sku-a']
+        );
+        $productB = $buildModel(
+            ['default', 'catalog_product_view', 'catalog_product_view_id_2', 'catalog_product_view_sku_sku-b'],
+            ['catalog_product_view_id_2', 'catalog_product_view_sku_sku-b']
+        );
+
+        $this->assertSame($productA->getCacheId(), $productB->getCacheId());
+    }
+
+    /**
+     * When EntitySpecificHandlesList returns no handles, all handles remain in the cache key.
+     */
+    public function testGetCacheIdWithEmptyEntitySpecificHandlesListPreservesAllHandles()
+    {
+        $this->theme->method('getArea')->willReturn('frontend');
+        $this->theme->method('getId')->willReturn(1);
+        $this->scope->method('getId')->willReturn(1);
+
+        $buildModel = function (array $handles): Merge {
+            $model = $this->objectManagerHelper->getObject(
+                Merge::class,
+                [
+                    'scope' => $this->scope,
+                    'cache' => $this->cache,
+                    'layoutValidator' => $this->layoutValidator,
+                    'logger' => $this->logger,
+                    'appState' => $this->appState,
+                    'layoutCacheKey' => $this->layoutCacheKeyMock,
+                    'serializer' => $this->serializer,
+                    'theme' => $this->theme,
+                    'entitySpecificHandlesList' => $this->createMock(EntitySpecificHandlesList::class),
+                ]
+            );
+            $model->addHandle($handles);
+            return $model;
+        };
+
+        $productA = $buildModel(['default', 'catalog_product_view', 'catalog_product_view_id_1']);
+        $productB = $buildModel(['default', 'catalog_product_view', 'catalog_product_view_id_2']);
+
+        $this->assertNotSame($productA->getCacheId(), $productB->getCacheId());
     }
 }

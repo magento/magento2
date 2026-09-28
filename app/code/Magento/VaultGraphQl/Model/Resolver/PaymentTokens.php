@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -20,17 +20,11 @@ use Magento\Vault\Model\PaymentTokenManagement;
 class PaymentTokens implements ResolverInterface
 {
     /**
-     * @var PaymentTokenManagement
-     */
-    private $paymentTokenManagement;
-
-    /**
      * @param PaymentTokenManagement $paymentTokenManagement
      */
     public function __construct(
-        PaymentTokenManagement $paymentTokenManagement
+        private readonly PaymentTokenManagement $paymentTokenManagement
     ) {
-        $this->paymentTokenManagement = $paymentTokenManagement;
     }
 
     /**
@@ -40,8 +34,8 @@ class PaymentTokens implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         /** @var ContextInterface $context */
         if (false === $context->getExtensionAttributes()->getIsCustomer()) {

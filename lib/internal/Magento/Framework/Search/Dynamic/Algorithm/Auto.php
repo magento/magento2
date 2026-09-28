@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Search\Dynamic\Algorithm;
 
@@ -34,7 +34,7 @@ class Auto implements AlgorithmInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getItems(
         BucketInterface $bucket,
@@ -53,6 +53,8 @@ class Auto implements AlgorithmInterface
     }
 
     /**
+     * Returns price range.
+     *
      * @param BucketInterface $bucket
      * @param array $dimensions
      * @param EntityStorage $entityStorage
@@ -80,13 +82,12 @@ class Auto implements AlgorithmInterface
     private function getMaxPriceInt(EntityStorage $entityStorage)
     {
         $aggregations = $this->dataProvider->getAggregations($entityStorage);
-        $maxPrice = $aggregations['max'];
-        $maxPrice = floor($maxPrice);
-
-        return $maxPrice;
+        return ($aggregations['max'] !== null) ? floor($aggregations['max']) : 0;
     }
 
     /**
+     * Return Minimal range power.
+     *
      * @return int
      */
     private function getMinRangePower()

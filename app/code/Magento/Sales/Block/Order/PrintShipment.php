@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Block\Order;
 
@@ -88,7 +88,7 @@ class PrintShipment extends \Magento\Sales\Block\Items\AbstractItems
      * Disable pager for printing page
      *
      * @return bool
-     * @since 100.2.0
+     * @since 100.1.9
      */
     public function isPagerDisplayed()
     {
@@ -99,7 +99,7 @@ class PrintShipment extends \Magento\Sales\Block\Items\AbstractItems
      * Get order items
      *
      * @return \Magento\Framework\DataObject[]
-     * @since 100.2.0
+     * @since 100.1.9
      */
     public function getItems()
     {

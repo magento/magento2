@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Customer\Api;
 
 use Magento\Customer\Model\Data\Group as CustomerGroup;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Customer\Model\GroupRegistry;
 use Magento\Customer\Model\ResourceModel\GroupRepository;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -17,9 +18,9 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
  */
 class GroupManagementTest extends WebapiAbstract
 {
-    const SERVICE_NAME = "customerGroupManagementV1";
-    const SERVICE_VERSION = "V1";
-    const RESOURCE_PATH = "/V1/customerGroups";
+    public const SERVICE_NAME = "customerGroupManagementV1";
+    public const SERVICE_VERSION = "V1";
+    public const RESOURCE_PATH = "/V1/customerGroups";
 
     /**
      * @var GroupRegistry
@@ -46,9 +47,8 @@ class GroupManagementTest extends WebapiAbstract
      *
      * @param int $storeId The store Id
      * @param array $defaultGroupData The default group data for the store with the specified Id.
-     *
-     * @dataProvider getDefaultGroupDataProvider
-     */
+     * */
+    #[DataProvider('getDefaultGroupDataProvider')]
     public function testGetDefaultGroup($storeId, $defaultGroupData)
     {
         $serviceInfo = [
@@ -73,7 +73,7 @@ class GroupManagementTest extends WebapiAbstract
      *
      * @return array
      */
-    public function getDefaultGroupDataProvider()
+    public static function getDefaultGroupDataProvider()
     {
         return [
             'admin' => [
@@ -143,9 +143,8 @@ class GroupManagementTest extends WebapiAbstract
      *
      * @param int $groupId The group Id
      * @param bool $isDeleteable Whether the group can or cannot be deleted.
-     *
-     * @dataProvider isReadonlyDataProvider
-     */
+     * */
+    #[DataProvider('isReadonlyDataProvider')]
     public function testIsReadonly($groupId, $isDeleteable)
     {
         $serviceInfo = [
@@ -174,7 +173,7 @@ class GroupManagementTest extends WebapiAbstract
      *
      * @return array
      */
-    public function isReadonlyDataProvider()
+    public static function isReadonlyDataProvider()
     {
         return [
             'NOT LOGGED IN' => [0, false],

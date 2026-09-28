@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -45,23 +45,11 @@ class EavTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_productEavIndexerRow = $this->getMockBuilder(
-            Row::class
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_productEavIndexerRow = $this->createMock(Row::class);
 
-        $this->_productEavIndexerRows = $this->getMockBuilder(
-            Rows::class
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_productEavIndexerRows = $this->createMock(Rows::class);
 
-        $this->_productEavIndexerFull = $this->getMockBuilder(
-            Full::class
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_productEavIndexerFull = $this->createMock(Full::class);
 
         $this->model = new Eav(
             $this->_productEavIndexerRow,
@@ -75,7 +63,6 @@ class EavTest extends TestCase
             Eav::class,
             'cacheContext'
         );
-        $cacheContextProperty->setAccessible(true);
         $cacheContextProperty->setValue($this->model, $this->cacheContextMock);
     }
 

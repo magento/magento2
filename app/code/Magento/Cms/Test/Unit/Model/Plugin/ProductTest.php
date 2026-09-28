@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -43,12 +43,12 @@ class ProductTest extends TestCase
 
         $this->product = $this->getMockBuilder(CatalogProduct::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getEntityId', 'getOrigData', 'getData', 'getCategoryIds'])
+            ->onlyMethods(['getEntityId', 'getOrigData', 'getData', 'getCategoryIds'])
             ->getMock();
 
         $this->page = $this->getMockBuilder(Page::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId', 'load'])
+            ->onlyMethods(['getId', 'load'])
             ->getMock();
 
         $this->plugin = $objectManager->getObject(

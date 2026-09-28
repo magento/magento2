@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Api\Data;
 
@@ -1047,6 +1047,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
      *
      * @param string[] $additionalInformation
      * @return $this
+     * @since 102.1.0
      */
     public function setAdditionalInformation($additionalInformation);
 

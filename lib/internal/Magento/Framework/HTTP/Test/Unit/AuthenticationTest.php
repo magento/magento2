@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,15 +11,15 @@ use Magento\Framework\App\Request\Http;
 use Magento\Framework\HTTP\Authentication;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class AuthenticationTest extends TestCase
 {
     /**
      * @param array $server
      * @param string $expectedLogin
-     * @param string $expectedPass
-     * @dataProvider getCredentialsDataProvider
-     */
+     * @param string $expectedPass     */
+    #[DataProvider('getCredentialsDataProvider')]
     public function testGetCredentials($server, $expectedLogin, $expectedPass)
     {
         $request = $this->createMock(Http::class);
@@ -32,7 +32,7 @@ class AuthenticationTest extends TestCase
     /**
      * @return array
      */
-    public function getCredentialsDataProvider()
+    public static function getCredentialsDataProvider()
     {
         $login = 'login';
         $password = 'password';

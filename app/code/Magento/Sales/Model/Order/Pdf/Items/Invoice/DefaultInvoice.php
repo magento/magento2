@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -47,8 +47,8 @@ class DefaultInvoice extends \Magento\Sales\Model\Order\Pdf\Items\AbstractItems
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\Filter\FilterManager $filterManager,
         \Magento\Framework\Stdlib\StringUtils $string,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
         ?RtlTextHandler $rtlTextHandler = null
     ) {
@@ -80,11 +80,9 @@ class DefaultInvoice extends \Magento\Sales\Model\Order\Pdf\Items\AbstractItems
         $lines = [];
 
         // draw Product name
-        $lines[0] = [
-            [
+        $lines[0][] = [
                 'text' => $this->string->split($this->prepareText((string)$item->getName()), 35, true, true),
                 'feed' => 35
-            ]
         ];
 
         // draw SKU
@@ -153,15 +151,21 @@ class DefaultInvoice extends \Magento\Sales\Model\Order\Pdf\Items\AbstractItems
                     } else {
                         $printValue = $this->filterManager->stripTags($option['value']);
                     }
+                    $printValue = str_replace(PHP_EOL, ', ', $printValue);
                     $values = explode(', ', $printValue);
+                    $text = [];
                     foreach ($values as $value) {
-                        $lines[][] = ['text' => $this->string->split($value, 30, true, true), 'feed' => 40];
+                        foreach ($this->string->split($value, 50, true, true) as $subValue) {
+                            $text[] = $subValue;
+                        }
                     }
+
+                    $lines[][] = ['text' => $text, 'feed' => 40];
                 }
             }
         }
 
-        $lineBlock = ['lines' => $lines, 'height' => 20];
+        $lineBlock = ['lines' => $lines, 'height' => 20, 'shift' => 5];
 
         $page = $pdf->drawLineBlocks($page, [$lineBlock], ['table_header' => true]);
         $this->setPage($page);

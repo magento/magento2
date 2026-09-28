@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,5 +15,4 @@ $mediaDirectory = $objectManager->get(\Magento\Framework\Filesystem::class)
 $fileName = 'magento_small_image.jpg';
 $tmpFilePath = 'catalog/tmp/category/' . $fileName;
 $mediaDirectory->create('catalog/tmp/category');
-
-copy(__DIR__ . DIRECTORY_SEPARATOR . $fileName, $mediaDirectory->getAbsolutePath($tmpFilePath));
+$mediaDirectory->getDriver()->filePutContents($mediaDirectory->getAbsolutePath($tmpFilePath), file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . $fileName));

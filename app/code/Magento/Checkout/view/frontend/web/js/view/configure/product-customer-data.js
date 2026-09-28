@@ -18,8 +18,9 @@ require([
     productQtyInput,
 
     /**
-    * Updates product's qty input value according to actual data
-    */
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
+ */
     updateQty = function () {
 
         if (productQty || productQty === 0) {

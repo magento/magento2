@@ -1,17 +1,18 @@
 <?php
+
 /**
- * Helper to obtain post data for postData widget
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
+
 namespace Magento\Framework\Data\Helper;
 
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Url\Helper\Data as UrlHelper;
 
+/**
+ * Helper to obtain post data for postData widget
+ */
 class PostHelper extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
@@ -32,10 +33,11 @@ class PostHelper extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * get data for post by javascript in format acceptable to $.mage.dataPost widget
+     * Get data for post by javascript in format acceptable to $.mage.dataPost widget
      *
      * @param string $url
      * @param array $data
+     *
      * @return string
      */
     public function getPostData($url, array $data = [])
@@ -43,6 +45,7 @@ class PostHelper extends \Magento\Framework\App\Helper\AbstractHelper
         if (!isset($data[\Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED])) {
             $data[\Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED] = $this->urlHelper->getEncodedUrl();
         }
+
         return json_encode(['action' => $url, 'data' => $data]);
     }
 }

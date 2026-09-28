@@ -1,9 +1,7 @@
 <?php
 /**
- * Renders HTML anchor or nothing depending on isVisible().
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer;
 
@@ -81,8 +79,9 @@ class Link extends AbstractRenderer
     }
 
     /**
-     * Return URL pattern for action associated with the link e.g. "(star)(slash)(star)(slash)activate" ->
-     * will be translated to http://.../admin/integration/activate/id/X
+     * Return URL pattern for action associated with the link e.g. "(star)(slash)(star)(slash)activate"
+     *
+     * Will be translated to http://.../admin/integration/activate/id/X
      *
      * @return string
      */
@@ -164,6 +163,6 @@ class Link extends AbstractRenderer
      */
     protected function _getUrl(DataObject $row)
     {
-        return $this->isDisabled($row) ? '#' : $this->getUrl($this->getUrlPattern(), ['id' => $row->getId()]);
+        return $this->isDisabled() ? '#' : $this->getUrl($this->getUrlPattern(), ['id' => $row->getId()]);
     }
 }

@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Dhl\Block\Adminhtml;
 
 use Magento\Dhl\Model;
+use Magento\Framework\Measure\Weight;
 use Magento\Shipping\Helper;
 use Magento\Backend\Block\Template\Context;
 use Magento\Config\Block\System\Config\Form\Field;
@@ -17,8 +18,6 @@ use Magento\Framework\Data\Form\Element\AbstractElement;
 class Unitofmeasure extends Field
 {
     /**
-     * Carrier helper
-     *
      * @var Helper\Carrier
      */
     protected $carrierHelper;
@@ -73,8 +72,8 @@ class Unitofmeasure extends Field
 
         $convertedWeight = $this->carrierHelper->convertMeasureWeight(
             $kgWeight,
-            \Zend_Measure_Weight::KILOGRAM,
-            \Zend_Measure_Weight::POUND
+            Weight::KILOGRAM,
+            Weight::POUND
         );
         $weight = sprintf('%.3f', $convertedWeight);
 

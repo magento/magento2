@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCreateCatalogProductsListWidgetWithTwoConditionsActionGroup" extends="AdminCreateWidgetActionGroup">
+        <annotations>
+            <description>EXTENDS: AdminCreateWidgetActionGroup. Creates a Product List Widget with two conditions.</description>
+        </annotations>
+        <arguments>
+            <argument name="title" defaultValue="" type="string"/>
+            <argument name="displayPageControl" defaultValue="0" type="string"/>
+            <argument name="numberOfProductsToDisplay" defaultValue="10" type="string"/>
+            <argument name="cacheLifetime" defaultValue="" type="string"/>
+            <argument name="condition" defaultValue="SKU" type="string"/>
+            <argument name="conditionsOperator" defaultValue="is one of" type="string"/>
+            <argument name="conditionParameter" defaultValue="" type="string"/>
+            <argument name="secondCondition" defaultValue="Price" type="string"/>
+            <argument name="secondConditionOperator" defaultValue="equals or less than" type="string"/>
+            <argument name="secondConditionParameter" defaultValue="10" type="string"/>
+        </arguments>
+        <waitForElementVisible selector="{{AdminNewWidgetSection.title}}" stepKey="waitForTitleFieldToBeVisible"/>
+        <fillField selector="{{AdminNewWidgetSection.title}}" userInput="{{title}}" stepKey="fillTitleWidgetOption"/>
+        <selectOption selector="{{AdminNewWidgetSection.displayPageControl}}" userInput="{{displayPageControl}}" stepKey="selectDisplayPageControl"/>
+        <waitForElementVisible selector="{{AdminNewWidgetSection.numberOfProductsToDisplay}}" stepKey="waitForNumberOfProductsToDisplayFieldToBeVisible"/>
+        <fillField selector="{{AdminNewWidgetSection.numberOfProductsToDisplay}}" userInput="{{numberOfProductsToDisplay}}" stepKey="fillNumberOfProductsToDisplay"/>
+        <waitForElementVisible selector="{{AdminNewWidgetSection.cacheLifetime}}" stepKey="waitForCacheLifeTimeFieldToBeVisible"/>
+        <fillField selector="{{AdminNewWidgetSection.cacheLifetime}}" userInput="{{cacheLifetime}}" stepKey="fillCacheLifetime"/>
+        <waitForElementClickable selector="{{AdminNewWidgetSection.addNewCondition}}" stepKey="waitForAddNewConiditionToBeClickable"/>
+        <click selector="{{AdminNewWidgetSection.addNewCondition}}" stepKey="clickAddNewCondition"/>
+        <selectOption selector="{{AdminNewWidgetSection.selectCondition}}" userInput="{{condition}}" stepKey="selectCondition"/>
+        <waitForElementClickable selector="{{AdminNewWidgetSection.conditionOperator}}" stepKey="clickConditionsOperator234"/>
+        <click selector="{{AdminNewWidgetSection.conditionOperator}}" stepKey="clickConditionsOperator"/>
+        <selectOption selector="{{AdminNewWidgetSection.selectOperator}}" userInput="{{conditionsOperator}}" stepKey="selectConditionsOperator"/>
+        <waitForElementClickable selector="{{AdminNewWidgetSection.conditions}}" stepKey="waitForClickOnConditionsElement"/>
+        <click selector="{{AdminNewWidgetSection.conditions}}" stepKey="clickOnConditionsELement"/>
+        <waitForElementClickable selector="{{AdminNewWidgetSection.ruleParameter}}" stepKey="waitForConiditionParameterToBeClickable"/>
+        <click selector="{{AdminNewWidgetSection.ruleParameter}}" stepKey="clickConditionParameter"/>
+        <waitForElementVisible selector="{{AdminNewWidgetSection.setRuleParameter}}" stepKey="waitForConditionParameterFieldToBeVisible"/>
+        <fillField selector="{{AdminNewWidgetSection.setRuleParameter}}" userInput="{{conditionParameter}}" stepKey="fillConditionParameter"/>
+        <waitForElementClickable selector="{{AdminNewWidgetSection.applyParameter}}" stepKey="waitForApplyConditionToBeClickable"/>
+        <click selector="{{AdminNewWidgetSection.applyParameter}}" stepKey="clickApplyCondition"/>
+        <waitForElementClickable selector="{{AdminNewWidgetSection.addNewCondition}}" stepKey="waitForAddNewButtonToBeClickableForSecondCondition"/>
+        <click selector="{{AdminNewWidgetSection.addNewCondition}}" stepKey="clickAddNewForSecondCondition"/>
+        <selectOption selector="{{AdminNewWidgetSection.selectCondition}}" userInput="{{secondCondition}}" stepKey="selectSecondCondition"/>
+        <waitForPageLoad stepKey="waitForConditionsOperator"/>
+        <waitForElementClickable selector="{{AdminNewWidgetSection.secondConditionOperator}}" stepKey="waitForSecondConditionsOperatorToBeClickable"/>
+        <click selector="{{AdminNewWidgetSection.secondConditionOperator}}" stepKey="clickSecondConditionsOperator"/>
+        <selectOption selector="{{AdminNewWidgetSection.secondSelectOperator}}" userInput="{{secondConditionOperator}}" stepKey="selectSecondConditionsOperator"/>
+        <waitForElementClickable selector="{{AdminNewWidgetSection.conditions}}" stepKey="againWaitForClickOnConditionsElement"/>
+        <click selector="{{AdminNewWidgetSection.conditions}}" stepKey="againClickOnConditionsELement"/>
+        <waitForElementClickable selector="{{AdminNewWidgetSection.secondRuleParameter}}" stepKey="waitForSecondRuleParameterToBeClickable"/>
+        <click selector="{{AdminNewWidgetSection.secondRuleParameter}}" stepKey="clickSecondRuleParameter"/>
+        <waitForElementVisible selector="{{AdminNewWidgetSection.setSecondRuleParameter}}" stepKey="waitForSecondConditionParameterToBeVisible"/>
+        <fillField selector="{{AdminNewWidgetSection.setSecondRuleParameter}}" userInput="{{secondConditionParameter}}" stepKey="fillSecondConditionParameter"/>
+    </actionGroup>
+</actionGroups>

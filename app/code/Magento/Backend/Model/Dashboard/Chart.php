@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -60,19 +60,16 @@ class Chart
     public function getByPeriod(
         string $period,
         string $chartParam,
-        string $store = null,
-        string $website = null,
-        string $group = null
+        ?string $store = null,
+        ?string $website = null,
+        ?string $group = null
     ): array {
         $this->orderHelper->setParam('store', $store);
         $this->orderHelper->setParam('website', $website);
         $this->orderHelper->setParam('group', $group);
 
-        $availablePeriods = array_keys($this->period->getDatePeriods());
-        $this->orderHelper->setParam(
-            'period',
-            $period && in_array($period, $availablePeriods, false) ? $period : Period::PERIOD_24_HOURS
-        );
+        $period = $this->period->resolvePeriod($period !== '' ? $period : null);
+        $this->orderHelper->setParam('period', $period);
 
         $dates = $this->dateRetriever->getByPeriod($period);
         $collection = $this->orderHelper->getCollection();

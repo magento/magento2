@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Pricing\Render;
@@ -13,6 +13,7 @@ use Magento\Framework\View\Element\AbstractBlock;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class RendererPool extends AbstractBlock
 {
@@ -97,8 +98,8 @@ class RendererPool extends AbstractBlock
      */
     public function createAmountRender(
         AmountInterface $amount,
-        SaleableInterface $saleableItem = null,
-        PriceInterface $price = null,
+        ?SaleableInterface $saleableItem = null,
+        ?PriceInterface $price = null,
         array $data = []
     ) {
         $type = self::DEFAULT_PRICE_GROUP_TYPE;
@@ -154,7 +155,7 @@ class RendererPool extends AbstractBlock
      * @param PriceInterface $price
      * @return array
      */
-    public function getAdjustmentRenders(SaleableInterface $saleableItem = null, PriceInterface $price = null)
+    public function getAdjustmentRenders(?SaleableInterface $saleableItem = null, ?PriceInterface $price = null)
     {
         $itemType = null === $saleableItem ? 'default' : $saleableItem->getTypeId();
         $priceType = null === $price ? 'default' : $price->getPriceCode();

@@ -1,10 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\CheckoutAgreements\Model\Checkout\Plugin;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -86,9 +88,9 @@ class GuestValidationTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoDbIsolation enabled
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @dataProvider dataProvider
      * @param string[] $agreementNames
      */
+    #[DataProvider('dataProvider')]
     public function testBeforeSavePaymentInformationAndPlaceOrder($agreementNames)
     {
         $guestEmail = 'guest@example.com';
@@ -152,7 +154,7 @@ class GuestValidationTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function dataProvider()
+    public static function dataProvider()
     {
         return [
             [[]],

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Analytics\Model\Config;
@@ -52,10 +52,9 @@ class Mapper
                 $providerData['parameters'] = !empty($providerData['parameters'])
                     ? reset($providerData['parameters'])
                     : [];
-                $providerData['parameters'] = array_map(
-                    'reset',
-                    $providerData['parameters']
-                );
+                array_walk($providerData['parameters'], function (&$array) {
+                    $array = reset($array);
+                });
                 $providers[$providerType] = $providerData;
             }
             $files[$fileData['name']] = $fileData;

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\ResourceModel\Order\Creditmemo;
 
@@ -10,14 +10,10 @@ use Magento\Sales\Model\Spi\CreditmemoItemResourceInterface;
 
 /**
  * Flat sales order creditmemo item resource
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Item extends SalesResource implements CreditmemoItemResourceInterface
 {
     /**
-     * Event prefix
-     *
      * @var string
      */
     protected $_eventPrefix = 'sales_order_creditmemo_item_resource';
@@ -33,6 +29,8 @@ class Item extends SalesResource implements CreditmemoItemResourceInterface
     }
 
     /**
+     * Before save
+     *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
      */

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -10,7 +10,7 @@ namespace Magento\MediaGalleryApi\Model\Asset\Command;
 
 /**
  * A command represents the media gallery asset delete action. A media gallery asset is filtered by path value.
- * @deprecated use \Magento\MediaGalleryApi\Api\DeleteAssetsByPathInterface instead
+ * @deprecated 101.0.0 use \Magento\MediaGalleryApi\Api\DeleteAssetsByPathInterface instead
  * @see \Magento\MediaGalleryApi\Api\DeleteAssetsByPathsInterface
  */
 interface DeleteByPathInterface

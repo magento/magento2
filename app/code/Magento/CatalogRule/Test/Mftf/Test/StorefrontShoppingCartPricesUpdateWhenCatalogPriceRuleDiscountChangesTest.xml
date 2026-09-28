@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontShoppingCartPricesUpdateWhenCatalogPriceRuleDiscountChangesTest">
+        <annotations>
+            <features value="CatalogRule"/>
+            <stories value="Apply catalog price rule"/>
+            <title value="Shopping cart prices reflect catalog price rule discount changes"/>
+            <description value="Cart prices update after the catalog rule discount changes"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="ACP2E-3955"/>
+            <group value="catalogRule"/>
+        </annotations>
+        <before>
+            <!-- Create simple product -->
+            <createData entity="ApiSimpleProduct" stepKey="createProduct">
+                <field key="price">100.00</field>
+            </createData>
+            <!-- Log in as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Delete existing catalog price rules -->
+            <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogRulesBeforeTest"/>
+        </before>
+        <after>
+            <!-- Delete simple product -->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <!-- Delete catalog price rules -->
+            <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogRulesAfterTest"/>
+            <!-- Log out from admin -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <!-- Open sku attribute for edit -->
+        <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openSkuAttribute">
+            <argument name="productAttributeCode" value="sku"/>
+        </actionGroup>
+        <!-- Enable use for promo rule conditions on sku -->
+        <actionGroup ref="ChangeUseForPromoRuleConditionsProductAttributeActionGroup" stepKey="enableSkuForPromoConditions">
+            <argument name="option" value="Yes"/>
+        </actionGroup>
+        <!-- Open new catalog price rule form -->
+        <actionGroup ref="AdminOpenNewCatalogPriceRuleFormPageActionGroup" stepKey="openNewCatalogPriceRulePage"/>
+        <!-- Fill catalog price rule main information -->
+        <actionGroup ref="AdminCatalogPriceRuleFillMainInfoActionGroup" stepKey="fillMainInfoForCatalogPriceRule">
+            <argument name="groups" value="'NOT LOGGED IN'"/>
+        </actionGroup>
+        <!-- Add sku condition matching the product -->
+        <actionGroup ref="AdminCatalogPriceRuleAddSkuConditionActionGroup" stepKey="addSkuCondition">
+            <argument name="productSku" value="$$createProduct.sku$$"/>
+        </actionGroup>
+        <!-- Set first discount to 20 percent -->
+        <actionGroup ref="AdminCatalogPriceRuleFillActionsActionGroup" stepKey="fillFirstDiscount">
+            <argument name="apply" value="by_percent"/>
+            <argument name="discountAmount" value="20"/>
+        </actionGroup>
+        <!-- Save and apply catalog price rule -->
+        <actionGroup ref="AdminCatalogPriceRuleSaveAndApplyActionGroup" stepKey="saveAndApplyFirstRule"/>
+        <!-- Open product on storefront -->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="goToProductOnStorefront">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+        <!-- Add product to cart from product page -->
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addProductToCart">
+            <argument name="productName" value="$$createProduct.name$$"/>
+        </actionGroup>
+        <!-- Open shopping cart -->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="openShoppingCartFirstTime"/>
+        <!-- Assert line price after first rule -->
+        <waitForText userInput="$80.00" selector="{{CheckoutCartProductSection.ProductPriceByName($$createProduct.name$$)}}" stepKey="assertLinePriceAfterFirstRule"/>
+        <!-- Assert cart subtotal after first rule -->
+        <waitForText userInput="$80.00" selector="{{CheckoutCartSummarySection.subtotal}}" stepKey="assertSubtotalAfterFirstRule"/>
+        <!-- Open existing catalog price rule for edit -->
+        <actionGroup ref="OpenCatalogPriceRuleActionGroup" stepKey="openExistingCatalogPriceRule">
+            <argument name="ruleName" value="{{_defaultCatalogRule.name}}"/>
+        </actionGroup>
+        <!-- Set second discount to 30 percent -->
+        <actionGroup ref="AdminCatalogPriceRuleFillActionsActionGroup" stepKey="fillSecondDiscount">
+            <argument name="apply" value="by_percent"/>
+            <argument name="discountAmount" value="30"/>
+        </actionGroup>
+        <!-- Save and apply updated catalog price rule -->
+        <actionGroup ref="AdminCatalogPriceRuleSaveAndApplyActionGroup" stepKey="saveAndApplyUpdatedRule"/>
+        <!-- Open shopping cart after rule change -->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="openShoppingCartAfterRuleChange"/>
+        <!-- Assert line price after second rule -->
+        <waitForText userInput="$70.00" selector="{{CheckoutCartProductSection.ProductPriceByName($$createProduct.name$$)}}" stepKey="assertLinePriceAfterSecondRule"/>
+        <!-- Assert cart subtotal after second rule -->
+        <waitForText userInput="$70.00" selector="{{CheckoutCartSummarySection.subtotal}}" stepKey="assertSubtotalAfterSecondRule"/>
+    </test>
+</tests>

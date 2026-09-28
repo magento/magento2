@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -93,7 +93,7 @@ class IndexTest extends TestCase
      */
     public function getLayoutFactoryMock($methods = null)
     {
-        return $this->createPartialMock(LayoutFactory::class, $methods, []);
+        return $this->createPartialMock(LayoutFactory::class, $methods);
     }
 
     /**
@@ -101,7 +101,7 @@ class IndexTest extends TestCase
      */
     public function getLayoutMock()
     {
-        return $this->getMockForAbstractClass(LayoutInterface::class);
+        return $this->createMock(LayoutInterface::class);
     }
 
     /**
@@ -109,7 +109,7 @@ class IndexTest extends TestCase
      */
     public function getResponseMock($methods = null)
     {
-        return $this->createPartialMock(Response::class, $methods, []);
+        return $this->createPartialMock(Response::class, $methods);
     }
 
     /**
@@ -117,7 +117,7 @@ class IndexTest extends TestCase
      */
     public function getRequestMock($methods = null)
     {
-        return $this->createPartialMock(Http::class, $methods, []);
+        return $this->createPartialMock(Http::class, $methods);
     }
 
     /**
@@ -125,6 +125,6 @@ class IndexTest extends TestCase
      */
     public function getBlockInterfaceMock()
     {
-        return $this->getMockForAbstractClass(BlockInterface::class);
+        return $this->createMock(BlockInterface::class);
     }
 }

@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
@@ -90,8 +90,8 @@
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Last Review</argument>
                             <argument name="type" xsi:type="string">datetime</argument>
-                            <argument name="id" xsi:type="string">created_at</argument>
-                            <argument name="index" xsi:type="string">created_at</argument>
+                            <argument name="id" xsi:type="string">last_review</argument>
+                            <argument name="index" xsi:type="string">last_review</argument>
                             <argument name="column_css_class" xsi:type="string">col-date</argument>
                             <argument name="header_css_class" xsi:type="string">col-date</argument>
                         </arguments>

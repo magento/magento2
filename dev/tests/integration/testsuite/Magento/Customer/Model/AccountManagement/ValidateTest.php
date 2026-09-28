@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -49,12 +50,11 @@ class ValidateTest extends TestCase
     /**
      * Validate customer fields.
      *
-     * @dataProvider validateFieldsProvider
-     *
      * @param array $customerData
      * @param array $expectedResults
      * @return void
      */
+    #[DataProvider('validateFieldsProvider')]
     public function testValidateFields(
         array $customerData,
         array $expectedResults
@@ -78,12 +78,12 @@ class ValidateTest extends TestCase
     /**
      * @return array
      */
-    public function validateFieldsProvider(): array
+    public static function validateFieldsProvider(): array
     {
         $attributeEmptyMessage = 'The "%1" attribute value is empty. Set the attribute and try again.';
         return [
             'without_required_fields' => [
-                'customer_data' => [],
+                'customerData' => [],
                 'expectedResults' => [
                     'valid' => false,
                     'messages' => [
@@ -96,7 +96,7 @@ class ValidateTest extends TestCase
                 ],
             ],
             'with_required_fields' => [
-                'customer_data' => [
+                'customerData' => [
                     CustomerInterface::WEBSITE_ID => 1,
                     CustomerInterface::GROUP_ID => 1,
                     CustomerInterface::FIRSTNAME => 'Jane',

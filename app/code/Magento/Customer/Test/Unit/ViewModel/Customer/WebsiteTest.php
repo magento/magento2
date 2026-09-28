@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -10,18 +10,17 @@ namespace Magento\Customer\Test\Unit\ViewModel\Customer;
 
 use Magento\Customer\ViewModel\Customer\Website as CustomerWebsite;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Store\Model\System\Store as SystemStore;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Magento\Store\Model\Website;
+use Magento\Store\Model\Store;
 
 /**
  * Test for customer's website view model
  */
 class WebsiteTest extends TestCase
 {
-    /** @var ObjectManagerHelper */
-    private $objectManagerHelper;
-
     /**
      * @var CustomerWebsite
      */
@@ -40,24 +39,34 @@ class WebsiteTest extends TestCase
     protected function setUp(): void
     {
         $this->systemStore = $this->createMock(SystemStore::class);
-        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
-        $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->customerWebsite = $this->objectManagerHelper->getObject(
-            CustomerWebsite::class,
-            [
-                'systemStore' => $this->systemStore,
-                'scopeConfig' => $this->scopeConfig
-            ]
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $this->customerWebsite = new CustomerWebsite(
+            $this->systemStore,
+            $this->scopeConfig
         );
+        $websiteMock1 = $this->createPartialMock(Website::class, ['getId', 'getDefaultStore']);
+        $websiteMock2 = $this->createPartialMock(Website::class, ['getId', 'getDefaultStore']);
+        $storeMock1 = $this->createPartialMock(Store::class, ['getId']);
+        $storeMock2 = $this->createPartialMock(Store::class, ['getId']);
+
+        $storeMock1->method('getId')->willReturn('1');
+        $websiteMock1->method('getId')->willReturn('1');
+        $websiteMock1->method('getDefaultStore')->willReturn($storeMock1);
+
+        $storeMock2->method('getId')->willReturn('2');
+        $websiteMock2->method('getId')->willReturn('2');
+        $websiteMock2->method('getDefaultStore')->willReturn($storeMock2);
+
+        $this->systemStore->method('getWebsiteCollection')->willReturn([$websiteMock1, $websiteMock2]);
     }
 
     /**
      * Test that method return correct array of options
      *
      * @param array $options
-     * @dataProvider dataProviderOptionsArray
      * @return void
      */
+    #[DataProvider('dataProviderOptionsArray')]
     public function testToOptionArray(array $options): void
     {
         $this->scopeConfig->method('getValue')
@@ -83,7 +92,7 @@ class WebsiteTest extends TestCase
      *
      * @return array
      */
-    public function dataProviderOptionsArray(): array
+    public static function dataProviderOptionsArray(): array
     {
         return [
             [
@@ -92,11 +101,13 @@ class WebsiteTest extends TestCase
                         'label' => 'Main Website',
                         'value' => '1',
                         'group_id' => '1',
+                        'default_store_view_id' => '1',
                     ],
                     [
                         'label' => 'Second Website',
                         'value' => '2',
                         'group_id' => '1',
+                        'default_store_view_id' => '2',
                     ],
                 ],
             ],

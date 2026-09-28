@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,11 +13,14 @@ use Magento\Framework\Data\Form;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\Escaper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\TestCase;
 
 class AdditionalCommentTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var AdditionalComment
      */
@@ -40,16 +43,15 @@ class AdditionalCommentTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->abstractElementMock = $this->getMockBuilder(AbstractElement::class)
-            ->setMethods(['getComment', 'getLabel'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->abstractElementMock = $this->createPartialMockWithReflection(
+            AbstractElement::class,
+            ['getComment', 'getLabel']
+        );
 
         $objectManager = new ObjectManager($this);
         $escaper = $objectManager->getObject(Escaper::class);
         $reflection = new \ReflectionClass($this->abstractElementMock);
         $reflection_property = $reflection->getProperty('_escaper');
-        $reflection_property->setAccessible(true);
         $reflection_property->setValue($this->abstractElementMock, $escaper);
 
         $this->abstractElementMock->setEscaper($escaper);
@@ -57,6 +59,13 @@ class AdditionalCommentTest extends TestCase
         $this->formMock = $this->createMock(Form::class);
 
         $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                SecureHtmlRenderer::class,
+                $this->createMock(SecureHtmlRenderer::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
         $this->additionalComment = $objectManager->getObject(
             AdditionalComment::class,
             [

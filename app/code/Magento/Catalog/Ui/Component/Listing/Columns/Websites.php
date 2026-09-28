@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -23,15 +23,17 @@ class Websites extends \Magento\Ui\Component\Listing\Columns\Column
     /**
      * Column name
      */
-    const NAME = 'websites';
+    public const NAME = 'websites';
 
     /**
      * Data for concatenated website names value.
+     *
+     * @var string
      */
     private $websiteNames = 'website_names';
 
     /**
-     * Store manager
+     * Store manager property
      *
      * @var StoreManagerInterface
      */
@@ -56,7 +58,7 @@ class Websites extends \Magento\Ui\Component\Listing\Columns\Column
         StoreManagerInterface $storeManager,
         array $components = [],
         array $data = [],
-        Helper $resourceHelper = null
+        ?Helper $resourceHelper = null
     ) {
         parent::__construct($context, $uiComponentFactory, $components, $data);
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
@@ -68,6 +70,7 @@ class Websites extends \Magento\Ui\Component\Listing\Columns\Column
      * @inheritdoc
      *
      * @deprecated 101.0.0
+     * @see MAGETWO-71174
      */
     public function prepareDataSource(array $dataSource)
     {
@@ -109,6 +112,7 @@ class Websites extends \Magento\Ui\Component\Listing\Columns\Column
      * Apply sorting.
      *
      * @return void
+     * @since 103.0.2
      */
     protected function applySorting()
     {
@@ -118,6 +122,7 @@ class Websites extends \Magento\Ui\Component\Listing\Columns\Column
             && !empty($sorting['field'])
             && !empty($sorting['direction'])
             && $sorting['field'] === $this->getName()
+            && in_array(strtoupper($sorting['direction']), ['ASC', 'DESC'], true)
         ) {
             /** @var \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection $collection */
             $collection = $this->getContext()->getDataProvider()->getCollection();

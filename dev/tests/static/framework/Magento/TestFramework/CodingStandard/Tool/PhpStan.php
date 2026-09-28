@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -19,7 +19,7 @@ class PhpStan implements ToolInterface
      *
      * @see https://github.com/phpstan/phpstan#rule-levels
      */
-    private const RULE_LEVEL = 0;
+    private const RULE_LEVEL = 1;
 
     /**
      * Memory limit required by PHPStan for full Magento project scan.

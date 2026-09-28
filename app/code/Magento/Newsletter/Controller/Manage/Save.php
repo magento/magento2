@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -77,14 +77,14 @@ class Save extends \Magento\Newsletter\Controller\Manage implements HttpPostActi
 
         $customerId = $this->_customerSession->getCustomerId();
         if ($customerId === null) {
-            $this->messageManager->addError(__('Something went wrong while saving your subscription.'));
+            $this->messageManager->addErrorMessage(__('Something went wrong while saving your subscription.'));
         } else {
             try {
                 $customer = $this->customerRepository->getById($customerId);
                 $storeId = (int)$this->storeManager->getStore()->getId();
                 $customer->setStoreId($storeId);
                 $isSubscribedState = $customer->getExtensionAttributes()->getIsSubscribed();
-                $isSubscribedParam = (boolean)$this->getRequest()->getParam('is_subscribed', false);
+                $isSubscribedParam = (bool)$this->getRequest()->getParam('is_subscribed', false);
                 if ($isSubscribedParam !== $isSubscribedState) {
                     // No need to validate customer and customer address while saving subscription preferences
                     $this->setIgnoreValidationFlag($customer);
@@ -105,7 +105,7 @@ class Save extends \Magento\Newsletter\Controller\Manage implements HttpPostActi
                     $this->messageManager->addSuccess(__('We have updated your subscription.'));
                 }
             } catch (\Exception $e) {
-                $this->messageManager->addError(__('Something went wrong while saving your subscription.'));
+                $this->messageManager->addErrorMessage(__('Something went wrong while saving your subscription.'));
             }
         }
         return $this->_redirect('customer/account/');

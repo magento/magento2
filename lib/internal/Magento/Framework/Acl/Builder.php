@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Acl;
+
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Access Control List Builder. Retrieves required role/rule/resource loaders
@@ -11,8 +13,9 @@ namespace Magento\Framework\Acl;
  * On consequent requests, ACL object is deserialized from cache.
  *
  * @api
+ * @since 100.0.2
  */
-class Builder
+class Builder implements ResetAfterRequestInterface
 {
     /**
      * Acl object
@@ -77,11 +80,19 @@ class Builder
      * Remove cached ACL instance.
      *
      * @return $this
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function resetRuntimeAcl()
     {
         $this->_acl = null;
         return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function _resetState(): void
+    {
+        $this->resetRuntimeAcl();
     }
 }

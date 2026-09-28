@@ -1,9 +1,7 @@
 <?php
 /**
- * Data Model implementing the Address interface
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -65,7 +63,7 @@ class ExchangeRate extends \Magento\Framework\Api\AbstractExtensibleObject imple
     /**
      * @inheritDoc
      */
-    public function setExchangeRates(array $exchangeRates = null)
+    public function setExchangeRates(?array $exchangeRates = null)
     {
         return $this->setData(self::KEY_EXCHANGE_RATES, $exchangeRates);
     }

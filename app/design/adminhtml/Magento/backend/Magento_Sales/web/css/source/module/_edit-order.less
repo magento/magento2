@@ -1,6 +1,8 @@
-// /**
-//  * Copyright © Magento, Inc. All rights reserved.
-//  * See COPYING.txt for license details.
+// /************************************************************************
+//  * Copyright 2025 Adobe
+//  * All Rights Reserved.
+//  *
+//  * ***********************************************************************
 //  */
 
 //
@@ -14,7 +16,7 @@
 //  Table secondary for edit order
 //  ---------------------------------------------
 
-.abs-admin__table-secondary-edit-order {
+.abs-admin--table-secondary-edit-order {
     th {
         font-weight: @font-weight__regular;
         text-align: left;
@@ -37,7 +39,7 @@
 //  ---------------------------------------------
 
 .order-information-table {
-    &:extend(.abs-admin__table-secondary-edit-order all);
+    &:extend(.abs-admin--table-secondary-edit-order all);
 }
 
 //
@@ -45,7 +47,7 @@
 //  ---------------------------------------------
 
 .order-account-information-table {
-    &:extend(.abs-admin__table-secondary-edit-order all);
+    &:extend(.abs-admin--table-secondary-edit-order all);
 }
 
 //
@@ -87,5 +89,6 @@
 }
 
 .order-history-comments-actions {
+    margin-bottom: @order-create-sidebar__margin__reqular;
     margin-top: @order-create-sidebar__margin__reqular;
 }

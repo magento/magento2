@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,26 +9,30 @@ namespace Magento\Framework\Simplexml\Test\Unit;
 
 use Magento\Framework\Simplexml\Element;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ElementTest extends TestCase
 {
-    /**
-     * @dataProvider xmlDataProvider
-     */
+    /**     */
+    #[DataProvider('xmlDataProvider')]
     public function testUnsetSelf($xmlData)
     {
         /** @var Element $xml */
         $xml = simplexml_load_file($xmlData[0], $xmlData[1]);
-        $this->assertObjectHasAttribute('node4', $xml->node3);
-        $xml->node3->unsetSelf();
-        $this->assertObjectNotHasAttribute('node4', $xml->node3);
-        $this->assertObjectNotHasAttribute('node3', $xml);
-        $this->assertObjectHasAttribute('node1', $xml);
+        $xmlNode3 = $xml->node3;
+        $this->assertIsObject($xmlNode3);
+        $this->assertTrue(property_exists($xmlNode3, 'node4'));
+        $xmlNode3->unsetSelf();
+        $this->assertIsObject($xmlNode3);
+        $this->assertFalse(property_exists($xmlNode3, 'node4'));
+        $this->assertIsObject($xml);
+        $this->assertFalse(property_exists($xml, 'node3'));
+        $this->assertIsObject($xml);
+        $this->assertTrue(property_exists($xml, 'node1'));
     }
 
-    /**
-     * @dataProvider xmlDataProvider
-     */
+    /**     */
+    #[DataProvider('xmlDataProvider')]
     public function testGetParent($xmlData)
     {
         $this->expectException('InvalidArgumentException');
@@ -98,11 +102,10 @@ XML;
         $this->assertEquals($value, (string)$xml->xpath('/root/node1/node2')[0]);
     }
 
-    /**
-     * @dataProvider setAttributeDataProvider
-     * @param string $name
+    /**     * @param string $name
      * @param string $value
      */
+    #[DataProvider('setAttributeDataProvider')]
     public function testSetAttribute($name, $value)
     {
         /** @var Element $xml */
@@ -116,7 +119,7 @@ XML;
     /**
      * @return array
      */
-    public function setAttributeDataProvider()
+    public static function setAttributeDataProvider()
     {
         return [
             ['name', 'test'],

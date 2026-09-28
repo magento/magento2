@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
@@ -26,6 +26,9 @@
                         <action method="setParentType">
                             <argument name="type" xsi:type="string">creditmemo</argument>
                         </action>
+                        <arguments>
+                            <argument name="editCommentCheck" xsi:type="object">Magento\Sales\ViewModel\Order\Entity\EditCommentCheck</argument>
+                        </arguments>
                     </block>
                     <block class="Magento\Sales\Block\Adminhtml\Order\Creditmemo\Totals" name="creditmemo_totals" template="Magento_Sales::order/totals.phtml">
                         <block class="Magento\Sales\Block\Adminhtml\Order\Totals\Tax" name="tax" template="Magento_Sales::order/totals/tax.phtml"/>

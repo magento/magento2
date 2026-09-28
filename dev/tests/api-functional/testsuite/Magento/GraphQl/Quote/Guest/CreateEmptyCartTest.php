@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -39,6 +39,11 @@ class CreateEmptyCartTest extends GraphQlAbstract
      */
     private $quoteIdMaskFactory;
 
+    /**
+     * @var string
+     */
+    private $maskedQuoteId;
+
     protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
@@ -61,6 +66,7 @@ class CreateEmptyCartTest extends GraphQlAbstract
         self::assertNotNull($guestCart->getId());
         self::assertNull($guestCart->getCustomer()->getId());
         self::assertEquals('default', $guestCart->getStore()->getCode());
+        self::assertEquals('1', $guestCart->getCustomerIsGuest());
     }
 
     /**
@@ -81,6 +87,7 @@ class CreateEmptyCartTest extends GraphQlAbstract
         self::assertNotNull($guestCart->getId());
         self::assertNull($guestCart->getCustomer()->getId());
         self::assertSame('fixture_second_store', $guestCart->getStore()->getCode());
+        self::assertEquals('1', $guestCart->getCustomerIsGuest());
     }
 
     /**

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Api\Data;
@@ -10,20 +10,20 @@ use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
  * @api
- * @since 101.1.0
+ * @since 102.0.0
  */
 interface CategoryLinkInterface extends ExtensibleDataInterface
 {
     /**
      * @return int|null
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function getPosition();
 
     /**
      * @param int $position
      * @return $this
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function setPosition($position);
 
@@ -31,7 +31,7 @@ interface CategoryLinkInterface extends ExtensibleDataInterface
      * Get category id
      *
      * @return string
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function getCategoryId();
 
@@ -40,7 +40,7 @@ interface CategoryLinkInterface extends ExtensibleDataInterface
      *
      * @param string $categoryId
      * @return $this
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function setCategoryId($categoryId);
 
@@ -48,7 +48,7 @@ interface CategoryLinkInterface extends ExtensibleDataInterface
      * Retrieve existing extension attributes object.
      *
      * @return \Magento\Catalog\Api\Data\CategoryLinkExtensionInterface|null
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function getExtensionAttributes();
 
@@ -57,7 +57,7 @@ interface CategoryLinkInterface extends ExtensibleDataInterface
      *
      * @param \Magento\Catalog\Api\Data\CategoryLinkExtensionInterface $extensionAttributes
      * @return $this
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function setExtensionAttributes(
         \Magento\Catalog\Api\Data\CategoryLinkExtensionInterface $extensionAttributes

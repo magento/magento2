@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Theme\Model\ResourceModel\Theme\Grid;
 
 /**
  * Theme grid collection
- * @deprecated
+ * @deprecated 101.0.0
  * @see \Magento\Theme\Ui\Component\Theme\DataProvider\SearchResult
  */
 class Collection extends \Magento\Theme\Model\ResourceModel\Theme\Collection

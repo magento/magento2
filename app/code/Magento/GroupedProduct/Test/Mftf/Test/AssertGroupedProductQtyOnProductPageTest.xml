@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AssertGroupedProductQtyOnProductPageTest">
+        <annotations>
+            <title value="Validate quantity in Storefront for a grouped product"/>
+            <stories value="Storefront grouped product quantity validation when one child product has invalid quantity"/>
+            <description value="On the storefront, validate that if a child product in a grouped product has an invalid quantity, the error is displayed only for that specific child product."/>
+            <features value="GroupedProduct"/>
+            <testCaseId value="AC-13508"/>
+            <useCaseId value="ACP2E-3469"/>
+            <severity value="MINOR"/>
+        </annotations>
+        <before>
+            <!--Create simple and grouped product-->
+            <createData entity="ApiProductWithDescription" stepKey="simple1"/>
+            <createData entity="ApiProductWithDescription" stepKey="simple2"/>
+            <createData entity="ApiProductWithDescription" stepKey="simple3"/>
+            <createData entity="ApiGroupedProduct" stepKey="groupedProduct"/>
+            <createData entity="OneSimpleProductLink" stepKey="addProductOne">
+                <requiredEntity createDataKey="groupedProduct"/>
+                <requiredEntity createDataKey="simple1"/>
+            </createData>
+            <updateData entity="OneMoreSimpleProductLink" createDataKey="addProductOne" stepKey="addProductTwo">
+                <requiredEntity createDataKey="groupedProduct"/>
+                <requiredEntity createDataKey="simple2"/>
+            </updateData>
+            <updateData entity="OneMoreSimpleProductLink" createDataKey="addProductOne" stepKey="addProductThree">
+                <requiredEntity createDataKey="groupedProduct"/>
+                <requiredEntity createDataKey="simple3"/>
+            </updateData>
+        </before>
+        <after>
+            <deleteData createDataKey="groupedProduct" stepKey="deleteGroupProduct"/>
+            <deleteData createDataKey="simple1" stepKey="deleteSimple1"/>
+            <deleteData createDataKey="simple2" stepKey="deleteSimple2"/>
+            <deleteData createDataKey="simple3" stepKey="deleteSimple3"/>
+        </after>
+        <!-- Add grouped product to the cart -->
+        <actionGroup ref="StorefrontAddThreeGroupedProductToTheCartActionGroup" stepKey="addGropedProductsToTheCart">
+            <argument name="urlKey" value="$$groupedProduct.custom_attributes[url_key]$$"/>
+            <argument name="product1" value="$$simple1.name$$"/>
+            <argument name="product2" value="$$simple2.name$$"/>
+            <argument name="product3" value="$$simple3.name$$"/>
+            <argument name="qty1" value="1"/>
+            <argument name="qty2" value="1"/>
+            <argument name="qty3" value="-1"/>
+        </actionGroup>
+        <!-- Asserting product options qty errors-->
+        <waitForElementNotVisible selector="{{StorefrontProductInfoMainSection.groupedProductOptionQtyError($simple1.id$)}}" stepKey="firstProductQtyError"/>
+        <waitForElementNotVisible selector="{{StorefrontProductInfoMainSection.groupedProductOptionQtyError($simple2.id$)}}" stepKey="secondProductQtyError"/>
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.groupedProductOptionQtyError($simple3.id$)}}" stepKey="thirdProductQtyError"/>
+    </test>
+</tests>

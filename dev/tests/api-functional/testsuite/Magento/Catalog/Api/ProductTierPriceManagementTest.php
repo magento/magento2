@@ -1,29 +1,27 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Api;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
- * Class ProductTierPriceManagementTest
- *
- * @package Magento\Catalog\Api
+ * ProductTierPriceManagementTest API operations test
  */
 class ProductTierPriceManagementTest extends WebapiAbstract
 {
-    const SERVICE_NAME = 'catalogProductTierPriceManagementV1';
-    const SERVICE_VERSION = 'V1';
-    const RESOURCE_PATH = '/V1/products/';
+    private const SERVICE_NAME = 'catalogProductTierPriceManagementV1';
+    private const SERVICE_VERSION = 'V1';
+    private const RESOURCE_PATH = '/V1/products/';
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
-     * @dataProvider getListDataProvider
      */
+    #[DataProvider('getListDataProvider')]
     public function testGetList($customerGroupId, $count, $value, $qty)
     {
         $productSku = 'simple';
@@ -51,7 +49,7 @@ class ProductTierPriceManagementTest extends WebapiAbstract
         }
     }
 
-    public function getListDataProvider()
+    public static function getListDataProvider()
     {
         return [
             [0, 3, 5, 3],
@@ -64,8 +62,8 @@ class ProductTierPriceManagementTest extends WebapiAbstract
      * @param string|int $customerGroupId
      * @param int $qty
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
-     * @dataProvider deleteDataProvider
      */
+    #[DataProvider('deleteDataProvider')]
     public function testDelete($customerGroupId, $qty)
     {
         $productSku = 'simple';
@@ -82,10 +80,10 @@ class ProductTierPriceManagementTest extends WebapiAbstract
             ],
         ];
         $requestData = ['sku' => $productSku, 'customerGroupId' => $customerGroupId, 'qty' => $qty];
-        $this->assertTrue($this->_webApiCall($serviceInfo, $requestData));
+        $this->assertTrue($this->_webApiCall($serviceInfo, $requestData, null, "all"));
     }
 
-    public function deleteDataProvider()
+    public static function deleteDataProvider()
     {
         return [
             'delete_tier_price_for_specific_customer_group' => [0, 3],
@@ -198,7 +196,7 @@ class ProductTierPriceManagementTest extends WebapiAbstract
             'qty' => $qty,
             'price' => $price,
         ];
-        $this->_webApiCall($serviceInfo, $requestData);
+        $this->_webApiCall($serviceInfo, $requestData, null, "all");
         $objectManager = \Magento\TestFramework\ObjectManager::getInstance();
         /** @var \Magento\Catalog\Api\ProductTierPriceManagementInterface $service */
         $service = $objectManager->get(\Magento\Catalog\Api\ProductTierPriceManagementInterface::class);

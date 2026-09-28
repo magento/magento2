@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Customer\Model\Address;
@@ -10,6 +10,7 @@ namespace Magento\Customer\Model\Address;
  * Interface for address validator.
  *
  * @api
+ * @since 102.0.0
  */
 interface ValidatorInterface
 {
@@ -19,6 +20,7 @@ interface ValidatorInterface
      *
      * @param AbstractAddress $address
      * @return array
+     * @since 102.0.0
      */
     public function validate(AbstractAddress $address);
 }

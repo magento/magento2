@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\CatalogInventory\Test\Unit\Model\Stock;
 use Magento\CatalogInventory\Api\Data\StockCollectionInterface;
 use Magento\CatalogInventory\Api\Data\StockCollectionInterfaceFactory;
 use Magento\CatalogInventory\Api\StockCriteriaInterface;
+use Magento\CatalogInventory\Model\ResourceModel\Stock as StockResource;
 use Magento\CatalogInventory\Model\Stock;
 use Magento\CatalogInventory\Model\Stock\StockRepository;
 use Magento\CatalogInventory\Model\StockFactory;
@@ -33,12 +34,12 @@ class StockRepositoryTest extends TestCase
     protected $model;
 
     /**
-     * @var \Magento\CatalogInventory\Model\Stock|MockObject
+     * @var Stock|MockObject
      */
     protected $stockMock;
 
     /**
-     * @var \Magento\CatalogInventory\Model\ResourceModel\Stock|MockObject
+     * @var StockResource|MockObject
      */
     protected $stockResourceMock;
 
@@ -73,24 +74,24 @@ class StockRepositoryTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->stockResourceMock = $this->getMockBuilder(\Magento\CatalogInventory\Model\ResourceModel\Stock::class)
+        $this->stockResourceMock = $this->getMockBuilder(StockResource::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->stockFactoryMock = $this->getMockBuilder(
             StockFactory::class
         )
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->stockCollectionMock = $this->getMockBuilder(
             StockCollectionInterfaceFactory::class
         )
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->queryBuilderFactoryMock = $this->getMockBuilder(QueryBuilderFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->mapperMock = $this->getMockBuilder(MapperFactory::class)
@@ -140,7 +141,7 @@ class StockRepositoryTest extends TestCase
             ->getMock();
         $queryBuilderMock = $this->getMockBuilder(QueryBuilder::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setCriteria', 'setResource', 'create'])
+            ->onlyMethods(['setCriteria', 'setResource', 'create'])
             ->getMock();
         $queryMock = $this->getMockBuilder(QueryInterface::class)
             ->getMock();

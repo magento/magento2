@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\AsynchronousOperations\Api\Data;
@@ -38,6 +38,7 @@ interface BulkSummaryInterface extends \Magento\Framework\Bulk\BulkSummaryInterf
      * Get user type
      *
      * @return int
+     * @since 100.3.0
      */
     public function getUserType();
 
@@ -46,6 +47,7 @@ interface BulkSummaryInterface extends \Magento\Framework\Bulk\BulkSummaryInterf
      *
      * @param int $userType
      * @return $this
+     * @since 100.3.0
      */
     public function setUserType($userType);
 }

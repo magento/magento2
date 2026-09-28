@@ -1,14 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Reports\Block\Product;
 
 /**
  * Reports Recently Products Abstract Block
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 abstract class AbstractProduct extends \Magento\Catalog\Block\Product\AbstractProduct
 {
@@ -37,6 +35,8 @@ abstract class AbstractProduct extends \Magento\Catalog\Block\Product\AbstractPr
     protected $_indexFactory;
 
     /**
+     * Initialize
+     *
      * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\Catalog\Model\Product\Visibility $productVisibility
      * @param \Magento\Reports\Model\Product\Index\Factory $indexFactory
@@ -82,6 +82,7 @@ abstract class AbstractProduct extends \Magento\Catalog\Block\Product\AbstractPr
 
     /**
      * Public method for retrieve Product Index model
+     *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Reports\Model\Product\Index\AbstractIndex
      */

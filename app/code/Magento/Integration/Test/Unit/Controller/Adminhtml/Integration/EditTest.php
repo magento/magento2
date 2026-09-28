@@ -1,18 +1,21 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Integration\Test\Unit\Controller\Adminhtml\Integration;
 
+use Magento\Backend\Model\Menu\Item\Factory;
 use Magento\Framework\Exception\IntegrationException;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info;
 use Magento\Integration\Controller\Adminhtml\Integration;
-use Magento\Integration\Test\Unit\Controller\Adminhtml\IntegrationTest;
+use Magento\Integration\Test\Unit\Controller\Adminhtml\IntegrationTestCase;
 
-class EditTest extends IntegrationTest
+class EditTest extends IntegrationTestCase
 {
     public function testEditAction()
     {
@@ -54,6 +57,18 @@ class EditTest extends IntegrationTest
         $this->pageTitleMock->expects($this->atLeastOnce())
             ->method('prepend');
         $this->_verifyLoadAndRenderLayout();
+        $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                Factory::class,
+                $this->createMock(Factory::class)
+            ],
+            [
+                SerializerInterface::class,
+                $this->createMock(SerializerInterface::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
         $controller = $this->_createIntegrationController('Edit');
         $controller->execute();
     }
@@ -62,7 +77,7 @@ class EditTest extends IntegrationTest
     {
         $exceptionMessage = 'This integration no longer exists.';
         // verify the error
-        $this->_messageManager->expects($this->once())->method('addError')->with($exceptionMessage);
+        $this->_messageManager->expects($this->once())->method('addErrorMessage')->with($exceptionMessage);
         $this->_requestMock->expects($this->any())->method('getParam')->willReturn(self::INTEGRATION_ID);
         // put data in session, the magic function getFormData is called so, must match __call method name
         $this->_backendSessionMock->expects(
@@ -93,7 +108,7 @@ class EditTest extends IntegrationTest
     {
         $exceptionMessage = 'Integration ID is not specified or is invalid.';
         // verify the error
-        $this->_messageManager->expects($this->once())->method('addError')->with($exceptionMessage);
+        $this->_messageManager->expects($this->once())->method('addErrorMessage')->with($exceptionMessage);
         $this->_verifyLoadAndRenderLayout();
         $integrationContr = $this->_createIntegrationController('Edit');
         $integrationContr->execute();
@@ -103,7 +118,7 @@ class EditTest extends IntegrationTest
     {
         $exceptionMessage = 'Integration ID is not specified or is invalid.';
         // verify the error
-        $this->_messageManager->expects($this->once())->method('addError')->with($exceptionMessage);
+        $this->_messageManager->expects($this->once())->method('addErrorMessage')->with($exceptionMessage);
         $this->_controller = $this->_createIntegrationController('Edit');
         $this->_controller->execute();
     }

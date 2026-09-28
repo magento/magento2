@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -26,7 +26,7 @@ class HashMapPoolTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
 
         $this->model = (new ObjectManager($this))->getObject(
             HashMapPool::class,
@@ -81,9 +81,7 @@ class HashMapPoolTest extends TestCase
     {
         $nonInterface = $this->createMock(HashMapPool::class);
 
-        $this->objectManagerMock->expects($this->any())
-            ->method('create')
-            ->willReturn($nonInterface);
+        $this->objectManagerMock->method('create')->willReturn($nonInterface);
         $this->expectException(\InvalidArgumentException::class);
         $this->model->getDataMap(HashMapPool::class, 1);
     }

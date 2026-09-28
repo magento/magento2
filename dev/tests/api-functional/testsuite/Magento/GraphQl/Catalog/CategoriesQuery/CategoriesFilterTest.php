@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Catalog\Model\ResourceModel\Category\Collection as CategoryCollectio
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test categories query filtering works as expected
@@ -19,12 +20,12 @@ class CategoriesFilterTest extends GraphQlAbstract
 {
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/categories.php
-     * @dataProvider filterSingleCategoryDataProvider
      * @param string $field
      * @param string $condition
      * @param string $value
      * @param array $expectedResult
      */
+    #[DataProvider('filterSingleCategoryDataProvider')]
     public function testFilterSingleCategoryByField($field, $condition, $value, $expectedResult)
     {
         $query = <<<QUERY
@@ -32,6 +33,7 @@ class CategoriesFilterTest extends GraphQlAbstract
     categories(filters: { $field : { $condition : "$value" } }){
         items{
             id
+            uid
             name
             url_key
             url_path
@@ -50,12 +52,12 @@ QUERY;
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/categories.php
-     * @dataProvider filterMultipleCategoriesDataProvider
      * @param $field
      * @param $condition
      * @param $value
      * @param $expectedResult
      */
+    #[DataProvider('filterMultipleCategoriesDataProvider')]
     public function testFilterMultipleCategoriesByField($field, $condition, $value, $expectedResult)
     {
         $query = <<<QUERY
@@ -63,6 +65,7 @@ QUERY;
     categories(filters: { $field : { $condition : $value } }){
         items{
             id
+            uid
             name
             url_key
             url_path
@@ -92,6 +95,7 @@ QUERY;
         total_count
         items{
             id
+            uid
             name
             url_key
             url_path
@@ -122,6 +126,7 @@ QUERY;
     categories(filters: {url_key: {in: ["inactive", "category-2"]}}){
         items{
             id
+            uid
             name
             url_key
             url_path
@@ -147,6 +152,7 @@ QUERY;
     categories(filters: {ids: {in: ["3"]}}){
         items{
             id
+            uid
             name
             url_key
             url_path
@@ -189,7 +195,7 @@ QUERY;
         $expectedBaseCategoryProducts = [
             ['sku' => 'simple', 'name' => 'Simple Product'],
             ['sku' => 'simple-4', 'name' => 'Simple Product Three'],
-            ['sku' => '12345', 'name' => 'Simple Product Two']
+            ['sku' => '12345', 'name' => 'Simple Product Two'],
         ];
         $this->assertCategoryProducts($baseCategory, $expectedBaseCategoryProducts);
         //Check base category children
@@ -233,6 +239,7 @@ QUERY;
     categories(filters: {ids: {in: ["3"]}}){
         items{
             id
+            uid
             name
             image
             url_key
@@ -315,6 +322,7 @@ QUERY;
     categories(filters: {url_key: {in: ["inactive", "does-not-exist"]}}){
         items{
             id
+            uid
             name
             url_key
             url_path
@@ -343,6 +351,7 @@ QUERY;
     categories{
         items{
             id
+            uid
             name
             url_key
             url_path
@@ -378,6 +387,7 @@ QUERY;
     categories(filters: {name: {match: "mo"}}){
         items{
             id
+            uid
             name
             url_key
             url_path
@@ -395,8 +405,9 @@ QUERY;
      * Test category image full name is returned
      *
      * @magentoApiDataFixture Magento/Catalog/_files/catalog_category_with_long_image_name.php
+     * @magentoConfigFixture default_store web/seo/use_rewrites 0
      */
-    public function testCategoryImageName()
+    public function testCategoryImageNameAndSeoDisabled()
     {
         /** @var CategoryCollection $categoryCollection */
         $categoryCollection = Bootstrap::getObjectManager()->get(CategoryCollection::class);
@@ -411,6 +422,7 @@ QUERY;
     categories(filters: {ids: {in: ["$categoryId"]}}) {
         items{
             id
+            uid
             name
             image
         }
@@ -427,14 +439,13 @@ QUERY;
         $categories = $response['categories'];
         $this->assertArrayNotHasKey('errors', $response);
         $this->assertNotEmpty($response['categories']['items']);
-        $expectedImageUrl = str_replace('index.php/', '', $expectedImageUrl);
-        $categories['items'][0]['image'] = str_replace('index.php/', '', $categories['items'][0]['image']);
         $this->assertEquals('Parent Image Category', $categories['items'][0]['name']);
         $this->assertEquals($expectedImageUrl, $categories['items'][0]['image']);
     }
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     * @magentoConfigFixture default_store web/seo/use_rewrites 1
      */
     public function testFilterByUrlPathTopLevelCategory()
     {
@@ -444,6 +455,7 @@ QUERY;
     categories(filters: {url_path: {eq: "$urlPath"}}){
         items{
             id
+            uid
             name
             url_key
             url_path
@@ -473,6 +485,7 @@ QUERY;
     categories(filters: {url_path: {eq: "$urlPath"}}){
         items{
             id
+            uid
             name
             url_key
             url_path
@@ -503,6 +516,7 @@ QUERY;
     categories(filters: {url_path: {in: [$urlPathsString]}}){
         items{
             id
+            uid
             name
             url_key
             url_path
@@ -533,6 +547,7 @@ QUERY;
     categories(filters: {url_path: {in: ["not-a-category url path"]}}){
         items{
             id
+            uid
             name
             url_key
             url_path
@@ -552,7 +567,7 @@ QUERY;
     /**
      * @return array
      */
-    public function filterSingleCategoryDataProvider(): array
+    public static function filterSingleCategoryDataProvider(): array
     {
         return [
             [
@@ -561,11 +576,55 @@ QUERY;
                 '4',
                 [
                     'id' => '4',
+                    'uid' => base64_encode('4'),
                     'name' => 'Category 1.1',
                     'url_key' => 'category-1-1',
                     'url_path' => 'category-1/category-1-1',
-                    'children_count' => '0',
+                    'children_count' => '1',
                     'path' => '1/2/3/4',
+                    'position' => '1'
+                ]
+            ],
+            [
+                'category_uid',
+                'eq',
+                base64_encode('4'),
+                [
+                    'id' => '4',
+                    'uid' => base64_encode('4'),
+                    'name' => 'Category 1.1',
+                    'url_key' => 'category-1-1',
+                    'url_path' => 'category-1/category-1-1',
+                    'children_count' => '1',
+                    'path' => '1/2/3/4',
+                    'position' => '1'
+                ]
+            ],
+            [
+                'parent_id',
+                'eq',
+                '4',
+                [
+                    'id' => '5',
+                    'name' => 'Category 1.1.1',
+                    'url_key' => 'category-1-1-1',
+                    'url_path' => 'category-1/category-1-1/category-1-1-1',
+                    'children_count' => '0',
+                    'path' => '1/2/3/4/5',
+                    'position' => '1'
+                ]
+            ],
+            [
+                'parent_category_uid',
+                'eq',
+                'NA==',
+                [
+                    'id' => '5',
+                    'name' => 'Category 1.1.1',
+                    'url_key' => 'category-1-1-1',
+                    'url_path' => 'category-1/category-1-1/category-1-1-1',
+                    'children_count' => '0',
+                    'path' => '1/2/3/4/5',
                     'position' => '1'
                 ]
             ],
@@ -575,6 +634,7 @@ QUERY;
                 'Movable Position 2',
                 [
                     'id' => '10',
+                    'uid' => base64_encode('10'),
                     'name' => 'Movable Position 2',
                     'url_key' => 'movable-position-2',
                     'url_path' => 'movable-position-2',
@@ -589,6 +649,7 @@ QUERY;
                 'category-1-1-1',
                 [
                     'id' => '5',
+                    'uid' => base64_encode('5'),
                     'name' => 'Category 1.1.1',
                     'url_key' => 'category-1-1-1',
                     'url_path' => 'category-1/category-1-1/category-1-1-1',
@@ -604,7 +665,7 @@ QUERY;
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return array
      */
-    public function filterMultipleCategoriesDataProvider(): array
+    public static function filterMultipleCategoriesDataProvider(): array
     {
         return[
             //Filter by multiple IDs
@@ -618,7 +679,7 @@ QUERY;
                         'name' => 'Category 1.1',
                         'url_key' => 'category-1-1',
                         'url_path' => 'category-1/category-1-1',
-                        'children_count' => '0',
+                        'children_count' => '1',
                         'path' => '1/2/3/4',
                         'position' => '1'
                     ],
@@ -642,20 +703,67 @@ QUERY;
                     ]
                 ]
             ],
-            //Filter by multiple url keys
+            //Filter by multiple UIDs
             [
-                'url_key',
+                'category_uid',
                 'in',
-                '["category-1-2", "movable"]',
+                '["' . base64_encode('4') . '", "' . base64_encode('9') . '", "' . base64_encode('10') . '"]',
                 [
                     [
-                        'id' => '7',
-                        'name' => 'Movable',
-                        'url_key' => 'movable',
-                        'url_path' => 'movable',
+                        'id' => '4',
+                        'uid' => base64_encode('4'),
+                        'name' => 'Category 1.1',
+                        'url_key' => 'category-1-1',
+                        'url_path' => 'category-1/category-1-1',
+                        'children_count' => '1',
+                        'path' => '1/2/3/4',
+                        'position' => '1'
+                    ],
+                    [
+                        'id' => '9',
+                        'uid' => base64_encode('9'),
+                        'name' => 'Movable Position 1',
+                        'url_key' => 'movable-position-1',
+                        'url_path' => 'movable-position-1',
                         'children_count' => '0',
-                        'path' => '1/2/7',
-                        'position' => '3'
+                        'path' => '1/2/9',
+                        'position' => '5'
+                    ],
+                    [
+                        'id' => '10',
+                        'uid' => base64_encode('10'),
+                        'name' => 'Movable Position 2',
+                        'url_key' => 'movable-position-2',
+                        'url_path' => 'movable-position-2',
+                        'children_count' => '0',
+                        'path' => '1/2/10',
+                        'position' => '6'
+                    ]
+                ]
+            ],
+            // Filter by multiple parent IDs
+            [
+                'parent_id',
+                'in',
+                '["3", "4"]',
+                [
+                    [
+                        'id' => '4',
+                        'name' => 'Category 1.1',
+                        'url_key' => 'category-1-1',
+                        'url_path' => 'category-1/category-1-1',
+                        'children_count' => '1',
+                        'path' => '1/2/3/4',
+                        'position' => '1'
+                    ],
+                    [
+                        'id' => '5',
+                        'name' => 'Category 1.1.1',
+                        'url_key' => 'category-1-1-1',
+                        'url_path' => 'category-1/category-1-1/category-1-1-1',
+                        'children_count' => '0',
+                        'path' => '1/2/3/4/5',
+                        'position' => '1'
                     ],
                     [
                         'id' => '13',
@@ -668,6 +776,69 @@ QUERY;
                     ]
                 ]
             ],
+            // Filter by multiple parent UIDs
+            [
+                'parent_category_uid',
+                'in',
+                '["Mw==", "NA=="]',
+                [
+                    [
+                        'id' => '4',
+                        'name' => 'Category 1.1',
+                        'url_key' => 'category-1-1',
+                        'url_path' => 'category-1/category-1-1',
+                        'children_count' => '1',
+                        'path' => '1/2/3/4',
+                        'position' => '1'
+                    ],
+                    [
+                        'id' => '5',
+                        'name' => 'Category 1.1.1',
+                        'url_key' => 'category-1-1-1',
+                        'url_path' => 'category-1/category-1-1/category-1-1-1',
+                        'children_count' => '0',
+                        'path' => '1/2/3/4/5',
+                        'position' => '1'
+                    ],
+                    [
+                        'id' => '13',
+                        'name' => 'Category 1.2',
+                        'url_key' => 'category-1-2',
+                        'url_path' => 'category-1/category-1-2',
+                        'children_count' => '0',
+                        'path' => '1/2/3/13',
+                        'position' => '2'
+                    ]
+                ]
+            ],
+            //Filter by multiple url keys
+            [
+                'url_key',
+                'in',
+                '["category-1-2", "movable"]',
+                [
+                    [
+                        'id' => '13',
+                        'uid' => base64_encode('13'),
+                        'name' => 'Category 1.2',
+                        'url_key' => 'category-1-2',
+                        'url_path' => 'category-1/category-1-2',
+                        'children_count' => '0',
+                        'path' => '1/2/3/13',
+                        'position' => '2'
+                    ],
+                    [
+                        'id' => '7',
+                        'uid' => base64_encode('7'),
+                        'name' => 'Movable',
+                        'url_key' => 'movable',
+                        'url_path' => 'movable',
+                        'children_count' => '0',
+                        'path' => '1/2/7',
+                        'position' => '3'
+                    ]
+                ]
+            ],
             //Filter by matching multiple names
             [
                 'name',
@@ -676,6 +847,7 @@ QUERY;
                 [
                     [
                         'id' => '9',
+                        'uid' => base64_encode('9'),
                         'name' => 'Movable Position 1',
                         'url_key' => 'movable-position-1',
                         'url_path' => 'movable-position-1',
@@ -685,6 +857,7 @@ QUERY;
                     ],
                     [
                         'id' => '10',
+                        'uid' => base64_encode('10'),
                         'name' => 'Movable Position 2',
                         'url_key' => 'movable-position-2',
                         'url_path' => 'movable-position-2',
@@ -694,6 +867,7 @@ QUERY;
                     ],
                     [
                         'id' => '11',
+                        'uid' => base64_encode('11'),
                         'name' => 'Movable Position 3',
                         'url_key' => 'movable-position-3',
                         'url_path' => 'movable-position-3',

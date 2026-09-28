@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,20 +12,19 @@ use Magento\Bundle\Model\Product\Price;
 use Magento\Bundle\Pricing\Price\BundleSelectionFactory;
 use Magento\Bundle\Pricing\Price\BundleSelectionPrice;
 use Magento\Catalog\Model\Product;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Pricing\Adjustment\Calculator as CalculatorBase;
 use Magento\Framework\Pricing\Amount\AmountFactory;
 use Magento\Framework\Pricing\Amount\AmountInterface;
 use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
-use Magento\Store\Model\Store;
-use Magento\Tax\Api\TaxCalculationInterface;
 use Magento\Tax\Helper\Data as TaxHelper;
 
 /**
  * Bundle price calculator
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Calculator implements BundleCalculatorInterface
+class Calculator implements BundleCalculatorInterface, ResetAfterRequestInterface
 {
     /**
      * @var CalculatorBase
@@ -214,7 +213,8 @@ class Calculator implements BundleCalculatorInterface
      * @param Option $option
      * @param bool $canSkipRequiredOption
      * @return bool
-     * @deprecated 100.2.0
+     * @deprecated 100.2.0 Not used anymore.
+     * @see Nothing
      */
     protected function canSkipOption($option, $canSkipRequiredOption)
     {
@@ -226,7 +226,8 @@ class Calculator implements BundleCalculatorInterface
      *
      * @param Product $bundleProduct
      * @return bool
-     * @deprecated 100.2.0
+     * @deprecated 100.2.0 Not used anymore.
+     * @see Nothing
      */
     protected function hasRequiredOption($bundleProduct)
     {
@@ -245,6 +246,7 @@ class Calculator implements BundleCalculatorInterface
      * @param Product $saleableItem
      * @return \Magento\Bundle\Model\ResourceModel\Option\Collection
      * @deprecated 100.2.0
+     * @see Nothing
      */
     protected function getBundleOptions(Product $saleableItem)
     {
@@ -306,42 +308,39 @@ class Calculator implements BundleCalculatorInterface
         $fullAmount = 0.;
         $adjustments = [];
         $i = 0;
-
-        $amountList[$i]['amount'] = $this->calculator->getAmount($basePriceValue, $bundleProduct, $exclude);
+        $amountList = [];
+        $baseAmount = $this->calculator->getAmount($basePriceValue, $bundleProduct, $exclude);
+        $amountList[$i]['amount'] = $baseAmount;
         $amountList[$i]['quantity'] = 1;
+        $amountList[$i]['priceValue'] = $baseAmount->getValue(['tax']);
 
         foreach ($selectionPriceList as $selectionPrice) {
             ++$i;
             if ($selectionPrice) {
                 $amountList[$i]['amount'] = $selectionPrice->getAmount();
-                // always honor the quantity given
                 $amountList[$i]['quantity'] = $selectionPrice->getQuantity();
+                $amountList[$i]['priceValue'] = $selectionPrice->getValue();
             }
         }
 
-        /** @var  Store $store */
-        $store = $bundleProduct->getStore();
-        $roundingMethod = $this->taxHelper->getCalculationAlgorithm($store);
+        $excludeTaxTotal = 0.;
         foreach ($amountList as $amountInfo) {
             /** @var AmountInterface $itemAmount */
             $itemAmount = $amountInfo['amount'];
             $qty = $amountInfo['quantity'];
-
-            if ($roundingMethod != TaxCalculationInterface::CALC_TOTAL_BASE) {
-                //We need to round the individual selection first
-                $fullAmount += ($this->priceCurrency->round($itemAmount->getValue()) * $qty);
-                foreach ($itemAmount->getAdjustmentAmounts() as $code => $adjustment) {
-                    $adjustment = $this->priceCurrency->round($adjustment) * $qty;
-                    $adjustments[$code] = isset($adjustments[$code]) ? $adjustments[$code] + $adjustment : $adjustment;
+            $fullAmount += $this->priceCurrency->round($itemAmount->getValue()) * $qty;
+            $excludeTaxPerUnit = $amountInfo['priceValue'] ?? $itemAmount->getValue(['tax']);
+            $excludeTaxTotal += $this->priceCurrency->round($excludeTaxPerUnit) * $qty;
+            foreach ($itemAmount->getAdjustmentAmounts() as $code => $adjustment) {
+                if ($code === 'tax') {
+                    continue;
                 }
-            } else {
-                $fullAmount += ($itemAmount->getValue() * $qty);
-                foreach ($itemAmount->getAdjustmentAmounts() as $code => $adjustment) {
-                    $adjustment = $adjustment * $qty;
-                    $adjustments[$code] = isset($adjustments[$code]) ? $adjustments[$code] + $adjustment : $adjustment;
-                }
+                $adjustment = $this->priceCurrency->round($adjustment) * $qty;
+                $adjustments[$code] = isset($adjustments[$code]) ? $adjustments[$code] + $adjustment : $adjustment;
             }
         }
+
+        $adjustments['tax'] = $fullAmount - $excludeTaxTotal;
         if (is_array($exclude) == false) {
             if ($exclude && isset($adjustments[$exclude])) {
                 $fullAmount -= $adjustments[$exclude];
@@ -424,5 +423,13 @@ class Calculator implements BundleCalculatorInterface
             }
         }
         return $result;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->optionAmount = [];
     }
 }

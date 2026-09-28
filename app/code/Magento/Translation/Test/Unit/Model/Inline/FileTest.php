@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -38,12 +38,8 @@ class FileTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->translateResourceMock = $this->getMockBuilder(ResourceInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->localeResolverMock = $this->getMockBuilder(ResolverInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->translateResourceMock = $this->createMock(ResourceInterface::class);
+        $this->localeResolverMock = $this->createMock(ResolverInterface::class);
         $this->jsonSerializer = new Json();
 
         $this->model = new File(

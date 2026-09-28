@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 define([
@@ -20,6 +20,26 @@ define([
         /**
          * @inheritdoc
          */
+        setInitialValue: function () {
+            this.initialValue = this.getInitialValue();
+
+            if (this.initialValue === undefined || this.initialValue === '') {
+                this.initialValue = 1;
+            }
+
+            if (this.value.peek() !== this.initialValue) {
+                this.value(this.initialValue);
+            }
+
+            this.on('value', this.onUpdate.bind(this));
+            this.isUseDefault(this.disabled());
+
+            return this;
+        },
+
+        /**
+         * @inheritdoc
+         */
         onUpdate: function () {
             this.validation['validate-digits'] = this.isInteger;
             this._super();
@@ -33,6 +53,5 @@ define([
 
             return !this.visible() ? false : notEqual;
         }
-
     });
 });

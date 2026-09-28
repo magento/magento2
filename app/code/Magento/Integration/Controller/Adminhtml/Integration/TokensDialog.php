@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Integration\Controller\Adminhtml\Integration;
 
@@ -51,12 +50,12 @@ class TokensDialog extends \Magento\Integration\Controller\Adminhtml\Integration
                 $this->_integrationService->get($integrationId)->getData()
             );
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
             $this->_redirect('*/*');
             return;
         } catch (\Exception $e) {
             $this->_logger->critical($e);
-            $this->messageManager->addError(__('Internal error. Check exception log for details.'));
+            $this->messageManager->addErrorMessage(__('Internal error. Check exception log for details.'));
             $this->_redirect('*/*');
             return;
         }

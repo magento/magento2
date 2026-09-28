@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Sales\Model\Order;
@@ -13,6 +13,7 @@ use Magento\Framework\DataObject;
 use Magento\Framework\DataObject\Factory as DataObjectFactory;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Api\Data\OrderItemSearchResultInterfaceFactory;
 use Magento\Sales\Api\OrderItemRepositoryInterface;
@@ -23,7 +24,7 @@ use Magento\Sales\Model\ResourceModel\Metadata;
  * Repository class for @see OrderItemInterface
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ItemRepository implements OrderItemRepositoryInterface
+class ItemRepository implements OrderItemRepositoryInterface, ResetAfterRequestInterface
 {
     /**
      * @var DataObjectFactory
@@ -82,6 +83,14 @@ class ItemRepository implements OrderItemRepositoryInterface
         $this->collectionProcessor = $collectionProcessor;
         $this->productOption = $productOption;
         $this->processorPool = $processorPool;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->registry = [];
     }
 
     /**
@@ -167,15 +176,30 @@ class ItemRepository implements OrderItemRepositoryInterface
     public function save(OrderItemInterface $entity)
     {
         if ($entity->getProductOption()) {
-            $request = $this->getBuyRequest($entity);
-            $productOptions = $entity->getProductOptions();
-            $productOptions['info_buyRequest'] = $request->toArray();
-            $entity->setProductOptions($productOptions);
+            $entity->setProductOptions($this->getItemProductOptions($entity));
         }
 
         $this->metadata->getMapper()->save($entity);
-        $this->registry[$entity->getEntityId()] = $entity;
-        return $this->registry[$entity->getEntityId()];
+        $entityId = $entity->getEntityId() ?? '';
+        $this->registry[$entityId] = $entity;
+        return $this->registry[$entityId];
+    }
+
+    /**
+     * Return product options
+     *
+     * @param OrderItemInterface $entity
+     * @return array
+     */
+    private function getItemProductOptions(OrderItemInterface $entity): array
+    {
+        $request = $this->getBuyRequest($entity);
+        $productOptions = $entity->getProductOptions();
+        $productOptions['info_buyRequest'] = $productOptions && !empty($productOptions['info_buyRequest'])
+            ? array_merge($productOptions['info_buyRequest'], $request->toArray())
+            : $request->toArray();
+
+        return $productOptions;
     }
 
     /**
@@ -211,7 +235,7 @@ class ItemRepository implements OrderItemRepositoryInterface
         $request = $this->objectFactory->create(['qty' => $entity->getQtyOrdered()]);
 
         $productType = $entity->getProductType();
-        if (isset($this->processorPool[$productType])
+        if (isset($this->processorPool[$productType ?? ''])
             && !$entity->getParentItemId()) {
             $productOption = $entity->getProductOption();
             if ($productOption) {

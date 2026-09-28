@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -63,18 +63,14 @@ class CategoryListTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->categoryCollectionFactory = $this->getMockBuilder(CollectionFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $this->extensionAttributesJoinProcessor = $this->getMockForAbstractClass(JoinProcessorInterface::class);
-        $this->categorySearchResultsFactory = $this->getMockBuilder(CategorySearchResultsInterfaceFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $this->categoryRepository = $this->getMockForAbstractClass(CategoryRepositoryInterface::class);
-        $this->collectionProcessorMock = $this->getMockBuilder(CollectionProcessorInterface::class)
-            ->getMock();
+        $this->categoryCollectionFactory = $this->createPartialMock(CollectionFactory::class, ['create']);
+        $this->extensionAttributesJoinProcessor = $this->createMock(JoinProcessorInterface::class);
+        $this->categorySearchResultsFactory = $this->createPartialMock(
+            CategorySearchResultsInterfaceFactory::class,
+            ['create']
+        );
+        $this->categoryRepository = $this->createMock(CategoryRepositoryInterface::class);
+        $this->collectionProcessorMock = $this->createMock(CollectionProcessorInterface::class);
 
         $this->model = (new ObjectManager($this))->getObject(
             CategoryList::class,
@@ -94,24 +90,18 @@ class CategoryListTest extends TestCase
         $categoryIdFirst = 1;
         $categoryIdSecond = 2;
 
-        $categoryFirst = $this->getMockBuilder(Category::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $categorySecond = $this->getMockBuilder(Category::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $categoryFirst = $this->createMock(Category::class);
+        $categorySecond = $this->createMock(Category::class);
 
         /** @var SearchCriteriaInterface|MockObject $searchCriteria */
-        $searchCriteria = $this->getMockForAbstractClass(SearchCriteriaInterface::class);
+        $searchCriteria = $this->createMock(SearchCriteriaInterface::class);
 
-        $collection = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $collection = $this->createMock(Collection::class);
         $collection->expects($this->once())->method('getSize')->willReturn($totalCount);
         $collection->expects($this->once())->method('getData')->willReturn(
             [['entity_id' => $categoryIdFirst], ['entity_id' => $categoryIdSecond]]
         );
-        $collection->expects($this->any())->method('getEntity')->willReturn(
+        $collection->method('getEntity')->willReturn(
             new DataObject(['id_field_name' => 'entity_id'])
         );
 
@@ -119,7 +109,7 @@ class CategoryListTest extends TestCase
             ->method('process')
             ->with($searchCriteria, $collection);
 
-        $searchResult = $this->getMockForAbstractClass(CategorySearchResultsInterface::class);
+        $searchResult = $this->createMock(CategorySearchResultsInterface::class);
         $searchResult->expects($this->once())->method('setSearchCriteria')->with($searchCriteria);
         $searchResult->expects($this->once())->method('setItems')->with([$categoryFirst, $categorySecond]);
         $searchResult->expects($this->once())->method('setTotalCount')->with($totalCount);

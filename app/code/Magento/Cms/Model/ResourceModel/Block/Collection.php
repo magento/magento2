@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Cms\Model\ResourceModel\Block;
 
@@ -19,15 +19,11 @@ class Collection extends AbstractCollection
     protected $_idFieldName = 'block_id';
 
     /**
-     * Event prefix
-     *
      * @var string
      */
     protected $_eventPrefix = 'cms_block_collection';
 
     /**
-     * Event object
-     *
      * @var string
      */
     protected $_eventObject = 'block_collection';

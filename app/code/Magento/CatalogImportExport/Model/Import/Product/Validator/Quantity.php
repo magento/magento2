@@ -1,19 +1,16 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CatalogImportExport\Model\Import\Product\Validator;
 
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 
-/**
- * Class Quantity
- */
 class Quantity extends AbstractImportValidator implements RowValidatorInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isValid($value)
     {

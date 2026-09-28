@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\InstantPurchase\PaymentMethodIntegration;
 
@@ -11,6 +11,7 @@ use Magento\Vault\Api\Data\PaymentTokenInterface;
  * Payment additional information provider that returns predefined value.
  *
  * @api
+ * @since 100.2.0
  */
 class StaticAdditionalInformationProvider implements PaymentAdditionalInformationProviderInterface
 {
@@ -30,6 +31,7 @@ class StaticAdditionalInformationProvider implements PaymentAdditionalInformatio
 
     /**
      * @inheritdoc
+     * @since 100.2.0
      */
     public function getAdditionalInformation(PaymentTokenInterface $paymentToken): array
     {

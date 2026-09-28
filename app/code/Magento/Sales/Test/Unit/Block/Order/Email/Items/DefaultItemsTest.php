@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,16 +11,20 @@ use Magento\Backend\Block\Template;
 use Magento\Backend\Block\Template\Context;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Layout;
-use Magento\Quote\Model\Quote\Item;
+use Magento\Quote\Model\Quote\Item as QuoteItem;
 use Magento\Sales\Block\Order\Email\Items\DefaultItems;
 use Magento\Sales\Model\Order\Item as OrderItem;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class DefaultItemsTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
-     * @var MockObject|\Magento\Sales\Block\Order\Email\Items\DefaultItem
+     * @var MockObject|DefaultItems
      */
     protected $block;
 
@@ -39,8 +43,15 @@ class DefaultItemsTest extends TestCase
      */
     protected $objectManager;
 
-    /** @var MockObject|Item  */
+    /**
+     * @var MockObject|OrderItem
+     */
     protected $itemMock;
+
+    /**
+     * @var MockObject|QuoteItem
+     */
+    protected $quoteItemMock;
 
     /**
      * Initialize required data
@@ -51,7 +62,19 @@ class DefaultItemsTest extends TestCase
 
         $this->layoutMock = $this->getMockBuilder(Layout::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getBlock'])
+            ->onlyMethods(['getBlock'])
+            ->getMock();
+
+        $this->priceRenderBlock = $this->createPartialMockWithReflection(
+            Template::class,
+            ['setItem', 'toHtml']
+        );
+
+        $this->itemMock = $this->createMock(OrderItem::class);
+
+        $this->quoteItemMock = $this->getMockBuilder(QuoteItem::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getQty'])
             ->getMock();
 
         $this->block = $this->objectManager->getObject(
@@ -60,28 +83,35 @@ class DefaultItemsTest extends TestCase
                 'context' => $this->objectManager->getObject(
                     Context::class,
                     ['layout' => $this->layoutMock]
-                )
+                ),
+                'data' => [
+                    'item' => $this->quoteItemMock
+                ]
             ]
         );
-
-        $this->priceRenderBlock = $this->getMockBuilder(Template::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setItem', 'toHtml'])
-            ->getMock();
-
-        $this->itemMock = $this->getMockBuilder(OrderItem::class)
-            ->disableOriginalConstructor()
-            ->getMock();
     }
 
-    public function testGetItemPrice()
+    /**
+     * @param float $price
+     * @param string $html
+     * @param float $quantity
+     */
+    #[DataProvider('getItemPriceDataProvider')]
+    public function testGetItemPrice($price, $html, $quantity)
     {
-        $html = '$34.28';
-
         $this->layoutMock->expects($this->once())
             ->method('getBlock')
             ->with('item_price')
             ->willReturn($this->priceRenderBlock);
+        $this->quoteItemMock->expects($this->any())
+            ->method('getQty')
+            ->willReturn($quantity);
+        $this->itemMock->expects($this->any())
+            ->method('setRowTotal')
+            ->willReturn($price * $quantity);
+        $this->itemMock->expects($this->any())
+            ->method('setBaseRowTotal')
+            ->willReturn($price * $quantity);
 
         $this->priceRenderBlock->expects($this->once())
             ->method('setItem')
@@ -92,5 +122,16 @@ class DefaultItemsTest extends TestCase
             ->willReturn($html);
 
         $this->assertEquals($html, $this->block->getItemPrice($this->itemMock));
+    }
+
+    /**
+     * @return array
+     */
+    public static function getItemPriceDataProvider()
+    {
+        return [
+            'get default item price' => [34.28,'$34.28',1.0],
+            'get item price with quantity 2.0' => [12.00,'$24.00',2.0]
+        ];
     }
 }

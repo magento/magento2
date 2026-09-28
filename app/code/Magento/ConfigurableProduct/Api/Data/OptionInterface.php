@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\ConfigurableProduct\Api\Data;
 
@@ -77,7 +76,7 @@ interface OptionInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * @param \Magento\ConfigurableProduct\Api\Data\OptionValueInterface[] $values
      * @return $this
      */
-    public function setValues(array $values = null);
+    public function setValues(?array $values = null);
 
     /**
      * Retrieve existing extension attributes object or create a new one.

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -102,7 +102,7 @@ class UpdateTest extends TestCase
             ->getMock();
         $this->websiteFactoryMock = $this->getMockBuilder(WebsiteFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->websiteMock = $this->getMockBuilder(Website::class)
             ->disableOriginalConstructor()
@@ -112,11 +112,11 @@ class UpdateTest extends TestCase
             ->getMock();
         $this->storeFactoryMock = $this->getMockBuilder(StoreFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->groupFactoryMock = $this->getMockBuilder(GroupFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->groupMock = $this->getMockBuilder(Group::class)
             ->disableOriginalConstructor()
@@ -130,8 +130,7 @@ class UpdateTest extends TestCase
         $this->storeResourceMock = $this->getMockBuilder(StoreResource::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
-            ->getMockForAbstractClass();
+        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
 
         $this->storeMock->expects($this->any())
             ->method('getResource')

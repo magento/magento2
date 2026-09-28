@@ -1,26 +1,25 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
-/**
- * Product mass attribute update websites tab
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Action\Attribute\Tab;
 
 use Magento\Store\Model\Group;
 use Magento\Store\Model\Website;
 
 /**
+ * Product mass attribute update websites tab
+ *
  * @api
  * @since 100.0.2
  */
 class Websites extends \Magento\Backend\Block\Widget implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
+     * Return collection of websites
+     *
      * @return Website[]
      */
     public function getWebsiteCollection()
@@ -29,6 +28,8 @@ class Websites extends \Magento\Backend\Block\Widget implements \Magento\Backend
     }
 
     /**
+     * Return collection of groups
+     *
      * @param Website $website
      * @return Group[]
      */
@@ -38,6 +39,8 @@ class Websites extends \Magento\Backend\Block\Widget implements \Magento\Backend
     }
 
     /**
+     * Return collection of stores
+     *
      * @param Group $group
      * @return array
      */
@@ -57,6 +60,8 @@ class Websites extends \Magento\Backend\Block\Widget implements \Magento\Backend
     }
 
     /**
+     * Return tab title
+     *
      * @return \Magento\Framework\Phrase
      */
     public function getTabTitle()
@@ -65,6 +70,8 @@ class Websites extends \Magento\Backend\Block\Widget implements \Magento\Backend
     }
 
     /**
+     * Return true always
+     *
      * @return bool
      */
     public function canShowTab()
@@ -73,6 +80,8 @@ class Websites extends \Magento\Backend\Block\Widget implements \Magento\Backend
     }
 
     /**
+     * Return false always
+     *
      * @return bool
      */
     public function isHidden()

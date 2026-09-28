@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Model;
@@ -9,7 +9,7 @@ namespace Magento\Catalog\Model;
 /**
  * @api
  * Storage, which provide information for frontend storages, as product-storage, ids-storage
- * @since 101.1.0
+ * @since 102.0.0
  */
 interface FrontendStorageConfigurationInterface
 {
@@ -23,7 +23,7 @@ interface FrontendStorageConfigurationInterface
      * Prepare dynamic data which will be used in Storage Configuration (e.g. data from App/Config)
      *
      * @return array
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function get();
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -10,10 +10,11 @@
 namespace Magento\Config\Model\Config\Backend\Admin;
 
 use Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 
 /**
- * @deprecated 100.2.0 robots.txt file is no longer stored in filesystem. It generates as response on request.
+ * @deprecated 100.1.7 robots.txt file is no longer stored in filesystem. It generates as response on request.
  */
 class Robots extends \Magento\Framework\App\Config\Value
 {
@@ -36,7 +37,6 @@ class Robots extends \Magento\Framework\App\Config\Value
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @param DocumentRoot $documentRoot
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -44,15 +44,13 @@ class Robots extends \Magento\Framework\App\Config\Value
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
         \Magento\Framework\Filesystem $filesystem,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = [],
-        \Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot $documentRoot = null
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        array $data = []
     ) {
         parent::__construct($context, $registry, $config, $cacheTypeList, $resource, $resourceCollection, $data);
 
-        $documentRoot = $documentRoot ?: ObjectManager::getInstance()->get(DocumentRoot::class);
-        $this->_directory = $filesystem->getDirectoryWrite($documentRoot->getPath());
+        $this->_directory = $filesystem->getDirectoryWrite(DirectoryList::PUB);
         $this->_file = 'robots.txt';
     }
 

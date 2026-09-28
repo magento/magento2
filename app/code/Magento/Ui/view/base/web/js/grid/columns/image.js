@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 define([
     'Magento_Ui/js/grid/columns/column'
@@ -11,6 +11,7 @@ define([
         defaults: {
             bodyTmpl: 'ui/grid/columns/image',
             modules: {
+                masonry: '${ $.parentName }',
                 previewComponent: '${ $.parentName }.preview'
             },
             previewRowId: null,
@@ -33,6 +34,15 @@ define([
                 ]);
 
             return this;
+        },
+
+        /**
+         * Updates styles when image loaded.
+         *
+         * @param {Object} record
+         */
+        updateStyles: function (record) {
+            !record.lastInRow || this.masonry().updateStyles();
         },
 
         /**

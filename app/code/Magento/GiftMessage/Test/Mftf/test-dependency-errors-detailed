@@ -1,0 +1,5 @@
+
+File "/var/www/html/app/code/Magento/GiftMessage/Test/Mftf/ActionGroup/CheckingGiftOptionsActionGroup.xml"
+contains entity references that violate dependency constraints:
+		
+	 MultishippingSection from module(s): magento/module-multishipping

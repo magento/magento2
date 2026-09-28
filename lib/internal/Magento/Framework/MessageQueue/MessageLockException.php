@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\MessageQueue;
 
@@ -11,7 +11,7 @@ use Magento\Framework\Exception\LocalizedException;
  * Class MessageLockException to be thrown when a message being processed is already in the lock table.
  *
  * @api
- * @since 100.1.0
+ * @since 103.0.0
  */
 class MessageLockException extends LocalizedException
 {

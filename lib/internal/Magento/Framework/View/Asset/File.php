@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\View\Asset;
@@ -12,9 +12,12 @@ namespace Magento\Framework\View\Asset;
  * This class is a value object with lazy loading of some of its data (content, physical file path)
  *
  * @api
+ * @since 100.0.2
  */
 class File implements MergeableInterface
 {
+    private const MAX_READ_ATTEMPTS = 3;
+
     /**
      * @var string
      */
@@ -80,7 +83,7 @@ class File implements MergeableInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getUrl()
     {
@@ -88,7 +91,7 @@ class File implements MergeableInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSourceUrl()
     {
@@ -96,7 +99,7 @@ class File implements MergeableInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getContentType()
     {
@@ -104,7 +107,7 @@ class File implements MergeableInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getPath()
     {
@@ -117,7 +120,7 @@ class File implements MergeableInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getRelativeSourceFilePath()
     {
@@ -126,7 +129,7 @@ class File implements MergeableInterface
         if ($sourcePath) {
             $origExt = pathinfo($path, PATHINFO_EXTENSION);
             $ext = pathinfo($sourcePath, PATHINFO_EXTENSION);
-            $path = str_replace('.' . $origExt, '.' . $ext, $this->filePath);
+            $path = $this->filePath !== null ? str_replace('.' . $origExt, '.' . $ext, $this->filePath) : '';
         }
         $result = '';
         $result = $this->join($result, $this->context->getPath());
@@ -148,7 +151,8 @@ class File implements MergeableInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @throws File\NotFoundException if file cannot be resolved
      */
     public function getSourceFile()
@@ -166,7 +170,7 @@ class File implements MergeableInterface
      * Get source content type
      *
      * @return string
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function getSourceContentType()
     {
@@ -177,19 +181,35 @@ class File implements MergeableInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getContent()
     {
-        $content = $this->source->getContent($this);
-        if (false === $content) {
-            throw new File\NotFoundException("Unable to get content for '{$this->getPath()}'");
+        $attempt    = 0;
+        while ($attempt < self::MAX_READ_ATTEMPTS) {
+            $attempt++;
+            $content = trim($this->source->getContent($this));
+
+            if ($content) {
+                return $content;
+            }
+
+            if ($attempt < self::MAX_READ_ATTEMPTS) {
+                usleep(random_int(10000, 1000000));
+            }
         }
-        return $content;
+
+        throw new File\NotFoundException(
+            sprintf(
+                "Unable to get content for '%s' after %d attempts.",
+                $this->getPath(),
+                self::MAX_READ_ATTEMPTS
+            )
+        );
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getFilePath()
     {
@@ -197,7 +217,8 @@ class File implements MergeableInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @return File\Context
      */
     public function getContext()
@@ -206,7 +227,7 @@ class File implements MergeableInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getModule()
     {

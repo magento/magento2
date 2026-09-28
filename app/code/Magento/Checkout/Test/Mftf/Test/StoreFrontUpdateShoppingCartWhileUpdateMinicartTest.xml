@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -30,7 +30,7 @@
         </after>
 
         <!--Add product to cart-->
-        <amOnPage url="$$createProduct.name$$.html" stepKey="navigateToProductPage"/>
+        <amOnPage url="$$createProduct.custom_attributes[url_key]$$.html" stepKey="navigateToProductPage"/>
         <waitForPageLoad stepKey="waitForProductPage"/>
         <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
             <argument name="productName" value="$$createProduct.name$$"/>

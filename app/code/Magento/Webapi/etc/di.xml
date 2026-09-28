@@ -1,12 +1,13 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Webapi\Model\ConfigInterface" type="Magento\Webapi\Model\Config" />
+    <preference for="Magento\Framework\Webapi\Rest\RequestValidatorInterface" type="Magento\Framework\Webapi\Rest\RequestMethodValidator" />
     <type name="Magento\Framework\App\AreaList">
         <arguments>
             <argument name="areas" xsi:type="array">

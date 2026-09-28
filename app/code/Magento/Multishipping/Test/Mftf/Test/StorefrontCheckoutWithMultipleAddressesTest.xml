@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -18,12 +18,11 @@
             <testCaseId value="MC-17461"/>
             <useCaseId value="MAGETWO-99490"/>
             <group value="Multishipment"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Login as Admin -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
-            <!-- Set configurations -->
-            <magentoCLI command="config:set multishipping/options/checkout_multiple 1" stepKey="allowShippingToMultipleAddresses"/>
             <!-- Create simple products -->
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
             <createData entity="SimpleProduct" stepKey="firstProduct">
@@ -40,6 +39,7 @@
             <deleteData createDataKey="firstProduct" stepKey="deleteFirstProduct"/>
             <deleteData createDataKey="secondProduct" stepKey="deleteSecondProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomerWithMultipleAddresses" stepKey="deleteCustomer"/>
         </after>
         <!-- Login to the Storefront as created customer -->

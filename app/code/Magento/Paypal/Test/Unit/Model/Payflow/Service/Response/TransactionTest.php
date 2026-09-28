@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Paypal\Model\Payflow\Service\Response\Transaction;
 use Magento\Paypal\Model\Payflow\Transparent;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -25,10 +26,9 @@ class TransactionTest extends TestCase
     /**
      * @covers \Magento\Paypal\Model\Payflow\Service\Response\Transaction::getResponseObject
      *
-     * @dataProvider gatewayResponseInvariants
-     *
      * @param mixed $gatewayTransactionResponse
      */
+    #[DataProvider('gatewayResponseInvariants')]
     public function testGetResponseObject($gatewayTransactionResponse)
     {
         /** @var Transaction $transactionService */
@@ -66,7 +66,7 @@ class TransactionTest extends TestCase
     /**
      * @return array
      */
-    public function gatewayResponseInvariants()
+    public static function gatewayResponseInvariants()
     {
         return [
             "Input data is a string" => ['testInput'],
@@ -92,7 +92,9 @@ class TransactionTest extends TestCase
      */
     private function getTransparentObject()
     {
-        return (new ObjectManager($this))->getObject(Transparent::class);
+        $objectManager = new ObjectManager($this);
+        $objectManager->prepareObjectManager();
+        return $objectManager->getObject(Transparent::class);
     }
 
     /**
@@ -100,9 +102,7 @@ class TransactionTest extends TestCase
      */
     private function getLoggerMock()
     {
-        return $this->getMockBuilder(Logger::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->createMock(Logger::class);
     }
 
     /**
@@ -110,12 +110,8 @@ class TransactionTest extends TestCase
      */
     private function getCartRepositoryMock()
     {
-        $cartRepository = $this->getMockBuilder(CartRepositoryInterface::class)
-            ->getMockForAbstractClass();
-
-        $cart = $this->getMockBuilder(CartInterface::class)
-            ->getMockForAbstractClass();
-
+        $cartRepository = $this->createMock(CartRepositoryInterface::class);
+        $cart = $this->createMock(CartInterface::class);
         $cartRepository->method('get')->willReturn($cart);
 
         return $cartRepository;

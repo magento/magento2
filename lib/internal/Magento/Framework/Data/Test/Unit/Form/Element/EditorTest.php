@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -20,9 +20,15 @@ use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Framework\Math\Random;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class EditorTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Editor
      */
@@ -63,13 +69,59 @@ class EditorTest extends TestCase
      */
     private $serializer;
 
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface|null
+     */
+    private $originalObjectManager;
+
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
+        
         $this->factoryMock = $this->createMock(Factory::class);
         $this->collectionFactoryMock = $this->createMock(CollectionFactory::class);
         $this->escaperMock = $this->createMock(Escaper::class);
         $this->configMock = $this->createPartialMock(DataObject::class, ['getData']);
+        
+        // Create mocks that will be needed by AbstractElement constructor via ObjectManager
+        $randomMock = $this->createMock(Random::class);
+        $randomMock->method('getRandomString')->willReturn('some-rando-string');
+        
+        $secureRendererMock = $this->createMock(SecureHtmlRenderer::class);
+        $secureRendererMock->method('renderEventListenerAsTag')
+            ->willReturnCallback(
+                function (string $event, string $listener, string $selector): string {
+                    return "<script>document.querySelector('{$selector}').{$event} = () => { {$listener} };</script>";
+                }
+            );
+        $secureRendererMock->method('renderTag')
+            ->willReturnCallback(
+                function (string $tag, array $attrs, ?string $content): string {
+                    $attrs = new DataObject($attrs);
+
+                    return "<$tag {$attrs->serialize()}>$content</$tag>";
+                }
+            );
+
+        // Save original ObjectManager if it exists, then configure mock to return our mocks
+        try {
+            $this->originalObjectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        } catch (\RuntimeException $e) {
+            $this->originalObjectManager = null;
+        }
+        
+        $objectManagerMock = $this->createMock(\Magento\Framework\App\ObjectManager::class);
+        $objectManagerMock->method('get')
+            ->willReturnCallback(function ($className) use ($randomMock, $secureRendererMock) {
+                if ($className === Random::class) {
+                    return $randomMock;
+                }
+                if ($className === SecureHtmlRenderer::class) {
+                    return $secureRendererMock;
+                }
+                return null;
+            });
+        \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
 
         $this->serializer = $this->createMock(Json::class);
 
@@ -80,16 +132,26 @@ class EditorTest extends TestCase
                 'factoryCollection' => $this->collectionFactoryMock,
                 'escaper' => $this->escaperMock,
                 'data' => ['config' => $this->configMock],
-                'serializer' => $this->serializer
+                'serializer' => $this->serializer,
+                'random' => $randomMock,
+                'secureRenderer' => $secureRendererMock
             ]
         );
 
-        $this->formMock =
-            $this->getMockBuilder(Form::class)
-                ->addMethods(['getHtmlIdPrefix', 'getHtmlIdSuffix'])
-                ->disableOriginalConstructor()
-                ->getMock();
+        $this->formMock = $this->createPartialMockWithReflection(
+            Form::class,
+            ['getHtmlIdPrefix', 'getHtmlIdSuffix']
+        );
         $this->model->setForm($this->formMock);
+    }
+
+    protected function tearDown(): void
+    {
+        // Restore original ObjectManager instance to avoid affecting other tests
+        if ($this->originalObjectManager) {
+            \Magento\Framework\App\ObjectManager::setInstance($this->originalObjectManager);
+        }
+        parent::tearDown();
     }
 
     public function testConstruct()
@@ -150,10 +212,9 @@ class EditorTest extends TestCase
     /**
      * @param bool $expected
      * @param bool $globalFlag
-     * @param bool $attributeFlag
-     * @dataProvider isEnabledDataProvider
-     * @return void
+     * @param bool $attributeFlag     * @return void
      */
+    #[DataProvider('isEnabledDataProvider')]
     public function testIsEnabled($expected, $globalFlag, $attributeFlag = null)
     {
         $this->configMock
@@ -171,7 +232,7 @@ class EditorTest extends TestCase
     /**
      * @return array
      */
-    public function isEnabledDataProvider()
+    public static function isEnabledDataProvider()
     {
         return [
             'Global disabled, attribute isnt set' => [false, false],
@@ -215,7 +276,14 @@ class EditorTest extends TestCase
             return json_encode($params);
         };
 
-        $this->configMock->expects($this->any())->method('getData')->withConsecutive(['enabled'])->willReturn(true);
+        $this->configMock->expects($this->any())->method('getData')
+            ->willReturnCallback(
+                function ($arg1) {
+                    if ($arg1 == 'enabled') {
+                        return true;
+                    }
+                }
+            );
         $this->serializer->expects($this->any())
             ->method('serialize')
             ->willReturnCallback($callback);

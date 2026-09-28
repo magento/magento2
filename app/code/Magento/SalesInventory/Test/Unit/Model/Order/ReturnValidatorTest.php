@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Sales\Api\Data\CreditmemoItemInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Api\OrderItemRepositoryInterface;
 use Magento\SalesInventory\Model\Order\ReturnValidator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -45,30 +46,17 @@ class ReturnValidatorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->orderItemRepositoryMock = $this->getMockBuilder(OrderItemRepositoryInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-
-        $this->creditMemoMock = $this->getMockBuilder(CreditmemoInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-
-        $this->creditMemoItemMock = $this->getMockBuilder(CreditmemoItemInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-
-        $this->orderItemMock = $this->getMockBuilder(OrderItemInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->orderItemRepositoryMock = $this->createMock(OrderItemRepositoryInterface::class);
+        $this->creditMemoMock = $this->createMock(CreditmemoInterface::class);
+        $this->creditMemoItemMock = $this->createMock(CreditmemoItemInterface::class);
+        $this->orderItemMock = $this->createMock(OrderItemInterface::class);
 
         $this->returnValidator = new ReturnValidator(
             $this->orderItemRepositoryMock
         );
     }
 
-    /**
-     * @dataProvider dataProvider
-     */
+    #[DataProvider('dataProvider')]
     public function testValidate(
         $expectedResult,
         $returnToStockItems,
@@ -125,7 +113,7 @@ class ReturnValidatorTest extends TestCase
     /**
      * @return array
      */
-    public function dataProvider()
+    public static function dataProvider()
     {
         return [
             'PostirivValidationTest' => [null, [1], 1, 1],

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,6 +17,7 @@ use Magento\Framework\DB\SelectFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class FieldDataConverterTest extends TestCase
 {
@@ -63,11 +64,11 @@ class FieldDataConverterTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $this->connectionMock = $this->createMock(AdapterInterface::class);
         $this->queryGeneratorMock = $this->createMock(Generator::class);
-        $this->dataConverterMock = $this->getMockForAbstractClass(DataConverterInterface::class);
+        $this->dataConverterMock = $this->createMock(DataConverterInterface::class);
         $this->selectMock = $this->createMock(Select::class);
-        $this->queryModifierMock = $this->getMockForAbstractClass(QueryModifierInterface::class);
+        $this->queryModifierMock = $this->createMock(QueryModifierInterface::class);
         $this->selectFactoryMock = $this->getMockBuilder(SelectFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -83,9 +84,8 @@ class FieldDataConverterTest extends TestCase
 
     /**
      * @param boolean $useQueryModifier
-     * @param int $numQueryModifierCalls
-     * @dataProvider convertDataProvider
-     */
+     * @param int $numQueryModifierCalls     */
+    #[DataProvider('convertDataProvider')]
     public function testConvert($useQueryModifier, $numQueryModifierCalls)
     {
         $table = 'table';
@@ -144,7 +144,7 @@ class FieldDataConverterTest extends TestCase
     /**
      * @return array
      */
-    public function convertDataProvider()
+    public static function convertDataProvider()
     {
         return [
             [false, 0],
@@ -153,9 +153,8 @@ class FieldDataConverterTest extends TestCase
     }
 
     /**
-     * @param null|int $envBatchSize
-     * @dataProvider convertBatchSizeFromEnvDataProvider
-     */
+     * @param null|int $envBatchSize     */
+    #[DataProvider('convertBatchSizeFromEnvDataProvider')]
     public function testConvertBatchSizeFromEnv($envBatchSize, $usedBatchSize)
     {
         $table = 'table';
@@ -201,7 +200,7 @@ class FieldDataConverterTest extends TestCase
     /**
      * @return array
      */
-    public function convertBatchSizeFromEnvDataProvider()
+    public static function convertBatchSizeFromEnvDataProvider()
     {
         return [
             [null, FieldDataConverter::DEFAULT_BATCH_SIZE],
@@ -212,9 +211,8 @@ class FieldDataConverterTest extends TestCase
     /**
      * @param string|int $batchSize
      * @codingStandardsIgnoreStart
-     * @codingStandardsIgnoreEnd
-     * @dataProvider convertBatchSizeFromEnvInvalidDataProvider
-     */
+     * @codingStandardsIgnoreEnd     */
+    #[DataProvider('convertBatchSizeFromEnvInvalidDataProvider')]
     public function testConvertBatchSizeFromEnvInvalid($batchSize)
     {
         $this->expectException('InvalidArgumentException');
@@ -261,7 +259,7 @@ class FieldDataConverterTest extends TestCase
     /**
      * @return array
      */
-    public function convertBatchSizeFromEnvInvalidDataProvider()
+    public static function convertBatchSizeFromEnvInvalidDataProvider()
     {
         return [
             ['value'],

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\View\Asset\MergeStrategy;
 
@@ -45,7 +45,7 @@ class Checksum implements \Magento\Framework\View\Asset\MergeStrategyInterface
     }
 
     /**
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      * @return Source
      */
     private function getAssetSource()

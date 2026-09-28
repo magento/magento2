@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Vault\Model;
 
@@ -212,6 +212,24 @@ class PaymentToken extends AbstractModel implements PaymentTokenInterface
     public function setIsVisible($isVisible)
     {
         $this->setData(PaymentTokenInterface::IS_VISIBLE, (bool) $isVisible);
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getWebsiteId()
+    {
+        return $this->getData(PaymentTokenInterface::WEBSITE_ID);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setWebsiteId(int $websiteId)
+    {
+        $this->setData(PaymentTokenInterface::WEBSITE_ID, $websiteId);
+
         return $this;
     }
 }

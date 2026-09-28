@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -47,7 +47,7 @@ class Mcrypt implements EncryptionAdapterInterface
         string $key,
         string $cipher = MCRYPT_BLOWFISH,
         string $mode = MCRYPT_MODE_ECB,
-        string $initVector = null
+        ?string $initVector = null
     ) {
         $this->cipher = $cipher;
         $this->mode = $mode;

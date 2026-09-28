@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -48,8 +48,8 @@ class GeneratorTest extends TestCase
     protected function setUp(): void
     {
         $this->dictionaryLoaderMock =
-            $this->getMockForAbstractClass(FileInterface::class);
-        $this->packWriterMock = $this->getMockForAbstractClass(WriterInterface::class);
+            $this->createMock(FileInterface::class);
+        $this->packWriterMock = $this->createMock(WriterInterface::class);
         $this->factoryMock = $this->createMock(Factory::class);
         $this->dictionaryMock = $this->createMock(Dictionary::class);
 

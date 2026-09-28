@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,9 +15,16 @@ use Magento\Framework\Api\ExtensionAttribute\Config\Converter;
 use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
+use ReflectionObject;
 
 class ExtensionAttributesInterfaceGeneratorTest extends TestCase
 {
+    /**
+     * @see https://github.com/magento/magento2/issues/XXXXX
+     * Pre-existing issue: TypeProcessor is not injected into ExtensionAttributesInterfaceGenerator
+     * constructor, but the test attempts to pass it. The generator uses ObjectManager::getInstance()
+     * to lazy-load TypeProcessor, making it impossible to mock in unit tests.
+     */
     public function testGenerate()
     {
         $objectManager = new ObjectManager($this);
@@ -53,24 +60,31 @@ class ExtensionAttributesInterfaceGeneratorTest extends TestCase
             );
         $typeProcessorMock = $this->getMockBuilder(TypeProcessor::class)
             ->disableOriginalConstructor()
-            ->setMethods(null)
             ->getMock();
+        $typeProcessorMock->method('isValidTypeDeclaration')
+            ->willReturnCallback(function ($type) {
+                return $type === '\\' . BundleOptionInterface::class;
+            });
 
         /** @var ExtensionAttributesInterfaceGenerator $model */
         $model = $objectManager->getObject(
             ExtensionAttributesInterfaceGenerator::class,
             [
                 'config' => $configMock,
-                'typeProcessor' => $typeProcessorMock,
                 'sourceClassName' => \Magento\Catalog\Api\Data\Product::class,
                 'resultClassName' => \Magento\Catalog\Api\Data\ProductExtensionInterface::class,
                 'classGenerator' => null
             ]
         );
+        
+        // Inject typeProcessor via reflection to bypass ObjectManager::getInstance()
+        $reflectionObject = new ReflectionObject($model);
+        $parentClass = $reflectionObject->getParentClass();
+        $typeProcessorProperty = $parentClass->getProperty('typeProcessor');
+        $typeProcessorProperty->setValue($model, $typeProcessorMock);
+        
         $expectedResult = file_get_contents(__DIR__ . '/_files/SampleExtensionInterface.txt');
-        $reflectionObject = new \ReflectionObject($model);
         $reflectionMethod = $reflectionObject->getMethod('_generateCode');
-        $reflectionMethod->setAccessible(true);
         $generatedCode = $reflectionMethod->invoke($model);
         $this->assertEquals($expectedResult, $generatedCode);
     }
@@ -86,10 +100,8 @@ class ExtensionAttributesInterfaceGeneratorTest extends TestCase
                 'resultClassName' => ProductInterface::class
             ]
         );
-        $reflectionObject = new \ReflectionObject($model);
+        $reflectionObject = new ReflectionObject($model);
         $reflectionMethod = $reflectionObject->getMethod('_validateData');
-        $reflectionMethod->setAccessible(true);
-
         $expectedValidationResult = false;
         $this->assertEquals($expectedValidationResult, $reflectionMethod->invoke($model));
         $this->assertContains(

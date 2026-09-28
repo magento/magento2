@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Framework\Registry;
 use Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\AbstractTab;
 use Magento\Theme\Model\Theme;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class TabAbstractTest extends TestCase
 {
@@ -24,20 +25,15 @@ class TabAbstractTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_model = $this->getMockForAbstractClass(
-            AbstractTab::class,
-            [
+        $this->_model = $this->getMockBuilder(AbstractTab::class)
+            ->setConstructorArgs([
                 $this->createMock(Context::class),
                 $this->createMock(Registry::class),
                 $this->createMock(FormFactory::class),
-                $this->getMockForAbstractClass(ObjectManagerInterface::class),
-            ],
-            '',
-            true,
-            false,
-            true,
-            ['_getCurrentTheme', 'getTabLabel']
-        );
+                $this->createMock(ObjectManagerInterface::class),
+            ])
+            ->onlyMethods(['_getCurrentTheme', 'getTabLabel'])
+            ->getMock();
     }
 
     protected function tearDown(): void
@@ -53,11 +49,11 @@ class TabAbstractTest extends TestCase
     }
 
     /**
-     * @dataProvider canShowTabDataProvider
      * @param bool $isVirtual
      * @param int $themeId
      * @param bool $result
      */
+    #[DataProvider('canShowTabDataProvider')]
     public function testCanShowTab($isVirtual, $themeId, $result)
     {
         $themeMock = $this->createPartialMock(Theme::class, ['isVirtual', 'getId', '__wakeup']);
@@ -77,7 +73,7 @@ class TabAbstractTest extends TestCase
     /**
      * @return array
      */
-    public function canShowTabDataProvider()
+    public static function canShowTabDataProvider()
     {
         return [[true, 1, true], [true, 0, false], [false, 1, false]];
     }

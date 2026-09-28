@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Block\Address\Renderer;
 
@@ -98,7 +98,7 @@ class DefaultRenderer extends AbstractBlock implements RendererInterface
      * @return string
      * All new code should use renderArray based on Metadata service
      */
-    public function getFormat(AddressModelInterface $address = null)
+    public function getFormat(?AddressModelInterface $address = null)
     {
         $countryFormat = $address === null
         ? false : $address->getCountryModel()->getFormat(
@@ -172,9 +172,9 @@ class DefaultRenderer extends AbstractBlock implements RendererInterface
             }
             $attributeCode = $attributeMetadata->getAttributeCode();
             if ($attributeCode == 'country_id' && isset($addressAttributes['country_id'])) {
-                $data['country'] = $this->_countryFactory->create()->loadByCode(
-                    $addressAttributes['country_id']
-                )->getName();
+                $data['country'] = $this->_countryFactory->create()
+                    ->loadByCode($addressAttributes['country_id'])
+                    ->getName($addressAttributes['locale'] ?? null);
             } elseif ($attributeCode == 'region' && isset($addressAttributes['region'])) {
                 $data['region'] = (string)__($addressAttributes['region']);
             } elseif (isset($addressAttributes[$attributeCode])) {
@@ -189,6 +189,9 @@ class DefaultRenderer extends AbstractBlock implements RendererInterface
                         $data[$key] = $v;
                     }
                 }
+                if (in_array($attributeCode, ['prefix','suffix'])) {
+                    $value = __($value);
+                }
                 $data[$attributeCode] = $value;
             }
         }
@@ -198,6 +201,7 @@ class DefaultRenderer extends AbstractBlock implements RendererInterface
             }
         }
         $format = $format !== null ? $format : $this->getFormatArray($addressAttributes);
+
         return $this->filterManager->template($format, ['variables' => $data]);
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeAdapter;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\NotEavAttribute;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD)
@@ -37,18 +38,18 @@ class NotEavAttributeTest extends TestCase
     }
 
     /**
-     * @dataProvider getFieldNameProvider
      * @param $attributeCode
      * @param $isEavAttribute
      * @param $context
      * @param $expected
      * @return void
      */
+    #[DataProvider('getFieldNameProvider')]
     public function testGetFieldName($attributeCode, $isEavAttribute, $context, $expected)
     {
         $attributeMock = $this->getMockBuilder(AttributeAdapter::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isEavAttribute', 'getAttributeCode'])
+            ->onlyMethods(['isEavAttribute', 'getAttributeCode'])
             ->getMock();
         $attributeMock->expects($this->any())
             ->method('isEavAttribute')
@@ -66,7 +67,7 @@ class NotEavAttributeTest extends TestCase
     /**
      * @return array
      */
-    public function getFieldNameProvider()
+    public static function getFieldNameProvider()
     {
         return [
             ['code', true, [], ''],

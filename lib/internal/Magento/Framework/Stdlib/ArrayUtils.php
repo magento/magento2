@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Stdlib;
 
@@ -9,6 +9,7 @@ namespace Magento\Framework\Stdlib;
  * Class ArrayUtils
  *
  * @api
+ * @since 100.0.2
  */
 class ArrayUtils
 {
@@ -150,7 +151,7 @@ class ArrayUtils
      * @param string $path The leading path
      * @param string $separator The path parts separator
      * @return array
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function flatten(array $data, $path = '', $separator = '/')
     {
@@ -181,7 +182,7 @@ class ArrayUtils
      * @param array $originalArray The array to compare from
      * @param array $newArray The array to compare with
      * @return array Diff array
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function recursiveDiff(array $originalArray, array $newArray)
     {

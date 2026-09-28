@@ -1,0 +1,11 @@
+<?php
+/**
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
+ */
+declare(strict_types=1);
+
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
+Resolver::getInstance()->requireDataFixture('Magento/Bundle/_files/fixed_bundle_product_without_discounts_rollback.php');
+Resolver::getInstance()->requireDataFixture('Magento/Checkout/_files/rollback_quote.php');

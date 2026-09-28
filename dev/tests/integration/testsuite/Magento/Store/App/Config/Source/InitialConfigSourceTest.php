@@ -1,23 +1,28 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Store\App\Config\Source;
 
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\DeploymentConfig\FileReader;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test that initial scopes config are loaded if database is available
+ * @magentoAppIsolation enabled
+ * @magentoCache config disabled
  */
 class InitialConfigSourceTest extends TestCase
 {
@@ -91,9 +96,9 @@ class InitialConfigSourceTest extends TestCase
      * @param array $websites
      * @param string $defaultWebsite
      * @param bool $offline
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @dataProvider getDefaultDataProvider
+     * @throws LocalizedException
      */
+    #[DataProvider('getDefaultDataProvider')]
     public function testGetWebsites(array $websites, string $defaultWebsite, bool $offline = false): void
     {
         if ($offline) {
@@ -108,9 +113,17 @@ class InitialConfigSourceTest extends TestCase
     /**
      * @return array
      */
-    public function getDefaultDataProvider(): array
+    public static function getDefaultDataProvider(): array
     {
         return [
+            [
+                [
+                    'admin',
+                    'main',
+                ],
+                'main',
+                true
+            ],
             [
                 [
                     'admin',
@@ -119,23 +132,20 @@ class InitialConfigSourceTest extends TestCase
                 'base',
                 false
             ],
-            [
-                [
-                    'admin',
-                    'main',
-                ],
-                'main',
-                true
-            ]
         ];
     }
 
     private function clearConfig(string $type): void
     {
-        $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->writeFile(
-            $this->configFilePool->getPath($type),
-            "<?php\n return [];\n"
-        );
+        $this->filesystem
+            ->getDirectoryWrite(DirectoryList::CONFIG)
+            ->writeFile(
+                $this->configFilePool->getPath($type),
+                "<?" . "php\n return [];\n"
+            );
+        /** @var DeploymentConfig $config */
+        $config = Bootstrap::getObjectManager()->get(DeploymentConfig::class);
+        $config->resetData();
     }
 
     /**

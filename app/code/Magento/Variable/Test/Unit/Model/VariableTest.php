@@ -1,17 +1,21 @@
 <?php
-/***
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Variable\Test\Unit\Model;
 
 use Magento\Framework\Escaper;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Validation\ValidationException;
+use Magento\Framework\Validator\HTML\WYSIWYGValidatorInterface;
 use Magento\Variable\Model\ResourceModel\Variable;
 use Magento\Variable\Model\ResourceModel\Variable\Collection;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -47,8 +51,14 @@ class VariableTest extends TestCase
      */
     private $objectManager;
 
+    /**
+     * @var WYSIWYGValidatorInterface
+     */
+    private $wysiwygValidator;
+
     protected function setUp(): void
     {
+        $this->wysiwygValidator = $this->createMock(WYSIWYGValidatorInterface::class);
         $this->objectManager = new ObjectManager($this);
         $this->escaperMock = $this->getMockBuilder(Escaper::class)
             ->disableOriginalConstructor()
@@ -59,15 +69,35 @@ class VariableTest extends TestCase
         $this->resourceCollectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->getServicesForObjMap();
         $this->model = $this->objectManager->getObject(
             \Magento\Variable\Model\Variable::class,
             [
                 'escaper' => $this->escaperMock,
                 'resource' => $this->resourceMock,
                 'resourceCollection' => $this->resourceCollectionMock,
+                'wysiwygValidator' => $this->wysiwygValidator
             ]
         );
         $this->validationFailedPhrase = __('Validation has failed.');
+    }
+
+    /**
+     * Replace Object Manager/Object Mapping
+     * @return void
+     */
+    public function getServicesForObjMap()
+    {
+        $value = $this->resourceCollectionMock;
+        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $objectManagerMock->method('create')->willReturnCallback(function () use ($value){
+            return $value;
+        });
+        $objectManagerMock->method('get')->willReturnCallback(function () use ($value){
+            return $value;
+        });
+
+        \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
     }
 
     public function testGetValueHtml()
@@ -104,6 +134,7 @@ class VariableTest extends TestCase
     /**
      * @dataProvider validateMissingInfoDataProvider
      */
+    #[DataProvider('validateMissingInfoDataProvider')]
     public function testValidateMissingInfo($code, $name)
     {
         $this->model->setCode($code)->setName($name);
@@ -113,6 +144,7 @@ class VariableTest extends TestCase
     /**
      * @dataProvider validateDataProvider
      */
+    #[DataProvider('validateDataProvider')]
     public function testValidate($variableArray, $objectId, $expectedResult)
     {
         $code = 'variable_code';
@@ -173,7 +205,7 @@ class VariableTest extends TestCase
     /**
      * @return array
      */
-    public function validateDataProvider()
+    public static function validateDataProvider()
     {
         $variable = [
             'variable_id' => 'matching_id',
@@ -188,11 +220,65 @@ class VariableTest extends TestCase
     /**
      * @return array
      */
-    public function validateMissingInfoDataProvider()
+    public static function validateMissingInfoDataProvider()
     {
         return [
             'Missing code' => ['', 'some-name'],
             'Missing name' => ['some-code', ''],
+        ];
+    }
+
+    /**
+     * Test Variable validation.
+     *
+     * @param string $value
+     * @param bool $isChanged
+     * @param bool $isValidated
+     * @param bool $exceptionThrown
+     * @dataProvider getWysiwygValidationCases
+     */
+    #[DataProvider('getWysiwygValidationCases')]
+    public function testBeforeSave(string $value, bool $isChanged, bool $isValidated, bool $exceptionThrown): void
+    {
+        $actuallyThrown = false;
+
+        if (!$isValidated) {
+            $this->wysiwygValidator->expects($this->any())
+                ->method('validate')
+                ->willThrowException(new ValidationException(__('HTML is invalid')));
+        } else {
+            $this->wysiwygValidator->expects($this->any())->method('validate');
+        }
+
+        $this->model->setData('html_value', $value);
+
+        if (!$isChanged) {
+            $this->model->setOrigData('html_value', $value);
+        } else {
+            $this->model->setOrigData('html_value', $value . '-OLD');
+        }
+
+        try {
+            $this->model->beforeSave();
+        } catch (\Throwable $exception) {
+            $actuallyThrown = true;
+        }
+
+        $this->assertEquals($exceptionThrown, $actuallyThrown);
+    }
+
+    /**
+     * Validation cases.
+     *
+     * @return array
+     */
+    public static function getWysiwygValidationCases(): array
+    {
+        return [
+            'changed-html-value-without-exception' => ['<b>Test Html</b>',true,true,false],
+            'changed-html-value-with-exception' => ['<b>Test Html</b>',true,false,true],
+            'no-changed-html-value-without-exception' => ['<b>Test Html</b>',false,false,false],
+            'no-html-value-with-exception' => ['',true,false,false]
         ];
     }
 }

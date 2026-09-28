@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\SalesRule\Api;
 
@@ -38,7 +38,7 @@ interface RuleRepositoryInterface
      * Retrieve sales rules that match te specified criteria.
      *
      * This call returns an array of objects, but detailed information about each object’s attributes might not be
-     * included. See https://devdocs.magento.com/codelinks/attributes.html#RuleRepositoryInterface to
+     * included. See https://developer.adobe.com/commerce/webapi/rest/attributes#RuleRepositoryInterface to
      * determine which call to use to get detailed information about all attributes for an object.
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria

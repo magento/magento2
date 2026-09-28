@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Eav\Api;
 
@@ -15,8 +15,8 @@ interface AttributeOptionManagementInterface
     /**
      * Add option to attribute
      *
-     * @param string $attributeCode
      * @param int $entityType
+     * @param string $attributeCode
      * @param \Magento\Eav\Api\Data\AttributeOptionInterface $option
      * @throws \Magento\Framework\Exception\StateException
      * @throws \Magento\Framework\Exception\InputException

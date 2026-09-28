@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -46,9 +46,9 @@ class ScopeTreeProviderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->websiteRepositoryMock = $this->getMockForAbstractClass(WebsiteRepositoryInterface::class);
-        $this->groupRepositoryMock = $this->getMockForAbstractClass(GroupRepositoryInterface::class);
-        $this->storeRepositoryMock = $this->getMockForAbstractClass(StoreRepositoryInterface::class);
+        $this->websiteRepositoryMock = $this->createMock(WebsiteRepositoryInterface::class);
+        $this->groupRepositoryMock = $this->createMock(GroupRepositoryInterface::class);
+        $this->storeRepositoryMock = $this->createMock(StoreRepositoryInterface::class);
 
         $this->model = new ScopeTreeProvider(
             $this->websiteRepositoryMock,
@@ -83,7 +83,7 @@ class ScopeTreeProviderTest extends TestCase
             'scopes' => [$websiteData],
         ];
 
-        $websiteMock = $this->getMockForAbstractClass(WebsiteInterface::class);
+        $websiteMock = $this->createMock(WebsiteInterface::class);
         $websiteMock->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn($websiteId);
@@ -91,7 +91,7 @@ class ScopeTreeProviderTest extends TestCase
             ->method('getList')
             ->willReturn([$websiteMock]);
 
-        $groupMock = $this->getMockForAbstractClass(GroupInterface::class);
+        $groupMock = $this->createMock(GroupInterface::class);
         $groupMock->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn($groupId);
@@ -102,7 +102,7 @@ class ScopeTreeProviderTest extends TestCase
             ->method('getList')
             ->willReturn([$groupMock, $groupMock]);
 
-        $storeMock = $this->getMockForAbstractClass(StoreInterface::class);
+        $storeMock = $this->createMock(StoreInterface::class);
         $storeMock->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn($storeId);

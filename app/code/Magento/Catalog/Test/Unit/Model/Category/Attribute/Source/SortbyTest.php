@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -41,13 +41,9 @@ class SortbyTest extends TestCase
      */
     private function getMockedConfig()
     {
-        $mockBuilder = $this->getMockBuilder(Config::class);
-        $mockBuilder->disableOriginalConstructor();
-        $mock = $mockBuilder->getMock();
+        $mock = $this->createMock(Config::class);
 
-        $mock->expects($this->any())
-            ->method('getAttributesUsedForSortBy')
-            ->willReturn([['frontend_label' => 'fl', 'attribute_code' => 'fc']]);
+        $mock->method('getAttributesUsedForSortBy')->willReturn([['frontend_label' => 'fl', 'attribute_code' => 'fc']]);
 
         return $mock;
     }

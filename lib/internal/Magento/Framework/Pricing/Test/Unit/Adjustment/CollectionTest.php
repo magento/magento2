@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Framework\Pricing\Adjustment\Collection;
 use Magento\Framework\Pricing\Adjustment\Pool;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class CollectionTest extends TestCase
 {
@@ -27,19 +28,19 @@ class CollectionTest extends TestCase
 
     protected function setUp(): void
     {
-        $adj1 = $this->getMockForAbstractClass(AdjustmentInterface::class);
+        $adj1 = $this->createMock(AdjustmentInterface::class);
         $adj1->expects($this->any())
             ->method('getSortOrder')
             ->willReturn(10);
-        $adj2 = $this->getMockForAbstractClass(AdjustmentInterface::class);
+        $adj2 = $this->createMock(AdjustmentInterface::class);
         $adj2->expects($this->any())
             ->method('getSortOrder')
             ->willReturn(20);
-        $adj3 = $this->getMockForAbstractClass(AdjustmentInterface::class);
+        $adj3 = $this->createMock(AdjustmentInterface::class);
         $adj3->expects($this->any())
             ->method('getSortOrder')
             ->willReturn(5);
-        $adj4 = $this->getMockForAbstractClass(AdjustmentInterface::class);
+        $adj4 = $this->createMock(AdjustmentInterface::class);
         $adj4->expects($this->any())
             ->method('getSortOrder')
             ->willReturn(Pool::DEFAULT_SORT_ORDER);
@@ -50,11 +51,12 @@ class CollectionTest extends TestCase
             'adj3' => $adj3,
             'adj4' => $adj4,
         ];
+        $this->adjustmentsData = $adjustmentsData;
 
         /** @var Pool|MockObject $adjustmentPool */
         $adjustmentPool = $this->getMockBuilder(Pool::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAdjustmentByCode'])
+            ->onlyMethods(['getAdjustmentByCode'])
             ->getMock();
         $adjustmentPool->expects($this->any())->method('getAdjustmentByCode')->willReturnCallback(
             function ($code) use ($adjustmentsData) {
@@ -64,16 +66,13 @@ class CollectionTest extends TestCase
                 return $adjustmentsData[$code];
             }
         );
-
         $this->adjustmentPool = $adjustmentPool;
-        $this->adjustmentsData = $adjustmentsData;
     }
 
     /**
      * @param string[] $adjustments
-     * @param string[] $expectedResult
-     * @dataProvider getItemsDataProvider
-     */
+     * @param string[] $expectedResult     */
+    #[DataProvider('getItemsDataProvider')]
     public function testGetItems($adjustments, $expectedResult)
     {
         $collection = new Collection($this->adjustmentPool, $adjustments);
@@ -86,7 +85,7 @@ class CollectionTest extends TestCase
     /**
      * @return array
      */
-    public function getItemsDataProvider()
+    public static function getItemsDataProvider()
     {
         return [
             [['adj1'], ['adj1']],
@@ -99,29 +98,28 @@ class CollectionTest extends TestCase
     /**
      * @param string[] $adjustments
      * @param string $code
-     * @param $expectedResult
-     * @dataProvider getItemByCodeDataProvider
-     */
+     * @param $expectedResult     */
+    #[DataProvider('getItemByCodeDataProvider')]
     public function testGetItemByCode($adjustments, $code, $expectedResult)
     {
         $collection = new Collection($this->adjustmentPool, $adjustments);
 
         $item = $collection->getItemByCode($code);
 
-        $this->assertEquals($expectedResult, $item->getAdjustmentCode());
+        $this->assertEquals($expectedResult, $item->getSortOrder());
     }
 
     /**
      * @return array
      */
-    public function getItemByCodeDataProvider()
+    public static function getItemByCodeDataProvider()
     {
         return [
-            [['adj1'], 'adj1', $this->adjustmentsData['adj1']],
-            [['adj1', 'adj2', 'adj3', 'adj4'], 'adj1', $this->adjustmentsData['adj1']],
-            [['adj1', 'adj2', 'adj3', 'adj4'], 'adj2', $this->adjustmentsData['adj2']],
-            [['adj1', 'adj2', 'adj3', 'adj4'], 'adj3', $this->adjustmentsData['adj3']],
-            [['adj1', 'adj2', 'adj3', 'adj4'], 'adj4', $this->adjustmentsData['adj4']],
+            [['adj1'], 'adj1', 10],
+            [['adj1', 'adj2', 'adj3', 'adj4'], 'adj1', 10],
+            [['adj1', 'adj2', 'adj3', 'adj4'], 'adj2', 20],
+            [['adj1', 'adj2', 'adj3', 'adj4'], 'adj3', 5],
+            [['adj1', 'adj2', 'adj3', 'adj4'], 'adj4', Pool::DEFAULT_SORT_ORDER],
         ];
     }
 

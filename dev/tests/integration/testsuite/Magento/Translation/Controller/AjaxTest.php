@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Translation\Controller;
@@ -9,20 +9,19 @@ namespace Magento\Translation\Controller;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Translation\Model\ResourceModel\StringUtils;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for Magento\Translation\Controller\Ajax class.
+ *
+ * @magentoDbIsolation disabled
  */
 class AjaxTest extends \Magento\TestFramework\TestCase\AbstractController
 {
     /**
-     * @param array $postData
-     * @param string $expected
-     *
-     * @return void
-     * @dataProvider indexActionDataProvider
      * @magentoConfigFixture default_store dev/translate_inline/active 1
      */
+    #[DataProvider('indexActionDataProvider')]
     public function testIndexAction(array $postData, string $expected): void
     {
         $this->getRequest()->setPostValue('translate', $postData);
@@ -31,10 +30,7 @@ class AjaxTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertEquals($expected, $result);
     }
 
-    /**
-     * @return array
-     */
-    public function indexActionDataProvider(): array
+    public static function indexActionDataProvider(): array
     {
         return [
             [

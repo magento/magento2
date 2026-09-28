@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -23,7 +23,7 @@ class FormKeyTest extends TestCase
         $objectManagerHelper = new ObjectManager($this);
 
         $formKeyMock = $this->getMockBuilder(\Magento\Framework\Data\Form\FormKey::class)
-            ->setMethods(['getFormKey'])->disableOriginalConstructor()
+            ->onlyMethods(['getFormKey'])->disableOriginalConstructor()
             ->getMock();
 
         $formKeyMock->expects($this->any())

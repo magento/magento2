@@ -1,16 +1,17 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
+
+namespace Magento\Framework\Convert;
 
 /**
  * Default converter for \Magento\Framework\DataObjects to arrays
  *
  * @api
  */
-namespace Magento\Framework\Convert;
-
 class DataObject
 {
     /** Constant used to mark cycles in the input array/objects */

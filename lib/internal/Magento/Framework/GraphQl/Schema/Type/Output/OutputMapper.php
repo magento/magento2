@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,7 +13,7 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\Phrase;
 
 /**
- * Map type names to their output type/interface/enum classes.
+ * Map type names to their output type/interface/union/enum classes.
  */
 class OutputMapper
 {
@@ -38,7 +38,7 @@ class OutputMapper
      * @return OutputTypeInterface
      * @throws GraphQlInputException
      */
-    public function getOutputType($typeName)
+    public function getOutputType(string $typeName)
     {
         $outputType = $this->typeRegistry->get($typeName);
 

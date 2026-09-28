@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\TestFramework\Dependency;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class DbRuleTest extends \PHPUnit\Framework\TestCase
 {
@@ -22,14 +24,14 @@ class DbRuleTest extends \PHPUnit\Framework\TestCase
      * @param string $file
      * @param string $contents
      * @param array $expected
-     * @dataProvider getDependencyInfoDataProvider
      */
+    #[DataProvider('getDependencyInfoDataProvider')]
     public function testGetDependencyInfo($module, $file, $contents, array $expected)
     {
         $this->assertEquals($expected, $this->model->getDependencyInfo($module, 'php', $file, $contents));
     }
 
-    public function getDependencyInfoDataProvider()
+    public static function getDependencyInfoDataProvider()
     {
         return [
             ['any', 'non-resource-file-path.php', 'any', []],

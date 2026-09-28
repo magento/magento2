@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\App;
 
 /**
  * Template Types interface
  *
- * @deprecated 100.2.0 because of incorrect location
+ * @deprecated 101.0.0 because of incorrect location
  */
 interface TemplateTypesInterface
 {

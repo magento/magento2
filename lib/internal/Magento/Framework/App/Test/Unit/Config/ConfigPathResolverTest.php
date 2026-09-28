@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Framework\App\Test\Unit\Config;
 use Magento\Framework\App\Config\ConfigPathResolver;
 use Magento\Framework\App\Config\ScopeCodeResolver;
 use PHPUnit\Framework\MockObject\MockObject as Mock;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -41,14 +42,9 @@ class ConfigPathResolverTest extends TestCase
         );
     }
 
-    /**
-     * @param string $path
-     * @param string $scope
-     * @param string $scopeCode
-     * @param string $type
-     * @param string $expected
-     * @dataProvider resolveDataProvider
+    /**     * @param string $expected
      */
+    #[DataProvider('resolveDataProvider')]
     public function testResolve($path, $scope, $scopeCode, $type, $expected)
     {
         $this->scopeCodeResolverMock->expects($this->any())
@@ -61,7 +57,7 @@ class ConfigPathResolverTest extends TestCase
     /**
      * @return array
      */
-    public function resolveDataProvider()
+    public static function resolveDataProvider()
     {
         return [
             ['/test/test/test/', 'default', null, null, 'default/test/test/test'],

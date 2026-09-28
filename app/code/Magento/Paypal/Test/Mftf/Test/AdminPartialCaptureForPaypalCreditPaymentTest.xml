@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminPartialCaptureForPaypalCreditPaymentTest" extends="StorefrontGuestCheckoutUsingPaypalPayFlowLinkTest">
+        <annotations>
+            <features value="PayPal"/>
+            <stories value="Paypal pay flow configuration"/>
+            <title value="Create partial capture for order paid with PayPal Payflow"/>
+            <description value="Admin creates partial capture for order paid with PayPal Payflow Pro and assert the transaction in transaction tab"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4833"/>
+            <group value="3rd_party_integration"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <remove keyForRemoval="addProductToCart"/>
+            <!-- Simple product is created -->
+            <createData entity="SimpleProduct" stepKey="createProduct" before ="ConfigPayPalPayFlowLink">
+                <field key="price">125.15</field>
+            </createData>
+        </before>
+        <remove keyForRemoval="addProductToCart"/>
+        <remove keyForRemoval="assertOrderDetails"/>
+        <actionGroup ref="AddProductWithQtyToCartFromStorefrontProductPageActionGroup" stepKey="addItemToCart" before="goToCheckout">
+            <argument name="productName" value="$$createProduct.name$$"/>
+            <argument name="productQty" value="2"/>
+        </actionGroup>
+        <remove keyForRemoval="seeAdminOrderStatus"/>
+        <remove keyForRemoval="checkGrandTotal"/>
+        <remove keyForRemoval="clickOnCommentsHistory"/>
+        <remove keyForRemoval="seeOrderHistoryNotes"/>
+        <!--Submit invoice-->
+        <actionGroup ref="AdminClickInvoiceButtonOrderViewActionGroup" stepKey="clickInvoiceButton" after="openFirstOrderPage"/>
+        <seeOptionIsSelected userInput="Capture Online" selector="{{AdminInvoiceTotalSection.amount}}" stepKey="seeOptionType"/>
+        <!--Update qty as 1 and assert the status of the order-->
+        <actionGroup ref="AdminFillQtyToInvoiceOnCreateInvoicePageActionGroup" stepKey="fillInvoiceQuantity">
+            <argument name="qty" value="1"/>
+        </actionGroup>
+        <actionGroup ref="AdminClickUpdateQtysButtonOnCreateInvoicePageActionGroup" stepKey="clickUpdateQtyAfterUpdatingInvoiceBtn"/>
+        <actionGroup ref="AdminInvoiceClickSubmitActionGroup" stepKey="clickOnSubmitInvoice"/>
+        <actionGroup ref="AdminOrderViewCheckStatusActionGroup" stepKey="checkOrderStatus">
+            <argument name="status" value="Processing"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{AdminOrderDetailsInformationSection.paymentInformationField('Last Transaction ID')}}" stepKey="waitForLastTransactionIDFieldToBeAppearedAfterSubmittingInvoice"/>
+        <grabTextFrom selector="{{AdminOrderDetailsInformationSection.paymentInformationField('Last Transaction ID')}}" stepKey="grabLastTransactionIDForCaptured"/>
+        <!--Open invoice tab and verify the invoice is present-->
+        <click selector="{{AdminOrderDetailsOrderViewSection.invoices}}" stepKey="clickOrderInvoicesTab"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForInvoiceGridLoadingMask" />
+        <see selector="{{AdminOrderInvoicesTabSection.gridRow('1')}}" userInput="{{Simple_US_Customer.firstname}}" stepKey="seeOrderInvoiceInTabGrid"/>
+        <waitForElementClickable selector="{{AdminOrderInvoicesTabSection.viewGridRow('1')}}" stepKey="waitForClickToViewInvoiceRow"/>
+        <conditionalClick selector="{{AdminOrderInvoicesTabSection.viewGridRow('1')}}" dependentSelector="{{AdminOrderInvoicesTabSection.viewGridRow('1')}}" visible="true" stepKey="clickToViewInvoiceRow"/>
+        <see selector="{{AdminInvoiceOrderInformationSection.orderId}}" userInput="{$grabOrderNumber}" stepKey="seeOrderIdOnInvoice" />
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openAgainOrderPage">
+            <argument name="orderId" value="{$grabOrderNumber}"/>
+        </actionGroup>
+        <!--Open the comment history tab and assert the comment-->
+        <actionGroup ref="AdminOpenOrderCommentsHistoryActionGroup" stepKey="clickOnCommentsHistoryAfterSubmittingInvoice"/>
+        <waitForText selector="{{AdminOrderCommentsTabSection.orderCommentsWithType('Captured amount')}}" userInput="Captured amount of $135.15 online. Transaction ID: &quot;{$grabLastTransactionIDForCaptured}&quot;" stepKey="seeOrderHistoryNotesAfterSubmittingInvoice"/>
+        <!-- Check the last transaction of the order and validate the details for Captured and Authorization-->
+        <actionGroup ref="AdminViewAuthorizationTransactionsInOrderActionGroup" stepKey="validateAuthTransaction"/>
+        <waitForText selector="{{AdminTransactionsGridSection.transactionData('Is Closed')}}" userInput="No" stepKey="seeIfClosedHeaderIsSetAsYesForAuthorization"/>
+        <waitForElementClickable selector="{{AdminProductFormActionSection.backButton}}" stepKey="waitForBackButtonToBeClicked"/>
+        <click selector="{{AdminProductFormActionSection.backButton}}" stepKey="clickBackButton"/>
+        <actionGroup ref="AdminAssertTransitionTypeStatusNewActionGroup" stepKey="assertTransactionTypeStatusForCapture">
+            <argument name="transactionType" value="capture"/>
+            <argument name="transitionTypeStatus" value="No"/>
+        </actionGroup>
+    </test>
+</tests>
+

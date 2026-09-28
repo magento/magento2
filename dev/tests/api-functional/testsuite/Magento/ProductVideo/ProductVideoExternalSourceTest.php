@@ -1,13 +1,24 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\ProductVideo;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product\Gallery\DefaultValueProcessor;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Webapi\Rest\Request;
+use Magento\Store\Test\Fixture\Store as StoreFixture;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use Magento\TestFramework\Fixture\ScopeFixture;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
@@ -18,16 +29,16 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
  */
 class ProductVideoExternalSourceTest extends WebapiAbstract
 {
-    const SERVICE_NAME = 'catalogProductRepositoryV1';
-    const SERVICE_VERSION = 'V1';
-    const RESOURCE_PATH = '/V1/products';
+    public const SERVICE_NAME = 'catalogProductRepositoryV1';
+    public const SERVICE_VERSION = 'V1';
+    public const RESOURCE_PATH = '/V1/products';
 
     /**
      * Media gallery entries with external videos
      *
      * @return array
      */
-    public function externalVideoDataProvider(): array
+    public static function externalVideoDataProvider(): array
     {
         return [
             'youtube-external-video' => [
@@ -37,7 +48,7 @@ class ProductVideoExternalSourceTest extends WebapiAbstract
                     'label' => 'Test Video Created',
                     'types' => [],
                     'position' => 1,
-                    'content' => $this->getVideoThumbnailStub(),
+                    'content' => self::getVideoThumbnailStub(),
                     'extension_attributes' => [
                         'video_content' => [
                             'media_type' => 'external-video',
@@ -57,7 +68,7 @@ class ProductVideoExternalSourceTest extends WebapiAbstract
                     'label' => 'Test Video Updated',
                     'types' => [],
                     'position' => 1,
-                    'content' => $this->getVideoThumbnailStub(),
+                    'content' => self::getVideoThumbnailStub(),
                     'extension_attributes' => [
                         'video_content' => [
                             'media_type' => 'external-video',
@@ -78,7 +89,7 @@ class ProductVideoExternalSourceTest extends WebapiAbstract
      *
      * @return array|string[]
      */
-    private function getVideoThumbnailStub(): array
+    private static function getVideoThumbnailStub(): array
     {
         return [
             'type' => 'image/png',
@@ -92,9 +103,9 @@ class ProductVideoExternalSourceTest extends WebapiAbstract
     /**
      * Test create/ update product with external video media gallery entry
      *
-     * @dataProvider externalVideoDataProvider
      * @param array $mediaGalleryData
      */
+    #[DataProvider('externalVideoDataProvider')]
     public function testCreateWithExternalVideo(array $mediaGalleryData)
     {
         $simpleProductBaseData = $this->getSimpleProductData(
@@ -111,6 +122,99 @@ class ProductVideoExternalSourceTest extends WebapiAbstract
             $simpleProductBaseData['media_gallery_entries'][0]['extension_attributes'],
             $response["media_gallery_entries"][0]["extension_attributes"]
         );
+    }
+
+    #[
+        DataFixture(ScopeFixture::class, as: 'global_scope'),
+        DataFixture(StoreFixture::class, as: 'store_view_2'),
+        DataFixture(
+            ProductFixture::class,
+            [
+                'media_gallery_entries' => [
+                    [
+                        'media_type' => 'external-video',
+                        'disabled' => false,
+                        'label' => 'Test Video Updated',
+                        'position' => 1,
+                        'extension_attributes' => [
+                            'video_content' => [
+                                'media_type' => 'external-video',
+                                'video_provider' => 'vimeo',
+                                'video_url' => 'https://www.vimeo.com/',
+                                'video_title' => 'Video title',
+                                'video_description' => 'Video description',
+                                'video_metadata' => 'Video meta',
+                            ],
+                        ],
+                    ]
+                ]
+            ],
+            as: 'p1',
+            scope: 'global_scope'
+        ),
+    ]
+    public function testMediaGalleryInheritanceTest(): void
+    {
+        $this->_markTestAsRestOnly(
+            'Test skipped due to known issue with SOAP. NULL value is cast to corresponding attribute type.'
+        );
+
+        $fixtures = DataFixtureStorageManager::getStorage();
+        $defaultValueProcessor = Bootstrap::getObjectManager()->get(DefaultValueProcessor::class);
+        $sku = $fixtures->get('p1')->getSku();
+        $store2 = $fixtures->get('store_view_2');
+
+        $productData = $this->getProductData($sku, $store2->getCode());
+
+        // Update1: Update product in store view 2 without media_gallery_entries
+        $update1 = $productData;
+        unset($update1['media_gallery_entries']);
+        $this->saveProduct($update1, $store2->getCode());
+
+        // Check video label, visibility and position inheritance in store view 2
+        $product = $this->getProductModel($sku, (int) $store2->getId());
+        $gallery = $defaultValueProcessor->process($product, $product->getData('media_gallery'));
+        $video = current($gallery['images']);
+        $this->assertEquals(1, $video['label_use_default']);
+        $this->assertEquals(1, $video['disabled_use_default']);
+        $this->assertEquals(1, $video['position_use_default']);
+        $this->assertEquals(1, $video['video_title_use_default']);
+        $this->assertEquals(1, $video['video_description_use_default']);
+
+        // Update2: Update product in store view 2 with media_gallery_entries
+        $update2 = $productData;
+        $this->saveProduct($update2, $store2->getCode());
+
+        // Check video label, visibility and position inheritance in store view 2
+        $product = $this->getProductModel($sku, (int) $store2->getId());
+        $gallery = $defaultValueProcessor->process($product, $product->getData('media_gallery'));
+        $video = current($gallery['images']);
+        $this->assertEquals(0, $video['label_use_default']);
+        $this->assertEquals(0, $video['disabled_use_default']);
+        $this->assertEquals(0, $video['position_use_default']);
+        $this->assertEquals(0, $video['video_title_use_default']);
+        $this->assertEquals(0, $video['video_description_use_default']);
+
+        // Update3: Update product in store view 2 to use default values for media_gallery_entries
+        $update3 = $productData;
+        foreach ($update3['media_gallery_entries'] as &$entry) {
+            $entry['label'] = null;
+            $entry['position'] = null;
+            $entry['disabled'] = null;
+            $entry['extension_attributes']['video_content']['video_title'] = null;
+            $entry['extension_attributes']['video_content']['video_description'] = null;
+        }
+        $this->saveProduct($update3, $store2->getCode());
+
+        // Check video label, visibility and position inheritance in store view 2
+        $product = $this->getProductModel($sku, (int) $store2->getId());
+        $gallery = $defaultValueProcessor->process($product, $product->getData('media_gallery'));
+        $video = current($gallery['images']);
+        $this->assertEquals(1, $video['label_use_default']);
+        $this->assertEquals(1, $video['disabled_use_default']);
+        $this->assertEquals(1, $video['position_use_default']);
+        $this->assertEquals(1, $video['video_title_use_default']);
+        $this->assertEquals(1, $video['video_description_use_default']);
     }
 
     /**
@@ -174,5 +278,34 @@ class ProductVideoExternalSourceTest extends WebapiAbstract
         $requestData = ['product' => $product];
 
         return $this->_webApiCall($serviceInfo, $requestData, null, $storeCode);
+    }
+
+    private function getProductModel(string $sku, ?int $storeId = null): ProductInterface
+    {
+        try {
+            $productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
+            $product = $productRepository->get($sku, false, $storeId, true);
+        } catch (NoSuchEntityException $e) {
+            $product = null;
+            $this->fail("Couldn`t load product: {$sku}");
+        }
+        return $product;
+    }
+    
+    private function getProductData(string $sku, ?string $storeCode = null): array
+    {
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . '/' . $sku,
+                'httpMethod' => Request::HTTP_METHOD_GET,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'Get',
+            ],
+        ];
+
+        return $this->_webApiCall($serviceInfo, ['sku' => $sku], null, $storeCode);
     }
 }

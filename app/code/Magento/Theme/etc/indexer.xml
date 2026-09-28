@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -17,7 +17,7 @@
             <field name="store_group_id" xsi:type="filterable" dataType="int"/>
             <field name="store_id" xsi:type="filterable" dataType="int"/>
         </fieldset>
-        <saveHandler class="Magento\Framework\Indexer\SaveHandler\Grid"/>
+        <saveHandler class="Magento\Theme\Model\Indexer\Design\IndexerHandler"/>
         <structure class="Magento\Framework\Indexer\GridStructure"/>
     </indexer>
 </config>

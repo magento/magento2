@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,105 +9,133 @@ namespace Magento\Downloadable\Test\Unit\Model\Link;
 
 use Magento\Catalog\Api\Data\ProductExtensionInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Product;
 use Magento\Downloadable\Api\Data\LinkInterface;
 use Magento\Downloadable\Api\LinkRepositoryInterface;
 use Magento\Downloadable\Model\Link\UpdateHandler;
 use Magento\Downloadable\Model\Product\Type;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\RuntimeException;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Test for \Magento\Downloadable\Model\Link\UpdateHandler.
+ */
 class UpdateHandlerTest extends TestCase
 {
-    /** @var UpdateHandler */
-    protected $model;
+    use MockCreationTrait;
 
-    /** @var LinkRepositoryInterface|MockObject */
-    protected $linkRepositoryMock;
+    /**
+     * @var UpdateHandler
+     */
+    private $model;
 
+    /**
+     * @var LinkRepositoryInterface|MockObject
+     */
+    private $linkRepositoryMock;
+
+    /**
+     * @var LinkInterface|MockObject
+     */
+    private $linkMock;
+
+    /**
+     * @var ProductExtensionInterface|MockObject
+     */
+    private $productExtensionMock;
+
+    /**
+     * @var ProductInterface|MockObject
+     */
+    private $entityMock;
+
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
-        $this->linkRepositoryMock = $this->getMockBuilder(LinkRepositoryInterface::class)
-            ->getMockForAbstractClass();
+        $this->linkRepositoryMock = $this->createMock(LinkRepositoryInterface::class);
+        $this->linkMock = $this->createMock(LinkInterface::class);
+        $this->productExtensionMock = $this->getProductExtensionMock();
+        $this->productExtensionMock->expects($this->once())
+            ->method('getDownloadableProductLinks')
+            ->willReturn([$this->linkMock]);
+        $this->entityMock = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getStoreId', 'getTypeId', 'getExtensionAttributes', 'getSku']
+        );
 
         $this->model = new UpdateHandler(
             $this->linkRepositoryMock
         );
     }
 
-    public function testExecute()
+    /**
+     * Update links for downloadable product
+     *
+     * @return void
+     */
+    public function testExecute(): void
     {
         $entitySku = 'sku';
         $entityStoreId = 0;
-        $linkId = 11;
         $linkToDeleteId = 22;
 
-        /** @var LinkInterface|MockObject $linkMock */
-        $linkMock = $this->getMockBuilder(LinkInterface::class)
-            ->getMock();
-        $linkMock->expects($this->exactly(3))
+        $this->linkMock->expects($this->exactly(3))
             ->method('getId')
-            ->willReturn($linkId);
+            ->willReturn(1);
 
         /** @var LinkInterface|MockObject $linkToDeleteMock */
-        $linkToDeleteMock = $this->getMockBuilder(LinkInterface::class)
-            ->getMock();
+        $linkToDeleteMock = $this->createMock(LinkInterface::class);
         $linkToDeleteMock->expects($this->exactly(2))
             ->method('getId')
             ->willReturn($linkToDeleteId);
 
-        /** @var ProductExtensionInterface|MockObject $productExtensionMock */
-        $productExtensionMock = $this->getMockBuilder(ProductExtensionInterface::class)
-            ->setMethods(['getDownloadableProductLinks'])
-            ->getMockForAbstractClass();
-        $productExtensionMock->expects($this->once())
-            ->method('getDownloadableProductLinks')
-            ->willReturn([$linkMock]);
-
-        /** @var ProductInterface|MockObject $entityMock */
-        $entityMock = $this->getMockBuilder(ProductInterface::class)
-            ->setMethods(['getTypeId', 'getExtensionAttributes', 'getSku', 'getStoreId'])
-            ->getMockForAbstractClass();
-        $entityMock->expects($this->once())
+        $this->entityMock->expects($this->once())
             ->method('getTypeId')
             ->willReturn(Type::TYPE_DOWNLOADABLE);
-        $entityMock->expects($this->once())
+        $this->entityMock->expects($this->once())
             ->method('getExtensionAttributes')
-            ->willReturn($productExtensionMock);
-        $entityMock->expects($this->exactly(2))
+            ->willReturn($this->productExtensionMock);
+        $this->entityMock->expects($this->exactly(2))
             ->method('getSku')
             ->willReturn($entitySku);
-        $entityMock->expects($this->once())
+        $this->entityMock->expects($this->once())
             ->method('getStoreId')
             ->willReturn($entityStoreId);
 
         $this->linkRepositoryMock->expects($this->once())
             ->method('getList')
             ->with($entitySku)
-            ->willReturn([$linkMock, $linkToDeleteMock]);
+            ->willReturn([$this->linkMock, $linkToDeleteMock]);
         $this->linkRepositoryMock->expects($this->once())
             ->method('save')
-            ->with($entitySku, $linkMock, !$entityStoreId);
+            ->with($entitySku, $this->linkMock, !$entityStoreId);
         $this->linkRepositoryMock->expects($this->once())
             ->method('delete')
             ->with($linkToDeleteId);
 
-        $this->assertEquals($entityMock, $this->model->execute($entityMock));
+        $this->assertEquals($this->entityMock, $this->model->execute($this->entityMock));
     }
 
-    public function testExecuteNonDownloadable()
+    /**
+     * Update links for non downloadable product.
+     *
+     * @return void
+     */
+    public function testExecuteNonDownloadable(): void
     {
-        /** @var ProductInterface|MockObject $entityMock */
-        $entityMock = $this->getMockBuilder(ProductInterface::class)
-            ->setMethods(['getTypeId', 'getExtensionAttributes', 'getSku', 'getStoreId'])
-            ->getMockForAbstractClass();
-        $entityMock->expects($this->once())
+        $this->entityMock->expects($this->once())
             ->method('getTypeId')
             ->willReturn(Type::TYPE_DOWNLOADABLE . 'some');
-        $entityMock->expects($this->never())
-            ->method('getExtensionAttributes');
-        $entityMock->expects($this->never())
+        $this->entityMock->expects($this->once())
+            ->method('getExtensionAttributes')
+            ->willReturn($this->productExtensionMock);
+        $this->entityMock->expects($this->never())
             ->method('getSku');
-        $entityMock->expects($this->never())
+        $this->entityMock->expects($this->never())
             ->method('getStoreId');
 
         $this->linkRepositoryMock->expects($this->never())
@@ -117,6 +145,19 @@ class UpdateHandlerTest extends TestCase
         $this->linkRepositoryMock->expects($this->never())
             ->method('delete');
 
-        $this->assertEquals($entityMock, $this->model->execute($entityMock));
+        $this->assertEquals($this->entityMock, $this->model->execute($this->entityMock));
+    }
+
+    /**
+     * Build product extension mock.
+     *
+     * @return MockObject
+     */
+    private function getProductExtensionMock(): MockObject
+    {
+        return $this->createPartialMockWithReflection(
+            ProductExtensionInterface::class,
+            ['getDownloadableProductLinks', 'setDownloadableProductLinks']
+        );
     }
 }

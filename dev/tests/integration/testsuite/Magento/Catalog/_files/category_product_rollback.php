@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 /** @var \Magento\Framework\Registry $registry */
@@ -22,3 +22,5 @@ $category->load(333);
 if ($category->getId()) {
     $category->delete();
 }
+$registry->unregister('isSecureArea');
+$registry->register('isSecureArea', false);

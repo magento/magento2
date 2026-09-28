@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Paypal\Block\Express\InContext\Minicart;
 
@@ -16,7 +16,7 @@ use Magento\Framework\View\Element\Template\Context;
 
 /**
  * Class Button
- * @deprecated @see \Magento\Paypal\Block\Express\InContext\Minicart\SmartButton
+ * @deprecated 100.3.1 @see \Magento\Paypal\Block\Express\InContext\Minicart\SmartButton
  */
 class Button extends Template implements ShortcutInterface
 {

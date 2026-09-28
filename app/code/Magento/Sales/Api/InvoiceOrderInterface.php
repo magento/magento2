@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Sales\Api;
@@ -31,7 +31,7 @@ interface InvoiceOrderInterface
         array $items = [],
         $notify = false,
         $appendComment = false,
-        \Magento\Sales\Api\Data\InvoiceCommentCreationInterface $comment = null,
-        \Magento\Sales\Api\Data\InvoiceCreationArgumentsInterface $arguments = null
+        ?\Magento\Sales\Api\Data\InvoiceCommentCreationInterface $comment = null,
+        ?\Magento\Sales\Api\Data\InvoiceCreationArgumentsInterface $arguments = null
     );
 }

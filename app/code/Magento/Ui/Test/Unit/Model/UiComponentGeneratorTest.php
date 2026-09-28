@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\View\LayoutInterface as LayoutInterfaceView;
 use Magento\Ui\Model\UiComponentGenerator;
 use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
 
 class UiComponentGeneratorTest extends TestCase
@@ -34,11 +35,11 @@ class UiComponentGeneratorTest extends TestCase
     {
         $this->contextFactoryMock = $this
             ->getMockBuilder(ContextFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->uiComponentFactoryMock = $this->getMockBuilder(UiComponentFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -54,9 +55,9 @@ class UiComponentGeneratorTest extends TestCase
 
     public function testGenerateUiComponent()
     {
-        $uiComponentMock = $this->getMockForAbstractClass(UiComponentInterface::class);
-        $uiComponentMockChild1 = $this->getMockForAbstractClass(UiComponentInterface::class);
-        $uiComponentMockChild2 = $this->getMockForAbstractClass(UiComponentInterface::class);
+        $uiComponentMock = $this->createMock(UiComponentInterface::class);
+        $uiComponentMockChild1 = $this->createMock(UiComponentInterface::class);
+        $uiComponentMockChild2 = $this->createMock(UiComponentInterface::class);
         $uiComponentMockChild1->expects($this->once())
             ->method('prepare');
         $uiComponentMockChild2->expects($this->once())

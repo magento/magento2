@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Deploy\Console\Command\App\SensitiveConfigSet;
 
@@ -11,6 +11,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Interface for collection values from user input
+ *
+ * @api
  */
 interface CollectorInterface
 {

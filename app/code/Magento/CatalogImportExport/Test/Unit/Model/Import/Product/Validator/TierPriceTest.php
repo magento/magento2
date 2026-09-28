@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\CatalogImportExport\Test\Unit\Model\Import\Product\Validator;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\CatalogImportExport\Model\Import\Product\StoreResolver;
 use Magento\CatalogImportExport\Model\Import\Product\Validator\TierPrice;
 use Magento\Customer\Api\Data\GroupSearchResultsInterface;
@@ -43,8 +44,7 @@ class TierPriceTest extends TestCase
         );
         $searchCriteriaSearch = $this->createMock(SearchCriteria::class);
         $this->searchCriteriaBuilder = $this->createMock(SearchCriteriaBuilder::class);
-        $this->searchCriteriaBuilder->expects($this->any())->method('create')
-            ->willReturn($searchCriteriaSearch);
+        $this->searchCriteriaBuilder->method('create')->willReturn($searchCriteriaSearch);
         $this->storeResolver = $this->createMock(
             StoreResolver::class
         );
@@ -66,7 +66,7 @@ class TierPriceTest extends TestCase
      */
     protected function processInit($groupId)
     {
-        $searchResult = $this->getMockForAbstractClass(GroupSearchResultsInterface::class);
+        $searchResult = $this->createMock(GroupSearchResultsInterface::class);
         $this->groupRepositoryInterface->expects($this->once())->method('getList')->willReturn($searchResult);
         $group = $this->createMock(Group::class);
         $group->expects($this->once())->method('getId')->willReturn($groupId);
@@ -85,8 +85,8 @@ class TierPriceTest extends TestCase
      * @param int $groupId
      * @param array|null $website
      * @param array $expected
-     * @dataProvider tierPriceDataProvider
      */
+    #[DataProvider('tierPriceDataProvider')]
     public function testIsValid($data, $groupId, $website, $expected)
     {
         $this->processInit($groupId);
@@ -106,7 +106,7 @@ class TierPriceTest extends TestCase
     /**
      * @return array
      */
-    public function tierPriceDataProvider()
+    public static function tierPriceDataProvider()
     {
         return [
             'empty' => [

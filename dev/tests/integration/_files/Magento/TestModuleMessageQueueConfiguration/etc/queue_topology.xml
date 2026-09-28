@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/topology.xsd">
@@ -39,7 +39,7 @@
         <binding id="wildcard2" destination="topic-queue2" destinationType="queue" topic="*.*.*" />
     </exchange>
 
-    <exchange name="overlappingDeprecatedExchange" type="topic" connection="amqp">
+    <exchange name="overlappingDeprecatedExchange" type="topic">
         <binding id="binding1" topic="overlapping.topic.declaration" destinationType="queue" destination="topology.config.queue" />
         <binding id="binding2" topic="deprecated.config.async.string.topic" destinationType="queue" destination="topology.config.queue" />
     </exchange>

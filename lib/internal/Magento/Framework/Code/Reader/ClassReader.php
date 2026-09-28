@@ -1,62 +1,81 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Code\Reader;
+
+use Magento\Framework\GetParameterClassTrait;
+use ReflectionClass;
+use ReflectionException;
+use ReflectionParameter;
 
 /**
  * Class ClassReader
  */
 class ClassReader implements ClassReaderInterface
 {
+    use GetParameterClassTrait;
+
+    /**
+     * @var array
+     */
     private $parentsCache = [];
+
+    /** @var array<string, array|null> */
+    private array $constructorCache = [];
 
     /**
      * Read class constructor signature
      *
      * @param  string $className
      * @return array|null
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function getConstructor($className)
     {
-        $class = new \ReflectionClass($className);
+        if (array_key_exists($className, $this->constructorCache)) {
+            return $this->constructorCache[$className];
+        }
+
+        $class = new ReflectionClass($className);
         $result = null;
         $constructor = $class->getConstructor();
         if ($constructor) {
             $result = [];
-            /** @var $parameter \ReflectionParameter */
+            /** @var $parameter ReflectionParameter */
             foreach ($constructor->getParameters() as $parameter) {
                 try {
+                    $parameterClass = $this->getParameterClass($parameter);
+
                     $result[] = [
                         $parameter->getName(),
-                        $parameter->getClass() !== null ? $parameter->getClass()->getName() : null,
+                        $parameterClass ? $parameterClass->getName() : null,
                         !$parameter->isOptional() && !$parameter->isDefaultValueAvailable(),
                         $this->getReflectionParameterDefaultValue($parameter),
                         $parameter->isVariadic(),
                     ];
-                } catch (\ReflectionException $e) {
+                } catch (ReflectionException $e) {
                     $message = sprintf(
                         'Impossible to process constructor argument %s of %s class',
                         $parameter->__toString(),
                         $className
                     );
-                    throw new \ReflectionException($message, 0, $e);
+                    throw new ReflectionException($message, 0, $e);
                 }
             }
         }
 
-        return $result;
+        return $this->constructorCache[$className] = $result;
     }
 
     /**
      * Get reflection parameter default value
      *
-     * @param  \ReflectionParameter $parameter
+     * @param  ReflectionParameter $parameter
      * @return array|mixed|null
      */
-    private function getReflectionParameterDefaultValue(\ReflectionParameter $parameter)
+    private function getReflectionParameterDefaultValue(ReflectionParameter $parameter)
     {
         if ($parameter->isVariadic()) {
             return [];
@@ -108,5 +127,16 @@ class ClassReader implements ClassReaderInterface
         $this->parentsCache[$className] = $result;
 
         return $result;
+    }
+
+    /**
+     * Disable show internals with var_dump
+     *
+     * @see https://www.php.net/manual/en/language.oop5.magic.php#object.debuginfo
+     * @return array
+     */
+    public function __debugInfo()
+    {
+        return [];
     }
 }

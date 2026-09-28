@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Sales Order Email order items
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Sales\Block\Order\Email;
 
@@ -52,6 +50,7 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
      * For legacy custom email templates it can pass as an object.
      *
      * @return OrderInterface|null
+     * @since 102.1.0
      */
     public function getOrder()
     {

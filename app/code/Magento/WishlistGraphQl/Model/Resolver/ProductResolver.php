@@ -1,18 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\WishlistGraphQl\Model\Resolver;
 
+use Magento\Catalog\Model\Product;
 use Magento\CatalogGraphQl\Model\ProductDataProvider;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Wishlist\Model\Item;
 
 /**
  * Fetches the Product data according to the GraphQL schema
@@ -39,15 +39,15 @@ class ProductResolver implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         if (!isset($value['model'])) {
             throw new LocalizedException(__('Missing key "model" in Wishlist Item value data'));
         }
-        /** @var Item $wishlistItem */
-        $wishlistItem = $value['model'];
+        /** @var Product $product */
+        $product = $value['model'];
 
-        return $this->productDataProvider->getProductDataById((int)$wishlistItem->getProductId());
+        return $this->productDataProvider->getProductDataById((int) $product->getId());
     }
 }

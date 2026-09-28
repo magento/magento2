@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\View\Result;
@@ -14,6 +14,7 @@ use Magento\Framework\ObjectManagerInterface;
  * which is by convention is determined from the controller action class
  *
  * @api
+ * @since 100.0.2
  */
 class PageFactory
 {

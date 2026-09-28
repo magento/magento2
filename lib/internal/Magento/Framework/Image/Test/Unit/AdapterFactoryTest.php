@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,9 +14,13 @@ use Magento\Framework\Image\AdapterFactory;
 use Magento\Framework\ObjectManager\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class AdapterFactoryTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ConfigInterface|MockObject
      */
@@ -43,19 +47,18 @@ class AdapterFactoryTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider createDataProvider
-     * @param string $alias
+    /**     * @param string $alias
      * @param string $class
      */
+    #[DataProvider('createDataProvider')]
     public function testCreate($alias, $class)
     {
         $objectManagerMock =
             $this->createPartialMock(ObjectManager::class, ['create']);
-        $imageAdapterMock = $this->getMockBuilder($class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['checkDependencies'])
-            ->getMock();
+        $imageAdapterMock = $this->createPartialMockWithReflection(
+            $class,
+            ['checkDependencies']
+        );
         $imageAdapterMock->expects($this->once())->method('checkDependencies');
 
         $objectManagerMock->expects(
@@ -77,7 +80,7 @@ class AdapterFactoryTest extends TestCase
      * @see self::testCreate()
      * @return array
      */
-    public function createDataProvider()
+    public static function createDataProvider()
     {
         return [
             ['GD2', Gd2::class],
@@ -158,9 +161,10 @@ class AdapterFactoryTest extends TestCase
         $class = 'stdClass';
         $objectManagerMock =
             $this->createPartialMock(ObjectManager::class, ['create']);
-        $imageAdapterMock = $this->getMockBuilder($class)
-            ->addMethods(['checkDependencies'])
-            ->getMock();
+        $imageAdapterMock = $this->createPartialMockWithReflection(
+            $class,
+            ['checkDependencies']
+        );
 
         $objectManagerMock->expects(
             $this->once()

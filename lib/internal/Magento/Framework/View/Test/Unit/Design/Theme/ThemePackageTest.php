@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,14 +9,14 @@ namespace Magento\Framework\View\Test\Unit\Design\Theme;
 
 use Magento\Framework\View\Design\Theme\ThemePackage;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ThemePackageTest extends TestCase
 {
     /**
      * @param string $key
-     *
-     * @dataProvider constructBadKeyDataProvider
-     */
+     *     */
+    #[DataProvider('constructBadKeyDataProvider')]
     public function testConstructBadKey($key)
     {
         $this->expectException('UnexpectedValueException');
@@ -29,7 +29,7 @@ class ThemePackageTest extends TestCase
     /**
      * @return array
      */
-    public function constructBadKeyDataProvider()
+    public static function constructBadKeyDataProvider()
     {
         return [
             [''],

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -36,7 +36,7 @@ class CommandPluginTest extends TestCase
     {
         $this->newRelicWrapperMock = $this->getMockBuilder(NewRelicWrapper::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setTransactionName'])
+            ->onlyMethods(['setTransactionName'])
             ->getMock();
 
         $this->objectManager = new ObjectManager($this);
@@ -79,7 +79,7 @@ class CommandPluginTest extends TestCase
     {
         $commandMock = $this->getMockBuilder(Command::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getName'])
+            ->onlyMethods(['getName'])
             ->getMock();
 
         $commandMock->method('getName')

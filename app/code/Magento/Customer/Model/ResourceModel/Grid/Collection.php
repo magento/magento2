@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Model\ResourceModel\Grid;
 
@@ -10,6 +10,7 @@ use Magento\Customer\Ui\Component\DataProvider\Document;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface as FetchStrategy;
 use Magento\Framework\Data\Collection\EntityFactoryInterface as EntityFactory;
 use Magento\Framework\Event\ManagerInterface as EventManager;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult;
 use Psr\Log\LoggerInterface as Logger;
@@ -25,12 +26,12 @@ class Collection extends SearchResult
     private $localeResolver;
 
     /**
-     * @inheritdoc
+     * @var string
      */
     protected $document = Document::class;
 
     /**
-     * @inheritdoc
+     * @var array
      */
     protected $_map = ['fields' => ['entity_id' => 'main_table.entity_id']];
 
@@ -42,6 +43,7 @@ class Collection extends SearchResult
      * @param ResolverInterface $localeResolver
      * @param string $mainTable
      * @param string $resourceModel
+     * @throws LocalizedException
      */
     public function __construct(
         EntityFactory $entityFactory,
@@ -74,7 +76,7 @@ class Collection extends SearchResult
     {
         if ($field === 'billing_region') {
             $conditionSql = $this->_getConditionSql(
-                $this->getRegionNameExpresion(),
+                $this->getRegionNameExpression(),
                 $condition
             );
             $this->getSelect()->where($conditionSql);
@@ -100,7 +102,7 @@ class Collection extends SearchResult
         $whereCondition = '';
         foreach ($fields as $key => $field) {
             $field = $field === 'billing_region'
-                ? $this->getRegionNameExpresion()
+                ? $this->getRegionNameExpression()
                 : 'main_table.' . $field;
             $condition = $this->_getConditionSql(
                 $this->getConnection()->quoteIdentifier($field),
@@ -152,18 +154,18 @@ class Collection extends SearchResult
             )->joinLeft(
                 ['rnt' => $this->getTable('directory_country_region_name')],
                 "rnt.region_id={$regionIdField} AND {$localeCondition}",
-                ['billing_region' => $this->getRegionNameExpresion()]
+                ['billing_region' => $this->getRegionNameExpression()]
             );
 
         return $this;
     }
 
     /**
-     * Get SQL Expresion to define Region Name field by locale
+     * Get SQL Expression to define Region Name field by locale
      *
      * @return \Zend_Db_Expr
      */
-    private function getRegionNameExpresion(): \Zend_Db_Expr
+    private function getRegionNameExpression(): \Zend_Db_Expr
     {
         $connection = $this->getConnection();
         $defaultNameExpr = $connection->getIfNullSql(

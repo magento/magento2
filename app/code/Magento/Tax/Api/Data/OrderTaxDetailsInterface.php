@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Tax\Api\Data;
@@ -27,7 +26,7 @@ interface OrderTaxDetailsInterface extends \Magento\Framework\Api\ExtensibleData
      * @param \Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface[] $appliedTaxes
      * @return $this
      */
-    public function setAppliedTaxes(array $appliedTaxes = null);
+    public function setAppliedTaxes(?array $appliedTaxes = null);
 
     /**
      * Get order item tax details
@@ -42,7 +41,7 @@ interface OrderTaxDetailsInterface extends \Magento\Framework\Api\ExtensibleData
      * @param \Magento\Tax\Api\Data\OrderTaxDetailsItemInterface[] $items
      * @return $this
      */
-    public function setItems(array $items = null);
+    public function setItems(?array $items = null);
 
     /**
      * Retrieve existing extension attributes object or create a new one.

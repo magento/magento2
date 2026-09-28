@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Eav\Block\Adminhtml\Attribute\Edit\Main;
@@ -201,7 +201,7 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
             ]
         );
 
-        $dateFormat = $this->_localeDate->getDateFormat(\IntlDateFormatter::SHORT);
+        $dateFormat = $this->_localeDate->getDateFormatWithLongYear();
         $fieldset->addField(
             'default_value_date',
             'date',

@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\Product;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class TypeTest extends \PHPUnit\Framework\TestCase
 {
@@ -22,8 +24,8 @@ class TypeTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string|null $typeId
      * @param string $expectedClass
-     * @dataProvider factoryDataProvider
      */
+    #[DataProvider('factoryDataProvider')]
     public function testFactory($typeId, $expectedClass)
     {
         $product = new \Magento\Framework\DataObject();
@@ -37,7 +39,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function factoryDataProvider()
+    public static function factoryDataProvider()
     {
         return [
             [null, \Magento\Catalog\Model\Product\Type\Simple::class],
@@ -53,8 +55,8 @@ class TypeTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param string|null $typeId
-     * @dataProvider factoryReturnsSingletonDataProvider
      */
+    #[DataProvider('factoryReturnsSingletonDataProvider')]
     public function testFactoryReturnsSingleton($typeId)
     {
         $product = new \Magento\Framework\DataObject();
@@ -70,7 +72,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function factoryReturnsSingletonDataProvider()
+    public static function factoryReturnsSingletonDataProvider()
     {
         return [
             [null],
@@ -84,15 +86,15 @@ class TypeTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string|null $typeId
      * @param string $expectedClass
-     * @dataProvider priceFactoryDataProvider
      */
+    #[DataProvider('priceFactoryDataProvider')]
     public function testPriceFactory($typeId, $expectedClass)
     {
         $type = $this->_productType->priceFactory($typeId);
         $this->assertInstanceOf($expectedClass, $type);
     }
 
-    public function priceFactoryDataProvider()
+    public static function priceFactoryDataProvider()
     {
         return [
             [null, \Magento\Catalog\Model\Product\Type\Price::class],
@@ -138,14 +140,14 @@ class TypeTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param string $typeId
-     * @dataProvider getOptionTextDataProvider
      */
+    #[DataProvider('getOptionTextDataProvider')]
     public function testGetOptionText($typeId)
     {
         $this->assertNotEmpty($this->_productType->getOptionText($typeId));
     }
 
-    public function getOptionTextDataProvider()
+    public static function getOptionTextDataProvider()
     {
         return [
             [\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE],

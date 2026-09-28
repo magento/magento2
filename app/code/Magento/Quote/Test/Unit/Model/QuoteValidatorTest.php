@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,13 +9,16 @@ namespace Magento\Quote\Test\Unit\Model;
 
 use Magento\Directory\Model\AllowedCountries;
 use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\ValidationRules\QuoteValidationRuleInterface;
 use Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage as OrderAmountValidationMessage;
 use Magento\Quote\Model\QuoteValidator;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class QuoteValidatorTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var QuoteValidator
      */
@@ -48,27 +51,29 @@ class QuoteValidatorTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $quoteValidationRule = $this->createStub(QuoteValidationRuleInterface::class);
+        $quoteValidationRule->method('validate')->willReturn([]);
+
         $this->quoteValidator = new QuoteValidator(
             $this->allowedCountryReader,
-            $this->orderAmountValidationMessage
+            $this->orderAmountValidationMessage,
+            $quoteValidationRule
         );
 
-        $this->quoteMock = $this->getMockBuilder(Quote::class)
-            ->addMethods(['getHasError', 'getIsMultiShipping'])
-            ->onlyMethods(
-                [
-                    'getShippingAddress',
-                    'getBillingAddress',
-                    'getPayment',
-                    'setHasError',
-                    'addMessage',
-                    'isVirtual',
-                    'validateMinimumAmount',
-                    '__wakeup'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->quoteMock = $this->createPartialMockWithReflection(
+            Quote::class,
+            [
+                'getHasError',
+                'setHasError',
+                'addMessage',
+                'getShippingAddress',
+                'getBillingAddress',
+                'getPayment',
+                'isVirtual',
+                'validateMinimumAmount',
+                '__wakeup'
+            ]
+        );
     }
 
     public function testCheckQuoteAmountExistingError()

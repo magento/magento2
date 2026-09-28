@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -27,7 +27,7 @@ class EscapeRendererTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         /** @var MessageInterface|MockObject $message */
-        $message = $this->getMockForAbstractClass(MessageInterface::class);
+        $message = $this->createMock(MessageInterface::class);
 
         $message->expects(static::once())
             ->method('getText')

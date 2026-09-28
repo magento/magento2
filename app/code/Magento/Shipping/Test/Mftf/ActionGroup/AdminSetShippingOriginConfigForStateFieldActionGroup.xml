@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminSetShippingOriginConfigForStateFieldActionGroup" extends="AdminSetShippingOriginConfigActionGroup">
+        <annotations>
+            <description>Admin Set shipping origin for custom address details on origin page.</description>
+        </annotations>
+        <arguments>
+            <argument name="stateField" type="string" defaultValue="Central"/>
+        </arguments>
+        <remove keyForRemoval="SelectState"/>
+        <fillField selector="{{AdminShippingSettingsConfigSection.stateField}}" userInput="{{stateField}}" stepKey="fillStateField" after="WaitForUncheckStateSystemValue"/>
+    </actionGroup>
+</actionGroups>

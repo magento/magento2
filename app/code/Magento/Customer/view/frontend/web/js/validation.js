@@ -1,3 +1,8 @@
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
+
 define([
     'jquery',
     'moment',
@@ -7,6 +12,20 @@ define([
     'mage/translate'
 ], function ($, moment, utils) {
     'use strict';
+
+    $.validator.addMethod(
+        'validate-date',
+        function (value, element, params) {
+            var dateFormat = utils.normalizeDate(params.dateFormat);
+
+            if (value === '') {
+                return true;
+            }
+
+            return moment(value, dateFormat, true).isValid();
+        },
+        $.mage.__('Invalid date')
+    );
 
     $.validator.addMethod(
         'validate-dob',

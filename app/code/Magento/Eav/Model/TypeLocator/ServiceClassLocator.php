@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Eav\Model\TypeLocator;
@@ -14,7 +14,7 @@ use Magento\Framework\Webapi\ServiceTypeToEntityTypeMap;
 
 /**
  * Class to find type based off of ServiceTypeToEntityTypeMap. This locator is introduced for backwards compatibility.
- * @deprecated
+ * @deprecated 102.0.0
  */
 class ServiceClassLocator implements CustomAttributeTypeLocatorInterface
 {

@@ -1,23 +1,19 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Resolver;
 
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\QuoteGraphQl\Model\Cart\CreateEmptyCartForCustomer;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
-use Magento\Quote\Api\CartManagementInterface;
-use Magento\Quote\Model\QuoteIdMaskFactory;
-use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
-use Magento\Quote\Model\ResourceModel\Quote\QuoteIdMask as QuoteIdMaskResourceModel;
+use Magento\QuoteGraphQl\Model\Cart\UpdateCartCurrency;
+use Magento\Quote\Model\Cart\CustomerCartResolver;
 
 /**
  * Get cart for the customer
@@ -25,73 +21,51 @@ use Magento\Quote\Model\ResourceModel\Quote\QuoteIdMask as QuoteIdMaskResourceMo
 class CustomerCart implements ResolverInterface
 {
     /**
-     * @var CreateEmptyCartForCustomer
+     * @var CustomerCartResolver
      */
-    private $createEmptyCartForCustomer;
+    private $customerCartResolver;
 
     /**
-     * @var CartManagementInterface
+     * @var UpdateCartCurrency
      */
-    private $cartManagement;
+    private UpdateCartCurrency $updateCartCurrency;
 
     /**
-     * @var QuoteIdMaskFactory
-     */
-    private $quoteIdMaskFactory;
-
-    /**
-     * @var QuoteIdMaskResourceModel
-     */
-    private $quoteIdMaskResourceModel;
-    /**
-     * @var QuoteIdToMaskedQuoteIdInterface
-     */
-    private $quoteIdToMaskedQuoteId;
-
-    /**
-     * @param CreateEmptyCartForCustomer $createEmptyCartForCustomer
-     * @param CartManagementInterface $cartManagement
-     * @param QuoteIdMaskFactory $quoteIdMaskFactory
-     * @param QuoteIdMaskResourceModel $quoteIdMaskResourceModel
-     * @param QuoteIdToMaskedQuoteIdInterface $quoteIdToMaskedQuoteId
+     * CustomerCart constructor.
+     *
+     * @param CustomerCartResolver $customerCartResolver
+     * @param UpdateCartCurrency $updateCartCurrency
      */
     public function __construct(
-        CreateEmptyCartForCustomer $createEmptyCartForCustomer,
-        CartManagementInterface $cartManagement,
-        QuoteIdMaskFactory $quoteIdMaskFactory,
-        QuoteIdMaskResourceModel $quoteIdMaskResourceModel,
-        QuoteIdToMaskedQuoteIdInterface $quoteIdToMaskedQuoteId
+        CustomerCartResolver $customerCartResolver,
+        UpdateCartCurrency $updateCartCurrency
     ) {
-        $this->createEmptyCartForCustomer = $createEmptyCartForCustomer;
-        $this->cartManagement = $cartManagement;
-        $this->quoteIdMaskFactory = $quoteIdMaskFactory;
-        $this->quoteIdMaskResourceModel = $quoteIdMaskResourceModel;
-         $this->quoteIdToMaskedQuoteId = $quoteIdToMaskedQuoteId;
+        $this->customerCartResolver = $customerCartResolver;
+        $this->updateCartCurrency = $updateCartCurrency;
     }
 
     /**
      * @inheritdoc
      */
-    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
+    public function resolve(Field $field, $context, ResolveInfo $info, ?array $value = null, ?array $args = null)
     {
         $currentUserId = $context->getUserId();
 
-        /** @var ContextInterface $context */
+        /**
+         * @var ContextInterface $context
+         */
         if (false === $context->getExtensionAttributes()->getIsCustomer()) {
             throw new GraphQlAuthorizationException(__('The request is allowed for logged in customer'));
         }
-        try {
-            $cart = $this->cartManagement->getCartForCustomer($currentUserId);
-        } catch (NoSuchEntityException $e) {
-            $this->createEmptyCartForCustomer->execute($currentUserId, null);
-            $cart =  $this->cartManagement->getCartForCustomer($currentUserId);
-        }
 
-        $maskedId = $this->quoteIdToMaskedQuoteId->execute((int) $cart->getId());
-        if (empty($maskedId)) {
-            $quoteIdMask = $this->quoteIdMaskFactory->create();
-            $quoteIdMask->setQuoteId((int) $cart->getId());
-            $this->quoteIdMaskResourceModel->save($quoteIdMask);
+        try {
+            $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
+            $cart = $this->updateCartCurrency->execute(
+                $this->customerCartResolver->resolve($currentUserId),
+                $storeId
+            );
+        } catch (\Exception $e) {
+            $cart = null;
         }
 
         return [

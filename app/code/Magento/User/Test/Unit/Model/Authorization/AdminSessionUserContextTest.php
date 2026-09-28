@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\User\Test\Unit\Model\Authorization;
 
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Backend\Model\Auth\Session;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\User\Model\Authorization\AdminSessionUserContext;
 use PHPUnit\Framework\TestCase;
@@ -18,6 +19,8 @@ use PHPUnit\Framework\TestCase;
  */
 class AdminSessionUserContextTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ObjectManager
      */
@@ -37,10 +40,10 @@ class AdminSessionUserContextTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->adminSession = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['hasUser', 'getUser', 'getId'])
-            ->getMock();
+        $this->adminSession = $this->createPartialMockWithReflection(
+            Session::class,
+            ['hasUser', 'getUser', 'getId']
+        );
 
         $this->adminSessionUserContext = $this->objectManager->getObject(
             AdminSessionUserContext::class,

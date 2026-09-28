@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Widget\Model\ResourceModel;
@@ -9,7 +9,7 @@ namespace Magento\Widget\Model\ResourceModel;
 /**
  * Resource model for widget.
  *
- * @deprecated 100.2.0 Data from this table was moved to xml(widget.xml).
+ * @deprecated 101.0.0 Data from this table was moved to xml(widget.xml).
  */
 class Widget extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

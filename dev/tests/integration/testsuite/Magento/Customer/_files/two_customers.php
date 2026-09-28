@@ -2,8 +2,8 @@
 /**
  * Fixture for Customer List method.
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 

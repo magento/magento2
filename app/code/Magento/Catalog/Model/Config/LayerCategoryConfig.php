@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -60,7 +60,7 @@ class LayerCategoryConfig
         }
 
         return $this->scopeConfig->isSetFlag(
-            static::XML_PATH_CATALOG_LAYERED_NAVIGATION_DISPLAY_CATEGORY,
+            self::XML_PATH_CATALOG_LAYERED_NAVIGATION_DISPLAY_CATEGORY,
             $scopeType,
             $scopeCode
         );

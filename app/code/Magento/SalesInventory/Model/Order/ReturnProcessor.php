@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\SalesInventory\Model\Order;
 
@@ -12,6 +12,7 @@ use Magento\Sales\Api\Data\OrderInterface;
  * Class ReturnProcessor
  *
  * @api
+ * @since 100.0.0
  */
 class ReturnProcessor
 {
@@ -68,6 +69,7 @@ class ReturnProcessor
      * @param array $returnToStockItems
      * @param bool $isAutoReturn
      * @return void
+     * @since 100.0.0
      */
     public function execute(
         CreditmemoInterface $creditmemo,

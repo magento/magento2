@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 /** @var \Magento\Review\Block\Product\Review $block */
@@ -13,7 +13,7 @@
     {
         "*": {
             "Magento_Review/js/process-reviews": {
-                "productReviewUrl": "<?= $block->escapeJs($block->escapeUrl($block->getProductReviewUrl())) ?>",
+                "productReviewUrl": "<?= $block->escapeJs($block->getProductReviewUrl()) ?>",
                 "reviewsTabSelector": "#tab-label-reviews"
             }
         }

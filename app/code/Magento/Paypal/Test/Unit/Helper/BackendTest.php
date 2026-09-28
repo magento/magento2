@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,14 +15,15 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Paypal\Block\Adminhtml\System\Config\Field\Country;
 use Magento\Paypal\Helper\Backend;
 use Magento\Paypal\Model\Config\StructurePlugin;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class BackendTest extends TestCase
 {
-    const SCOPE = 'website';
+    private const SCOPE = 'website';
 
-    const SCOPE_ID = 1;
+    private const SCOPE_ID = 1;
 
     /**
      * @var Context|MockObject
@@ -59,7 +60,7 @@ class BackendTest extends TestCase
         $this->context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->request = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->request = $this->createMock(RequestInterface::class);
         $this->context->expects(static::once())
             ->method('getRequest')
             ->willReturn($this->request);
@@ -89,8 +90,8 @@ class BackendTest extends TestCase
 
     /**
      * @param string|null $request
-     * @dataProvider getConfigurationCountryCodeFromConfigDataProvider
      */
+    #[DataProvider('getConfigurationCountryCodeFromConfigDataProvider')]
     public function testGetConfigurationCountryCodeFromConfig($request)
     {
         $this->configurationCountryCodePrepareRequest($request);
@@ -101,7 +102,7 @@ class BackendTest extends TestCase
     /**
      * @return array
      */
-    public function getConfigurationCountryCodeFromConfigDataProvider()
+    public static function getConfigurationCountryCodeFromConfigDataProvider()
     {
         return [
             [null],
@@ -113,8 +114,8 @@ class BackendTest extends TestCase
      * @param string|null $request
      * @param string|null|false $config
      * @param string|null $default
-     * @dataProvider getConfigurationCountryCodeFromDefaultDataProvider
      */
+    #[DataProvider('getConfigurationCountryCodeFromDefaultDataProvider')]
     public function testGetConfigurationCountryCodeFromDefault($request, $config, $default)
     {
         $this->configurationCountryCodePrepareRequest($request);
@@ -128,7 +129,7 @@ class BackendTest extends TestCase
     /**
      * @return array
      */
-    public function getConfigurationCountryCodeFromDefaultDataProvider()
+    public static function getConfigurationCountryCodeFromDefaultDataProvider()
     {
         return [
             [null, false, 'DE'],

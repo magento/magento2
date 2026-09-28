@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Cms\Block;
@@ -10,6 +10,8 @@ use Magento\Framework\View\Element\AbstractBlock;
 
 /**
  * Cms block content block
+ * @deprecated This class introduces caching issues and should no longer be used
+ * @see \Magento\Cms\Block\BlockByIdentifier
  */
 class Block extends AbstractBlock implements \Magento\Framework\DataObject\IdentityInterface
 {

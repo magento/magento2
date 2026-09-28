@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -201,7 +201,7 @@ define([
             var links  = {};
 
             _.each(data, function (value, key) {
-                if (value.split('.')[0] === ns) {
+                if (typeof value === 'string' && value.split('.')[0] === ns) {
                     links[key] = value;
                 }
             });

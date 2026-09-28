@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
@@ -33,7 +33,7 @@ $queue->setTemplateId(
 )->setQueueStatus(
     \Magento\Newsletter\Model\Queue::STATUS_NEVER
 )->setQueueStartAtByString(
-    0
+    null
 )->setStores(
     [$currentStore, $otherStore]
 )->save();

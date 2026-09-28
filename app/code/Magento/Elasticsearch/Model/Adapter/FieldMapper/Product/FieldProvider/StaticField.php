@@ -1,14 +1,16 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider;
 
-use Magento\Eav\Model\Config;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
+use Magento\Eav\Model\Config;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeFieldsMappingProcessorInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeProvider;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldIndex\ConverterInterface
     as IndexTypeConverterInterface;
@@ -20,9 +22,13 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldT
     as FieldTypeResolver;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProviderInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Provide static fields for mapping of product.
+ * @deprecated Elasticsearch is no longer supported by Adobe
+ * @see this class will be responsible for ES only
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class StaticField implements FieldProviderInterface
 {
@@ -67,6 +73,11 @@ class StaticField implements FieldProviderInterface
     private $excludedAttributes;
 
     /**
+     * @var AttributeFieldsMappingProcessorInterface
+     */
+    private $attributeFieldsMappingProcessor;
+
+    /**
      * @param Config $eavConfig
      * @param FieldTypeConverterInterface $fieldTypeConverter
      * @param IndexTypeConverterInterface $indexTypeConverter
@@ -75,6 +86,7 @@ class StaticField implements FieldProviderInterface
      * @param AttributeProvider $attributeAdapterProvider
      * @param FieldName\ResolverInterface $fieldNameResolver
      * @param array $excludedAttributes
+     * @param AttributeFieldsMappingProcessorInterface|null $attributeFieldsMappingProcessor
      */
     public function __construct(
         Config $eavConfig,
@@ -84,7 +96,8 @@ class StaticField implements FieldProviderInterface
         FieldIndexResolver $fieldIndexResolver,
         AttributeProvider $attributeAdapterProvider,
         FieldName\ResolverInterface $fieldNameResolver,
-        array $excludedAttributes = []
+        array $excludedAttributes = [],
+        ?AttributeFieldsMappingProcessorInterface $attributeFieldsMappingProcessor = null
     ) {
         $this->eavConfig = $eavConfig;
         $this->fieldTypeConverter = $fieldTypeConverter;
@@ -94,6 +107,8 @@ class StaticField implements FieldProviderInterface
         $this->attributeAdapterProvider = $attributeAdapterProvider;
         $this->fieldNameResolver = $fieldNameResolver;
         $this->excludedAttributes = $excludedAttributes;
+        $this->attributeFieldsMappingProcessor = $attributeFieldsMappingProcessor
+            ?? ObjectManager::getInstance()->get(AttributeFieldsMappingProcessorInterface::class);
     }
 
     /**
@@ -102,6 +117,7 @@ class StaticField implements FieldProviderInterface
      * @param array $context
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getFields(array $context = []): array
     {
@@ -109,60 +125,7 @@ class StaticField implements FieldProviderInterface
         $allAttributes = [];
 
         foreach ($attributes as $attribute) {
-            if (in_array($attribute->getAttributeCode(), $this->excludedAttributes, true)) {
-                continue;
-            }
-            $attributeAdapter = $this->attributeAdapterProvider->getByAttributeCode($attribute->getAttributeCode());
-            $fieldName = $this->fieldNameResolver->getFieldName($attributeAdapter);
-
-            $allAttributes[$fieldName] = [
-                'type' => $this->fieldTypeResolver->getFieldType($attributeAdapter),
-            ];
-
-            $index = $this->fieldIndexResolver->getFieldIndex($attributeAdapter);
-            if (null !== $index) {
-                $allAttributes[$fieldName]['index'] = $index;
-            }
-
-            if ($attributeAdapter->isSortable()) {
-                $sortFieldName = $this->fieldNameResolver->getFieldName(
-                    $attributeAdapter,
-                    ['type' => FieldMapperInterface::TYPE_SORT]
-                );
-                $allAttributes[$fieldName]['fields'][$sortFieldName] = [
-                    'type' => $this->fieldTypeConverter->convert(
-                        FieldTypeConverterInterface::INTERNAL_DATA_TYPE_KEYWORD
-                    ),
-                    'index' => $this->indexTypeConverter->convert(
-                        IndexTypeConverterInterface::INTERNAL_NO_ANALYZE_VALUE
-                    )
-                ];
-            }
-
-            if ($attributeAdapter->isTextType()) {
-                $keywordFieldName = FieldTypeConverterInterface::INTERNAL_DATA_TYPE_KEYWORD;
-                $index = $this->indexTypeConverter->convert(
-                    IndexTypeConverterInterface::INTERNAL_NO_ANALYZE_VALUE
-                );
-                $allAttributes[$fieldName]['fields'][$keywordFieldName] = [
-                    'type' => $this->fieldTypeConverter->convert(
-                        FieldTypeConverterInterface::INTERNAL_DATA_TYPE_KEYWORD
-                    )
-                ];
-                if ($index) {
-                    $allAttributes[$fieldName]['fields'][$keywordFieldName]['index'] = $index;
-                }
-            }
-
-            if ($attributeAdapter->isComplexType()) {
-                $childFieldName = $this->fieldNameResolver->getFieldName(
-                    $attributeAdapter,
-                    ['type' => FieldMapperInterface::TYPE_QUERY]
-                );
-                $allAttributes[$childFieldName] = [
-                    'type' => $this->fieldTypeConverter->convert(FieldTypeConverterInterface::INTERNAL_DATA_TYPE_STRING)
-                ];
-            }
+            $allAttributes += $this->getField($attribute);
         }
 
         $allAttributes['store_id'] = [
@@ -171,5 +134,120 @@ class StaticField implements FieldProviderInterface
         ];
 
         return $allAttributes;
+    }
+
+    /**
+     * Get field mapping for specific attribute.
+     *
+     * @param AbstractAttribute $attribute
+     * @return array
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     */
+    public function getField(AbstractAttribute $attribute): array
+    {
+        $fieldMapping = [];
+        if (in_array($attribute->getAttributeCode(), $this->excludedAttributes, true)) {
+            return $fieldMapping;
+        }
+
+        $attributeAdapter = $this->attributeAdapterProvider->getByAttributeCode($attribute->getAttributeCode());
+        $fieldName = $this->fieldNameResolver->getFieldName($attributeAdapter);
+
+        $fieldMapping[$fieldName] = [
+            'type' => $this->fieldTypeResolver->getFieldType($attributeAdapter),
+        ];
+        if ($this->isNeedToAddCustomAnalyzer($fieldName) && $this->getCustomAnalyzer($fieldName)) {
+            $fieldMapping[$fieldName]['analyzer'] = $this->getCustomAnalyzer($fieldName);
+        }
+
+        $index = $this->fieldIndexResolver->getFieldIndex($attributeAdapter);
+        if (null !== $index) {
+            $fieldMapping[$fieldName]['index'] = $index;
+        }
+
+        if ($attributeAdapter->isSortable() && !$attributeAdapter->isComplexType()) {
+            $sortFieldName = $this->fieldNameResolver->getFieldName(
+                $attributeAdapter,
+                ['type' => FieldMapperInterface::TYPE_SORT]
+            );
+            $fieldMapping[$fieldName]['fields'][$sortFieldName] = [
+                'type' => $this->fieldTypeConverter->convert(
+                    FieldTypeConverterInterface::INTERNAL_DATA_TYPE_KEYWORD
+                ),
+                'index' => $this->indexTypeConverter->convert(
+                    IndexTypeConverterInterface::INTERNAL_NO_ANALYZE_VALUE
+                ),
+                'normalizer' => 'folding',
+            ];
+        }
+
+        if ($attributeAdapter->isTextType()) {
+            $keywordFieldName = FieldTypeConverterInterface::INTERNAL_DATA_TYPE_KEYWORD;
+            $index = $this->indexTypeConverter->convert(
+                IndexTypeConverterInterface::INTERNAL_NO_ANALYZE_VALUE
+            );
+            $fieldMapping[$fieldName]['fields'][$keywordFieldName] = [
+                'type' => $this->fieldTypeConverter->convert(
+                    FieldTypeConverterInterface::INTERNAL_DATA_TYPE_KEYWORD
+                )
+            ];
+            if ($index) {
+                $fieldMapping[$fieldName]['fields'][$keywordFieldName]['index'] = $index;
+            }
+        }
+
+        if ($attributeAdapter->isComplexType()) {
+            $childFieldName = $this->fieldNameResolver->getFieldName(
+                $attributeAdapter,
+                ['type' => FieldMapperInterface::TYPE_QUERY]
+            );
+            $fieldMapping[$childFieldName] = [
+                'type' => $this->fieldTypeConverter->convert(FieldTypeConverterInterface::INTERNAL_DATA_TYPE_STRING)
+            ];
+            if ($attributeAdapter->isSortable()) {
+                $sortFieldName = $this->fieldNameResolver->getFieldName(
+                    $attributeAdapter,
+                    ['type' => FieldMapperInterface::TYPE_SORT]
+                );
+                $fieldMapping[$childFieldName]['fields'][$sortFieldName] = [
+                    'type' => $this->fieldTypeConverter->convert(
+                        FieldTypeConverterInterface::INTERNAL_DATA_TYPE_KEYWORD
+                    ),
+                    'index' => $this->indexTypeConverter->convert(
+                        IndexTypeConverterInterface::INTERNAL_NO_ANALYZE_VALUE
+                    ),
+                    'normalizer' => 'folding',
+                ];
+            }
+        }
+
+        return $this->attributeFieldsMappingProcessor->process(
+            $attribute->getAttributeCode(),
+            $fieldMapping
+        );
+    }
+
+    /**
+     * Check is the custom analyzer exists for the field
+     *
+     * @param string $fieldName
+     * @return bool
+     */
+    private function isNeedToAddCustomAnalyzer(string $fieldName): bool
+    {
+        return $fieldName === 'sku';
+    }
+
+    /**
+     * Getter for the field custom analyzer if it's exists
+     *
+     * @param string $fieldName
+     * @return string|null
+     */
+    private function getCustomAnalyzer(string $fieldName): ?string
+    {
+        return $fieldName === 'sku' ? 'sku' : null;
     }
 }

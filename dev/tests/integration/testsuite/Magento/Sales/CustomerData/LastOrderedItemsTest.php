@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -42,7 +42,7 @@ class LastOrderedItemsTest extends TestCase
         $this->assertEquals(
             LastOrderedItems::SIDEBAR_ORDER_LIMIT,
             count($data['items']),
-            'Section items count should not be greater then ' . LastOrderedItems::SIDEBAR_ORDER_LIMIT
+            'Section items count should not be greater than ' . LastOrderedItems::SIDEBAR_ORDER_LIMIT
         );
     }
 }

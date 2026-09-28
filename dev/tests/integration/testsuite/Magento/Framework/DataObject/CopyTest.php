@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\DataObject;
 
@@ -43,7 +43,7 @@ class CopyTest extends \PHPUnit\Framework\TestCase
 
         $fieldsetConfigMock = $this->getMockBuilder(\Magento\Framework\DataObject\Copy\Config::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getFieldSet'])
+            ->onlyMethods(['getFieldSet'])
             ->getMock();
 
         $service = $objectManager->create(
@@ -113,7 +113,7 @@ class CopyTest extends \PHPUnit\Framework\TestCase
 
         $fieldsetConfigMock = $this->getMockBuilder(\Magento\Framework\DataObject\Copy\Config::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getFieldSet'])
+            ->onlyMethods(['getFieldSet'])
             ->getMock();
 
         $service = $objectManager->create(

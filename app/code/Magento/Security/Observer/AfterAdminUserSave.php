@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -53,7 +53,7 @@ class AfterAdminUserSave implements ObserverInterface
     {
         /* @var $user \Magento\User\Model\User */
         $user = $observer->getEvent()->getObject();
-        if ($user->getId()) {
+        if ($user->getId() && $user->hasData('expires_at')) {
             $expiresAt = $user->getExpiresAt();
             /** @var \Magento\Security\Model\UserExpiration $userExpiration */
             $userExpiration = $this->userExpirationFactory->create();

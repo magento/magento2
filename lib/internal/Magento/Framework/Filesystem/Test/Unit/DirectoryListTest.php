@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Framework\Filesystem\Test\Unit;
 
 use Magento\Framework\Filesystem\DirectoryList;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class DirectoryListTest extends TestCase
 {
@@ -19,9 +20,8 @@ class DirectoryListTest extends TestCase
 
     /**
      * @param array $config
-     * @param string $expectedError
-     * @dataProvider validateDataProvider
-     */
+     * @param string $expectedError     */
+    #[DataProvider('validateDataProvider')]
     public function testValidate($config, $expectedError)
     {
         $this->expectException('\InvalidArgumentException');
@@ -32,7 +32,7 @@ class DirectoryListTest extends TestCase
     /**
      * @return array
      */
-    public function validateDataProvider()
+    public static function validateDataProvider()
     {
         return [
             ['', 'Unexpected value type.'],
@@ -60,9 +60,8 @@ class DirectoryListTest extends TestCase
     }
 
     /**
-     * @param string $method
-     * @dataProvider assertCodeDataProvider
-     */
+     * @param string $method     */
+    #[DataProvider('assertCodeDataProvider')]
     public function testAssertCode($method)
     {
         $this->expectException('Magento\Framework\Exception\FileSystemException');
@@ -74,16 +73,18 @@ class DirectoryListTest extends TestCase
     /**
      * @return array
      */
-    public function assertCodeDataProvider()
+    public static function assertCodeDataProvider()
     {
-        return [['getPath', 'getUrlPath']];
+        return [
+            ['getPath'],
+            ['getUrlPath']
+        ];
     }
 
     /**
      * @param array $config
-     * @param string|bool $expected
-     * @dataProvider getUrlPathDataProvider
-     */
+     * @param string|bool $expected     */
+    #[DataProvider('getUrlPathDataProvider')]
     public function testGetUrlPath($config, $expected)
     {
         $object = new DirectoryList('/root/dir', $config);
@@ -93,7 +94,7 @@ class DirectoryListTest extends TestCase
     /**
      * @return array
      */
-    public function getUrlPathDataProvider()
+    public static function getUrlPathDataProvider()
     {
         return [
             [[], false],
@@ -114,9 +115,8 @@ class DirectoryListTest extends TestCase
     }
 
     /**
-     * @param string $value
-     * @dataProvider assertUrlPathDataProvider
-     */
+     * @param string $value     */
+    #[DataProvider('assertUrlPathDataProvider')]
     public function testAssertUrlPath($value)
     {
         $this->expectException('InvalidArgumentException');
@@ -129,7 +129,7 @@ class DirectoryListTest extends TestCase
     /**
      * @return array
      */
-    public function assertUrlPathDataProvider()
+    public static function assertUrlPathDataProvider()
     {
         return [
             ['/'],

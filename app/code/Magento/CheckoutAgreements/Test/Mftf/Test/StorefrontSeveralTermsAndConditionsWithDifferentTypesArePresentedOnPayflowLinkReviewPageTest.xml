@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontSeveralTermsAndConditionsWithDifferentTypesArePresentedOnPayflowLinkReviewPageTest">
+        <annotations>
+            <features value="PayPal"/>
+            <stories value="Paypal payflow link"/>
+            <title value="Several Terms and Conditions with different types are presented on Payflow Link review page"/>
+            <description value="Admin creates several terms and conditions with different types and assert them on the payment type payflow link in the storefront's review and payments page"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-5204"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <!-- Enable Terms And Condition-->
+            <magentoCLI command="config:set checkout/options/enable_agreements 1" stepKey="setEnableTermsOnCheckout"/>
+            <!--Create a simple product-->
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct"/>
+            <!--Create a US Customer-->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <!--Login to admin-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!--Create terms and conditions-->
+            <actionGroup ref="AdminTermsConditionsOpenNewTermPageActionGroup" stepKey="openNewTerm"/>
+            <actionGroup ref="AdminTermsConditionsFillTermEditFormActionGroup" stepKey="fillNewTerm">
+                <argument name="term" value="newHtmlTerm"/>
+            </actionGroup>
+            <actionGroup ref="AdminTermsConditionsSaveTermActionGroup" stepKey="saveNewTerm"/>
+            <actionGroup ref="AdminTermsConditionsOpenNewTermPageActionGroup" stepKey="openNewHTMLTerm"/>
+            <actionGroup ref="AdminTermsConditionsFillTermEditFormActionGroup" stepKey="fillNewHTMLTerm">
+                <argument name="term" value="newHtmlAutomaticallyTerm"/>
+            </actionGroup>
+            <actionGroup ref="AdminTermsConditionsSaveTermActionGroup" stepKey="saveNewHTMLTerm"/>
+            <!--Clear cache and reindex-->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!--Admin delete terms and condition-->
+            <actionGroup ref="AdminTermsConditionsOpenGridActionGroup" stepKey="openTermsGridToDelete"/>
+            <actionGroup ref="AdminDeleteAllTermConditionsActionGroup" stepKey="deleteAllTerms"/>
+            <!--Delete created product-->
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <!-- Delete created customer -->
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <!--Logout-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!--Login to storefront and open created simple product-->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
+            <argument name="Customer" value="$createCustomer$" />
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="goToProductOnStorefront">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <!-- Add product to cart and then select shipping method on checkout page-->
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
+            <argument name="productName" value="$createSimpleProduct.name$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCheckoutCartPage"/>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="clickProceedToCheckout"/>
+        <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="selectFlatrate">
+            <argument name="shippingMethodName" value="Flat Rate"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNextOnShippingStep"/>
+        <!--Assert the created terms and conditions-->
+        <waitForText selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementLink('Credit Card (Payflow Link)')}}" userInput="{{newHtmlTerm.checkboxText}}" after="selectCreditCardPaymentMethod" stepKey="seeTermInCheckout"/>
+        <waitForElementClickable selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreement(newHtmlAutomaticallyTerm.checkboxText)}}" stepKey="waitToClickOnHTMLTerm"/>
+        <click selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreement(newHtmlAutomaticallyTerm.checkboxText)}}" stepKey="clickOnHTMLTerm"/>
+        <waitForElement selector="{{StorefrontCheckoutAgreementsSection.contentArea(newHtmlAutomaticallyTerm.content)}}" stepKey="verifyAutomaticTermContentTextMessage"/>
+    </test>
+</tests>

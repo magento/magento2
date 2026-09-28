@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\App\Action;
 
@@ -19,6 +19,7 @@ use Magento\Framework\Controller\ResultFactory;
  * the classes they were introduced for.
  *
  * @api
+ * @since 100.0.2
  */
 class Context implements \Magento\Framework\ObjectManager\ContextInterface
 {

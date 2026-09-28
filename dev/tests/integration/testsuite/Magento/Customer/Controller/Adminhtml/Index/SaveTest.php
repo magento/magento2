@@ -1,19 +1,23 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
 use Magento\Backend\Model\Session;
+use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Api\CustomerNameGenerationInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\Data\Customer as CustomerData;
 use Magento\Customer\Model\EmailNotification;
+use Magento\Eav\Api\AttributeRepositoryInterface;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Mail\Template\TransportBuilder;
 use Magento\Framework\Mail\TransportInterface;
 use Magento\Framework\Message\MessageInterface;
@@ -21,7 +25,9 @@ use Magento\Newsletter\Model\Subscriber;
 use Magento\Newsletter\Model\SubscriberFactory;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\AbstractBackendController;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
@@ -33,8 +39,6 @@ use PHPUnit\Framework\MockObject\MockObject;
 class SaveTest extends AbstractBackendController
 {
     /**
-     * Base controller URL
-     *
      * @var string
      */
     private $baseControllerUrl = 'backend/customer/index/';
@@ -54,6 +58,12 @@ class SaveTest extends AbstractBackendController
     /** @var StoreManagerInterface */
     private $storeManager;
 
+    /** @var ResolverInterface */
+    private $localeResolver;
+
+    /** @var CustomerInterface */
+    private $customer;
+
     /**
      * @inheritdoc
      */
@@ -65,18 +75,31 @@ class SaveTest extends AbstractBackendController
         $this->subscriberFactory = $this->_objectManager->get(SubscriberFactory::class);
         $this->session = $this->_objectManager->get(Session::class);
         $this->storeManager = $this->_objectManager->get(StoreManagerInterface::class);
+        $this->localeResolver = $this->_objectManager->get(ResolverInterface::class);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function tearDown(): void
+    {
+        if ($this->customer instanceof CustomerInterface) {
+            $this->customerRepository->delete($this->customer);
+        }
+
+        parent::tearDown();
     }
 
     /**
      * Create customer
      *
-     * @dataProvider createCustomerProvider
      * @magentoDbIsolation enabled
      *
      * @param array $postData
      * @param array $expectedData
      * @return void
      */
+    #[DataProvider('createCustomerProvider')]
     public function testCreateCustomer(array $postData, array $expectedData): void
     {
         $this->dispatchCustomerSave($postData);
@@ -97,17 +120,17 @@ class SaveTest extends AbstractBackendController
      *
      * @return array
      */
-    public function createCustomerProvider(): array
+    public static function createCustomerProvider(): array
     {
-        $defaultCustomerData = $this->getDefaultCustomerData();
-        $expectedCustomerData = $this->getExpectedCustomerData($defaultCustomerData);
+        $defaultCustomerData = self::getDefaultCustomerData();
+        $expectedCustomerData = self::getExpectedCustomerData($defaultCustomerData);
         return [
             "fill_all_fields" => [
-                'post_data' => $defaultCustomerData,
-                'expected_data' => $expectedCustomerData
+                'postData' => $defaultCustomerData,
+                'expectedData' => $expectedCustomerData
             ],
             'only_require_fields' => [
-                'post_data' => array_replace_recursive(
+                'postData' => array_replace_recursive(
                     $defaultCustomerData,
                     [
                         'customer' => [
@@ -121,7 +144,7 @@ class SaveTest extends AbstractBackendController
                         ],
                     ]
                 ),
-                'expected_data' => array_replace_recursive(
+                'expectedData' => array_replace_recursive(
                     $expectedCustomerData,
                     [
                         'customer' => [
@@ -142,7 +165,6 @@ class SaveTest extends AbstractBackendController
     /**
      * Create customer with exceptions
      *
-     * @dataProvider createCustomerErrorsProvider
      * @magentoDbIsolation enabled
      *
      * @param array $postData
@@ -150,6 +172,7 @@ class SaveTest extends AbstractBackendController
      * @param array $expectedMessage
      * @return void
      */
+    #[DataProvider('createCustomerErrorsProvider')]
     public function testCreateCustomerErrors(array $postData, array $expectedData, array $expectedMessage): void
     {
         $this->dispatchCustomerSave($postData);
@@ -169,12 +192,12 @@ class SaveTest extends AbstractBackendController
      *
      * @return array
      */
-    public function createCustomerErrorsProvider(): array
+    public static function createCustomerErrorsProvider(): array
     {
-        $defaultCustomerData = $this->getDefaultCustomerData();
+        $defaultCustomerData = self::getDefaultCustomerData();
         return [
             'without_some_require_fields' => [
-                'post_data' => array_replace_recursive(
+                'postData' => array_replace_recursive(
                     $defaultCustomerData,
                     [
                         'customer' => [
@@ -183,7 +206,7 @@ class SaveTest extends AbstractBackendController
                         ],
                     ]
                 ),
-                'expected_data' => array_replace_recursive(
+                'expectedData' => array_replace_recursive(
                     $defaultCustomerData,
                     [
                         'customer' => [
@@ -193,33 +216,33 @@ class SaveTest extends AbstractBackendController
                         ],
                     ]
                 ),
-                'expected_message' => [
+                'expectedMessage' => [
                     (string)__('"%1" is a required value.', 'First Name'),
                     (string)__('"%1" is a required value.', 'Last Name'),
                 ],
             ],
-            'with_empty_post_data' => [
-                'post_data' => [],
-                'expected_data' => [],
-                'expected_message' => [
-                    (string)__('The customer email is missing. Enter and try again.'),
+            'with_empty_postData' => [
+                'postData' => [],
+                'expectedData' => [],
+                'expectedMessage' => [
+                    (string)__('The email address is required to create a customer account.'),
                 ],
             ],
             'with_invalid_form_data' => [
-                'post_data' => [
+                'postData' => [
                     'account' => [
                         'middlename' => 'test middlename',
                         'group_id' => 1,
                     ],
                 ],
-                'expected_data' => [
+                'expectedData' => [
                     'account' => [
                         'middlename' => 'test middlename',
                         'group_id' => 1,
                     ],
                 ],
-                'expected_message' => [
-                    (string)__('The customer email is missing. Enter and try again.'),
+                'expectedMessage' => [
+                    (string)__('The email address is required to create a customer account.'),
                 ],
             ]
         ];
@@ -363,7 +386,7 @@ class SaveTest extends AbstractBackendController
                 'sendemail_store_id' => '1',
                 'sendemail' => '1',
                 CustomerData::CREATED_AT => '2000-01-01 00:00:00',
-                CustomerData::DEFAULT_SHIPPING => '_item1',
+                CustomerData::DEFAULT_SHIPPING => '1',
                 CustomerData::DEFAULT_BILLING => '1'
             ]
         ];
@@ -419,11 +442,47 @@ class SaveTest extends AbstractBackendController
     }
 
     /**
+     * @return void
+     */
+    public function testCreateCustomerByAdminWithLocaleGB(): void
+    {
+        $this->localeResolver->setLocale('en_GB');
+        $postData = array_replace_recursive(
+            $this->getDefaultCustomerData(),
+            [
+                'customer' => [
+                    CustomerData::DOB => '24/10/1990',
+                ],
+            ]
+        );
+        $expectedData = array_replace_recursive(
+            $postData,
+            [
+                'customer' => [
+                    CustomerData::DOB => '1990-10-24',
+                ],
+            ]
+        );
+        unset($expectedData['customer']['sendemail_store_id']);
+        $this->dispatchCustomerSave($postData);
+        $this->assertSessionMessages(
+            $this->containsEqual((string)__('You saved the customer.')),
+            MessageInterface::TYPE_SUCCESS
+        );
+        $this->assertRedirect($this->stringContains($this->baseControllerUrl . 'index/key/'));
+        $this->assertCustomerData(
+            $postData['customer'][CustomerData::EMAIL],
+            (int)$postData['customer'][CustomerData::WEBSITE_ID],
+            $expectedData
+        );
+    }
+
+    /**
      * Default values for customer creation
      *
      * @return array
      */
-    private function getDefaultCustomerData(): array
+    private static function getDefaultCustomerData(): array
     {
         return [
             'customer' => [
@@ -438,7 +497,8 @@ class SaveTest extends AbstractBackendController
                 CustomerData::EMAIL => 'janedoe' . uniqid() . '@example.com',
                 CustomerData::DOB => '01/01/2000',
                 CustomerData::TAXVAT => '121212',
-                CustomerData::GENDER => 'Male',
+                CustomerData::GENDER => Bootstrap::getObjectManager()->get(AttributeRepositoryInterface::class)
+                    ->get(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER, 'gender')->getSource()->getOptionId('Male'),
                 'sendemail_store_id' => '1',
             ]
         ];
@@ -450,7 +510,7 @@ class SaveTest extends AbstractBackendController
      * @param array $defaultCustomerData
      * @return array
      */
-    private function getExpectedCustomerData(array $defaultCustomerData): array
+    private static function getExpectedCustomerData(array $defaultCustomerData): array
     {
         unset($defaultCustomerData['customer']['sendemail_store_id']);
         return array_replace_recursive(
@@ -458,7 +518,6 @@ class SaveTest extends AbstractBackendController
             [
                 'customer' => [
                     CustomerData::DOB => '2000-01-01',
-                    CustomerData::GENDER => '0',
                     CustomerData::STORE_ID => 1,
                     CustomerData::CREATED_IN => 'Default Store View',
                 ],
@@ -496,9 +555,8 @@ class SaveTest extends AbstractBackendController
         int $customerWebsiteId,
         array $expectedData
     ): void {
-        /** @var CustomerData $customerData */
-        $customerData = $this->customerRepository->get($customerEmail, $customerWebsiteId);
-        $actualCustomerArray = $customerData->__toArray();
+        $this->customer = $this->customerRepository->get($customerEmail, $customerWebsiteId);
+        $actualCustomerArray = $this->customer->__toArray();
         foreach ($expectedData['customer'] as $key => $expectedValue) {
             $this->assertEquals(
                 $expectedValue,
@@ -554,13 +612,15 @@ class SaveTest extends AbstractBackendController
         $name = $this->customerViewHelper->getCustomerName($customer);
 
         $transportMock = $this->getMockBuilder(TransportInterface::class)
-            ->setMethods(['sendMessage'])
-            ->getMockForAbstractClass();
+            ->onlyMethods(['sendMessage', 'getMessage'])
+            ->getMock();
         $transportMock->expects($this->exactly($occurrenceNumber))
             ->method('sendMessage');
+        $transportMock->method('getMessage')
+            ->willReturn(null);
         $transportBuilderMock = $this->getMockBuilder(TransportBuilder::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'addTo',
                     'setFrom',

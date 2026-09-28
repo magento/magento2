@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Setup\Fixtures;
@@ -12,6 +12,8 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Class Application test
+ *
+ * @magentoDbIsolation disabled
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -73,6 +75,8 @@ class FixtureModelTest extends \Magento\TestFramework\Indexer\TestCase
             $indexer = $this->indexerRegistry->get($indexerId);
             $indexer->setScheduled($state);
         }
+        self::restoreFromDb();
+        self::$dbRestored = true;
     }
 
     public static function setUpBeforeClass(): void

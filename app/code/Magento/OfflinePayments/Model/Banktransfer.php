@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\OfflinePayments\Model;
 
@@ -15,7 +15,7 @@ namespace Magento\OfflinePayments\Model;
  */
 class Banktransfer extends \Magento\Payment\Model\Method\AbstractMethod
 {
-    const PAYMENT_METHOD_BANKTRANSFER_CODE = 'banktransfer';
+    public const PAYMENT_METHOD_BANKTRANSFER_CODE = 'banktransfer';
 
     /**
      * Payment method code
@@ -52,6 +52,7 @@ class Banktransfer extends \Magento\Payment\Model\Method\AbstractMethod
      */
     public function getInstructions()
     {
-        return trim($this->getConfigData('instructions'));
+        $instructions = $this->getConfigData('instructions');
+        return $instructions !== null ? trim($instructions) : '';
     }
 }

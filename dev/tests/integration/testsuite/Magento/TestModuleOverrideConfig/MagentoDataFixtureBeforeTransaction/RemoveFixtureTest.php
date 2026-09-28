@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -39,6 +39,6 @@ class RemoveFixtureTest extends AbstractOverridesTest
      */
     public function testRemoveFixture(): void
     {
-        $this->assertFalse($this->fixtureCallStorage->getFixturePosition('fixture1_first_module.php'));
+        $this->assertNull($this->fixtureCallStorage->getFixturePosition('fixture1_first_module.php'));
     }
 }

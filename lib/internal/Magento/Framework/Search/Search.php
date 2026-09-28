@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Search;
 
@@ -18,22 +18,22 @@ class Search implements SearchInterface
     /**
      * @var Builder
      */
-    private $requestBuilder;
+    private Builder $requestBuilder;
 
     /**
      * @var ScopeResolverInterface
      */
-    private $scopeResolver;
+    private ScopeResolverInterface $scopeResolver;
 
     /**
      * @var SearchEngineInterface
      */
-    private $searchEngine;
+    private SearchEngineInterface $searchEngine;
 
     /**
      * @var SearchResponseBuilder
      */
-    private $searchResponseBuilder;
+    private SearchResponseBuilder $searchResponseBuilder;
 
     /**
      * @param Builder $requestBuilder
@@ -45,7 +45,7 @@ class Search implements SearchInterface
         Builder $requestBuilder,
         ScopeResolverInterface $scopeResolver,
         SearchEngineInterface $searchEngine,
-        SearchResponseBuilder $searchResponseBuilder
+        SearchResponseBuilder $searchResponseBuilder,
     ) {
         $this->requestBuilder = $requestBuilder;
         $this->scopeResolver = $scopeResolver;
@@ -83,9 +83,10 @@ class Search implements SearchInterface
         }
         $request = $this->requestBuilder->create();
         $searchResponse = $this->searchEngine->search($request);
-
-        return $this->searchResponseBuilder->build($searchResponse)
+        $response = $this->searchResponseBuilder->build($searchResponse)
             ->setSearchCriteria($searchCriteria);
+
+        return $response;
     }
 
     /**

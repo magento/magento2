@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Model\Product\Compare;
@@ -28,6 +28,8 @@ class ListCompareTest extends \PHPUnit\Framework\TestCase
             ->get(\Magento\Customer\Model\Session::class);
         $this->_visitor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create(\Magento\Customer\Model\Visitor::class);
+        // md5() used for generate unique session identifier for test purposes.
+        // phpcs:ignore Magento2.Security.InsecureFunction
         $this->_visitor->setSessionId(md5(time()) . md5(microtime()))
             ->setLastVisitAt((new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT))
             ->save();

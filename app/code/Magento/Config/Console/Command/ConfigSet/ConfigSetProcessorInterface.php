@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Config\Console\Command\ConfigSet;
 
@@ -14,7 +14,7 @@ use Magento\Framework\Exception\CouldNotSaveException;
  * @see ConfigSetCommand
  *
  * @api
- * @since 100.2.0
+ * @since 101.0.0
  */
 interface ConfigSetProcessorInterface
 {
@@ -27,7 +27,7 @@ interface ConfigSetProcessorInterface
      * @param string $scopeCode The scope code
      * @return void
      * @throws CouldNotSaveException An exception on processing error
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function process($path, $value, $scope, $scopeCode);
 }

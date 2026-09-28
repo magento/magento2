@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -53,7 +53,7 @@ class CookieTest extends TestCase
         $websiteMock = $this->createMock(Website::class);
         $websiteMock->expects($this->any())->method('getId')->willReturn(1);
 
-        $this->scopeConfigMock = $this->createPartialMock(ScopeConfigInterface::class, ['getValue', 'isSetFlag']);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
 
         $this->requestMock = $this->createPartialMock(Http::class, ['getCookie']);
 
@@ -162,6 +162,6 @@ class CookieTest extends TestCase
             return $defaultConfig[$hashName];
         }
 
-        throw new \InvalidArgumentException('Unknow id = ' . $hashName);
+        throw new \InvalidArgumentException('Unknown id = ' . $hashName);
     }
 }

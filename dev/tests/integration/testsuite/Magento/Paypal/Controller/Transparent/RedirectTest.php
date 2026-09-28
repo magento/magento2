@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Paypal\Controller\Transparent;
 
 use Magento\TestFramework\TestCase\AbstractController;
-use Zend\Stdlib\Parameters;
+use Laminas\Stdlib\Parameters;
 
 /**
  * Tests PayPal transparent redirect controller.
@@ -67,7 +67,6 @@ class RedirectTest extends AbstractController
         $request = $this->getRequest();
         $reflection = new \ReflectionClass($request);
         $property = $reflection->getProperty('requestUri');
-        $property->setAccessible(true);
         $property->setValue($request, null);
 
         $request->setServer(new Parameters(['REQUEST_URI' => $requestUri]));

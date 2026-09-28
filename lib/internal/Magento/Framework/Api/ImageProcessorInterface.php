@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Api;
@@ -13,14 +13,13 @@ use Magento\Framework\Exception\InputException;
  * Interface ImageProcessorInterface
  *
  * @api
+ * @since 100.0.2
  */
 interface ImageProcessorInterface
 {
     /**
-     * Process Data objects with image type custom attributes and update the custom attribute values with saved image
-     * paths
+     * Process Data objects with image type custom attributes and update custom attribute values with saved image paths
      *
-     * @api
      * @param CustomAttributesDataInterface $dataObjectWithCustomAttributes
      * @param string $entityType entity type
      * @param CustomAttributesDataInterface $previousCustomerData
@@ -29,7 +28,7 @@ interface ImageProcessorInterface
     public function save(
         CustomAttributesDataInterface $dataObjectWithCustomAttributes,
         $entityType,
-        CustomAttributesDataInterface $previousCustomerData = null
+        ?CustomAttributesDataInterface $previousCustomerData = null
     );
 
     /**

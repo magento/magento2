@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -51,7 +51,7 @@ class MetadataProcessorTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->_backendModelMock = $this->getMockBuilder(ProcessorInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->_initialConfigMock->expects($this->any())
             ->method('getMetadata')

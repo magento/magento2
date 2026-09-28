@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Block\Product;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Model\Store;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Block\Product\Image;
 use Magento\Catalog\Block\Product\ImageFactory;
 use Magento\Catalog\Model\Product;
@@ -19,6 +22,9 @@ use Magento\Framework\View\ConfigInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ImageFactoryTest extends TestCase
 {
     /** @var  ParamsBuilder|MockObject */
@@ -40,14 +46,20 @@ class ImageFactoryTest extends TestCase
      */
     private $viewAssetImageFactory;
 
+    /**
+     * @var ScopeConfigInterface|MockObject
+     */
+    private ScopeConfigInterface $scopeConfig;
+
     protected function setUp(): void
     {
         $this->viewConfig = $this->createMock(View::class);
-        $configInterface = $this->getMockForAbstractClass(ConfigInterface::class);
+        $configInterface = $this->createMock(ConfigInterface::class);
         $configInterface->method('getViewConfig')->willReturn($this->viewConfig);
         $this->viewAssetImageFactory = $this->createMock(ViewAssetImageFactory::class);
         $this->paramsBuilder = $this->createMock(ParamsBuilder::class);
         $this->objectManager = $this->createMock(ObjectManager::class);
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject(
             ImageFactory::class,
@@ -55,15 +67,16 @@ class ImageFactoryTest extends TestCase
                 'objectManager' => $this->objectManager,
                 'presentationConfig' => $configInterface,
                 'viewAssetImageFactory' => $this->viewAssetImageFactory,
-                'imageParamsBuilder' => $this->paramsBuilder
+                'imageParamsBuilder' => $this->paramsBuilder,
+                'scopeConfig' => $this->scopeConfig
             ]
         );
     }
 
     /**
      * @param array $data
-     * @dataProvider createDataProvider
      */
+    #[DataProvider('createDataProvider')]
     public function testCreate($data, $expected)
     {
         $product = $this->createMock(Product::class);
@@ -85,6 +98,7 @@ class ImageFactoryTest extends TestCase
             ->method('create')
             ->with(Image::class, $expected)
             ->willReturn($imageBlock);
+        $this->scopeConfig->expects(self::once())->method('isSetFlag')->with(Store::XML_PATH_STORE_IN_URL);
         $actual = $this->model->create($product, 'image_id', $data['custom_attributes']);
         self::assertInstanceOf(Image::class, $actual);
     }
@@ -92,19 +106,19 @@ class ImageFactoryTest extends TestCase
     /**
      * @return array
      */
-    public function createDataProvider(): array
+    public static function createDataProvider(): array
     {
         return [
-            $this->getTestDataWithoutAttributes(),
-            $this->getTestDataWithAttributes(),
-            $this->getTestDataWithoutDimensions()
+            self::getTestDataWithoutAttributes(),
+            self::getTestDataWithAttributes(),
+            self::getTestDataWithoutDimensions()
         ];
     }
 
     /**
      * @return array
      */
-    private function getTestDataWithoutAttributes(): array
+    private static function getTestDataWithoutAttributes(): array
     {
         return [
             'data' => [
@@ -158,7 +172,7 @@ class ImageFactoryTest extends TestCase
     /**
      * @return array
      */
-    private function getTestDataWithAttributes(): array
+    private static function getTestDataWithAttributes(): array
     {
         return [
             'data' => [
@@ -219,9 +233,9 @@ class ImageFactoryTest extends TestCase
     /**
      * @return array
      */
-    private function getTestDataWithoutDimensions(): array
+    private static function getTestDataWithoutDimensions(): array
     {
-        $data = $this->getTestDataWithoutAttributes();
+        $data = self::getTestDataWithoutAttributes();
 
         $data['data']['imageParamsBuilder']['image_width'] = null;
         $data['data']['imageParamsBuilder']['image_height'] = null;

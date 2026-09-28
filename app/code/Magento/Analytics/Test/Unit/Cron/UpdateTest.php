@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,7 @@ use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\FlagManager;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class UpdateTest extends TestCase
@@ -56,9 +57,9 @@ class UpdateTest extends TestCase
     protected function setUp(): void
     {
         $this->connectorMock =  $this->createMock(Connector::class);
-        $this->configWriterMock =  $this->getMockForAbstractClass(WriterInterface::class);
+        $this->configWriterMock =  $this->createMock(WriterInterface::class);
         $this->flagManagerMock =  $this->createMock(FlagManager::class);
-        $this->reinitableConfigMock = $this->getMockForAbstractClass(ReinitableConfigInterface::class);
+        $this->reinitableConfigMock = $this->createMock(ReinitableConfigInterface::class);
         $this->analyticsTokenMock = $this->createMock(AnalyticsToken::class);
 
         $this->update = new Update(
@@ -100,10 +101,10 @@ class UpdateTest extends TestCase
         $this->flagManagerMock
             ->expects($this->exactly(2 * $isExecuted))
             ->method('deleteFlag')
-            ->withConsecutive(
-                [SubscriptionUpdateHandler::SUBSCRIPTION_UPDATE_REVERSE_COUNTER_FLAG_CODE],
-                [SubscriptionUpdateHandler::PREVIOUS_BASE_URL_FLAG_CODE]
-            );
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [SubscriptionUpdateHandler::SUBSCRIPTION_UPDATE_REVERSE_COUNTER_FLAG_CODE] => $this->flagManagerMock,
+                [SubscriptionUpdateHandler::PREVIOUS_BASE_URL_FLAG_CODE] => $this->flagManagerMock
+            });
         $this->configWriterMock
             ->expects($this->exactly((int)$isExecuted))
             ->method('delete')
@@ -117,9 +118,10 @@ class UpdateTest extends TestCase
     /**
      * @param $counterData
      * @return void
-     * @dataProvider executeWithEmptyReverseCounterDataProvider
+     *
      * @throws NotFoundException
      */
+    #[DataProvider('executeWithEmptyReverseCounterDataProvider')]
     public function testExecuteWithEmptyReverseCounter($counterData)
     {
         $this->flagManagerMock
@@ -143,7 +145,7 @@ class UpdateTest extends TestCase
      *
      * @return array
      */
-    public function executeWithEmptyReverseCounterDataProvider()
+    public static function executeWithEmptyReverseCounterDataProvider()
     {
         return [
             [null],
@@ -157,9 +159,10 @@ class UpdateTest extends TestCase
      * @param bool $finalConditionsIsExpected
      * @param bool $functionResult
      * @return void
-     * @dataProvider executeRegularScenarioDataProvider
+     *
      * @throws NotFoundException
      */
+    #[DataProvider('executeRegularScenarioDataProvider')]
     public function testExecuteRegularScenario(
         int $reverseCount,
         bool $commandResult,
@@ -189,26 +192,26 @@ class UpdateTest extends TestCase
     /**
      * @return array
      */
-    public function executeRegularScenarioDataProvider()
+    public static function executeRegularScenarioDataProvider()
     {
         return [
             'The last attempt with command execution result False' => [
-                'Reverse count' => 1,
-                'Command result' => false,
-                'Executed final output conditions' => true,
-                'Function result' => false,
+                'reverseCount' => 1,
+                'commandResult' => false,
+                'finalConditionsIsExpected' => true,
+                'functionResult' => false,
             ],
             'Not the last attempt with command execution result False' => [
-                'Reverse count' => 10,
-                'Command result' => false,
-                'Executed final output conditions' => false,
-                'Function result' => false,
+                'reverseCount' => 10,
+                'commandResult' => false,
+                'finalConditionsIsExpected' => false,
+                'functionResult' => false,
             ],
             'Command execution result True' => [
-                'Reverse count' => 10,
-                'Command result' => true,
-                'Executed final output conditions' => true,
-                'Function result' => true,
+                'reverseCount' => 10,
+                'commandResult' => true,
+                'finalConditionsIsExpected' => true,
+                'functionResult' => true,
             ],
         ];
     }

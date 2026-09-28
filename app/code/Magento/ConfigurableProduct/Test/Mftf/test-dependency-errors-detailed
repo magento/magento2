@@ -1,0 +1,62 @@
+
+File "/var/www/html/app/code/Magento/ConfigurableProduct/Test/Mftf/Test/AdminConfigurableProductUpdateTest/AdminConfigurableProductBulkUpdateTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminProductAttributeUpdateMessageConsumerData from module(s): magento/module-message-queue
+	 CliConsumerStartActionGroup from module(s): magento/module-message-queue
+
+File "/var/www/html/app/code/Magento/ConfigurableProduct/Test/Mftf/Test/AdminCreateConfigurableProductWithTwoOptionsAssignedToCategoryTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontQuickSearchSection from module(s): magento/module-search
+
+File "/var/www/html/app/code/Magento/ConfigurableProduct/Test/Mftf/Test/AdminCreateConfigurableProductWithTwoOptionsWithoutAssignedToCategoryTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontQuickSearchSection from module(s): magento/module-search
+
+File "/var/www/html/app/code/Magento/ConfigurableProduct/Test/Mftf/Test/AdminCreateConfigurableProductWithVideoAssociatedToVariantTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AddProductVideoActionGroup from module(s): magento/module-product-video
+	 AssertProductVideoStorefrontProductPageActionGroup from module(s): magento/module-product-video
+
+File "/var/www/html/app/code/Magento/ConfigurableProduct/Test/Mftf/Test/AdminDeleteConfigurableProductTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontCatalogSearchMainSection from module(s): magento/module-catalog-search
+	 StoreFrontQuickSearchActionGroup from module(s): magento/module-search
+
+File "/var/www/html/app/code/Magento/ConfigurableProduct/Test/Mftf/Test/StorefrontConfigurableProductSwatchUpdateCartItemTierPriceTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AddTextSwatchToProductActionGroup from module(s): magento/module-swatches
+	 StorefrontSelectSwatchOptionOnProductPageActionGroup from module(s): magento/module-swatches
+	 StorefrontAddProductWithSwatchesTextOptionToTheCartActionGroup from module(s): magento/module-swatches
+
+File "/var/www/html/app/code/Magento/ConfigurableProduct/Test/Mftf/Test/StorefrontConfigurableProductViewTest/SpecialPriceForConfigurableProductBasedOnVisualSwatchAttributeTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminManageSwatchSection from module(s): magento/module-swatches
+
+File "/var/www/html/app/code/Magento/ConfigurableProduct/Test/Mftf/Test/StorefrontConfigurableProductViewTest/StorefrontConfigurableProductMSRPCovertTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontSwitchCurrencyActionGroup from module(s): magento/module-currency-symbol
+
+File "/var/www/html/app/code/Magento/ConfigurableProduct/Test/Mftf/Test/StorefrontGalleryConfigurableProductWithSeveralAttributesPrependMediaTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminAddProductVideoWithPreviewActionGroup from module(s): magento/module-product-video
+	 AssertProductVideoAdminProductPageActionGroup from module(s): magento/module-product-video
+
+File "/var/www/html/app/code/Magento/ConfigurableProduct/Test/Mftf/Test/StorefrontGalleryConfigurableProductWithVisualSwatchAttributePrependMediaTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminAddProductVideoWithPreviewActionGroup from module(s): magento/module-product-video
+	 AssertProductVideoAdminProductPageActionGroup from module(s): magento/module-product-video
+
+File "/var/www/html/app/code/Magento/ConfigurableProduct/Test/Mftf/ActionGroup/SelectSingleAttributeAndAddToCartActionGroup.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontQuickSearchResultsSection from module(s): magento/module-search

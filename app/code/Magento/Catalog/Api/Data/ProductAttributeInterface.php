@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Api\Data;
 
@@ -35,6 +34,7 @@ interface ProductAttributeInterface extends \Magento\Catalog\Api\Data\EavAttribu
 
     /**
      * @return \Magento\Eav\Api\Data\AttributeExtensionInterface|null
+     * @since 103.0.0
      */
     public function getExtensionAttributes();
 }

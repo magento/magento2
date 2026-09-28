@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Framework\Data\Form\Element\Factory;
 use Magento\Framework\ObjectManager\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class FactoryTest extends TestCase
 {
@@ -36,9 +37,8 @@ class FactoryTest extends TestCase
     }
 
     /**
-     * @param string $type
-     * @dataProvider createPositiveDataProvider
-     */
+     * @param string $type     */
+    #[DataProvider('createPositiveDataProvider')]
     public function testCreatePositive($type)
     {
         $className = 'Magento\Framework\Data\Form\Element\\' . ucfirst($type);
@@ -59,9 +59,8 @@ class FactoryTest extends TestCase
     }
 
     /**
-     * @param string $type
-     * @dataProvider createPositiveDataProvider
-     */
+     * @param string $type     */
+    #[DataProvider('createPositiveDataProvider')]
     public function testCreatePositiveWithNotEmptyConfig($type)
     {
         $config = ['data' => ['attr1' => 'attr1', 'attr2' => 'attr2']];
@@ -85,7 +84,7 @@ class FactoryTest extends TestCase
     /**
      * @return array
      */
-    public function createPositiveDataProvider()
+    public static function createPositiveDataProvider()
     {
         return [
             'button' => ['button'],
@@ -120,9 +119,8 @@ class FactoryTest extends TestCase
     }
 
     /**
-     * @param string $type
-     * @dataProvider createExceptionReflectionExceptionDataProvider
-     */
+     * @param string $type     */
+    #[DataProvider('createExceptionReflectionExceptionDataProvider')]
     public function testCreateExceptionReflectionException($type)
     {
         $this->expectException('ReflectionException');
@@ -142,7 +140,7 @@ class FactoryTest extends TestCase
     /**
      * @return array
      */
-    public function createExceptionReflectionExceptionDataProvider()
+    public static function createExceptionReflectionExceptionDataProvider()
     {
         return [
             'factory' => ['factory'],
@@ -152,9 +150,8 @@ class FactoryTest extends TestCase
     }
 
     /**
-     * @param string $type
-     * @dataProvider createExceptionInvalidArgumentDataProvider
-     */
+     * @param string $type     */
+    #[DataProvider('createExceptionInvalidArgumentDataProvider')]
     public function testCreateExceptionInvalidArgument($type)
     {
         $this->expectException('InvalidArgumentException');
@@ -175,7 +172,7 @@ class FactoryTest extends TestCase
     /**
      * @return array
      */
-    public function createExceptionInvalidArgumentDataProvider()
+    public static function createExceptionInvalidArgumentDataProvider()
     {
         return [
             Factory::class => [

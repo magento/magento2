@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
@@ -61,8 +61,10 @@ $order->setIncrementId('100000001')
     ->setGrandTotal(100)
     ->setBaseSubtotal(100)
     ->setBaseGrandTotal(100)
+    ->setOrderCurrencyCode('USD')
+    ->setBaseCurrencyCode('USD')
     ->setCustomerIsGuest(true)
-    ->setCustomerEmail('customer@null.com')
+    ->setCustomerEmail('customer@example.com')
     ->setBillingAddress($billingAddress)
     ->setShippingAddress($shippingAddress)
     ->setStoreId($objectManager->get(StoreManagerInterface::class)->getStore()->getId())

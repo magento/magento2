@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Paypal\Controller\Payflow;
 
@@ -17,8 +17,13 @@ use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 use Magento\TestFramework\TestCase\AbstractController;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject_MockObject as MockObject;
+use Psr\Log\LoggerInterface;
 
+/**
+ * @magentoAppIsolation enabled
+ */
 class SilentPostTest extends AbstractController
 {
     /**
@@ -67,8 +72,8 @@ class SilentPostTest extends AbstractController
      * @param string $orderState
      * @param string $orderStatus
      * @magentoDataFixture Magento/Paypal/_files/order_payflow_link.php
-     * @dataProvider responseCodeDataProvider
      */
+    #[DataProvider('responseCodeDataProvider')]
     public function testSuccessfulNotification($resultCode, $orderState, $orderStatus)
     {
         $orderIncrementId = '000000045';
@@ -90,7 +95,7 @@ class SilentPostTest extends AbstractController
      *
      * @return array
      */
-    public function responseCodeDataProvider()
+    public static function responseCodeDataProvider()
     {
         return [
             [Payflowlink::RESPONSE_CODE_APPROVED, Order::STATE_COMPLETE, Order::STATE_COMPLETE],
@@ -114,7 +119,7 @@ class SilentPostTest extends AbstractController
         $logger = $this->getMockBuilder(Monolog::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->_objectManager->addSharedInstance($logger, Monolog::class);
+        $this->_objectManager->addSharedInstance($logger, LoggerInterface::class, true);
 
         $exception = new CommandException(__('Response message from PayPal gateway'));
         $logger->expects(self::once())
@@ -125,7 +130,7 @@ class SilentPostTest extends AbstractController
 
         self::assertEquals(200, $this->getResponse()->getStatusCode());
 
-        $this->_objectManager->removeSharedInstance(Monolog::class);
+        $this->_objectManager->removeSharedInstance(LoggerInterface::class, true);
     }
 
     /**

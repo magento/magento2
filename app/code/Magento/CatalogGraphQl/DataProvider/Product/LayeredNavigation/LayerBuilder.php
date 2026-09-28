@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -36,7 +36,7 @@ class LayerBuilder implements LayerBuilderInterface
         foreach ($this->builders as $builder) {
             $layers[] = $builder->build($aggregation, $storeId);
         }
-        $layers = \array_merge(...$layers);
+        $layers = \array_merge([], ...$layers);
 
         return \array_filter($layers);
     }

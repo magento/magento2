@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Persistent\Model;
 
@@ -12,6 +12,7 @@ namespace Magento\Persistent\Model;
  * @method int getCustomerId()
  * @method Session setCustomerId()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @since 100.0.2
  */
 class Session extends \Magento\Framework\Model\AbstractModel
@@ -19,16 +20,14 @@ class Session extends \Magento\Framework\Model\AbstractModel
     /**
      * Persistent cookie key length
      */
-    const KEY_LENGTH = 50;
+    public const KEY_LENGTH = 50;
 
     /**
      * Persistent cookie name
      */
-    const COOKIE_NAME = 'persistent_shopping_cart';
+    public const COOKIE_NAME = 'persistent_shopping_cart';
 
     /**
-     * Fields which model does not save into `info` db field
-     *
      * @var string[]
      */
     protected $_unserializableFields = [
@@ -41,22 +40,16 @@ class Session extends \Magento\Framework\Model\AbstractModel
     ];
 
     /**
-     * If model loads expired sessions
-     *
      * @var bool
      */
     protected $_loadExpired = false;
 
     /**
-     * Persistent data
-     *
      * @var \Magento\Persistent\Helper\Data
      */
     protected $_persistentData;
 
     /**
-     * Json Helper
-     *
      * @var \Magento\Framework\Json\Helper\Data
      */
     protected $jsonHelper;
@@ -67,22 +60,16 @@ class Session extends \Magento\Framework\Model\AbstractModel
     protected $_coreConfig;
 
     /**
-     * Store manager
-     *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * Cookie manager
-     *
      * @var \Magento\Framework\Stdlib\CookieManagerInterface
      */
     protected $_cookieManager;
 
     /**
-     * Cookie metadata factory
-     *
      * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
      */
     protected $_cookieMetadataFactory;
@@ -98,8 +85,6 @@ class Session extends \Magento\Framework\Model\AbstractModel
     protected $sessionConfig;
 
     /**
-     * Request
-     *
      * @var \Magento\Framework\App\Request\Http
      */
     private $request;
@@ -133,8 +118,8 @@ class Session extends \Magento\Framework\Model\AbstractModel
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Math\Random $mathRandom,
         \Magento\Framework\Session\Config\ConfigInterface $sessionConfig,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->jsonHelper = $jsonHelper;
@@ -296,7 +281,6 @@ class Session extends \Magento\Framework\Model\AbstractModel
      * Remove persistent cookie
      *
      * @return $this
-     * @api
      */
     public function removePersistentCookie()
     {
@@ -312,7 +296,6 @@ class Session extends \Magento\Framework\Model\AbstractModel
      * @param int $duration Time in seconds.
      * @param string $path
      * @return $this
-     * @api
      */
     public function setPersistentCookie($duration, $path)
     {
@@ -391,7 +374,8 @@ class Session extends \Magento\Framework\Model\AbstractModel
             ->setDuration($duration)
             ->setPath($path)
             ->setSecure($this->getRequest()->isSecure())
-            ->setHttpOnly(true);
+            ->setHttpOnly(true)
+            ->setSameSite('Lax');
         $this->_cookieManager->setPublicCookie(
             self::COOKIE_NAME,
             $value,

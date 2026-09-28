@@ -1,13 +1,14 @@
 <?php declare(strict_types=1);
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Developer\Test\Unit\Console\Command;
 
 use Magento\Developer\Console\Command\ProfilerEnableCommand;
 use Magento\Framework\Filesystem\Io\File;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -30,8 +31,8 @@ class ProfilerEnableCommandTest extends TestCase
      * @param string $inputType
      * @param bool $fileExists
      * @param string $expectedOutput
-     * @dataProvider commandDataProvider
      */
+    #[DataProvider('commandDataProvider')]
     public function testCommand(string $inputType, bool $fileExists, string $expectedOutput)
     {
         $this->filesystemMock
@@ -62,7 +63,7 @@ class ProfilerEnableCommandTest extends TestCase
      *
      * @return array
      */
-    public function commandDataProvider()
+    public static function commandDataProvider()
     {
         return [
             [

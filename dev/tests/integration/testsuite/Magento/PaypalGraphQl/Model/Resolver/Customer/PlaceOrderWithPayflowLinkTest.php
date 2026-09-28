@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Framework\Math\Random;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\GraphQl\Service\GraphQlRequest;
+use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\Integration\Model\Oauth\Token;
 use Magento\Paypal\Model\Payflow\Request;
 use Magento\Paypal\Model\Payflow\Service\Gateway;
@@ -69,11 +70,11 @@ class PlaceOrderWithPayflowLinkTest extends TestCase
             ->getMock();
         $this->gateway = $this->getMockBuilder(Gateway::class)
             ->disableOriginalConstructor()
-            ->setMethods(['postRequest'])
+            ->onlyMethods(['postRequest'])
             ->getMock();
 
         $requestFactory = $this->getMockBuilder(RequestFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -119,14 +120,14 @@ class PlaceOrderWithPayflowLinkTest extends TestCase
       cart_id: "$cartId"
       payment_method: {
           code: "$paymentMethod"
-            payflow_link: 
+            payflow_link:
             {
            cancel_url:"paypal/payflow/cancelPayment"
            return_url:"paypal/payflow/returnUrl"
            error_url:"paypal/payflow/errorUrl"
           }
       }
-  }) {    
+  }) {
        cart {
           selected_payment_method {
           code
@@ -142,7 +143,7 @@ class PlaceOrderWithPayflowLinkTest extends TestCase
 QUERY;
 
         $productMetadata = ObjectManager::getInstance()->get(ProductMetadataInterface::class);
-        $button = 'Magento_Cart_' . $productMetadata->getEdition();
+        $button = 'Magento_2_' . $productMetadata->getEdition();
 
         $payflowLinkResponse = new DataObject(
             [
@@ -160,23 +161,25 @@ QUERY;
             ->willReturnMap(
                 [
                     [
-                        'user' => null,
-                        'vendor' => null,
-                        'partner' => null,
-                        'pwd' => null,
-                        'verbosity' => null,
-                        'BUTTONSOURCE' => $button,
-                        'tender' => 'C',
-                    ],
-                    $this->returnSelf()
+                        [
+                            'user' => null,
+                            'vendor' => null,
+                            'partner' => null,
+                            'pwd' => null,
+                            'verbosity' => null,
+                            'BUTTONSOURCE' => $button,
+                            'tender' => 'C',
+                        ],
+                        $this->payflowRequest
+                    ]
                 ],
-                ['USER1', 1, $this->returnSelf()],
-                ['USER2', 'USER2SilentPostHash', $this->returnSelf()]
+                ['USER1', 1, $this->payflowRequest],
+                ['USER2', 'USER2SilentPostHash', $this->payflowRequest]
             );
 
-        /** @var Token $tokenModel */
-        $tokenModel = $this->objectManager->create(Token::class);
-        $customerToken = $tokenModel->createCustomerToken(1)->getToken();
+        /** @var CustomerTokenServiceInterface $tokenService */
+        $tokenService = $this->objectManager->get(CustomerTokenServiceInterface::class);
+        $customerToken = $tokenService->createCustomerAccessToken('customer@example.com', 'password');
 
         $requestHeaders = [
             'Accept' => 'application/json',

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\ResourceModel\Product;
 
@@ -60,7 +60,7 @@ class LinkedProductSelectBuilderByBasePrice implements LinkedProductSelectBuilde
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Catalog\Helper\Data $catalogHelper,
         \Magento\Framework\EntityManager\MetadataPool $metadataPool,
-        BaseSelectProcessorInterface $baseSelectProcessor = null
+        ?BaseSelectProcessorInterface $baseSelectProcessor = null
     ) {
         $this->storeManager = $storeManager;
         $this->resource = $resourceConnection;

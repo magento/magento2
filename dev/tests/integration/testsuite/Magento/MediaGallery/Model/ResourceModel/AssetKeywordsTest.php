@@ -1,21 +1,22 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\MediaGallery\Model\ResourceModel;
 
 use Behat\Gherkin\Keywords\KeywordsInterface;
-use Magento\MediaGalleryApi\Api\Data\KeywordInterfaceFactory;
-use Magento\MediaGalleryApi\Api\Data\AssetKeywordsInterfaceFactory;
 use Magento\MediaGalleryApi\Api\Data\AssetKeywordsInterface;
+use Magento\MediaGalleryApi\Api\Data\AssetKeywordsInterfaceFactory;
+use Magento\MediaGalleryApi\Api\Data\KeywordInterfaceFactory;
 use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
 use Magento\MediaGalleryApi\Api\GetAssetsKeywordsInterface;
 use Magento\MediaGalleryApi\Api\SaveAssetsKeywordsInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Testing assets keywords operation
@@ -65,30 +66,45 @@ class AssetKeywordsTest extends TestCase
      * Testing assets keywords save and get
      *
      * @magentoDataFixture Magento/MediaGallery/_files/media_asset.php
-     * @dataProvider keywordsProvider
-     * @param array $keywords
+     * @param string[] $keywords
+     * @param string[] $updatedKeywords
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function testSaveAndGetKeywords(array $keywords): void
+    #[DataProvider('keywordsProvider')]
+    public function testSaveAndGetKeywords(array $keywords, array $updatedKeywords): void
     {
-        $keywords = ['pear', 'plum'];
-
         $loadedAssets = $this->getAssetsByPath->execute([self::FIXTURE_ASSET_PATH]);
         $this->assertCount(1, $loadedAssets);
         $loadedAsset = current($loadedAssets);
 
+        $this->updateAssetKeywords($loadedAsset->getId(), $keywords);
+        $this->updateAssetKeywords($loadedAsset->getId(), $updatedKeywords);
+    }
+
+    /**
+     * Update Asset keywords
+     *
+     * @param int $assetId
+     * @param string[] $keywords
+     */
+    private function updateAssetKeywords(int $assetId, array $keywords): void
+    {
         $assetKeywords = $this->assetsKeywordsFactory->create(
             [
-                'assetId' => $loadedAsset->getId(),
+                'assetId' => $assetId,
                 'keywords' => $this->getKeywords($keywords)
             ]
         );
 
         $this->saveAssetsKeywords->execute([$assetKeywords]);
-        $loadedAssetKeywords = $this->getAssetsKeywords->execute([$loadedAsset->getId()]);
+        $loadedAssetKeywords = $this->getAssetsKeywords->execute([$assetId]);
+
+        if (empty($keywords)) {
+            $this->assertEmpty($loadedAssetKeywords);
+            return;
+        }
 
         $this->assertCount(1, $loadedAssetKeywords);
-
         /** @var AssetKeywordsInterface $loadedAssetKeyword */
         $loadedAssetKeyword = current($loadedAssetKeywords);
 
@@ -112,13 +128,20 @@ class AssetKeywordsTest extends TestCase
      *
      * @return array
      */
-    public function keywordsProvider(): array
+    public static function keywordsProvider(): array
     {
         return [
-            [['one-keyword']],
-            [['кириллица']],
-            [['plum', 'pear']],
-            [[]]
+            [['one-keyword'],['plum','orange']],
+            [['кириллица'],[]],
+            [[],['plum']],
+            [['plum', 'pear'],['plum','pear']],
+            [['plum', 'pear'],['plum','orange']],
+            [['plum', 'pear','grape'],['plum','orange']],
+            [['plum', 'pear','grape'],['mango']],
+            [['plum', 'pear','grape'],['orange']],
+            [['plum', 'pear','grape'],[]],
+            [['plum', 'pear'],['plum', 'pear','grape','mango','orange']],
+            [[],[]]
         ];
     }
 

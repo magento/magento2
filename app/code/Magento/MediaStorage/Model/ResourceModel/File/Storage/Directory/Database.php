@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\MediaStorage\Model\ResourceModel\File\Storage\Directory;
 
 /**
  * Class Database
+ *
+ * @deprecated Database Media Storage is deprecated
  */
 class Database extends \Magento\MediaStorage\Model\ResourceModel\File\Storage\AbstractStorage
 {

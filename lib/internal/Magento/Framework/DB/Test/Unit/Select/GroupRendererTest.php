@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Framework\DB\Select\GroupRenderer;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class GroupRendererTest extends TestCase
 {
@@ -48,9 +49,8 @@ class GroupRendererTest extends TestCase
     }
 
     /**
-     * @param array $mapValues
-     * @dataProvider renderNoPartDataProvider
-     */
+     * @param array $mapValues     */
+    #[DataProvider('renderNoPartDataProvider')]
     public function testRenderNoPart($mapValues)
     {
         $sql = 'SELECT';
@@ -64,7 +64,7 @@ class GroupRendererTest extends TestCase
      * Data provider for testRenderNoPart
      * @return array
      */
-    public function renderNoPartDataProvider()
+    public static function renderNoPartDataProvider()
     {
         return [
             [[[Select::FROM, false], [Select::GROUP, false]]],

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -18,7 +18,7 @@
                 "expires": null,
                 "path": "<?= $block->escapeJs($block->getPath()) ?>",
                 "domain": "<?= $block->escapeJs($block->getDomain()) ?>",
-                "secure": false,
+                "secure": <?= $block->getSessionConfig()->getCookieSecure() ? 'true' : 'false'; ?>,
                 "lifetime": "<?= $block->escapeJs($block->getLifetime()) ?>"
             }
         }

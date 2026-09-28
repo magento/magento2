@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminDisableJsBundlingAndCreateProductTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Preconditions for JS Bundling and Product"/>
+            <title value="Disable JS bundling and create simple product along with/without custom options"/>
+            <description value="Check the product price on product and cart page when JS bundling is disabled via CLI"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4401"/>
+            <group value="checkout"/>
+        </annotations>
+        <before>
+            <!-- Precondition Step 1: Enable JS Bundling and related settings via CLI -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <!-- Precondition Step 2: Create two Simple products -->
+            <createData entity="ApiSimpleProduct" stepKey="createSimpleNoOptions"/>
+            <createData entity="ApiSimpleProductWithCustomPrice" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!-- Update  product to have custom options -->
+            <updateData createDataKey="createProduct" entity="productWithCustomOptions" stepKey="updateProductWithOptions"/>
+            <!-- Login as Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!--Logout from customer account-->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutStorefront"/>
+            <!-- Admin Logout -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAsAdmin"/>
+            <!-- Delete Customer -->
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <!-- Delete created products and category -->
+            <deleteData createDataKey="createProduct" stepKey="deleteSimpleWithOptionsBase"/>
+            <deleteData createDataKey="createSimpleNoOptions" stepKey="deleteSimpleNoOptions"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+        </after>
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <!-- Step 1: Go to product page on Storefront -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openStorefrontProductPage">
+            <argument name="productUrl" value="$$createProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <!-- Step 2: Select product with custom options -->
+        <actionGroup ref="StorefrontSelectCustomOptionDropDownAndAssertPricesActionGroup" stepKey="selectDropdownAssertPrice">
+            <argument name="customOption" value="OptionValueDropDown1"/>
+            <argument name="productPrice" value="$100.01"/>
+            <argument name="productFinalPrice" value="$100.01"/>
+        </actionGroup>
+        <!-- Step 3: Add product to cart -->
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$$createProduct$$"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openAgainStorefrontProductPage">
+            <argument name="productUrl" value="$$createSimpleNoOptions.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddSimpleProductToShoppingCartActionGroup" stepKey="addAnotherProductToCart">
+            <argument name="product" value="$createSimpleNoOptions$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="openShoppingCartPage"/>
+        <!-- Step 4: Check product price in cart -->
+        <waitForText userInput="$100.01" selector="{{CheckoutCartProductSection.ProductPriceByName($$createProduct.name$$)}}" stepKey="assertProductPrice"/>
+        <waitForText userInput="$123.00" selector="{{CheckoutCartProductSection.ProductPriceByName($$createSimpleNoOptions.name$$)}}" stepKey="assertProductPriceInCart"/>
+        <!-- Step 5: Click Proceed to Checkout button -->
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="goToCheckout"/>
+        <!-- Step 6: Select Flat Rate shipping method and click *Next* button -->
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickOnNextButton"/>
+        <!-- Step 7: Select Check/Money Order as a payment method -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
+        <!-- Step 8: Click Place order button -->
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrder"/>
+    </test>
+</tests>

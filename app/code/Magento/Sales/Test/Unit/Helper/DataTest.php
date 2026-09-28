@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,8 +9,6 @@ namespace Magento\Sales\Test\Unit\Helper;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Helper\Context;
-use Magento\Framework\App\State;
-use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Sales\Helper\Data;
 use Magento\Sales\Model\Order\Email\Container\CreditmemoCommentIdentity;
 use Magento\Sales\Model\Order\Email\Container\CreditmemoIdentity;
@@ -21,9 +19,10 @@ use Magento\Sales\Model\Order\Email\Container\OrderIdentity;
 use Magento\Sales\Model\Order\Email\Container\ShipmentCommentIdentity;
 use Magento\Sales\Model\Order\Email\Container\ShipmentIdentity;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Model\Store;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -41,7 +40,7 @@ class DataTest extends TestCase
     protected $scopeConfigMock;
 
     /**
-     * @var MockObject|\Magento\Sales\Model\Store
+     * @var MockObject|Store
      */
     protected $storeMock;
 
@@ -50,43 +49,21 @@ class DataTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $contextMock = $this->createMock(Context::class);
         $contextMock->expects($this->any())
             ->method('getScopeConfig')
             ->willReturn($this->scopeConfigMock);
 
-        $storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->helper = new Data($contextMock);
 
-        $appStateMock = $this->getMockBuilder(State::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $pricingCurrencyMock = $this->getMockBuilder(PriceCurrencyInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-
-        $this->helper = new Data(
-            $contextMock,
-            $storeManagerMock,
-            $appStateMock,
-            $pricingCurrencyMock
-        );
-
-        $this->storeMock = $this->getMockBuilder(\Magento\Sales\Model\Store::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->storeMock = $this->createMock(Store::class);
     }
 
     /**
-     * @dataProvider getScopeConfigValue
+     * @return void
      */
+    #[DataProvider('getScopeConfigValue')]
     public function testCanSendNewOrderConfirmationEmail($scopeConfigValue)
     {
         $this->setupScopeConfigIsSetFlag(
@@ -98,9 +75,9 @@ class DataTest extends TestCase
     }
 
     /**
-     * @dataProvider getScopeConfigValue
      * @return void
      */
+    #[DataProvider('getScopeConfigValue')]
     public function testCanSendNewOrderEmail($scopeConfigValue)
     {
         $this->setupScopeConfigIsSetFlag(
@@ -112,9 +89,9 @@ class DataTest extends TestCase
     }
 
     /**
-     * @dataProvider getScopeConfigValue
      * @return void
      */
+    #[DataProvider('getScopeConfigValue')]
     public function testCanSendOrderCommentEmail($scopeConfigValue)
     {
         $this->setupScopeConfigIsSetFlag(
@@ -126,9 +103,9 @@ class DataTest extends TestCase
     }
 
     /**
-     * @dataProvider getScopeConfigValue
      * @return void
      */
+    #[DataProvider('getScopeConfigValue')]
     public function testCanSendNewShipmentEmail($scopeConfigValue)
     {
         $this->setupScopeConfigIsSetFlag(
@@ -140,9 +117,9 @@ class DataTest extends TestCase
     }
 
     /**
-     * @dataProvider getScopeConfigValue
      * @return void
      */
+    #[DataProvider('getScopeConfigValue')]
     public function testCanSendShipmentCommentEmail($scopeConfigValue)
     {
         $this->setupScopeConfigIsSetFlag(
@@ -154,8 +131,9 @@ class DataTest extends TestCase
     }
 
     /**
-     * @dataProvider getScopeConfigValue
+     * @return void
      */
+    #[DataProvider('getScopeConfigValue')]
     public function testCanSendNewInvoiceEmail($scopeConfigValue)
     {
         $this->setupScopeConfigIsSetFlag(
@@ -166,9 +144,7 @@ class DataTest extends TestCase
         $this->assertEquals($scopeConfigValue, $this->helper->canSendNewInvoiceEmail($this->storeMock));
     }
 
-    /**
-     * @dataProvider getScopeConfigValue
-     */
+    #[DataProvider('getScopeConfigValue')]
     public function testCanSendInvoiceCommentEmail($scopeConfigValue)
     {
         $this->setupScopeConfigIsSetFlag(
@@ -180,9 +156,9 @@ class DataTest extends TestCase
     }
 
     /**
-     * @dataProvider getScopeConfigValue
      * @return void
      */
+    #[DataProvider('getScopeConfigValue')]
     public function testCanSendNewCreditmemoEmail($scopeConfigValue)
     {
         $this->setupScopeConfigIsSetFlag(
@@ -194,9 +170,9 @@ class DataTest extends TestCase
     }
 
     /**
-     * @dataProvider getScopeConfigValue
      * @return void
      */
+    #[DataProvider('getScopeConfigValue')]
     public function testCanSendCreditmemoCommentEmail($scopeConfigValue)
     {
         $this->setupScopeConfigIsSetFlag(
@@ -229,7 +205,7 @@ class DataTest extends TestCase
     /**
      * @return array
      */
-    public function getScopeConfigValue()
+    public static function getScopeConfigValue()
     {
         return [
             [true],

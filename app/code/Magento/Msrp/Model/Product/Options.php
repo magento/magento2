@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Msrp\Model\Product;
 
 use Magento\Msrp\Model\Product\Attribute\Source\Type\Price as TypePrice;
 
+/**
+ * @api
+ */
 class Options
 {
     /**
@@ -32,10 +35,11 @@ class Options
     }
 
     /**
+     * Is enabled
+     *
      * @param \Magento\Catalog\Model\Product $product
-     * @param null $visibility
+     * @param int|null $visibility
      * @return bool|null
-     * @api
      */
     public function isEnabled($product, $visibility = null)
     {
@@ -55,6 +59,8 @@ class Options
     }
 
     /**
+     * Get visibilities
+     *
      * @param \Magento\Catalog\Model\Product $product
      * @return array
      */

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminVerifyTaxRateStateResetWhenChangingCountryTest">
+        <annotations>
+            <features value="Tax"/>
+            <stories value="Tax Rate Administration"/>
+            <title value="Tax rate state field should reset to asterisk when changing from US to UK"/>
+            <description value="Verify state field resets to wildcard when changing country from US to UK in tax rate form"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-15440"/>
+            <group value="tax"/>
+        </annotations>
+        <before>
+            <!-- Step 1: Login to admin panel -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Logout from admin -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <!-- Step 2: Navigate to Stores > Tax Rates -->
+        <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToTaxRatesPage"/>
+        <!-- Step 3: Click on "Add New Tax Rate" button -->
+        <waitForElementClickable selector="{{AdminTaxRulesSection.addNewTaxRate}}" stepKey="waitToAddNewTaxRate"/>
+        <click selector="{{AdminTaxRulesSection.addNewTaxRate}}" stepKey="addNewTaxRate"/>
+        <!-- Step 4: Select State California (Country US is already selected by default) -->
+        <seeOptionIsSelected selector="{{AdminTaxRateFormSection.country}}" userInput="{{US_Address_CA.country}}" stepKey="verifyUSIsDefaultCountry"/>
+        <!-- Select California state -->
+        <waitForElementVisible selector="{{AdminTaxRateFormSection.state}}" stepKey="waitForStateDropdownVisible"/>
+        <selectOption selector="{{AdminTaxRateFormSection.state}}" userInput="{{US_Address_CA.state}}" stepKey="selectCaliforniaState"/>
+        <waitForAjaxLoad stepKey="waitAfterSelectingCalifornia"/>
+        <!-- Verify California is selected -->
+        <seeOptionIsSelected selector="{{AdminTaxRateFormSection.state}}" userInput="{{US_Address_CA.state}}" stepKey="verifyCaliforniaIsSelected"/>
+        <!-- Step 5: Switch Country to United Kingdom -->
+        <selectOption selector="{{AdminTaxRateFormSection.country}}" userInput="{{UK_Address.country}}" stepKey="selectUnitedKingdom"/>
+        <waitForAjaxLoad stepKey="waitAfterSelectingUK"/>
+        <!-- Step 6 & 7: Verify state field shows asterisk (*) for countries without required states -->
+        <!-- Verify state is NOT showing California anymore -->
+        <dontSeeOptionIsSelected selector="{{AdminTaxRateFormSection.state}}" userInput="{{US_Address_CA.state}}" stepKey="verifyCaliforniaNotSelected"/>
+        <!-- Verify state field shows asterisk (*) which represents "All States" -->
+        <seeInField selector="{{AdminTaxRateFormSection.state}}" userInput="*" stepKey="verifyStateIsAsterisk"/>
+        <!-- Alternative: Check if asterisk option is selected -->
+        <seeOptionIsSelected selector="{{AdminTaxRateFormSection.state}}" userInput="*" stepKey="verifyAsteriskOptionSelected"/>
+    </test>
+</tests>

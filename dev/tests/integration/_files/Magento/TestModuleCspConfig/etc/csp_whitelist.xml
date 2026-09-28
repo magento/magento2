@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 -->
 <csp_whitelist xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Csp/etc/csp_whitelist.xsd">
@@ -11,6 +11,7 @@
             <values>
                 <value id="mage-base" type="host">https://magento.com</value>
                 <value id="hash" type="hash" algorithm="sha256">B2yPHKaXnvFWtRChIbabYmUBFZdVfKKXHbWtWidDVF8=</value>
+                <value id="hash2" type="hash" algorithm="sha256">B2yPHKaXnvFWtRChIbabYmUBFZdVfKKXHbWtWidDVF9=</value>
             </values>
         </policy>
         <policy id="media-src">

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Search\Model\Search;
 /**
  * Returns max  page size by search engine name
  * @api
+ * @since 101.0.0
  */
 class PageSizeProvider
 {
@@ -39,6 +40,7 @@ class PageSizeProvider
      * Returns max_page_size depends on engine
      *
      * @return integer
+     * @since 101.0.0
      */
     public function getMaxPageSize() : int
     {

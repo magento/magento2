@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\View\Element;
 
@@ -22,6 +22,7 @@ use Magento\Framework\App\ObjectManager;
  * @SuppressWarnings(PHPMD)
  *
  * @api
+ * @since 100.0.2
  */
 class Context implements \Magento\Framework\ObjectManager\ContextInterface
 {
@@ -183,7 +184,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
         \Magento\Framework\Filter\FilterManager $filterManager,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
-        LockGuardedCacheLoader $lockQuery = null
+        ?LockGuardedCacheLoader $lockQuery = null
     ) {
         $this->_request = $request;
         $this->_layout = $layout;
@@ -379,6 +380,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      * Lock guarded cache loader.
      *
      * @return LockGuardedCacheLoader
+     * @since 102.0.2
      */
     public function getLockGuardedCacheLoader()
     {

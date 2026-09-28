@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,7 +9,6 @@ namespace Magento\Catalog\Test\Unit\Block\Product;
 
 use Magento\Catalog\Block\Product\ListProduct;
 use Magento\Catalog\Block\Product\NewProduct;
-use Magento\Catalog\Model\Product;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
 
@@ -33,7 +32,7 @@ class NewProductTest extends TestCase
 
     public function testGetIdentities()
     {
-        $this->assertEquals([Product::CACHE_TAG], $this->block->getIdentities());
+        $this->assertEquals([NewProduct::CACHE_TAG], $this->block->getIdentities());
     }
 
     public function testScope()

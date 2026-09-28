@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -12,6 +12,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Escaper;
 use Magento\Framework\Filter\FilterManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Review\Helper\Data as HelperData;
 use Magento\Store\Model\ScopeInterface;
@@ -20,6 +21,8 @@ use PHPUnit\Framework\TestCase;
 
 class DataTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ObjectManagerHelper
      */
@@ -55,22 +58,16 @@ class DataTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->context = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->context = $this->createMock(Context::class);
 
-        $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
 
-        $this->filter = $this->getMockBuilder(FilterManager::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['truncate'])
-            ->getMock();
+        $this->filter = $this->createPartialMockWithReflection(
+            FilterManager::class,
+            ['truncate']
+        );
 
-        $this->escaper = $this->getMockBuilder(Escaper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->escaper = $this->createMock(Escaper::class);
 
         $this->context->expects($this->once())
             ->method('getScopeConfig')
@@ -105,7 +102,7 @@ class DataTest extends TestCase
     /**
      * Test getDetailHtml() function
      */
-    public function getDetailHtml()
+    public function testGetDetailHtml()
     {
         $origDetail = "<span>This\nis\na\nstring</span>";
         $origDetailEscapeHtml = "This\nis\na\nstring";
@@ -119,7 +116,7 @@ class DataTest extends TestCase
             ->with($origDetailEscapeHtml, ['length' => 50])
             ->willReturn($origDetailEscapeHtml);
 
-        $this->assertEquals($expected, $this->helper->getDetail($origDetail));
+        $this->assertEquals($expected, $this->helper->getDetailHtml($origDetail));
     }
 
     /**

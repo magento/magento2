@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Framework\Shell\Test\Unit;
 
 use Magento\Framework\Shell\ComplexParameter;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ComplexParameterTest extends TestCase
 {
@@ -22,9 +23,8 @@ class ComplexParameterTest extends TestCase
 
     /**
      * @param string $str
-     * @param array $expected
-     * @dataProvider getFromStringDataProvider
-     */
+     * @param array $expected     */
+    #[DataProvider('getFromStringDataProvider')]
     public function testGetFromString($str, $expected)
     {
         $object = new ComplexParameter('foo');
@@ -34,7 +34,7 @@ class ComplexParameterTest extends TestCase
     /**
      * @return array
      */
-    public function getFromStringDataProvider()
+    public static function getFromStringDataProvider()
     {
         return [
             ['--not-matching', []],

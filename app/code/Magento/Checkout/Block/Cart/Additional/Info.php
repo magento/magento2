@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Checkout\Block\Cart\Additional;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Info extends \Magento\Framework\View\Element\Template
 {

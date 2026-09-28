@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\ConfigurableProduct\Model;
 
 /**
  * Interface to retrieve options for attribute
  * @api
- * @since 100.2.0
+ * @since 100.1.11
  */
 interface AttributeOptionProviderInterface
 {
@@ -18,7 +18,7 @@ interface AttributeOptionProviderInterface
      * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute
      * @param int $productId
      * @return array
-     * @since 100.2.0
+     * @since 100.1.11
      */
     public function getAttributeOptions(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute, $productId);
 }

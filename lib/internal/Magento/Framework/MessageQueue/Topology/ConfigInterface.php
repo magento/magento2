@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\MessageQueue\Topology;
 
@@ -13,7 +13,7 @@ use Magento\Framework\MessageQueue\Topology\Config\QueueConfigItemInterface;
  * Topology config interface provides access data declared in etc/queue_topology.xml
  *
  * @api
- * @since 100.2.0
+ * @since 103.0.0
  */
 interface ConfigInterface
 {
@@ -25,7 +25,7 @@ interface ConfigInterface
      * @return ExchangeConfigItemInterface
      * @throws LocalizedException
      * @throws \LogicException
-     * @since 100.2.0
+     * @since 103.0.0
      */
     public function getExchange($name, $connection);
 
@@ -34,7 +34,7 @@ interface ConfigInterface
      *
      * @return ExchangeConfigItemInterface[]
      * @throws \LogicException
-     * @since 100.2.0
+     * @since 103.0.0
      */
     public function getExchanges();
 
@@ -43,7 +43,7 @@ interface ConfigInterface
      *
      * @return QueueConfigItemInterface[]
      * @throws \LogicException
-     * @since 100.2.0
+     * @since 103.0.0
      */
     public function getQueues();
 }

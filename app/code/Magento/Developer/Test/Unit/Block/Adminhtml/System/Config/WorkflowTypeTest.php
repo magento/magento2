@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Developer\Test\Unit\Block\Adminhtml\System\Config;
 
@@ -10,6 +10,7 @@ use Magento\Developer\Block\Adminhtml\System\Config\WorkflowType;
 use Magento\Framework\App\State;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -43,6 +44,7 @@ class WorkflowTypeTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManager($this);
+        $this->objectManagerHelper->prepareObjectManager();
         $this->elementMock = $this->createMock(AbstractElement::class);
         $this->appStateMock = $this->createMock(State::class);
 
@@ -61,8 +63,8 @@ class WorkflowTypeTest extends TestCase
     /**
      * @param string $mode
      * @param int $disable
-     * @dataProvider renderDataProvider
      */
+    #[DataProvider('renderDataProvider')]
     public function testRender($mode, $disable)
     {
         $this->appStateMock->expects($this->once())
@@ -86,7 +88,7 @@ class WorkflowTypeTest extends TestCase
     /**
      * @return array
      */
-    public function renderDataProvider()
+    public static function renderDataProvider()
     {
         return [
             [State::MODE_PRODUCTION, 1],

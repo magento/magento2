@@ -1,0 +1,14 @@
+
+File "/var/www/html/app/code/Magento/Directory/Test/Mftf/Test/CustomCurrencySymbolWithSpaceTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 SetCurrencyIDRBaseConfig from module(s): magento/module-currency-symbol
+	 SetAllowedCurrenciesConfigForIDR from module(s): magento/module-currency-symbol
+	 SetAllowedCurrenciesConfigForUSD from module(s): magento/module-currency-symbol
+	 SetDefaultCurrencyIDRConfig from module(s): magento/module-currency-symbol
+	 SetCurrencyUSDBaseConfig from module(s): magento/module-currency-symbol
+	 SetDefaultCurrencyUSDConfig from module(s): magento/module-currency-symbol
+	 AdminCurrencySymbolsGridSection from module(s): magento/module-currency-symbol
+	 AdminSaveCurrencySymbolMessageData from module(s): magento/module-currency-symbol
+	 AdminNavigateToCurrencySymbolsPageActionGroup from module(s): magento/module-currency-symbol
+	 AssertAdminCurrencySymbolIsDisabledActionGroup from module(s): magento/module-currency-symbol

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\TestFramework\TestCase\Webapi\Adapter\Rest;
@@ -23,7 +23,7 @@ class DocumentationGenerator
     public function generateDocumentation($httpMethod, $resourcePath, $arguments, $response)
     {
         $content = $this->generateHtmlContent($httpMethod, $resourcePath, $arguments, $response);
-        $filePath = $this->generateFileName($resourcePath);
+        $filePath = $this->generateFileName();
         if ($filePath === null) {
             return;
         }

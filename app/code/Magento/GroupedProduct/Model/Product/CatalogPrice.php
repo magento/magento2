@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\GroupedProduct\Model\Product;
 
@@ -38,7 +38,7 @@ class CatalogPrice implements \Magento\Catalog\Model\Product\CatalogPriceInterfa
      */
     public function getCatalogPrice(
         \Magento\Catalog\Model\Product $product,
-        \Magento\Store\Api\Data\StoreInterface $store = null,
+        ?\Magento\Store\Api\Data\StoreInterface $store = null,
         $inclTax = false
     ) {
         // Workaround to avoid loading stock status by admin's website

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminVerifyCmsPageSelectMenuActionGroup">
+        <arguments>
+            <argument name="pageName" type="string" defaultValue="404 Not Found"/>
+        </arguments>
+        <annotations>
+            <description>Goes to Admin CMS Page grid page. Validates that all of the select menu options are present.</description>
+        </annotations>
+        <waitForElementVisible selector="{{CmsPagesPageActionsSection.select('pageName')}}" stepKey="waitForCMSPageListItem" />
+        <click selector="{{CmsPagesPageActionsSection.select('pageName')}}" stepKey="clickSelect" />
+        <waitForElementVisible selector="{{CmsPagesPageActionsSection.edit('pageName')}}" stepKey="waitForEditLink" />
+        <waitForElementVisible selector="{{CmsPagesPageActionsSection.preview('pageName')}}" stepKey="waitForPreviewLink" />
+        <waitForElementVisible selector="{{CmsPagesPageActionsSection.delete('pageName')}}" stepKey="waitForDeleteLink" />
+    </actionGroup>
+</actionGroups>

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,9 +15,11 @@ use Magento\Analytics\Model\ReportWriterInterface;
 use Magento\Framework\Archive;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
-use Magento\Framework\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem\File\WriteInterface as FileWriteInterface;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ExportDataHandlerTest extends TestCase
@@ -86,13 +88,13 @@ class ExportDataHandlerTest extends TestCase
 
         $this->archiveMock = $this->createMock(Archive::class);
 
-        $this->reportWriterMock = $this->getMockForAbstractClass(ReportWriterInterface::class);
+        $this->reportWriterMock = $this->createMock(ReportWriterInterface::class);
 
         $this->cryptographerMock = $this->createMock(Cryptographer::class);
 
         $this->fileRecorderMock = $this->createMock(FileRecorder::class);
 
-        $this->directoryMock = $this->getMockForAbstractClass(WriteInterface::class);
+        $this->directoryMock = $this->createMock(WriteInterface::class);
 
         $this->encodedContextMock = $this->createMock(EncodedContext::class);
 
@@ -113,12 +115,22 @@ class ExportDataHandlerTest extends TestCase
     }
 
     /**
-     * @param bool $isArchiveSourceDirectory
-     * @dataProvider prepareExportDataDataProvider
+     * Return unique identifier for an instance.
+     *
+     * @return string
      */
+    private function getInstanceIdentifier()
+    {
+        return hash('sha256', BP);
+    }
+
+    /**
+     * @param bool $isArchiveSourceDirectory
+     */
+    #[DataProvider('prepareExportDataDataProvider')]
     public function testPrepareExportData($isArchiveSourceDirectory)
     {
-        $tmpFilesDirectoryPath = $this->subdirectoryPath . 'tmp/';
+        $tmpFilesDirectoryPath = $this->subdirectoryPath . 'tmp/' . $this->getInstanceIdentifier() . '/';
         $archiveRelativePath = $this->subdirectoryPath . $this->archiveName;
 
         $archiveSource = $isArchiveSourceDirectory ? (__DIR__) : '/tmp/' . $tmpFilesDirectoryPath;
@@ -132,26 +144,18 @@ class ExportDataHandlerTest extends TestCase
         $this->directoryMock
             ->expects($this->exactly(4))
             ->method('delete')
-            ->withConsecutive(
-                [$tmpFilesDirectoryPath],
-                [$archiveRelativePath]
-            );
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$tmpFilesDirectoryPath] => true,
+                [$archiveRelativePath] => true
+            });
 
         $this->directoryMock
             ->expects($this->exactly(4))
             ->method('getAbsolutePath')
-            ->withConsecutive(
-                [$tmpFilesDirectoryPath],
-                [$tmpFilesDirectoryPath],
-                [$archiveRelativePath],
-                [$archiveRelativePath]
-            )
-            ->willReturnOnConsecutiveCalls(
-                $archiveSource,
-                $archiveSource,
-                $archiveAbsolutePath,
-                $archiveAbsolutePath
-            );
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$tmpFilesDirectoryPath] => $archiveSource,
+                [$archiveRelativePath] => $archiveAbsolutePath
+            });
 
         $this->reportWriterMock
             ->expects($this->once())
@@ -161,14 +165,10 @@ class ExportDataHandlerTest extends TestCase
         $this->directoryMock
             ->expects($this->exactly(2))
             ->method('isExist')
-            ->withConsecutive(
-                [$tmpFilesDirectoryPath],
-                [$archiveRelativePath]
-            )
-            ->willReturnOnConsecutiveCalls(
-                true,
-                true
-            );
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$tmpFilesDirectoryPath] => true,
+                [$archiveRelativePath] => true
+            });
 
         $this->directoryMock
             ->expects($this->once())
@@ -184,23 +184,30 @@ class ExportDataHandlerTest extends TestCase
                 $isArchiveSourceDirectory
             );
 
-        $fileContent = 'Some text';
+        $archiveReadFileMock = $this->createMock(FileWriteInterface::class);
         $this->directoryMock
             ->expects($this->once())
-            ->method('readFile')
-            ->with($archiveRelativePath)
-            ->willReturn($fileContent);
+            ->method('openFile')
+            ->with($archiveRelativePath, 'r')
+            ->willReturn($archiveReadFileMock);
+        $archiveReadFileMock
+            ->expects($this->once())
+            ->method('close');
 
+        $destinationFileMock = $this->createMock(FileWriteInterface::class);
         $this->cryptographerMock
             ->expects($this->once())
-            ->method('encode')
-            ->with($fileContent)
+            ->method('encodeToFile')
+            ->with($archiveReadFileMock, $destinationFileMock)
             ->willReturn($this->encodedContextMock);
 
         $this->fileRecorderMock
             ->expects($this->once())
-            ->method('recordNewFile')
-            ->with($this->encodedContextMock);
+            ->method('recordNewFileStreamed')
+            ->willReturnCallback(function (callable $writer) use ($destinationFileMock) {
+                $this->assertSame($this->encodedContextMock, $writer($destinationFileMock));
+                return true;
+            });
 
         $this->assertTrue($this->exportDataHandler->prepareExportData());
     }
@@ -208,7 +215,7 @@ class ExportDataHandlerTest extends TestCase
     /**
      * @return array
      */
-    public function prepareExportDataDataProvider()
+    public static function prepareExportDataDataProvider()
     {
         return [
             'Data source for archive is directory' => [true],
@@ -222,7 +229,7 @@ class ExportDataHandlerTest extends TestCase
     public function testPrepareExportDataWithLocalizedException()
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');
-        $tmpFilesDirectoryPath = $this->subdirectoryPath . 'tmp/';
+        $tmpFilesDirectoryPath = $this->subdirectoryPath . 'tmp/' . $this->getInstanceIdentifier() . '/';
         $archivePath = $this->subdirectoryPath . $this->archiveName;
 
         $this->filesystemMock
@@ -237,11 +244,10 @@ class ExportDataHandlerTest extends TestCase
         $this->directoryMock
             ->expects($this->exactly(3))
             ->method('delete')
-            ->withConsecutive(
-                [$tmpFilesDirectoryPath],
-                [$tmpFilesDirectoryPath],
-                [$archivePath]
-            );
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$tmpFilesDirectoryPath] => true,
+                [$archivePath] => true
+            });
         $this->directoryMock
             ->expects($this->exactly(2))
             ->method('getAbsolutePath')

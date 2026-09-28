@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Theme\Controller\Adminhtml\System\Design\Theme;
@@ -11,7 +10,7 @@ use Magento\Framework\App\Action\HttpGetActionInterface;
 
 /**
  * Class UploadJs
- * @deprecated
+ * @deprecated 101.0.0
  */
 class UploadJs extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme implements HttpGetActionInterface
 {

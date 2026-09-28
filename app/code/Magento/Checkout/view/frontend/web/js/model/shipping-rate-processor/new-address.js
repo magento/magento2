@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 define([
     'Magento_Checkout/js/model/resource-url-manager',
@@ -52,8 +52,10 @@ define([
                 shippingService.setShippingRates(cache);
                 shippingService.isLoading(false);
             } else {
+                let async = quote.isPersistent() ? false : true;
+
                 storage.post(
-                    serviceUrl, payload, false
+                    serviceUrl, payload, false, 'application/json', {}, async
                 ).done(function (result) {
                     rateRegistry.set(address.getCacheKey(), result);
                     shippingService.setShippingRates(result);

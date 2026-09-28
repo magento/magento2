@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\ImportExport\Model\Export\Adapter;
 
@@ -46,7 +46,7 @@ abstract class AbstractAdapter
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
         $destination = null,
-        $destinationDirectoryCode = DirectoryList::VAR_DIR
+        $destinationDirectoryCode = DirectoryList::VAR_IMPORT_EXPORT
     ) {
         $this->_directoryHandle = $filesystem->getDirectoryWrite($destinationDirectoryCode);
         if (!$destination) {

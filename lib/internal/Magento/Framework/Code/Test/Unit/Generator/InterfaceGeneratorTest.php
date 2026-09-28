@@ -1,17 +1,21 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Code\Test\Unit\Generator;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Framework\Code\Generator\InterfaceGenerator;
 use Magento\SomeModule\Model\Two\Test;
 use Magento\Framework\Code\Generator\CodeGeneratorInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class InterfaceGeneratorTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var InterfaceGenerator
      */
@@ -74,9 +78,8 @@ class InterfaceGeneratorTest extends TestCase
         $this->interfaceGenerator = new InterfaceGenerator();
     }
 
-    /**
-     * @dataProvider generateDataProvider
-     */
+    /**     */
+    #[DataProvider('generateDataProvider')]
     public function testGenerate($additionalMethodsData, $expectedException, $expectedExceptionMessage)
     {
         if ($expectedException) {
@@ -122,7 +125,7 @@ class InterfaceGeneratorTest extends TestCase
     /**
      * @return array
      */
-    public function generateDataProvider()
+    public static function generateDataProvider()
     {
         return [
             'Valid data' => [

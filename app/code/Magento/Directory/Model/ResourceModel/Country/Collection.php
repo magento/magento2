@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Directory\Model\ResourceModel\Country;
@@ -9,6 +9,7 @@ namespace Magento\Directory\Model\ResourceModel\Country;
 use Magento\Directory\Model\AllowedCountries;
 use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Directory\Helper\Data;
 
 /**
  * Country Resource Collection
@@ -102,9 +103,9 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \Magento\Framework\App\Helper\AbstractHelper $helperData,
         array $countriesWithNotRequiredStates = [],
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null,
-        \Magento\Store\Model\StoreManagerInterface $storeManager = null
+        ?\Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
+        ?\Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null,
+        ?\Magento\Store\Model\StoreManagerInterface $storeManager = null
     ) {
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
         $this->_scopeConfig = $scopeConfig;
@@ -120,7 +121,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
-     * Foreground countries
+     * Highlighted country codes list.
      *
      * @var array
      */
@@ -137,9 +138,10 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
-     * Return Allowed Countries reader
+     * Return allowed countries reader.
      *
-     * @deprecated 100.1.2
+     * @deprecated 100.1.2 Use constructor-injected AllowedCountries instead.
+     * @see AllowedCountries
      * @return \Magento\Directory\Model\AllowedCountries
      */
     private function getAllowedCountriesReader()
@@ -203,7 +205,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
                 if (is_array($iso)) {
                     $whereOr = [];
                     foreach ($iso as $iso_curr) {
-                        $whereOr[] .= $this->_getConditionSql("{$iso_curr}_code", ['in' => $countryCode]);
+                            $whereOr[] = $this->_getConditionSql("{$iso_curr}_code", ['in' => $countryCode]);
                     }
                     $this->_select->where('(' . implode(') OR (', $whereOr) . ')');
                 } else {
@@ -213,7 +215,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
                 if (is_array($iso)) {
                     $whereOr = [];
                     foreach ($iso as $iso_curr) {
-                        $whereOr[] .= $this->_getConditionSql("{$iso_curr}_code", $countryCode);
+                            $whereOr[] = $this->_getConditionSql("{$iso_curr}_code", $countryCode);
                     }
                     $this->_select->where('(' . implode(') OR (', $whereOr) . ')');
                 } else {
@@ -293,20 +295,14 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     private function addDefaultCountryToOptions(array &$options)
     {
-        $defaultCountry = [];
-        foreach ($this->storeManager->getWebsites() as $website) {
-            $defaultCountryConfig = $this->_scopeConfig->getValue(
-                \Magento\Directory\Helper\Data::XML_PATH_DEFAULT_COUNTRY,
-                ScopeInterface::SCOPE_WEBSITES,
-                $website
-            );
-            $defaultCountry[$defaultCountryConfig][] = $website->getId();
-        }
+        $defaultCountry = $this->_scopeConfig->getValue(
+            Data::XML_PATH_DEFAULT_COUNTRY,
+            ScopeInterface::SCOPE_WEBSITES,
+            $this->storeManager->getWebsite()
+        );
 
         foreach ($options as $key => $option) {
-            if (isset($defaultCountry[$option['value']])) {
-                $options[$key]['is_default'] = !empty($defaultCountry[$option['value']]);
-            }
+            $options[$key]['is_default'] = $defaultCountry === $option['value'];
         }
     }
 

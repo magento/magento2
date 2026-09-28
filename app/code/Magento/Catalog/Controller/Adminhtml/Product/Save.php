@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Controller\Adminhtml\Product;
@@ -15,7 +15,8 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\Request\DataPersistorInterface;
 
 /**
- * Class Save
+ * Product save controller
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Save extends \Magento\Catalog\Controller\Adminhtml\Product implements HttpPostActionInterface
@@ -87,10 +88,10 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product implements Http
         \Magento\Catalog\Model\Product\Copier $productCopier,
         \Magento\Catalog\Model\Product\TypeTransitionManager $productTypeManager,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
-        \Magento\Framework\Escaper $escaper = null,
-        \Psr\Log\LoggerInterface $logger = null,
-        \Magento\Catalog\Api\CategoryLinkManagementInterface $categoryLinkManagement = null,
-        \Magento\Store\Model\StoreManagerInterface $storeManager = null
+        ?\Magento\Framework\Escaper $escaper = null,
+        ?\Psr\Log\LoggerInterface $logger = null,
+        ?\Magento\Catalog\Api\CategoryLinkManagementInterface $categoryLinkManagement = null,
+        ?\Magento\Store\Model\StoreManagerInterface $storeManager = null
     ) {
         parent::__construct($context, $productBuilder);
         $this->initializationHelper = $initializationHelper;
@@ -141,10 +142,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product implements Http
                 $canSaveCustomOptions = $product->getCanSaveCustomOptions();
                 $product->save();
                 $this->handleImageRemoveError($data, $product->getId());
-                $this->categoryLinkManagement->assignProductToCategories(
-                    $product->getSku(),
-                    $product->getCategoryIds()
-                );
                 $productId = $product->getEntityId();
                 $productAttributeSetId = $product->getAttributeSetId();
                 $productTypeId = $product->getTypeId();
@@ -233,7 +230,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product implements Http
             }
             if ($removedImagesAmount) {
                 $expectedImagesAmount = count($postData['product']['media_gallery']['images']) - $removedImagesAmount;
-                $product = $this->productRepository->getById($productId);
+                $product = $this->productRepository->getById($productId, false, null, true);
                 $images = $product->getMediaGallery('images');
                 if (is_array($images) && $expectedImagesAmount != count($images)) {
                     $this->messageManager->addNoticeMessage(
@@ -298,6 +295,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product implements Http
      *
      * @return DataPersistorInterface|mixed
      * @deprecated 101.0.0
+     * @see we don't recommend this approach anymore
      */
     protected function getDataPersistor()
     {

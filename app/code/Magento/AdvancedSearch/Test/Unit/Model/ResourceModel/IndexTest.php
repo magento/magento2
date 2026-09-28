@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\AdvancedSearch\Test\Unit\Model\ResourceModel;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\AdvancedSearch\Model\ResourceModel\Index;
 use Magento\Catalog\Model\Indexer\Product\Price\DimensionCollectionFactory;
 use Magento\Framework\App\ResourceConnection;
@@ -23,9 +25,9 @@ use PHPUnit\Framework\TestCase;
 use Traversable;
 
 /**
- * @covers \Magento\AdvancedSearch\Model\ResourceModel\Index
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
+#[CoversClass(Index::class)]
 class IndexTest extends TestCase
 {
     /**
@@ -60,18 +62,17 @@ class IndexTest extends TestCase
      */
     private $resourceConnectionMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->resourceContextMock = $this->createMock(Context::class);
         $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
-        $this->resourceContextMock->expects($this->any())
-            ->method('getResources')
-            ->willReturn($this->resourceConnectionMock);
-        $this->adapterMock = $this->getMockForAbstractClass(AdapterInterface::class);
-        $this->resourceConnectionMock->expects($this->any())
-            ->method('getConnection')
-            ->willReturn($this->adapterMock);
+        $this->resourceContextMock->method('getResources')->willReturn($this->resourceConnectionMock);
+        $this->adapterMock = $this->createMock(AdapterInterface::class);
+        $this->resourceConnectionMock->method('getConnection')->willReturn($this->adapterMock);
         $this->metadataPoolMock = $this->createMock(MetadataPool::class);
 
         /** @var IndexScopeResolver|MockObject $indexScopeResolverMock */
@@ -98,11 +99,14 @@ class IndexTest extends TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testGetPriceIndexDataUsesFrontendPriceIndexerTable(): void
     {
         $storeId = 1;
-        $storeMock = $this->getMockForAbstractClass(StoreInterface::class);
-        $storeMock->expects($this->any())->method('getId')->willReturn($storeId);
+        $storeMock = $this->createMock(StoreInterface::class);
+        $storeMock->method('getId')->willReturn($storeId);
         $storeMock->method('getWebsiteId')->willReturn(1);
         $this->storeManagerMock->expects($this->once())
             ->method('getStore')
@@ -116,5 +120,74 @@ class IndexTest extends TestCase
         $this->adapterMock->expects($this->once())->method('fetchAll')->with($selectMock)->willReturn([]);
 
         $this->assertEmpty($this->model->getPriceIndexData([1], $storeId));
+    }
+
+    /**
+     * @param array $testData
+     *
+     * @return void
+     */
+    #[DataProvider('providerForTestPriceIndexData')]
+    public function testGetPriceIndexData(array $testData): void
+    {
+        $storeMock = $this->createMock(StoreInterface::class);
+        $storeMock->method('getId')->willReturn(1);
+        $storeMock->method('getWebsiteId')->willReturn($testData['website_id']);
+        $this->storeManagerMock->expects($this->once())
+            ->method('getStore')
+            ->with(1)->willReturn($storeMock);
+
+        $selectMock = $this->createMock(Select::class);
+        $selectMock->expects($this->any())->method('union')->willReturnSelf();
+        $this->adapterMock->method('select')->willReturn($selectMock);
+        $this->adapterMock->expects($this->any())->method('fetchAll')->with($selectMock)->willReturn([$testData]);
+        $expectedData = [
+            $testData['entity_id'] => [
+                $testData['customer_group_id'] => round((float) $testData['min_price'], 2)
+            ]
+        ];
+
+        $this->assertEquals($this->model->getPriceIndexData([1], 1), $expectedData);
+    }
+
+    /**
+     * @return array
+     */
+    public static function providerForTestPriceIndexData(): array
+    {
+        return [
+            [
+               [
+                   'website_id' => 1,
+                   'entity_id' => 1,
+                   'customer_group_id' => 1,
+                   'min_price' => '12.12'
+               ]
+            ],
+            [
+                [
+                    'website_id' => 1,
+                    'entity_id' => 2,
+                    'customer_group_id' => 2,
+                    'min_price' => null
+                ]
+            ],
+            [
+                [
+                    'website_id' => 1,
+                    'entity_id' => 3,
+                    'customer_group_id' => 3,
+                    'min_price' => 12.12
+                ]
+            ],
+            [
+                [
+                    'website_id' => 1,
+                    'entity_id' => 3,
+                    'customer_group_id' => 3,
+                    'min_price' => ''
+                ]
+            ]
+        ];
     }
 }

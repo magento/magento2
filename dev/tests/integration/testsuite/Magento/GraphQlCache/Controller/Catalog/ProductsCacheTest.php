@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -138,5 +138,34 @@ QUERY;
 
         $this->assertEquals('MISS', $responseProduct1->getHeader('X-Magento-Cache-Debug')->getFieldValue());
         $this->assertEquals('MISS', $responseProduct2->getHeader('X-Magento-Cache-Debug')->getFieldValue());
+    }
+
+    /**
+     * Test response has category tags when products are filtered by category id
+     *
+     * @magentoDataFixture Magento/Catalog/_files/category_product.php
+     */
+    public function testProductsFilterByCategoryHasCategoryTags(): void
+    {
+        $query
+            = <<<QUERY
+        {
+           products(filter: {category_id: {eq: "333"}})
+           {
+               items {
+                   name
+                   sku
+               }
+           }
+        }
+QUERY;
+
+        $response = $this->dispatchGraphQlGETRequest(['query' => $query]);
+        $actualCacheTags = explode(',', $response->getHeader('X-Magento-Tags')->getFieldValue());
+        $expectedCacheTags = ['cat_c', 'cat_c_333'];
+
+        foreach ($expectedCacheTags as $cacheTag) {
+            $this->assertContains($cacheTag, $actualCacheTags);
+        }
     }
 }

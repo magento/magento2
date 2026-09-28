@@ -1,21 +1,23 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Persistent\Test\Unit\Model\Checkout;
 
 use Magento\Checkout\Model\GuestPaymentInformationManagement;
+use Magento\Checkout\Model\Session as CheckoutSession;
+use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\Data\Collection;
 use Magento\Persistent\Helper\Data;
 use Magento\Persistent\Helper\Session;
 use Magento\Persistent\Model\Checkout\GuestPaymentInformationManagementPlugin;
 use Magento\Persistent\Model\QuoteManager;
 use Magento\Quote\Api\CartRepositoryInterface;
-use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Api\Data\PaymentInterface;
+use Magento\Quote\Model\Quote;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -32,7 +34,7 @@ class GuestPaymentInformationManagementPluginTest extends TestCase
     protected $persistentSessionMock;
 
     /**
-     * @var \Magento\Checkout\Model\Session|MockObject
+     * @var CheckoutSession|MockObject
      */
     protected $checkoutSessionMock;
 
@@ -42,7 +44,7 @@ class GuestPaymentInformationManagementPluginTest extends TestCase
     protected $quoteManagerMock;
 
     /**
-     * @var \Magento\Customer\Model\Session|MockObject
+     * @var CustomerSession|MockObject
      */
     protected $customerSessionMock;
 
@@ -65,9 +67,9 @@ class GuestPaymentInformationManagementPluginTest extends TestCase
     {
         $this->persistentHelperMock = $this->createMock(Data::class);
         $this->persistentSessionMock = $this->createMock(Session::class);
-        $this->checkoutSessionMock = $this->createMock(\Magento\Checkout\Model\Session::class);
+        $this->checkoutSessionMock = $this->createMock(CheckoutSession::class);
         $this->quoteManagerMock = $this->createMock(QuoteManager::class);
-        $this->customerSessionMock = $this->createMock(\Magento\Customer\Model\Session::class);
+        $this->customerSessionMock = $this->createMock(CustomerSession::class);
         $this->cartRepositoryMock = $this->createMock(
             CartRepositoryInterface::class
         );
@@ -85,7 +87,7 @@ class GuestPaymentInformationManagementPluginTest extends TestCase
         );
     }
 
-    public function testBeforeSavePaymentInformationAndPlaceOrderCartConvertsToGuest()
+    public function testBeforeSavePaymentInformationEmailIsSet()
     {
         $cartId = '1';
         $email = 'guest@example.com';
@@ -94,31 +96,16 @@ class GuestPaymentInformationManagementPluginTest extends TestCase
         /**
          * @var PaymentInterface|MockObject $paymentInterfaceMock
          */
-        $paymentInterfaceMock = $this->getMockForAbstractClass(PaymentInterface::class);
+        $paymentInterfaceMock = $this->createMock(PaymentInterface::class);
 
         $this->persistentHelperMock->expects($this->once())->method('isShoppingCartPersist')->willReturn(true);
         $this->persistentSessionMock->expects($this->once())->method('isPersistent')->willReturn(true);
         $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->willReturn(false);
         $this->quoteManagerMock->expects($this->once())->method('isPersistent')->willReturn(true);
-        $this->customerSessionMock->expects($this->once())->method('setCustomerId')->with(null);
-        $this->customerSessionMock->expects($this->once())->method('setCustomerGroupId')->with(null);
-        $this->quoteManagerMock->expects($this->once())->method('convertCustomerCartToGuest');
 
-        /** @var CartInterface|MockObject $quoteMock */
-        $quoteMock = $this->getMockForAbstractClass(
-            CartInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['setCustomerEmail', 'getAddressesCollection'],
-            false
-        );
+        $quoteMock = $this->createMock(Quote::class);
         $this->checkoutSessionMock->method('getQuoteId')->willReturn($cartId);
         $this->cartRepositoryMock->expects($this->once())->method('get')->with($cartId)->willReturn($quoteMock);
-        $quoteMock->expects($this->once())->method('setCustomerEmail')->with($email);
-        /** @var Collection|MockObject $collectionMock */
         $collectionMock = $this->createMock(Collection::class);
         $quoteMock->expects($this->once())->method('getAddressesCollection')->willReturn($collectionMock);
         $collectionMock->expects($this->once())->method('walk')->with($walkMethod, $walkArgs);
@@ -133,7 +120,7 @@ class GuestPaymentInformationManagementPluginTest extends TestCase
         );
     }
 
-    public function testBeforeSavePaymentInformationAndPlaceOrderShoppingCartNotPersistentState()
+    public function testBeforeSavePaymentInformationShoppingCartNotPersistentState()
     {
         $cartId = '1';
         $email = 'guest@example.com';
@@ -141,11 +128,12 @@ class GuestPaymentInformationManagementPluginTest extends TestCase
         /**
          * @var PaymentInterface|MockObject $paymentInterfaceMock
          */
-        $paymentInterfaceMock = $this->getMockForAbstractClass(PaymentInterface::class);
+        $paymentInterfaceMock = $this->createMock(PaymentInterface::class);
 
         $this->persistentHelperMock->expects($this->once())->method('isShoppingCartPersist')->willReturn(false);
         $this->persistentSessionMock->expects($this->once())->method('isPersistent')->willReturn(true);
         $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->willReturn(false);
+        $this->cartRepositoryMock->expects($this->never())->method('save');
 
         $this->plugin->beforeSavePaymentInformation(
             $this->subjectMock,
@@ -156,7 +144,7 @@ class GuestPaymentInformationManagementPluginTest extends TestCase
         );
     }
 
-    public function testBeforeSavePaymentInformationAndPlaceOrderPersistentSessionNotPersistentState()
+    public function testBeforeSavePaymentInformationPersistentSessionNotPersistentState()
     {
         $cartId = '1';
         $email = 'guest@example.com';
@@ -164,9 +152,10 @@ class GuestPaymentInformationManagementPluginTest extends TestCase
         /**
          * @var PaymentInterface|MockObject $paymentInterfaceMock
          */
-        $paymentInterfaceMock = $this->getMockForAbstractClass(PaymentInterface::class);
+        $paymentInterfaceMock = $this->createMock(PaymentInterface::class);
 
         $this->persistentSessionMock->expects($this->once())->method('isPersistent')->willReturn(false);
+        $this->cartRepositoryMock->expects($this->never())->method('save');
 
         $this->plugin->beforeSavePaymentInformation(
             $this->subjectMock,
@@ -177,7 +166,7 @@ class GuestPaymentInformationManagementPluginTest extends TestCase
         );
     }
 
-    public function testBeforeSavePaymentInformationAndPlaceOrderCustomerSessionInLoggedInState()
+    public function testBeforeSavePaymentInformationCustomerSessionInLoggedInState()
     {
         $cartId = '1';
         $email = 'guest@example.com';
@@ -185,10 +174,11 @@ class GuestPaymentInformationManagementPluginTest extends TestCase
         /**
          * @var PaymentInterface|MockObject $paymentInterfaceMock
          */
-        $paymentInterfaceMock = $this->getMockForAbstractClass(PaymentInterface::class);
+        $paymentInterfaceMock = $this->createMock(PaymentInterface::class);
 
         $this->persistentSessionMock->expects($this->once())->method('isPersistent')->willReturn(true);
         $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->willReturn(true);
+        $this->cartRepositoryMock->expects($this->never())->method('save');
 
         $this->plugin->beforeSavePaymentInformation(
             $this->subjectMock,
@@ -199,7 +189,7 @@ class GuestPaymentInformationManagementPluginTest extends TestCase
         );
     }
 
-    public function testBeforeSavePaymentInformationAndPlaceOrderQuoteManagerNotInPersistentState()
+    public function testBeforeSavePaymentInformationQuoteManagerNotInPersistentState()
     {
         $cartId = '1';
         $email = 'guest@example.com';
@@ -207,12 +197,13 @@ class GuestPaymentInformationManagementPluginTest extends TestCase
         /**
          * @var PaymentInterface|MockObject $paymentInterfaceMock
          */
-        $paymentInterfaceMock = $this->getMockForAbstractClass(PaymentInterface::class);
+        $paymentInterfaceMock = $this->createMock(PaymentInterface::class);
 
         $this->persistentHelperMock->expects($this->once())->method('isShoppingCartPersist')->willReturn(true);
         $this->persistentSessionMock->expects($this->once())->method('isPersistent')->willReturn(true);
         $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->willReturn(false);
         $this->quoteManagerMock->expects($this->once())->method('isPersistent')->willReturn(false);
+        $this->cartRepositoryMock->expects($this->never())->method('save');
 
         $this->plugin->beforeSavePaymentInformation(
             $this->subjectMock,

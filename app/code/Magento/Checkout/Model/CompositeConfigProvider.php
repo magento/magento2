@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Checkout\Model;
 
@@ -10,6 +10,7 @@ namespace Magento\Checkout\Model;
  *
  * @see \Magento\Checkout\Model\ConfigProviderInterface
  * @api
+ * @since 100.0.2
  */
 class CompositeConfigProvider implements ConfigProviderInterface
 {

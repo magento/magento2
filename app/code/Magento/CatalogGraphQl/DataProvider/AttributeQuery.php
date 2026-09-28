@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -148,7 +148,7 @@ class AttributeQuery
     ): Select {
         $select = $connection->select()
             ->from(['e' => $entityTableName], $entityTableAttributes)
-            ->where('e.entity_id IN (?)', $entityIds);
+            ->where('e.entity_id IN (?)', $entityIds, \Zend_Db::INT_TYPE);
 
         return $select;
     }

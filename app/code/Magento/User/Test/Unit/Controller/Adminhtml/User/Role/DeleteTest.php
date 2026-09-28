@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,6 +18,7 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Filter\FilterManager;
 use Magento\Framework\Message\Manager;
 use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\User\Controller\Adminhtml\User\Role\Delete;
 use Magento\User\Model\User;
@@ -32,6 +33,8 @@ use PHPUnit\Framework\TestCase;
  */
 class DeleteTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Delete
      */
@@ -93,7 +96,7 @@ class DeleteTest extends TestCase
     private $messageManagerMock;
 
     /**
-     * @var \Magento\Authorization\Model\Role|MockObject
+     * @var Role|MockObject
      */
     private $roleModelMock;
 
@@ -105,20 +108,20 @@ class DeleteTest extends TestCase
         $objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->contextMock = $this->createMock(Context::class);
-        $this->coreRegistryMock = $this->getMockBuilder(Registry::class)
-            ->addMethods(['getId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->coreRegistryMock = $this->createPartialMockWithReflection(
+            Registry::class,
+            ['getId']
+        );
         $this->roleFactoryMock = $this->createMock(RoleFactory::class);
         $this->userFactoryMock = $this->createPartialMock(
             UserFactory::class,
             ['create']
         );
         $this->rulesFactoryMock = $this->createMock(RulesFactory::class);
-        $this->authSessionMock = $this->getMockBuilder(Session::class)
-            ->addMethods(['getUser'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->authSessionMock = $this->createPartialMockWithReflection(
+            Session::class,
+            ['getUser']
+        );
         $this->filterManagerMock = $this->createMock(FilterManager::class);
         $this->resultRedirectMock = $this->createPartialMock(
             Redirect::class,
@@ -132,20 +135,13 @@ class DeleteTest extends TestCase
         $this->resultFactoryMock->expects($this->atLeastOnce())
             ->method('create')
             ->willReturn($this->resultRedirectMock);
-        $this->requestMock = $this->getMockForAbstractClass(
-            RequestInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['getParam']
-        );
+        $this->requestMock = $this->createMock(RequestInterface::class);
         $this->contextMock->expects($this->once())
             ->method('getResultFactory')
             ->willReturn($this->resultFactoryMock);
         $this->resultFactoryMock->expects($this->once())
             ->method('create')
+            // @phpstan-ignore-next-line
             ->with(ResultFactory::TYPE_REDIRECT, [])
             ->willReturn($this->resultRedirectMock);
 
@@ -156,11 +152,10 @@ class DeleteTest extends TestCase
 
         $this->contextMock->expects($this->once())->method('getRequest')->willReturn($this->requestMock);
 
-        $this->roleModelMock = $this->getMockBuilder(Role::class)
-            ->addMethods(['getRoleType'])
-            ->onlyMethods(['load', 'getId', 'delete'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->roleModelMock = $this->createPartialMockWithReflection(
+            Role::class,
+            ['getRoleType', 'load', 'getId', 'delete']
+        );
 
         $this->controller = $objectManagerHelper->getObject(
             Delete::class,
@@ -171,7 +166,7 @@ class DeleteTest extends TestCase
                 'userFactory' => $this->userFactoryMock,
                 'rulesFactory' => $this->rulesFactoryMock,
                 'authSession' => $this->authSessionMock,
-                'filterManager' => $this->filterManagerMock,
+                'filterManager' => $this->filterManagerMock
             ]
         );
     }
@@ -181,7 +176,7 @@ class DeleteTest extends TestCase
      *
      * @return void
      */
-    public function testExecuteDeleteSelfAssignedRole()
+    public function testExecuteDeleteSelfAssignedRole(): void
     {
         $idUser = 1;
         $idUserRole = 3;
@@ -207,7 +202,7 @@ class DeleteTest extends TestCase
      *
      * @return void
      */
-    public function testExecuteDeleteWithNormalScenario()
+    public function testExecuteDeleteWithNormalScenario(): void
     {
         $idUser = 1;
         $idUserRole = 3;
@@ -239,7 +234,7 @@ class DeleteTest extends TestCase
      *
      * @return void
      */
-    public function testExecuteDeleteWithError()
+    public function testExecuteDeleteWithError(): void
     {
         $idUser = 1;
         $idUserRole = 3;
@@ -271,7 +266,7 @@ class DeleteTest extends TestCase
      *
      * @return void
      */
-    public function testExecuteWithoutRole()
+    public function testExecuteWithoutRole(): void
     {
         $idUser = 1;
         $idUserRole = 3;
@@ -281,8 +276,9 @@ class DeleteTest extends TestCase
         $this->checkUserAndRoleIds($idDeleteRole, $idUser, $idUserRole);
 
         $this->initRoleExecute($roleType);
-        $this->roleModelMock->expects($this->at(1))->method('getId')->willReturn($idDeleteRole);
-        $this->roleModelMock->expects($this->at(2))->method('getId')->willReturn(null);
+        $this->roleModelMock
+            ->method('getId')
+            ->willReturnOnConsecutiveCalls($idDeleteRole, null);
 
         $this->messageManagerMock->expects($this->once())
             ->method('addError')
@@ -303,9 +299,10 @@ class DeleteTest extends TestCase
      * @param int $id
      * @param int $userId
      * @param int $userRoleId
+     *
      * @return void
      */
-    private function checkUserAndRoleIds(int $id, int $userId, int $userRoleId)
+    private function checkUserAndRoleIds(int $id, int $userId, int $userRoleId): void
     {
         $this->requestMock->expects($this->atLeastOnce())->method('getParam')->with('rid')->willReturn($id);
 
@@ -323,9 +320,10 @@ class DeleteTest extends TestCase
      * Execute initialization Role.
      *
      * @param string|null $roleType
+     *
      * @return void
      */
-    private function initRoleExecute($roleType)
+    private function initRoleExecute(?string $roleType): void
     {
         $this->roleFactoryMock->expects($this->once())->method('create')->willReturn($this->roleModelMock);
         $this->roleModelMock->expects($this->once())->method('load')->willReturnSelf();

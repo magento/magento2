@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Downloadable\Model\Sample;
 
@@ -9,7 +9,7 @@ use Magento\Downloadable\Api\SampleRepositoryInterface as SampleRepository;
 use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 
 /**
- * Class DeleteHandler
+ * Delete Handler for Downloadable Product Samples.
  */
 class DeleteHandler implements ExtensionInterface
 {
@@ -27,6 +27,8 @@ class DeleteHandler implements ExtensionInterface
     }
 
     /**
+     * Delete Downloadable Samples for the provided Entity.
+     *
      * @param object $entity
      * @param array $arguments
      * @return \Magento\Catalog\Api\Data\ProductInterface|object
@@ -42,6 +44,8 @@ class DeleteHandler implements ExtensionInterface
         foreach ($this->sampleRepository->getList($entity->getSku()) as $sample) {
             $this->sampleRepository->delete($sample->getId());
         }
+        $entity->setDownloadableSamples(null);
+
         return $entity;
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -29,7 +29,7 @@ class SitemapConfigReaderTest extends TestCase
      */
     private function getScopeConfigMock(): MockObject
     {
-        $scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $scopeConfigMock->expects($this->any())
             ->method('getValue')
             ->willReturnMap([

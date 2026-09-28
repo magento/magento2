@@ -2,6 +2,9 @@
     "tests": [
         "actionGroupArguments",
         "deprecatedEntityUsage",
-        "annotations"
+        "annotations",
+        "pauseActionUsage",
+        "classFileNamingCheck",
+        "testDependencies"
     ]
 }

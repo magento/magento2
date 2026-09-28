@@ -1,19 +1,27 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model;
 
 /**
- * Class ValidatorResult
+ * Validation result messages class
  */
 class ValidatorResult implements ValidatorResultInterface
 {
     /**
      * @var \string[]
      */
-    private $messages = [];
+    private $messages;
+
+    /**
+     * @param array $messages
+     */
+    public function __construct(array $messages = [])
+    {
+        $this->messages = $messages;
+    }
 
     /**
      * @inheritdoc
@@ -24,7 +32,7 @@ class ValidatorResult implements ValidatorResultInterface
     }
 
     /**
-     * @return bool
+     * @inheritdoc
      */
     public function hasMessages()
     {
@@ -32,7 +40,7 @@ class ValidatorResult implements ValidatorResultInterface
     }
 
     /**
-     * @return \string[]
+     * @inheritdoc
      */
     public function getMessages()
     {

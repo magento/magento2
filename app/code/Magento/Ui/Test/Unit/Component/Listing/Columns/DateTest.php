@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -46,7 +46,7 @@ class DateTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->contextMock = $this->getMockForAbstractClass(
+        $this->contextMock = $this->createMock(
             ContextInterface::class,
             [],
             '',
@@ -55,14 +55,10 @@ class DateTest extends TestCase
             true,
             []
         );
-        $processor = $this->getMockBuilder(Processor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $processor = $this->createMock(Processor::class);
         $this->contextMock->expects($this->never())->method('getProcessor')->willReturn($processor);
 
-        $this->timezoneMock = $this->getMockBuilder(TimezoneInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->timezoneMock = $this->createMock(TimezoneInterface::class);
 
         $this->model = $this->objectManager->getObject(
             Date::class,

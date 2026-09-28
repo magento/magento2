@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Eav\Block\Adminhtml\Attribute\Edit;
 
@@ -38,7 +38,7 @@ class Js extends \Magento\Backend\Block\Template
     }
 
     /**
-     * @deprecated Misspelled method
+     * @deprecated 102.0.0 Misspelled method
      * @see getCompatibleInputTypes
      */
     public function getComaptibleInputTypes()

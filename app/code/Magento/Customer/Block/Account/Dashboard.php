@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Block\Account;
 
@@ -120,7 +120,7 @@ class Dashboard extends Template
      * Retrieve the Url for customer orders.
      *
      * @return string
-     * @deprecated Action does not exist
+     * @deprecated 102.0.3 Action does not exist
      */
     public function getOrdersUrl()
     {

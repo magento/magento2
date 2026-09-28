@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\InstantPurchase\Model\ShippingMethodChoose;
 
@@ -20,12 +20,14 @@ use Magento\Quote\Api\Data\ShippingMethodInterface;
  * DeferredShippingMethodChooserPool.
  *
  * @api
+ * @since 100.2.0
  */
 interface ShippingMethodChooserInterface
 {
     /**
      * @param Address $address
      * @return ShippingMethodInterface|null
+     * @since 100.2.0
      */
     public function choose(Address $address);
 }

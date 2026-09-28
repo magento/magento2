@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -38,8 +38,7 @@ class ConfigReaderPluginTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->configMock = $this->getMockBuilder(ConfigInterface::class)
-            ->getMockForAbstractClass();
+        $this->configMock = $this->createMock(ConfigInterface::class);
         $this->subjectMock = $this->getMockBuilder(ConsumerConfigCompositeReader::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -82,7 +81,10 @@ class ConfigReaderPluginTest extends TestCase
                 'consumerInstance' => 'type1',
                 'handlers' => ['handlerConfig1_1_1', 'handlerConfig1_1_2', 'handlerConfig1_2_1'],
                 'connection' => 'connection1',
-                'maxMessages' => 100
+                'maxMessages' => 100,
+                'maxIdleTime' => null,
+                'sleep' => null,
+                'onlySpawnWhenMessageAvailable' => false
             ],
             'consumer2' => [
                 'name' => 'consumer2',
@@ -90,7 +92,10 @@ class ConfigReaderPluginTest extends TestCase
                 'consumerInstance' => 'type2',
                 'handlers' => [],
                 'connection' => 'connection2',
-                'maxMessages' => 2
+                'maxMessages' => 2,
+                'maxIdleTime' => null,
+                'sleep' => null,
+                'onlySpawnWhenMessageAvailable' => false
             ],
             'consumer0' => []
         ];

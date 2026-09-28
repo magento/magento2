@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Paypal\Model\Api;
 
@@ -71,7 +71,6 @@ class NvpTest extends \PHPUnit\Framework\TestCase
 
         $refObject = new \ReflectionObject($config);
         $refProperty = $refObject->getProperty('productMetadata');
-        $refProperty->setAccessible(true);
         $refProperty->setValue($config, $productMetadata);
 
         $this->nvpApi->setConfigObject($config);
@@ -95,7 +94,7 @@ class NvpTest extends \PHPUnit\Framework\TestCase
             . '&SHIPPINGAMT=0.00&ITEMAMT=112.70&TAXAMT=0.00'
             . '&L_NAME0=Simple+Product+FPT&L_QTY0=1&L_AMT0=100.00'
             . '&L_NAME1=FPT&L_QTY1=1&L_AMT1=12.70'
-            . '&METHOD=SetExpressCheckout&VERSION=72.0&BUTTONSOURCE=Magento_Cart_';
+            . '&METHOD=SetExpressCheckout&VERSION=72.0&BUTTONSOURCE=Magento_2_';
 
         $this->httpClient->method('write')
             ->with(
@@ -146,7 +145,7 @@ class NvpTest extends \PHPUnit\Framework\TestCase
 
         $httpQuery = 'TRANSACTIONID=fooTransactionId&REFUNDTYPE=Partial'
             .'&CURRENCYCODE=USD&AMT=145.98&METHOD=RefundTransaction'
-            .'&VERSION=72.0&BUTTONSOURCE=Magento_Cart_';
+            .'&VERSION=72.0&BUTTONSOURCE=Magento_2_';
 
         $this->httpClient->expects($this->once())->method('write')
             ->with(
@@ -156,6 +155,7 @@ class NvpTest extends \PHPUnit\Framework\TestCase
                 [],
                 $httpQuery
             );
+        $this->httpClient->method('read')->willReturn('');
 
         $this->nvpApi->callRefundTransaction();
     }

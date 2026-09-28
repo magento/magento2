@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Adminhtml system templates page content block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Email\Block\Adminhtml;
 
@@ -52,7 +50,7 @@ class Template extends \Magento\Backend\Block\Template implements \Magento\Backe
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function updateButton($buttonId, $key, $data)
     {
@@ -90,7 +88,7 @@ class Template extends \Magento\Backend\Block\Template implements \Magento\Backe
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function addButton($buttonId, $data, $level = 0, $sortOrder = 0, $region = 'toolbar')
     {
@@ -109,7 +107,7 @@ class Template extends \Magento\Backend\Block\Template implements \Magento\Backe
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function removeButton($buttonId)
     {
@@ -135,7 +133,7 @@ class Template extends \Magento\Backend\Block\Template implements \Magento\Backe
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function canRender(\Magento\Backend\Block\Widget\Button\Item $item)
     {

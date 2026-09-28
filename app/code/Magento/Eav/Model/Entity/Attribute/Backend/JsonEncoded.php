@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Eav\Model\Entity\Attribute\Backend;
 
@@ -11,7 +11,7 @@ use Magento\Framework\Serialize\Serializer\Json;
  * Backend model for attribute that stores structures in json format
  *
  * @api
- * @since 100.2.0
+ * @since 101.0.0
  */
 class JsonEncoded extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
@@ -35,7 +35,7 @@ class JsonEncoded extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBa
      *
      * @param \Magento\Framework\DataObject $object
      * @return $this
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function beforeSave($object)
     {
@@ -52,7 +52,7 @@ class JsonEncoded extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBa
      *
      * @param \Magento\Framework\DataObject $object
      * @return $this
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function afterLoad($object)
     {

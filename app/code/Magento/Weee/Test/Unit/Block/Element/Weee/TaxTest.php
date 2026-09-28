@@ -1,18 +1,21 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Weee\Test\Unit\Block\Element\Weee;
 
 use Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Weight;
+use Magento\Framework\Currency as FrameworkCurrency;
 use Magento\Framework\Data\Form\Element\CollectionFactory;
 use Magento\Framework\Data\Form\Element\Factory;
 use Magento\Framework\DataObject;
 use Magento\Framework\Locale\Currency;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManagerHelper;
+use Magento\Framework\View\Element\Template\Context as TemplateContext;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManager;
 use Magento\Weee\Block\Element\Weee\Tax;
@@ -28,6 +31,14 @@ class TaxTest extends TestCase
     public function testGetEscapedValue()
     {
         $objectManager = new ObjectManager($this);
+        
+        $objects = [
+            [
+                TemplateContext::class,
+                $this->createMock(TemplateContext::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
 
         $inputValue = [
             ['value' => '30000.4'],
@@ -42,7 +53,7 @@ class TaxTest extends TestCase
 
         $localeCurrency = $this->createMock(Currency::class);
 
-        $currency = $this->createMock(\Magento\Framework\Currency::class);
+        $currency = $this->createMock(FrameworkCurrency::class);
 
         $currency->expects(
             $this->any()

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\App\ScopeResolverPool;
 use Magento\Framework\DataObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ScopeResolverPoolTest extends TestCase
@@ -27,7 +28,7 @@ class ScopeResolverPoolTest extends TestCase
 
     public function testGet()
     {
-        $scope = $this->getMockForAbstractClass(ScopeResolverInterface::class);
+        $scope = $this->createMock(ScopeResolverInterface::class);
         $scopeResolver = $this->_helper->getObject(
             ScopeResolverPool::class,
             [
@@ -37,12 +38,9 @@ class ScopeResolverPoolTest extends TestCase
         $this->assertSame($scope, $scopeResolver->get('test'));
     }
 
-    /**
-     * @param string $scope
-     *
-     * @covers \Magento\Framework\App\ScopeResolverPool::get()
-     * @dataProvider testGetExceptionDataProvider
+    /**     * @covers \Magento\Framework\App\ScopeResolverPool::get()
      */
+    #[DataProvider('getExceptionDataProvider')]
     public function testGetException($scope)
     {
         $this->expectException('InvalidArgumentException');
@@ -59,7 +57,7 @@ class ScopeResolverPoolTest extends TestCase
     /**
      * @return array
      */
-    public function testGetExceptionDataProvider()
+    public static function getExceptionDataProvider()
     {
         return [
             ['undefined'],

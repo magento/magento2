@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Message;
 
@@ -9,6 +9,7 @@ namespace Magento\Framework\Message;
  * Represent a message with a type, content text, and an isSticky attribute to prevent message from being cleared.
  *
  * @api
+ * @since 100.0.2
  */
 interface MessageInterface
 {

@@ -1,15 +1,20 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Backend\Block\Widget\Form;
+
+use Magento\Backend\Block\Widget\Context;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
 /**
  * Backend form container block
  *
  * @api
- * @deprecated 100.2.0 in favour of UI component implementation
+ * @deprecated 100.2.0 Use UI components for form rendering instead of this legacy form container
+ * @see \Magento\Ui\Component\Form
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @since 100.0.2
  */
@@ -39,21 +44,40 @@ class Container extends \Magento\Backend\Block\Widget\Container
      * @var string
      */
     protected $_blockGroup = 'Magento_Backend';
-    
-    /**
-     *  @var string
-     */
-    const PARAM_BLOCK_GROUP = 'block_group';
 
     /**
-     *  @var string
+     * @var string
      */
-    const PARAM_MODE = 'mode';
+    public const PARAM_BLOCK_GROUP = 'block_group';
+
+    /**
+     * @var string
+     */
+    public const PARAM_MODE = 'mode';
 
     /**
      * @var string
      */
     protected $_template = 'Magento_Backend::widget/form/container.phtml';
+
+    /**
+     * @var SecureHtmlRenderer
+     */
+    private $secureRenderer;
+
+    /**
+     * @param Context $context
+     * @param array $data
+     * @param SecureHtmlRenderer|null $secureRenderer
+     */
+    public function __construct(
+        Context $context,
+        array $data = [],
+        ?SecureHtmlRenderer $secureRenderer = null
+    ) {
+        $this->secureRenderer = $secureRenderer ?? ObjectManager::getInstance()->get(SecureHtmlRenderer::class);
+        parent::__construct($context, $data);
+    }
 
     /**
      * Initialize form.
@@ -88,14 +112,17 @@ class Container extends \Magento\Backend\Block\Widget\Container
         $objId = (int)$this->getRequest()->getParam($this->_objectId);
 
         if (!empty($objId)) {
+            $confirmMessage = $this->escapeJs(
+                $this->escapeHtml(__('Are you sure you want to do this?'))
+            );
+            $deleteOnClick = 'deleteConfirm(\'' . $confirmMessage . '\', \'' .
+                $this->getDeleteUrl() . '\', {data: {}})';
             $this->addButton(
                 'delete',
                 [
                     'label' => __('Delete'),
                     'class' => 'delete',
-                    'onclick' => 'deleteConfirm(\'' . __(
-                        'Are you sure you want to do this?'
-                    ) . '\', \'' . $this->getDeleteUrl() . '\', {data: {}})'
+                    'onclick' => $deleteOnClick
                 ]
             );
         }
@@ -205,8 +232,14 @@ class Container extends \Magento\Backend\Block\Widget\Container
     public function getFormInitScripts()
     {
         if (!empty($this->_formInitScripts) && is_array($this->_formInitScripts)) {
-            return '<script>' . implode("\n", $this->_formInitScripts) . '</script>';
+            return $this->secureRenderer->renderTag(
+                'script',
+                [],
+                implode("\n", $this->_formInitScripts),
+                false
+            );
         }
+
         return '';
     }
 
@@ -218,8 +251,14 @@ class Container extends \Magento\Backend\Block\Widget\Container
     public function getFormScripts()
     {
         if (!empty($this->_formScripts) && is_array($this->_formScripts)) {
-            return '<script>' . implode("\n", $this->_formScripts) . '</script>';
+            return $this->secureRenderer->renderTag(
+                'script',
+                [],
+                implode("\n", $this->_formScripts),
+                false
+            );
         }
+
         return '';
     }
 

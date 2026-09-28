@@ -1,16 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Analytics\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Archive;
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\Filesystem\File\WriteInterface as FileWriteInterface;
 
 /**
  * Class for the handling of a new data collection for MBI.
@@ -90,7 +92,6 @@ class ExportDataHandler implements ExportDataHandlerInterface
     {
         try {
             $tmpDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::SYS_TMP);
-
             $this->prepareDirectory($tmpDirectory, $this->getTmpFilesDirRelativePath());
             $this->reportWriter->write($tmpDirectory, $this->getTmpFilesDirRelativePath());
 
@@ -102,12 +103,21 @@ class ExportDataHandler implements ExportDataHandlerInterface
             );
 
             $this->validateSource($tmpDirectory, $this->getArchiveRelativePath());
-            $this->fileRecorder->recordNewFile(
-                $this->cryptographer->encode($tmpDirectory->readFile($this->getArchiveRelativePath()))
-            );
+            $archiveReadFile = $tmpDirectory->openFile($this->getArchiveRelativePath(), 'r');
+            try {
+                $this->fileRecorder->recordNewFileStreamed(
+                    function (FileWriteInterface $destination) use ($archiveReadFile) {
+                        return $this->cryptographer->encodeToFile($archiveReadFile, $destination);
+                    }
+                );
+            } finally {
+                $archiveReadFile->close();
+            }
         } finally {
-            $tmpDirectory->delete($this->getTmpFilesDirRelativePath());
-            $tmpDirectory->delete($this->getArchiveRelativePath());
+            if (isset($tmpDirectory)) {
+                $tmpDirectory->delete($this->getTmpFilesDirRelativePath());
+                $tmpDirectory->delete($this->getArchiveRelativePath());
+            }
         }
 
         return true;
@@ -120,7 +130,17 @@ class ExportDataHandler implements ExportDataHandlerInterface
      */
     private function getTmpFilesDirRelativePath()
     {
-        return $this->subdirectoryPath . 'tmp/';
+        return $this->subdirectoryPath . 'tmp/' . $this->getInstanceIdentifier() . '/';
+    }
+
+    /**
+     * Return unique identifier for an instance.
+     *
+     * @return string
+     */
+    private function getInstanceIdentifier()
+    {
+        return hash('sha256', BP);
     }
 
     /**

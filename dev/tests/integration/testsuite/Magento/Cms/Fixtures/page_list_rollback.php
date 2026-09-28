@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,7 +16,18 @@ $pageRepository = $objectManager->get(PageRepositoryInterface::class);
 
 /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
 $searchCriteriaBuilder = $objectManager->get(SearchCriteriaBuilder::class);
-$searchCriteria = $searchCriteriaBuilder->addFilter('title', ['simplePage', 'simplePage01', '01simplePage'], 'in')
+$searchCriteria = $searchCriteriaBuilder
+    ->addFilter(
+        'title',
+        [
+            'simplePage',
+            'simplePage01',
+            '01simplePage',
+            'Page with 1column layout',
+            'Page with unavailable layout',
+        ],
+        'in'
+    )
     ->create();
 $result = $pageRepository->getList($searchCriteria);
 

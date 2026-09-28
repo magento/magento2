@@ -1,13 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\SendFriend\Model;
 
 use Magento\Framework\Exception\LocalizedException as CoreException;
+use Magento\Framework\Stdlib\Cookie\CookieMetadata;
+use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Validator\EmailAddress;
+use Magento\Framework\Validator\ValidatorChain;
 
 /**
  * SendFriend Log
@@ -17,7 +22,6 @@ use Magento\Framework\Exception\LocalizedException as CoreException;
  * @method int getTime()
  * @method \Magento\SendFriend\Model\SendFriend setTime(int $value)
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
@@ -69,14 +73,14 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
     protected $_lastCookieValue = [];
 
     /**
-     * SendFriend data
+     * Send friend data helper
      *
      * @var \Magento\SendFriend\Helper\Data
      */
     protected $_sendfriendData = null;
 
     /**
-     * Catalog image
+     * Catalog image helper
      *
      * @var \Magento\Catalog\Helper\Image
      */
@@ -113,6 +117,11 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
     protected $remoteAddress;
 
     /**
+     * @var CookieMetadataFactory
+     */
+    private $cookieMetadataFactory;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -126,6 +135,7 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param CookieMetadataFactory $cookieMetadataFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -139,9 +149,10 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress,
         \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        array $data = [],
+        ?CookieMetadataFactory $cookieMetadataFactory = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_transportBuilder = $transportBuilder;
@@ -151,6 +162,8 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
         $this->remoteAddress = $remoteAddress;
         $this->cookieManager = $cookieManager;
         $this->inlineTranslation = $inlineTranslation;
+        $this->cookieMetadataFactory = $cookieMetadataFactory
+            ?? ObjectManager::getInstance()->get(CookieMetadataFactory::class);
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -188,6 +201,8 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
 
         foreach ($this->getRecipients()->getEmails() as $k => $email) {
             $name = $this->getRecipients()->getNames($k);
+            $product = $this->getProduct();
+            $productImage = $this->_catalogImage->init($product, 'sendfriend_small_image');
             $this->_transportBuilder->setTemplateIdentifier(
                 $this->_sendfriendData->getEmailTemplate()
             )->setTemplateOptions(
@@ -200,19 +215,18 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
             )->setReplyTo(
                 $sender['email'],
                 $sender['name']
-            )->setTemplateVars(
-                [
-                    'name' => $name,
-                    'email' => $email,
-                    'product_name' => $this->getProduct()->getName(),
-                    'product_url' => $this->getProduct()->getUrlInStore(),
-                    'message' => $message,
-                    'sender_name' => $sender['name'],
-                    'sender_email' => $sender['email'],
-                    'product_image' => $this->_catalogImage->init($this->getProduct(), 'sendfriend_small_image')
-                        ->getUrl(),
-                ]
-            )->addTo(
+            )->setTemplateVars([
+                'name' => $name,
+                'email' => $email,
+                'product_name' => $this->getProduct()->getName(),
+                'product_url' => $this->getProduct()->getUrlInStore(),
+                'message' => $message,
+                'sender_name' => $sender['name'],
+                'sender_email' => $sender['email'],
+                'product_image' => $productImage->getType() !== null
+                    ? $productImage->getUrl()
+                    : $productImage->getDefaultPlaceholderUrl()
+            ])->addTo(
                 $email,
                 $name
             );
@@ -244,7 +258,7 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
         }
 
         $email = $this->getSender()->getEmail();
-        if (empty($email) || !\Zend_Validate::is($email, \Magento\Framework\Validator\EmailAddress::class)) {
+        if (empty($email) || !ValidatorChain::is($email, EmailAddress::class)) {
             $errors[] = __('Invalid Sender Email');
         }
 
@@ -259,7 +273,7 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
 
         // validate recipients email addresses
         foreach ($this->getRecipients()->getEmails() as $email) {
-            if (!\Zend_Validate::is($email, \Magento\Framework\Validator\EmailAddress::class)) {
+            if (!ValidatorChain::is($email, EmailAddress::class)) {
                 $errors[] = __('Please enter a correct recipient email address.');
                 break;
             }
@@ -484,6 +498,11 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
         $cookieName = $this->_sendfriendData->getCookieName();
         $time = time();
         $newTimes = [];
+        $sensitiveCookMetadata = $this->cookieMetadataFactory->createSensitiveCookieMetadata(
+            [
+                CookieMetadata::KEY_SAME_SITE => 'Lax'
+            ]
+        );
 
         if (isset($this->_lastCookieValue[$cookieName])) {
             $oldTimes = $this->_lastCookieValue[$cookieName];
@@ -504,7 +523,7 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
         if ($increment) {
             $newTimes[] = $time;
             $newValue = implode(',', $newTimes);
-            $this->cookieManager->setSensitiveCookie($cookieName, $newValue);
+            $this->cookieManager->setSensitiveCookie($cookieName, $newValue, $sensitiveCookMetadata);
             $this->_lastCookieValue[$cookieName] = $newValue;
         }
 

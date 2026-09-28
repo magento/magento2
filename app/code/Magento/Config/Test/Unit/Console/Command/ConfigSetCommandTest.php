@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,10 +11,12 @@ use Magento\Config\Console\Command\ConfigSet\ProcessorFacade;
 use Magento\Config\Console\Command\ConfigSet\ProcessorFacadeFactory;
 use Magento\Config\Console\Command\ConfigSetCommand;
 use Magento\Config\Console\Command\EmulatedAdminhtmlAreaProcessor;
+use Magento\Config\Console\Command\LocaleEmulatorInterface;
 use Magento\Deploy\Model\DeploymentConfig\ChangeDetector;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\Exception\ValidatorException;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\MockObject as Mock;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -57,31 +59,28 @@ class ConfigSetCommandTest extends TestCase
     private $processorFacadeMock;
 
     /**
+     * @var LocaleEmulatorInterface|MockObject
+     */
+    private $localeEmulatorMock;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
-        $this->emulatedAreProcessorMock = $this->getMockBuilder(EmulatedAdminhtmlAreaProcessor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->changeDetectorMock = $this->getMockBuilder(ChangeDetector::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->processorFacadeFactoryMock = $this->getMockBuilder(ProcessorFacadeFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->processorFacadeMock = $this->getMockBuilder(ProcessorFacade::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->emulatedAreProcessorMock = $this->createMock(EmulatedAdminhtmlAreaProcessor::class);
+        $this->changeDetectorMock = $this->createMock(ChangeDetector::class);
+        $this->processorFacadeFactoryMock = $this->createMock(ProcessorFacadeFactory::class);
+        $this->processorFacadeMock = $this->createMock(ProcessorFacade::class);
+        $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);
+        $this->localeEmulatorMock = $this->createMock(LocaleEmulatorInterface::class);
 
         $this->command = new ConfigSetCommand(
             $this->emulatedAreProcessorMock,
             $this->changeDetectorMock,
             $this->processorFacadeFactoryMock,
-            $this->deploymentConfigMock
+            $this->deploymentConfigMock,
+            $this->localeEmulatorMock
         );
     }
 
@@ -103,6 +102,11 @@ class ConfigSetCommandTest extends TestCase
             ->method('process')
             ->willReturnCallback(function ($function) {
                 return $function();
+            });
+        $this->localeEmulatorMock->expects($this->once())
+            ->method('emulate')
+            ->willReturnCallback(function ($callback) {
+                return $callback();
             });
 
         $tester = new CommandTester($this->command);

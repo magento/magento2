@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -132,7 +132,11 @@ class ForDirective implements DirectiveProcessorInterface
                 $subText = $loopTextToReplace;
                 foreach ($attributes as $attribute) {
                     $text = $this->variableResolver->resolve($attribute[2], $filter, $templateVariables);
-                    $subText = str_replace($attribute[0], $text, $subText);
+                    $subText = str_replace(
+                        $attribute[0],
+                        is_array($text) ? $text : (string) $text,
+                        $subText
+                    );
                 }
                 $loopText[] = $subText;
             }

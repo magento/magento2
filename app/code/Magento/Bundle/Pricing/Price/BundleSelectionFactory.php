@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Bundle\Pricing\Price;
@@ -52,9 +52,12 @@ class BundleSelectionFactory
         $quantity,
         array $arguments = []
     ) {
+        $quantity = $quantity ? (float)$quantity : 1.;
+        $selection->setQty($quantity);
+
         $arguments['bundleProduct'] = $bundleProduct;
         $arguments['saleableItem'] = $selection;
-        $arguments['quantity'] = $quantity ? (float)$quantity : 1.;
+        $arguments['quantity'] = $quantity;
 
         return $this->objectManager->create(self::SELECTION_CLASS_DEFAULT, $arguments);
     }

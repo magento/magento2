@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,13 +13,16 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 
 /**
  * Root category tree field resolver, used for GraphQL request processing.
+ *
+ * @deprecated Use the UID instead of a numeric id
+ * @see \Magento\CatalogGraphQl\Model\Resolver\RootCategoryUid
  */
 class RootCategoryId implements ResolverInterface
 {
     /**
      * @inheritdoc
      */
-    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
+    public function resolve(Field $field, $context, ResolveInfo $info, ?array $value = null, ?array $args = null)
     {
         return (int)$context->getExtensionAttributes()->getStore()->getRootCategoryId();
     }

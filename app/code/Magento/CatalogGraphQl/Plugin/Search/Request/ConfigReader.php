@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CatalogGraphQl\Plugin\Search\Request;
 
@@ -106,6 +106,9 @@ class ConfigReader
         $productAttributes->addFieldToFilter(
             ['is_searchable', 'is_visible_in_advanced_search', 'is_filterable', 'is_filterable_in_search'],
             [1, 1, [1, 2], 1]
+        )->setOrder(
+            'position',
+            'ASC'
         );
 
         /** @var Attribute $attribute */

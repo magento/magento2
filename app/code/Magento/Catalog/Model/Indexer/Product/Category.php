@@ -1,11 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\Indexer\Product;
 
+use Magento\Framework\Indexer\IndexMutexInterface;
+
 /**
+ * Product Categories indexer
+ *
  * @api
  * @since 100.0.2
  */
@@ -20,13 +24,17 @@ class Category extends \Magento\Catalog\Model\Indexer\Category\Product
      * @param \Magento\Catalog\Model\Indexer\Category\Product\Action\FullFactory $fullActionFactory
      * @param Category\Action\RowsFactory $rowsActionFactory
      * @param \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
+     * @param IndexMutexInterface|null $indexMutex
+     * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod.Found
      */
     public function __construct(
         \Magento\Catalog\Model\Indexer\Category\Product\Action\FullFactory $fullActionFactory,
         Category\Action\RowsFactory $rowsActionFactory,
-        \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
+        \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry,
+        ?IndexMutexInterface $indexMutex = null
     ) {
-        parent::__construct($fullActionFactory, $rowsActionFactory, $indexerRegistry);
+        //phpcs:enable
+        parent::__construct($fullActionFactory, $rowsActionFactory, $indexerRegistry, $indexMutex);
     }
 
     /**

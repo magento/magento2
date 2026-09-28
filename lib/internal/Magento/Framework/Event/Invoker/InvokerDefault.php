@@ -2,8 +2,8 @@
 /**
  * Default event invoker
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Event\Invoker;
@@ -44,7 +44,7 @@ class InvokerDefault implements \Magento\Framework\Event\InvokerInterface
     public function __construct(
         \Magento\Framework\Event\ObserverFactory $observerFactory,
         State $appState,
-        LoggerInterface $logger = null
+        ?LoggerInterface $logger = null
     ) {
         $this->_observerFactory = $observerFactory;
         $this->_appState = $appState;

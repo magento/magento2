@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -45,9 +45,10 @@ class AssignCouponDataAfterOrderCustomerAssignObserver implements ObserverInterf
         $event = $observer->getEvent();
         /** @var OrderInterface $order */
         $order = $event->getData(self::EVENT_KEY_ORDER);
-
-        if ($order->getCustomerId()) {
-            $this->updateCouponUsages->execute($order, true);
+        if (!$order->getCustomerId()) {
+            return;
         }
+
+        $this->updateCouponUsages->execute($order, true);
     }
 }

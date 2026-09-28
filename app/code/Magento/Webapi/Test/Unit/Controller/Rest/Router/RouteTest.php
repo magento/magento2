@@ -1,18 +1,17 @@
 <?php
 /**
- * Test Rest router route.
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Webapi\Test\Unit\Controller\Rest\Router;
 
+use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\App\RequestInterface as Request;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Webapi\Controller\Rest\Router\Route;
-
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -32,9 +31,10 @@ class RouteTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->request = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
-            ->setMethods(['getPathInfo'])
-            ->getMockForAbstractClass();
+        $this->request = $this->createPartialMock(
+            HttpRequest::class,
+            ['getPathInfo']
+        );
     }
 
     /**
@@ -64,8 +64,8 @@ class RouteTest extends TestCase
      * @param string $path
      * @param array|bool $params
      * @return void
-     * @dataProvider dataProviderRoutes
      */
+    #[DataProvider('dataProviderRoutes')]
     public function testRoute($route, $path, $params)
     {
         /** @var Route $model */
@@ -85,7 +85,7 @@ class RouteTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderRoutes()
+    public static function dataProviderRoutes()
     {
         return [
             // Success

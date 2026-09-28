@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontAssertReviewNotificationForNotLoggedInUsersActionGroup">
+        <arguments>
+            <argument name="message" type="string"/>
+        </arguments>
+        <see userInput="{{message}}" selector="{{StorefrontProductReviewsSection.infoForNotLoggedIn}}" stepKey="verifyMessage"/>
+    </actionGroup>
+</actionGroups>

@@ -1,15 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Cart;
 
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\GraphQl\Query\Uid;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Quote\Api\Data\CartInterface;
+use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
+use Magento\Quote\Model\QuoteRepository;
 
 /**
  * Set single shipping address for a specified shopping cart
@@ -17,25 +20,23 @@ use Magento\Quote\Api\Data\CartInterface;
 class SetShippingAddressesOnCart implements SetShippingAddressesOnCartInterface
 {
     /**
-     * @var AssignShippingAddressToCart
-     */
-    private $assignShippingAddressToCart;
-
-    /**
-     * @var GetShippingAddress
-     */
-    private $getShippingAddress;
-
-    /**
+     * SetShippingAddressesOnCart Constructor
+     *
+     * @param QuoteIdToMaskedQuoteIdInterface $quoteIdToMaskedQuoteId
+     * @param GetCartForUser $getCartForUser
      * @param AssignShippingAddressToCart $assignShippingAddressToCart
      * @param GetShippingAddress $getShippingAddress
+     * @param QuoteRepository $quoteRepository
+     * @param Uid $uidEncoder
      */
     public function __construct(
-        AssignShippingAddressToCart $assignShippingAddressToCart,
-        GetShippingAddress $getShippingAddress
+        private readonly QuoteIdToMaskedQuoteIdInterface $quoteIdToMaskedQuoteId,
+        private readonly GetCartForUser                  $getCartForUser,
+        private readonly AssignShippingAddressToCart     $assignShippingAddressToCart,
+        private readonly GetShippingAddress              $getShippingAddress,
+        private readonly QuoteRepository                 $quoteRepository,
+        private readonly Uid                             $uidEncoder
     ) {
-        $this->assignShippingAddressToCart = $assignShippingAddressToCart;
-        $this->getShippingAddress = $getShippingAddress;
     }
 
     /**
@@ -49,9 +50,20 @@ class SetShippingAddressesOnCart implements SetShippingAddressesOnCartInterface
             );
         }
         $shippingAddressInput = current($shippingAddressesInput) ?? [];
+
+        if (isset($shippingAddressInput['customer_address_uid'])) {
+            $shippingAddressInput['customer_address_id'] = (int) $this->uidEncoder->decode(
+                (string) $shippingAddressInput['customer_address_uid']
+            );
+            unset($shippingAddressInput['customer_address_uid']);
+        }
+
         $customerAddressId = $shippingAddressInput['customer_address_id'] ?? null;
 
-        if (!$customerAddressId && !isset($shippingAddressInput['address']['save_in_address_book'])) {
+        if (!$customerAddressId
+            && isset($shippingAddressInput['address'])
+            && !isset($shippingAddressInput['address']['save_in_address_book'])
+        ) {
             $shippingAddressInput['address']['save_in_address_book'] = true;
         }
 
@@ -67,5 +79,10 @@ class SetShippingAddressesOnCart implements SetShippingAddressesOnCartInterface
             throw $e;
         }
         $this->assignShippingAddressToCart->execute($cart, $shippingAddress);
+
+        // reload updated cart & trigger quote re-evaluation after address change
+        $maskedId = $this->quoteIdToMaskedQuoteId->execute((int)$cart->getId());
+        $cart = $this->getCartForUser->execute($maskedId, $context->getUserId(), $cart->getStoreId());
+        $this->quoteRepository->save($cart);
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\EntityManager\Operation;
 
@@ -142,7 +142,7 @@ class Create implements CreateInterface
     /**
      * @return SequenceApplier
      *
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     private function getSequenceApplier()
     {

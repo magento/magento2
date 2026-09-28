@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace Magento\Framework\View\Test\Unit\Layout\Reader;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\View\Layout\AclCondition;
 use Magento\Framework\View\Layout\ConfigCondition;
 use Magento\Framework\View\Layout\Element;
@@ -23,9 +24,11 @@ use Magento\Framework\View\Layout\ScheduledStructure\Helper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Rule\InvokedCount;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class BlockTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var ScheduledStructure|MockObject
      */
@@ -105,9 +108,8 @@ class BlockTest extends TestCase
      * @param InvokedCount $setCondition
      * @param string $aclKey
      * @param string $aclValue
-     *
-     * @dataProvider processBlockDataProvider
-     */
+     *     */
+    #[DataProvider('processBlockDataProvider')]
     public function testProcessBlock(
         $literal,
         $scheduleStructureCount,
@@ -118,6 +120,17 @@ class BlockTest extends TestCase
         $aclKey,
         $aclValue
     ) {
+        // Convert string expectations to matchers
+        $scheduleStructureCount = is_string($scheduleStructureCount) 
+            ? $this->createInvocationMatcher($scheduleStructureCount) 
+            : $scheduleStructureCount;
+        $getCondition = is_string($getCondition) 
+            ? $this->createInvocationMatcher($getCondition) 
+            : $getCondition;
+        $setCondition = is_string($setCondition) 
+            ? $this->createInvocationMatcher($setCondition) 
+            : $setCondition;
+        
         $this->context->expects($this->once())->method('getScheduledStructure')
             ->willReturn($this->scheduledStructure);
         $this->scheduledStructure->expects($getCondition)
@@ -177,12 +190,12 @@ class BlockTest extends TestCase
     /**
      * @return array
      */
-    public function processBlockDataProvider()
+    public static function processBlockDataProvider()
     {
         return [
             [
                 'block',
-                $this->once(),
+                'once',
                 '',
                 [
                     'acl' => [
@@ -192,14 +205,14 @@ class BlockTest extends TestCase
                         ],
                     ],
                 ],
-                $this->once(),
-                $this->once(),
+                'once',
+                'once',
                 'acl',
                 'test',
             ],
             [
                 'block',
-                $this->once(),
+                'once',
                 'config_path',
                 [
                     'acl' => [
@@ -215,14 +228,14 @@ class BlockTest extends TestCase
                         ],
                     ],
                 ],
-                $this->once(),
-                $this->once(),
+                'once',
+                'once',
                 'aclResource',
                 'test',
             ],
             [
                 'page',
-                $this->never(),
+                'never',
                 '',
                 [
                     'acl' => [
@@ -238,8 +251,8 @@ class BlockTest extends TestCase
                         ],
                     ],
                 ],
-                $this->never(),
-                $this->never(),
+                'never',
+                'never',
                 'aclResource',
                 'test',
             ],
@@ -251,9 +264,8 @@ class BlockTest extends TestCase
      * @param string $remove
      * @param InvokedCount $getCondition
      * @param InvokedCount $setCondition
-     * @param InvokedCount $setRemoveCondition
-     * @dataProvider processReferenceDataProvider
-     */
+     * @param InvokedCount $setRemoveCondition     */
+    #[DataProvider('processReferenceDataProvider')]
     public function testProcessReference(
         $literal,
         $remove,
@@ -261,6 +273,17 @@ class BlockTest extends TestCase
         $setCondition,
         $setRemoveCondition
     ) {
+        // Convert string expectations to matchers
+        $getCondition = is_string($getCondition) 
+            ? $this->createInvocationMatcher($getCondition) 
+            : $getCondition;
+        $setCondition = is_string($setCondition) 
+            ? $this->createInvocationMatcher($setCondition) 
+            : $setCondition;
+        $setRemoveCondition = is_string($setRemoveCondition) 
+            ? $this->createInvocationMatcher($setRemoveCondition) 
+            : $setRemoveCondition;
+        
         if ($literal == 'referenceBlock' && $remove == 'false') {
             $this->scheduledStructure->expects($this->once())
                 ->method('unsetElementFromListToRemove')
@@ -326,13 +349,13 @@ class BlockTest extends TestCase
     /**
      * @return array
      */
-    public function processReferenceDataProvider()
+    public static function processReferenceDataProvider()
     {
         return [
-            ['referenceBlock', 'false', $this->once(), $this->once(), $this->never()],
-            ['referenceBlock', 'true', $this->never(), $this->never(), $this->once()],
-            ['page', 'false', $this->never(), $this->never(), $this->never()],
-            ['page', 'true', $this->never(), $this->never(), $this->never()],
+            ['referenceBlock', 'false', 'once', 'once', 'never'],
+            ['referenceBlock', 'true', 'never', 'never', 'once'],
+            ['page', 'false', 'never', 'never', 'never'],
+            ['page', 'true', 'never', 'never', 'never'],
         ];
     }
 }

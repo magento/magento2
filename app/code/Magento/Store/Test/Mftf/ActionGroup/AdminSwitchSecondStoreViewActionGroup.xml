@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    /**
+     * Copyright 2024 Adobe
+     * All Rights Reserved.
+     */
+   -->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminSwitchSecondStoreViewActionGroup">
+        <annotations>
+            <description>Selects the provided Website from the 'Second Store View' dropdown menu on the Admin Grid pages.</description>
+        </annotations>
+        <arguments>
+            <argument name="secondStoreView"/>
+        </arguments>
+        <scrollToTopOfPage stepKey="scrollToTop"/>
+        <waitForElementClickable selector="{{AdminMainActionsSection.storeViewDropdown}}" stepKey="waitForStoreViewAreVisible"/>
+        <click selector="{{AdminMainActionsSection.storeViewDropdown}}" stepKey="clickWebsiteSwitchDropdown"/>
+        <waitForElementClickable selector="{{AdminMainActionsSection.websiteByName('Main Website')}}" stepKey="waitForWebsiteAreVisible"/>
+        <click selector="{{AdminMainActionsSection.storeViewByName(secondStoreView.name)}}" stepKey="clicksecondStoreViewByName"/>
+        <waitForElementClickable selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitingForInformationModal"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmStoreSwitch"/>
+        <waitForText userInput="{{secondStoreView.name}}" selector="{{AdminMainActionsSection.storeSwitcher}}" stepKey="seesecondStoreViewName"/>
+    </actionGroup>
+</actionGroups>

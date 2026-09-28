@@ -1,12 +1,9 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
-/**
- * @author     Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Wishlist\Block\Customer;
 
 /**
@@ -31,6 +28,7 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
 
     /**
      * @var  \Magento\Wishlist\Model\ResourceModel\Item\Collection
+     * @since 101.1.1
      */
     protected $_collection;
 
@@ -101,6 +99,7 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
      * Retrieve Wishlist Product Items collection
      *
      * @return \Magento\Wishlist\Model\ResourceModel\Item\Collection
+     * @since 101.1.1
      */
     public function getWishlistItems()
     {

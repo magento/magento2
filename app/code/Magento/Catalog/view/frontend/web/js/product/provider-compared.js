@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 define([
@@ -35,7 +35,7 @@ define([
                 productCurrentScope,
                 scopeId;
 
-            if (typeof this.data.productCurrentScope !== 'undefined') {
+            if (typeof this.data.productCurrentScope !== 'undefined' && window.checkout && window.checkout.baseUrl) {
                 productCurrentScope = this.data.productCurrentScope;
                 scopeId = productCurrentScope === 'store' ? window.checkout.storeId :
                     productCurrentScope === 'group' ? window.checkout.storeGroupId :

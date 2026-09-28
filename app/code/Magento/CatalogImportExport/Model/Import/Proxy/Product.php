@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Import proxy product model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\CatalogImportExport\Model\Import\Proxy;
 
@@ -17,6 +15,7 @@ class Product extends \Magento\Catalog\Model\Product
      * DO NOT Initialize resources.
      *
      * @return void
+     * @phpcs:disable Magento2.CodeAnalysis.EmptyBlock.DetectedFunction
      */
     protected function _construct()
     {

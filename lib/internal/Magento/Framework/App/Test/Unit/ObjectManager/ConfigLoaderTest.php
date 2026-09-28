@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Framework\ObjectManager\Config\Reader\DomFactory;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ConfigLoaderTest extends TestCase
@@ -65,7 +66,7 @@ class ConfigLoaderTest extends TestCase
                 'readerFactory' => $this->readerFactoryMock,
             ]
         );
-        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
         $objectManagerHelper->setBackwardCompatibleProperty(
             $this->object,
             'serializer',
@@ -75,8 +76,8 @@ class ConfigLoaderTest extends TestCase
 
     /**
      * @param $area
-     * @dataProvider loadDataProvider
      */
+    #[DataProvider('loadDataProvider')]
     public function testLoadNotCached($area)
     {
         $configData = ['some' => 'config', 'data' => 'value'];
@@ -109,7 +110,7 @@ class ConfigLoaderTest extends TestCase
      *
      * @return array
      */
-    public function loadDataProvider()
+    public static function loadDataProvider()
     {
         return [
             'global files' => ['global'],

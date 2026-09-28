@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -10,6 +10,8 @@ namespace Magento\Framework\Filter\DirectiveProcessor;
 
 /**
  * Transforms the output of a directive processor
+ *
+ * @api
  */
 interface FilterInterface
 {

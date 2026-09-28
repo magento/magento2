@@ -1,8 +1,11 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
+/**
+ * @deprecated see Magento/Ui/view/base/web/js/grid/filters/elements/ui-select.js
+ */
 define([
     'Magento_Ui/js/form/element/ui-select',
     'jquery',

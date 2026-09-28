@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\CatalogUrlRewrite\Model;
@@ -11,16 +11,19 @@ use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\CategoryRepository;
 use Magento\Catalog\Model\ProductRepository;
 use Magento\CatalogUrlRewrite\Model\ResourceModel\Category\Product;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\UrlRewrite\Model\OptionProvider;
+use Magento\UrlRewrite\Model\Storage\DbStorage;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoAppArea adminhtml
@@ -44,6 +47,9 @@ class CategoryUrlRewriteGeneratorTest extends TestCase
      */
     public function testGenerateUrlRewritesWithoutSaveHistory()
     {
+        $resource = $this->objectManager->get(ResourceConnection::class);
+        $connection = $resource->getConnection();
+        $connection->delete(DbStorage::TABLE_NAME);
         /** @var Category $category */
         $category = $this->objectManager->create(Category::class);
         $category->load(3);
@@ -206,8 +212,8 @@ class CategoryUrlRewriteGeneratorTest extends TestCase
      * @throws CouldNotSaveException
      * @throws NoSuchEntityException
      * @throws Exception
-     * @dataProvider incorrectUrlRewritesDataProvider
      */
+    #[DataProvider('incorrectUrlRewritesDataProvider')]
     public function testGenerateUrlRewritesWithIncorrectUrlKey($urlKey)
     {
         $this->expectException(LocalizedException::class);
@@ -222,7 +228,7 @@ class CategoryUrlRewriteGeneratorTest extends TestCase
     /**
      * @return array
      */
-    public function incorrectUrlRewritesDataProvider()
+    public static function incorrectUrlRewritesDataProvider()
     {
         return [
             ['#'],

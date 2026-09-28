@@ -1,10 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 /** @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Variations\Config\Matrix */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 
 $productMatrix = $block->getProductMatrix();
 $attributes = $block->getProductAttributes();
@@ -15,13 +16,18 @@ $attributes = $block->getProductAttributes();
     'configurableModal' => $block->getForm() . '.' . $block->getModal()
 ]);
 ?>
-<script>
-    require(['jquery', 'uiRegistry', 'underscore'], function ($, registry, _) {
-        $('body').trigger('contentUpdated');
-        $('.<?= /* @noEscape */ $block->getData('config/dataScope') ?>[data-role=steps-wizard-main]').applyBindings();
 
-        registry.async('<?= /* @noEscape */ $block->getData('config/nameStepWizard') ?>')(function (component) {
+<?php $dataScope = /* @noEscape */ $block->getData('config/dataScope');
+$nameStep = /* @noEscape */ $block->getData('config/nameStepWizard');
+$scriptString = <<<script
+    require(['jquery', 'uiRegistry', 'underscore', 'Magento_Ui/js/lib/step-wizard'], function ($, registry, _) {
+        $('body').trigger('contentUpdated');
+        $('.{$dataScope}[data-role=steps-wizard-main]').applyBindings();
+
+        registry.async('{$nameStep}')(function (component) {
             _.delay(component.open.bind(component), 500); // TODO: MAGETWO-50246
         })
     });
-</script>
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>

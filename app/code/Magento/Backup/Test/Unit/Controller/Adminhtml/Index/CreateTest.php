@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Backend\Helper\Data;
 use Magento\Backend\Model\Session;
 use Magento\Backup\Controller\Adminhtml\Index\Create;
 use Magento\Backup\Model\Backup;
+use Magento\Backup\Helper\Data as BackupHelperData;
 use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\RequestInterface;
@@ -21,6 +22,7 @@ use Magento\Framework\Backup\Factory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -30,6 +32,8 @@ use PHPUnit\Framework\TestCase;
  */
 class CreateTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ObjectManager
      */
@@ -66,7 +70,7 @@ class CreateTest extends TestCase
     private $dataBackendHelperMock;
 
     /**
-     * @var \Magento\Backup\Helper\Data|MockObject
+     * @var BackupHelperData|MockObject
      */
     private $dataBackupHelperMock;
 
@@ -101,34 +105,34 @@ class CreateTest extends TestCase
             ->getMock();
         $this->requestMock = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isAjax', 'isPost', 'getParam'])
+            ->onlyMethods(['isAjax', 'isPost', 'getParam'])
             ->getMock();
         $this->responseMock = $this->getMockBuilder(\Magento\Framework\App\Response\Http::class)
             ->disableOriginalConstructor()
-            ->setMethods(['representJson', 'setRedirect'])
+            ->onlyMethods(['representJson', 'setRedirect'])
             ->getMock();
         $this->sessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->backupFactoryMock = $this->getMockBuilder(Factory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
-        $this->backupModelMock = $this->getMockBuilder(Backup::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setBackupExtension', 'setTime', 'setBackupsDir', 'setName', 'create'])
-            ->getMock();
+        $this->backupModelMock = $this->createPartialMockWithReflection(
+            Backup::class,
+            ['setBackupExtension', 'setBackupsDir', 'create', 'setTime', 'setName']
+        );
         $this->dataBackendHelperMock = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getUrl'])
+            ->onlyMethods(['getUrl'])
             ->getMock();
-        $this->dataBackupHelperMock = $this->getMockBuilder(\Magento\Backup\Helper\Data::class)
+        $this->dataBackupHelperMock = $this->getMockBuilder(BackupHelperData::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getExtensionByType', 'getBackupsDir'])
+            ->onlyMethods(['getExtensionByType', 'getBackupsDir'])
             ->getMock();
         $this->maintenanceModeMock = $this->getMockBuilder(MaintenanceMode::class)
             ->disableOriginalConstructor()
-            ->setMethods(['set'])
+            ->onlyMethods(['set'])
             ->getMock();
         $this->fileFactoryMock = $this->getMockBuilder(FileFactory::class)
             ->disableOriginalConstructor()
@@ -241,7 +245,7 @@ class CreateTest extends TestCase
             ->willReturnSelf();
         $this->objectManagerMock->expects($this->any())
             ->method('get')
-            ->with(\Magento\Backup\Helper\Data::class)
+            ->with(BackupHelperData::class)
             ->willReturn($this->dataBackupHelperMock);
         $this->dataBackupHelperMock->expects($this->any())
             ->method('getExtensionByType')

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="CreateCustomAttributeActionGroup">
+        <arguments>
+            <argument name="attributeScope" type="string" defaultValue="Store View"/>
+        </arguments>
+        <selectOption selector="{{AttributePropertiesSection.Scope}}" userInput="{{attributeScope}}" stepKey="selectAttributeScopeDropdown" after="fillAttributeCode"/>
+    </actionGroup>
+</actionGroups>

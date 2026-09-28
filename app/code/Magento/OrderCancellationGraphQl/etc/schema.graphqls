@@ -1,0 +1,56 @@
+#  Copyright 2024 Adobe
+#  All Rights Reserved.
+
+type StoreConfig {
+    order_cancellation_enabled: Boolean! @doc(description: "Indicates whether orders can be cancelled by customers or not.")
+    order_cancellation_reasons: [CancellationReason!]! @resolver(class: "Magento\\OrderCancellationGraphQl\\Model\\Resolver\\CancellationReasons") @doc(description: "An array containing available cancellation reasons.")
+}
+
+type CancellationReason {
+    description: String! @resolver(class: "Magento\\OrderCancellationGraphQl\\Model\\Resolver\\CancellationReason")
+}
+
+type Mutation {
+    cancelOrder(input: CancelOrderInput!): CancelOrderOutput @resolver(class: "Magento\\OrderCancellationGraphQl\\Model\\Resolver\\CancelOrder") @doc(description: "Cancel the specified customer order.")
+    confirmCancelOrder(input: ConfirmCancelOrderInput!): CancelOrderOutput @resolver(class: "Magento\\OrderCancellationGraphQl\\Model\\Resolver\\ConfirmCancelOrder") @doc(description: "Cancel the specified guest customer order.")
+    requestGuestOrderCancel(input: GuestOrderCancelInput!): CancelOrderOutput @resolver(class: "Magento\\OrderCancellationGraphQl\\Model\\Resolver\\RequestGuestOrderCancel") @doc(description: "Request to cancel specified guest order.")
+}
+
+input CancelOrderInput @doc(description: "Defines the order to cancel.") {
+    order_id: ID! @doc(description: "The unique ID of an `Order` type.")
+    reason: String! @doc(description: "Cancellation reason.")
+}
+
+input ConfirmCancelOrderInput {
+    order_id: ID! @doc(description: "The unique ID of an `Order` type.")
+    confirmation_key: String! @doc(description: "Confirmation Key to cancel the order.")
+}
+
+input GuestOrderCancelInput @doc(description: "Input to retrieve a guest order based on token.") {
+    token: String! @doc(description: "Order token.")
+    reason: String! @doc(description: "Cancellation reason.")
+}
+
+type CancelOrderOutput @doc(description: "Contains the updated customer order and error message if any.") {
+    error: String @doc(description: "Error encountered while cancelling the order.")
+    order: CustomerOrder @doc(description: "Updated customer order.")
+    errorV2: CancelOrderError @resolver(class: "Magento\\OrderCancellationGraphQl\\Model\\Resolver\\CancelOrderError")
+}
+
+type CancelOrderError {
+    message: String! @doc(description: "A localized error message.")
+    code: CancelOrderErrorCode! @doc(description: "An error code that is specific to cancel order.")
+}
+
+enum CancelOrderErrorCode {
+    ORDER_CANCELLATION_DISABLED
+    UNDEFINED
+    UNAUTHORISED
+    ORDER_NOT_FOUND
+    PARTIAL_ORDER_ITEM_SHIPPED
+    INVALID_ORDER_STATUS
+}
+
+enum OrderActionType {
+    CANCEL
+}

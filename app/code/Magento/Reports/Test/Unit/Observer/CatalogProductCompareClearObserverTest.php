@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -70,7 +70,7 @@ class CatalogProductCompareClearObserverTest extends TestCase
 
         $this->reportStatusMock = $this->getMockBuilder(ReportStatus::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isReportEnabled'])
+            ->onlyMethods(['isReportEnabled'])
             ->getMock();
 
         $this->reportEventMock = $this->getMockBuilder(Event::class)
@@ -79,7 +79,7 @@ class CatalogProductCompareClearObserverTest extends TestCase
 
         $this->productCompFactoryMock = $this->getMockBuilder(ComparedFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->productCompModelMock = $this->getMockBuilder(Compared::class)

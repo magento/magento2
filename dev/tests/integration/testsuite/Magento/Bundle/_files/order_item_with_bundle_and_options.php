@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
@@ -48,6 +48,7 @@ $requestInfo = [
     'bundle_option' => $bundleOptions,
     'bundle_option_qty' => $bundleOptionsQty,
     'qty' => 1,
+    'custom_price' => 300,
 ];
 
 /** @var \Magento\Sales\Model\Order\Item $orderItem */
@@ -58,7 +59,14 @@ $orderItem->setBasePrice($product->getPrice());
 $orderItem->setPrice($product->getPrice());
 $orderItem->setRowTotal($product->getPrice());
 $orderItem->setProductType($product->getTypeId());
-$orderItem->setProductOptions(['info_buyRequest' => $requestInfo]);
+$orderItem->setProductOptions([
+    'info_buyRequest' => $requestInfo,
+    'bundle_options' => [
+        [
+            'value' => [['title' => $product->getName()]]
+        ]
+    ]
+]);
 
 /** @var \Magento\Sales\Model\Order $order */
 $order = $objectManager->create(\Magento\Sales\Model\Order::class);

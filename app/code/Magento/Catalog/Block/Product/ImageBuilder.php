@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,7 +11,7 @@ use Magento\Catalog\Helper\ImageFactory as HelperFactory;
 use Magento\Catalog\Model\Product;
 
 /**
- * @deprecated
+ * @deprecated 103.0.0
  * @see ImageFactory
  */
 class ImageBuilder
@@ -127,7 +127,7 @@ class ImageBuilder
      * @param array|null $attributes
      * @return Image
      */
-    public function create(Product $product = null, string $imageId = null, array $attributes = null)
+    public function create(?Product $product = null, ?string $imageId = null, ?array $attributes = null)
     {
         $product = $product ?? $this->product;
         $imageId = $imageId ?? $this->imageId;

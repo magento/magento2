@@ -1,25 +1,28 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2012 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Framework\DB\Test\Unit\Adapter\Pdo;
 
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Adapter\Pdo\Mysql as PdoMysqlAdapter;
 use Magento\Framework\DB\LoggerInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\DB\Select\SelectRenderer;
 use Magento\Framework\DB\SelectFactory;
 use Magento\Framework\Model\ResourceModel\Type\Db\Pdo\Mysql;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Setup\Declaration\Schema\Dto\Factories\Table as DtoFactoriesTable;
 use Magento\Framework\Setup\SchemaListener;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\StringUtils;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * \Magento\Framework\DB\Adapter\Pdo\Mysql class test
@@ -27,21 +30,7 @@ use PHPUnit\Framework\TestCase;
  */
 class MysqlTest extends TestCase
 {
-    const CUSTOM_ERROR_HANDLER_MESSAGE = 'Custom error handler message';
-
-    /**
-     * Adapter for test
-     *
-     * @var \Magento\Framework\DB\Adapter\Pdo\Mysql|MockObject
-     */
-    protected $_adapter;
-
-    /**
-     * Mock DB adapter for DDL query tests
-     *
-     * @var \Magento\Framework\DB\Adapter\Pdo\Mysql|MockObject
-     */
-    protected $_mockAdapter;
+    public const CUSTOM_ERROR_HANDLER_MESSAGE = 'Custom error handler message';
 
     /**
      * @var SelectFactory|MockObject
@@ -59,96 +48,41 @@ class MysqlTest extends TestCase
     private $serializerMock;
 
     /**
+     * @var MockObject|\Zend_Db_Profiler
+     */
+    private $profiler;
+
+    /**
+     * @var \PDO|MockObject
+     */
+    private $connection;
+
+    /**
+     * @var LoggerInterface|MockObject
+     */
+    private $logger;
+
+    /**
      * Setup
      */
     protected function setUp(): void
     {
-        $string = $this->createMock(StringUtils::class);
-        $dateTime = $this->createMock(DateTime::class);
-        $logger = $this->getMockForAbstractClass(LoggerInterface::class);
-        $selectFactory = $this->getMockBuilder(SelectFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->serializerMock = $this->getMockBuilder(SerializerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
         $this->schemaListenerMock = $this->getMockBuilder(SchemaListener::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->_mockAdapter = $this->getMockBuilder(\Magento\Framework\DB\Adapter\Pdo\Mysql::class)
-            ->setMethods(['beginTransaction', 'getTransactionLevel', 'getSchemaListener'])
-            ->setConstructorArgs(
-                [
-                    'string' => $string,
-                    'dateTime' => $dateTime,
-                    'logger' => $logger,
-                    'selectFactory' => $selectFactory,
-                    'config' => [
-                        'dbname' => 'dbname',
-                        'username' => 'user',
-                        'password' => 'password',
-                    ],
-                    'serializer' => $this->serializerMock
-                ]
-            )
-            ->getMock();
-
-        $this->_mockAdapter->expects($this->any())
-            ->method('getTransactionLevel')
-            ->willReturn(1);
-
-        $this->_adapter = $this->getMockBuilder(\Magento\Framework\DB\Adapter\Pdo\Mysql::class)
-            ->setMethods(
-                [
-                    'getCreateTable',
-                    '_connect',
-                    '_beginTransaction',
-                    '_commit',
-                    '_rollBack',
-                    'query',
-                    'fetchRow',
-                    'getSchemaListener'
-                ]
-            )->setConstructorArgs(
-                [
-                    'string' => $string,
-                    'dateTime' => $dateTime,
-                    'logger' => $logger,
-                    'selectFactory' => $selectFactory,
-                    'config' => [
-                        'dbname' => 'not_exists',
-                        'username' => 'not_valid',
-                        'password' => 'not_valid',
-                    ],
-                    'serializer' => $this->serializerMock,
-                ]
-            )
-            ->getMock();
-        $this->_mockAdapter->expects($this->any())
-            ->method('getSchemaListener')
-            ->willReturn($this->schemaListenerMock);
-        $this->_adapter->expects($this->any())
-            ->method('getSchemaListener')
-            ->willReturn($this->schemaListenerMock);
-
-        $profiler = $this->createMock(
+        $this->profiler = $this->createMock(
             \Zend_Db_Profiler::class
         );
-
-        $resourceProperty = new \ReflectionProperty(
-            get_class($this->_adapter),
-            '_profiler'
-        );
-        $resourceProperty->setAccessible(true);
-        $resourceProperty->setValue($this->_adapter, $profiler);
+        $this->connection = $this->createMock(\PDO::class);
     }
 
-    /**
-     * @dataProvider bigintResultProvider
-     */
+    /**     */
+    #[DataProvider('bigintResultProvider')]
     public function testPrepareColumnValueForBigint($value, $expectedResult)
     {
-        $result = $this->_adapter->prepareColumnValue(
+        $adapter = $this->getMysqlPdoAdapterMock([]);
+        $result = $adapter->prepareColumnValue(
             ['DATA_TYPE' => 'bigint'],
             $value
         );
@@ -158,7 +92,7 @@ class MysqlTest extends TestCase
     /**
      * Data Provider for testPrepareColumnValueForBigint
      */
-    public function bigintResultProvider()
+    public static function bigintResultProvider()
     {
         return [
             [1, 1],
@@ -184,13 +118,13 @@ class MysqlTest extends TestCase
 
     /**
      * Test not DDL query inside transaction
-     *
-     * @dataProvider sqlQueryProvider
-     */
+     *     */
+    #[DataProvider('sqlQueryProvider')]
     public function testCheckNotDdlTransaction($query)
     {
+        $mockAdapter = $this->getMysqlPdoAdapterMockForDdlQueryTest();
         try {
-            $this->_mockAdapter->query($query);
+            $mockAdapter->query($query);
         } catch (\Exception $e) {
             $this->assertStringNotContainsString(
                 $e->getMessage(),
@@ -198,10 +132,10 @@ class MysqlTest extends TestCase
             );
         }
 
-        $select = new Select($this->_mockAdapter, new SelectRenderer([]));
+        $select = new Select($mockAdapter, new SelectRenderer([]));
         $select->from('user');
         try {
-            $this->_mockAdapter->query($select);
+            $mockAdapter->query($select);
         } catch (\Exception $e) {
             $this->assertStringNotContainsString(
                 $e->getMessage(),
@@ -212,14 +146,13 @@ class MysqlTest extends TestCase
 
     /**
      * Test DDL query inside transaction in Developer mode
-     *
-     * @dataProvider ddlSqlQueryProvider
-     */
+     *     */
+    #[DataProvider('ddlSqlQueryProvider')]
     public function testCheckDdlTransaction($ddlQuery)
     {
         $this->expectException('Exception');
         $this->expectExceptionMessage('DDL statements are not allowed in transactions');
-        $this->_mockAdapter->query($ddlQuery);
+        $this->getMysqlPdoAdapterMockForDdlQueryTest()->query($ddlQuery);
     }
 
     public function testMultipleQueryException()
@@ -229,7 +162,67 @@ class MysqlTest extends TestCase
         $sql = "SELECT COUNT(*) AS _num FROM test; ";
         $sql .= "INSERT INTO test(id) VALUES (1); ";
         $sql .= "SELECT COUNT(*) AS _num FROM test; ";
-        $this->_mockAdapter->query($sql);
+        $this->getMysqlPdoAdapterMockForDdlQueryTest()->query($sql);
+    }
+
+    /**
+     * Multiple statements must be detected, including when the statement separator follows a
+     * backslash-terminated string literal.
+     *
+     * @param string $sql
+     * @return void
+     */
+    #[DataProvider('stackedQueriesDataProvider')]
+    public function testStackedQueriesAreBlocked(string $sql): void
+    {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->expectExceptionMessage('Multiple queries can\'t be executed. Run a single query and try again.');
+
+        $this->getMysqlPdoAdapterMockForDdlQueryTest()->query($sql);
+    }
+
+    /**
+     * @return array
+     */
+    public static function stackedQueriesDataProvider(): array
+    {
+        return [
+            'plain multiple statements' => ["SELECT 1; SELECT 2;"],
+            'separator after backslash-terminated literal' => ["SELECT '\\\\'; SELECT 1"],
+        ];
+    }
+
+    /**
+     * A single statement must not be split when it contains a semicolon inside a string literal
+     * quoted with doubled backslashes.
+     *
+     * @param string $sql
+     * @return void
+     */
+    #[DataProvider('singleQueryWithSpecialCharactersDataProvider')]
+    public function testSingleQueryWithSpecialCharactersIsNotBlocked(string $sql): void
+    {
+        $adapter = $this->getMysqlPdoAdapterMock(['_query']);
+        $adapter->expects($this->once())
+            ->method('_query')
+            ->with($sql);
+
+        $adapter->query($sql);
+    }
+
+    /**
+     * @return array
+     */
+    public static function singleQueryWithSpecialCharactersDataProvider(): array
+    {
+        return [
+            'semicolon inside literal quoted with doubled backslashes' => [
+                "SELECT * FROM test WHERE path IN ('foo\\\\', 'a;b')",
+            ],
+            'backslash-terminated literal then semicolon in another literal' => [
+                "SELECT * FROM test WHERE path IN ('x\\\\', 'p;q')",
+            ],
+        ];
     }
 
     /**
@@ -265,8 +258,9 @@ class MysqlTest extends TestCase
      */
     public function testAsymmetricRollBackFailure()
     {
+        $adapter = $this->getMysqlPdoAdapterMock([]);
         $this->expectExceptionMessage(AdapterInterface::ERROR_ASYMMETRIC_ROLLBACK_MESSAGE);
-        $this->_adapter->rollBack();
+        $adapter->rollBack();
     }
 
     /**
@@ -274,8 +268,9 @@ class MysqlTest extends TestCase
      */
     public function testAsymmetricCommitFailure()
     {
+        $adapter = $this->getMysqlPdoAdapterMock([]);
         $this->expectExceptionMessage(AdapterInterface::ERROR_ASYMMETRIC_COMMIT_MESSAGE);
-        $this->_adapter->commit();
+        $adapter->commit();
     }
 
     /**
@@ -283,11 +278,13 @@ class MysqlTest extends TestCase
      */
     public function testAsymmetricCommitSuccess()
     {
-        $this->assertEquals(0, $this->_adapter->getTransactionLevel());
-        $this->_adapter->beginTransaction();
-        $this->assertEquals(1, $this->_adapter->getTransactionLevel());
-        $this->_adapter->commit();
-        $this->assertEquals(0, $this->_adapter->getTransactionLevel());
+        $adapter = $this->getMysqlPdoAdapterMock(['_connect']);
+        $this->addConnectionMock($adapter);
+        $this->assertEquals(0, $adapter->getTransactionLevel());
+        $adapter->beginTransaction();
+        $this->assertEquals(1, $adapter->getTransactionLevel());
+        $adapter->commit();
+        $this->assertEquals(0, $adapter->getTransactionLevel());
     }
 
     /**
@@ -295,11 +292,13 @@ class MysqlTest extends TestCase
      */
     public function testAsymmetricRollBackSuccess()
     {
-        $this->assertEquals(0, $this->_adapter->getTransactionLevel());
-        $this->_adapter->beginTransaction();
-        $this->assertEquals(1, $this->_adapter->getTransactionLevel());
-        $this->_adapter->rollBack();
-        $this->assertEquals(0, $this->_adapter->getTransactionLevel());
+        $adapter = $this->getMysqlPdoAdapterMock(['_connect']);
+        $this->addConnectionMock($adapter);
+        $this->assertEquals(0, $adapter->getTransactionLevel());
+        $adapter->beginTransaction();
+        $this->assertEquals(1, $adapter->getTransactionLevel());
+        $adapter->rollBack();
+        $this->assertEquals(0, $adapter->getTransactionLevel());
     }
 
     /**
@@ -307,21 +306,22 @@ class MysqlTest extends TestCase
      */
     public function testNestedTransactionCommitSuccess()
     {
-        $this->_adapter->expects($this->exactly(2))
+        $adapter = $this->getMysqlPdoAdapterMock(['_connect', '_beginTransaction', '_commit']);
+        $adapter->expects($this->exactly(2))
             ->method('_connect');
-        $this->_adapter->expects($this->once())
+        $adapter->expects($this->once())
             ->method('_beginTransaction');
-        $this->_adapter->expects($this->once())
+        $adapter->expects($this->once())
             ->method('_commit');
 
-        $this->_adapter->beginTransaction();
-        $this->_adapter->beginTransaction();
-        $this->_adapter->beginTransaction();
-        $this->assertEquals(3, $this->_adapter->getTransactionLevel());
-        $this->_adapter->commit();
-        $this->_adapter->commit();
-        $this->_adapter->commit();
-        $this->assertEquals(0, $this->_adapter->getTransactionLevel());
+        $adapter->beginTransaction();
+        $adapter->beginTransaction();
+        $adapter->beginTransaction();
+        $this->assertEquals(3, $adapter->getTransactionLevel());
+        $adapter->commit();
+        $adapter->commit();
+        $adapter->commit();
+        $this->assertEquals(0, $adapter->getTransactionLevel());
     }
 
     /**
@@ -329,21 +329,22 @@ class MysqlTest extends TestCase
      */
     public function testNestedTransactionRollBackSuccess()
     {
-        $this->_adapter->expects($this->exactly(2))
+        $adapter = $this->getMysqlPdoAdapterMock(['_connect', '_beginTransaction', '_rollBack']);
+        $adapter->expects($this->exactly(2))
             ->method('_connect');
-        $this->_adapter->expects($this->once())
+        $adapter->expects($this->once())
             ->method('_beginTransaction');
-        $this->_adapter->expects($this->once())
+        $adapter->expects($this->once())
             ->method('_rollBack');
 
-        $this->_adapter->beginTransaction();
-        $this->_adapter->beginTransaction();
-        $this->_adapter->beginTransaction();
-        $this->assertEquals(3, $this->_adapter->getTransactionLevel());
-        $this->_adapter->rollBack();
-        $this->_adapter->rollBack();
-        $this->_adapter->rollBack();
-        $this->assertEquals(0, $this->_adapter->getTransactionLevel());
+        $adapter->beginTransaction();
+        $adapter->beginTransaction();
+        $adapter->beginTransaction();
+        $this->assertEquals(3, $adapter->getTransactionLevel());
+        $adapter->rollBack();
+        $adapter->rollBack();
+        $adapter->rollBack();
+        $this->assertEquals(0, $adapter->getTransactionLevel());
     }
 
     /**
@@ -351,21 +352,22 @@ class MysqlTest extends TestCase
      */
     public function testNestedTransactionLastRollBack()
     {
-        $this->_adapter->expects($this->exactly(2))
+        $adapter = $this->getMysqlPdoAdapterMock(['_connect', '_beginTransaction', '_rollBack']);
+        $adapter->expects($this->exactly(2))
             ->method('_connect');
-        $this->_adapter->expects($this->once())
+        $adapter->expects($this->once())
             ->method('_beginTransaction');
-        $this->_adapter->expects($this->once())
+        $adapter->expects($this->once())
             ->method('_rollBack');
 
-        $this->_adapter->beginTransaction();
-        $this->_adapter->beginTransaction();
-        $this->_adapter->beginTransaction();
-        $this->assertEquals(3, $this->_adapter->getTransactionLevel());
-        $this->_adapter->commit();
-        $this->_adapter->commit();
-        $this->_adapter->rollBack();
-        $this->assertEquals(0, $this->_adapter->getTransactionLevel());
+        $adapter->beginTransaction();
+        $adapter->beginTransaction();
+        $adapter->beginTransaction();
+        $this->assertEquals(3, $adapter->getTransactionLevel());
+        $adapter->commit();
+        $adapter->commit();
+        $adapter->rollBack();
+        $this->assertEquals(0, $adapter->getTransactionLevel());
     }
 
     /**
@@ -374,20 +376,21 @@ class MysqlTest extends TestCase
      */
     public function testIncompleteRollBackFailureOnCommit()
     {
-        $this->_adapter->expects($this->exactly(2))->method('_connect');
+        $adapter = $this->getMysqlPdoAdapterMock(['_connect']);
+        $this->addConnectionMock($adapter);
 
         try {
-            $this->_adapter->beginTransaction();
-            $this->_adapter->beginTransaction();
-            $this->_adapter->rollBack();
-            $this->_adapter->commit();
+            $adapter->beginTransaction();
+            $adapter->beginTransaction();
+            $adapter->rollBack();
+            $adapter->commit();
             throw new \Exception('Test Failed!');
         } catch (\Exception $e) {
             $this->assertEquals(
                 AdapterInterface::ERROR_ROLLBACK_INCOMPLETE_MESSAGE,
                 $e->getMessage()
             );
-            $this->_adapter->rollBack();
+            $adapter->rollBack();
         }
     }
 
@@ -397,20 +400,21 @@ class MysqlTest extends TestCase
      */
     public function testIncompleteRollBackFailureOnBeginTransaction()
     {
-        $this->_adapter->expects($this->exactly(2))->method('_connect');
+        $adapter = $this->getMysqlPdoAdapterMock(['_connect']);
+        $this->addConnectionMock($adapter);
 
         try {
-            $this->_adapter->beginTransaction();
-            $this->_adapter->beginTransaction();
-            $this->_adapter->rollBack();
-            $this->_adapter->beginTransaction();
+            $adapter->beginTransaction();
+            $adapter->beginTransaction();
+            $adapter->rollBack();
+            $adapter->beginTransaction();
             throw new \Exception('Test Failed!');
         } catch (\Exception $e) {
             $this->assertEquals(
                 AdapterInterface::ERROR_ROLLBACK_INCOMPLETE_MESSAGE,
                 $e->getMessage()
             );
-            $this->_adapter->rollBack();
+            $adapter->rollBack();
         }
     }
 
@@ -419,24 +423,27 @@ class MysqlTest extends TestCase
      */
     public function testSequentialTransactionsSuccess()
     {
-        $this->_adapter->expects($this->exactly(4))
+        $adapter = $this->getMysqlPdoAdapterMock(['_connect', '_beginTransaction', '_rollBack', '_commit']);
+        $this->addConnectionMock($adapter);
+
+        $adapter->expects($this->exactly(4))
             ->method('_connect');
-        $this->_adapter->expects($this->exactly(2))
+        $adapter->expects($this->exactly(2))
             ->method('_beginTransaction');
-        $this->_adapter->expects($this->once())
+        $adapter->expects($this->once())
             ->method('_rollBack');
-        $this->_adapter->expects($this->once())
+        $adapter->expects($this->once())
             ->method('_commit');
 
-        $this->_adapter->beginTransaction();
-        $this->_adapter->beginTransaction();
-        $this->_adapter->beginTransaction();
-        $this->_adapter->rollBack();
-        $this->_adapter->rollBack();
-        $this->_adapter->rollBack();
+        $adapter->beginTransaction();
+        $adapter->beginTransaction();
+        $adapter->beginTransaction();
+        $adapter->rollBack();
+        $adapter->rollBack();
+        $adapter->rollBack();
 
-        $this->_adapter->beginTransaction();
-        $this->_adapter->commit();
+        $adapter->beginTransaction();
+        $adapter->commit();
     }
 
     /**
@@ -444,6 +451,7 @@ class MysqlTest extends TestCase
      */
     public function testInsertOnDuplicateWithQuotedColumnName()
     {
+        $adapter = $this->getMysqlPdoAdapterMock([]);
         $table = 'some_table';
         $data = [
             'index' => 'indexValue',
@@ -457,43 +465,41 @@ class MysqlTest extends TestCase
 
         $stmtMock = $this->createMock(\Zend_Db_Statement_Pdo::class);
         $bind = ['indexValue', 'rowValue', 'selectValue', 'insertValue'];
-        $this->_adapter->expects($this->once())
+        $adapter->expects($this->once())
             ->method('query')
             ->with($sqlQuery, $bind)
             ->willReturn($stmtMock);
 
-        $this->_adapter->insertOnDuplicate($table, $data, $fields);
+        $adapter->insertOnDuplicate($table, $data, $fields);
     }
 
     /**
      * @param array $options
      * @param string $expectedQuery
-     *
-     * @dataProvider addColumnDataProvider
-     * @covers \Magento\Framework\DB\Adapter\Pdo\Mysql::addColumn
+     *     * @covers \Magento\Framework\DB\Adapter\Pdo\Mysql::addColumn
      * @covers \Magento\Framework\DB\Adapter\Pdo\Mysql::_getColumnDefinition
      */
+    #[DataProvider('addColumnDataProvider')]
     public function testAddColumn($options, $expectedQuery)
     {
-        $connectionMock = $this->createPartialMock(
-            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
+        $adapter = $this->getMysqlPdoAdapterMock(
             ['tableColumnExists', '_getTableName', 'rawQuery', 'resetDdlCache', 'quote', 'getSchemaListener']
         );
-        $connectionMock->expects($this->any())->method('getSchemaListener')->willReturn($this->schemaListenerMock);
-        $connectionMock->expects($this->any())->method('_getTableName')->willReturnArgument(0);
-        $connectionMock->expects($this->any())->method('quote')->willReturnArgument(0);
-        $connectionMock->expects($this->once())->method('rawQuery')->with($expectedQuery);
-        $connectionMock->addColumn('tableName', 'columnName', $options);
+        $adapter->expects($this->any())->method('getSchemaListener')->willReturn($this->schemaListenerMock);
+        $adapter->expects($this->any())->method('_getTableName')->willReturnArgument(0);
+        $adapter->expects($this->any())->method('quote')->willReturnOnConsecutiveCalls('', 'Some field');
+        $adapter->expects($this->once())->method('rawQuery')->with($expectedQuery);
+        $adapter->addColumn('tableName', 'columnName', $options);
     }
 
     /**
      * @return array
      */
-    public function addColumnDataProvider()
+    public static function addColumnDataProvider()
     {
         return [
             [
-                'columnData' => [
+                'options' => [
                     'TYPE'        => 'integer',
                     'IDENTITY'    => true,
                     'UNSIGNED'    => true,
@@ -509,19 +515,18 @@ class MysqlTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider getIndexNameDataProvider
-     */
+    /**     */
+    #[DataProvider('getIndexNameDataProvider')]
     public function testGetIndexName($name, $fields, $indexType, $expectedName)
     {
-        $resultIndexName = $this->_mockAdapter->getIndexName($name, $fields, $indexType);
+        $resultIndexName = $this->getMysqlPdoAdapterMockForDdlQueryTest()->getIndexName($name, $fields, $indexType);
         $this->assertStringStartsWith($expectedName, $resultIndexName);
     }
 
     /**
      * @return array
      */
-    public function getIndexNameDataProvider()
+    public static function getIndexNameDataProvider()
     {
         // 65 characters long - will be compressed
         $longTableName = '__________________________________________________long_table_name';
@@ -555,5 +560,575 @@ class MysqlTest extends TestCase
             Mysql::class,
             ['config' => ['host' => 'localhost', 'port' => '33390']]
         );
+    }
+
+    /**
+     * @param string $indexName
+     * @param string $indexType
+     * @param array $keyLists
+     * @param \Exception $exception
+     * @param string $query
+     * @throws \ReflectionException
+     * @throws \Zend_Db_Exception     */
+    #[DataProvider('addIndexWithDuplicationsInDBDataProvider')]
+    public function testAddIndexWithDuplicationsInDB(
+        string $indexName,
+        string $indexType,
+        array $keyLists,
+        string $query,
+        string $exceptionMessage,
+        array $ids
+    ) {
+        $tableName = 'core_table';
+        $fields = ['sku', 'field2'];
+        $quotedFields = [$this->quoteIdentifier('sku'), $this->quoteIdentifier('field2')];
+
+        $exception = new \Exception(
+            sprintf(
+                $exceptionMessage,
+                $tableName,
+                implode(',', $quotedFields)
+            )
+        );
+
+        $this->expectException(get_class($exception));
+        $this->expectExceptionMessage($exception->getMessage());
+
+        $adapter = $this->getMysqlPdoAdapterMock([
+            'describeTable',
+            'getIndexList',
+            'quoteIdentifier',
+            '_getTableName',
+            'rawQuery',
+            '_removeDuplicateEntry',
+            'resetDdlCache',
+        ]);
+        $this->addConnectionMock($adapter);
+        $columns = ['sku' => [], 'field2' => [], 'comment' => [], 'timestamp' => []];
+        $schemaName = null;
+
+        $this->schemaListenerMock
+            ->expects($this->once())
+            ->method('addIndex')
+            ->with($tableName, $indexName, $fields, $indexType);
+
+        $adapter
+            ->expects($this->once())
+            ->method('describeTable')
+            ->with($tableName, $schemaName)
+            ->willReturn($columns);
+        $adapter
+            ->expects($this->once())
+            ->method('getIndexList')
+            ->with($tableName, $schemaName)
+            ->willReturn($keyLists);
+        $adapter
+            ->expects($this->once())
+            ->method('_getTableName')
+            ->with($tableName, $schemaName)
+            ->willReturn($tableName);
+        $adapter
+            ->method('quoteIdentifier')
+            ->willReturnMap([
+                [$tableName, false, $this->quoteIdentifier($tableName)],
+                [$indexName, false, $this->quoteIdentifier($indexName)],
+                [$fields[0], false, $quotedFields[0]],
+                [$fields[1], false, $quotedFields[1]],
+            ]);
+        $adapter
+            ->expects($this->once())
+            ->method('rawQuery')
+            ->with(
+                sprintf(
+                    $query,
+                    $tableName,
+                    implode(',', $quotedFields)
+                )
+            )
+            ->willThrowException($exception);
+        $adapter
+            ->expects($this->exactly((int)in_array(strtolower($indexType), ['primary', 'unique'])))
+            ->method('_removeDuplicateEntry')
+            ->with($tableName, $fields, $ids)
+            ->willThrowException($exception);
+        $adapter
+            ->expects($this->never())
+            ->method('resetDdlCache');
+
+        $adapter->addIndex($tableName, $indexName, $fields, $indexType);
+    }
+
+    /**
+     * @return array
+     */
+    public static function addIndexWithDuplicationsInDBDataProvider(): array
+    {
+        return [
+            'New unique index' => [
+                'indexName' => 'SOME_UNIQUE_INDEX',
+                'indexType' => AdapterInterface::INDEX_TYPE_UNIQUE,
+                'keyLists' => [
+                    'PRIMARY' => [
+                        'INDEX_TYPE' => [
+                            AdapterInterface::INDEX_TYPE_PRIMARY
+                        ]
+                    ],
+                ],
+                'query' => 'ALTER TABLE `%s` ADD UNIQUE `SOME_UNIQUE_INDEX` (%s)',
+                'exceptionMessage' => 'SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry \'1-1-1\' '
+                    . 'for key \'SOME_UNIQUE_INDEX\', query was: '
+                    . 'ALTER TABLE `%s` ADD UNIQUE `SOME_UNIQUE_INDEX` (%s)',
+                'ids' => [1, 1, 1],
+            ],
+            'Existing unique index' => [
+                'indexName' => 'SOME_UNIQUE_INDEX',
+                'indexType' => AdapterInterface::INDEX_TYPE_UNIQUE,
+                'keyLists' => [
+                    'PRIMARY' => [
+                        'INDEX_TYPE' => [
+                            AdapterInterface::INDEX_TYPE_PRIMARY
+                        ]
+                    ],
+                    'SOME_UNIQUE_INDEX' => [
+                        'INDEX_TYPE' => [
+                            AdapterInterface::INDEX_TYPE_UNIQUE
+                        ]
+                    ],
+                ],
+                'query' => 'ALTER TABLE `%s` DROP INDEX `SOME_UNIQUE_INDEX`, ADD UNIQUE `SOME_UNIQUE_INDEX` (%s)',
+                'exceptionMessage' => 'SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry \'1-2-5\' '
+                    . 'for key \'SOME_UNIQUE_INDEX\', query was: '
+                    . 'ALTER TABLE `%s` DROP INDEX `SOME_UNIQUE_INDEX`, ADD UNIQUE `SOME_UNIQUE_INDEX` (%s)',
+                'ids' => [1, 2, 5],
+            ],
+            'New primary index' => [
+                'indexName' => 'PRIMARY',
+                'indexType' => AdapterInterface::INDEX_TYPE_PRIMARY,
+                'keyLists' => [
+                    'SOME_UNIQUE_INDEX' => [
+                        'INDEX_TYPE' => [
+                            AdapterInterface::INDEX_TYPE_UNIQUE
+                        ]
+                    ],
+                ],
+                'query' => 'ALTER TABLE `%s` ADD PRIMARY KEY (%s)',
+                'exceptionMessage' => 'SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry \'1-3-4\' '
+                    . 'for key \'PRIMARY\', query was: '
+                    . 'ALTER TABLE `%s` ADD PRIMARY KEY (%s)',
+                'ids' => [1, 3, 4],
+            ],
+        ];
+    }
+
+    /**
+     * @param string $field
+     * @return string
+     */
+    private function quoteIdentifier(string $field): string
+    {
+        if (strpos($field, '`') !== 0) {
+            $field = '`' . $field . '`';
+        }
+
+        return $field;
+    }
+
+    public function testAddIndexForNonExitingField()
+    {
+        $tableName = 'core_table';
+        $this->expectException(\Zend_Db_Exception::class);
+        $this->expectExceptionMessage(sprintf(
+            'There is no field "%s" that you are trying to create an index on "%s"',
+            'sku',
+            $tableName
+        ));
+
+        $adapter = $this->getMysqlPdoAdapterMock(['describeTable', 'getIndexList', 'quoteIdentifier', '_getTableName']);
+
+        $fields = ['sku', 'field2'];
+        $schemaName = null;
+
+        $adapter
+            ->expects($this->once())
+            ->method('describeTable')
+            ->with($tableName, $schemaName)
+            ->willReturn([]);
+        $adapter
+            ->expects($this->once())
+            ->method('getIndexList')
+            ->with($tableName, $schemaName)
+            ->willReturn([]);
+        $adapter
+            ->expects($this->once())
+            ->method('_getTableName')
+            ->with($tableName, $schemaName)
+            ->willReturn($tableName);
+        $adapter
+            ->method('quoteIdentifier')
+            ->willReturnMap([
+                [$tableName, $tableName],
+            ]);
+
+        $adapter->addIndex($tableName, 'SOME_INDEX', $fields);
+    }
+
+    /**
+     * @return MockObject|PdoMysqlAdapter
+     * @throws \ReflectionException
+     */
+    private function getMysqlPdoAdapterMockForDdlQueryTest(): MockObject
+    {
+        $mockAdapter = $this->getMysqlPdoAdapterMock(['beginTransaction', 'getTransactionLevel', 'getSchemaListener']);
+        $mockAdapter
+            ->method('getTransactionLevel')
+            ->willReturn(1);
+
+        return $mockAdapter;
+    }
+
+    /**
+     * @param array $methods
+     * @return MockObject|PdoMysqlAdapter
+     * @throws \ReflectionException
+     */
+    private function getMysqlPdoAdapterMock(array $methods): MockObject
+    {
+        if (empty($methods)) {
+            $methods = array_merge($methods, ['query']);
+        }
+        $methods = array_unique(array_merge($methods, ['getSchemaListener']));
+
+        $string = $this->createMock(StringUtils::class);
+        $dateTime = $this->createMock(DateTime::class);
+        $this->logger = $this->createMock(LoggerInterface::class);
+        $selectFactory = $this->getMockBuilder(SelectFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $dtoFactoriesTable = $this->createMock(DtoFactoriesTable::class);
+
+        $adapterMock = $this->getMockBuilder(PdoMysqlAdapter::class)
+            ->onlyMethods(
+                $methods
+            )->setConstructorArgs(
+                [
+                    'string' => $string,
+                    'dateTime' => $dateTime,
+                    'logger' => $this->logger,
+                    'selectFactory' => $selectFactory,
+                    'config' => [
+                        'dbname' => 'not_exists',
+                        'username' => 'not_valid',
+                        'password' => 'not_valid',
+                    ],
+                    'serializer' => $this->serializerMock,
+                    'dtoFactoriesTable' => $dtoFactoriesTable,
+                ]
+            )
+            ->getMock();
+
+        $adapterMock
+            ->method('getSchemaListener')
+            ->willReturn($this->schemaListenerMock);
+
+        /** add profiler Mock */
+        $resourceProperty = new \ReflectionProperty(
+            get_class($adapterMock),
+            '_profiler'
+        );
+        $resourceProperty->setValue($adapterMock, $this->profiler);
+
+        return $adapterMock;
+    }
+
+    /**
+     * @param MockObject $pdoAdapterMock
+     * @throws \ReflectionException
+     */
+    private function addConnectionMock(MockObject $pdoAdapterMock): void
+    {
+        $resourceProperty = new \ReflectionProperty(
+            get_class($pdoAdapterMock),
+            '_connection'
+        );
+        $resourceProperty->setValue($pdoAdapterMock, $this->connection);
+    }
+
+    /**
+     * @param array $actual
+     * @param array $expected     * @return void
+     * @throws \ReflectionException
+     */
+    #[DataProvider('columnDataForTest')]
+    public function testPrepareColumnData(array $actual, array $expected)
+    {
+        $adapter = $this->getMysqlPdoAdapterMock([]);
+        $result = $this->invokeModelMethod($adapter, 'prepareColumnData', [$actual]);
+
+        foreach ($result as $key => $value) {
+            $this->assertEquals($expected[$key], $value);
+        }
+    }
+
+    /**
+     * Data provider for testPrepareColumnData
+     *
+     * @return array[]
+     */
+    public static function columnDataForTest(): array
+    {
+        return [
+          [
+              'actual' => [
+                      [
+                          'DATA_TYPE' => 'int',
+                          'DEFAULT' => ''
+                      ],
+                      [
+                          'DATA_TYPE' => 'timestamp /* mariadb-5.3 */',
+                          'DEFAULT' => 'CURRENT_TIMESTAMP'
+                      ],
+                      [
+                          'DATA_TYPE' => 'varchar',
+                          'DEFAULT' => ''
+                      ]
+                  ],
+              'expected' => [
+                      [
+                          'DATA_TYPE' => 'int',
+                          'DEFAULT' => null
+                      ],
+                      [
+                          'DATA_TYPE' => 'timestamp',
+                          'DEFAULT' => 'CURRENT_TIMESTAMP'
+                      ],
+                      [
+                          'DATA_TYPE' => 'varchar',
+                          'DEFAULT' => ''
+                      ]
+                  ]
+              ]
+        ];
+    }
+
+    /**
+     * @param array $actual
+     * @param int|string|\Zend_Db_Expr $expected     * @return void
+     * @throws \ReflectionException
+     */
+    #[DataProvider('columnDataAndValueForTest')]
+    public function testPrepareColumnValue(array $actual, int|string|\Zend_Db_Expr $expected)
+    {
+        $adapter = $this->getMysqlPdoAdapterMock([]);
+
+        $result = $this->invokeModelMethod($adapter, 'prepareColumnValue', [$actual[0], $actual[1]]);
+
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * Data provider for testPrepareColumnValue
+     *
+     * @return array[]
+     */
+    public static function columnDataAndValueForTest(): array
+    {
+        return [
+            [
+                'actual' => [
+                    [
+                        'DATA_TYPE' => 'int',
+                        'DEFAULT' => ''
+                    ],
+                    '10'
+                ],
+                'expected' => 10
+            ],
+            [
+                'actual' => [
+                    [
+                        'DATA_TYPE' => 'datetime /* mariadb-5.3 */',
+                        'DEFAULT' => 'CURRENT_TIMESTAMP'
+                    ],
+                    'null'
+                ],
+                'expected' => new \Zend_Db_Expr('NULL')
+            ],
+            [
+                'actual' => [
+                    [
+                        'DATA_TYPE' => 'date /* mariadb-5.3 */',
+                        'DEFAULT' => ''
+                    ],
+                    'null'
+                ],
+                'expected' => new \Zend_Db_Expr('NULL')
+            ],
+            [
+                'actual' => [
+                    [
+                        'DATA_TYPE' => 'timestamp /* mariadb-5.3 */',
+                        'DEFAULT' => 'CURRENT_TIMESTAMP'
+                    ],
+                    'null'
+                ],
+                'expected' => new \Zend_Db_Expr('NULL')
+            ],
+            [
+                'actual' => [
+                    [
+                        'DATA_TYPE' => 'varchar',
+                        'NULLABLE' => false,
+                        'DEFAULT' => ''
+                    ],
+                    10
+                ],
+                'expected' => '10'
+            ]
+        ];
+    }
+
+    /**
+     * @param string $actual
+     * @param string $expected     * @return void
+     * @throws \ReflectionException
+     */
+    #[DataProvider('providerForSanitizeColumnDataType')]
+    public function testSanitizeColumnDataType(string $actual, string $expected)
+    {
+        $adapter = $this->getMysqlPdoAdapterMock([]);
+        $result = $this->invokeModelMethod($adapter, 'sanitizeColumnDataType', [$actual]);
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * Data provider for testSanitizeColumnDataType
+     *
+     * @return array[]
+     */
+    public static function providerForSanitizeColumnDataType()
+    {
+        return [
+            [
+                'actual' => 'int',
+                'expected' => 'int'
+            ],
+            [
+                'actual' => 'varchar',
+                'expected' => 'varchar'
+            ],
+            [
+                'actual' => 'datetime /* mariadb-5.3 */',
+                'expected' => 'datetime'
+            ],
+            [
+                'actual' => 'date /* mariadb-5.3 */',
+                'expected' => 'date'
+            ],
+            [
+                'actual' => 'timestamp /* mariadb-5.3 */',
+                'expected' => 'timestamp'
+            ]
+        ];
+    }
+
+    /**
+     * @param string $method
+     * @param array $parameters
+     * @return mixed
+     * @throws \ReflectionException
+     */
+    private function invokeModelMethod(MockObject $adapter, string $method, array $parameters = [])
+    {
+        $reflection = new \ReflectionClass($adapter);
+        $method = $reflection->getMethod($method);
+
+        return $method->invokeArgs($adapter, $parameters);
+    }
+
+    /**     * @param \Exception $exception
+     * @return void
+     */
+    #[DataProvider('retryExceptionDataProvider')]
+    public function testBeginTransactionWithReconnect(\Exception $exception): void
+    {
+        $adapter = $this->getMysqlPdoAdapterMock(['_connect', '_beginTransaction', '_rollBack']);
+        $adapter->expects(self::exactly(4))
+            ->method('_connect');
+        $adapter->expects(self::once())
+            ->method('_rollBack');
+
+        $matcher = self::exactly(2);
+        $adapter->expects($matcher)
+            ->method('_beginTransaction')
+            ->willReturnCallback(
+                function () use ($exception) {
+                    static $counter = 0;
+                    if (++$counter === 1) {
+                        throw $exception;
+                    }
+                }
+            );
+        $adapter->beginTransaction();
+        $adapter->rollBack();
+    }
+
+    /**
+     * @return array[]
+     */
+    public static function retryExceptionDataProvider(): array
+    {
+        $serverHasGoneAwayException = new \PDOException();
+        $serverHasGoneAwayException->errorInfo = [1 => 2006];
+        $lostConnectionException = new \PDOException();
+        $lostConnectionException->errorInfo = [1 => 2013];
+
+        return [
+            [$serverHasGoneAwayException],
+            [$lostConnectionException],
+            [new \Zend_Db_Statement_Exception('', 0, $serverHasGoneAwayException)],
+            [new \Zend_Db_Statement_Exception('', 0, $lostConnectionException)],
+        ];
+    }
+
+    /**     * @param \Exception $exception
+     * @return void
+     */
+    #[DataProvider('exceptionDataProvider')]
+    public function testBeginTransactionWithoutReconnect(\Exception $exception): void
+    {
+        $this->expectException(\Exception::class);
+        $adapter = $this->getMysqlPdoAdapterMock(['_connect', '_beginTransaction', '_rollBack']);
+        $adapter->expects(self::once())
+            ->method('_connect');
+        $adapter->expects(self::once())
+            ->method('_beginTransaction')
+            ->willThrowException($exception);
+        $adapter->beginTransaction();
+    }
+
+    /**
+     * @return array[]
+     */
+    public static function exceptionDataProvider(): array
+    {
+        $pdoException = new \PDOException();
+        $pdoException->errorInfo = [1 => 1213];
+
+        return [
+            [$pdoException],
+            [new \Zend_Db_Statement_Exception('', 0, $pdoException)],
+            [new \Exception()],
+        ];
+    }
+
+    public function testDestruct(): void
+    {
+        $adapter = $this->getMysqlPdoAdapterMock(['_connect', '_rollBack']);
+        $this->addConnectionMock($adapter);
+        $adapter->expects($this->once())->method('_rollBack');
+        $this->logger->expects($this->once())->method('log');
+        $adapter->beginTransaction();
+        $adapter->__destruct();
+        $this->assertEquals(0, $adapter->getTransactionLevel());
     }
 }

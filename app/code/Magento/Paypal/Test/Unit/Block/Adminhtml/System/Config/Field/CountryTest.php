@@ -1,20 +1,23 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Paypal\Test\Unit\Block\Adminhtml\System\Config\Field;
 
 use Magento\Backend\Model\Url;
+use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Data\Form\Element\AbstractElement;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Helper\Js;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use Magento\Paypal\Block\Adminhtml\System\Config\Field\Country;
 use Magento\Paypal\Model\Config\StructurePlugin;
-use PHPUnit\Framework\Constraint\LogicalAnd;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Constraint\StringContains;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -46,16 +49,28 @@ class CountryTest extends TestCase
      */
     protected $_url;
 
+    /**
+     * @var DirectoryHelper
+     */
+    private $helper;
+
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $helper = new ObjectManager($this);
-        $this->_element = $this->getMockForAbstractClass(
+
+        $jsonHelperMock = $this->createMock(JsonHelper::class);
+        $directoryHelperMock = $this->createMock(DirectoryHelper::class);
+        $objects = [
+            [JsonHelper::class, $jsonHelperMock],
+            [DirectoryHelper::class, $directoryHelperMock]
+        ];
+        $helper->prepareObjectManager($objects);
+
+        $this->_element = $this->createPartialMock(
             AbstractElement::class,
-            [],
-            '',
-            false,
-            true,
-            true,
             ['getHtmlId', 'getElementHtml', 'getName']
         );
         $this->_element->expects($this->any())
@@ -67,24 +82,51 @@ class CountryTest extends TestCase
         $this->_element->expects($this->any())
             ->method('getName')
             ->willReturn('name');
-        $this->_request = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->_request = $this->createMock(RequestInterface::class);
         $this->_jsHelper = $this->createMock(Js::class);
         $this->_url = $this->createMock(Url::class);
+        $this->helper = $this->createMock(DirectoryHelper::class);
+        $secureRendererMock = $this->createMock(SecureHtmlRenderer::class);
+        $secureRendererMock->method('renderEventListenerAsTag')
+            ->willReturnCallback(
+                function (string $event, string $js, string $selector): string {
+                    return "<script>document.querySelector('$selector').$event = function () { $js };</script>";
+                }
+            );
+        $secureRendererMock->method('renderStyleAsTag')
+            ->willReturnCallback(
+                function (string $style, string $selector): string {
+                    return "<style>$selector { $style }</style>";
+                }
+            );
         $this->_model = $helper->getObject(
             Country::class,
-            ['request' => $this->_request, 'jsHelper' => $this->_jsHelper, 'url' => $this->_url]
+            [
+                'request' => $this->_request,
+                'jsHelper' => $this->_jsHelper,
+                'url' => $this->_url,
+                'directoryHelper' => $this->helper,
+                'secureHtmlRenderer' => $secureRendererMock
+            ]
         );
     }
 
     /**
-     * @param null|string $requestCountry
-     * @param null|string $requestDefaultCountry
+     * @param string|null $requestCountry
+     * @param string|null $requestDefaultCountry
      * @param bool $canUseDefault
      * @param bool $inherit
-     * @dataProvider renderDataProvider
+     *
+     * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function testRender($requestCountry, $requestDefaultCountry, $canUseDefault, $inherit)
-    {
+    #[DataProvider('renderDataProvider')]
+    public function testRender(
+        ?string $requestCountry,
+        ?string $requestDefaultCountry,
+        bool $canUseDefault,
+        bool $inherit
+    ): void {
         $this->_request->expects($this->any())
             ->method('getParam')
             ->willReturnCallback(function ($param) use ($requestCountry, $requestDefaultCountry) {
@@ -105,31 +147,39 @@ class CountryTest extends TestCase
             ),
         ];
         if ($canUseDefault && ($requestCountry == 'US') && $requestDefaultCountry) {
+            $this->helper->method('getDefaultCountry')->willReturn($requestDefaultCountry);
             $constraints[] = new StringContains(
                 '$("' . $this->_element->getHtmlId() . '_inherit").observe("click", function () {'
             );
+            $this->_url
+                ->method('getUrl')
+                ->willReturnCallback(
+                    function ($arg1, $arg2) {
+                        if ($arg1 === '*/*/*' && is_array($arg2) &&
+                            $arg2['section'] === 'section' &&
+                            $arg2['website'] === 'website' && $arg2['store'] === 'store' &&
+                            $arg2[StructurePlugin::REQUEST_PARAM_COUNTRY] === '__country__') {
+                            return 'first_url';
+                        } elseif ($arg1 === '*/*/*' &&
+                            is_array($arg2) && $arg2['section'] === 'section' &&
+                            $arg2['website'] === 'website' && $arg2['store'] === 'store' &&
+                            $arg2[StructurePlugin::REQUEST_PARAM_COUNTRY] === '__country__' &&
+                            $arg2[Country::REQUEST_PARAM_DEFAULT_COUNTRY] === '__default__') {
+                            return 'second_url';
+                        }
+                    }
+                );
         }
         $this->_jsHelper->expects($this->once())
             ->method('getScript')
-            ->with(new LogicalAnd($constraints));
-        $this->_url->expects($this->once())
-            ->method('getUrl')
-            ->with(
-                '*/*/*',
-                [
-                    'section' => 'section',
-                    'website' => 'website',
-                    'store' => 'store',
-                    StructurePlugin::REQUEST_PARAM_COUNTRY => '__country__'
-                ]
-            );
+            ->with(self::logicalAnd(...$constraints));
         $this->_model->render($this->_element);
     }
 
     /**
      * @return array
      */
-    public function renderDataProvider()
+    public static function renderDataProvider(): array
     {
         return [
             [null, null, false, false],
@@ -140,7 +190,7 @@ class CountryTest extends TestCase
             ['IT', 'GB', true, false],
             ['US', 'GB', true, true],
             ['US', 'GB', true, false],
-            ['US', null, true, false],
+            ['US', null, true, false]
         ];
     }
 }

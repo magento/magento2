@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCatalogSpecialPriceListDisplayTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Special price display"/>
+            <title value="Special price shows on listing with regular price"/>
+            <description value="Admin sets a special price on a simple product via advanced pricing, then storefront listing shows special price and regular price with label."/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="AC-15205"/>
+            <group value="catalog"/>
+        </annotations>
+        <before>
+            <!-- Step 1: Create category and product -->
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!-- Login to admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Delete category, product and logout from admin -->
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAdmin"/>
+        </after>
+        <!--Step 2: In admin open product and set special price via advanced pricing -->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductEditPage">
+            <argument name="productId" value="$$createSimpleProduct.id$$"/>
+        </actionGroup>
+        <actionGroup ref="AddSpecialPriceToProductActionGroup" stepKey="setSpecialPrice">
+            <argument name="price" value="5.00"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+        <!-- Step 3: In storefront open the category -->
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="openCreatedCategoryOnStorefront">
+            <argument name="category" value="$$createCategory$$"/>
+        </actionGroup>
+        <!-- Step 4 Assertion: Verify special price (final price) present -->
+        <waitForElementVisible selector="{{StorefrontCategoryProductSection.ProductSpecialPriceByNumber('1')}}" stepKey="seeSpecialPrice"/>
+        <!-- Step 4 Assertion: Verify old (regular) price present -->
+        <waitForElementVisible selector="{{StorefrontCategoryProductSection.ProductOldPriceByNumber('1')}}" stepKey="seeRegularPrice"/>
+        <!--Step 4 Assertion: Verify regular price label present -->
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.oldPriceTag}}" stepKey="seeRegularPriceLabel"/>
+    </test>
+</tests>

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -57,7 +57,7 @@ class CleanExpiredOrdersTest extends TestCase
             ['create']
         );
         $this->orderCollectionMock = $this->createMock(Collection::class);
-        $this->orderManagementMock = $this->getMockForAbstractClass(OrderManagementInterface::class);
+        $this->orderManagementMock = $this->createMock(OrderManagementInterface::class);
 
         $this->model = new CleanExpiredOrders(
             $this->storesConfigMock,

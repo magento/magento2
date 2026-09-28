@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Setup\Declaration\Schema\Db;
@@ -64,7 +64,7 @@ class StatementFactory
         string $type,
         string $statement,
         string $resource,
-        string $elementType = null
+        ?string $elementType = null
     ) {
         $className = $elementType === Reference::TYPE ? $this->referenceClassName : $this->className;
         return $this->objectManager->create($className, [

@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -32,7 +31,7 @@ class WebsiteTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->_storeManagerMock = $this->createMock(StoreManagerInterface::class);
 
         $this->_model = new Website($this->_storeManagerMock);
     }
@@ -44,7 +43,7 @@ class WebsiteTest extends TestCase
 
     public function testGetScope()
     {
-        $scopeMock = $this->getMockForAbstractClass(ScopeInterface::class);
+        $scopeMock = $this->createMock(ScopeInterface::class);
         $this->_storeManagerMock
             ->expects($this->once())
             ->method('getWebsite')

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Setup\Declaration\Schema\Diff;
@@ -9,6 +9,7 @@ namespace Magento\Framework\Setup\Declaration\Schema\Diff;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
+ * @api
  * @see DiffInterface
  */
 class DiffFactory

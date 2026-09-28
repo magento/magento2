@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -45,18 +45,14 @@ class DescriptionSentenceGeneratorTest extends TestCase
 
     public function testSentenceGeneration()
     {
+        $words = ['Lorem', 'ipsum', 'dolor', 'sit', 'amet', 'consectetur', 'adipiscing'];
+        $callCount = 0;
         $this->dictionaryMock
             ->expects($this->exactly(7))
             ->method('getRandWord')
-            ->will($this->onConsecutiveCalls(
-                'Lorem',
-                'ipsum',
-                'dolor',
-                'sit',
-                'amet',
-                'consectetur',
-                'adipiscing'
-            ));
+            ->willReturnCallback(function() use (&$callCount, $words) {
+                return $words[$callCount++];
+            });
 
         $this->assertEquals(
             'Lorem ipsum dolor sit amet consectetur adipiscing.',

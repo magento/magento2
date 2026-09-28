@@ -1,16 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Category;
 
 use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Framework\App\ObjectManager;
 
-/**
- * Class Edit
- */
 class Edit extends \Magento\Catalog\Controller\Adminhtml\Category implements HttpGetActionInterface
 {
     /**
@@ -40,7 +37,7 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Category implements Htt
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager = null
+        ?\Magento\Store\Model\StoreManagerInterface $storeManager = null
     ) {
         parent::__construct($context);
         $this->resultPageFactory = $resultPageFactory;

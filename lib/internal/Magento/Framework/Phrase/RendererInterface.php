@@ -2,8 +2,8 @@
 /**
  * Phrase renderer interface
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Phrase;
 
@@ -11,6 +11,7 @@ namespace Magento\Framework\Phrase;
  * Translated phrase renderer
  *
  * @api
+ * @since 100.0.2
  */
 interface RendererInterface
 {

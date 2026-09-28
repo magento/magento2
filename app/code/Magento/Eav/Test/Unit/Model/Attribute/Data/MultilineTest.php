@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,8 @@ namespace Magento\Eav\Test\Unit\Model\Attribute\Data;
 use Magento\Eav\Model\Attribute;
 use Magento\Eav\Model\Attribute\Data\Multiline;
 use Magento\Eav\Model\AttributeDataFactory;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Eav\Model\Entity\Type;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Model\AbstractModel;
@@ -17,10 +19,14 @@ use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\Stdlib\StringUtils;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class MultilineTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Multiline
      */
@@ -37,11 +43,11 @@ class MultilineTest extends TestCase
     protected function setUp(): void
     {
         /** @var TimezoneInterface $timezoneMock */
-        $timezoneMock = $this->getMockForAbstractClass(TimezoneInterface::class);
+        $timezoneMock = $this->createMock(TimezoneInterface::class);
         /** @var LoggerInterface $loggerMock */
-        $loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $loggerMock = $this->createMock(LoggerInterface::class);
         /** @var ResolverInterface $localeResolverMock */
-        $localeResolverMock = $this->getMockForAbstractClass(ResolverInterface::class);
+        $localeResolverMock = $this->createMock(ResolverInterface::class);
         $this->stringMock = $this->createMock(StringUtils::class);
 
         $this->model = new Multiline(
@@ -57,12 +63,12 @@ class MultilineTest extends TestCase
      *
      * @param mixed $param
      * @param mixed $expectedResult
-     * @dataProvider extractValueDataProvider
      */
+    #[DataProvider('extractValueDataProvider')]
     public function testExtractValue($param, $expectedResult)
     {
         /** @var MockObject|RequestInterface $requestMock */
-        $requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        $requestMock = $this->createMock(RequestInterface::class);
         /** @var MockObject|Attribute $attributeMock */
         $attributeMock = $this->createMock(Attribute::class);
 
@@ -78,7 +84,7 @@ class MultilineTest extends TestCase
     /**
      * @return array
      */
-    public function extractValueDataProvider()
+    public static function extractValueDataProvider()
     {
         return [
             [
@@ -97,8 +103,8 @@ class MultilineTest extends TestCase
      *
      * @param string $format
      * @param mixed $expectedResult
-     * @dataProvider outputValueDataProvider
      */
+    #[DataProvider('outputValueDataProvider')]
     public function testOutputValue($format, $expectedResult)
     {
         /** @var MockObject|AbstractModel $entityMock */
@@ -109,7 +115,6 @@ class MultilineTest extends TestCase
 
         /** @var MockObject|Attribute $attributeMock */
         $attributeMock = $this->createMock(Attribute::class);
-
         $this->model->setEntity($entityMock);
         $this->model->setAttribute($attributeMock);
         $this->assertEquals($expectedResult, $this->model->outputValue($format));
@@ -118,7 +123,7 @@ class MultilineTest extends TestCase
     /**
      * @return array
      */
-    public function outputValueDataProvider()
+    public static function outputValueDataProvider()
     {
         return [
             [
@@ -146,17 +151,32 @@ class MultilineTest extends TestCase
      *
      * @param mixed $value
      * @param bool $isAttributeRequired
+     * @param bool $skipRequiredValidation
      * @param array $rules
      * @param array $expectedResult
-     * @dataProvider validateValueDataProvider
      */
-    public function testValidateValue($value, $isAttributeRequired, $rules, $expectedResult)
+    #[DataProvider('validateValueDataProvider')]
+    public function testValidateValue($value, $isAttributeRequired, $skipRequiredValidation, $rules, $expectedResult)
     {
         /** @var MockObject|AbstractModel $entityMock */
-        $entityMock = $this->createMock(AbstractModel::class);
+        $entityMock = $this->createPartialMockWithReflection(
+            AbstractModel::class,
+            ['getSkipRequiredValidation', 'getData', 'getDataUsingMethod']
+        );
+        if ($skipRequiredValidation === true) {
+            $entityMock->expects($this->any())
+                ->method('getDataUsingMethod')
+                ->willReturn([]);
+        } else {
+            $entityMock->expects($this->any())
+                ->method('getDataUsingMethod')
+                ->willReturn("value1\nvalue2");
+        }
+
         $entityMock->expects($this->any())
-            ->method('getDataUsingMethod')
-            ->willReturn("value1\nvalue2");
+            ->method('getSkipRequiredValidation')
+            ->willReturn($skipRequiredValidation);
+        $entityTypeMock = $this->createMock(Type::class);
 
         /** @var MockObject|Attribute $attributeMock */
         $attributeMock = $this->createMock(Attribute::class);
@@ -170,6 +190,10 @@ class MultilineTest extends TestCase
             ->method('getIsRequired')
             ->willReturn($isAttributeRequired);
 
+        $attributeMock->expects($this->any())
+            ->method('getEntityType')
+            ->willReturn($entityTypeMock);
+
         $this->stringMock->expects($this->any())->method('strlen')->willReturn(5);
 
         $this->model->setEntity($entityMock);
@@ -180,60 +204,76 @@ class MultilineTest extends TestCase
     /**
      * @return array
      */
-    public function validateValueDataProvider()
+    public static function validateValueDataProvider()
     {
         return [
             [
                 'value' => false,
                 'isAttributeRequired' => false,
+                'skipRequiredValidation' => false,
+                'rules' => [],
+                'expectedResult' => true,
+            ],
+            [
+                'value' => false,
+                'isAttributeRequired' => true,
+                'skipRequiredValidation' => true,
                 'rules' => [],
                 'expectedResult' => true,
             ],
             [
                 'value' => 'value',
                 'isAttributeRequired' => false,
+                'skipRequiredValidation' => false,
                 'rules' => [],
                 'expectedResult' => true,
             ],
             [
                 'value' => ['value1', 'value2'],
                 'isAttributeRequired' => false,
+                'skipRequiredValidation' => false,
                 'rules' => [],
                 'expectedResult' => true,
             ],
             [
                 'value' => 'value',
                 'isAttributeRequired' => false,
+                'skipRequiredValidation' => false,
                 'rules' => ['input_validation' => 'other', 'max_text_length' => 3],
                 'expectedResult' => ['"Label" length must be equal or less than 3 characters.'],
             ],
             [
                 'value' => 'value',
                 'isAttributeRequired' => false,
+                'skipRequiredValidation' => false,
                 'rules' => ['input_validation' => 'other', 'min_text_length' => 10],
                 'expectedResult' => ['"Label" length must be equal or greater than 10 characters.'],
             ],
             [
                 'value' => "value1\nvalue2\nvalue3",
                 'isAttributeRequired' => false,
+                'skipRequiredValidation' => false,
                 'rules' => [],
                 'expectedResult' => ['"Label" cannot contain more than 2 lines.'],
             ],
             [
                 'value' => ['value1', 'value2', 'value3'],
                 'isAttributeRequired' => false,
+                'skipRequiredValidation' => false,
                 'rules' => [],
                 'expectedResult' => ['"Label" cannot contain more than 2 lines.'],
             ],
             [
                 'value' => [],
                 'isAttributeRequired' => true,
+                'skipRequiredValidation' => false,
                 'rules' => [],
                 'expectedResult' => ['"Label" is a required value.'],
             ],
             [
                 'value' => '',
                 'isAttributeRequired' => true,
+                'skipRequiredValidation' => false,
                 'rules' => [],
                 'expectedResult' => ['"Label" is a required value.'],
             ],

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\ResourceModel\Product;
 
@@ -147,7 +147,7 @@ class CategoryLink
      * @param bool $insert
      * @return array
      */
-    private function updateCategoryLinks(ProductInterface $product, array $insertLinks, $insert = false)
+    public function updateCategoryLinks(ProductInterface $product, array $insertLinks, $insert = false)
     {
         if (empty($insertLinks)) {
             return [];

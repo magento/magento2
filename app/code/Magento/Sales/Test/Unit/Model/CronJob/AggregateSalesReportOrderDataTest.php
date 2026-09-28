@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -42,17 +42,13 @@ class AggregateSalesReportOrderDataTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->localeResolverMock = $this->getMockBuilder(ResolverInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->localeResolverMock = $this->createMock(ResolverInterface::class);
 
         $this->orderFactoryMock = $this->getMockBuilder(OrderFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
-        $this->localeDateMock = $this->getMockBuilder(TimezoneInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->localeDateMock = $this->createMock(TimezoneInterface::class);
 
         $this->observer = new AggregateSalesReportOrderData(
             $this->localeResolverMock,
@@ -64,9 +60,7 @@ class AggregateSalesReportOrderDataTest extends TestCase
     public function testExecute()
     {
         $date = $this->setupAggregate();
-        $orderMock = $this->getMockBuilder(Order::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $orderMock = $this->createMock(Order::class);
         $orderMock->expects($this->once())
             ->method('aggregate')
             ->with($date);

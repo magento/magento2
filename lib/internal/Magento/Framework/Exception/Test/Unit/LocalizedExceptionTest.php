@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Framework\Phrase;
 use Magento\Framework\Phrase\Renderer\Placeholder;
 use Magento\Framework\Phrase\RendererInterface;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class LocalizedExceptionTest extends TestCase
 {
@@ -49,9 +50,8 @@ class LocalizedExceptionTest extends TestCase
      * @param string $message
      * @param array $params
      * @param string $expectedLogMessage
-     * @return void
-     * @dataProvider constructorParametersDataProvider
-     */
+     * @return void     */
+    #[DataProvider('constructorParametersDataProvider')]
     public function testConstructor($message, $params, $expectedLogMessage)
     {
         $cause = new \Exception();
@@ -72,7 +72,7 @@ class LocalizedExceptionTest extends TestCase
     /**
      * @return array
      */
-    public function constructorParametersDataProvider()
+    public static function constructorParametersDataProvider()
     {
         return [
             'withNoNameParameters' => [
@@ -90,7 +90,6 @@ class LocalizedExceptionTest extends TestCase
             'withoutParameters'    => [
                 'message',
                 [],
-                'message',
                 'message',
             ],
         ];

@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All rights reserved.
  */
 namespace Magento\Paypal\Controller\Transparent;
 
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\CsrfAwareActionInterface;
 use Magento\Framework\App\Request\InvalidRequestException;
@@ -20,7 +21,7 @@ use Magento\Paypal\Model\Payflow\Transparent;
 /**
  * Class for redirecting the Paypal response result to Magento controller.
  */
-class Redirect extends Action implements CsrfAwareActionInterface, HttpPostActionInterface
+class Redirect extends Action implements CsrfAwareActionInterface, HttpPostActionInterface, HttpGetActionInterface
 {
     /**
      * @var LayoutFactory
@@ -81,6 +82,7 @@ class Redirect extends Action implements CsrfAwareActionInterface, HttpPostActio
      */
     public function execute()
     {
+        $this->mapGatewayResponse();
         $gatewayResponse = (array)$this->getRequest()->getPostValue();
         $this->logger->debug(
             ['PayPal PayflowPro redirect:' => $gatewayResponse],
@@ -93,5 +95,21 @@ class Redirect extends Action implements CsrfAwareActionInterface, HttpPostActio
         $resultLayout->getLayout()->getUpdate()->load(['transparent_payment_redirect']);
 
         return $resultLayout;
+    }
+
+    /**
+     * Fill post data with gateway response params
+     *
+     * @return void
+     */
+    private function mapGatewayResponse(): void
+    {
+        if (!empty($this->getRequest()->getPostValue())) {
+            return;
+        }
+        $gatewayResponse = $this->getRequest()->getParams();
+        if (!empty($gatewayResponse)) {
+            $this->getRequest()->setPostValue($gatewayResponse);
+        }
     }
 }

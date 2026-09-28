@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 define([
@@ -32,15 +32,13 @@ define([
         });
 
         it('Default state - Select no rows', function () {
-            multiSelect.rows.push({
+            multiSelect.rows([{
                 id: 1
-            });
-            multiSelect.rows.push({
+            }, {
                 id: 2
-            });
-            multiSelect.rows.push({
+            }, {
                 id: 3
-            });
+            }]);
 
             expect(multiSelect.allSelected()).toBeFalsy();
             expect(multiSelect.excluded().toString()).toEqual('');
@@ -135,6 +133,19 @@ define([
             expect(multiSelect.selected().toString()).toEqual('3,4,1,2');
         });
 
+        it('Select all rows all over the Grid and deselects all records', function () {
+            multiSelect.rows([{
+                id: 1
+            }, {
+                id: 2
+            }]);
+
+            multiSelect.selectAll();
+            multiSelect.deselectAll();
+            multiSelect.indetermine(2);
+            expect(multiSelect.togglePage().selected()).toEqual([1, 2]);
+        });
+
         it('Select all rows all over the Grid without all rows on current page but with specific rows on another page',
             function () {
                 multiSelect.rows([{
@@ -159,5 +170,17 @@ define([
                 expect(multiSelect.excluded().toString()).toEqual('3,4');
                 expect(multiSelect.selected().toString()).toEqual('5,6');
             });
+
+        it('updateState does not call selectAll when all items are selected', function () {
+            multiSelect.rows([{ id: 1 }, { id: 2 }]);
+            multiSelect.totalRecords(2);
+            multiSelect.excludeMode(false);
+            multiSelect.selected([1, 2]);
+            multiSelect.preserveSelectionsOnFilter = false;
+            spyOn(multiSelect, 'selectAll').and.callThrough();
+            multiSelect.updateState();
+
+            expect(multiSelect.selectAll).not.toHaveBeenCalled();
+        });
     });
 });

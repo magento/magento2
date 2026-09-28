@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Framework\App\Config\ConfigTypeInterface;
 use Magento\Framework\App\Config\ScopeCodeResolver;
 use Magento\Framework\App\ScopeInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ConfigTest extends TestCase
@@ -42,9 +43,9 @@ class ConfigTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->configType = $this->getMockBuilder(ConfigTypeInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->scope = $this->getMockBuilder(ScopeInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->appConfig = new Config($this->scopeCodeResolver, ['system' => $this->configType]);
     }
@@ -53,9 +54,9 @@ class ConfigTest extends TestCase
      * @param string $scope
      * @param string|null $scopeCode
      *
-     * @dataProvider getValueDataProvider
      * @return void
      */
+    #[DataProvider('getValueDataProvider')]
     public function testGetValue($scope, $scopeCode = null)
     {
         $path = 'path';
@@ -80,7 +81,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function getValueDataProvider()
+    public static function getValueDataProvider()
     {
         return [
             ['store', 1],

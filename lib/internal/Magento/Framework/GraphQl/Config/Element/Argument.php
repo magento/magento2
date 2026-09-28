@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -81,7 +81,7 @@ class Argument implements FieldInterface
         bool $isList,
         string $itemType = '',
         bool $itemsRequired = false,
-        string $defaultValue = null,
+        ?string $defaultValue = null,
         array $deprecated = []
     ) {
         $this->name = $name;

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -49,7 +49,7 @@ class Switcher extends \Magento\Framework\View\Element\Template
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Framework\Data\Helper\PostHelper $postDataHelper,
         array $data = [],
-        UrlHelper $urlHelper = null
+        ?UrlHelper $urlHelper = null
     ) {
         $this->_postDataHelper = $postDataHelper;
         parent::__construct($context, $data);
@@ -170,9 +170,15 @@ class Switcher extends \Magento\Framework\View\Element\Template
 
                 if ($store) {
                     $group->setHomeUrl($store->getHomeUrl());
+                    $group->setSortOrder($store->getSortOrder());
                     $groups[] = $group;
                 }
             }
+
+            usort($groups, static function ($itemA, $itemB) {
+                return (int)$itemA->getSortOrder() <=> (int)$itemB->getSortOrder();
+            });
+
             $this->setData('groups', $groups);
         }
         return $this->getData('groups');
@@ -193,7 +199,12 @@ class Switcher extends \Magento\Framework\View\Element\Template
                 $stores = [];
             } else {
                 $stores = $rawStores[$groupId];
+
+                uasort($stores, static function ($itemA, $itemB) {
+                    return (int)$itemA->getSortOrder() <=> (int)$itemB->getSortOrder();
+                });
             }
+
             $this->setData('stores', $stores);
         }
         return $this->getData('stores');

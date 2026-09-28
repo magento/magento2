@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Sales\Model\OrderIncrementIdChecker;
 use Magento\Sales\Model\ResourceModel\Order;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Unit test for \Magento\Sales\Model\OrderIncrementIdChecker.
@@ -71,8 +72,8 @@ class OrderIncrementIdCheckerTest extends TestCase
      *
      * @param string|int $value
      * @return void
-     * @dataProvider isOrderIncrementIdUsedDataProvider
      */
+    #[DataProvider('isOrderIncrementIdUsedDataProvider')]
     public function testIsIncrementIdUsed($value): void
     {
         $expectedBind = [':increment_id' => $value];
@@ -83,7 +84,7 @@ class OrderIncrementIdCheckerTest extends TestCase
     /**
      * @return array
      */
-    public function isOrderIncrementIdUsedDataProvider(): array
+    public static function isOrderIncrementIdUsedDataProvider(): array
     {
         return [[100000001], ['10000000001'], ['M10000000001']];
     }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Backup\Block\Adminhtml;
 
@@ -11,19 +11,18 @@ use Magento\Framework\View\Element\AbstractBlock;
  * Adminhtml backup page content block
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Backup extends \Magento\Backend\Block\Template
 {
     /**
-     * Block's template
-     *
      * @var string
      */
     protected $_template = 'Magento_Backup::backup/list.phtml';
 
     /**
+     * Prepare the layout
+     *
      * @return AbstractBlock|void
      */
     protected function _prepareLayout()
@@ -62,6 +61,8 @@ class Backup extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Return HTML for the backups grid
+     *
      * @return string
      */
     public function getGridHtml()

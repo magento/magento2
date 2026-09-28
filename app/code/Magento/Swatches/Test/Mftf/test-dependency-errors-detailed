@@ -1,0 +1,31 @@
+
+File "/var/www/html/app/code/Magento/Swatches/Test/Mftf/Test/AdminSimpleProductwithTextandVisualSwatchTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontCatalogSearchMainSection from module(s): magento/module-catalog-search
+	 StorefrontCheckQuickSearchStringActionGroup from module(s): magento/module-catalog-search
+
+File "/var/www/html/app/code/Magento/Swatches/Test/Mftf/Test/CreateConfigProductBasedOnVisualSwatchAttributeWithImagesAndCustomLabelOnDifferentStoreViewsTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontLayeredNavigationSection from module(s): magento/module-layered-navigation
+	 StorefrontCheckQuickSearchActionGroup from module(s): magento/module-catalog-search
+
+File "/var/www/html/app/code/Magento/Swatches/Test/Mftf/Test/StorefrontConfigurableOptionsImportSameBaseImageTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 ImportProduct_Configurable from module(s): magento/module-configurable-import-export
+	 ImportProductSimple3_Configurable from module(s): magento/module-configurable-import-export
+	 ImportProductSimple2_Configurable from module(s): magento/module-configurable-import-export
+	 ImportProductSimple1_Configurable from module(s): magento/module-configurable-import-export
+
+File "/var/www/html/app/code/Magento/Swatches/Test/Mftf/Test/StorefrontSwatchAttributeDisplayedInWidgetCMSTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 CatalogWidgetSection from module(s): magento/module-catalog-widget
+	 AdminFillCatalogProductsListWidgetCategoryActionGroup from module(s): magento/module-catalog-widget
+
+File "/var/www/html/app/code/Magento/Swatches/Test/Mftf/Test/SwatchesAreVisibleInLayeredNavigationTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 textSwatch1 from module(s): magento/module-inventory-admin-ui

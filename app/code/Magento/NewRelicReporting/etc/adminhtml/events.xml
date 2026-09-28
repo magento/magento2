@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
@@ -24,5 +24,8 @@
     </event>
     <event name="admin_system_config_changed_section_newrelicreporting">
         <observer name="newrelicreporting_observer_check_config" instance="Magento\NewRelicReporting\Model\Observer\CheckConfig"/>
+    </event>
+    <event name="controller_front_send_response_before">
+        <observer name="newrelicreporting_observer_controller_front_send_response_before" instance="Magento\NewRelicReporting\Observer\DisableBrowserMonitoringAutomaticInjection" />
     </event>
 </config>

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Amqp;
 
@@ -12,7 +12,7 @@ use Magento\Framework\App\DeploymentConfig;
  * Amqp connection type resolver.
  *
  * @api
- * @since 100.0.0
+ * @since 103.0.0
  */
 class ConnectionTypeResolver implements ConnectionTypeResolverInterface
 {
@@ -27,7 +27,6 @@ class ConnectionTypeResolver implements ConnectionTypeResolverInterface
      * Initialize dependencies.
      *
      * @param DeploymentConfig $deploymentConfig
-     * @since 100.0.0
      */
     public function __construct(DeploymentConfig $deploymentConfig)
     {
@@ -41,11 +40,11 @@ class ConnectionTypeResolver implements ConnectionTypeResolverInterface
     }
 
     /**
-     * {@inheritdoc}
-     * @since 100.0.0
+     * @inheritdoc
+     * @since 103.0.0
      */
     public function getConnectionType($connectionName)
     {
-        return in_array($connectionName, $this->amqpConnectionName) ? 'amqp' : null;
+        return in_array($connectionName, $this->amqpConnectionName, true) ? 'amqp' : null;
     }
 }

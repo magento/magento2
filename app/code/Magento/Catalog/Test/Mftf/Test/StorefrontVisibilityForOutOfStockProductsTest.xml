@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontVisibilityForOutOfStockProductsTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Admin manage out Of stock products In Storefront"/>
+            <title value="Visibility of Out of Stock products In Storefront"/>
+            <description value="Verify visibility of products in storefront based Display Out of Stock Products configuration"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-5301"/>
+        </annotations>
+        <before>
+            <!--Step 1 & 2 : Create Category-->
+            <createData entity="CategoryB" stepKey="createCategory"/>
+            <!--Create 4 Simple Product-->
+            <createData entity="SimpleProduct" stepKey="simpleProduct1">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="quantity">100</field>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="simpleProduct2">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="quantity">100</field>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="simpleProduct3">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="simpleProduct4">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+            <!--Set simple product 2 out of stock-->
+            <amOnPage url="{{AdminProductEditPage.url($$simpleProduct2.id$$)}}" stepKey="openSecondProductEditPageToMakeProductOutOfStock"/>
+            <selectOption selector="{{AdminProductFormSection.stockStatus}}" userInput="{{UpdateAttributeQtyAndStockToOutOfStock.stockAvailability}}" stepKey="setProductToOutOfStock"/>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+            <!--Update simple product 3 quantity to zero -->
+            <amOnPage url="{{AdminProductEditPage.url($$simpleProduct3.id$$)}}" stepKey="openThirdProductEditPageToUpdateProductQuantity"/>
+            <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="0" stepKey="updateSimpleProduct3Qty"/>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveThirdProduct"/>
+            <!--Update simple product 4 quantity to -100 -->
+            <amOnPage url="{{AdminProductEditPage.url($$simpleProduct4.id$$)}}" stepKey="openFourthProductEditPageToUpdateProductQuantity"/>
+            <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="-100" stepKey="updateSimpleProduct4Qty"/>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveFourthProduct"/>
+        </before>
+        <after>
+            <!-- Delete created entity -->
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteFirstProduct"/>
+            <deleteData createDataKey="simpleProduct2" stepKey="deleteSecondProduct"/>
+            <deleteData createDataKey="simpleProduct3" stepKey="deleteThirdProduct"/>
+            <deleteData createDataKey="simpleProduct4" stepKey="deleteFourthProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Step 3 & 4: Stores - Configuration - Catalog - Inventory - Stock options - Enable display out of stock products to yes -->
+        <magentoCLI command="config:set {{CatalogInventoryOptionsShowOutOfStockEnable.path}} {{CatalogInventoryOptionsShowOutOfStockEnable.value}}" stepKey="setConfigShowOutOfStockTrue"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runIndexCronJobs">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+            <argument name="tags" value="config full_page"/>
+        </actionGroup>
+        <!-- Step 5: Go to Storefront. Open Category with created products and verify all the products is visible -->
+        <actionGroup ref="GoToStorefrontCategoryPageByParametersActionGroup" stepKey="GoToStorefrontCategoryPage">
+            <argument name="category" value="$$createCategory.custom_attributes[url_key]$$"/>
+            <argument name="mode" value="list"/>
+            <argument name="numOfProductsPerPage" value="10"/>
+            <argument name="sortBy" value="price"/>
+            <argument name="sort" value="desc"/>
+        </actionGroup>
+        <waitForText userInput="$$simpleProduct1.name$$" selector="{{StorefrontCategoryMainSection.lineProductName('1')}}" stepKey="seeFirstProductIsVisibleInStorefront"/>
+        <waitForText userInput="$$simpleProduct2.name$$" selector="{{StorefrontCategoryMainSection.lineProductName('2')}}" stepKey="seeSecondProductIsVisibleInStorefront"/>
+        <waitForText userInput="$$simpleProduct3.name$$" selector="{{StorefrontCategoryMainSection.lineProductName('3')}}" stepKey="seeThirdProductIsVisibleInStorefront"/>
+        <waitForText userInput="$$simpleProduct4.name$$" selector="{{StorefrontCategoryMainSection.lineProductName('4')}}" stepKey="seeFourthProductIsVisibleInStorefront"/>
+        <!-- Step 6 & 7: Stores - Configuration - Catalog - Inventory - Stock options - Enable display out of stock products to NO -->
+        <magentoCLI command="config:set {{CatalogInventoryOptionsShowOutOfStockDisable.path}} {{CatalogInventoryOptionsShowOutOfStockDisable.value}}" stepKey="setConfigShowOutOfStockFalse"/>
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCachesAgain">
+            <argument name="tags" value="config full_page"/>
+        </actionGroup>
+        <!-- Step 8: Go to Storefront. Open Category with created products and verify only one product is visible in storefront -->
+        <actionGroup ref="GoToStorefrontCategoryPageByParametersActionGroup" stepKey="GoToStorefrontCategoryPageAgain">
+            <argument name="category" value="$$createCategory.custom_attributes[url_key]$$"/>
+            <argument name="mode" value="list"/>
+            <argument name="numOfProductsPerPage" value="10"/>
+            <argument name="sortBy" value="price"/>
+            <argument name="sort" value="desc"/>
+        </actionGroup>
+        <waitForText userInput="$$simpleProduct1.name$$" selector="{{StorefrontCategoryMainSection.lineProductName('1')}}" stepKey="verifyOnlyFirstProductIsVisibleInStoreFront"/>
+        <waitForElementNotVisible selector="{{StorefrontCategoryMainSection.lineProductName('2')}}" stepKey="seeSecondProductIsNotVisibleInStorefront"/>
+        <waitForElementNotVisible selector="{{StorefrontCategoryMainSection.lineProductName('3')}}" stepKey="seeThirdProductIsNotVisibleInStorefront"/>
+        <waitForElementNotVisible selector="{{StorefrontCategoryMainSection.lineProductName('4')}}" stepKey="seeFourthProductIsNotVisibleInStorefront"/>
+        <!-- Step 9 & 10: Navigate to catalog product page in admin and update stock status and quantity -->
+        <!--Set simple product 2 In stock-->
+        <amOnPage url="{{AdminProductEditPage.url($$simpleProduct2.id$$)}}" stepKey="openSecondProductEditPageToMakeProductInStock"/>
+        <selectOption selector="{{AdminProductFormSection.stockStatus}}" userInput="{{UpdateAttributeQtyAndStockToInStock.stockAvailability}}" stepKey="setProductToInStock"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductAfterChangingStockStatus"/>
+        <!--Update simple product 3 quantity to 1-->
+        <amOnPage url="{{AdminProductEditPage.url($$simpleProduct3.id$$)}}" stepKey="openThirdProductEditPageToUpdateQty"/>
+        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="1" stepKey="updateSimpleProduct3Qty"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductAfterUpdatingQuantity"/>
+        <!--Update simple product 4 quantity to 100-->
+        <amOnPage url="{{AdminProductEditPage.url($$simpleProduct4.id$$)}}" stepKey="openFourthProductEditPageToUpdateQty"/>
+        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="100" stepKey="updateSimpleProduct4Qty"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct4AfterUpdatingQuantity"/>
+        <!-- Step 11: Go to Storefront. Open Category with created product and verify all the products is visible-->
+        <actionGroup ref="GoToStorefrontCategoryPageByParametersActionGroup" stepKey="GoToStorefrontCategoryPageAgainToVerifyAllProductVisible">
+            <argument name="category" value="$$createCategory.custom_attributes[url_key]$$"/>
+            <argument name="mode" value="list"/>
+            <argument name="numOfProductsPerPage" value="10"/>
+            <argument name="sortBy" value="price"/>
+            <argument name="sort" value="desc"/>
+        </actionGroup>
+        <waitForText userInput="$$simpleProduct1.name$$" selector="{{StorefrontCategoryMainSection.lineProductName('1')}}" stepKey="seeFirstProductIsVisibleInStorefrontAgain"/>
+        <waitForText userInput="$$simpleProduct2.name$$" selector="{{StorefrontCategoryMainSection.lineProductName('2')}}" stepKey="seeSecondProductIsVisibleInStorefrontAgain"/>
+        <waitForText userInput="$$simpleProduct3.name$$" selector="{{StorefrontCategoryMainSection.lineProductName('3')}}" stepKey="seeThirdProductIsVisibleInStorefrontAgain"/>
+        <waitForText userInput="$$simpleProduct4.name$$" selector="{{StorefrontCategoryMainSection.lineProductName('4')}}" stepKey="seeFourthProductIsVisibleInStorefrontAgain"/>
+    </test>
+</tests>

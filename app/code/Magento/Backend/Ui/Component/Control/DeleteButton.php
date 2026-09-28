@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,6 +17,7 @@ use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
  * Provide an ability to show confirmation message on click on the "Delete" button
  *
  * @api
+ * @since 101.0.0
  */
 class DeleteButton implements ButtonProviderInterface
 {
@@ -84,6 +85,7 @@ class DeleteButton implements ButtonProviderInterface
 
     /**
      * {@inheritdoc}
+     * @since 101.0.0
      */
     public function getButtonData()
     {

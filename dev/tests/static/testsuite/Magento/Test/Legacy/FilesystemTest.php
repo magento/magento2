@@ -2,8 +2,8 @@
 /**
  * Backwards-incompatible changes in file system
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Test\Legacy;
 
@@ -22,7 +22,7 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
              * @param string $path
              */
             function ($path) {
-                $this->assertFileNotExists(
+                $this->assertFileDoesNotExist(
                     BP . '/' . $path
                 );
             },

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAssertLoginAsCustomerConfigVisibleActionGroup">
+        <annotations>
+            <description>Verify Login as Customer config section available.</description>
+        </annotations>
+
+        <seeElement selector="{{AdminCustomerConfigSection.loginAsCustomerSettingsHead}}" stepKey="seeLoginAsCustomerSettingsHead"/>
+        <seeElement selector="{{AdminCustomerConfigSection.enableExtensionLabel}}" stepKey="seeEnableExtensionLabel"/>
+        <seeElement selector="{{AdminCustomerConfigSection.disablePageCacheLabel}}" stepKey="seeDisablePageCacheLabel"/>
+        <seeElement selector="{{AdminCustomerConfigSection.storeViewToLoginToLabel}}" stepKey="seeStoreViewToLoginToLabel"/>
+    </actionGroup>
+</actionGroups>

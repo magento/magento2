@@ -1,13 +1,22 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Shipping\Model\Tracking\Result;
 
-class Error extends \Magento\Shipping\Model\Tracking\Result\AbstractResult
+use Magento\Framework\Phrase;
+
+/**
+ * Class to get data from error shipping tracking result
+ */
+class Error extends AbstractResult
 {
+    public const STATUS_TYPE = 1;
+
     /**
+     * Gets all data of shipping tracking result
+     *
      * @return array
      */
     public function getAllData()
@@ -16,7 +25,9 @@ class Error extends \Magento\Shipping\Model\Tracking\Result\AbstractResult
     }
 
     /**
-     * @return \Magento\Framework\Phrase
+     * Gets error message
+     *
+     * @return Phrase
      */
     public function getErrorMessage()
     {

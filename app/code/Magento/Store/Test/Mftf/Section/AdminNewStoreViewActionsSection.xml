@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
 -->
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminNewStoreViewActionsSection">
@@ -12,5 +12,6 @@
         <element name="resetButton" type="button" selector="#reset" timeout="30"/>
         <element name="saveButton" type="button" selector="#save" timeout="60"/>
         <element name="loadingMask" type="text" selector=".loading-mask"/>
+        <element name="btnSaveStoreView" type="button" selector="//button[@title='Save Store View' and @id='save']"/>
     </section>
 </sections>

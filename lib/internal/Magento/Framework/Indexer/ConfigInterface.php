@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Indexer;
 
@@ -9,6 +9,7 @@ namespace Magento\Framework\Indexer;
  * Indexer(s) configuration
  *
  * @api
+ * @since 100.0.2
  */
 interface ConfigInterface
 {

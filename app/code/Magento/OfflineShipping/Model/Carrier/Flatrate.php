@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\OfflineShipping\Model\Carrier;
 
@@ -113,9 +113,14 @@ class Flatrate extends AbstractCarrier implements CarrierInterface
                     continue;
                 }
 
+                $freeShippingMethod = $item->getFreeShippingMethod();
+
                 if ($item->getHasChildren() && $item->isShipSeparately()) {
                     $freeBoxes += $this->getFreeBoxesCountFromChildren($item);
-                } elseif ($item->getFreeShipping()) {
+                } elseif (
+                    $item->getFreeShipping()
+                    && ($freeShippingMethod === null || $freeShippingMethod === 'flatrate_flatrate')
+                ) {
                     $freeBoxes += $item->getQty();
                 }
             }

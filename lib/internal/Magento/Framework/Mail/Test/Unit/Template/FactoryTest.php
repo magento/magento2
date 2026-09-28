@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class FactoryTest extends TestCase
 {
@@ -37,16 +38,15 @@ class FactoryTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
-        $this->templateMock = $this->getMockForAbstractClass(TemplateInterface::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->templateMock = $this->createMock(TemplateInterface::class);
     }
 
     /**
      * @param string $expectedArgument
      * @param null|string $namespace
-     * @return void
-     * @dataProvider getDataProvider
-     */
+     * @return void     */
+    #[DataProvider('getDataProvider')]
     public function testGet($expectedArgument, $namespace)
     {
         $factory = $this->objectManagerHelper->getObject(
@@ -68,7 +68,7 @@ class FactoryTest extends TestCase
     /**
      * @return array
      */
-    public function getDataProvider()
+    public static function getDataProvider()
     {
         return [
             [

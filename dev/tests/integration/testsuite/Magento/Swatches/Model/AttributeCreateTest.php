@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Swatches\Model;
 
@@ -52,7 +52,7 @@ class AttributeCreateTest extends \PHPUnit\Framework\TestCase
         );
         $data['optionvisual']['value'] = array_reduce(
             range(1, $optionsPerAttribute),
-            function ($values, $index) use ($optionsPerAttribute) {
+            function ($values, $index) {
                 $values['option_' . $index] = ['option ' . $index];
                 return $values;
             },
@@ -61,7 +61,7 @@ class AttributeCreateTest extends \PHPUnit\Framework\TestCase
 
         $data['options']['option'] = array_reduce(
             range(1, $optionsPerAttribute),
-            function ($values, $index) use ($optionsPerAttribute) {
+            function ($values, $index) {
                 $values[] = [
                     'label' => 'option ' . $index,
                     'value' => 'option_' . $index

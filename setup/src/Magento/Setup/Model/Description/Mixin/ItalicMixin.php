@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Setup\Model\Description\Mixin;
 
@@ -48,6 +48,8 @@ class ItalicMixin implements DescriptionMixinInterface
 
         return $this->wordWrapper->wrapWords(
             $text,
+            // mt_rand() here is not for cryptographic use.
+            // phpcs:ignore Magento2.Security.InsecureFunction
             $this->randomWordSelector->getRandomWords($rawText, mt_rand(5, 8)),
             '<i>%s</i>'
         );

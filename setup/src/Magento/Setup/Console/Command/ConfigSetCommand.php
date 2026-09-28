@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Setup\Console\Command;
@@ -14,11 +14,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 
-/**
- * Config Set Command
- */
 class ConfigSetCommand extends AbstractSetupCommand
 {
+    public const NAME = 'setup:config:set';
     /**
      * @var ConfigModel
      */
@@ -33,6 +31,7 @@ class ConfigSetCommand extends AbstractSetupCommand
 
     /**
      * Existing deployment config
+     * @var DeploymentConfig
      */
     private $deploymentConfig;
 
@@ -63,7 +62,7 @@ class ConfigSetCommand extends AbstractSetupCommand
     {
         $options = $this->configModel->getAvailableOptions();
 
-        $this->setName('setup:config:set')
+        $this->setName(self::NAME)
             ->setDescription('Creates or modifies the deployment configuration')
             ->setDefinition($options);
 
@@ -72,8 +71,9 @@ class ConfigSetCommand extends AbstractSetupCommand
 
     /**
      * @inheritdoc
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $inputOptions = $input->getOptions();
         $optionCollection = $this->configModel->getAvailableOptions();
@@ -84,7 +84,10 @@ class ConfigSetCommand extends AbstractSetupCommand
             $commandOptions[$option->getName()] = false;
 
             $currentValue = $this->deploymentConfig->get($option->getConfigPath());
-            if (($currentValue !== null) && ($inputOptions[$option->getName()] !== null)) {
+            $needOverwrite = ($currentValue !== null) &&
+                ($inputOptions[$option->getName()] !== null) &&
+                ($inputOptions[$option->getName()] !== $currentValue);
+            if ($needOverwrite) {
                 $dialog = $this->getHelperSet()->get('question');
                 $question = new Question(
                     '<question>Overwrite the existing configuration for ' . $option->getName() . '?[Y/n]</question>',

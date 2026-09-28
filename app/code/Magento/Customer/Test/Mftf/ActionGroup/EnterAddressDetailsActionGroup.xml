@@ -1,0 +1,18 @@
+<!--
+/**
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="EnterAddressDetailsActionGroup" extends="EnterCustomerAddressInfoActionGroup">
+        <annotations>
+            <description>Removed specific page. Fills in the required details </description>
+        </annotations>
+
+        <remove keyForRemoval="goToAddressPage"/>
+        <remove keyForRemoval="saveAddress"/>
+    </actionGroup>
+</actionGroups>

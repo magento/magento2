@@ -1,0 +1,55 @@
+
+File "/var/www/html/app/code/Magento/CatalogImportExport/Test/Mftf/Test/AdminExportBundleProductTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminExportMessageConsumerData from module(s): magento/module-message-queue
+	 CliConsumerStartActionGroup from module(s): magento/module-message-queue
+
+File "/var/www/html/app/code/Magento/CatalogImportExport/Test/Mftf/Test/AdminExportFilenameTimezoneTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminExportMessageConsumerData from module(s): magento/module-message-queue
+	 CliConsumerStartActionGroup from module(s): magento/module-message-queue
+
+File "/var/www/html/app/code/Magento/CatalogImportExport/Test/Mftf/Test/AdminExportGroupedProductWithSpecialPriceTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminExportMessageConsumerData from module(s): magento/module-message-queue
+	 CliConsumerStartActionGroup from module(s): magento/module-message-queue
+
+File "/var/www/html/app/code/Magento/CatalogImportExport/Test/Mftf/Test/AdminExportImportConfigurableProductWithImagesTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminExportMessageConsumerData from module(s): magento/module-message-queue
+	 AdminProductFormConfigurationsSection from module(s): magento/module-configurable-product
+	 CliConsumerStartActionGroup from module(s): magento/module-message-queue
+
+File "/var/www/html/app/code/Magento/CatalogImportExport/Test/Mftf/Test/AdminExportSimpleAndConfigurableProductsWithCustomOptionsTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminExportMessageConsumerData from module(s): magento/module-message-queue
+	 CliConsumerStartActionGroup from module(s): magento/module-message-queue
+
+File "/var/www/html/app/code/Magento/CatalogImportExport/Test/Mftf/Test/AdminExportSimpleProductAndConfigurableProductsWithAssignedImagesTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminExportMessageConsumerData from module(s): magento/module-message-queue
+	 CliConsumerStartActionGroup from module(s): magento/module-message-queue
+
+File "/var/www/html/app/code/Magento/CatalogImportExport/Test/Mftf/Test/AdminExportSimpleProductAssignedToMainWebsiteAndConfigurableProductAssignedToCustomWebsiteTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminExportMessageConsumerData from module(s): magento/module-message-queue
+	 CliConsumerStartActionGroup from module(s): magento/module-message-queue
+
+File "/var/www/html/app/code/Magento/CatalogImportExport/Test/Mftf/Test/AdminExportSimpleProductWithCustomAttributeTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminExportMessageConsumerData from module(s): magento/module-message-queue
+	 CliConsumerStartActionGroup from module(s): magento/module-message-queue
+
+File "/var/www/html/app/code/Magento/CatalogImportExport/Test/Mftf/Test/AdminExportSimpleProductWithImageAndImageAltForDiffrentScopeTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminExportMessageConsumerData from module(s): magento/module-message-queue
+	 CliConsumerStartActionGroup from module(s): magento/module-message-queue

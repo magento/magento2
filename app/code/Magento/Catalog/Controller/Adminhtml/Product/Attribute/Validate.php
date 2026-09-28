@@ -1,19 +1,29 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Controller\Adminhtml\Product\Attribute;
 
+use Magento\Backend\App\Action\Context;
 use Magento\Catalog\Controller\Adminhtml\Product\Attribute as AttributeAction;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
+use Magento\Eav\Model\Entity\Attribute\Set;
 use Magento\Eav\Model\Validator\Attribute\Code as AttributeCodeValidator;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Cache\FrontendInterface;
+use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Escaper;
+use Magento\Framework\Registry;
 use Magento\Framework\Serialize\Serializer\FormData;
+use Magento\Framework\View\LayoutFactory;
+use Magento\Framework\View\Result\PageFactory;
 
 /**
  * Product attribute validate controller.
@@ -22,15 +32,16 @@ use Magento\Framework\Serialize\Serializer\FormData;
  */
 class Validate extends AttributeAction implements HttpGetActionInterface, HttpPostActionInterface
 {
-    const DEFAULT_MESSAGE_KEY = 'message';
+    public const DEFAULT_MESSAGE_KEY = 'message';
+    private const RESERVED_ATTRIBUTE_CODES = ['product_type', 'type_id'];
 
     /**
-     * @var \Magento\Framework\Controller\Result\JsonFactory
+     * @var JsonFactory
      */
     protected $resultJsonFactory;
 
     /**
-     * @var \Magento\Framework\View\LayoutFactory
+     * @var LayoutFactory
      */
     protected $layoutFactory;
 
@@ -57,29 +68,29 @@ class Validate extends AttributeAction implements HttpGetActionInterface, HttpPo
     /**
      * Constructor
      *
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Cache\FrontendInterface $attributeLabelCache
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
-     * @param \Magento\Framework\View\LayoutFactory $layoutFactory
+     * @param Context $context
+     * @param FrontendInterface $attributeLabelCache
+     * @param Registry $coreRegistry
+     * @param PageFactory $resultPageFactory
+     * @param JsonFactory $resultJsonFactory
+     * @param LayoutFactory $layoutFactory
      * @param array $multipleAttributeList
      * @param FormData|null $formDataSerializer
      * @param AttributeCodeValidator|null $attributeCodeValidator
-     * @param Escaper $escaper
+     * @param Escaper|null $escaper
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\Cache\FrontendInterface $attributeLabelCache,
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
-        \Magento\Framework\View\LayoutFactory $layoutFactory,
+        Context $context,
+        FrontendInterface $attributeLabelCache,
+        Registry $coreRegistry,
+        PageFactory $resultPageFactory,
+        JsonFactory $resultJsonFactory,
+        LayoutFactory $layoutFactory,
         array $multipleAttributeList = [],
-        FormData $formDataSerializer = null,
-        AttributeCodeValidator $attributeCodeValidator = null,
-        Escaper $escaper = null
+        ?FormData $formDataSerializer = null,
+        ?AttributeCodeValidator $attributeCodeValidator = null,
+        ?Escaper $escaper = null
     ) {
         parent::__construct($context, $attributeLabelCache, $coreRegistry, $resultPageFactory);
         $this->resultJsonFactory = $resultJsonFactory;
@@ -96,7 +107,7 @@ class Validate extends AttributeAction implements HttpGetActionInterface, HttpPo
     /**
      * @inheritdoc
      *
-     * @return \Magento\Framework\Controller\ResultInterface
+     * @return ResultInterface
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
@@ -118,20 +129,33 @@ class Validate extends AttributeAction implements HttpGetActionInterface, HttpPo
 
         $attributeCode = $this->getRequest()->getParam('attribute_code');
         $frontendLabel = $this->getRequest()->getParam('frontend_label');
-        $attributeCode = $attributeCode ?: $this->generateCode($frontendLabel[0]);
         $attributeId = $this->getRequest()->getParam('attribute_id');
-        $attribute = $this->_objectManager->create(
-            \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class
-        )->loadByCode(
-            $this->_entityTypeId,
-            $attributeCode
-        );
 
-        if ($attribute->getId() && !$attributeId || $attributeCode === 'product_type' || $attributeCode === 'type_id') {
+        if ($attributeId) {
+            $attribute = $this->_objectManager->create(
+                Attribute::class
+            )->load($attributeId);
+            $attributeCode = $attribute->getAttributeCode();
+        } else {
+            $attributeCode = $attributeCode ?: $this->generateCode($frontendLabel[0]);
+            $attribute = $this->_objectManager->create(
+                Attribute::class
+            )->loadByCode(
+                $this->_entityTypeId,
+                $attributeCode
+            );
+        }
+
+        if (in_array($attributeCode, self::RESERVED_ATTRIBUTE_CODES, true)) {
+            $message = __('Code (%1) is a reserved key and cannot be used as attribute code.', $attributeCode);
+            $this->setMessageToResponse($response, [$message]);
+            $response->setError(true);
+        }
+
+        if ($attribute->getId() && !$attributeId) {
             $message = strlen($this->getRequest()->getParam('attribute_code'))
                 ? __('An attribute with this code already exists.')
                 : __('An attribute with the same code (%1) already exists.', $attributeCode);
-
             $this->setMessageToResponse($response, [$message]);
 
             $response->setError(true);
@@ -145,8 +169,8 @@ class Validate extends AttributeAction implements HttpGetActionInterface, HttpPo
 
         if ($this->getRequest()->has('new_attribute_set_name')) {
             $setName = $this->getRequest()->getParam('new_attribute_set_name');
-            /** @var $attributeSet \Magento\Eav\Model\Entity\Attribute\Set */
-            $attributeSet = $this->_objectManager->create(\Magento\Eav\Model\Entity\Attribute\Set::class);
+            /** @var $attributeSet Set */
+            $attributeSet = $this->_objectManager->create(Set::class);
             $attributeSet->setEntityTypeId($this->_entityTypeId)->load($setName, 'attribute_set_name');
             if ($attributeSet->getId()) {
                 $setName = $this->escaper->escapeHtml($setName);
@@ -222,7 +246,7 @@ class Validate extends AttributeAction implements HttpGetActionInterface, HttpPo
      * @param array|null $options
      * @return $this
      */
-    private function checkUniqueOption(DataObject $response, array $options = null)
+    private function checkUniqueOption(DataObject $response, ?array $options = null)
     {
         if (is_array($options)
             && isset($options['value'])
@@ -246,13 +270,13 @@ class Validate extends AttributeAction implements HttpGetActionInterface, HttpPo
      * Check that admin does not try to create option with empty admin scope option.
      *
      * @param DataObject $response
-     * @param array $optionsForCheck
+     * @param array|null $optionsForCheck
      * @return void
      */
-    private function checkEmptyOption(DataObject $response, array $optionsForCheck = null)
+    private function checkEmptyOption(DataObject $response, ?array $optionsForCheck = null)
     {
         foreach ($optionsForCheck as $optionValues) {
-            if (isset($optionValues[0]) && trim($optionValues[0]) == '') {
+            if (isset($optionValues[0]) && trim((string)$optionValues[0]) == '') {
                 $this->setMessageToResponse($response, [__("The value of Admin scope can't be empty.")]);
                 $response->setError(true);
             }

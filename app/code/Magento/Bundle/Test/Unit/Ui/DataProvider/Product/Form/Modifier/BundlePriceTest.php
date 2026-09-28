@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,7 +11,7 @@ use Magento\Bundle\Ui\DataProvider\Product\Form\Modifier\BundlePrice;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Framework\Stdlib\ArrayManager;
 
-class BundlePriceTest extends AbstractModifierTest
+class BundlePriceTest extends AbstractModifierTestCase
 {
     /**
      * @return BundlePrice
@@ -29,15 +29,14 @@ class BundlePriceTest extends AbstractModifierTest
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function testModifyMeta()
     {
-        $this->productMock->expects($this->any())
-            ->method('getId')
-            ->willReturn(true);
-        $this->productMock->expects($this->any())
-            ->method('getPriceType')
-            ->willReturn(0);
+        $this->productMock->setId(true);
+        $this->productMock->setPriceType(0);
         $priceTypePath = 'bundle-items/children/' . BundlePrice::CODE_PRICE_TYPE;
         $priceTypeConfigPath = $priceTypePath . BundlePrice::META_CONFIG_PATH;
         $pricePath = 'product-details/children/' . ProductAttributeInterface::CODE_PRICE;
@@ -92,75 +91,56 @@ class BundlePriceTest extends AbstractModifierTest
 
         $this->arrayManagerMock->expects($this->any())
             ->method('findPath')
-            ->willReturnMap(
-                [
-                    [
-                        BundlePrice::CODE_PRICE_TYPE,
-                        $sourceMeta,
-                        null,
-                        'children',
-                        ArrayManager::DEFAULT_PATH_DELIMITER,
-                        $priceTypePath
-                    ],
-                    [
-                        ProductAttributeInterface::CODE_PRICE,
-                        $priceTypeMeta,
-                        BundlePrice::DEFAULT_GENERAL_PANEL . '/children',
-                        'children',
-                        ArrayManager::DEFAULT_PATH_DELIMITER,
-                        $pricePath
-                    ],
-                    [
-                        BundlePrice::CODE_TAX_CLASS_ID,
-                        $priceMeta,
-                        null,
-                        'children',
-                        ArrayManager::DEFAULT_PATH_DELIMITER,
-                        $pricePath
-                    ],
-                    [
-                        BundlePrice::CODE_TAX_CLASS_ID,
-                        $priceMeta,
-                        null,
-                        'children',
-                        ArrayManager::DEFAULT_PATH_DELIMITER,
-                        $pricePath
-                    ]
-                ]
+            ->willReturnCallback(
+                function (
+                    $code,
+                    $data,
+                    $path = null
+                ) use (
+                    $sourceMeta,
+                    $priceTypeMeta,
+                    $priceTypePath,
+                    $pricePath
+                ) {
+                    if ($code === BundlePrice::CODE_PRICE_TYPE && $data === $sourceMeta) {
+                        return $priceTypePath;
+                    }
+                    if ($code === ProductAttributeInterface::CODE_PRICE && $data === $priceTypeMeta) {
+                        return $pricePath;
+                    }
+                    if ($code === BundlePrice::CODE_TAX_CLASS_ID) {
+                        return $pricePath;
+                    }
+                    return null;
+                }
             );
         $this->arrayManagerMock->expects($this->exactly(4))
             ->method('merge')
-            ->willReturnMap(
-                [
-                    [
-                        $priceTypeConfigPath,
-                        $sourceMeta,
-                        $priceTypeParams,
-                        ArrayManager::DEFAULT_PATH_DELIMITER,
-                        $priceTypeMeta
-                    ],
-                    [
-                        $priceConfigPath,
-                        $priceTypeMeta,
-                        $priceParams,
-                        ArrayManager::DEFAULT_PATH_DELIMITER,
-                        $priceMeta
-                    ],
-                    [
-                        $priceConfigPath,
-                        $priceMeta,
-                        $priceParams,
-                        ArrayManager::DEFAULT_PATH_DELIMITER,
-                        $priceMeta
-                    ],
-                    [
-                        $priceConfigPath,
-                        $priceMeta,
-                        $taxParams,
-                        ArrayManager::DEFAULT_PATH_DELIMITER,
-                        $priceMeta
-                    ]
-                ]
+            ->willReturnCallback(
+                function (
+                    $path,
+                    $data,
+                    $params
+                ) use (
+                    $sourceMeta,
+                    $priceTypeMeta,
+                    $priceMeta,
+                    $priceTypeConfigPath,
+                    $priceConfigPath,
+                    $priceTypeParams,
+                    $priceParams
+                ) {
+                    if ($path === $priceTypeConfigPath && $data === $sourceMeta && $params === $priceTypeParams) {
+                        return $priceTypeMeta;
+                    }
+                    if ($path === $priceConfigPath && $data === $priceTypeMeta && $params === $priceParams) {
+                        return $priceMeta;
+                    }
+                    if ($path === $priceConfigPath && $data === $priceMeta) {
+                        return $priceMeta;
+                    }
+                    return $priceMeta;
+                }
             );
 
         $this->assertSame($priceMeta, $this->getModel()->modifyMeta($sourceMeta));

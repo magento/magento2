@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
@@ -13,11 +13,6 @@
             </argument>
         </arguments>
     </virtualType>
-    <type name="Magento\Catalog\Model\ResourceModel\Category\Collection">
-        <arguments>
-            <argument name="fetchStrategy" xsi:type="object">Magento\Catalog\Model\ResourceModel\Category\Collection\FetchStrategy</argument>
-        </arguments>
-    </type>
     <type name="Magento\Catalog\Model\Indexer\AbstractFlatState">
         <arguments>
             <argument name="isAvailable" xsi:type="boolean">true</argument>
@@ -119,5 +114,17 @@
     <type name="Magento\Framework\App\Action\AbstractAction">
         <plugin name="catalog_app_action_dispatch_controller_context_plugin"
                 type="Magento\Catalog\Plugin\Framework\App\Action\ContextPlugin" />
+    </type>
+    <type name="\Magento\PageCache\Model\PageCacheTagsPreprocessorComposite">
+        <arguments>
+            <argument name="preprocessors" xsi:type="array">
+                <item name="catalog_product_view" xsi:type="array">
+                    <item name="product_not_found" xsi:type="object">Magento\Catalog\Model\ProductNotFoundPageCacheTags</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Config">
+        <plugin name="special_price_listing_plugin" type="Magento\Catalog\Plugin\Model\ConfigPlugin" sortOrder="10" />
     </type>
 </config>

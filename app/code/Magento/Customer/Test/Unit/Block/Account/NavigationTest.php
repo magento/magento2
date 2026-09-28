@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -44,7 +44,7 @@ class NavigationTest extends TestCase
     protected function setUp(): void
     {
         $this->contextMock = $this->createMock(Context::class);
-        $this->layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
+        $this->layoutMock = $this->createMock(LayoutInterface::class);
         $this->contextMock->expects($this->any())
             ->method('getLayout')
             ->willReturn($this->layoutMock);
@@ -66,12 +66,12 @@ class NavigationTest extends TestCase
     {
         $wishListLinkMock = $this->getMockBuilder(WishListLink::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getSortOrder'])
+            ->onlyMethods(['getSortOrder'])
             ->getMock();
 
         $customerAccountLinkMock = $this->getMockBuilder(CustomerAccountLink::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getSortOrder'])
+            ->onlyMethods(['getSortOrder'])
             ->getMock();
 
         $wishListLinkMock->expects($this->any())

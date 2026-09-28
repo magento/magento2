@@ -1,41 +1,42 @@
 <?php
 /**
- * Backend area front name resolver. Reads front name from configuration
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
+
 namespace Magento\Backend\App\Area;
 
+use Laminas\Uri\Uri;
+use Magento\Backend\App\Config;
 use Magento\Backend\Setup\ConfigOptionsList;
+use Magento\Framework\App\Area\FrontNameResolverInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\RequestInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
-use Laminas\Uri\Uri;
 
 /**
- * Class to get area front name.
+ * Front name resolver for backend area.
  *
  * @api
  * @since 100.0.2
  */
-class FrontNameResolver implements \Magento\Framework\App\Area\FrontNameResolverInterface
+class FrontNameResolver implements FrontNameResolverInterface
 {
-    const XML_PATH_USE_CUSTOM_ADMIN_PATH = 'admin/url/use_custom_path';
+    public const XML_PATH_USE_CUSTOM_ADMIN_PATH = 'admin/url/use_custom_path';
 
-    const XML_PATH_CUSTOM_ADMIN_PATH = 'admin/url/custom_path';
+    public const XML_PATH_CUSTOM_ADMIN_PATH = 'admin/url/custom_path';
 
-    const XML_PATH_USE_CUSTOM_ADMIN_URL = 'admin/url/use_custom';
+    public const XML_PATH_USE_CUSTOM_ADMIN_URL = 'admin/url/use_custom';
 
-    const XML_PATH_CUSTOM_ADMIN_URL = 'admin/url/custom';
+    public const XML_PATH_CUSTOM_ADMIN_URL = 'admin/url/custom';
 
     /**
      * Backend area code
      */
-    const AREA_CODE = 'adminhtml';
+    public const AREA_CODE = 'adminhtml';
 
     /**
      * @var array
@@ -75,18 +76,18 @@ class FrontNameResolver implements \Magento\Framework\App\Area\FrontNameResolver
     private $request;
 
     /**
-     * @param \Magento\Backend\App\Config $config
+     * @param Config $config
      * @param DeploymentConfig $deploymentConfig
      * @param ScopeConfigInterface $scopeConfig
      * @param Uri $uri
      * @param RequestInterface $request
      */
     public function __construct(
-        \Magento\Backend\App\Config $config,
+        Config $config,
         DeploymentConfig $deploymentConfig,
         ScopeConfigInterface $scopeConfig,
-        Uri $uri = null,
-        RequestInterface $request = null
+        ?Uri $uri = null,
+        ?RequestInterface $request = null
     ) {
         $this->config = $config;
         $this->defaultFrontName = $deploymentConfig->get(ConfigOptionsList::CONFIG_PATH_BACKEND_FRONTNAME);
@@ -106,45 +107,52 @@ class FrontNameResolver implements \Magento\Framework\App\Area\FrontNameResolver
         if ($checkHost && !$this->isHostBackend()) {
             return false;
         }
-        $isCustomPathUsed = (bool)(string)$this->config->getValue(self::XML_PATH_USE_CUSTOM_ADMIN_PATH);
-        if ($isCustomPathUsed) {
-            return (string)$this->config->getValue(self::XML_PATH_CUSTOM_ADMIN_PATH);
-        }
-        return $this->defaultFrontName;
+
+        return $this->config->isSetFlag(self::XML_PATH_USE_CUSTOM_ADMIN_PATH)
+            ? (string)$this->config->getValue(self::XML_PATH_CUSTOM_ADMIN_PATH)
+            : $this->defaultFrontName;
     }
 
     /**
      * Return whether the host from request is the backend host
      *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return bool
      */
     public function isHostBackend()
     {
-        if ($this->scopeConfig->getValue(self::XML_PATH_USE_CUSTOM_ADMIN_URL, ScopeInterface::SCOPE_STORE)) {
-            $backendUrl = $this->scopeConfig->getValue(self::XML_PATH_CUSTOM_ADMIN_URL, ScopeInterface::SCOPE_STORE);
+        if (!$this->request->getServer('HTTP_HOST')) {
+            return false;
+        }
+        if ($this->scopeConfig->isSetFlag(self::XML_PATH_USE_CUSTOM_ADMIN_URL)) {
+            $backendUrl = $this->scopeConfig->getValue(self::XML_PATH_CUSTOM_ADMIN_URL);
         } else {
-            $backendUrl = $this->scopeConfig->getValue(Store::XML_PATH_UNSECURE_BASE_URL, ScopeInterface::SCOPE_STORE);
+            $xmlPath = $this->request->isSecure() ? Store::XML_PATH_SECURE_BASE_URL : Store::XML_PATH_UNSECURE_BASE_URL;
+            $backendUrl = $this->config->getValue($xmlPath);
+            if ($backendUrl === null) {
+                $backendUrl = $this->scopeConfig->getValue(
+                    $xmlPath,
+                    ScopeInterface::SCOPE_STORE
+                );
+            }
         }
-        $host = $this->request->getServer('HTTP_HOST', '');
-        return stripos($this->getHostWithPort($backendUrl), (string) $host) !== false;
-    }
+        $this->uri->parse($backendUrl);
+        $configuredHost = $this->uri->getHost();
+        if (!$configuredHost) {
+            return false;
+        }
 
-    /**
-     * Get host with port
-     *
-     * @param string $url
-     * @return mixed|string
-     */
-    private function getHostWithPort($url)
-    {
-        $this->uri->parse($url);
-        $scheme = $this->uri->getScheme();
+        $configuredPort = $this->uri->getPort() ?: ($this->standardPorts[$this->uri->getScheme()] ?? null);
+        $uri = ($this->request->isSecure() ? 'https' : 'http') . '://' . $this->request->getServer('HTTP_HOST');
+        $this->uri->parse($uri);
         $host = $this->uri->getHost();
-        $port = $this->uri->getPort();
-
-        if (!$port) {
-            $port = isset($this->standardPorts[$scheme]) ? $this->standardPorts[$scheme] : null;
+        if ($configuredPort) {
+            $configuredHost .= ':' . $configuredPort;
+            $host .= ':' . ($this->uri->getPort() ?: $this->standardPorts[$this->uri->getScheme()]);
         }
-        return isset($port) ? $host . ':' . $port : $host;
+
+        return strcasecmp($configuredHost, $host) === 0;
     }
 }

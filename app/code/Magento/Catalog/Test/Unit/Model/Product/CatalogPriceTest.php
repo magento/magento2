@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -51,11 +51,7 @@ class CatalogPriceTest extends TestCase
 
     public function testGetCatalogPriceWhenPoolContainsPriceModelForGivenProductType()
     {
-        $this->productMock->expects(
-            $this->any()
-        )->method(
-            'getTypeId'
-        )->willReturn(
+        $this->productMock->method('getTypeId')->willReturn(
             'custom_product_type'
         );
         $this->priceFactoryMock->expects(
@@ -74,7 +70,7 @@ class CatalogPriceTest extends TestCase
 
     public function testGetCatalogPriceWhenPoolDoesNotContainPriceModelForGivenProductType()
     {
-        $this->productMock->expects($this->any())->method('getTypeId')->willReturn('test');
+        $this->productMock->method('getTypeId')->willReturn('test');
         $this->priceFactoryMock->expects($this->never())->method('create');
         $this->productMock->expects($this->once())->method('getFinalPrice');
         $this->catalogPriceInterfaceMock->expects($this->never())->method('getCatalogPrice');
@@ -83,7 +79,7 @@ class CatalogPriceTest extends TestCase
 
     public function testGetCatalogRegularPriceWhenPoolDoesNotContainPriceModelForGivenProductType()
     {
-        $this->productMock->expects($this->any())->method('getTypeId')->willReturn('test');
+        $this->productMock->method('getTypeId')->willReturn('test');
         $this->priceFactoryMock->expects($this->never())->method('create');
         $this->catalogPriceInterfaceMock->expects($this->never())->method('getCatalogRegularPrice');
         $this->productMock->expects($this->once())->method('getPrice');
@@ -92,11 +88,7 @@ class CatalogPriceTest extends TestCase
 
     public function testGetCatalogRegularPriceWhenPoolContainsPriceModelForGivenProductType()
     {
-        $this->productMock->expects(
-            $this->any()
-        )->method(
-            'getTypeId'
-        )->willReturn(
+        $this->productMock->method('getTypeId')->willReturn(
             'custom_product_type'
         );
         $this->priceFactoryMock->expects(

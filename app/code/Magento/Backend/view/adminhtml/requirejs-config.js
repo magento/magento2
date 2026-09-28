@@ -1,13 +1,12 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 var config = {
     map: {
         '*': {
-            'mediaUploader':  'Magento_Backend/js/media-uploader',
-            'mage/translate': 'Magento_Backend/js/translate'
+            'mediaUploader':  'Magento_Backend/js/media-uploader'
         }
     }
 };

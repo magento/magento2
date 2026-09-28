@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Backend\Block\Widget\Form\Renderer;
@@ -12,8 +12,6 @@ use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
 /**
  * Form fieldset default renderer
  *
- * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @api
  * @since 100.0.2
  */
@@ -30,6 +28,8 @@ class Fieldset extends \Magento\Backend\Block\Template implements RendererInterf
     protected $_template = 'Magento_Backend::widget/form/renderer/fieldset.phtml';
 
     /**
+     * Get element
+     *
      * @return AbstractElement
      */
     public function getElement()
@@ -38,6 +38,8 @@ class Fieldset extends \Magento\Backend\Block\Template implements RendererInterf
     }
 
     /**
+     * Render the element
+     *
      * @param AbstractElement $element
      * @return string
      */

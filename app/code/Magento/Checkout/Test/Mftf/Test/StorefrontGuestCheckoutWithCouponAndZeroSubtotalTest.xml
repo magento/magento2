@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
@@ -25,6 +25,7 @@
             <createData entity="SalesRuleNoCouponWithFixedDiscount" stepKey="createSalesRule"/>
         </before>
         <after>
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrdersGridFiltersAfter" before="logout"/>
             <deleteData createDataKey="virtualProduct" stepKey="deleteVirtualProduct"/>
             <deleteData createDataKey="createSalesRule" stepKey="deleteSalesRule"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
@@ -47,10 +48,12 @@
         <actionGroup ref="CheckoutFillEstimateShippingAndTaxActionGroup" stepKey="fillEstimateShippingAndTaxFields"/>
 
         <!-- Assert Discount and proceed to checkout -->
-        <waitForElementVisible selector="{{CheckoutCartSummarySection.discountAmount}}" stepKey="waitForDiscountElement"/>
-        <see selector="{{CheckoutCartSummarySection.discountAmount}}" userInput="-$50.00" stepKey="seeDiscountTotal"/>
-        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="goToCheckout"/>
-        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <comment userInput="Adding the comment to replace action for preserving Backward Compatibility" stepKey="waitForDiscountElement"/>
+        <actionGroup ref="AssertStorefrontCartDiscountActionGroup" stepKey="seeDiscountTotal">
+            <argument name="discount" value="50.00"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="goToCheckout"/>
+        <comment userInput="Adding the comment to replace waitForPageToLoad action for preserving Backward Compatibility" stepKey="waitForPageToLoad"/>
 
         <!--Fill Customer Information -->
         <fillField selector="{{CheckoutShippingSection.emailAddress}}" userInput="{{Simple_US_Customer.email}}" stepKey="enterEmail"/>
@@ -66,6 +69,7 @@
         <click selector="{{CheckoutPaymentSection.update}}" stepKey="clickOnUpdateButton"/>
 
         <!-- Place order and Assert success message -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrder"/>
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickOnPlaceOrder"/>
 
         <!-- Assert empty Mini Cart -->
@@ -73,8 +77,7 @@
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumberWithoutLink}}" stepKey="orderId"/>
 
         <!-- Open Order Index Page -->
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrders"/>
-        <waitForPageLoad stepKey="waitForPageLoad5"/>
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToOrders"/>
 
         <!-- Filter Order using orderId and assert order-->
         <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridById">

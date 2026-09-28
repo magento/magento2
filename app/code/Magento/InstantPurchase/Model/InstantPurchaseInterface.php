@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\InstantPurchase\Model;
 
@@ -12,6 +12,7 @@ use Magento\Store\Model\Store;
  * Interface for detecting customer option to make instant purchase in a store.
  *
  * @api
+ * @since 100.2.0
  */
 interface InstantPurchaseInterface
 {
@@ -21,6 +22,7 @@ interface InstantPurchaseInterface
      * @param Store $store
      * @param Customer $customer
      * @return InstantPurchaseOption
+     * @since 100.2.0
      */
     public function getOption(
         Store $store,

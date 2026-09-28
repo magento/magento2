@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\InstantPurchase\Model;
 
@@ -14,6 +14,7 @@ use Magento\Vault\Api\Data\PaymentTokenInterface;
  * Create instances of instant purchase option.
  *
  * @api
+ * @since 100.2.0
  */
 class InstantPurchaseOptionFactory
 {
@@ -39,12 +40,13 @@ class InstantPurchaseOptionFactory
      * @param Address|null $billingAddress
      * @param ShippingMethodInterface|null $shippingMethod
      * @return InstantPurchaseOption
+     * @since 100.2.0
      */
     public function create(
-        PaymentTokenInterface $paymentToken = null,
-        Address $shippingAddress = null,
-        Address $billingAddress = null,
-        ShippingMethodInterface $shippingMethod = null
+        ?PaymentTokenInterface $paymentToken = null,
+        ?Address $shippingAddress = null,
+        ?Address $billingAddress = null,
+        ?ShippingMethodInterface $shippingMethod = null
     ): InstantPurchaseOption {
         return $this->objectManager->create(InstantPurchaseOption::class, [
             'paymentToken' => $paymentToken,
@@ -58,6 +60,7 @@ class InstantPurchaseOptionFactory
      * Creates new empty instance (no option available).
      *
      * @return InstantPurchaseOption
+     * @since 100.2.0
      */
     public function createDisabledOption(): InstantPurchaseOption
     {

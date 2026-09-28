@@ -1,12 +1,16 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Code\Reader;
 
+use Magento\Framework\GetParameterClassTrait;
+
 class SourceArgumentsReader
 {
+    use GetParameterClassTrait;
+
     /**
      * Namespace separator
      * @deprecated
@@ -22,7 +26,7 @@ class SourceArgumentsReader
     /**
      * @param NamespaceResolver|null $namespaceResolver
      */
-    public function __construct(NamespaceResolver $namespaceResolver = null)
+    public function __construct(?NamespaceResolver $namespaceResolver = null)
     {
         $this->namespaceResolver = $namespaceResolver ?: new NamespaceResolver();
     }
@@ -56,19 +60,20 @@ class SourceArgumentsReader
         foreach ($params as $param) {
             //For the sake of backward compatibility.
             $typeName = '';
-            if ($param->isArray()) {
+            $parameterType = $param->getType();
+            if ($parameterType && $parameterType->getName() === 'array') {
                 //For the sake of backward compatibility.
                 $typeName = 'array';
             } else {
                 try {
-                    $paramClass = $param->getClass();
+                    $paramClass = $this->getParameterClass($param);
                     if ($paramClass) {
                         $typeName = '\\' .$paramClass->getName();
                     }
                 } catch (\ReflectionException $exception) {
                     //If there's a problem loading a class then ignore it and
                     //just return it's name.
-                    $typeName = '\\' .$param->getType()->getName();
+                    $typeName = '\\' .$parameterType->getName();
                 }
             }
             $types[] = $typeName;
@@ -87,7 +92,7 @@ class SourceArgumentsReader
      * @param string $argument
      * @param array $availableNamespaces
      * @return string
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      * @see getConstructorArgumentTypes
      */
     protected function resolveNamespaces($argument, $availableNamespaces)
@@ -102,7 +107,7 @@ class SourceArgumentsReader
      * @param string $token
      * @return string
      *
-     * @deprecated Not used anymore.
+     * @deprecated 102.0.0 Not used anymore.
      */
     protected function removeToken($argument, $token)
     {
@@ -118,7 +123,7 @@ class SourceArgumentsReader
      *
      * @param array $file
      * @return array
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      * @see getConstructorArgumentTypes
      */
     protected function getImportedNamespaces(array $file)

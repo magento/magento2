@@ -1,18 +1,21 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Framework\App\Test\Unit\PageCache;
 
+use Laminas\Stdlib\Parameters;
+use Laminas\Uri\Http as HttpUri;
 use Magento\Framework\App\Http\Context;
 use Magento\Framework\App\PageCache\Identifier;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class IdentifierTest extends TestCase
@@ -20,7 +23,7 @@ class IdentifierTest extends TestCase
     /**
      * Test value for cache vary string
      */
-    const VARY = '123';
+    public const VARY = '123';
 
     /**
      * @var ObjectManager
@@ -47,8 +50,11 @@ class IdentifierTest extends TestCase
      */
     private $serializerMock;
 
+    /** @var Parameters|MockObject */
+    private $fileParams;
+
     /**
-     * @return ObjectManager
+     * @inheritdoc
      */
     protected function setUp(): void
     {
@@ -62,7 +68,7 @@ class IdentifierTest extends TestCase
             ->getMock();
 
         $this->serializerMock = $this->getMockBuilder(Json::class)
-            ->setMethods(['serialize'])
+            ->onlyMethods(['serialize'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->serializerMock->expects($this->any())
@@ -72,91 +78,134 @@ class IdentifierTest extends TestCase
                     return json_encode($value);
                 }
             );
+        $this->fileParams = $this->createMock(Parameters::class);
 
         $this->model = $this->objectManager->getObject(
             Identifier::class,
             [
                 'request'    => $this->requestMock,
                 'context'    => $this->contextMock,
-                'serializer' => $this->serializerMock,
+                'serializer' => $this->serializerMock
             ]
         );
         parent::setUp();
     }
 
-    public function testSecureDifferentiator()
+    /**
+     * @return void
+     */
+    public function testSecureDifferentiator(): void
     {
-        $this->requestMock->expects($this->at(0))
+        $this->requestMock
             ->method('isSecure')
-            ->willReturn(true);
-        $this->requestMock->expects($this->at(3))
-            ->method('isSecure')
-            ->willReturn(false);
+            ->willReturnOnConsecutiveCalls(true, false);
         $this->requestMock->method('getUriString')
             ->willReturn('http://example.com/path/');
         $this->contextMock->method('getVaryString')->willReturn(self::VARY);
+        $this->requestMock->expects($this->any())
+            ->method('getQuery')
+            ->willReturn($this->fileParams);
+        $this->fileParams->expects($this->any())
+            ->method('toArray')
+            ->willReturn([]);
+
+        $uri = $this->createMock(HttpUri::class);
+        $uri->expects($this->any())->method('getQueryAsArray')->willReturn('');
+        $this->requestMock->expects($this->any())
+            ->method('getUri')
+            ->willReturn($uri);
 
         $valueWithSecureRequest = $this->model->getValue();
         $valueWithInsecureRequest = $this->model->getValue();
         $this->assertNotEquals($valueWithSecureRequest, $valueWithInsecureRequest);
     }
 
-    public function testDomainDifferentiator()
+    /**
+     * @return void
+     */
+    public function testDomainDifferentiator(): void
     {
         $this->requestMock->method('isSecure')->willReturn(true);
-        $this->requestMock->expects($this->at(1))
+        $this->requestMock
             ->method('getUriString')
-            ->willReturn('http://example.com/path/');
-        $this->requestMock->expects($this->at(4))
-            ->method('getUriString')
-            ->willReturn('http://example.net/path/');
+            ->willReturnOnConsecutiveCalls('http://example.com/path/', 'http://example.net/path/');
         $this->contextMock->method('getVaryString')->willReturn(self::VARY);
+        $this->requestMock->expects($this->any())
+            ->method('getQuery')
+            ->willReturn($this->fileParams);
+        $this->fileParams->expects($this->any())
+            ->method('toArray')
+            ->willReturn([]);
+
+        $uri = $this->createMock(HttpUri::class);
+        $uri->expects($this->any())->method('getQueryAsArray')->willReturn('');
+        $this->requestMock->expects($this->any())
+            ->method('getUri')
+            ->willReturn($uri);
 
         $valueDomain1 = $this->model->getValue();
         $valueDomain2 = $this->model->getValue();
         $this->assertNotEquals($valueDomain1, $valueDomain2);
     }
 
-    public function testPathDifferentiator()
+    /**
+     * @return void
+     */
+    public function testPathDifferentiator(): void
     {
         $this->requestMock->method('isSecure')->willReturn(true);
-        $this->requestMock->expects($this->at(1))
+        $this->requestMock
             ->method('getUriString')
-            ->willReturn('http://example.com/path/');
-        $this->requestMock->expects($this->at(4))
-            ->method('getUriString')
-            ->willReturn('http://example.com/path1/');
+            ->willReturnOnConsecutiveCalls('http://example.com/path/', 'http://example.com/path1/');
         $this->contextMock->method('getVaryString')->willReturn(self::VARY);
+        $this->requestMock->expects($this->any())
+            ->method('getQuery')
+            ->willReturn($this->fileParams);
+        $this->fileParams->expects($this->any())
+            ->method('toArray')
+            ->willReturn([]);
+
+        $uri = $this->createMock(HttpUri::class);
+        $uri->expects($this->any())->method('getQueryAsArray')->willReturn('');
+        $this->requestMock->expects($this->any())
+            ->method('getUri')
+            ->willReturn($uri);
 
         $valuePath1 = $this->model->getValue();
         $valuePath2 = $this->model->getValue();
         $this->assertNotEquals($valuePath1, $valuePath2);
     }
 
-    /**
-     * @param $cookieExists
-     *
-     * @dataProvider trueFalseDataProvider
+    /**     * @return void
      */
-    public function testVaryStringSource($cookieExists)
+    #[DataProvider('trueFalseDataProvider')]
+    public function testVaryStringSource($cookieExists): void
     {
         $this->requestMock->method('get')->willReturn($cookieExists ? 'vary-string-from-cookie' : null);
         $this->contextMock->expects($cookieExists ? $this->never() : $this->once())->method('getVaryString');
+        $this->requestMock->expects($this->any())
+            ->method('getQuery')
+            ->willReturn($this->fileParams);
+        $this->fileParams->expects($this->any())
+            ->method('toArray')
+            ->willReturn([]);
         $this->model->getValue();
     }
 
     /**
      * @return array
      */
-    public function trueFalseDataProvider()
+    public static function trueFalseDataProvider(): array
     {
         return [[true], [false]];
     }
 
     /**
-     * Test get identifier value
+     * Test get identifier value.
+     *
+     * @return void
      */
-    public function testGetValue()
+    public function testGetValue(): void
     {
         $this->requestMock->expects($this->any())
             ->method('isSecure')
@@ -170,12 +219,159 @@ class IdentifierTest extends TestCase
             ->method('getVaryString')
             ->willReturn(self::VARY);
 
+        $this->requestMock->expects($this->any())
+            ->method('getQuery')
+            ->willReturn($this->fileParams);
+        $this->fileParams->expects($this->any())
+            ->method('toArray')
+            ->willReturn([]);
+
+        $uri = $this->createMock(HttpUri::class);
+        $uri->expects($this->any())->method('getQueryAsArray')->willReturn('');
+        $this->requestMock->expects($this->any())
+            ->method('getUri')
+            ->willReturn($uri);
+
         $this->assertEquals(
             sha1(
                 json_encode(
                     [
                         true,
                         'http://example.com/path1/',
+                        '',
+                        self::VARY
+                    ]
+                )
+            ),
+            $this->model->getValue()
+        );
+    }
+
+    /**
+     * Test get identifier for save value.
+     *
+     * @return void
+     */
+    public function testGetValueWithQuery(): void
+    {
+        $this->requestMock->expects($this->any())
+            ->method('isSecure')
+            ->willReturn(true);
+
+        $this->requestMock->expects($this->any())
+            ->method('getUriString')
+            ->willReturn('http://example.com/path1/?b=2&a=1');
+
+        $this->contextMock->expects($this->any())
+            ->method('getVaryString')
+            ->willReturn(self::VARY);
+
+        $this->requestMock->expects($this->any())
+            ->method('getQuery')
+            ->willReturn($this->fileParams);
+        $this->fileParams->expects($this->any())
+            ->method('toArray')
+            ->willReturn([
+                'b' => 2,
+                'a' => 1,
+            ]);
+
+        $uri = $this->createMock(HttpUri::class);
+        $uri->expects($this->any())->method('getQueryAsArray')->willReturn([
+            'b' => 2,
+            'a' => 1,
+        ]);
+        $this->requestMock->expects($this->any())
+            ->method('getUri')
+            ->willReturn($uri);
+
+        $this->assertEquals(
+            sha1(
+                json_encode(
+                    [
+                        true,
+                        'http://example.com/path1/',
+                        'a=1&b=2',
+                        self::VARY
+                    ]
+                )
+            ),
+            $this->model->getValue()
+        );
+    }
+
+    /**
+     * Test get identifier value with marketing parameters.
+     *
+     * @return void
+     */
+    public function testGetValueWithMarketingParameters(): void
+    {
+        $this->requestMock->expects($this->any())
+            ->method('isSecure')
+            ->willReturn(true);
+
+        $this->requestMock->expects($this->any())
+            ->method('getUriString')
+            ->willReturn('http://example.com/path1/?abc=123&gclid=456&utm_source=abc');
+
+        $this->contextMock->expects($this->any())
+            ->method('getVaryString')
+            ->willReturn(self::VARY);
+
+        $uri = $this->createMock(HttpUri::class);
+        $uri->expects($this->any())->method('getQueryAsArray')->willReturn(['abc' => '123']);
+        $this->requestMock->expects($this->any())
+            ->method('getUri')
+            ->willReturn($uri);
+
+        $this->assertEquals(
+            sha1(
+                json_encode(
+                    [
+                        true,
+                        'http://example.com/path1/',
+                        'abc=123',
+                        self::VARY
+                    ]
+                )
+            ),
+            $this->model->getValue()
+        );
+    }
+
+    /**
+     * Test get identifier value with invalid URL.
+     *
+     * @return void
+     */
+    public function testGetValueWithInvalidUrl(): void
+    {
+        $this->requestMock->expects($this->any())
+            ->method('isSecure')
+            ->willReturn(true);
+
+        $this->requestMock->expects($this->any())
+            ->method('getUriString')
+            ->willReturn('http://example.com:invalid_port/path1/?a=1');
+
+        $this->contextMock->expects($this->any())
+            ->method('getVaryString')
+            ->willReturn(self::VARY);
+
+        $uri = $this->createMock(HttpUri::class);
+        $uri->expects($this->any())->method('getQueryAsArray')->willReturn([]);
+        $this->requestMock->expects($this->any())
+            ->method('getUri')
+            ->willReturn($uri);
+
+        $this->assertEquals(
+            sha1(
+                json_encode(
+                    [
+                        true,
+                        'http://example.com:invalid_port/path1/',
+                        '',
                         self::VARY
                     ]
                 )

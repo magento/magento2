@@ -1,17 +1,21 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
+
 namespace Magento\ImportExport\Controller\Adminhtml\Import;
 
+use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\View\Result\Layout;
+use Magento\ImportExport\Block\Adminhtml\Import\Frame\Result;
 use Magento\ImportExport\Controller\Adminhtml\ImportResult as ImportResultController;
 use Magento\ImportExport\Model\Import;
-use Magento\ImportExport\Block\Adminhtml\Import\Frame\Result;
-use Magento\Framework\Controller\ResultFactory;
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\ImportExport\Model\Import\Adapter as ImportAdapter;
+use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
 /**
  * Import validate controller action.
@@ -25,30 +29,40 @@ class Validate extends ImportResultController implements HttpPostActionInterface
     private $import;
 
     /**
+     * @var Import
+     */
+    private $_validateRowError = false;
+
+    /**
      * Validate uploaded files action
      *
-     * @return \Magento\Framework\Controller\ResultInterface
-     * @SuppressWarnings(PHPMD.Superglobals)
+     * @return ResultInterface
      */
     public function execute()
     {
         $data = $this->getRequest()->getPostValue();
-        /** @var \Magento\Framework\View\Result\Layout $resultLayout */
+        /** @var Layout $resultLayout */
         $resultLayout = $this->resultFactory->create(ResultFactory::TYPE_LAYOUT);
         /** @var $resultBlock Result */
         $resultBlock = $resultLayout->getLayout()->getBlock('import.frame.result');
+        //phpcs:disable Magento2.Security.Superglobal
         if ($data) {
             // common actions
-            $resultBlock->addAction(
-                'show',
-                'import_validation_container'
-            );
-
-            /** @var $import \Magento\ImportExport\Model\Import */
+            $resultBlock->addAction('show', 'import_validation_container');
             $import = $this->getImport()->setData($data);
             try {
                 $source = $import->uploadFileAndGetSource();
+                $this->_eventManager->dispatch('log_admin_import');
                 $this->processValidationResult($import->validateSource($source), $resultBlock);
+                $ids = $import->getValidatedIds();
+                if (count($ids) > 0) {
+                    $resultBlock->addAction('value', Import::FIELD_IMPORT_IDS, $ids);
+                    $resultBlock->addAction(
+                        'value',
+                        '_import_history_id',
+                        $this->historyModel->getId()
+                    );
+                }
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $resultBlock->addError($e->getMessage());
             } catch (\Exception $e) {
@@ -59,8 +73,8 @@ class Validate extends ImportResultController implements HttpPostActionInterface
             $resultBlock->addError(__('The file was not uploaded.'));
             return $resultLayout;
         }
-        $this->messageManager->addError(__('Sorry, but the data is invalid or the file is not uploaded.'));
-        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $this->messageManager->addErrorMessage(__('Sorry, but the data is invalid or the file is not uploaded.'));
+        /** @var Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         $resultRedirect->setPath('adminhtml/*/index');
         return $resultRedirect;
@@ -78,10 +92,12 @@ class Validate extends ImportResultController implements HttpPostActionInterface
     {
         $import = $this->getImport();
         $errorAggregator = $import->getErrorAggregator();
-
         if ($import->getProcessedRowsCount()) {
             if ($validationResult) {
-                $this->addMessageForValidResult($resultBlock);
+                $totalError = $errorAggregator->getErrorsCount();
+                $totalRows = $import->getProcessedRowsCount();
+                $this->validateRowError($errorAggregator, $totalRows);
+                $this->addMessageForValidResult($resultBlock, $totalError, $totalRows);
             } else {
                 $resultBlock->addError(
                     __('Data validation failed. Please fix the following errors and upload the file again.')
@@ -100,7 +116,7 @@ class Validate extends ImportResultController implements HttpPostActionInterface
                     $errorAggregator->getErrorsCount()
                 )
             );
-            
+
             $this->addErrorMessages($resultBlock, $errorAggregator);
         } else {
             if ($errorAggregator->getErrorsCount()) {
@@ -112,10 +128,29 @@ class Validate extends ImportResultController implements HttpPostActionInterface
     }
 
     /**
+     * Validate row error.
+     *
+     * @param object $errorAggregator
+     * @param int $totalRows
+     * @return bool
+     */
+    private function validateRowError(object $errorAggregator, int $totalRows): bool
+    {
+        $errors = $errorAggregator->getAllErrors();
+        $rowNumber = [];
+        foreach ($errors as $error) {
+            if ($error->getRowNumber()) {
+                $rowNumber = array_unique([...$rowNumber , ...[$error->getRowNumber()]]);
+            }
+        }
+        (count($rowNumber) < $totalRows)? $this->_validateRowError = true : $this->_validateRowError = false;
+        return $this->_validateRowError;
+    }
+
+    /**
      * Provides import model.
      *
      * @return Import
-     * @deprecated 100.1.0
      */
     private function getImport()
     {
@@ -138,7 +173,10 @@ class Validate extends ImportResultController implements HttpPostActionInterface
     private function addMessageToSkipErrors(Result $resultBlock)
     {
         $import = $this->getImport();
-        if (!$import->getErrorAggregator()->hasFatalExceptions()) {
+        $validationStrategy = $import->getData(Import::FIELD_NAME_VALIDATION_STRATEGY);
+        if ($validationStrategy === ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_SKIP_ERRORS
+            && !$import->getErrorAggregator()->hasFatalExceptions()
+        ) {
             $resultBlock->addSuccess(
                 __('Please fix errors and re-upload file or simply press "Import" button to skip rows with errors'),
                 true
@@ -153,12 +191,14 @@ class Validate extends ImportResultController implements HttpPostActionInterface
      * 2. Add message for case when imported data was checked and result is valid, but import is not allowed.
      *
      * @param Result $resultBlock
+     * @param Import $totalError
+     * @param Import $totalRows
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    private function addMessageForValidResult(Result $resultBlock)
+    private function addMessageForValidResult(Result $resultBlock, $totalError, $totalRows)
     {
-        if ($this->getImport()->isImportAllowed()) {
+        if ($this->getImport()->isImportAllowed() && ($totalRows > $totalError || $this->_validateRowError)) {
             $resultBlock->addSuccess(__('File is valid! To start import process press "Import" button'), true);
         } else {
             $resultBlock->addError(__('The file is valid, but we can\'t import it for some reason.'));

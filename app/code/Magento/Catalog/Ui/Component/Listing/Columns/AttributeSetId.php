@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Ui\Component\Listing\Columns;
 
 /**
- * Attribute set listing column component
+ * AttributeSetId listing column component.
  */
 class AttributeSetId extends \Magento\Ui\Component\Listing\Columns\Column
 {
@@ -23,6 +23,7 @@ class AttributeSetId extends \Magento\Ui\Component\Listing\Columns\Column
             && !empty($sorting['field'])
             && !empty($sorting['direction'])
             && $sorting['field'] === $this->getName()
+            && in_array(strtoupper($sorting['direction']), ['ASC', 'DESC'], true)
         ) {
             $collection = $this->getContext()->getDataProvider()->getCollection();
             $collection->joinField(

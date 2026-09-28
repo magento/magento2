@@ -1,9 +1,7 @@
 <?php
 /**
- * Order Email items grouped renderer
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\GroupedProduct\Block\Order\Email\Items\CreditMemo;
 
@@ -13,6 +11,7 @@ use Magento\Sales\Block\Order\Email\Items\DefaultItems;
  * Class renders grouped product(s) in the CreditMemo email
  *
  * @api
+ * @since 100.4.0
  */
 class Grouped extends DefaultItems
 {
@@ -22,6 +21,7 @@ class Grouped extends DefaultItems
      * This method uses renderer for real product type
      *
      * @return string
+     * @since 100.4.0
      */
     protected function _toHtml()
     {

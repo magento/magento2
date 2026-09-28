@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
+    <page name="CheckoutPage" url="/checkout" area="storefront" module="Magento_Checkout">
+        <section name="StorefrontOnePageCheckoutPaymentSection"/>
+    </page>
+</pages>

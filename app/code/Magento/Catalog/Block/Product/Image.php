@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Block\Product;
 
@@ -21,19 +21,19 @@ namespace Magento\Catalog\Block\Product;
 class Image extends \Magento\Framework\View\Element\Template
 {
     /**
-     * @deprecated Property isn't used
+     * @deprecated 102.0.5 Property isn't used
      * @var \Magento\Catalog\Helper\Image
      */
     protected $imageHelper;
 
     /**
-     * @deprecated Property isn't used
+     * @deprecated 102.0.5 Property isn't used
      * @var \Magento\Catalog\Model\Product
      */
     protected $product;
 
     /**
-     * @deprecated Property isn't used
+     * @deprecated 102.0.5 Property isn't used
      * @var array
      */
     protected $attributes = [];

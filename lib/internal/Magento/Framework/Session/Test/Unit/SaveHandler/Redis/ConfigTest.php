@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -112,6 +112,16 @@ class ConfigTest extends TestCase
             ->with(Config::PARAM_TIMEOUT)
             ->willReturn($expected);
         $this->assertEquals($this->config->getTimeout(), $expected);
+    }
+
+    public function testGetRetries()
+    {
+        $expected = 10;
+        $this->deploymentConfigMock->expects($this->once())
+            ->method('get')
+            ->willReturn(Config::PARAM_RETRIES)
+            ->willReturn($expected);
+        $this->assertEquals($this->config->getRetries(), $expected);
     }
 
     public function testGetPersistentIdentifier()

@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Checkout\Controller\Cart;
@@ -41,7 +40,7 @@ class Addgroup extends \Magento\Checkout\Controller\Cart implements HttpPostActi
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
         CustomerCart $cart,
-        Escaper $escaper = null
+        ?Escaper $escaper = null
     ) {
         $this->escaper = $escaper ?: ObjectManager::getInstance()->get(\Magento\Framework\Escaper::class);
         parent::__construct($context, $scopeConfig, $checkoutSession, $storeManager, $formKeyValidator, $cart);
@@ -104,13 +103,25 @@ class Addgroup extends \Magento\Checkout\Controller\Cart implements HttpPostActi
             if ($orderCustomerId == $currentCustomerId) {
                 $this->cart->addOrderItem($item, 1);
                 if (!$this->cart->getQuote()->getHasError()) {
-                    $message = __(
-                        'You added %1 to your shopping cart.',
-                        $this->escaper->escapeHtml($item->getName())
+                    $this->messageManager->addComplexSuccessMessage(
+                        'addCartSuccessMessage',
+                        [
+                            'product_name' => $item->getName(),
+                            'cart_url' => $this->getCartUrl()
+                        ]
                     );
-                    $this->messageManager->addSuccessMessage($message);
                 }
             }
         }
+    }
+
+    /**
+     * Returns cart url
+     *
+     * @return string
+     */
+    private function getCartUrl()
+    {
+        return $this->_url->getUrl('checkout/cart', ['_secure' => true]);
     }
 }

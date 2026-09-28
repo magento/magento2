@@ -1,14 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework;
 
 /**
  * Image handler library
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Image
 {
@@ -47,10 +45,6 @@ class Image
     public function open()
     {
         $this->_adapter->checkDependencies();
-
-        if (!file_exists($this->_fileName)) {
-            throw new \Exception("File '{$this->_fileName}' does not exist.");
-        }
 
         $this->_adapter->open($this->_fileName);
     }
@@ -94,7 +88,7 @@ class Image
     /**
      * Crop an image.
      *
-     * @param int $top  Default value is 0
+     * @param int $top Default value is 0
      * @param int $left Default value is 0
      * @param int $right Default value is 0
      * @param int $bottom Default value is 0
@@ -204,9 +198,6 @@ class Image
         $watermarkImageOpacity = 30,
         $repeat = false
     ) {
-        if (!file_exists($watermarkImage)) {
-            throw new \Exception("Required file '{$watermarkImage}' does not exists.");
-        }
         $this->_adapter->watermark($watermarkImage, $positionX, $positionY, $watermarkImageOpacity, $repeat);
     }
 
@@ -238,7 +229,7 @@ class Image
      * @access public
      * @return void
      */
-    public function process()
+    public function process() //phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
     {
     }
 
@@ -248,7 +239,7 @@ class Image
      * @access public
      * @return void
      */
-    public function instruction()
+    public function instruction() //phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
     {
     }
 

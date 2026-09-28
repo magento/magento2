@@ -1,27 +1,33 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Multishipping\Block\Checkout;
 
+use Magento\Captcha\Block\Captcha;
+use Magento\Checkout\Model\CaptchaPaymentProcessingRateLimiter;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Quote\Model\Quote\Address;
+use Magento\Checkout\Helper\Data as CheckoutHelper;
+use Magento\Framework\App\ObjectManager;
+use Magento\Quote\Model\Quote\Address\Total\Collector;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Multishipping checkout overview information
  *
  * @api
- * @author Magento Core Team <core@magentocommerce.com>
  * @since  100.0.2
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Overview extends \Magento\Sales\Block\Items\AbstractItems
 {
     /**
      * Block alias fallback
      */
-    const DEFAULT_TYPE = 'default';
+    public const DEFAULT_TYPE = 'default';
 
     /**
      * @var \Magento\Multishipping\Model\Checkout\Type\Multishipping
@@ -56,6 +62,7 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
      * @param \Magento\Quote\Model\Quote\TotalsCollector               $totalsCollector
      * @param \Magento\Quote\Model\Quote\TotalsReader                  $totalsReader
      * @param array                                                    $data
+     * @param CheckoutHelper|null                                      $checkoutHelper
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -64,11 +71,14 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
         PriceCurrencyInterface $priceCurrency,
         \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector,
         \Magento\Quote\Model\Quote\TotalsReader $totalsReader,
-        array $data = []
+        array $data = [],
+        ?CheckoutHelper $checkoutHelper = null
     ) {
         $this->_taxHelper = $taxHelper;
         $this->_multishipping = $multishipping;
         $this->priceCurrency = $priceCurrency;
+        $data['taxHelper'] = $this->_taxHelper;
+        $data['checkoutHelper'] = $checkoutHelper ?? ObjectManager::getInstance()->get(CheckoutHelper::class);
         parent::__construct($context, $data);
         $this->_isScopePrivate = true;
         $this->totalsCollector = $totalsCollector;
@@ -116,6 +126,21 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
         $this->pageConfig->getTitle()->set(
             __('Review Order - %1', $this->pageConfig->getTitle()->getDefault())
         );
+        if (!$this->getChildBlock('captcha')) {
+            $this->addChild(
+                'captcha',
+                Captcha::class,
+                [
+                    'cacheable' => false,
+                    'after' => '-',
+                    'form_id' => CaptchaPaymentProcessingRateLimiter::CAPTCHA_FORM,
+                    'image_width' => 230,
+                    'image_height' => 230,
+                    'frontend_validation' => false
+                ]
+            );
+        }
+
         return parent::_prepareLayout();
     }
 
@@ -209,9 +234,18 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
     public function getShippingPriceInclTax($address)
     {
         $rate = $address->getShippingRateByCode($address->getShippingMethod());
-        $exclTax = $rate->getPrice();
-        $taxAmount = $address->getShippingTaxAmount();
-        return $this->formatPrice($exclTax + $taxAmount);
+        $store = $this->getQuote()->getStore();
+        $baseCode = $store->getBaseCurrencyCode();
+        $currentCode = $store->getCurrentCurrencyCode();
+        if ($baseCode === $currentCode) {
+            $displayAmount = (float)$rate->getPrice() + (float)$address->getShippingTaxAmount();
+            return $this->formatPrice($displayAmount);
+        }
+        $baseAmount = (float)$rate->getPrice();
+        $baseTaxAmount = $address->getBaseShippingTaxAmount();
+        $baseTaxAmount = $baseTaxAmount !== null ? (float)$baseTaxAmount : 0.0;
+        $converted = $store->getBaseCurrency()->convert($baseAmount + $baseTaxAmount, $currentCode);
+        return $this->formatPrice($converted);
     }
 
     /**
@@ -223,8 +257,15 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
     public function getShippingPriceExclTax($address)
     {
         $rate = $address->getShippingRateByCode($address->getShippingMethod());
-        $shippingAmount = $rate->getPrice();
-        return $this->formatPrice($shippingAmount);
+        $store = $this->getQuote()->getStore();
+        $baseCode = $store->getBaseCurrencyCode();
+        $currentCode = $store->getCurrentCurrencyCode();
+        if ($baseCode === $currentCode) {
+            return $this->formatPrice((float)$rate->getPrice());
+        }
+        $baseAmount = (float)$rate->getPrice();
+        $converted = $store->getBaseCurrency()->convert($baseAmount, $currentCode);
+        return $this->formatPrice($converted);
     }
 
     /**
@@ -392,8 +433,9 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
     /**
      * Get billin address totals
      *
-     * @return     mixed
-     * @deprecated
+     * @return mixed
+     * @deprecated 100.2.3
+     * @see nothing
      * typo in method name, see getBillingAddressTotals()
      */
     public function getBillinAddressTotals()
@@ -405,6 +447,7 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
      * Get billing address totals
      *
      * @return mixed
+     * @since 100.2.3
      */
     public function getBillingAddressTotals()
     {
@@ -421,8 +464,11 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
      */
     public function renderTotals($totals, $colspan = null)
     {
-        //check if the shipment is multi shipment
+        // check if the shipment is multi shipment
         $totals = $this->getMultishippingTotals($totals);
+
+        // sort totals by configuration settings
+        $totals = $this->sortTotals($totals);
 
         if ($colspan === null) {
             $colspan = 3;
@@ -472,5 +518,39 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
             $renderer->setTemplate($this->getRowRendererTemplate());
         }
         return $renderer;
+    }
+
+    /**
+     * Sort total information based on configuration settings.
+     *
+     * @param array $totals
+     * @return array
+     */
+    private function sortTotals($totals): array
+    {
+        $sortedTotals = [];
+        $sorts = $this->_scopeConfig->getValue(
+            Collector::XML_PATH_SALES_TOTALS_SORT,
+            ScopeInterface::SCOPE_STORES
+        );
+
+        $sorted = [];
+        foreach ($sorts as $code => $sortOrder) {
+            $sorted[$sortOrder] = $code;
+        }
+        ksort($sorted);
+
+        foreach ($sorted as $code) {
+            if (isset($totals[$code])) {
+                $sortedTotals[$code] = $totals[$code];
+            }
+        }
+
+        $notSorted = array_diff(array_keys($totals), array_keys($sortedTotals));
+        foreach ($notSorted as $code) {
+            $sortedTotals[$code] = $totals[$code];
+        }
+
+        return $sortedTotals;
     }
 }

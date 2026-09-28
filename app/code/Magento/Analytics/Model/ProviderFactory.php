@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Analytics\Model;
 
@@ -27,6 +27,8 @@ class ProviderFactory
     }
 
     /**
+     * Object creation
+     *
      * @param string $providerName
      * @return object
      */

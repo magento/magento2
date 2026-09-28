@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -22,6 +22,13 @@ define(
              */
             execute: function () {
                 fullScreenLoader.startLoader();
+                this.redirectToSuccessPage();
+            },
+
+            /**
+             * Redirect to success page.
+             */
+            redirectToSuccessPage: function () {
                 window.location.replace(url.build(this.redirectUrl));
             }
         };

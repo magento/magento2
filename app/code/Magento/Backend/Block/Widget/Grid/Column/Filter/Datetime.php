@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
@@ -9,7 +9,6 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
 /**
  * Date grid column filter
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @todo        date format
  */
 class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
@@ -17,10 +16,10 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
     /**
      * full day is 86400, we need 23 hours:59 minutes:59 seconds = 86399
      */
-    const END_OF_DAY_IN_SECONDS = 86399;
+    public const END_OF_DAY_IN_SECONDS = 86399;
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getValue($index = null)
     {
@@ -117,13 +116,13 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
             ) . '/>' . '</div></div>';
         $html .= '<input type="hidden" name="' . $this->_getHtmlName() . '[locale]"' . ' value="'
             . $this->localeResolver->getLocale() . '"/>';
-        $html .= '<script>
-            require(["jquery", "mage/calendar"],function($){
+        $scriptString = 'require(["jquery", "mage/calendar"],function($){
                     $("#' . $htmlId . '_range").dateRange({
                         dateFormat: "' . $format . '",
                         timeFormat: "' . $timeFormat . '",
                         showsTime: ' . ($this->getColumn()->getFilterTime() ? 'true' : 'false') . ',
                         buttonText: "' . $this->escapeHtml(__('Date selector')) . '",
+                        buttonImage: "' . $this->getViewFileUrl('Magento_Theme::calendar.png') . '",
                         from: {
                             id: "' . $htmlId . '_from"
                         },
@@ -131,8 +130,9 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
                             id: "' . $htmlId . '_to"
                         }
                     })
-            });
-        </script>';
+            });';
+        $html .= $this->secureHtmlRenderer->renderTag('script', [], $scriptString, false);
+
         return $html;
     }
 

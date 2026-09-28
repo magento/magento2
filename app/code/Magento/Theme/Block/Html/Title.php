@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Theme\Block\Html;
 
@@ -101,7 +101,7 @@ class Title extends Template
     private function shouldTranslateTitle(): bool
     {
         return $this->scopeConfig->isSetFlag(
-            static::XML_PATH_HEADER_TRANSLATE_TITLE,
+            self::XML_PATH_HEADER_TRANSLATE_TITLE,
             ScopeInterface::SCOPE_STORE
         );
     }

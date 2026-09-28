@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -52,7 +52,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
     /**
      * test for \Magento\MediaStorage\Model\File\Storage\Database::deleteFolder()
      *
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoDataFixture Magento/MediaStorage/_files/database_mode.php
      * @magentoConfigFixture current_store system/media_storage_configuration/media_storage 1
      * @magentoConfigFixture current_store system/media_storage_configuration/media_database default_setup

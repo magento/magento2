@@ -1,23 +1,24 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Amqp;
 
+use Closure;
+use Exception;
 use Magento\Framework\MessageQueue\ConnectionLostException;
 use Magento\Framework\MessageQueue\EnvelopeInterface;
 use Magento\Framework\MessageQueue\QueueInterface;
-use PhpAmqpLib\Exception\AMQPProtocolConnectionException;
+use Magento\Framework\Phrase;
+use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Message\AMQPMessage;
 use Magento\Framework\MessageQueue\EnvelopeFactory;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class Queue
- *
  * @api
- * @since 100.0.0
+ * @since 103.0.0
  */
 class Queue implements QueueInterface
 {
@@ -42,29 +43,38 @@ class Queue implements QueueInterface
     private $logger;
 
     /**
+     * The prefetch value is used to specify how many messages that are being sent to the consumer at the same time.
+     * @see https://www.rabbitmq.com/consumer-prefetch.html
+     * @var int
+     */
+    private $prefetchCount;
+
+    /**
      * Initialize dependencies.
      *
      * @param Config $amqpConfig
      * @param EnvelopeFactory $envelopeFactory
      * @param string $queueName
      * @param LoggerInterface $logger
-     * @since 100.0.0
+     * @param int $prefetchCount
      */
     public function __construct(
         Config $amqpConfig,
         EnvelopeFactory $envelopeFactory,
         $queueName,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        $prefetchCount = 100
     ) {
         $this->amqpConfig = $amqpConfig;
         $this->queueName = $queueName;
         $this->envelopeFactory = $envelopeFactory;
         $this->logger = $logger;
+        $this->prefetchCount = (int)$prefetchCount;
     }
 
     /**
      * @inheritdoc
-     * @since 100.0.0
+     * @since 103.0.0
      */
     public function dequeue()
     {
@@ -74,11 +84,11 @@ class Queue implements QueueInterface
         /** @var AMQPMessage $message */
         try {
             $message = $channel->basic_get($this->queueName);
-        } catch (AMQPProtocolConnectionException $e) {
+        } catch (Exception $exception) {
             throw new ConnectionLostException(
-                $e->getMessage(),
-                $e->getCode(),
-                $e
+                $exception->getMessage(),
+                $exception->getCode(),
+                $exception
             );
         }
 
@@ -88,6 +98,7 @@ class Queue implements QueueInterface
                 [
                     'topic_name' => $message->delivery_info['routing_key'],
                     'delivery_tag' => $message->delivery_info['delivery_tag'],
+                    'delivery_channel' => $message->getChannel(),
                 ]
             );
             $envelope = $this->envelopeFactory->create(['body' => $message->body, 'properties' => $properties]);
@@ -99,7 +110,7 @@ class Queue implements QueueInterface
 
     /**
      * @inheritdoc
-     * @since 100.0.0
+     * @since 103.0.0
      */
     public function acknowledge(EnvelopeInterface $envelope)
     {
@@ -107,12 +118,13 @@ class Queue implements QueueInterface
         $channel = $this->amqpConfig->getChannel();
         // @codingStandardsIgnoreStart
         try {
+            $this->validateChannel($properties, $channel, 'ack');
             $channel->basic_ack($properties['delivery_tag']);
-        } catch (AMQPProtocolConnectionException $e) {
+        } catch (Exception $exception) {
             throw new ConnectionLostException(
-                $e->getMessage(),
-                $e->getCode(),
-                $e
+                $exception->getMessage(),
+                $exception->getCode(),
+                $exception
             );
         }
         // @codingStandardsIgnoreEnd
@@ -120,10 +132,11 @@ class Queue implements QueueInterface
 
     /**
      * @inheritdoc
-     * @since 100.0.0
+     * @since 103.0.0
      */
     public function subscribe($callback)
     {
+        $channel = $this->amqpConfig->getChannel();
         $callbackConverter = function (AMQPMessage $message) use ($callback) {
             // @codingStandardsIgnoreStart
             $properties = array_merge(
@@ -131,20 +144,21 @@ class Queue implements QueueInterface
                 [
                     'topic_name' => $message->delivery_info['routing_key'],
                     'delivery_tag' => $message->delivery_info['delivery_tag'],
+                    'delivery_channel' => $message->getChannel(),
                 ]
             );
             // @codingStandardsIgnoreEnd
             $envelope = $this->envelopeFactory->create(['body' => $message->body, 'properties' => $properties]);
 
-            if ($callback instanceof \Closure) {
+            if ($callback instanceof Closure) {
                 $callback($envelope);
             } else {
                 call_user_func($callback, $envelope);
             }
         };
 
-        $channel = $this->amqpConfig->getChannel();
         // @codingStandardsIgnoreStart
+        $channel->basic_qos(0, $this->prefetchCount, false);
         $channel->basic_consume($this->queueName, '', false, false, false, false, $callbackConverter);
         // @codingStandardsIgnoreEnd
         while (count($channel->callbacks)) {
@@ -154,7 +168,7 @@ class Queue implements QueueInterface
 
     /**
      * @inheritdoc
-     * @since 100.0.0
+     * @since 103.0.0
      */
     public function reject(EnvelopeInterface $envelope, $requeue = true, $rejectionMessage = null)
     {
@@ -162,18 +176,27 @@ class Queue implements QueueInterface
 
         $channel = $this->amqpConfig->getChannel();
         // @codingStandardsIgnoreStart
-        $channel->basic_reject($properties['delivery_tag'], $requeue);
+        try {
+            $this->validateChannel($properties, $channel, 'reject');
+            $channel->basic_reject($properties['delivery_tag'], $requeue);
+        } catch (Exception $exception) {
+            throw new ConnectionLostException(
+                $exception->getMessage(),
+                $exception->getCode(),
+                $exception
+            );
+        }
         // @codingStandardsIgnoreEnd
         if ($rejectionMessage !== null) {
             $this->logger->critical(
-                new \Magento\Framework\Phrase('Message has been rejected: %message', ['message' => $rejectionMessage])
+                new Phrase('Message has been rejected: %message', ['message' => $rejectionMessage])
             );
         }
     }
 
     /**
      * @inheritdoc
-     * @since 100.0.0
+     * @since 103.0.0
      */
     public function push(EnvelopeInterface $envelope)
     {
@@ -186,5 +209,65 @@ class Queue implements QueueInterface
             ]
         );
         $this->amqpConfig->getChannel()->basic_publish($msg, '', $this->queueName);
+
+        return $msg;
+    }
+
+    /**
+     * Only subscribe queue
+     *
+     * @return void
+     */
+    public function subscribeQueue(): void
+    {
+        throw new \BadMethodCallException('subscribeQueue is not supported in amqp queue.');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function clearQueue(): int
+    {
+        $count = 0;
+        while ($message = $this->dequeue()) {
+            $this->acknowledge($message);
+            $count++;
+        }
+
+        return $count;
+    }
+
+    /**
+     * Get connection name
+     *
+     * @return string
+     */
+    #[\Deprecated('Connection name is just a config alias. It should not be used outside of loading config data.')]
+    public function getConnectionName(): string
+    {
+        return $this->amqpConfig->getConnectionName();
+    }
+
+    /**
+     * Validate that the delivery tag's channel matches the current channel.
+     *
+     * @param array $properties
+     * @param AMQPChannel $channel
+     * @param string $operation
+     * @return void
+     * @throws ConnectionLostException
+     */
+    private function validateChannel(array $properties, AMQPChannel $channel, string $operation): void
+    {
+        if (isset($properties['delivery_channel']) && $properties['delivery_channel'] instanceof AMQPChannel
+            && $properties['delivery_channel'] !== $channel
+        ) {
+            throw new ConnectionLostException(
+                sprintf(
+                    'Delivery tag channel does not match current channel; skipping %s.',
+                    $operation
+                )
+            );
+        }
     }
 }

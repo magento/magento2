@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\AdvancedSearch\Test\Unit\Model\Recommendations;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use Magento\AdvancedSearch\Model\Recommendations\DataProvider;
 use Magento\AdvancedSearch\Model\ResourceModel\Recommendations;
 use Magento\AdvancedSearch\Model\ResourceModel\RecommendationsFactory;
@@ -23,9 +24,9 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Magento\AdvancedSearch\Model\Recommendations\DataProvider
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
+#[CoversClass(DataProvider::class)]
 class DataProviderTest extends TestCase
 {
     /**
@@ -77,28 +78,26 @@ class DataProviderTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->layerResolverMock = $this->getMockBuilder(Resolver::class)
             ->disableOriginalConstructor()
-            ->setMethods(['get'])
+            ->onlyMethods(['get'])
             ->getMock();
 
         $this->searchLayerMock = $this->createMock(SearchLayer::class);
 
-        $this->layerResolverMock->expects($this->any())
-            ->method('get')
-            ->willReturn($this->searchLayerMock);
+        $this->layerResolverMock->method('get')->willReturn($this->searchLayerMock);
 
         $this->recommendationsFactoryMock = $this->getMockBuilder(RecommendationsFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->recommendationsMock = $this->createMock(Recommendations::class);
 
         $this->queryResultFactoryMock = $this->getMockBuilder(QueryResultFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
@@ -123,7 +122,7 @@ class DataProviderTest extends TestCase
         $isEnabledSearchRecommendations = false;
 
         /** @var QueryInterface $queryInterfaceMock */
-        $queryInterfaceMock = $this->getMockForAbstractClass(QueryInterface::class);
+        $queryInterfaceMock = $this->createMock(QueryInterface::class);
 
         $this->scopeConfigMock->expects($this->any())
             ->method('isSetFlag')
@@ -147,8 +146,8 @@ class DataProviderTest extends TestCase
         $queryText = 'test';
 
         /** @var QueryInterface $queryInterfaceMock */
-        $queryInterfaceMock = $this->getMockForAbstractClass(QueryInterface::class);
-        $queryInterfaceMock->expects($this->any())->method('getQueryText')->willReturn($queryText);
+        $queryInterfaceMock = $this->createMock(QueryInterface::class);
+        $queryInterfaceMock->method('getQueryText')->willReturn($queryText);
 
         $this->scopeConfigMock->expects($this->any())
             ->method('isSetFlag')
@@ -161,13 +160,11 @@ class DataProviderTest extends TestCase
             ->willReturn($searchRecommendationsCountConfig);
 
         $productCollectionMock = $this->createMock(ProductCollection::class);
-        $productCollectionMock->expects($this->any())->method('getStoreId')->willReturn($storeId);
+        $productCollectionMock->method('getStoreId')->willReturn($storeId);
 
-        $this->searchLayerMock->expects($this->any())->method('getProductCollection')
-            ->willReturn($productCollectionMock);
+        $this->searchLayerMock->method('getProductCollection')->willReturn($productCollectionMock);
 
-        $this->recommendationsFactoryMock->expects($this->any())->method('create')
-            ->willReturn($this->recommendationsMock);
+        $this->recommendationsFactoryMock->method('create')->willReturn($this->recommendationsMock);
 
         $this->recommendationsMock->expects($this->any())->method('getRecommendationsByQuery')
             ->with($queryText, ['store_id' => $storeId], $searchRecommendationsCountConfig)
@@ -184,7 +181,7 @@ class DataProviderTest extends TestCase
                 ]
             );
         $queryResultMock = $this->createMock(QueryResult::class);
-        $this->queryResultFactoryMock->expects($this->any())->method('create')->willReturn($queryResultMock);
+        $this->queryResultFactoryMock->method('create')->willReturn($queryResultMock);
 
         $result = $this->model->getItems($queryInterfaceMock);
         $this->assertCount(2, $result);

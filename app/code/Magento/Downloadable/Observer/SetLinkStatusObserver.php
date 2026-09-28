@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Downloadable\Observer;
 
@@ -61,6 +61,7 @@ class SetLinkStatusObserver implements ObserverInterface
             'payment_pending' => \Magento\Downloadable\Model\Link\Purchased\Item::LINK_STATUS_PENDING_PAYMENT,
             'payment_review' => \Magento\Downloadable\Model\Link\Purchased\Item::LINK_STATUS_PAYMENT_REVIEW,
         ];
+        $expiredOrderItemIds = [];
 
         $downloadableItemsStatuses = [];
         $orderItemStatusToEnable = $this->_scopeConfig->getValue(
@@ -83,10 +84,13 @@ class SetLinkStatusObserver implements ObserverInterface
                 if ($item->getProductType() == \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE
                     || $item->getRealProductType() == \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE
                 ) {
-                    if ($order->isCanceled() || in_array($item->getStatusId(), $expiredStatuses)) {
-                        $downloadableItemsStatuses[$item->getId()] = $linkStatuses['expired'];
-                    } else {
-                        $downloadableItemsStatuses[$item->getId()] = $linkStatuses['avail'];
+                    $itemId = $item->getId();
+                    if ($itemId !== null) {
+                        if ($order->isCanceled() || in_array($item->getStatusId(), $expiredStatuses)) {
+                            $downloadableItemsStatuses[$itemId] = $linkStatuses['expired'];
+                        } else {
+                            $downloadableItemsStatuses[$itemId] = $linkStatuses['avail'];
+                        }
                     }
                 }
             }
@@ -113,6 +117,10 @@ class SetLinkStatusObserver implements ObserverInterface
 
                     if (in_array($item->getStatusId(), $availableStatuses)) {
                         $downloadableItemsStatuses[$item->getId()] = $linkStatuses['avail'];
+                    }
+
+                    if ($item->getQtyOrdered() - $item->getQtyRefunded() == 0) {
+                        $expiredOrderItemIds[] = $item->getId();
                     }
                 }
             }
@@ -141,10 +149,22 @@ class SetLinkStatusObserver implements ObserverInterface
             }
         }
 
+        if ($expiredOrderItemIds) {
+            $linkPurchased = $this->_createItemsCollection()->addFieldToFilter(
+                'order_item_id',
+                ['in' => $expiredOrderItemIds]
+            );
+            foreach ($linkPurchased as $link) {
+                $link->setStatus(\Magento\Downloadable\Model\Link\Purchased\Item::LINK_STATUS_EXPIRED)->save();
+            }
+        }
+
         return $this;
     }
 
     /**
+     * Returns purchased item collection
+     *
      * @return \Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\Collection
      */
     protected function _createItemsCollection()

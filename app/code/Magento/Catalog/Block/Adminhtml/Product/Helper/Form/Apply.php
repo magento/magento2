@@ -1,19 +1,26 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Attribute form apply element
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form;
+
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
 class Apply extends \Magento\Framework\Data\Form\Element\Multiselect
 {
     /**
+     * @var SecureHtmlRenderer
+     */
+    private $secureRenderer;
+
+    /**
+     * Return html of the element.
+     *
      * @return string
      */
     public function getElementHtml()
@@ -28,12 +35,19 @@ class Apply extends \Magento\Framework\Data\Form\Element\Multiselect
             $elementAttributeHtml = $elementAttributeHtml . ' disabled="disabled"';
         }
 
-        $html = '<select onchange="toggleApplyVisibility(this)"' . $elementAttributeHtml . '>'
+        $html = '<select id="' . $this->getHtmlId() . '"' . $elementAttributeHtml . '>'
             . '<option value="0">' . $this->getModeLabels('all') . '</option>'
             . '<option value="1" ' . ($this->getValue() == null ? '' : 'selected') . '>'
             . $this->getModeLabels('custom') . '</option>' . '</select><br /><br />';
 
+        $html .= /* @noEscape */ $this->secureRenderer->renderEventListenerAsTag(
+            'onchange',
+            "toggleApplyVisibility(this)",
+            'select#' . $this->getHtmlId()
+        );
+
         $html .= parent::getElementHtml();
+
         return $html;
     }
 

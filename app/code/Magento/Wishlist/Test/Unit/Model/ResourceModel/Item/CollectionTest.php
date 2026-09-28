@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -19,6 +19,8 @@ use Magento\Framework\EntityManager\EntityMetadata;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\TestFramework\Unit\Helper\SelectRendererTrait;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use ReflectionClass;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManager;
 use Magento\Wishlist\Model\ResourceModel\Item;
@@ -32,6 +34,7 @@ use PHPUnit\Framework\TestCase;
 class CollectionTest extends TestCase
 {
     use SelectRendererTrait;
+    use MockCreationTrait;
 
     /**
      * @var Collection
@@ -54,7 +57,8 @@ class CollectionTest extends TestCase
 
     /** @var  string */
     protected $sql = "SELECT `main_table`.* FROM `testMainTableName` AS `main_table`
- INNER JOIN `testBackendTableName` AS `product_name_table` ON product_name_table.entity_id = main_table.product_id
+ INNER JOIN `testEntityTableName` AS `product_entity` ON product_entity.entity_id = main_table.product_id
+ INNER JOIN `testBackendTableName` AS `product_name_table` ON product_name_table.entity_id = product_entity.entity_id
  AND product_name_table.store_id = 1
  AND product_name_table.attribute_id = 12
  WHERE (INSTR(product_name_table.value, 'TestProductName'))";
@@ -80,11 +84,10 @@ class CollectionTest extends TestCase
             ->expects($this->any())
             ->method('select')
             ->willReturn($select);
-        $resource = $this->getMockBuilder(Item::class)
-            ->addMethods(['getTableName'])
-            ->onlyMethods(['getConnection', 'getMainTable', 'getTable'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $resource = $this->createPartialMockWithReflection(
+            Item::class,
+            ['getTableName', 'getConnection', 'getMainTable', 'getTable']
+        );
 
         $resource
             ->expects($this->any())
@@ -92,16 +95,11 @@ class CollectionTest extends TestCase
             ->willReturn($connection);
         $resource
             ->expects($this->any())
-            ->method('getMainTable')
-            ->willReturn('testMainTableName');
-        $resource
-            ->expects($this->any())
-            ->method('getTableName')
-            ->willReturn('testMainTableName');
-        $resource
-            ->expects($this->any())
             ->method('getTable')
-            ->willReturn('testMainTableName');
+            ->willReturnOnConsecutiveCalls(
+                'testMainTableName',
+                'testEntityTableName'
+            );
 
         $catalogConfFactory = $this->createPartialMock(
             ConfigFactory::class,
@@ -172,21 +170,16 @@ class CollectionTest extends TestCase
             ]
         );
 
-        $this->metadataPool = $this->getMockBuilder(MetadataPool::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->metadataPool = $this->createMock(MetadataPool::class);
 
-        $reflection = new \ReflectionClass(get_class($this->collection));
+        $reflection = new ReflectionClass(get_class($this->collection));
         $reflectionProperty = $reflection->getProperty('metadataPool');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->collection, $this->metadataPool);
     }
 
     public function testAddProductNameFilter()
     {
-        $entityMetadata = $this->getMockBuilder(EntityMetadata::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $entityMetadata = $this->createMock(EntityMetadata::class);
         $entityMetadata->expects($this->once())
             ->method('getLinkField')
             ->willReturn('entity_id');

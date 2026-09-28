@@ -1,13 +1,17 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Api;
 
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
+/**
+ * Represents CategoryLinkManagementTest Class
+ */
 class CategoryLinkManagementTest extends WebapiAbstract
 {
     const SERVICE_WRITE_NAME = 'catalogCategoryLinkManagementV1';
@@ -44,10 +48,20 @@ class CategoryLinkManagementTest extends WebapiAbstract
     }
 
     /**
-     * @param int $id category id
-     * @return string
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
      */
-    protected function getAssignedProducts($id)
+    public function testDuplicatedProductsInChildCategories()
+    {
+        $result = $this->getAssignedProducts(3, 'all');
+        $this->assertCount(3, $result);
+    }
+
+    /**
+     * @param int $id category id
+     * @param string|null $storeCode
+     * @return array|string
+     */
+    private function getAssignedProducts(int $id, ?string $storeCode = null)
     {
         $serviceInfo = [
             'rest' => [
@@ -60,6 +74,6 @@ class CategoryLinkManagementTest extends WebapiAbstract
                 'operation' => self::SERVICE_WRITE_NAME . 'GetAssignedProducts',
             ],
         ];
-        return $this->_webApiCall($serviceInfo, ['categoryId' => $id]);
+        return $this->_webApiCall($serviceInfo, ['categoryId' => $id], null, $storeCode);
     }
 }

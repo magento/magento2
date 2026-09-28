@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Eav\Model\Attribute;
@@ -68,7 +68,7 @@ class GroupRepository implements \Magento\Eav\Api\AttributeGroupRepositoryInterf
         \Magento\Eav\Api\AttributeSetRepositoryInterface $setRepository,
         \Magento\Eav\Api\Data\AttributeGroupSearchResultsInterfaceFactory $searchResultsFactory,
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor,
-        CollectionProcessorInterface $collectionProcessor = null
+        ?CollectionProcessorInterface $collectionProcessor = null
     ) {
         $this->groupResource = $groupResource;
         $this->groupListFactory = $groupListFactory;
@@ -181,7 +181,7 @@ class GroupRepository implements \Magento\Eav\Api\AttributeGroupRepositoryInterf
     /**
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return null|string
-     * @deprecated
+     * @deprecated 101.0.3
      */
     protected function retrieveAttributeSetIdFromSearchCriteria(
         \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
@@ -199,7 +199,7 @@ class GroupRepository implements \Magento\Eav\Api\AttributeGroupRepositoryInterf
     /**
      * Retrieve collection processor
      *
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      * @return CollectionProcessorInterface
      */
     private function getCollectionProcessor()

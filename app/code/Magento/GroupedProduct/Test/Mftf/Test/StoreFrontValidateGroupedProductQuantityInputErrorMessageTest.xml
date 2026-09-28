@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StoreFrontValidateGroupedProductQuantityInputErrorMessageTest">
+        <annotations>
+            <features value="GroupedProduct"/>
+            <stories value="Verify grouped product qty validation message in Storefront"/>
+            <title value="Grouped product qty validation should be displayed only on invalid qty textbox"/>
+            <description value="Grouped product qty validation should be displayed only on invalid qty textbox"/>
+            <testCaseId value="AC-13325"/>
+            <severity value="MAJOR"/>
+            <group value="GroupedProduct"/>
+        </annotations>
+        <before>
+            <createData entity="ApiProductWithDescription" stepKey="simple1"/>
+            <createData entity="ApiProductWithDescription" stepKey="simple2"/>
+            <createData entity="ApiProductWithDescription" stepKey="simple3"/>
+            <createData entity="ApiGroupedProduct" stepKey="product"/>
+            <createData entity="OneSimpleProductLink" stepKey="addProductOne">
+                <requiredEntity createDataKey="product"/>
+                <requiredEntity createDataKey="simple1"/>
+            </createData>
+            <updateData entity="OneMoreSimpleProductLink" createDataKey="addProductOne" stepKey="addProductTwo">
+                <requiredEntity createDataKey="product"/>
+                <requiredEntity createDataKey="simple2"/>
+            </updateData>
+            <updateData entity="OneMoreSimpleProductLink" createDataKey="addProductOne" stepKey="addProductThree">
+                <requiredEntity createDataKey="product"/>
+                <requiredEntity createDataKey="simple3"/>
+            </updateData>
+        </before>
+        <after>
+            <deleteData createDataKey="product" stepKey="deleteGroupedProduct"/>
+            <deleteData createDataKey="simple1" stepKey="deleteSimple1"/>
+            <deleteData createDataKey="simple2" stepKey="deleteSimple2"/>
+            <deleteData createDataKey="simple3" stepKey="deleteSimple3"/>
+        </after>
+        <actionGroup ref="StorefrontAddThreeGroupedProductToTheCartActionGroup" stepKey="enterSimpleProductsQty">
+            <argument name="urlKey" value="$$product.custom_attributes[url_key]$$" />
+            <argument name="product1" value="$simple1.name$"/>
+            <argument name="product2" value="$simple2.name$"/>
+            <argument name="product3" value="$simple3.name$"/>
+            <argument name="qty1" value="0"/>
+            <argument name="qty2" value="-10"/>
+            <argument name="qty3" value="5"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontValidateThreeGroupedProductQtyErrorMessageActionGroup" stepKey="verifyQtyInputErrorMessage">
+            <argument name="firstProductId" value="$simple1.id$"/>
+            <argument name="secondProductId" value="$simple2.id$"/>
+            <argument name="thirdProductId" value="$simple3.id$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddThreeGroupedProductToTheCartActionGroup" stepKey="enterSimpleProductsQty2">
+            <argument name="urlKey" value="$$product.custom_attributes[url_key]$$" />
+            <argument name="product1" value="$simple1.name$"/>
+            <argument name="product2" value="$simple2.name$"/>
+            <argument name="product3" value="$simple3.name$"/>
+            <argument name="qty1" value="0"/>
+            <argument name="qty2" value="0"/>
+            <argument name="qty3" value="5"/>
+        </actionGroup>
+        <see userInput="You added $$product.name$$ to your shopping cart" stepKey="seeGroupedAddedToCart"/>
+    </test>
+</tests>

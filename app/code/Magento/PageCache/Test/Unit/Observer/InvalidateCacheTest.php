@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +13,7 @@ use Magento\Framework\Event\Observer;
 use Magento\PageCache\Model\Config;
 use Magento\PageCache\Observer\InvalidateCache;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class InvalidateCacheTest extends TestCase
@@ -49,9 +49,9 @@ class InvalidateCacheTest extends TestCase
     }
 
     /**
-     * @dataProvider invalidateCacheDataProvider
      * @param bool $cacheState
      */
+    #[DataProvider('invalidateCacheDataProvider')]
     public function testExecute($cacheState)
     {
         $this->_configMock->expects($this->once())->method('isEnabled')->willReturn($cacheState);
@@ -66,7 +66,7 @@ class InvalidateCacheTest extends TestCase
     /**
      * @return array
      */
-    public function invalidateCacheDataProvider()
+    public static function invalidateCacheDataProvider()
     {
         return [[true], [false]];
     }

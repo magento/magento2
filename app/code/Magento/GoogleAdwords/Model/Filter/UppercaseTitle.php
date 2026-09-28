@@ -1,17 +1,17 @@
 <?php
 /**
- * Filter to uppercase the first character of each word in a string
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\GoogleAdwords\Model\Filter;
+
+use Laminas\Filter\FilterInterface;
 
 /**
  * @api
  * @since 100.0.2
  */
-class UppercaseTitle implements \Zend_Filter_Interface
+class UppercaseTitle implements FilterInterface
 {
     /**
      * Convert title to uppercase

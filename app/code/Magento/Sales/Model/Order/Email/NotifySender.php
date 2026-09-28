@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Sales\Model\Order\Email;
@@ -10,6 +10,7 @@ use Magento\Sales\Model\Order;
 
 /**
  * Class NotifySender
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @since 100.0.2
  */
@@ -35,7 +36,7 @@ abstract class NotifySender extends Sender
 
         if ($notify) {
             $sender->send();
-        } else {
+        } elseif ($this->identityContainer->getCopyMethod() === 'copy') {
             // Email copies are sent as separated emails if their copy method
             // is 'copy' or a customer should not be notified
             $sender->sendCopyTo();

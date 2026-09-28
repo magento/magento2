@@ -1,10 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
+
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Backend grid item renderer currency
@@ -82,7 +84,6 @@ class Currency extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
     {
         if ($data = (string)$this->_getValue($row)) {
             $currency_code = $this->_getCurrencyCode($row);
-            $data = (float)$data * $this->_getRate($row);
             $sign = (bool)(int)$this->getColumn()->getShowNumberSign() && $data > 0 ? '+' : '';
             $data = sprintf("%f", $data);
             $data = $this->_localeCurrency->getCurrency($currency_code)->toCurrency($data);
@@ -102,10 +103,29 @@ class Currency extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
         if ($code = $this->getColumn()->getCurrencyCode()) {
             return $code;
         }
-        if ($code = $row->getData($this->getColumn()->getCurrency())) {
+        $currency = $this->getColumn()->getCurrency();
+        if ($currency !== null && $code = $row->getData($currency)) {
             return $code;
         }
-
+        $storeId = $row->getData('store_id');
+        if ($storeId) {
+            try {
+                $store = $this->_storeManager->getStore($storeId);
+                // Check if the currency is set at the store level
+                $currencyCode = $store->getCurrentCurrencyCode();
+                if ($currencyCode) {
+                    return $currencyCode;
+                }
+                $website = $store->getWebsite();
+                // Check if the currency is set at the website level
+                $currencyCode = $website->getBaseCurrencyCode();
+                if ($currencyCode) {
+                    return $currencyCode;
+                }
+            } catch (NoSuchEntityException $e) {
+                $this->_logger->warning('Failed to get website currency: ' . $e->getMessage());
+            }
+        }
         return $this->_currencyLocator->getDefaultCurrency($this->_request);
     }
 
@@ -118,11 +138,25 @@ class Currency extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
     protected function _getRate($row)
     {
         if ($rate = $this->getColumn()->getRate()) {
-            return (float)$rate;
+            return (float) $rate;
         }
-        if ($rate = $row->getData($this->getColumn()->getRateField())) {
-            return (float)$rate;
+        $rateField = $this->getColumn()->getRateField();
+
+        if ($rateField !== null && $rate = $row->getData($rateField)) {
+            return (float) $rate;
         }
+
+        $storeId = $row->getData('store_id');
+        if ($storeId) {
+            try {
+                $store = $this->_storeManager->getStore($storeId);
+                return $store->getBaseCurrency()->getRate($store->getCurrentCurrencyCode());
+            } catch (NoSuchEntityException $e) {
+                $this->_logger->warning('Failed to get website currency: ' . $e->getMessage());
+            }
+
+        }
+
         return $this->_defaultBaseCurrency->getRate($this->_getCurrencyCode($row));
     }
 

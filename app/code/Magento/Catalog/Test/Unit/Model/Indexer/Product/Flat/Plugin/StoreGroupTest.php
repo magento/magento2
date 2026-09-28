@@ -1,14 +1,16 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Flat\Plugin;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Indexer\Product\Flat\Plugin\StoreGroup;
 use Magento\Catalog\Model\Indexer\Product\Flat\Processor;
+use Magento\Store\Model\Group as StoreGroupModel;
 use Magento\Store\Model\ResourceModel\Group;
 use Magento\Store\Model\Store;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -19,17 +21,22 @@ class StoreGroupTest extends TestCase
     /**
      * @var Processor|MockObject
      */
-    protected $processorMock;
+    private $processorMock;
 
     /**
      * @var Store|MockObject
      */
-    protected $storeGroupMock;
+    private $storeGroupMock;
 
     /**
      * @var MockObject
      */
-    protected $subjectMock;
+    private $subjectMock;
+
+    /**
+     * @var StoreGroup
+     */
+    private $storeGroupPlugin;
 
     protected function setUp(): void
     {
@@ -40,55 +47,54 @@ class StoreGroupTest extends TestCase
 
         $this->subjectMock = $this->createMock(Group::class);
         $this->storeGroupMock = $this->createPartialMock(
-            \Magento\Store\Model\Group::class,
+            StoreGroupModel::class,
             ['getId', 'dataHasChangedFor']
         );
+
+        $this->storeGroupPlugin = new StoreGroup($this->processorMock);
     }
 
     /**
      * @param string $matcherMethod
      * @param int|null $storeId
-     * @dataProvider storeGroupDataProvider
      */
-    public function testBeforeSave($matcherMethod, $storeId)
+    #[DataProvider('storeGroupDataProvider')]
+    public function testAfterSave(string $matcherMethod, ?int $storeId): void
     {
         $this->processorMock->expects($this->{$matcherMethod}())->method('markIndexerAsInvalid');
 
         $this->storeGroupMock->expects($this->once())->method('getId')->willReturn($storeId);
 
-        $model = new StoreGroup($this->processorMock);
-        $model->beforeSave($this->subjectMock, $this->storeGroupMock);
+        $this->assertSame(
+            $this->subjectMock,
+            $this->storeGroupPlugin->afterSave($this->subjectMock, $this->subjectMock, $this->storeGroupMock)
+        );
     }
 
     /**
      * @param string $matcherMethod
      * @param bool $websiteChanged
-     * @dataProvider storeGroupWebsiteDataProvider
      */
-    public function testChangedWebsiteBeforeSave($matcherMethod, $websiteChanged)
+    #[DataProvider('storeGroupWebsiteDataProvider')]
+    public function testAfterSaveChangedWebsite(string $matcherMethod, bool $websiteChanged): void
     {
         $this->processorMock->expects($this->{$matcherMethod}())->method('markIndexerAsInvalid');
 
         $this->storeGroupMock->expects($this->once())->method('getId')->willReturn(1);
 
-        $this->storeGroupMock->expects(
-            $this->once()
-        )->method(
-            'dataHasChangedFor'
-        )->with(
-            'root_category_id'
-        )->willReturn(
-            $websiteChanged
-        );
+        $this->storeGroupMock->expects($this->once())->method('dataHasChangedFor')
+            ->with('root_category_id')->willReturn($websiteChanged);
 
-        $model = new StoreGroup($this->processorMock);
-        $model->beforeSave($this->subjectMock, $this->storeGroupMock);
+        $this->assertSame(
+            $this->subjectMock,
+            $this->storeGroupPlugin->afterSave($this->subjectMock, $this->subjectMock, $this->storeGroupMock)
+        );
     }
 
     /**
      * @return array
      */
-    public function storeGroupWebsiteDataProvider()
+    public static function storeGroupWebsiteDataProvider(): array
     {
         return [['once', true], ['never', false]];
     }
@@ -96,7 +102,7 @@ class StoreGroupTest extends TestCase
     /**
      * @return array
      */
-    public function storeGroupDataProvider()
+    public static function storeGroupDataProvider(): array
     {
         return [['once', null], ['never', 1]];
     }

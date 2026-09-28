@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -172,6 +172,19 @@ $productsData = [
         'stock-data' => ['use_config_manage_stock' => 1, 'qty' => 22, 'is_in_stock' => 1],
         'qty' => 42,
         'categories' => ['Category 1.1.1'],
+    ],
+    [
+        'type-id' => 'simple',
+        'attribute-set-id' => $attributeSetGuardians->getId(),
+        'website-ids' => [1],
+        'name' => 'Simple Product 13',
+        'sku' => 'simple-product-13',
+        'price' => 10,
+        'visibility' => \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH,
+        'status' => \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED,
+        'stock-data' => ['use_config_manage_stock' => 1, 'qty' => 22, 'is_in_stock' => 1],
+        'qty' => 42,
+        'categories' => [],
     ],
 ];
 

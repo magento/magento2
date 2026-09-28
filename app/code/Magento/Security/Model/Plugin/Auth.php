@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Security\Model\Plugin;
 
@@ -35,6 +35,8 @@ class Auth
     }
 
     /**
+     * Add warning message if other sessions terminated
+     *
      * @param \Magento\Backend\Model\Auth $authModel
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -43,11 +45,13 @@ class Auth
     {
         $this->sessionsManager->processLogin();
         if ($this->sessionsManager->getCurrentSession()->isOtherSessionsTerminated()) {
-            $this->messageManager->addWarning(__('All other open sessions for this account were terminated.'));
+            $this->messageManager->addWarningMessage(__('All other open sessions for this account were terminated.'));
         }
     }
 
     /**
+     * Handle logout process
+     *
      * @param \Magento\Backend\Model\Auth $authModel
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)

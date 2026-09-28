@@ -1,13 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Tax\Model\Sales\Total\Quote;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Model\Quote\TotalsCollector;
-use Magento\Tax\Model\Calculation;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 require_once __DIR__ . '/SetupUtil.php';
 require_once __DIR__ . '/../../../../_files/tax_calculation_data_aggregated.php';
@@ -15,10 +17,18 @@ require_once __DIR__ . '/../../../../_files/full_discount_with_tax.php';
 
 /**
  * Class TaxTest
+ *
+ * Tests sales taxes with discounts/price rules during checkout.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class TaxTest extends \Magento\TestFramework\Indexer\TestCase
 {
+    /**
+     * @var float
+     */
+    private const EPSILON = 0.0000000001;
+
     /**
      * Utility object for setting up tax rates, tax classes and tax rules
      *
@@ -172,7 +182,7 @@ class TaxTest extends \Magento\TestFramework\Indexer\TestCase
     protected function verifyItem($item, $expectedItemData)
     {
         foreach ($expectedItemData as $key => $value) {
-            $this->assertEquals($value, $item->getData($key), 'item ' . $key . ' is incorrect');
+            $this->assertEqualsWithDelta($value, $item->getData($key), self::EPSILON, 'item ' . $key . ' is incorrect');
         }
 
         return $this;
@@ -243,7 +253,12 @@ class TaxTest extends \Magento\TestFramework\Indexer\TestCase
             if ($key == 'applied_taxes') {
                 $this->verifyAppliedTaxes($quoteAddress->getAppliedTaxes(), $value);
             } else {
-                $this->assertEquals($value, $quoteAddress->getData($key), 'Quote address ' . $key . ' is incorrect');
+                $this->assertEqualsWithDelta(
+                    $value,
+                    $quoteAddress->getData($key),
+                    self::EPSILON,
+                    'Quote address ' . $key . ' is incorrect'
+                );
             }
         }
 
@@ -283,10 +298,10 @@ class TaxTest extends \Magento\TestFramework\Indexer\TestCase
      * @param array $expectedResults
      * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
-     * @dataProvider taxDataProvider
      * @return void
      */
-    public function testTaxCalculation($configData, $quoteData, $expectedResults)
+    #[DataProvider('taxDataProvider')]
+    public function testTaxCalculation($config_data, $quote_data, $expected_results)
     {
         $db = \Magento\TestFramework\Helper\Bootstrap::getInstance()->getBootstrap()
             ->getApplication()
@@ -296,12 +311,17 @@ class TaxTest extends \Magento\TestFramework\Indexer\TestCase
         }
         $db->restoreFromDbDump();
         //Setup tax configurations
-        $this->setupUtil->setupTax($configData);
+        $this->setupUtil->setupTax($config_data);
 
-        $quote = $this->setupUtil->setupQuote($quoteData);
+        $quote = $this->setupUtil->setupQuote($quote_data);
         $quoteAddress = $quote->getShippingAddress();
         $this->totalsCollector->collectAddressTotals($quote, $quoteAddress);
-        $this->verifyResult($quoteAddress, $expectedResults);
+        $this->verifyResult($quoteAddress, $expected_results);
+
+        $skus = array_map(function ($item) {
+            return $item['sku'];
+        }, $quoteData['items'] ?? []);
+        $this->removeProducts($skus);
     }
 
     /**
@@ -310,9 +330,37 @@ class TaxTest extends \Magento\TestFramework\Indexer\TestCase
      *
      * @return array
      */
-    public function taxDataProvider()
+    public static function taxDataProvider()
     {
         global $taxCalculationData;
         return $taxCalculationData;
+    }
+
+    /**
+     * Cleanup test by removing products.
+     *
+     * @param string[] $skus
+     * @return void
+     */
+    private function removeProducts(array $skus): void
+    {
+        $objectManager = Bootstrap::getObjectManager();
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = $objectManager->create(ProductRepositoryInterface::class);
+        $registry = $objectManager->get(\Magento\Framework\Registry::class);
+        /** @var ProductRepositoryInterface $productRepository */
+        $registry->unregister('isSecureArea');
+        $registry->register('isSecureArea', true);
+
+        foreach ($skus as $sku) {
+            try {
+                $productRepository->deleteById($sku);
+            } catch (NoSuchEntityException $e) {
+                // product already deleted
+            }
+        }
+
+        $registry->unregister('isSecureArea');
+        $registry->register('isSecureArea', false);
     }
 }

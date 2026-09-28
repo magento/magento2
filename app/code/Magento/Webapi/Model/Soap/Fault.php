@@ -1,9 +1,7 @@
 <?php
 /**
- * Magento-specific SOAP fault.
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Webapi\Model\Soap;
 
@@ -126,7 +124,7 @@ class Fault
         \Magento\Framework\Webapi\Exception $exception,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         State $appState,
-        Escaper $escaper = null
+        ?Escaper $escaper = null
     ) {
         $this->_soapFaultCode = $exception->getOriginator();
         $this->_parameters = $exception->getDetails();

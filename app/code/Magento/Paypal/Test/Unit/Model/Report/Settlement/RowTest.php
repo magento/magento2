@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Paypal\Test\Unit\Model\Report\Settlement;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Paypal\Model\Report\Settlement\Row;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class RowTest extends TestCase
@@ -27,8 +28,8 @@ class RowTest extends TestCase
     /**
      * @param string $code
      * @param string $expectation
-     * @dataProvider getReferenceTypeDataProvider
      */
+    #[DataProvider('getReferenceTypeDataProvider')]
     public function testGetReferenceType($code, $expectation)
     {
         $this->assertEquals($expectation, $this->row->getReferenceType($code));
@@ -37,8 +38,8 @@ class RowTest extends TestCase
     /**
      * @param string $code
      * @param string $expectation
-     * @dataProvider getTransactionEventDataProvider
      */
+    #[DataProvider('getTransactionEventDataProvider')]
     public function testGetTransactionEvent($code, $expectation)
     {
         $this->assertEquals($expectation, $this->row->getTransactionEvent($code));
@@ -47,8 +48,8 @@ class RowTest extends TestCase
     /**
      * @param string $code
      * @param string $expectation
-     * @dataProvider getDebitCreditTextDataProvider
      */
+    #[DataProvider('getDebitCreditTextDataProvider')]
     public function testGetDebitCreditText($code, $expectation)
     {
         $this->assertEquals($expectation, $this->row->getDebitCreditText($code));
@@ -58,8 +59,8 @@ class RowTest extends TestCase
      * @param string $code
      * @param array $modelData
      * @param int $expectation
-     * @dataProvider getCastedAmountDataProvider
      */
+    #[DataProvider('getCastedAmountDataProvider')]
     public function testGetCastedAmount($code, $modelData, $expectation)
     {
         $this->row->setData($modelData);
@@ -74,7 +75,7 @@ class RowTest extends TestCase
     /**
      * @return array
      */
-    public function getReferenceTypeDataProvider()
+    public static function getReferenceTypeDataProvider()
     {
         return [
             ['ODR', __('Order ID')],
@@ -85,7 +86,7 @@ class RowTest extends TestCase
     /**
      * @return array
      */
-    public function getTransactionEventDataProvider()
+    public static function getTransactionEventDataProvider()
     {
         return [
             ['T1502', __('ACH Deposit (Hold for Dispute or Other Investigation)')],
@@ -96,7 +97,7 @@ class RowTest extends TestCase
     /**
      * @return array
      */
-    public function getDebitCreditTextDataProvider()
+    public static function getDebitCreditTextDataProvider()
     {
         return [
             ['CR', __('Credit')],
@@ -107,7 +108,7 @@ class RowTest extends TestCase
     /**
      * @return array
      */
-    public function getCastedAmountDataProvider()
+    public static function getCastedAmountDataProvider()
     {
         return [
             ['fee_amount', ['fee_amount' => 1, 'fee_debit_or_credit' => 'CR'], -1],

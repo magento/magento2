@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\ResourceModel\Product\Indexer;
 
@@ -74,9 +74,9 @@ class LinkedProductSelectBuilderByIndexPrice implements LinkedProductSelectBuild
         \Magento\Framework\App\ResourceConnection $resourceConnection,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\EntityManager\MetadataPool $metadataPool,
-        BaseSelectProcessorInterface $baseSelectProcessor = null,
-        IndexScopeResolverInterface $priceTableResolver = null,
-        DimensionFactory $dimensionFactory = null
+        ?BaseSelectProcessorInterface $baseSelectProcessor = null,
+        ?IndexScopeResolverInterface $priceTableResolver = null,
+        ?DimensionFactory $dimensionFactory = null
     ) {
         $this->storeManager = $storeManager;
         $this->resource = $resourceConnection;

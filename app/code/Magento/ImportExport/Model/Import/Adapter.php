@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\ImportExport\Model\Import;
 
@@ -9,8 +9,6 @@ use Magento\Framework\Filesystem\Directory\Write;
 
 /**
  * Import adapter model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Adapter
 {
@@ -23,7 +21,7 @@ class Adapter
      * @param mixed $options OPTIONAL Adapter constructor options
      *
      * @return AbstractSource
-     *
+     * phpcs:disable Magento2.Functions.StaticFunction
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public static function factory($type, $directory, $source, $options = null)
@@ -56,11 +54,11 @@ class Adapter
      * @param string $source Source file path.
      * @param Write $directory
      * @param mixed $options OPTIONAL Adapter constructor options
-     *
+     * phpcs:disable Magento2.Functions.StaticFunction
      * @return AbstractSource
      */
     public static function findAdapterFor($source, $directory, $options = null)
     {
-        return self::factory(pathinfo($source, PATHINFO_EXTENSION), $directory, $source, $options);
+        return self::factory(pathinfo($source, PATHINFO_EXTENSION), $directory, $source, $options); // phpcs:ignore
     }
 }

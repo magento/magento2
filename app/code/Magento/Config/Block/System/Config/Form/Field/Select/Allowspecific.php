@@ -1,18 +1,48 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * System configuration shipping methods allow all countries select
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Config\Block\System\Config\Form\Field\Select;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Data\Form\Element\CollectionFactory;
+use Magento\Framework\Data\Form\Element\Factory;
+use Magento\Framework\Escaper;
+use Magento\Framework\Math\Random;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+
 class Allowspecific extends \Magento\Framework\Data\Form\Element\Select
 {
+    /**
+     * @var SecureHtmlRenderer
+     */
+    private $secureRenderer;
+
+    /**
+     * Allowspecific constructor.
+     * @param Factory $factoryElement
+     * @param CollectionFactory $factoryCollection
+     * @param Escaper $escaper
+     * @param array $data
+     * @param SecureHtmlRenderer|null $secureRenderer
+     */
+    public function __construct(
+        Factory $factoryElement,
+        CollectionFactory $factoryCollection,
+        Escaper $escaper,
+        $data = [],
+        ?SecureHtmlRenderer $secureRenderer = null
+    ) {
+        $secureRenderer = $secureRenderer ?? ObjectManager::getInstance()->get(SecureHtmlRenderer::class);
+        parent::__construct($factoryElement, $factoryCollection, $escaper, $data, $secureRenderer);
+        $this->secureRenderer = $secureRenderer;
+    }
+
     /**
      * Add additional Javascript code
      *
@@ -25,7 +55,6 @@ class Allowspecific extends \Magento\Framework\Data\Form\Element\Select
         $useDefaultElementId = $countryListId . '_inherit';
 
         $elementJavaScript = <<<HTML
-<script type="text/javascript">
 //<![CDATA[
 document.getElementById('{$elementId}').addEventListener('change', function(event) {
     var isCountrySpecific = event.target.value == 1,
@@ -42,13 +71,15 @@ document.getElementById('{$elementId}').addEventListener('change', function(even
     }
 });
 //]]>
-</script>
 HTML;
 
-        return $elementJavaScript . parent::getAfterElementHtml();
+        return $this->secureRenderer->renderTag('script', [], $elementJavaScript, false) .
+            parent::getAfterElementHtml();
     }
 
     /**
+     * Return generated html.
+     *
      * @return string
      */
     public function getHtml()
@@ -61,10 +92,14 @@ HTML;
     }
 
     /**
+     * Return country specific element id.
+     *
      * @return string
      */
     protected function _getSpecificCountryElementId()
     {
-        return substr($this->getId(), 0, strrpos($this->getId(), 'allowspecific')) . 'specificcountry';
+        $id = $this->getId();
+        $element = $id !== null ? substr($id, 0, strrpos($id, 'allowspecific')) : '';
+        return $element . 'specificcountry';
     }
 }

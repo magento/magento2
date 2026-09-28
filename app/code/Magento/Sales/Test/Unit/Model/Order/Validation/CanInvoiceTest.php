@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,8 +11,10 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Item;
 use Magento\Sales\Model\Order\Validation\CanInvoice;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -20,6 +22,7 @@ use PHPUnit\Framework\TestCase;
  */
 class CanInvoiceTest extends TestCase
 {
+
     /**
      * @var CanInvoice|MockObject
      */
@@ -44,24 +47,23 @@ class CanInvoiceTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->orderMock = $this->getMockBuilder(OrderInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getStatus', 'getItems'])
-            ->getMockForAbstractClass();
+        $this->orderMock = $this->createPartialMock(
+            Order::class,
+            ['getStatus', 'getItems', 'getState']
+        );
 
-        $this->orderItemMock = $this->getMockBuilder(OrderItemInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getQtyToInvoice', 'getLockedDoInvoice'])
-            ->getMockForAbstractClass();
+        $this->orderItemMock = $this->createPartialMock(
+            Item::class,
+            ['getQtyToInvoice', 'getLockedDoInvoice']
+        );
 
         $this->model = new CanInvoice();
     }
 
     /**
      * @param string $state
-     *
-     * @dataProvider canInvoiceWrongStateDataProvider
      */
+    #[DataProvider('canInvoiceWrongStateDataProvider')]
     public function testCanInvoiceWrongState($state)
     {
         $this->orderMock->expects($this->any())
@@ -82,7 +84,7 @@ class CanInvoiceTest extends TestCase
      * Data provider for testCanInvoiceWrongState
      * @return array
      */
-    public function canInvoiceWrongStateDataProvider()
+    public static function canInvoiceWrongStateDataProvider()
     {
         return [
             [Order::STATE_PAYMENT_REVIEW],
@@ -112,9 +114,8 @@ class CanInvoiceTest extends TestCase
      * @param float $qtyToInvoice
      * @param bool|null $itemLockedDoInvoice
      * @param bool $expectedResult
-     *
-     * @dataProvider canInvoiceDataProvider
      */
+    #[DataProvider('canInvoiceDataProvider')]
     public function testCanInvoice($qtyToInvoice, $itemLockedDoInvoice, $expectedResult)
     {
         $this->orderMock->expects($this->any())
@@ -143,7 +144,7 @@ class CanInvoiceTest extends TestCase
      *
      * @return array
      */
-    public function canInvoiceDataProvider()
+    public static function canInvoiceDataProvider()
     {
         return [
             [0, null, [__('The order does not allow an invoice to be created.')]],

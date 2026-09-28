@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Backend\Controller\Adminhtml\System;
 
 use Magento\TestFramework\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoAppArea adminhtml
@@ -13,9 +14,9 @@ use Magento\TestFramework\Bootstrap;
 class AccountTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
-     * @dataProvider saveDataProvider
      * @magentoDbIsolation enabled
      */
+    #[DataProvider('saveDataProvider')]
     public function testSaveAction($password, $passwordConfirmation, $isPasswordChanged)
     {
         $userId = $this->_session->getUser()->getId();
@@ -70,7 +71,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
         }
     }
 
-    public function saveDataProvider()
+    public static function saveDataProvider()
     {
         $password = uniqid('123q');
         return [

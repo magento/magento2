@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Backend\Block\MenuItemChecker;
 use Magento\Backend\Model\Menu;
 use Magento\Backend\Model\Menu\Item;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class MenuItemCheckerTest extends TestCase
@@ -37,12 +38,8 @@ class MenuItemCheckerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->menuItemMock = $this->getMockBuilder(Item::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->activeMenuItemMock = $this->getMockBuilder(Item::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->menuItemMock = $this->createMock(Item::class);
+        $this->activeMenuItemMock = $this->createMock(Item::class);
         $this->menuItemChecker = new MenuItemChecker();
     }
 
@@ -51,13 +48,11 @@ class MenuItemCheckerTest extends TestCase
      * @param int $itemId
      * @param bool $isItem
      * @param bool $expected
-     * @dataProvider dataProvider
      */
+    #[DataProvider('dataProvider')]
     public function testIsItemActive($activeItemId, $itemId, $isItem, $expected)
     {
-        $this->menuMock = $this->getMockBuilder(Menu::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->menuMock = $this->createMock(Menu::class);
         $this->menuItemMock->expects($this->any())->method('getId')->willReturn($itemId);
         $this->activeMenuItemMock->expects($this->any())->method('getId')->willReturn($activeItemId);
         $this->menuItemMock->expects($this->any())->method('getChildren')->willReturn($this->menuMock);
@@ -81,7 +76,7 @@ class MenuItemCheckerTest extends TestCase
     /**
      * @return array
      */
-    public function dataProvider()
+    public static function dataProvider()
     {
         return [
             'outputItemEquals' => ['1', '1', false, true],

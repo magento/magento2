@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -37,7 +37,7 @@ class AddProductToCartTest extends GraphQlAbstract
     public function testAddProductIfQuantityIsNotAvailable()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('The requested qty is not available');
+        $this->expectExceptionMessage('Not enough items for sale');
 
         $sku = 'simple';
         $quantity = 200;

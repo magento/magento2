@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -21,6 +21,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\TranslateInterface;
 use Magento\Framework\View\DesignExceptions;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
@@ -95,28 +96,28 @@ class AreaTest extends TestCase
         $this->objectManager = new ObjectManager($this);
         $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->translatorMock = $this->getMockBuilder(TranslateInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->diConfigLoaderMock = $this->getMockBuilder(ConfigLoader::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->designMock = $this->getMockBuilder(DesignInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->scopeResolverMock = $this->getMockBuilder(ScopeResolverInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $scopeMock = $this->getMockBuilder(ScopeInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $scopeMock->expects($this->any())
             ->method('getId')
             ->willReturn(self::SCOPE_ID);
@@ -161,7 +162,7 @@ class AreaTest extends TestCase
             ->method('loadData');
         $renderMock = $this->getMockBuilder(RendererInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->objectManagerMock->expects($this->once())
             ->method('get')
             ->with(RendererInterface::class)
@@ -203,7 +204,7 @@ class AreaTest extends TestCase
             ->method('loadData');
         $renderMock = $this->getMockBuilder(RendererInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $designMock = $this->getMockBuilder(\Magento\Framework\View\DesignInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -256,12 +257,9 @@ class AreaTest extends TestCase
         $this->object->detectDesign();
     }
 
-    /**
-     * @param string|bool $value
-     * @param int $callNum
-     * @param int $callNum2
-     * @dataProvider detectDesignByRequestDataProvider
+    /**     * @param int $callNum2
      */
+    #[DataProvider('detectDesignByRequestDataProvider')]
     public function testDetectDesignByRequest($value, $callNum, $callNum2)
     {
         $this->designExceptionsMock->expects($this->once())
@@ -293,7 +291,7 @@ class AreaTest extends TestCase
     /**
      * @return array
      */
-    public function detectDesignByRequestDataProvider()
+    public static function detectDesignByRequestDataProvider()
     {
         return [
             [false, 0, 1],

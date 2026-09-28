@@ -1,14 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\SalesRule\Model\ResourceModel\Report;
 
 /**
  * Rule report resource model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Rule extends \Magento\Reports\Model\ResourceModel\Report\AbstractReport
 {
@@ -90,8 +88,9 @@ class Rule extends \Magento\Reports\Model\ResourceModel\Report\AbstractReport
      */
     public function getUniqRulesNamesList()
     {
-        $connection = $this->getConnection();
-        $tableName = $this->getTable('salesrule_coupon_aggregated');
+        $resourceModel = $this->_createdatFactory->create();
+        $connection = $resourceModel->getConnection();
+        $tableName = $resourceModel->getMainTable();
         $select = $connection->select()->from(
             $tableName,
             new \Zend_Db_Expr('DISTINCT rule_name')

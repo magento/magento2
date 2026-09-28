@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Store\Test\Unit\Model;
 use Magento\Directory\Model\CountryFactory;
 use Magento\Directory\Model\RegionFactory;
 use Magento\Framework\DataObject;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Store\Model\Address\Renderer;
 use Magento\Store\Model\Information;
 use Magento\Store\Model\Store;
@@ -18,6 +19,8 @@ use PHPUnit\Framework\TestCase;
 
 class InformationTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Information
      */
@@ -76,7 +79,7 @@ class InformationTest extends TestCase
 
         $this->renderer = $this->getMockBuilder(Renderer::class)
             ->disableOriginalConstructor()
-            ->setMethods(['format'])
+            ->onlyMethods(['format'])
             ->getMock();
 
         $this->renderer->expects($this->once())
@@ -85,20 +88,20 @@ class InformationTest extends TestCase
                 return implode("\n", $storeInfo->getData());
             });
 
-        $region = $this->getMockBuilder(DataObject::class)
-            ->addMethods(['load', 'getName'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $region = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['load', 'getName']
+        );
         $region->expects($this->once())->method('load')->willReturnSelf();
         $region->expects($this->once())->method('getName')->willReturn('Rohan');
 
         $this->regionFactory = $this->createMock(RegionFactory::class);
         $this->regionFactory->expects($this->once())->method('create')->willReturn($region);
 
-        $country = $this->getMockBuilder(DataObject::class)
-            ->addMethods(['loadByCode', 'getName'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $country = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['loadByCode', 'getName']
+        );
         $country->expects($this->once())->method('loadByCode')->with('ED')->willReturnSelf();
         $country->expects($this->once())->method('getName')->willReturn('Edoras');
 

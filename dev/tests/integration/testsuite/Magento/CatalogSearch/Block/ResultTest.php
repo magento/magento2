@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CatalogSearch\Block;
 
@@ -12,6 +12,8 @@ use Magento\Framework\View\Element\Text;
 use Magento\Framework\View\LayoutInterface;
 use Magento\Search\Model\QueryFactory;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Search\ViewModel\ConfigProvider;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ResultTest extends \PHPUnit\Framework\TestCase
 {
@@ -26,15 +28,26 @@ class ResultTest extends \PHPUnit\Framework\TestCase
     private $layout;
 
     /**
+     * @var ConfigProvider
+     */
+    private $configProvider;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->layout = $this->objectManager->get(LayoutInterface::class);
+        $this->configProvider = $this->objectManager->get(ConfigProvider::class);
     }
 
-    public function testSetListOrders()
+    /**
+     * Set list orders test
+     *
+     * @return void
+     */
+    public function testSetListOrders(): void
     {
         $this->layout->addBlock(Text::class, 'head');
         // The tested block is using head block
@@ -48,20 +61,30 @@ class ResultTest extends \PHPUnit\Framework\TestCase
     /**
      * Verify search value escaping process
      *
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
-     * @dataProvider toEscapeSearchTextDataProvider
      * @magentoAppArea frontend
      * @param string $searchValue
      * @param string $expectedOutput
      * @param string $unexpectedOutput
      * @return void
      */
+    #[DataProvider('toEscapeSearchTextDataProvider')]
     public function testEscapeSearchText(string $searchValue, string $expectedOutput, string $unexpectedOutput): void
     {
         /** @var Result $searchResultBlock */
         $searchResultBlock = $this->layout->createBlock(Result::class);
         /** @var Template $searchBlock */
+        $searchQueryParams = $this->getMockBuilder(\Magento\Search\ViewModel\AdditionalSearchFormData::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getFormData'])
+            ->getMock();
+        $searchQueryParams->expects($this->any())
+            ->method('getFormData')
+            ->willReturn([]);
         $searchBlock = $this->layout->createBlock(Template::class);
+        $searchBlock->setData([
+            'configProvider' => $this->configProvider,
+            'additionalSearchFormData' => $searchQueryParams,
+        ]);
         $searchBlock->setTemplate('Magento_Search::form.mini.phtml');
         /** @var RequestInterface $request */
         $request = $this->objectManager->get(RequestInterface::class);
@@ -82,7 +105,7 @@ class ResultTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function toEscapeSearchTextDataProvider(): array
+    public static function toEscapeSearchTextDataProvider(): array
     {
         return [
             'less_than_sign_escaped' => ['<', '&lt;', '&amp;lt&#x3B;'],

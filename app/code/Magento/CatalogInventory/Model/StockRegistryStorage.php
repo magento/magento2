@@ -1,18 +1,16 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CatalogInventory\Model;
 
 use Magento\CatalogInventory\Api\Data\StockInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\Data\StockStatusInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
-/**
- * Class StockRegistryStorage
- */
-class StockRegistryStorage
+class StockRegistryStorage implements ResetAfterRequestInterface
 {
     /**
      * @var array
@@ -30,6 +28,8 @@ class StockRegistryStorage
     private $stockStatuses = [];
 
     /**
+     * Get Stock Data
+     *
      * @param int $scopeId
      * @return StockInterface
      */
@@ -39,6 +39,8 @@ class StockRegistryStorage
     }
 
     /**
+     * Set Stock cache
+     *
      * @param int $scopeId
      * @param StockInterface $value
      * @return void
@@ -49,6 +51,8 @@ class StockRegistryStorage
     }
 
     /**
+     * Delete cached Stock based on scopeId
+     *
      * @param int|null $scopeId
      * @return void
      */
@@ -62,16 +66,22 @@ class StockRegistryStorage
     }
 
     /**
-     * @param int $productId
-     * @param int $scopeId
+     * Retrieve Stock Item
+     *
+     * @param int|null $productId
+     * @param int|null $scopeId
      * @return StockItemInterface
      */
-    public function getStockItem($productId, $scopeId)
+    public function getStockItem(?int $productId, ?int $scopeId)
     {
+        $productId= $productId ?? '';
+        $scopeId= $scopeId ?? '';
         return $this->stockItems[$productId][$scopeId] ?? null;
     }
 
     /**
+     * Update Stock Item
+     *
      * @param int $productId
      * @param int $scopeId
      * @param StockItemInterface $value
@@ -83,6 +93,8 @@ class StockRegistryStorage
     }
 
     /**
+     * Remove stock Item based on productId & scopeId
+     *
      * @param int $productId
      * @param int|null $scopeId
      * @return void
@@ -97,16 +109,22 @@ class StockRegistryStorage
     }
 
     /**
-     * @param int $productId
-     * @param int $scopeId
+     * Retrieve stock status
+     *
+     * @param int|null $productId
+     * @param int|null $scopeId
      * @return StockStatusInterface
      */
-    public function getStockStatus($productId, $scopeId)
+    public function getStockStatus(?int $productId, ?int $scopeId)
     {
+        $productId = $productId ?? '';
+        $scopeId = $scopeId ?? '';
         return $this->stockStatuses[$productId][$scopeId] ?? null;
     }
 
     /**
+     * Update stock Status
+     *
      * @param int $productId
      * @param int $scopeId
      * @param StockStatusInterface $value
@@ -118,6 +136,8 @@ class StockRegistryStorage
     }
 
     /**
+     * Clear stock status
+     *
      * @param int $productId
      * @param int|null $scopeId
      * @return void
@@ -141,5 +161,13 @@ class StockRegistryStorage
         $this->stockItems = [];
         $this->stocks = [];
         $this->stockStatuses = [];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function _resetState(): void
+    {
+        $this->clean();
     }
 }

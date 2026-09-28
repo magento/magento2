@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -36,7 +36,7 @@ class JsonTest extends TestCase
         /** Prepare mocks for SUT constructor. */
         $this->decoderMock = $this->getMockBuilder(Decoder::class)
             ->disableOriginalConstructor()
-            ->setMethods(['decode'])
+            ->onlyMethods(['decode'])
             ->getMock();
         $this->_appStateMock = $this->createMock(
             State::class

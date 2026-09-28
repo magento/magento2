@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\EntityManager;
@@ -46,7 +46,6 @@ class MetadataPool
      * @param ObjectManagerInterface $objectManager
      * @param SequenceFactory $sequenceFactory
      * @param array $metadata
-     * @since 100.1.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager,

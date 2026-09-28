@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Cms\Setup;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ContentConverterTest extends \Magento\TestFramework\TestCase\AbstractController
 {
@@ -20,14 +22,14 @@ class ContentConverterTest extends \Magento\TestFramework\TestCase\AbstractContr
     /**
      * @param string $value
      * @param string $expected
-     * @dataProvider convertDataProvider
      */
+    #[DataProvider('convertDataProvider')]
     public function testConvert($value, $expected)
     {
         $this->assertEquals($expected, $this->converter->convert($value));
     }
 
-    public function convertDataProvider()
+    public static function convertDataProvider()
     {
         // @codingStandardsIgnoreStart
         $someContent = '<div class="content-heading">

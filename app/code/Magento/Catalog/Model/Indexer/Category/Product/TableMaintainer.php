@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -35,11 +35,15 @@ class TableMaintainer
 
     /**
      * Catalog tmp category index table name
+     *
+     * @var string
      */
     private $tmpTableSuffix = '_tmp';
 
     /**
      * Catalog tmp category index table name
+     *
+     * @var string
      */
     private $additionalTableSuffix = '_replica';
 
@@ -71,6 +75,16 @@ class TableMaintainer
             $this->connection = $this->resource->getConnection();
         }
         return $this->connection;
+    }
+
+    /**
+     * Expose connection so callers can use the same adapter instance that created temporary tables.
+     *
+     * @return AdapterInterface
+     */
+    public function getSameAdapterConnection(): AdapterInterface
+    {
+        return $this->getConnection();
     }
 
     /**
@@ -120,7 +134,7 @@ class TableMaintainer
     /**
      * Return main index table name
      *
-     * @param $storeId
+     * @param int $storeId
      *
      * @return string
      */
@@ -134,7 +148,7 @@ class TableMaintainer
     /**
      * Create main and replica index tables for store
      *
-     * @param $storeId
+     * @param int $storeId
      *
      * @return void
      *
@@ -161,7 +175,7 @@ class TableMaintainer
     /**
      * Drop main and replica index tables for store
      *
-     * @param $storeId
+     * @param int $storeId
      *
      * @return void
      */
@@ -177,7 +191,7 @@ class TableMaintainer
     /**
      * Return replica index table name
      *
-     * @param $storeId
+     * @param int $storeId
      *
      * @return string
      */
@@ -189,7 +203,7 @@ class TableMaintainer
     /**
      * Create temporary index table for store
      *
-     * @param $storeId
+     * @param int $storeId
      *
      * @return void
      */
@@ -206,7 +220,7 @@ class TableMaintainer
     /**
      * Return temporary index table name
      *
-     * @param $storeId
+     * @param int $storeId
      *
      * @return string
      *
@@ -215,7 +229,7 @@ class TableMaintainer
     public function getMainTmpTable(int $storeId)
     {
         if (!isset($this->mainTmpTable[$storeId])) {
-            throw new \Magento\Framework\Exception\NoSuchEntityException('Temporary table does not exist');
+            throw new \Magento\Framework\Exception\NoSuchEntityException(__('Temporary table does not exist'));
         }
         return $this->mainTmpTable[$storeId];
     }

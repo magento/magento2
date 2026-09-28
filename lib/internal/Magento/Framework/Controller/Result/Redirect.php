@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Controller\Result;
@@ -17,6 +17,7 @@ use Magento\Framework\UrlInterface;
  * so this is a result object that implements all necessary properties of a HTTP redirect
  *
  * @api
+ * @since 100.0.2
  */
 class Redirect extends AbstractResult
 {

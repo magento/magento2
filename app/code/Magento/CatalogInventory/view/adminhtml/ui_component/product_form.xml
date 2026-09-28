@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 -->
 <form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
@@ -293,7 +293,7 @@
                         <scopeLabel>[GLOBAL]</scopeLabel>
                         <validation>
                             <rule name="validate-number" xsi:type="boolean">true</rule>
-                            <rule name="validate-greater-than-zero" xsi:type="boolean">true</rule>
+                            <rule name="validate-nonempty-number-greater-than-zero" xsi:type="boolean">true</rule>
                         </validation>
                         <label translate="true">Maximum Qty Allowed in Shopping Cart</label>
                         <dataScope>max_sale_qty</dataScope>
@@ -355,7 +355,15 @@
                     </select>
                 </formElements>
             </field>
-            <field name="is_decimal_divided" sortOrder="700" formElement="select">
+            <container name="container_is_decimal_divided" component="Magento_Ui/js/form/components/group" sortOrder="700">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="imports" xsi:type="array">
+                        <item name="visible" xsi:type="string">${$.provider}:data.product.stock_data.is_qty_decimal</item>
+                    </item>
+                </item>
+            </argument>
+            <field name="is_decimal_divided" formElement="select">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="value" xsi:type="number">0</item>
@@ -377,6 +385,7 @@
                     </select>
                 </formElements>
             </field>
+            </container>
             <container name="container_backorders" component="Magento_Ui/js/form/components/group" sortOrder="800">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">

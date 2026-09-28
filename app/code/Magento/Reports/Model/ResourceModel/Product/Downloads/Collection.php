@@ -1,15 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Reports\Model\ResourceModel\Product\Downloads;
 
 /**
  * Product Downloads Report collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  *
  * @api
  * @since 100.0.2
@@ -100,11 +98,12 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
     /**
      * @inheritDoc
+     * @since 100.3.2
      */
     public function getSelectCountSql()
     {
         $countSelect = parent::getSelectCountSql();
-        $countSelect->reset(\Laminas\Db\Sql\Select::GROUP);
+        $countSelect->reset(\PhpDb\Sql\Select::GROUP);
         return $countSelect;
     }
 }

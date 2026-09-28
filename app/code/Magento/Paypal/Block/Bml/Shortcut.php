@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Paypal\Block\Bml;
@@ -103,7 +103,7 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
         $bmlMethodCode,
         $shortcutTemplate,
         array $data = [],
-        ConfigFactory $config = null
+        ?ConfigFactory $config = null
     ) {
         $this->_paymentData = $paymentData;
         $this->_mathRandom = $mathRandom;

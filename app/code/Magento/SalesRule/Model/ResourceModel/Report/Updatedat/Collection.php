@@ -1,14 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\SalesRule\Model\ResourceModel\Report\Updatedat;
 
 /**
  * Sales report coupons collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Collection extends \Magento\SalesRule\Model\ResourceModel\Report\Collection
 {

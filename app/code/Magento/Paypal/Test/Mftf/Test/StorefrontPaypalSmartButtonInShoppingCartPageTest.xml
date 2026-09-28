@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -16,11 +16,10 @@
             <description value="Users are able to perform PayPal Express Checkout method using PayPal Smart Button on Shopping Cart, payment action is Sale, make sure checkout as guest is not available"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-27605"/>
-            <skip>
-                <issueId value="MC-33951"/>
-            </skip>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
+            <magentoCLI command="config:set carriers/flatrate/sallowspecific 0" stepKey="setFlatRateForAllCountries"/>
             <!-- Login -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
 
@@ -58,6 +57,7 @@
             <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>
 
             <!--Delete Customer -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData stepKey="deleteCustomer" createDataKey="createCustomer"/>
 
             <!-- Logout -->
@@ -68,7 +68,7 @@
             <argument name="Customer" value="$$createCustomer$$"/>
         </actionGroup>
 
-        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="navigateToCategoryPage"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.custom_attributes[url_key]$$)}}" stepKey="navigateToCategoryPage"/>
         <actionGroup ref="StorefrontAddProductToCartFromCategoryActionGroup" stepKey="addProductToCart">
             <argument name="productName" value="$$createProduct.name$$"/>
         </actionGroup>
@@ -82,19 +82,13 @@
         </actionGroup>
 
         <!--Login to Paypal in-context-->
-        <actionGroup ref="StorefrontLoginToPayPalPaymentFromCartAccountActionGroup" stepKey="LoginToPayPal">
-            <argument name="payerName" value="{{Payer.firstName}}"/>
-        </actionGroup>
+        <actionGroup ref="StorefrontLoginToPayPalPaymentAccountTwoStepActionGroup" stepKey="LoginToPayPal"/>
 
         <!--Transfer Cart Line and Shipping Method assertion-->
-        <actionGroup ref="PayPalAssertTransferLineAndShippingMethodActionGroup" stepKey="assertPayPalSettings">
-            <argument name="productName" value="$$createProduct.name$$"/>
-        </actionGroup>
+        <actionGroup ref="PayPalAssertTransferLineAndShippingMethodActionGroup" stepKey="assertPayPalSettings"/>
 
         <!--Click PayPal button and go back to Magento site-->
-        <actionGroup ref="StorefrontPaypalSwitchBackToMagentoActionGroup" stepKey="goBackToMagentoSite"/>
-
-        <actionGroup ref="StorefrontSelectShippingMethodOnOrderReviewPageActionGroup" stepKey="selectShippingMethod"/>
+        <actionGroup ref="StorefrontPaypalSwitchBackToMagentoFromCheckoutPageActionGroup" stepKey="goBackToMagentoSite"/>
 
         <!--Assert grand total-->
         <actionGroup ref="StorefrontAssertOrderReviewSummaryWithTaxActionGroup" stepKey="verifyCheckoutPaymentOrderSummary">
@@ -110,9 +104,11 @@
         <!-- I see order successful Page instead of Order Review Page -->
         <actionGroup ref="AssertStorefrontCheckoutSuccessActionGroup" stepKey="assertCheckoutSuccess"/>
 
-        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="getOrderNumber"/>
-        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="addFilterToGridAndOpenOrder">
-            <argument name="orderId" value="{$getOrderNumber}"/>
+        <actionGroup ref="StorefrontClickOrderLinkFromCheckoutSuccessPageActionGroup" stepKey="clickOrderLink"/>
+        <comment userInput="BIC workaround" stepKey="getOrderNumber"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="orderId"/>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="addFilterToGridAndOpenOrder">
+            <argument name="entityId" value="{$orderId}"/>
         </actionGroup>
         <actionGroup ref="AdminAssertNoAuthorizeButtonOnOrderPageActionGroup" stepKey="dontSeeOrderWaitingForAuthorize"/>
         <actionGroup ref="AdminOrderViewCheckStatusActionGroup" stepKey="checkOrderStatus">

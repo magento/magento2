@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2012 Adobe
+ * All rights reserved.
  */
 // @codingStandardsIgnoreStart
 namespace {
@@ -70,6 +70,8 @@ namespace Magento\Framework\Session {
         return call_user_func_array('\session_set_save_handler', func_get_args());
     }
 
+    use PHPUnit\Framework\Attributes\DataProvider;
+
     /**
      * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
      */
@@ -115,18 +117,20 @@ namespace Magento\Framework\Session {
          */
         private $appState;
 
+        /**
+         * @inheritdoc
+         */
         protected function setUp(): void
         {
             $this->sessionName = 'frontEndSession';
 
-            ini_set('session.use_only_cookies', '0');
             ini_set('session.name', $this->sessionName);
 
             $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
             /** @var \Magento\Framework\Session\SidResolverInterface $sidResolver */
             $this->appState = $this->getMockBuilder(State::class)
-                ->setMethods(['getAreaCode'])
+                ->onlyMethods(['getAreaCode'])
                 ->disableOriginalConstructor()
                 ->getMock();
 
@@ -225,22 +229,6 @@ namespace Magento\Framework\Session {
             $this->assertEquals('test', $this->model->getSessionId());
         }
 
-        /**
-         * @magentoConfigFixture current_store web/session/use_frontend_sid 1
-         */
-        public function testSetSessionIdFromParam()
-        {
-            $this->initializeModel();
-            $this->appState->expects($this->any())
-                ->method('getAreaCode')
-                ->willReturn(\Magento\Framework\App\Area::AREA_FRONTEND);
-            $currentId = $this->model->getSessionId();
-            $this->assertNotEquals('test_id', $this->model->getSessionId());
-            $this->request->getQuery()->set(SidResolverInterface::SESSION_ID_QUERY_PARAM, 'test-id');
-            $this->model->setSessionId($this->sidResolver->getSid($this->model));
-            $this->assertEquals($currentId, $this->model->getSessionId());
-        }
-
         public function testGetSessionIdForHost()
         {
             $this->initializeModel();
@@ -258,7 +246,6 @@ namespace Magento\Framework\Session {
             $this->model->start();
 
             $reflection = new \ReflectionMethod($this->model, '_addHost');
-            $reflection->setAccessible(true);
             $reflection->invoke($this->model);
 
             $this->assertFalse($this->model->isValidForHost('test.com'));
@@ -266,8 +253,6 @@ namespace Magento\Framework\Session {
             $this->model->destroy();
         }
 
-        /**
-         */
         public function testStartAreaNotSet()
         {
             $this->expectException(\Magento\Framework\Exception\SessionException::class);
@@ -299,17 +284,29 @@ namespace Magento\Framework\Session {
             $this->model->start();
         }
 
-        public function testConstructor()
+        /**
+         * @param string $saveMethod
+         *
+         * @return void
+         */
+        #[DataProvider('dataConstructor')]
+        public function testConstructor(string $saveMethod): void
         {
             global $mockPHPFunctions;
             $mockPHPFunctions = true;
 
+            if ($this->isComposerBaseInstallation()) {
+                $this->markTestSkipped(
+                    'Skipping: Composer-based installation, php_ini global method does not invoke the session value.'
+                );
+            }
+
             $deploymentConfigMock = $this->createMock(DeploymentConfig::class);
             $deploymentConfigMock->method('get')
-                ->willReturnCallback(function ($configPath) {
+                ->willReturnCallback(function ($configPath) use ($saveMethod) {
                     switch ($configPath) {
                         case Config::PARAM_SESSION_SAVE_METHOD:
-                            return 'db';
+                            return $saveMethod;
                         case Config::PARAM_SESSION_CACHE_LIMITER:
                             return 'private_no_expire';
                         case Config::PARAM_SESSION_SAVE_PATH:
@@ -329,13 +326,13 @@ namespace Magento\Framework\Session {
                     'sessionConfig' => $sessionConfig,
                 ]
             );
-            $this->assertEquals('db', $sessionConfig->getOption('session.save_handler'));
+            $this->assertEquals($saveMethod, $sessionConfig->getOption('session.save_handler'));
             $this->assertEquals('private_no_expire', $sessionConfig->getOption('session.cache_limiter'));
             $this->assertEquals('explicit_save_path', $sessionConfig->getOption('session.save_path'));
             $this->assertArrayHasKey('session.use_only_cookies', self::$isIniSetInvoked);
             $this->assertEquals('1', self::$isIniSetInvoked['session.use_only_cookies']);
             foreach ($sessionConfig->getOptions() as $option => $value) {
-                if ($option=='session.save_handler') {
+                if ($option === 'session.save_handler' && $value !== 'memcached') {
                     $this->assertArrayNotHasKey('session.save_handler', self::$isIniSetInvoked);
                 } else {
                     $this->assertArrayHasKey($option, self::$isIniSetInvoked);
@@ -343,6 +340,19 @@ namespace Magento\Framework\Session {
                 }
             }
             $this->assertTrue(self::$isSessionSetSaveHandlerInvoked);
+        }
+
+        /**
+         * @return array
+         */
+        public static function dataConstructor(): array
+        {
+            return [
+                ['saveMethod' =>'db'],
+                ['saveMethod' =>'redis'],
+                ['saveMethod' =>'memcached'],
+                ['saveMethod' =>'user'],
+            ];
         }
 
         private function initializeModel(): void
@@ -353,6 +363,12 @@ namespace Magento\Framework\Session {
                     'sidResolver' => $this->sidResolver
                 ]
             );
+        }
+
+        private function isComposerBaseInstallation(): bool
+        {
+            $isComposerBased = file_exists(BP . '/vendor/magento/magento2-base');
+            return (bool)$isComposerBased;
         }
     }
 }

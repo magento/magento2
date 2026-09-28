@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,7 +13,7 @@ use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
  * bundled items should not contain products with required custom options.
  * However, if to create such a bundle product, it will be always out of stock.
  */
-Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/products.php');
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/products_rollback.php');
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 /** @var \Magento\Framework\Registry $registry */

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -85,9 +85,9 @@ class InputParamsResolverTest extends TestCase
 
         $this->route = $this->createPartialMock(Route::class, ['getServiceMethod', 'getServiceClass']);
         $this->request = $this->createPartialMock(RestRequest::class, ['getBodyParams']);
-        $this->request->expects($this->any())->method('getBodyParams')->willReturn($this->requestBodyParams);
+        $this->request->method('getBodyParams')->willReturn($this->requestBodyParams);
         $this->subject = $this->createPartialMock(InputParamsResolver::class, ['getRoute']);
-        $this->subject->expects($this->any())->method('getRoute')->willReturn($this->route);
+        $this->subject->method('getRoute')->willReturn($this->route);
         $this->product = $this->createPartialMock(Product::class, ['setData']);
 
         $this->result = [false, $this->product, 'test'];

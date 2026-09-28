@@ -1,22 +1,22 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
-/**
- * Catalog Custom Options Config Renderer
- *
- * @author     Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Catalog\Block\Adminhtml\Form\Renderer\Config;
 
 use Magento\Config\Block\System\Config\Form\Field;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 
+/**
+ * Catalog Custom Options Config Renderer
+ */
 class YearRange extends Field
 {
     /**
+     * Return the HTML for this element
+     *
      * @param AbstractElement $element
      * @return string
      */

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\InstantPurchase\Model\Ui;
 
@@ -12,6 +12,7 @@ use Magento\Vault\Api\Data\PaymentTokenInterface;
  * Payment token string presentation.
  *
  * @api May be used for pluginization.
+ * @since 100.2.0
  */
 class PaymentTokenFormatter
 {
@@ -34,6 +35,7 @@ class PaymentTokenFormatter
      *
      * @param PaymentTokenInterface $paymentToken
      * @return string
+     * @since 100.2.0
      */
     public function format(PaymentTokenInterface $paymentToken): string
     {

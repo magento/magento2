@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Config\Model\Config\Source\Email;
 
@@ -60,10 +60,12 @@ class Template extends \Magento\Framework\DataObject implements \Magento\Framewo
             $this->_coreRegistry->register('config_system_email_template', $collection);
         }
         $options = $collection->toOptionArray();
-        $templateId = str_replace('/', '_', $this->getPath());
-        $templateLabel = $this->_emailConfig->getTemplateLabel($templateId);
-        $templateLabel = __('%1 (Default)', $templateLabel);
-        array_unshift($options, ['value' => $templateId, 'label' => $templateLabel]);
+        if (!empty($this->getPath())) {
+            $templateId = str_replace('/', '_', $this->getPath());
+            $templateLabel = $this->_emailConfig->getTemplateLabel($templateId);
+            $templateLabel = __('%1 (Default)', $templateLabel);
+            array_unshift($options, ['value' => $templateId, 'label' => $templateLabel]);
+        }
         return $options;
     }
 }

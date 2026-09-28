@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,10 +12,12 @@ use Magento\Eav\Model\Entity\AbstractEntity;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\DataObject;
 use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class BillingTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Billing
      */
@@ -23,18 +25,15 @@ class BillingTest extends TestCase
 
     protected function setUp(): void
     {
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->getMock();
-        /** @var LoggerInterface $logger */
-        $this->testable = new Billing($logger);
+        $this->testable = new Billing();
     }
 
     public function testBeforeSave()
     {
-        $object = $this->getMockBuilder(DataObject::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getDefaultBilling', 'unsetDefaultBilling'])
-            ->getMock();
+        $object = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['getDefaultBilling', 'unsetDefaultBilling']
+        );
 
         $object->expects($this->once())->method('getDefaultBilling')->willReturn(null);
         $object->expects($this->once())->method('unsetDefaultBilling')->willReturnSelf();
@@ -47,25 +46,31 @@ class BillingTest extends TestCase
         $addressId = 1;
         $attributeCode = 'attribute_code';
         $defaultBilling = 'default billing address';
-        $object = $this->getMockBuilder(DataObject::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getDefaultBilling', 'getAddresses', 'setDefaultBilling'])
-            ->getMock();
+        $object = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['getDefaultBilling', 'getAddresses', 'setDefaultBilling']
+        );
 
-        $address = $this->getMockBuilder(DataObject::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getPostIndex', 'getId'])
-            ->getMock();
+        $address = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['getPostIndex', 'getId']
+        );
 
-        $attribute = $this->getMockBuilder(AbstractAttribute::class)
-            ->setMethods(['__wakeup', 'getEntity', 'getAttributeCode'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $attribute = $this->createPartialMock(
+            AbstractAttribute::class,
+            [
+                '__wakeup',
+                'getEntity',
+                'getAttributeCode'
+            ]
+        );
 
-        $entity = $this->getMockBuilder(AbstractEntity::class)
-            ->setMethods(['saveAttribute'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $entity = $this->createPartialMock(
+            AbstractEntity::class,
+            [
+                'saveAttribute'
+            ]
+        );
 
         $attribute->expects($this->once())->method('getEntity')->willReturn($entity);
         $attribute->expects($this->once())->method('getAttributeCode')->willReturn($attributeCode);

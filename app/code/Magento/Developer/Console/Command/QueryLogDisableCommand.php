@@ -1,29 +1,25 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Developer\Console\Command;
 
+use InvalidArgumentException;
+use Magento\Framework\App\DeploymentConfig\Writer;
+use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Framework\Console\Cli;
+use Magento\Framework\DB\Logger\LoggerProxy;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Framework\App\DeploymentConfig\Writer;
-use Magento\Framework\Config\File\ConfigFilePool;
-use Magento\Framework\DB\Logger\LoggerProxy;
 
 class QueryLogDisableCommand extends Command
 {
-    /**
-     * command name
-     */
-    const COMMAND_NAME = 'dev:query-log:disable';
+    public const COMMAND_NAME = 'dev:query-log:disable';
 
-    /**
-     * Success message
-     */
-    const SUCCESS_MESSAGE = "DB query logging disabled.";
+    public const SUCCESS_MESSAGE = "DB query logging disabled.";
 
     /**
      * @var Writer
@@ -33,7 +29,7 @@ class QueryLogDisableCommand extends Command
     /**
      * QueryLogDisableCommand constructor.
      * @param Writer $deployConfigWriter
-     * @param null $name
+     * @param ?string $name
      */
     public function __construct(
         Writer $deployConfigWriter,
@@ -44,7 +40,7 @@ class QueryLogDisableCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -55,14 +51,17 @@ class QueryLogDisableCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
-     * @throws \InvalidArgumentException
+     * @inheritdoc
+     *
+     * @throws InvalidArgumentException
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $data = [LoggerProxy::PARAM_ALIAS => LoggerProxy::LOGGER_ALIAS_DISABLED];
         $this->deployConfigWriter->saveConfig([ConfigFilePool::APP_ENV => [LoggerProxy::CONF_GROUP_NAME => $data]]);
 
         $output->writeln("<info>". self::SUCCESS_MESSAGE . "</info>");
+
+        return Cli::RETURN_SUCCESS;
     }
 }

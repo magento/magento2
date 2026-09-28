@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,9 @@ namespace Magento\TestFramework\Workaround\Override\Fixture\Applier;
 abstract class Base implements ApplierInterface
 {
     /** @var array */
+    private $globalConfig;
+
+    /** @var array */
     private $classConfig;
 
     /** @var array */
@@ -20,6 +23,27 @@ abstract class Base implements ApplierInterface
 
     /** @var array */
     private $dataSetConfig;
+
+    /**
+     * Get global node config
+     *
+     * @return array
+     */
+    public function getGlobalConfig(): array
+    {
+        return $this->globalConfig;
+    }
+
+    /**
+     * Set global node config
+     *
+     * @param array $globalConfig
+     * @return void
+     */
+    public function setGlobalConfig(array $globalConfig): void
+    {
+        $this->globalConfig = $globalConfig;
+    }
 
     /**
      * Get class node config
@@ -92,6 +116,7 @@ abstract class Base implements ApplierInterface
     protected function getPrioritizedConfig(): array
     {
         return [
+            $this->getGlobalConfig(),
             $this->getClassConfig(),
             $this->getMethodConfig(),
             $this->getDataSetConfig(),

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\App\Config;
 
@@ -24,6 +24,7 @@ namespace Magento\Framework\App\Config;
  * @api
  *
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @since 100.0.2
  */
 class Value extends \Magento\Framework\Model\AbstractModel implements \Magento\Framework\App\Config\ValueInterface
 {
@@ -67,8 +68,8 @@ class Value extends \Magento\Framework\Model\AbstractModel implements \Magento\F
         \Magento\Framework\Registry $registry,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_config = $config;
@@ -93,11 +94,16 @@ class Value extends \Magento\Framework\Model\AbstractModel implements \Magento\F
      */
     public function getOldValue()
     {
-        return (string)$this->_config->getValue(
+        $oldValue = $this->_config->getValue(
             $this->getPath(),
             $this->getScope() ?: ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
             $this->getScopeCode()
         );
+
+        if (is_array($oldValue)) {
+            return json_encode($oldValue);
+        }
+        return (string)$oldValue;
     }
 
     /**
@@ -134,6 +140,7 @@ class Value extends \Magento\Framework\Model\AbstractModel implements \Magento\F
      * {@inheritdoc}. In addition, it sets status 'invalidate' for config caches
      *
      * @return $this
+     * @since 100.1.0
      */
     public function afterDelete()
     {

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Block\Product\View;
 
@@ -9,7 +9,7 @@ namespace Magento\Catalog\Block\Product\View;
  * Product view abstract block
  *
  * @api
- * @deprecated 101.1.0
+ * @deprecated 102.0.0
  * @since 100.0.2
  */
 abstract class AbstractView extends \Magento\Catalog\Block\Product\AbstractProduct

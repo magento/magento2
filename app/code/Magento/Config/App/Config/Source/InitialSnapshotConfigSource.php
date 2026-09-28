@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Config\App\Config\Source;
 
@@ -12,7 +12,7 @@ use Magento\Framework\FlagManager;
 /**
  * The source with previously imported configuration.
  * @api
- * @since 100.2.0
+ * @since 101.0.0
  */
 class InitialSnapshotConfigSource implements ConfigSourceInterface
 {
@@ -45,7 +45,7 @@ class InitialSnapshotConfigSource implements ConfigSourceInterface
      * Snapshots are stored in flags.
      *
      * {@inheritdoc}
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function get($path = '')
     {

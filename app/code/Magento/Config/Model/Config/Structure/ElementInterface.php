@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Config\Model\Config\Structure;
 
@@ -10,7 +10,7 @@ use Magento\Config\Model\Config\StructureElementInterface;
 /**
  * @api
  * @since 100.0.2
- * @deprecated
+ * @deprecated 101.1.0
  * @see StructureElementInterface
  */
 interface ElementInterface

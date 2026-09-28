@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -55,7 +55,7 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
     public function __construct(
         ResourceConnection $resource,
         DeploymentConfig $deploymentConfig,
-        string $prefix = null
+        ?string $prefix = null
     ) {
         $this->resource = $resource;
         $this->deploymentConfig = $deploymentConfig;

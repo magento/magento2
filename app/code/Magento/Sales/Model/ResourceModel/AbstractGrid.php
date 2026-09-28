@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\ResourceModel;
 
@@ -90,7 +90,7 @@ abstract class AbstractGrid extends AbstractDb implements GridInterface
      *
      * @param string $default
      * @return string
-     * @deprecated 100.2.0 this method is not used in abstract model but only in single child so
+     * @deprecated 101.0.0 this method is not used in abstract model but only in single child so
      * this deprecation is a part of cleaning abstract classes.
      * @see \Magento\Sales\Model\ResourceModel\Provider\UpdatedIdListProvider
      */

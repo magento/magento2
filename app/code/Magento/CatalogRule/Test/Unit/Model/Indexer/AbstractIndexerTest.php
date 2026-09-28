@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -40,20 +40,19 @@ class AbstractIndexerTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->_eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->_eventManagerMock = $this->createMock(ManagerInterface::class);
         $this->indexBuilder = $this->createMock(IndexBuilder::class);
 
-        $this->indexer = $this->getMockForAbstractClass(
-            AbstractIndexer::class,
-            [
+        $this->indexer = $this->getMockBuilder(AbstractIndexer::class)
+            ->setConstructorArgs([
                 $this->indexBuilder,
                 $this->_eventManagerMock
-            ]
-        );
-        $cacheMock = $this->getMockForAbstractClass(CacheInterface::class);
+            ])
+            ->onlyMethods(['doExecuteList', 'doExecuteRow'])
+            ->getMock();
+        $cacheMock = $this->createMock(CacheInterface::class);
         $reflection = new \ReflectionClass(AbstractIndexer::class);
         $reflectionProperty = $reflection->getProperty('cacheManager');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->indexer, $cacheMock);
     }
 

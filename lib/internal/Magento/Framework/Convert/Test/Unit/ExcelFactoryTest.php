@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -27,9 +27,7 @@ class ExcelFactoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->setMethods(['create'])
-            ->getMockForAbstractClass();
+        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
 
         $this->model = new ExcelFactory(
             $this->objectManager

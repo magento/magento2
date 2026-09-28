@@ -9,6 +9,7 @@ Always,Always
 "Reload captcha","Reload captcha"
 "Please type the letters and numbers below","Please type the letters and numbers below"
 "Attention: Captcha is case sensitive.","Attention: Captcha is case sensitive."
+"Please provide CAPTCHA code and try again","Please provide CAPTCHA code and try again"
 CAPTCHA,CAPTCHA
 "Enable CAPTCHA in Admin","Enable CAPTCHA in Admin"
 Font,Font
@@ -24,3 +25,4 @@ Forms,Forms
 "Case Sensitive","Case Sensitive"
 "Enable CAPTCHA on Storefront","Enable CAPTCHA on Storefront"
 "CAPTCHA for ""Create user"" and ""Forgot password"" forms is always enabled if chosen.","CAPTCHA for ""Create user"" and ""Forgot password"" forms is always enabled if chosen."
+"CAPTCHA is required.","CAPTCHA is required."

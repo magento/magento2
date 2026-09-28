@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\MessageQueue;
 
@@ -53,7 +53,7 @@ class ExchangeRepository
      * Get exchange factory.
      *
      * @return ExchangeFactoryInterface
-     * @deprecated 100.2.0
+     * @deprecated 103.0.0
      */
     private function getExchangeFactory()
     {

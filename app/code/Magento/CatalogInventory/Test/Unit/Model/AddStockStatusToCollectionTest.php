@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -37,8 +37,8 @@ class AddStockStatusToCollectionTest extends TestCase
         $this->stockHelper = $this->createMock(Stock::class);
         $this->engineResolver = $this->getMockBuilder(EngineResolverInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCurrentSearchEngine'])
-            ->getMockForAbstractClass();
+            ->onlyMethods(['getCurrentSearchEngine'])
+            ->getMock();
 
         $this->plugin = (new ObjectManager($this))->getObject(
             AddStockStatusToCollection::class,
@@ -55,9 +55,7 @@ class AddStockStatusToCollectionTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->engineResolver->expects($this->any())
-            ->method('getCurrentSearchEngine')
-            ->willReturn('mysql');
+        $this->engineResolver->method('getCurrentSearchEngine')->willReturn('mysql');
 
         $this->stockHelper->expects($this->once())
             ->method('addIsInStockFilterToCollection')

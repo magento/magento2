@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Sales\Model\Order;
@@ -49,9 +49,9 @@ class InvoiceDocumentFactory
     public function create(
         OrderInterface $order,
         $items = [],
-        InvoiceCommentCreationInterface $comment = null,
+        ?InvoiceCommentCreationInterface $comment = null,
         $appendComment = false,
-        InvoiceCreationArgumentsInterface $arguments = null
+        ?InvoiceCreationArgumentsInterface $arguments = null
     ) {
         $invoiceItems = $this->itemsToArray($items);
         $invoice = $this->invoiceService->prepareInvoice($order, $invoiceItems);

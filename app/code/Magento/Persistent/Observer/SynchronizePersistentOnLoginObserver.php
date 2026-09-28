@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Persistent\Observer;
 
@@ -11,6 +11,9 @@ use Magento\Framework\Event\ObserverInterface;
 
 /**
  * Persistent Session Observer
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class SynchronizePersistentOnLoginObserver implements ObserverInterface
 {
@@ -63,6 +66,8 @@ class SynchronizePersistentOnLoginObserver implements ObserverInterface
     }
 
     /**
+     * Synchronize persistent session data with logged in customer
+     *
      * @param Observer $observer
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -96,8 +101,9 @@ class SynchronizePersistentOnLoginObserver implements ObserverInterface
             if (!$sessionModel->getId()) {
                 /** @var \Magento\Persistent\Model\Session $sessionModel */
                 $sessionModel = $this->_sessionFactory->create();
-                $sessionModel->setCustomerId($customer->getId())->save();
+                $sessionModel->setCustomerId($customer->getId());
             }
+            $sessionModel->save();
             $this->_persistentSession->setSession($sessionModel);
         }
 

@@ -1,13 +1,24 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 use Magento\Catalog\Helper\Data;
 
-// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
+/** @var \Magento\Backend\Block\Template $block */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+/** @var $escaper \Magento\Framework\Escaper */
 ?>
-<script>
+
+<?php
+/** @var \Magento\Framework\Json\Helper\Data $jsonHelper */
+$jsonHelper = $block->getData('jsonHelper');
+if (!method_exists($jsonHelper, 'getAttributeHiddenFields')) {
+    /** @var \Magento\Catalog\ViewModel\Attribute\ProductAttributeHelper $viewModel */
+    $viewModel = $block->getViewModel();
+    $jsonHelper = $viewModel->getCatalogHelper();
+}
+$scriptString = <<<script
 require([
     "jquery",
     'Magento_Ui/js/modal/alert',
@@ -207,32 +218,39 @@ function switchDefaultValueField()
             setRowVisibility('is_unique', false);
             setRowVisibility('frontend_class', false);
         break;
-
-        <?php // phpcs:ignore Magento2.Templates.ThisInTemplate ?>
-        <?php foreach ($this->helper(Data::class)->getAttributeHiddenFields() as $type => $fields): ?>
-            case '<?= $block->escapeJs($type) ?>':
+script;
+foreach ($jsonHelper->getAttributeHiddenFields() as $type => $fields):
+            $scriptString .= <<<script
+            case '{$block->escapeJs($type)}':
                 var isFrontTabHidden = false;
-                <?php foreach ($fields as $one): ?>
-                    <?php if ($one == '_front_fieldset'): ?>
+script;
+    foreach ($fields as $one):
+        if ($one == '_front_fieldset'):
+            $scriptString .= <<<script
                         getFrontTab().hide();
                         isFrontTabHidden = true;
-                    <?php elseif ($one == '_default_value'): ?>
+script;
+        elseif ($one == '_default_value'):
+            $scriptString .= <<<script
                         defaultValueTextVisibility =
                         defaultValueTextareaVisibility =
                         defaultValueDateVisibility =
                         defaultValueYesnoVisibility = false;
-                    <?php elseif ($one == '_scope'): ?>
-                        scopeVisibility = false;
-                    <?php else: ?>
-                        setRowVisibility('<?= $block->escapeJs($one) ?>', false);
-                    <?php endif; ?>
-                <?php endforeach; ?>
-
+script;
+        elseif ($one == '_scope'):
+            $scriptString .= 'scopeVisibility = false;';
+        else:
+            $scriptString .= "setRowVisibility('" . $escaper->escapeJs($one) . "', false);";
+        endif;
+    endforeach;
+    $scriptString .= <<<script
                 if (!isFrontTabHidden){
                   getFrontTab().show();
                 }
             break;
-        <?php endforeach; ?>
+script;
+        endforeach;
+        $scriptString .= <<<script
 
         default:
             getFrontTab().show();
@@ -247,7 +265,7 @@ function switchDefaultValueField()
     setRowVisibility('default_value_yesno', defaultValueYesnoVisibility);
     setRowVisibility('is_global', scopeVisibility);
 
-    var elems = document.getElementsByName('default[]');
+    var elems = document.querySelectorAll('input[name^="default["]');
     for (var i = 0; i < elems.length; i++) {
         elems[i].type = optionDefaultInputType;
     }
@@ -278,7 +296,7 @@ function setRowVisibility(id, isVisible)
 
 function updateRequriedOptions()
 {
-    if ($F('frontend_input')=='select' && $F('is_required')==1) {
+    if (\$F('frontend_input')=='select' && \$F('is_required')==1) {
         $('option-count-check').addClassName('required-options-count');
     } else {
         $('option-count-check').removeClassName('required-options-count');
@@ -364,4 +382,6 @@ window.getFrontTab = getFrontTab;
 window.toggleApplyVisibility = toggleApplyVisibility;
 
 });
-</script>
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>

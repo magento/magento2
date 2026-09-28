@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Review\Block\Adminhtml;
 
@@ -9,12 +9,13 @@ namespace Magento\Review\Block\Adminhtml;
  * Ratings grid
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Rating extends \Magento\Backend\Block\Widget\Grid\Container
 {
     /**
+     * Initialise the block
+     *
      * @return void
      */
     protected function _construct()

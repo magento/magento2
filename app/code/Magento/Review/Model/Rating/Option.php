@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Review\Model\Rating;
 
@@ -18,13 +18,14 @@ namespace Magento\Review\Model\Rating;
  * @method int getPosition()
  * @method \Magento\Review\Model\Rating\Option setPosition(int $value)
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @codeCoverageIgnore
  * @since 100.0.2
  */
 class Option extends \Magento\Framework\Model\AbstractModel
 {
     /**
+     * Initialise the model
+     *
      * @return void
      */
     protected function _construct()
@@ -33,6 +34,8 @@ class Option extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Add a vote
+     *
      * @return $this
      */
     public function addVote()
@@ -42,6 +45,8 @@ class Option extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Set the identifier
+     *
      * @param mixed $id
      * @return $this
      */

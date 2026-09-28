@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -13,6 +13,7 @@ use Magento\MediaContentApi\Api\Data\ContentAssetLinkInterface;
 /**
  * Delete the relation between media asset and the piece of content. I.e media asset no longer part of the content
  * @api
+ * @since 100.4.0
  */
 interface DeleteContentAssetLinksByAssetIdsInterface
 {
@@ -21,6 +22,7 @@ interface DeleteContentAssetLinksByAssetIdsInterface
      *
      * @param int[] $assetIds
      * @throws \Magento\Framework\Exception\CouldNotDeleteException
+     * @since 100.4.0
      */
     public function execute(array $assetIds): void;
 }

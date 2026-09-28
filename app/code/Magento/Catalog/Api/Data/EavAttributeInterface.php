@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Api\Data;
 
@@ -145,7 +144,7 @@ interface EavAttributeInterface extends \Magento\Eav\Api\Data\AttributeInterface
      *
      * @param bool|null $isUsedInGrid
      * @return $this
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function setIsUsedInGrid($isUsedInGrid);
 
@@ -154,7 +153,7 @@ interface EavAttributeInterface extends \Magento\Eav\Api\Data\AttributeInterface
      *
      * @param bool|null $isVisibleInGrid
      * @return $this
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function setIsVisibleInGrid($isVisibleInGrid);
 
@@ -163,7 +162,7 @@ interface EavAttributeInterface extends \Magento\Eav\Api\Data\AttributeInterface
      *
      * @param bool|null $isFilterableInGrid
      * @return $this
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function setIsFilterableInGrid($isFilterableInGrid);
 

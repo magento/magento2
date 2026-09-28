@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 define([
@@ -22,9 +22,12 @@ define([
         it('Check on empty object.', function () {
             var addressData = {
                 region: {}
+            },
+            expected = {
+                customAttributes: []
             };
 
-            expect(JSON.stringify(customerAddress(addressData))).toEqual(JSON.stringify({}));
+            expect(JSON.stringify(customerAddress(addressData))).toEqual(JSON.stringify(expected));
         });
 
         it('Check on function call with empty address data.', function () {
@@ -49,7 +52,8 @@ define([
                     }
                 }),
                 expected = {
-                    regionId: '1'
+                    regionId: '1',
+                    customAttributes: []
                 };
 
             expect(JSON.stringify(result)).toEqual(JSON.stringify(expected));

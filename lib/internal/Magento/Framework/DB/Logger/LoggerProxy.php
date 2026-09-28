@@ -1,92 +1,118 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\DB\Logger;
 
 use Magento\Framework\DB\LoggerInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
-class LoggerProxy implements LoggerInterface
+class LoggerProxy implements LoggerInterface, ResetAfterRequestInterface
 {
     /**
      * Configuration group name
      */
-    const CONF_GROUP_NAME = 'db_logger';
+    public const CONF_GROUP_NAME = 'db_logger';
 
     /**
      * Logger alias param name
      */
-    const PARAM_ALIAS = 'output';
+    public const PARAM_ALIAS = 'output';
 
     /**
      * Logger log all param name
      */
-    const PARAM_LOG_ALL = 'log_everything';
+    public const PARAM_LOG_ALL = 'log_everything';
 
     /**
      * Logger query time param name
      */
-    const PARAM_QUERY_TIME = 'query_time_threshold';
+    public const PARAM_QUERY_TIME = 'query_time_threshold';
 
     /**
      * Logger call stack param name
      */
-    const PARAM_CALL_STACK = 'include_stacktrace';
+    public const PARAM_CALL_STACK = 'include_stacktrace';
+
+    /**
+     * Logger call no index detection param name
+     */
+    public const PARAM_INDEX_CHECK = 'include_index_check';
 
     /**
      * File logger alias
      */
-    const LOGGER_ALIAS_FILE = 'file';
+    public const LOGGER_ALIAS_FILE = 'file';
 
     /**
      * Quiet logger alias
      */
-    const LOGGER_ALIAS_DISABLED = 'disabled';
+    public const LOGGER_ALIAS_DISABLED = 'disabled';
 
     /**
-     * @var LoggerInterface
+     * @var LoggerInterface|null
      */
-    private $logger;
+    private ?LoggerInterface $logger = null;
 
     /**
      * @var FileFactory
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
-    private $fileFactory;
+    private readonly FileFactory $fileFactory;
 
     /**
      * @var QuietFactory
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
-    private $quietFactory;
+    private readonly QuietFactory $quietFactory;
+
+    /**
+     * @var string|null
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
+     */
+    private readonly ?string $loggerAlias;
 
     /**
      * @var bool
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
-    private $loggerAlias;
-
-    /**
-     * @var bool
-     */
-    private $logAllQueries;
+    private readonly bool $logAllQueries;
 
     /**
      * @var float
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
-    private $logQueryTime;
+    private readonly float $logQueryTime;
 
     /**
      * @var bool
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
-    private $logCallStack;
+    private readonly bool $logCallStack;
+
+    /**
+     * @var bool
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
+     */
+    private readonly bool $logIndexCheck;
 
     /**
      * LoggerProxy constructor.
      * @param FileFactory $fileFactory
      * @param QuietFactory $quietFactory
-     * @param bool $loggerAlias
+     * @param string|null $loggerAlias
      * @param bool $logAllQueries
      * @param float $logQueryTime
      * @param bool $logCallStack
+     * @param bool $logIndexCheck
      */
     public function __construct(
         FileFactory $fileFactory,
@@ -94,7 +120,8 @@ class LoggerProxy implements LoggerInterface
         $loggerAlias,
         $logAllQueries = true,
         $logQueryTime = 0.001,
-        $logCallStack = true
+        $logCallStack = true,
+        $logIndexCheck = false
     ) {
         $this->fileFactory = $fileFactory;
         $this->quietFactory = $quietFactory;
@@ -102,10 +129,12 @@ class LoggerProxy implements LoggerInterface
         $this->logAllQueries = $logAllQueries;
         $this->logQueryTime = $logQueryTime;
         $this->logCallStack = $logCallStack;
+        $this->logIndexCheck = $logIndexCheck;
     }
 
     /**
      * Get logger object. Initialize if needed.
+     *
      * @return LoggerInterface
      */
     private function getLogger()
@@ -118,6 +147,7 @@ class LoggerProxy implements LoggerInterface
                             'logAllQueries' => $this->logAllQueries,
                             'logQueryTime' => $this->logQueryTime,
                             'logCallStack' => $this->logCallStack,
+                            'logIndexCheck' => $this->logIndexCheck,
                         ]
                     );
                     break;
@@ -141,6 +171,8 @@ class LoggerProxy implements LoggerInterface
     }
 
     /**
+     * Log stats
+     *
      * @param string $type
      * @param string $sql
      * @param array $bind
@@ -153,6 +185,8 @@ class LoggerProxy implements LoggerInterface
     }
 
     /**
+     * Logs critical exception
+     *
      * @param \Exception $exception
      * @return void
      */
@@ -162,10 +196,20 @@ class LoggerProxy implements LoggerInterface
     }
 
     /**
+     * Starts timer
+     *
      * @return void
      */
     public function startTimer()
     {
         $this->getLogger()->startTimer();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->logger = null;
     }
 }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -34,7 +34,9 @@
                 <requiredEntity createDataKey="createBundleOption"/>
                 <requiredEntity createDataKey="createSimpleProduct"/>
             </createData>
-            <magentoCron stepKey="runCronIndex" groups="index"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <!-- Delete Simple Product -->
@@ -56,9 +58,11 @@
         <actionGroup ref="AdminUpdateProductNameAndDescriptionAttributes" stepKey="updateProductAttribute">
             <argument name="product" value="UpdateAttributeNameAndDescription"/>
         </actionGroup>
-        <!--Run cron twice-->
-        <magentoCLI command="cron:run" stepKey="cronRun"/>
-        <magentoCLI command="cron:run" stepKey="cronRunTwice"/>
+        <!-- Start message queue for product attribute consumer -->
+        <actionGroup ref="CliConsumerStartActionGroup" stepKey="startMessageQueue">
+            <argument name="consumerName" value="{{AdminProductAttributeUpdateMessageConsumerData.consumerName}}"/>
+            <argument name="maxMessages" value="{{AdminProductAttributeUpdateMessageConsumerData.messageLimit}}"/>
+        </actionGroup>
         <!-- Search for a product with a new name and Open Product -->
         <actionGroup ref="FilterProductGridByNameActionGroup" stepKey="searchWithNewProductName">
             <argument name="product" value="UpdateAttributeNameAndDescription"/>

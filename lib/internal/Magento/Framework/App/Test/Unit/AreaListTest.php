@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -34,7 +34,7 @@ class AreaListTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $this->_resolverFactory = $this
             ->createMock(FrontNameResolverFactory::class);
     }
@@ -49,7 +49,7 @@ class AreaListTest extends TestCase
             $expected
         );
 
-        $resolverMock = $this->getMockForAbstractClass(FrontNameResolverInterface::class);
+        $resolverMock = $this->createMock(FrontNameResolverInterface::class);
         $this->_resolverFactory->expects(
             $this->any()
         )->method(
@@ -107,6 +107,19 @@ class AreaListTest extends TestCase
         $this->assertSame('test', $model->getArea($code));
     }
 
+    public function testGetFrontNameWhenFrontNameIsInvalid() : void
+    {
+        $this->_model = new AreaList(
+            $this->objectManagerMock,
+            $this->_resolverFactory,
+            [
+                'testAreaCode' => []
+            ]
+        );
+
+        $this->assertNull($this->_model->getFrontName('0'));
+    }
+
     public function testGetCodes()
     {
         $areas = ['area1' => 'value1', 'area2' => 'value2'];
@@ -156,7 +169,7 @@ class AreaListTest extends TestCase
      */
     protected function getObjectManagerMockGetArea()
     {
-        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $objectManagerMock
             ->expects($this->any())
             ->method('create')

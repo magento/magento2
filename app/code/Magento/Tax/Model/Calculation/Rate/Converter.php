@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Tax\Model\Calculation\Rate;
 
@@ -38,7 +38,7 @@ class Converter
     public function __construct(
         \Magento\Tax\Api\Data\TaxRateInterfaceFactory $taxRateDataObjectFactory,
         \Magento\Tax\Api\Data\TaxRateTitleInterfaceFactory $taxRateTitleDataObjectFactory,
-        FormatInterface $format = null
+        ?FormatInterface $format = null
     ) {
         $this->taxRateDataObjectFactory = $taxRateDataObjectFactory;
         $this->taxRateTitleDataObjectFactory = $taxRateTitleDataObjectFactory;

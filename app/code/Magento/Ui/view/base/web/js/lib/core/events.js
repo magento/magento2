@@ -1,13 +1,11 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
-/* global WeakMap, Map*/
 define([
     'ko',
-    'underscore',
-    'es6-collections'
+    'underscore'
 ], function (ko, _) {
     'use strict';
 

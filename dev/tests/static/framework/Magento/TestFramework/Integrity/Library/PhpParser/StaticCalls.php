@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\TestFramework\Integrity\Library\PhpParser;
 
@@ -82,6 +82,13 @@ class StaticCalls implements ParserInterface, DependenciesCollectorInterface
     {
         $step = 1;
         $staticClassParts = [];
+
+        $token = $this->tokens->getTokenCodeByKey($staticCall - $step);
+        if ($token === T_NAME_FULLY_QUALIFIED || $token === T_NAME_QUALIFIED) {
+            return $this->tokens->getTokenValueByKey($staticCall - $step);
+        }
+
+        // PHP 7 compatibility
         while ($this->tokens->getTokenCodeByKey(
             $staticCall - $step
         ) == T_STRING || $this->tokens->getTokenCodeByKey(
@@ -90,6 +97,7 @@ class StaticCalls implements ParserInterface, DependenciesCollectorInterface
             $staticClassParts[] = $this->tokens->getTokenValueByKey($staticCall - $step);
             $step++;
         }
+
         return implode(array_reverse($staticClassParts));
     }
 

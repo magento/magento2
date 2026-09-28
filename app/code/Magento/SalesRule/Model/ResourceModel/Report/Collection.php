@@ -1,14 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\SalesRule\Model\ResourceModel\Report;
 
 /**
  * Sales report coupons collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\AbstractCollection
 {
@@ -50,8 +48,8 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\SalesRule\Model\ResourceModel\Report\RuleFactory $ruleFactory
      * @param \Magento\Sales\Model\ResourceModel\Report $resource
+     * @param \Magento\SalesRule\Model\ResourceModel\Report\RuleFactory $ruleFactory
      * @param mixed $connection
      */
     public function __construct(
@@ -61,7 +59,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Sales\Model\ResourceModel\Report $resource,
         \Magento\SalesRule\Model\ResourceModel\Report\RuleFactory $ruleFactory,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
+        ?\Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
         $this->_ruleFactory = $ruleFactory;
         $resource->init($this->_aggregationTable);

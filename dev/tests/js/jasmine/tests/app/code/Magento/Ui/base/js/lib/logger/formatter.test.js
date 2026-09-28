@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 /* eslint-disable max-nested-callbacks */
 /*jscs:disable jsDoc*/
@@ -24,7 +24,7 @@ define([
                     timestamp: Date.now()
                 };
 
-                date = moment(entry.timestamp).format('YYYY-MM-DD hh:mm:ss');
+                date = moment(entry.timestamp).format('YYYY-MM-DD HH:mm:ssZ');
 
                 expect(formatter.process(entry)).toBe('[' + date + '] [DEBUG] message text');
             });
@@ -43,7 +43,7 @@ define([
                     }
                 };
 
-                date = moment(entry.timestamp).format('YYYY-MM-DD hh:mm:ss');
+                date = moment(entry.timestamp).format('YYYY-MM-DD HH:mm:ssZ');
 
                 expect(formatter.process(entry)).toBe('[' + date + '] [DEBUG] Foo Bar');
             });

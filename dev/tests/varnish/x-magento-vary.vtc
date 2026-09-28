@@ -1,0 +1,121 @@
+varnishtest "X-Magento-Vary handling (varnish7)"
+
+server s1 {
+    # first request will be the probe, handle it and be on our way
+    rxreq
+    expect req.url == "/health_check.php"
+    txresp
+
+    # the probe expects the connection to close
+    close
+    accept
+
+    # Non-GraphQL with X-Magento-Vary => uncacheable (backend hit twice)
+    rxreq
+    expect req.url == "/"
+    txresp -status 200 \
+           -hdr "Cache-Control: max-age=600" \
+           -hdr "Set-Cookie: X-Magento-Vary=abc; Path=/; HttpOnly" \
+           -body "non-graphql-1"
+
+    rxreq
+    expect req.url == "/"
+    txresp -status 200 \
+           -hdr "Cache-Control: max-age=600" \
+           -hdr "Set-Cookie: X-Magento-Vary=abc; Path=/; HttpOnly" \
+           -body "non-graphql-2"
+
+    # GraphQL with X-Magento-Cache-Id => cacheable (backend hit once)
+    rxreq
+    expect req.url == "/graphql"
+    expect req.http.X-Magento-Cache-Id == "id-1"
+    txresp -status 200 \
+           -hdr "Cache-Control: max-age=600" \
+           -hdr "Set-Cookie: X-Magento-Vary=abc; Path=/; HttpOnly" \
+           -hdr "X-Magento-Cache-Id: id-1" \
+           -body "graphql-1"
+
+    # Multiple Set-Cookie with X-Magento-Vary => uncacheable (backend hit twice)
+    rxreq
+    expect req.url == "/multi"
+    txresp -status 200 \
+           -hdr "Cache-Control: max-age=600" \
+           -hdr "Set-Cookie: foo=bar; Path=/; HttpOnly" \
+           -hdr "Set-Cookie: X-Magento-Vary=abc; Path=/; HttpOnly" \
+           -body "multi-1"
+
+    rxreq
+    expect req.url == "/multi"
+    txresp -status 200 \
+           -hdr "Cache-Control: max-age=600" \
+           -hdr "Set-Cookie: baz=qux; Path=/; HttpOnly" \
+           -hdr "Set-Cookie: X-Magento-Vary=abc; Path=/; HttpOnly" \
+           -body "multi-2"
+} -start
+
+# generate usable VCL pointing towards s1
+shell {
+    sed \
+        -e 's@\.interval = 5s;@.interval = 5m; .initial = 10;@' \
+        -e 's@/\* {{ host }} \*/@${s1_addr}@' \
+        -e 's@/\* {{ port }} \*/@${s1_port}@' \
+        -e 's@/\* {{ ssl_offloaded_header }} \*/@unused@' \
+        -e 's@/\* {{ grace_period }} \*/@0@' \
+        ${testdir}/../../../app/code/Magento/PageCache/etc/varnish7.vcl > ${tmpdir}/output.vcl
+}
+
+varnish v1 -arg "-f" -arg "${tmpdir}/output.vcl" -start
+
+# make sure the probe request fired
+delay 1
+
+client c1 {
+    # Test 1: Non-GraphQL with X-Magento-Vary => uncacheable
+    txreq -url "/"
+    rxresp
+    expect resp.status == 200
+    expect resp.http.Set-Cookie == "<undef>"
+    expect resp.http.X-Magento-Cache-Debug == "UNCACHEABLE"
+    expect resp.body ~ "non-graphql-1"
+
+    txreq -url "/"
+    rxresp
+    expect resp.status == 200
+    expect resp.http.Set-Cookie == "<undef>"
+    expect resp.http.X-Magento-Cache-Debug == "UNCACHEABLE"
+    expect resp.body ~ "non-graphql-2"
+
+    # Test 2: GraphQL with X-Magento-Cache-Id => cacheable
+    txreq -url "/graphql" -hdr "X-Magento-Cache-Id: id-1"
+    rxresp
+    expect resp.status == 200
+    expect resp.http.Set-Cookie == "<undef>"
+    expect resp.http.X-Magento-Cache-Debug == "MISS"
+    expect resp.body ~ "graphql-1"
+
+    txreq -url "/graphql" -hdr "X-Magento-Cache-Id: id-1"
+    rxresp
+    expect resp.status == 200
+    expect resp.http.Set-Cookie == "<undef>"
+    expect resp.http.X-Magento-Cache-Debug == "HIT"
+    expect resp.body ~ "graphql-1"
+
+    # Test 3: Multiple Set-Cookie with X-Magento-Vary => uncacheable
+    txreq -url "/multi"
+    rxresp
+    expect resp.status == 200
+    expect resp.http.Set-Cookie == "<undef>"
+    expect resp.http.X-Magento-Cache-Debug == "UNCACHEABLE"
+    expect resp.body ~ "multi-1"
+
+    txreq -url "/multi"
+    rxresp
+    expect resp.status == 200
+    expect resp.http.Set-Cookie == "<undef>"
+    expect resp.http.X-Magento-Cache-Debug == "UNCACHEABLE"
+    expect resp.body ~ "multi-2"
+} -run
+
+# make sure s1 saw all the requests it was expecting
+server s1 -wait
+

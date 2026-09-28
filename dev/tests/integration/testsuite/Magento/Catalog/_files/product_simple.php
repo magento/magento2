@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 use Magento\Catalog\Api\Data\ProductTierPriceExtensionFactory;
@@ -95,7 +95,7 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setPrice(10)
     ->setWeight(1)
     ->setShortDescription("Short description")
-    ->setTaxClassId(0)
+    ->setTaxClassId(2)
     ->setTierPrices($tierPrices)
     ->setDescription('Description with <b>html tag</b>')
     ->setExtensionAttributes($productExtensionAttributesWebsiteIds)

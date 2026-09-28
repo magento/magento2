@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Multishipping\Test\Unit\Model\Checkout\Type\Multishipping;
 use Magento\Framework\ObjectManager\TMapFactory;
 use Magento\Multishipping\Model\Checkout\Type\Multishipping\PlaceOrderInterface;
 use Magento\Multishipping\Model\Checkout\Type\Multishipping\PlaceOrderPool;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -21,13 +22,16 @@ class PlaceOrderPoolTest extends TestCase
     /**
      * @param string $paymentProviderCode
      * @param PlaceOrderInterface[] $placeOrderList
-     * @param PlaceOrderInterface|null $expectedResult
+     * @param \Closure $expectedResult
      * @return void
-     *
-     * @dataProvider getDataProvider
      */
+    #[DataProvider('getDataProvider')]
     public function testGet(string $paymentProviderCode, array $placeOrderList, $expectedResult)
     {
+        $placeOrderList['payment_code'] = $placeOrderList['payment_code']($this);
+        if ($expectedResult != null) {
+            $expectedResult = $expectedResult($this);
+        }
         /** @var TMapFactory|MockObject $tMapFactory */
         $tMapFactory = $this->getMockBuilder(TMapFactory::class)
             ->disableOriginalConstructor()
@@ -43,9 +47,9 @@ class PlaceOrderPoolTest extends TestCase
     /**
      * @return array
      */
-    public function getDataProvider(): array
+    public static function getDataProvider(): array
     {
-        $placeOrder = $this->getMockForAbstractClass(PlaceOrderInterface::class);
+        $placeOrder = static fn (self $testCase) => $testCase->createMock(PlaceOrderInterface::class);
         $placeOrderList = ['payment_code' => $placeOrder];
 
         return [

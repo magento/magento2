@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\PageCache\Model\Controller\Result;
 
@@ -69,7 +69,7 @@ class BuiltinPlugin
     {
         $usePlugin = $this->registry->registry('use_page_cache_plugin');
 
-        if (!$usePlugin || !$this->config->isEnabled() || $this->config->getType() != Config::BUILT_IN) {
+        if (!$usePlugin || !$this->config->isEnabled() || $this->config->getType() !== Config::BUILT_IN) {
             return $result;
         }
 

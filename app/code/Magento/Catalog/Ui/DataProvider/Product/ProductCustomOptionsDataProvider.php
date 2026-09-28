@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Ui\DataProvider\Product;
 
@@ -75,8 +75,8 @@ class ProductCustomOptionsDataProvider extends ProductDataProvider
         array $addFilterStrategies = [],
         array $meta = [],
         array $data = [],
-        PoolInterface $modifiersPool = null,
-        MetadataPool $metadataPool = null
+        ?PoolInterface $modifiersPool = null,
+        ?MetadataPool $metadataPool = null
     ) {
         parent::__construct(
             $name,

@@ -1,12 +1,18 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Multishipping\Controller\Checkout;
 
-class RemoveItem extends \Magento\Multishipping\Controller\Checkout
+use Magento\Framework\App\Action\HttpPostActionInterface;
+
+/**
+ * Class RemoveItem
+ *
+ * Removes multishipping items
+ */
+class RemoveItem extends \Magento\Multishipping\Controller\Checkout implements HttpPostActionInterface
 {
     /**
      * Multishipping checkout remove item action

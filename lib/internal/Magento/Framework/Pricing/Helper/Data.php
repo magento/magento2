@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Pricing\Helper;
 
@@ -11,6 +11,7 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
  * Pricing data helper
  *
  * @api
+ * @since 100.0.2
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {

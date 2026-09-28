@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -170,5 +170,12 @@
     <entity name="RevertShipViaTitleTranslateData" type="translation_operation_translate">
         <data key="original">Shipping Method:</data>
         <data key="custom">Shipping Method:</data>
+    </entity>
+    <entity name="RevertWelcomeMessageTranslate" extends="CustomTranslationData">
+        <requiredEntity type="translation_operation_translate">RevertWelcomeMessageTranslateData</requiredEntity>
+    </entity>
+    <entity name="RevertWelcomeMessageTranslateData" type="translation_operation_translate">
+        <data key="original">Default welcome msg!</data>
+        <data key="custom">Default welcome msg!</data>
     </entity>
 </entities>

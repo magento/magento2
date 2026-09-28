@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Amqp\Setup;
 
@@ -10,9 +10,6 @@ use Magento\Framework\Setup\InstallSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
 
-/**
- * Class Recurring
- */
 class Recurring implements InstallSchemaInterface
 {
     /**
@@ -29,7 +26,7 @@ class Recurring implements InstallSchemaInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {

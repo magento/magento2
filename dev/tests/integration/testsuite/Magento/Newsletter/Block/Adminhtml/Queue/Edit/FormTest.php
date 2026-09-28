@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Newsletter\Block\Adminhtml\Queue\Edit;
 
@@ -40,8 +40,6 @@ class FormTest extends \PHPUnit\Framework\TestCase
             \Magento\Newsletter\Block\Adminhtml\Queue\Edit\Form::class,
             '_prepareForm'
         );
-        $prepareFormMethod->setAccessible(true);
-
         $statuses = [
             \Magento\Newsletter\Model\Queue::STATUS_NEVER,
             \Magento\Newsletter\Model\Queue::STATUS_PAUSE,

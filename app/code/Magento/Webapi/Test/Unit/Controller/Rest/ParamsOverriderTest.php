@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Webapi\Controller\Rest\ParamOverriderCustomerId;
 use Magento\Webapi\Controller\Rest\ParamsOverrider;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -26,16 +27,16 @@ class ParamsOverriderTest extends TestCase
      * @param array $expectedOverriddenParams Result of overriding $requestData when applying rules from $parameters
      * @param int $userId The id of the user invoking the request
      * @param int $userType The type of user invoking the request
-     *
-     * @dataProvider overrideParamsDataProvider
      */
+    #[DataProvider('overrideParamsDataProvider')]
     public function testOverrideParams($requestData, $parameters, $expectedOverriddenParams, $userId, $userType)
     {
         $objectManager = new ObjectManager($this);
 
-        $userContextMock = $this->getMockBuilder(UserContextInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getUserId', 'getUserType'])->getMockForAbstractClass();
+        $userContextMock = $this->createPartialMock(
+            UserContextInterface::class,
+            ['getUserId', 'getUserType']
+        );
         $userContextMock->expects($this->any())->method('getUserId')->willReturn($userId);
         $userContextMock->expects($this->any())->method('getUserType')->willReturn($userType);
 
@@ -45,10 +46,10 @@ class ParamsOverriderTest extends TestCase
         );
 
         /** @var MockObject $objectConverter */
-        $objectConverter = $this->getMockBuilder(SimpleDataObjectConverter::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['convertKeysToCamelCase'])
-            ->getMock();
+        $objectConverter = $this->createPartialMock(
+            SimpleDataObjectConverter::class,
+            ['convertKeysToCamelCase']
+        );
         $objectConverter->expects($this->any())
             ->method('convertKeysToCamelCase')
             ->willReturnCallback(
@@ -77,7 +78,7 @@ class ParamsOverriderTest extends TestCase
     /**
      * @return array
      */
-    public function overrideParamsDataProvider()
+    public static function overrideParamsDataProvider()
     {
         return [
             'force false, value present' => [

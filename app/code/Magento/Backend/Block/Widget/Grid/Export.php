@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Backend\Block\Widget\Grid;
@@ -9,10 +9,13 @@ namespace Magento\Backend\Block\Widget\Grid;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
+ * Class Export for exporting grid data as CSV file or MS Excel 2003 XML Document file
+ *
  * @api
  * @deprecated 100.2.0 in favour of UI component implementation
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
+ * @see MAGETWO-67718
  */
 class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\Block\Widget\Grid\ExportInterface
 {
@@ -69,6 +72,8 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
     }
 
     /**
+     * Internal constructor, that is called from real constructor
+     *
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -242,6 +247,7 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
 
     /**
      * Iterate collection and call callback method per item
+     *
      * For callback method first argument always is item object
      *
      * @param string $callback
@@ -273,7 +279,12 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
 
             $collection = $this->_getRowCollection($originalCollection);
             foreach ($collection as $item) {
-                call_user_func_array([$this, $callback], array_merge([$item], $args));
+                //phpcs:ignore Magento2.Functions.DiscouragedFunction
+                call_user_func_array(
+                    [$this, $callback],
+                    // phpcs:ignore Magento2.Performance.ForeachArrayMerge
+                    array_merge([$item], $args)
+                );
             }
         }
     }
@@ -307,7 +318,7 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
      */
     public function getCsvFile()
     {
-        $name = md5(microtime());
+        $name = hash('sha256', microtime());
         $file = $this->_path . '/' . $name . '.csv';
 
         $this->_directory->create($this->_path);
@@ -333,6 +344,7 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
      * Retrieve Grid data as CSV
      *
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getCsv()
     {
@@ -354,7 +366,7 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
                     $data[] = '"' . str_replace(
                         ['"', '\\'],
                         ['""', '\\\\'],
-                        $column->getRowFieldExport($item)
+                        $column->getRowFieldExport($item) ?: ''
                     ) . '"';
                 }
             }
@@ -368,7 +380,7 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
                     $data[] = '"' . str_replace(
                         ['"', '\\'],
                         ['""', '\\\\'],
-                        $column->getRowFieldExport($this->_getTotals())
+                        $column->getRowFieldExport($this->_getTotals()) ?: ''
                     ) . '"';
                 }
             }
@@ -432,11 +444,11 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
      */
     public function getExcelFile($sheetName = '')
     {
-        $collection = $this->_getRowCollection();
+        $collection = $this->_getPreparedCollection();
 
         $convert = new \Magento\Framework\Convert\Excel($collection->getIterator(), [$this, 'getRowRecord']);
 
-        $name = md5(microtime());
+        $name = hash('sha256', microtime());
         $file = $this->_path . '/' . $name . '.xml';
 
         $this->_directory->create($this->_path);
@@ -507,7 +519,7 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
      * @param \Magento\Framework\Data\Collection $baseCollection
      * @return \Magento\Framework\Data\Collection
      */
-    protected function _getRowCollection(\Magento\Framework\Data\Collection $baseCollection = null)
+    protected function _getRowCollection(?\Magento\Framework\Data\Collection $baseCollection = null)
     {
         if (null === $baseCollection) {
             $baseCollection = $this->getParentBlock()->getPreparedCollection();
@@ -551,6 +563,8 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
     }
 
     /**
+     * Get export page size
+     *
      * @return int
      */
     public function getExportPageSize()

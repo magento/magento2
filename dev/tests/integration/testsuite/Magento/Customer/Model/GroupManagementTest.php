@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Customer\Model;
 
 use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for Magento\Customer\Model\GroupManagement
@@ -33,9 +34,8 @@ class GroupManagementTest extends \PHPUnit\Framework\TestCase
     /**
      * @param $testGroup
      * @param $storeId
-     *
-     * @dataProvider getDefaultGroupDataProvider
      */
+    #[DataProvider('getDefaultGroupDataProvider')]
     public function testGetDefaultGroupWithStoreId($testGroup, $storeId)
     {
         $this->assertDefaultGroupMatches($testGroup, $storeId);
@@ -112,7 +112,7 @@ class GroupManagementTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getDefaultGroupDataProvider()
+    public static function getDefaultGroupDataProvider()
     {
         /** @var \Magento\Store\Model\StoreManagerInterface  $storeManager */
         $storeManager = Bootstrap::getObjectManager()->get(\Magento\Store\Model\StoreManagerInterface::class);

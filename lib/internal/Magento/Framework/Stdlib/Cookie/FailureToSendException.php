@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Stdlib\Cookie;
 
@@ -12,6 +12,7 @@ use Magento\Framework\Exception\LocalizedException;
  * impossible to send any cookie information back to the client.
  *
  * @api
+ * @since 100.0.2
  */
 class FailureToSendException extends LocalizedException
 {

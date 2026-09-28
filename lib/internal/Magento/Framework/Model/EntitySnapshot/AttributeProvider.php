@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -74,7 +74,7 @@ class AttributeProvider implements AttributeProviderInterface
                 $attributes[] = $provider->getAttributes($entityType);
             }
 
-            $this->registry[$entityType] = \array_merge(...$attributes);
+            $this->registry[$entityType] = \array_merge([], ...$attributes);
         }
 
         return $this->registry[$entityType];

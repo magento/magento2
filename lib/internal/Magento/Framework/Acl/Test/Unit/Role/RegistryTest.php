@@ -1,13 +1,14 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Framework\Acl\Test\Unit\Role;
 
+use Laminas\Permissions\Acl\Exception\InvalidArgumentException;
+use Laminas\Permissions\Acl\Role\RoleInterface;
 use Magento\Framework\Acl\Role\Registry;
 use PHPUnit\Framework\TestCase;
 
@@ -27,15 +28,15 @@ class RegistryTest extends TestCase
      * @param $roleId
      * @param $parentRoleId
      * @return array
-     * @throws \Zend_Acl_Role_Registry_Exception
+     * @throws InvalidArgumentException
      */
     protected function initRoles($roleId, $parentRoleId)
     {
-        $parentRole = $this->createMock(\Zend_Acl_Role_Interface::class);
-        $parentRole->expects($this->any())->method('getRoleId')->willReturn($parentRoleId);
+        $parentRole = $this->createMock(RoleInterface::class);
+        $parentRole->method('getRoleId')->willReturn($parentRoleId);
 
-        $role = $this->createMock(\Zend_Acl_Role_Interface::class);
-        $role->expects($this->any())->method('getRoleId')->willReturn($roleId);
+        $role = $this->createMock(RoleInterface::class);
+        $role->method('getRoleId')->willReturn($roleId);
 
         $this->model->add($role);
         $this->model->add($parentRole);
@@ -68,7 +69,7 @@ class RegistryTest extends TestCase
 
     public function testAddParentWrongChildId()
     {
-        $this->expectException('Zend_Acl_Role_Registry_Exception');
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Child Role id \'20\' does not exist');
         $roleId = 1;
         $parentRoleId = 2;
@@ -79,7 +80,7 @@ class RegistryTest extends TestCase
 
     public function testAddParentWrongParentId()
     {
-        $this->expectException('Zend_Acl_Role_Registry_Exception');
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Parent Role id \'26\' does not exist');
         $roleId = 1;
         $parentRoleId = 2;

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,6 +17,8 @@ use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\MetaReader\CacheAnnot
  */
 class InputObjectType implements TypeMetaReaderInterface
 {
+    public const GRAPHQL_INPUT = 'graphql_input';
+
     /**
      * @var TypeMetaWrapperReader
      */
@@ -40,7 +42,7 @@ class InputObjectType implements TypeMetaReaderInterface
     public function __construct(
         TypeMetaWrapperReader $typeMetaReader,
         DocReader $docReader,
-        CacheAnnotationReader $cacheAnnotationReader = null
+        ?CacheAnnotationReader $cacheAnnotationReader = null
     ) {
         $this->typeMetaReader = $typeMetaReader;
         $this->docReader = $docReader;
@@ -49,7 +51,7 @@ class InputObjectType implements TypeMetaReaderInterface
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function read(\GraphQL\Type\Definition\Type $typeMeta) : array
     {
@@ -57,7 +59,7 @@ class InputObjectType implements TypeMetaReaderInterface
             $typeName = $typeMeta->name;
             $result = [
                 'name' => $typeName,
-                'type' => 'graphql_input',
+                'type' => self::GRAPHQL_INPUT,
                 'fields' => [] // Populated later
             ];
             $fields = $typeMeta->getFields();

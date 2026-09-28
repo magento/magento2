@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\View\Layout;
 
@@ -9,6 +9,7 @@ namespace Magento\Framework\View\Layout;
  * Layout structure model
  *
  * @api
+ * @since 100.0.2
  */
 class ScheduledStructure
 {
@@ -489,7 +490,7 @@ class ScheduledStructure
      * Reformat 'Layout scheduled structure' to array.
      *
      * @return array
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function __toArray()
     {
@@ -506,7 +507,7 @@ class ScheduledStructure
      *
      * @param array $data
      * @return void
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function populateWithArray(array $data)
     {

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontCheckoutCartFillEstimateShippingAndTaxInShoppingCartActionGroup" extends="StorefrontCheckoutCartFillEstimateShippingAndTaxActionGroup">
+        <annotations>
+            <description>EXTENDS: StorefrontCheckoutCartFillEstimateShippingAndTaxActionGroup. Removes 'selectState' replace selectOption to fill field.</description>
+        </annotations>
+
+        <remove keyForRemoval="selectState"/>
+        <waitForElementVisible selector="{{CheckoutCartSummarySection.stateProvinceInput}}"  after="selectCountry" stepKey="waitForStateVisible"/>
+        <fillField selector="{{CheckoutCartSummarySection.stateProvinceInput}}" userInput="{{state}}" after="waitForStateVisible" stepKey="fillState"/>
+    </actionGroup>
+</actionGroups>

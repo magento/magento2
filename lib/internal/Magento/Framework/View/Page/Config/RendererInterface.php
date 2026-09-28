@@ -1,15 +1,16 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\View\Page\Config;
 
 /**
  * Interface RendererInterface
  *
- * @package Magento\Framework\View\Page\Config
+ * @api
  */
 interface RendererInterface
 {
@@ -17,7 +18,6 @@ interface RendererInterface
      * Render Element Attributes
      *
      * @param string $elementType
-     *
      * @return string
      */
     public function renderElementAttributes($elementType);

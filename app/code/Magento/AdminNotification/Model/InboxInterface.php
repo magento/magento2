@@ -1,14 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\AdminNotification\Model;
 
 /**
  * AdminNotification Inbox interface
  *
- * @author Magento Core Team <core@magentocommerce.com>
  * @api
  * @since 100.0.2
  */
@@ -19,7 +18,6 @@ interface InboxInterface
      *
      * @param int|null $severity
      * @return array|string|null
-     * @api
      */
     public function getSeverities($severity = null);
 
@@ -27,7 +25,6 @@ interface InboxInterface
      * Retrieve Latest Notice
      *
      * @return $this
-     * @api
      */
     public function loadLatestNotice();
 
@@ -35,7 +32,6 @@ interface InboxInterface
      * Retrieve notice statuses
      *
      * @return array
-     * @api
      */
     public function getNoticeStatus();
 }

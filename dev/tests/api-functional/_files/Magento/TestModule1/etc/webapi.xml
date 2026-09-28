@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 -->
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
@@ -71,6 +71,16 @@
             <resource ref="Magento_TestModule1::resource1" />
             <resource ref="Magento_TestModule1::resource2" />
         </resources>
+    </route>
+    <route method="PUT" url="/V1/testmodule1/withParam">
+        <service class="Magento\TestModule1\Service\V1\AllSoapAndRestInterface" method="update" />
+        <resources>
+            <resource ref="Magento_TestModule1::resource1" />
+            <resource ref="Magento_TestModule1::resource2" />
+        </resources>
+        <data>
+            <parameter name="paramId" force="true">%param_id%</parameter>
+        </data>
     </route>
     <route method="GET" url="/V2/testmodule1/:id">
         <service class="Magento\TestModule1\Service\V2\AllSoapAndRestInterface" method="item" />

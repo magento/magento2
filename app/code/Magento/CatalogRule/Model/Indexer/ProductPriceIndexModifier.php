@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -71,7 +71,7 @@ class ProductPriceIndexModifier implements PriceModifierInterface
             []
         );
         if ($entityIds) {
-            $select->where('i.entity_id IN (?)', $entityIds);
+            $select->where('i.entity_id IN (?)', $entityIds, \Zend_Db::INT_TYPE);
         }
 
         $finalPrice = $priceTable->getFinalPriceField();

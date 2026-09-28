@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 return [
     'region' => 'CA',
     'region_id' => '12',
     'postcode' => '11111',
+    'company' => 'Test Company',
     'lastname' => 'lastname',
     'firstname' => 'firstname',
     'street' => 'street',

@@ -1,0 +1,29 @@
+
+File "/var/www/html/app/code/Magento/MediaGalleryUi/Test/Mftf/Test/AdminEnhancedMediaGalleryVerifyAssetFilterTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminOpenCategoryGridPageActionGroup from module(s): magento/module-media-gallery-catalog-ui
+	 AssertAdminCategoryGridPageNumberOfRecordsActionGroup from module(s): magento/module-media-gallery-catalog-ui
+	 AssertAdminCategoryGridPageImageColumnActionGroup from module(s): magento/module-media-gallery-catalog-ui
+	 AssertAdminCategoryGridPageDetailsActionGroup from module(s): magento/module-media-gallery-catalog-ui
+	 AssertAdminCategoryGridPageProductsInMenuEnabledColumnsActionGroup from module(s): magento/module-media-gallery-catalog-ui
+
+File "/var/www/html/app/code/Magento/MediaGalleryUi/Test/Mftf/Test/AdminEnhancedMediaGalleryVerifyFilterByAssetTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminOpenCategoryGridPageActionGroup from module(s): magento/module-media-gallery-catalog-ui
+	 AssertAdminCategoryGridPageNumberOfRecordsActionGroup from module(s): magento/module-media-gallery-catalog-ui
+	 AssertAdminCategoryGridPageImageColumnActionGroup from module(s): magento/module-media-gallery-catalog-ui
+	 AssertAdminCategoryGridPageDetailsActionGroup from module(s): magento/module-media-gallery-catalog-ui
+	 AssertAdminCategoryGridPageProductsInMenuEnabledColumnsActionGroup from module(s): magento/module-media-gallery-catalog-ui
+
+File "/var/www/html/app/code/Magento/MediaGalleryUi/Test/Mftf/Test/AdminMediaGalleryDefaultViewWithoutFiltersTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminOpenCategoryGridPageActionGroup from module(s): magento/module-media-gallery-catalog-ui
+	 AdminEditCategoryInGridPageActionGroup from module(s): magento/module-media-gallery-catalog-ui
+
+File "/var/www/html/app/code/Magento/MediaGalleryUi/Test/Mftf/ActionGroup/AdminAssertMediaGalleryFilterPlaceholderActionGroup.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminMediaGalleryCatalogUiCategoryGridSection from module(s): magento/module-media-gallery-catalog-ui

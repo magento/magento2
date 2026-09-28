@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -18,6 +18,13 @@
         <data key="title">Pages</data>
         <data key="dataUiId">magento-cms-cms-page</data>
     </entity>
+
+    <entity name="AdminMenuContentElementsWidgets">
+        <data key="pageTitle">Widgets</data>
+        <data key="title">Widgets</data>
+        <data key="dataUiId">magento-widget-cms-widget-instance</data>
+    </entity>
+
     <entity name="AdminMenuContentElementsBlocks">
         <data key="pageTitle">Blocks</data>
         <data key="title">Blocks</data>

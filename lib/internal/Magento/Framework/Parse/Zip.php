@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -32,7 +32,7 @@ class Zip
      */
     public static function parseZip($zip)
     {
-        if (strpos($zip, '-') === false) {
+        if ($zip === null || strpos($zip, '-') === false) {
             return [$zip];
         } else {
             return self::zipRangeToZipPattern($zip);

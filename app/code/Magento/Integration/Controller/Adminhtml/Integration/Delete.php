@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Integration\Controller\Adminhtml\Integration;
 
@@ -27,7 +26,7 @@ class Delete extends \Magento\Integration\Controller\Adminhtml\Integration imple
             if ($integrationId) {
                 $integrationData = $this->_integrationService->get($integrationId);
                 if ($this->_integrationData->isConfigType($integrationData)) {
-                    $this->messageManager->addError(
+                    $this->messageManager->addErrorMessage(
                         __(
                             "Uninstall the extension to remove integration '%1'.",
                             $this->escaper->escapeHtml($integrationData[Info::DATA_NAME])
@@ -37,7 +36,7 @@ class Delete extends \Magento\Integration\Controller\Adminhtml\Integration imple
                 }
                 $integrationData = $this->_integrationService->delete($integrationId);
                 if (!$integrationData[Info::DATA_ID]) {
-                    $this->messageManager->addError(__('This integration no longer exists.'));
+                    $this->messageManager->addErrorMessage(__('This integration no longer exists.'));
                 } else {
                     //Integration deleted successfully, now safe to delete the associated consumer data
                     if (isset($integrationData[Info::DATA_CONSUMER_ID])) {
@@ -52,10 +51,10 @@ class Delete extends \Magento\Integration\Controller\Adminhtml\Integration imple
                     );
                 }
             } else {
-                $this->messageManager->addError(__('Integration ID is not specified or is invalid.'));
+                $this->messageManager->addErrorMessage(__('Integration ID is not specified or is invalid.'));
             }
         } catch (IntegrationException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
         } catch (\Exception $e) {
             $this->_logger->critical($e);
         }

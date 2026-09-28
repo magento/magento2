@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,9 +16,10 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 
 /**
- * @inheritdoc
- *
  * Fixed the id related data in the product data
+ *
+ * @deprecated Use UID
+ * @see \Magento\CatalogGraphQl\Model\Resolver\Product\EntityIdToUid
  */
 class EntityIdToId implements ResolverInterface
 {
@@ -42,8 +43,8 @@ class EntityIdToId implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         if (!isset($value['model'])) {
             throw new LocalizedException(__('"model" value should be specified'));

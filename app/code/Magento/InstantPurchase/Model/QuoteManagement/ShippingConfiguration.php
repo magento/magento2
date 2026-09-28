@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\InstantPurchase\Model\QuoteManagement;
 
@@ -16,6 +16,7 @@ use Magento\Quote\Model\Quote\Address;
  * Configure shipping method for instant purchase
  *
  * @api May be used for pluginization.
+ * @since 100.2.0
  */
 class ShippingConfiguration
 {
@@ -41,6 +42,7 @@ class ShippingConfiguration
      * @param ShippingMethodInterface $shippingMethod
      * @return Quote
      * @throws LocalizedException if shipping can not be configured for a quote.
+     * @since 100.2.0
      */
     public function configureShippingMethod(
         Quote $quote,

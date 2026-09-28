@@ -1,13 +1,20 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Cms\Model\ResourceModel\Page\Grid;
 
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Api\Search\AggregationInterface;
 use Magento\Cms\Model\ResourceModel\Page\Collection as PageCollection;
+use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
+use Magento\Framework\Data\Collection\EntityFactoryInterface;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Store\Model\StoreManagerInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class Collection
@@ -20,38 +27,46 @@ class Collection extends PageCollection implements SearchResultInterface
      */
     protected $aggregations;
 
+    /** @var mixed */
+    private $model;
+
+    /** @var string */
+    private $resourceModel;
+
     /**
-     * @param \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
+     * @param EntityFactoryInterface $entityFactory
+     * @param LoggerInterface $logger
+     * @param FetchStrategyInterface $fetchStrategy
+     * @param ManagerInterface $eventManager
+     * @param StoreManagerInterface $storeManager
+     * @param MetadataPool $metadataPool
      * @param mixed|null $mainTable
      * @param string $eventPrefix
      * @param mixed $eventObject
      * @param mixed $resourceModel
      * @param string $model
-     * @param null $connection
-     * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb|null $resource
+     * @param mixed|null $connection
+     * @param AbstractDb|null $resource
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\EntityManager\MetadataPool $metadataPool,
+        EntityFactoryInterface $entityFactory,
+        LoggerInterface $logger,
+        FetchStrategyInterface $fetchStrategy,
+        ManagerInterface $eventManager,
+        StoreManagerInterface $storeManager,
+        MetadataPool $metadataPool,
         $mainTable,
         $eventPrefix,
         $eventObject,
         $resourceModel,
         $model = \Magento\Framework\View\Element\UiComponent\DataProvider\Document::class,
         $connection = null,
-        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
+        ?AbstractDb $resource = null
     ) {
+        $this->resourceModel = $resourceModel;
+        $this->model = $model;
         parent::__construct(
             $entityFactory,
             $logger,
@@ -64,11 +79,22 @@ class Collection extends PageCollection implements SearchResultInterface
         );
         $this->_eventPrefix = $eventPrefix;
         $this->_eventObject = $eventObject;
-        $this->_init($model, $resourceModel);
+        $this->_init($this->model, $this->resourceModel);
         $this->setMainTable($mainTable);
     }
 
     /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->_init($this->model, $this->resourceModel);
+    }
+
+    /**
+     * Get aggregation interface instance
+     *
      * @return AggregationInterface
      */
     public function getAggregations()
@@ -77,6 +103,8 @@ class Collection extends PageCollection implements SearchResultInterface
     }
 
     /**
+     * Set aggregation interface instance
+     *
      * @param AggregationInterface $aggregations
      * @return $this
      */
@@ -103,7 +131,7 @@ class Collection extends PageCollection implements SearchResultInterface
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function setSearchCriteria(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria = null)
+    public function setSearchCriteria(?\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria = null)
     {
         return $this;
     }
@@ -137,7 +165,7 @@ class Collection extends PageCollection implements SearchResultInterface
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function setItems(array $items = null)
+    public function setItems(?array $items = null)
     {
         return $this;
     }

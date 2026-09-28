@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -103,7 +103,7 @@ class ProductLinkQuery
             if (count($linkTypesToLoad) === 1) {
                 $linkTypesToLoad = $linkTypesToLoad[0];
             } else {
-                $linkTypesToLoad = array_merge(...$linkTypesToLoad);
+                $linkTypesToLoad = array_merge([], ...$linkTypesToLoad);
             }
             $linkTypesToLoad = array_flip($linkTypesToLoad);
             $linkTypes = array_filter(

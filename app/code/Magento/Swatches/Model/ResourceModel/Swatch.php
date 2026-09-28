@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Swatches\Model\ResourceModel;
@@ -47,6 +47,7 @@ class Swatch extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param array $optionIDs
      * @param int $type
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 100.2.4
      */
     public function clearSwatchOptionByOptionIdAndType($optionIDs, $type = null)
     {

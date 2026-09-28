@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,12 +11,15 @@ declare(strict_types=1);
 namespace Magento\Config\Test\Unit\Block\System\Config\Form\Field;
 
 use Magento\Config\Block\System\Config\Form\Field\Image;
+use Magento\Config\Model\Config\Backend\Image as BackendImage;
 use Magento\Framework\DataObject;
 use Magento\Framework\Escaper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Url;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\Math\Random;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
 class ImageTest extends TestCase
 {
@@ -39,11 +42,22 @@ class ImageTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
         $this->urlBuilderMock = $this->createMock(Url::class);
+        $randomMock = $this->createMock(Random::class);
+        $randomMock->method('getRandomString')->willReturn('some-rando-string');
+        $secureRendererMock = $this->createMock(SecureHtmlRenderer::class);
+        $secureRendererMock->method('renderEventListenerAsTag')
+            ->willReturnCallback(
+                function (string $event, string $listener, string $selector): string {
+                    return "<script>document.querySelector('{$selector}').{$event} = () => { {$listener} };</script>";
+                }
+            );
         $this->image = $objectManager->getObject(
             Image::class,
             [
                 'urlBuilder' => $this->urlBuilderMock,
-                '_escaper' => $objectManager->getObject(Escaper::class)
+                '_escaper' => $objectManager->getObject(Escaper::class),
+                'random' => $randomMock,
+                'secureRenderer' => $secureRendererMock
             ]
         );
 
@@ -82,7 +96,7 @@ class ImageTest extends TestCase
                 'showInWebsite' => '1',
                 'showInStore' => '1',
                 'label' => null,
-                'backend_model' => \Magento\Config\Model\Config\Backend\Image::class,
+                'backend_model' => BackendImage::class,
                 'upload_dir' => [
                     'config' => 'system/filesystem/media',
                     'scope_info' => '1',
@@ -108,14 +122,15 @@ class ImageTest extends TestCase
         $this->assertStringContainsString('type="file"', $html);
         $this->assertStringContainsString('value="test_value"', $html);
         $this->assertStringContainsString(
-            '<a href="'
+            '<a previewlinkid="linkIdsome-rando-string" href="'
             . $url
             . $this->testData['path']
             . '/'
             . $this->testData['value']
-            . '" onclick="imagePreview(\'' . $expectedHtmlId . '_image\'); return false;"',
+            . '"',
             $html
         );
+        $this->assertStringContainsString("imagePreview('{$expectedHtmlId}_image');\nreturn false;", $html);
         $this->assertStringContainsString('<input type="checkbox"', $html);
     }
 }

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminEnableFreeShippingToSpecificCountriesActionGroup">
+        <annotations>
+            <description>Admin Enable Free Shipping To Specific Countries on configuration papge.</description>
+        </annotations>
+        <magentoCLI command="config:set {{EnableFreeShippingToSpecificCountriesConfigData.path}} {{EnableFreeShippingToSpecificCountriesConfigData.value}}" stepKey="selectSpecificCountriesForFreeShipping"/>
+        <magentoCLI command="config:set {{EnableFreeShippingToAfghanistanConfigData.path}} {{EnableFreeShippingToAfghanistanConfigData.value}}" stepKey="selectCountry"/>
+    </actionGroup>
+</actionGroups>

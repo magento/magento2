@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Framework\Math\Random;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class TemporaryTableServiceTest extends TestCase
 {
@@ -44,7 +45,7 @@ class TemporaryTableServiceTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->adapterMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $this->adapterMock = $this->createMock(AdapterInterface::class);
         $this->selectMock = $this->createMock(Select::class);
         $this->randomMock = $this->createMock(Random::class);
         $this->temporaryTableService = (new ObjectManager($this))->getObject(
@@ -88,10 +89,9 @@ class TemporaryTableServiceTest extends TestCase
      * Run test createFromSelect method
      *
      * @param array $indexes
-     * @param string $expectedSelect
-     * @dataProvider createFromSelectDataProvider
-     * @return void
+     * @param string $expectedSelect     * @return void
      */
+    #[DataProvider('createFromSelectDataProvider')]
     public function testCreateFromSelect($indexes, $expectedSelect)
     {
         $selectString = 'select * from sometable';
@@ -147,16 +147,13 @@ class TemporaryTableServiceTest extends TestCase
      *
      * @param string $tableName
      * @param bool $assertion
-     *
-     * @dataProvider dropTableWhenCreatedTablesArrayNotEmptyDataProvider
-     * @return void
+     *     * @return void
      */
+    #[DataProvider('dropTableWhenCreatedTablesArrayNotEmptyDataProvider')]
     public function testDropTableWhenCreatedTablesArrayNotEmpty($tableName, $assertion)
     {
         $createdTableAdapters = new \ReflectionProperty($this->temporaryTableService, 'createdTableAdapters');
-        $createdTableAdapters->setAccessible(true);
         $createdTableAdapters->setValue($this->temporaryTableService, ['tmp_select_table' => $this->adapterMock]);
-        $createdTableAdapters->setAccessible(false);
 
         $this->adapterMock->expects($this->any())
             ->method('dropTemporaryTable')
@@ -168,7 +165,7 @@ class TemporaryTableServiceTest extends TestCase
     /**
      * @return array
      */
-    public function createFromSelectDataProvider()
+    public static function createFromSelectDataProvider()
     {
         return [
             [
@@ -203,7 +200,7 @@ class TemporaryTableServiceTest extends TestCase
     /**
      * @return array
      */
-    public function dropTableWhenCreatedTablesArrayNotEmptyDataProvider()
+    public static function dropTableWhenCreatedTablesArrayNotEmptyDataProvider()
     {
         return [
             ['tmp_select_table_1', false],

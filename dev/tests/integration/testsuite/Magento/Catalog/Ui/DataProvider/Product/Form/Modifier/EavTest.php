@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,8 +9,10 @@ namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Eav\Api\AttributeSetRepositoryInterface;
 use Magento\Eav\Model\AttributeSetRepository;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\TestFramework\Eav\Model\GetAttributeGroupByName;
 use Magento\TestFramework\Eav\Model\ResourceModel\GetEntityIdByAttributeId;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Provides tests for eav modifier used in products admin form data provider.
@@ -34,6 +36,9 @@ class EavTest extends AbstractEavTest
      */
     private $setRepository;
 
+    /** @var ScopeConfigInterface */
+    private $config;
+
     /**
      * @inheritdoc
      */
@@ -43,18 +48,19 @@ class EavTest extends AbstractEavTest
         $this->attributeGroupByName = $this->objectManager->get(GetAttributeGroupByName::class);
         $this->getEntityIdByAttributeId = $this->objectManager->get(GetEntityIdByAttributeId::class);
         $this->setRepository = $this->objectManager->get(AttributeSetRepositoryInterface::class);
+        $this->config = $this->objectManager->get(ScopeConfigInterface::class);
     }
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/product_text_attribute.php
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
-     * @dataProvider modifyMetaWithAttributeProvider
      * @param string $groupName
      * @param string $groupCode
      * @param string $attributeCode
      * @param array $attributeMeta
      * @return void
      */
+    #[DataProvider('modifyMetaWithAttributeProvider')]
     public function testModifyMetaWithAttributeInGroups(
         string $groupName,
         string $groupCode,
@@ -82,7 +88,7 @@ class EavTest extends AbstractEavTest
     /**
      * @return array
      */
-    public function modifyMetaWithAttributeProvider(): array
+    public static function modifyMetaWithAttributeProvider(): array
     {
         $textAttributeMeta = [
             'dataType' => 'textarea',
@@ -113,28 +119,28 @@ class EavTest extends AbstractEavTest
 
         return [
             'new_attribute_in_existing_group' => [
-                'group_name' => 'Content',
-                'group_code' => 'content',
-                'attribute_code' => 'text_attribute',
-                'attribute_meta' => $textAttributeMeta,
+                'groupName' => 'Content',
+                'groupCode' => 'content',
+                'attributeCode' => 'text_attribute',
+                'attributeMeta' => $textAttributeMeta,
             ],
             'new_attribute_in_new_group' => [
-                'group_name' => 'Test',
-                'group_code' => 'test',
-                'attribute_code' => 'text_attribute',
-                'attribute_meta' => array_merge($textAttributeMeta, ['source' => 'test']),
+                'groupName' => 'Test',
+                'groupCode' => 'test',
+                'attributeCode' => 'text_attribute',
+                'attributeMeta' => array_merge($textAttributeMeta, ['source' => 'test']),
             ],
             'old_attribute_moved_to_existing_group' => [
-                'group_name' => 'Images',
-                'group_code' => 'image-management',
-                'attribute_code' => 'url_key',
-                'attribute_meta' => $urlKeyAttributeMeta,
+                'groupName' => 'Images',
+                'groupCode' => 'image-management',
+                'attributeCode' => 'url_key',
+                'attributeMeta' => $urlKeyAttributeMeta,
             ],
             'old_attribute_moved_to_new_group' => [
-                'group_name' => 'Test',
-                'group_code' => 'test',
-                'attribute_code' => 'url_key',
-                'attribute_meta' => array_merge($urlKeyAttributeMeta, ['source' => 'test']),
+                'groupName' => 'Test',
+                'groupCode' => 'test',
+                'attributeCode' => 'url_key',
+                'attributeMeta' => array_merge($urlKeyAttributeMeta, ['source' => 'test']),
             ],
         ];
     }
@@ -216,5 +222,93 @@ class EavTest extends AbstractEavTest
         ];
         $set->organizeData(array_merge($data, $additional));
         $this->setRepository->save($set);
+    }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/attribute_page_layout_default.php
+     * @return void
+     */
+    #[DataProvider('attrModifyMetaNewProductPageLayoutDefaultProvider')]
+    public function testModifyMetaNewProductPageLayoutDefault($attributesMeta): void
+    {
+        $defaultLayout = $this->config->getValue('web/default_layouts/default_product_layout');
+        if ($defaultLayout) {
+            $attributesMeta = array_merge($attributesMeta, ['default' => $defaultLayout]);
+        }
+        $expectedMeta = $this->addMetaNesting(
+            $attributesMeta,
+            'design',
+            'page_layout'
+        );
+        $this->callModifyMetaAndAssert($this->getNewProduct(), $expectedMeta);
+    }
+
+    /**
+     * @return array
+     */
+    public static function attrModifyMetaNewProductPageLayoutDefaultProvider(): array
+    {
+        return [
+            'attributes_meta' => [
+                [
+                    'dataType' => 'select',
+                    'formElement' => 'select',
+                    'visible' => '1',
+                    'required' => false,
+                    'label' => 'Layout',
+                    'code' => 'page_layout',
+                    'source' => 'design',
+                    'scopeLabel' => '[STORE VIEW]',
+                    'globalScope' => false,
+                    'sortOrder' => '__placeholder__',
+                    'options' =>
+                        [
+                            0 =>
+                                [
+                                    'value' => '',
+                                    'label' => 'No layout updates',
+                                    '__disableTmpl' => true,
+                                ],
+                            1 =>
+                                [
+                                    'label' => 'Empty',
+                                    'value' => 'empty',
+                                    '__disableTmpl' => true,
+                                ],
+                            2 =>
+                                [
+                                    'label' => '1 column',
+                                    'value' => '1column',
+                                    '__disableTmpl' => true,
+                                ],
+                            3 =>
+                                [
+                                    'label' => '2 columns with left bar',
+                                    'value' => '2columns-left',
+                                    '__disableTmpl' => true,
+                                ],
+                            4 =>
+                                [
+                                    'label' => '2 columns with right bar',
+                                    'value' => '2columns-right',
+                                    '__disableTmpl' => true,
+                                ],
+                            5 =>
+                                [
+                                    'label' => '3 columns',
+                                    'value' => '3columns',
+                                    '__disableTmpl' => true,
+                                ],
+                        ],
+                    'componentType' => 'field',
+                    'disabled' => true,
+                    'validation' =>
+                        [
+                            'required' => false,
+                        ],
+                    'serviceDisabled' => true,
+                ]
+            ]
+        ];
     }
 }

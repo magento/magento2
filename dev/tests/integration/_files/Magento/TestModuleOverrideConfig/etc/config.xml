@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
@@ -12,6 +12,8 @@
                 <field_1>1st field default value</field_1>
                 <field_2>2nd field default value</field_2>
                 <field_3>3rd field default value</field_3>
+                <field_4>4th field default value</field_4>
+                <field_5>5th field default value</field_5>
             </test_group>
         </test_section>
     </default>

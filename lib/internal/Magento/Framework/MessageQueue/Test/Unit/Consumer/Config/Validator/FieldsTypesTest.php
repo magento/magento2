@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Framework\MessageQueue\Test\Unit\Consumer\Config\Validator;
 use Magento\Framework\MessageQueue\Consumer\Config\Validator\FieldsTypes as FieldsTypesValidator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class FieldsTypesTest extends TestCase
 {
@@ -27,10 +28,9 @@ class FieldsTypesTest extends TestCase
         $this->validator = $objectManager->getObject(FieldsTypesValidator::class);
     }
 
-    /**
-     * @dataProvider validConfigDataProvider
-     * @param array $configData
+    /**     * @param array $configData
      */
+    #[DataProvider('validConfigDataProvider')]
     public function testValidateValid($configData)
     {
         $this->validator->validate($configData);
@@ -39,7 +39,7 @@ class FieldsTypesTest extends TestCase
     /**
      * @return array
      */
-    public function validConfigDataProvider()
+    public static function validConfigDataProvider()
     {
         return [
             'valid' => [
@@ -51,6 +51,9 @@ class FieldsTypesTest extends TestCase
                         'handlers' => [['type' => 'handlerClassOne', 'method' => 'handlerMethodOne']],
                         'connection' => 'connection1',
                         'maxMessages' => '100',
+                        'maxIdleTime' => '500',
+                        'sleep' => '10',
+                        'onlySpawnWhenMessageAvailable' => true
                     ]
                 ]
             ],
@@ -63,17 +66,64 @@ class FieldsTypesTest extends TestCase
                         'handlers' => [['type' => 'handlerClassOne', 'method' => 'handlerMethodOne']],
                         'connection' => 'connection1',
                         'maxMessages' => null,
+                        'maxIdleTime' => '500',
+                        'sleep' => '10',
+                        'onlySpawnWhenMessageAvailable' => true
+                    ]
+                ]
+            ],
+            'valid, maxIdleTime == null' => [
+                [
+                    'consumer1' => [
+                        'name' => 'consumer1',
+                        'queue' => 'queue1',
+                        'consumerInstance' => 'consumerClass1',
+                        'handlers' => [['type' => 'handlerClassOne', 'method' => 'handlerMethodOne']],
+                        'connection' => 'connection1',
+                        'maxMessages' => '100',
+                        'maxIdleTime' => null,
+                        'sleep' => '10',
+                        'onlySpawnWhenMessageAvailable' => true
+                    ]
+                ]
+            ],
+            'valid, sleep == null' => [
+                [
+                    'consumer1' => [
+                        'name' => 'consumer1',
+                        'queue' => 'queue1',
+                        'consumerInstance' => 'consumerClass1',
+                        'handlers' => [['type' => 'handlerClassOne', 'method' => 'handlerMethodOne']],
+                        'connection' => 'connection1',
+                        'maxMessages' => '100',
+                        'maxIdleTime' => '500',
+                        'sleep' => null,
+                        'onlySpawnWhenMessageAvailable' => true
+                    ]
+                ]
+            ],
+            'valid, onlySpawnWhenMessageAvailable == null' => [
+                [
+                    'consumer1' => [
+                        'name' => 'consumer1',
+                        'queue' => 'queue1',
+                        'consumerInstance' => 'consumerClass1',
+                        'handlers' => [['type' => 'handlerClassOne', 'method' => 'handlerMethodOne']],
+                        'connection' => 'connection1',
+                        'maxMessages' => '100',
+                        'maxIdleTime' => '500',
+                        'sleep' => '10',
+                        'onlySpawnWhenMessageAvailable' => null
                     ]
                 ]
             ],
         ];
     }
 
-    /**
-     * @dataProvider invalidConfigDataProvider
-     * @param array $configData
+    /**     * @param array $configData
      * @param string $expectedExceptionMessage
      */
+    #[DataProvider('invalidConfigDataProvider')]
     public function testValidateInvalid($configData, $expectedExceptionMessage)
     {
         $this->expectException('\LogicException');
@@ -83,8 +133,10 @@ class FieldsTypesTest extends TestCase
 
     /**
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function invalidConfigDataProvider()
+    public static function invalidConfigDataProvider()
     {
         return [
             'invalid name' => [
@@ -96,6 +148,9 @@ class FieldsTypesTest extends TestCase
                         'handlers' => [['type' => 'handlerClassOne', 'method' => 'handlerMethodOne']],
                         'connection' => 'connection1',
                         'maxMessages' => '100',
+                        'maxIdleTime' => '500',
+                        'sleep' => '10',
+                        'onlySpawnWhenMessageAvailable' => true
                     ]
                 ],
                 "Type of 'name' field specified in configuration of 'consumer1' consumer is invalid."
@@ -110,6 +165,9 @@ class FieldsTypesTest extends TestCase
                         'handlers' => [['type' => 'handlerClassOne', 'method' => 'handlerMethodOne']],
                         'connection' => 'connection1',
                         'maxMessages' => '100',
+                        'maxIdleTime' => '500',
+                        'sleep' => '10',
+                        'onlySpawnWhenMessageAvailable' => true
                     ]
                 ],
                 "Type of 'queue' field specified in configuration of 'consumer1' consumer is invalid."
@@ -124,6 +182,9 @@ class FieldsTypesTest extends TestCase
                         'handlers' => [['type' => 'handlerClassOne', 'method' => 'handlerMethodOne']],
                         'connection' => 'connection1',
                         'maxMessages' => '100',
+                        'maxIdleTime' => '500',
+                        'sleep' => '10',
+                        'onlySpawnWhenMessageAvailable' => true
                     ]
                 ],
                 "Type of 'consumerInstance' field specified in configuration of 'consumer1' consumer is invalid."
@@ -138,6 +199,9 @@ class FieldsTypesTest extends TestCase
                         'handlers' => [['type' => 'handlerClassOne', 'method' => 'handlerMethodOne']],
                         'connection' => [],
                         'maxMessages' => '100',
+                        'maxIdleTime' => '500',
+                        'sleep' => '10',
+                        'onlySpawnWhenMessageAvailable' => true
                     ]
                 ],
                 "Type of 'connection' field specified in configuration of 'consumer1' consumer is invalid."
@@ -152,6 +216,9 @@ class FieldsTypesTest extends TestCase
                         'handlers' => '',
                         'connection' => 'connection1',
                         'maxMessages' => '100',
+                        'maxIdleTime' => '500',
+                        'sleep' => '10',
+                        'onlySpawnWhenMessageAvailable' => true
                     ]
                 ],
                 "Type of 'handlers' field specified in configuration of 'consumer1' consumer is invalid."
@@ -166,11 +233,65 @@ class FieldsTypesTest extends TestCase
                         'handlers' => [['type' => 'handlerClassOne', 'method' => 'handlerMethodOne']],
                         'connection' => 'connection1',
                         'maxMessages' => 'abc',
+                        'maxIdleTime' => '500',
+                        'sleep' => '10',
+                        'onlySpawnWhenMessageAvailable' => true
                     ]
                 ],
                 "Type of 'maxMessages' field specified in configuration of 'consumer1' consumer is invalid."
                 . " Given 'string', 'int|null' was expected."
             ],
+            'invalid maxIdleTime' => [
+                [
+                    'consumer1' => [
+                        'name' => 'consumer1',
+                        'queue' => 'queue1',
+                        'consumerInstance' => 'consumerClass1',
+                        'handlers' => [['type' => 'handlerClassOne', 'method' => 'handlerMethodOne']],
+                        'connection' => 'connection1',
+                        'maxMessages' => '100',
+                        'maxIdleTime' => 'abc',
+                        'sleep' => '10',
+                        'onlySpawnWhenMessageAvailable' => true
+                    ]
+                ],
+                "Type of 'maxIdleTime' field specified in configuration of 'consumer1' consumer is invalid."
+                . " Given 'string', 'int|null' was expected."
+            ],
+            'invalid sleep' => [
+                [
+                    'consumer1' => [
+                        'name' => 'consumer1',
+                        'queue' => 'queue1',
+                        'consumerInstance' => 'consumerClass1',
+                        'handlers' => [['type' => 'handlerClassOne', 'method' => 'handlerMethodOne']],
+                        'connection' => 'connection1',
+                        'maxMessages' => '100',
+                        'maxIdleTime' => '500',
+                        'sleep' => 'abc',
+                        'onlySpawnWhenMessageAvailable' => true
+                    ]
+                ],
+                "Type of 'sleep' field specified in configuration of 'consumer1' consumer is invalid."
+                . " Given 'string', 'int|null' was expected."
+            ],
+            'onlySpawnWhenMessageAvailable' => [
+                [
+                    'consumer1' => [
+                        'name' => 'consumer1',
+                        'queue' => 'queue1',
+                        'consumerInstance' => 'consumerClass1',
+                        'handlers' => [['type' => 'handlerClassOne', 'method' => 'handlerMethodOne']],
+                        'connection' => 'connection1',
+                        'maxMessages' => '100',
+                        'maxIdleTime' => '500',
+                        'sleep' => '10',
+                        'onlySpawnWhenMessageAvailable' => 'yes'
+                    ]
+                ],
+                "Type of 'onlySpawnWhenMessageAvailable' field specified in configuration of 'consumer1' consumer "
+                . "is invalid. Given 'string', 'boolean|null' was expected."
+            ]
         ];
     }
 }

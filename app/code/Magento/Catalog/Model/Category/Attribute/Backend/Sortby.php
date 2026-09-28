@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Model\Category\Attribute\Backend;
@@ -101,6 +101,11 @@ class Sortby extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
                 $data = [];
             }
             $object->setData($attributeCode, implode(',', $data) ?: null);
+        }
+        if ($attributeCode == 'default_sort_by') {
+            $data = $object->getData($attributeCode);
+            $attributeValue = (is_array($data) ? reset($data) : (!empty($data))) ? $data : null;
+            $object->setData($attributeCode, $attributeValue);
         }
         if (!$object->hasData($attributeCode)) {
             $object->setData($attributeCode, null);

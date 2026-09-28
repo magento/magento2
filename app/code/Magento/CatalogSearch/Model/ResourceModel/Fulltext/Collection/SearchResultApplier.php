@@ -1,15 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection;
 
-use Magento\Framework\Data\Collection;
-use Magento\Framework\Search\Adapter\Mysql\TemporaryStorage;
-use Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory;
 use Magento\Framework\Api\Search\SearchResultInterface;
+use Magento\Framework\Data\Collection;
 
 /**
  * Resolve specific attributes for search criteria.
@@ -30,31 +28,15 @@ class SearchResultApplier implements SearchResultApplierInterface
     private $searchResult;
 
     /**
-     * @var TemporaryStorageFactory
-     */
-    private $temporaryStorageFactory;
-
-    /**
-     * @var array
-     */
-    private $orders;
-
-    /**
      * @param Collection $collection
      * @param SearchResultInterface $searchResult
-     * @param TemporaryStorageFactory $temporaryStorageFactory
-     * @param array $orders
      */
     public function __construct(
         Collection $collection,
-        SearchResultInterface $searchResult,
-        TemporaryStorageFactory $temporaryStorageFactory,
-        array $orders
+        SearchResultInterface $searchResult
     ) {
         $this->collection = $collection;
         $this->searchResult = $searchResult;
-        $this->temporaryStorageFactory = $temporaryStorageFactory;
-        $this->orders = $orders;
     }
 
     /**
@@ -62,21 +44,20 @@ class SearchResultApplier implements SearchResultApplierInterface
      */
     public function apply()
     {
-        $temporaryStorage = $this->temporaryStorageFactory->create();
-        $table = $temporaryStorage->storeApiDocuments($this->searchResult->getItems());
-
-        $this->collection->getSelect()->joinInner(
-            [
-                'search_result' => $table->getName(),
-            ],
-            'e.entity_id = search_result.' . TemporaryStorage::FIELD_ENTITY_ID,
-            []
-        );
-
-        if (isset($this->orders['relevance'])) {
-            $this->collection->getSelect()->order(
-                'search_result.' . TemporaryStorage::FIELD_SCORE . ' ' . $this->orders['relevance']
-            );
+        if (empty($this->searchResult->getItems())) {
+            $this->collection->getSelect()->where('NULL');
+            return;
         }
+
+        $ids = [];
+        foreach ($this->searchResult->getItems() as $item) {
+            $ids[] = (int)$item->getId();
+        }
+
+        $orderList = implode(',', $ids);
+        $this->collection->getSelect()
+            ->where('e.entity_id IN (?)', $ids)
+            ->reset(\Magento\Framework\DB\Select::ORDER)
+            ->order(new \Magento\Framework\DB\Sql\Expression("FIELD(e.entity_id, $orderList)"));
     }
 }

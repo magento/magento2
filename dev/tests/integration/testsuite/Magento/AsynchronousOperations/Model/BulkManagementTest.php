@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\AsynchronousOperations\Model;
 
@@ -40,7 +40,7 @@ class BulkManagementTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->publisherMock = $this->getMockForAbstractClass(BulkPublisherInterface::class);
+        $this->publisherMock = $this->createMock(BulkPublisherInterface::class);
 
         $this->model = $this->objectManager->create(
             BulkManagement::class,
@@ -94,9 +94,6 @@ class BulkManagementTest extends \PHPUnit\Framework\TestCase
             ->create()
             ->addFieldToFilter('bulk_uuid', ['eq' => $bulkUuid])
             ->getItems();
-        foreach ($operations as $operation) {
-            $operation->setId(null);
-        }
         $this->publisherMock->expects($this->once())
             ->method('publish')
             ->with($topicName, array_values($operations));

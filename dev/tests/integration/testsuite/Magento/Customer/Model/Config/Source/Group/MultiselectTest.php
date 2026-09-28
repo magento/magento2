@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Model\Config\Source\Group;
 
@@ -23,12 +23,12 @@ class MultiselectTest extends \PHPUnit\Framework\TestCase
         $optionsToCompare = [];
         foreach ($options as $option) {
             if (is_array($option['value'])) {
-                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                $optionsToCompare = array_merge($optionsToCompare, $option['value']);
+                $optionsToCompare[] = $option['value'];
             } else {
-                $optionsToCompare[] = $option;
+                $optionsToCompare[] = [$option];
             }
         }
+        $optionsToCompare = array_merge([], ...$optionsToCompare);
         sort($optionsToCompare);
         foreach ($optionsToCompare as $item) {
             $this->assertTrue(

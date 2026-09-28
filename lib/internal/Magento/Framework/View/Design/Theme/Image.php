@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\View\Design\Theme;
 
@@ -101,7 +101,7 @@ class Image
         Image\PathInterface $themeImagePath,
         \Psr\Log\LoggerInterface $logger,
         array $imageParams = [self::PREVIEW_IMAGE_WIDTH, self::PREVIEW_IMAGE_HEIGHT],
-        ThemeInterface $theme = null
+        ?ThemeInterface $theme = null
     ) {
         $this->mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->rootDirectory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);

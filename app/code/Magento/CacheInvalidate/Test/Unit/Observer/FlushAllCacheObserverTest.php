@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -56,7 +56,7 @@ class FlushAllCacheObserverTest extends TestCase
             Config::VARNISH
         );
 
-        $this->purgeCache->expects($this->once())->method('sendPurgeRequest')->with('.*');
+        $this->purgeCache->expects($this->once())->method('sendPurgeRequest')->with(['.*']);
         $this->model->execute($this->observerMock);
     }
 }

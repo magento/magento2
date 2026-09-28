@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -64,11 +64,11 @@ class EavAttributeCondition implements CustomConditionInterface
                 ->select()
                 ->from(
                     [Collection::MAIN_TABLE_ALIAS => $entityResourceModel->getEntityTable()],
-                    Collection::MAIN_TABLE_ALIAS . '.' . $entityResourceModel->getEntityIdField()
+                    Collection::MAIN_TABLE_ALIAS . '.' . $attribute->getEntityIdField()
                 )->joinLeft(
                     [$tableAlias => $attribute->getBackendTable()],
                     $tableAlias . '.' . $attribute->getEntityIdField() . '=' . Collection::MAIN_TABLE_ALIAS .
-                    '.' . $entityResourceModel->getEntityIdField() . ' AND ' . $tableAlias . '.' .
+                    '.' . $attribute->getEntityIdField() . ' AND ' . $tableAlias . '.' .
                     $attribute->getIdFieldName() . '=' . $attribute->getAttributeId(),
                     ''
                 )->where($tableAlias . '.value is null');

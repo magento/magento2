@@ -1,12 +1,15 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
     <event name="sales_quote_save_after">
         <observer name="set_checkout_quote_id" instance="Magento\Checkout\Observer\SalesQuoteSaveAfterObserver" />
+    </event>
+    <event name="magento_catalogrule_api_data_ruleinterface_save_after">
+        <observer name="checkout_catalog_rule_save_after" instance="Magento\Checkout\Observer\CatalogRuleSaveAfterObserver" />
     </event>
 </config>

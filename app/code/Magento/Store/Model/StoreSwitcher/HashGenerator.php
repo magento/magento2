@@ -1,14 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Store\Model\StoreSwitcher;
 
 use Magento\Authorization\Model\UserContextInterface;
-use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\DeploymentConfig as DeploymentConfig;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Url\Helper\Data as UrlHelper;
@@ -17,6 +16,10 @@ use Magento\Store\Model\StoreSwitcher\HashGenerator\HashData;
 
 /**
  * Generate one time token and build redirect url
+ *
+ * @deprecated No longer used
+ * @see RedirectDataGenerator
+ * @see RedirectDataValidator
  */
 class HashGenerator
 {
@@ -96,6 +99,7 @@ class HashGenerator
      */
     public function validateHash(string $signature, HashData $hashData): bool
     {
+        // @phpstan-ignore-next-line
         if (!empty($signature) && !empty($hashData)) {
             $timeStamp = $hashData->getTimestamp();
             $fromStoreCode = $hashData->getFromStoreCode();

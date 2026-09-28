@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -40,11 +40,11 @@ class ReportProductDeletedToNewRelicTest extends TestCase
     {
         $this->config = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isNewRelicEnabled'])
+            ->onlyMethods(['isNewRelicEnabled'])
             ->getMock();
         $this->newRelicWrapper = $this->getMockBuilder(NewRelicWrapper::class)
             ->disableOriginalConstructor()
-            ->setMethods(['addCustomParameter'])
+            ->onlyMethods(['addCustomParameter'])
             ->getMock();
 
         $this->model = new ReportProductDeletedToNewRelic(

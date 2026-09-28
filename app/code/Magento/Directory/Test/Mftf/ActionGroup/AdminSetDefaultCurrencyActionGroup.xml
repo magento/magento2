@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!-- Set base currency -->
+    <actionGroup name="AdminSetDefaultCurrencyActionGroup" extends="AdminSaveConfigActionGroup">
+        <annotations>
+            <description>Admin uncheck  default currency  option.</description>
+        </annotations>
+        <arguments>
+            <argument name="currency" type="string"/>
+        </arguments>
+        <uncheckOption selector="{{CurrencySetupSection.defaultdisplayCurrency}}" before="clickSaveConfigBtn" stepKey="uncheckUseDefaultOption"/>
+        <selectOption selector="{{CurrencySetupSection.defaultCurrency}}" userInput="{{currency}}" after="uncheckUseDefaultOption" stepKey="setDefaultCurrencyField"/>
+    </actionGroup>
+</actionGroups>

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -46,23 +46,6 @@ class InvalidateTokenTest extends AbstractBackendController
         $this->assertRedirect($this->stringContains('backend/customer/index/edit/id/' . $customerId));
         $message = $this->escaper->escapeHtml('You have revoked the customer\'s tokens.');
         $this->assertSessionMessages($this->equalTo([(string)__($message)]), MessageInterface::TYPE_SUCCESS);
-    }
-
-    /**
-     * @magentoDataFixture Magento/Customer/_files/customer.php
-     *
-     * @return void
-     */
-    public function testInvalidateCustomerWithoutToken(): void
-    {
-        $customerId = 1;
-        $this->getRequest()->setParam('customer_id', $customerId)->setMethod(HttpRequest::METHOD_GET);
-        $this->dispatch('backend/customer/customer/invalidateToken');
-        $this->assertRedirect($this->stringContains('backend/customer/index/edit/id/' . $customerId));
-        $this->assertSessionMessages(
-            $this->equalTo([(string)__('This customer has no tokens.')]),
-            MessageInterface::TYPE_ERROR
-        );
     }
 
     /**

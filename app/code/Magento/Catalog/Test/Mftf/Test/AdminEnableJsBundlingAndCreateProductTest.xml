@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminEnableJsBundlingAndCreateProductTest" extends="AdminDisableJsBundlingAndCreateProductTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Preconditions for JS Bundling and Product Matrix"/>
+            <title value="Enable JS bundling and create simple product across types with/without custom options"/>
+            <description value="Check the product price on product and cart page when JS bundling is enabled via CLI"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4128"/>
+            <group value="checkout"/>
+        </annotations>
+        <before>
+            <!-- Precondition Step 1: Enable JS Bundling and related settings via CLI -->
+            <magentoCLI command="config:set" arguments="dev/js/enable_js_bundling 1" stepKey="enableJsBundling" before="createCustomer"/>
+        </before>
+        <after>
+            <!-- Revert JS bundling settings -->
+            <magentoCLI command="config:set" arguments="dev/js/enable_js_bundling 0" stepKey="disableJsBundling" after="logoutAsAdmin"/>
+        </after>
+    </test>
+</tests>

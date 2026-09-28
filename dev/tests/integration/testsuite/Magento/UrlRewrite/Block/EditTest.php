@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\UrlRewrite\Block;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for \Magento\UrlRewrite\Block\Edit
@@ -14,13 +16,12 @@ class EditTest extends \PHPUnit\Framework\TestCase
     /**
      * Test prepare layout
      *
-     * @dataProvider prepareLayoutDataProvider
-     *
      * @param array $blockAttributes
      * @param array $expected
      *
      * @magentoAppIsolation enabled
      */
+    #[DataProvider('prepareLayoutDataProvider')]
     public function testPrepareLayout($blockAttributes, $expected)
     {
         /** @var $layout \Magento\Framework\View\LayoutInterface */
@@ -187,7 +188,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function prepareLayoutDataProvider()
+    public static function prepareLayoutDataProvider(): array
     {
         /** @var $urlRewrite \Magento\UrlRewrite\Model\UrlRewrite */
         $urlRewrite = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(

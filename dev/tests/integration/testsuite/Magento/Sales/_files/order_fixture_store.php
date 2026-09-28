@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
@@ -41,6 +41,7 @@ $payment->setMethod('checkmo');
 /** @var OrderItem $orderItem */
 $orderItem = $objectManager->create(OrderItem::class);
 $orderItem->setProductId($product->getId())->setQtyOrdered(2);
+$orderItem->setProductType(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE);
 
 /** @var Order $order */
 $order = $objectManager->create(Order::class);

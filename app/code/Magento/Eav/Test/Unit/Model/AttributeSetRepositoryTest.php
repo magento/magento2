@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -21,6 +21,7 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\StateException;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -93,8 +94,7 @@ class AttributeSetRepositoryTest extends TestCase
             ['process']
         );
 
-        $this->collectionProcessor = $this->getMockBuilder(CollectionProcessorInterface::class)
-            ->getMockForAbstractClass();
+        $this->collectionProcessor = $this->createMock(CollectionProcessorInterface::class);
 
         $this->model = new AttributeSetRepository(
             $this->resourceMock,
@@ -227,7 +227,7 @@ class AttributeSetRepositoryTest extends TestCase
 
         $collectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'getItems',
                 'getSize',
             ])
@@ -242,10 +242,9 @@ class AttributeSetRepositoryTest extends TestCase
 
         $this->collectionFactoryMock->expects($this->once())->method('create')->willReturn($collectionMock);
 
-        $searchCriteriaMock = $this->getMockForAbstractClass(SearchCriteriaInterface::class);
+        $searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);
 
-        $resultMock = $this->getMockBuilder(AttributeSetSearchResultsInterface::class)
-            ->getMockForAbstractClass();
+        $resultMock = $this->createMock(AttributeSetSearchResultsInterface::class);
 
         $resultMock->expects($this->once())
             ->method('setSearchCriteria')
@@ -281,7 +280,7 @@ class AttributeSetRepositoryTest extends TestCase
 
         $collectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'getItems',
                 'getSize',
             ])
@@ -298,10 +297,9 @@ class AttributeSetRepositoryTest extends TestCase
             ->method('create')
             ->willReturn($collectionMock);
 
-        $searchCriteriaMock = $this->getMockForAbstractClass(SearchCriteriaInterface::class);
+        $searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);
 
-        $resultMock = $this->getMockBuilder(AttributeSetSearchResultsInterface::class)
-            ->getMockForAbstractClass();
+        $resultMock = $this->createMock(AttributeSetSearchResultsInterface::class);
 
         $resultMock->expects($this->once())
             ->method('setSearchCriteria')

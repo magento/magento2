@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -20,6 +20,11 @@
     </entity>
     <entity name="NotValidCartItems" type="CartItem">
         <data key="qty">abc</data>
+        <var key="quote_id" entityKey="return" entityType="GuestCart"/>
+        <var key="sku" entityKey="sku" entityType="product"/>
+    </entity>
+    <entity name="FourCartItems" type="CartItem">
+        <data key="qty">4</data>
         <var key="quote_id" entityKey="return" entityType="GuestCart"/>
         <var key="sku" entityKey="sku" entityType="product"/>
     </entity>

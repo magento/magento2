@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -93,7 +93,7 @@ class ReportProviderTest extends TestCase
             ->method('getIterator')
             ->willReturn($this->iteratorMock);
 
-        $this->connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $this->connectionMock = $this->createMock(AdapterInterface::class);
 
         $this->queryFactoryMock = $this->createMock(QueryFactory::class);
 
@@ -154,5 +154,110 @@ class ReportProviderTest extends TestCase
             ->with($this->statementMock, null)
             ->willReturn($this->iteratorMock);
         $this->assertEquals($this->iteratorMock, $this->subject->getReport($reportName));
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetBatchReport()
+    {
+        $reportName = 'test_report';
+        $connectionName = 'sales';
+        $tableName = 'sales_order_item';
+        $cursorColumn = 'item_id';
+        $this->queryFactoryMock->expects($this->once())
+            ->method('create')
+            ->with($reportName)
+            ->willReturn($this->queryMock);
+
+        $this->connectionFactoryMock->expects($this->once())
+            ->method('getConnection')
+            ->with($connectionName)
+            ->willReturn($this->connectionMock);
+
+        $this->queryMock->expects($this->once())
+            ->method('getConnectionName')
+            ->willReturn($connectionName);
+        $this->queryMock->expects($this->atLeast(2))
+            ->method('getConfig')
+            ->willReturn(
+                [
+                    'name' => $reportName,
+                    'connection' => $connectionName,
+                    'source' => ['name' => $tableName]
+                ]
+            );
+        $this->queryMock->expects($this->once())->method('getSelect')->willReturn($this->selectMock);
+        $this->selectMock->method('where')->willReturn($this->selectMock);
+        $this->selectMock->method('order')->willReturn($this->selectMock);
+        $this->selectMock->method('limit')->willReturn($this->selectMock);
+        $rows = [
+            [$cursorColumn => 1, 'other_field' => 'value1'],
+            [$cursorColumn => 2, 'other_field' => 'value2'],
+            [$cursorColumn => 3, 'other_field' => 'value3']
+        ];
+        $this->connectionMock->expects($this->once())
+            ->method('query')
+            ->with($this->isInstanceOf(Select::class))
+            ->willReturn($this->statementMock);
+        $this->statementMock->expects($this->once())
+            ->method('fetchAll')
+            ->with(\PDO::FETCH_ASSOC)
+            ->willReturn($rows);
+        $this->iteratorFactoryMock->expects($this->once())
+            ->method('create')
+            ->with($this->isInstanceOf(\ArrayIterator::class), null)
+            ->willReturn($this->iteratorMock);
+        $this->assertEquals($this->iteratorMock, $this->subject->getBatchReport($reportName));
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetBatchReportWithOffsetFallback()
+    {
+        $reportName = 'test_report';
+        $connectionName = 'sales';
+        $tableName = 'unknown_table';
+        $this->queryFactoryMock->expects($this->once())
+            ->method('create')
+            ->with($reportName)
+            ->willReturn($this->queryMock);
+        $this->connectionFactoryMock->expects($this->once())
+            ->method('getConnection')
+            ->with($connectionName)
+            ->willReturn($this->connectionMock);
+        $this->queryMock->expects($this->once())
+            ->method('getConnectionName')
+            ->willReturn($connectionName);
+        $this->queryMock->expects($this->atLeast(2))
+            ->method('getConfig')
+            ->willReturn(
+                [
+                    'name' => $reportName,
+                    'connection' => $connectionName,
+                    'source' => ['name' => $tableName]
+                ]
+            );
+        $countSelectMock = $this->createMock(Select::class);
+        $this->queryMock->expects($this->once())->method('getSelectCountSql')->willReturn($countSelectMock);
+        $this->connectionMock->expects($this->once())
+            ->method('fetchOne')
+            ->with($countSelectMock)
+            ->willReturn(100);
+        $this->queryMock->expects($this->once())->method('getSelect')->willReturn($this->selectMock);
+        $this->selectMock->expects($this->once())
+            ->method('limit')
+            ->with(ReportProvider::BATCH_SIZE, 0)
+            ->willReturn($this->selectMock);
+        $this->connectionMock->expects($this->once())
+            ->method('query')
+            ->with($this->selectMock)
+            ->willReturn($this->statementMock);
+        $this->iteratorFactoryMock->expects($this->once())
+            ->method('create')
+            ->with($this->statementMock, null)
+            ->willReturn($this->iteratorMock);
+        $this->assertEquals($this->iteratorMock, $this->subject->getBatchReport($reportName));
     }
 }

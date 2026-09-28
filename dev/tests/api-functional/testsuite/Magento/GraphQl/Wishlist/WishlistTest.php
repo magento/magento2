@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -39,6 +39,7 @@ class WishlistTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoConfigFixture default_store wishlist/general/active 1
      * @magentoApiDataFixture Magento/Wishlist/_files/wishlist.php
      */
     public function testGetCustomerWishlist(): void
@@ -94,6 +95,7 @@ QUERY;
     }
 
     /**
+     * @magentoConfigFixture default_store wishlist/general/active 1
      */
     public function testGetGuestWishlist()
     {

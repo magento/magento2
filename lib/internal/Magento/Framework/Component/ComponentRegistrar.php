@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Component;
 
@@ -9,20 +9,22 @@ namespace Magento\Framework\Component;
  * Provides ability to statically register components.
  *
  * @api
+ * @since 100.0.2
  */
 class ComponentRegistrar implements ComponentRegistrarInterface
 {
-    /**#@+
+    /**
      * Different types of components
      */
-    const MODULE = 'module';
-    const LIBRARY = 'library';
-    const THEME = 'theme';
-    const LANGUAGE = 'language';
-    const SETUP = 'setup';
-    /**#@- */
+    public const MODULE = 'module';
+    public const LIBRARY = 'library';
+    public const THEME = 'theme';
+    public const LANGUAGE = 'language';
+    public const SETUP = 'setup';
 
-    /**#@- */
+    /**
+     * @var array[]
+     */
     private static $paths = [
         self::MODULE => [],
         self::LIBRARY => [],
@@ -62,11 +64,19 @@ class ComponentRegistrar implements ComponentRegistrarInterface
     }
 
     /**
-     * @inheritdoc
+     * Get path of a component if it is already registered
+     *
+     * @param string $type
+     * @param string $componentName
+     * @return null|string
      */
     public function getPath($type, $componentName)
     {
         self::validateType($type);
+        if (!is_string($componentName)) {
+            return null;
+        }
+
         return self::$paths[$type][$componentName] ?? null;
     }
 

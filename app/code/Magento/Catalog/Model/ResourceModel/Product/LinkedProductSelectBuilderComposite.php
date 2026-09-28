@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Model\ResourceModel\Product;
@@ -33,7 +33,7 @@ class LinkedProductSelectBuilderComposite implements LinkedProductSelectBuilderI
         foreach ($this->linkedProductSelectBuilder as $productSelectBuilder) {
             $selects[] = $productSelectBuilder->build($productId, $storeId);
         }
-        $selects = array_merge(...$selects);
+        $selects = array_merge([], ...$selects);
 
         return $selects;
     }

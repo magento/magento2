@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -15,6 +15,7 @@ use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Ui\Component\Form\Element\DataType\Media\Image;
 use Magento\Ui\Test\Unit\Component\Form\Element\DataType\MediaTest;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 
 class ImageTest extends MediaTest
@@ -48,24 +49,19 @@ class ImageTest extends MediaTest
     {
         parent::setUp();
 
-        $this->processor = $this->getMockBuilder(Processor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->processor = $this->createMock(Processor::class);
 
         $this->context->expects($this->atLeastOnce())->method('getProcessor')->willReturn($this->processor);
 
-        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
 
-        $this->store = $this->getMockBuilder(StoreInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->store = $this->createMock(StoreInterface::class);
 
         $this->store->expects($this->any())->method('getId')->willReturn(0);
 
         $this->storeManager->expects($this->any())->method('getStore')->willReturn($this->store);
 
-        $this->fileSize = $this->getMockBuilder(Size::class)
-            ->getMock();
+        $this->fileSize = $this->createMock(Size::class);
 
         $this->objectManager = new ObjectManager($this);
 
@@ -82,19 +78,17 @@ class ImageTest extends MediaTest
         ]);
     }
 
-    /**
-     * @dataProvider prepareDataProvider
-     */
-    public function testPrepare()
+    #[DataProvider('prepareDataProvider')]
+    public function testPrepare(array $initialConfig, int $maxFileSizeSupported, array $expectedPreparedConfig): void
     {
-        $this->assertExpectedPreparedConfiguration(...func_get_args());
+        $this->assertExpectedPreparedConfiguration($initialConfig, $maxFileSizeSupported, $expectedPreparedConfig);
     }
 
     /**
      * Data provider for testPrepare
      * @return array
      */
-    public function prepareDataProvider(): array
+    public static function prepareDataProvider(): array
     {
         return [
             [['maxFileSize' => 10], 10, ['maxFileSize' => 10]],

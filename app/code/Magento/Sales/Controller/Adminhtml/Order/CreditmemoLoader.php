@@ -1,19 +1,18 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
 use Magento\Framework\DataObject;
 use Magento\Sales\Api\CreditmemoRepositoryInterface;
-use \Magento\Sales\Model\Order\CreditmemoFactory;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\CreditmemoFactory;
 
 /**
- * Class CreditmemoLoader
+ * Loader for creditmemo
  *
- * @package Magento\Sales\Controller\Adminhtml\Order
  * @method CreditmemoLoader setCreditmemoId($id)
  * @method CreditmemoLoader setCreditmemo($creditMemo)
  * @method CreditmemoLoader setInvoiceId($id)
@@ -22,6 +21,7 @@ use \Magento\Sales\Model\Order\CreditmemoFactory;
  * @method string getCreditmemo()
  * @method int getInvoiceId()
  * @method int getOrderId()
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class CreditmemoLoader extends DataObject
 {
@@ -129,7 +129,8 @@ class CreditmemoLoader extends DataObject
 
     /**
      * Check if creditmeno can be created for order
-     * @param \Magento\Sales\Model\Order $order
+     *
+     * @param Order $order
      * @return bool
      */
     protected function _canCreditmemo($order)
@@ -153,7 +154,9 @@ class CreditmemoLoader extends DataObject
     }
 
     /**
-     * @param \Magento\Sales\Model\Order $order
+     * Inits invoice
+     *
+     * @param Order $order
      * @return $this|bool
      */
     protected function _initInvoice($order)
@@ -181,7 +184,12 @@ class CreditmemoLoader extends DataObject
         $creditmemoId = $this->getCreditmemoId();
         $orderId = $this->getOrderId();
         if ($creditmemoId) {
-            $creditmemo = $this->creditmemoRepository->get($creditmemoId);
+            try {
+                $creditmemo = $this->creditmemoRepository->get($creditmemoId);
+            } catch (\Exception $e) {
+                $this->messageManager->addErrorMessage(__('This creditmemo no longer exists.'));
+                return false;
+            }
         } elseif ($orderId) {
             $data = $this->getCreditmemo();
             $order = $this->orderFactory->create()->load($orderId);
@@ -197,7 +205,7 @@ class CreditmemoLoader extends DataObject
             $backToStock = [];
             foreach ($savedData as $orderItemId => $itemData) {
                 if (isset($itemData['qty'])) {
-                    $qtys[$orderItemId] = $itemData['qty'];
+                    $qtys[$orderItemId] = $itemData['qty'] > 0 ? $itemData['qty'] : 0;
                 }
                 if (isset($itemData['back_to_stock'])) {
                     $backToStock[$orderItemId] = true;
@@ -219,7 +227,7 @@ class CreditmemoLoader extends DataObject
                 $parentId = $orderItem->getParentItemId();
                 if ($parentId && isset($backToStock[$parentId]) && $backToStock[$parentId]) {
                     $creditmemoItem->setBackToStock(true);
-                } elseif (isset($backToStock[$orderItem->getId()])) {
+                } elseif (isset($backToStock[$orderItem->getId() ?? ''])) {
                     $creditmemoItem->setBackToStock(true);
                 } elseif (empty($savedData)) {
                     $creditmemoItem->setBackToStock(

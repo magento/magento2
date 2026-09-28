@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,6 +18,7 @@ use PHPUnit\Framework\TestCase;
 
 class CustomerGroupTest extends TestCase
 {
+
     /**
      * @var CustomerGroup
      */
@@ -32,12 +33,10 @@ class CustomerGroupTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
         $contextMock = $this->getMockBuilder(ContextInterface::class)
-            ->getMockForAbstractClass();
-        $processor = $this->getMockBuilder(Processor::class)
-            ->disableOriginalConstructor()
             ->getMock();
+        $processor = $this->createMock(Processor::class);
         $contextMock->expects($this->never())->method('getProcessor')->willReturn($processor);
-        $this->groupRepository = $this->getMockForAbstractClass(GroupRepositoryInterface::class);
+        $this->groupRepository = $this->createMock(GroupRepositoryInterface::class);
         $this->model = $objectManager->getObject(
             CustomerGroup::class,
             ['groupRepository' => $this->groupRepository, 'context' => $contextMock]
@@ -57,7 +56,7 @@ class CustomerGroupTest extends TestCase
             ]
         ];
 
-        $group = $this->getMockForAbstractClass(GroupInterface::class);
+        $group = $this->createMock(GroupInterface::class);
         $group->expects($this->once())
             ->method('getCode')
             ->willReturn($newItemValue);

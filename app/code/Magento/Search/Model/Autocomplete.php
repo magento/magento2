@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Search\Model;
 
@@ -30,11 +30,11 @@ class Autocomplete implements AutocompleteInterface
      */
     public function getItems()
     {
-        $data = [[]];
+        $data = [];
         foreach ($this->dataProviders as $dataProvider) {
             $data[] = $dataProvider->getItems();
         }
 
-        return array_merge(...$data);
+        return array_merge([], ...$data);
     }
 }

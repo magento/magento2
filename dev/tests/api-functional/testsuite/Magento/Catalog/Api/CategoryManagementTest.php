@@ -1,30 +1,45 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Api;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Helper\CompareArraysRecursively;
 
 /**
  * Tests CategoryManagement
  */
 class CategoryManagementTest extends WebapiAbstract
 {
-    const RESOURCE_PATH = '/V1/categories';
+    public const RESOURCE_PATH = '/V1/categories';
 
-    const SERVICE_NAME = 'catalogCategoryManagementV1';
+    public const SERVICE_NAME = 'catalogCategoryManagementV1';
+
+    /**
+     * @var CompareArraysRecursively
+     */
+    private $compareArraysRecursively;
+
+    /**
+     * @inheritDoc
+     */
+    protected function setUp(): void
+    {
+        $objectManager = Bootstrap::getObjectManager();
+        $this->compareArraysRecursively = $objectManager->create(CompareArraysRecursively::class);
+    }
 
     /**
      * Tests getTree operation
      *
-     * @dataProvider treeDataProvider
      * @magentoApiDataFixture Magento/Catalog/_files/category_tree.php
      */
+    #[DataProvider('treeDataProvider')]
     public function testTree($rootCategoryId, $depth, $expected)
     {
         $requestData = ['rootCategoryId' => $rootCategoryId, 'depth' => $depth];
@@ -40,14 +55,14 @@ class CategoryManagementTest extends WebapiAbstract
             ]
         ];
         $result = $this->_webApiCall($serviceInfo, $requestData);
-        $expected = array_replace_recursive($result, $expected);
-        $this->assertEquals($expected, $result);
+        $diff = $this->compareArraysRecursively->execute($expected, $result);
+        self::assertEquals([], $diff, "Actual categories response doesn't equal expected data");
     }
 
     /**
      * @return array
      */
-    public function treeDataProvider(): array
+    public static function treeDataProvider(): array
     {
         return [
             [
@@ -141,8 +156,8 @@ class CategoryManagementTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/category_tree.php
-     * @dataProvider updateMoveDataProvider
      */
+    #[DataProvider('updateMoveDataProvider')]
     public function testUpdateMove($categoryId, $parentId, $afterId, $expectedPosition)
     {
         $expectedPath = '1/2/400/' . $categoryId;
@@ -168,7 +183,7 @@ class CategoryManagementTest extends WebapiAbstract
         $this->assertEquals($parentId, $model->getParentId());
     }
 
-    public function updateMoveDataProvider()
+    public static function updateMoveDataProvider()
     {
         return [
             [402, 400, null, 2],

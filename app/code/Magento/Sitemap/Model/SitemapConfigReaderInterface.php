@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Sitemap\Model;
@@ -10,6 +10,7 @@ namespace Magento\Sitemap\Model;
  * Sitemap config reader interface
  *
  * @api
+ * @since 100.3.0
  */
 interface SitemapConfigReaderInterface
 {
@@ -18,6 +19,7 @@ interface SitemapConfigReaderInterface
      *
      * @param int $storeId
      * @return int
+     * @since 100.3.0
      */
     public function getEnableSubmissionRobots($storeId);
 
@@ -26,6 +28,7 @@ interface SitemapConfigReaderInterface
      *
      * @param int $storeId
      * @return int
+     * @since 100.3.0
      */
     public function getMaximumFileSize($storeId);
 
@@ -34,6 +37,7 @@ interface SitemapConfigReaderInterface
      *
      * @param int $storeId
      * @return int
+     * @since 100.3.0
      */
     public function getMaximumLinesNumber($storeId);
 
@@ -42,6 +46,7 @@ interface SitemapConfigReaderInterface
      *
      * @param int $storeId
      * @return string
+     * @since 100.3.0
      */
     public function getProductImageIncludePolicy($storeId);
 
@@ -49,6 +54,7 @@ interface SitemapConfigReaderInterface
      * Get list valid paths for generate a sitemap XML file
      *
      * @return string[]
+     * @since 100.3.0
      */
     public function getValidPaths();
 }

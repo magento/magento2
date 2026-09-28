@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -24,11 +24,11 @@ use PHPUnit\Framework\TestCase;
  */
 class EventSaverTest extends TestCase
 {
-    const STUB_CUSTOMER_ID = 1;
-    const STUB_VISITOR_ID = 2;
-    const STUB_EVENT_TYPE_ID = 1;
-    const STUB_OBJECT_ID = 1;
-    const STUB_STORE_ID = 1;
+    private const STUB_CUSTOMER_ID = 1;
+    private const STUB_VISITOR_ID = 2;
+    private const STUB_EVENT_TYPE_ID = 1;
+    private const STUB_OBJECT_ID = 1;
+    private const STUB_STORE_ID = 1;
 
     /**
      * @var Session|MockObject
@@ -73,8 +73,8 @@ class EventSaverTest extends TestCase
         $this->customerSessionMock = $this->createMock(Session::class);
         $this->customerVisitorMock = $this->createMock(Visitor::class);
 
-        $this->storeMock = $this->getMockForAbstractClass(StoreInterface::class);
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeMock = $this->createMock(StoreInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->storeManagerMock->expects($this->once())
             ->method('getStore')
             ->willReturn($this->storeMock);

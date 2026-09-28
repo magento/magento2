@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -30,7 +29,7 @@ class LockValidatorCompositeTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
     }
 
     public function testCompositionsWithInvalidValidatorInstance()
@@ -46,7 +45,7 @@ class LockValidatorCompositeTest extends TestCase
     public function testValidateWithValidValidatorInstance()
     {
         $validators = [LockValidatorComposite::class];
-        $lockValidatorMock = $this->getMockForAbstractClass(LockValidatorInterface::class);
+        $lockValidatorMock = $this->createMock(LockValidatorInterface::class);
         $this->objectManagerMock->expects(
             $this->any()
         )->method(

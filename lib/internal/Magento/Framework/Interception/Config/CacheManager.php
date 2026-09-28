@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -88,6 +88,9 @@ class CacheManager
      */
     public function saveCompiled(string $key, array $data)
     {
+        // sort configuration to have it in the same order on every build
+        ksort($data);
+
         $this->configWriter->write($key, $data);
     }
 

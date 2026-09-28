@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\TestModuleOverrideConfig\MagentoAdminConfigFixture;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\TestModuleOverrideConfig\AbstractOverridesTest;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class checks that magentoAdminConfigFixtures can be added via override config
@@ -44,11 +45,10 @@ class AddFixtureTest extends AbstractOverridesTest
     /**
      * Checks that fixtures added in method and data set nodes successfully applied
      *
-     * @dataProvider testDataProvider
-     *
      * @param string $expectedConfigValue
      * @return void
      */
+    #[DataProvider('configDataProvider')]
     public function testAddFixtureToMethod(string $expectedConfigValue): void
     {
         $value = $this->config->getValue('test_section/test_group/field_1', ScopeConfigInterface::SCOPE_TYPE_DEFAULT);
@@ -58,11 +58,11 @@ class AddFixtureTest extends AbstractOverridesTest
     /**
      * @return array
      */
-    public function testDataProvider(): array
+    public static function configDataProvider(): array
     {
         return [
-            'first_data_set' => ['expected_config_value' => 'overridden config fixture value for method'],
-            'second_data_set' => ['expected_config_value' => 'overridden config fixture value for data set']
+            'first_data_set' => ['overridden config fixture value for method'],
+            'second_data_set' => ['overridden config fixture value for data set']
         ];
     }
 }

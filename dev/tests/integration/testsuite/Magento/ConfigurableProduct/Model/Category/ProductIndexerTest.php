@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\ConfigurableProduct\Model\Category;
 
@@ -217,5 +217,19 @@ class ProductIndexerTest extends \PHPUnit\Framework\TestCase
         $result = array_slice($result, 2);
 
         return array_slice($result, 0, 4);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        $reflection = new \ReflectionObject($this);
+        foreach ($reflection->getProperties() as $property) {
+            if (!$property->isStatic() && 0 !== strpos($property->getDeclaringClass()->getName(), 'PHPUnit')) {
+                $property->setValue($this, null);
+            }
+        }
     }
 }

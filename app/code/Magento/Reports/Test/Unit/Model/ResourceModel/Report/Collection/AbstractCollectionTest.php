@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -28,15 +28,15 @@ class AbstractCollectionTest extends TestCase
     protected function setUp(): void
     {
         $entityFactory = $this->createMock(EntityFactory::class);
-        $logger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $logger = $this->createMock(LoggerInterface::class);
         $fetchStrategy = $this->createMock(Query::class);
         $eventManager = $this->createMock(Manager::class);
         $connection = $this->createMock(Mysql::class);
 
-        $resource = $this->getMockBuilder(AbstractDb::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getConnection'])
-            ->getMockForAbstractClass();
+        $resource = $this->createPartialMock(
+            AbstractDb::class,
+            ['getConnection', '_construct']
+        );
         $resource->method('getConnection')->willReturn($connection);
 
         $this->collection = new AbstractCollection(

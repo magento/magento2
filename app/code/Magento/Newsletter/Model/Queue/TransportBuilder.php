@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -84,11 +84,11 @@ class TransportBuilder extends \Magento\Framework\Mail\Template\TransportBuilder
         SenderResolverInterface $senderResolver,
         ObjectManagerInterface $objectManager,
         TransportInterfaceFactory $mailTransportFactory,
-        MessageInterfaceFactory $messageFactory = null,
-        EmailMessageInterfaceFactory $emailMessageInterfaceFactory = null,
-        MimeMessageInterfaceFactory $mimeMessageInterfaceFactory = null,
-        MimePartInterfaceFactory $mimePartInterfaceFactory = null,
-        AddressConverter $addressConverter = null
+        ?MessageInterfaceFactory $messageFactory = null,
+        ?EmailMessageInterfaceFactory $emailMessageInterfaceFactory = null,
+        ?MimeMessageInterfaceFactory $mimeMessageInterfaceFactory = null,
+        ?MimePartInterfaceFactory $mimePartInterfaceFactory = null,
+        ?AddressConverter $addressConverter = null
     ) {
         parent::__construct(
             $templateFactory,
@@ -185,7 +185,7 @@ class TransportBuilder extends \Magento\Framework\Mail\Template\TransportBuilder
      * @throws MailException
      * @see setFromByScope()
      *
-     * @deprecated This function sets the from address but does not provide
+     * @deprecated 100.3.3 This function sets the from address but does not provide
      * a way of setting the correct from addresses based on the scope.
      */
     public function setFrom($from)

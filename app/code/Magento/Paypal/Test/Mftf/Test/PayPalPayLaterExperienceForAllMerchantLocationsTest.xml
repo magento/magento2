@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="PayPalPayLaterExperienceForAllMerchantLocationsTest">
+        <annotations>
+            <features value="Paypal"/>
+            <stories value="Payment methods"/>
+            <title value="Enable PayPal Pay Later Experience for all Merchant Locations"/>
+            <description value="PayPal Pay later is configured on Admin site for all PayPal Payment method which is applicable for all Merchant Locations"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="AC-5689"/>
+            <group value="paypalExpress"/>
+            <group value="3rd_party_integration"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set paypal/general/merchant_country US" stepKey="setMerchantCountryDefault"/>
+            <actionGroup ref="AdminPayPalExpressCheckoutPayLaterDisableActionGroup" stepKey="disablePayPalPayLater"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <actionGroup ref="AdminEnablePayPalExpressCheckoutPayLaterActionGroup" stepKey="enablePayPalPayLater"/>
+        <actionGroup ref="AssertPaypalPayLaterComponentsActionGroup" stepKey="assertPaypalPAyLaterComponents"/>
+        <actionGroup ref="AdminSavePaymentConfigActionGroup" stepKey="savePaymentConfig"/>
+        <selectOption selector="{{PaymentsConfigSection.merchantCountry}}" userInput="United Kingdom" stepKey="setMerchantCountry"/>
+        <actionGroup ref="AdminSavePaymentConfigActionGroup" stepKey="savePaymentConfiga"/>
+        <actionGroup ref="AdminEnablePayPalExpressCheckoutPayLaterActionGroup" stepKey="enablePayPalPayLater1">
+            <argument name="countryCode" value="gb"/>
+        </actionGroup>
+        <actionGroup ref="AssertPaypalPayLaterComponentsActionGroup" stepKey="assertPaypalPAyLaterComponents1">
+            <argument name="countryCode" value="gb"/>
+        </actionGroup>
+    </test>
+</tests>

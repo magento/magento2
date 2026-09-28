@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Locale;
 
@@ -9,6 +9,7 @@ namespace Magento\Framework\Locale;
  * Provides access to locale-related config information
  *
  * @api
+ * @since 100.0.2
  */
 interface ConfigInterface
 {

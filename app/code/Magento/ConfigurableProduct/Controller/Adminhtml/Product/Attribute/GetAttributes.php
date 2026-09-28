@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\ConfigurableProduct\Controller\Adminhtml\Product\Attribute;
 
@@ -30,6 +29,11 @@ class GetAttributes extends Action implements HttpGetActionInterface
      * @var \Magento\Framework\Json\Helper\Data
      */
     protected $jsonHelper;
+
+    /**
+     * @var AttributesListInterface
+     */
+    private $attributesList;
 
     /**
      * @param Action\Context $context

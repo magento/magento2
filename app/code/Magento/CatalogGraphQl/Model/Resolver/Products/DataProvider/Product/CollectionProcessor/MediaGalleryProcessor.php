@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Catalog\Model\Product\Media\Config as MediaConfig;
+use Magento\GraphQl\Model\Query\ContextInterface;
 
 /**
  * Add attributes required for every GraphQL product resolution process.
@@ -35,14 +36,24 @@ class MediaGalleryProcessor implements CollectionProcessorInterface
     }
 
     /**
-     * @inheritdoc
+     * Process collection to add additional joins, attributes, and clauses to a product collection.
+     *
+     * @param Collection $collection
+     * @param SearchCriteriaInterface $searchCriteria
+     * @param array $attributeNames
+     * @param ContextInterface|null $context
+     * @return Collection
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function process(
         Collection $collection,
         SearchCriteriaInterface $searchCriteria,
-        array $attributeNames
+        array $attributeNames,
+        ?ContextInterface $context = null
     ): Collection {
-        if (in_array('media_gallery_entries', $attributeNames)) {
+        if (in_array('media_gallery_entries', $attributeNames) ||
+            in_array('media_gallery', $attributeNames)
+        ) {
             $mediaAttributes = $this->mediaConfig->getMediaAttributeCodes();
             foreach ($mediaAttributes as $mediaAttribute) {
                 if (!in_array($mediaAttribute, $attributeNames)) {

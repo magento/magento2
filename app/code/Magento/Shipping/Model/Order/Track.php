@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Shipping\Model\Order;
@@ -49,8 +49,8 @@ class Track extends \Magento\Sales\Model\Order\Shipment\Track
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Sales\Api\ShipmentRepositoryInterface $shipmentRepository,
         \Magento\Shipping\Model\CarrierFactory $carrierFactory,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         parent::__construct(

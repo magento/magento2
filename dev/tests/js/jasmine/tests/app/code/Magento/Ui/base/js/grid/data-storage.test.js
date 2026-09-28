@@ -1,9 +1,9 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
-/*eslint max-nested-callbacks: 0*/
+/* eslint-disable */
 /*jscs:disable requireCamelCaseOrUpperCaseIdentifiers*/
 define([
     'jquery',
@@ -230,23 +230,36 @@ define([
         });
 
         describe('"requestData" method', function () {
-            var model = new DataStorage();
+            var model = new DataStorage(),
+                originalJQueryAjax;
+
+            beforeEach(function () {
+                // Store original $.ajax if it exists
+                originalJQueryAjax = $.ajax; //eslint-disable-line no-trailing-spaces
+
+                // Mock $.ajax method to avoid actual server calls
+                $.ajax = jasmine.createSpy('ajax').and.callFake(function (options) {
+                    return {
+                        done: function (handler) {
+                            return handler();
+                        }
+                    };
+                });
+            });
+
+            afterEach(function () {
+                // Restore original $.ajax
+                if (originalJQueryAjax) {
+                    $.ajax = originalJQueryAjax;
+                } else if ($.ajax && $.ajax.isSpy) {
+                    delete $.ajax;
+                }
+            });
 
             it('Check Ajax request', function () {
                 var result = 'result';
 
                 spyOn(model, 'onRequestComplete').and.returnValue(result);
-                spyOn($, 'ajax').and.returnValue({
-                    /**
-                     * Success result for ajax request
-                     *
-                     * @param {Function} handler
-                     * @returns {*}
-                     */
-                    done: function (handler) {
-                        return handler();
-                    }
-                });
                 expect(model.requestData({})).toEqual(result);
             });
         });
@@ -276,7 +289,7 @@ define([
         });
 
         describe('"getRequestData" method', function () {
-            it('returns request data', function () {
+            it('returns request data', function (done) {
                 var request = {
                         ids: [1,2],
                         totalRecords: 2,
@@ -295,7 +308,8 @@ define([
                     result = {
                         items: items,
                         totalRecords: 2,
-                        errorMessage: ''
+                        errorMessage: '',
+                        showTotalRecords: true
                     },
                     model = new DataStorage({
                         cachedRequestDelay: 0
@@ -304,6 +318,10 @@ define([
                 spyOn(model, 'getByIds').and.returnValue(items);
                 model.getRequestData(request).then(function (promiseResult) {
                     expect(promiseResult).toEqual(result);
+                    done();
+                }).catch(function (error) {
+                    fail('Promise was rejected: ' + error);
+                    done();
                 });
             });
         });
@@ -324,12 +342,14 @@ define([
                     data = {
                         items: ids,
                         totalRecords: 3,
+                        showTotalRecords: true,
                         errorMessage: ''
                     },
                     request = {
                         ids: ids,
                         params: params,
                         totalRecords: 3,
+                        showTotalRecords: true,
                         errorMessage: ''
                     };
 
@@ -351,23 +371,27 @@ define([
                     firstData = {
                         items: ids,
                         totalRecords: 3,
+                        showTotalRecords: true,
                         errorMessage: ''
                     },
                     secondData = {
                         items: ids,
                         totalRecords: 3,
+                        showTotalRecords: true,
                         errorMessage: 'Error message'
                     },
                     firstRequest = {
                         ids: ids,
                         params: params,
                         totalRecords: 3,
+                        showTotalRecords: true,
                         errorMessage: ''
                     },
                     secondRequest = {
                         ids: ids,
                         params: params,
                         totalRecords: 3,
+                        showTotalRecords: true,
                         errorMessage: 'Error message'
                     };
 

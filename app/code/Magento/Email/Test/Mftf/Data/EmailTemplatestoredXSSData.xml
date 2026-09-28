@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="EmailTemplateWithStoreddXSS" type="template">
+        <data key="templateName">xss</data>
+        <data key="templateSubject">Subjectxss</data>
+        <data key="templateText">&lt;object data="data:text/html;base64,PHNjcmlwdD5hbGVydChkb2N1bWVudC5jb29raWUpOzwvc2NyaXB0Pg=="/&gt;</data>
+        <data key="expectedTemplate"> </data>
+    </entity>
+</entities>

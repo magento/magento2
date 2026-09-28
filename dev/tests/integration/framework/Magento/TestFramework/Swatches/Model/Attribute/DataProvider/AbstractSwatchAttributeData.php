@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -20,8 +20,8 @@ abstract class AbstractSwatchAttributeData extends AbstractAttributeDataWithOpti
     public function __construct()
     {
         parent::__construct();
-        $this->defaultAttributePostData = array_replace(
-            $this->defaultAttributePostData,
+        static::$defaultAttributePostData = array_replace(
+            static::$defaultAttributePostData,
             [
                 'update_product_preview_image' => 0,
                 'use_product_image_for_swatch' => 0,
@@ -32,6 +32,6 @@ abstract class AbstractSwatchAttributeData extends AbstractAttributeDataWithOpti
                 'used_for_sort_by' => 0,
             ]
         );
-        $this->defaultAttributePostData['swatch_input_type'] = 'text';
+        static::$defaultAttributePostData['swatch_input_type'] = 'text';
     }
 }

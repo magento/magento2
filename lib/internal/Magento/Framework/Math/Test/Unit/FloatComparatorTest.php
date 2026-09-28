@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Framework\Math\Test\Unit;
 
 use Magento\Framework\Math\FloatComparator;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class FloatComparatorTest extends TestCase
 {
@@ -30,9 +31,8 @@ class FloatComparatorTest extends TestCase
      *
      * @param float $a
      * @param float $b
-     * @param bool $expected
-     * @dataProvider eqDataProvider
-     */
+     * @param bool $expected     */
+    #[DataProvider('eqDataProvider')]
     public function testEq(float $a, float $b, bool $expected)
     {
         self::assertEquals($expected, $this->comparator->equal($a, $b));
@@ -43,7 +43,7 @@ class FloatComparatorTest extends TestCase
      *
      * @return array
      */
-    public function eqDataProvider(): array
+    public static function eqDataProvider(): array
     {
         return [
             [10, 10.00001, true],
@@ -59,9 +59,8 @@ class FloatComparatorTest extends TestCase
      *
      * @param float $a
      * @param float $b
-     * @param bool $expected
-     * @dataProvider gtDataProvider
-     */
+     * @param bool $expected     */
+    #[DataProvider('gtDataProvider')]
     public function testGt(float $a, float $b, bool $expected)
     {
         self::assertEquals($expected, $this->comparator->greaterThan($a, $b));
@@ -72,7 +71,7 @@ class FloatComparatorTest extends TestCase
      *
      * @return array
      */
-    public function gtDataProvider(): array
+    public static function gtDataProvider(): array
     {
         return [
             [10, 10.00001, false],
@@ -88,9 +87,8 @@ class FloatComparatorTest extends TestCase
      *
      * @param float $a
      * @param float $b
-     * @param bool $expected
-     * @dataProvider gteDataProvider
-     */
+     * @param bool $expected     */
+    #[DataProvider('gteDataProvider')]
     public function testGte(float $a, float $b, bool $expected)
     {
         self::assertEquals($expected, $this->comparator->greaterThanOrEqual($a, $b));
@@ -101,7 +99,7 @@ class FloatComparatorTest extends TestCase
      *
      * @return array
      */
-    public function gteDataProvider(): array
+    public static function gteDataProvider(): array
     {
         return [
             [10, 10.00001, true],

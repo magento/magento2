@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -29,7 +29,7 @@ class BlockTest extends TestCase
     private $blockModel;
 
     /**
-     * Object Manager
+     * Object Manager helper
      *
      * @var ObjectManager
      */
@@ -58,7 +58,7 @@ class BlockTest extends TestCase
     protected function setUp(): void
     {
         $this->resourceMock = $this->createMock(BlockResource::class);
-        $this->eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
         $this->contextMock = $this->createMock(Context::class);
         $this->contextMock->expects($this->any())->method('getEventDispatcher')->willReturn($this->eventManagerMock);
         $this->objectManager = new ObjectManager($this);

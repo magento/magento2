@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -82,5 +82,25 @@ class ResetPasswordTest extends TestCase
             Xpath::getElementsCountForXpath(self::SET_NEW_PASSWORD_BUTTON_XPATH, $output),
             'Set password button was not found on the page'
         );
+    }
+
+    /**
+     * @magentoConfigFixture current_store customer/password/autocomplete_on_storefront 1
+     *
+     * @return void
+     */
+    public function testAutocompletePasswordEnabled(): void
+    {
+        $this->assertFalse($this->block->isAutocompleteDisabled());
+    }
+
+    /**
+     * @magentoConfigFixture current_store customer/password/autocomplete_on_storefront 0
+     *
+     * @return void
+     */
+    public function testAutocompletePasswordDisabled(): void
+    {
+        $this->assertTrue($this->block->isAutocompleteDisabled());
     }
 }

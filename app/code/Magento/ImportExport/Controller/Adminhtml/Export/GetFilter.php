@@ -1,17 +1,32 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
+
 namespace Magento\ImportExport\Controller\Adminhtml\Export;
 
+use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\ImportExport\Controller\Adminhtml\Export as ExportController;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\ImportExport\Model\Export\EntityFiltersProviderInterface;
 
 class GetFilter extends ExportController implements HttpGetActionInterface, HttpPostActionInterface
 {
+
+    /**
+     * @param Context $context
+     * @param EntityFiltersProviderInterface $filtersProvider
+     */
+    public function __construct(
+        Context $context,
+        private readonly EntityFiltersProviderInterface $filtersProvider
+    ) {
+        parent::__construct($context);
+    }
+
     /**
      * Get grid-filter of entity attributes action.
      *
@@ -30,15 +45,13 @@ class GetFilter extends ExportController implements HttpGetActionInterface, Http
                 $export = $this->_objectManager->create(\Magento\ImportExport\Model\Export::class);
                 $export->setData($data);
 
-                $export->filterAttributeCollection(
-                    $attrFilterBlock->prepareCollection($export->getEntityAttributeCollection())
-                );
+                $attrFilterBlock->prepareCollection($this->filtersProvider->getFilters($export));
                 return $resultLayout;
             } catch (\Exception $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
             }
         } else {
-            $this->messageManager->addError(__('Please correct the data sent value.'));
+            $this->messageManager->addErrorMessage(__('Please correct the data sent value.'));
         }
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);

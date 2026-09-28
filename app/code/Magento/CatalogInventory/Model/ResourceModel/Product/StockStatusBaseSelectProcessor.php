@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CatalogInventory\Model\ResourceModel\Product;
 
@@ -33,7 +32,7 @@ class StockStatusBaseSelectProcessor implements BaseSelectProcessorInterface
      */
     public function __construct(
         ResourceConnection $resource,
-        \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfig = null
+        ?\Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfig = null
     ) {
         $this->resource = $resource;
         $this->stockConfig = $stockConfig ?: ObjectManager::getInstance()

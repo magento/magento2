@@ -1,15 +1,17 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\ResourceModel\Product\Compare\Item;
+
+use Magento\Customer\Model\Config\Share;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Catalog Product Compare Items Resource Collection
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
@@ -32,6 +34,13 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     protected $_visitorId = 0;
 
     /**
+     * List Id Filter
+     *
+     * @var int
+     */
+    protected $listId = 0;
+
+    /**
      * Comparable attributes cache
      *
      * @var array
@@ -39,18 +48,19 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     protected $_comparableAttributes;
 
     /**
-     * Catalog product compare
-     *
      * @var \Magento\Catalog\Helper\Product\Compare
      */
     protected $_catalogProductCompare = null;
 
     /**
-     * Catalog product compare item
-     *
      * @var \Magento\Catalog\Model\ResourceModel\Product\Compare\Item
      */
     protected $_catalogProductCompareItem;
+
+    /**
+     * @var Share
+     */
+    private $share;
 
     /**
      * Collection constructor.
@@ -76,6 +86,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param \Magento\Catalog\Model\ResourceModel\Product\Compare\Item $catalogProductCompareItem
      * @param \Magento\Catalog\Helper\Product\Compare $catalogProductCompare
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
+     * @param Share|null $share
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -101,10 +112,12 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         \Magento\Customer\Api\GroupManagementInterface $groupManagement,
         \Magento\Catalog\Model\ResourceModel\Product\Compare\Item $catalogProductCompareItem,
         \Magento\Catalog\Helper\Product\Compare $catalogProductCompare,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
+        ?\Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
+        ?Share $share = null,
     ) {
         $this->_catalogProductCompareItem = $catalogProductCompareItem;
         $this->_catalogProductCompare = $catalogProductCompare;
+        $this->share = $share ?? ObjectManager::getInstance()->get(Share::class);
         parent::__construct(
             $entityFactory,
             $logger,
@@ -144,6 +157,18 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->_customerId = 0;
+        $this->_visitorId = 0;
+        $this->listId = 0;
+        $this->_comparableAttributes = null;
+    }
+
+    /**
      * Set customer filter to collection
      *
      * @param int $customerId
@@ -154,6 +179,30 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         $this->_customerId = (int)$customerId;
         $this->_addJoinToSelect();
         return $this;
+    }
+
+    /**
+     * Set listId filter to collection
+     *
+     * @param int $listId
+     *
+     * @return $this
+     */
+    public function setListId(int $listId)
+    {
+        $this->listId = $listId;
+        $this->_addJoinToSelect();
+        return $this;
+    }
+
+    /**
+     * Retrieve listId filter applied to collection
+     *
+     * @return int
+     */
+    public function getListId(): int
+    {
+        return (int)$this->listId;
     }
 
     /**
@@ -197,14 +246,24 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     public function getConditionForJoin()
     {
         if ($this->getCustomerId()) {
-            return ['customer_id' => $this->getCustomerId()];
+            $conditions['customer_id'] = $this->getCustomerId();
+            if (!$this->share->isGlobalScope()) {
+                $conditions['store_id'] = $this->getStoreId();
+            }
+            return $conditions;
         }
 
         if ($this->getVisitorId()) {
-            return ['visitor_id' => $this->getVisitorId()];
+            return ['visitor_id' => $this->getVisitorId(), 'store_id' => $this->getStoreId()];
         }
 
-        return ['customer_id' => ['null' => true], 'visitor_id' => '0'];
+        if ($this->getListId()) {
+            return ['list_id' => $this->getListId()];
+        }
+
+        // If no customer id, visitor id or list id is passed ensure we add all these fields as 0 or null to the query
+        // To prevent data leaks.
+        return ['customer_id' => ['null' => true], 'visitor_id' => '0', 'list_id' => ['null' => true]];
     }
 
     /**
@@ -230,6 +289,81 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         $this->_productLimitationFilters['store_table'] = 't_compare';
 
         return $this;
+    }
+
+    /**
+     * Get products ids by for compare list
+     *
+     * @param int $listId
+     *
+     * @return array
+     */
+    public function getProductsByListId(int $listId): array
+    {
+        $select = $this->getConnection()->select()->
+        from(
+            $this->getTable('catalog_compare_item'),
+            'product_id'
+        )->where(
+            'list_id = ?',
+            $listId
+        );
+        return $this->getConnection()->fetchCol($select);
+    }
+
+    /**
+     * Set list_id for customer compare item
+     *
+     * @param int $listId
+     * @param int $customerId
+     */
+    public function setListIdToCustomerCompareItems(int $listId, int $customerId)
+    {
+        foreach ($this->getCustomerCompareItems($customerId) as $itemId) {
+            $this->getConnection()->update(
+                $this->getTable('catalog_compare_item'),
+                ['list_id' => $listId],
+                ['catalog_compare_item_id = ?' => (int)$itemId]
+            );
+        }
+    }
+
+    /**
+     * Remove compare list if customer compare list empty
+     *
+     * @param int|null $customerId
+     */
+    public function removeCompareList(?int $customerId)
+    {
+        if (empty($this->getCustomerCompareItems($customerId))) {
+            $this->getConnection()->delete(
+                $this->getTable('catalog_compare_list'),
+                ['customer_id = ?' => $customerId]
+            );
+        }
+    }
+
+    /**
+     * Get customer compare items
+     *
+     * @param int|null $customerId
+     * @return array
+     */
+    private function getCustomerCompareItems(?int $customerId): array
+    {
+        if ($customerId) {
+            $select = $this->getConnection()->select()->
+            from(
+                $this->getTable('catalog_compare_item')
+            )->where(
+                'customer_id = ?',
+                $customerId
+            );
+
+            return $this->getConnection()->fetchCol($select);
+        }
+
+        return [];
     }
 
     /**
@@ -330,12 +464,20 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
                 $attributesData = $this->getConnection()->fetchAll($select);
                 if ($attributesData) {
                     $entityType = \Magento\Catalog\Model\Product::ENTITY;
-                    $this->_eavConfig->importAttributesData($entityType, $attributesData);
+                    $importData = array_map(
+                        static function (array $data): array {
+                            unset($data['store_label']);
+                            return $data;
+                        },
+                        $attributesData
+                    );
+                    $this->_eavConfig->importAttributesData($entityType, $importData);
                     foreach ($attributesData as $data) {
                         $attribute = $this->_eavConfig->getAttribute($entityType, $data['attribute_code']);
+                        $attribute->setData('store_label', $data['store_label']);
                         $this->_comparableAttributes[$attribute->getAttributeCode()] = $attribute;
                     }
-                    unset($attributesData);
+                    unset($attributesData, $importData);
                 }
             }
         }

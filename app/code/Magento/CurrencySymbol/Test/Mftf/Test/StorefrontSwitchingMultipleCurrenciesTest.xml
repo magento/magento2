@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <!--
+ /**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontSwitchingMultipleCurrenciesTest">
+        <annotations>
+            <stories value="Switching Currency"/>
+            <title value="Storefront switching multiple currencies"/>
+            <description value="Storefront test correct price and symbol when switching multiple currencies"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-5358"/>
+            <features value="CurrencySymbol"/>
+            <!--Will be fixed in scope of ACQE-7613-->
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <!--Login as admin-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+            <!--Set currency options-->
+            <magentoCLI command="config:set {{SetCurrencyAEDBaseConfig.path}} {{SetCurrencyAEDBaseConfig.value}}" stepKey="setBaseCurrencyAsAED"/>
+            <magentoCLI command="config:set {{SetAllowedCurrenciesConfigForAED.path}} {{SetAllowedCurrenciesConfigForUSD.value}},{{SetAllowedCurrenciesConfigForQAR.value}},{{SetAllowedCurrenciesConfigForAED.value}}" stepKey="setAllowedCurrencyAsAEDandQARandUSD"/>
+            <magentoCLI command="config:set {{SetDefaultCurrencyAEDConfig.path}} {{SetDefaultCurrencyAEDConfig.value}}" stepKey="setDefaultCurrencyAED"/>
+            <!--Enable free shipping-->
+            <createData entity="FreeShippinMethodConfig" stepKey="enableFreeShipping"/>
+            <!--Configure currency rates-->
+            <actionGroup ref="AdminOpenCurrencyRatesPageActionGroup" stepKey="gotToCurrencyRatesPage"/>
+            <actionGroup ref="AdminSetCurrencyRatesActionGroup" stepKey="setCurrencyRates">
+                <argument name="firstCurrency" value="AED"/>
+                <argument name="secondCurrency" value="QAR"/>
+                <argument name="rate" value="0.77"/>
+            </actionGroup>
+            <!--Create category-->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <!--Create product "Banana" having price 3.50 AED-->
+            <createData entity="SimpleProduct" stepKey="createProductBanana">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="price">3.50</field>
+            </createData>
+            <!--Create product "Date" having price 8.00 AED-->
+            <createData entity="SimpleProduct" stepKey="createProductDate">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="price">8.00</field>
+            </createData>
+            <!--Re-index to show product in storefront-->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </before>
+        <after>
+            <!--Delete category-->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <!--Delete product Banana-->
+            <deleteData createDataKey="createProductBanana" stepKey="deletedProductBanana"/>
+            <!--Dalete product date-->
+            <deleteData createDataKey="createProductDate" stepKey="deletedProductDate"/>
+            <!--Disable free shipping-->
+            <createData entity="FreeShippinMethodDefault" stepKey="disableFreeShippingMethod"/>
+            <!--Navigate to currency setup page-->
+            <actionGroup ref="AdminNavigateToCurrencySetupPageActionGroup" stepKey="navigateCurrencySetupPageForDefault"/>
+            <waitForPageLoad stepKey="waitForCurrencySetupPageToMakeDefault"/>
+            <!--Open currency options-->
+            <conditionalClick selector="{{AdminConfigSection.currencyOptionsTab}}" dependentSelector="{{AdminConfigSection.defaultCurrencySelect}}" visible="false" stepKey="openCurrencyOptionsTabToMakeConfigDefault"/>
+            <!--Check all currency options to make default-->
+            <checkOption selector="{{AdminConfigSection.allowedCurrencyCheckbox}}" stepKey="checkAllowedDisplayCurrencyToDeafultValueUSDandEUR"/>
+            <checkOption selector="{{AdminConfigSection.defaultCurrencyCheckbox}}" stepKey="checkDefaultDisplayCurrencyToDefaultValueUSD"/>
+            <checkOption selector="{{AdminConfigSection.baseCurrencyCheckbox}}" stepKey="checkBaseCurrencyToDefaultValueUSD"/>
+            <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfiguration"/>
+            <!--Logout as admin-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAsAdmin"/>
+        </after>
+        <!--Navigate to category page-->
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="navigateToCategoryPage">
+            <argument name="category" value="$$createCategory$$"/>
+        </actionGroup>
+        <!--Assert price & currency[AED] for product Banana-->
+        <actionGroup ref="StorefrontAssertCurrencySymbolOnCategoryPageActionGroup" stepKey="assertPriceAEDForProductBanana">
+            <argument name="productName" value="$createProductBanana.name$"/>
+            <argument name="currencySymbol" value="AED"/>
+            <argument name="productPrice" value="3.50"/>
+        </actionGroup>
+        <!--Assert price & currency[AED] for product Date-->
+        <actionGroup ref="StorefrontAssertCurrencySymbolOnCategoryPageActionGroup" stepKey="assertPriceAEDForProductDate">
+            <argument name="productName" value="$createProductDate.name$"/>
+            <argument name="currencySymbol" value="AED"/>
+            <argument name="productPrice" value="8.00"/>
+        </actionGroup>
+        <!--Switch currency to QAR-->
+        <actionGroup ref="StorefrontSwitchCurrencyActionGroup" stepKey="switchCurrencyToQAR">
+            <argument name="currency" value="QAR"/>
+        </actionGroup>
+        <!--Assert price & currency[QAR] for product Banana-->
+        <actionGroup ref="StorefrontAssertCurrencySymbolOnCategoryPageActionGroup" stepKey="assertCurrencySymbolQARForProductBanana">
+            <argument name="productName" value="$createProductBanana.name$"/>
+            <argument name="currencySymbol" value="QAR"/>
+            <argument name="productPrice" value="2.70"/>
+        </actionGroup>
+        <!--Assert price & currency[QAR] for product Date-->
+        <actionGroup ref="StorefrontAssertCurrencySymbolOnCategoryPageActionGroup" stepKey="assertCurrencySymbolQARForProductDate">
+            <argument name="productName" value="$createProductDate.name$"/>
+            <argument name="currencySymbol" value="QAR"/>
+            <argument name="productPrice" value="6.16"/>
+        </actionGroup>
+        <!--Navigate to product Banana & add to cart-->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="GoToProductBanana">
+            <argument name="productUrl" value="$$createProductBanana.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartProductBanana">
+            <argument name="productName" value="$createProductBanana.name$"/>
+        </actionGroup>
+        <!--Navigate to product Date & add to cart-->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="GoToProductDate">
+            <argument name="productUrl" value="$$createProductDate.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartProductDate">
+            <argument name="productName" value="$createProductDate.name$"/>
+        </actionGroup>
+        <!--Navigate to cart page-->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCartPage" />
+        <!--Assert currency symbol of order total-->
+        <waitForText selector="{{CheckoutCartSummarySection.orderTotal}}" userInput="QAR" stepKey="assertOrderTotalCurrencySymbol"/>
+    </test>
+</tests>

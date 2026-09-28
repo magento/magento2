@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 
@@ -78,7 +78,7 @@ class CrontabManager implements CrontabManagerInterface
         $pattern = '!(' . $this->getTasksBlockStart() . ')(.*?)(' . $this->getTasksBlockEnd() . ')!s';
 
         if (preg_match($pattern, $content, $matches)) {
-            $tasks = trim($matches[2], PHP_EOL);
+            $tasks = trim($matches[2] ?? '', PHP_EOL);
             $tasks = explode(PHP_EOL, $tasks);
             return $tasks;
         }

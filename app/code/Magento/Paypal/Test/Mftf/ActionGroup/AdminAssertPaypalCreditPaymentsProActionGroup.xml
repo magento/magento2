@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+   * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAssertPaypalCreditPaymentsProActionGroup" extends="AdminConfigurePayPalPaymentsProActionGroup">
+        <annotations>
+            <description>Configuration for Payments pro with Sample PayPal credentials and Assert Other Paypal Solution</description>
+        </annotations>
+        <arguments>
+            <argument name="countryCode" type="string" defaultValue="us"/>
+        </arguments>
+        <remove keyForRemoval="expandOtherPaypalConfigButton"/>
+        <conditionalClick selector="{{OtherPayPalPaymentsConfigSection.expandTab(countryCode)}}" dependentSelector="{{OtherPayPalPaymentsConfigSection.expandedTab(countryCode)}}" visible="false"  stepKey="clickOtherPayPalPaymentsSection" before="waitForPayPalPaymentsProConfigureBtn"/>
+        <seeOptionIsSelected selector="{{PayPalPaymentsProConfigSection.enableSolution(countryCode)}}" userInput="No" stepKey="seeEnableThisSolutionIsSetAsNo" after="enableTestMode"/>
+        <assertElementContainsAttribute stepKey="seeEnablePaypalCreditIsDisabled" after="seeEnableThisSolutionIsSetAsNo">
+            <expectedResult selector="{{PayPalPaymentsProConfigSection.enablePaypalCredit(countryCode)}}" attribute="disabled" type="string"></expectedResult>
+        </assertElementContainsAttribute>
+        <assertElementContainsAttribute stepKey="seeEnableVaultIsDisabled" after="scrollToBottom">
+            <expectedResult selector="{{PayPalPaymentsProConfigSection.enableVault(countryCode)}}" attribute="disabled" type="string"></expectedResult>
+        </assertElementContainsAttribute>
+        <!-- Check that Paypal Credit and Vault is set to No and it is disabled -->
+        <seeOptionIsSelected selector="{{PayPalPaymentsProConfigSection.enablePaypalCredit(countryCode)}}" userInput="No" stepKey="seePaypalCreditIsSetAsNo" after="seeEnablePaypalCreditIsDisabled"/>
+        <seeOptionIsSelected selector="{{PayPalPaymentsProConfigSection.enableVault(countryCode)}}" userInput="No" stepKey="seeValultIsSetAsNo" after="seeEnableVaultIsDisabled"/>
+        <waitForElementVisible selector="{{PayPalPaymentsProConfigSection.disabledEnableSolution(countryCode)}}" stepKey="assertGreenTickMarkForEnableThisSolutionDropdown" after="enableSolution"/>
+        <waitForElementVisible selector="{{PayPalPaymentsProConfigSection.disabledPaypalCredit(countryCode)}}" stepKey="assertGreenTickMarkForEnablePaypalCredit" after="assertGreenTickMarkForEnableThisSolutionDropdown"/>
+        <waitForElementVisible selector="{{PayPalPaymentsProConfigSection.sortOrder(countryCode)}}" stepKey="assertSortOrder" after="assertGreenTickMarkForEnablePaypalCredit"/>
+        <selectOption selector="{{PayPalPaymentsProConfigSection.enableVault(countryCode)}}" userInput="Yes" stepKey="setValultIsSetAsYes" before="waitForSaveButtonBecomeClickable"/>
+        <waitForElementVisible selector="{{PayPalPaymentsProConfigSection.disabledVault(countryCode)}}" stepKey="assertGreenTickMarkForEnableVaultDropdown" after="setValultIsSetAsYes"/>
+    </actionGroup>
+</actionGroups>

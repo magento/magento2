@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -20,6 +20,7 @@ use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb as ResourceModelAbstractDb;
 use Magento\Framework\Mview\View\Collection as MviewCollection;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\View\Element\UiComponent\DataProvider\FulltextFilter;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -30,6 +31,8 @@ use Psr\Log\LoggerInterface;
  */
 class FulltextFilterTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var FulltextFilter
      */
@@ -73,20 +76,18 @@ class FulltextFilterTest extends TestCase
     protected function setUp(): void
     {
         $this->entityFactoryMock = $this->createMock(EntityFactory::class);
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
-        $this->fetchStrategyMock = $this->getMockForAbstractClass(FetchStrategyInterface::class);
-        $this->resourceModelAbstractDb = $this->getMockForAbstractClass(FetchStrategyInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->fetchStrategyMock = $this->createMock(FetchStrategyInterface::class);
+        $this->resourceModelAbstractDb = $this->createMock(FetchStrategyInterface::class);
         $this->connectionMock = $this->createPartialMock(Mysql::class, ['select', 'getIndexList']);
         $this->selectMock = $this->createPartialMock(Select::class, ['getPart', 'where']);
 
-        $this->resourceModelAbstractDb = $this->getMockBuilder(ResourceModelAbstractDb::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->resourceModelAbstractDb = $this->createMock(ResourceModelAbstractDb::class);
 
-        $this->collectionAbstractDbMock = $this->getMockBuilder(CollectionAbstractDb::class)
-            ->setMethods(['getConnection', 'getSelect', 'getMainTable'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->collectionAbstractDbMock = $this->createPartialMockWithReflection(
+            CollectionAbstractDb::class,
+            ['getResource', 'getMainTable', 'getConnection', 'getSelect']
+        );
 
         $this->fulltextFilter = new FulltextFilter();
     }
@@ -130,7 +131,6 @@ class FulltextFilterTest extends TestCase
         $this->expectException('InvalidArgumentException');
         /** @var MviewCollection $mviewCollection */
         $mviewCollection = $this->getMockBuilder(MviewCollection::class)
-            ->setMethods([])
             ->disableOriginalConstructor()
             ->getMock();
 

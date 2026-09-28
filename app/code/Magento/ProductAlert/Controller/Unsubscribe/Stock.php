@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -52,8 +52,8 @@ class Stock extends UnsubscribeController implements HttpPostActionInterface
         Context $context,
         CustomerSession $customerSession,
         ProductRepositoryInterface $productRepository,
-        StoreManagerInterface $storeManager = null,
-        StockFactory $stockFactory = null
+        ?StoreManagerInterface $storeManager = null,
+        ?StockFactory $stockFactory = null
     ) {
         $this->productRepository = $productRepository;
         $this->storeManager = $storeManager ?? ObjectManager::getInstance()->get(StoreManagerInterface::class);

@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 define([
     'underscore',
@@ -51,6 +51,7 @@ define([
          */
         handlePriceValue: function (isConfigurable) {
             this.disabled(!!this.isUseDefault() || isConfigurable);
+            this.required(!!this.isUseDefault() || !isConfigurable);
 
             if (isConfigurable) {
                 this.clear();

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -70,7 +70,7 @@ class FinalPriceTest extends TestCase
             ->method('getPrice')
             ->with(BasePrice::PRICE_CODE)
             ->willReturn($this->basePriceMock);
-        $this->priceCurrencyMock = $this->getMockForAbstractClass(PriceCurrencyInterface::class);
+        $this->priceCurrencyMock = $this->createMock(PriceCurrencyInterface::class);
 
         $this->model = new FinalPrice(
             $this->saleableMock,

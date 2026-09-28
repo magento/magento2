@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAddAttributeOptionInIFrameActionGroup">
+        <annotations>
+            <description>Adds a single option to an attribute in the iframe (during attribute creation)</description>
+        </annotations>
+        <arguments>
+            <argument name="optionLabel" type="string"/>
+            <argument name="optionIndex" type="string"/>
+        </arguments>
+        <click selector="{{AttributePropertiesSection.dropdownAddOptions}}" stepKey="clickAddOption"/>
+        <fillField selector="{{AttributePropertiesSection.dropdownNthOptionAdmin(optionIndex)}}"
+                   userInput="{{optionLabel}}" stepKey="fillOption"/>
+    </actionGroup>
+</actionGroups>

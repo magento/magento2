@@ -1,14 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Checkout\Controller\Cart;
 
 use Magento\Framework;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Checkout\Model\Cart as CustomerCart;
 
-class EstimatePost extends \Magento\Checkout\Controller\Cart
+class EstimatePost extends \Magento\Checkout\Controller\Cart implements HttpPostActionInterface
 {
     /**
      * @var \Magento\Quote\Api\CartRepositoryInterface
@@ -63,9 +64,7 @@ class EstimatePost extends \Magento\Checkout\Controller\Cart
             ->setCity($city)
             ->setPostcode($postcode)
             ->setRegionId($regionId)
-            ->setRegion($region)
-            ->setCollectShippingRates(true);
-        $this->quoteRepository->save($this->cart->getQuote());
+            ->setRegion($region);
         $this->cart->save();
         return $this->_goBack();
     }

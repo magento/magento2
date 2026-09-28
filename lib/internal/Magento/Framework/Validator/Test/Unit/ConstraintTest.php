@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,6 +17,7 @@ use Magento\Framework\Validator\Constraint;
 use Magento\Framework\Validator\ValidatorInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ConstraintTest extends TestCase
 {
@@ -37,7 +38,7 @@ class ConstraintTest extends TestCase
     {
         $this->_validatorMock = $this->getMockBuilder(
             AbstractValidator::class
-        )->setMethods(
+        )->onlyMethods(
             ['isValid', 'getMessages']
         )->getMock();
         $this->_constraint = new Constraint($this->_validatorMock);
@@ -56,13 +57,12 @@ class ConstraintTest extends TestCase
 
     /**
      * Test isValid method
-     *
-     * @dataProvider isValidDataProvider
-     *
+     *     *
      * @param mixed $value
      * @param bool $expectedResult
      * @param array $expectedMessages
      */
+    #[DataProvider('isValidDataProvider')]
     public function testIsValid($value, $expectedResult, $expectedMessages = [])
     {
         $this->_validatorMock->expects(
@@ -96,7 +96,7 @@ class ConstraintTest extends TestCase
      *
      * @return array
      */
-    public function isValidDataProvider()
+    public static function isValidDataProvider()
     {
         return [['test', true], ['test', false, ['foo']]];
     }
@@ -107,9 +107,9 @@ class ConstraintTest extends TestCase
     public function testSetTranslator()
     {
         /** @var AbstractAdapter $translator */
-        $translator = $this->getMockBuilder(
+        $translator = $this->createMock(
             AdapterInterface::class
-        )->getMockForAbstractClass();
+        );
         $this->_constraint->setTranslator($translator);
         $this->assertEquals($translator, $this->_validatorMock->getTranslator());
         $this->assertEquals($translator, $this->_constraint->getTranslator());

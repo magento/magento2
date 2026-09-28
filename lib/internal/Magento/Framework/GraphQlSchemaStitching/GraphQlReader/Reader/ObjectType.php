@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -19,6 +19,8 @@ use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\MetaReader\Deprecated
  */
 class ObjectType implements TypeMetaReaderInterface
 {
+    public const GRAPHQL_TYPE = 'graphql_type';
+
     /**
      * @var FieldMetaReader
      */
@@ -56,8 +58,8 @@ class ObjectType implements TypeMetaReaderInterface
         FieldMetaReader $fieldMetaReader,
         DocReader $docReader,
         ImplementsReader $implementsAnnotation,
-        CacheAnnotationReader $cacheAnnotationReader = null,
-        DeprecatedAnnotationReader $deprecatedAnnotationReader = null
+        ?CacheAnnotationReader $cacheAnnotationReader = null,
+        ?DeprecatedAnnotationReader $deprecatedAnnotationReader = null
     ) {
         $this->fieldMetaReader = $fieldMetaReader;
         $this->docReader = $docReader;
@@ -69,7 +71,7 @@ class ObjectType implements TypeMetaReaderInterface
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function read(\GraphQL\Type\Definition\Type $typeMeta) : array
     {
@@ -77,7 +79,7 @@ class ObjectType implements TypeMetaReaderInterface
             $typeName = $typeMeta->name;
             $result = [
                 'name' => $typeName,
-                'type' => 'graphql_type',
+                'type' => self::GRAPHQL_TYPE,
                 'fields' => [], // Populated later
             ];
 

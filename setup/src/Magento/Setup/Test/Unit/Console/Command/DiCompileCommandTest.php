@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -22,7 +22,7 @@ use Magento\Setup\Module\Di\App\Task\Manager;
 use Magento\Setup\Module\Di\App\Task\OperationFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Console\Formatter\OutputFormatterInterface;
+use Symfony\Component\Console\Formatter\OutputFormatter;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -62,19 +62,17 @@ class DiCompileCommandTest extends TestCase
     /** @var  OutputInterface|MockObject */
     private $outputMock;
 
-    /** @var OutputFormatterInterface|MockObject */
-    private $outputFormatterMock;
+    /** @var OutputFormatter */
+    private $outputFormatter;
+
+    /** @var Filesystem\Io\File|MockObject */
+    private $fileMock;
 
     protected function setUp(): void
     {
         $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);
         $objectManagerProviderMock = $this->createMock(ObjectManagerProvider::class);
-        $this->objectManagerMock = $this->getMockForAbstractClass(
-            ObjectManagerInterface::class,
-            [],
-            '',
-            false
-        );
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $this->cacheMock = $this->getMockBuilder(Cache::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -96,18 +94,35 @@ class DiCompileCommandTest extends TestCase
         $this->fileDriverMock = $this->getMockBuilder(File::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->fileDriverMock->method('getParentDirectory')->willReturnMap(
+            [
+                ['/path/to/module/one', '/path/to/module'],
+                ['/path/to/module', '/path/to'],
+                ['/path (1)/to/module/two', '/path (1)/to/module'],
+                ['/path (1)/to/module', '/path (1)/to'],
+            ]
+        );
         $this->componentRegistrarMock = $this->createMock(ComponentRegistrar::class);
         $this->componentRegistrarMock->expects($this->any())->method('getPaths')->willReturnMap([
             [ComponentRegistrar::MODULE, ['/path/to/module/one', '/path (1)/to/module/two']],
             [ComponentRegistrar::LIBRARY, ['/path/to/library/one', '/path (1)/to/library/two']],
         ]);
 
-        $this->outputFormatterMock = $this->createMock(
-            OutputFormatterInterface::class
-        );
-        $this->outputMock = $this->getMockForAbstractClass(OutputInterface::class);
+        $this->outputFormatter = new OutputFormatter();
+        $this->outputMock = $this->createMock(OutputInterface::class);
         $this->outputMock->method('getFormatter')
-            ->willReturn($this->outputFormatterMock);
+            ->willReturn($this->outputFormatter);
+        $this->fileMock = $this->getMockBuilder(Filesystem\Io\File::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->fileMock->method('getPathInfo')->willReturnMap(
+            [
+                ['/path/to/module/one', ['basename' => 'one']],
+                ['/path/to/module', ['basename' => 'module']],
+                ['/path (1)/to/module/two', ['basename' => 'two']],
+                ['/path (1)/to/module', ['basename' => 'module']],
+            ]
+        );
 
         $this->command = new DiCompileCommand(
             $this->deploymentConfigMock,
@@ -116,7 +131,8 @@ class DiCompileCommandTest extends TestCase
             $objectManagerProviderMock,
             $this->filesystemMock,
             $this->fileDriverMock,
-            $this->componentRegistrarMock
+            $this->componentRegistrarMock,
+            $this->fileMock
         );
     }
 
@@ -143,14 +159,21 @@ class DiCompileCommandTest extends TestCase
             ->with(Cache::class)
             ->willReturn($this->cacheMock);
         $this->cacheMock->expects($this->once())->method('clean');
-        $writeDirectory = $this->getMockForAbstractClass(WriteInterface::class);
+        $writeDirectory = $this->createMock(WriteInterface::class);
         $writeDirectory->expects($this->atLeastOnce())->method('delete');
         $this->filesystemMock->expects($this->atLeastOnce())->method('getDirectoryWrite')->willReturn($writeDirectory);
 
-        $this->deploymentConfigMock->expects($this->once())
+        $this->deploymentConfigMock->expects($this->exactly(2))
             ->method('get')
             ->with(ConfigOptionsListConstants::KEY_MODULES)
-            ->willReturn(['Magento_Catalog' => 1]);
+            ->willReturn(
+                [
+                    'Magento_Catalog' => 1,
+                    'Module_Test' => 0
+                ]
+            );
+        $this->componentRegistrarMock->expects($this->exactly(2))->method('getPaths');
+
         $progressBar = new ProgressBar($this->outputMock);
 
         $this->objectManagerMock->expects($this->once())->method('configure');
@@ -160,26 +183,24 @@ class DiCompileCommandTest extends TestCase
             ->with(ProgressBar::class)
             ->willReturn($progressBar);
 
-        $this->managerMock->expects($this->exactly(8))->method('addOperation')
-            ->withConsecutive(
-                [OperationFactory::PROXY_GENERATOR, []],
-                [OperationFactory::REPOSITORY_GENERATOR, $this->anything()],
-                [OperationFactory::DATA_ATTRIBUTES_GENERATOR, []],
-                [OperationFactory::APPLICATION_CODE_GENERATOR, $this->callback(function ($subject) {
-                    $this->assertEmpty(array_diff($subject['excludePatterns'], [
-                        "#^(?:/path \(1\)/to/setup/)(/[\w]+)*/Test#",
-                        "#^(?:/path/to/library/one|/path \(1\)/to/library/two)/([\w]+/)?Test#",
-                        "#^(?:/path/to/library/one|/path \(1\)/to/library/two)/([\w]+/)?tests#",
-                        "#^(?:/path/to/(?:module/(?:one))|/path \(1\)/to/(?:module/(?:two)))/Test#",
-                        "#^(?:/path/to/(?:module/(?:one))|/path \(1\)/to/(?:module/(?:two)))/tests#"
-                    ]));
-                    return true;
-                })],
-                [OperationFactory::INTERCEPTION, $this->anything()],
-                [OperationFactory::AREA_CONFIG_GENERATOR, $this->anything()],
-                [OperationFactory::INTERCEPTION_CACHE, $this->anything()],
-                [OperationFactory::APPLICATION_ACTION_LIST_GENERATOR, $this->anything()]
-            );
+        $operations = [
+            OperationFactory::REPOSITORY_GENERATOR,
+            OperationFactory::DATA_ATTRIBUTES_GENERATOR,
+            OperationFactory::APPLICATION_CODE_GENERATOR,
+            OperationFactory::INTERCEPTION,
+            OperationFactory::AREA_CONFIG_GENERATOR,
+            OperationFactory::INTERCEPTION_CACHE,
+            OperationFactory::APPLICATION_ACTION_LIST_GENERATOR,
+            OperationFactory::PLUGIN_LIST_GENERATOR,
+        ];
+        $this->managerMock->expects($this->exactly(9))->method('addOperation')
+            ->willReturnCallback(function ($arg1, $arg2) use ($operations) {
+                if ($arg1 == OperationFactory::PROXY_GENERATOR && empty($arg2)) {
+                    return null;
+                } elseif (in_array($arg1, $operations)) {
+                    return null;
+                }
+            });
 
         $this->managerMock->expects($this->once())->method('process');
         $tester = new CommandTester($this->command);

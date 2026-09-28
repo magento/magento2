@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Config\Model\Config;
 
@@ -23,7 +23,7 @@ use Magento\Framework\Stdlib\ArrayUtils;
  * {@inheritdoc}
  * @see \Magento\Deploy\Console\Command\App\ConfigImport\Importer
  * @api
- * @since 100.2.0
+ * @since 101.0.0
  */
 class Importer implements ImporterInterface
 {
@@ -103,7 +103,7 @@ class Importer implements ImporterInterface
      * or current value is different from previously imported.
      *
      * {@inheritdoc}
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function import(array $data)
     {
@@ -145,7 +145,7 @@ class Importer implements ImporterInterface
     /**
      * @inheritdoc
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function getWarningMessages(array $data)
     {

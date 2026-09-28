@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\Product\ProductFrontendAction;
 
@@ -133,10 +133,9 @@ class Synchronizer
             $productsData,
             function (array $firstProduct, array $secondProduct) {
                 if (isset($firstProduct['added_at'], $secondProduct['added_at'])) {
-                    return $firstProduct['added_at'] > $secondProduct['added_at'];
+                    return ($firstProduct['added_at'] <=> $secondProduct['added_at']);
                 }
-
-                return false;
+                return 0;
             }
         );
 

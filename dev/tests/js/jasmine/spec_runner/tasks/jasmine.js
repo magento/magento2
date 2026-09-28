@@ -1,21 +1,33 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
-
-'use strict';
 
 var tasks = {},
     _ = require('underscore');
 
+function renderTemplate(data, template) {
+    'use strict';
+
+    return _.template(template)(data);
+}
+
+function cutJsExtension(filePath) {
+    'use strict';
+
+    return filePath.replace(/\.js$/, '');
+}
+
 function init(config) {
+    'use strict';
+
     var grunt  = require('grunt'),
         expand = grunt.file.expand.bind(grunt.file),
         staticMode = 'quick',
         themes, root, staticDir, baseUrl, mapFile, host, port, files, requireJs;
 
     root         = config.root;
-    staticDir       = config.static;
+    staticDir    = config.static;
     port         = config.port;
     files        = config.files;
     themes       = config.themes;
@@ -53,6 +65,7 @@ function init(config) {
         tasks[themeName] = {
             src: configs,
             options: {
+                version: '5.1.2',
                 host: host,
                 template: render(files.template),
                 templateOptions: {
@@ -60,28 +73,26 @@ function init(config) {
                 },
                 vendor: requireJs,
                 junit: {
-                    path: "var/log/js-unit/",
+                    path: 'var/log/js-unit/',
                     consolidate: true
                 },
 
                 /**
                  * @todo rename "helpers" to "specs" (implies overriding grunt-contrib-jasmine code)
                  */
-                helpers: specs
+                helpers: specs,
+                sandboxArgs: {
+                    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+                    defaultViewport: {width: 400, height: 400, hasTouch: true}
+                }
             }
-        }
+        };
     });
 }
 
-function renderTemplate(data, template) {
-    return _.template(template)(data);
-}
-
-function cutJsExtension(path) {
-    return path.replace(/\.js$/, '');
-}
-
 function getTasks() {
+    'use strict';
+
     return tasks;
 }
 

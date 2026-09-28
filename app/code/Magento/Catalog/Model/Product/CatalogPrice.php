@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\Product;
 
@@ -32,11 +32,11 @@ class CatalogPrice implements CatalogPriceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCatalogPrice(
         \Magento\Catalog\Model\Product $product,
-        \Magento\Store\Api\Data\StoreInterface $store = null,
+        ?\Magento\Store\Api\Data\StoreInterface $store = null,
         $inclTax = false
     ) {
         if (array_key_exists($product->getTypeId(), $this->priceModelPool)) {

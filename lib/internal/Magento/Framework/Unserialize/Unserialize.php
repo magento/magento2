@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Unserialize;
@@ -10,7 +10,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Serialize;
 
 /**
- * @deprecated 100.2.0
+ * @deprecated 101.0.0
  */
 class Unserialize
 {
@@ -24,18 +24,20 @@ class Unserialize
     /**
      * @param Serialize|null $serializer Optional parameter for backward compatibility.
      */
-    public function __construct(Serialize $serializer = null)
+    public function __construct(?Serialize $serializer = null)
     {
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Serialize::class);
     }
 
     /**
+     * Unserialize
+     *
      * @param string $string
      * @return bool|mixed
      */
     public function unserialize($string)
     {
-        if (preg_match('/[oc]:[+\-]?\d+:"/i', $string)) {
+        if ($string !== null && preg_match('/[oc]:[+\-]?\d+:"/i', $string)) {
             trigger_error('String contains serialized object');
             return false;
         }

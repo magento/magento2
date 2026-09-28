@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -21,6 +21,9 @@ use Magento\Framework\View\LayoutInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Escaper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -29,6 +32,8 @@ use PHPUnit\Framework\TestCase;
  */
 class DataTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var  Data */
     private $block;
 
@@ -62,9 +67,16 @@ class DataTest extends TestCase
     /** @var SerializerInterface|MockObject */
     private $serializerMock;
 
+    /** @var \Magento\Framework\Escaper */
+    private $escaper;
+
     protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManager($this);
+        $this->escaper = $this->getMockBuilder(Escaper::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['escapeHtmlAttr'])
+            ->getMock();
         $this->prepareContext();
 
         $this->helperDataMock = $this->getMockBuilder(\Magento\Directory\Helper\Data::class)
@@ -87,7 +99,7 @@ class DataTest extends TestCase
             ]
         );
 
-        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
         $objectManagerHelper->setBackwardCompatibleProperty(
             $this->block,
             'serializer',
@@ -101,18 +113,15 @@ class DataTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->getMockForAbstractClass();
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
 
-        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
-            ->getMockForAbstractClass();
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
 
         $this->storeManagerMock->expects($this->any())
             ->method('getStore')
             ->willReturn($this->storeMock);
 
-        $this->layoutMock = $this->getMockBuilder(LayoutInterface::class)
-            ->getMockForAbstractClass();
+        $this->layoutMock = $this->createMock(LayoutInterface::class);
 
         $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
@@ -129,6 +138,10 @@ class DataTest extends TestCase
         $this->contextMock->expects($this->any())
             ->method('getLayout')
             ->willReturn($this->layoutMock);
+
+        $this->contextMock->expects($this->once())
+            ->method('getEscaper')
+            ->willReturn($this->escaper);
     }
 
     protected function prepareCountryCollection()
@@ -142,9 +155,11 @@ class DataTest extends TestCase
             \Magento\Directory\Model\ResourceModel\Country\CollectionFactory::class
         )
             ->disableOriginalConstructor()
-            ->setMethods([
-                'create'
-            ])
+            ->onlyMethods(
+                [
+                    'create'
+                ]
+            )
             ->getMock();
 
         $this->countryCollectionFactoryMock->expects($this->any())
@@ -159,8 +174,8 @@ class DataTest extends TestCase
      * @param array $expectedDestinations
      * @param array $options
      * @param string $resultHtml
-     * @dataProvider dataProviderGetCountryHtmlSelect
      */
+    #[DataProvider('dataProviderGetCountryHtmlSelect')]
     public function testGetCountryHtmlSelect(
         $storeCode,
         $defaultCountry,
@@ -224,7 +239,7 @@ class DataTest extends TestCase
      *
      * @return array
      */
-    public function dataProviderGetCountryHtmlSelect()
+    public static function dataProviderGetCountryHtmlSelect()
     {
         return [
             [
@@ -290,18 +305,18 @@ class DataTest extends TestCase
         $id = 'country';
         $title = 'Country';
 
-        $elementHtmlSelect = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->setMethods([
+        $elementHtmlSelect = $this->createPartialMockWithReflection(
+            Select::class,
+            [
                 'setName',
+                'setValue',
+                'setExtraParams',
                 'setId',
                 'setTitle',
-                'setValue',
                 'setOptions',
-                'setExtraParams',
                 'getHtml',
-            ])
-            ->getMock();
+            ]
+        );
 
         $elementHtmlSelect->expects($this->once())
             ->method('setName')
@@ -330,6 +345,10 @@ class DataTest extends TestCase
         $elementHtmlSelect->expects($this->once())
             ->method('getHtml')
             ->willReturn($resultHtml);
+        $this->escaper->expects($this->once())
+            ->method('escapeHtmlAttr')
+            ->with(__($title))
+            ->willReturn(__($title));
 
         return $elementHtmlSelect;
     }

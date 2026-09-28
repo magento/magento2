@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\MessageQueue\Config\Reader\Xml;
 
@@ -11,7 +11,7 @@ use Magento\Framework\Phrase;
 /**
  * Converts MessageQueue config from \DOMDocument to array
  *
- * @deprecated 100.2.0
+ * @deprecated 103.0.0
  */
 class CompositeConverter implements ConverterInterface
 {

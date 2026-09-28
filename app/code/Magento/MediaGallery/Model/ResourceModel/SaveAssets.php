@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -60,7 +60,9 @@ class SaveAssets implements SaveAssetsInterface
                     'id' => $asset->getId(),
                     'path' => $asset->getPath(),
                     'title' => $asset->getTitle(),
+                    'description' => $asset->getDescription(),
                     'source' => $asset->getSource(),
+                    'hash' => $asset->getHash(),
                     'content_type' => $asset->getContentType(),
                     'width' => $asset->getWidth(),
                     'height' => $asset->getHeight(),

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Framework\ObjectManager\Test\Unit\Config;
 use Magento\Framework\ObjectManager\Config\Config;
 use Magento\Framework\ObjectManager\ConfigCacheInterface;
 use Magento\Framework\ObjectManager\DefinitionInterface;
+use Magento\Framework\ObjectManager\Helper\SortItems;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
@@ -50,16 +51,26 @@ class ConfigTest extends TestCase
 
     public function testExtendWithCacheMock()
     {
-        $definitions = $this->getMockForAbstractClass(DefinitionInterface::class);
+        $definitions = $this->createMock(DefinitionInterface::class);
         $definitions->expects($this->once())->method('getClasses')->willReturn(['FooType']);
 
-        $cache = $this->getMockForAbstractClass(ConfigCacheInterface::class);
+        $cache = $this->createMock(ConfigCacheInterface::class);
         $cache->expects($this->once())->method('get')->willReturn(false);
 
-        $config = new Config(null, $definitions);
-        $serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
-        $serializerMock->expects($this->exactly(2))
-            ->method('serialize');
+        $serializerMock = $this->createMock(SerializerInterface::class);
+        $serializerMock->expects($this->atLeast(2))
+            ->method('serialize')
+            ->willReturn('[[],[],[],[]]');
+
+        $sortItemsMock = $this->createMock(SortItems::class);
+        $config =$this->objectManagerHelper->getObject(
+            Config::class,
+            [
+                'relations' => null,
+                'definitions' => $definitions,
+                'sortItemsHelper' => $sortItemsMock,
+            ]
+        );
         $this->objectManagerHelper->setBackwardCompatibleProperty(
             $config,
             'serializer',

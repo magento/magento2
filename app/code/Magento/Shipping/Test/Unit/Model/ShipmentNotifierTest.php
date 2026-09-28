@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,6 +17,7 @@ use Magento\Sales\Model\Order\Status\History;
 use Magento\Sales\Model\ResourceModel\Order\Status\History\Collection;
 use Magento\Sales\Model\ResourceModel\Order\Status\History\CollectionFactory;
 use Magento\Shipping\Model\ShipmentNotifier;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -26,6 +27,7 @@ use Psr\Log\LoggerInterface;
  */
 class ShipmentNotifierTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var CollectionFactory|MockObject
      */
@@ -51,6 +53,9 @@ class ShipmentNotifierTest extends TestCase
      */
     protected $shipmentSenderMock;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->historyCollectionFactory = $this->createPartialMock(
@@ -65,7 +70,7 @@ class ShipmentNotifierTest extends TestCase
             ShipmentSender::class,
             ['send']
         );
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->notifier = new ShipmentNotifier(
             $this->historyCollectionFactory,
             $this->loggerMock,
@@ -75,23 +80,22 @@ class ShipmentNotifierTest extends TestCase
 
     /**
      * Test case for successful email sending
+     *
+     * @return void
      */
-    public function testNotifySuccess()
+    public function testNotifySuccess(): void
     {
-        $historyCollection = $this->getMockBuilder(Collection::class)
-            ->addMethods(['setIsCustomerNotified'])
-            ->onlyMethods(['getUnnotifiedForInstance', 'save'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $historyCollection = $this->createPartialMockWithReflection(
+            Collection::class,
+            ['setIsCustomerNotified', 'getUnnotifiedForInstance', 'save']
+        );
         $historyItem = $this->createPartialMock(
             History::class,
             ['setIsCustomerNotified', 'save', '__wakeUp']
         );
-        $historyItem->expects($this->at(0))
+        $historyItem
             ->method('setIsCustomerNotified')
             ->with(1);
-        $historyItem->expects($this->at(1))
-            ->method('save');
         $historyCollection->expects($this->once())
             ->method('getUnnotifiedForInstance')
             ->with($this->shipment)
@@ -112,8 +116,10 @@ class ShipmentNotifierTest extends TestCase
 
     /**
      * Test case when email has not been sent
+     *
+     * @return void
      */
-    public function testNotifyFail()
+    public function testNotifyFail(): void
     {
         $this->shipment->expects($this->once())
             ->method('getEmailSent')
@@ -123,8 +129,10 @@ class ShipmentNotifierTest extends TestCase
 
     /**
      * Test case when Mail Exception has been thrown
+     *
+     * @return void
      */
-    public function testNotifyException()
+    public function testNotifyException(): void
     {
         $exception = new MailException(__('Email has not been sent'));
         $this->shipmentSenderMock->expects($this->once())

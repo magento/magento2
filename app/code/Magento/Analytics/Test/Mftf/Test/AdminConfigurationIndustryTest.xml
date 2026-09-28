@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -17,10 +17,16 @@
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-63898"/>
             <group value="analytics"/>
+            <group value="pr_exclude"/>
+            <group value="cloud"/>
         </annotations>
-
-        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-        <amOnPage url="{{AdminConfigGeneralAnalyticsPage.url}}" stepKey="amOnAdminConfig"/>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
+        </after>
+        <actionGroup ref="AdminOpenConfigGeneralAnalyticsPageActionGroup" stepKey="amOnAdminConfig"/>
         <selectOption selector="{{AdminConfigAdvancedReportingSection.advancedReportingService}}" userInput="Enable" stepKey="selectAdvancedReportingServiceEnabled"/>
         <see selector="{{AdminConfigAdvancedReportingSection.advancedReportingIndustryLabel}}" userInput="Industry" stepKey="seeAdvancedReportingIndustryLabel"/>
         <selectOption selector="{{AdminConfigAdvancedReportingSection.advancedReportingIndustry}}" userInput="Apps and Games" stepKey="selectAdvancedReportingIndustry"/>

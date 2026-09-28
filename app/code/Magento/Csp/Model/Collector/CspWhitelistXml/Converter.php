@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -36,14 +36,12 @@ class Converter implements ConverterInterface
             /** @var \DOMElement $value */
             foreach ($policy->getElementsByTagName('value') as $value) {
                 if ($value->attributes->getNamedItem('type')->nodeValue === 'host') {
-                    $policyConfig[$id]['hosts'][] = $value->nodeValue;
+                    $policyConfig[$id]['hosts'][$value->attributes->getNamedItem('id')->nodeValue] = $value->nodeValue;
                 } else {
                     $policyConfig[$id]['hashes'][$value->nodeValue]
                         = $value->attributes->getNamedItem('algorithm')->nodeValue;
                 }
             }
-            $policyConfig[$id]['hosts'] = array_unique($policyConfig[$id]['hosts']);
-            $policyConfig[$id]['hashes'] = array_unique($policyConfig[$id]['hashes']);
         }
 
         return $policyConfig;

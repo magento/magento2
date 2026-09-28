@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,7 +9,7 @@ namespace Magento\Backend\Block;
 
 /**
  * Class used to initialize layout for MBO Dashboard
- * @deprecated dashboard graphs were migrated to dynamic chart.js solution
+ * @deprecated 102.0.0 dashboard graphs were migrated to dynamic chart.js solution
  * @see dashboard in adminhtml_dashboard_index.xml
  *
  * @api

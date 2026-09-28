@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\MessageQueue;
 
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\MessageQueue\PoisonPill\PoisonPillCompareInterface;
 use Magento\Framework\MessageQueue\PoisonPill\PoisonPillReadInterface;
-use Magento\Framework\App\DeploymentConfig;
 
 /**
  * Class CallbackInvoker to invoke callbacks for consumer classes
@@ -56,16 +56,32 @@ class CallbackInvoker implements CallbackInvokerInterface
      * @param QueueInterface $queue
      * @param int $maxNumberOfMessages
      * @param \Closure $callback
+     * @param mixed $maxIdleTime
+     * @param mixed $sleep
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function invoke(QueueInterface $queue, $maxNumberOfMessages, $callback)
-    {
+    public function invoke(
+        QueueInterface $queue,
+        $maxNumberOfMessages,
+        $callback,
+        $maxIdleTime = null,
+        $sleep = null
+    ) {
         $this->poisonPillVersion = $this->poisonPillRead->getLatestVersion();
+        $sleep = (int) $sleep ?: 1;
+        $maxIdleTime = $maxIdleTime ? (int) $maxIdleTime : PHP_INT_MAX;
         for ($i = $maxNumberOfMessages; $i > 0; $i--) {
+            $idleStartTime = microtime(true);
             do {
                 $message = $queue->dequeue();
+                if (!$message && microtime(true) - $idleStartTime > $maxIdleTime) {
+                    break 2;
+                }
                 // phpcs:ignore Magento2.Functions.DiscouragedFunction
-            } while ($message === null && $this->isWaitingNextMessage() && (sleep(1) === 0));
+            } while ($message === null && $this->isWaitingNextMessage() && (sleep($sleep) === 0));
 
             if ($message === null) {
                 break;

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Communication\Config\Reader\XmlReader;
 
@@ -62,7 +62,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * The getter function to get the new ConfigParser dependency.
      *
      * @return \Magento\Framework\Communication\Config\ConfigParser
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     private function getConfigParser()
     {

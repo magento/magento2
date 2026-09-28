@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\View\Element\Html\Link;
 
@@ -20,6 +20,7 @@ use Magento\Framework\View\Element\Template\Context;
  * @method null|array                      getAttributes()
  * @method null|bool                       getCurrent()
  * @method \Magento\Framework\View\Element\Html\Link\Current setCurrent(bool $value)
+ * @since 100.0.2
  */
 class Current extends Template
 {
@@ -29,7 +30,7 @@ class Current extends Template
     private const REGEX_INDEX_URL_PATTERN = '/(\/index|(\/))+($|\/$)/';
 
     /**
-     * Default path
+     * This property specifies the default path.
      *
      * @var DefaultPathInterface
      */
@@ -92,9 +93,31 @@ class Current extends Template
      */
     public function isCurrent()
     {
+        $urlByPath = preg_replace(self::REGEX_INDEX_URL_PATTERN, '', $this->getUrl($this->getPath()));
         return $this->getCurrent() ||
-            preg_replace(self::REGEX_INDEX_URL_PATTERN, '', $this->getUrl($this->getPath()))
-            == preg_replace(self::REGEX_INDEX_URL_PATTERN, '', $this->getUrl($this->getMca()));
+            ($urlByPath == preg_replace(self::REGEX_INDEX_URL_PATTERN, '', $this->getUrl($this->getMca()))) ||
+            $this->isCurrentCmsUrl($urlByPath);
+    }
+
+    /**
+     * Get Current displayed page url
+     *
+     * @return string
+     */
+    private function getCurrentUrl()
+    {
+        return $this->getUrl('*/*/*', ['_current' => false, '_use_rewrite' => true]);
+    }
+
+    /**
+     * Check if link URL equivalent to URL of currently displayed CMS page
+     *
+     * @param string $urlByPath
+     * @return bool
+     */
+    private function isCurrentCmsUrl($urlByPath)
+    {
+        return ($urlByPath == preg_replace(self::REGEX_INDEX_URL_PATTERN, '', $this->getCurrentUrl()));
     }
 
     /**
@@ -116,9 +139,10 @@ class Current extends Template
 
         if ($this->isCurrent()) {
             $html = '<li class="nav item current">';
-            $html .= '<strong>'
-                . $this->escapeHtml(__($this->getLabel()))
-                . '</strong>';
+            $html .= '<strong';
+            $html .= $this->getAttributesHtml() . '>'
+                     . $this->escapeHtml(__($this->getLabel()))
+                     . '</strong>';
             $html .= '</li>';
         } else {
             $html = '<li class="nav item' . $highlight . '"><a href="' . $this->escapeHtml($this->getHref()) . '"';

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Theme\Model\Theme\ThemeDependencyChecker;
 use Magento\Theme\Model\Theme\ThemePackageInfo;
 use Magento\Theme\Model\Theme\ThemeProvider;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ThemeDependencyCheckerTest extends TestCase
@@ -61,13 +62,13 @@ class ThemeDependencyCheckerTest extends TestCase
     }
 
     /**
-     * @dataProvider executeFailedChildThemeCheckDataProvider
      * @param bool $hasVirtual
      * @param bool $hasPhysical
      * @param array $input
      * @param string $expected
      * @return void
      */
+    #[DataProvider('executeFailedChildThemeCheckDataProvider')]
     public function testExecuteFailedChildThemeCheck($hasVirtual, $hasPhysical, array $input, $expected)
     {
         $theme = $this->createMock(Theme::class);
@@ -97,7 +98,7 @@ class ThemeDependencyCheckerTest extends TestCase
     /**
      * @return array
      */
-    public function executeFailedChildThemeCheckDataProvider()
+    public static function executeFailedChildThemeCheckDataProvider()
     {
         return [
             [

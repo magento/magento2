@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,13 +9,17 @@ namespace Magento\Theme\Test\Unit\Model\Theme;
 
 use Magento\Framework\View\Design\Theme\Customization\FileInterface;
 use Magento\Framework\View\Design\Theme\CustomizationInterface;
+use Magento\Framework\View\Design\Theme\FileInterface as ThemeFileInterface;
 use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Theme\Model\Theme\SingleFile;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class SingleFileTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var SingleFile
      */
@@ -31,8 +35,7 @@ class SingleFileTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->file = $this->getMockBuilder(FileInterface::class)
-            ->getMock();
+        $this->file = $this->createMock(FileInterface::class);
 
         $this->object = new SingleFile($this->file);
     }
@@ -45,44 +48,26 @@ class SingleFileTest extends TestCase
         $fileContent = 'file content';
         $customFiles = [];
         $fileType = 'png';
-        $customCss = $this->getMockBuilder(\Magento\Framework\View\Design\Theme\FileInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'delete',
-                    'save',
-                    'getContent',
-                    'getFileInfo',
-                    'getFullPath',
-                    'getFileName',
-                    'setFileName',
-                    'getTheme',
-                    'setTheme',
-                    'getCustomizationService',
-                    'setCustomizationService',
-                    'setData',
-                    'getType',
-                    'prepareFile',
-                ]
-            )
-            ->getMock();
-        $theme = $this->getMockBuilder(ThemeInterface::class)
-            ->setMethods(
-                [
-                    'getArea',
-                    'getThemePath',
-                    'getFullPath',
-                    'getParentTheme',
-                    'getCode',
-                    'isPhysical',
-                    'getInheritedThemes',
-                    'getId',
-                    'getCustomization',
-                ]
-            )
-            ->getMockForAbstractClass();
-        $customization = $this->getMockBuilder(CustomizationInterface::class)
-            ->getMock();
+        $customCss = $this->createPartialMockWithReflection(
+            ThemeFileInterface::class,
+            [
+                'setData', 'getType', 'prepareFile',
+                'delete', 'save', 'getContent', 'getFileInfo',
+                'getFullPath', 'getFileName', 'setFileName',
+                'getTheme', 'setTheme',
+                'getCustomizationService', 'setCustomizationService'
+            ]
+        );
+        $theme = $this->createPartialMockWithReflection(
+            ThemeInterface::class,
+            [
+                'getCustomization',
+                'getArea', 'getThemePath', 'getFullPath',
+                'getParentTheme', 'getCode', 'isPhysical',
+                'getInheritedThemes', 'getId'
+            ]
+        );
+        $customization = $this->createMock(CustomizationInterface::class);
 
         $customCss->expects($this->once())
             ->method('setData')
@@ -108,7 +93,7 @@ class SingleFileTest extends TestCase
 
         /** @var ThemeInterface $theme */
         $this->assertInstanceOf(
-            \Magento\Framework\View\Design\Theme\FileInterface::class,
+            ThemeFileInterface::class,
             $this->object->update($theme, $fileContent)
         );
     }
@@ -118,48 +103,30 @@ class SingleFileTest extends TestCase
      */
     public function testUpdateWhenFileDelete()
     {
-        $customCss = $this->getMockBuilder(\Magento\Framework\View\Design\Theme\FileInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'delete',
-                    'save',
-                    'getContent',
-                    'getFileInfo',
-                    'getFullPath',
-                    'getFileName',
-                    'setFileName',
-                    'getTheme',
-                    'setTheme',
-                    'getCustomizationService',
-                    'setCustomizationService',
-                    'setData',
-                    'getType',
-                    'prepareFile',
-                ]
-            )
-            ->getMock();
+        $customCss = $this->createPartialMockWithReflection(
+            ThemeFileInterface::class,
+            [
+                'setData', 'getType', 'prepareFile',
+                'delete', 'save', 'getContent', 'getFileInfo',
+                'getFullPath', 'getFileName', 'setFileName',
+                'getTheme', 'setTheme',
+                'getCustomizationService', 'setCustomizationService'
+            ]
+        );
         $fileContent = '';
         $customFiles = [$customCss];
         $fileType = 'png';
 
-        $theme = $this->getMockBuilder(ThemeInterface::class)
-            ->setMethods(
-                [
-                    'getArea',
-                    'getThemePath',
-                    'getFullPath',
-                    'getParentTheme',
-                    'getCode',
-                    'isPhysical',
-                    'getInheritedThemes',
-                    'getId',
-                    'getCustomization',
-                ]
-            )
-            ->getMockForAbstractClass();
-        $customization = $this->getMockBuilder(CustomizationInterface::class)
-            ->getMock();
+        $theme = $this->createPartialMockWithReflection(
+            ThemeInterface::class,
+            [
+                'getCustomization',
+                'getArea', 'getThemePath', 'getFullPath',
+                'getParentTheme', 'getCode', 'isPhysical',
+                'getInheritedThemes', 'getId'
+            ]
+        );
+        $customization = $this->createMock(CustomizationInterface::class);
 
         $customCss->expects($this->once())
             ->method('delete');
@@ -176,7 +143,7 @@ class SingleFileTest extends TestCase
 
         /** @var ThemeInterface $theme */
         $this->assertInstanceOf(
-            \Magento\Framework\View\Design\Theme\FileInterface::class,
+            ThemeFileInterface::class,
             $this->object->update($theme, $fileContent)
         );
     }

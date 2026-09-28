@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,10 +18,14 @@ use Magento\Persistent\Observer\RemoveGuestPersistenceOnEmptyCartObserver;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\TestCase;
 
 class RemoveGuestPersistenceOnEmptyCartObserverTest extends TestCase
 {
+
+    use MockCreationTrait;
+
     /**
      * @var RemoveGuestPersistenceOnEmptyCartObserver
      */
@@ -115,28 +119,28 @@ class RemoveGuestPersistenceOnEmptyCartObserverTest extends TestCase
         $this->persistentHelperMock->expects($this->once())->method('isPersistent')->willReturn(true);
         $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->willReturn(false);
         $this->persistentDataMock->expects($this->once())->method('isShoppingCartPersist')->willReturn(true);
-        $sessionMock = $this->getMockBuilder(PersistentSession::class)
-            ->addMethods(['getCustomerId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $sessionMock = $this->createPartialMockWithReflection(
+            PersistentSession::class,
+            ['getCustomerId']
+        );
         $this->persistentHelperMock->expects($this->once())->method('getSession')->willReturn($sessionMock);
         $sessionMock->expects($this->once())->method('getCustomerId')->willReturn($customerId);
         /** @var CartInterface|MockObject $quoteMock */
-        $quoteMock = $this->getMockForAbstractClass(
-            CartInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['setCustomerEmail', 'getAddressesCollection'],
-            false
+        $quoteMock = $this->createMock(
+            CartInterface::class
         );
         $this->cartRepositoryMock->expects($this->once())
             ->method('getActiveForCustomer')
             ->with($customerId)
             ->willReturn($quoteMock);
         $quoteMock->expects($this->once())->method('getItemsCount')->willReturn($emptyCount);
+        $this->customerSessionMock->expects($this->once())
+            ->method('setCustomerId')
+            ->with(null)
+            ->willReturnSelf();
+        $this->customerSessionMock->expects($this->once())
+            ->method('setCustomerGroupId')
+            ->with(null);
         $this->quoteManagerMock->expects($this->once())->method('setGuest');
 
         $this->model->execute($this->observerMock);
@@ -150,16 +154,23 @@ class RemoveGuestPersistenceOnEmptyCartObserverTest extends TestCase
         $this->persistentHelperMock->expects($this->once())->method('isPersistent')->willReturn(true);
         $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->willReturn(false);
         $this->persistentDataMock->expects($this->once())->method('isShoppingCartPersist')->willReturn(true);
-        $sessionMock = $this->getMockBuilder(PersistentSession::class)
-            ->addMethods(['getCustomerId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $sessionMock = $this->createPartialMockWithReflection(
+            PersistentSession::class,
+            ['getCustomerId']
+        );
         $this->persistentHelperMock->expects($this->once())->method('getSession')->willReturn($sessionMock);
         $sessionMock->expects($this->once())->method('getCustomerId')->willReturn($customerId);
         $this->cartRepositoryMock->expects($this->once())
             ->method('getActiveForCustomer')
             ->with($customerId)
             ->willThrowException($exception);
+        $this->customerSessionMock->expects($this->once())
+            ->method('setCustomerId')
+            ->with(null)
+            ->willReturnSelf();
+        $this->customerSessionMock->expects($this->once())
+            ->method('setCustomerGroupId')
+            ->with(null);
         $this->quoteManagerMock->expects($this->once())->method('setGuest');
 
         $this->model->execute($this->observerMock);

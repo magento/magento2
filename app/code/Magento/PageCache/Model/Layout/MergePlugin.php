@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\PageCache\Model\Layout;
 
@@ -42,7 +42,7 @@ class MergePlugin
     public function beforeValidateUpdate(\Magento\Framework\View\Model\Layout\Merge $subject, $handle, $updateXml)
     {
         if (in_array($handle, $this->entitySpecificHandlesList->getHandles())
-            && (strpos($updateXml, 'ttl=') !== false)
+            && ($updateXml && strpos($updateXml, 'ttl=') !== false)
         ) {
             throw new \LogicException(
                 "Handle '{$handle}' must not contain blocks with 'ttl' attribute specified. "

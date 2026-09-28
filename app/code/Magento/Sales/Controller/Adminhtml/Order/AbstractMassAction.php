@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
@@ -14,7 +14,7 @@ use Magento\Ui\Component\MassAction\Filter;
 
 /**
  * Class AbstractMassStatus
- * @deprecated 100.2.0
+ * @deprecated 101.0.0
  * Never extend from this action. Implement mass-action logic in the "execute" method of your controller.
  */
 abstract class AbstractMassAction extends \Magento\Backend\App\Action

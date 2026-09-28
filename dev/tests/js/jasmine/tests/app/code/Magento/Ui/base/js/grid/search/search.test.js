@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 define([
@@ -36,6 +36,16 @@ define([
             spyOn(searchObj, 'updatePreview');
             searchObj.updatePreview();
             expect(searchObj.updatePreview).toHaveBeenCalled();
+        });
+        it('set the proper keywordUpdated value on new search keyword', function () {
+            searchObj.value = 'keyword 1';
+            expect(searchObj.keywordUpdated).toEqual(false);
+            searchObj.apply('keyword 2');
+            expect(searchObj.keywordUpdated).toEqual(true);
+            searchObj.apply('keyword 2');
+            expect(searchObj.keywordUpdated).toEqual(false);
+            searchObj.apply('keyword 3');
+            expect(searchObj.keywordUpdated).toEqual(true);
         });
     });
 });

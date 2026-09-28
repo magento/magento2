@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\InstantPurchase\Model;
 
@@ -21,6 +21,7 @@ use \Throwable;
  * Place an order using instant purchase option.
  *
  * @api
+ * @since 100.2.0
  */
 class PlaceOrder
 {
@@ -90,6 +91,7 @@ class PlaceOrder
      * @return int order identifier
      * @throws LocalizedException if order can not be placed.
      * @throws Throwable if unpredictable error occurred.
+     * @since 100.2.0
      */
     public function placeOrder(
         Store $store,

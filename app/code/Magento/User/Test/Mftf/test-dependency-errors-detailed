@@ -1,0 +1,40 @@
+
+File "/var/www/html/app/code/Magento/User/Test/Mftf/Test/AdminBulkOperationsLogIsNotAccessibleForAdminUserWithLimitedAccessTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminSystemMessagesSection from module(s): magento/module-admin-notification
+
+File "/var/www/html/app/code/Magento/User/Test/Mftf/Test/AdminSystemAllUsersNavigateMenuTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminMenuSystem from module(s): magento/module-admin-notification
+
+File "/var/www/html/app/code/Magento/User/Test/Mftf/Test/AdminSystemLockedUsersNavigateMenuTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminMenuSystem from module(s): magento/module-admin-notification
+
+File "/var/www/html/app/code/Magento/User/Test/Mftf/Test/AdminSystemManageEncryptionKeyNavigateMenuTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminMenuSystem from module(s): magento/module-admin-notification
+
+File "/var/www/html/app/code/Magento/User/Test/Mftf/Test/AdminSystemUserRolesNavigateMenuTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminMenuSystem from module(s): magento/module-admin-notification
+
+File "/var/www/html/app/code/Magento/User/Test/Mftf/Test/AdminUnlockAdminUserEntityTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminMenuSystem from module(s): magento/module-admin-notification
+
+File "/var/www/html/app/code/Magento/User/Test/Mftf/ActionGroup/AdminCreateUserWithApiRoleActionGroup.xml"
+contains entity references that violate dependency constraints:
+		
+	 role from module(s): magento/module-cms-staging
+
+File "/var/www/html/app/code/Magento/User/Test/Mftf/ActionGroup/AdminDeleteRoleByRoleNameActionGroup.xml"
+contains entity references that violate dependency constraints:
+		
+	 role from module(s): magento/module-cms-staging

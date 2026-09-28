@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Framework\DataObject;
 use Magento\Paypal\Model\Payflow\Service\Response\Validator\IAVSResponse;
 use Magento\Paypal\Model\Payflow\Transparent;
 use Magento\Paypal\Model\PayflowConfig;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -22,8 +23,8 @@ class IAVSResponseTest extends TestCase
      * @param int $configValue
      * @param string $iavs
      * @param bool $expected
-     * @dataProvider variationsDataProvider
      */
+    #[DataProvider('variationsDataProvider')]
     public function testValidate($configValue, $iavs, $expected)
     {
         $response = new DataObject([
@@ -31,14 +32,10 @@ class IAVSResponseTest extends TestCase
         ]);
 
         /** @var PayflowConfig|MockObject $config */
-        $config = $this->getMockBuilder(PayflowConfig::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $config = $this->createMock(PayflowConfig::class);
 
         /** @var Transparent|MockObject $model */
-        $model = $this->getMockBuilder(Transparent::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $model = $this->createMock(Transparent::class);
 
         $model->method('getConfig')
             ->willReturn($config);
@@ -55,7 +52,7 @@ class IAVSResponseTest extends TestCase
      *
      * @return array
      */
-    public function variationsDataProvider()
+    public static function variationsDataProvider()
     {
         return [
             ['configValue' => 1, 'iavs' => 'Y', 'expected' => false],

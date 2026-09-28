@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Reports\Model\Product\Index;
 
@@ -75,8 +75,8 @@ abstract class AbstractIndex extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Session\Generic $reportSession,
         \Magento\Catalog\Model\Product\Visibility $productVisibility,
         \Magento\Framework\Stdlib\DateTime $dateTime,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);

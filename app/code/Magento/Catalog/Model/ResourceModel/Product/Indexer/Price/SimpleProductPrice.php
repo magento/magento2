@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Price;
@@ -62,7 +62,7 @@ class SimpleProductPrice implements DimensionalIndexerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function executeByDimensions(array $dimensions, \Traversable $entityIds)
     {
@@ -81,8 +81,21 @@ class SimpleProductPrice implements DimensionalIndexerInterface
             'tierPriceField' => 'tier_price',
         ]);
         $select = $this->baseFinalPrice->getQuery($dimensions, $this->productType, iterator_to_array($entityIds));
-        $query = $select->insertFromSelect($temporaryPriceTable->getTableName(), [], false);
-        $this->tableMaintainer->getConnection()->query($query);
+        $this->tableMaintainer->insertFromSelect(
+            $select,
+            $temporaryPriceTable->getTableName(),
+            [
+                "entity_id",
+                "customer_group_id",
+                "website_id",
+                "tax_class_id",
+                "price",
+                "final_price",
+                "min_price",
+                "max_price",
+                "tier_price",
+            ]
+        );
 
         $this->basePriceModifier->modifyPrice($temporaryPriceTable, iterator_to_array($entityIds));
     }

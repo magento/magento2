@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Sidebar;
 
@@ -9,7 +9,6 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create\Sidebar;
  * Adminhtml sales order create sidebar wishlist block
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Wishlist extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar
@@ -55,6 +54,15 @@ class Wishlist extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abstr
             $collection = $this->getCreateOrderModel()->getCustomerWishlist(true);
             if ($collection) {
                 $collection = $collection->getItemCollection()->load();
+                $transferredItems = $this->getCreateOrderModel()->getSession()->getTransferredItems() ?? [];
+                $transferredItems = $transferredItems[$this->getDataId()] ?? [];
+                if (!empty($transferredItems)) {
+                    foreach ($collection as $key => $item) {
+                        if (in_array($item->getId(), $transferredItems)) {
+                            $collection->removeItemByKey($key);
+                        }
+                    }
+                }
             }
             $this->setData('item_collection', $collection);
         }

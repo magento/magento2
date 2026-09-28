@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Developer\Console\Command\TablesWhitelistGenerateCommand as Generate
 use Magento\Developer\Model\Setup\Declaration\Schema\WhitelistGenerator;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\Exception\ConfigurationMismatchException as ConfigException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -18,8 +19,8 @@ use Symfony\Component\Console\Tester\CommandTester;
 class TablesWhitelistGenerateCommandTest extends TestCase
 {
     // Exception Messages!
-    const CONFIG_EXCEPTION_MESSAGE = 'Configuration Exception Message';
-    const EXCEPTION_MESSAGE = 'General Exception Message';
+    private const CONFIG_EXCEPTION_MESSAGE = 'Configuration Exception Message';
+    private const EXCEPTION_MESSAGE = 'General Exception Message';
 
     /** @var WhitelistGenerator|MockObject $whitelistGenerator */
     private $whitelistGenerator;
@@ -41,9 +42,8 @@ class TablesWhitelistGenerateCommandTest extends TestCase
      *
      * @param string $arguments
      * @param int $expected
-     *
-     * @dataProvider successDataProvider
      */
+    #[DataProvider('successDataProvider')]
     public function testCommandSuccess(string $arguments, int $expected)
     {
         $this->whitelistGenerator->expects($this->once())
@@ -62,9 +62,8 @@ class TablesWhitelistGenerateCommandTest extends TestCase
      * @param int $expected
      * @param \Exception|ConfigException $exception
      * @param string $output
-     *
-     * @dataProvider failureDataProvider
      */
+    #[DataProvider('failureDataProvider')]
     public function testCommandFailure(string $arguments, int $expected, $exception, string $output)
     {
         $this->whitelistGenerator->expects($this->once())
@@ -86,7 +85,7 @@ class TablesWhitelistGenerateCommandTest extends TestCase
      *
      * @return array
      */
-    public function successDataProvider()
+    public static function successDataProvider()
     {
         return [
             [
@@ -106,7 +105,7 @@ class TablesWhitelistGenerateCommandTest extends TestCase
      *
      * @return array
      */
-    public function failureDataProvider()
+    public static function failureDataProvider()
     {
         return [
             [

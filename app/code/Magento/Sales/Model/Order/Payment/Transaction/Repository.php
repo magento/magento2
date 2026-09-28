@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Sales\Model\Order\Payment\Transaction;
@@ -80,7 +80,7 @@ class Repository implements TransactionRepositoryInterface
         SortOrderBuilder $sortOrderBuilder,
         Metadata $metaData,
         EntityStorageFactory $entityStorageFactory,
-        CollectionProcessorInterface $collectionProcessor = null
+        ?CollectionProcessorInterface $collectionProcessor = null
     ) {
         $this->searchResultFactory = $searchResultFactory;
         $this->filterBuilder = $filterBuilder;
@@ -233,7 +233,7 @@ class Repository implements TransactionRepositoryInterface
     /**
      * Retrieve collection processor
      *
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      * @return CollectionProcessorInterface
      */
     private function getCollectionProcessor()

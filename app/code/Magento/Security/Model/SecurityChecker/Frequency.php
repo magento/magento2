@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Security\Model\SecurityChecker;
@@ -56,7 +56,7 @@ class Frequency implements SecurityCheckerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function check($securityEventType, $accountReference = null, $longIp = null)
     {
@@ -100,6 +100,6 @@ class Frequency implements SecurityCheckerInterface
         /** @var \Magento\Security\Model\PasswordResetRequestEvent $record */
         $record = $collection->filterLastItem()->getFirstItem();
 
-        return (int) strtotime($record->getCreatedAt());
+        return (int) strtotime($record->getCreatedAt() ?? '');
     }
 }

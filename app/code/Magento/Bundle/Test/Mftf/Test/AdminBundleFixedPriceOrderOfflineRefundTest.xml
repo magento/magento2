@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminBundleFixedPriceOrderOfflineRefundTest">
+        <annotations>
+            <features value="Bundle"/>
+            <stories value="Bundle order invoice and offline refund"/>
+            <title value="Fixed price bundle order can be invoiced and refunded offline"/>
+            <description value="This test case verifies create fixed price bundle with 2 options, place order via check/money order, invoice, and refund offline."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="ACP2E-4157"/>
+            <group value="bundle"/>
+        </annotations>
+        <before>
+            <!-- Create customer and products -->
+            <createData entity="CustomerEntityOne" stepKey="createCustomer"/>
+            <createData entity="SimpleProduct2" stepKey="firstSimpleProduct"/>
+            <createData entity="SimpleProduct2" stepKey="secondSimpleProduct"/>
+            <!--Step 1: Create a bundle product with fixed price and have 2 options, each option has 1 simple product -->
+            <createData entity="ApiFixedBundleProduct" stepKey="createFixedBundleProduct">
+                <field key="price">25.00</field>
+            </createData>
+            <createData entity="RadioButtonsOption" stepKey="createFirstBundleOption">
+                <field key="position">1</field>
+                <requiredEntity createDataKey="createFixedBundleProduct"/>
+            </createData>
+            <createData entity="RadioButtonsOption" stepKey="createSecondBundleOption">
+                <field key="position">2</field>
+                <requiredEntity createDataKey="createFixedBundleProduct"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="linkFirstOptionToFirstProduct">
+                <requiredEntity createDataKey="createFixedBundleProduct"/>
+                <requiredEntity createDataKey="createFirstBundleOption"/>
+                <requiredEntity createDataKey="firstSimpleProduct"/>
+                <field key="price_type">0</field>
+                <field key="price">0</field>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="linkSecondOptionToSecondProduct">
+                <requiredEntity createDataKey="createFixedBundleProduct"/>
+                <requiredEntity createDataKey="createSecondBundleOption"/>
+                <requiredEntity createDataKey="secondSimpleProduct"/>
+                <field key="price_type">0</field>
+                <field key="price">0</field>
+            </createData>
+        </before>
+        <after>
+            <!-- Logout from storefront, delete products, customer and logout from admin -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
+            <deleteData createDataKey="firstSimpleProduct" stepKey="deleteFirstSimpleProduct"/>
+            <deleteData createDataKey="secondSimpleProduct" stepKey="deleteSecondSimpleProduct"/>
+            <deleteData createDataKey="createFixedBundleProduct" stepKey="deleteBundleProduct"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+        <!-- Step 2,3: Login to storefront, add bundle product to cart, checkout with check/money order -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginCustomer">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openBundlePdp">
+            <argument name="product" value="$createFixedBundleProduct$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSelectCustomizeAndAddToTheCartButtonActionGroup" stepKey="customizeAndAddToCart"/>
+        <actionGroup ref="StorefrontEnterProductQuantityAndAddToTheCartActionGroup" stepKey="enterQtyAndAddToCart">
+            <argument name="quantity" value="1"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="openCheckout"/>
+        <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShipping"/>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="goToPayment"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrder"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="placeOrder"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="orderId"/>
+        <!-- Step 4,5: Login to admin, open order, create invoice -->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrderInAdmin">
+            <argument name="entityId" value="{$orderId}"/>
+        </actionGroup>
+        <actionGroup ref="StartCreateInvoiceFromOrderPageActionGroup" stepKey="startInvoice"/>
+        <actionGroup ref="SubmitInvoiceActionGroup" stepKey="submitInvoice"/>
+        <!-- Step 6: Go to credit memo, click refund offline and verify success message displayed -->
+        <waitForElementClickable selector="{{AdminOrderDetailsMainActionsSection.creditMemo}}" stepKey="waitToClickCreditMemoAction"/>
+        <click selector="{{AdminOrderDetailsMainActionsSection.creditMemo}}" stepKey="clickCreditMemoAction"/>
+        <seeInCurrentUrl url="{{AdminCreditMemoNewPage.url}}" stepKey="seeNewCreditMemoPage"/>
+        <actionGroup ref="AdminClickRefundOfflineOnNewMemoPageActionGroup" stepKey="clickRefundOffline"/>
+        <waitForElementVisible selector="{{AdminIndexManagementSection.successMessage}}" stepKey="waitForSuccessMessage"/>
+        <!-- Assert no credit memo button in orders page after refund offline -->
+        <waitForElementNotVisible selector="{{AdminOrderFormItemsSection.creditMemo}}" stepKey="assertNoCreditMemoButton"/>
+    </test>
+</tests>

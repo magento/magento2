@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Review\Block\Product;
 
@@ -11,7 +11,6 @@ use Magento\Review\Model\ResourceModel\Review\Collection as ReviewCollection;
 /**
  * Product Reviews Page
  *
- * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class View extends \Magento\Catalog\Block\Product\View

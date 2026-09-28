@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\MessageQueue\Config\Publisher;
 
@@ -11,7 +11,7 @@ use Magento\Framework\MessageQueue\Publisher\Config\CompositeReader as Publisher
 /**
  * Plugin which provides access to publishers declared in queue config using publisher config interface.
  *
- * @deprecated 100.2.0
+ * @deprecated 103.0.0
  */
 class ConfigReaderPlugin
 {

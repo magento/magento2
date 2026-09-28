@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\WebapiAsync\Model;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\TestFramework\MessageQueue\PreconditionFailedException;
 use Magento\TestFramework\MessageQueue\PublisherConsumerController;
@@ -31,15 +32,18 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
  */
 class AsyncScheduleCustomRouteTest extends WebapiAbstract
 {
-    const ASYNC_RESOURCE_CUSTOM_PATH = '/asyncProducts';
-    const ASYNC_CONSUMER_NAME = 'async.operations.all';
+    public const ASYNC_RESOURCE_CUSTOM_PATH = '/asyncProducts';
+    public const ASYNC_CONSUMER_NAME = 'async.operations.all';
 
-    const KEY_TIER_PRICES = 'tier_prices';
-    const KEY_SPECIAL_PRICE = 'special_price';
-    const KEY_CATEGORY_LINKS = 'category_links';
+    public const KEY_TIER_PRICES = 'tier_prices';
+    public const KEY_SPECIAL_PRICE = 'special_price';
+    public const KEY_CATEGORY_LINKS = 'category_links';
 
-    const BULK_UUID_KEY = 'bulk_uuid';
+    public const BULK_UUID_KEY = 'bulk_uuid';
 
+    /**
+     * @var string[]
+     */
     protected $consumers = [
         self::ASYNC_CONSUMER_NAME,
     ];
@@ -72,7 +76,7 @@ class AsyncScheduleCustomRouteTest extends WebapiAbstract
     protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->logFilePath = TESTS_TEMP_DIR . "/MessageQueueTestLog.txt";
+        $logFilePath = TESTS_TEMP_DIR . "/MessageQueueTestLog.txt";
         $this->registry = $this->objectManager->get(Registry::class);
 
         $params = array_merge_recursive(
@@ -83,7 +87,7 @@ class AsyncScheduleCustomRouteTest extends WebapiAbstract
         /** @var PublisherConsumerController publisherConsumerController */
         $this->publisherConsumerController = $this->objectManager->create(PublisherConsumerController::class, [
             'consumers'     => $this->consumers,
-            'logFilePath'   => $this->logFilePath,
+            'logFilePath'   => $logFilePath,
             'appInitParams' => $params,
         ]);
         $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
@@ -101,9 +105,8 @@ class AsyncScheduleCustomRouteTest extends WebapiAbstract
         parent::setUp();
     }
 
-    /**
-     * @dataProvider productCreationProvider
-     */
+    /** */
+    #[DataProvider('productCreationProvider')]
     public function testAsyncScheduleBulkByCustomRoute($product)
     {
         $this->_markTestAsRestOnly();
@@ -111,6 +114,7 @@ class AsyncScheduleCustomRouteTest extends WebapiAbstract
         $this->clearProducts();
 
         $response = $this->saveProductByCustomRoute($product);
+        sleep(5);
         $this->assertArrayHasKey(self::BULK_UUID_KEY, $response);
         $this->assertNotNull($response[self::BULK_UUID_KEY]);
 
@@ -172,11 +176,11 @@ class AsyncScheduleCustomRouteTest extends WebapiAbstract
     /**
      * @return array
      */
-    public function productCreationProvider()
+    public static function productCreationProvider()
     {
         $productBuilder = function ($data) {
             return array_replace_recursive(
-                $this->getSimpleProductData(),
+                self::getSimpleProductData(),
                 $data
             );
         };
@@ -208,7 +212,7 @@ class AsyncScheduleCustomRouteTest extends WebapiAbstract
      * @param array $productData
      * @return array
      */
-    private function getSimpleProductData($productData = [])
+    private static function getSimpleProductData($productData = [])
     {
         return [
             ProductInterface::SKU              => isset($productData[ProductInterface::SKU])
@@ -219,7 +223,6 @@ class AsyncScheduleCustomRouteTest extends WebapiAbstract
             ProductInterface::TYPE_ID          => 'simple',
             ProductInterface::PRICE            => 3.62,
             ProductInterface::STATUS           => 1,
-            ProductInterface::TYPE_ID          => 'simple',
             ProductInterface::ATTRIBUTE_SET_ID => 4,
             'custom_attributes'                => [
                 ['attribute_code' => 'cost', 'value' => ''],

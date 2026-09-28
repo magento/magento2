@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Swatches\Model;
 
@@ -45,7 +45,7 @@ class SwatchAttributesProvider
     public function __construct(
         Configurable $typeConfigurable,
         SwatchAttributeCodes $swatchAttributeCodes,
-        SwatchAttributeType $swatchTypeChecker = null
+        ?SwatchAttributeType $swatchTypeChecker = null
     ) {
         $this->typeConfigurable = $typeConfigurable;
         $this->swatchAttributeCodes = $swatchAttributeCodes;

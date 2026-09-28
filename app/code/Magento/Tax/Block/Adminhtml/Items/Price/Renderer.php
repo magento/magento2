@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Tax\Block\Adminhtml\Items\Price;
 
@@ -22,7 +22,7 @@ class Renderer extends \Magento\Backend\Block\Template
 {
     /**
      * @var \Magento\Tax\Helper\Data
-     * @deprecated
+     * @deprecated 100.3.0
      * Marked as deprecated as it is unused.
      */
     protected $taxHelper;

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,15 +10,16 @@ namespace Magento\Framework\App\Test\Unit\Response\HeaderProvider;
 use Magento\Framework\App\Response\HeaderProvider\XssProtection;
 use Magento\Framework\HTTP\Header;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class XssProtectionTest extends TestCase
 {
     /**
-     * @dataProvider userAgentDataProvider
      * @param string $userAgent
      * @param string $expectedHeader
      */
+    #[DataProvider('userAgentDataProvider')]
     public function testGetValue($userAgent, $expectedHeader)
     {
         $headerServiceMock = $this->getMockBuilder(Header::class)
@@ -35,20 +36,20 @@ class XssProtectionTest extends TestCase
     /**
      * @return array
      */
-    public function userAgentDataProvider()
+    public static function userAgentDataProvider()
     {
         return [
             [
-                'user-agent' => 'Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; GTB7.4)',
-                'expected-header' => XssProtection::HEADER_DISABLED
+                'userAgent' => 'Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; GTB7.4)',
+                'expectedHeader' => XssProtection::HEADER_DISABLED
             ],
             [
-                'user-agent' => 'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/4.0; GTB7.4)',
-                'expected-header' => XssProtection::HEADER_ENABLED
+                'userAgent' => 'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/4.0; GTB7.4)',
+                'expectedHeader' => XssProtection::HEADER_ENABLED
             ],
             [
-                'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) Chrome/41.0.2227.1 Safari/537.36',
-                'expected-header' => XssProtection::HEADER_ENABLED
+                'userAgent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) Chrome/41.0.2227.1 Safari/537.36',
+                'expectedHeader' => XssProtection::HEADER_ENABLED
             ],
         ];
     }

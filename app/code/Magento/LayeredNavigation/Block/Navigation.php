@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\LayeredNavigation\Block;
 
@@ -76,6 +76,7 @@ class Navigation extends \Magento\Framework\View\Element\Template
 
     /**
      * @inheritdoc
+     * @since 100.3.4
      */
     protected function _beforeToHtml()
     {

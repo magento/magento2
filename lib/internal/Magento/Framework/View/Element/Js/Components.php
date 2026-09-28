@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\View\Element\Js;
 
@@ -12,6 +12,7 @@ use Magento\Framework\View\Element\Template;
  * Block for Components
  *
  * @api
+ * @since 100.0.2
  */
 class Components extends Template
 {

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Framework\Reflection\MethodsMap;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class HandlersTest extends TestCase
 {
@@ -37,10 +38,9 @@ class HandlersTest extends TestCase
         $this->validator = $objectManager->getObject(HandlersValidator::class, ['methodsMap' => $this->methodsMap]);
     }
 
-    /**
-     * @dataProvider validConfigDataProvider
-     * @param array $configData
+    /**     * @param array $configData
      */
+    #[DataProvider('validConfigDataProvider')]
     public function testValidateValid($configData)
     {
         $this->validator->validate($configData);
@@ -49,7 +49,7 @@ class HandlersTest extends TestCase
     /**
      * @return array
      */
-    public function validConfigDataProvider()
+    public static function validConfigDataProvider()
     {
         return [
             'valid' => [
@@ -64,6 +64,9 @@ class HandlersTest extends TestCase
                         ],
                         'connection' => 'connection1',
                         'maxMessages' => '100',
+                        'maxIdleTime' => '500',
+                        'sleep' => '10',
+                        'onlySpawnWhenMessageAvailable' => true
                     ]
                 ]
             ],
@@ -76,17 +79,19 @@ class HandlersTest extends TestCase
                         'handlers' => [],
                         'connection' => 'connection1',
                         'maxMessages' => null,
+                        'maxIdleTime' => '500',
+                        'sleep' => null,
+                        'onlySpawnWhenMessageAvailable' => true
                     ]
                 ]
             ],
         ];
     }
 
-    /**
-     * @dataProvider invalidConfigDataProvider
-     * @param array $configData
+    /**     * @param array $configData
      * @param string $expectedExceptionMessage
      */
+    #[DataProvider('invalidConfigDataProvider')]
     public function testValidateInvalid($configData, $expectedExceptionMessage)
     {
         $this->expectException('\LogicException');
@@ -97,7 +102,7 @@ class HandlersTest extends TestCase
     /**
      * @return array
      */
-    public function invalidConfigDataProvider()
+    public static function invalidConfigDataProvider()
     {
         return [
             'invalid, not an array' => [
@@ -109,6 +114,9 @@ class HandlersTest extends TestCase
                         'handlers' => ['handlerClassOne::handlerMethodOne'],
                         'connection' => 'connection1',
                         'maxMessages' => '100',
+                        'maxIdleTime' => '500',
+                        'sleep' => '10',
+                        'onlySpawnWhenMessageAvailable' => false
                     ]
                 ],
                 "'consumer1' consumer declaration is invalid. Every handler element must be an array."
@@ -125,6 +133,9 @@ class HandlersTest extends TestCase
                         ],
                         'connection' => 'connection1',
                         'maxMessages' => '100',
+                        'maxIdleTime' => '500',
+                        'sleep' => '10',
+                        'onlySpawnWhenMessageAvailable' => true
                     ]
                 ],
                 "'consumer1' consumer declaration is invalid. Every handler element must be an array."
@@ -141,6 +152,9 @@ class HandlersTest extends TestCase
                         ],
                         'connection' => 'connection1',
                         'maxMessages' => '100',
+                        'maxIdleTime' => '500',
+                        'sleep' => '10',
+                        'onlySpawnWhenMessageAvailable' => true
                     ]
                 ],
                 "'consumer1' consumer declaration is invalid. Every handler element must be an array."
@@ -157,6 +171,9 @@ class HandlersTest extends TestCase
                         ],
                         'connection' => 'connection1',
                         'maxMessages' => '100',
+                        'maxIdleTime' => '500',
+                        'sleep' => '10',
+                        'onlySpawnWhenMessageAvailable' => true
                     ]
                 ],
                 "'consumer1' consumer declaration is invalid. Every handler element must be an array."
@@ -177,6 +194,9 @@ class HandlersTest extends TestCase
                 ],
                 'connection' => 'connection1',
                 'maxMessages' => '100',
+                'maxIdleTime' => '500',
+                'sleep' => '10',
+                'onlySpawnWhenMessageAvailable' => true
             ]
         ];
         $expectedExceptionMessage = 'Service method specified as handler for of consumer "consumer1" is not available.'

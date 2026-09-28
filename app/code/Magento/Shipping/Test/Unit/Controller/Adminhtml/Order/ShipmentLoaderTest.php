@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -78,31 +78,25 @@ class ShipmentLoaderTest extends TestCase
         $this->objectManagerMock = new ObjectManager($this);
         $this->shipmentRepositoryMock = $this->getMockBuilder(ShipmentRepository::class)
             ->disableOriginalConstructor()
-            ->setMethods(['get'])
+            ->onlyMethods(['get'])
             ->getMock();
         $this->registryMock = $this->getMockBuilder(Registry::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $this->trackFactoryMock = $this->getMockBuilder(ShipmentTrackCreationInterfaceFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->messageManagerMock = $this->getMockBuilder(Manager::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
-        $this->orderRepositoryMock = $this->getMockBuilder(OrderRepositoryInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMockForAbstractClass();
+        $this->orderRepositoryMock = $this->createMock(OrderRepositoryInterface::class);
         $this->itemFactoryMock = $this->getMockBuilder(ShipmentItemCreationInterfaceFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->documentFactoryMock = $this->getMockBuilder(ShipmentDocumentFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
 
         $data = [
@@ -134,7 +128,6 @@ class ShipmentLoaderTest extends TestCase
     {
         $shipmentModelMock = $this->getMockBuilder(Shipment::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $this->shipmentRepositoryMock->expects($this->once())
             ->method('get')
@@ -151,7 +144,7 @@ class ShipmentLoaderTest extends TestCase
         $this->loader->unsetData('shipment_id');
         $orderMock = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getForcedShipmentWithInvoice', 'getId', 'canShip'])
+            ->onlyMethods(['getForcedShipmentWithInvoice', 'getId', 'canShip'])
             ->getMock();
         $this->orderRepositoryMock->expects($this->once())
             ->method('get')
@@ -167,12 +160,8 @@ class ShipmentLoaderTest extends TestCase
             ->willReturn(true);
         $shipmentModelMock = $this->getMockBuilder(Shipment::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
-        $trackMock = $this->getMockBuilder(ShipmentTrackCreationInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setCarrierCode', 'setTrackNumber', 'setTitle'])
-            ->getMockForAbstractClass();
+        $trackMock = $this->createMock(ShipmentTrackCreationInterface::class);
         $this->trackFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($trackMock);
@@ -182,9 +171,7 @@ class ShipmentLoaderTest extends TestCase
         $this->registryMock->expects($this->once())
             ->method('register')
             ->with('current_shipment', $shipmentModelMock);
-        $itemMock = $this->getMockBuilder(ShipmentItemCreationInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $itemMock = $this->createMock(ShipmentItemCreationInterface::class);
         $this->itemFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($itemMock);

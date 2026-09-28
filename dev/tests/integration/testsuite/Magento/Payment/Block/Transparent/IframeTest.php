@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Payment\Block\Transparent;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for \Magento\Payment\Block\Transparent\Iframe
@@ -13,8 +15,8 @@ class IframeTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoAppIsolation enabled
      * @magentoAppArea frontend
-     * @dataProvider xssDataProvider
      */
+    #[DataProvider('xssDataProvider')]
     public function testToHtml($xssString)
     {
         /** @var $block Iframe */
@@ -37,13 +39,13 @@ class IframeTest extends \PHPUnit\Framework\TestCase
         $content = $block->toHtml();
 
         $this->assertStringNotContainsString($xssString, $content, 'Params must be escaped');
-        $this->assertStringContainsString($block->escapeXssInUrl($xssString), $content, 'Content must be present');
+        $this->assertStringContainsString($block->escapeJs($xssString), $content, 'Content must be present');
     }
 
     /**
      * @return array
      */
-    public function xssDataProvider()
+    public static function xssDataProvider(): array
     {
         return [
             ['</script><script>alert("XSS")</script>'],

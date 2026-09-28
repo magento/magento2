@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CheckoutAgreements\Api;
 
@@ -25,7 +25,7 @@ interface CheckoutAgreementsRepositoryInterface
      * Lists active checkout agreements.
      *
      * @return \Magento\CheckoutAgreements\Api\Data\AgreementInterface[]
-     * @deprecated
+     * @deprecated 100.3.0
      * @see \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface::getList
      */
     public function getList();

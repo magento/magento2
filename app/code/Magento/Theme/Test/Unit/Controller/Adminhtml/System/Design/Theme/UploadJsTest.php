@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,84 +14,88 @@ use Magento\Framework\View\Design\Theme\FileInterface;
 use Magento\Framework\View\Design\Theme\FlyweightFactory;
 use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Theme\Model\Uploader\Service;
-use Magento\Theme\Test\Unit\Controller\Adminhtml\System\Design\ThemeTest;
+use Magento\Theme\Test\Unit\Controller\Adminhtml\System\Design\ThemeTestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 
-class UploadJsTest extends ThemeTest
+class UploadJsTest extends ThemeTestCase
 {
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $name = 'UploadJs';
 
-    /** @var  Service|MockObject */
+    /**
+     * @var Service|MockObject
+     */
     protected $serviceModel;
 
-    /** @var  FlyweightFactory|MockObject */
+    /**
+     * @var FlyweightFactory|MockObject
+     */
     protected $themeFactory;
 
-    /** @var  Js|MockObject */
+    /**
+     * @var Js|MockObject
+     */
     protected $customizationJs;
 
-    /** @var  Data|MockObject */
+    /**
+     * @var Data|MockObject
+     */
     protected $jsonHelper;
 
-    /** @var LoggerInterface|MockObject  */
+    /**
+     * @var LoggerInterface|MockObject
+     */
     protected $logger;
 
-    /** @var CustomizationInterface|MockObject  */
+    /**
+     * @var CustomizationInterface|MockObject
+     */
     protected $themeCustomization;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         parent::setUp();
         $this->serviceModel = $this->createMock(Service::class);
         $this->themeFactory = $this->createMock(FlyweightFactory::class);
         $this->jsonHelper = $this->createMock(Data::class);
-        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class, [], '', false);
-        $this->themeCustomization = $this->getMockForAbstractClass(
+        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->themeCustomization = $this->createPartialMockWithReflection(
             CustomizationInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
             [
-                'generateFileInfo',
-                'getFilesByType'
+                'getFiles', 'getFilesByType', 'getCustomizationPath',
+                'getThemeFilesPath', 'getCustomViewConfigPath', 'reorder', 'delete',
+                'generateFileInfo'
             ]
         );
         $this->customizationJs = $this->createMock(Js::class);
     }
 
-    public function testExecuteWithoutTheme()
+    /**
+     * @return void
+     */
+    public function testExecuteWithoutTheme(): void
     {
         $themeId = 23;
 
-        $this->_request->expects($this->at(0))
+        $this->_request
             ->method('getParam')
             ->with('id')
             ->willReturn($themeId);
 
         $this->_objectManagerMock
-            ->expects($this->at(0))
             ->method('get')
-            ->with(Service::class)
-            ->willReturn($this->serviceModel);
-        $this->_objectManagerMock
-            ->expects($this->at(1))
-            ->method('get')
-            ->with(FlyweightFactory::class)
-            ->willReturn($this->themeFactory);
-        $this->_objectManagerMock
-            ->expects($this->at(2))
-            ->method('get')
-            ->with(Js::class)
-            ->willReturn($this->customizationJs);
-        $this->_objectManagerMock
-            ->expects($this->at(3))
-            ->method('get')
-            ->with(Data::class)
-            ->willReturn($this->jsonHelper);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [Service::class] => $this->serviceModel,
+                [FlyweightFactory::class] => $this->themeFactory,
+                [Js::class] => $this->customizationJs,
+                [Data::class] => $this->jsonHelper
+            });
 
         $this->themeFactory->expects($this->once())
             ->method('create')
@@ -108,42 +112,31 @@ class UploadJsTest extends ThemeTest
         $this->_model->execute();
     }
 
-    public function testExecuteWithException()
+    /**
+     * @return void
+     */
+    public function testExecuteWithException(): void
     {
         $themeId = 23;
 
-        $this->_request->expects($this->at(0))
+        $this->_request
             ->method('getParam')
             ->with('id')
             ->willReturn($themeId);
-
-        $this->_objectManagerMock->expects($this->at(0))
-            ->method('get')
-            ->with(Service::class)
-            ->willReturn($this->serviceModel);
-        $this->_objectManagerMock->expects($this->at(1))
-            ->method('get')
-            ->with(FlyweightFactory::class)
-            ->willReturn($this->themeFactory);
-        $this->_objectManagerMock
-            ->expects($this->at(2))
-            ->method('get')
-            ->with(Js::class)
-            ->willReturn($this->customizationJs);
-        $this->_objectManagerMock
-            ->expects($this->at(4))
-            ->method('get')
-            ->with(Data::class)
-            ->willReturn($this->jsonHelper);
 
         $this->themeFactory->expects($this->once())
             ->method('create')
             ->willThrowException(new \Exception('Message'));
 
-        $this->_objectManagerMock->expects($this->at(3))
+        $this->_objectManagerMock
             ->method('get')
-            ->with(LoggerInterface::class)
-            ->willReturn($this->logger);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [Service::class] => $this->serviceModel,
+                [FlyweightFactory::class] => $this->themeFactory,
+                [Js::class] => $this->customizationJs,
+                [LoggerInterface::class] => $this->logger,
+                [Data::class] => $this->jsonHelper
+            });
         $this->logger->expects($this->once())
             ->method('critical');
 
@@ -158,46 +151,36 @@ class UploadJsTest extends ThemeTest
         $this->_model->execute();
     }
 
-    public function testExecute()
+    /**
+     * @return void
+     */
+    public function testExecute(): void
     {
         $themeId = 23;
-        $theme = $this->getMockForAbstractClass(ThemeInterface::class, [], '', false);
-        $jsFile = $this->getMockForAbstractClass(
+        $theme = $this->createMock(ThemeInterface::class);
+        $jsFile = $this->createPartialMockWithReflection(
             FileInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
             [
-                'setTheme',
-                'setFileName',
-                'setData',
-                'save',
+                'setCustomizationService', 'getCustomizationService',
+                'setTheme', 'getTheme', 'setFileName', 'getFileName',
+                'getFullPath', 'getFileInfo', 'getContent', 'save', 'delete',
+                'setData'
             ]
         );
 
-        $this->_request->expects($this->at(0))
+        $this->_request
             ->method('getParam')
             ->with('id')
             ->willReturn($themeId);
 
-        $this->_objectManagerMock->expects($this->at(0))
+        $this->_objectManagerMock
             ->method('get')
-            ->with(Service::class)
-            ->willReturn($this->serviceModel);
-        $this->_objectManagerMock->expects($this->at(1))
-            ->method('get')
-            ->with(FlyweightFactory::class)
-            ->willReturn($this->themeFactory);
-        $this->_objectManagerMock->expects($this->at(2))
-            ->method('get')
-            ->with(Js::class)
-            ->willReturn($this->customizationJs);
-        $this->_objectManagerMock->expects($this->at(4))
-            ->method('get')
-            ->with(Data::class)
-            ->willReturn($this->jsonHelper);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                    [Service::class] => $this->serviceModel,
+                    [FlyweightFactory::class] => $this->themeFactory,
+                    [Js::class] => $this->customizationJs,
+                    [Data::class] => $this->jsonHelper
+            });
 
         $this->themeFactory->expects($this->once())
             ->method('create')

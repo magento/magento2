@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser;
 
@@ -24,9 +24,7 @@ class DesignAbstractionTest extends \PHPUnit\Framework\TestCase
         $layoutUtility = new \Magento\Framework\View\Utility\Layout($this);
         $appState = $objectManager->get(\Magento\Framework\App\State::class);
         $appState->setAreaCode(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
-        $processorMock = $this->getMockBuilder(\Magento\Framework\View\Layout\ProcessorInterface::class)
-            ->setMethods(['isPageLayoutDesignAbstraction'])
-            ->getMockForAbstractClass();
+        $processorMock = $this->createMock(\Magento\Framework\View\Layout\ProcessorInterface::class);
         $processorMock->expects($this->exactly(2))->method('isPageLayoutDesignAbstraction')->willReturnCallback(
             
                 function ($abstraction) {

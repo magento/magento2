@@ -2,8 +2,8 @@
 /**
  * Application configuration object. Used to access configuration when application is installed.
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\App;
@@ -51,7 +51,7 @@ class MutableScopeConfig extends Config implements MutableScopeConfigInterface
         $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
         $scopeCode = null
     ) {
-        $this->data[$scope][$scopeCode][$path] = $value;
+        $this->data[$scope][$scopeCode ?? ''][$path] = $value;
     }
 
     /**

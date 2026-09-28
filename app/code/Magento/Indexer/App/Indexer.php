@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Indexer\App;
 
@@ -26,6 +26,11 @@ class Indexer implements \Magento\Framework\AppInterface
      * @var \Magento\Framework\App\Console\Response
      */
     protected $_response;
+
+    /**
+     * @var \Magento\Indexer\Model\Processor
+     */
+    private $processor;
 
     /**
      * @param string $reportDir

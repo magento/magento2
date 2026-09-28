@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -27,8 +27,8 @@ class ConsoleLoggerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->console = $this->getMockForAbstractClass(OutputInterface::class);
-        $outputFormatter = $this->getMockForAbstractClass(OutputFormatterInterface::class);
+        $this->console = $this->createMock(OutputInterface::class);
+        $outputFormatter = $this->createMock(OutputFormatterInterface::class);
         $this->console
             ->expects($this->once())
             ->method('getFormatter')

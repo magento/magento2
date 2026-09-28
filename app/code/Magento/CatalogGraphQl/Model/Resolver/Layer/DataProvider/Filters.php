@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\CatalogGraphQl\Model\Resolver\Layer\DataProvider;
 use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
 use Magento\CatalogGraphQl\Model\Resolver\Layer\FiltersProvider;
 use Magento\Catalog\Model\Layer\Filter\Item;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Layered navigation filters data provider.
@@ -47,7 +48,7 @@ class Filters
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getData(string $layerType, array $attributesToFilter = null) : array
+    public function getData(string $layerType, ?array $attributesToFilter = null) : array
     {
         $filtersData = [];
         /** @var AbstractFilter $filter */
@@ -76,11 +77,11 @@ class Filters
      * Check for adding filter to the list
      *
      * @param AbstractFilter $filter
-     * @param array $attributesToFilter
+     * @param array|null $attributesToFilter
      * @return bool
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
-    private function isNeedToAddFilter(AbstractFilter $filter, array $attributesToFilter): bool
+    private function isNeedToAddFilter(AbstractFilter $filter, ?array $attributesToFilter = null): bool
     {
         if ($attributesToFilter === null) {
             $result = (bool)$filter->getItemsCount();

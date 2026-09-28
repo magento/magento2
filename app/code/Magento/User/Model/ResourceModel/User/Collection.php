@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\User\Model\ResourceModel\User;
 
@@ -27,6 +27,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Collection Init Select
      *
      * @return $this
+     * @since 101.1.0
      */
     protected function _initSelect()
     {
@@ -40,5 +41,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             'user_role.parent_id = detail_role.role_id',
             ['role_name']
         );
+		$this->addFilterToMap('user_id', 'main_table.user_id');
     }
 }

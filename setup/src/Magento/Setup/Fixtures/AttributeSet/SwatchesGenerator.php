@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Setup\Fixtures\AttributeSet;
 
@@ -91,7 +91,7 @@ class SwatchesGenerator
         );
         $attribute['optionvisual']['value'] = array_reduce(
             range(1, $optionCount),
-            function ($values, $index) use ($optionCount) {
+            function ($values, $index) {
                 $values['option_' . $index] = ['option ' . $index];
                 return $values;
             },
@@ -129,6 +129,7 @@ class SwatchesGenerator
             $this->imagesGenerator = $this->imagesGeneratorFactory->create();
         }
 
+        // phpcs:ignore Magento2.Security.InsecureFunction
         $imageName = md5($data) . '.jpg';
         $this->imagesGenerator->generate([
             'image-width' => self::GENERATED_SWATCH_WIDTH,

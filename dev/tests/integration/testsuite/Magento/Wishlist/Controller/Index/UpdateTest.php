@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,7 +16,7 @@ use Magento\TestFramework\Wishlist\Model\GetWishlistByCustomerId;
 /**
  * Test for update wish list item.
  *
- * @magentoDbIsolation enabled
+ * @magentoDbIsolation disabled
  * @magentoAppArea frontend
  * @magentoDataFixture Magento/Wishlist/_files/wishlist.php
  */

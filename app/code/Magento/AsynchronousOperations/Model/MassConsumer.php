@@ -1,13 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\AsynchronousOperations\Model;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\MessageQueue\CallbackInvokerInterface;
+use Magento\Framework\MessageQueue\Consumer\ConfigInterface as ConsumerConfig;
 use Magento\Framework\MessageQueue\ConsumerConfigurationInterface;
 use Magento\Framework\MessageQueue\ConsumerInterface;
 use Magento\Framework\MessageQueue\EnvelopeInterface;
@@ -42,23 +44,31 @@ class MassConsumer implements ConsumerInterface
     private $registry;
 
     /**
+     * @var ConsumerConfig
+     */
+    private $consumerConfig;
+
+    /**
      * Initialize dependencies.
      *
      * @param CallbackInvokerInterface $invoker
      * @param ConsumerConfigurationInterface $configuration
      * @param MassConsumerEnvelopeCallbackFactory $massConsumerEnvelopeCallback
      * @param Registry $registry
+     * @param ConsumerConfig|null $consumerConfig
      */
     public function __construct(
         CallbackInvokerInterface $invoker,
         ConsumerConfigurationInterface $configuration,
         MassConsumerEnvelopeCallbackFactory $massConsumerEnvelopeCallback,
-        Registry $registry
+        Registry $registry,
+        ?ConsumerConfig $consumerConfig = null
     ) {
         $this->invoker = $invoker;
         $this->configuration = $configuration;
         $this->massConsumerEnvelopeCallback = $massConsumerEnvelopeCallback;
         $this->registry = $registry;
+        $this->consumerConfig = $consumerConfig ?: ObjectManager::getInstance()->get(ConsumerConfig::class);
     }
 
     /**
@@ -69,11 +79,19 @@ class MassConsumer implements ConsumerInterface
         $this->registry->register('isSecureArea', true, true);
 
         $queue = $this->configuration->getQueue();
+        $maxIdleTime = $this->configuration->getMaxIdleTime();
+        $sleep = $this->configuration->getSleep();
 
         if (!isset($maxNumberOfMessages)) {
             $queue->subscribe($this->getTransactionCallback($queue));
         } else {
-            $this->invoker->invoke($queue, $maxNumberOfMessages, $this->getTransactionCallback($queue));
+            $this->invoker->invoke(
+                $queue,
+                $maxNumberOfMessages,
+                $this->getTransactionCallback($queue),
+                $maxIdleTime,
+                $sleep
+            );
         }
 
         $this->registry->unregister('isSecureArea');

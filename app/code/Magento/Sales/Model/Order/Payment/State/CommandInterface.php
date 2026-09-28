@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\Order\Payment\State;
 
@@ -10,6 +10,7 @@ use Magento\Sales\Api\Data\OrderPaymentInterface;
 
 /**
  * Interface CommandInterface using for payment related changes of order state
+ * @api
  */
 interface CommandInterface
 {

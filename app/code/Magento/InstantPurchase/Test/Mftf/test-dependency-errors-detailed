@@ -1,0 +1,17 @@
+
+File "/var/www/html/app/code/Magento/InstantPurchase/Test/Mftf/Test/StorefrontInstantPurchaseFunctionalityNegativeScenarioTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontPaypalCheckoutSection from module(s): magento/module-paypal
+	 DisableVaultPayflowPro from module(s): magento/module-paypal
+	 AdminCreateApiConfigurableProductActionGroup from module(s): magento/module-configurable-product
+	 StorefrontPaypalFillCardDataActionGroup from module(s): magento/module-paypal
+
+File "/var/www/html/app/code/Magento/InstantPurchase/Test/Mftf/Test/StorefrontInstantPurchaseFunctionalityTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontPaypalCheckoutSection from module(s): magento/module-paypal
+	 Visa3DSecureCardInfo from module(s): magento/module-paypal
+	 VisaDefaultCardInfo from module(s): magento/module-paypal
+	 AdminCreateApiConfigurableProductActionGroup from module(s): magento/module-configurable-product
+	 StorefrontPaypalFillCardDataActionGroup from module(s): magento/module-paypal

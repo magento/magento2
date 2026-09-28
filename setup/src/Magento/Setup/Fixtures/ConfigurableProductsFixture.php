@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Setup\Fixtures;
@@ -325,6 +325,8 @@ class ConfigurableProductsFixture extends Fixture
 
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
             return $attributeSetAmount > ($index - 1) % (int)$this->fixtureModel->getValue('categories', 30)
+                // mt_rand() here is not for cryptographic use.
+                // phpcs:ignore Magento2.Security.InsecureFunction
                 ? array_keys($defaultAttributeSets)[mt_rand(0, $attributeSetAmount - 1)]
                 : 'Default';
         };

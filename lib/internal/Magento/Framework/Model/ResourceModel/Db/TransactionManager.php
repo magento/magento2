@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Model\ResourceModel\Db;
@@ -13,10 +13,10 @@ class TransactionManager implements TransactionManagerInterface
     /**
      * @var Connection[]
      */
-    protected $participants;
+    protected $participants = [];
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function start(Connection $connection)
     {
@@ -26,7 +26,7 @@ class TransactionManager implements TransactionManagerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function commit()
     {
@@ -37,7 +37,7 @@ class TransactionManager implements TransactionManagerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function rollBack()
     {

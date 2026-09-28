@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Eav\Model;
@@ -75,7 +75,7 @@ class AttributeSetRepository implements AttributeSetRepositoryInterface
         EavConfig $eavConfig,
         \Magento\Eav\Api\Data\AttributeSetSearchResultsInterfaceFactory $searchResultFactory,
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor,
-        CollectionProcessorInterface $collectionProcessor = null
+        ?CollectionProcessorInterface $collectionProcessor = null
     ) {
         $this->attributeSetResource = $attributeSetResource;
         $this->attributeSetFactory = $attributeSetFactory;
@@ -126,7 +126,7 @@ class AttributeSetRepository implements AttributeSetRepositoryInterface
     /**
      * Retrieve entity type code from search criteria
      *
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return null|string
      */
@@ -188,7 +188,7 @@ class AttributeSetRepository implements AttributeSetRepositoryInterface
     /**
      * Retrieve collection processor
      *
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      * @return CollectionProcessorInterface
      */
     private function getCollectionProcessor()

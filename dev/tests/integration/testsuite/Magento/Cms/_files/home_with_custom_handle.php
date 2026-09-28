@@ -1,10 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
+use Magento\Cms\Model\ResourceModel\Page as PageResource;
 use Magento\Cms\Model\Page as PageModel;
 use Magento\Cms\Model\PageFactory as PageModelFactory;
 use Magento\TestFramework\Cms\Model\CustomLayoutManager;
@@ -20,11 +21,16 @@ $layoutRepo = $objectManager->create(PageModel\CustomLayoutRepositoryInterface::
 
 $customLayoutName = 'page_custom_layout';
 
-/** @var PageModel $page */
+/**
+ * @var PageModel $page
+ * @var PageResource $pageResource
+ */
 $page = $pageFactory->create(['customLayoutRepository' => $layoutRepo]);
-$page->load('home');
+$pageResource = $objectManager->create(PageResource::class);
+
+$pageResource->load($page, 'home');
 $cmsPageId = (int)$page->getId();
 
 $fakeManager->fakeAvailableFiles($cmsPageId, [$customLayoutName]);
 $page->setData('layout_update_selected', $customLayoutName);
-$page->save();
+$pageResource->save($page);

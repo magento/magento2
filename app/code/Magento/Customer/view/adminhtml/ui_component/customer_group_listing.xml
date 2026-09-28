@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 -->
 <listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
@@ -13,11 +13,7 @@
     </argument>
     <settings>
         <buttons>
-            <button name="add">
-                <url path="*/*/new"/>
-                <class>primary</class>
-                <label translate="true">Add New Customer Group</label>
-            </button>
+            <button name="add" class="Magento\Customer\Block\Adminhtml\Group\AddCustomerGroupButton"/>
         </buttons>
         <spinner>customer_group_columns</spinner>
         <deps>

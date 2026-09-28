@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Block\Adminhtml;
 
@@ -13,7 +13,7 @@ use Magento\Framework\DataObject;
 class Totals extends \Magento\Sales\Block\Order\Totals
 {
     /**
-     * Admin helper
+     * Sales admin helper object
      *
      * @var \Magento\Sales\Helper\Admin
      */
@@ -71,7 +71,7 @@ class Totals extends \Magento\Sales\Block\Order\Totals
         /**
          * Add discount
          */
-        if ((double)$order->getDiscountAmount() != 0) {
+        if ((float)$order->getDiscountAmount() != 0) {
             if ($order->getDiscountDescription()) {
                 $discountLabel = __('Discount (%1)', $order->getDiscountDescription());
             } else {
@@ -91,13 +91,17 @@ class Totals extends \Magento\Sales\Block\Order\Totals
          * Add shipping
          */
         if (!$order->getIsVirtual()
-            && ((double)$order->getShippingAmount()
+            && ($order->getShippingAmount() !== null
             || $order->getShippingDescription())
         ) {
             $shippingLabel = __('Shipping & Handling');
 
-            if ($order->getCouponCode() && !isset($this->_totals['discount'])) {
-                $shippingLabel .= " ({$order->getCouponCode()})";
+            if (!isset($this->_totals['discount'])) {
+                if ($order->getCouponCode()) {
+                    $shippingLabel .= " ({$order->getCouponCode()})";
+                } elseif ($order->getDiscountDescription()) {
+                    $shippingLabel .= " ({$order->getDiscountDescription()})";
+                }
             }
 
             $this->_totals['shipping'] = new DataObject(

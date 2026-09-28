@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,7 @@ use Magento\Framework\Stdlib\StringUtils;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Unit test class for \Magento\Eav\Model\TypeLocator
@@ -62,8 +63,8 @@ class TypeLocatorTest extends TestCase
      * @param array $serviceEntityTypeMapData
      * @param array $serviceBackendModelDataInterfaceMapData
      * @param string $expected
-     * @dataProvider getTypeDataProvider
      */
+    #[DataProvider('getTypeDataProvider')]
     public function testGetType(
         $attributeCode,
         $serviceClass,
@@ -83,34 +84,35 @@ class TypeLocatorTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function getTypeDataProvider()
+    public static function getTypeDataProvider()
     {
         $serviceInterface = ProductInterface::class;
         $eavEntityType = 'catalog_product';
-        $mediaBackEndModelClass = ProductAttributeMediaGalleryEntryInterface::class;
+//        $mediaBackEndModelClass = ProductAttributeMediaGalleryEntryInterface::class;
         $mediaAttributeDataInterface = ProductAttributeMediaGalleryEntryInterface::class;
 
-        $attribute = $this->createPartialMock(
-            Attribute::class,
-            ['getBackendModel']
-        );
-
-        $attribute->expects($this->any())
-            ->method('getBackendModel')
-            ->willReturn($mediaBackEndModelClass);
-
-        $attributeNoBackendModel = $this->createPartialMock(
-            Attribute::class,
-            ['getBackendModel', 'getFrontendInput']
-        );
-
-        $attributeNoBackendModel->expects($this->any())
-            ->method('getBackendModel')
-            ->willReturn(null);
-
-        $attributeNoBackendModel->expects($this->any())
-            ->method('getFrontendInput')
-            ->willReturn('image');
+        // There is no use of below mock, uncomment to paas in result
+//        $attribute = $this->createPartialMock(
+//            Attribute::class,
+//            ['getBackendModel']
+//        );
+//
+//        $attribute->expects($this->any())
+//            ->method('getBackendModel')
+//            ->willReturn($mediaBackEndModelClass);
+//
+//        $attributeNoBackendModel = $this->createPartialMock(
+//            Attribute::class,
+//            ['getBackendModel', 'getFrontendInput']
+//        );
+//
+//        $attributeNoBackendModel->expects($this->any())
+//            ->method('getBackendModel')
+//            ->willReturn(null);
+//
+//        $attributeNoBackendModel->expects($this->any())
+//            ->method('getFrontendInput')
+//            ->willReturn('image');
 
         return [
             [

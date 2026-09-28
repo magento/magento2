@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Payment\Model\Method;
 
@@ -10,7 +10,9 @@ use Magento\Payment\Model\MethodInterface;
 /**
  * Interface TransparentInterface need to be implemented by Payment Method service
  * which supports transparent redirect feature
+ *
  * @package Magento\Payment\Model\Method
+ * @api
  */
 interface TransparentInterface extends MethodInterface
 {

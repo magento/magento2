@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,43 +11,58 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\Response\Http;
 use Magento\Framework\Json\Helper\Data;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files;
 use Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files\DeleteFiles;
+use Magento\Theme\Helper\Storage;
 use Magento\Theme\Model\Wysiwyg\Storage as WisiwygStorage;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class DeleteFilesTest extends TestCase
 {
-    /** @var Files */
+    use MockCreationTrait;
+    /**
+     * @var Files
+     */
     protected $controller;
 
-    /** @var MockObject|MockObject*/
+    /**
+     * @var MockObject|MockObject
+     */
     protected $objectManager;
 
-    /** @var \Magento\Theme\Helper\Storage|MockObject */
+    /**
+     * @var Storage|MockObject
+     */
     protected $storage;
 
-    /** @var RequestInterface|MockObject */
+    /**
+     * @var RequestInterface|MockObject
+     */
     protected $request;
 
-    /** @var Http|MockObject */
+    /**
+     * @var Http|MockObject
+     */
     protected $response;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
-        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
         $this->storage = $this->createMock(WisiwygStorage::class);
         $this->response = $this->createMock(Http::class);
-        $this->request = $this->getMockForAbstractClass(
+        $this->request = $this->createPartialMockWithReflection(
             RequestInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['isPost', 'getParam']
+            [
+                'getModuleName', 'setModuleName', 'getActionName', 'setActionName',
+                'getParam', 'setParams', 'getParams', 'getCookie', 'isSecure',
+                'isPost'
+            ]
         );
 
         $helper = new ObjectManager($this);
@@ -56,12 +71,15 @@ class DeleteFilesTest extends TestCase
             [
                 'objectManager' => $this->objectManager,
                 'request' => $this->request,
-                'response' => $this->response,
+                'response' => $this->response
             ]
         );
     }
 
-    public function testExecuteWithWrongRequest()
+    /**
+     * @return void
+     */
+    public function testExecuteWithWrongRequest(): void
     {
         $this->request->expects($this->once())
             ->method('isPost')
@@ -85,7 +103,10 @@ class DeleteFilesTest extends TestCase
         $this->controller->execute();
     }
 
-    public function testExecute()
+    /**
+     * @return void
+     */
+    public function testExecute(): void
     {
         $this->request->expects($this->once())
             ->method('isPost')
@@ -100,14 +121,12 @@ class DeleteFilesTest extends TestCase
             ->method('jsonDecode')
             ->with('{"files":"file"}')
             ->willReturn(['files' => 'file']);
-        $this->objectManager->expects($this->at(0))
+        $this->objectManager
             ->method('get')
-            ->with(Data::class)
-            ->willReturn($jsonData);
-        $this->objectManager->expects($this->at(1))
-            ->method('get')
-            ->with(WisiwygStorage::class)
-            ->willReturn($this->storage);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [Data::class] => $jsonData,
+                [WisiwygStorage::class] => $this->storage
+            });
         $this->storage->expects($this->once())
             ->method('deleteFile')
             ->with('file');

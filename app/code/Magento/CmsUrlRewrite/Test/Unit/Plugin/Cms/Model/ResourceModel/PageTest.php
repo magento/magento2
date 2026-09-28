@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,8 @@ namespace Magento\CmsUrlRewrite\Test\Unit\Plugin\Cms\Model\ResourceModel;
 
 use Magento\CmsUrlRewrite\Model\CmsPageUrlRewriteGenerator;
 use Magento\CmsUrlRewrite\Plugin\Cms\Model\ResourceModel\Page;
+use Magento\Cms\Model\Page as CmsPageModelPage;
+use Magento\Cms\Model\ResourceModel\Page as CmsPageResourceModelPage;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
@@ -28,12 +30,12 @@ class PageTest extends TestCase
     protected $urlPersistMock;
 
     /**
-     * @var \Magento\Cms\Model\Page|MockObject
+     * @var CmsPageModelPage|MockObject
      */
     protected $cmsPageMock;
 
     /**
-     * @var \Magento\Cms\Model\ResourceModel\Page|MockObject
+     * @var CmsPageResourceModelPage|MockObject
      */
     protected $cmsPageResourceMock;
 
@@ -41,14 +43,13 @@ class PageTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->urlPersistMock = $this->getMockBuilder(UrlPersistInterface::class)
-            ->getMockForAbstractClass();
+        $this->urlPersistMock = $this->createMock(UrlPersistInterface::class);
 
-        $this->cmsPageMock = $this->getMockBuilder(\Magento\Cms\Model\Page::class)
+        $this->cmsPageMock = $this->getMockBuilder(CmsPageModelPage::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->cmsPageResourceMock = $this->getMockBuilder(\Magento\Cms\Model\ResourceModel\Page::class)
+        $this->cmsPageResourceMock = $this->getMockBuilder(CmsPageResourceModelPage::class)
             ->disableOriginalConstructor()
             ->getMock();
 

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\TestModuleOverrideConfig\MagentoDataFixture;
 
 use Magento\TestModuleOverrideConfig\AbstractOverridesTest;
 use Magento\TestModuleOverrideConfig\Model\FixtureCallStorage;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Checks that magentoDataFixture can be removed using override config
@@ -27,6 +28,7 @@ class RemoveFixtureTest extends AbstractOverridesTest
     {
         parent::setUp();
 
+        // phpstan:ignore "Class Magento\TestModuleOverrideConfig\Model\FixtureCallStorage not found."
         $this->fixtureCallStorage = $this->objectManager->get(FixtureCallStorage::class);
     }
 
@@ -48,11 +50,10 @@ class RemoveFixtureTest extends AbstractOverridesTest
      * @magentoDataFixture Magento/TestModuleOverrideConfig/_files/fixture2_first_module.php
      * @magentoDataFixture Magento/TestModuleOverrideConfig/_files/fixture3_first_module.php
      *
-     * @dataProvider testDataProvider
-     *
      * @param string $fixtureName
      * @return void
      */
+    #[DataProvider('datasetDataProvider')]
     public function testRemoveFixtureForMethod(string $fixtureName): void
     {
         $this->assertEmpty($this->fixtureCallStorage->getFixturesCount($fixtureName));
@@ -61,7 +62,7 @@ class RemoveFixtureTest extends AbstractOverridesTest
     /**
      * @return array
      */
-    public function testDataProvider(): array
+    public static function datasetDataProvider(): array
     {
         return [
             'first_data_set' => ['fixture2_first_module.php'],

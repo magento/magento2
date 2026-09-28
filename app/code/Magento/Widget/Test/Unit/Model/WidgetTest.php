@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -50,16 +50,9 @@ class WidgetTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->dataStorageMock = $this->getMockBuilder(Data::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->conditionsHelper = $this->getMockBuilder(Conditions::class)
-            ->setMethods(['encode'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->escaperMock = $this->getMockBuilder(Escaper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->dataStorageMock = $this->createMock(Data::class);
+        $this->conditionsHelper = $this->createPartialMock(Conditions::class, ['encode']);
+        $this->escaperMock = $this->createMock(Escaper::class);
         $objectManagerHelper = new ObjectManager($this);
         $this->widget = $objectManagerHelper->getObject(
             Widget::class,
@@ -189,7 +182,6 @@ class WidgetTest extends TestCase
         $mathRandomMock->expects($this->any())->method('getRandomString')->willReturn('asdf');
         $reflection = new \ReflectionClass(get_class($this->widget));
         $reflectionProperty = $reflection->getProperty('mathRandom');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->widget, $mathRandomMock);
 
         $conditions = [

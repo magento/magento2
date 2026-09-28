@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+<suites xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Suite/etc/suiteSchema.xsd">
+    <suite name="IndexersByScheduleOnlyTestSuite">
+        <before>
+            <!-- Set Index mode "Update by Schedule" -->
+            <magentoCLI command="indexer:set-mode" arguments="schedule" stepKey="setIndexerModeToUpdateBySchedule" />
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runIndexCronJobs">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </before>
+        <include>
+            <group name="indexers_by_schedule_mode_only"/>
+        </include>
+        <after>
+            <!-- Set Index mode "Update on Save" -->
+            <magentoCLI command="indexer:set-mode" arguments="realtime" stepKey="setIndexerModeToUpdateOnSave" />
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runIndexCronJobs">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </after>
+    </suite>
+</suites>

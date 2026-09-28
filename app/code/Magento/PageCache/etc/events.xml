@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
@@ -48,7 +48,7 @@
     <event name="model_save_commit_after">
         <observer name="flush_cache_after_model_save" instance="Magento\PageCache\Observer\FlushCacheByTags" />
     </event>
-    <event name="backend_auth_user_login_success">
+    <event name="admin_user_authenticate_after">
         <observer name="FlushFormKey" instance="Magento\PageCache\Observer\FlushFormKey"/>
     </event>
     <event name="customer_login">

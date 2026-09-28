@@ -1,20 +1,21 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Swatches\Test\Unit\Controller\Ajax;
 
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\PageCache\Model\Config;
 use Magento\Swatches\Controller\Ajax\Media;
@@ -22,8 +23,12 @@ use Magento\Swatches\Helper\Data;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class MediaTest extends TestCase
 {
+    use MockCreationTrait;
     /** @var array */
     private $mediaGallery;
 
@@ -60,6 +65,12 @@ class MediaTest extends TestCase
     /** @var ObjectManager|Media */
     private $controller;
 
+    /** @var int */
+    private $productId = 23;
+
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->mediaGallery = [
@@ -82,12 +93,13 @@ class MediaTest extends TestCase
         $this->productMock = $this->createMock(Product::class);
         $this->contextMock = $this->createMock(Context::class);
 
-        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->requestMock = $this->createMock(RequestInterface::class);
         $this->contextMock->method('getRequest')->willReturn($this->requestMock);
-        $this->responseMock = $this->getMockBuilder(ResponseInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setPublicHeaders'])
-            ->getMockForAbstractClass();
+        $this->responseMock = $this->createPartialMockWithReflection(
+            ResponseInterface::class,
+            ['setPublicHeaders', 'sendResponse', 'setHeader', 'clearHeader', 'clearHeaders',
+             'setHttpResponseCode', 'setBody', 'appendBody', 'getBody', 'setRedirect', 'setStatusHeader']
+        );
         $this->responseMock->method('setPublicHeaders')->willReturnSelf();
         $this->contextMock->method('getResponse')->willReturn($this->responseMock);
         $this->resultFactory = $this->createPartialMock(ResultFactory::class, ['create']);
@@ -107,23 +119,49 @@ class MediaTest extends TestCase
         );
     }
 
-    public function testExecute()
+    /**
+     * Prepare product mock for test execution.
+     *
+     * @return void
+     */
+    private function prepareProductMock(): void
     {
-        $this->requestMock->expects($this->any())->method('getParam')->with('product_id')->willReturn(59);
+        $this->requestMock
+            ->expects($this->once())
+            ->method('getParam')
+            ->with('product_id')
+            ->willReturn($this->productId);
+        $this->productModelFactoryMock
+            ->expects($this->once())
+            ->method('create')
+            ->willReturn($this->productMock);
         $this->productMock
             ->expects($this->once())
             ->method('load')
-            ->with(59)
+            ->with($this->productId)
             ->willReturn($this->productMock);
         $this->productMock
             ->expects($this->once())
             ->method('getIdentities')
             ->willReturn(['tags']);
+    }
 
-        $this->productModelFactoryMock
+    /**
+     * Check that controller return media gallery for the product.
+     *
+     * @return void
+     */
+    public function testExecute()
+    {
+        $this->prepareProductMock();
+        $this->productMock
             ->expects($this->once())
-            ->method('create')
-            ->willReturn($this->productMock);
+            ->method('getId')
+            ->willReturn($this->productId);
+        $this->productMock
+            ->expects($this->once())
+            ->method('getStatus')
+            ->willReturn(Status::STATUS_ENABLED);
 
         $this->swatchHelperMock
             ->expects($this->once())
@@ -135,6 +173,57 @@ class MediaTest extends TestCase
             ->expects($this->once())
             ->method('setData')
             ->with($this->mediaGallery)->willReturnSelf();
+
+        $result = $this->controller->execute();
+
+        $this->assertInstanceOf(Json::class, $result);
+    }
+
+    /**
+     * Check that controller does not crash while taking the non-existing product.
+     *
+     * @return void
+     */
+    public function testExecuteNonExistingProduct()
+    {
+        $this->prepareProductMock();
+        $this->productMock
+            ->expects($this->once())
+            ->method('getId')
+            ->willReturn(null);
+
+        $this->jsonMock
+            ->expects($this->once())
+            ->method('setData')
+            ->with([])->willReturnSelf();
+
+        $result = $this->controller->execute();
+
+        $this->assertInstanceOf(Json::class, $result);
+    }
+
+    /**
+     * Check that controller does not return media gallery for disabled product.
+     *
+     * @return void
+     */
+    public function testExecuteDisabledProduct()
+    {
+        $this->prepareProductMock();
+        $this->productMock
+            ->expects($this->once())
+            ->method('getId')
+            ->willReturn($this->productId);
+
+        $this->productMock
+            ->expects($this->once())
+            ->method('getStatus')
+            ->willReturn(Status::STATUS_DISABLED);
+
+        $this->jsonMock
+            ->expects($this->once())
+            ->method('setData')
+            ->with([])->willReturnSelf();
 
         $result = $this->controller->execute();
 

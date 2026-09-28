@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Filesystem\File;
@@ -124,7 +124,7 @@ class Read implements ReadInterface
      * @param string $escape [optional]
      * @return array|bool|null
      */
-    public function readCsv($length = 0, $delimiter = ',', $enclosure = '"', $escape = '\\')
+    public function readCsv($length = 0, $delimiter = ',', $enclosure = '"', $escape = "\0")
     {
         return $this->driver->fileGetCsv($this->resource, $length, $delimiter, $enclosure, $escape);
     }

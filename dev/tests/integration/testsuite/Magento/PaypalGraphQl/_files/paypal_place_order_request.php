@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,7 +13,7 @@ $url = ObjectManager::getInstance()->get(UrlInterface::class);
 $notifyUrl = $url->getUrl('paypal/ipn/');
 
 $productMetadata = ObjectManager::getInstance()->get(ProductMetadataInterface::class);
-$button = 'Magento_Cart_' . $productMetadata->getEdition();
+$button = 'Magento_2_' . $productMetadata->getEdition();
 
 return [
     'TOKEN' => $token,

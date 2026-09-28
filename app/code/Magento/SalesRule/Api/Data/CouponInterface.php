@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\SalesRule\Api\Data;
 
@@ -110,7 +110,7 @@ interface CouponInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Get expiration date
      *
      * @return string|null
-     * @deprecated Coupon expiration must follow sales rule expiration date.
+     * @deprecated 101.1.3 Coupon expiration must follow sales rule expiration date.
      */
     public function getExpirationDate();
 
@@ -119,7 +119,7 @@ interface CouponInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $expirationDate
      * @return $this
-     * @deprecated Coupon expiration must follow sales rule expiration date.
+     * @deprecated 101.1.3 Coupon expiration must follow sales rule expiration date.
      */
     public function setExpirationDate($expirationDate);
 

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,9 +17,11 @@ use Magento\Framework\Pricing\PriceInfo\Base as PriceInfoBase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class PriceTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var ObjectManagerHelper
      */
@@ -58,23 +60,16 @@ class PriceTest extends TestCase
         $qty = 1;
 
         /** @var Product|MockObject $configurableProduct */
-        $configurableProduct = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getCustomOption', 'getPriceInfo', 'setFinalPrice'])
-            ->getMock();
+        $configurableProduct = $this->createPartialMock(
+            Product::class,
+            ['getCustomOption', 'getPriceInfo', 'setFinalPrice']
+        );
         /** @var PriceInfoBase|MockObject $priceInfo */
-        $priceInfo = $this->getMockBuilder(PriceInfoBase::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getPrice'])
-            ->getMock();
+        $priceInfo = $this->createPartialMock(PriceInfoBase::class, ['getPrice']);
         /** @var PriceInterface|MockObject $price */
-        $price = $this->getMockBuilder(PriceInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $price = $this->createMock(PriceInterface::class);
         /** @var AmountInterface|MockObject $amount */
-        $amount = $this->getMockBuilder(AmountInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $amount = $this->createMock(AmountInterface::class);
 
         $configurableProduct->expects($this->any())
             ->method('getCustomOption')
@@ -93,48 +88,82 @@ class PriceTest extends TestCase
         $finalPrice = 10;
         $qty = 1;
         $customerGroupId = 1;
+        $basePrice = 10;
 
         /** @var Product|MockObject $configurableProduct */
-        $configurableProduct = $this->getMockBuilder(Product::class)
-            ->addMethods(['getCustomerGroupId'])
-            ->onlyMethods(['getCustomOption', 'setFinalPrice'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $configurableProduct = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getCustomOption', 'getCustomerGroupId', 'setFinalPrice', 'getCalculatedFinalPrice']
+        );
+        
         /** @var Option|MockObject $customOption */
-        $customOption = $this->getMockBuilder(Option::class)
-            ->addMethods(['getProduct'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $customOption = $this->createPartialMockWithReflection(
+            Option::class,
+            ['getProduct']
+        );
+        
         /** @var Product|MockObject $simpleProduct */
-        $simpleProduct = $this->getMockBuilder(Product::class)
-            ->addMethods(['setCustomerGroupId'])
-            ->onlyMethods(['setFinalPrice', 'getPrice', 'getTierPrice', 'getData', 'getCustomOption'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $simpleProduct = $this->createPartialMockWithReflection(
+            Product::class,
+            [
+                'setCustomerGroupId',
+                'getPrice',
+                'getTierPrice',
+                'getSpecialPrice',
+                'getSpecialFromDate',
+                'getSpecialToDate',
+                'setFinalPrice',
+                'getData',
+                'getCustomOption',
+                'getCalculatedFinalPrice'
+            ]
+        );
 
+        // Configure configurable product mock
         $configurableProduct->method('getCustomOption')
             ->willReturnMap([
                 ['simple_product', $customOption],
                 ['option_ids', false]
             ]);
         $configurableProduct->method('getCustomerGroupId')->willReturn($customerGroupId);
-        $configurableProduct->expects($this->atLeastOnce())
-            ->method('setFinalPrice')
-            ->with($finalPrice)
-            ->willReturnSelf();
+        $configurableProduct->method('getCalculatedFinalPrice')->willReturn(null);
+        $configurableProduct->expects($this->once())->method('setFinalPrice')->with($finalPrice)->willReturnSelf();
+        
+        // Configure custom option mock
         $customOption->method('getProduct')->willReturn($simpleProduct);
-        $simpleProduct->expects($this->atLeastOnce())
-            ->method('setCustomerGroupId')
-            ->with($customerGroupId)
-            ->willReturnSelf();
-        $simpleProduct->method('getPrice')->willReturn($finalPrice);
-        $simpleProduct->method('getTierPrice')->with($qty)->willReturn($finalPrice);
-        $simpleProduct->expects($this->atLeastOnce())
-            ->method('setFinalPrice')
-            ->with($finalPrice)
-            ->willReturnSelf();
-        $simpleProduct->method('getData')->with('final_price')->willReturn($finalPrice);
+        
+        // Configure simple product mock for parent::getFinalPrice() call
+        // getBasePrice() calls getPrice(), getTierPrice(), getSpecialPrice()
+        $simpleProduct->expects($this->once())->method('setCustomerGroupId')->with($customerGroupId)->willReturnSelf();
+        $simpleProduct->method('getPrice')->willReturn($basePrice);
+        $simpleProduct->method('getTierPrice')->willReturn(null);
+        $simpleProduct->method('getSpecialPrice')->willReturn(null);
+        $simpleProduct->method('getSpecialFromDate')->willReturn(null);
+        $simpleProduct->method('getSpecialToDate')->willReturn(null);
+        $simpleProduct->method('getCalculatedFinalPrice')->willReturn(null);
+        
+        // getFinalPrice() sets final price, then gets it back via getData('final_price')
+        // Make the mock stateful so setFinalPrice() and getData() work together
+        $finalPriceValue = null;
+        $simpleProduct->method('setFinalPrice')->willReturnCallback(
+            function ($price) use (&$finalPriceValue, $simpleProduct) {
+                $finalPriceValue = $price;
+                return $simpleProduct;
+            }
+        );
+        $simpleProduct->method('getData')->willReturnCallback(
+            function ($key = null) use (&$finalPriceValue, $basePrice) {
+                if ($key === 'final_price') {
+                    return $finalPriceValue;
+                } elseif ($key === 'price') {
+                    return $basePrice;
+                }
+                return null;
+            }
+        );
         $simpleProduct->method('getCustomOption')->with('option_ids')->willReturn(false);
+        
+        // Verify event dispatch for simple product
         $this->eventManagerMock->expects($this->once())
             ->method('dispatch')
             ->with('catalog_product_get_final_price', ['product' => $simpleProduct, 'qty' => $qty]);

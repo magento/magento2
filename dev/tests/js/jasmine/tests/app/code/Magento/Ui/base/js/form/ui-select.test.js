@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 /*eslint max-nested-callbacks: 0*/
@@ -245,6 +245,12 @@ define([
                 var type = typeof obj.toggleListVisible();
 
                 expect(type).toEqual('object');
+            });
+            it('Must be false if "disabled" is true', function () {
+                obj.listVisible(false);
+                obj.disabled(true);
+                obj.toggleListVisible();
+                expect(obj.listVisible()).toEqual(false);
             });
             it('Must be false if "listVisible" is true', function () {
                 obj.listVisible(true);

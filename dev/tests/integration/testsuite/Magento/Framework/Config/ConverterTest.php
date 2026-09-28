@@ -1,10 +1,12 @@
 <?php declare(strict_types=1);
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Config;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Tests Magento\Framework\Config\Convert
@@ -21,8 +23,8 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
      *
      * @param string $sourceString
      * @param array $expected
-     * @dataProvider parseVarElementDataProvider
      */
+    #[DataProvider('parseVarElementDataProvider')]
     public function testParseVarElement($sourceString, $expected)
     {
         $document = new \DOMDocument();
@@ -40,18 +42,18 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function parseVarElementDataProvider()
+    public static function parseVarElementDataProvider()
     {
         $sourceString = <<<'XML'
 <?xml version="1.0"?>
-<view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+<view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xsi:noNamespaceSchemaLocation="urn:magento:framework:Config/etc/view.xsd">
-    <vars module="Magento_Test">    
-        <var name="str">some string</var>  
-        <var name="int-1">1</var>        
-        <var name="int-0">0</var>        
-        <var name="bool-true">true</var> 
-        <var name="bool-false">false</var> 
+    <vars module="Magento_Test">
+        <var name="str">some string</var>
+        <var name="int-1">1</var>
+        <var name="int-0">0</var>
+        <var name="bool-true">true</var>
+        <var name="bool-false">false</var>
     </vars>
  </view>
 XML;

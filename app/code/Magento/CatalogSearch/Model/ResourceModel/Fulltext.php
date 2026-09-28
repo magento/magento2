@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CatalogSearch\Model\ResourceModel;
 
@@ -41,7 +41,7 @@ class Fulltext extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         $connectionName = null,
-        MetadataPool $metadataPool = null
+        ?MetadataPool $metadataPool = null
     ) {
         $this->_eventManager = $eventManager;
         $this->metadataPool = $metadataPool ? : ObjectManager::getInstance()->get(MetadataPool::class);
@@ -62,7 +62,7 @@ class Fulltext extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Reset search results
      *
      * @return $this
-     * @deprecated Not used anymore
+     * @deprecated 101.0.0 Not used anymore
      * @see Fulltext::resetSearchResultsByStore
      */
     public function resetSearchResults()
@@ -78,6 +78,7 @@ class Fulltext extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param int $storeId
      * @return $this
+     * @since 101.0.0
      */
     public function resetSearchResultsByStore($storeId)
     {
@@ -115,7 +116,8 @@ class Fulltext extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 ['cpe.entity_id']
             )->where(
                 'relation.child_id IN (?)',
-                $childIds
+                $childIds,
+                \Zend_Db::INT_TYPE
             );
 
         return $connection->fetchCol($select);

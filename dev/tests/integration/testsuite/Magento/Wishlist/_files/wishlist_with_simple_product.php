@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -25,4 +25,9 @@ $product = $productRepository->get('simple-1');
 $wishlistFactory = $objectManager->get(WishlistFactory::class);
 $wishlist = $wishlistFactory->create();
 $wishlist->loadByCustomerId($customer->getId(), true);
+/** @var \Magento\Catalog\Helper\Product $productHelper */
+$productHelper = $objectManager->get(\Magento\Catalog\Helper\Product::class);
+$isSkipSaleableCheck = $productHelper->getSkipSaleableCheck();
+$productHelper->setSkipSaleableCheck(true);
 $wishlist->addNewItem($product);
+$productHelper->setSkipSaleableCheck($isSkipSaleableCheck);

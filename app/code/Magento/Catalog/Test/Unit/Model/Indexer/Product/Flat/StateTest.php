@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -31,7 +31,7 @@ class StateTest extends TestCase
 
         $indexerMock = $this->createMock(Indexer::class);
         $flatIndexerHelperMock = $this->createMock(\Magento\Catalog\Helper\Product\Flat\Indexer::class);
-        $configMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $configMock = $this->createMock(ScopeConfigInterface::class);
         $this->_model = $this->_objectManager->getObject(
             State::class,
             [

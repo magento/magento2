@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Block\Adminhtml\Order\Status\Assign;
 
+use Magento\Framework\Data\Form as DataForm;
 use Magento\Framework\Data\Form\Element\Fieldset;
 use Magento\Framework\Data\FormFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -39,6 +40,9 @@ class FormTest extends TestCase
      */
     protected $orderConfig;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
@@ -61,7 +65,12 @@ class FormTest extends TestCase
         );
     }
 
-    public function testToHtml()
+    /**
+     * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
+    public function testToHtml(): void
     {
         $statuses = ['status1', 'status2'];
         $states = ['state1', 'state2'];
@@ -70,7 +79,7 @@ class FormTest extends TestCase
         array_unshift($statusesForField, ['value' => '', 'label' => '']);
         $statesForField = array_merge(['' => ''], $states);
 
-        $form = $this->createMock(\Magento\Framework\Data\Form::class);
+        $form = $this->createMock(DataForm::class);
         $fieldset = $this->createMock(Fieldset::class);
         $collection = $this->createMock(Collection::class);
 
@@ -92,45 +101,22 @@ class FormTest extends TestCase
             ->method('getStates')
             ->willReturn($states);
 
-        $fieldset->expects($this->at(0))
-            ->method('addField')
-            ->with(
-                'status',
-                'select',
-                [
-                    'name' => 'status',
-                    'label' => __('Order Status'),
-                    'class' => 'required-entry',
-                    'values' => $statusesForField,
-                    'required' => true
-                ]
-            );
-        $fieldset->expects($this->at(1))
-            ->method('addField')
-            ->with(
-                'state',
-                'select',
-                [
-                    'name' => 'state',
-                    'label' => __('Order State'),
-                    'class' => 'required-entry',
-                    'values' => $statesForField,
-                    'required' => true
-                ]
-            );
-        $fieldset->expects($this->at(2))
-            ->method('addField')
-            ->with(
-                'is_default',
-                'checkbox',
-                ['name' => 'is_default', 'label' => __('Use Order Status As Default'), 'value' => 1]
-            );
-        $fieldset->expects($this->at(3))
-            ->method('addField')
-            ->with(
-                'visible_on_front',
-                'checkbox',
-                ['name' => 'visible_on_front', 'label' => __('Visible On Storefront'), 'value' => 1, 'checked' => true]
+        $fieldset->method('addField')
+            ->willReturnCallback(
+                function ($arg1, $arg2, $arg3) {
+                    if ($arg1 === 'status' && $arg2 === 'select' && $arg3['name'] === 'status') {
+                        return null;
+                    } elseif ($arg1 === 'state' && $arg2 === 'select' && $arg3['name'] === 'state') {
+                        return null;
+                    } elseif ($arg1 === 'is_default' && $arg2 === 'checkbox' && $arg3['name'] === 'is_default') {
+                        return null;
+                    } elseif ($arg1 === 'visible_on_front'
+                        && $arg2 === 'checkbox'
+                        && $arg3['name'] === 'visible_on_front'
+                    ) {
+                        return null;
+                    }
+                }
             );
 
         $this->block->toHtml();

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Code\Test\Unit\Generator;
 
@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 use Magento\Framework\Code\Generator\Io;
 use Magento\Framework\Filesystem;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Framework\Filesystem\Driver\File;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Phrase;
@@ -18,13 +19,13 @@ class IoTest extends TestCase
     /**#@+
      * Source and result class parameters
      */
-    const GENERATION_DIRECTORY = 'generation_directory';
+    public const GENERATION_DIRECTORY = 'generation_directory';
 
-    const CLASS_NAME = 'class_name';
+    public const CLASS_NAME = 'class_name';
 
-    const CLASS_FILE_NAME = 'class/file/name';
+    public const CLASS_FILE_NAME = 'class/file/name';
 
-    const FILE_CONTENT = "content";
+    public const FILE_CONTENT = "content";
 
     /**#@-*/
 
@@ -42,10 +43,10 @@ class IoTest extends TestCase
     protected $_filesystemDriverMock;
 
     /** @var string */
-    protected $existingFile = '/Magento/Class/Exists.php';
+    protected static $existingFile = '/Magento/Class/Exists.php';
 
     /** @var string */
-    protected $nonExistingFile = '/Magento/Class/Does/Not/Exists.php';
+    protected static $nonExistingFile = '/Magento/Class/Does/Not/Exists.php';
 
     protected function setUp(): void
     {
@@ -79,9 +80,8 @@ class IoTest extends TestCase
         $this->assertEquals($expectedFileName, $this->_object->generateResultFileName(self::CLASS_NAME));
     }
 
-    /**
-     * @dataProvider testWriteResultFileAlreadyExistsDataProvider
-     */
+    /**     */
+    #[DataProvider('writeResultFileAlreadyExistsDataProvider')]
     public function testWriteResultFileAlreadyExists($resultFileName, $fileExists, $exceptionDuringRename, $success)
     {
         $this->_filesystemDriverMock->expects($this->once())
@@ -95,23 +95,23 @@ class IoTest extends TestCase
             ->method('isExists')
             ->willReturn($fileExists);
 
-        if (!$exceptionDuringRename) {
-            $renameMockEvent = $this->returnValue(true);
-        } elseif ($fileExists) {
-            $renameMockEvent = $this->throwException(new FileSystemException(new Phrase('File already exists')));
-        } else {
-            $exceptionMessage = 'Some error renaming file';
-            $renameMockEvent = $this->throwException(new FileSystemException(new Phrase($exceptionMessage)));
-            $this->expectException(FileSystemException::class);
-            $this->expectExceptionMessage($exceptionMessage);
-        }
-
-        $this->_filesystemDriverMock->expects($this->once())
+        $renameMock = $this->_filesystemDriverMock->expects($this->once())
             ->method('rename')
             ->with(
                 $this->stringContains($resultFileName),
                 $resultFileName
-            )->will($renameMockEvent); //Throw exception or return true
+            );
+        
+        if (!$exceptionDuringRename) {
+            $renameMock->willReturn(true);
+        } elseif ($fileExists) {
+            $renameMock->willThrowException(new FileSystemException(new Phrase('File already exists')));
+        } else {
+            $exceptionMessage = 'Some error renaming file';
+            $renameMock->willThrowException(new FileSystemException(new Phrase($exceptionMessage)));
+            $this->expectException(FileSystemException::class);
+            $this->expectExceptionMessage($exceptionMessage);
+        }
 
         $this->assertSame($success, $this->_object->writeResultFile($resultFileName, self::FILE_CONTENT));
     }
@@ -119,24 +119,24 @@ class IoTest extends TestCase
     /**
      * @return array
      */
-    public function testWriteResultFileAlreadyExistsDataProvider()
+    public static function writeResultFileAlreadyExistsDataProvider()
     {
         return [
             'Writing file succeeds: writeResultFile succeeds' => [
-                'resultFileName' => $this->nonExistingFile,
+                'resultFileName' => self::$nonExistingFile,
                 'fileExists' => false,
                 'exceptionDuringRename' => false,
                 'success' => true
 
             ],
             'Writing file fails because class already exists on disc: writeResultFile succeeds' => [
-                'resultFileName' => $this->existingFile,
+                'resultFileName' => self::$existingFile,
                 'fileExists' => true,
                 'exceptionDuringRename' => true,
                 'success' => true
             ],
             'Error renaming file, btu class does not exist on disc: writeResultFile throws exception and fails' => [
-                'resultFileName' => $this->nonExistingFile,
+                'resultFileName' => self::$nonExistingFile,
                 'fileExists' => false,
                 'exceptionDuringRename' => true,
                 'success' => false
@@ -190,11 +190,10 @@ class IoTest extends TestCase
         $this->assertEquals($this->_generationDirectory, $this->_object->getGenerationDirectory());
     }
 
-    /**
-     * @dataProvider fileExistsDataProvider
-     * @param $fileName
+    /**     * @param $fileName
      * @param $exists
      */
+    #[DataProvider('fileExistsDataProvider')]
     public function testFileExists($fileName, $exists)
     {
         $this->_filesystemDriverMock->expects(
@@ -213,11 +212,11 @@ class IoTest extends TestCase
     /**
      * @return array
      */
-    public function fileExistsDataProvider()
+    public static function fileExistsDataProvider()
     {
         return [
-            ['fileName' => $this->existingFile, 'exists' => true],
-            ['fileName' => $this->nonExistingFile, 'exists' => false]
+            ['fileName' => self::$existingFile, 'exists' => true],
+            ['fileName' => self::$nonExistingFile, 'exists' => false]
         ];
     }
 }

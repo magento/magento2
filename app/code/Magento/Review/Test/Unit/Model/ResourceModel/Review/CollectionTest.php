@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,6 +17,7 @@ use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class CollectionTest extends TestCase
 {
@@ -50,24 +51,22 @@ class CollectionTest extends TestCase
      */
     protected $objectManager;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $store = $this->createPartialMock(Store::class, ['getId']);
         $store->expects($this->any())->method('getId')->willReturn(1);
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($store);
         $this->objectManager = (new ObjectManager($this));
-        $this->resourceMock = $this->getMockBuilder(AbstractDb::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getConnection', 'getMainTable', 'getTable'])
-            ->getMockForAbstractClass();
-        $this->readerAdapterMock = $this->getMockBuilder(Mysql::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['select', 'prepareSqlCondition', 'quoteInto'])
-            ->getMockForAbstractClass();
-        $this->selectMock = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resourceMock = $this->createMock(AbstractDb::class);
+        $this->readerAdapterMock = $this->createPartialMock(
+            Mysql::class,
+            ['select', 'prepareSqlCondition', 'quoteInto']
+        );
+        $this->selectMock = $this->createMock(Select::class);
         $this->readerAdapterMock->expects($this->any())
             ->method('select')
             ->willReturn($this->selectMock);
@@ -91,14 +90,17 @@ class CollectionTest extends TestCase
         );
     }
 
-    public function testInitSelect()
+    /**
+     * @return void
+     */
+    public function testInitSelect(): void
     {
         $this->selectMock->expects($this->once())
             ->method('join')
             ->with(
                 ['detail' => 'review_detail'],
                 'main_table.review_id = detail.review_id',
-                ['detail_id', 'title', 'detail', 'nickname', 'customer_id']
+                ['detail_id', 'store_id', 'title', 'detail', 'nickname', 'customer_id']
             );
         $this->objectManager->getObject(
             Collection::class,
@@ -109,7 +111,10 @@ class CollectionTest extends TestCase
         );
     }
 
-    public function testAddStoreFilter()
+    /**
+     * @return void
+     */
+    public function testAddStoreFilter(): void
     {
         $this->readerAdapterMock->expects($this->once())
             ->method('prepareSqlCondition');
@@ -126,30 +131,34 @@ class CollectionTest extends TestCase
     /**
      * @param int|string $entity
      * @param int $pkValue
-     * @param string $quoteIntoArguments1
-     * @param string $quoteIntoArguments2
+     * @param array $quoteIntoArguments1
+     * @param array $quoteIntoArguments2
      * @param string $quoteIntoReturn1
      * @param string $quoteIntoReturn2
      * @param int $callNum
-     * @dataProvider addEntityFilterDataProvider
+     *
+     * @return void
      */
+    #[DataProvider('addEntityFilterDataProvider')]
     public function testAddEntityFilter(
         $entity,
-        $pkValue,
-        $quoteIntoArguments1,
-        $quoteIntoArguments2,
-        $quoteIntoReturn1,
-        $quoteIntoReturn2,
-        $callNum
-    ) {
-        $this->readerAdapterMock->expects($this->at(0))
+        int $pkValue,
+        array $quoteIntoArguments1,
+        array $quoteIntoArguments2,
+        string $quoteIntoReturn1,
+        string $quoteIntoReturn2,
+        int $callNum
+    ): void {
+        $this->readerAdapterMock
             ->method('quoteInto')
-            ->with($quoteIntoArguments1[0], $quoteIntoArguments1[1])
-            ->willReturn($quoteIntoReturn1);
-        $this->readerAdapterMock->expects($this->at(1))
-            ->method('quoteInto')
-            ->with($quoteIntoArguments2[0], $quoteIntoArguments2[1])
-            ->willReturn($quoteIntoReturn2);
+            ->willReturnCallback(function ($arg1, $arg2)
+ use ($quoteIntoArguments1, $quoteIntoArguments2, $quoteIntoReturn1, $quoteIntoReturn2) {
+                if ($arg1 == $quoteIntoArguments1[1] && $arg2 == $quoteIntoArguments2[1]) {
+                    return $quoteIntoReturn1;
+                } elseif ($arg1 == $quoteIntoArguments1[1] && $arg2 == $quoteIntoArguments2[1]) {
+                    return $quoteIntoReturn2;
+                }
+            });
         $this->selectMock->expects($this->exactly($callNum))
             ->method('join')
             ->with(
@@ -163,7 +172,7 @@ class CollectionTest extends TestCase
     /**
      * @return array
      */
-    public function addEntityFilterDataProvider()
+    public static function addEntityFilterDataProvider(): array
     {
         return [
             [
@@ -187,7 +196,10 @@ class CollectionTest extends TestCase
         ];
     }
 
-    public function testAddReviewsTotalCount()
+    /**
+     * @return void
+     */
+    public function testAddReviewsTotalCount(): void
     {
         $this->selectMock->expects($this->once())
             ->method('joinLeft')

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\SalesRule\Api\Data;
 
@@ -42,7 +42,7 @@ interface ConditionInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * @param \Magento\SalesRule\Api\Data\ConditionInterface[]|null $conditions
      * @return $this
      */
-    public function setConditions(array $conditions = null);
+    public function setConditions(?array $conditions = null);
 
     /**
      * Return the aggregator type

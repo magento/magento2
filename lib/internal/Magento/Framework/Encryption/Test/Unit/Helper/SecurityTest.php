@@ -2,8 +2,8 @@
 /**
  * Collection of various useful functions
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ namespace Magento\Framework\Encryption\Test\Unit\Helper;
 
 use Magento\Framework\Encryption\Helper\Security;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class SecurityTest extends TestCase
 {
@@ -25,9 +26,8 @@ class SecurityTest extends TestCase
     /**
      * @param  string $expected
      * @param  string $actual
-     * @param  bool $result
-     * @dataProvider dataProvider
-     */
+     * @param  bool $result     */
+    #[DataProvider('dataProvider')]
     public function testCompareStrings($expected, $actual, $result)
     {
         $this->assertEquals($result, Security::compareStrings($expected, $actual));
@@ -36,7 +36,7 @@ class SecurityTest extends TestCase
     /**
      * @return array
      */
-    public function dataProvider()
+    public static function dataProvider()
     {
         return [
             ['a@fzsd434sdfqw24', 'a@fzsd434sdfqw24', true],

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Framework\Message\MessageInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\TestFramework\TestCase\AbstractBackendController;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoAppArea adminhtml
@@ -68,8 +69,8 @@ class MassDeleteTest extends AbstractBackendController
      * @param string|null $messageType
      * @magentoDataFixture Magento/Customer/_files/five_repository_customers.php
      * @magentoDbIsolation disabled
-     * @dataProvider failedRequestDataProvider
      */
+    #[DataProvider('failedRequestDataProvider')]
     public function testFailedMassDeleteAction($ids, Constraint $constraint, $messageType)
     {
         $this->massDeleteAssertions($ids, $constraint, $messageType);
@@ -83,8 +84,8 @@ class MassDeleteTest extends AbstractBackendController
      * @param string $messageType
      * @magentoDataFixture Magento/Customer/_files/five_repository_customers.php
      * @magentoDbIsolation disabled
-     * @dataProvider successRequestDataProvider
      */
+    #[DataProvider('successRequestDataProvider')]
     public function testSuccessMassDeleteAction(array $emails, Constraint $constraint, string $messageType)
     {
         $ids = [];
@@ -129,7 +130,7 @@ class MassDeleteTest extends AbstractBackendController
      *
      * @return array
      */
-    public function failedRequestDataProvider(): array
+    public static function failedRequestDataProvider(): array
     {
         return [
             [
@@ -155,16 +156,16 @@ class MassDeleteTest extends AbstractBackendController
      *
      * @return array
      */
-    public function successRequestDataProvider(): array
+    public static function successRequestDataProvider(): array
     {
         return [
             [
-                'customerEmails' => ['customer1@example.com'],
+                'emails' => ['customer1@example.com'],
                 'constraint' => self::equalTo(['A total of 1 record(s) were deleted.']),
                 'messageType' => MessageInterface::TYPE_SUCCESS,
             ],
             [
-                'customerEmails' => ['customer2@example.com', 'customer3@example.com'],
+                'emails' => ['customer2@example.com', 'customer3@example.com'],
                 'constraint' => self::equalTo(['A total of 2 record(s) were deleted.']),
                 'messageType' => MessageInterface::TYPE_SUCCESS,
             ],

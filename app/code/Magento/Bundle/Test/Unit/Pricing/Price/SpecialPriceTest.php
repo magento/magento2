@@ -1,15 +1,17 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Bundle\Test\Unit\Pricing\Price;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Bundle\Pricing\Price\SpecialPrice;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Pricing\Price\RegularPrice;
+use Magento\Catalog\Model\Pricing\SpecialPriceService;
 use Magento\Framework\Pricing\Price\PriceInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Pricing\PriceInfo\Base;
@@ -47,20 +49,25 @@ class SpecialPriceTest extends TestCase
      */
     protected $priceCurrencyMock;
 
+    /**
+     * @var SpecialPriceService|MockObject
+     */
+    private $specialPriceService;
+
     protected function setUp(): void
     {
-        $this->saleable = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->saleable = $this->createMock(Product::class);
 
-        $this->localeDate = $this->getMockForAbstractClass(TimezoneInterface::class);
+        $this->localeDate = $this->createMock(TimezoneInterface::class);
         $this->priceInfo = $this->createMock(Base::class);
 
         $this->saleable->expects($this->once())
             ->method('getPriceInfo')
             ->willReturn($this->priceInfo);
 
-        $this->priceCurrencyMock = $this->getMockForAbstractClass(PriceCurrencyInterface::class);
+        $this->priceCurrencyMock = $this->createMock(PriceCurrencyInterface::class);
+
+        $this->specialPriceService = $this->createMock(SpecialPriceService::class);
 
         $objectHelper = new ObjectManager($this);
         $this->model = $objectHelper->getObject(
@@ -68,7 +75,8 @@ class SpecialPriceTest extends TestCase
             [
                 'saleableItem' => $this->saleable,
                 'localeDate' => $this->localeDate,
-                'priceCurrency' => $this->priceCurrencyMock
+                'priceCurrency' => $this->priceCurrencyMock,
+                'specialPriceService' => $this->specialPriceService
             ]
         );
     }
@@ -79,8 +87,8 @@ class SpecialPriceTest extends TestCase
      * @param $isScopeDateInInterval
      * @param $value
      * @param $percent
-     * @dataProvider getValueDataProvider
      */
+    #[DataProvider('getValueDataProvider')]
     public function testGetValue($regularPrice, $specialPrice, $isScopeDateInInterval, $value, $percent)
     {
         $specialFromDate =  'some date from';
@@ -102,11 +110,16 @@ class SpecialPriceTest extends TestCase
             ->with(WebsiteInterface::ADMIN_CODE, $specialFromDate, $specialToDate)
             ->willReturn($isScopeDateInInterval);
 
+        $this->specialPriceService->expects($this->once())
+            ->method('execute')
+            ->with($specialToDate)
+            ->willReturn($specialToDate);
+
         $this->priceCurrencyMock->expects($this->never())
             ->method('convertAndRound');
 
         if ($isScopeDateInInterval) {
-            $price = $this->getMockForAbstractClass(PriceInterface::class);
+            $price = $this->createMock(PriceInterface::class);
             $this->priceInfo->expects($this->once())
                 ->method('getPrice')
                 ->with(RegularPrice::PRICE_CODE)
@@ -126,7 +139,7 @@ class SpecialPriceTest extends TestCase
     /**
      * @return array
      */
-    public function getValueDataProvider()
+    public static function getValueDataProvider()
     {
         return [
             ['regularPrice' => 100, 'specialPrice' => 40, 'isScopeDateInInterval' => true,  'value' => 40,
@@ -135,6 +148,8 @@ class SpecialPriceTest extends TestCase
                 'percent' => 40],
             ['regularPrice' => 75,  'specialPrice' => 40, 'isScopeDateInInterval' => false, 'value' => false,
                 'percent' => null],
+            ['regularPrice' => 100,  'specialPrice' => 0, 'isScopeDateInInterval' => true,  'value' => 0,
+                'percent' => 0],
         ];
     }
 }

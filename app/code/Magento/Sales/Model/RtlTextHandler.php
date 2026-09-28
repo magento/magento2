@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -48,7 +48,7 @@ class RtlTextHandler
 
         for ($i = 0; $i < $splitTextAmount; $i++) {
             if ($this->isRtlText($splitText[$i])) {
-                for ($j = $i + 1; $j < $splitTextAmount; $j++) {
+                for ($j = $i; $j < $splitTextAmount; $j++) {
                     $tmp = $this->isRtlText($splitText[$j])
                         ? $this->stringUtils->strrev($splitText[$j]) : $splitText[$j];
                     $splitText[$j] = $this->isRtlText($splitText[$i])

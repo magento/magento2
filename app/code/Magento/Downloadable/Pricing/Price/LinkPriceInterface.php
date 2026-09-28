@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
 
 namespace Magento\Downloadable\Pricing\Price;
 
@@ -10,6 +11,8 @@ use Magento\Downloadable\Model\Link;
 
 /**
  * Class LinkPrice Model
+ *
+ * @api
  */
 interface LinkPriceInterface
 {

@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Config\Model\Config;
 
 /**
  * @api
+ * @since 101.1.0
  */
 interface StructureElementInterface extends Structure\ElementInterface
 {
@@ -15,6 +16,7 @@ interface StructureElementInterface extends Structure\ElementInterface
      *
      * @param string $fieldPrefix
      * @return string
+     * @since 101.1.0
      */
     public function getPath($fieldPrefix = '');
 }

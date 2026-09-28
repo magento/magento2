@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!--Click a swatch option on product page-->
+    <actionGroup name="StorefrontSelectVisualSwatchOptionOnCategoryPageActionGroup">
+        <arguments>
+            <argument name="productId" type="string"/>
+            <argument name="visualSwatchOptionLabel" type="string" />
+        </arguments>
+        <click selector="{{StorefrontCategoryPageProductInfoSection.visualSwatchOption(productId,visualSwatchOptionLabel)}}" stepKey="clickSwatchOption"/>
+    </actionGroup>
+</actionGroups>

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,8 @@ namespace Magento\Framework\GraphQl\Query\Resolver;
 
 /**
  * IdentityInterface is responsible for generating the proper tags from a cache tag and resolved data.
+ *
+ * @api
  */
 interface IdentityInterface
 {
@@ -21,5 +23,5 @@ interface IdentityInterface
      * @param array $resolvedData
      * @return string[]
      */
-    public function getIdentities(array $resolvedData) : array;
+    public function getIdentities(array $resolvedData): array;
 }

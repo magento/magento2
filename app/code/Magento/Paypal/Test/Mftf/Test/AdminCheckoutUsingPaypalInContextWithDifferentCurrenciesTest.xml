@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCheckoutUsingPaypalInContextWithDifferentCurrenciesTest">
+        <annotations>
+            <features value="Order"/>
+            <stories value="Currencies"/>
+            <title value="Checkout using Paypal in-context with different currencies"/>
+            <description value="The purpose of this test is to checkout with Paypal with base currency as HKD and display currency as HKD and validate the corresponding prices and currency symbols"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="AC-6118"/>
+            <group value="3rd_party_integration"/>
+            <group value="paypalExpress"/>
+            <group value="pr_exclude" />
+        </annotations>
+        <before>
+            <!-- Currency Options settings -->
+            <magentoCLI command="config:set {{SetAllowedCurrenciesConfigForUSD.path}} {{SetAllowedCurrenciesConfigForUSD.value}},{{SetAllowedCurrenciesConfigForHKD.value}}" stepKey="setAllowedCurrencyEURAndUSD"/>
+            <magentoCLI command="config:set currency/options/default HKD" stepKey="setCurrencyDefaultHKD"/>
+            <magentoCLI command="config:set currency/options/base HKD" stepKey="setCurrencyBaseHKD"/>
+            <!-- Enable free shipping method -->
+            <magentoCLI command="config:set {{EnableFreeShippingConfigData.path}} {{EnableFreeShippingConfigData.value}}" stepKey="enableFreeShipping"/>
+            <!-- Create customer -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <!-- Create SimpleProductWithPrice100 -->
+            <createData entity="SimpleProduct_100" stepKey="createProduct"/>
+            <!-- Login as Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+        </before>
+        <after>
+            <comment userInput="BIC" stepKey="resetDefaultCurrencyBaseBackToHKD"/>
+            <magentoCLI command="config:set {{SetDefaultCurrencyUSDConfig.path}} {{SetDefaultCurrencyUSDConfig.value}}" stepKey="resetDefaultCurrencyBaseBackToUSD"/>
+            <magentoCLI command="config:set {{SetAllowedCurrenciesConfigForUSD.path}} {{SetAllowedCurrenciesConfigForUSD.value}}" stepKey="resetAllowedCurrencyBaseBackToUSD"/>
+            <magentoCLI command="config:set {{SetCurrencyUSDBaseConfig.path}} {{SetCurrencyUSDBaseConfig.value}}" stepKey="setCurrencyBaseUSD"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+            <!-- Customer log out -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
+            <!-- Delete customer -->
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <!-- Delete product -->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <!-- Admin log out -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <!-- Disable Free Shipping -->
+            <createData entity="DisableFreeShippingConfig" stepKey="disableFreeShippingConfig"/>
+        </after>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runIndexCronJob">
+            <argument name="indices" value="cataloginventory_stock"/>
+        </actionGroup>
+        <!-- Login as customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <!-- Navigate To Simple Product Page -->
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="navigateToSimpleProductPage">
+            <argument name="productUrlKey" value="$$createProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <!-- Add product to cart -->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToShoppingCart"/>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="goToCheckout">
+        </actionGroup>
+        <!-- Select Free Shipping -->
+        <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="setShippingMethodFreeShipping">
+            <argument name="shippingMethodName" value="Free Shipping"/>
+        </actionGroup>
+        <!-- click on Next button -->
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNext"/>
+        <!-- verify order summary -->
+        <actionGroup ref="CheckOrderSummaryInCheckoutActionGroup" stepKey="checkOrderSummary">
+            <argument name="subtotal" value="HK$100.00"/>
+            <argument name="shippingTotal" value="HK$0.00"/>
+            <argument name="shippingMethod" value="Free Shipping - Free"/>
+            <argument name="total" value="HK$100.00"/>
+        </actionGroup>
+        <waitForText userInput="HK$100.00" selector="{{CheckoutPaymentSection.productCharged}}" stepKey="assertProductChargedFor"/>
+        <!-- Click on PayPal payment radio button -->
+        <waitForElementClickable selector="{{CheckoutPaymentSection.PayPalPaymentRadio}}" stepKey="waitForPayPalRadioButton"/>
+        <click selector="{{CheckoutPaymentSection.PayPalPaymentRadio}}" stepKey="selectPaypalPayment"/>
+        <actionGroup ref="SwitchToPayPalGroupBtnActionGroup" stepKey="clickPayPalBtn"/>
+        <!-- Login to Paypal in-context and verify order total on paypal page-->
+        <actionGroup ref="StorefrontLoginToPayPalPaymentAccountTwoStepActionGroup" stepKey="loginToPayPal"/>
+        <actionGroup ref="StorefrontPaypalSwitchBackToMagentoFromCheckoutPageActionGroup" stepKey="confirmPaymentAndGoBackToMagento"/>
+        <waitForElementVisible selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="waitForOrderNumberToBeGrabbed"/>
+        <actionGroup ref="StorefrontClickOrderLinkFromCheckoutSuccessPageActionGroup" stepKey="openOrderViewPage"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderNumber"/>
+        <!--Step11. Go to admin Order page for newly created order-->
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="navigateToSalesOrderPage">
+            <argument name="entityId" value="{$grabOrderNumber}"/>
+        </actionGroup>
+        <!--Verify Success Message-->
+        <waitForText userInput="The order was placed using HKD" stepKey="successMessageIsBeingDisplayed"/>
+    </test>
+</tests>

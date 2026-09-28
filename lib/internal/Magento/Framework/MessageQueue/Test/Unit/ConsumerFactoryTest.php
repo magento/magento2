@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,9 +18,12 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class ConsumerFactoryTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ObjectManager
      */
@@ -68,14 +71,14 @@ class ConsumerFactoryTest extends TestCase
     public function testConnectionInjectedForConsumer()
     {
         $consumerType = 'async';
-        $consumerTypeValue = \Magento\Framework\MessageQueue\Model\TestConsumer::class;
+        $consumerTypeValue = \stdClass::class;
         $consumers = [
             [
                 'type' => [$consumerType => $consumerTypeValue]
             ]
         ];
         $consumerFactory = $this->getConsumerFactoryInstance($consumers);
-        $consumerInstanceMock = $this->getMockBuilder($consumerTypeValue)
+        $consumerInstanceMock = $this->getMockBuilder(\stdClass::class)
             ->getMock();
         $this->assertInstanceOf(get_class($consumerInstanceMock), $consumerFactory->get(self::TEST_CONSUMER_NAME));
     }
@@ -128,21 +131,15 @@ class ConsumerFactoryTest extends TestCase
                 ]
             );
 
-        $consumerInstanceMock = $this->getMockBuilder($consumerTypeValue)
+        $consumerInstanceMock = $this->getMockBuilder(\stdClass::class)
             ->getMock();
-        $consumerMock = $this->getMockBuilder(ConsumerInterface::class)
-            ->setMethods(['configure'])
-            ->getMockForAbstractClass();
+        $consumerMock = $this->createMock(ConsumerInterface::class);
 
         $consumerConfigurationMock =
-            $this->getMockBuilder(ConsumerConfigurationInterface::class)
-                ->disableOriginalConstructor()
-                ->getMockForAbstractClass();
+            $this->createMock(ConsumerConfigurationInterface::class);
         $consumerConfigurationMock->expects($this->any())->method('getType')->willReturn($consumerType);
 
-        $objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->setMethods(['create'])
-            ->getMockForAbstractClass();
+        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
 
         $objectManagerMock->expects($this->any())
             ->method('create')

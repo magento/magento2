@@ -1,14 +1,17 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\CatalogSearch\Test\Unit\Model\Indexer\Fulltext\Plugin;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Catalog\Model\Product;
 use Magento\CatalogSearch\Model\Indexer\Fulltext;
 use Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Attribute;
+use Magento\Eav\Model\Config as EavConfig;
 use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Search\Request\Config;
@@ -16,6 +19,9 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Unit tests for @see \Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Attribute.
+ */
 class AttributeTest extends TestCase
 {
     /**
@@ -53,19 +59,19 @@ class AttributeTest extends TestCase
      */
     private $config;
 
+    /**
+     * @var EavConfig
+     */
+    private $eavConfig;
+
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->subjectMock = $this->createMock(\Magento\Catalog\Model\ResourceModel\Attribute::class);
-        $this->indexerMock = $this->getMockForAbstractClass(
-            IndexerInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['getId', 'getState', '__wakeup']
-        );
+        $this->indexerMock = $this->createMock(IndexerInterface::class);
         $this->indexerRegistryMock = $this->createPartialMock(
             IndexerRegistry::class,
             ['get']
@@ -76,13 +82,18 @@ class AttributeTest extends TestCase
         );
         $this->config =  $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
-            ->setMethods(['reset'])
+            ->onlyMethods(['reset'])
             ->getMock();
+        $this->eavConfig = $this->createPartialMock(
+            EavConfig::class,
+            ['getEntityType']
+        );
         $this->model = $this->objectManager->getObject(
             Attribute::class,
             [
                 'indexerRegistry' => $this->indexerRegistryMock,
-                'config' => $this->config
+                'config' => $this->config,
+                'eavConfig' => $this->eavConfig
             ]
         );
     }
@@ -114,8 +125,8 @@ class AttributeTest extends TestCase
      *
      * @param bool $saveNeedInvalidation
      * @param bool $saveIsNew
-     * @dataProvider afterSaveDataProvider
      */
+    #[DataProvider('afterSaveDataProvider')]
     public function testAfterSaveWithInvalidation(bool $saveNeedInvalidation, bool $saveIsNew)
     {
         $model = $this->objectManager->getObject(
@@ -123,19 +134,24 @@ class AttributeTest extends TestCase
             [
                 'indexerRegistry' => $this->indexerRegistryMock,
                 'config' => $this->config,
+                'eavConfig' => $this->eavConfig,
                 'saveNeedInvalidation' => $saveNeedInvalidation,
                 'saveIsNew' => $saveIsNew,
             ]
         );
+        if ($saveIsNew || $saveNeedInvalidation) {
+            $this->config->expects($this->once())
+                ->method('reset');
+            $catalogProductEntity = $this->createMock(Product::class);
+            $this->eavConfig->expects($this->once())
+                ->method('getEntityType')
+                ->with(Product::ENTITY)
+                ->willReturn($catalogProductEntity);
+        }
 
         if ($saveNeedInvalidation) {
             $this->indexerMock->expects($this->once())->method('invalidate');
             $this->prepareIndexer();
-        }
-
-        if ($saveIsNew || $saveNeedInvalidation) {
-            $this->config->expects($this->once())
-                ->method('reset');
         }
 
         $this->assertEquals(
@@ -147,13 +163,13 @@ class AttributeTest extends TestCase
     /**
      * @return array
      */
-    public function afterSaveDataProvider(): array
+    public static function afterSaveDataProvider(): array
     {
         return [
-            'save_new_with_invalidation' => ['saveNeedInvalidation' => true, 'isNew' => true],
-            'save_new_without_invalidation' => ['saveNeedInvalidation' => false, 'isNew' => true],
-            'update_existing_with_inalidation' => ['saveNeedInvalidation' => true, 'isNew' => false],
-            'update_existing_without_inalidation' => ['saveNeedInvalidation' => false, 'isNew' => false],
+            'save_new_with_invalidation' => ['saveNeedInvalidation' => true, 'saveIsNew' => true],
+            'save_new_without_invalidation' => ['saveNeedInvalidation' => false, 'saveIsNew' => true],
+            'update_existing_with_inalidation' => ['saveNeedInvalidation' => true, 'saveIsNew' => false],
+            'update_existing_without_inalidation' => ['saveNeedInvalidation' => false, 'saveIsNew' => false],
         ];
     }
 

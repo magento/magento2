@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\MessageQueue\Model;
 
@@ -48,7 +48,7 @@ class ConsumerRunner
      */
     public function __construct(
         ConsumerFactory $consumerFactory,
-        MaintenanceMode $maintenanceMode = null,
+        ?MaintenanceMode $maintenanceMode = null,
         $maintenanceSleepInterval = 30
     ) {
         $this->consumerFactory = $consumerFactory;

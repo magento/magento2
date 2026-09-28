@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 -->
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -23,19 +23,19 @@
     <route url="/V1/cmsPage" method="POST">
         <service class="Magento\Cms\Api\PageRepositoryInterface" method="save"/>
         <resources>
-            <resource ref="Magento_Cms::page"/>
+            <resource ref="Magento_Cms::save"/>
         </resources>
     </route>
     <route url="/V1/cmsPage/:id" method="PUT">
         <service class="Magento\Cms\Api\PageRepositoryInterface" method="save"/>
         <resources>
-            <resource ref="Magento_Cms::page"/>
+            <resource ref="Magento_Cms::save"/>
         </resources>
     </route>
     <route url="/V1/cmsPage/:pageId" method="DELETE">
         <service class="Magento\Cms\Api\PageRepositoryInterface" method="deleteById"/>
         <resources>
-            <resource ref="Magento_Cms::page"/>
+            <resource ref="Magento_Cms::page_delete"/>
         </resources>
     </route>
     <!-- Cms Block -->

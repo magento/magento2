@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -42,9 +42,12 @@ class PageTest extends TestCase
      */
     protected $_model;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
-        $logger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $logger = $this->createMock(LoggerInterface::class);
         $this->_menuModel = new Menu($logger);
         $this->_menuSubModel = new Menu($logger);
 
@@ -78,27 +81,20 @@ class PageTest extends TestCase
         $this->_model = new Page($this->_factoryMock, $menuConfig);
     }
 
-    public function testToOptionArray()
+    /**
+     * @return void
+     */
+    public function testToOptionArray(): void
     {
-        $this->_factoryMock->expects(
-            $this->at(0)
-        )->method(
-            'create'
-        )->with(
-            ['iterator' => $this->_menuModel->getIterator()]
-        )->willReturn(
-            new Iterator($this->_menuModel->getIterator())
-        );
-
-        $this->_factoryMock->expects(
-            $this->at(1)
-        )->method(
-            'create'
-        )->with(
-            ['iterator' => $this->_menuSubModel->getIterator()]
-        )->willReturn(
-            new Iterator($this->_menuSubModel->getIterator())
-        );
+        $this->_factoryMock
+            ->method('create')
+            ->willReturnCallback(function ($arg1) {
+                if ($arg1['iterator'] == $this->_menuModel->getIterator()) {
+                    return new Iterator($this->_menuModel->getIterator());
+                } elseif ($arg1['iterator'] == $this->_menuSubModel->getIterator()) {
+                    return new Iterator($this->_menuSubModel->getIterator());
+                }
+            });
 
         $nonEscapableNbspChar = html_entity_decode('&#160;', ENT_NOQUOTES, 'UTF-8');
         $paddingString = str_repeat($nonEscapableNbspChar, 4);

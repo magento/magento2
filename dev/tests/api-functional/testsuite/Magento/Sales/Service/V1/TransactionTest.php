@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Sales\Service\V1;
@@ -145,7 +145,7 @@ class TransactionTest extends WebapiAbstract
         $searchCriteriaBuilder->addFilters([$filter1, $filter2]);
         $searchCriteriaBuilder->addFilters([$filter3, $filter4]);
         $searchCriteriaBuilder->addSortOrder($sortOrder);
-
+        $searchCriteriaBuilder->setPageSize(20);
         $searchData = $searchCriteriaBuilder->create()->__toArray();
 
         $requestData = ['searchCriteria' => $searchData];

@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Report Products Review collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Reports\Model\ResourceModel\Review\Product;
 
@@ -106,6 +104,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param array|null $condition
      * @param string $joinType
      * @return $this|\Magento\Catalog\Model\ResourceModel\Product\Collection
+     * @since 100.3.5
      */
     public function addAttributeToFilter($attribute, $condition = null, $joinType = 'inner')
     {

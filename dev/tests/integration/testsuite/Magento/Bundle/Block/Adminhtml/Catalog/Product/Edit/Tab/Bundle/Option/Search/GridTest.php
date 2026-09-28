@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option\Search;
 
@@ -27,7 +27,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
 
         $html = $block->toHtml();
 
-        $regexpTemplate = '/<button [^>]* onclick="temp_id[^"]*\\.%s/i';
+        $regexpTemplate = '/\<script.*?\>.*?temp_id[^"]*\\.%s/is';
         $jsFuncs = ['doFilter', 'resetFilter'];
         foreach ($jsFuncs as $func) {
             $regexp = sprintf($regexpTemplate, $func);

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -56,7 +56,7 @@ class CollectionTest extends TestCase
     protected function setUp(): void
     {
         $this->collectionMock = $this->getMockBuilder(Collection::class)
-            ->setMethods([])->getMock();
+            ->getMock();
         $this->model = new Collection();
     }
 

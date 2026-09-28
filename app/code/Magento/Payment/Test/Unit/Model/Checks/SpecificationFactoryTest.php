@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -25,24 +25,18 @@ class SpecificationFactoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_compositeFactory = $this->getMockBuilder(
-            CompositeFactory::class
-        )->disableOriginalConstructor()
-            ->setMethods(['create'])->getMock();
+        $this->_compositeFactory = $this->createPartialMock(
+            CompositeFactory::class,
+            ['create']
+        );
     }
 
     public function testCreate()
     {
-        $specification = $this->getMockBuilder(
-            SpecificationInterface::class
-        )->disableOriginalConstructor()
-            ->setMethods([])->getMock();
+        $specification = $this->createMock(SpecificationInterface::class);
         $specificationMapping = [self::SPECIFICATION_KEY => $specification];
 
-        $expectedComposite = $this->getMockBuilder(
-            Composite::class
-        )->disableOriginalConstructor()
-            ->setMethods([])->getMock();
+        $expectedComposite = $this->createMock(Composite::class);
         $modelFactory = new SpecificationFactory($this->_compositeFactory, $specificationMapping);
         $this->_compositeFactory->expects($this->once())->method('create')->with(
             ['list' => $specificationMapping]

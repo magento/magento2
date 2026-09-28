@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,18 +12,19 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Store\Model\HeaderProvider\UpgradeInsecure;
 use Magento\Store\Model\Store;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class UpgradeInsecureTest extends TestCase
 {
     /** Content-Security-Policy Header name */
-    const HEADER_NAME = 'Content-Security-Policy';
+    private const HEADER_NAME = 'Content-Security-Policy';
 
     /**
      * Content-Security-Policy header value
      */
-    const HEADER_VALUE = 'upgrade-insecure-requests';
+    private const HEADER_VALUE = 'upgrade-insecure-requests';
 
     /**
      * @var UpgradeInsecure
@@ -60,8 +61,8 @@ class UpgradeInsecureTest extends TestCase
     /**
      * @param [] $configValuesMap
      * @param bool $expected
-     * @dataProvider canApplyDataProvider
      */
+    #[DataProvider('canApplyDataProvider')]
     public function testCanApply($configValuesMap, $expected)
     {
         $this->scopeConfigMock->expects($this->any())->method('isSetFlag')->willReturnMap(
@@ -75,7 +76,7 @@ class UpgradeInsecureTest extends TestCase
      *
      * @return array
      */
-    public function canApplyDataProvider()
+    public static function canApplyDataProvider()
     {
         return [
             [

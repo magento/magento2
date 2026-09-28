@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Interface of product configurational item option
  *
+ * @api
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Model\Product\Configuration\Item\Option;

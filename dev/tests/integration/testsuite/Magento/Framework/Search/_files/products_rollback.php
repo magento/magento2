@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 use Magento\CatalogInventory\Model\StockRegistryStorage;
@@ -13,11 +13,11 @@ $registry = $objectManager->get(\Magento\Framework\Registry::class);
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
+$productRepository = $objectManager->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
 /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */
 $collection = $objectManager->create(\Magento\Catalog\Model\ResourceModel\Product\Collection::class);
-$collection->addAttributeToSelect('id')->load();
-if ($collection->count() > 0) {
-    $collection->delete();
+foreach ($collection->getItems() as $product) {
+    $productRepository->delete($product);
 }
 
 /** @var \Magento\CatalogInventory\Model\StockRegistryStorage $stockRegistryStorage */

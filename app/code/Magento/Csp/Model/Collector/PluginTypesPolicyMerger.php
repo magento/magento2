@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -22,7 +22,7 @@ class PluginTypesPolicyMerger implements MergerInterface
     {
         /** @var PluginTypesPolicy $policy1 */
         /** @var PluginTypesPolicy $policy2 */
-        return new PluginTypesPolicy(array_unique(array_merge($policy1->getTypes(), $policy2->getTypes())));
+        return new PluginTypesPolicy(array_merge($policy1->getTypes(), $policy2->getTypes()));
     }
 
     /**

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -84,7 +84,7 @@ class CustomLayoutManager implements CustomLayoutManagerInterface
      */
     private function sanitizeIdentifier(PageInterface $page): string
     {
-        return str_replace('/', '_', $page->getIdentifier());
+        return $page->getIdentifier() === null ? '' : str_replace('/', '_', $page->getIdentifier());
     }
 
     /**

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Vault\Api\PaymentMethodListInterface;
 use Magento\Vault\Model\Ui\VaultConfigProvider;
 use Magento\Vault\Model\VaultPaymentInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -51,13 +52,11 @@ class VaultConfigProviderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->vaultPayment = $this->getMockForAbstractClass(VaultPaymentInterface::class);
-        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $this->store = $this->getMockForAbstractClass(StoreInterface::class);
-        $this->session = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->vaultPaymentList = $this->getMockForAbstractClass(PaymentMethodListInterface::class);
+        $this->vaultPayment = $this->createMock(VaultPaymentInterface::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->store = $this->createMock(StoreInterface::class);
+        $this->session = $this->createMock(Session::class);
+        $this->vaultPaymentList = $this->createMock(PaymentMethodListInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->vaultConfigProvider = new VaultConfigProvider($this->storeManager, $this->session);
@@ -71,8 +70,8 @@ class VaultConfigProviderTest extends TestCase
     /**
      * @param int $customerId
      * @param bool $vaultEnabled
-     * @dataProvider customerIdProvider
      */
+    #[DataProvider('customerIdProvider')]
     public function testGetConfig($customerId, $vaultEnabled)
     {
         $storeId = 1;
@@ -114,16 +113,16 @@ class VaultConfigProviderTest extends TestCase
     /**
      * @return array
      */
-    public function customerIdProvider()
+    public static function customerIdProvider()
     {
         return [
             [
-                'id' => 1,
-                'vault_enabled' => true
+                'customerId' => 1,
+                'vaultEnabled' => true
             ],
             [
-                'id' => null,
-                'vault_enabled' => false
+                'customerId' => null,
+                'vaultEnabled' => false
             ]
         ];
     }

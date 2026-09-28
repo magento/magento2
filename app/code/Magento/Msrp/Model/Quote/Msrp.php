@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Msrp\Model\Quote;
 
@@ -22,6 +22,7 @@ class Msrp
      */
     public function setCanApplyMsrp($quoteId, $canApply)
     {
+        $quoteId = $quoteId ?? '';
         $this->canApplyMsrpData[$quoteId] = (bool)$canApply;
         return $this;
     }
@@ -33,6 +34,7 @@ class Msrp
      */
     public function getCanApplyMsrp($quoteId)
     {
+        $quoteId = $quoteId ?? '';
         if (isset($this->canApplyMsrpData[$quoteId])) {
             return (bool)$this->canApplyMsrpData[$quoteId];
         }

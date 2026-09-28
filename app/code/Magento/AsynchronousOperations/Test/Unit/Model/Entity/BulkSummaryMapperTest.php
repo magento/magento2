@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\EntityMetadataInterface;
 use Magento\Framework\EntityManager\MetadataPool;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -52,8 +53,8 @@ class BulkSummaryMapperTest extends TestCase
     {
         $this->metadataPoolMock = $this->createMock(MetadataPool::class);
         $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
-        $this->entityMetadataMock = $this->getMockForAbstractClass(EntityMetadataInterface::class);
-        $this->connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $this->entityMetadataMock = $this->createMock(EntityMetadataInterface::class);
+        $this->connectionMock = $this->createMock(AdapterInterface::class);
         $this->selectMock = $this->createMock(Select::class);
         $this->model = new BulkSummaryMapper(
             $this->metadataPoolMock,
@@ -64,8 +65,8 @@ class BulkSummaryMapperTest extends TestCase
     /**
      * @param int $identifier
      * @param array|false $result
-     * @dataProvider entityToDatabaseDataProvider
      */
+    #[DataProvider('entityToDatabaseDataProvider')]
     public function testEntityToDatabase($identifier, $result)
     {
         $entityType = 'entityType';
@@ -103,7 +104,7 @@ class BulkSummaryMapperTest extends TestCase
     /**
      * @return array
      */
-    public function entityToDatabaseDataProvider()
+    public static function entityToDatabaseDataProvider()
     {
         return [
             [1, ['uuid' => 'bulk-1', 'id' => 1]],

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 namespace Magento\Catalog\Model\Indexer\Category\Product\Plugin;
@@ -55,7 +55,10 @@ class TableResolver
         string $result,
         $modelEntity
     ) {
-        if (!is_array($modelEntity) && $modelEntity === AbstractAction::MAIN_INDEX_TABLE) {
+        if (!is_array($modelEntity) &&
+            $modelEntity === AbstractAction::MAIN_INDEX_TABLE &&
+            $this->storeManager->getStore()->getId()
+        ) {
             $catalogCategoryProductDimension = new Dimension(
                 \Magento\Store\Model\Store::ENTITY,
                 $this->storeManager->getStore()->getId()

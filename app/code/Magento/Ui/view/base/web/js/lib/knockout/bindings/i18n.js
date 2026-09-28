@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 define([
@@ -119,7 +119,7 @@ define([
                     return $(el).next('span');
                 }
 
-                return $('<span/>').insertAfter(el);
+                return $('<span></span>').insertAfter(el);
             }
 
             return el;

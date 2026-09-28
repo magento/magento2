@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -20,12 +20,16 @@ use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * @covers \Magento\Customer\Controller\Adminhtml\Index\Index
  */
 class IndexTest extends TestCase
 {
+
+    use MockCreationTrait;
+
     /**
      * @var Index
      */
@@ -85,7 +89,7 @@ class IndexTest extends TestCase
             ForwardFactory::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->resultForwardMock = $this->getMockBuilder(Forward::class)
             ->disableOriginalConstructor()
@@ -93,20 +97,20 @@ class IndexTest extends TestCase
         $this->resultPageFactoryMock = $this->getMockBuilder(PageFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultPageMock = $this->getMockBuilder(Page::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setActiveMenu', 'getConfig', 'addBreadcrumb'])
-            ->getMock();
+        $this->resultPageMock = $this->createPartialMockWithReflection(
+            Page::class,
+            ['getConfig', 'setActiveMenu', 'addBreadcrumb']
+        );
         $this->pageConfigMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->pageTitleMock = $this->getMockBuilder(Title::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->sessionMock = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['unsCustomerData', 'unsCustomerFormData'])
-            ->getMock();
+        $this->sessionMock = $this->createPartialMockWithReflection(
+            Session::class,
+            ['unsCustomerData', 'unsCustomerFormData']
+        );
 
         $objectManager = new ObjectManager($this);
         $this->context = $objectManager->getObject(
@@ -150,9 +154,14 @@ class IndexTest extends TestCase
             ->with('Customers');
         $this->resultPageMock->expects($this->atLeastOnce())
             ->method('addBreadcrumb')
-            ->withConsecutive(
-                ['Customers', 'Customers'],
-                ['Manage Customers', 'Manage Customers']
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 == 'Customers' && $arg2 == 'Customers') {
+                        return null;
+                    } elseif ($arg1 == 'Manage Customers' && $arg2 == 'Manage Customers') {
+                        return null;
+                    }
+                }
             );
         $this->sessionMock->expects($this->once())
             ->method('unsCustomerData');

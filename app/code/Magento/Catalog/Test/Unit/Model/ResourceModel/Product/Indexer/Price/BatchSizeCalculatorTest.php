@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Indexer\BatchSizeManagementInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\App\DeploymentConfig;
 
 class BatchSizeCalculatorTest extends TestCase
 {
@@ -30,20 +31,26 @@ class BatchSizeCalculatorTest extends TestCase
      */
     private $batchRowsCount;
 
+    /**
+     * @var DeploymentConfig|MockObject
+     */
+    private $deploymentConfigMock;
+
     protected function setUp(): void
     {
-        $this->estimatorMock = $this->getMockForAbstractClass(BatchSizeManagementInterface::class);
+        $this->estimatorMock = $this->createMock(BatchSizeManagementInterface::class);
         $this->batchRowsCount = 200;
         $this->model = new BatchSizeCalculator(
             ['default' => $this->batchRowsCount],
             ['default' => $this->estimatorMock],
-            []
+            [],
+            $this->createMock(DeploymentConfig::class)
         );
     }
 
     public function testEstimateBatchSize()
     {
-        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $connectionMock = $this->createMock(AdapterInterface::class);
         $typeId = 'default';
         $batchSize = 100500;
 

@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\AsynchronousOperations\Test\Unit\Model\ResourceModel\Operation;
 
-use Magento\AsynchronousOperations\Api\Data\OperationInterface;
 use Magento\AsynchronousOperations\Api\Data\OperationListInterface;
+use Magento\AsynchronousOperations\Model\Operation;
 use Magento\AsynchronousOperations\Model\ResourceModel\Operation\Create;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
@@ -76,23 +76,23 @@ class CreateTest extends TestCase
         $connectionName = 'default';
         $operationData = ['key1' => 'value1'];
         $operationTable = 'magento_operation';
-        $operationList = $this->getMockForAbstractClass(OperationListInterface::class);
+        $operationList = $this->createMock(OperationListInterface::class);
         $this->typeResolver->expects($this->once())->method('resolve')->with($operationList)
             ->willReturn(OperationListInterface::class);
-        $metadata = $this->getMockForAbstractClass(EntityMetadataInterface::class);
+        $metadata = $this->createMock(EntityMetadataInterface::class);
         $this->metadataPool->expects($this->once())->method('getMetadata')
             ->with(OperationListInterface::class)->willReturn($metadata);
         $metadata->expects($this->once())->method('getEntityConnectionName')->willReturn($connectionName);
-        $connection = $this->getMockForAbstractClass(AdapterInterface::class);
+        $connection = $this->createMock(AdapterInterface::class);
         $this->resourceConnection->expects($this->once())
             ->method('getConnection')->with($connectionName)->willReturn($connection);
         $connection->expects($this->once())->method('beginTransaction')->willReturnSelf();
-        $operation = $this->getMockBuilder(OperationInterface::class)
-            ->setMethods(['getData'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $operation = $this->createPartialMock(
+            Operation::class,
+            ['getData']
+        );
         $operationList->expects($this->once())->method('getItems')->willReturn([$operation]);
-        $operation->expects($this->once())->method('getData')->willReturn($operationData);
+        $operation->method('getData')->willReturn($operationData);
         $metadata->expects($this->once())->method('getEntityTable')->willReturn($operationTable);
         $connection->expects($this->once())->method('insertOnDuplicate')
             ->with($operationTable, [$operationData], ['status', 'error_code', 'result_message'])->willReturn(1);
@@ -111,23 +111,23 @@ class CreateTest extends TestCase
         $connectionName = 'default';
         $operationData = ['key1' => 'value1'];
         $operationTable = 'magento_operation';
-        $operationList = $this->getMockForAbstractClass(OperationListInterface::class);
+        $operationList = $this->createMock(OperationListInterface::class);
         $this->typeResolver->expects($this->once())->method('resolve')->with($operationList)
             ->willReturn(OperationListInterface::class);
-        $metadata = $this->getMockForAbstractClass(EntityMetadataInterface::class);
+        $metadata = $this->createMock(EntityMetadataInterface::class);
         $this->metadataPool->expects($this->once())->method('getMetadata')
             ->with(OperationListInterface::class)->willReturn($metadata);
         $metadata->expects($this->once())->method('getEntityConnectionName')->willReturn($connectionName);
-        $connection = $this->getMockForAbstractClass(AdapterInterface::class);
+        $connection = $this->createMock(AdapterInterface::class);
         $this->resourceConnection->expects($this->once())
             ->method('getConnection')->with($connectionName)->willReturn($connection);
         $connection->expects($this->once())->method('beginTransaction')->willReturnSelf();
-        $operation = $this->getMockBuilder(OperationInterface::class)
-            ->setMethods(['getData'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $operation = $this->createPartialMock(
+            Operation::class,
+            ['getData']
+        );
         $operationList->expects($this->once())->method('getItems')->willReturn([$operation]);
-        $operation->expects($this->once())->method('getData')->willReturn($operationData);
+        $operation->method('getData')->willReturn($operationData);
         $metadata->expects($this->once())->method('getEntityTable')->willReturn($operationTable);
         $connection->expects($this->once())->method('insertOnDuplicate')
             ->with($operationTable, [$operationData], ['status', 'error_code', 'result_message'])

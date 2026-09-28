@@ -1,16 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Items;
 
 use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\CatalogInventory\Api\StockStateInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Quote\Model\Quote\Item;
+use Magento\Catalog\Helper\Data as CatalogHelper;
 
 /**
  * Adminhtml sales order create items grid block
@@ -28,36 +30,26 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
     protected $_moveToCustomerStorage = true;
 
     /**
-     * Tax data
-     *
      * @var \Magento\Tax\Helper\Data
      */
     protected $_taxData;
 
     /**
-     * Wishlist factory
-     *
      * @var \Magento\Wishlist\Model\WishlistFactory
      */
     protected $_wishlistFactory;
 
     /**
-     * Gift message save
-     *
      * @var \Magento\GiftMessage\Model\Save
      */
     protected $_giftMessageSave;
 
     /**
-     * Tax config
-     *
      * @var \Magento\Tax\Model\Config
      */
     protected $_taxConfig;
 
     /**
-     * Message helper
-     *
      * @var \Magento\GiftMessage\Helper\Message
      */
     protected $_messageHelper;
@@ -85,6 +77,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * @param StockRegistryInterface $stockRegistry
      * @param StockStateInterface $stockState
      * @param array $data
+     * @param CatalogHelper|null $catalogHelper
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -99,7 +92,8 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
         \Magento\GiftMessage\Helper\Message $messageHelper,
         StockRegistryInterface $stockRegistry,
         StockStateInterface $stockState,
-        array $data = []
+        array $data = [],
+        ?CatalogHelper $catalogHelper = null
     ) {
         $this->_messageHelper = $messageHelper;
         $this->_wishlistFactory = $wishlistFactory;
@@ -108,6 +102,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
         $this->_taxData = $taxData;
         $this->stockRegistry = $stockRegistry;
         $this->stockState = $stockState;
+        $data['catalogHelper'] = $catalogHelper ?? ObjectManager::getInstance()->get(CatalogHelper::class);
         parent::__construct($context, $sessionQuote, $orderCreate, $priceCurrency, $data);
     }
 
@@ -137,25 +132,28 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
             $item->setQty($item->getQty());
 
             if (!$item->getMessage()) {
-                //Getting product ids for stock item last quantity validation before grid display
-                $stockItemToCheck = [];
-
                 $childItems = $item->getChildren();
+                $websiteId = $this->getQuote()->getStore()->getWebsiteId();
                 if (count($childItems)) {
                     foreach ($childItems as $childItem) {
-                        $stockItemToCheck[] = $childItem->getProduct()->getId();
+                        $childQty = $childItem->getQty() * $item->getQty();
+                        $check = $this->stockState->checkQuoteItemQty(
+                            $childItem->getProduct()->getId(),
+                            $childQty,
+                            $childQty,
+                            $childQty,
+                            $websiteId
+                        );
+                        $item->setMessage($check->getMessage());
+                        $item->setHasError($check->getHasError());
                     }
                 } else {
-                    $stockItemToCheck[] = $item->getProduct()->getId();
-                }
-
-                foreach ($stockItemToCheck as $productId) {
                     $check = $this->stockState->checkQuoteItemQty(
-                        $productId,
+                        $item->getProduct()->getId(),
                         $item->getQty(),
                         $item->getQty(),
                         $item->getQty(),
-                        $this->getQuote()->getStore()->getWebsiteId()
+                        $websiteId
                     );
                     $item->setMessage($check->getMessage());
                     $item->setHasError($check->getHasError());
@@ -428,14 +426,15 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * @param Item $item
      * @return string
      *
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0 Method is not used anymore
+     * @see \Magento\Catalog\Helper\Product\Configuration::getCustomOptions()
      */
     public function getCustomOptions(Item $item)
     {
         $optionStr = '';
         $this->_moveToCustomerStorage = true;
         if ($optionIds = $item->getOptionByCode('option_ids')) {
-            foreach (explode(',', $optionIds->getValue()) as $optionId) {
+            foreach (explode(',', $optionIds->getValue() ?? '') as $optionId) {
                 $option = $item->getProduct()->getOptionById($optionId);
                 if ($option) {
                     $optionStr .= $option->getTitle() . ':';
@@ -540,12 +539,12 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
     {
         $product = $item->getProduct();
 
-        $options = ['label' => __('Configure')];
+        $options = ['label' => $this->escapeHtmlAttr(__('Configure'))];
         if ($product->canConfigure()) {
             $options['onclick'] = sprintf('order.showQuoteItemConfiguration(%s)', $item->getId());
         } else {
             $options['class'] = ' disabled';
-            $options['title'] = __('This product does not have any configurable options');
+            $options['title'] = $this->escapeHtmlAttr(__('This product does not have any configurable options'));
         }
 
         return $this->getLayout()->createBlock(

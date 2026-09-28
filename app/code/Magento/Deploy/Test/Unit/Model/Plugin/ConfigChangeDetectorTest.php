@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Deploy\Test\Unit\Model\Plugin;
 
 use Magento\Deploy\Model\DeploymentConfig\ChangeDetector;
 use Magento\Deploy\Model\Plugin\ConfigChangeDetector;
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\FrontControllerInterface;
 use Magento\Framework\App\RequestInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -37,6 +38,11 @@ class ConfigChangeDetectorTest extends TestCase
     private $requestMock;
 
     /**
+     * @var DeploymentConfig|mixed|MockObject
+     */
+    private $deploymentConfig;
+
+    /**
      * @return void
      */
     protected function setUp(): void
@@ -44,12 +50,16 @@ class ConfigChangeDetectorTest extends TestCase
         $this->changeDetectorMock = $this->getMockBuilder(ChangeDetector::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->frontControllerMock = $this->getMockBuilder(FrontControllerInterface::class)
-            ->getMockForAbstractClass();
-        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->getMockForAbstractClass();
+        $this->frontControllerMock = $this->createMock(FrontControllerInterface::class);
+        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->deploymentConfig =$this->getMockBuilder(DeploymentConfig::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->configChangeDetectorPlugin = new ConfigChangeDetector($this->changeDetectorMock);
+        $this->configChangeDetectorPlugin = new ConfigChangeDetector(
+            $this->changeDetectorMock,
+            $this->deploymentConfig
+        );
     }
 
     /**
@@ -65,8 +75,6 @@ class ConfigChangeDetectorTest extends TestCase
 
     /**
      * @return void
-     * @codingStandardsIgnoreStart
-     * @codingStandardsIgnoreEnd
      */
     public function testBeforeDispatchWithException()
     {
@@ -78,6 +86,15 @@ class ConfigChangeDetectorTest extends TestCase
         $this->changeDetectorMock->expects($this->once())
             ->method('hasChanges')
             ->willReturn(true);
+        $this->configChangeDetectorPlugin->beforeDispatch($this->frontControllerMock, $this->requestMock);
+    }
+
+    public function testBeforeDispatchWithBlueGreen()
+    {
+        $this->deploymentConfig->expects($this->atLeastOnce())
+            ->method('get')
+            ->with('deployment/blue_green/enabled')
+            ->willReturn(1);
         $this->configChangeDetectorPlugin->beforeDispatch($this->frontControllerMock, $this->requestMock);
     }
 }

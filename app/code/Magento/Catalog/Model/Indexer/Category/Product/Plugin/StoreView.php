@@ -1,22 +1,22 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\Indexer\Category\Product\Plugin;
 
-use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
 class StoreView extends StoreGroup
 {
     /**
      * Validate changes for invalidating indexer
      *
-     * @param \Magento\Framework\Model\AbstractModel $store
+     * @param AbstractModel $store
      * @return bool
      */
-    protected function validate(\Magento\Framework\Model\AbstractModel $store)
+    protected function validate(AbstractModel $store)
     {
         return $store->isObjectNew() || $store->dataHasChangedFor('group_id');
     }
@@ -30,13 +30,13 @@ class StoreView extends StoreGroup
      *
      * @return AbstractDb
      */
-    public function afterSave(AbstractDb $subject, AbstractDb $objectResource, AbstractModel $store = null)
+    public function afterSave(AbstractDb $subject, AbstractDb $objectResource, ?AbstractModel $store = null)
     {
         if ($store->isObjectNew()) {
             $this->tableMaintainer->createTablesForStore($store->getId());
         }
 
-        return parent::afterSave($subject, $objectResource);
+        return parent::afterSave($subject, $objectResource, $store);
     }
 
     /**

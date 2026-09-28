@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -27,10 +27,7 @@ class CleanerTest extends TestCase
     {
         $helper = new ObjectManager($this);
 
-        $this->status = $this->getMockBuilder(StatusInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['isEnabled'])
-            ->getMockForAbstractClass();
+        $this->status = $this->createMock(StatusInterface::class);
 
         $this->cleaner = $helper->getObject(
             Cleaner::class,

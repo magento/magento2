@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 var config = {
@@ -8,12 +8,7 @@ var config = {
         '*': {
             editTrigger: 'mage/edit-trigger',
             addClass: 'Magento_Translation/js/add-class',
-            'Magento_Translation/add-class': 'Magento_Translation/js/add-class',
-            mageTranslationDictionary: 'Magento_Translation/js/mage-translation-dictionary'
+            'Magento_Translation/add-class': 'Magento_Translation/js/add-class'
         }
-    },
-    deps: [
-        'mage/translate-inline',
-        'mageTranslationDictionary'
-    ]
+    }
 };

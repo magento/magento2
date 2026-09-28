@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Eav\Model\Form;
 use Magento\Eav\Model\Validator\Attribute\Data;
 use Magento\Framework\DataObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class FormTest extends TestCase
 {
@@ -49,7 +50,7 @@ class FormTest extends TestCase
     {
         $this->_model = $this->getMockBuilder(
             Form::class
-        )->setMethods(
+        )->onlyMethods(
             ['_getFilteredFormAttributeCollection', '_getValidator', 'getEntity']
         )->disableOriginalConstructor()
             ->getMock();
@@ -123,20 +124,17 @@ class FormTest extends TestCase
     /**
      * Test validateData method
      *
-     * @dataProvider validateDataProvider
-     *
      * @param bool $isValid
      * @param bool|array $expected
      * @param null|array $messages
      */
+    #[DataProvider('validateDataProvider')]
     public function testValidateDataPassed($isValid, $expected, $messages = null)
     {
-        $validator = $this->getMockBuilder(
-            Data::class
-        )->disableOriginalConstructor()
-            ->setMethods(
-                ['isValid', 'getMessages']
-            )->getMock();
+        $validator = $this->createPartialMock(
+            Data::class,
+            ['isValid', 'getMessages']
+        );
         $validator->expects($this->once())->method('isValid')->willReturn($isValid);
         if ($messages) {
             $validator->expects($this->once())->method('getMessages')->willReturn($messages);
@@ -155,7 +153,7 @@ class FormTest extends TestCase
      *
      * @return array
      */
-    public function validateDataProvider()
+    public static function validateDataProvider()
     {
         return [
             'is_valid' => [true, true, null],

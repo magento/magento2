@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Elasticsearch\Model\ResourceModel\Fulltext\Collection;
@@ -10,7 +10,7 @@ use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\DefaultFilterS
 
 /**
  * This class add in backward compatibility purposes to check if need to apply old strategy for filter prepare process.
- * @deprecated
+ * @deprecated 100.3.2
  */
 class DefaultFilterStrategyApplyChecker implements DefaultFilterStrategyApplyCheckerInterface
 {

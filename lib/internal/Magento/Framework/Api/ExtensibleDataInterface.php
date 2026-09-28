@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Api;
@@ -10,6 +10,7 @@ namespace Magento\Framework\Api;
  * Interface for entities which can be extended with extension attributes.
  *
  * @api
+ * @since 100.0.2
  */
 interface ExtensibleDataInterface
 {

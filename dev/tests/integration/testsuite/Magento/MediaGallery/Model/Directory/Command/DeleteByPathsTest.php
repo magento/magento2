@@ -1,23 +1,32 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
- *
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\MediaGallery\Model\Directory\Command;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\MediaGalleryApi\Api\DeleteDirectoriesByPathsInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for DeleteDirectoriesByPathsInterface
  */
 class DeleteByPathsTest extends \PHPUnit\Framework\TestCase
 {
+    private const MEDIA_GALLERY_IMAGE_FOLDERS_CONFIG_PATH
+        = 'system/media_storage_configuration/allowed_resources/media_gallery_image_folders';
+
+    /**
+     * @var array
+     */
+    private $origConfigValue;
+
     /**
      * @var DeleteDirectoriesByPathsInterface
      */
@@ -34,12 +43,28 @@ class DeleteByPathsTest extends \PHPUnit\Framework\TestCase
     private $filesystem;
 
     /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
+    private $objectManager;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
-        $this->deleteByPaths = Bootstrap::getObjectManager()->get(DeleteDirectoriesByPathsInterface::class);
-        $this->filesystem = Bootstrap::getObjectManager()->get(Filesystem::class);
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->deleteByPaths = $this->objectManager->get(DeleteDirectoriesByPathsInterface::class);
+        $this->filesystem = $this->objectManager->get(Filesystem::class);
+        $config = $this->objectManager->get(ScopeConfigInterface::class);
+        $this->origConfigValue = $config->getValue(
+            self::MEDIA_GALLERY_IMAGE_FOLDERS_CONFIG_PATH,
+            'default'
+        );
+        $scopeConfig = $this->objectManager->get(\Magento\Framework\App\Config\MutableScopeConfigInterface::class);
+        $scopeConfig->setValue(
+            self::MEDIA_GALLERY_IMAGE_FOLDERS_CONFIG_PATH,
+            array_merge($this->origConfigValue, [$this->testDirectoryName]),
+        );
     }
 
     /**
@@ -48,20 +73,22 @@ class DeleteByPathsTest extends \PHPUnit\Framework\TestCase
      */
     public function testDeleteDirectory(): void
     {
+        $testDir = $this->testDirectoryName . '/testDir';
         /** @var \Magento\Framework\Filesystem\Directory\WriteInterface $mediaDirectory */
         $mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $mediaDirectory->create($this->testDirectoryName);
-        $fullPath = $mediaDirectory->getAbsolutePath($this->testDirectoryName);
-        $this->assertFileExists($fullPath);
-        $this->deleteByPaths->execute([$this->testDirectoryName]);
-        $this->assertFileNotExists($fullPath);
+        $mediaDirectory->create($testDir);
+        $fullPath = $mediaDirectory->getAbsolutePath($testDir);
+        $this->assertTrue($mediaDirectory->isExist($fullPath));
+        $this->deleteByPaths->execute([$testDir]);
+        $this->assertFalse($mediaDirectory->isExist($fullPath));
     }
 
     /**
      * @param array $paths
      * @throws \Magento\Framework\Exception\CouldNotDeleteException
-     * @dataProvider notAllowedPathsProvider
      */
+    #[DataProvider('notAllowedPathsProvider')]
     public function testDeleteDirectoryThatIsNotAllowed(array $paths): void
     {
         $this->expectException(\Magento\Framework\Exception\CouldNotDeleteException::class);
@@ -74,7 +101,7 @@ class DeleteByPathsTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function notAllowedPathsProvider(): array
+    public static function notAllowedPathsProvider(): array
     {
         return [
             [
@@ -94,6 +121,11 @@ class DeleteByPathsTest extends \PHPUnit\Framework\TestCase
      */
     protected function tearDown(): void
     {
+        $scopeConfig = $this->objectManager->get(\Magento\Framework\App\Config\MutableScopeConfigInterface::class);
+        $scopeConfig->setValue(
+            self::MEDIA_GALLERY_IMAGE_FOLDERS_CONFIG_PATH,
+            $this->origConfigValue
+        );
         $directory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         if ($directory->isExist($this->testDirectoryName)) {
             $directory->delete($this->testDirectoryName);

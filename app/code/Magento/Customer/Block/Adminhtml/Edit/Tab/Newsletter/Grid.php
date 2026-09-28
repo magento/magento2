@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab\Newsletter;
 
@@ -62,8 +62,8 @@ class Grid extends Extended
         CollectionFactory $collectionFactory,
         Registry $coreRegistry,
         array $data = [],
-        Share $shareConfig = null,
-        SystemStore $systemStore = null
+        ?Share $shareConfig = null,
+        ?SystemStore $systemStore = null
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_collectionFactory = $collectionFactory;

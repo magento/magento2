@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -21,8 +21,8 @@ class GraphQlMutationTest extends GraphQlAbstract
         $query = <<<MUTATION
 mutation {
   testItem(id: {$id}) {
-    item_id,
-    name,
+    item_id
+    name
     integer_list
   }
 }
@@ -47,8 +47,8 @@ MUTATION;
         $query = <<<MUTATION
 mutation {
   testItem(id: {$id}) {
-    item_id,
-    name,
+    item_id
+    name
     integer_list
   }
 }

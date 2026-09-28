@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Setup;
 
@@ -75,7 +75,7 @@ class FilePermissions
     public function __construct(
         Filesystem $filesystem,
         DirectoryList $directoryList,
-        State $state = null
+        ?State $state = null
     ) {
         $this->filesystem = $filesystem;
         $this->directoryList = $directoryList;
@@ -93,12 +93,16 @@ class FilePermissions
             $data = [
                 DirectoryList::CONFIG,
                 DirectoryList::VAR_DIR,
-                DirectoryList::MEDIA,
-                DirectoryList::STATIC_VIEW,
+                DirectoryList::MEDIA
             ];
             if ($this->state->getMode() !== State::MODE_PRODUCTION) {
                 $data[] = DirectoryList::GENERATED;
+                /**
+                 * Static files may be pre-generated on separate machine.
+                 */
+                $data[] = DirectoryList::STATIC_VIEW;
             }
+
             foreach ($data as $code) {
                 $this->installationWritableDirectories[$code] = $this->directoryList->getPath($code);
             }
@@ -260,6 +264,7 @@ class FilePermissions
                 if ($associative) {
                     $missingPaths[$missingPath] = $this->nonWritablePathsInDirectories[$missingPath];
                 } else {
+                    // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                     $missingPaths = array_merge(
                         $missingPaths,
                         $this->nonWritablePathsInDirectories[$missingPath]

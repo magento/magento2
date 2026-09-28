@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -34,7 +34,7 @@ class ModuleOutputTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_fileSource = $this->getMockForAbstractClass(CollectorInterface::class);
+        $this->_fileSource = $this->createMock(CollectorInterface::class);
         $this->_moduleManager = $this->createMock(Manager::class);
         $this->_moduleManager
             ->expects($this->any())
@@ -51,7 +51,7 @@ class ModuleOutputTest extends TestCase
 
     public function testGetFiles()
     {
-        $theme = $this->getMockForAbstractClass(ThemeInterface::class);
+        $theme = $this->createMock(ThemeInterface::class);
         $fileOne = new File('1.xml', 'Module_OutputEnabled');
         $fileTwo = new File('2.xml', 'Module_OutputDisabled');
         $fileThree = new File('3.xml', 'Module_OutputEnabled', $theme);

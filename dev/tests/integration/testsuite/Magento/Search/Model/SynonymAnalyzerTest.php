@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Search\Model;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoDataFixture Magento/Search/_files/synonym_reader.php
@@ -78,14 +80,18 @@ class SynonymAnalyzerTest extends \PHPUnit\Framework\TestCase
                 'phrase' => 'schlicht',
                 'expectedResult' => [['schlicht', 'natürlich']]
             ],
+            'withSlashInSearchPhrase' => [
+                'phrase' => 'orange hill/peak',
+                'expectedResult' => [['orange', 'magento'], ['hill/peak']]
+            ],
         ];
     }
 
     /**
      * @param string $phrase
      * @param array $expectedResult
-     * @dataProvider loadGetSynonymsForPhraseDataProvider
      */
+    #[DataProvider('loadGetSynonymsForPhraseDataProvider')]
     public function testGetSynonymsForPhrase($phrase, $expectedResult)
     {
         $synonyms = $this->synAnalyzer->getSynonymsForPhrase($phrase);

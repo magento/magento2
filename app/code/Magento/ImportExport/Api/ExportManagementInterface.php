@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\ImportExport\Api\Data\ExportInfoInterface;
 /**
  * Describes how to do export operation with data interface.
  * @api
+ * @since 100.3.2
  */
 interface ExportManagementInterface
 {
@@ -20,6 +21,7 @@ interface ExportManagementInterface
      *
      * @param ExportInfoInterface $exportInfo
      * @return string
+     * @since 100.3.2
      */
     public function export(ExportInfoInterface $exportInfo);
 }

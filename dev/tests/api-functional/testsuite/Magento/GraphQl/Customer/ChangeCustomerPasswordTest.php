@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -71,6 +71,11 @@ class ChangeCustomerPasswordTest extends GraphQlAbstract
 
         $response = $this->graphQlMutation($query, [], '', $headerMap);
         $this->assertEquals($customerEmail, $response['changeCustomerPassword']['email']);
+
+        $this->assertEmpty(
+            $response['changeCustomerPassword']['custom_attributes'],
+            'custom_attributes should not contain any static values'
+        );
 
         try {
             // registry contains the old password hash so needs to be reset
@@ -216,6 +221,18 @@ mutation {
     email
     firstname
     lastname
+    custom_attributes {
+        code
+        ... on AttributeValue {
+          value
+        }
+        ... on AttributeSelectedOptions {
+          selected_options {
+            value
+            label
+          }
+        }
+      }
   }
 }
 QUERY;

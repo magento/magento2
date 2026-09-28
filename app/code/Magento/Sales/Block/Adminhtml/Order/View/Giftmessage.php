@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\View;
 
@@ -9,7 +9,6 @@ namespace Magento\Sales\Block\Adminhtml\Order\View;
  * Edit order giftmessage block
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Giftmessage extends \Magento\Backend\Block\Widget
@@ -22,22 +21,16 @@ class Giftmessage extends \Magento\Backend\Block\Widget
     protected $_entity;
 
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * Message factory
-     *
      * @var \Magento\GiftMessage\Model\MessageFactory
      */
     protected $_messageFactory;
 
     /**
-     * Message helper
-     *
      * @var \Magento\GiftMessage\Helper\Message
      */
     protected $_messageHelper;

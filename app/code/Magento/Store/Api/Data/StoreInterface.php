@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Store\Api\Data;
 
@@ -69,11 +69,13 @@ interface StoreInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     /**
      * @param int $isActive
      * @return $this
+     * @since 101.0.0
      */
     public function setIsActive($isActive);
 
     /**
      * @return int
+     * @since 101.0.0
      */
     public function getIsActive();
 

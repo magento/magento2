@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,49 +12,57 @@ use Magento\Backend\Block\Widget\Button;
 use Magento\Backend\Model\UrlInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Data\Form;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Data\Form\Element\CollectionFactory;
+use Magento\Framework\Data\Form\Element\Factory as ElementFactory;
+use Magento\Framework\Escaper;
 use Magento\Framework\View\Layout;
 use Magento\OfflineShipping\Block\Adminhtml\Form\Field\Export;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\TestCase;
 
 class ExportTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Export
      */
     protected $_object;
 
+    /**
+     * @var UrlInterface|\PHPUnit\Framework\MockObject\MockObject
+     */
+    protected $backendUrl;
+
     protected function setUp(): void
     {
-        $backendUrl = $this->getMockForAbstractClass(UrlInterface::class);
-        $backendUrl->expects($this->once())->method('getUrl')->with("*/*/exportTablerates", ['website' => 1]);
+        $this->backendUrl = $this->createMock(UrlInterface::class);
+        $this->backendUrl->expects($this->once())->method('getUrl')->with("*/*/exportTablerates", ['website' => 1]);
 
-        $objectManager = new ObjectManager($this);
-        $this->_object = $objectManager->getObject(
-            Export::class,
-            ['backendUrl' => $backendUrl]
-        );
+        $this->_object = $this->getMockBuilder(Export::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods([])
+            ->getMock();
+
+        $reflection = new \ReflectionClass(Export::class);
+        $backendUrlProperty = $reflection->getProperty('_backendUrl');
+        $backendUrlProperty->setValue($this->_object, $this->backendUrl);
     }
 
     public function testGetElementHtml()
     {
         $expected = 'some test data';
 
-        $form = $this->getMockBuilder(Form::class)
-            ->addMethods(['getParent'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $form = $this->createPartialMockWithReflection(Form::class, ['getParent']);
         $parentObjectMock = $this->createPartialMock(Template::class, ['getLayout']);
         $layoutMock = $this->createMock(Layout::class);
 
         $blockMock = $this->createMock(Button::class);
 
-        $requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        $requestMock = $this->createMock(RequestInterface::class);
         $requestMock->expects($this->once())->method('getParam')->with('website')->willReturn(1);
 
-        $mockData = $this->getMockBuilder(\stdClass::class)->addMethods(['toHtml'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $mockData = $this->createPartialMockWithReflection(\stdClass::class, ['toHtml']);
         $mockData->expects($this->once())->method('toHtml')->willReturn($expected);
 
         $blockMock->expects($this->once())->method('getRequest')->willReturn($requestMock);

@@ -1,15 +1,17 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Downloadable\Test\Unit\Helper;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Downloadable\Helper\Download as DownloadHelper;
 use Magento\Downloadable\Helper\File as DownloadableFile;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\File\Mime;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface as DirReadInterface;
 use Magento\Framework\Filesystem\File\ReadFactory;
@@ -54,13 +56,18 @@ class DownloadTest extends TestCase
     /** @var string Result of mime_content_type() */
     public static $mimeContentType;
 
-    const FILE_SIZE = 4096;
+    private const FILE_SIZE = 4096;
 
-    const FILE_PATH = '/some/path';
+    private const FILE_PATH = '/some/path';
 
-    const MIME_TYPE = 'image/png';
+    private const MIME_TYPE = 'image/png';
 
-    const URL = 'http://example.com';
+    private const URL = 'http://example.com';
+
+    /**
+     * @var Mime|MockObject
+     */
+    private $mime;
 
     protected function setUp(): void
     {
@@ -71,20 +78,20 @@ class DownloadTest extends TestCase
 
         $this->_filesystemMock = $this->createMock(Filesystem::class);
         $this->_handleMock = $this->createMock(\Magento\Framework\Filesystem\File\ReadInterface::class);
-        $this->_workingDirectoryMock = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
-        $this->_downloadableFileMock = $this->createMock(\Magento\Downloadable\Helper\File::class);
-        $this->sessionManager = $this->getMockForAbstractClass(
-            SessionManagerInterface::class
-        );
+        $this->_workingDirectoryMock = $this->createMock(DirReadInterface::class);
+        $this->_downloadableFileMock = $this->createMock(DownloadableFile::class);
+        $this->sessionManager = $this->createMock(SessionManagerInterface::class);
         $this->fileReadFactory = $this->createMock(ReadFactory::class);
+        $this->mime = $this->createMock(Mime::class);
 
         $this->_helper = (new ObjectManager($this))->getObject(
-            \Magento\Downloadable\Helper\Download::class,
+            DownloadHelper::class,
             [
                 'downloadableFile' => $this->_downloadableFileMock,
                 'filesystem'       => $this->_filesystemMock,
                 'session'          => $this->sessionManager,
                 'fileReadFactory'  => $this->fileReadFactory,
+                'mime' => $this->mime
             ]
         );
     }
@@ -132,24 +139,31 @@ class DownloadTest extends TestCase
 
     public function testGetContentType()
     {
+        $this->mime->expects(
+            self::once()
+        )->method(
+            'getMimeType'
+        )->willReturn(
+            self::MIME_TYPE
+        );
         $this->_setupFileMocks();
         $this->_downloadableFileMock->expects($this->never())->method('getFileType');
+        $this->_workingDirectoryMock->expects($this->once())->method('getAbsolutePath')
+            ->willReturn('/path/to/file.txt');
         $this->assertEquals(self::MIME_TYPE, $this->_helper->getContentType());
     }
 
-    /**
-     * @dataProvider dataProviderForTestGetContentTypeThroughHelper
-     */
+    #[DataProvider('dataProviderForTestGetContentTypeThroughHelper')]
     public function testGetContentTypeThroughHelper($functionExistsResult, $mimeContentTypeResult)
     {
         $this->_setupFileMocks();
         self::$functionExists = $functionExistsResult;
         self::$mimeContentType = $mimeContentTypeResult;
 
-        $this->_downloadableFileMock->expects(
-            $this->once()
+        $this->mime->expects(
+            self::once()
         )->method(
-            'getFileType'
+            'getMimeType'
         )->willReturn(
             self::MIME_TYPE
         );
@@ -160,7 +174,7 @@ class DownloadTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForTestGetContentTypeThroughHelper()
+    public static function dataProviderForTestGetContentTypeThroughHelper()
     {
         return [[false, ''], [true, false]];
     }
@@ -199,7 +213,7 @@ class DownloadTest extends TestCase
      */
     protected function _setupFileMocks($doesExist = true, $size = self::FILE_SIZE, $path = self::FILE_PATH)
     {
-        $this->_handleMock->expects($this->any())->method('stat')->willReturn(['size' => $size]);
+        $this->_handleMock->method('stat')->willReturn(['size' => $size]);
         $this->_downloadableFileMock->expects($this->any())->method('ensureFileInFilesystem')->with($path)
             ->willReturn($doesExist);
         $this->_workingDirectoryMock->expects($doesExist ? $this->once() : $this->never())->method('openFile')
@@ -216,11 +230,7 @@ class DownloadTest extends TestCase
      */
     protected function _setupUrlMocks($size = self::FILE_SIZE, $url = self::URL, $additionalStatData = [])
     {
-        $this->_handleMock->expects(
-            $this->any()
-        )->method(
-            'stat'
-        )->willReturn(
+        $this->_handleMock->method('stat')->willReturn(
             array_merge(['size' => $size, 'type' => self::MIME_TYPE], $additionalStatData)
         );
 

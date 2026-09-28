@@ -1,19 +1,20 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\WishlistGraphQl\Model\Resolver;
 
 use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Wishlist\Model\ResourceModel\Wishlist as WishlistResourceModel;
 use Magento\Wishlist\Model\Wishlist;
+use Magento\Wishlist\Model\Wishlist\Config as WishlistConfig;
 use Magento\Wishlist\Model\WishlistFactory;
-use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 
 /**
  * Fetches the Wishlist data according to the GraphQL schema
@@ -21,23 +22,25 @@ use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 class WishlistResolver implements ResolverInterface
 {
     /**
-     * @var WishlistResourceModel
-     */
-    private $wishlistResource;
-
-    /**
      * @var WishlistFactory
      */
     private $wishlistFactory;
 
     /**
-     * @param WishlistResourceModel $wishlistResource
-     * @param WishlistFactory $wishlistFactory
+     * @var WishlistConfig
      */
-    public function __construct(WishlistResourceModel $wishlistResource, WishlistFactory $wishlistFactory)
-    {
-        $this->wishlistResource = $wishlistResource;
+    private $wishlistConfig;
+
+    /**
+     * @param WishlistFactory $wishlistFactory
+     * @param WishlistConfig $wishlistConfig
+     */
+    public function __construct(
+        WishlistFactory $wishlistFactory,
+        WishlistConfig $wishlistConfig
+    ) {
         $this->wishlistFactory = $wishlistFactory;
+        $this->wishlistConfig = $wishlistConfig;
     }
 
     /**
@@ -47,9 +50,13 @@ class WishlistResolver implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
+        if (!$this->wishlistConfig->isEnabled()) {
+            throw new GraphQlInputException(__('The wishlist configuration is currently disabled.'));
+        }
+
         $customerId = $context->getUserId();
 
         /* Guest checking */
@@ -58,11 +65,7 @@ class WishlistResolver implements ResolverInterface
         }
         /** @var Wishlist $wishlist */
         $wishlist = $this->wishlistFactory->create();
-        $this->wishlistResource->load($wishlist, $customerId, 'customer_id');
-
-        if (null === $wishlist->getId()) {
-            return [];
-        }
+        $wishlist->loadByCustomerId($customerId, true);
 
         return [
             'sharing_code' => $wishlist->getSharingCode(),

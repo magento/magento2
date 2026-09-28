@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\MessageQueue\Config\Reader\Xml;
@@ -9,7 +9,7 @@ namespace Magento\Framework\MessageQueue\Config\Reader\Xml;
 /**
  * Schema locator for Publishers
  *
- * @deprecated 100.2.0
+ * @deprecated 103.0.0
  */
 class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 {

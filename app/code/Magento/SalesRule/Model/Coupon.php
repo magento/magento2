@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\SalesRule\Model;
 
@@ -207,7 +207,7 @@ class Coupon extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Get expiration date
      *
      * @return string|null
-     * @deprecated Coupon expiration must follow sales rule expiration date.
+     * @deprecated 101.1.3 Coupon expiration must follow sales rule expiration date.
      */
     public function getExpirationDate()
     {
@@ -219,7 +219,7 @@ class Coupon extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param string $expirationDate
      * @return $this
-     * @deprecated Coupon expiration must follow sales rule expiration date.
+     * @deprecated 101.1.3 Coupon expiration must follow sales rule expiration date.
      */
     public function setExpirationDate($expirationDate)
     {

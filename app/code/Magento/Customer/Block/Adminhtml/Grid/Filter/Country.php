@@ -1,14 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Block\Adminhtml\Grid\Filter;
 
 /**
  * Country customer grid column filter
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Country extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
 {
@@ -34,6 +32,8 @@ class Country extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
     }
 
     /**
+     * Return options
+     *
      * @return array
      */
     protected function _getOptions()

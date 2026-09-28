@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Persistent\Observer;
 
@@ -10,6 +10,8 @@ use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Observer to remove persistent session if guest empties persistent cart previously created and added to by customer.
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class RemoveGuestPersistenceOnEmptyCartObserver implements ObserverInterface
 {
@@ -96,6 +98,8 @@ class RemoveGuestPersistenceOnEmptyCartObserver implements ObserverInterface
         }
 
         if (!$cart || $cart->getItemsCount() == 0) {
+            $this->customerSession->setCustomerId(null)
+                ->setCustomerGroupId(null);
             $this->quoteManager->setGuest();
         }
     }

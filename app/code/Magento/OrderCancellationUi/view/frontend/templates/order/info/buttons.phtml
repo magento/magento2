@@ -1,0 +1,47 @@
+<?php
+/**
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
+ */
+// phpcs:disable Magento2.Templates.ThisInTemplate
+// @codingStandardsIgnoreFile
+
+/** @var \Magento\Sales\Block\Order\Info\Buttons $block */
+/** @var $viewModel \Magento\OrderCancellationUi\ViewModel\Config */
+$viewModel = $block->getViewModel();
+?>
+<div class="actions">
+    <?php $_order = $block->getOrder() ?>
+    <?php if ($this->helper(\Magento\Sales\Helper\Reorder::class)->canReorder($_order->getEntityId())): ?>
+        <a href="#" data-post='<?=
+        /* @noEscape */ $this->helper(\Magento\Framework\Data\Helper\PostHelper::class)
+            ->getPostData($block->getReorderUrl($_order))
+        ?>' class="action order">
+            <span><?= $block->escapeHtml(__('Reorder')) ?></span>
+        </a>
+    <?php endif ?>
+    <?php if ($viewModel->canCancel($_order->getEntityId())): ?>
+        <a href="#" class="cancel-order"
+            id="cancel-order-<?=/* @noEscape */ $_order->getId() ?>" data-mage-init='{
+            "cancelOrderModal":{
+                "url": "<?=/* @noEscape */ $block->getBaseUrl(); ?>",
+                "order_id": "<?= $block->escapeHtml(__($_order->getId())); ?>"
+            }
+        }'>
+            <span><?= $block->escapeHtml(__('Cancel Order')) ?></span>
+        </a>
+    <?php endif ?>
+    <a href="<?= $block->escapeUrl($block->getPrintUrl($_order)) ?>"
+       class="action print"
+       target="_blank"
+       rel="noopener">
+        <span><?= $block->escapeHtml(__('Print Order')) ?></span>
+    </a>
+    <?= $block->getChildHtml() ?>
+</div>
+
+<?php if ($viewModel->canCancel($_order->getEntityId())): ?>
+    <?= $this->getLayout()->createBlock("Magento\Framework\View\Element\Template")->setOrder($_order)
+        ->setReasons($viewModel->getCancellationReasons($_order->getEntityId()))
+        ->setTemplate("Magento_OrderCancellationUi::cancel-order-modal.phtml")->toHtml() ?>
+<?php endif ?>

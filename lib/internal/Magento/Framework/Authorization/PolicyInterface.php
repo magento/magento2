@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Authorization;
 
@@ -9,6 +9,7 @@ namespace Magento\Framework\Authorization;
  * Responsible for internal authorization decision making based on provided role, resource and privilege
  *
  * @api
+ * @since 100.0.2
  */
 interface PolicyInterface
 {

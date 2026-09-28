@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -46,7 +46,7 @@ class FlushCacheByTagsTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->cacheState = $this->getMockForAbstractClass(StateInterface::class);
+        $this->cacheState = $this->createMock(StateInterface::class);
         $this->frontendPool = $this->createMock(FrontendPool::class);
         $this->tagResolver = $this->createMock(Resolver::class);
 
@@ -61,21 +61,19 @@ class FlushCacheByTagsTest extends TestCase
     /**
      * @return void
      */
-    public function testAroundSave(): void
+    public function testAfterSave(): void
     {
         $resource = $this->getMockBuilder(AbstractResource::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $model = $this->getMockBuilder(AbstractModel::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->tagResolver->expects($this->atLeastOnce())->method('getTags')->with($model)->willReturn([]);
 
-        $result = $this->plugin->aroundSave(
+        $result = $this->plugin->afterSave(
             $resource,
-            function () use ($resource) {
-                return $resource;
-            },
+            $resource,
             $model
         );
 
@@ -85,21 +83,19 @@ class FlushCacheByTagsTest extends TestCase
     /**
      * @return void
      */
-    public function testAroundDelete(): void
+    public function testAfterDelete(): void
     {
         $resource = $this->getMockBuilder(AbstractResource::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $model = $this->getMockBuilder(AbstractModel::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->tagResolver->expects($this->atLeastOnce())->method('getTags')->with($model)->willReturn([]);
 
-        $result = $this->plugin->aroundDelete(
+        $result = $this->plugin->afterDelete(
             $resource,
-            function () use ($resource) {
-                return $resource;
-            },
+            $resource,
             $model
         );
 

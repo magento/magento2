@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Checkout\Block\Cart;
 
@@ -11,6 +11,7 @@ use Magento\Captcha\Block\Captcha;
  * Block with apply-coupon form.
  *
  * @api
+ * @since 100.0.2
  */
 class Coupon extends \Magento\Checkout\Block\Cart\AbstractCart
 {
@@ -44,6 +45,7 @@ class Coupon extends \Magento\Checkout\Block\Cart\AbstractCart
 
     /**
      * @inheritDoc
+     * @since 100.3.2
      */
     protected function _prepareLayout()
     {

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\CheckoutAgreements\Api;
@@ -13,6 +13,7 @@ namespace Magento\CheckoutAgreements\Api;
  * search filters without predefined limitations.
  *
  * @api
+ * @since 100.3.0
  */
 interface CheckoutAgreementsListInterface
 {
@@ -21,6 +22,7 @@ interface CheckoutAgreementsListInterface
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\CheckoutAgreements\Api\Data\AgreementInterface[]
+     * @since 100.3.0
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria) : array;
 }

@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 define([
@@ -23,6 +23,9 @@ define([
         },
         addressOptions = addressList().filter(function (address) {
             return address.getType() === 'customer-address';
+        }),
+        addressDefaultIndex = addressOptions.findIndex(function (address) {
+            return address.isDefaultBilling();
         });
 
     return Component.extend({
@@ -53,7 +56,8 @@ define([
             this._super()
                 .observe('selectedAddress isNewAddressSelected')
                 .observe({
-                    isNewAddressSelected: !customer.isLoggedIn() || !addressOptions.length
+                    isNewAddressSelected: !customer.isLoggedIn() || !addressOptions.length,
+                    selectedAddress: this.addressOptions[addressDefaultIndex]
                 });
 
             return this;

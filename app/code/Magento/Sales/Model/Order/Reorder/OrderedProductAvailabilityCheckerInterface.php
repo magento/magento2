@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\Order\Reorder;
 
@@ -9,7 +9,7 @@ use Magento\Sales\Model\Order\Item;
 
 /**
  * @api
- * @since 100.2.0
+ * @since 101.0.0
  */
 interface OrderedProductAvailabilityCheckerInterface
 {
@@ -19,7 +19,7 @@ interface OrderedProductAvailabilityCheckerInterface
      *
      * @param Item $item
      * @return bool
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function isAvailable(Item $item);
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Customer\Model\Address;
@@ -30,11 +30,11 @@ class CompositeValidator implements ValidatorInterface
      */
     public function validate(AbstractAddress $address)
     {
-        $errors = [[]];
+        $errors = [];
         foreach ($this->validators as $validator) {
             $errors[] = $validator->validate($address);
         }
 
-        return array_merge(...$errors);
+        return array_merge([], ...$errors);
     }
 }

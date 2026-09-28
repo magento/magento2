@@ -1,0 +1,384 @@
+{
+  "RateResponse": {
+    "Response": {
+      "ResponseStatus": {
+        "Code": "1",
+        "Description": "Success"
+      },
+      "Alert": [
+        {
+          "Code": "119001",
+          "Description": "Additional Handling has automatically been set on Package 1."
+        },
+        {
+          "Code": "110971",
+          "Description": "Your invoice may vary from the displayed reference rates"
+        }
+      ],
+      "TransactionReference": {
+        "CustomerContext": "Rating and Service"
+      }
+    },
+    "RatedShipment": [
+      {
+        "Service": {
+          "Code": "12",
+          "Description": ""
+        },
+        "RatedShipmentAlert": [
+          {
+            "Code": "119001",
+            "Description": "Additional Handling has automatically been set on Package 1."
+          },
+          {
+            "Code": "110971",
+            "Description": "Your invoice may vary from the displayed reference rates"
+          }
+        ],
+        "BillingWeight": {
+          "UnitOfMeasurement": {
+            "Code": "LBS",
+            "Description": "Pounds"
+          },
+          "Weight": "100.0"
+        },
+        "TransportationCharges": {
+          "CurrencyCode": "USD",
+          "MonetaryValue": "156.54"
+        },
+        "ServiceOptionsCharges": {
+          "CurrencyCode": "USD",
+          "MonetaryValue": "32.50"
+        },
+        "TotalCharges": {
+          "CurrencyCode": "USD",
+          "MonetaryValue": "189.04"
+        },
+        "GuaranteedDelivery": {
+          "BusinessDaysInTransit": "3"
+        },
+        "RatedPackage": {
+          "TransportationCharges": {
+            "CurrencyCode": "USD",
+            "MonetaryValue": "156.54"
+          },
+          "ServiceOptionsCharges": {
+            "CurrencyCode": "USD",
+            "MonetaryValue": "32.50"
+          },
+          "TotalCharges": {
+            "CurrencyCode": "USD",
+            "MonetaryValue": "189.04"
+          },
+          "Weight": "100.0",
+          "BillingWeight": {
+            "UnitOfMeasurement": {
+              "Code": "LBS",
+              "Description": "Pounds"
+            },
+            "Weight": "100.0"
+          }
+        }
+      },
+      {
+        "Service": {
+          "Code": "14",
+          "Description": ""
+        },
+        "RatedShipmentAlert": [
+          {
+            "Code": "119001",
+            "Description": "Additional Handling has automatically been set on Package 1."
+          },
+          {
+            "Code": "110971",
+            "Description": "Your invoice may vary from the displayed reference rates"
+          }
+        ],
+        "BillingWeight": {
+          "UnitOfMeasurement": {
+            "Code": "LBS",
+            "Description": "Pounds"
+          },
+          "Weight": "100.0"
+        },
+        "TransportationCharges": {
+          "CurrencyCode": "USD",
+          "MonetaryValue": "352.31"
+        },
+        "ServiceOptionsCharges": {
+          "CurrencyCode": "USD",
+          "MonetaryValue": "32.50"
+        },
+        "TotalCharges": {
+          "CurrencyCode": "USD",
+          "MonetaryValue": "384.81"
+        },
+        "GuaranteedDelivery": {
+          "BusinessDaysInTransit": "1",
+          "DeliveryByTime": "8:00 A.M."
+        },
+        "RatedPackage": {
+          "TransportationCharges": {
+            "CurrencyCode": "USD",
+            "MonetaryValue": "352.31"
+          },
+          "ServiceOptionsCharges": {
+            "CurrencyCode": "USD",
+            "MonetaryValue": "32.50"
+          },
+          "TotalCharges": {
+            "CurrencyCode": "USD",
+            "MonetaryValue": "384.81"
+          },
+          "Weight": "100.0",
+          "BillingWeight": {
+            "UnitOfMeasurement": {
+              "Code": "LBS",
+              "Description": "Pounds"
+            },
+            "Weight": "100.0"
+          }
+        }
+      },
+      {
+        "Service": {
+          "Code": "03",
+          "Description": ""
+        },
+        "RatedShipmentAlert": [
+          {
+            "Code": "119001",
+            "Description": "Additional Handling has automatically been set on Package 1."
+          },
+          {
+            "Code": "110971",
+            "Description": "Your invoice may vary from the displayed reference rates"
+          }
+        ],
+        "BillingWeight": {
+          "UnitOfMeasurement": {
+            "Code": "LBS",
+            "Description": "Pounds"
+          },
+          "Weight": "100.0"
+        },
+        "TransportationCharges": {
+          "CurrencyCode": "USD",
+          "MonetaryValue": "82.51"
+        },
+        "ServiceOptionsCharges": {
+          "CurrencyCode": "USD",
+          "MonetaryValue": "32.50"
+        },
+        "TotalCharges": {
+          "CurrencyCode": "USD",
+          "MonetaryValue": "115.01"
+        },
+        "RatedPackage": {
+          "TransportationCharges": {
+            "CurrencyCode": "USD",
+            "MonetaryValue": "82.51"
+          },
+          "ServiceOptionsCharges": {
+            "CurrencyCode": "USD",
+            "MonetaryValue": "32.50"
+          },
+          "TotalCharges": {
+            "CurrencyCode": "USD",
+            "MonetaryValue": "115.01"
+          },
+          "Weight": "100.0",
+          "BillingWeight": {
+            "UnitOfMeasurement": {
+              "Code": "LBS",
+              "Description": "Pounds"
+            },
+            "Weight": "100.0"
+          }
+        }
+      },
+      {
+        "Service": {
+          "Code": "13",
+          "Description": ""
+        },
+        "RatedShipmentAlert": [
+          {
+            "Code": "119001",
+            "Description": "Additional Handling has automatically been set on Package 1."
+          },
+          {
+            "Code": "110971",
+            "Description": "Your invoice may vary from the displayed reference rates"
+          }
+        ],
+        "BillingWeight": {
+          "UnitOfMeasurement": {
+            "Code": "LBS",
+            "Description": "Pounds"
+          },
+          "Weight": "100.0"
+        },
+        "TransportationCharges": {
+          "CurrencyCode": "USD",
+          "MonetaryValue": "311.33"
+        },
+        "ServiceOptionsCharges": {
+          "CurrencyCode": "USD",
+          "MonetaryValue": "32.50"
+        },
+        "TotalCharges": {
+          "CurrencyCode": "USD",
+          "MonetaryValue": "343.83"
+        },
+        "GuaranteedDelivery": {
+          "BusinessDaysInTransit": "1"
+        },
+        "RatedPackage": {
+          "TransportationCharges": {
+            "CurrencyCode": "USD",
+            "MonetaryValue": "311.33"
+          },
+          "ServiceOptionsCharges": {
+            "CurrencyCode": "USD",
+            "MonetaryValue": "32.50"
+          },
+          "TotalCharges": {
+            "CurrencyCode": "USD",
+            "MonetaryValue": "343.83"
+          },
+          "Weight": "100.0",
+          "BillingWeight": {
+            "UnitOfMeasurement": {
+              "Code": "LBS",
+              "Description": "Pounds"
+            },
+            "Weight": "100.0"
+          }
+        }
+      },
+      {
+        "Service": {
+          "Code": "01",
+          "Description": ""
+        },
+        "RatedShipmentAlert": [
+          {
+            "Code": "119001",
+            "Description": "Additional Handling has automatically been set on Package 1."
+          },
+          {
+            "Code": "110971",
+            "Description": "Your invoice may vary from the displayed reference rates"
+          }
+        ],
+        "BillingWeight": {
+          "UnitOfMeasurement": {
+            "Code": "LBS",
+            "Description": "Pounds"
+          },
+          "Weight": "100.0"
+        },
+        "TransportationCharges": {
+          "CurrencyCode": "USD",
+          "MonetaryValue": "318.04"
+        },
+        "ServiceOptionsCharges": {
+          "CurrencyCode": "USD",
+          "MonetaryValue": "32.50"
+        },
+        "TotalCharges": {
+          "CurrencyCode": "USD",
+          "MonetaryValue": "350.54"
+        },
+        "GuaranteedDelivery": {
+          "BusinessDaysInTransit": "1",
+          "DeliveryByTime": "10:30 A.M."
+        },
+        "RatedPackage": {
+          "TransportationCharges": {
+            "CurrencyCode": "USD",
+            "MonetaryValue": "318.04"
+          },
+          "ServiceOptionsCharges": {
+            "CurrencyCode": "USD",
+            "MonetaryValue": "32.50"
+          },
+          "TotalCharges": {
+            "CurrencyCode": "USD",
+            "MonetaryValue": "350.54"
+          },
+          "Weight": "100.0",
+          "BillingWeight": {
+            "UnitOfMeasurement": {
+              "Code": "LBS",
+              "Description": "Pounds"
+            },
+            "Weight": "100.0"
+          }
+        }
+      },
+      {
+        "Service": {
+          "Code": "02",
+          "Description": ""
+        },
+        "RatedShipmentAlert": [
+          {
+            "Code": "119001",
+            "Description": "Additional Handling has automatically been set on Package 1."
+          },
+          {
+            "Code": "110971",
+            "Description": "Your invoice may vary from the displayed reference rates"
+          }
+        ],
+        "BillingWeight": {
+          "UnitOfMeasurement": {
+            "Code": "LBS",
+            "Description": "Pounds"
+          },
+          "Weight": "100.0"
+        },
+        "TransportationCharges": {
+          "CurrencyCode": "USD",
+          "MonetaryValue": "207.82"
+        },
+        "ServiceOptionsCharges": {
+          "CurrencyCode": "USD",
+          "MonetaryValue": "32.50"
+        },
+        "TotalCharges": {
+          "CurrencyCode": "USD",
+          "MonetaryValue": "240.32"
+        },
+        "GuaranteedDelivery": {
+          "BusinessDaysInTransit": "2"
+        },
+        "RatedPackage": {
+          "TransportationCharges": {
+            "CurrencyCode": "USD",
+            "MonetaryValue": "207.82"
+          },
+          "ServiceOptionsCharges": {
+            "CurrencyCode": "USD",
+            "MonetaryValue": "32.50"
+          },
+          "TotalCharges": {
+            "CurrencyCode": "USD",
+            "MonetaryValue": "240.32"
+          },
+          "Weight": "100.0",
+          "BillingWeight": {
+            "UnitOfMeasurement": {
+              "Code": "LBS",
+              "Description": "Pounds"
+            },
+            "Weight": "100.0"
+          }
+        }
+      }
+    ]
+  }
+}

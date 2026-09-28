@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -34,7 +34,7 @@ class ResetAttemptForFrontendObserverTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/Captcha/_files/failed_logins_frontend.php
      */
-    public function testSuccesfulLoginRemovesFailedAttempts()
+    public function testSuccessfulLoginRemovesFailedAttempts()
     {
         $customerEmail = 'mageuser@dummy.com';
         $customerFactory = $this->objectManager->get(CustomerFactory::class);

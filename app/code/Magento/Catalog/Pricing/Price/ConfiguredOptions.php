@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -28,7 +28,7 @@ class ConfiguredOptions
         $value = 0.;
         $optionIds = $item->getOptionByCode('option_ids');
         if ($optionIds) {
-            foreach (explode(',', $optionIds->getValue()) as $optionId) {
+            foreach (explode(',', $optionIds->getValue() ?? '') as $optionId) {
                 $option = $product->getOptionById($optionId);
                 if ($option !== null) {
                     $itemOption = $item->getOptionByCode('option_' . $option->getId());

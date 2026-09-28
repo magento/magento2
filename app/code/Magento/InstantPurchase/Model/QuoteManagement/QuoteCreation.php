@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\InstantPurchase\Model\QuoteManagement;
 
@@ -16,6 +16,7 @@ use Magento\Store\Model\Store;
  * Create Quote for instance purchase.
  *
  * @api May be used for pluginization.
+ * @since 100.2.0
  */
 class QuoteCreation
 {
@@ -43,6 +44,7 @@ class QuoteCreation
      * @param Address $billingAddress
      * @return Quote
      * @throws LocalizedException if quote can not be created.
+     * @since 100.2.0
      */
     public function createQuote(
         Store $store,
@@ -55,9 +57,11 @@ class QuoteCreation
         $quote->setCustomer($customer->getDataModel());
         $quote->setCustomerIsGuest(0);
         $quote->getShippingAddress()
-            ->importCustomerAddressData($shippingAddress->getDataModel());
+            ->importCustomerAddressData($shippingAddress->getDataModel())
+            ->setCollectShippingRates(true);
         $quote->getBillingAddress()
-            ->importCustomerAddressData($billingAddress->getDataModel());
+            ->importCustomerAddressData($billingAddress->getDataModel())
+            ->setCollectShippingRates(true);
         $quote->setInventoryProcessed(false);
         return $quote;
     }

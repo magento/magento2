@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Checkout\Model\Cart;
 
@@ -14,6 +14,7 @@ use Magento\Quote\Model\Quote;
  * @author      Magento Core Team <core@magentocommerce.com>
  * @deprecated 100.1.0 Use \Magento\Quote\Api\Data\CartInterface instead
  * @see \Magento\Quote\Api\Data\CartInterface
+ * @since 100.0.2
  */
 interface CartInterface
 {

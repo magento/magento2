@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Setup\Module\Dependency;
 
@@ -95,7 +95,7 @@ class ServiceLocator
             self::$circularDependenciesReportBuilder = new CircularReport\Builder(
                 self::getComposerJsonParser(),
                 new CircularReport\Writer(self::getCsvWriter()),
-                new CircularTool([], null)
+                new CircularTool()
             );
         }
         return self::$circularDependenciesReportBuilder;

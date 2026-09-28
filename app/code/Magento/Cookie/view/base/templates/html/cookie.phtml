@@ -1,17 +1,20 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Cookie settings initialization script
  *
  * @var $block \Magento\Framework\View\Element\Js\Cookie
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
+$isCookieSecure = $block->getSessionConfig()->getCookieSecure() ? 'true' : 'false';
+$scriptString = "
+    window.cookiesConfig = window.cookiesConfig || {};
+    window.cookiesConfig.secure = $isCookieSecure;
+";
 ?>
 
-<script>
-    window.cookiesConfig = window.cookiesConfig || {};
-    window.cookiesConfig.secure = <?= /* @noEscape */ $block->getSessionConfig()->getCookieSecure() ? 'true' : 'false' ?>;
-</script>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>

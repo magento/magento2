@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Checkout\Block\Checkout;
 
@@ -412,7 +412,7 @@ class AttributeMerger
      *
      * @param array $countryOptions
      * @return array
-     * @deprecated 100.2.0
+     * @deprecated 100.1.7
      */
     protected function orderCountryOptions(array $countryOptions)
     {

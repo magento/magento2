@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Framework\Data\Test\Unit\Argument;
 
 use Magento\Framework\TestFramework\Unit\Utility\XsdValidator;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class XsdTest extends TestCase
 {
@@ -34,9 +35,8 @@ class XsdTest extends TestCase
 
     /**
      * @param string $xmlString
-     * @param array $expectedError
-     * @dataProvider schemaCorrectlyIdentifiesInvalidTypesXmlDataProvider
-     */
+     * @param array $expectedError     */
+    #[DataProvider('schemaCorrectlyIdentifiesInvalidTypesXmlDataProvider')]
     public function testSchemaCorrectlyIdentifiesInvalidTypesXml($xmlString, $expectedError)
     {
         $actualError = $this->_xsdValidator->validate($this->_typesXsdSchema, $xmlString);
@@ -48,7 +48,7 @@ class XsdTest extends TestCase
      *
      * @return array
      */
-    public function schemaCorrectlyIdentifiesInvalidTypesXmlDataProvider()
+    public static function schemaCorrectlyIdentifiesInvalidTypesXmlDataProvider()
     {
         return include __DIR__ . '/_files/typesInvalidArray.php';
     }

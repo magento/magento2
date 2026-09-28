@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create;
 
@@ -11,21 +11,16 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
  * Adminhtml order create gift message block
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Giftmessage extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
 {
     /**
-     * Gift message save
-     *
      * @var \Magento\GiftMessage\Model\Save
      */
     protected $_giftMessageSave;
 
     /**
-     * Message helper
-     *
      * @var \Magento\GiftMessage\Helper\Message
      */
     protected $_messageHelper;
@@ -50,6 +45,7 @@ class Giftmessage extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCr
     ) {
         $this->_messageHelper = $messageHelper;
         $this->_giftMessageSave = $giftMessageSave;
+        $data['giftMessageHelper'] = $messageHelper;
         parent::__construct($context, $sessionQuote, $orderCreate, $priceCurrency, $data);
     }
 

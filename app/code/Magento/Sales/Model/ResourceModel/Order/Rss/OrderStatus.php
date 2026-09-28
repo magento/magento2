@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\ResourceModel\Order\Rss;
 
@@ -9,8 +9,6 @@ use Magento\Framework\App\ResourceConnection;
 
 /**
  * Order Rss Resource Model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class OrderStatus
 {
@@ -43,13 +41,13 @@ class OrderStatus
         $commentSelects = [];
         foreach (['invoice', 'shipment', 'creditmemo'] as $entityTypeCode) {
             $mainTable = $resource->getTableName('sales_' . $entityTypeCode);
-            $slaveTable = $resource->getTableName('sales_' . $entityTypeCode . '_comment');
+            $commentTable = $resource->getTableName('sales_' . $entityTypeCode . '_comment');
             $select = $read->select()->from(
                 ['main' => $mainTable],
                 ['entity_id' => 'order_id', 'entity_type_code' => new \Zend_Db_Expr("'{$entityTypeCode}'")]
             )->join(
-                ['slave' => $slaveTable],
-                'main.entity_id = slave.parent_id',
+                ['comment' => $commentTable],
+                'main.entity_id = comment.parent_id',
                 $fields
             )->where(
                 'main.order_id = ?',

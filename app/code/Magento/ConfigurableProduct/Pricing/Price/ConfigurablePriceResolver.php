@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\ConfigurableProduct\Pricing\Price;
@@ -19,13 +19,13 @@ class ConfigurablePriceResolver implements PriceResolverInterface
 
     /**
      * @var PriceCurrencyInterface
-     * @deprecated 100.1.1
+     * @deprecated 100.0.2
      */
     protected $priceCurrency;
 
     /**
      * @var Configurable
-     * @deprecated 100.1.1
+     * @deprecated 100.0.2
      */
     protected $configurable;
 
@@ -44,7 +44,7 @@ class ConfigurablePriceResolver implements PriceResolverInterface
         PriceResolverInterface $priceResolver,
         Configurable $configurable,
         PriceCurrencyInterface $priceCurrency,
-        LowestPriceOptionsProviderInterface $lowestPriceOptionsProvider = null
+        ?LowestPriceOptionsProviderInterface $lowestPriceOptionsProvider = null
     ) {
         $this->priceResolver = $priceResolver;
         $this->configurable = $configurable;

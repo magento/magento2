@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\GiftMessage\Block\Adminhtml\Sales\Order\Create;
 
@@ -9,7 +9,6 @@ namespace Magento\GiftMessage\Block\Adminhtml\Sales\Order\Create;
  * Adminhtml sales order create gift message form
  *
  * @api
- * @author     Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Form extends \Magento\Backend\Block\Template

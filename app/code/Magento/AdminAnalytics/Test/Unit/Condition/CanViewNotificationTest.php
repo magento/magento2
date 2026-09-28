@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\AdminAnalytics\Model\Viewer\Log;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -35,11 +36,10 @@ class CanViewNotificationTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->cacheStorageMock = $this->getMockBuilder(CacheInterface::class)
-            ->getMockForAbstractClass();
+        $this->cacheStorageMock = $this->createMock(CacheInterface::class);
         $this->logMock = $this->createMock(Log::class);
         $this->viewerLoggerMock = $this->createMock(Logger::class);
-        $this->productMetadataMock = $this->getMockForAbstractClass(ProductMetadataInterface::class);
+        $this->productMetadataMock = $this->createMock(ProductMetadataInterface::class);
         $objectManager = new ObjectManager($this);
         $this->canViewNotification = $objectManager->getObject(
             CanViewNotification::class,
@@ -55,8 +55,8 @@ class CanViewNotificationTest extends TestCase
      * @param $expected
      * @param $cacheResponse
      * @param $logExists
-     * @dataProvider isVisibleProvider
      */
+    #[DataProvider('isVisibleProvider')]
     public function testIsVisibleLoadDataFromLog($expected, $cacheResponse, $logExists)
     {
         $this->cacheStorageMock->expects($this->once())
@@ -75,7 +75,7 @@ class CanViewNotificationTest extends TestCase
     /**
      * @return array
      */
-    public function isVisibleProvider()
+    public static function isVisibleProvider()
     {
         return [
             [true, false, false],

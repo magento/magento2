@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Model\Product\Option\Type;
@@ -58,7 +58,7 @@ class Text extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         parent::validateUserValue($values);
 
         $option = $this->getOption();
-        $value = trim($this->getUserValue());
+        $value = $this->getUserValue() !== null ? trim($this->getUserValue()) : '';
 
         // Check requires option to have some value
         if (strlen($value) == 0 && $option->getIsRequire() && !$this->getSkipCheckRequiredOption()) {

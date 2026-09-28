@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Framework\View\Asset\NotationResolver\Module;
 use Magento\Framework\View\Asset\PreProcessor\Chain;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ImportTest extends TestCase
 {
@@ -41,7 +42,7 @@ class ImportTest extends TestCase
     protected function setUp(): void
     {
         $this->notationResolver = $this->createMock(Module::class);
-        $contextMock = $this->getMockForAbstractClass(
+        $contextMock = $this->createMock(
             ContextInterface::class,
             [],
             '',
@@ -64,9 +65,8 @@ class ImportTest extends TestCase
      * @param string $foundPath
      * @param string $resolvedPath
      * @param string $expectedContent
-     *
-     * @dataProvider processDataProvider
-     */
+     *     */
+    #[DataProvider('processDataProvider')]
     public function testProcess($originalContent, $foundPath, $resolvedPath, $expectedContent)
     {
         $chain = new Chain(
@@ -91,7 +91,7 @@ class ImportTest extends TestCase
     /**
      * @return array
      */
-    public function processDataProvider()
+    public static function processDataProvider()
     {
         return [
             'non-modular notation, no extension' => [

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Controller;
@@ -14,6 +14,7 @@ use Magento\Framework\App\ResponseInterface;
  * and be able to set it to the HTTP response
  *
  * @api
+ * @since 100.0.2
  */
 interface ResultInterface
 {

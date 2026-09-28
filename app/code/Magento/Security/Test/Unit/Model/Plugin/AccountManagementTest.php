@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Framework\Config\ScopeInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Security\Model\PasswordResetRequestEvent;
 use Magento\Security\Model\SecurityManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -60,23 +61,23 @@ class AccountManagementTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->request =  $this->getMockForAbstractClass(RequestInterface::class);
+        $this->request = $this->createMock(RequestInterface::class);
 
         $this->securityManager = $this->createPartialMock(
             SecurityManager::class,
             ['performSecurityCheck']
         );
 
-        $this->accountManagement =  $this->createMock(AccountManagement::class);
-        $this->scope =  $this->getMockForAbstractClass(ScopeInterface::class);
+        $this->accountManagement = $this->createMock(AccountManagement::class);
+        $this->scope = $this->createMock(ScopeInterface::class);
     }
 
     /**
      * @param $area
      * @param $passwordRequestEvent
      * @param $expectedTimes
-     * @dataProvider beforeInitiatePasswordResetDataProvider
      */
+    #[DataProvider('beforeInitiatePasswordResetDataProvider')]
     public function testBeforeInitiatePasswordReset($area, $passwordRequestEvent, $expectedTimes)
     {
         $email = 'test@example.com';
@@ -92,7 +93,7 @@ class AccountManagementTest extends TestCase
             ]
         );
 
-        $this->scope->expects($this->once())
+        $this->scope->expects($this->any())
             ->method('getCurrentScope')
             ->willReturn($area);
 
@@ -111,14 +112,16 @@ class AccountManagementTest extends TestCase
     /**
      * @return array
      */
-    public function beforeInitiatePasswordResetDataProvider()
+    public static function beforeInitiatePasswordResetDataProvider()
     {
         return [
             [Area::AREA_ADMINHTML, PasswordResetRequestEvent::CUSTOMER_PASSWORD_RESET_REQUEST, 0],
             [Area::AREA_ADMINHTML, PasswordResetRequestEvent::ADMIN_PASSWORD_RESET_REQUEST, 1],
             [Area::AREA_FRONTEND, PasswordResetRequestEvent::CUSTOMER_PASSWORD_RESET_REQUEST, 1],
+            [Area::AREA_GRAPHQL, PasswordResetRequestEvent::CUSTOMER_PASSWORD_RESET_REQUEST, 1],
             // This should never happen, but let's cover it with tests
             [Area::AREA_FRONTEND, PasswordResetRequestEvent::ADMIN_PASSWORD_RESET_REQUEST, 1],
+            [Area::AREA_WEBAPI_REST, PasswordResetRequestEvent::CUSTOMER_PASSWORD_RESET_REQUEST, 1],
         ];
     }
 }

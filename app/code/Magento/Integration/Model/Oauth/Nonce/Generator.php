@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Integration\Model\Oauth\Nonce;
 
@@ -56,7 +56,7 @@ class Generator implements NonceGeneratorInterface
     /**
      * {@inheritdoc}
      */
-    public function generateNonce(ConsumerInterface $consumer = null)
+    public function generateNonce(?ConsumerInterface $consumer = null)
     {
         return $this->_oauthHelper->generateRandomString($this->_nonceLength);
     }

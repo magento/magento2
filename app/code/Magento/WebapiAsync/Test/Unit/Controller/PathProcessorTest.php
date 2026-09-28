@@ -1,7 +1,7 @@
 <?php
-/***
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -13,6 +13,7 @@ use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Webapi\Controller\PathProcessor;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -31,38 +32,37 @@ class PathProcessorTest extends TestCase
     private $model;
 
     /** @var string */
-    private $arbitraryStoreCode = 'myStoreCode';
+    private static $arbitraryStoreCode = 'myStoreCode';
 
     /** @var string */
     private $endpointPath = '/async/V1/path/of/endpoint';
 
     protected function setUp(): void
     {
-        $store = $this->getMockForAbstractClass(StoreInterface::class);
+        $store = $this->createMock(StoreInterface::class);
         $store->method('getId')->willReturn(2);
 
         $this->storeManagerMock = $this->createConfiguredMock(
             StoreManagerInterface::class,
             [
-                'getStores' => [$this->arbitraryStoreCode => 'store object', 'default' => 'default store object'],
+                'getStores' => [self::$arbitraryStoreCode => 'store object', 'default' => 'default store object'],
                 'getStore'  => $store,
             ]
         );
         $this->storeManagerMock->expects($this->once())->method('getStores');
 
-        $this->localeResolverMock = $this->getMockForAbstractClass(ResolverInterface::class);
+        $this->localeResolverMock = $this->createMock(ResolverInterface::class);
         $this->localeResolverMock->method('emulate')->with(2);
 
         $this->model = new PathProcessor($this->storeManagerMock, $this->localeResolverMock);
     }
 
     /**
-     * @dataProvider processPathDataProvider
-     *
      * @param string $storeCodeInPath
      * @param string $storeCodeSet
      * @param int $setCurrentStoreCallCtr
      */
+    #[DataProvider('processPathDataProvider')]
     public function testAllStoreCode($storeCodeInPath, $storeCodeSet, $setCurrentStoreCallCtr = 1)
     {
         $storeCodeInPath = !$storeCodeInPath ?: '/' . $storeCodeInPath; // add leading slash if store code not empty
@@ -77,12 +77,12 @@ class PathProcessorTest extends TestCase
     /**
      * @return array
      */
-    public function processPathDataProvider()
+    public static function processPathDataProvider()
     {
         return [
             'All store code'              => ['all', Store::ADMIN_CODE],
             'Default store code'          => ['', 'default', 0],
-            'Arbitrary store code'        => [$this->arbitraryStoreCode, $this->arbitraryStoreCode],
+            'Arbitrary store code'        => [self::$arbitraryStoreCode, self::$arbitraryStoreCode],
             'Explicit default store code' => ['default', 'default'],
         ];
     }

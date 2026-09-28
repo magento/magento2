@@ -1,18 +1,21 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Catalog textarea attribute WYSIWYG button
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Block\Adminhtml\Helper\Form;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+
 /**
  * Wysiwyg helper.
+ *
+ * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  */
 class Wysiwyg extends \Magento\Framework\Data\Form\Element\Textarea
 {
@@ -41,6 +44,11 @@ class Wysiwyg extends \Magento\Framework\Data\Form\Element\Textarea
     protected $_layout;
 
     /**
+     * @var SecureHtmlRenderer
+     */
+    protected $secureRenderer;
+
+    /**
      * @param \Magento\Framework\Data\Form\Element\Factory $factoryElement
      * @param \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection
      * @param \Magento\Framework\Escaper $escaper
@@ -49,6 +57,7 @@ class Wysiwyg extends \Magento\Framework\Data\Form\Element\Textarea
      * @param \Magento\Framework\Module\Manager $moduleManager
      * @param \Magento\Backend\Helper\Data $backendData
      * @param array $data
+     * @param SecureHtmlRenderer|null $secureRenderer
      */
     public function __construct(
         \Magento\Framework\Data\Form\Element\Factory $factoryElement,
@@ -58,13 +67,15 @@ class Wysiwyg extends \Magento\Framework\Data\Form\Element\Textarea
         \Magento\Framework\View\LayoutInterface $layout,
         \Magento\Framework\Module\Manager $moduleManager,
         \Magento\Backend\Helper\Data $backendData,
-        array $data = []
+        array $data = [],
+        ?SecureHtmlRenderer $secureRenderer = null
     ) {
         $this->_wysiwygConfig = $wysiwygConfig;
         $this->_layout = $layout;
         $this->_moduleManager = $moduleManager;
         $this->_backendData = $backendData;
         parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
+        $this->secureRenderer = $secureRenderer ?? ObjectManager::getInstance()->get(SecureHtmlRenderer::class);
     }
 
     /**
@@ -95,8 +106,7 @@ class Wysiwyg extends \Magento\Framework\Data\Form\Element\Textarea
                     ]
                 ]
             )->toHtml();
-            $html .= <<<HTML
-<script>
+            $scriptString = <<<HTML
 require([
     'jquery',
     'mage/adminhtml/wysiwyg/tiny_mce/setup'
@@ -119,9 +129,10 @@ jQuery('#{$this->getHtmlId()}')
         editor
     );
 });
-</script>
 HTML;
+            $html .= /* @noEscape */ $this->secureRenderer->renderTag('script', [], $scriptString, false);
         }
+
         return $html;
     }
 

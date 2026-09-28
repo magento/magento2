@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 define([
@@ -41,6 +41,7 @@ define([
                         $(this).attr('data-bind', html);
                         $(this).html(html);
                     });
+                    $(welcomeElems).append(' <span><a ' + window.notYouLink + '>' + $t('Not you?') + '</a>');
                 }
             }
         },

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\TestModuleOverrideConfig\MagentoDataFixture;
 
 use Magento\TestModuleOverrideConfig\AbstractOverridesTest;
 use Magento\TestModuleOverrideConfig\Model\FixtureCallStorage;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class checks that magentoConfigFixtures can be placed into certain place using override config
@@ -27,13 +28,12 @@ class SortFixturesTest extends AbstractOverridesTest
     {
         parent::setUp();
 
+        // phpstan:ignore "Class Magento\TestModuleOverrideConfig\Model\FixtureCallStorage not found."
         $this->fixtureCallStorage = $this->objectManager->get(FixtureCallStorage::class);
     }
 
     /**
      * Checks that fixtures can be placed to specific place according to config
-     *
-     * @dataProvider sortFixturesProvider
      *
      * @magentoDataFixture Magento/TestModuleOverrideConfig/_files/fixture1_first_module.php
      * @magentoDataFixture Magento/TestModuleOverrideConfig/_files/fixture2_first_module.php
@@ -42,6 +42,7 @@ class SortFixturesTest extends AbstractOverridesTest
      * @param array $sortedFixtures
      * @return void
      */
+    #[DataProvider('sortFixturesProvider')]
     public function testSortFixtures(array $sortedFixtures): void
     {
         $this->assertEquals($sortedFixtures, $this->fixtureCallStorage->getStorage());
@@ -50,26 +51,28 @@ class SortFixturesTest extends AbstractOverridesTest
     /**
      * @return array
      */
-    public function sortFixturesProvider(): array
+    public static function sortFixturesProvider(): array
     {
         return [
             'first_data_set' => [
-                'sorted_fixtures' => [
+                'sortedFixtures' => [
                     'fixture3_second_module.php',
                     'fixture1_first_module.php',
                     'fixture1_second_module.php',
                     'fixture2_first_module.php',
                     'fixture1_third_module.php',
                     'fixture3_first_module.php',
+                    'global_fixture_first_module.php',// globally added fixture
                     'fixture2_second_module.php',
                 ],
             ],
             'second_data_set' => [
-                'sorted_fixtures' => [
+                'sortedFixtures' => [
                     'fixture1_first_module.php',
                     'fixture1_second_module.php',
                     'fixture2_first_module.php',
                     'fixture3_first_module.php',
+                    'global_fixture_first_module.php',// globally added fixture
                     'fixture2_second_module.php',
                 ],
             ],

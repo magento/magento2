@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +9,8 @@ namespace Magento\TestModuleOverrideConfig\Model;
 
 /**
  * Class represent simple container to save data
+ *
+ * phpcs:disable Generic.Classes.DuplicateClassName
  */
 class FixtureCallStorage
 {
@@ -30,11 +31,11 @@ class FixtureCallStorage
      * Get fixture position in storage
      *
      * @param string $fixture
-     * @return false|int
+     * @return null|int
      */
-    public function getFixturePosition(string $fixture)
+    public function getFixturePosition(string $fixture): ?int
     {
-        return array_search($fixture, $this->storage);
+        return array_search($fixture, $this->storage) ?: null;
     }
 
     /**

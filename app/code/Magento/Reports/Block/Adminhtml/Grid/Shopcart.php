@@ -1,14 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Reports\Block\Adminhtml\Grid;
 
 /**
  * Adminhtml shopping carts report grid block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Shopcart extends \Magento\Backend\Block\Widget\Grid\Extended
 {
@@ -28,6 +26,7 @@ class Shopcart extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * StoreIds setter
+     *
      * @codeCoverageIgnore
      *
      * @param array $storeIds
@@ -46,6 +45,10 @@ class Shopcart extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     public function getCurrentCurrencyCode()
     {
+        if (empty($this->_storeIds)) {
+            $this->setStoreIds(array_keys($this->_storeManager->getStores()));
+        }
+
         if ($this->_currentCurrencyCode === null) {
             reset($this->_storeIds);
             $this->_currentCurrencyCode = count(

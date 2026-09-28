@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -37,12 +37,8 @@ class CommentTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->placeholderMock = $this->getMockBuilder(PlaceholderInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->fileSystemMock = $this->getMockBuilder(Filesystem::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->placeholderMock = $this->createMock(PlaceholderInterface::class);
+        $this->fileSystemMock = $this->createMock(Filesystem::class);
 
         $this->model = new Comment(
             $this->fileSystemMock,
@@ -53,9 +49,7 @@ class CommentTest extends TestCase
     public function testExecute()
     {
         $fileName = 'config.local.php';
-        $directoryReadMock = $this->getMockBuilder(ReadInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $directoryReadMock = $this->createMock(ReadInterface::class);
         $directoryReadMock->expects($this->once())
             ->method('readFile')
             ->with($fileName)
@@ -66,14 +60,10 @@ class CommentTest extends TestCase
             ->willReturn($directoryReadMock);
         $this->placeholderMock->expects($this->any())
             ->method('restore')
-            ->withConsecutive(
-                ['CONFIG__DEFAULT__SOME__PAYMENT__PASSWORD'],
-                ['CONFIG__DEFAULT__SOME__PAYMENT__TOKEN']
-            )
-            ->willReturnOnConsecutiveCalls(
-                'some/payment/password',
-                'some/payment/token'
-            );
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['CONFIG__DEFAULT__SOME__PAYMENT__PASSWORD'] => 'some/payment/password',
+                ['CONFIG__DEFAULT__SOME__PAYMENT__TOKEN'] => 'some/payment/token'
+            });
 
         $this->assertEquals(
             $this->model->execute($fileName),

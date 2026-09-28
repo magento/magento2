@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 /** @var $product \Magento\Catalog\Model\Product */
@@ -13,7 +13,7 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setName('Simple Product1')
     ->setSku('simple1')
     ->setTaxClassId('none')
-    ->setDescription('description')
+    ->setDescription('description uniqueword')
     ->setShortDescription('short description')
     ->setOptionsContainer('container1')
     ->setMsrpDisplayActualPriceType(\Magento\Msrp\Model\Product\Attribute\Source\Type::TYPE_IN_CART)

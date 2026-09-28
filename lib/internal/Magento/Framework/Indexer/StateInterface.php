@@ -1,21 +1,23 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Indexer;
 
 /**
  * @api Retrieve status of the Indexer
+ * @since 100.0.2
  */
 interface StateInterface
 {
     /**
      * Indexer statuses
      */
-    const STATUS_WORKING = 'working';
-    const STATUS_VALID = 'valid';
-    const STATUS_INVALID = 'invalid';
+    public const STATUS_WORKING = 'working';
+    public const STATUS_VALID = 'valid';
+    public const STATUS_INVALID = 'invalid';
+    public const STATUS_SUSPENDED = 'suspended';
 
     /**
      * Return indexer id

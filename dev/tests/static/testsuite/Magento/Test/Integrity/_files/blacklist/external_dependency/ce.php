@@ -2,8 +2,8 @@
 /**
  * Black list for the @see \Magento\Test\Integrity\DependencyTest::testExternalDependencies()
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 return [
     'app/code/Magento/Paypal/Model/AbstractConfig.php' => ['Magento\Cart'],

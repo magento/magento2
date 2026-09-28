@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -105,8 +105,8 @@ class PayflowProResponse implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         if (!isset($args['input']['cart_id']) || empty($args['input']['cart_id'])) {
             throw new GraphQlInputException(__('Required parameter "cart_id" is missing.'));
@@ -126,9 +126,9 @@ class PayflowProResponse implements ResolverInterface
         $this->parameters->fromString(urldecode($paypalPayload));
         $data = $this->parameters->toArray();
         try {
-            $do = $this->dataObjectFactory->create(['data' => array_change_key_case($data, CASE_LOWER)]);
-            $this->responseValidator->validate($do, $this->transparent);
-            $this->transaction->savePaymentInQuote($do, $cart->getId());
+            $response = $this->transaction->getResponseObject($data);
+            $this->responseValidator->validate($response, $this->transparent);
+            $this->transaction->savePaymentInQuote($response, $cart->getId());
         } catch (LocalizedException $exception) {
             $parameters['error'] = true;
             $parameters['error_msg'] = $exception->getMessage();

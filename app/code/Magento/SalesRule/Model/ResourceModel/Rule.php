@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
+
 namespace Magento\SalesRule\Model\ResourceModel;
 
 use Magento\Framework\App\ObjectManager;
@@ -59,6 +60,11 @@ class Rule extends AbstractResource
     private $metadataPool;
 
     /**
+     * @var string
+     */
+    private $linkedField;
+
+    /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\SalesRule\Model\ResourceModel\Coupon $resourceCoupon
@@ -72,13 +78,14 @@ class Rule extends AbstractResource
         \Magento\Framework\Stdlib\StringUtils $string,
         \Magento\SalesRule\Model\ResourceModel\Coupon $resourceCoupon,
         $connectionName = null,
-        \Magento\Framework\DataObject $associatedEntityMapInstance = null,
-        Json $serializer = null,
-        MetadataPool $metadataPool = null
+        ?\Magento\Framework\DataObject $associatedEntityMapInstance = null,
+        ?Json $serializer = null,
+        ?MetadataPool $metadataPool = null
     ) {
         $this->string = $string;
         $this->_resourceCoupon = $resourceCoupon;
         $associatedEntitiesMapInstance = $associatedEntityMapInstance ?: ObjectManager::getInstance()->get(
+            // @phpstan-ignore-next-line - this is a virtual type defined in di.xml
             \Magento\SalesRule\Model\ResourceModel\Rule\AssociatedEntityMap::class
         );
         $this->_associatedEntitiesMap = $associatedEntitiesMapInstance->getData();
@@ -98,9 +105,10 @@ class Rule extends AbstractResource
     }
 
     /**
+     * Load customer group IDs for a rule
+     *
      * @param AbstractModel $object
      * @return void
-     * @deprecated 100.1.0
      */
     public function loadCustomerGroupIds(AbstractModel $object)
     {
@@ -111,9 +119,10 @@ class Rule extends AbstractResource
     }
 
     /**
+     * Load website IDs for a rule
+     *
      * @param AbstractModel $object
      * @return void
-     * @deprecated 100.1.0
      */
     public function loadWebsiteIds(AbstractModel $object)
     {
@@ -166,7 +175,7 @@ class Rule extends AbstractResource
     protected function _afterSave(AbstractModel $object)
     {
         if ($object->hasStoreLabels()) {
-            $this->saveStoreLabels($object->getId(), $object->getStoreLabels());
+            $this->saveStoreLabels($object->getData($this->getLinkField()), $object->getStoreLabels());
         }
 
         // Save product attributes used in rule
@@ -179,7 +188,10 @@ class Rule extends AbstractResource
         }
 
         // Update auto geterated specific coupons if exists
-        if ($object->getUseAutoGeneration() && $object->hasDataChanges()) {
+        if (($object->getUseAutoGeneration()
+            || ((int) $object->getCouponType()) === \Magento\SalesRule\Model\Rule::COUPON_TYPE_AUTO
+            ) && $object->hasDataChanges()
+        ) {
             $this->_resourceCoupon->updateSpecificCoupons($object);
         }
         return parent::_afterSave($object);
@@ -223,7 +235,7 @@ class Rule extends AbstractResource
         $data = [];
         foreach ($labels as $storeId => $label) {
             if ($this->string->strlen($label)) {
-                $data[] = ['rule_id' => $ruleId, 'store_id' => $storeId, 'label' => $label];
+                $data[] = [$this->getLinkField() => $ruleId, 'store_id' => $storeId, 'label' => $label];
             } else {
                 $deleteByStoreIds[] = $storeId;
             }
@@ -236,7 +248,10 @@ class Rule extends AbstractResource
             }
 
             if (!empty($deleteByStoreIds)) {
-                $connection->delete($table, ['rule_id=?' => $ruleId, 'store_id IN (?)' => $deleteByStoreIds]);
+                $connection->delete(
+                    $table,
+                    [$this->getLinkField() . '=?' => $ruleId, 'store_id IN (?)' => $deleteByStoreIds]
+                );
             }
         } catch (\Exception $e) {
             $connection->rollBack();
@@ -259,7 +274,7 @@ class Rule extends AbstractResource
             $this->getTable('salesrule_label'),
             ['store_id', 'label']
         )->where(
-            'rule_id = :rule_id'
+            $this->getLinkField() . ' = :rule_id'
         );
         return $this->getConnection()->fetchPairs($select, [':rule_id' => $ruleId]);
     }
@@ -277,7 +292,7 @@ class Rule extends AbstractResource
             $this->getTable('salesrule_label'),
             'label'
         )->where(
-            'rule_id = :rule_id'
+            $this->getLinkField() . ' = :rule_id'
         )->where(
             'store_id IN(0, :store_id)'
         )->order(
@@ -294,14 +309,19 @@ class Rule extends AbstractResource
     public function getActiveAttributes()
     {
         $connection = $this->getConnection();
+        $subSelect = $connection->select();
+        $subSelect->reset();
+        $subSelect->from($this->getTable('salesrule_product_attribute'))
+            ->group('attribute_id');
         $select = $connection->select()->from(
-            ['a' => $this->getTable('salesrule_product_attribute')],
-            new \Zend_Db_Expr('DISTINCT ea.attribute_code')
+            ['a' => $subSelect],
+            new \Zend_Db_Expr('ea.attribute_code')
         )->joinInner(
             ['ea' => $this->getTable('eav_attribute')],
             'ea.attribute_id = a.attribute_id',
             []
         );
+
         return $connection->fetchAll($select);
     }
 
@@ -315,10 +335,9 @@ class Rule extends AbstractResource
     public function setActualProductAttributes($rule, $attributes)
     {
         $connection = $this->getConnection();
-        $metadata = $this->metadataPool->getMetadata(RuleInterface::class);
         $connection->delete(
             $this->getTable('salesrule_product_attribute'),
-            [$metadata->getLinkField() . '=?' => $rule->getData($metadata->getLinkField())]
+            [$this->getLinkField() . '=?' => $rule->getData($this->getLinkField())]
         );
 
         //Getting attribute IDs for attribute codes
@@ -341,7 +360,7 @@ class Rule extends AbstractResource
                 foreach ($rule->getWebsiteIds() as $websiteId) {
                     foreach ($attributeIds as $attribute) {
                         $data[] = [
-                            $metadata->getLinkField() => $rule->getData($metadata->getLinkField()),
+                            $this->getLinkField() => $rule->getData($this->getLinkField()),
                             'website_id' => $websiteId,
                             'customer_group_id' => $customerGroupId,
                             'attribute_id' => $attribute,
@@ -374,6 +393,8 @@ class Rule extends AbstractResource
     }
 
     /**
+     * Save cart rule
+     *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
      */
@@ -396,8 +417,9 @@ class Rule extends AbstractResource
     }
 
     /**
+     * Init EntityManager
+     *
      * @return \Magento\Framework\EntityManager\EntityManager
-     * @deprecated 100.1.0
      */
     private function getEntityManager()
     {
@@ -406,5 +428,20 @@ class Rule extends AbstractResource
                 ->get(\Magento\Framework\EntityManager\EntityManager::class);
         }
         return $this->entityManager;
+    }
+
+    /**
+     * Get lined field for Rule entity
+     *
+     * @return string
+     */
+    public function getLinkField() :string
+    {
+        if ($this->linkedField === null) {
+            $metadata = $this->metadataPool->getMetadata(RuleInterface::class);
+            $this->linkedField = $metadata->getLinkField();
+        }
+
+        return $this->linkedField;
     }
 }

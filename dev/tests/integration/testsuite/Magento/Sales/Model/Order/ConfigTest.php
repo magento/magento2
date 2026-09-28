@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Sales\Model\Order;
 
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test class for \Magento\Sales\Model\Order\Config
@@ -49,5 +50,29 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $completeState = $allStates[$completeStatus->getStatus()];
 
         $this->assertEquals($completeStatus->getLabel(), $completeState->getText());
+    }
+
+    /**
+     * Test Mask Status For Area
+     *
+     * @param string $code
+     * @param string $expected
+     */
+    #[DataProvider('dataProviderForTestMaskStatusForArea')]
+    public function testMaskStatusForArea(string $code, string $expected)
+    {
+        $result = $this->orderConfig->getStatusFrontendLabel($code);
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * @return array
+     */
+    public static function dataProviderForTestMaskStatusForArea(): array
+    {
+        return [
+            ['fraud', 'Suspected Fraud'],
+            ['processing', 'Processing'],
+        ];
     }
 }

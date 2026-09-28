@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Theme\Ui\Component\Design\Config\SearchRobots;
 
@@ -14,7 +14,7 @@ use Magento\Ui\Component\Form\Field;
  * ResetButton field instance
  *
  * @api
- * @since 100.2.0
+ * @since 100.1.9
  */
 class ResetButton extends Field
 {
@@ -66,7 +66,7 @@ class ResetButton extends Field
      *
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 100.2.0
+     * @since 100.1.9
      */
     public function prepare()
     {

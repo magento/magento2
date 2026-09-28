@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -47,6 +47,7 @@ define([
             imgTitleSelector: '[data-role=img-title]',
             imageSizeLabel: '[data-role=size]',
             types: null,
+            showSpinner: true,
             initialized: false
         },
 
@@ -63,10 +64,18 @@ define([
 
             this._bind();
 
+            this._isInitializingItems = true;
+            this._initializedItemCount = 0;
+            this._lastInitializedElement = null;
+
             $.each(this.options.images, $.proxy(function (index, imageData) {
                 this.element.trigger('addItem', imageData);
             }, this));
 
+            this._updateImagesRoles();
+            this._contentUpdated();
+
+            this._isInitializingItems = false;
             this.options.initialized = true;
         },
 
@@ -146,6 +155,8 @@ define([
                     imageData: imageData
                 });
 
+                this.element.find('[type="hidden"][name="use_default[' + image.code + ']"]').val('0');
+
                 if (isImageOpened) {
                     this.element.find('.item').addClass('selected');
                     this.element.find('[data-role=type-selector]').prop({
@@ -186,14 +197,29 @@ define([
          * @private
          */
         _addItem: function (event, imageData) {
-            var count = this.element.find(this.options.imageSelector).length,
-                element,
-                imgElement;
+            var element,
+                imgElement,
+                lastElement,
+                count,
+                position;
 
+            if (this._isInitializingItems) {
+                count = this._initializedItemCount++;
+                lastElement = this._lastInitializedElement;
+            } else {
+                count = this.element.find(this.options.imageSelector).length;
+                lastElement = this.element.find(this.options.imageSelector + ':last');
+            }
+
+            position = count + 1;
+
+            if (lastElement && lastElement.length === 1) {
+                position = parseInt(lastElement.data('imageData').position || count, 10) + 1;
+            }
             imageData = $.extend({
                 'file_id': imageData['value_id'] ? imageData['value_id'] : Math.random().toString(33).substr(2, 18),
                 'disabled': imageData.disabled ? imageData.disabled : 0,
-                'position': count + 1,
+                'position': position,
                 sizeLabel: bytesToSize(imageData.size)
             }, imageData);
 
@@ -206,8 +232,10 @@ define([
             if (count === 0) {
                 element.prependTo(this.element);
             } else {
-                element.insertAfter(this.element.find(this.options.imageSelector + ':last'));
+                element.insertAfter(lastElement);
             }
+
+            this._lastInitializedElement = element;
 
             if (!this.options.initialized &&
                 this.options.images.length === 0 ||
@@ -230,8 +258,10 @@ define([
                 }
             }, this));
 
-            this._updateImagesRoles();
-            this._contentUpdated();
+            if (!this._isInitializingItems) {
+                this._updateImagesRoles();
+                this._contentUpdated();
+            }
         },
 
         /**
@@ -327,6 +357,14 @@ define([
 
             imageData.isRemoved = true;
             $imageContainer.addClass('removed').hide().find('.is-removed').val(1);
+
+            // Reset all image role/type selections to 'no_selection' value
+            // For each role (like base image, small image, etc.), clears both
+            // the UI select element and the internal types data structure
+            $.each(this.options.types, $.proxy(function (index, type) {
+                this.element.find('.image-' + type.code).val('no_selection');
+                this.options.types[index].value = 'no_selection';
+            }, this));
 
             this._contentUpdated();
         },
@@ -530,6 +568,26 @@ define([
                 });
             }.bind(this));
 
+            $dialog.on('change', '[data-role="use-default"]', function (e) {
+                const target = $(e.target),
+                    isChecked = target.is(':checked'),
+                    name = target.attr('name'),
+                    imageData = $dialog.data('imageData');
+
+                this.element.find('input[type="hidden"][name="' + name + '"]').val(isChecked ? 1 : 0);
+                if (name.indexOf('[images]') !== -1) {
+                    const attrName = name.substring(name.lastIndexOf('[') + 1, name.length - 1);
+
+                    if (attrName) {
+                        imageData[attrName] = isChecked ? 1 : 0;
+                    }
+                }
+                target.closest('.field')
+                    .toggleClass('_disabled', isChecked)
+                    .find('input:not([data-role="use-default"]), textarea:not([data-role="use-default"])')
+                    .prop('disabled', isChecked);
+            }.bind(this));
+
             this.$dialog = $dialog;
         },
 
@@ -542,7 +600,10 @@ define([
                 $template;
 
             $template = this.dialogTmpl({
-                'data': imageData
+                'data': imageData,
+                context: {
+                    showSpinner: this.options.showSpinner
+                }
             });
 
             this.$dialog
@@ -550,6 +611,9 @@ define([
                 .data('imageData', imageData)
                 .data('imageContainer', $imageContainer)
                 .modal('openModal');
+            if (this.options.showSpinner) {
+                this.$dialog.find('[data-role=spinner]').hide();
+            }
         },
 
         /**
@@ -591,6 +655,19 @@ define([
                     );
                     parent.toggleClass(selectedClass, isChecked);
                 }, this));
+
+            this.$dialog.find('[data-role="use-default"]').each(function (index, element) {
+                const $useDefaultCheckbox = $(element),
+                    name = $useDefaultCheckbox.attr('name');
+
+                if (name) {
+                    const $useDefaultInput = this.element.find('input[type="hidden"][name="' + name + '"]');
+
+                    if ($useDefaultInput.length) {
+                        $useDefaultCheckbox.prop('checked', $useDefaultInput.val() === '1').trigger('change');
+                    }
+                }
+            }.bind(this));
         },
 
         /**
@@ -624,7 +701,7 @@ define([
                 $imageContainer.addClass('hidden-for-front') :
                 $imageContainer.removeClass('hidden-for-front');
 
-            $imageContainer.find('[name*="disabled"]').val(disabled);
+            $imageContainer.find('[name*="[disabled]"]').val(disabled);
             imageData.disabled = disabled;
 
             this._contentUpdated();

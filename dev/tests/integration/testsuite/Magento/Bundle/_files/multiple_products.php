@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -28,7 +28,7 @@ $product->setTypeId(ProductType::TYPE_SIMPLE)
     ->setAttributeSetId($product->getDefaultAttributeSetId())
     ->setName('Simple Product')
     ->setSku('simple1')
-    ->setTaxClassId(0)
+    ->setTaxClassId(2)
     ->setDescription('description')
     ->setShortDescription('short description')
     ->setOptionsContainer('container1')
@@ -57,7 +57,7 @@ $product2->setTypeId(ProductType::TYPE_SIMPLE)
     ->setAttributeSetId($product2->getDefaultAttributeSetId())
     ->setName('Simple Product2')
     ->setSku('simple2')
-    ->setTaxClassId(0)
+    ->setTaxClassId(2)
     ->setDescription('description')
     ->setShortDescription('short description')
     ->setOptionsContainer('container1')

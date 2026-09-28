@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\InstantPurchase\PaymentMethodIntegration;
 
@@ -12,6 +12,7 @@ namespace Magento\InstantPurchase\PaymentMethodIntegration;
  * instant_purchase/available configuration option in vault payment config.
  *
  * @api
+ * @since 100.2.0
  */
 interface AvailabilityCheckerInterface
 {
@@ -19,6 +20,7 @@ interface AvailabilityCheckerInterface
      * Checks if payment method may be used for instant purchase.
      *
      * @return bool
+     * @since 100.2.0
      */
     public function isAvailable(): bool;
 }

@@ -1,27 +1,28 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel;
 
-use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Attribute\LockValidatorInterface;
 use Magento\Catalog\Model\ResourceModel\Attribute;
+use Magento\Catalog\Model\ResourceModel\Attribute\RemoveProductAttributeData;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend;
 use Magento\Eav\Model\ResourceModel\Entity\Type;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface as Adapter;
-use Magento\Framework\EntityManager\EntityMetadataInterface;
-use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\Db\Context;
-use Magento\ResourceConnections\DB\Select;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\DB\Select;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -31,6 +32,8 @@ use PHPUnit\Framework\TestCase;
  */
 class AttributeTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Select|MockObject
      */
@@ -72,75 +75,51 @@ class AttributeTest extends TestCase
     private $lockValidatorMock;
 
     /**
-     * @var EntityMetadataInterface|MockObject
+     * @var RemoveProductAttributeData|MockObject
      */
-    private $entityMetaDataInterfaceMock;
+    private $removeProductAttributeDataMock;
 
     /**
      * @inheritDoc
      */
     protected function setUp(): void
     {
-        $this->selectMock = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['from', 'where', 'join', 'deleteFromSelect'])
-            ->getMock();
+        $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                PoisonPillPutInterface::class,
+                $this->createMock(PoisonPillPutInterface::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
+        $this->selectMock = $this->createPartialMock(
+            Select::class,
+            ['from', 'where', 'join', 'deleteFromSelect']
+        );
 
-        $this->connectionMock = $this->getMockBuilder(Adapter::class)
-            ->getMockForAbstractClass();
-        $this->connectionMock->expects($this->once())->method('select')->willReturn($this->selectMock);
-        $this->connectionMock->expects($this->once())->method('query')->willReturn($this->selectMock);
+        $this->connectionMock = $this->createMock(Adapter::class);
         $this->connectionMock->expects($this->once())->method('delete')->willReturn($this->selectMock);
-        $this->selectMock->expects($this->once())->method('from')->willReturnSelf();
-        $this->selectMock->expects($this->once())->method('join')->willReturnSelf();
-        $this->selectMock->expects($this->any())->method('where')->willReturnSelf();
-        $this->selectMock->expects($this->any())->method('deleteFromSelect')->willReturnSelf();
 
-        $this->resourceMock = $this->getMockBuilder(ResourceConnection::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['delete', 'getConnection'])
-            ->getMock();
+        $this->resourceMock = $this->createPartialMockWithReflection(
+            ResourceConnection::class,
+            ['getConnection']
+        );
+        $this->resourceMock->method('getConnection')->willReturn($this->connectionMock);
 
-        $this->contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
-            ->getMock();
-        $this->eavEntityTypeMock = $this->getMockBuilder(Type::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->eavConfigMock = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getAttribute'])
-            ->getMock();
-        $this->lockValidatorMock = $this->getMockBuilder(LockValidatorInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['validate'])
-            ->getMockForAbstractClass();
-        $this->entityMetaDataInterfaceMock = $this->getMockBuilder(EntityMetadataInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-    }
-
-    /**
-     * Sets object non-public property.
-     *
-     * @param mixed $object
-     * @param string $propertyName
-     * @param mixed $value
-     *
-     * @return void
-     */
-    private function setObjectProperty($object, string $propertyName, $value) : void
-    {
-        $reflectionClass = new \ReflectionClass($object);
-        $reflectionProperty = $reflectionClass->getProperty($propertyName);
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($object, $value);
+        $this->contextMock = $this->createMock(Context::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->eavEntityTypeMock = $this->createMock(Type::class);
+        $this->eavConfigMock = $this->createPartialMock(Config::class, ['getAttribute']);
+        $this->lockValidatorMock = $this->createMock(LockValidatorInterface::class);
+        $this->removeProductAttributeDataMock = $this->createPartialMock(
+            RemoveProductAttributeData::class,
+            ['removeData']
+        );
     }
 
     /**
      * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testDeleteEntity() : void
     {
@@ -156,78 +135,100 @@ class AttributeTest extends TestCase
         ];
 
         $backendTableName = 'weee_tax';
-        $backendFieldName = 'value_id';
 
-        $attributeModel = $this->getMockBuilder(Attribute::class)
-            ->setMethods(['getEntityAttribute', 'getMetadataPool', 'getConnection', 'getTable'])
-            ->setConstructorArgs([
+        $attributeModel = $this->createPartialMockWithReflection(
+            Attribute::class,
+            ['getEntityAttribute', 'getConnection', 'getTable'],
+            [
                 $this->contextMock,
                 $this->storeManagerMock,
                 $this->eavEntityTypeMock,
                 $this->eavConfigMock,
                 $this->lockValidatorMock,
                 null,
-            ])->getMock();
+                $this->removeProductAttributeDataMock
+            ]
+        );
+        
         $attributeModel->expects($this->any())
             ->method('getEntityAttribute')
             ->with($entityAttributeId)
             ->willReturn($result);
-        $metadataPoolMock = $this->getMockBuilder(MetadataPool::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getMetadata'])
-            ->getMock();
 
-        $this->setObjectProperty($attributeModel, 'metadataPool', $metadataPoolMock);
+        $eavAttributeMock = $this->createMock(AbstractAttribute::class);
 
-        $eavAttributeMock = $this->getMockBuilder(AbstractAttribute::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $eavAttributeMock->expects($this->any())->method('getId')->willReturn($result['attribute_id']);
+        $eavAttributeMock->method('getId')->willReturn($result['attribute_id']);
 
         $this->eavConfigMock->expects($this->any())
             ->method('getAttribute')
             ->with($entityTypeId, $result['attribute_id'])
             ->willReturn($eavAttributeMock);
 
-        $abstractModelMock = $this->getMockBuilder(AbstractModel::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getEntityAttributeId','getEntityTypeId'])
-            ->getMockForAbstractClass();
-        $abstractModelMock->expects($this->any())->method('getEntityAttributeId')->willReturn($entityAttributeId);
-        $abstractModelMock->expects($this->any())->method('getEntityTypeId')->willReturn($entityTypeId);
+        $abstractModelMock = $this->createPartialMockWithReflection(
+            AbstractModel::class,
+            ['setEntityAttributeId', 'getEntityAttributeId', 'setEntityTypeId', 'getEntityTypeId', 'getId']
+        );
+        $entityAttrId = null;
+        $entTypeId = null;
+        $abstractModelMock->method('setEntityAttributeId')->willReturnCallback(
+            function ($id) use (&$entityAttrId, $abstractModelMock) {
+                $entityAttrId = $id;
+                return $abstractModelMock;
+            }
+        );
+        $abstractModelMock->method('getEntityAttributeId')->willReturnCallback(
+            function () use (&$entityAttrId) {
+                return $entityAttrId;
+            }
+        );
+        $abstractModelMock->method('setEntityTypeId')->willReturnCallback(
+            function ($id) use (&$entTypeId, $abstractModelMock) {
+                $entTypeId = $id;
+                return $abstractModelMock;
+            }
+        );
+        $abstractModelMock->method('getEntityTypeId')->willReturnCallback(
+            function () use (&$entTypeId) {
+                return $entTypeId;
+            }
+        );
+        $abstractModelMock->setEntityAttributeId($entityAttributeId);
+        $abstractModelMock->setEntityTypeId($entityTypeId);
 
         $this->lockValidatorMock->expects($this->any())
             ->method('validate')
             ->with($eavAttributeMock, $result['attribute_set_id'])
             ->willReturn(true);
 
-        $backendModelMock = $this->getMockBuilder(AbstractBackend::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getBackend', 'getTable', 'getEntityIdField'])
-            ->getMock();
+        $backendModelMock = $this->createPartialMockWithReflection(
+            AbstractBackend::class,
+            ['setTable', 'getTable']
+        );
+        $table = null;
+        $backendModelMock->method('setTable')->willReturnCallback(
+            function ($tbl) use (&$table, $backendModelMock) {
+                $table = $tbl;
+                return $backendModelMock;
+            }
+        );
+        $backendModelMock->method('getTable')->willReturnCallback(
+            function () use (&$table) {
+                return $table;
+            }
+        );
 
-        $abstractAttributeMock = $this->getMockBuilder(AbstractAttribute::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getEntity'])
-            ->getMockForAbstractClass();
+        $abstractAttributeMock = $this->createMock(AbstractAttribute::class);
 
-        $eavAttributeMock->expects($this->any())->method('getBackend')->willReturn($backendModelMock);
-        $eavAttributeMock->expects($this->any())->method('getEntity')->willReturn($abstractAttributeMock);
+        $eavAttributeMock->method('getBackend')->willReturn($backendModelMock);
+        $eavAttributeMock->method('getEntity')->willReturn($abstractAttributeMock);
 
-        $backendModelMock->expects($this->any())->method('getTable')->willReturn($backendTableName);
-        $backendModelMock->expects($this->once())->method('getEntityIdField')->willReturn($backendFieldName);
+        $backendModelMock->setTable($backendTableName);
 
-        $metadataPoolMock->expects($this->any())
-            ->method('getMetadata')
-            ->with(ProductInterface::class)
-            ->willReturn($this->entityMetaDataInterfaceMock);
+        $this->removeProductAttributeDataMock->expects($this->once())
+            ->method('removeData')
+            ->with($abstractModelMock, $result['attribute_set_id']);
 
-        $this->entityMetaDataInterfaceMock->expects($this->any())
-            ->method('getLinkField')
-            ->willReturn('row_id');
-
-        $attributeModel->expects($this->any())->method('getConnection')->willReturn($this->connectionMock);
+        $attributeModel->method('getConnection')->willReturn($this->connectionMock);
         $attributeModel->expects($this->any())
             ->method('getTable')
             ->with('eav_entity_attribute')

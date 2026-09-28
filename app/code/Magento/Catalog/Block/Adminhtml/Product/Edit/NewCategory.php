@@ -1,15 +1,16 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * New category creation form
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit;
+
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
 /**
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
@@ -27,12 +28,18 @@ class NewCategory extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_categoryFactory;
 
     /**
+     * @var SecureHtmlRenderer
+     */
+    protected $secureRenderer;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
+     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      * @param array $data
+     * @param SecureHtmlRenderer|null $htmlRenderer
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -40,12 +47,14 @@ class NewCategory extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
-        array $data = []
+        array $data = [],
+        ?SecureHtmlRenderer $htmlRenderer = null
     ) {
         $this->_jsonEncoder = $jsonEncoder;
         $this->_categoryFactory = $categoryFactory;
         parent::__construct($context, $registry, $formFactory, $data);
         $this->setUseContainer(true);
+        $this->secureRenderer = $htmlRenderer ?? ObjectManager::getInstance()->get(SecureHtmlRenderer::class);
     }
 
     /**
@@ -153,14 +162,13 @@ class NewCategory extends \Magento\Backend\Block\Widget\Form\Generic
             ]
         );
         //TODO: JavaScript logic should be moved to separate file or reviewed
-        return <<<HTML
-<script>
+        $scriptString =  <<<HTML
 require(["jquery","mage/mage"],function($) {  // waiting for dependencies at first
     $(function(){ // waiting for page to load to have '#category_ids-template' available
-        $('#new-category').mage('newCategoryDialog', $widgetOptions);
+        $('#new-category').mage('newCategoryDialog', {$widgetOptions});
     });
 });
-</script>
 HTML;
+        return /* @noEscape */ $this->secureRenderer->renderTag('script', [], $scriptString, false);
     }
 }

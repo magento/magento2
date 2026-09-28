@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,17 +17,22 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Helper\Admin;
 use Magento\Sales\Model\Config;
 use Magento\Sales\Model\Order;
+use Magento\Quote\Model\Quote\Item as QuoteItem;
 use Magento\Sales\Model\Order\Item;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AdminTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Context|MockObject
      */
@@ -70,22 +75,14 @@ class AdminTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->salesConfigMock = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->contextMock = $this->createMock(Context::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->salesConfigMock = $this->createMock(Config::class);
         $this->priceCurrency = $this->getMockBuilder(
             PriceCurrencyInterface::class
         )->getMock();
 
-        $this->escaperMock = $this->getMockBuilder(Escaper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->escaperMock = $this->createMock(Escaper::class);
 
         $this->adminHelper = (new ObjectManager($this))->getObject(
             Admin::class,
@@ -98,14 +95,12 @@ class AdminTest extends TestCase
             ]
         );
 
-        $this->magentoObjectMock = $this->getMockBuilder(DataObject::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getOrder', 'getData'])
-            ->getMock();
+        $this->magentoObjectMock = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['getOrder', 'getData']
+        );
 
-        $this->orderMock = $this->getMockBuilder(Order::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->orderMock = $this->createMock(Order::class);
         $this->orderMock->expects($this->any())
             ->method('formatBasePrice')
             ->willReturn('formattedBasePrice');
@@ -124,8 +119,8 @@ class AdminTest extends TestCase
      * @param bool $magentoDataObjectHasOrder
      * @param bool $strong
      * @param string $separator
-     * @dataProvider displayPricesDataProvider
      */
+    #[DataProvider('displayPricesDataProvider')]
     public function testDisplayPrices(
         $expected,
         $dataObjectIsOrder,
@@ -134,35 +129,33 @@ class AdminTest extends TestCase
         $strong = false,
         $separator = '<br/>'
     ) {
-        $this->orderMock->expects($this->any())
+         $this->orderMock->expects($this->any())
             ->method('isCurrencyDifferent')
             ->willReturn($isCurrencyDifferent);
-        $storeMock = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->storeManagerMock->expects($this->any())
+         $storeMock = $this->createMock(Store::class);
+         $this->storeManagerMock->expects($this->any())
             ->method('getStore')
             ->willReturn($storeMock);
-        $this->priceCurrency->expects($this->any())
+         $this->priceCurrency->expects($this->any())
             ->method('format')
             ->willReturn('storeFormattedPrice');
-        $dataObject = $this->orderMock;
+         $dataObject = $this->orderMock;
         if (!$dataObjectIsOrder) {
             $returnRes = false;
             if ($magentoDataObjectHasOrder) {
                 $returnRes = $this->orderMock;
             }
             $this->magentoObjectMock->expects($this->once())
-                ->method('getOrder')
-                ->willReturn($returnRes);
+               ->method('getOrder')
+               ->willReturn($returnRes);
             $dataObject = $this->magentoObjectMock;
         }
-        $basePrice = 10.00;
-        $price = 15.00;
-        $this->assertEquals(
-            $expected,
-            $this->adminHelper->displayPrices($dataObject, $basePrice, $price, $strong, $separator)
-        );
+         $basePrice = 10.00;
+         $price = 15.00;
+         $this->assertEquals(
+             $expected,
+             $this->adminHelper->displayPrices($dataObject, $basePrice, $price, $strong, $separator)
+         );
     }
 
     /**
@@ -172,8 +165,8 @@ class AdminTest extends TestCase
      * @param bool $magentoDataObjectHasOrder
      * @param bool $strong
      * @param string $separator
-     * @dataProvider displayPricesDataProvider
      */
+    #[DataProvider('displayPricesDataProvider')]
     public function testDisplayPriceAttribute(
         $expected,
         $dataObjectIsOrder,
@@ -182,42 +175,40 @@ class AdminTest extends TestCase
         $strong = false,
         $separator = '<br/>'
     ) {
-        $this->orderMock->expects($this->any())
+         $this->orderMock->expects($this->any())
             ->method('isCurrencyDifferent')
             ->willReturn($isCurrencyDifferent);
-        $storeMock = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->storeManagerMock->expects($this->any())
+         $storeMock = $this->createMock(Store::class);
+         $this->storeManagerMock->expects($this->any())
             ->method('getStore')
             ->willReturn($storeMock);
-        $this->priceCurrency->expects($this->any())
+         $this->priceCurrency->expects($this->any())
             ->method('format')
             ->willReturn('storeFormattedPrice');
-        $dataObject = $this->orderMock;
+         $dataObject = $this->orderMock;
         if (!$dataObjectIsOrder) {
             $returnRes = false;
             if ($magentoDataObjectHasOrder) {
                 $returnRes = $this->orderMock;
             }
             $this->magentoObjectMock->expects($this->once())
-                ->method('getOrder')
-                ->willReturn($returnRes);
+               ->method('getOrder')
+               ->willReturn($returnRes);
             $this->magentoObjectMock->expects($this->any())
-                ->method('getData')
-                ->willReturn('data');
+               ->method('getData')
+               ->willReturn('data');
             $dataObject = $this->magentoObjectMock;
         }
-        $this->assertEquals(
-            $expected,
-            $this->adminHelper->displayPriceAttribute($dataObject, 'code', $strong, $separator)
-        );
+         $this->assertEquals(
+             $expected,
+             $this->adminHelper->displayPriceAttribute($dataObject, 'code', $strong, $separator)
+         );
     }
 
     /**
      * @return array
      */
-    public function displayPricesDataProvider()
+    public static function displayPricesDataProvider()
     {
         return [
             [
@@ -285,26 +276,22 @@ class AdminTest extends TestCase
      * @param string $itemKey
      * @param string $type
      * @param int $calledTimes
-     * @dataProvider applySalableProductTypesFilterDataProvider
      */
+    #[DataProvider('applySalableProductTypesFilterDataProvider')]
     public function testApplySalableProductTypesFilter($itemKey, $type, $calledTimes)
     {
-        $productMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productMock = $this->createMock(Product::class);
         $productMock->expects($this->any())
             ->method('getTypeId')
             ->willReturn($type);
         $orderMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getProductType'])
+            ->onlyMethods(['getProductType'])
             ->getMock();
         $orderMock->expects($this->any())
             ->method('getProductType')
             ->willReturn($type);
-        $quoteMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $quoteMock = $this->createMock(QuoteItem::class);
         $quoteMock->expects($this->any())
             ->method('getProductType')
             ->willReturn($type);
@@ -315,9 +302,7 @@ class AdminTest extends TestCase
             'other' => 'other',
         ];
         $collectionClassName = AbstractCollection::class;
-        $collectionMock = $this->getMockBuilder($collectionClassName)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $collectionMock = $this->createMock($collectionClassName);
         $collectionMock->expects($this->any())
             ->method('getItems')
             ->willReturn([$items[$itemKey]]);
@@ -332,7 +317,7 @@ class AdminTest extends TestCase
     /**
      * @return array
      */
-    public function applySalableProductTypesFilterDataProvider()
+    public static function applySalableProductTypesFilterDataProvider()
     {
         return [
             ['product', 'validProductType', 0],

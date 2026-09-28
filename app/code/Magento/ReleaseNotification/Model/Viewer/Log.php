@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\ReleaseNotification\Model\Viewer;
 
@@ -9,6 +9,10 @@ use Magento\Framework\DataObject;
 
 /**
  * Release notification viewer log resource
+ *
+ * @deprecated Starting from Magento OS 2.4.7 Magento_ReleaseNotification module is deprecated
+ * in favor of another in-product messaging mechanism
+ * @see Current in-product messaging mechanism
  */
 class Log extends DataObject
 {

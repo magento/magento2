@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Config\Console\Command\ConfigSet;
 
@@ -21,7 +21,7 @@ use Magento\Config\Model\PreparedValueFactory;
  *
  * @inheritdoc
  * @api
- * @since 100.2.0
+ * @since 101.0.0
  */
 class DefaultProcessor implements ConfigSetProcessorInterface
 {
@@ -61,7 +61,7 @@ class DefaultProcessor implements ConfigSetProcessorInterface
         PreparedValueFactory $preparedValueFactory,
         DeploymentConfig $deploymentConfig,
         ConfigPathResolver $configPathResolver,
-        ConfigFactory $configFactory = null
+        ?ConfigFactory $configFactory = null
     ) {
         $this->preparedValueFactory = $preparedValueFactory;
         $this->deploymentConfig = $deploymentConfig;
@@ -76,7 +76,7 @@ class DefaultProcessor implements ConfigSetProcessorInterface
      * Requires installed application.
      *
      * @inheritdoc
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function process($path, $value, $scope, $scopeCode)
     {

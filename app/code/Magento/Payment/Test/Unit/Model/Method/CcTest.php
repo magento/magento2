@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Payment\Test\Unit\Model\Method;
 
+use Magento\Framework\App\ObjectManager as AppObjectManager;
 use Magento\Framework\DataObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Payment\Model\Method\Cc;
@@ -23,6 +24,9 @@ class CcTest extends TestCase
 
     protected function setUp(): void
     {
+        $appObjectManagerMock = $this->createMock(AppObjectManager::class);
+        AppObjectManager::setInstance($appObjectManagerMock);
+
         $objectManager = new ObjectManager($this);
         $this->ccModel = $objectManager->getObject(Cc::class);
     }
@@ -47,9 +51,7 @@ class CcTest extends TestCase
             ]
         );
 
-        $payment = $this->getMockBuilder(Payment::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $payment = $this->createMock(Payment::class);
 
         $expectedData = [
             'cc_type' => 'VI',

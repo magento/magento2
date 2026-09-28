@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -51,20 +51,11 @@ class GroupTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->moduleManagerMock = $this->getMockBuilder(Manager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->groupRepositoryMock = $this->getMockBuilder(GroupRepositoryInterface::class)
-            ->setMethods(['getList'])
-            ->getMockForAbstractClass();
-        $this->searchCriteriaBuilderMock = $this->getMockBuilder(SearchCriteriaBuilder::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->searchCriteriaMock = $this->getMockBuilder(SearchCriteria::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->searchResultMock = $this->getMockBuilder(GroupSearchResultsInterface::class)
-            ->getMockForAbstractClass();
+        $this->moduleManagerMock = $this->createMock(Manager::class);
+        $this->groupRepositoryMock = $this->createMock(GroupRepositoryInterface::class);
+        $this->searchCriteriaBuilderMock = $this->createMock(SearchCriteriaBuilder::class);
+        $this->searchCriteriaMock = $this->createMock(SearchCriteria::class);
+        $this->searchResultMock = $this->createMock(GroupSearchResultsInterface::class);
 
         $this->model = new Group(
             $this->moduleManagerMock,
@@ -95,10 +86,7 @@ class GroupTest extends TestCase
             ->with($this->searchCriteriaMock)
             ->willReturn($this->searchResultMock);
 
-        $groupTest = $this->getMockBuilder(GroupInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getCode', 'getId'])
-            ->getMockForAbstractClass();
+        $groupTest = $this->createMock(GroupInterface::class);
         $groupTest->expects($this->any())->method('getCode')->willReturn(__('NOT LOGGED IN'));
         $groupTest->expects($this->any())->method('getId')->willReturn('0');
         $groups = [$groupTest];

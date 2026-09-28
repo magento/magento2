@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Backend\Controller\Adminhtml\System\Account;
 
@@ -11,9 +11,11 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\State\UserLockedException;
 use Magento\Security\Model\SecurityCookie;
+use Magento\User\Model\User;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.AllPurposeAction)
  */
 class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
 {
@@ -25,8 +27,11 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
     /**
      * Get security cookie
      *
+     * @deprecated 100.1.0 This method is deprecated because dependency injection should be used instead of
+     *                     directly accessing the SecurityCookie instance.
+     *                     Use dependency injection to get an instance of SecurityCookie.
+     * @see \Magento\Backend\Controller\Adminhtml\System\Account::__construct()
      * @return SecurityCookie
-     * @deprecated 100.1.0
      */
     private function getSecurityCookie()
     {
@@ -81,7 +86,29 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
             } else {
                 $user->save();
                 $user->sendNotificationEmailsIfRequired();
-                $this->messageManager->addSuccessMessage(__('You saved the account.'));
+
+                $modifiedFields = $this->getModifiedFields($user);
+                if (!empty($modifiedFields)) {
+                    $countModifiedFields = count($modifiedFields);
+                    // validate how many fields were modified to display them correctly
+                    if ($countModifiedFields > 1) {
+                        $lastModifiedField = array_pop($modifiedFields);
+                        $modifiedFieldsText = implode(', ', $modifiedFields);
+                        $successMessage = __(
+                            'The %1 and %2 of this account have been modified successfully.',
+                            $modifiedFieldsText,
+                            $lastModifiedField
+                        );
+                    } else {
+                        $successMessage = __(
+                            'The %1 of this account has been modified successfully.',
+                            reset($modifiedFields)
+                        );
+                    }
+                    $this->messageManager->addSuccessMessage($successMessage);
+                } else {
+                    $this->messageManager->addSuccessMessage(__('You saved the account.'));
+                }
             }
         } catch (UserLockedException $e) {
             $this->_auth->logout();
@@ -102,5 +129,23 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         return $resultRedirect->setPath("*/*/");
+    }
+
+    /**
+     * Get user modified fields
+     *
+     * @param User $user
+     * @return array
+     */
+    private function getModifiedFields(User $user)
+    {
+        $modifiedFields = [];
+        $propertiesToCheck = ['password', 'username', 'firstname', 'lastname', 'email'];
+        foreach ($propertiesToCheck as $property) {
+            if ($user->getOrigData($property) !== $user->{'get' . ucfirst($property)}()) {
+                $modifiedFields[] = $property;
+            }
+        }
+        return $modifiedFields;
     }
 }

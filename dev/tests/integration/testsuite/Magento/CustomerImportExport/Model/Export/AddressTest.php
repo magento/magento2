@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2012 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\CustomerImportExport\Model\Export;
 
 use Magento\CustomerImportExport\Model\Import\Address as ImportAddress;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for customer address export model
@@ -130,18 +131,20 @@ class AddressTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function getGenderFilterValueDataProvider()
+    public static function getGenderFilterValueDataProvider()
     {
-        return ['male' => ['$genderFilterValue' => 1], 'female' => ['$genderFilterValue' => 2]];
+        return [
+            'male' => [1],  // $genderFilterValue
+            'female' => [2]  // $genderFilterValue
+        ];
     }
 
     /**
      * Test export method if filter was set
      *
-     * @dataProvider getGenderFilterValueDataProvider
-     *
      * @param int $genderFilterValue
      */
+    #[DataProvider('getGenderFilterValueDataProvider')]
     public function testExportWithFilter($genderFilterValue)
     {
         $entityIdCode = Address::COLUMN_ADDRESS_ID;
@@ -208,12 +211,12 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     {
         $data = ['header' => [], 'data' => []];
 
-        $lines = str_getcsv($content, "\n");
+        $lines = str_getcsv($content, "\n", '"', '\\');
         foreach ($lines as $index => $line) {
             if ($index == 0) {
-                $data['header'] = str_getcsv($line);
+                $data['header'] = str_getcsv($line, ',', '"', '\\');
             } else {
-                $row = array_combine($data['header'], str_getcsv($line));
+                $row = array_combine($data['header'], str_getcsv($line, ',', '"', '\\'));
                 if ($entityId !== null && !empty($row[$entityId])) {
                     $data['data'][$row[$entityId]] = $row;
                 } else {

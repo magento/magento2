@@ -2,8 +2,8 @@
 /**
  * Application interface
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework;
 
@@ -14,6 +14,7 @@ namespace Magento\Framework;
  * Implementations of this interface should implement application type specific initialization.
  *
  * @api
+ * @since 100.0.2
  */
 interface AppInterface
 {

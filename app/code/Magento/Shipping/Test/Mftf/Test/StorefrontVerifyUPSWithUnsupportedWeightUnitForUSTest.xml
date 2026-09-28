@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontVerifyUPSWithUnsupportedWeightUnitForUSTest">
+        <annotations>
+            <features value="Shipping"/>
+            <stories value="Weight unit kgs is not authorised for US origin"/>
+            <title value="Unsupported weight unit"/>
+            <description value="This test case verifies weight unit kgs is not authorised for US origin"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-11910"/>
+            <group value="shipping"/>
+        </annotations>
+        <before>
+            <!--Login as Admin-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Create product -->
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct">
+                <field key="price">100.00</field>
+            </createData>
+            <!--Create customer-->
+            <createData entity="Simple_US_Utah_Customer" stepKey="createCustomer"/>
+            <!--Step 1:Set Shipping settings origin data to US-->
+            <actionGroup ref="AdminSetShippingOriginConfigActionGroup" stepKey="setShippingOriginConfigurationData">
+                <argument name="country" value="United States"/>
+                <argument name="state" value="California"/>
+                <argument name="postcode" value="90034"/>
+            </actionGroup>
+            <!--Navigate to shipping method configuration for enabling UPS-->
+            <actionGroup ref="AdminOpenShippingMethodsConfigPageActionGroup" stepKey="openShippingMethodConfigPageForEnablingUPS"/>
+            <!--Step 2: Configure UPS shipping method with ups type:rest, weight unit:kgs-->
+            <actionGroup ref="AdminEnableUpsWithWeightUnitActionGroup" stepKey="enableUPSShippingMethod">
+                <argument name="weight" value="KGS"/>
+            </actionGroup>
+            <!--Cache flush-->
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="flushCache">
+                <argument name="tags" value="full_page"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!--Reset shipping origin-->
+            <actionGroup ref="AdminResetShippingOriginConfigurationActionGroup" stepKey="resetShippingOriginConfig"/>
+            <!--Navigate to shipping method configuration-->
+            <actionGroup ref="AdminOpenShippingMethodsConfigPageActionGroup" stepKey="openShippingMethodConfigPageForDisablingUPS"/>
+            <!--Configure UPS shipping method with enable for checkout = No-->
+            <actionGroup ref="AdminDisableUPSActionGroup" stepKey="disableUPSShippingMethod"/>
+            <!--delete product, customer-->
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <!--Logout Admin-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <!--Add simple product to cart-->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <!--Proceed to checkout-->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="proceedToCheckout"/>
+        <!--Enter shipping address & method-->
+        <actionGroup ref="FillGuestCheckoutShippingAddressFormActionGroup" stepKey="fillShippingAddress"/>
+        <waitForPageLoad stepKey="waitForShippingPageToLoad"/>
+        <!--Step 3 Assertion: Verify ups shipping methods on front end and verify ups shipping methods should not be displayed to the user-->
+        <waitForElementVisible selector="{{StorefrontOrderShipmentSection.upsShippingMethodIsNotAvailable}}" stepKey="verifyUPSShippingMethodIsNotAvailable"/>
+        <!--In admin navigate to create new order with existing customer-->
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
+            <argument name="customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <!--Admin add simple product to order-->
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSimpleProductToOrder">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <!--Admin add new address while creating order-->
+        <selectOption userInput="Add New Address" selector="{{AdminOrderFormBillingAddressSection.selectAddress}}" stepKey="addAddress" />
+        <actionGroup ref="AdminFillAddressInformationInOrderActionGroup" stepKey="FillOrderNewShippingAddress">
+            <argument name="customer" value="$$createCustomer$$"/>
+            <argument name="address" value="US_Address_NY_Not_Default_Address"/>
+        </actionGroup>
+        <!--Scroll to element & click to reflect details as per defined address & customer-->
+        <scrollTo selector="{{AdminOrderFormBillingAddressSection.Phone}}" stepKey="scrollToElementInteractable"/>
+        <click selector="{{AdminOrderFormPaymentSection.linkPaymentOptions}}" stepKey="clickToReflectDetailsAccordingToInputData"/>
+        <!--Checkout select Check/Money Order payment-->
+        <actionGroup ref="SelectCheckMoneyPaymentMethodActionGroup" stepKey="selectCheckMoneyPayment"/>
+        <!--click on get shipping methods link-->
+        <click selector="{{AdminOrderFormPaymentSection.header}}" stepKey="unfocus"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForJavascriptToFinish"/>
+        <click selector="{{AdminOrderFormPaymentSection.getShippingMethods}}" stepKey="clickShippingMethods"/>
+        <!--Step 3 Assertion: Verify ups shipping method in admin and verify ups shipping methods is not available-->
+        <waitForElementVisible selector="{{AdminShippingMethodUPSSection.upsShippingNotAvailableAlertInAdmin}}" stepKey="waitForUpsShippingNotAvailable"/>
+    </test>
+</tests>

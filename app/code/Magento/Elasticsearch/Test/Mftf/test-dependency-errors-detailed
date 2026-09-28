@@ -1,0 +1,5 @@
+
+File "/var/www/html/app/code/Magento/Elasticsearch/Test/Mftf/Test/StorefrontCheckAdvancedSearchOnElasticSearchTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 CreateApiConfigurableProductWithDescriptionActionGroup from module(s): magento/module-configurable-product

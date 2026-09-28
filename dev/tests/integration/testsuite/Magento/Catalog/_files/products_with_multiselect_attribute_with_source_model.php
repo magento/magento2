@@ -1,14 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 use Magento\Catalog\_files\MultiselectSourceMock;
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
 Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/multiselect_attribute_with_source_model.php');
-Resolver::getInstance()->requireDataFixture('Magento/Checkout/_files/ValidatorFileMock.php');
 
 /** Create product with options and multiselect attribute */
 

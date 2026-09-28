@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -70,15 +70,15 @@ class Builder
         Logger $logger,
         Registry $registry,
         WysiwygModel\Config $wysiwygConfig,
-        StoreFactory $storeFactory = null,
-        ProductRepositoryInterface $productRepository = null
+        ?StoreFactory $storeFactory = null,
+        ?ProductRepositoryInterface $productRepository = null
     ) {
         $this->productFactory = $productFactory;
         $this->logger = $logger;
         $this->registry = $registry;
         $this->wysiwygConfig = $wysiwygConfig;
         $this->storeFactory = $storeFactory ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Store\Model\StoreFactory::class);
+            ->get(StoreFactory::class);
         $this->productRepository = $productRepository ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(ProductRepositoryInterface::class);
     }

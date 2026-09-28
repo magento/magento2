@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Analytics\Model;
@@ -49,7 +49,9 @@ class StoreConfigurationProvider
 
     /**
      * Generates report using config paths from di.xml
+     *
      * For each website and store
+     *
      * @return \IteratorIterator
      */
     public function getReport()
@@ -58,6 +60,7 @@ class StoreConfigurationProvider
 
         /** @var WebsiteInterface $website */
         foreach ($this->storeManager->getWebsites() as $website) {
+            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
             $configReport = array_merge(
                 $this->generateReportForScope(ScopeInterface::SCOPE_WEBSITES, $website->getId()),
                 $configReport
@@ -66,6 +69,7 @@ class StoreConfigurationProvider
 
         /** @var StoreInterface $store */
         foreach ($this->storeManager->getStores() as $store) {
+            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
             $configReport = array_merge(
                 $this->generateReportForScope(ScopeInterface::SCOPE_STORES, $store->getId()),
                 $configReport

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\Order\Pdf\Items;
 
@@ -97,8 +97,8 @@ abstract class AbstractItems extends AbstractModel
         TaxHelper $taxData,
         Filesystem $filesystem,
         FilterManager $filterManager,
-        AbstractResource $resource = null,
-        AbstractDb $resourceCollection = null,
+        ?AbstractResource $resource = null,
+        ?AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->filterManager = $filterManager;
@@ -326,7 +326,7 @@ abstract class AbstractItems extends AbstractModel
      */
     public function getItemOptions()
     {
-        $result = [[]];
+        $result = [];
         $options = $this->getItem()->getOrderItem()->getProductOptions();
         if ($options) {
             if (isset($options['options'])) {
@@ -339,7 +339,7 @@ abstract class AbstractItems extends AbstractModel
                 $result[] = $options['attributes_info'];
             }
         }
-        return array_merge(...$result);
+        return array_merge([], ...$result);
     }
 
     /**

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,12 +18,32 @@ use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use Magento\Sales\Model\Order\StatusLabel;
 
 /**
  * Test for Magento\Sales\Model\Order\Config class
  */
 class ConfigTest extends TestCase
 {
+    use MockCreationTrait;
+
+    /**
+     * Pending status stub
+     */
+    private const STUB_PENDING_STATUS_CODE = 'pending';
+
+    /**
+     * Store view with id 2
+     */
+    private const STUB_STORE_VIEW_WITH_ID_2 = 2;
+
+    /**
+     * Pending label in store view 2
+     */
+    private const STUB_STORE_VIEW_LABEL_WITH_ID_2 = 'Pending-2';
+
     /**
      * @var  Config
      */
@@ -50,30 +70,37 @@ class ConfigTest extends TestCase
     protected $storeManagerMock;
 
     /**
+     * @var StatusLabel|MockObject
+     */
+    protected $statusLabel;
+
+    /**
      * @return void
      */
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->orderStatusModel = $objectManager->getObject(Status::class, [
             'storeManager' => $this->storeManagerMock,
         ]);
-        $this->statusFactoryMock = $this->getMockBuilder(StatusFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['load', 'create'])
-            ->getMock();
+        $this->statusFactoryMock = $this->createPartialMockWithReflection(
+            StatusFactory::class,
+            ['load', 'create']
+        );
         $this->orderStatusCollectionFactoryMock = $this->createPartialMock(
             CollectionFactory::class,
             ['create']
         );
+        $this->statusLabel = $this->createMock(StatusLabel::class);
         $this->salesConfig = $objectManager
             ->getObject(
                 Config::class,
                 [
                     'orderStatusFactory' => $this->statusFactoryMock,
-                    'orderStatusCollectionFactory' => $this->orderStatusCollectionFactoryMock
+                    'orderStatusCollectionFactory' => $this->orderStatusCollectionFactoryMock,
+                    'statusLabel' => $this->statusLabel
                 ]
             );
     }
@@ -115,11 +142,10 @@ class ConfigTest extends TestCase
         ];
         $expectedResult = ['complete', 'pending_payment'];
 
-        $collectionMock = $this->getMockBuilder(Collection::class)
-            ->addMethods(['create'])
-            ->onlyMethods(['joinStates'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $collectionMock = $this->createPartialMockWithReflection(
+            Collection::class,
+            ['create', 'joinStates']
+        );
         $this->orderStatusCollectionFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($collectionMock);
@@ -152,11 +178,10 @@ class ConfigTest extends TestCase
                 ]
             )
         ];
-        $collectionMock = $this->getMockBuilder(Collection::class)
-            ->addMethods(['create'])
-            ->onlyMethods(['joinStates'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $collectionMock = $this->createPartialMockWithReflection(
+            Collection::class,
+            ['create', 'joinStates']
+        );
         $this->orderStatusCollectionFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($collectionMock);
@@ -169,21 +194,19 @@ class ConfigTest extends TestCase
 
     /**
      * Test get statuses
-     *
-     * @dataProvider getStatusesDataProvider
-     *
+     *     *
      * @param string $state
      * @param bool $joinLabels
      * @param DataObject[] $collectionData
      * @param array $expectedResult
      */
+    #[DataProvider('getStatusesDataProvider')]
     public function testGetStatuses($state, $joinLabels, $collectionData, $expectedResult)
     {
-        $collectionMock = $this->getMockBuilder(Collection::class)
-            ->addMethods(['create'])
-            ->onlyMethods(['joinStates', 'addStateFilter', 'orderByLabel'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $collectionMock = $this->createPartialMockWithReflection(
+            Collection::class,
+            ['create', 'joinStates', 'addStateFilter', 'orderByLabel']
+        );
         $this->orderStatusCollectionFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($collectionMock);
@@ -204,8 +227,9 @@ class ConfigTest extends TestCase
 
         $this->statusFactoryMock->method('load')
             ->willReturn($this->orderStatusModel);
+        $this->statusLabel->method('getStatusLabel')->willReturn('Pending label');
 
-        $storeMock = $this->getMockForAbstractClass(StoreInterface::class);
+        $storeMock = $this->createMock(StoreInterface::class);
         $storeMock->method('getId')
             ->willReturn(1);
 
@@ -227,7 +251,7 @@ class ConfigTest extends TestCase
      *
      * @return array
      */
-    public function getStatusesDataProvider()
+    public static function getStatusesDataProvider()
     {
         return [
             'processing state' => [

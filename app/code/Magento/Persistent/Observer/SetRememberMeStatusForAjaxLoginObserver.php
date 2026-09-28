@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Persistent\Observer;
 
@@ -44,7 +44,7 @@ class SetRememberMeStatusForAjaxLoginObserver implements ObserverInterface
     public function __construct(
         \Magento\Persistent\Helper\Data $persistentData,
         \Magento\Persistent\Helper\Session $persistentSession,
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->_persistentData = $persistentData;
         $this->_persistentSession = $persistentSession;

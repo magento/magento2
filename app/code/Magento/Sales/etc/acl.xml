@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Acl/etc/acl.xsd">
@@ -14,6 +14,7 @@
                         <resource id="Magento_Sales::sales_order"  title="Orders" translate="title" sortOrder="10">
                             <resource id="Magento_Sales::actions" title="Actions" translate="title" sortOrder="10">
                                 <resource id="Magento_Sales::create" title="Create" translate="title" sortOrder="10" />
+                                <resource id="Magento_Sales::api_actions" title="Order Save API" translate="title" sortOrder="10" />
                                 <resource id="Magento_Sales::actions_view" title="View" translate="title" sortOrder="20" />
                                 <resource id="Magento_Sales::email" title="Send Order Email" translate="title" sortOrder="30" />
                                 <resource id="Magento_Sales::reorder" title="Reorder" translate="title" sortOrder="40" />

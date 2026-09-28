@@ -1,17 +1,24 @@
 <?php
 declare(strict_types=1);
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Controller\Adminhtml\Address;
 
 use Magento\Backend\App\Action;
+use Magento\Customer\Model\CustomerRegistry;
 use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Customer\Model\ValidatorExceptionProcessor;
+use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Message\AbstractMessage;
+use Magento\Framework\Validator\Exception as ValidatorException;
+use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -63,6 +70,21 @@ class Save extends Action implements HttpPostActionInterface
     private $resultJsonFactory;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
+     * @var CustomerRegistry
+     */
+    private $customerRegistry;
+
+    /**
+     * @var ValidatorExceptionProcessor
+     */
+    private $validatorExceptionProcessor;
+
+    /**
      * @param Action\Context $context
      * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
      * @param \Magento\Customer\Model\Metadata\FormFactory $formFactory
@@ -71,6 +93,10 @@ class Save extends Action implements HttpPostActionInterface
      * @param \Magento\Customer\Api\Data\AddressInterfaceFactory $addressDataFactory
      * @param LoggerInterface $logger
      * @param JsonFactory $resultJsonFactory
+     * @param StoreManagerInterface|null $storeManager
+     * @param CustomerRegistry|null $customerRegistry
+     * @param ValidatorExceptionProcessor|null $validatorExceptionProcessor
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Action\Context $context,
@@ -80,7 +106,10 @@ class Save extends Action implements HttpPostActionInterface
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Customer\Api\Data\AddressInterfaceFactory $addressDataFactory,
         LoggerInterface $logger,
-        JsonFactory $resultJsonFactory
+        JsonFactory $resultJsonFactory,
+        ?StoreManagerInterface $storeManager = null,
+        ?CustomerRegistry $customerRegistry = null,
+        ?ValidatorExceptionProcessor $validatorExceptionProcessor = null
     ) {
         parent::__construct($context);
         $this->addressRepository = $addressRepository;
@@ -90,6 +119,15 @@ class Save extends Action implements HttpPostActionInterface
         $this->addressDataFactory = $addressDataFactory;
         $this->logger = $logger;
         $this->resultJsonFactory = $resultJsonFactory;
+        $this->storeManager = $storeManager
+            ?? ObjectManager::getInstance()->get(StoreManagerInterface::class);
+        $this->customerRegistry = $customerRegistry
+            ?? ObjectManager::getInstance()->get(CustomerRegistry::class);
+        $this->validatorExceptionProcessor = $validatorExceptionProcessor
+            ?? ObjectManager::getInstance()->get(ValidatorExceptionProcessor::class);
+        if ($this->validatorExceptionProcessor !== null) {
+            $this->validatorExceptionProcessor->setMessageManager($context->getMessageManager());
+        }
     }
 
     /**
@@ -104,6 +142,10 @@ class Save extends Action implements HttpPostActionInterface
 
         $error = false;
         try {
+            $customerModel = $this->customerRegistry->retrieve($customerId);
+            if ($customerModel->getStoreId()) {
+                $this->storeManager->setCurrentStore($customerModel->getStoreId());
+            }
             /** @var \Magento\Customer\Api\Data\CustomerInterface $customer */
             $customer = $this->customerRepository->getById($customerId);
 
@@ -149,7 +191,11 @@ class Save extends Action implements HttpPostActionInterface
             $message = __('There is no customer with such id.');
         } catch (LocalizedException $e) {
             $error = true;
-            $message = __($e->getMessage());
+            if ($e instanceof InputException && $this->validatorExceptionProcessor !== null) {
+                $message = $this->validatorExceptionProcessor->processInputExceptionForJson($e);
+            } else {
+                $message = __($e->getMessage());
+            }
             $this->logger->critical($e);
         } catch (\Exception $e) {
             $error = true;

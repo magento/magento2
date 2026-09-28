@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -32,7 +32,7 @@ class CacheTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->frontendCacheMock = $this->getMockForAbstractClass(FrontendInterface::class);
+        $this->frontendCacheMock = $this->createMock(FrontendInterface::class);
 
         $objectManager = new ObjectManagerHelper($this);
 
@@ -162,6 +162,6 @@ class CacheTest extends TestCase
             ->with(self::LOCK_PREFIX . $identifier)
             ->willReturn(\uniqid('some_rand-', true));
 
-        $this->assertEquals(false, $this->cache->lock($identifier));
+        $this->assertEquals(false, $this->cache->lock($identifier, 0));
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -11,6 +11,7 @@ namespace Magento\MediaGalleryApi\Api;
 /**
  * Delete media assets by exact or directory paths
  * @api
+ * @since 101.0.0
  */
 interface DeleteAssetsByPathsInterface
 {
@@ -19,6 +20,7 @@ interface DeleteAssetsByPathsInterface
      *
      * @param string[] $paths
      * @return void
+     * @since 101.0.0
      */
     public function execute(array $paths): void;
 }

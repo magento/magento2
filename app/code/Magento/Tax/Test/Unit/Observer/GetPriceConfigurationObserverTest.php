@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Tax\Test\Unit\Observer;
 
 use Magento\Bundle\Model\ResourceModel\Selection\Collection;
+use Magento\Bundle\Model\Product\Type as BundleProductType;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Pricing\Price\BasePrice;
@@ -15,9 +16,11 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Pricing\Amount\Base;
 use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Tax\Helper\Data;
 use Magento\Tax\Observer\GetPriceConfigurationObserver;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -26,6 +29,8 @@ use PHPUnit\Framework\TestCase;
  */
 class GetPriceConfigurationObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var GetPriceConfigurationObserver
      */
@@ -48,12 +53,10 @@ class GetPriceConfigurationObserverTest extends TestCase
 
     /**
      * test Execute
-     * @dataProvider getPriceConfigurationProvider
-     * @param array $testArray
-     * @param array $expectedArray
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testExecute($testArray, $expectedArray)
+    #[DataProvider('getPriceConfigurationProvider')]
+    public function testExecute(array $testArray, array $expectedArray): void
     {
         $configObj = new DataObject(
             [
@@ -122,17 +125,15 @@ class GetPriceConfigurationObserverTest extends TestCase
             ->method('getItems')
             ->willReturn([$prod1, $prod2]);
 
-        $productInstance =
-            $this->getMockBuilder(Type::class)
-                ->addMethods(['setStoreFilter', 'getSelectionsCollection', 'getOptionsIds'])
-                ->disableOriginalConstructor()
-                ->getMock();
+        $productInstance = $this->createPartialMockWithReflection(
+            Type::class,
+            ['setStoreFilter', 'getSelectionsCollection', 'getOptionsIds']
+        );
 
-        $product = $this->getMockBuilder(\Magento\Bundle\Model\Product\Type::class)
-            ->addMethods(['getTypeInstance', 'getTypeId', 'getStoreId', 'getId'])
-            ->onlyMethods(['getSelectionsCollection'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $product = $this->createPartialMockWithReflection(
+            BundleProductType::class,
+            ['getTypeInstance', 'getTypeId', 'getStoreId', 'getId', 'getSelectionsCollection']
+        );
         $product->expects($this->any())
             ->method('getTypeInstance')
             ->willReturn($productInstance);
@@ -178,7 +179,7 @@ class GetPriceConfigurationObserverTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function getPriceConfigurationProvider()
+    public static function getPriceConfigurationProvider(): array
     {
         return [
             "basic" => [

@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
+
 declare(strict_types=1);
 
 namespace Magento\SalesRule\Test\Unit\Model\ResourceModel;
@@ -12,14 +13,18 @@ use Magento\Framework\DataObject;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\EntityManager;
+use Magento\Framework\EntityManager\EntityMetadataInterface;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor;
 use Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\SalesRule\Model\ResourceModel\Rule;
 use Magento\SalesRule\Model\Rule\Condition\Product;
 use Magento\SalesRule\Model\Rule\Condition\Product\Found;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -78,6 +83,16 @@ class RuleTest extends TestCase
      */
     protected $relationProcessorMock;
 
+    /**
+     * @var MockObject
+     */
+    private $metadataPoolMock;
+
+    /**
+     * @var \Magento\SalesRule\Model\ResourceModel\Coupon|MockObject
+     */
+    private $resourceCoupon;
+
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
@@ -102,22 +117,18 @@ class RuleTest extends TestCase
                 ->getMock();
 
         $this->transactionManagerMock =
-            $this->getMockBuilder(TransactionManagerInterface::class)
-                ->disableOriginalConstructor()
-                ->getMockForAbstractClass();
+            $this->createMock(TransactionManagerInterface::class);
 
         $context->expects($this->any())
             ->method('getResources')
             ->willReturn($this->resourcesMock);
 
         $this->entityManager = $this->getMockBuilder(EntityManager::class)
-            ->setMethods(['load', 'save', 'delete'])
+            ->onlyMethods(['load', 'save', 'delete'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->adapter = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->adapter = $this->createMock(AdapterInterface::class);
         $this->resourcesMock->expects($this->any())
             ->method('getConnection')
             ->willReturn($this->adapter);
@@ -154,6 +165,15 @@ class RuleTest extends TestCase
                     ],
                 ]
             );
+        $serializerMock = $this->createMock(Json::class);
+        $serializerMock->method('serialize')->willReturnCallback(function ($value) {
+            return json_encode($value);
+        });
+        $this->metadataPoolMock = $this->getMockBuilder(MetadataPool::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->resourceCoupon = $this->createMock(\Magento\SalesRule\Model\ResourceModel\Coupon::class);
 
         $this->model = $this->objectManager->getObject(
             Rule::class,
@@ -161,7 +181,10 @@ class RuleTest extends TestCase
                 'context' => $context,
                 'connectionName' => $connectionName,
                 'entityManager' => $this->entityManager,
-                'associatedEntityMapInstance' => $associatedEntitiesMap
+                'associatedEntityMapInstance' => $associatedEntitiesMap,
+                'serializer' => $serializerMock,
+                'metadataPool' => $this->metadataPoolMock,
+                'resourceCoupon' => $this->resourceCoupon
             ]
         );
     }
@@ -173,9 +196,7 @@ class RuleTest extends TestCase
     {
         $ruleId = 1;
         /** @var AbstractModel|MockObject $abstractModel */
-        $abstractModel = $this->getMockBuilder(AbstractModel::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $abstractModel = $this->createMock(AbstractModel::class);
         $this->entityManager->expects($this->once())
             ->method('load')
             ->with($abstractModel, $ruleId);
@@ -204,8 +225,8 @@ class RuleTest extends TestCase
      *
      * @param string $testString
      * @param array $expects
-     * @dataProvider dataProviderForProductAttributes
      */
+    #[DataProvider('dataProviderForProductAttributes')]
     public function testGetProductAttributes($testString, $expects)
     {
         $result = $this->model->getProductAttributes($testString);
@@ -213,9 +234,76 @@ class RuleTest extends TestCase
     }
 
     /**
+     * Checks that linked field is used for rule labels
+     */
+    public function testSaveStoreLabels()
+    {
+        $entityMetadataInterfaceMock = $this->createMock(EntityMetadataInterface::class);
+        $entityMetadataInterfaceMock->expects($this->once())
+            ->method('getLinkField')
+            ->willReturn('fieldName');
+        $this->metadataPoolMock->expects($this->once())
+            ->method('getMetadata')
+            ->willReturn($entityMetadataInterfaceMock);
+        $this->model->saveStoreLabels(1, ['test']);
+    }
+
+    /**
+     * @param array $data
+     * @param bool $update
+     * @return void
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
+    #[DataProvider('afterSaveShouldUpdateExistingCouponsDataProvider')]
+    public function testAfterSaveShouldUpdateExistingCoupons(array $data, bool $update = true): void
+    {
+        /** @var AbstractModel|MockObject $abstractModel */
+        $ruleMock = $this->getMockBuilder(\Magento\SalesRule\Model\Rule::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getConditions', 'getActions'])
+            ->getMock();
+        $conditions = $this->createMock(\Magento\Rule\Model\Condition\Combine::class);
+        $conditions->method('asArray')->willReturn([]);
+        $actions = $this->createMock(\Magento\Rule\Model\Action\Collection::class);
+        $actions->method('asArray')->willReturn([]);
+        $ruleMock->method('getConditions')->willReturn($conditions);
+        $ruleMock->method('getActions')->willReturn($actions);
+        $ruleMock->addData($data);
+        $this->resourceCoupon->expects($update ? $this->once() : $this->never())
+            ->method('updateSpecificCoupons')
+            ->with($ruleMock);
+        $this->model->afterSave($ruleMock);
+    }
+
+    /**
      * @return array
      */
-    public function dataProviderForProductAttributes()
+    public static function afterSaveShouldUpdateExistingCouponsDataProvider(): array
+    {
+        return [
+            [
+                ['use_auto_generation' => 0, 'coupon_type' => \Magento\SalesRule\Model\Rule::COUPON_TYPE_NO_COUPON],
+                false
+            ],
+            [
+                ['use_auto_generation' => 0, 'coupon_type' => \Magento\SalesRule\Model\Rule::COUPON_TYPE_SPECIFIC],
+                false
+            ],
+            [
+                ['use_auto_generation' => 1, 'coupon_type' => \Magento\SalesRule\Model\Rule::COUPON_TYPE_SPECIFIC],
+                true
+            ],
+            [
+                ['use_auto_generation' => 0, 'coupon_type' => \Magento\SalesRule\Model\Rule::COUPON_TYPE_AUTO],
+                true
+            ]
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public static function dataProviderForProductAttributes()
     {
         return [
             [

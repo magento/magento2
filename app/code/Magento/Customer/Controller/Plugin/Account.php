@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -72,7 +72,7 @@ class Account
      */
     private function isActionAllowed(): bool
     {
-        $action = strtolower($this->request->getActionName());
+        $action = strtolower($this->request->getActionName() ?? '');
         $pattern = '/^(' . implode('|', $this->allowedActions) . ')$/i';
 
         return (bool)preg_match($pattern, $action);

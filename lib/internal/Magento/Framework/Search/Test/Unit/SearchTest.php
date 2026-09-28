@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -62,17 +62,13 @@ class SearchTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->searchEngine = $this->getMockBuilder(SearchEngineInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->searchEngine = $this->createMock(SearchEngineInterface::class);
 
         $this->searchResponseBuilder = $this->getMockBuilder(SearchResponseBuilder::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->scopeResolver = $this->getMockBuilder(ScopeResolverInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->scopeResolver = $this->createMock(ScopeResolverInterface::class);
 
         $this->model = $objectManager->getObject(
             Search::class,
@@ -97,9 +93,7 @@ class SearchTest extends TestCase
             $this->createFilterMock('range_filter', ['from' => 60, 'to' => 82]),
         ];
 
-        $scope = $this->getMockBuilder(ScopeInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $scope = $this->createMock(ScopeInterface::class);
 
         $filterGroup = $this->getMockBuilder(FilterGroup::class)
             ->disableOriginalConstructor()
@@ -108,9 +102,7 @@ class SearchTest extends TestCase
             ->method('getFilters')
             ->willReturn($filters);
 
-        $searchCriteria = $this->getMockBuilder(SearchCriteriaInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $searchCriteria = $this->createMock(SearchCriteriaInterface::class);
         $searchCriteria->expects($this->once())
             ->method('getRequestName')
             ->willReturn($requestName);
@@ -118,17 +110,16 @@ class SearchTest extends TestCase
             ->method('getFilterGroups')
             ->willReturn([$filterGroup]);
 
-        $searchResult = $this->getMockBuilder(SearchResult::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $searchResultMock = $this->createMock(SearchResult::class);
+        // SearchResult must support setSearchCriteria() method chaining
+        $searchResultMock->expects($this->once())
+            ->method('setSearchCriteria')
+            ->with($searchCriteria)
+            ->willReturnSelf();
 
-        $request = $this->getMockBuilder(RequestInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $request = $this->createMock(RequestInterface::class);
 
-        $response = $this->getMockBuilder(ResponseInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $response = $this->createMock(ResponseInterface::class);
 
         $this->requestBuilder->expects($this->once())
             ->method('setRequestName')
@@ -150,7 +141,7 @@ class SearchTest extends TestCase
         $this->searchResponseBuilder->expects($this->once())
             ->method('build')
             ->with($response)
-            ->willReturn($searchResult);
+            ->willReturn($searchResultMock);
 
         $this->scopeResolver->expects($this->once())
             ->method('getScope')
@@ -160,9 +151,10 @@ class SearchTest extends TestCase
             ->method('getId')
             ->willReturn($scopeId);
 
-        $searchResult = $this->model->search($searchCriteria);
+        $actualResult = $this->model->search($searchCriteria);
 
-        $this->assertInstanceOf(SearchResultInterface::class, $searchResult);
+        $this->assertInstanceOf(SearchResultInterface::class, $actualResult);
+        $this->assertSame($searchResultMock, $actualResult);
     }
 
     /**

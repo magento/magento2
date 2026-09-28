@@ -1,11 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Theme\Model\Data\Design;
 
+use Magento\Config\Model\Config\Reader\Source\Deployed\SettingChecker;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ScopeValidatorInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Store\Model\StoreManagerInterface;
@@ -60,6 +62,7 @@ class ConfigFactory
      * @param DesignConfigExtensionFactory $configExtensionFactory
      * @param ScopeValidatorInterface $scopeValidator
      * @param StoreManagerInterface $storeManager
+     * @param SettingChecker|null $settingChecker
      */
     public function __construct(
         DesignConfigInterfaceFactory $designConfigFactory,
@@ -67,7 +70,8 @@ class ConfigFactory
         DesignConfigDataInterfaceFactory $designConfigDataFactory,
         DesignConfigExtensionFactory $configExtensionFactory,
         ScopeValidatorInterface $scopeValidator,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        private ?SettingChecker $settingChecker = null
     ) {
         $this->designConfigFactory = $designConfigFactory;
         $this->metadataProvider = $metadataProvider;
@@ -75,6 +79,7 @@ class ConfigFactory
         $this->configExtensionFactory = $configExtensionFactory;
         $this->scopeValidator = $scopeValidator;
         $this->storeManager = $storeManager;
+        $this->settingChecker = $this->settingChecker ?? ObjectManager::getInstance()->get(SettingChecker::class);
     }
 
     /**
@@ -100,7 +105,7 @@ class ConfigFactory
             $configDataObject = $this->designConfigDataFactory->create();
             $configDataObject->setPath($metadata['path']);
             $configDataObject->setFieldConfig($metadata);
-            if (isset($data[$name])) {
+            if (isset($data[$name]) && !$this->settingChecker->isReadOnly($metadata['path'], $scope, $scopeId)) {
                 $configDataObject->setValue($data[$name]);
             }
             $configData[] = $configDataObject;

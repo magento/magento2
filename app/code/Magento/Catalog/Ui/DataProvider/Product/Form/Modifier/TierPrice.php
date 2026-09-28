@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 
@@ -18,7 +18,7 @@ use Magento\Ui\Component\Form\Field;
  * Tier prices modifier adds price type option to tier prices.
  *
  * @api
- * @since 101.1.0
+ * @since 102.0.0
  */
 class TierPrice extends AbstractModifier
 {
@@ -46,7 +46,7 @@ class TierPrice extends AbstractModifier
 
     /**
      * @inheritdoc
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function modifyData(array $data)
     {
@@ -56,7 +56,7 @@ class TierPrice extends AbstractModifier
     /**
      * Add tier price info to meta array.
      *
-     * @since 101.1.0
+     * @since 102.0.0
      * @param array $meta
      * @return array
      */
@@ -118,6 +118,10 @@ class TierPrice extends AbstractModifier
                             'showLabel' => false,
                             'dataScope' => '',
                             'additionalClasses' => 'control-grouped',
+                            'imports' => [
+                                'currency' => '${ $.parentName }.website_id:currency',
+                                '__disableTmpl' => ['currency' => false],
+                            ],
                             'sortOrder' => isset($priceMeta['arguments']['data']['config']['sortOrder'])
                                 ? $priceMeta['arguments']['data']['config']['sortOrder'] : 40,
                         ],

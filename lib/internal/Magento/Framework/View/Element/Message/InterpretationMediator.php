@@ -1,12 +1,17 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Element\Message;
 
 use Magento\Framework\Message\MessageInterface;
 
+/**
+ * Can try and interpret a given message or fall back to the message text if not possible
+ */
 class InterpretationMediator implements InterpretationStrategyInterface
 {
     /**
@@ -34,8 +39,8 @@ class InterpretationMediator implements InterpretationStrategyInterface
         if ($message->getIdentifier()) {
             try {
                 return $this->interpretationStrategy->interpret($message);
+                // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
             } catch (\LogicException $e) {
-                // pass
             }
         }
 

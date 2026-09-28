@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CatalogRule\Model\Indexer;
 
@@ -41,6 +41,12 @@ class ProductRuleTest extends \PHPUnit\Framework\TestCase
         );
         $product = $productRepository->get('simple');
         $product->setData('test_attribute', 'test_attribute_value')->save();
+
+        // Manually trigger reindexing to ensure rule price is updated
+        $indexBuilder = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            \Magento\CatalogRule\Model\Indexer\IndexBuilder::class
+        );
+        $indexBuilder->reindexById($product->getId());
 
         $this->assertEquals(9.8, $this->resourceRule->getRulePrice(new \DateTime(), 1, 1, $product->getId()));
     }

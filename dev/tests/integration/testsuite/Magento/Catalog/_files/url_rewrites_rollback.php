@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 /** @var \Magento\Framework\Registry $registry */
@@ -25,7 +25,7 @@ try {
 $collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
     ->create(\Magento\Catalog\Model\ResourceModel\Category\Collection::class);
 $collection
-    ->addAttributeToFilter('level', 2)
+    ->addAttributeToFilter('name', ['in' => ['Old Root', 'Category 2', 'Category 1']])
     ->load()
     ->delete();
 

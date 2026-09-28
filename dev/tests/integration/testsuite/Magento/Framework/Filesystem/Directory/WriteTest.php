@@ -2,20 +2,23 @@
 /**
  * Test for \Magento\Framework\Filesystem\Directory\Write
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Filesystem\Directory;
 
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Filesystem\DriverPool;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class ReadTest
  * Test for Magento\Framework\Filesystem\Directory\Read class
  */
-class WriteTest extends \PHPUnit\Framework\TestCase
+class WriteTest extends TestCase
 {
     /**
      * Test data to be cleaned
@@ -37,11 +40,13 @@ class WriteTest extends \PHPUnit\Framework\TestCase
     /**
      * Test for create method
      *
-     * @dataProvider createProvider
      * @param string $basePath
      * @param int $permissions
      * @param string $path
+     * @throws FileSystemException
+     * @throws ValidatorException
      */
+    #[DataProvider('createProvider')]
     public function testCreate($basePath, $permissions, $path)
     {
         $directory = $this->getDirectoryInstance($basePath, $permissions);
@@ -54,7 +59,7 @@ class WriteTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function createProvider()
+    public static function createProvider()
     {
         return [
             ['newDir1', 0777, "newDir1"],
@@ -64,6 +69,11 @@ class WriteTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
+    /**
+     * Test for create outside
+     *
+     * @throws FileSystemException
+     */
     public function testCreateOutside()
     {
         $exceptions = 0;
@@ -89,9 +99,11 @@ class WriteTest extends \PHPUnit\Framework\TestCase
     /**
      * Test for delete method
      *
-     * @dataProvider deleteProvider
      * @param string $path
+     * @throws FileSystemException
+     * @throws ValidatorException
      */
+    #[DataProvider('deleteProvider')]
     public function testDelete($path)
     {
         $directory = $this->getDirectoryInstance('newDir', 0777);
@@ -106,11 +118,16 @@ class WriteTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function deleteProvider()
+    public static function deleteProvider()
     {
         return [['subdir'], ['subdir/subsubdir']];
     }
 
+    /**
+     * Test for delete outside
+     *
+     * @throws FileSystemException
+     */
     public function testDeleteOutside()
     {
         $exceptions = 0;
@@ -136,12 +153,14 @@ class WriteTest extends \PHPUnit\Framework\TestCase
     /**
      * Test for rename method (in scope of one directory instance)
      *
-     * @dataProvider renameProvider
      * @param string $basePath
      * @param int $permissions
      * @param string $name
      * @param string $newName
+     * @throws FileSystemException
+     * @throws ValidatorException
      */
+    #[DataProvider('renameProvider')]
     public function testRename($basePath, $permissions, $name, $newName)
     {
         $directory = $this->getDirectoryInstance($basePath, $permissions);
@@ -159,11 +178,16 @@ class WriteTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function renameProvider()
+    public static function renameProvider()
     {
         return [['newDir1', 0777, 'first_name.txt', 'second_name.txt']];
     }
 
+    /**
+     * Test for rename outside
+     *
+     * @throws FileSystemException
+     */
     public function testRenameOutside()
     {
         $exceptions = 0;
@@ -192,13 +216,15 @@ class WriteTest extends \PHPUnit\Framework\TestCase
     /**
      * Test for rename method (moving to new directory instance)
      *
-     * @dataProvider renameTargetDirProvider
      * @param string $firstDir
      * @param string $secondDir
      * @param int $permission
      * @param string $name
      * @param string $newName
+     * @throws FileSystemException
+     * @throws ValidatorException
      */
+    #[DataProvider('renameTargetDirProvider')]
     public function testRenameTargetDir($firstDir, $secondDir, $permission, $name, $newName)
     {
         $dir1 = $this->getDirectoryInstance($firstDir, $permission);
@@ -218,7 +244,7 @@ class WriteTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function renameTargetDirProvider()
+    public static function renameTargetDirProvider()
     {
         return [['dir1', 'dir2', 0777, 'first_name.txt', 'second_name.txt']];
     }
@@ -226,12 +252,14 @@ class WriteTest extends \PHPUnit\Framework\TestCase
     /**
      * Test for copy method (copy in scope of one directory instance)
      *
-     * @dataProvider renameProvider
      * @param string $basePath
      * @param int $permissions
      * @param string $name
      * @param string $newName
+     * @throws ValidatorException
+     * @throws FileSystemException
      */
+    #[DataProvider('renameProvider')]
     public function testCopy($basePath, $permissions, $name, $newName)
     {
         $directory = $this->getDirectoryInstance($basePath, $permissions);
@@ -255,6 +283,11 @@ class WriteTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
+    /**
+     * Test for copy outside
+     *
+     * @throws FileSystemException|ValidatorException
+     */
     public function testCopyOutside()
     {
         $exceptions = 0;
@@ -292,13 +325,15 @@ class WriteTest extends \PHPUnit\Framework\TestCase
     /**
      * Test for copy method (copy to another directory instance)
      *
-     * @dataProvider copyTargetDirProvider
      * @param string $firstDir
      * @param string $secondDir
      * @param int $permission
      * @param string $name
      * @param string $newName
+     * @throws FileSystemException
+     * @throws ValidatorException
      */
+    #[DataProvider('copyTargetDirProvider')]
     public function testCopyTargetDir($firstDir, $secondDir, $permission, $name, $newName)
     {
         $dir1 = $this->getDirectoryInstance($firstDir, $permission);
@@ -317,7 +352,7 @@ class WriteTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function copyTargetDirProvider()
+    public static function copyTargetDirProvider()
     {
         return [
             ['dir1', 'dir2', 0777, 'first_name.txt', 'second_name.txt'],
@@ -327,6 +362,8 @@ class WriteTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test for changePermissions method
+     *
+     * @throws FileSystemException|ValidatorException
      */
     public function testChangePermissions()
     {
@@ -335,6 +372,11 @@ class WriteTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($directory->changePermissions('test_directory', 0644));
     }
 
+    /**
+     * Test for changePermissions outside
+     *
+     * @throws FileSystemException
+     */
     public function testChangePermissionsOutside()
     {
         $exceptions = 0;
@@ -359,6 +401,8 @@ class WriteTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test for changePermissionsRecursively method
+     *
+     * @throws FileSystemException|ValidatorException
      */
     public function testChangePermissionsRecursively()
     {
@@ -370,6 +414,11 @@ class WriteTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($directory->changePermissionsRecursively('test_directory', 0777, 0644));
     }
 
+    /**
+     * Test for changePermissionsRecursively outside
+     *
+     * @throws FileSystemException
+     */
     public function testChangePermissionsRecursivelyOutside()
     {
         $exceptions = 0;
@@ -395,12 +444,14 @@ class WriteTest extends \PHPUnit\Framework\TestCase
     /**
      * Test for touch method
      *
-     * @dataProvider touchProvider
      * @param string $basePath
      * @param int $permissions
      * @param string $path
      * @param int $time
+     * @throws FileSystemException
+     * @throws ValidatorException
      */
+    #[DataProvider('touchProvider')]
     public function testTouch($basePath, $permissions, $path, $time)
     {
         $directory = $this->getDirectoryInstance($basePath, $permissions);
@@ -414,7 +465,7 @@ class WriteTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function touchProvider()
+    public static function touchProvider()
     {
         return [
             ['test_directory', 0777, 'touch_file.txt', time() - 3600],
@@ -422,6 +473,11 @@ class WriteTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
+    /**
+     * Test for touch outside
+     *
+     * @throws FileSystemException
+     */
     public function testTouchOutside()
     {
         $exceptions = 0;
@@ -446,6 +502,8 @@ class WriteTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test isWritable method
+     *
+     * @throws FileSystemException|ValidatorException
      */
     public function testIsWritable()
     {
@@ -455,6 +513,11 @@ class WriteTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($directory->isWritable('bar'));
     }
 
+    /**
+     * Test isWritable method outside
+     *
+     * @throws FileSystemException
+     */
     public function testIsWritableOutside()
     {
         $exceptions = 0;
@@ -480,12 +543,14 @@ class WriteTest extends \PHPUnit\Framework\TestCase
     /**
      * Test for openFile method
      *
-     * @dataProvider openFileProvider
      * @param string $basePath
      * @param int $permissions
      * @param string $path
      * @param string $mode
+     * @throws FileSystemException
+     * @throws ValidatorException
      */
+    #[DataProvider('openFileProvider')]
     public function testOpenFile($basePath, $permissions, $path, $mode)
     {
         $directory = $this->getDirectoryInstance($basePath, $permissions);
@@ -499,7 +564,7 @@ class WriteTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function openFileProvider()
+    public static function openFileProvider()
     {
         return [
             ['newDir1', 0777, 'newFile.txt', 'w+'],
@@ -507,6 +572,11 @@ class WriteTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
+    /**
+     * Test for openFile outside
+     *
+     * @throws FileSystemException
+     */
     public function testOpenFileOutside()
     {
         $exceptions = 0;
@@ -532,11 +602,13 @@ class WriteTest extends \PHPUnit\Framework\TestCase
     /**
      * Test writeFile
      *
-     * @dataProvider writeFileProvider
      * @param string $path
      * @param string $content
      * @param string $extraContent
+     * @throws FileSystemException
+     * @throws ValidatorException
      */
+    #[DataProvider('writeFileProvider')]
     public function testWriteFile($path, $content, $extraContent)
     {
         $directory = $this->getDirectoryInstance('writeFileDir', 0777);
@@ -549,11 +621,13 @@ class WriteTest extends \PHPUnit\Framework\TestCase
     /**
      * Test writeFile for append mode
      *
-     * @dataProvider writeFileProvider
      * @param string $path
      * @param string $content
      * @param string $extraContent
+     * @throws FileSystemException
+     * @throws ValidatorException
      */
+    #[DataProvider('writeFileProvider')]
     public function testWriteFileAppend($path, $content, $extraContent)
     {
         $directory = $this->getDirectoryInstance('writeFileDir', 0777);
@@ -568,11 +642,16 @@ class WriteTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function writeFileProvider()
+    public static function writeFileProvider()
     {
         return [['file1', '123', '456'], ['folder1/file1', '123', '456']];
     }
 
+    /**
+     * Test for writeFile outside
+     *
+     * @throws FileSystemException
+     */
     public function testWriteFileOutside()
     {
         $exceptions = 0;
@@ -596,7 +675,23 @@ class WriteTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test for invalidDeletePath
+     *
+     * @throws ValidatorException
+     */
+    public function testInvalidDeletePath()
+    {
+        $this->expectException(FileSystemException::class);
+        $directory = $this->getDirectoryInstance('newDir', 0777);
+        $invalidPath = 'invalidPath/../';
+        $directory->create($invalidPath);
+        $directory->delete($invalidPath);
+    }
+
+    /**
      * Tear down
+     *
+     * @throws ValidatorException|FileSystemException
      */
     protected function tearDown(): void
     {
@@ -620,8 +715,8 @@ class WriteTest extends \PHPUnit\Framework\TestCase
     {
         $fullPath = __DIR__ . '/../_files/' . $path;
         $objectManager = Bootstrap::getObjectManager();
-        /** @var \Magento\Framework\Filesystem\Directory\WriteFactory $directoryFactory */
-        $directoryFactory = $objectManager->create(\Magento\Framework\Filesystem\Directory\WriteFactory::class);
+        /** @var WriteFactory $directoryFactory */
+        $directoryFactory = $objectManager->create(WriteFactory::class);
         $directory = $directoryFactory->create($fullPath, DriverPool::FILE, $permissions);
         $this->testDirectories[] = $directory;
         return $directory;

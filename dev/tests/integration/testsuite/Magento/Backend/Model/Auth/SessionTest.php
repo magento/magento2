@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Backend\Model\Auth;
 
 use Magento\TestFramework\Bootstrap as TestHelper;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoAppArea adminhtml
@@ -39,6 +40,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
             ->setCurrentScope(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
         $this->auth = $this->objectManager->create(\Magento\Backend\Model\Auth::class);
         $this->authSession = $this->objectManager->create(\Magento\Backend\Model\Auth\Session::class);
+        $this->authSession->setUser($this->objectManager->create(\Magento\User\Model\User::class));
         $this->auth->setAuthStorage($this->authSession);
         $this->auth->logout();
     }
@@ -50,8 +52,8 @@ class SessionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider loginDataProvider
      */
+    #[DataProvider('loginDataProvider')]
     public function testIsLoggedIn($loggedIn)
     {
         if ($loggedIn) {
@@ -63,7 +65,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($loggedIn, $this->authSession->isLoggedIn());
     }
 
-    public function loginDataProvider()
+    public static function loginDataProvider()
     {
         return [[false], [true]];
     }

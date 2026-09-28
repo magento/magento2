@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -37,8 +37,8 @@ class Allow extends AbstractCurrency
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
         \Magento\Framework\Locale\CurrencyInterface $localeCurrency,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_localeCurrency = $localeCurrency;
@@ -81,7 +81,7 @@ class Allow extends AbstractCurrency
 
     /**
      * @inheritdoc
-     * @since 100.2.0
+     * @since 101.0.0
      */
     protected function _getAllowedCurrencies()
     {

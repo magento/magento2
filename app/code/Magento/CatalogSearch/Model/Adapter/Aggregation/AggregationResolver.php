@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CatalogSearch\Model\Adapter\Aggregation;
 
@@ -64,8 +64,8 @@ class AggregationResolver implements AggregationResolverInterface
         ProductAttributeRepositoryInterface $productAttributeRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         Config $config,
-        AttributeCollection $attributeCollection = null,
-        RequestCheckerInterface $aggregationChecker = null
+        ?AttributeCollection $attributeCollection = null,
+        ?RequestCheckerInterface $aggregationChecker = null
     ) {
         $this->attributeSetFinder = $attributeSetFinder;
         $this->productAttributeRepository = $productAttributeRepository;

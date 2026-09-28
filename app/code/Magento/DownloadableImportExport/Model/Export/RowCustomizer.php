@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -75,6 +75,7 @@ class RowCustomizer implements RowCustomizerInterface
      */
     public function prepareData($collection, $productIds): void
     {
+        $this->downloadableData = [];
         $productCollection = clone $collection;
         $productCollection->addAttributeToFilter('entity_id', ['in' => $productIds])
             ->addAttributeToFilter('type_id', ['eq' => Type::TYPE_DOWNLOADABLE])
@@ -82,7 +83,9 @@ class RowCustomizer implements RowCustomizerInterface
             ->addAttributeToSelect('samples_title');
         // set global scope during export
         $this->storeManager->setCurrentStore(Store::DEFAULT_STORE_ID);
-        foreach ($collection as $product) {
+
+        while ($product = $productCollection->fetchItem()) {
+            /** @var $product \Magento\Catalog\Api\Data\ProductInterface */
             $productLinks = $this->linkRepository->getLinksByProduct($product);
             $productSamples = $this->sampleRepository->getSamplesByProduct($product);
             $this->downloadableData[$product->getId()] = [];

@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
@@ -79,5 +79,8 @@
                 <item name="sync" xsi:type="object" sortOrder="100">Magento\Webapi\Controller\Rest\SynchronousRequestProcessor</item>
             </argument>
         </arguments>
+    </type>
+    <type name="Magento\Store\Model\Validation\StoreCodeValidator">
+        <plugin name="check_if_parsed_store_code_is_valid" type="Magento\Webapi\Model\Plugin\Store\Model\Validation\StoreCodeValidator"/>
     </type>
 </config>

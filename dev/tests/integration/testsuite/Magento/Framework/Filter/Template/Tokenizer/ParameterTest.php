@@ -1,22 +1,36 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Filter\Template\Tokenizer;
 
-class ParameterTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Block\Product\Widget\NewWidget;
+use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\TestCase;
+
+/**
+ * Test for \Magento\Framework\Filter\Template\Tokenizer\Parameter.
+ */
+use PHPUnit\Framework\Attributes\DataProvider;
+
+class ParameterTest extends TestCase
 {
     /**
+     * Test for getValue
+     *
      * @param string $string
      * @param array $values
-     * @dataProvider getValueDataProvider
+     * @return void
      */
-    public function testGetValue($string, $values)
+    #[DataProvider('getValueDataProvider')]
+    public function testGetValue($string, $values): void
     {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var \Magento\Framework\Filter\Template\Tokenizer\Parameter $parameter */
-        $parameter = $objectManager->create(\Magento\Framework\Filter\Template\Tokenizer\Parameter::class);
+        $objectManager = Bootstrap::getObjectManager();
+        /** @var Parameter $parameter */
+        $parameter = $objectManager->create(Parameter::class);
         $parameter->setString($string);
 
         foreach ($values as $value) {
@@ -25,30 +39,35 @@ class ParameterTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider tokenizeDataProvider
+     * Test for tokenize
+     *
      * @param string $string
      * @param array $params
+     * @return void
      */
-    public function testTokenize($string, $params)
+    #[DataProvider('tokenizeDataProvider')]
+    public function testTokenize(string $string, array $params): void
     {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var \Magento\Framework\Filter\Template\Tokenizer\Parameter $parameter */
-        $parameter = $objectManager->create(\Magento\Framework\Filter\Template\Tokenizer\Parameter::class);
+        $objectManager = Bootstrap::getObjectManager();
+        $parameter = $objectManager->create(Parameter::class);
         $parameter->setString($string);
+
         $this->assertEquals($params, $parameter->tokenize());
     }
 
     /**
+     * DataProvider for testTokenize
+     *
      * @return array
      */
-    public function tokenizeDataProvider()
+    public static function tokenizeDataProvider(): array
     {
         return [
             [
                 ' type="Magento\\Catalog\\Block\\Product\\Widget\\NewWidget" display_type="all_products"'
                 . ' products_count="10" template="product/widget/new/content/new_grid.phtml"',
                 [
-                    'type' => \Magento\Catalog\Block\Product\Widget\NewWidget::class,
+                    'type' => NewWidget::class,
                     'display_type' => 'all_products',
                     'products_count' => 10,
                     'template' => 'product/widget/new/content/new_grid.phtml'
@@ -58,19 +77,31 @@ class ParameterTest extends \PHPUnit\Framework\TestCase
                 ' type="Magento\Catalog\Block\Product\Widget\NewWidget" display_type="all_products"'
                 . ' products_count="10" template="product/widget/new/content/new_grid.phtml"',
                 [
-                    'type' => \Magento\Catalog\Block\Product\Widget\NewWidget::class,
+                    'type' => NewWidget::class,
                     'display_type' => 'all_products',
                     'products_count' => 10,
                     'template' => 'product/widget/new/content/new_grid.phtml'
                 ]
-            ]
+            ],
+            [
+                sprintf(
+                    'type="%s" display_type="all_products" products_count="1" template="content/new_grid.phtml"',
+                    NewWidget::class
+                ),
+                [
+                    'type' => NewWidget::class,
+                    'display_type' => 'all_products',
+                    'products_count' => 1,
+                    'template' => 'content/new_grid.phtml'
+                ],
+            ],
         ];
     }
 
     /**
      * @return array
      */
-    public function getValueDataProvider()
+    public static function getValueDataProvider()
     {
         return [
             [

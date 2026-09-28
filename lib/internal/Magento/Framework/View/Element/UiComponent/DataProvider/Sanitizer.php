@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -43,28 +43,19 @@ class Sanitizer
     public function sanitize(array $data): array
     {
         $config = $this->extractConfig($data);
-        $toProcess = [];
-        array_walk(
-            $data,
-            function ($datum, string $key) use (&$config, &$toProcess) : void {
-                if (is_array($datum)) {
-                    //Each array must have it's own __disableTmpl property
-                    $toProcess[$key] = $datum;
-                } elseif ((
-                        !is_bool($config) && !array_key_exists($key, $config)
-                    )
-                    && (is_string($datum) || $datum instanceof Phrase)
-                    && preg_match('/\$\{.+\}/', (string)$datum)
-                ) {
-                    //Templating is not disabled for all properties or for this property specifically
-                    //Property is a string that contains template syntax so we are disabling it's rendering
-                    $config[$key] = true;
-                }
+        foreach ($data as $key => $datum) {
+            if (is_array($datum)) {
+                //Each array must have its own __disableTmpl property
+                $data[$key] = $this->sanitize($datum);
+            } elseif (!is_bool($config)
+                && !array_key_exists($key, $config)
+                && (is_string($datum) || $datum instanceof Phrase)
+                && preg_match('/\$\{.+\}/', (string)$datum)
+            ) {
+                //Templating is not disabled for all properties or for this property specifically
+                //Property is a string that contains template syntax, so we are disabling its rendering
+                $config[$key] = true;
             }
-        );
-        if ($toProcess) {
-            //Processing sub-arrays
-            $data = array_replace($data, array_map([$this, 'sanitize'], $toProcess));
         }
         if ($config !== []) {
             //Some properties require rendering configuration.
@@ -79,11 +70,14 @@ class Sanitizer
      *
      * Will sanitize full component's metadata as well as metadata of it's child components.
      *
-     * @param array $meta
+     * @param array|null $meta
      * @return array
      */
-    public function sanitizeComponentMetadata(array $meta): array
+    public function sanitizeComponentMetadata(?array $meta): array
     {
+        if ($meta === null) {
+            return [];
+        }
         if (array_key_exists('arguments', $meta)
             && is_array($meta['arguments'])
             && array_key_exists('data', $meta['arguments'])

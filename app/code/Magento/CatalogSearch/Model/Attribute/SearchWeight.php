@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\CatalogSearch\Model\Attribute;
@@ -15,6 +15,11 @@ namespace Magento\CatalogSearch\Model\Attribute;
  */
 class SearchWeight
 {
+    /**
+     * @var \Magento\Framework\Search\Request\Config
+     */
+    private $config;
+
     /**
      * @param \Magento\Framework\Search\Request\Config $config
      */

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Backend\Block;
 
@@ -71,7 +71,7 @@ class Context extends \Magento\Framework\View\Element\Context
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
         \Magento\Framework\AuthorizationInterface $authorization,
-        LockGuardedCacheLoader $lockQuery = null
+        ?LockGuardedCacheLoader $lockQuery = null
     ) {
         $this->_authorization = $authorization;
         parent::__construct(

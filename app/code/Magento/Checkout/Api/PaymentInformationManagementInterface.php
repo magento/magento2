@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Checkout\Api;
 
 /**
  * Interface for managing quote payment information
  * @api
+ * @since 100.0.2
  */
 interface PaymentInformationManagementInterface
 {
@@ -23,7 +24,7 @@ interface PaymentInformationManagementInterface
     public function savePaymentInformationAndPlaceOrder(
         $cartId,
         \Magento\Quote\Api\Data\PaymentInterface $paymentMethod,
-        \Magento\Quote\Api\Data\AddressInterface $billingAddress = null
+        ?\Magento\Quote\Api\Data\AddressInterface $billingAddress = null
     );
 
     /**
@@ -38,7 +39,7 @@ interface PaymentInformationManagementInterface
     public function savePaymentInformation(
         $cartId,
         \Magento\Quote\Api\Data\PaymentInterface $paymentMethod,
-        \Magento\Quote\Api\Data\AddressInterface $billingAddress = null
+        ?\Magento\Quote\Api\Data\AddressInterface $billingAddress = null
     );
 
     /**

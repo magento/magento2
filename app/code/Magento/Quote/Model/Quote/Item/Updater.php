@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Quote\Model\Quote\Item;
 
@@ -48,7 +48,7 @@ class Updater
         ProductFactory $productFactory,
         FormatInterface $localeFormat,
         ObjectFactory $objectFactory,
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->productFactory = $productFactory;
         $this->localeFormat = $localeFormat;

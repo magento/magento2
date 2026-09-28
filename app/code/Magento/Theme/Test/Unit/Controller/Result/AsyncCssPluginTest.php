@@ -1,26 +1,31 @@
 <?php
+
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
+
 declare(strict_types=1);
 
 namespace Magento\Theme\Test\Unit\Controller\Result;
 
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\Response\Http;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Store\Model\ScopeInterface;
 use Magento\Theme\Controller\Result\AsyncCssPlugin;
-use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Csp\Api\InlineUtilInterface;
+use Magento\Framework\App\Response\Http;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\View\Result\Layout;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * Unit test for Magento\Theme\Test\Unit\Controller\Result\AsyncCssPlugin.
  */
 class AsyncCssPluginTest extends TestCase
 {
-    const STUB_XML_PATH_USE_CSS_CRITICAL_PATH = 'dev/css/use_css_critical_path';
+    private const STUB_XML_PATH_USE_CSS_CRITICAL_PATH = 'dev/css/use_css_critical_path';
 
     /**
      * @var AsyncCssPlugin
@@ -38,108 +43,173 @@ class AsyncCssPluginTest extends TestCase
     private $httpMock;
 
     /**
+     * @var Layout|MockObject
+     */
+    private $layoutMock;
+
+    /**
+     * @var InlineUtilInterface|MockObject
+     */
+    private $cspInlineUtilMock;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->setMethods(['isSetFlag'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
 
         $this->httpMock = $this->createMock(Http::class);
+        $this->layoutMock = $this->createMock(Layout::class);
+        $this->cspInlineUtilMock = $this->createMock(InlineUtilInterface::class);
 
         $objectManager = new ObjectManagerHelper($this);
         $this->plugin = $objectManager->getObject(
             AsyncCssPlugin::class,
             [
-                'scopeConfig' => $this->scopeConfigMock
+                'scopeConfig' => $this->scopeConfigMock,
+                'cspInlineUtil' => $this->cspInlineUtilMock
             ]
         );
     }
 
     /**
-     * Data Provider for before send response
+     * Data Provider for testAfterRenderResult
      *
      * @return array
      */
-    public function sendResponseDataProvider(): array
+    public static function renderResultDataProvider(): array
     {
         return [
             [
-                "content" => "<body><h1>Test Title</h1>" .
-                    "<link rel=\"stylesheet\" href=\"css/critical.css\" />" .
-                    "<p>Test Content</p></body>",
-                "flag" => true,
-                "result" => "<body><h1>Test Title</h1>" .
-                    "<link rel=\"preload\" as=\"style\" media=\"all\"" .
-                    " onload=\"this.onload=null;this.rel='stylesheet'\" href=\"css/critical.css\" />" .
-                    "<p>Test Content</p>" .
-                    "<link rel=\"stylesheet\" href=\"css/critical.css\" />" .
-                    "\n</body>"
+                "content" => "<head><link rel=\"stylesheet\" href=\"css/async.css\">" .
+                    "<style>.critical-css{}</style>" .
+                    "</head>",
+                "isSetFlag" => true,
+                "result" => "<head><style>.critical-css{}</style>\n" .
+                    "<link " .
+                        "rel=\"stylesheet\" media=\"print\" onload=\"this.onload=null;this.media='all'\" " .
+                        "href=\"css/async.css\">\n" .
+                    "</head>",
             ],
             [
-                "content" => "<body><p>Test Content</p></body>",
-                "flag" => false,
-                "result" => "<body><p>Test Content</p></body>"
+                "content" => "<head><link rel=\"stylesheet\" href=\"css/async.css\">" .
+                    "<link rel=\"preload\" href=\"other-file.html\">" .
+                    "</head>",
+                "isSetFlag" => true,
+                "result" => "<head><link rel=\"preload\" href=\"other-file.html\">\n" .
+                    "<link " .
+                        "rel=\"stylesheet\" media=\"print\" onload=\"this.onload=null;this.media='all'\" " .
+                        "href=\"css/async.css\">\n" .
+                    "</head>",
             ],
             [
-                "content" => "<body><p>Test Content</p></body>",
-                "flag" => true,
-                "result" => "<body><p>Test Content</p></body>"
+                "content" => "<head><link rel=\"stylesheet\" href=\"css/async.css\">" .
+                    "<link rel=\"preload\" href=\"other-file.html\">" .
+                    "</head>",
+                "isSetFlag" => false,
+                "result" => "<head><link rel=\"stylesheet\" href=\"css/async.css\">" .
+                    "<link rel=\"preload\" href=\"other-file.html\">" .
+                    "</head>",
+            ],
+            [
+                "content" => "<head><link rel=\"stylesheet\" href=\"css/first.css\">" .
+                    "<link rel=\"stylesheet\" href=\"css/second.css\">" .
+                    "<style>.critical-css{}</style>" .
+                    "</head>",
+                "isSetFlag" => true,
+                "result" => "<head><style>.critical-css{}</style>\n" .
+                    "<link " .
+                        "rel=\"stylesheet\" media=\"print\" onload=\"this.onload=null;this.media='all'\" " .
+                        "href=\"css/first.css\">\n" .
+                    "<link " .
+                        "rel=\"stylesheet\" media=\"print\" onload=\"this.onload=null;this.media='all'\" " .
+                        "href=\"css/second.css\">\n" .
+                    "</head>",
+            ],
+            [
+                "content" => "<head><style>.critical-css{}</style></head>",
+                "isSetFlag" => false,
+                "result" => "<head><style>.critical-css{}</style></head>"
+            ],
+            [
+                "content" => "<head><style>.critical-css{}</style></head>",
+                "isSetFlag" => true,
+                "result" => "<head><style>.critical-css{}</style></head>"
             ]
         ];
     }
 
     /**
-     * Test beforeSendResponse
+     * Test after render result response
      *
      * @param string $content
      * @param bool $isSetFlag
      * @param string $result
      * @return void
-     * @dataProvider sendResponseDataProvider
      */
-    public function testBeforeSendResponse($content, $isSetFlag, $result): void
+    #[DataProvider('renderResultDataProvider')]
+    public function testAfterRenderResult(string $content, bool $isSetFlag, string $result): void
     {
-        $this->httpMock->expects($this->once())
-            ->method('getContent')
+        // Given (context)
+        $this->httpMock->method('getContent')
             ->willReturn($content);
 
-        $this->scopeConfigMock->expects($this->once())
-            ->method('isSetFlag')
-            ->with(
-                self::STUB_XML_PATH_USE_CSS_CRITICAL_PATH,
-                ScopeInterface::SCOPE_STORE
-            )
+        $this->scopeConfigMock->method('isSetFlag')
+            ->with(self::STUB_XML_PATH_USE_CSS_CRITICAL_PATH, ScopeInterface::SCOPE_STORE)
             ->willReturn($isSetFlag);
 
+        if ($isSetFlag) {
+            $this->cspInlineUtilMock->expects($this->any())
+                ->method('renderEventListener')
+                ->with(
+                    'onload',
+                    "this.onload=null;this.media='all'"
+                )->willReturn('onload="this.onload=null;this.media=\'all\'"');
+        }
+        // Expects
         $this->httpMock->expects($this->any())
             ->method('setContent')
             ->with($result);
 
-        $this->plugin->beforeSendResponse($this->httpMock);
+        // When
+        $this->plugin->afterRenderResult($this->layoutMock, $this->layoutMock, $this->httpMock);
     }
 
     /**
-     * Test BeforeSendResponse if content is not a string
+     * Data Provider for testAfterRenderResultIfGetContentIsNotAString()
      *
+     * @return array
+     */
+    public static function ifGetContentIsNotAStringDataProvider(): array
+    {
+        return [
+            [
+                'content' => null
+            ]
+        ];
+    }
+
+    /**
+     * Test AfterRenderResult if content is not a string
+     *
+     * @param $content
      * @return void
      */
-    public function testIfGetContentIsNotAString(): void
+    #[DataProvider('ifGetContentIsNotAStringDataProvider')]
+    public function testAfterRenderResultIfGetContentIsNotAString($content): void
     {
+        $this->scopeConfigMock->method('isSetFlag')
+            ->with(self::STUB_XML_PATH_USE_CSS_CRITICAL_PATH, ScopeInterface::SCOPE_STORE)
+            ->willReturn(true);
+
         $this->httpMock->expects($this->once())
             ->method('getContent')
-            ->willReturn([]);
+            ->willReturn($content);
 
-        $this->scopeConfigMock->expects($this->any())
-            ->method('isSetFlag')
-            ->with(
-                self::STUB_XML_PATH_USE_CSS_CRITICAL_PATH,
-                ScopeInterface::SCOPE_STORE
-            )
-            ->willReturn(false);
+        $this->httpMock->expects($this->never())
+            ->method('setContent');
 
-        $this->plugin->beforeSendResponse($this->httpMock);
+        $this->plugin->afterRenderResult($this->layoutMock, $this->layoutMock, $this->httpMock);
     }
 }

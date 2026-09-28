@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Controller\Result;
@@ -15,6 +15,7 @@ use Magento\Framework\Translate\InlineInterface;
  * Actual for controller actions that serve ajax requests
  *
  * @api
+ * @since 100.0.2
  */
 class Json extends AbstractResult
 {
@@ -39,7 +40,7 @@ class Json extends AbstractResult
      */
     public function __construct(
         InlineInterface $translateInline,
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->translateInline = $translateInline;
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()

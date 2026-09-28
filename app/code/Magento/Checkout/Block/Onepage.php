@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Checkout\Block;
 
@@ -9,6 +9,7 @@ namespace Magento\Checkout\Block;
  * Onepage checkout block
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Onepage extends \Magento\Framework\View\Element\Template
 {
@@ -58,8 +59,8 @@ class Onepage extends \Magento\Framework\View\Element\Template
         \Magento\Checkout\Model\CompositeConfigProvider $configProvider,
         array $layoutProcessors = [],
         array $data = [],
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
-        \Magento\Framework\Serialize\SerializerInterface $serializerInterface = null
+        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null,
+        ?\Magento\Framework\Serialize\SerializerInterface $serializerInterface = null
     ) {
         parent::__construct($context, $data);
         $this->formKey = $formKey;

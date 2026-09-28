@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -43,16 +43,13 @@ class IndexTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->configMock = $this->getMockBuilder(ConfigInterface::class)
-            ->getMockForAbstractClass();
+        $this->configMock = $this->createMock(ConfigInterface::class);
 
-        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->getMockForAbstractClass();
-        $responseMock = $this->getMockBuilder(ResponseInterface::class)
-            ->getMockForAbstractClass();
+        $this->requestMock = $this->createMock(RequestInterface::class);
+        $responseMock = $this->createMock(ResponseInterface::class);
 
         $contextMock = $this->getMockBuilder(Context::class)
-            ->setMethods(['getRequest', 'getResponse'])
+            ->onlyMethods(['getRequest', 'getResponse'])
             ->disableOriginalConstructor()
             ->getMock();
         $contextMock->expects($this->any())

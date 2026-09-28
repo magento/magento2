@@ -2,8 +2,8 @@
 /**
  * Interface of Magento filesystem driver
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Filesystem;
 
@@ -13,6 +13,7 @@ use Magento\Framework\Exception\FileSystemException;
  * Class Driver
  *
  * @api
+ * @since 100.0.2
  */
 interface DriverInterface
 {
@@ -149,7 +150,7 @@ interface DriverInterface
      * @return bool
      * @throws FileSystemException
      */
-    public function rename($oldPath, $newPath, DriverInterface $targetDriver = null);
+    public function rename($oldPath, $newPath, ?DriverInterface $targetDriver = null);
 
     /**
      * Copy source into destination
@@ -160,7 +161,7 @@ interface DriverInterface
      * @return bool
      * @throws FileSystemException
      */
-    public function copy($source, $destination, DriverInterface $targetDriver = null);
+    public function copy($source, $destination, ?DriverInterface $targetDriver = null);
 
     /**
      * Create symlink on source and place it into destination
@@ -171,7 +172,7 @@ interface DriverInterface
      * @return bool
      * @throws FileSystemException
      */
-    public function symlink($source, $destination, DriverInterface $targetDriver = null);
+    public function symlink($source, $destination, ?DriverInterface $targetDriver = null);
 
     /**
      * Delete file
@@ -275,7 +276,7 @@ interface DriverInterface
      * @return array|bool|null
      * @throws FileSystemException
      */
-    public function fileGetCsv($resource, $length = 0, $delimiter = ',', $enclosure = '"', $escape = '\\');
+    public function fileGetCsv($resource, $length = 0, $delimiter = ',', $enclosure = '"', $escape = "\0");
 
     /**
      * Returns position of read/write pointer

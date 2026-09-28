@@ -1,14 +1,11 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 define(['jquery', 'analyticsPopupConfig'], function ($, analyticsPopupConfig) {
-    'use strict';
-
-    var deferred = $.Deferred(),
-
-        mixin = {
+    'use strict'; // eslint-disable-line strict
+    var deferred = $.Deferred(), mixin = {
         /**
          * Initializes content only if its visible
          */
@@ -36,4 +33,3 @@ define(['jquery', 'analyticsPopupConfig'], function ($, analyticsPopupConfig) {
         return target.extend(mixin);
     };
 });
-

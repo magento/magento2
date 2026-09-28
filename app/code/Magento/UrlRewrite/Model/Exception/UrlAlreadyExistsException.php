@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\UrlRewrite\Model\Exception;
 
@@ -11,7 +11,7 @@ use Magento\Framework\Phrase;
  * Exception for already created url.
  *
  * @api
- * @since 100.2.0
+ * @since 101.0.0
  */
 class UrlAlreadyExistsException extends \Magento\Framework\Exception\AlreadyExistsException
 {
@@ -26,7 +26,7 @@ class UrlAlreadyExistsException extends \Magento\Framework\Exception\AlreadyExis
      * @param int $code
      * @param array $urls
      */
-    public function __construct(Phrase $phrase = null, \Exception $cause = null, $code = 0, array $urls = [])
+    public function __construct(?Phrase $phrase = null, ?\Exception $cause = null, $code = 0, array $urls = [])
     {
         $this->urls = $urls;
         if ($phrase === null) {
@@ -39,7 +39,7 @@ class UrlAlreadyExistsException extends \Magento\Framework\Exception\AlreadyExis
      * Get URLs
      *
      * @return array
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function getUrls()
     {

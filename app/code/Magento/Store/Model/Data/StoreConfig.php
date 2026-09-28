@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Store\Model\Data;
 
 /**
- * Class StoreConfig
+ * Allows to get and set store config values
  *
  * @codeCoverageIgnore
  */
@@ -188,7 +188,7 @@ class StoreConfig extends \Magento\Framework\Api\AbstractExtensibleObject implem
     }
 
     /**
-     * set base URL
+     * Set base URL
      *
      * @param string $baseUrl
      * @return $this
@@ -293,7 +293,7 @@ class StoreConfig extends \Magento\Framework\Api\AbstractExtensibleObject implem
     }
 
     /**
-     * set secure base URL
+     * Set secure base URL
      *
      * @param string $secureBaseUrl
      * @return $this
@@ -367,7 +367,7 @@ class StoreConfig extends \Magento\Framework\Api\AbstractExtensibleObject implem
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return \Magento\Store\Api\Data\StoreConfigExtensionInterface|null
      */
@@ -377,7 +377,7 @@ class StoreConfig extends \Magento\Framework\Api\AbstractExtensibleObject implem
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @param \Magento\Store\Api\Data\StoreConfigExtensionInterface $extensionAttributes
      * @return $this

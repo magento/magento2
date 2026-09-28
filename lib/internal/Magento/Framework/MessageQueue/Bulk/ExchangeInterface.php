@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\MessageQueue\Bulk;
 
@@ -9,7 +9,7 @@ namespace Magento\Framework\MessageQueue\Bulk;
  * Interface for bulk exchange.
  *
  * @api
- * @since 100.2.0
+ * @since 103.0.0
  */
 interface ExchangeInterface
 {
@@ -19,7 +19,7 @@ interface ExchangeInterface
      * @param string $topic
      * @param \Magento\Framework\MessageQueue\EnvelopeInterface[] $envelopes
      * @return mixed
-     * @since 100.2.0
+     * @since 103.0.0
      */
     public function enqueue($topic, array $envelopes);
 }

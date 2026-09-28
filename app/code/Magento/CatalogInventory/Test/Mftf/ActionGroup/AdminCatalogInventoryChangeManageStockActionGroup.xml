@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -16,6 +16,8 @@
             <argument name="manageStock" type="string" defaultValue="Yes"/>
         </arguments>
         <conditionalClick selector="{{AdminProductFormSection.advancedInventoryLink}}" dependentSelector="{{AdminProductFormAdvancedInventorySection.advancedInventoryModal}}" visible="false" stepKey="openAdvancedInventoryWindow"/>
+        <!-- Wait for close button appeared. That means animation finished and modal window is fully visible -->
+        <waitForElementVisible selector="{{AdminProductFormAdvancedInventorySection.advancedInventoryCloseButton}}" stepKey="waitForCloseButtonAppeared"/>
         <waitForElementVisible selector="{{AdminProductFormAdvancedInventorySection.useConfigSettings}}" stepKey="waitForAdvancedInventoryModalWindowOpen"/>
         <uncheckOption selector="{{AdminProductFormAdvancedInventorySection.useConfigSettings}}" stepKey="uncheckManageStockConfigSetting"/>
         <selectOption selector="{{AdminProductFormAdvancedInventorySection.manageStock}}"  userInput="{{manageStock}}" stepKey="changeManageStock"/>

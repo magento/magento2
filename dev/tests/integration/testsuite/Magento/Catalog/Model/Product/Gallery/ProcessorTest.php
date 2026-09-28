@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\Product\Gallery;
 
@@ -46,9 +46,10 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
         $mediaDirectory->create($config->getBaseTmpMediaPath());
         $mediaDirectory->create($config->getBaseMediaPath());
 
-        copy($fixtureDir . "/magento_image.jpg", self::$_mediaTmpDir . "/magento_image.jpg");
-        copy($fixtureDir . "/magento_image.jpg", self::$_mediaDir . "/magento_image.jpg");
-        copy($fixtureDir . "/magento_small_image.jpg", self::$_mediaTmpDir . "/magento_small_image.jpg");
+        $mediaDirectory->getDriver()->filePutContents(self::$_mediaTmpDir . "/magento_image.jpg", file_get_contents($fixtureDir . "/magento_image.jpg"));
+        $mediaDirectory->getDriver()->filePutContents(self::$_mediaDir . "/magento_image.jpg", file_get_contents($fixtureDir . "/magento_image.jpg"));
+        $mediaDirectory->getDriver()->filePutContents(self::$_mediaTmpDir . "/magento_small_image.jpg", file_get_contents($fixtureDir . "/magento_small_image.jpg"));
+
     }
 
     public static function tearDownAfterClass(): void

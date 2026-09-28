@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Backend\App;
@@ -16,11 +16,12 @@ use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Data\Form\FormKey\Validator as FormKeyValidator;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Framework\Encryption\Helper\Security;
 
 /**
  * Generic backend controller
  *
- * @deprecated Use \Magento\Framework\App\ActionInterface
+ * @deprecated 102.0.0 Use \Magento\Framework\App\ActionInterface
  *
  * phpcs:disable Magento2.Classes.AbstractApi
  * @api
@@ -33,17 +34,17 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
     /**
      * Name of "is URLs checked" flag
      */
-    const FLAG_IS_URLS_CHECKED = 'check_url_settings';
+    public const FLAG_IS_URLS_CHECKED = 'check_url_settings';
 
     /**
      * Session namespace to refer in other places
      */
-    const SESSION_NAMESPACE = 'adminhtml';
+    public const SESSION_NAMESPACE = 'adminhtml';
 
     /**
      * Authorization level of a basic admin session
      */
-    const ADMIN_RESOURCE = 'Magento_Backend::admin';
+    public const ADMIN_RESOURCE = 'Magento_Backend::admin';
 
     /**
      * Array of actions which can be processed without secret key validation
@@ -368,7 +369,7 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
      * @param array|null $params
      * @return void
      */
-    protected function _forward($action, $controller = null, $module = null, array $params = null)
+    protected function _forward($action, $controller = null, $module = null, ?array $params = null)
     {
         $this->_getSession()->setIsUrlNotice($this->_actionFlag->get('', self::FLAG_IS_URLS_CHECKED));
         parent::_forward($action, $controller, $module, $params);
@@ -386,7 +387,7 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
         }
 
         $secretKey = $this->getRequest()->getParam(UrlInterface::SECRET_KEY_PARAM_NAME, null);
-        if (!$secretKey || $secretKey != $this->_backendUrl->getSecretKey()) {
+        if (!$secretKey || !Security::compareStrings($secretKey, $this->_backendUrl->getSecretKey())) {
             return false;
         }
         return true;

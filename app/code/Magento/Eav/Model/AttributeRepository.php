@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Eav\Model;
@@ -69,7 +69,7 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
         \Magento\Eav\Api\Data\AttributeSearchResultsInterfaceFactory $searchResultsFactory,
         \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory,
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor,
-        CollectionProcessorInterface $collectionProcessor = null
+        ?CollectionProcessorInterface $collectionProcessor = null
     ) {
         $this->eavConfig = $eavConfig;
         $this->eavResource = $eavResource;
@@ -88,7 +88,7 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
         try {
             $this->eavResource->save($attribute);
         } catch (\Exception $e) {
-            throw new StateException(__("The attribute can't be saved."));
+            throw new StateException(__("The attribute can't be saved."), $e);
         }
         return $attribute;
     }
@@ -208,7 +208,7 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
     /**
      * Retrieve collection processor
      *
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      * @return CollectionProcessorInterface
      */
     private function getCollectionProcessor()

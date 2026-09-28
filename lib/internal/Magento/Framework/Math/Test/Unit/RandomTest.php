@@ -2,22 +2,22 @@
 /**
  * Test \Magento\Framework\Math\Random
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Math\Test\Unit;
 
 use Magento\Framework\Math\Random;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class RandomTest extends TestCase
 {
     /**
      * @param int    $length
      * @param string $chars
-     *
-     * @dataProvider getRandomStringDataProvider
-     */
+     *     */
+    #[DataProvider('getRandomStringDataProvider')]
     public function testGetRandomString($length, $chars = null)
     {
         $mathRandom = new Random();
@@ -32,7 +32,7 @@ class RandomTest extends TestCase
     /**
      * @return array
      */
-    public function getRandomStringDataProvider()
+    public static function getRandomStringDataProvider()
     {
         return [
             [0],
@@ -73,9 +73,8 @@ class RandomTest extends TestCase
     /**
      * @param $min
      * @param $max
-     *
-     * @dataProvider testGetRandomNumberProvider
-     */
+     *     */
+    #[DataProvider('getRandomNumberProvider')]
     public function testGetRandomNumber($min, $max)
     {
         $number = Random::getRandomNumber($min, $max);
@@ -86,7 +85,7 @@ class RandomTest extends TestCase
     /**
      * @return array
      */
-    public function testGetRandomNumberProvider()
+    public static function getRandomNumberProvider()
     {
         return [
             [0, 100],

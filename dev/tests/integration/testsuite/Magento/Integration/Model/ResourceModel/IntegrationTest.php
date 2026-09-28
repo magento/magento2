@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Integration\Model\ResourceModel;
 
@@ -26,8 +26,11 @@ class IntegrationTest extends \PHPUnit\Framework\TestCase
         $this->consumer = $objectManager->create(\Magento\Integration\Model\Oauth\Consumer::class);
         $this->consumer->setData(
             [
+                // md5() here just to generate unique string
+                // phpcs:disable Magento2.Security.InsecureFunction
                 'key' => md5(uniqid()),
                 'secret' => md5(uniqid()),
+                // phpcs:enable
                 'callback_url' => 'http://example.com/callback',
                 'rejected_callback_url' => 'http://example.com/rejectedCallback'
             ]

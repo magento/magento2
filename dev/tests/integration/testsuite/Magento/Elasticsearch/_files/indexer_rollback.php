@@ -1,8 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
+
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/product_boolean_attribute_rollback.php');
 
 /** @var $objectManager \Magento\Framework\ObjectManagerInterface */
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Indexer;
@@ -9,7 +9,7 @@ namespace Magento\Framework\Indexer;
 /**
  * Calculate memory size for entity according different dimensions.
  * @api
- * @since 100.2.0
+ * @since 101.0.0
  */
 interface IndexTableRowSizeEstimatorInterface
 {
@@ -17,7 +17,7 @@ interface IndexTableRowSizeEstimatorInterface
      * Calculate memory size for entity row.
      *
      * @return float
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function estimateRowSize();
 }

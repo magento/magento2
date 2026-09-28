@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Search\Request\Aggregation;
 
@@ -28,16 +28,27 @@ class TermBucket implements BucketInterface
     protected $metrics;
 
     /**
+     * @var array
+     */
+    private $parameters;
+
+    /**
      * @param string $name
      * @param string $field
      * @param array $metrics
+     * @param array $parameters
      * @codeCoverageIgnore
      */
-    public function __construct($name, $field, array $metrics)
-    {
+    public function __construct(
+        $name,
+        $field,
+        array $metrics,
+        array $parameters = []
+    ) {
         $this->name = $name;
         $this->field = $field;
         $this->metrics = $metrics;
+        $this->parameters = $parameters;
     }
 
     /**
@@ -73,5 +84,13 @@ class TermBucket implements BucketInterface
     public function getMetrics()
     {
         return $this->metrics;
+    }
+
+    /**
+     * @return array
+     */
+    public function getParameters(): array
+    {
+        return $this->parameters;
     }
 }

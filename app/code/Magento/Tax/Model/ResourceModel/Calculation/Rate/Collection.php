@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -52,8 +52,8 @@ class Collection extends AbstractCollection
         FetchStrategyInterface $fetchStrategy,
         ManagerInterface $eventManager,
         StoreManagerInterface $storeManager,
-        AdapterInterface $connection = null,
-        AbstractDb $resource = null
+        ?AdapterInterface $connection = null,
+        ?AbstractDb $resource = null
     ) {
         $this->_storeManager = $storeManager;
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
@@ -206,7 +206,7 @@ class Collection extends AbstractCollection
     {
         $size = self::TAX_RULES_CHUNK_SIZE;
         $page = 1;
-        $rates = [[]];
+        $rates = [];
         do {
             $offset = $size * ($page - 1);
             $this->getSelect()->reset();
@@ -222,6 +222,6 @@ class Collection extends AbstractCollection
             $page++;
         } while ($this->getSize() > $offset);
 
-        return array_merge(...$rates);
+        return array_merge([], ...$rates);
     }
 }

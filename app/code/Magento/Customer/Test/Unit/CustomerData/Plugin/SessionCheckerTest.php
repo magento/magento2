@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Framework\Session\SessionManager;
 use Magento\Framework\Stdlib\Cookie\CookieMetadata;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -64,9 +65,8 @@ class SessionCheckerTest extends TestCase
     /**
      * @param bool $result
      * @param string $callCount
-     * @return void
-     * @dataProvider beforeStartDataProvider
-     */
+     * @return void */
+    #[DataProvider('beforeStartDataProvider')]
     public function testBeforeStart($result, $callCount)
     {
         $phpSessionCookieName = 'PHPSESSID';
@@ -76,11 +76,10 @@ class SessionCheckerTest extends TestCase
             ->willReturn($phpSessionCookieName);
         $this->cookieManager->expects($this->exactly(2))
             ->method('getCookie')
-            ->withConsecutive(
-                [$phpSessionCookieName],
-                [$frontendSessionCookieName]
-            )
-            ->willReturnOnConsecutiveCalls(false, $result);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$phpSessionCookieName] => false,
+                [$frontendSessionCookieName] => $result
+            });
 
         $this->metadataFactory->expects($this->{$callCount}())
             ->method('createCookieMetadata')
@@ -98,7 +97,7 @@ class SessionCheckerTest extends TestCase
     /**
      * @return array
      */
-    public function beforeStartDataProvider()
+    public static function beforeStartDataProvider()
     {
         return [
             [true, 'once'],

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminConfigUPSShippingMethodAndAddProductInStorefrontTest">
+        <annotations>
+            <stories value="Admin configure UPS Shipping method"/>
+            <title value="Admin configure UPS Shipping method and add product to cart in storefront "/>
+            <description value="Admin configure UPS Shipping method and add product to cart in storefront >> open mini cart"/>
+            <features value="Shipping"/>
+            <severity value="MINOR"/>
+            <group value="3rd_party_integration"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <!--Login as Admin-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdminToConfig"/>
+            <!-- Create product -->
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct">
+                <field key="price">100.00</field>
+            </createData>
+            <!--Navigate to shipping method configuration for enabling UPS-->
+            <actionGroup ref="AdminOpenShippingMethodsConfigPageActionGroup" stepKey="openShippingMethodConfigPageForEnablingUPS"/>
+            <!--Configure UPS shipping method with enable for checkout = Yes-->
+            <actionGroup ref="AdminEnableUPSActionGroup" stepKey="enableUPSShippingMethod">
+                <argument name="shipping" value="UPSShippingMethod"/>
+            </actionGroup>
+            <!--Cache flush-->
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCachePostConfiguring">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </before>
+        <after>
+            <!--delete product-->
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
+            <!--Configure UPS shipping method with enable for checkout = No-->
+            <actionGroup ref="AdminUPSDisableActionGroup" stepKey="disableUPSShippingMethod"/>
+            <!--Logout Admin-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdminToRollBackConfig"/>
+        </after>
+        <!-- Navigate to StoreFront -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStoreFront"/>
+        <!-- Add product to cart -->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <!-- Go to Shopping Cart -->
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCartFromMinicart1"/>
+    </test>
+</tests>

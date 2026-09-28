@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Acl/etc/acl.xsd">
@@ -12,7 +12,9 @@
                 <resource id="Magento_Backend::stores">
                     <resource id="Magento_Backend::stores_settings">
                         <resource id="Magento_Config::config">
-                            <resource id="Magento_Paypal::paypal" title="PayPal Section" translate="title" sortOrder="50" />
+                            <resource id="Magento_Payment::payment">
+                                <resource id="Magento_Paypal::paypal" title="PayPal Section" translate="title" sortOrder="50" />
+                            </resource>
                         </resource>
                     </resource>
                 </resource>

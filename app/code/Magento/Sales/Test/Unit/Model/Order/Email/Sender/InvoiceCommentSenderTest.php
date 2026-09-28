@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,10 +11,11 @@ use Magento\Payment\Helper\Data;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order\Email\Container\InvoiceCommentIdentity;
 use Magento\Sales\Model\Order\Email\Sender\InvoiceCommentSender;
+use Magento\Sales\Model\Order\Invoice as InvoiceModel;
 use Magento\Sales\Model\ResourceModel\Order\Invoice;
 use PHPUnit\Framework\MockObject\MockObject;
 
-class InvoiceCommentSenderTest extends AbstractSenderTest
+class InvoiceCommentSenderTest extends AbstractSenderTestCase
 {
     /**
      * @var InvoiceCommentSender
@@ -26,19 +27,20 @@ class InvoiceCommentSenderTest extends AbstractSenderTest
      */
     protected $invoiceMock;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->stepMockSetup();
         $this->paymentHelper = $this->createPartialMock(Data::class, ['getInfoBlockHtml']);
-
-        $this->invoiceResource = $this->createMock(Invoice::class);
 
         $this->stepIdentityContainerInit(InvoiceCommentIdentity::class);
 
         $this->addressRenderer->expects($this->any())->method('format')->willReturn(1);
 
         $this->invoiceMock = $this->createPartialMock(
-            \Magento\Sales\Model\Order\Invoice::class,
+            InvoiceModel::class,
             ['getStore', 'getOrder']
         );
         $this->invoiceMock->expects($this->any())
@@ -54,18 +56,21 @@ class InvoiceCommentSenderTest extends AbstractSenderTest
             $this->senderBuilderFactoryMock,
             $this->loggerMock,
             $this->addressRenderer,
-            $this->eventManagerMock
+            $this->eventManagerMock,
+            $this->appEmulator
         );
     }
 
     public function testSendFalse()
     {
+        $this->appEmulator->expects($this->once())->method('startEnvironmentEmulation');
+        $this->appEmulator->expects($this->once())->method('stopEnvironmentEmulation');
         $this->stepAddressFormat($this->addressMock);
         $result = $this->sender->send($this->invoiceMock);
         $this->assertFalse($result);
     }
 
-    public function testSendTrueWithCustomerCopy()
+    public function testSendTrueWithoutCustomerCopy()
     {
         $billingAddress = $this->addressMock;
         $this->stepAddressFormat($billingAddress);
@@ -104,13 +109,14 @@ class InvoiceCommentSenderTest extends AbstractSenderTest
                     ]
                 ]
             );
-
+        $this->appEmulator->expects($this->once())->method('startEnvironmentEmulation');
+        $this->appEmulator->expects($this->once())->method('stopEnvironmentEmulation');
         $this->stepSendWithoutSendCopy();
         $result = $this->sender->send($this->invoiceMock, true, $comment);
         $this->assertTrue($result);
     }
 
-    public function testSendTrueWithoutCustomerCopy()
+    public function testSendTrueWithCustomerCopy()
     {
         $billingAddress = $this->addressMock;
         $customerName = 'Test Customer';
@@ -132,6 +138,9 @@ class InvoiceCommentSenderTest extends AbstractSenderTest
         $this->identityContainerMock->expects($this->once())
             ->method('isEnabled')
             ->willReturn(true);
+        $this->identityContainerMock->expects($this->once())
+            ->method('getCopyMethod')
+            ->willReturn('copy');
         $this->templateContainerMock->expects($this->once())
             ->method('setTemplateVars')
             ->with(
@@ -149,6 +158,8 @@ class InvoiceCommentSenderTest extends AbstractSenderTest
                     ]
                 ]
             );
+        $this->appEmulator->expects($this->once())->method('startEnvironmentEmulation');
+        $this->appEmulator->expects($this->once())->method('stopEnvironmentEmulation');
         $this->stepSendWithCallSendCopyTo();
         $result = $this->sender->send($this->invoiceMock, false, $comment);
         $this->assertTrue($result);
@@ -190,6 +201,8 @@ class InvoiceCommentSenderTest extends AbstractSenderTest
                     ]
                 ]
             );
+        $this->appEmulator->expects($this->once())->method('startEnvironmentEmulation');
+        $this->appEmulator->expects($this->once())->method('stopEnvironmentEmulation');
         $this->assertFalse($this->sender->send($this->invoiceMock));
     }
 }

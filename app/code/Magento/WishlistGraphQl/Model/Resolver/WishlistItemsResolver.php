@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -52,8 +52,8 @@ class WishlistItemsResolver implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         if (!isset($value['model'])) {
             throw new LocalizedException(__('Missing key "model" in Wishlist value data'));
@@ -70,7 +70,7 @@ class WishlistItemsResolver implements ResolverInterface
                 'qty' => $wishlistItem->getData('qty'),
                 'description' => $wishlistItem->getDescription(),
                 'added_at' => $wishlistItem->getAddedAt(),
-                'model' => $wishlistItem,
+                'model' => $wishlistItem->getProduct(),
             ];
         }
         return $data;

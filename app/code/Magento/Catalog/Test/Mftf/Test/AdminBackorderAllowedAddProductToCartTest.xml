@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -31,7 +31,9 @@
             <!-- Set Magento back to default configuration -->
             <magentoCLI command="config:set {{CatalogInventoryOptionsShowOutOfStockDisable.path}} {{CatalogInventoryOptionsShowOutOfStockDisable.value}}" stepKey="setConfigShowOutOfStockFalse"/>
             <magentoCLI command="config:set {{CatalogInventoryItemOptionsBackordersDisable.path}} {{CatalogInventoryItemOptionsBackordersDisable.value}}" stepKey="setConfigAllowBackordersFalse"/>
-            <magentoCLI command="cache:clean config full_page" stepKey="cleanInvalidatedCache"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
         </after>
 

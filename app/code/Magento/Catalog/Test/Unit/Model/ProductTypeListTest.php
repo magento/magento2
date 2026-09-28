@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -33,7 +33,7 @@ class ProductTypeListTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->typeConfigMock = $this->getMockForAbstractClass(ConfigInterface::class);
+        $this->typeConfigMock = $this->createMock(ConfigInterface::class);
         $this->factoryMock = $this->createPartialMock(
             ProductTypeInterfaceFactory::class,
             ['create']
@@ -53,8 +53,8 @@ class ProductTypeListTest extends TestCase
         $productTypeData = [
             'simple' => $simpleProductType,
         ];
-        $productTypeMock = $this->getMockForAbstractClass(ProductTypeInterface::class);
-        $this->typeConfigMock->expects($this->any())->method('getAll')->willReturn($productTypeData);
+        $productTypeMock = $this->createMock(ProductTypeInterface::class);
+        $this->typeConfigMock->method('getAll')->willReturn($productTypeData);
 
         $this->factoryMock->expects($this->once())->method('create')->willReturn($productTypeMock);
         $productTypeMock->expects($this->once())

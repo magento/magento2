@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Validator;
@@ -10,6 +10,8 @@ use Magento\Framework\Setup\Lists;
 
 /**
  * Locale validator model
+ *
+ * @api
  */
 class Locale
 {
@@ -33,8 +35,6 @@ class Locale
      *
      * @param string $localeCode
      * @return bool
-     *
-     * @api
      */
     public function isValid($localeCode)
     {

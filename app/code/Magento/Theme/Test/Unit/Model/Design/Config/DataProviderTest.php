@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Theme\Model\Design\Config\DataProvider;
 use Magento\Theme\Model\Design\Config\DataProvider\DataLoader as ConfigDataLoader;
 use Magento\Theme\Model\Design\Config\DataProvider\MetadataLoader as ConfigMetadataLoader;
 use Magento\Theme\Model\ResourceModel\Design\Config\Collection;
+use PHPUnit\Framework\Attributes\DataProvider as DataProviderAttribute;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -85,14 +86,12 @@ class DataProviderTest extends TestCase
         $collectionFactory = $this->getMockBuilder(
             \Magento\Theme\Model\ResourceModel\Design\Config\CollectionFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(['create'])->getMock();
+            ->onlyMethods(['create'])->getMock();
         $collectionFactory->expects($this->once())
             ->method('create')
             ->willReturn($this->collection);
 
-        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->requestMock = $this->createMock(RequestInterface::class);
         $this->scopeCodeResolverMock = $this->getMockBuilder(ScopeCodeResolver::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -142,8 +141,8 @@ class DataProviderTest extends TestCase
      * @param array $inputMeta
      * @param array $expectedMeta
      * @param array $request
-     * @dataProvider getMetaDataProvider
      */
+    #[DataProviderAttribute('getMetaDataProvider')]
     public function testGetMeta(array $inputMeta, array $expectedMeta, array $request)
     {
         $this->requestMock->expects($this->any())
@@ -155,15 +154,16 @@ class DataProviderTest extends TestCase
             ->willReturn('default');
         $this->settingCheckerMock->expects($this->any())
             ->method('isReadOnly')
-            ->withConsecutive(
-                ['design/head/welcome', 'stores', 'default'],
-                ['design/head/logo', 'stores', 'default'],
-                ['design/head/head', 'stores', 'default']
-            )
-            ->willReturnOnConsecutiveCalls(
-                true,
-                false,
-                true
+            ->willReturnCallback(
+                function ($arg1, $arg2, $arg3) {
+                    if ($arg1 == 'design/head/welcome' && $arg2 == 'stores' && $arg3 == 'default') {
+                        return true;
+                    } elseif ($arg1 == 'design/head/logo' && $arg2 == 'stores' && $arg3 == 'default') {
+                        return false;
+                    } elseif ($arg1 == 'design/head/head' && $arg2 == 'stores' && $arg3 == 'default') {
+                        return true;
+                    }
+                }
             );
 
         $this->objectManager->setBackwardCompatibleProperty(
@@ -178,7 +178,7 @@ class DataProviderTest extends TestCase
     /**
      * @return array
      */
-    public function getMetaDataProvider()
+    public static function getMetaDataProvider()
     {
         return [
             [

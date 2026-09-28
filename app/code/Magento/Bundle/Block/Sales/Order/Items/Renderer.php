@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Bundle\Block\Sales\Order\Items;
 
@@ -16,8 +16,6 @@ use Magento\Framework\Serialize\Serializer\Json;
 class Renderer extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer
 {
     /**
-     * Serializer
-     *
      * @var Json
      */
     private $serializer;
@@ -34,7 +32,7 @@ class Renderer extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer
         \Magento\Framework\Stdlib\StringUtils $string,
         \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory,
         array $data = [],
-        Json $serializer = null
+        ?Json $serializer = null
     ) {
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(Json::class);
@@ -43,7 +41,10 @@ class Renderer extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer
     }
 
     /**
+     * Check if shipment type (invoice etc) is separate
+     *
      * @param mixed $item
+     *
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
@@ -79,7 +80,10 @@ class Renderer extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer
     }
 
     /**
+     * Check if sub product calculations are present
+     *
      * @param mixed $item
+     *
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
@@ -117,7 +121,10 @@ class Renderer extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer
     }
 
     /**
+     * Get bundle selection attributes
+     *
      * @param mixed $item
+     *
      * @return mixed|null
      */
     public function getSelectionAttributes($item)
@@ -134,13 +141,16 @@ class Renderer extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer
     }
 
     /**
+     * Get html of bundle selection attributes
+     *
      * @param mixed $item
+     *
      * @return string
      */
     public function getValueHtml($item)
     {
         if ($attributes = $this->getSelectionAttributes($item)) {
-            return sprintf('%d', $attributes['qty']) . ' x ' . $this->escapeHtml($item->getName()) . " "
+            return (float) $attributes['qty'] . ' x ' . $this->escapeHtml($item->getName()) . " "
                 . $this->getOrder()->formatPrice($attributes['price']);
         }
         return $this->escapeHtml($item->getName());
@@ -183,7 +193,10 @@ class Renderer extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer
     }
 
     /**
+     * Check if price info can be shown
+     *
      * @param mixed $item
+     *
      * @return bool
      */
     public function canShowPriceInfo($item)

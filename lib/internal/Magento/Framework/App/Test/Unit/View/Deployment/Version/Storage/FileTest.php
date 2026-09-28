@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -27,7 +27,7 @@ class FileTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->directory = $this->getMockForAbstractClass(WriteInterface::class);
+        $this->directory = $this->createMock(WriteInterface::class);
         $filesystem = $this->createMock(Filesystem::class);
         $filesystem
             ->expects($this->once())

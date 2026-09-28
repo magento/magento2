@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Test:etc/testschema.xsd">
+    <test name="AdminProductAttributeVisualSwatchIsResetDefaultTest">
+        <annotations>
+            <features value="Swatches"/>
+            <stories value="Create/configure swatches"/>
+            <title value="Check reset is default functionality"/>
+            <description value="Check reset is default functionality"/>
+            <severity value="CRITICAL"/>
+            <group value="Swatches"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AddVisualSwatchActionGroup" stepKey="addVisualSwatch" />
+            <!-- Go to created attribute (attribute page) -->
+            <actionGroup ref="NavigateToEditProductAttributeActionGroup" stepKey="navigateToSkuProductAttribute">
+                <argument name="ProductAttribute" value="$addVisualSwatch"/>
+            </actionGroup>
+        </before>
+        <!-- Click on reset_default_swatch_visual_option_button button to reset the default option -->
+        <scrollTo selector="{{AdminManageSwatchSection.manageSwatchSection}}" stepKey="scrollToManageSwatchSection21"/>
+        <click selector="{{AttributePropertiesSection.resetDefaultSwatchVisualOptionButton}}" stepKey="clickResetDefaultSwatchVisualOptionButton"/>
+
+        <!-- Save the new product attribute -->
+        <click selector="{{AttributePropertiesSection.Save}}" stepKey="clickSaveAndEdit"/>
+        <wait stepKey="waitToLoad2" time="3"/>
+        <waitForPageLoad stepKey="waitForPageLoad4"/>
+        <click selector="{{AdminProductAttributeGridSection.FirstRow}}" stepKey="navigateToAttributeEditPage4" />
+        <waitForPageLoad stepKey="waitForPageLoad5"/>
+        <scrollTo selector="{{AdminManageSwatchSection.manageSwatchSection}}" stepKey="scrollToManageSwatchSection30"/>
+        <dontSeeCheckboxIsChecked selector="{{AdminManageSwatchSection.nthIsDefault('1')}}" stepKey="checkboxNotChecked0"/>
+
+        <after>
+            <!-- Delete the created attribute -->
+            <actionGroup ref="DeleteProductAttributeByAttributeCodeActionGroup" stepKey="deleteProductAttribute" />
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+    </test>
+</tests>

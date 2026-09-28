@@ -1,9 +1,7 @@
 <?php
 /**
- * Google Optimizer Form Helper
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\GoogleOptimizer\Helper;
 
@@ -24,7 +22,7 @@ class Form extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $formName
      * @return void
      */
-    public function addGoogleoptimizerFields(DataForm $form, ModelCode $experimentCodeModel = null, $formName = '')
+    public function addGoogleoptimizerFields(DataForm $form, ?ModelCode $experimentCodeModel = null, $formName = '')
     {
         $fieldset = $form->addFieldset(
             'googleoptimizer_fields',

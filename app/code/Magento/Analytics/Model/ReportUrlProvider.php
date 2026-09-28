@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Analytics\Model;
 
@@ -48,6 +48,13 @@ class ReportUrlProvider
     private $urlReportConfigPath = 'analytics/url/report';
 
     /**
+     * Path to Advanced Reporting documentation URL.
+     *
+     * @var string
+     */
+    private $urlReportDocConfigPath = 'analytics/url/documentation';
+
+    /**
      * @param AnalyticsToken $analyticsToken
      * @param OTPRequest $otpRequest
      * @param ScopeConfigInterface $config
@@ -80,13 +87,15 @@ class ReportUrlProvider
             ));
         }
 
-        $url = $this->config->getValue($this->urlReportConfigPath);
         if ($this->analyticsToken->isTokenExist()) {
+            $url = $this->config->getValue($this->urlReportConfigPath);
             $otp = $this->otpRequest->call();
             if ($otp) {
                 $query = http_build_query(['otp' => $otp], '', '&');
                 $url .= '?' . $query;
             }
+        } else {
+            $url = $this->config->getValue($this->urlReportDocConfigPath);
         }
 
         return $url;

@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 define([
@@ -17,6 +17,7 @@ define([
          * @param {Object} data - customer address and actions
          */
         onAction: function (data) {
+            // eslint-disable-next-line no-useless-call
             this[data.action + 'Action'].call(this, data.data);
         },
 
@@ -26,6 +27,7 @@ define([
          * @param {Object} data - customer address
          */
         onMassAction: function (data) {
+            // eslint-disable-next-line no-useless-call
             this[data.action + 'Massaction'].call(this, data.data);
         },
 
@@ -62,7 +64,9 @@ define([
          * @param {Object} data - customer address
          */
         deleteMassaction: function (data) {
-            var ids = _.map(data, function (val) {
+            var ids = data.selected || this.selections().selected();
+
+            ids = _.map(ids, function (val) {
                 return parseFloat(val);
             });
 
@@ -70,7 +74,7 @@ define([
         },
 
         /**
-         * Delete customer address by ids
+         * Delete customer address and selections by provided ids.
          *
          * @param {Array} ids
          */
@@ -85,6 +89,10 @@ define([
             if (ids.indexOf(defaultBillingId) !== -1) {
                 this.source.set('data.default_billing_address', []);
             }
+
+            _.each(ids, function (id) {
+                this.selections().deselect(id.toString(), false);
+            }, this);
         }
     });
 });

@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\TestFramework\Dependency;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class LayoutRuleTest extends \PHPUnit\Framework\TestCase
 {
@@ -17,15 +19,15 @@ class LayoutRuleTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $contents
      * @param array $expected
-     * @dataProvider getDependencyInfoDataProvider
      */
+    #[DataProvider('getDependencyInfoDataProvider')]
     public function testGetDependencyInfo($contents, array $expected)
     {
         $model = new LayoutRule([], [], []);
         $this->assertEquals($expected, $model->getDependencyInfo('Magento\SomeModule', 'layout', 'any', $contents));
     }
 
-    public function getDependencyInfoDataProvider()
+    public static function getDependencyInfoDataProvider()
     {
         return [
             [
@@ -113,9 +115,11 @@ class LayoutRuleTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $contents
      * @param string $type
-     * @dataProvider layoutGetDependencyInfoDataProvider
+     * @param bool $isHandle
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function testUpdatesRouterGetDependencyInfo($contents, $type)
+    #[DataProvider('layoutGetDependencyInfoDataProvider')]
+    public function testUpdatesRouterGetDependencyInfo($contents, $type, $isHandle)
     {
         $model = new LayoutRule(['router_name' => ['Magento\RouterModule']], [], []);
         $this->assertEquals([], $model->getDependencyInfo('Magento\RouterModule', 'layout', 'any', $contents));
@@ -128,9 +132,8 @@ class LayoutRuleTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $contents
      * @param string $type
-     * @param bool $isHandle
-     * @dataProvider layoutGetDependencyInfoWithReferenceDataProvider
-     */
+     * @param bool $isHandle     */
+    #[DataProvider('layoutGetDependencyInfoWithReferenceDataProvider')]
     public function testLayoutGetDependencyInfo($contents, $type, $isHandle)
     {
         // test one module
@@ -175,34 +178,34 @@ class LayoutRuleTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function layoutGetDependencyInfoDataProvider()
+    public static function layoutGetDependencyInfoDataProvider()
     {
         return [
             [
-                $this->_getLayoutFileContent('layout_handle.xml'),
+                self::_getLayoutFileContent('layout_handle.xml'),
                 \Magento\Test\Integrity\DependencyTest::TYPE_SOFT,
                 true,
             ],
             [
-                $this->_getLayoutFileContent('layout_handle_parent.xml'),
+                self::_getLayoutFileContent('layout_handle_parent.xml'),
                 \Magento\Test\Integrity\DependencyTest::TYPE_HARD,
                 true
             ],
             [
-                $this->_getLayoutFileContent('layout_handle_update.xml'),
+                self::_getLayoutFileContent('layout_handle_update.xml'),
                 \Magento\Test\Integrity\DependencyTest::TYPE_SOFT,
                 true
             ]
         ];
     }
 
-    public function layoutGetDependencyInfoWithReferenceDataProvider()
+    public static function layoutGetDependencyInfoWithReferenceDataProvider()
     {
         return array_merge(
-            $this->layoutGetDependencyInfoDataProvider(),
+            self::layoutGetDependencyInfoDataProvider(),
             [
                 [
-                    $this->_getLayoutFileContent('layout_reference.xml'),
+                    self::_getLayoutFileContent('layout_reference.xml'),
                     \Magento\Test\Integrity\DependencyTest::TYPE_SOFT,
                     false,
                 ]
@@ -216,7 +219,7 @@ class LayoutRuleTest extends \PHPUnit\Framework\TestCase
      * @param string $fileName
      * @return string
      */
-    protected function _getLayoutFileContent($fileName)
+    protected static function _getLayoutFileContent($fileName)
     {
         return file_get_contents(str_replace('\\', '/', realpath(__DIR__)) . '/_files/' . $fileName);
     }

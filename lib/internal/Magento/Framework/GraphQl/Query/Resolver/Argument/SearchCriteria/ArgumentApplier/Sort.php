@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -26,14 +26,14 @@ class Sort implements ArgumentApplierInterface
     /**
      * @param SortOrderBuilder|null $sortOrderBuilder
      */
-    public function __construct(SortOrderBuilder $sortOrderBuilder = null)
+    public function __construct(?SortOrderBuilder $sortOrderBuilder = null)
     {
         $this->sortOrderBuilder = $sortOrderBuilder ?: ObjectManager::getInstance()
             ->get(SortOrderBuilder::class);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function applyArgument(
         SearchCriteriaInterface $searchCriteria,

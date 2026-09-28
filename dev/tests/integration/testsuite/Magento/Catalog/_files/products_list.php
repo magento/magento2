@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -29,6 +29,7 @@ $product
 $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
     ->create(\Magento\Catalog\Model\Product::class);
 $product
+    ->setId(153)
     ->setTypeId('simple')
     ->setAttributeSetId(4)
     ->setWebsiteIds([1])
@@ -49,6 +50,7 @@ $product
 $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
     ->create(\Magento\Catalog\Model\Product::class);
 $product
+    ->setId(156)
     ->setTypeId('simple')
     ->setAttributeSetId(4)
     ->setWebsiteIds([1])

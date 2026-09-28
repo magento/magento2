@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -17,7 +16,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  *
  * Page Cache State Observer
  *
- * @deprecated Originally used by now removed observer SwitchPageCacheOnMaintenance
+ * @deprecated 100.4.0 Originally used by now removed observer SwitchPageCacheOnMaintenance
  */
 class PageCacheState
 {

@@ -2,8 +2,8 @@
 /**
  * Magento filesystem facade
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework;
 
@@ -11,6 +11,7 @@ use Magento\Framework\Filesystem\DriverPool;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Filesystem
 {
@@ -78,6 +79,7 @@ class Filesystem
      *
      * @return \Magento\Framework\Filesystem\Directory\ReadInterface
      *
+     * @since 102.0.0
      */
     public function getDirectoryReadByPath($path, $driverCode = DriverPool::FILE)
     {

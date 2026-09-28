@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -13,6 +13,7 @@ use Magento\InstantPurchase\Block\Button;
 use Magento\InstantPurchase\Model\Config;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -54,8 +55,8 @@ class ButtonTest extends TestCase
     protected function setUp(): void
     {
         $this->context = $this->createMock(Context::class);
-        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $this->store = $this->getMockForAbstractClass(StoreInterface::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->store = $this->createMock(StoreInterface::class);
 
         $this->storeManager->expects($this->any())->method('getStore')
             ->willReturn($this->store);
@@ -72,7 +73,7 @@ class ButtonTest extends TestCase
                     'instantPurchaseConfig' => $this->config
                 ]
             )
-            ->setMethods(['getUrl'])
+            ->onlyMethods(['getUrl'])
             ->getMock();
     }
 
@@ -82,8 +83,8 @@ class ButtonTest extends TestCase
      * @param $currentStoreId
      * @param $isModuleEnabled
      * @param $expected
-     * @dataProvider isEnabledDataProvider
      */
+    #[DataProvider('isEnabledDataProvider')]
     public function testIsEnabled($currentStoreId, $isModuleEnabled, $expected)
     {
         $this->store->expects($this->any())->method('getId')
@@ -100,7 +101,7 @@ class ButtonTest extends TestCase
      *
      * @return array
      */
-    public function isEnabledDataProvider()
+    public static function isEnabledDataProvider()
     {
         return [
             'Store With ID = 1 and enable module' => [

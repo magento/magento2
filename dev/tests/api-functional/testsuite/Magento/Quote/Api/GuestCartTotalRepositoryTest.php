@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Quote\Api;
 
@@ -150,7 +149,7 @@ class GuestCartTotalRepositoryTest extends WebapiAbstract
     {
         foreach ($data as $key => $field) {
             if (is_numeric($field)) {
-                $data[$key] = round($field, 1);
+                $data[$key] = round((float) $field, 1);
                 if ($data[$key] === null) {
                     $data[$key] = 0.0;
                 }

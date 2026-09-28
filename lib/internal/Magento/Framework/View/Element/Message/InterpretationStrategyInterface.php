@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\View\Element\Message;
 
@@ -10,6 +10,7 @@ use Magento\Framework\Message\MessageInterface;
 /**
  * Interface \Magento\Framework\View\Element\Message\InterpretationStrategyInterface
  *
+ * @api
  */
 interface InterpretationStrategyInterface
 {

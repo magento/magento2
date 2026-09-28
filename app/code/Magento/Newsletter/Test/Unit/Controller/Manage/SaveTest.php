@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -70,31 +70,16 @@ class SaveTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->responseMock = $this->getMockBuilder(ResponseInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->messageManagerMock = $this->getMockBuilder(ManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->redirectMock = $this->getMockBuilder(RedirectInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->customerSessionMock = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->responseMock = $this->createMock(ResponseInterface::class);
+        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
+        $this->redirectMock = $this->createMock(RedirectInterface::class);
+        $this->customerSessionMock = $this->createMock(Session::class);
         $this->customerSessionMock->expects($this->any())
             ->method('isLoggedIn')
             ->willReturn(true);
-        $this->formKeyValidatorMock = $this->getMockBuilder(Validator::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->customerRepositoryMock =
-            $this->getMockBuilder(CustomerRepositoryInterface::class)
-                ->disableOriginalConstructor()
-                ->getMockForAbstractClass();
+        $this->formKeyValidatorMock = $this->createMock(Validator::class);
+        $this->customerRepositoryMock = $this->createMock(CustomerRepositoryInterface::class);
         $objectManager = new ObjectManager($this);
 
         $this->action = $objectManager->getObject(
@@ -122,7 +107,7 @@ class SaveTest extends TestCase
         $this->messageManagerMock->expects($this->never())
             ->method('addSuccess');
         $this->messageManagerMock->expects($this->never())
-            ->method('addError');
+            ->method('addErrorMessage');
         $this->action->execute();
     }
 
@@ -140,7 +125,7 @@ class SaveTest extends TestCase
         $this->messageManagerMock->expects($this->never())
             ->method('addSuccess');
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with('Something went wrong while saving your subscription.');
         $this->action->execute();
     }
@@ -169,7 +154,7 @@ class SaveTest extends TestCase
         $this->messageManagerMock->expects($this->never())
             ->method('addSuccess');
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with('Something went wrong while saving your subscription.');
         $this->action->execute();
     }

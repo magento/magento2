@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\InstantPurchase\PaymentMethodIntegration;
 
@@ -9,6 +9,7 @@ namespace Magento\InstantPurchase\PaymentMethodIntegration;
  * Availability checker with predefined result.
  *
  * @api
+ * @since 100.2.0
  */
 class StaticAvailabilityChecker implements AvailabilityCheckerInterface
 {
@@ -28,6 +29,7 @@ class StaticAvailabilityChecker implements AvailabilityCheckerInterface
 
     /**
      * @inheritdoc
+     * @since 100.2.0
      */
     public function isAvailable(): bool
     {

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,11 +14,13 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\AbstractResource;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\DataObject;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
 
 class AbstractTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * Get attribute list
      *
@@ -29,11 +31,7 @@ class AbstractTest extends TestCase
         $attributes = [];
         $codes = ['entity_type_id', 'attribute_set_id', 'created_at', 'updated_at', 'parent_id', 'increment_id'];
         foreach ($codes as $code) {
-            $mock = $this->getMockBuilder(AbstractAttribute::class)
-                ->addMethods(['getApplyTo'])
-                ->onlyMethods(['isInSet', 'getBackend'])
-                ->disableOriginalConstructor()
-                ->getMockForAbstractClass();
+            $mock = $this->createPartialMock(AbstractAttribute::class, ['isInSet', 'getBackend']);
 
             $mock->setAttributeId($code);
             $mock->setAttributeCode($code);
@@ -47,8 +45,6 @@ class AbstractTest extends TestCase
 
     public function testWalkAttributes()
     {
-        $objectManager = new ObjectManager($this);
-
         $code = 'test_attr';
         $set = 10;
         $storeId = 100;
@@ -86,13 +82,10 @@ class AbstractTest extends TestCase
         $attributes[$code] = $attribute;
 
         /** @var AbstractResource $model */
-        $arguments = $objectManager->getConstructArguments(
-            AbstractResource::class
+        $model = $this->createPartialMockWithReflection(
+            AbstractResource::class,
+            ['getAttributesByCode']
         );
-        $model = $this->getMockBuilder(AbstractResource::class)
-            ->setMethods(['getAttributesByCode'])
-            ->setConstructorArgs($arguments)
-            ->getMock();
 
         $model->expects($this->once())->method('getAttributesByCode')->willReturn($attributes);
 

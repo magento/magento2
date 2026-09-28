@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
@@ -13,6 +13,6 @@
         <element name="columnName" type="button" selector="//label[contains(text(), '{{var1}}')]" parameterized="true" timeout="5"/>
 
         <element name="reset" type="button" selector="//div[@class='admin__action-dropdown-menu-footer']/div/button[contains(text(), 'Reset')]" timeout="5"/>
-        <element name="cancel" type="button" selector="//div[@class='admin__action-dropdown-menu-footer']/div/button[contains(text(), 'Cancel')]" timeout="5"/>
+        <element name="cancel" type="button" selector="//div[@class='admin__action-dropdown-wrap admin__data-grid-action-columns _active']//button[text()='Cancel']" timeout="5"/>
     </section>
 </sections>

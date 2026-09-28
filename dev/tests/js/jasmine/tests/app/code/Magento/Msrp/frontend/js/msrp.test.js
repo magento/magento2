@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 /* eslint-disable max-nested-callbacks */
@@ -41,7 +41,7 @@ define([
                 expect(result).toEqual(wdContainer[0]);
                 done();
             });
-            link.click();
+            link.trigger('click');
         });
     });
 });

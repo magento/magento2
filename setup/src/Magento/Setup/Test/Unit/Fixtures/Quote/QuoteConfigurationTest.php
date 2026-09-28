@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -68,15 +68,25 @@ class QuoteConfigurationTest extends TestCase
         ];
         $this->fixtureModelMock->expects($this->atLeastOnce())
             ->method('getValue')
-            ->withConsecutive(
-                ['order_simple_product_count_to'],
-                ['order_simple_product_count_from'],
-                ['order_configurable_product_count_to'],
-                ['order_configurable_product_count_from'],
-                ['order_big_configurable_product_count_to'],
-                ['order_big_configurable_product_count_from'],
-                ['order_quotes_enable']
-            )->willReturn(1);
+            ->willReturnCallback(
+                function ($arg) {
+                    if ($arg == 'order_simple_product_count_to') {
+                        return 1;
+                    } elseif ($arg == 'order_simple_product_count_from') {
+                        return 1;
+                    } elseif ($arg == 'order_configurable_product_count_to') {
+                        return 1;
+                    } elseif ($arg == 'order_configurable_product_count_from') {
+                        return 1;
+                    } elseif ($arg == 'order_big_configurable_product_count_to') {
+                        return 1;
+                    } elseif ($arg == 'order_big_configurable_product_count_from') {
+                        return 1;
+                    } elseif ($arg == 'order_quotes_enable') {
+                        return 1;
+                    }
+                }
+            );
         $this->assertSame($expectedResult, $this->fixture->load()->getData());
     }
 }

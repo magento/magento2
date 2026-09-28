@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\PageCache\Model;
@@ -16,8 +16,9 @@ interface VclGeneratorInterface
      * Return generated varnish.vcl configuration file
      *
      * @param int $version
+     * @param string $inputFile
      * @return string
      * @since 100.2.0
      */
-    public function generateVcl($version);
+    public function generateVcl($version, $inputFile = null);
 }

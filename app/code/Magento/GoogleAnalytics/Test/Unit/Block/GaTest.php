@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -62,34 +62,22 @@ class GaTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $contextMock = $this->createMock(Context::class);
 
         $contextMock->expects($this->once())
             ->method('getEscaper')
             ->willReturn($objectManager->getObject(Escaper::class));
 
-        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
 
-        $this->storeMock = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->storeMock = $this->createMock(Store::class);
         $contextMock->expects($this->once())->method('getStoreManager')->willReturn($this->storeManagerMock);
 
-        $this->salesOrderCollectionMock = $this->getMockBuilder(CollectionFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->salesOrderCollectionMock = $this->createMock(CollectionFactory::class);
 
-        $this->googleAnalyticsDataMock = $this->getMockBuilder(Data::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->googleAnalyticsDataMock = $this->createMock(Data::class);
 
-        $this->cookieHelperMock = $this->getMockBuilder(Cookie::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->cookieHelperMock = $this->createMock(Cookie::class);
 
         $this->gaBlock = $objectManager->getObject(
             Ga::class,
@@ -115,15 +103,21 @@ class GaTest extends TestCase
             ga('ec:addProduct', {
                                     'id': 'sku0',
                                     'name': 'testName0',
-                                    'price': '0.00',
+                                    'price': 0.00,
                                     'quantity': 1
+                                });
+            ga('ec:addProduct', {
+                                    'id': 'sku1',
+                                    'name': 'testName1',
+                                    'price': 1.00,
+                                    'quantity': 1.11
                                 });
             ga('ec:setAction', 'purchase', {
                                 'id': '100',
                                 'affiliation': 'test',
-                                'revenue': '10',
-                                'tax': '2',
-                                'shipping': '1'
+                                'revenue': 10.00,
+                                'tax': 2.00,
+                                'shipping': 2.00
                             });
             ga('send', 'pageview');";
 
@@ -143,8 +137,7 @@ class GaTest extends TestCase
     public function testGetCurrentWebsiteId()
     {
         $websiteId = 100;
-        $websiteMock = $this->getMockBuilder(WebsiteInterface::class)
-            ->getMock();
+        $websiteMock = $this->createMock(WebsiteInterface::class);
         $websiteMock->expects($this->once())->method('getId')->willReturn($websiteId);
         $this->storeManagerMock->expects($this->once())->method('getWebsite')->willReturn($websiteMock);
         $this->assertEquals($websiteId, $this->gaBlock->getCurrentWebsiteId());
@@ -163,9 +156,9 @@ class GaTest extends TestCase
                 [
                     'id' => 100,
                     'affiliation' => 'test',
-                    'revenue' => 10,
-                    'tax' => 2,
-                    'shipping' => 1
+                    'revenue' => 10.00,
+                    'tax' => 2.00,
+                    'shipping' => 2.0
                 ]
             ],
             'products' => [
@@ -174,6 +167,12 @@ class GaTest extends TestCase
                     'name' => 'testName0',
                     'price' => 0.00,
                     'quantity' => 1
+                ],
+                [
+                    'id' => 'sku1',
+                    'name' => 'testName1',
+                    'price' => 1.00,
+                    'quantity' => 1.11
                 ]
             ],
             'currency' => 'USD'
@@ -204,28 +203,24 @@ class GaTest extends TestCase
      * @param int $orderItemCount
      * @return Order|MockObject
      */
-    protected function createOrderMock($orderItemCount = 1)
+    protected function createOrderMock($orderItemCount = 2)
     {
         $orderItems = [];
         for ($i = 0; $i < $orderItemCount; $i++) {
-            $orderItemMock = $this->getMockBuilder(OrderItemInterface::class)
-                ->disableOriginalConstructor()
-                ->getMockForAbstractClass();
+            $orderItemMock = $this->createMock(OrderItemInterface::class);
             $orderItemMock->expects($this->once())->method('getSku')->willReturn('sku' . $i);
             $orderItemMock->expects($this->once())->method('getName')->willReturn('testName' . $i);
-            $orderItemMock->expects($this->once())->method('getPrice')->willReturn($i . '.00');
-            $orderItemMock->expects($this->once())->method('getQtyOrdered')->willReturn($i + 1);
+            $orderItemMock->expects($this->once())->method('getPrice')->willReturn((float)($i . '.0000'));
+            $orderItemMock->expects($this->once())->method('getQtyOrdered')->willReturn($i == 1 ? 1.11 : $i + 1);
             $orderItems[] = $orderItemMock;
         }
 
-        $orderMock = $this->getMockBuilder(Order::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $orderMock = $this->createMock(Order::class);
         $orderMock->expects($this->once())->method('getIncrementId')->willReturn(100);
         $orderMock->expects($this->once())->method('getAllVisibleItems')->willReturn($orderItems);
-        $orderMock->expects($this->once())->method('getGrandTotal')->willReturn(10);
-        $orderMock->expects($this->once())->method('getTaxAmount')->willReturn(2);
-        $orderMock->expects($this->once())->method('getShippingAmount')->willReturn($orderItemCount);
+        $orderMock->expects($this->once())->method('getGrandTotal')->willReturn(10.00);
+        $orderMock->expects($this->once())->method('getTaxAmount')->willReturn(2.00);
+        $orderMock->expects($this->once())->method('getShippingAmount')->willReturn(round((float)$orderItemCount, 2));
         $orderMock->expects($this->once())->method('getOrderCurrencyCode')->willReturn('USD');
         return $orderMock;
     }
@@ -235,13 +230,11 @@ class GaTest extends TestCase
      */
     protected function createCollectionMock()
     {
-        $collectionMock = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $collectionMock = $this->createMock(Collection::class);
 
         $collectionMock->expects($this->any())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator([$this->createOrderMock(1)]));
+            ->willReturn(new \ArrayIterator([$this->createOrderMock(2)]));
         return $collectionMock;
     }
 

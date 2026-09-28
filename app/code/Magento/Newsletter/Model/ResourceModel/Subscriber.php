@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Newsletter\Model\ResourceModel;
 
@@ -19,7 +19,6 @@ use Magento\Store\Model\StoreManagerInterface;
 /**
  * Newsletter subscriber resource model
  *
- * @author Magento Core Team <core@magentocommerce.com>
  * @api
  * @since 100.0.2
  */
@@ -47,7 +46,7 @@ class Subscriber extends AbstractDb
     protected $_messagesScope = 'newsletter/session';
 
     /**
-     * Date
+     * Date variable
      *
      * @var DateTime
      */
@@ -59,7 +58,7 @@ class Subscriber extends AbstractDb
     protected $mathRandom;
 
     /**
-     * Store manager
+     * Member variable for Store manager
      *
      * @var StoreManagerInterface
      */
@@ -79,7 +78,7 @@ class Subscriber extends AbstractDb
         DateTime $date,
         Random $mathRandom,
         $connectionName = null,
-        StoreManagerInterface $storeManager = null
+        ?StoreManagerInterface $storeManager = null
     ) {
         $this->_date = $date;
         $this->mathRandom = $mathRandom;
@@ -116,6 +115,8 @@ class Subscriber extends AbstractDb
      * @param string $email
      * @param int $websiteId
      * @return array
+     * @since 100.4.0
+     * @throws LocalizedException
      */
     public function loadBySubscriberEmail(string $email, int $websiteId): array
     {
@@ -140,6 +141,7 @@ class Subscriber extends AbstractDb
      * @param int $customerId
      * @param int $websiteId
      * @return array
+     * @since 100.4.0
      */
     public function loadByCustomerId(int $customerId, int $websiteId): array
     {
@@ -199,7 +201,7 @@ class Subscriber extends AbstractDb
      *
      * @param string $subscriberEmail
      * @return array
-     * @deprecated The subscription should be loaded by website id
+     * @deprecated 100.4.0 The subscription should be loaded by website id
      * @see loadBySubscriberEmail
      */
     public function loadByEmail($subscriberEmail)
@@ -213,7 +215,7 @@ class Subscriber extends AbstractDb
      *
      * @param CustomerInterface $customer
      * @return array
-     * @deprecated The subscription should be loaded by website id
+     * @deprecated 100.4.0 The subscription should be loaded by website id
      * @see loadByCustomerId
      */
     public function loadByCustomerData(CustomerInterface $customer)

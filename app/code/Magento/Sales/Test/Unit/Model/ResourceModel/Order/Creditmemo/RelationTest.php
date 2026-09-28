@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,9 +15,12 @@ use Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item;
 use Magento\Sales\Model\ResourceModel\Order\Creditmemo\Relation;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class RelationTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Relation
      */
@@ -52,7 +55,7 @@ class RelationTest extends TestCase
     {
         $this->itemResourceMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'save'
                 ]
@@ -62,7 +65,7 @@ class RelationTest extends TestCase
             CreditMemoComment::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'save'
                 ]
@@ -70,7 +73,7 @@ class RelationTest extends TestCase
             ->getMock();
         $this->creditmemoMock = $this->getMockBuilder(Creditmemo::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getId',
                     'getItems',
@@ -78,17 +81,8 @@ class RelationTest extends TestCase
                 ]
             )
             ->getMock();
-        $this->itemMock = $this->getMockBuilder(OrderItem::class)
-            ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'setParentId'
-                ]
-            )
-            ->getMock();
-        $this->commentMock = $this->getMockBuilder(Creditmemo::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->itemMock = $this->createPartialMockWithReflection(OrderItem::class, ['setParentId']);
+        $this->commentMock = $this->createMock(Creditmemo::class);
         $this->relationProcessor = new Relation(
             $this->itemResourceMock,
             $this->commentResourceMock

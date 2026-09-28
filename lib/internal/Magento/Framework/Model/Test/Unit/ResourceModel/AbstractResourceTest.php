@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -42,7 +43,7 @@ class AbstractResourceTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
         $this->serializerMock = $this->createMock(Json::class);
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->model = $objectManager->getObject(AbstractResourceStub::class);
         $objectManager->setBackwardCompatibleProperty($this->model, 'serializer', $this->serializerMock);
         $objectManager->setBackwardCompatibleProperty($this->model, '_logger', $this->loggerMock);
@@ -55,9 +56,8 @@ class AbstractResourceTest extends TestCase
      * @param string|null $expected
      * @param array|string|int $serializeCalledWith
      * @param int $numSerializeCalled
-     * @return void
-     * @dataProvider serializeFieldsDataProvider
-     */
+     * @return void     */
+    #[DataProvider('serializeFieldsDataProvider')]
     public function testSerializeFields(
         array $arguments,
         ?string $expected,
@@ -79,7 +79,7 @@ class AbstractResourceTest extends TestCase
      *
      * @return array
      */
-    public function serializeFieldsDataProvider(): array
+    public static function serializeFieldsDataProvider(): array
     {
         $array = ['a', 'b', 'c'];
         $string = 'i am string';
@@ -130,9 +130,8 @@ class AbstractResourceTest extends TestCase
      *
      * @param array $arguments
      * @param array|string|int|boolean $expected
-     * @return void
-     * @dataProvider unserializeFieldsDataProvider
-     */
+     * @return void     */
+    #[DataProvider('unserializeFieldsDataProvider')]
     public function testUnserializeFields(array $arguments, $expected): void
     {
         /** @var DataObject $dataObject */
@@ -150,7 +149,7 @@ class AbstractResourceTest extends TestCase
      *
      * @return array
      */
-    public function unserializeFieldsDataProvider(): array
+    public static function unserializeFieldsDataProvider(): array
     {
         $dataObject = new DataObject(
             [
@@ -199,7 +198,7 @@ class AbstractResourceTest extends TestCase
     public function testCommitZeroLevel(): void
     {
         /** @var AdapterInterface|MockObject $connection */
-        $connection = $this->getMockForAbstractClass(AdapterInterface::class);
+        $connection = $this->createMock(AdapterInterface::class);
         /** @var DataObject|MockObject $closureExpectation */
         $closureExpectation = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
@@ -240,7 +239,7 @@ class AbstractResourceTest extends TestCase
     public function testCommitZeroLevelCallbackException(): void
     {
         /** @var AdapterInterface|MockObject $connection */
-        $connection = $this->getMockForAbstractClass(AdapterInterface::class);
+        $connection = $this->createMock(AdapterInterface::class);
 
         $this->model->setConnection($connection);
         $this->model->addCommitCallback(
@@ -268,7 +267,7 @@ class AbstractResourceTest extends TestCase
     public function testCommitNotCompletedTransaction(): void
     {
         /** @var AdapterInterface|MockObject $connection */
-        $connection = $this->getMockForAbstractClass(AdapterInterface::class);
+        $connection = $this->createMock(AdapterInterface::class);
         /** @var DataObject|MockObject $closureExpectation */
         $closureExpectation = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()

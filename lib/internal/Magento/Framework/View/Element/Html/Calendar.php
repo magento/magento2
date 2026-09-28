@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\View\Element\Html;
 
@@ -13,6 +13,7 @@ use Magento\Framework\Locale\Bundle\DataBundle;
  * Prepares localization data for calendar
  *
  * @api
+ * @since 100.0.2
  */
 class Calendar extends \Magento\Framework\View\Element\Template
 {
@@ -73,7 +74,11 @@ class Calendar extends \Magento\Framework\View\Element\Template
             [
                 'wide' => $this->encoder->encode(array_values(iterator_to_array($daysData['format']['wide']))),
                 'abbreviated' => $this->encoder->encode(
-                    array_values(iterator_to_array($daysData['format']['abbreviated']))
+                    array_values(
+                        iterator_to_array(
+                            $daysData['format']['abbreviated'] ?? $daysData['format']['wide']
+                        )
+                    )
                 ),
             ]
         );
@@ -107,13 +112,8 @@ class Calendar extends \Magento\Framework\View\Element\Template
             ]
         );
 
-        // get "today" and "week" words
-        $this->assign('today', $this->encoder->encode($localeData['fields']['day']['relative']['0']));
-        $this->assign('week', $this->encoder->encode($localeData['fields']['week']['dn']));
-
-        // get "am" & "pm" words
-        $this->assign('am', $this->encoder->encode($localeData['calendar']['gregorian']['AmPmMarkers']['0']));
-        $this->assign('pm', $this->encoder->encode($localeData['calendar']['gregorian']['AmPmMarkers']['1']));
+        $this->assignFieldsValues($localeData);
+        $this->assignAmPmWords($localeData);
 
         // get first day of week and weekend days
         $this->assign(
@@ -188,5 +188,45 @@ class Calendar extends \Magento\Framework\View\Element\Template
     {
         return (new \DateTime())->modify('- 100 years')->format('Y')
             . ':' . (new \DateTime())->modify('+ 100 years')->format('Y');
+    }
+
+    /**
+     * Assign "fields" values from the ICU data
+     *
+     * @param \ResourceBundle $localeData
+     */
+    private function assignFieldsValues(\ResourceBundle $localeData): void
+    {
+        /**
+         * Fields value in the current position has been added to ICU Data tables
+         * starting with ICU library version 51.1.
+         * Due to fact that we do not use these variables in templates, we do not initialize them for older versions
+         *
+         * @see https://github.com/unicode-org/icu/blob/release-50-2/icu4c/source/data/locales/en.txt
+         * @see https://github.com/unicode-org/icu/blob/release-51-2/icu4c/source/data/locales/en.txt
+         */
+        if ($localeData->get('fields')) {
+            $this->assign('today', $this->encoder->encode($localeData['fields']['day']['relative']['0']));
+            $this->assign('week', $this->encoder->encode($localeData['fields']['week']['dn']));
+        }
+    }
+
+    /**
+     * Assign "am" & "pm" words from the ICU data
+     *
+     * @param \ResourceBundle $localeData
+     */
+    private function assignAmPmWords(\ResourceBundle $localeData): void
+    {
+        // AmPmMarkers and AmPmMarkersAbbr aren't guaranteed to exist, so fallback to null if neither exist
+        $amWord = $localeData['calendar']['gregorian']['AmPmMarkers'][0] ??
+                  $localeData['calendar']['gregorian']['AmPmMarkersAbbr'][0] ??
+                  null;
+        $pmWord = $localeData['calendar']['gregorian']['AmPmMarkers'][1] ??
+                  $localeData['calendar']['gregorian']['AmPmMarkersAbbr'][1] ??
+                  null;
+
+        $this->assign('am', $this->encoder->encode($amWord));
+        $this->assign('pm', $this->encoder->encode($pmWord));
     }
 }

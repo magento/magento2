@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Stdlib;
@@ -22,6 +22,7 @@ use Magento\Framework\Exception\InputException;
  * about how the cookie should be stored and whether JavaScript can access the cookie.
  *
  * @api
+ * @since 100.0.2
  */
 interface CookieManagerInterface extends CookieReaderInterface
 {
@@ -39,7 +40,7 @@ interface CookieManagerInterface extends CookieReaderInterface
      * @throws CookieSizeLimitReachedException Thrown when the cookie is too big to store any additional data.
      * @throws InputException If the cookie name is empty or contains invalid characters.
      */
-    public function setSensitiveCookie($name, $value, SensitiveCookieMetadata $metadata = null);
+    public function setSensitiveCookie($name, $value, ?SensitiveCookieMetadata $metadata = null);
 
     /**
      * Set a value in a public cookie with the given $name $value pairing.
@@ -55,7 +56,7 @@ interface CookieManagerInterface extends CookieReaderInterface
      * @throws CookieSizeLimitReachedException Thrown when the cookie is too big to store any additional data.
      * @throws InputException If the cookie name is empty or contains invalid characters.
      */
-    public function setPublicCookie($name, $value, PublicCookieMetadata $metadata = null);
+    public function setPublicCookie($name, $value, ?PublicCookieMetadata $metadata = null);
 
     /**
      * Deletes a cookie with the given name.
@@ -68,5 +69,5 @@ interface CookieManagerInterface extends CookieReaderInterface
      *     received and accepted the request to delete this cookie.
      * @throws InputException If the cookie name is empty or contains invalid characters.
      */
-    public function deleteCookie($name, CookieMetadata $metadata = null);
+    public function deleteCookie($name, ?CookieMetadata $metadata = null);
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -21,6 +21,9 @@ class ApplyCouponsToCartTest extends GraphQlAbstract
      */
     private $getMaskedQuoteIdByReservedOrderId;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
@@ -36,12 +39,17 @@ class ApplyCouponsToCartTest extends GraphQlAbstract
     public function testApplyCouponsToCart()
     {
         $couponCode = '2?ds5!2d';
+        $expectedGrandTotal = 15.00;
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $query = $this->getQuery($maskedQuoteId, $couponCode);
         $response = $this->graphQlMutation($query);
 
         self::assertArrayHasKey('applyCouponToCart', $response);
         self::assertEquals($couponCode, $response['applyCouponToCart']['cart']['applied_coupons'][0]['code']);
+        self::assertEquals(
+            $expectedGrandTotal,
+            $response['applyCouponToCart']['cart']['prices']['grand_total']['value']
+        );
     }
 
     /**
@@ -145,6 +153,11 @@ mutation {
     cart {
       applied_coupons {
         code
+      }
+      prices {
+        grand_total {
+          value
+        }
       }
     }
   }

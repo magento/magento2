@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Payment\Model\Method;
@@ -115,10 +115,10 @@ class Adapter implements MethodInterface, SaleOperationInterface
         $code,
         $formBlockType,
         $infoBlockType,
-        CommandPoolInterface $commandPool = null,
-        ValidatorPoolInterface $validatorPool = null,
-        CommandManagerInterface $commandExecutor = null,
-        LoggerInterface $logger = null
+        ?CommandPoolInterface $commandPool = null,
+        ?ValidatorPoolInterface $validatorPool = null,
+        ?CommandManagerInterface $commandExecutor = null,
+        ?LoggerInterface $logger = null
     ) {
         $this->valueHandlerPool = $valueHandlerPool;
         $this->validatorPool = $validatorPool;
@@ -277,7 +277,7 @@ class Adapter implements MethodInterface, SaleOperationInterface
     /**
      * @inheritdoc
      */
-    public function isAvailable(CartInterface $quote = null)
+    public function isAvailable(?CartInterface $quote = null)
     {
         if (!$this->isActive($quote ? $quote->getStoreId() : null)) {
             return false;
@@ -668,6 +668,7 @@ class Adapter implements MethodInterface, SaleOperationInterface
 
     /**
      * @inheritdoc
+     * @since 100.4.0
      */
     public function canSale(): bool
     {
@@ -676,6 +677,7 @@ class Adapter implements MethodInterface, SaleOperationInterface
 
     /**
      * @inheritdoc
+     * @since 100.4.0
      */
     public function sale(InfoInterface $payment, float $amount)
     {

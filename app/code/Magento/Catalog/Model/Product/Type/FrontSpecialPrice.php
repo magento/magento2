@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,7 +18,7 @@ use Magento\Store\Api\Data\WebsiteInterface;
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
- * @deprecated
+ * @deprecated 103.0.2
  * @see \Magento\Catalog\Model\Product\Type\Price
  */
 class FrontSpecialPrice extends Price
@@ -70,7 +70,7 @@ class FrontSpecialPrice extends Price
     /**
      * @inheritdoc
      *
-     * @deprecated
+     * @deprecated 103.0.2
      */
     protected function _applySpecialPrice($product, $finalPrice)
     {

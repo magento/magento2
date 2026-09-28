@@ -1,13 +1,17 @@
 <?php
+
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\App;
 
 use Magento\Framework\App\ResourceConnection\ConfigInterface as ResourceConfigInterface;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Model\ResourceModel\Type\Db\ConnectionFactoryInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Application provides ability to configure multiple connections to persistent storage.
@@ -15,16 +19,14 @@ use Magento\Framework\Model\ResourceModel\Type\Db\ConnectionFactoryInterface;
  * This class provides access to all these connections.
  *
  * @api
+ * @since 100.0.2
  */
-class ResourceConnection
+class ResourceConnection implements ResetAfterRequestInterface
 {
-    const AUTO_UPDATE_ONCE = 0;
-
-    const AUTO_UPDATE_NEVER = -1;
-
-    const AUTO_UPDATE_ALWAYS = 1;
-
-    const DEFAULT_CONNECTION = 'default';
+    public const AUTO_UPDATE_ONCE = 0;
+    public const AUTO_UPDATE_NEVER = -1;
+    public const AUTO_UPDATE_ALWAYS = 1;
+    public const DEFAULT_CONNECTION = 'default';
 
     /**
      * Instances of actual connections.
@@ -38,7 +40,7 @@ class ResourceConnection
      *
      * @var array
      */
-    protected $mappedTableNames;
+    protected $mappedTableNames = [];
 
     /**
      * Resource config.
@@ -83,6 +85,19 @@ class ResourceConnection
     }
 
     /**
+     * @inheritdoc
+     */
+    public function _resetState() : void
+    {
+        $this->mappedTableNames = [];
+        foreach ($this->connections as $connection) {
+            if ($connection instanceof ResetAfterRequestInterface) {
+                $connection->_resetState();
+            }
+        }
+    }
+
+    /**
      * Retrieve connection to resource specified by $resourceName.
      *
      * @param string $resourceName
@@ -93,8 +108,7 @@ class ResourceConnection
     public function getConnection($resourceName = self::DEFAULT_CONNECTION)
     {
         $connectionName = $this->config->getConnectionName($resourceName);
-        $connection = $this->getConnectionByName($connectionName);
-        return $connection;
+        return $this->getConnectionByName($connectionName);
     }
 
     /**
@@ -114,7 +128,7 @@ class ResourceConnection
             }
             $this->connections = [];
         } else {
-            $processConnectionName = $this->getProcessConnectionName($this->config->getConnectionName($resourceName));
+            $processConnectionName = $this->config->getConnectionName($resourceName) ?? '';
             if (isset($this->connections[$processConnectionName])) {
                 if ($this->connections[$processConnectionName] !== null) {
                     $this->connections[$processConnectionName]->closeConnection();
@@ -133,9 +147,8 @@ class ResourceConnection
      */
     public function getConnectionByName($connectionName)
     {
-        $processConnectionName = $this->getProcessConnectionName($connectionName);
-        if (isset($this->connections[$processConnectionName])) {
-            return $this->connections[$processConnectionName];
+        if (isset($this->connections[$connectionName])) {
+            return $this->connections[$connectionName];
         }
 
         $connectionConfig = $this->deploymentConfig->get(
@@ -148,28 +161,16 @@ class ResourceConnection
             throw new \DomainException('Connection "' . $connectionName . '" is not defined');
         }
 
-        $this->connections[$processConnectionName] = $connection;
+        $this->connections[$connectionName] = $connection;
         return $connection;
-    }
-
-    /**
-     * Get conneciton name for process.
-     *
-     * @param string $connectionName
-     * @return string
-     */
-    private function getProcessConnectionName($connectionName)
-    {
-        return  $connectionName . '_process_' . getmypid();
     }
 
     /**
      * Get resource table name, validated by db adapter.
      *
-     * @param   string|string[] $modelEntity
+     * @param string|string[] $modelEntity
      * @param string $connectionName
-     * @return  string
-     * @api
+     * @return string
      */
     public function getTableName($modelEntity, $connectionName = self::DEFAULT_CONNECTION)
     {
@@ -178,7 +179,7 @@ class ResourceConnection
             list($modelEntity, $tableSuffix) = $modelEntity;
         }
 
-        $tableName = $modelEntity;
+        $tableName = (string)$modelEntity;
 
         $mappedTableName = $this->getMappedTableName($tableName);
         if ($mappedTableName) {
@@ -212,9 +213,9 @@ class ResourceConnection
     /**
      * Build a trigger name.
      *
-     * @param string $tableName  The table that is the subject of the trigger
-     * @param string $time  Either "before" or "after"
-     * @param string $event  The DB level event which activates the trigger, i.e. "update" or "insert"
+     * @param string $tableName The table that is the subject of the trigger
+     * @param string $time Either "before" or "after"
+     * @param string $event The DB level event which activates the trigger, i.e. "update" or "insert"
      * @return string
      */
     public function getTriggerName($tableName, $time, $event)
@@ -275,9 +276,9 @@ class ResourceConnection
     /**
      * Retrieve 32bit UNIQUE HASH for a Table foreign key.
      *
-     * @param string $priTableName  the target table name
+     * @param string $priTableName the target table name
      * @param string $priColumnName the target table column name
-     * @param string $refTableName  the reference table name
+     * @param string $refTableName the reference table name
      * @param string $refColumnName the reference table column name
      * @return string
      */
@@ -298,14 +299,12 @@ class ResourceConnection
      *
      * @param string $resourceName
      * @return string
+     * @since 102.0.0
      */
     public function getSchemaName($resourceName)
     {
         return $this->deploymentConfig->get(
-            ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTIONS .
-            '/' .
-            $resourceName .
-            '/dbname'
+            ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTIONS . '/' . $resourceName . '/dbname'
         );
     }
 
@@ -320,8 +319,6 @@ class ResourceConnection
             return $this->tablePrefix;
         }
 
-        return (string) $this->deploymentConfig->get(
-            ConfigOptionsListConstants::CONFIG_PATH_DB_PREFIX
-        );
+        return (string)$this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_DB_PREFIX);
     }
 }

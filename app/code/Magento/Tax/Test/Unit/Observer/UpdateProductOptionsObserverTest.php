@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,27 +12,27 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Tax\Helper\Data;
 use Magento\Tax\Observer\UpdateProductOptionsObserver;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class UpdateProductOptionsObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * Tests the methods that rely on the ScopeConfigInterface object to provide their return values
-     * @param array $expected
-     * @param bool $displayBothPrices
-     * @param bool $priceIncludesTax
-     * @param bool $displayPriceExcludingTax
-     * @dataProvider dataProviderUpdateProductOptions
      */
+    #[DataProvider('dataProviderUpdateProductOptions')]
     public function testUpdateProductOptions(
-        $expected,
-        $displayBothPrices,
-        $priceIncludesTax,
-        $displayPriceExcludingTax
-    ) {
+        array $expected,
+        bool $displayBothPrices,
+        bool $priceIncludesTax,
+        bool $displayPriceExcludingTax
+    ): void {
         $frameworkObject= new DataObject();
         $frameworkObject->setAdditionalOptions([]);
 
@@ -61,10 +61,10 @@ class UpdateProductOptionsObserverTest extends TestCase
             ->method('displayPriceExcludingTax')
             ->willReturn($displayPriceExcludingTax);
 
-        $eventObject=$this->getMockBuilder(Event::class)
-            ->addMethods(['getResponseObject'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $eventObject = $this->createPartialMockWithReflection(
+            Event::class,
+            ['getResponseObject']
+        );
         $eventObject->expects($this->any())
             ->method('getResponseObject')
             ->willReturn($frameworkObject);
@@ -92,7 +92,7 @@ class UpdateProductOptionsObserverTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderUpdateProductOptions()
+    public static function dataProviderUpdateProductOptions()
     {
         return [
             [

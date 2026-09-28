@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -20,7 +20,7 @@ class CouponSearchResult extends SearchResults implements CouponSearchResultInte
     /**
      * @inheritdoc
      */
-    public function setItems(array $items = null)
+    public function setItems(?array $items = null)
     {
         return parent::setItems($items);
     }

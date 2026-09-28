@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -10,7 +10,7 @@ define([
     'Magento_Ui/js/grid/columns/column',
     'underscore'
 ], function (Column, _) {
-    'use strict';
+    'use strict'; // eslint-disable-line strict
 
     return Column.extend({
         defaults: {
@@ -34,6 +34,16 @@ define([
         /** @inheritdoc */
         getLabel: function (record) {
             return record[this.messageIndex];
+        },
+
+        /**
+         * Proxy to getLabel function with UnsanitizedHtml suffix
+         *
+         * @param {Object} record
+         * @returns {String}
+         */
+        getLabelUnsanitizedHtml: function (record) {
+            return this.getLabel(record);
         },
 
         /** @inheritdoc */

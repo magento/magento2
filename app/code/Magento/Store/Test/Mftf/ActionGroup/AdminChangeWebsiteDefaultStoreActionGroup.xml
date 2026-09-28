@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    /**
+     * Copyright 2024 Adobe
+     * All Rights Reserved.
+     */
+   -->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminChangeWebsiteDefaultStoreActionGroup" extends="AdminEditWebsiteStoreGroupActionGroup">
+        <annotations>
+            <description>Change the default store for provided store group.</description>
+        </annotations>
+        <arguments>
+            <argument name="defaultStoreName" type="string"/>
+        </arguments>
+        <selectOption selector="{{AdminEditStoreGroupSection.defaultStore}}" userInput="{{defaultStoreName}}" stepKey="changeDefaultStoreView" after="waitForStorePageToLoad"/>
+        <waitForElementClickable selector="{{AdminStoreGroupActionsSection.saveButton}}"  stepKey="waitForSaveStoreButtonClickable" />
+        <click selector="{{AdminStoreGroupActionsSection.saveButton}}" stepKey="clickSaveStoreGroup"/>
+        <waitForElementVisible selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitForModal"/>
+        <waitForText selector="{{AdminConfirmationModalSection.title}}" userInput="Warning message" stepKey="seeWarningAboutTakingALongTimeToComplete"/>
+        <waitForElementClickable selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitForOkButtonClickable" />
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmModal"/>
+        <waitForText selector="{{AdminMessagesSection.success}}" userInput="You saved the website." stepKey="seeSuccessMessage"/>
+    </actionGroup>
+</actionGroups>

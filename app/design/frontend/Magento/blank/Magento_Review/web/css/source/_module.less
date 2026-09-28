@@ -1,6 +1,6 @@
 // /**
-//  * Copyright © Magento, Inc. All rights reserved.
-//  * See COPYING.txt for license details.
+//  * Copyright 2015 Adobe
+//  * All Rights Reserved.
 //  */
 
 //
@@ -15,9 +15,21 @@
 //  _____________________________________________
 
 & when (@media-common = true) {
+    .data.switch .counter {
+        .lib-css(color, @text__color__muted);
+
+        &:before {
+            content: '(';
+        }
+
+        &:after {
+            content: ')';
+        }
+    }
+
     .rating-summary {
         .lib-rating-summary();
-        
+
         .rating-result {
             margin-left: -5px;
         }
@@ -359,3 +371,4 @@
         }
     }
 }
+

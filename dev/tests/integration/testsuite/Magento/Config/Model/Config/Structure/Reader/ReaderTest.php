@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -76,15 +76,12 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
         $this->objectManager = Bootstrap::getObjectManager();
         $this->fileUtility = Files::init();
 
-        $this->validationStateMock = $this->getMockBuilder(ValidationStateInterface::class)
-            ->setMethods(['isValidationRequired'])
-            ->getMockForAbstractClass();
+        $this->validationStateMock = $this->createMock(ValidationStateInterface::class);
         $this->schemaLocatorMock = $this->getMockBuilder(SchemaLocator::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getPerFileSchema'])
+            ->onlyMethods(['getPerFileSchema'])
             ->getMock();
-        $this->fileResolverMock = $this->getMockBuilder(FileResolverInterface::class)
-            ->getMockForAbstractClass();
+        $this->fileResolverMock = $this->createMock(FileResolverInterface::class);
 
         $this->validationStateMock->expects($this->atLeastOnce())
             ->method('isValidationRequired')
@@ -96,10 +93,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
         $this->converter = $this->objectManager->create(ConverterStub::class);
 
         //Isolate test from actual configuration, and leave only sample data.
-        $this->compiler = $this->getMockBuilder(CompilerInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['compile'])
-            ->getMockForAbstractClass();
+        $this->compiler = $this->createMock(CompilerInterface::class);
 
         $this->reader = $this->objectManager->create(
             ReaderStub::class,

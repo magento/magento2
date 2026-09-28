@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -42,9 +42,9 @@ class ViewFactoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
         $this->model = new ViewFactory($this->objectManager);
-        $this->theme = $this->getMockForAbstractClass(ThemeInterface::class);
+        $this->theme = $this->createMock(ThemeInterface::class);
         $this->view = $this->createMock(View::class);
     }
 

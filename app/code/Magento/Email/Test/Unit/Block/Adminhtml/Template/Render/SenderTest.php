@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ class SenderTest extends TestCase
     {
         $this->block = $this->getMockBuilder(Sender::class)
             ->disableOriginalConstructor()
-            ->setMethods(['escapeHtml'])
+            ->onlyMethods(['escapeHtml'])
             ->getMock();
     }
 

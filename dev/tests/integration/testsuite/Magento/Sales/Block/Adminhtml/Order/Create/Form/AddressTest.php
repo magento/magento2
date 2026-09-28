@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -53,7 +53,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
 
         $this->quoteSession = $this->getMockBuilder(QuoteSession::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCustomerId', 'getStore', 'getStoreId', 'getQuote'])
+            ->onlyMethods(['getStore', 'getQuote', '__call'])
             ->getMock();
 
         $this->block = $this->objectManager->create(
@@ -72,8 +72,14 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $website = $this->getWebsite('base');
         $customer = $this->getCustomer('customer@example.com', (int)$website->getId());
         $addresses = $customer->getAddresses();
-        $this->quoteSession->method('getCustomerId')
-            ->willReturn($customer->getId());
+        $customerId = $customer->getId();
+        $this->quoteSession->method('__call')
+            ->willReturnCallback(function ($method) use ($customerId) {
+                if ($method === 'getCustomerId') {
+                    return $customerId;
+                }
+                return null;
+            });
 
         $actual = $this->block->getAddressCollection();
         self::assertNotEmpty($actual);
@@ -93,8 +99,14 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $store = $this->getStore('fixture_second_store');
         $this->quoteSession->method('getStore')
             ->willReturn($store);
-        $this->quoteSession->method('getCustomerId')
-            ->willReturn($customer->getId());
+        $customerId = $customer->getId();
+        $this->quoteSession->method('__call')
+            ->willReturnCallback(function ($method) use ($customerId) {
+                if ($method === 'getCustomerId') {
+                    return $customerId;
+                }
+                return null;
+            });
         $addresses = $customer->getAddresses();
         $expected = [
             0 => [

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -35,10 +35,7 @@ class PermissionsTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->mockAuthorization = $this->getMockBuilder(Authorization::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['isAllowed'])
-            ->getMock();
+        $this->mockAuthorization = $this->createPartialMock(Authorization::class, ['isAllowed']);
 
         $this->permissions = new Permissions($this->mockAuthorization);
     }

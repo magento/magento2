@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -41,7 +41,7 @@ class ProcessorTest extends TestCase
      */
     protected function getViews($method)
     {
-        $viewMock = $this->getMockForAbstractClass(ViewInterface::class);
+        $viewMock = $this->createMock(ViewInterface::class);
         $viewMock->expects($this->exactly(2))->method($method);
         return [$viewMock, $viewMock];
     }

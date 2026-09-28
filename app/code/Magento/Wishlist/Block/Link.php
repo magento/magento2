@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -75,7 +75,7 @@ class Link extends \Magento\Framework\View\Element\Html\Link implements SortLink
 
     /**
      * {@inheritdoc}
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function getSortOrder()
     {

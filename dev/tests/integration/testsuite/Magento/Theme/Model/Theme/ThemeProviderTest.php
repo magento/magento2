@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Theme\Model\Theme;
 
@@ -33,7 +33,6 @@ class ThemeProviderTest extends \PHPUnit\Framework\TestCase
         $this->themeProviderOne = $objectManager->create(ThemeProvider::class);
         $this->themeProviderTwo = clone $this->themeProviderOne;
         $this->themeCollection = $objectManager->create(ThemeCollection::class);
-        CacheCleaner::clean();
     }
 
     public function testGetThemeById()

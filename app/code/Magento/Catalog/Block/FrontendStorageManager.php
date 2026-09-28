@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Block;
@@ -15,7 +15,7 @@ use Magento\Framework\View\Element\Template\Context;
  * Provide information to frontend storage manager
  *
  * @api
- * @since 101.1.0
+ * @since 102.0.0
  */
 class FrontendStorageManager extends \Magento\Framework\View\Element\Template
 {
@@ -51,7 +51,7 @@ class FrontendStorageManager extends \Magento\Framework\View\Element\Template
      * in json format
      *
      * @return string
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function getConfigurationJson()
     {

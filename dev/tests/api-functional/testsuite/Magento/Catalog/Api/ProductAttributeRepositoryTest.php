@@ -1,11 +1,11 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Api;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
 
 /**
@@ -13,9 +13,9 @@ use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
  */
 class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 {
-    const SERVICE_NAME = 'catalogProductAttributeRepositoryV1';
-    const SERVICE_VERSION = 'V1';
-    const RESOURCE_PATH = '/V1/products/attributes';
+    public const SERVICE_NAME = 'catalogProductAttributeRepositoryV1';
+    public const SERVICE_VERSION = 'V1';
+    public const RESOURCE_PATH = '/V1/products/attributes';
 
     /**
      * @var array
@@ -87,12 +87,15 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
     }
 
     /**
+     * Test create attribute
+     *
      * @magentoApiDataFixture Magento/Catalog/Model/Product/Attribute/_files/create_attribute_service.php
+     * @param string $attributeCode
      * @return void
      */
-    public function testCreate()
+    #[DataProvider('attributeCodeDataProvider')]
+    public function testCreate(string $attributeCode): void
     {
-        $attributeCode = uniqid('label_attr_code');
         $attribute = $this->createAttribute($attributeCode);
 
         $expectedData = [
@@ -122,21 +125,32 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
     }
 
     /**
+     * @return array
+     */
+    public static function attributeCodeDataProvider(): array
+    {
+        return [
+            [str_repeat('az_7', 15)],
+            [uniqid('label_attr_code')],
+        ];
+    }
+
+    /**
+     * Verify POST without attribute_id resolves existing attribute by attribute_code and updates it.
+     *
      * @magentoApiDataFixture Magento/Catalog/_files/product_attribute.php
      * @return void
      */
-    public function testCreateWithExceptionIfAttributeAlreadyExists()
+    public function testCreateResolvesExistingAttributeByCodeWhenAttributeIdIsMissing(): void
     {
         $attributeCode = 'test_attribute_code_333';
-        try {
-            $this->createAttribute($attributeCode);
-            $this->fail("Expected exception");
-            // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
-        } catch (\SoapFault $e) {
-            //Expects soap exception
-        } catch (\Exception $e) {
-            $this->assertEquals(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());
-        }
+        $existingAttribute = $this->getAttribute($attributeCode);
+
+        $attribute = $this->createAttribute($attributeCode);
+
+        $this->assertEquals($existingAttribute['attribute_id'], $attribute['attribute_id']);
+        $this->assertEquals($attributeCode, $attribute['attribute_code']);
+        $this->assertEquals('default_label', $attribute['default_frontend_label']);
     }
 
     /**

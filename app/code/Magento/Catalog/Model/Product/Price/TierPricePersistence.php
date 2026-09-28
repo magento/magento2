@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Model\Product\Price;
@@ -56,7 +56,7 @@ class TierPricePersistence
     {
         $select = $this->tierpriceResource->getConnection()->select()->from($this->tierpriceResource->getMainTable());
         return $this->tierpriceResource->getConnection()->fetchAll(
-            $select->where($this->getEntityLinkField() . ' IN (?)', $ids)
+            $select->where($this->getEntityLinkField() . ' IN (?)', $ids, \Zend_Db::INT_TYPE)
         );
     }
 

@@ -2,8 +2,8 @@
 /**
  * Module configuration file reader
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Module\Dir;
 
@@ -15,6 +15,7 @@ use Magento\Framework\Module\ModuleListInterface;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Reader
 {
@@ -124,7 +125,11 @@ class Reader
     {
         $result = [];
         foreach ($this->modulesList->getNames() as $moduleName) {
-            $moduleSubDir = $this->getModuleDir($subDir, $moduleName);
+            try {
+                $moduleSubDir = $this->getModuleDir($subDir, $moduleName);
+            } catch (\InvalidArgumentException $e) {
+                continue;
+            }
             $file = $moduleSubDir . '/' . $filename;
             $directoryRead = $this->readFactory->create($moduleSubDir);
             $path = $directoryRead->getRelativePath($file);
@@ -170,6 +175,8 @@ class Reader
      */
     public function getModuleDir($type, $moduleName)
     {
+        $moduleName = $moduleName ?? '';
+        $type = $type ?? '';
         if (isset($this->customModuleDirs[$moduleName][$type])) {
             return $this->customModuleDirs[$moduleName][$type];
         }

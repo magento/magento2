@@ -1,18 +1,17 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Form Input/Output Filter Interface
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Framework\Data\Form\Filter;
 
 /**
  * @api
+ * @since 100.0.2
  */
 interface FilterInterface
 {

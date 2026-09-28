@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
 
 namespace Magento\GroupedCatalogInventory\Test\Unit\Plugin;
 
+use Closure;
 use Magento\Catalog\Model\Product;
 use Magento\CatalogInventory\Api\Data\StockStatusInterface;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
@@ -15,6 +16,7 @@ use Magento\Framework\DataObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\GroupedCatalogInventory\Plugin\OutOfStockFilter;
 use Magento\GroupedProduct\Model\Product\Type\Grouped;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -49,15 +51,11 @@ class OutOfStockFilterTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->subjectMock = $this->getMockBuilder(Grouped::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->subjectMock = $this->createMock(Grouped::class);
 
-        $this->buyRequestMock = $this->getMockBuilder(DataObject::class)
-            ->getMock();
+        $this->buyRequestMock = $this->createMock(DataObject::class);
 
-        $this->stockRegistryMock = $this->getMockBuilder(StockRegistryInterface::class)
-            ->getMock();
+        $this->stockRegistryMock = $this->createMock(StockRegistryInterface::class);
 
         $this->unit = $objectManager->getObject(
             OutOfStockFilter::class,
@@ -72,8 +70,8 @@ class OutOfStockFilterTest extends TestCase
      *
      * @param mixed $nonArrayResult
      * @return void
-     * @dataProvider nonArrayResultsProvider
      */
+    #[DataProvider('nonArrayResultsProvider')]
     public function testFilterOnlyProcessesArray($nonArrayResult): void
     {
         $this->stockRegistryMock->expects($this->never())
@@ -115,26 +113,43 @@ class OutOfStockFilterTest extends TestCase
     /**
      * Tests that out of stock products will be removed from resulting array.
      *
-     * @param array $originalResult
+     * @param array|Closure $originalResult
      * @param array $productStockStatusMap
      * @param array $expectedResult
-     * @dataProvider outOfStockProductDataProvider
      */
+    #[DataProvider('outOfStockProductDataProvider')]
     public function testFilterRemovesOutOfStockProducts(
         $originalResult,
         array $productStockStatusMap,
         array $expectedResult
     ): void {
+        $finalOriginalResult = [];
+
+        if (is_array($originalResult)) {
+            foreach ($originalResult as $result) {
+                if (is_callable($result)) {
+                    $finalOriginalResult[] = $result($this);
+                }
+            }
+        } else {
+            $finalOriginalResult[] = $originalResult($this);
+        }
+
         $this->stockRegistryMock->method('getProductStockStatus')
             ->willReturnMap($productStockStatusMap);
 
-        $result = $this->unit->afterPrepareForCartAdvanced(
+        $finalResult = $this->unit->afterPrepareForCartAdvanced(
             $this->subjectMock,
-            $originalResult,
+            $finalOriginalResult,
             $this->buyRequestMock
         );
 
-        $this->assertSame($expectedResult, $result);
+        $finalExpectedResult = [];
+        foreach ($expectedResult as $key => $result) {
+            $finalExpectedResult[$key] = $result($this);
+        }
+
+        $this->assertEquals($finalExpectedResult, $finalResult);
     }
 
     /**
@@ -142,15 +157,10 @@ class OutOfStockFilterTest extends TestCase
      *
      * @return array
      */
-    public function outOfStockProductDataProvider(): array
+    public static function outOfStockProductDataProvider(): array
     {
-        $product1 = $this->createProductMock();
-        $product1->method('getId')
-            ->willReturn(123);
-
-        $product2 = $this->createProductMock();
-        $product2->method('getId')
-            ->willReturn(321);
+        $product1 = static fn (self $testCase) => $testCase->createProductMockById(123);
+        $product2 = static fn (self $testCase) => $testCase->createProductMockById(321);
 
         return [
             [
@@ -174,12 +184,23 @@ class OutOfStockFilterTest extends TestCase
         ];
     }
 
+    /**ß
+     * @param int $id
+     * @return MockObject|Product
+     */
+    public function createProductMockById(int $id): MockObject|Product
+    {
+        $product = $this->createMock(Product::class);
+        $product->method('getId')->willReturn($id);
+        return $product;
+    }
+
     /**
      * Provider of non array type "result" parameters.
      *
      * @return array
      */
-    public function nonArrayResultsProvider(): array
+    public static function nonArrayResultsProvider(): array
     {
         return [
             [123],
@@ -195,8 +216,6 @@ class OutOfStockFilterTest extends TestCase
      */
     private function createProductMock(): MockObject
     {
-        return $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->createMock(Product::class);
     }
 }

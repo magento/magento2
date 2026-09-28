@@ -1,3 +1,15 @@
+# If you want to enable the web based setup functionality, add your ip address
+# to the allow list below or comment out the IfVersion Deny deny blocks below.
+<Files "index.php">
+    <IfVersion < 2.4>
+        order allow,deny
+        deny from all
+    </IfVersion>
+    <IfVersion >= 2.4>
+        Require all denied
+    </IfVersion>
+</Files>
+
 Options -Indexes
 
 <IfModule mod_rewrite.c>

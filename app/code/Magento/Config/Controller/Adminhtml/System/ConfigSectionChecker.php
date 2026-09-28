@@ -1,15 +1,16 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Config\Controller\Adminhtml\System;
 
+use Laminas\Permissions\Acl\Exception\InvalidArgumentException;
 use Magento\Framework\Exception\NotFoundException;
 
 /**
- * @deprecated 100.2.0 - unused class.
+ * @deprecated 101.0.0 - unused class.
  * @see \Magento\Config\Model\Config\Structure\Element\Section::isAllowed()
  */
 class ConfigSectionChecker
@@ -41,11 +42,14 @@ class ConfigSectionChecker
     {
         try {
             if (false == $this->_configStructure->getElement($sectionId)->isAllowed()) {
+                // phpcs:ignore Magento2.Exceptions.DirectThrow
                 throw new \Exception('');
             }
             return true;
-        } catch (\Zend_Acl_Exception $e) {
+        } catch (InvalidArgumentException $e) {
+            // phpcs:ignore Magento2.Exceptions.ThrowCatch
             throw new NotFoundException(__('Page not found.'));
+            // phpcs:ignore Magento2.Exceptions.ThrowCatch
         } catch (\Exception $e) {
             return false;
         }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,15 +14,27 @@ $objectManager = Bootstrap::getObjectManager();
 $data = [
     [
         'title' => 'simplePage',
-        'is_active' => 1
+        'is_active' => 1,
     ],
     [
         'title' => 'simplePage01',
-        'is_active' => 1
+        'is_active' => 1,
     ],
     [
         'title' => '01simplePage',
-        'is_active' => 1
+        'is_active' => 1,
+    ],
+    [
+        'title' => 'Page with 1column layout',
+        'is_active' => 1,
+        'content' => '<h1>Test Page Content</h1>',
+        'page_layout' => '1column',
+    ],
+    [
+        'title' => 'Page with unavailable layout',
+        'content' => '<h1>Test Page Content</h1>',
+        'is_active' => 1,
+        'page_layout' => 'unavailable-layout',
     ],
 ];
 

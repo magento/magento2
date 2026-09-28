@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Rule\Model\Condition;
 
 /**
- * Combine
- *
  * @api
  * @since 100.0.2
  */
@@ -227,28 +225,65 @@ class Combine extends AbstractCondition
      * @param array $arr
      * @param string $key
      * @return $this
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function loadArray($arr, $key = 'conditions')
     {
-        $this->setAggregator(
-            isset($arr['aggregator']) ? $arr['aggregator'] : (isset($arr['attribute']) ? $arr['attribute'] : null)
-        )->setValue(
-            isset($arr['value']) ? $arr['value'] : (isset($arr['operator']) ? $arr['operator'] : null)
-        );
+        $this->setAggregatorAndValue($arr);
+        $this->loadConditions($arr[$key] ?? [], $key);
 
-        if (!empty($arr[$key]) && is_array($arr[$key])) {
-            foreach ($arr[$key] as $conditionArr) {
-                try {
-                    $condition = $this->_conditionFactory->create($conditionArr['type']);
-                    $this->addCondition($condition);
-                    $condition->loadArray($conditionArr, $key);
-                } catch (\Exception $e) {
-                    $this->_logger->critical($e);
-                }
+        return $this;
+    }
+
+    /**
+     * Set the aggregator and value from the array.
+     *
+     * @param array $arr
+     */
+    private function setAggregatorAndValue(array $arr): void
+    {
+        $aggregator = $arr['aggregator'] ?? $arr['attribute'] ?? null;
+        $value = $arr['value'] ?? $arr['operator'] ?? null;
+
+        $this->setAggregator($aggregator)
+            ->setValue($value);
+    }
+
+    /**
+     * Load the conditions from the array.
+     *
+     * @param array $conditions
+     * @param string $key
+     */
+    private function loadConditions(array $conditions, string $key): void
+    {
+        foreach ($conditions as $conditionArr) {
+            if (!empty($conditionArr['type'])) {
+                $this->createAndAddCondition($conditionArr, $key);
+                continue;
+            }
+
+            // Recursively load conditions if there are nested conditions
+            if (!empty($conditionArr[$key])) {
+                $this->loadConditions($conditionArr[$key], $key);
             }
         }
-        return $this;
+    }
+
+    /**
+     * Create and add a condition to the object.
+     *
+     * @param array $conditionArr
+     * @param string $key
+     */
+    private function createAndAddCondition(array $conditionArr, string $key): void
+    {
+        try {
+            $condition = $this->_conditionFactory->create($conditionArr['type']);
+            $this->addCondition($condition);
+            $condition->loadArray($conditionArr, $key);
+        } catch (\Exception $e) {
+            $this->_logger->critical($e);
+        }
     }
 
     /**

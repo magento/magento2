@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Model\Config\Backend\Grid\AsyncIndexing;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Unit test of backend model for global configuration value
@@ -66,9 +67,9 @@ class AsyncIndexingTest extends TestCase
      * @param int $value
      * @param int $oldValue
      * @param string $eventName
-     * @dataProvider afterSaveDataProvider
      * @return void
      */
+    #[DataProvider('afterSaveDataProvider')]
     public function testAfterSave($value, $oldValue, $eventName)
     {
         $path = 'dev/grid/async_indexing';
@@ -91,7 +92,7 @@ class AsyncIndexingTest extends TestCase
     /**
      * @return array
      */
-    public function afterSaveDataProvider()
+    public static function afterSaveDataProvider()
     {
         return [
             [0, 0, null],

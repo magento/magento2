@@ -1,13 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Developer\Console\Command;
 
 use Magento\TestFramework\Helper\Bootstrap;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
 
 /**
  * Class SourceThemeDeployCommandTest
@@ -48,6 +50,10 @@ class SourceThemeDeployCommandTest extends \PHPUnit\Framework\TestCase
     {
         global $installDir;
 
+        $installDir = Bootstrap::getObjectManager()->create(
+            Filesystem::class
+        )->getDirectoryRead(DirectoryList::ROOT)->getAbsolutePath();
+
         $this->pubStatic = $installDir . DIRECTORY_SEPARATOR . self::PUB_STATIC_DIRECTORY;
         $this->command = Bootstrap::getObjectManager()->get(SourceThemeDeployCommand::class);
     }
@@ -60,8 +66,7 @@ class SourceThemeDeployCommandTest extends \PHPUnit\Framework\TestCase
         $error = [];
 
         /** @var OutputInterface|\PHPUnit\Framework\MockObject\MockObject $outputMock */
-        $outputMock = $this->getMockBuilder(OutputInterface::class)
-            ->getMockForAbstractClass();
+        $outputMock = $this->createMock(OutputInterface::class);
 
         $this->clearStaticDirectory();
 
@@ -118,8 +123,7 @@ class SourceThemeDeployCommandTest extends \PHPUnit\Framework\TestCase
      */
     private function getInputMock()
     {
-        $inputMock = $this->getMockBuilder(InputInterface::class)
-            ->getMockForAbstractClass();
+        $inputMock = $this->createMock(InputInterface::class);
 
         $inputMock->expects(self::exactly(4))
             ->method('getOption')

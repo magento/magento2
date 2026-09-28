@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,7 @@ use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Config\ScopeInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ConfigTest extends TestCase
@@ -57,11 +58,11 @@ class ConfigTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->scopeMock = $this->getMockForAbstractClass(ScopeInterface::class);
-        $this->cacheMock = $this->getMockForAbstractClass(CacheInterface::class);
+        $this->scopeMock = $this->createMock(ScopeInterface::class);
+        $this->cacheMock = $this->createMock(CacheInterface::class);
 
         $this->readerMock = $this->createMock(Reader::class);
-        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
 
         $this->resourcesConfig = [
             'mainResourceName' => ['name' => 'mainResourceName', 'extends' => 'anotherResourceName'],
@@ -90,11 +91,9 @@ class ConfigTest extends TestCase
         );
     }
 
-    /**
-     * @param string $resourceName
-     * @param string $connectionName
-     * @dataProvider getConnectionNameDataProvider
+    /**     * @param string $connectionName
      */
+    #[DataProvider('getConnectionNameDataProvider')]
     public function testGetConnectionName($resourceName, $connectionName)
     {
         $this->deploymentConfig->expects($this->once())
@@ -129,7 +128,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function getConnectionNameDataProvider()
+    public static function getConnectionNameDataProvider()
     {
         return [
             ['resourceName' => 'otherResourceName', 'connectionName' => 'otherConnectionName'],

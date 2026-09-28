@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Deploy\Package;
 
@@ -11,6 +11,8 @@ use Magento\Framework\View\Asset\PreProcessor\FileNameResolver;
 
 /**
  * Deployment Package
+ *
+ * @api
  */
 class Package
 {
@@ -346,7 +348,7 @@ class Package
      * @param Package $parentPackage
      * @return bool true on success
      */
-    public function aggregate(Package $parentPackage = null)
+    public function aggregate(?Package $parentPackage = null)
     {
         $inheritedFiles = $this->getParentFiles();
         foreach ($inheritedFiles as $fileId => $file) {
@@ -443,11 +445,11 @@ class Package
      */
     public function getParentMap()
     {
-        $map = [[]];
+        $map = [];
         foreach ($this->getParentPackages() as $parentPackage) {
             $map[] = $parentPackage->getMap();
         }
-        return array_merge(...$map);
+        return array_merge([], ...$map);
     }
 
     /**
@@ -458,7 +460,7 @@ class Package
      */
     public function getParentFiles($type = null)
     {
-        $files = [[]];
+        $files = [];
         foreach ($this->getParentPackages() as $parentPackage) {
             if ($type === null) {
                 $files[] = $parentPackage->getFiles();
@@ -466,7 +468,7 @@ class Package
                 $files[] = $parentPackage->getFilesByType($type);
             }
         }
-        return array_merge(...$files);
+        return array_merge([], ...$files);
     }
 
     /**
@@ -535,8 +537,8 @@ class Package
         $area,
         $theme,
         $locale,
-        array & $result = [],
-        ThemeInterface $themeModel = null
+        array &$result = [],
+        ?ThemeInterface $themeModel = null
     ) {
         if (($package->getArea() != $area) || ($package->getTheme() != $theme) || ($package->getLocale() != $locale)) {
             $result[] = $area . '/' . $theme . '/' . $locale;

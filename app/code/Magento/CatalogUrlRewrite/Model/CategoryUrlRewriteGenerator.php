@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CatalogUrlRewrite\Model;
 
@@ -30,7 +30,7 @@ class CategoryUrlRewriteGenerator
 
     /**
      * @var \Magento\Catalog\Model\Category
-     * @deprecated 100.1.4
+     * @deprecated 100.1.0
      */
     protected $category;
 
@@ -55,6 +55,11 @@ class CategoryUrlRewriteGenerator
     private $mergeDataProviderPrototype;
 
     /**
+     * @var CategoryRepositoryInterface
+     */
+    private $categoryRepository;
+
+    /**
      * @var bool
      */
     protected $overrideStoreUrls;
@@ -73,7 +78,7 @@ class CategoryUrlRewriteGenerator
         ChildrenUrlRewriteGenerator $childrenUrlRewriteGenerator,
         StoreViewService $storeViewService,
         CategoryRepositoryInterface $categoryRepository,
-        MergeDataProviderFactory $mergeDataProviderFactory = null
+        ?MergeDataProviderFactory $mergeDataProviderFactory = null
     ) {
         $this->storeViewService = $storeViewService;
         $this->canonicalUrlRewriteGenerator = $canonicalUrlRewriteGenerator;
@@ -117,17 +122,18 @@ class CategoryUrlRewriteGenerator
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
      */
     protected function generateForGlobalScope(
-        Category $category = null,
+        ?Category $category = null,
         $overrideStoreUrls = false,
         $rootCategoryId = null
     ) {
         $mergeDataProvider = clone $this->mergeDataProviderPrototype;
         $categoryId = $category->getId();
         foreach ($category->getStoreIds() as $storeId) {
-            $category->setStoreId($storeId);
             if (!$this->isGlobalScope($storeId)
                 && $this->isOverrideUrlsForStore($storeId, $categoryId, $overrideStoreUrls)
             ) {
+                $category = clone $category; // prevent undesired side effects on original object
+                $category->setStoreId($storeId);
                 $this->updateCategoryUrlForStore($storeId, $category);
                 $mergeDataProvider->merge($this->generateForSpecificStoreView($storeId, $category, $rootCategoryId));
             }
@@ -160,7 +166,7 @@ class CategoryUrlRewriteGenerator
      * @param \Magento\Catalog\Model\Category|null $category
      * @return void
      */
-    protected function updateCategoryUrlForStore($storeId, Category $category = null)
+    protected function updateCategoryUrlForStore($storeId, ?Category $category = null)
     {
         $categoryFromRepository = $this->categoryRepository->get($category->getId(), $storeId);
             $category->addData(
@@ -190,7 +196,7 @@ class CategoryUrlRewriteGenerator
      * @param int|null $rootCategoryId
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
      */
-    protected function generateForSpecificStoreView($storeId, Category $category = null, $rootCategoryId = null)
+    protected function generateForSpecificStoreView($storeId, ?Category $category = null, $rootCategoryId = null)
     {
         $mergeDataProvider = clone $this->mergeDataProviderPrototype;
         $mergeDataProvider->merge(

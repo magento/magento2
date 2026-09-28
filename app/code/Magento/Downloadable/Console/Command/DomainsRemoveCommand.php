@@ -1,16 +1,17 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Downloadable\Console\Command;
 
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputArgument;
+use Exception;
 use Magento\Downloadable\Api\DomainManagerInterface as DomainManager;
+use Magento\Framework\Console\Cli;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class DomainsRemoveCommand
@@ -65,7 +66,7 @@ class DomainsRemoveCommand extends Command
     /**
      * @inheritdoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {
             if ($input->getArgument(self::INPUT_KEY_DOMAINS)) {
@@ -80,12 +81,14 @@ class DomainsRemoveCommand extends Command
                     );
                 }
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
             if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
                 $output->writeln($e->getTraceAsString());
             }
-            return;
+            return Cli::RETURN_FAILURE;
         }
+
+        return Cli::RETURN_SUCCESS;
     }
 }

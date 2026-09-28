@@ -1,19 +1,23 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\SalesRule\Api;
 
-use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\SalesRule\Model\Coupon;
+use Magento\SalesRule\Model\RuleRepository;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class RuleRepositoryTest extends WebapiAbstract
 {
-    const SERVICE_NAME = 'salesRuleRuleRepositoryV1';
-    const RESOURCE_PATH = '/V1/salesRules';
-    const SERVICE_VERSION = "V1";
+    public const SERVICE_NAME = 'salesRuleRuleRepositoryV1';
+    public const RESOURCE_PATH = '/V1/salesRules';
+    public const SERVICE_VERSION = "V1";
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
@@ -66,7 +70,16 @@ class RuleRepositoryTest extends WebapiAbstract
                         'operator' => '==',
                         'attribute_name' => 'attribute_set_id',
                         'value' => '4',
-                    ]
+                    ],
+                    [
+                        'condition_type' => \Magento\SalesRule\Model\Rule\Condition\Product::class,
+                        'operator' => '==',
+                        'attribute_name' => 'category_ids',
+                        'value' => '3',
+                        'extension_attributes' => [
+                            'attribute_scope' => 'parent',
+                        ],
+                    ],
                 ],
                 'aggregator_type' => 'all',
                 'operator' => null,
@@ -86,6 +99,8 @@ class RuleRepositoryTest extends WebapiAbstract
             'use_auto_generation' => false,
             'uses_per_coupon' => 0,
             'simple_free_shipping' => 0,
+            'from_date' => '2022-04-22',
+            'to_date' => '2022-09-25',
         ];
         return $data;
     }
@@ -98,6 +113,8 @@ class RuleRepositoryTest extends WebapiAbstract
         $ruleId = $result['rule_id'];
         $this->assertArrayHasKey('rule_id', $result);
         $this->assertEquals($ruleId, $result['rule_id']);
+        $this->assertEquals($inputData['from_date'], $result['from_date']);
+        $this->assertEquals($inputData['to_date'], $result['to_date']);
         unset($result['rule_id']);
         unset($result['extension_attributes']);
         $this->assertEquals($inputData, $result);
@@ -112,6 +129,7 @@ class RuleRepositoryTest extends WebapiAbstract
         $inputData['times_used'] = 2;
         $inputData['customer_group_ids'] = [0, 1, 3];
         $inputData['discount_amount'] = 30;
+        $inputData['action_condition']['conditions'][1]['extension_attributes']['attribute_scope'] = 'children';
         $result = $this->updateRule($ruleId, $inputData);
         unset($result['rule_id']);
         unset($result['extension_attributes']);
@@ -125,6 +143,33 @@ class RuleRepositoryTest extends WebapiAbstract
 
         //test delete
         $this->assertTrue($this->deleteRule($ruleId));
+    }
+
+    public function testValidation(): void
+    {
+        $this->_markTestAsRestOnly('Skip SOAP due to the error response format');
+        $inputData = $this->getSalesRuleData();
+        $inputData['website_ids'] = [];
+        $inputData['customer_group_ids'] = [];
+        $inputData['action_condition']['conditions'][1]['extension_attributes']['attribute_scope'] = 'invalid_value';
+        try {
+            $this->createRule($inputData);
+            $this->fail('Validation error is expected');
+        } catch (\Exception $e) {
+            $error = json_decode($e->getMessage(), true);
+            $this->assertEquals('One or more input exceptions have occurred.', $error['message']);
+            $this->assertCount(3, $error['errors']);
+            $this->assertEquals('Please specify a website.', $error['errors'][0]['message']);
+            $this->assertEquals('Please specify Customer Groups.', $error['errors'][1]['message']);
+            $this->assertEquals(
+                'Invalid value of "%value" provided for the %fieldName field.',
+                $error['errors'][2]['message']
+            );
+            $this->assertEquals(
+                ['fieldName' => 'attribute_scope',  'value' => 'invalid_value'],
+                $error['errors'][2]['parameters']
+            );
+        }
     }
 
     public function verifyGetList($ruleId)
@@ -212,6 +257,7 @@ class RuleRepositoryTest extends WebapiAbstract
         $searchCriteriaBuilder->addFilters([$filter1, $filter2]);
         $searchCriteriaBuilder->addFilters([$filter3]);
         $searchCriteriaBuilder->addSortOrder($sortOrder);
+        $searchCriteriaBuilder->setPageSize(20);
         $searchData = $searchCriteriaBuilder->create()->__toArray();
 
         $requestData = ['searchCriteria' => $searchData];
@@ -235,6 +281,28 @@ class RuleRepositoryTest extends WebapiAbstract
         $this->assertEquals('#1', $result['items'][0]['name']);
         $this->assertEquals('#2', $result['items'][1]['name']);
         $this->assertEquals($searchData, $result['search_criteria']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/SalesRule/_files/cart_rule_100_percent_off_with_coupon.php
+     */
+    public function testUpdateRuleHavingSpecificCouponCode(): void
+    {
+        $searchCriteria = $this->objectManager->create(SearchCriteriaBuilder::class)
+            ->addFilter('name', '100% discount on orders for registered customers')
+            ->create();
+        $salesRules = $this->objectManager->create(RuleRepositoryInterface::class)
+            ->getList($searchCriteria)
+            ->getItems();
+        $ruleId = array_pop($salesRules)->getRuleId();
+        $inputData = $this->getSalesRuleData();
+        unset($inputData['name']);
+        $result = $this->updateRule($ruleId, $inputData);
+        $this->assertNotEmpty($result);
+        $coupon = $this->objectManager->create(Coupon::class);
+        $coupon->loadByCode('free_use');
+        $this->assertInstanceOf(Coupon::class, $coupon);
+        $this->assertEquals($ruleId, $coupon->getRuleId());
     }
 
     /**

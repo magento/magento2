@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Checkout\Block\Cart;
@@ -20,6 +20,7 @@ use Magento\Framework\App\ObjectManager;
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
 {
@@ -61,8 +62,8 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
         CompositeConfigProvider $configProvider,
         array $layoutProcessors = [],
         array $data = [],
-        Json $serializer = null,
-        JsonHexTag $jsonHexTagSerializer = null
+        ?Json $serializer = null,
+        ?JsonHexTag $jsonHexTagSerializer = null
     ) {
         $this->configProvider = $configProvider;
         $this->layoutProcessors = $layoutProcessors;

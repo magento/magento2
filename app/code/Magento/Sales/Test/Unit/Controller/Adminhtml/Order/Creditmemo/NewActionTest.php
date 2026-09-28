@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -24,6 +24,7 @@ use Magento\Sales\Model\Order\Creditmemo;
 use Magento\Sales\Model\Order\Invoice;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -31,6 +32,8 @@ use PHPUnit\Framework\TestCase;
  */
 class NewActionTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var NewAction
      */
@@ -104,63 +107,33 @@ class NewActionTest extends TestCase
     protected function setUp(): void
     {
         $this->contextMock = $this->createMock(Context::class);
-        $this->creditmemoLoaderMock = $this->getMockBuilder(CreditmemoLoader::class)
-            ->addMethods(['setOrderId', 'setCreditmemoId', 'setCreditmemo', 'setInvoiceId'])
-            ->onlyMethods(['load'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->creditmemoMock = $this->getMockBuilder(Creditmemo::class)
-            ->addMethods(['setCommentText'])
-            ->onlyMethods(['getInvoice'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->creditmemoLoaderMock = $this->createPartialMockWithReflection(
+            CreditmemoLoader::class,
+            ['setOrderId', 'setCreditmemoId', 'setCreditmemo', 'setInvoiceId', 'load']
+        );
+        $this->creditmemoMock = $this->createPartialMockWithReflection(
+            Creditmemo::class,
+            ['setCommentText', 'getInvoice']
+        );
         $this->invoiceMock = $this->createPartialMock(
             Invoice::class,
             ['getIncrementId']
         );
-        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
-        $this->requestMock = $this->getMockForAbstractClass(
-            RequestInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            []
-        );
-        $this->responseMock = $this->getMockForAbstractClass(
-            ResponseInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            []
-        );
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->responseMock = $this->createMock(ResponseInterface::class);
         $this->titleMock = $this->createMock(Title::class);
-        $this->pageConfigMock = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->backendSessionMock = $this->getMockBuilder(Session::class)
-            ->addMethods(['getCommentText'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->layoutMock = $this->getMockForAbstractClass(
-            LayoutInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            []
+        $this->pageConfigMock = $this->createMock(Config::class);
+        $this->backendSessionMock = $this->createPartialMockWithReflection(
+            Session::class,
+            ['getCommentText']
         );
+        $this->layoutMock = $this->createMock(LayoutInterface::class);
         $this->resultPageFactoryMock = $this->getMockBuilder(PageFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
-        $this->resultPageMock = $this->getMockBuilder(Page::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resultPageMock = $this->createMock(Page::class);
 
         $this->contextMock->expects($this->once())
             ->method('getRequest')

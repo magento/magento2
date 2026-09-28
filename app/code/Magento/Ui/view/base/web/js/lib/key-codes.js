@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -21,6 +21,7 @@ define([], function () {
         17: 'ctrlKey',
         18: 'altKey',
         16: 'shiftKey',
+        191: 'forwardSlashKey',
         66: 'bKey',
         73: 'iKey',
         85: 'uKey'

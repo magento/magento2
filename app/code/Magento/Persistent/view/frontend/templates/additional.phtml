@@ -1,16 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 ?>
-<?php if ($block->getCustomerId()) :?>
-    <span>
-        <a <?= /* @noEscape */ $block->getLinkAttributes()?>><?= $block->escapeHtml(__('Not you?'));?></a>
-    </span>
-<?php endif;?>
 <script type="application/javascript">
-    window.persistent = <?= /* @noEscape */ $block->getConfig(); ?>;
+    window.persistent = <?=/* @noEscape */ $block->getConfig()?>;
+    window.notYouLink = '<?=/* @noEscape */ $block->getLinkAttributes()?>';
 </script>
 <script type="text/x-magento-init">
     {

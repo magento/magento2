@@ -1,31 +1,27 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
+
+declare(strict_types=1);
 
 namespace Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator;
 
 use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
+use Magento\CatalogImportExport\Model\Import\Product\Validator\AbstractImportValidator;
 
 /**
  * Class TierPriceType validates tier price type.
  */
-class TierPriceType extends \Magento\CatalogImportExport\Model\Import\Product\Validator\AbstractImportValidator
+class TierPriceType extends AbstractImportValidator
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function init($context)
-    {
-        return parent::init($context);
-    }
-
     /**
      * Validate tier price type.
      *
      * @param array $value
+     *
      * @return bool
      */
     public function isValid($value)

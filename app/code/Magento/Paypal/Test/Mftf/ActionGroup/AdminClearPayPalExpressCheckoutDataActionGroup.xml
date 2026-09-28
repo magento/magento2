@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminClearPayPalExpressCheckoutDataActionGroup">
+        <annotations>
+            <description>Admin goes to paypal express checkout configuration and clears provided Sample PayPal credentials</description>
+        </annotations>
+        <arguments>
+            <argument name="countryCode" type="string" defaultValue="us"/>
+        </arguments>
+        <amOnPage url="{{AdminConfigPaymentMethodsPage.url}}" stepKey="navigateToPaymentConfigurationPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <!-- Because of in-product messaging in Payment Services extension, Paypal config is within the Additional Payment Solutions we need to uncollapse -->
+        <conditionalClick selector="{{OtherPayPalPaymentsConfigSection.expandTab('us')}}" stepKey="clickPayPalTabConfigure" dependentSelector="{{PayPalExpressCheckoutConfigSection.configureBtn('us')}}" visible="false"/>
+        <waitForElementClickable selector="{{PayPalExpressCheckoutConfigSection.configureBtn(countryCode)}}" stepKey="waitForConfigureButtonToBeAppeared"/>
+        <click selector="{{PayPalExpressCheckoutConfigSection.configureBtn(countryCode)}}" stepKey="clickPayPalConfigureBtn"/>
+        <waitForElementVisible selector="{{PayPalAdvancedSettingConfigSection.advancedSettingTab(countryCode)}}" stepKey="waitForAdvancedSettingTab"/>
+        <clearField selector ="{{PayPalExpressCheckoutConfigSection.username(countryCode)}}" stepKey="clearInputAPIUsernameField"/>
+        <clearField selector ="{{PayPalExpressCheckoutConfigSection.password(countryCode)}}" stepKey="clearInputAPIPasswordField"/>
+        <clearField selector ="{{PayPalExpressCheckoutConfigSection.signature(countryCode)}}" stepKey="clearInputAPISignatureField"/>
+        <selectOption selector ="{{PayPalExpressCheckoutConfigSection.sandboxMode(countryCode)}}" userInput="No" stepKey="disableSandboxMode"/>
+    </actionGroup>
+</actionGroups>

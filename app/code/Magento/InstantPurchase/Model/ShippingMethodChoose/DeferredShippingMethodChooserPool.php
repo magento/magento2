@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\InstantPurchase\Model\ShippingMethodChoose;
 
@@ -10,6 +10,7 @@ namespace Magento\InstantPurchase\Model\ShippingMethodChoose;
  * Use deferred shipping method code as a key for a deferred chooser.
  *
  * @api
+ * @since 100.2.0
  */
 class DeferredShippingMethodChooserPool
 {
@@ -34,6 +35,7 @@ class DeferredShippingMethodChooserPool
     /**
      * @param string $type
      * @return DeferredShippingMethodChooserInterface
+     * @since 100.2.0
      */
     public function get($type) : DeferredShippingMethodChooserInterface
     {

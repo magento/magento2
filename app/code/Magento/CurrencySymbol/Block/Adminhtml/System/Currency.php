@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Manage currency block
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\CurrencySymbol\Block\Adminhtml\System;
 
@@ -41,7 +39,14 @@ class Currency extends \Magento\Backend\Block\Template
             ]
         );
 
-        $onClick = "setLocation('" . $this->getUrl('adminhtml/system_config/edit/section/currency') . "')";
+        $currencyOptionPath = $this->getUrl(
+            'adminhtml/system_config/edit',
+            [
+                'section' => 'currency',
+                '_fragment' => 'currency_options-link'
+            ]
+        );
+        $onClick = "setLocation('$currencyOptionPath')";
 
         $this->getToolbar()->addChild(
             'options_button',

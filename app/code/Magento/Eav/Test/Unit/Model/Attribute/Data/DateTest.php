@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,10 +15,14 @@ use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class DateTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Date
      */
@@ -31,9 +35,9 @@ class DateTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->timezoneMock = $this->getMockForAbstractClass(TimezoneInterface::class);
-        $loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
-        $localeResolverMock = $this->getMockForAbstractClass(ResolverInterface::class);
+        $this->timezoneMock = $this->createMock(TimezoneInterface::class);
+        $loggerMock = $this->createMock(LoggerInterface::class);
+        $localeResolverMock = $this->createMock(ResolverInterface::class);
 
         $this->model = new Date(
             $this->timezoneMock,
@@ -49,18 +53,17 @@ class DateTest extends TestCase
      * @param mixed $value
      * @param mixed $expectedResult
      * @param int $callTimes
-     * @dataProvider outputValueDataProvider
      */
+    #[DataProvider('outputValueDataProvider')]
     public function testOutputValue($format, $value, $callTimes, $expectedResult)
     {
         $entityMock = $this->createMock(AbstractModel::class);
         $entityMock->expects($this->once())->method('getData')->willReturn($value);
 
-        $attributeMock = $this->getMockBuilder(Attribute::class)
-            ->addMethods(['getInputFilter'])
-            ->onlyMethods(['__wakeup'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $attributeMock = $this->createPartialMockWithReflection(
+            Attribute::class,
+            ['getInputFilter', '__wakeup']
+        );
         $attributeMock->expects($this->exactly($callTimes))->method('getInputFilter')->willReturn(false);
 
         $this->model->setEntity($entityMock);
@@ -71,7 +74,7 @@ class DateTest extends TestCase
     /**
      * @return array
      */
-    public function outputValueDataProvider()
+    public static function outputValueDataProvider()
     {
         return [
             [
@@ -96,14 +99,26 @@ class DateTest extends TestCase
      * @param array $rules
      * @param mixed $originalValue
      * @param bool $isRequired
+     * @param bool $skipRequiredValidation
      * @param array $expectedResult
-     * @dataProvider validateValueDataProvider
      */
-    public function testValidateValue($value, $rules, $originalValue, $isRequired, $expectedResult)
-    {
-        $entityMock = $this->createMock(AbstractModel::class);
+    #[DataProvider('validateValueDataProvider')]
+    public function testValidateValue(
+        $value,
+        $rules,
+        $originalValue,
+        $isRequired,
+        $skipRequiredValidation,
+        $expectedResult
+    ) {
+        $entityMock = $this->createPartialMockWithReflection(
+            AbstractModel::class,
+            ['getSkipRequiredValidation', 'getDataUsingMethod']
+        );
         $entityMock->expects($this->any())->method('getDataUsingMethod')->willReturn($originalValue);
-
+        $entityMock->expects($this->any())
+            ->method('getSkipRequiredValidation')
+            ->willReturn($skipRequiredValidation);
         $attributeMock = $this->createMock(Attribute::class);
         $attributeMock->expects($this->any())->method('getStoreLabel')->willReturn('Label');
         $attributeMock->expects($this->any())->method('getIsRequired')->willReturn($isRequired);
@@ -117,7 +132,7 @@ class DateTest extends TestCase
     /**
      * @return array
      */
-    public function validateValueDataProvider()
+    public static function validateValueDataProvider()
     {
         return [
             [
@@ -125,6 +140,7 @@ class DateTest extends TestCase
                 'rules' => [],
                 'originalValue' => false,
                 'isRequired' => true,
+                'skipRequiredValidation' => false,
                 'expectedResult' => ['"Label" is a required value.'],
             ],
             [
@@ -132,6 +148,15 @@ class DateTest extends TestCase
                 'rules' => [],
                 'originalValue' => 'value',
                 'isRequired' => false,
+                'skipRequiredValidation' => false,
+                'expectedResult' => true,
+            ],
+            [
+                'value' => false,
+                'rules' => [],
+                'originalValue' => '',
+                'isRequired' => true,
+                'skipRequiredValidation' => true,
                 'expectedResult' => true,
             ],
             [
@@ -139,6 +164,7 @@ class DateTest extends TestCase
                 'rules' => [],
                 'originalValue' => '',
                 'isRequired' => false,
+                'skipRequiredValidation' => false,
                 'expectedResult' => true,
             ],
             [
@@ -146,6 +172,7 @@ class DateTest extends TestCase
                 'rules' => ['date_range_min' => strtotime('2001-01-01'),'date_range_max' => strtotime('2002-01-01')],
                 'originalValue' => '',
                 'isRequired' => false,
+                'skipRequiredValidation' => false,
                 'expectedResult' => ['Please enter a valid date between 01/01/2001 and 01/01/2002 at Label.'],
             ],
             [
@@ -153,6 +180,7 @@ class DateTest extends TestCase
                 'rules' => ['date_range_min' => strtotime('2001-01-01')],
                 'originalValue' => '',
                 'isRequired' => false,
+                'skipRequiredValidation' => false,
                 'expectedResult' => ['Please enter a valid date equal to or greater than 01/01/2001 at Label.'],
             ],
             [
@@ -160,6 +188,7 @@ class DateTest extends TestCase
                 'rules' => ['date_range_max' => strtotime('2001-01-01')],
                 'originalValue' => '',
                 'isRequired' => false,
+                'skipRequiredValidation' => false,
                 'expectedResult' => ['Please enter a valid date less than or equal to 01/01/2001 at Label.'],
             ],
         ];
@@ -170,8 +199,8 @@ class DateTest extends TestCase
      *
      * @param string $value
      * @param string $expectedResult
-     * @dataProvider compactValueDataProvider
      */
+    #[DataProvider('compactValueDataProvider')]
     public function testCompactValue($value, $expectedResult)
     {
         $entityMock = $this->createMock(AbstractModel::class);
@@ -188,7 +217,7 @@ class DateTest extends TestCase
     /**
      * @return array
      */
-    public function compactValueDataProvider()
+    public static function compactValueDataProvider()
     {
         return [
             ['value' => 'value', 'expectedResult' => 'value'],

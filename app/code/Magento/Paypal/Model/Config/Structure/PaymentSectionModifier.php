@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Paypal\Model\Config\Structure;
@@ -84,7 +84,7 @@ class PaymentSectionModifier
      */
     private function getMoveInstructions($section, $data)
     {
-        $moved = [[]];
+        $moved = [];
 
         if (array_key_exists('children', $data)) {
             foreach ($data['children'] as $childSection => $childData) {
@@ -106,6 +106,6 @@ class PaymentSectionModifier
             ];
         }
 
-        return array_merge(...$moved);
+        return array_merge([], ...$moved);
     }
 }

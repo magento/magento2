@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Ui\Model\Export;
 
@@ -127,6 +127,8 @@ class ConvertToXml
     {
         $component = $this->filter->getComponent();
 
+        // md5() here is not for cryptographic use.
+        // phpcs:ignore Magento2.Security.InsecureFunction
         $name = md5(microtime());
         $file = 'export/'. $component->getName() . $name . '.xml';
 

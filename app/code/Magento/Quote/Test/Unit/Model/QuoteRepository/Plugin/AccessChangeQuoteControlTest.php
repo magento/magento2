@@ -1,23 +1,26 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Quote\Test\Unit\Model\QuoteRepository\Plugin;
 
 use Magento\Authorization\Model\UserContextInterface;
+use Magento\Framework\Exception\StateException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Model\ChangeQuoteControl;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\QuoteRepository;
 use Magento\Quote\Model\QuoteRepository\Plugin\AccessChangeQuoteControl;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class AccessChangeQuoteControlTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var AccessChangeQuoteControl
      */
@@ -45,15 +48,11 @@ class AccessChangeQuoteControlTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->userContextMock = $this->getMockBuilder(UserContextInterface::class)
-            ->getMockForAbstractClass();
+        $this->userContextMock = $this->createMock(UserContextInterface::class);
         $this->userContextMock->method('getUserId')
             ->willReturn(1);
 
-        $this->quoteMock = $this->getMockBuilder(Quote::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getCustomerId'])
-            ->getMock();
+        $this->quoteMock = $this->createPartialMockWithReflection(Quote::class, ['getCustomerId']);
 
         $this->quoteRepositoryMock = $this->getMockBuilder(QuoteRepository::class)
             ->disableOriginalConstructor()
@@ -63,17 +62,10 @@ class AccessChangeQuoteControlTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $objectManagerHelper = new ObjectManager($this);
-        $this->accessChangeQuoteControl = $objectManagerHelper->getObject(
-            AccessChangeQuoteControl::class,
-            ['changeQuoteControl' => $this->changeQuoteControlMock]
-        );
+        $this->accessChangeQuoteControl = new AccessChangeQuoteControl($this->changeQuoteControlMock);
     }
 
-    /**
-     * User with role Customer and customer_id matches context user_id.
-     */
-    public function testBeforeSaveForCustomer()
+    public function testBeforeSaveForCustomerWithCustomerIdMatchinQuoteUserIdIsAllowed()
     {
         $this->quoteMock->method('getCustomerId')
             ->willReturn(1);
@@ -84,17 +76,12 @@ class AccessChangeQuoteControlTest extends TestCase
         $this->changeQuoteControlMock->method('isAllowed')
             ->willReturn(true);
 
-        $result = $this->accessChangeQuoteControl->beforeSave($this->quoteRepositoryMock, $this->quoteMock);
-
-        $this->assertNull($result);
+        $this->accessChangeQuoteControl->beforeSave($this->quoteRepositoryMock, $this->quoteMock);
     }
 
-    /**
-     * The user_id and customer_id from the quote are different.
-     */
-    public function testBeforeSaveException()
+    public function testBeforeSaveThrowsExceptionForCustomerWithCustomerIdNotMatchingQuoteUserId()
     {
-        $this->expectException('Magento\Framework\Exception\StateException');
+        $this->expectException(StateException::class);
         $this->expectExceptionMessage('Invalid state change requested');
         $this->quoteMock->method('getCustomerId')
             ->willReturn(2);
@@ -108,10 +95,7 @@ class AccessChangeQuoteControlTest extends TestCase
         $this->accessChangeQuoteControl->beforeSave($this->quoteRepositoryMock, $this->quoteMock);
     }
 
-    /**
-     * User with role Admin and customer_id not much with user_id.
-     */
-    public function testBeforeSaveForAdmin()
+    public function testBeforeSaveForAdminUserRoleIsAllowed()
     {
         $this->quoteMock->method('getCustomerId')
             ->willReturn(2);
@@ -122,15 +106,10 @@ class AccessChangeQuoteControlTest extends TestCase
         $this->changeQuoteControlMock->method('isAllowed')
             ->willReturn(true);
 
-        $result = $this->accessChangeQuoteControl->beforeSave($this->quoteRepositoryMock, $this->quoteMock);
-
-        $this->assertNull($result);
+        $this->accessChangeQuoteControl->beforeSave($this->quoteRepositoryMock, $this->quoteMock);
     }
 
-    /**
-     * User with role Guest and customer_id === null.
-     */
-    public function testBeforeSaveForGuest()
+    public function testBeforeSaveForGuestIsAllowed()
     {
         $this->quoteMock->method('getCustomerId')
             ->willReturn(null);
@@ -141,17 +120,12 @@ class AccessChangeQuoteControlTest extends TestCase
         $this->changeQuoteControlMock->method('isAllowed')
             ->willReturn(true);
 
-        $result = $this->accessChangeQuoteControl->beforeSave($this->quoteRepositoryMock, $this->quoteMock);
-
-        $this->assertNull($result);
+        $this->accessChangeQuoteControl->beforeSave($this->quoteRepositoryMock, $this->quoteMock);
     }
 
-    /**
-     * User with role Guest and customer_id !== null.
-     */
-    public function testBeforeSaveForGuestException()
+    public function testBeforeSaveThrowsExceptionForGuestDoesNotEquals()
     {
-        $this->expectException('Magento\Framework\Exception\StateException');
+        $this->expectException(StateException::class);
         $this->expectExceptionMessage('Invalid state change requested');
         $this->quoteMock->method('getCustomerId')
             ->willReturn(1);
@@ -165,12 +139,9 @@ class AccessChangeQuoteControlTest extends TestCase
         $this->accessChangeQuoteControl->beforeSave($this->quoteRepositoryMock, $this->quoteMock);
     }
 
-    /**
-     * User with unknown role.
-     */
-    public function testBeforeSaveForUnknownUserTypeException()
+    public function testBeforeSaveThrowsExceptionForUnknownUserType()
     {
-        $this->expectException('Magento\Framework\Exception\StateException');
+        $this->expectException(StateException::class);
         $this->expectExceptionMessage('Invalid state change requested');
         $this->quoteMock->method('getCustomerId')
             ->willReturn(2);

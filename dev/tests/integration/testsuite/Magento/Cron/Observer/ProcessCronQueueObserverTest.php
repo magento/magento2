@@ -1,13 +1,16 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All rights reserved.
  */
 namespace Magento\Cron\Observer;
 
-use \Magento\TestFramework\Helper\Bootstrap;
+use Magento\Cron\Observer\ProcessCronQueueObserver;
+use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 
-class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
+class ProcessCronQueueObserverTest extends TestCase
 {
     /**
      * @var \Magento\Cron\Observer\ProcessCronQueueObserver
@@ -48,5 +51,126 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
         foreach ($collection as $item) {
             $this->fail($item->getMessages());
         }
+    }
+
+    /**
+     * @param array $expectedGroupsToRun
+     * @param mixed $group
+     * @param mixed $excludeGroup
+     */
+    #[DataProvider('groupFiltersDataProvider')]
+    public function testGroupFilters(array $expectedGroupsToRun, $group = null, $excludeGroup = null)
+    {
+        $config = $this->createMock(\Magento\Cron\Model\ConfigInterface::class);
+        $config->expects($this->any())
+            ->method('getJobs')
+            ->willReturn($this->getFilterTestCronGroups());
+
+        $request = Bootstrap::getObjectManager()->get(\Magento\Framework\App\Console\Request::class);
+        $lockManager = $this->createMock(\Magento\Framework\Lock\LockManagerInterface::class);
+
+        // The jobs are locked when they are run, assert on them to see which groups would run
+        $expectedLockData = [];
+        foreach ($expectedGroupsToRun as $expectedGroupToRun) {
+            $expectedLockData[] = [
+                ProcessCronQueueObserver::LOCK_PREFIX . $expectedGroupToRun,
+                ProcessCronQueueObserver::LOCK_TIMEOUT
+            ];
+        }
+
+        // No expected lock data, means we should never call it
+        if (empty($expectedLockData)) {
+            $lockManager->expects($this->never())
+                ->method('lock');
+        }
+
+        $lockManager->expects($this->exactly(count($expectedLockData)))
+            ->method('lock')
+            ->willReturnCallback(function (...$expectedLockData) {
+                if (!empty($expectedLockData)) {
+                    return false;
+                }
+            });
+
+        $request->setParams(
+            [
+                'group' => $group,
+                'exclude-group' => $excludeGroup,
+                'standaloneProcessStarted' => '1'
+            ]
+        );
+        $this->_model = Bootstrap::getObjectManager()
+            ->create(\Magento\Cron\Observer\ProcessCronQueueObserver::class, [
+                'request' => $request,
+                'lockManager' => $lockManager,
+                'config' => $config
+            ]);
+        $this->_model->execute(new \Magento\Framework\Event\Observer());
+    }
+
+    /**
+     * @return array|array[]
+     */
+    public static function groupFiltersDataProvider(): array
+    {
+        return [
+            'no flags runs all groups' => [
+                ['index', 'consumers', 'default'],  // $expectedGroupsToRun
+                null,  // $group
+                null   // $excludeGroup
+            ],
+            '--group=default should run'  => [
+                ['default'],  // $expectedGroupsToRun
+                'default',    // $group
+                null          // $excludeGroup
+            ],
+            '--group=default with --exclude-group=default, nothing should run' => [
+                [],           // $expectedGroupsToRun
+                'default',    // $group
+                ['default']   // $excludeGroup
+            ],
+            '--group=default with --exclude-group=index, default should run' => [
+                ['default'],  // $expectedGroupsToRun
+                'default',    // $group
+                ['index']     // $excludeGroup
+            ],
+            '--group=index with --exclude-group=default, index should run' => [
+                ['index'],    // $expectedGroupsToRun
+                'index',      // $group
+                ['default']   // $excludeGroup
+            ],
+            '--exclude-group=index, all other groups should run' => [
+                ['consumers', 'default'],  // $expectedGroupsToRun
+                null,         // $group
+                ['index']     // $excludeGroup
+            ],
+            '--exclude-group for every group runs nothing' => [
+                [],           // $expectedGroupsToRun
+                null,         // $group
+                ['default', 'consumers', 'index']  // $excludeGroup
+            ],
+            'exclude all groups but consumers, consumers runs' => [
+                ['consumers'],       // $expectedGroupsToRun
+                null,                // $group
+                ['index', 'default'] // $excludeGroup
+            ],
+        ];
+    }
+
+    /**
+     * Only run the filter group tests with a limited set of cron groups, keeps tests consistent between EE and CE
+     *
+     * @return array
+     */
+    private function getFilterTestCronGroups()
+    {
+        $listOfGroups = [];
+        $config = Bootstrap::getObjectManager()->get(\Magento\Cron\Model\ConfigInterface::class);
+        foreach ($config->getJobs() as $groupId => $data) {
+            if (in_array($groupId, ['default', 'consumers', 'index'])) {
+                $listOfGroups[$groupId] = $data;
+            }
+        }
+        return $listOfGroups;
     }
 }

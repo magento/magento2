@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,11 +14,17 @@ use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Model\AddressRegistry;
 use Magento\Customer\Model\CustomerRegistry;
 use Magento\Customer\Model\ResourceModel\Address;
+use Magento\Customer\Model\Vat;
+use Magento\Customer\Observer\AfterAddressSaveObserver;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\DataObjectFactory;
 use Magento\Framework\Exception\InputException;
 use Magento\TestFramework\Directory\Model\GetRegionIdByName;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface as PsrLogger;
 
 /**
  * Assert that address was created as expected or address create throws expected error.
@@ -89,6 +95,11 @@ class CreateAddressTest extends TestCase
     private $createdAddressesIds = [];
 
     /**
+     * @var DataObjectFactory
+     */
+    private $dataObjectFactory;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -101,6 +112,7 @@ class CreateAddressTest extends TestCase
         $this->customerRepository = $this->objectManager->get(CustomerRepositoryInterface::class);
         $this->addressRegistry = $this->objectManager->get(AddressRegistry::class);
         $this->addressResource = $this->objectManager->get(Address::class);
+        $this->dataObjectFactory = $this->objectManager->get(DataObjectFactory::class);
         parent::setUp();
     }
 
@@ -112,6 +124,7 @@ class CreateAddressTest extends TestCase
         foreach ($this->createdAddressesIds as $createdAddressesId) {
             $this->addressRegistry->remove($createdAddressesId);
         }
+        $this->objectManager->removeSharedInstance(AfterAddressSaveObserver::class);
         parent::tearDown();
     }
 
@@ -120,13 +133,12 @@ class CreateAddressTest extends TestCase
      *
      * @magentoDataFixture Magento/Customer/_files/customer_no_address.php
      *
-     * @dataProvider createDefaultAddressesDataProvider
-     *
      * @param array $addressData
      * @param bool $isShippingDefault
      * @param bool $isBillingDefault
      * @return void
      */
+    #[DataProvider('createDefaultAddressesDataProvider')]
     public function testCreateDefaultAddress(
         array $addressData,
         bool $isShippingDefault,
@@ -153,7 +165,7 @@ class CreateAddressTest extends TestCase
      *
      * @return array
      */
-    public function createDefaultAddressesDataProvider(): array
+    public static function createDefaultAddressesDataProvider(): array
     {
         return [
             'any_addresses_are_default' => [self::STATIC_CUSTOMER_ADDRESS_DATA, false, false],
@@ -168,12 +180,11 @@ class CreateAddressTest extends TestCase
      *
      * @magentoDataFixture Magento/Customer/_files/customer_no_address.php
      *
-     * @dataProvider createAddressesDataProvider
-     *
      * @param array $addressData
      * @param array $expectedData
      * @return void
      */
+    #[DataProvider('createAddressesDataProvider')]
     public function testAddressCreatedWithProperData(array $addressData, array $expectedData): void
     {
         if (isset($expectedData['custom_region_name'])) {
@@ -196,7 +207,7 @@ class CreateAddressTest extends TestCase
      *
      * @return array
      */
-    public function createAddressesDataProvider(): array
+    public static function createAddressesDataProvider(): array
     {
         return [
             'required_fields_valid_data' => [
@@ -268,12 +279,11 @@ class CreateAddressTest extends TestCase
      *
      * @magentoDataFixture Magento/Customer/_files/customer_no_address.php
      *
-     * @dataProvider createWrongAddressesDataProvider
-     *
      * @param array $addressData
      * @param \Exception $expectException
      * @return void
      */
+    #[DataProvider('createWrongAddressesDataProvider')]
     public function testExceptionThrownDuringCreateAddress(array $addressData, \Exception $expectException): void
     {
         $customer = $this->customerRepository->get('customer5@example.com');
@@ -282,11 +292,30 @@ class CreateAddressTest extends TestCase
     }
 
     /**
+     * @magentoDataFixture Magento/Customer/_files/customer_no_address.php
+     */
+    public function testExceptionMessageForTooLongTelephone(): void
+    {
+        $customer = $this->customerRepository->get('customer5@example.com');
+        $addressData = array_replace(
+            self::STATIC_CUSTOMER_ADDRESS_DATA,
+            [AddressInterface::TELEPHONE => str_repeat('1', 256)]
+        );
+
+        try {
+            $this->createAddress((int)$customer->getId(), $addressData);
+            $this->fail('Expected InputException was not thrown.');
+        } catch (InputException $exception) {
+            $this->assertStringContainsString('phone number is too long', $exception->getMessage());
+        }
+    }
+
+    /**
      * Data provider for create address with wrong data.
      *
      * @return array
      */
-    public function createWrongAddressesDataProvider(): array
+    public static function createWrongAddressesDataProvider(): array
     {
         return [
             'required_field_empty_telephone' => [
@@ -327,6 +356,109 @@ class CreateAddressTest extends TestCase
     }
 
     /**
+     * Assert that after address creation customer group is Group for Valid VAT ID - Domestic.
+     *
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/Customer/_files/customer_no_address.php
+     * @magentoConfigFixture current_store general/store_information/country_id AT
+     * @magentoConfigFixture current_store customer/create_account/auto_group_assign 1
+     * @magentoConfigFixture current_store customer/create_account/viv_domestic_group 2
+     * @return void
+     */
+    public function testAddressCreatedWithGroupAssignByDomesticVatId(): void
+    {
+        $this->createVatMock(true, true);
+        $addressData = array_merge(
+            self::STATIC_CUSTOMER_ADDRESS_DATA,
+            [AddressInterface::VAT_ID => '111', AddressInterface::COUNTRY_ID => 'AT']
+        );
+        $customer = $this->customerRepository->get('customer5@example.com');
+        $this->createAddress((int)$customer->getId(), $addressData, false, true);
+        $this->assertEquals(2, $this->getCustomerGroupId('customer5@example.com'));
+    }
+
+    /**
+     * Assert that after address creation customer group is Group for Valid VAT ID - Intra-Union.
+     *
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/Customer/_files/customer_no_address.php
+     * @magentoConfigFixture current_store general/store_information/country_id GR
+     * @magentoConfigFixture current_store customer/create_account/auto_group_assign 1
+     * @magentoConfigFixture current_store customer/create_account/viv_intra_union_group 2
+     * @return void
+     */
+    public function testAddressCreatedWithGroupAssignByIntraUnionVatId(): void
+    {
+        $this->createVatMock(true, true);
+        $addressData = array_merge(
+            self::STATIC_CUSTOMER_ADDRESS_DATA,
+            [AddressInterface::VAT_ID => '111', AddressInterface::COUNTRY_ID => 'AT']
+        );
+        $customer = $this->customerRepository->get('customer5@example.com');
+        $this->createAddress((int)$customer->getId(), $addressData, false, true);
+        $this->assertEquals(2, $this->getCustomerGroupId('customer5@example.com'));
+    }
+
+    /**
+     * Assert that after address creation customer group is Group for Invalid VAT ID.
+     *
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/Customer/_files/customer_no_address.php
+     * @magentoConfigFixture current_store customer/create_account/auto_group_assign 1
+     * @magentoConfigFixture current_store customer/create_account/viv_invalid_group 2
+     * @return void
+     */
+    public function testAddressCreatedWithGroupAssignByInvalidVatId(): void
+    {
+        $this->createVatMock(false, true);
+        $addressData = array_merge(
+            self::STATIC_CUSTOMER_ADDRESS_DATA,
+            [AddressInterface::VAT_ID => '111', AddressInterface::COUNTRY_ID => 'AT']
+        );
+        $customer = $this->customerRepository->get('customer5@example.com');
+        $this->createAddress((int)$customer->getId(), $addressData, false, true);
+        $this->assertEquals(2, $this->getCustomerGroupId('customer5@example.com'));
+    }
+
+    /**
+     * Assert that after address creation customer group is Validation Error Group.
+     *
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/Customer/_files/customer_no_address.php
+     * @magentoConfigFixture current_store customer/create_account/auto_group_assign 1
+     * @magentoConfigFixture current_store customer/create_account/viv_error_group 2
+     * @return void
+     */
+    public function testAddressCreatedWithGroupAssignByVatIdWithError(): void
+    {
+        $this->createVatMock(false, false);
+        $addressData = array_merge(
+            self::STATIC_CUSTOMER_ADDRESS_DATA,
+            [AddressInterface::VAT_ID => '111', AddressInterface::COUNTRY_ID => 'AT']
+        );
+        $customer = $this->customerRepository->get('customer5@example.com');
+        $this->createAddress((int)$customer->getId(), $addressData, false, true);
+        $this->assertEquals(2, $this->getCustomerGroupId('customer5@example.com'));
+    }
+
+    /**
+     * @magentoDataFixture Magento/Customer/_files/customer_no_address.php
+     * @magentoDataFixture Magento/Store/_files/second_website_with_store_group_and_store.php
+     * @magentoConfigFixture default_store general/country/allow BD,BB,AF
+     * @magentoConfigFixture fixture_second_store_store general/country/allow AS,BM
+     *
+     * @return void
+     */
+    public function testCreateAvailableAddress(): void
+    {
+        $countryId = 'BB';
+        $addressData = array_merge(self::STATIC_CUSTOMER_ADDRESS_DATA, [AddressInterface::COUNTRY_ID => $countryId]);
+        $customer = $this->customerRepository->get('customer5@example.com');
+        $address = $this->createAddress((int)$customer->getId(), $addressData);
+        $this->assertSame($countryId, $address->getCountryId());
+    }
+
+    /**
      * Create customer address with provided address data.
      *
      * @param int $customerId
@@ -360,5 +492,50 @@ class CreateAddressTest extends TestCase
         $this->createdAddressesIds[] = (int)$address->getId();
 
         return $address;
+    }
+
+    /**
+     * Creates mock for vat id validation.
+     *
+     * @param bool $isValid
+     * @param bool $isRequestSuccess
+     * @return void
+     */
+    private function createVatMock(bool $isValid = false, bool $isRequestSuccess = false): void
+    {
+        $gatewayResponse = $this->dataObjectFactory->create(
+            [
+                'data' => [
+                    'is_valid' => $isValid,
+                    'request_date' => '',
+                    'request_identifier' => '123123123',
+                    'request_success' => $isRequestSuccess,
+                    'request_message' => __(''),
+                ],
+            ]
+        );
+        $customerVat = $this->getMockBuilder(Vat::class)
+            ->setConstructorArgs(
+                [
+                    $this->objectManager->get(ScopeConfigInterface::class),
+                    $this->objectManager->get(PsrLogger::class)
+                ]
+            )
+            ->onlyMethods(['checkVatNumber'])
+            ->getMock();
+        $customerVat->method('checkVatNumber')->willReturn($gatewayResponse);
+        $this->objectManager->removeSharedInstance(Vat::class);
+        $this->objectManager->addSharedInstance($customerVat, Vat::class);
+    }
+
+    /**
+     * Returns customer group id by email.
+     *
+     * @param string $email
+     * @return int
+     */
+    private function getCustomerGroupId(string $email): int
+    {
+        return (int)$this->customerRepository->get($email)->getGroupId();
     }
 }

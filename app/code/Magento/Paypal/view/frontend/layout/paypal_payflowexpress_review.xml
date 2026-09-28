@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
@@ -20,6 +20,9 @@
         </referenceContainer>
         <referenceContainer name="content">
             <block class="Magento\Paypal\Block\Express\Review" name="paypal.express.review" template="Magento_Paypal::express/review.phtml">
+                <arguments>
+                    <argument name="PaypalFundingSourceDataProvider" xsi:type="object">Magento\Paypal\ViewModel\PaypalFundingSourceDataProvider</argument>
+                </arguments>
                 <action method="setControllerPath">
                     <argument name="prefix" xsi:type="string">paypal/payflowexpress</argument>
                 </action>

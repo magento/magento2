@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminVerifyWYSIWYGEditorAndTinyMCEButtonsActionGroup">
+        <annotations>
+            <description>Goes to Admin CMS Page creation page. Validates that all of the Tiny MCE buttons are present.</description>
+        </annotations>
+        <waitForElementVisible selector="{{TinyMCESection.TinyMCE}}" stepKey="waitForTinyMCE"/>
+        <click selector="{{TinyMCESection.ShowHideBtn}}" stepKey="clickShowHideBtn" />
+        <waitForElementNotVisible selector="{{TinyMCESection.TinyMCE}}" stepKey="tinyMCENotAvailable"/>
+        <waitForElementVisible selector="{{TinyMCESection.InsertWidgetBtn}}" stepKey="waitForInsertWidget"/>
+        <waitForElementVisible selector="{{TinyMCESection.InsertImageBtn}}" stepKey="waitForInsertImage"/>
+        <waitForElementVisible selector="{{TinyMCESection.InsertVariableBtn}}" stepKey="waitForInsertVariable"/>
+    </actionGroup>
+</actionGroups>

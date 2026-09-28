@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\CatalogSearch\Model\Search\RequestGenerator;
@@ -9,7 +9,7 @@ namespace Magento\CatalogSearch\Model\Search\RequestGenerator;
 /**
  * @api
  * @since 100.1.6
- * @deprecated
+ * @deprecated 101.0.0
  * @see \Magento\ElasticSearch
  */
 class GeneratorResolver

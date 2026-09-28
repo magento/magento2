@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Model;
 
@@ -9,14 +9,17 @@ use Magento\Customer\Api\AddressMetadataInterface;
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\RegionInterfaceFactory;
+use Magento\Customer\Model\Address\AbstractAddress\CountryModelsCache;
+use Magento\Customer\Model\Address\AbstractAddress\RegionModelsCache;
+use Magento\Customer\Model\Address\CompositeValidator;
 use Magento\Framework\Indexer\StateInterface;
 
 /**
  * Customer address model
  *
  * @api
- * @method int getParentId() getParentId()
- * @method \Magento\Customer\Model\Address setParentId() setParentId(int $parentId)
+ * @method int getParentId()
+ * @method \Magento\Customer\Model\Address setParentId(int $parentId)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
@@ -74,6 +77,9 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
+     * @param CompositeValidator|null $compositeValidator
+     * @param CountryModelsCache|null $countryModelsCache
+     * @param RegionModelsCache|null $regionModelsCache
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -94,9 +100,12 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
         CustomerFactory $customerFactory,
         \Magento\Framework\Reflection\DataObjectProcessor $dataProcessor,
         \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        array $data = [],
+        ?CompositeValidator $compositeValidator = null,
+        ?CountryModelsCache $countryModelsCache = null,
+        ?RegionModelsCache $regionModelsCache = null,
     ) {
         $this->dataProcessor = $dataProcessor;
         $this->_customerFactory = $customerFactory;
@@ -117,7 +126,10 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
             $dataObjectHelper,
             $resource,
             $resourceCollection,
-            $data
+            $data,
+            $compositeValidator,
+            $countryModelsCache,
+            $regionModelsCache,
         );
     }
 
@@ -359,7 +371,9 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     {
         /** @var \Magento\Framework\Indexer\IndexerInterface $indexer */
         $indexer = $this->indexerRegistry->get(Customer::CUSTOMER_GRID_INDEXER_ID);
-        $indexer->reindexRow($this->getCustomerId());
+        if (!$indexer->isScheduled()) {
+            $indexer->reindexRow($this->getCustomerId());
+        }
     }
 
     /**
@@ -380,6 +394,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      *
      * @return \Magento\Customer\Model\Address\CustomAttributeListInterface
      * @deprecated 100.0.6
+     * @see not recommended way
      */
     private function getAttributeList()
     {
@@ -395,7 +410,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      * Retrieve attribute set id for customer address.
      *
      * @return int
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function getAttributeSetId()
     {

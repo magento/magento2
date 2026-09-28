@@ -1,23 +1,21 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Block\Adminhtml\Order;
 
 /**
  * Adminhtml creditmemo bar
  *
- * @deprecated
+ * @deprecated 101.0.6
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
+ * @see Nothing
  */
 class Totalbar extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
 {
     /**
-     * Totals
-     *
      * @var array
      */
     protected $_totals = [];

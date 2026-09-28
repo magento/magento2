@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\UrlRewrite\Block;
@@ -10,7 +10,7 @@ namespace Magento\UrlRewrite\Block;
  * Url rewrite grid container class
  *
  * @api
- * @deprecated Moved to UI component implementation
+ * @deprecated 102.0.0 Moved to UI component implementation
  * @since 100.0.2
  */
 class GridContainer extends \Magento\Backend\Block\Widget\Grid\Container

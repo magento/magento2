@@ -1,18 +1,15 @@
 <?php
 /**
- * @category    Magento
- * @package     Magento_CatalogInventory
- * @subpackage  unit_tests
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\CatalogInventory\Test\Unit\Model\Indexer\Stock\Plugin;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\CatalogInventory\Model\Indexer\Stock\Plugin\StoreGroup;
 use Magento\CatalogInventory\Model\Indexer\Stock\Processor;
-use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Store\Model\ResourceModel\Group;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -23,24 +20,24 @@ class StoreGroupTest extends TestCase
     /**
      * @var StoreGroup
      */
-    protected $_model;
+    private $model;
 
     /**
-     * @var IndexerInterface|MockObject
+     * @var Processor|MockObject
      */
-    protected $_indexerMock;
+    private $indexerProcessorMock;
 
     protected function setUp(): void
     {
-        $this->_indexerMock = $this->createMock(Processor::class);
-        $this->_model = new StoreGroup($this->_indexerMock);
+        $this->indexerProcessorMock = $this->createMock(Processor::class);
+        $this->model = new StoreGroup($this->indexerProcessorMock);
     }
 
     /**
      * @param array $data
-     * @dataProvider beforeSaveDataProvider
      */
-    public function testBeforeSave(array $data)
+    #[DataProvider('afterSaveDataProvider')]
+    public function testAfterSave(array $data): void
     {
         $subjectMock = $this->createMock(Group::class);
         $objectMock = $this->createPartialMock(
@@ -55,16 +52,19 @@ class StoreGroupTest extends TestCase
             ->with('website_id')
             ->willReturn($data['has_website_id_changed']);
 
-        $this->_indexerMock->expects($this->once())
+        $this->indexerProcessorMock->expects($this->once())
             ->method('markIndexerAsInvalid');
 
-        $this->_model->beforeSave($subjectMock, $objectMock);
+        $this->assertSame(
+            $subjectMock,
+            $this->model->afterSave($subjectMock, $subjectMock, $objectMock)
+        );
     }
 
     /**
      * @return array
      */
-    public function beforeSaveDataProvider()
+    public static function afterSaveDataProvider(): array
     {
         return [
             [

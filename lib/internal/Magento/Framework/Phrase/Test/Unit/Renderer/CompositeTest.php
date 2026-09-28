@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -31,8 +31,8 @@ class CompositeTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->rendererOne = $this->getMockForAbstractClass(RendererInterface::class);
-        $this->rendererTwo = $this->getMockForAbstractClass(RendererInterface::class);
+        $this->rendererOne = $this->createMock(RendererInterface::class);
+        $this->rendererTwo = $this->createMock(RendererInterface::class);
         $this->object = new Composite([$this->rendererOne, $this->rendererTwo]);
     }
 

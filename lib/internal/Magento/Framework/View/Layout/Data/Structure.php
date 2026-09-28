@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\View\Layout\Data;
 
@@ -12,6 +12,7 @@ use Magento\Framework\App\State;
  * An associative data structure, that features "nested set" parent-child relations
  *
  * @api
+ * @since 100.0.2
  */
 class Structure extends DataStructure
 {
@@ -42,7 +43,7 @@ class Structure extends DataStructure
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
         State $state,
-        array $elements = null
+        ?array $elements = null
     ) {
         $this->logger = $logger;
         $this->state = $state;
@@ -76,7 +77,7 @@ class Structure extends DataStructure
      */
     protected function _generateAnonymousName($class)
     {
-        $position = strpos($class, '\\Block\\');
+        $position = $class !== null ? strpos($class, '\\Block\\') : '';
         $key = $position !== false ? substr($class, $position + 7) : $class;
         $key = strtolower(trim($key, '_'));
 
@@ -107,7 +108,7 @@ class Structure extends DataStructure
     public function reorderChildElement($parentName, $childName, $offsetOrSibling, $after = true)
     {
         if (is_numeric($offsetOrSibling)) {
-            $offset = (int)abs($offsetOrSibling) * ($after ? 1 : -1);
+            $offset = abs((int) $offsetOrSibling) * ($after ? 1 : -1);
             $this->reorderChild($parentName, $childName, $offset);
         } elseif (null === $offsetOrSibling) {
             $this->reorderChild($parentName, $childName, null);

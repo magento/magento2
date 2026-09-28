@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminDeleteAllTaxRulesActionGroup">
+        <annotations>
+            <description>Deletes all rows one by one on the 'Tax Rules' page.</description>
+        </annotations>
+        <amOnPage url="{{AdminTaxRuleGridPage.url}}" stepKey="goToTaxRuleGridPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clickClearFilters"/>
+        <helper class="Magento\Tax\Test\Mftf\Helper\TaxHelpers" method="deleteAllSpecifiedTaxRuleRows" stepKey="deleteAllSpecifiedTaxRules">
+            <argument name="rowsToDelete">{{AdminTaxRuleGridSection.allRows}}</argument>
+            <argument name="deleteButton">{{AdminMainActionsSection.delete}}</argument>
+            <argument name="modalAcceptButton">{{AdminConfirmationModalSection.ok}}</argument>
+            <argument name="successMessage">{{TaxRuleSuccessMessages.delete}}</argument>
+            <argument name="successMessageContainer">{{AdminMessagesSection.success}}</argument>
+        </helper>
+        <waitForPageLoad stepKey="waitForGridLoad"/>
+        <seeNumberOfElements userInput="0" selector="{{AdminTaxRuleGridSection.allRows}}" stepKey="seeExpectedFinalTotalRows"/>
+    </actionGroup>
+</actionGroups>

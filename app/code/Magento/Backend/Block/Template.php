@@ -1,12 +1,16 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
 
 namespace Magento\Backend\Block;
+
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
+use Magento\Directory\Helper\Data as DirectoryHelper;
 
 /**
  * Standard admin block. Adds admin-specific behavior and event.
@@ -60,15 +64,25 @@ class Template extends \Magento\Framework\View\Element\Template
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param array $data
+     * @param JsonHelper|null $jsonHelper
+     * @param DirectoryHelper|null $directoryHelper
      */
-    public function __construct(\Magento\Backend\Block\Template\Context $context, array $data = [])
-    {
+    public function __construct(
+        \Magento\Backend\Block\Template\Context $context,
+        array $data = [],
+        ?JsonHelper $jsonHelper = null,
+        ?DirectoryHelper $directoryHelper = null
+    ) {
         $this->_localeDate = $context->getLocaleDate();
         $this->_authorization = $context->getAuthorization();
         $this->mathRandom = $context->getMathRandom();
         $this->_backendSession = $context->getBackendSession();
         $this->formKey = $context->getFormKey();
         $this->nameBuilder = $context->getNameBuilder();
+        $data['jsonHelper'] = $jsonHelper ?? ObjectManager::getInstance()->get(JsonHelper::class);
+        if (empty($data['directoryHelper'])) {
+            $data['directoryHelper'] = $directoryHelper ?? ObjectManager::getInstance()->get(DirectoryHelper::class);
+        }
         parent::__construct($context, $data);
     }
 
@@ -95,6 +109,7 @@ class Template extends \Magento\Framework\View\Element\Template
      * not be used in future development. Module design should explicitly state dependencies to avoid requiring output
      * disabling. This functionality will temporarily be kept in Magento core, as there are unresolved modularity
      * issues that will be addressed in future releases.
+     * @see no alternatives
      */
     public function isOutputEnabled($moduleName = null)
     {

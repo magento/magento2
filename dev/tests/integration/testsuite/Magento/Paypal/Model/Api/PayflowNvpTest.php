@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Paypal\Model\Api;
 
@@ -71,7 +71,6 @@ class PayflowNvpTest extends \PHPUnit\Framework\TestCase
 
         $refObject = new \ReflectionObject($config);
         $refProperty = $refObject->getProperty('productMetadata');
-        $refProperty->setAccessible(true);
         $refProperty->setValue($config, $productMetadata);
 
         $this->nvpApi->setConfigObject($config);
@@ -95,7 +94,7 @@ class PayflowNvpTest extends \PHPUnit\Framework\TestCase
             . 'L_NAME1=Simple 2&L_QTY1=2&L_COST1=9.69&'
             . 'L_NAME2=Simple 3&L_QTY2=3&L_COST2=11.69&'
             . 'L_NAME3=Discount&L_QTY3=1&L_COST3=-10.00&'
-            . 'TRXTYPE=A&ACTION=S&BUTTONSOURCE=Magento_Cart_';
+            . 'TRXTYPE=A&ACTION=S&BUTTONSOURCE=Magento_2_';
 
         $this->httpClient->method('write')
             ->with(

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,23 +18,32 @@ use PHPUnit\Framework\TestCase;
  */
 class ValidatorTest extends TestCase
 {
+    /**
+     * @var Validator
+     */
     private $validator;
 
+    /**
+     * @var MockObject
+     */
     private $otherEngineValidatorMock;
 
+    /**
+     * @var MockObject
+     */
     private $scopeConfigMock;
 
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->otherEngineValidatorMock = $this->getMockForAbstractClass(ValidatorInterface::class);
+        $this->otherEngineValidatorMock = $this->createMock(ValidatorInterface::class);
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)->getMock();
         $this->validator = $objectManager->getObject(
             Validator::class,
             [
                 'scopeConfig' => $this->scopeConfigMock,
                 'engineValidators' => ['otherEngine' => $this->otherEngineValidatorMock],
-                'engineBlacklist' => ['badEngine' => 'Bad Engine']
+                'excludedEngineList' => ['badEngine' => 'Bad Engine']
             ]
         );
     }
@@ -54,7 +63,7 @@ class ValidatorTest extends TestCase
         $this->assertEquals($expectedErrors, $this->validator->validate());
     }
 
-    public function testValidateBlacklist()
+    public function testValidateExcludedList()
     {
         $this->scopeConfigMock
             ->expects($this->once())

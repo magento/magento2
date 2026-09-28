@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
  * Translate type names found by the custom type locator to GraphQL type names.
  *
  * @api
+ * @since 100.3.0
  */
 class Type
 {
@@ -55,6 +56,7 @@ class Type
      * @param string $entityType
      * @return string
      * @throws GraphQlInputException
+     * @since 100.3.0
      */
     public function getType(string $attributeCode, string $entityType) : string
     {

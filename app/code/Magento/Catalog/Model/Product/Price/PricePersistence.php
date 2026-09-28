@@ -1,13 +1,25 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Model\Product\Price;
 
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
+use Magento\Catalog\Model\ProductIdLocatorInterface;
+use Magento\Catalog\Model\ResourceModel\Attribute;
+use Magento\Catalog\Model\ResourceModel\Product\Price\BasePriceFactory;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Exception\CouldNotDeleteException;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Stdlib\DateTime\DateTime;
+
 /**
- * Price persistence.
+ * Class responsibly for persistence of prices.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PricePersistence
 {
@@ -19,69 +31,84 @@ class PricePersistence
     private $table = 'catalog_product_entity_decimal';
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Attribute
+     * @var Attribute
      */
     private $attributeResource;
 
     /**
-     * @var \Magento\Catalog\Api\ProductAttributeRepositoryInterface
+     * @var ProductAttributeRepositoryInterface
      */
     private $attributeRepository;
 
     /**
-     * @var \Magento\Catalog\Model\ProductIdLocatorInterface
+     * @var ProductIdLocatorInterface
      */
     private $productIdLocator;
 
     /**
-     * Metadata pool.
+     * Metadata pool property to get a metadata.
      *
-     * @var \Magento\Framework\EntityManager\MetadataPool
+     * @var MetadataPool
      */
     private $metadataPool;
 
     /**
-     * Attribute code.
+     * Attribute code attribute to get the attribute id.
      *
      * @var string
      */
     private $attributeCode;
 
     /**
-     * Attribute ID.
+     * Attribute ID property to store the attribute id.
      *
      * @var int
      */
     private $attributeId;
 
     /**
-     * Items per operation.
+     * Items per operation to chunk the array in a batch.
      *
      * @var int
      */
     private $itemsPerOperation = 500;
 
     /**
+     * Date time property to get the gm date.
+     *
+     * @var DateTime
+     */
+    private $dateTime;
+
+    /**
      * PricePersistence constructor.
      *
-     * @param \Magento\Catalog\Model\ResourceModel\Attribute $attributeResource
-     * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository
-     * @param \Magento\Catalog\Model\ProductIdLocatorInterface $productIdLocator
-     * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
+     * @param Attribute $attributeResource
+     * @param ProductAttributeRepositoryInterface $attributeRepository
+     * @param ProductIdLocatorInterface $productIdLocator
+     * @param MetadataPool $metadataPool
      * @param string $attributeCode
+     * @param DateTime|null $dateTime
+     * @param BasePriceFactory|null $basePriceFactory
      */
     public function __construct(
-        \Magento\Catalog\Model\ResourceModel\Attribute $attributeResource,
-        \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository,
-        \Magento\Catalog\Model\ProductIdLocatorInterface $productIdLocator,
-        \Magento\Framework\EntityManager\MetadataPool $metadataPool,
-        $attributeCode = ''
+        Attribute $attributeResource,
+        ProductAttributeRepositoryInterface $attributeRepository,
+        ProductIdLocatorInterface $productIdLocator,
+        MetadataPool $metadataPool,
+        $attributeCode = '',
+        ?DateTime $dateTime = null,
+        private ?BasePriceFactory $basePriceFactory = null
     ) {
         $this->attributeResource = $attributeResource;
         $this->attributeRepository = $attributeRepository;
         $this->attributeCode = $attributeCode;
         $this->productIdLocator = $productIdLocator;
         $this->metadataPool = $metadataPool;
+        $this->dateTime = $dateTime ?: ObjectManager::getInstance()
+            ->get(DateTime::class);
+        $this->basePriceFactory = $this->basePriceFactory ?: ObjectManager::getInstance()
+            ->get(BasePriceFactory::class);
     }
 
     /**
@@ -97,7 +124,7 @@ class PricePersistence
             ->select()
             ->from($this->attributeResource->getTable($this->table));
         return $this->attributeResource->getConnection()->fetchAll(
-            $select->where($this->getEntityLinkField() . ' IN (?)', $ids)
+            $select->where($this->getEntityLinkField() . ' IN (?)', $ids, \Zend_Db::INT_TYPE)
                 ->where('attribute_id = ?', $this->getAttributeId())
         );
     }
@@ -107,27 +134,19 @@ class PricePersistence
      *
      * @param array $prices
      * @return void
-     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @throws CouldNotSaveException
      */
     public function update(array $prices)
     {
         array_walk($prices, function (&$price) {
-            return $price['attribute_id'] = $this->getAttributeId();
+            return $price['attribute_id'] = (int)$this->getAttributeId();
         });
-        $connection = $this->attributeResource->getConnection();
-        $connection->beginTransaction();
+
+        $basePrice = $this->basePriceFactory->create(['attributeId' => (int)$this->getAttributeId()]);
         try {
-            foreach (array_chunk($prices, $this->itemsPerOperation) as $pricesBunch) {
-                $this->attributeResource->getConnection()->insertOnDuplicate(
-                    $this->attributeResource->getTable($this->table),
-                    $pricesBunch,
-                    ['value']
-                );
-            }
-            $connection->commit();
+            $basePrice->update($prices);
         } catch (\Exception $e) {
-            $connection->rollBack();
-            throw new \Magento\Framework\Exception\CouldNotSaveException(
+            throw new CouldNotSaveException(
                 __('Could not save Prices.'),
                 $e
             );
@@ -139,7 +158,7 @@ class PricePersistence
      *
      * @param array $skus
      * @return void
-     * @throws \Magento\Framework\Exception\CouldNotDeleteException
+     * @throws CouldNotDeleteException
      */
     public function delete(array $skus)
     {
@@ -159,7 +178,7 @@ class PricePersistence
             $connection->commit();
         } catch (\Exception $e) {
             $connection->rollBack();
-            throw new \Magento\Framework\Exception\CouldNotDeleteException(
+            throw new CouldNotDeleteException(
                 __('Could not delete Prices'),
                 $e
             );
@@ -209,10 +228,10 @@ class PricePersistence
         $affectedIds = [];
 
         foreach ($this->productIdLocator->retrieveProductIdsBySkus($skus) as $productIds) {
-            $affectedIds = array_merge($affectedIds, array_keys($productIds));
+            $affectedIds[] = array_keys($productIds);
         }
 
-        return array_unique($affectedIds);
+        return array_unique(array_merge([], ...$affectedIds));
     }
 
     /**
@@ -222,7 +241,30 @@ class PricePersistence
      */
     public function getEntityLinkField()
     {
-        return $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
+        return $this->metadataPool->getMetadata(ProductInterface::class)
             ->getLinkField();
+    }
+
+    /**
+     * Update last updated date.
+     *
+     * @param array $productIds
+     * @return void
+     * @throws CouldNotSaveException
+     */
+    public function updateLastUpdatedAt(array $productIds): void
+    {
+        try {
+            $this->attributeResource->getConnection()->update(
+                $this->attributeResource->getTable('catalog_product_entity'),
+                [ProductInterface::UPDATED_AT => $this->dateTime->gmtDate()],
+                [$this->getEntityLinkField(). ' IN(?)' => $productIds]
+            );
+        } catch (\Exception $e) {
+            throw new CouldNotSaveException(
+                __("The attribute can't be saved."),
+                $e
+            );
+        }
     }
 }

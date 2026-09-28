@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Ui\Config;
 
 /**
  * Converter interface is used to convert UI Component XML configuration into UI Component interfaces arguments
+ *
+ * @api
  */
 interface ConverterInterface
 {

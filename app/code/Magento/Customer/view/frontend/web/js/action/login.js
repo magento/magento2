@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 define([
@@ -22,9 +22,15 @@ define([
          */
         action = function (loginData, redirectUrl, isGlobal, messageContainer) {
             messageContainer = messageContainer || globalMessageList;
+            let customerLoginUrl = 'customer/ajax/login';
+
+            if (loginData.customerLoginUrl) {
+                customerLoginUrl = loginData.customerLoginUrl;
+                delete loginData.customerLoginUrl;
+            }
 
             return storage.post(
-                'customer/ajax/login',
+                customerLoginUrl,
                 JSON.stringify(loginData),
                 isGlobal
             ).done(function (response) {

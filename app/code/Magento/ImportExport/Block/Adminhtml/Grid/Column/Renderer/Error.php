@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\ImportExport\Block\Adminhtml\Grid\Column\Renderer;
 
@@ -22,9 +22,9 @@ class Error extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
     {
         $result = '';
         if ($row->getData('error_file') != '') {
-            $result = '<p> ' . $row->getData('error_file') .  '</p><a href="'
+            $result = '<p> ' . $this->escapeHtml($row->getData('error_file')) .  '</p><a href="'
                 . $this->getUrl('*/*/download', ['filename' => $row->getData('error_file')]) . '">'
-                . __('Download')
+                . $this->escapeHtml(__('Download'))
                 . '</a>';
         }
         return $result;

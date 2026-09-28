@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -38,18 +38,24 @@ class DictionaryTest extends TestCase
      */
     private $configFactory;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->readFactory = $this->createMock(ReadFactory::class);
         $this->componentRegistrar = $this->createMock(ComponentRegistrar::class);
         $this->configFactory = $this->getMockBuilder(ConfigFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->model = new Dictionary($this->readFactory, $this->componentRegistrar, $this->configFactory);
     }
 
-    public function testDictionaryGetter()
+    /**
+     * @return void
+     */
+    public function testDictionaryGetter(): void
     {
         $csvFileName = 'abc.csv';
         $data = [['one', '1'], ['two', '2']];
@@ -58,13 +64,18 @@ class DictionaryTest extends TestCase
             $expected[$item[0]] = $item[1];
         }
 
-        $file = $this->getMockForAbstractClass(ReadInterface::class);
-        for ($i = 0, $count = count($data); $i < $count; $i++) {
-            $file->expects($this->at($i))->method('readCsv')->willReturn($data[$i]);
-        }
-        $file->expects($this->at($i))->method('readCsv')->willReturn(false);
+        $file = $this->createMock(ReadInterface::class);
+        $willReturnArgs = [];
 
-        $readMock = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
+        for ($i = 0, $count = count($data); $i < $count; $i++) {
+            $willReturnArgs[] = $data[$i];
+        }
+        $willReturnArgs[] = false;
+        $file
+            ->method('readCsv')
+            ->willReturnOnConsecutiveCalls(...$willReturnArgs);
+
+        $readMock = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
         $readMock->expects($this->any())->method('readFile')->willReturnMap([
             ['language.xml', $readMock],
             [$csvFileName, $file],

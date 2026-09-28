@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -19,6 +19,7 @@ use Magento\InstantPurchase\Model\Ui\PaymentTokenFormatter;
 use Magento\InstantPurchase\Model\Ui\ShippingMethodFormatter;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -90,7 +91,7 @@ class InstantPurchaseTest extends TestCase
     protected function setUp(): void
     {
         $this->customerSession = $this->createMock(Session::class);
-        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
         $this->instantPurchase = $this->createMock(InstantPurchaseModel::class);
         $this->paymentTokenFormatter = $this->createMock(PaymentTokenFormatter::class);
         $this->customerAddressesFormatter = $this->createMock(CustomerAddressesFormatter::class);
@@ -119,8 +120,8 @@ class InstantPurchaseTest extends TestCase
      * @param $isLogin
      * @param $isAvailable
      * @param $expected
-     * @dataProvider getSectionDataProvider
      */
+    #[DataProvider('getSectionDataProvider')]
     public function testGetSectionData($isLogin, $isAvailable, $expected)
     {
         $this->customerSession->expects($this->any())->method('isLoggedIn')->willReturn($isLogin);
@@ -145,7 +146,7 @@ class InstantPurchaseTest extends TestCase
      *
      * @return array
      */
-    public function getSectionDataProvider()
+    public static function getSectionDataProvider()
     {
         return [
             'No Login and available instant purchase' => [

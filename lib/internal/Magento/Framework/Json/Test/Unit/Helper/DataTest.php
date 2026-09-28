@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -30,12 +30,8 @@ class DataTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->jsonEncoderMock = $this->getMockBuilder(EncoderInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->jsonDecoderMock = $this->getMockBuilder(DecoderInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->jsonEncoderMock = $this->createMock(EncoderInterface::class);
+        $this->jsonDecoderMock = $this->createMock(DecoderInterface::class);
         $this->helper = $objectManager->getObject(
             Data::class,
             [

@@ -1,16 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor;
 
+use Magento\Framework\Api\SearchCriteriaInterface;
+
 class TestService
 {
-    const DEFAULT_VALUE = 42;
-    const CUSTOM_ATTRIBUTE_CODE = 'customAttr';
+    public const DEFAULT_VALUE = 42;
+    public const CUSTOM_ATTRIBUTE_CODE = 'customAttr';
 
     /**
      * @param int $entityId
@@ -83,6 +85,15 @@ class TestService
     public function dataArray(array $dataObjects)
     {
         return $dataObjects;
+    }
+
+    /**
+     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
+     * @return \Magento\Framework\Api\SearchCriteriaInterface
+     */
+    public function search(SearchCriteriaInterface $searchCriteria)
+    {
+        return $searchCriteria;
     }
 
     /**

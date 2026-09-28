@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
 use Magento\Theme\Model\Theme;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class FlyweightFactoryTest extends TestCase
 {
@@ -28,16 +29,15 @@ class FlyweightFactoryTest extends TestCase
     protected function setUp(): void
     {
         $this->themeProviderMock =
-            $this->getMockForAbstractClass(ThemeProviderInterface::class);
+            $this->createMock(ThemeProviderInterface::class);
         $this->factory = new FlyweightFactory($this->themeProviderMock);
     }
 
     /**
      * @param string $path
-     * @param int $expectedId
-     * @dataProvider createByIdDataProvider
-     * @covers \Magento\Framework\View\Design\Theme\FlyweightFactory::create
+     * @param int $expectedId     * @covers \Magento\Framework\View\Design\Theme\FlyweightFactory::create
      */
+    #[DataProvider('createByIdDataProvider')]
     public function testCreateById($path, $expectedId)
     {
         $theme = $this->createMock(Theme::class);
@@ -61,7 +61,7 @@ class FlyweightFactoryTest extends TestCase
     /**
      * @return array
      */
-    public function createByIdDataProvider()
+    public static function createByIdDataProvider()
     {
         return [
             [5, 5],

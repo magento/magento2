@@ -1,9 +1,8 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
-
 namespace Magento\Eav\Model\Entity\Attribute\Backend;
 
 /**
@@ -54,6 +53,14 @@ class Datetime extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
             }
 
             $object->setData($attributeName, $value);
+            $object->setData($attributeName . '_is_formated', true);
+        }
+
+        $defaultValue = $this->getDefaultValue();
+        if ($object->getData($attributeName) === null
+            && $defaultValue !== null
+            && !$object->hasData($attributeName)) {
+            $object->setData($attributeName, $defaultValue);
             $object->setData($attributeName . '_is_formated', true);
         }
 

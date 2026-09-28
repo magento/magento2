@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
@@ -14,5 +14,10 @@
                        template="Magento_Wishlist::catalog/product/list/addto/wishlist.phtml"/>
             </referenceBlock>
         </referenceContainer>
+        <referenceBlock name="wishlist_page_head_components">
+            <block class="Magento\Wishlist\Block\AddToWishlist"
+                name="catalogsearch.wishlist_addto"
+                template="Magento_Wishlist::addto.phtml"/>
+        </referenceBlock>
     </body>
 </page>

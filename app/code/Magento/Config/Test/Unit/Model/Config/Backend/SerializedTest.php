@@ -1,18 +1,20 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Config\Test\Unit\Model\Config\Backend;
 
 use Magento\Config\Model\Config\Backend\Serialized;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
@@ -27,13 +29,19 @@ class SerializedTest extends TestCase
     /** @var LoggerInterface|MockObject */
     private $loggerMock;
 
+    /**
+     * @var ScopeConfigInterface|MockObject
+     */
+    private $scopeConfigMock;
+
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->serializerMock = $this->createMock(Json::class);
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $contextMock = $this->createMock(Context::class);
-        $eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $eventManagerMock = $this->createMock(ManagerInterface::class);
         $contextMock->method('getEventDispatcher')
             ->willReturn($eventManagerMock);
         $contextMock->method('getLogger')
@@ -43,6 +51,7 @@ class SerializedTest extends TestCase
             [
                 'serializer' => $this->serializerMock,
                 'context' => $contextMock,
+                'config' => $this->scopeConfigMock,
             ]
         );
     }
@@ -52,8 +61,8 @@ class SerializedTest extends TestCase
      * @param int|double|string|array|boolean|null $value
      * @param int $numCalls
      * @param array $unserializedValue
-     * @dataProvider afterLoadDataProvider
      */
+    #[DataProvider('afterLoadDataProvider')]
     public function testAfterLoad($expected, $value, $numCalls, $unserializedValue = null)
     {
         $this->serializedConfig->setValue($value);
@@ -67,7 +76,7 @@ class SerializedTest extends TestCase
     /**
      * @return array
      */
-    public function afterLoadDataProvider()
+    public static function afterLoadDataProvider()
     {
         return [
             'empty value' => [
@@ -103,8 +112,8 @@ class SerializedTest extends TestCase
      * @param int|double|string|array|boolean|null $value
      * @param int $numCalls
      * @param string|null $serializedValue
-     * @dataProvider beforeSaveDataProvider
      */
+    #[DataProvider('beforeSaveDataProvider')]
     public function testBeforeSave($expected, $value, $numCalls, $serializedValue = null)
     {
         $this->serializedConfig->setId('id');
@@ -119,7 +128,7 @@ class SerializedTest extends TestCase
     /**
      * @return array
      */
-    public function beforeSaveDataProvider()
+    public static function beforeSaveDataProvider()
     {
         return [
             'string' => [
@@ -134,5 +143,30 @@ class SerializedTest extends TestCase
                 'string array'
             ]
         ];
+    }
+
+    /**
+     * If a config value is not available in core_confid_data the defaults are
+     * loaded from the config.xml file. Those defaults may be arrays.
+     * The Serialized backend model has to override its parent
+     * getOldValue function, to prevent an array to string conversion error
+     * and serialize those values.
+     */
+    public function testGetOldValueWithNonScalarDefaultValue(): void
+    {
+        $value = [
+            ['foo' => '1', 'bar' => '2'],
+        ];
+        $serializedValue = \json_encode($value);
+
+        $this->scopeConfigMock->method('getValue')->willReturn($value);
+        $this->serializerMock->method('serialize')->willReturn($serializedValue);
+
+        $this->serializedConfig->setData('value', $serializedValue);
+
+        $oldValue = $this->serializedConfig->getOldValue();
+
+        $this->assertIsString($oldValue, 'Default value from the config is not serialized.');
+        $this->assertSame($serializedValue, $oldValue);
     }
 }

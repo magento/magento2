@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2019 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontSwitchStoreActionGroup">
+        <annotations>
+            <description>Switch the Storefront to the provided Store.</description>
+        </annotations>
+        <arguments>
+            <argument name="storeName" type="string"/>
+        </arguments>
+        <click selector="{{StorefrontFooterSection.switchStoreButton}}" stepKey="clickOnSwitchStoreButton"/>
+        <click selector="{{StorefrontFooterSection.storeLink(storeName)}}" stepKey="selectStoreToSwitchOn"/>
+    </actionGroup>
+</actionGroups>

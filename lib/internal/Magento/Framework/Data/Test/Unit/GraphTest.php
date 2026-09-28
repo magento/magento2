@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,14 +9,14 @@ namespace Magento\Framework\Data\Test\Unit;
 
 use Magento\Framework\Data\Graph;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class GraphTest extends TestCase
 {
     /**
      * @param array $nodes
-     * @param array $relations
-     * @dataProvider constructorErrorDataProvider
-     */
+     * @param array $relations     */
+    #[DataProvider('constructorErrorDataProvider')]
     public function testConstructorError($nodes, $relations)
     {
         $this->expectException('InvalidArgumentException');
@@ -26,7 +26,7 @@ class GraphTest extends TestCase
     /**
      * @return array
      */
-    public function constructorErrorDataProvider()
+    public static function constructorErrorDataProvider()
     {
         return [
             'duplicate nodes' => [[1, 2, 2], []],

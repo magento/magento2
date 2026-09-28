@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Framework\HTTP\PhpEnvironment\ServerAddress;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ServerAddressTest extends TestCase
 {
@@ -30,7 +31,7 @@ class ServerAddressTest extends TestCase
         $this->_request = $this->getMockBuilder(
             Http::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['getServer']
             )->getMock();
 
@@ -41,9 +42,8 @@ class ServerAddressTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider getServerAddressProvider
-     */
+    /**     */
+    #[DataProvider('getServerAddressProvider')]
     public function testGetServerAddress($serverVar, $expected, $ipToLong)
     {
         $this->_request->expects(
@@ -61,7 +61,7 @@ class ServerAddressTest extends TestCase
     /**
      * @return array
      */
-    public function getServerAddressProvider()
+    public static function getServerAddressProvider()
     {
         return [
             [null, false, false],

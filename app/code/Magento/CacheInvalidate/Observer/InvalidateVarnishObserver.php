@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -77,7 +77,7 @@ class InvalidateVarnishObserver implements ObserverInterface
                 $tags[] = sprintf($pattern, $tag);
             }
             if (!empty($tags)) {
-                $this->purgeCache->sendPurgeRequest(implode('|', array_unique($tags)));
+                $this->purgeCache->sendPurgeRequest(array_unique($tags));
             }
         }
     }

@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Newsletter\Controller\Adminhtml\Queue;
@@ -88,7 +87,7 @@ class Save extends \Magento\Newsletter\Controller\Adminhtml\Queue implements Htt
 
             $this->_redirect('*/*');
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
             $id = $this->getRequest()->getParam('id');
             if ($id) {
                 $this->_redirect('*/*/edit', ['id' => $id]);

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminVerifyProductDetailsInDashboardActionGroup">
+        <annotations>
+            <description>Admin asserts name, price and views details on the dashboard for most viewed products.</description>
+        </annotations>
+        <arguments>
+            <argument name="productName" type="string" defaultValue="$$createProduct.name$$"/>
+            <argument name="productPrice" type="string" defaultValue=""/>
+            <argument name="productViews" type="string" defaultValue=""/>
+        </arguments>
+        <waitForElementVisible selector="{{AdminDashboardSection.productTab}}" stepKey="waitForProductColumnToBeVisible"/>
+        <waitForElementVisible selector="{{AdminDashboardSection.priceTab}}" stepKey="waitForPriceColumnToBeVisible"/>
+        <waitForElementVisible selector="{{AdminDashboardSection.viewsTab}}" stepKey="waitForViewColumnToBeVisible"/>
+        <waitForElementVisible selector="{{AdminDashboardSection.productName(productName)}}" stepKey="assertProductSkuInLineItem"/>
+        <waitForText selector="{{AdminDashboardSection.productPrice(productName)}}" userInput="{{productPrice}}"  stepKey="assertProductPrice"/>
+        <waitForText selector="{{AdminDashboardSection.productViews(productName)}}" userInput="{{productViews}}"  stepKey="assertProductViews"/>
+    </actionGroup>
+</actionGroups>

@@ -1,18 +1,25 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
-/** @var \Magento\Framework\Registry $registry */
-$registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);
+/** @var Registry $registry */
+
+use Magento\Catalog\Model\Category\AttributeFactory;
+use Magento\Framework\Registry;
+use Magento\TestFramework\Helper\Bootstrap;
+
+$objectManager = Bootstrap::getObjectManager();
+/** @var Registry $registry */
+$registry = $objectManager->get(Registry::class);
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
-/** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
-$attribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class);
+/** @var AttributeFactory $attributeFactory */
+$attributeFactory = $objectManager->get(AttributeFactory::class);
+$attribute = $attributeFactory->create();
 
 $attribute->loadByCode(3, 'test_attribute_code_666');
 

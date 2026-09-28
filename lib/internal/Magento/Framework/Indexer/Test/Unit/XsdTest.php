@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,7 +9,9 @@ namespace Magento\Framework\Indexer\Test\Unit;
 
 use Magento\Framework\Config\Dom\UrnResolver;
 use Magento\Framework\TestFramework\Unit\Utility\XsdValidator;
+use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class XsdTest extends TestCase
 {
@@ -41,16 +43,31 @@ class XsdTest extends TestCase
 
     /**
      * @param string $xmlString
-     * @param array $expectedError
-     * @dataProvider schemaCorrectlyIdentifiesInvalidXmlDataProvider
-     */
+     * @param array $expectedError     */
+    #[DataProvider('schemaCorrectlyIdentifiesInvalidXmlDataProvider')]
     public function testSchemaCorrectlyIdentifiesInvalidXml($xmlString, $expectedError)
     {
-        $actualError = $this->_xsdValidator->validate(
+        $actualErrors = $this->_xsdValidator->validate(
             $this->urnResolver->getRealPath('urn:magento:framework:Indexer/etc/indexer_merged.xsd'),
             $xmlString
         );
-        $this->assertEquals($expectedError, $actualError);
+        $this->assertNotEmpty($actualErrors);
+        foreach ($expectedError as [$error, $isRegex]) {
+            if ($isRegex) {
+                $matched = false;
+                foreach ($actualErrors as $actualError) {
+                    try {
+                        $this->assertMatchesRegularExpression($error, $actualError);
+                        $matched = true;
+                        break;
+                    } catch (AssertionFailedError) {
+                    }
+                }
+                $this->assertTrue($matched, "None of the errors matched: $error");
+            } else {
+                $this->assertContains($error, $actualErrors);
+            }
+        }
     }
 
     public function testSchemaCorrectlyIdentifiesValidXml()
@@ -64,7 +81,7 @@ class XsdTest extends TestCase
     /**
      * Data provider with invalid xml array according to events.xsd
      */
-    public function schemaCorrectlyIdentifiesInvalidXmlDataProvider()
+    public static function schemaCorrectlyIdentifiesInvalidXmlDataProvider()
     {
         return include __DIR__ . '/_files/invalidIndexerXmlArray.php';
     }

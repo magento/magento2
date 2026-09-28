@@ -1,11 +1,10 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 define([
     'jquery',
     'underscore',
-    'MutationObserver',
     'domReady!'
 ], function ($, _) {
     'use strict';
@@ -148,9 +147,9 @@ define([
      */
     function processAdded(node) {
         _.each(watchers.selectors, function (listeners, selector) {
-            listeners.forEach(function (data) {
+            for (let data of listeners) {
                 if (!data.ctx.contains(node) || !$(node, data.ctx).is(selector)) {
-                    return;
+                    continue;
                 }
 
                 if (data.type === 'add') {
@@ -158,7 +157,7 @@ define([
                 } else if (data.type === 'remove') {
                     addRemovalListener(node, data);
                 }
-            });
+            }
         });
     }
 
@@ -171,14 +170,14 @@ define([
         var nodeData    = getNodeData(node),
             listeners   = nodeData && nodeData.remove;
 
+
         if (!listeners) {
             return;
         }
 
-        listeners.forEach(function (data) {
+        for (let data of listeners) {
             trigger(node, data);
-        });
-
+        }
         removeNodeData(node);
     }
 
@@ -195,12 +194,12 @@ define([
 
         nodes = _.toArray(nodes).filter(isElementNode);
 
-        nodes.forEach(function (node) {
+        for (let node of nodes) {
             result.push(node);
 
             children = extractChildren(node);
-            result   = result.concat(children);
-        });
+            result.push(...children);
+        }
 
         return result;
     }
@@ -217,10 +216,10 @@ define([
         var removed = [],
             added = [];
 
-        mutations.forEach(function (record) {
-            removed = removed.concat(_.toArray(record.removedNodes));
-            added   = added.concat(_.toArray(record.addedNodes));
-        });
+        for (let record of mutations) {
+            removed.push(...record.removedNodes);
+            added.push(...record.addedNodes);
+        }
 
         removed = removed.filter(function (node) {
             var addIndex = added.indexOf(node),
@@ -286,10 +285,16 @@ define([
         var changes;
 
         if (shouldObserveMutations(mutations)) {
+            let node;
+
             changes = formChangesLists(mutations);
 
-            changes.removed.forEach(processRemoved);
-            changes.added.forEach(processAdded);
+            for (node of changes.removed) {
+                processRemoved(node);
+            }
+            for (node of changes.added) {
+                processAdded(node);
+            }
         }
     });
 
@@ -332,10 +337,9 @@ define([
 
             nodes = $(selector, data.ctx).toArray();
 
-            nodes.forEach(function (node) {
+            for (let node of nodes) {
                 trigger(node, data);
-            });
-
+            }
             addSelectorListener(selector, data);
         },
 
@@ -367,9 +371,9 @@ define([
                 addSelectorListener(selector, data);
             }
 
-            nodes.forEach(function (node) {
+            for (let node of nodes) {
                 addRemovalListener(node, data);
-            });
+            }
         },
 
         /**

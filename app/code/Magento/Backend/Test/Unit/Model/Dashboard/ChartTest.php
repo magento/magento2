@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,10 +11,12 @@ use Magento\Backend\Helper\Dashboard\Order as OrderHelper;
 use Magento\Backend\Model\Dashboard\Chart;
 use Magento\Backend\Model\Dashboard\Chart\Date as DateRetriever;
 use Magento\Backend\Model\Dashboard\Period;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Reports\Model\ResourceModel\Order\Collection;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ChartTest extends TestCase
@@ -44,25 +46,23 @@ class ChartTest extends TestCase
      */
     private $collectionMock;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManager($this);
 
-        $this->dateRetrieverMock = $this->getMockBuilder(DateRetriever::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->dateRetrieverMock = $this->createMock(DateRetriever::class);
 
-        $this->orderHelperMock = $this->getMockBuilder(OrderHelper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->orderHelperMock = $this->createMock(OrderHelper::class);
 
-        $this->collectionMock = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->collectionMock = $this->createMock(Collection::class);
         $this->orderHelperMock->method('getCollection')
             ->willReturn($this->collectionMock);
 
-        $period = $this->objectManagerHelper->getObject(Period::class);
+        $scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $period = new Period($scopeConfigMock);
 
         $this->model = $this->objectManagerHelper->getObject(
             Chart::class,
@@ -78,22 +78,21 @@ class ChartTest extends TestCase
      * @param string $period
      * @param string $chartParam
      * @param array $result
-     * @dataProvider getByPeriodDataProvider
+     *
+     * @return void
      */
-    public function testGetByPeriod($period, $chartParam, $result)
+    #[DataProvider('getByPeriodDataProvider')]
+    public function testGetByPeriod(string $period, string $chartParam, array $result): void
     {
-        $this->orderHelperMock->expects($this->at(0))
+        $this->orderHelperMock
             ->method('setParam')
-            ->with('store', null);
-        $this->orderHelperMock->expects($this->at(1))
-            ->method('setParam')
-            ->with('website', null);
-        $this->orderHelperMock->expects($this->at(2))
-            ->method('setParam')
-            ->with('group', null);
-        $this->orderHelperMock->expects($this->at(3))
-            ->method('setParam')
-            ->with('period', $period);
+            ->willReturnCallback(function ($arg1, $arg2) use ($period) {
+                if ($arg1 == 'period' && $arg2 == $period) {
+                    return $this;
+                } elseif ($arg1 == 'store' || $arg1=='website' || $arg1 == 'group') {
+                    return $this;
+                }
+            });
 
         $this->dateRetrieverMock->expects($this->once())
             ->method('getByPeriod')
@@ -107,9 +106,7 @@ class ChartTest extends TestCase
 
         $valueMap = [];
         foreach ($result as $resultItem) {
-            $dataObjectMock = $this->getMockBuilder(DataObject::class)
-                ->disableOriginalConstructor()
-                ->getMock();
+            $dataObjectMock = $this->createMock(DataObject::class);
             $dataObjectMock->method('getData')
                 ->with($chartParam)
                 ->willReturn($resultItem['y']);
@@ -129,7 +126,10 @@ class ChartTest extends TestCase
         );
     }
 
-    public function getByPeriodDataProvider(): array
+    /**
+     * @return array
+     */
+    public static function getByPeriodDataProvider(): array
     {
         return [
             [

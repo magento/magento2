@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Persistent\Block\Form;
 
@@ -9,14 +9,11 @@ namespace Magento\Persistent\Block\Form;
  * Remember Me block
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Remember extends \Magento\Framework\View\Element\Template
 {
     /**
-     * Persistent data
-     *
      * @var \Magento\Persistent\Helper\Data
      */
     protected $_persistentData = null;

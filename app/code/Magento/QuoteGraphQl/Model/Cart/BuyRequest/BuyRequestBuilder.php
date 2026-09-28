@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -45,11 +45,11 @@ class BuyRequestBuilder
      */
     public function build(array $cartItemData): DataObject
     {
-        $requestData = [[]];
+        $requestData = [];
         foreach ($this->providers as $provider) {
             $requestData[] = $provider->execute($cartItemData);
         }
 
-        return $this->dataObjectFactory->create(['data' => array_merge(...$requestData)]);
+        return $this->dataObjectFactory->create(['data' => array_merge([], ...$requestData)]);
     }
 }

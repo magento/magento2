@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 
@@ -15,7 +15,6 @@ use Magento\Framework\DataObject;
  * Backend grid item abstract renderer
  * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
- * @api
  * @since 100.0.2
  */
 abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock implements RendererInterface
@@ -98,7 +97,9 @@ abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock imp
             }
             return '';
         }
-        return $row->getData($this->getColumn()->getIndex());
+        return $this->getColumn()->getIndex() !== null
+            ? $row->getData($this->getColumn()->getIndex())
+            : null;
     }
 
     /**
@@ -139,9 +140,10 @@ abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock imp
     {
         if (false !== $this->getColumn()->getSortable()) {
             $className = 'not-sort';
-            $dir = strtolower($this->getColumn()->getDir());
+            $dir = is_string($this->getColumn()->getDir()) ? strtolower($this->getColumn()->getDir()) : '';
             $nDir = $dir == 'asc' ? 'desc' : 'asc';
-            if ($this->getColumn()->getDir()) {
+
+            if ($dir) {
                 $className = '_' . $dir . 'end';
             }
             $out = '<th data-sort="' .

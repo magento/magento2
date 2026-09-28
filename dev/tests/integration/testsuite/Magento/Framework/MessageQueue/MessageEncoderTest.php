@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\MessageQueue;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\MessageQueue\MessageEncoder;
 use Magento\Framework\Communication\Config;
@@ -105,6 +106,18 @@ class MessageEncoderTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('AL', $addresses[0]->getRegion()->getRegionCode());
     }
 
+    public function testEncodeDecodeReadonlyMessage()
+    {
+        $message = new ReadonlyMessage(10, 'Test Message');
+
+        $encodedMessage = $this->encoder->encode('readonly.message.created', $message);
+        $decodedMessage = $this->encoder->decode('readonly.message.created', $encodedMessage);
+
+        $this->assertInstanceOf(ReadonlyMessage::class, $decodedMessage);
+        $this->assertSame(10, $decodedMessage->entityId);
+        $this->assertSame('Test Message', $decodedMessage->name);
+    }
+
     /**
      */
     public function testDecodeInvalidMessageFormat()
@@ -119,10 +132,9 @@ class MessageEncoderTest extends \PHPUnit\Framework\TestCase
      */
     public function testDecodeInvalidMessage()
     {
-        $this->expectException(\LogicException::class);
+        $this->expectException(LocalizedException::class);
 
-        $message = 'Property "NotExistingField" does not have accessor method "getNotExistingField" in class '
-            . '"Magento\Customer\Api\Data\CustomerInterface".';
+        $message = 'customer.created" must be an instance of "Magento\Customer\Api\Data\CustomerInterface".';
         $this->expectExceptionMessage($message);
         $this->encoder->decode('customer.created', '{"not_existing_field": "value"}');
     }
@@ -223,7 +235,6 @@ JSON;
     {
         $reflection = new \ReflectionClass(get_class($object));
         $reflectionProperty = $reflection->getProperty($propertyName);
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($object, $propertyValue);
     }
 }

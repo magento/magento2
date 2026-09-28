@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,7 +14,7 @@ use Magento\Framework\Data\Form\Element\Fieldset;
 /**
  * Class ElementCreator
  *
- * @deprecated 100.3.0 in favour of UI component implementation
+ * @deprecated 101.0.1 in favour of UI component implementation
  * @package Magento\Backend\Block\Widget\Form\Element
  */
 class ElementCreator

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -33,7 +33,8 @@ class DefaultAttributesTest extends AbstractEavTest
     public function testModifyData(): void
     {
         $expectedData = include __DIR__ . '/../_files/eav_expected_data_output.php';
-        $this->callModifyDataAndAssert($this->getProduct(), $expectedData);
+        // force load: ProductRepositoryInterface::getList does not add stock item, prices, categories to product
+        $this->callModifyDataAndAssert($this->getProduct(true), $expectedData);
     }
 
     /**

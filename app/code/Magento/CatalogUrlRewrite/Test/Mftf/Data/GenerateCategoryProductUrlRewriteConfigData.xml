@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -25,6 +25,14 @@
     </entity>
     <entity name="DisableCategoriesPathProductUrls">
         <data key="path">catalog/seo/product_use_categories</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="EnableCreatePermanentRedirect">
+        <data key="path">catalog/seo/save_rewrites_history</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="DisableCreatePermanentRedirect">
+        <data key="path">catalog/seo/save_rewrites_history</data>
         <data key="value">0</data>
     </entity>
 </entities>

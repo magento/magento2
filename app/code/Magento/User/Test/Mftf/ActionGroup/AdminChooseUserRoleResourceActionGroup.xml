@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminChooseUserRoleResourceActionGroup">
+        <annotations>
+            <description>Check the resource access checkbox. Leave the form open.</description>
+        </annotations>
+        <arguments>
+            <argument name="resourceId" type="string" defaultValue="Magento_Backend::dashboard"/>
+            <argument name="resourceName" type="string" defaultValue="Dashboard"/>
+        </arguments>
+
+        <waitForElementVisible selector="{{AdminEditRoleResourcesSection.resourceCheckboxLink(resourceId, resourceName)}}" stepKey="waitForResourceCheckboxVisible"/>
+        <click selector="{{AdminEditRoleResourcesSection.resourceCheckboxLink(resourceId, resourceName)}}" stepKey="checkResource"/>
+        <seeElement selector="{{AdminEditRoleResourcesSection.resourceCheckbox(resourceId)}}" stepKey="seeCheckedResource"/>
+    </actionGroup>
+</actionGroups>

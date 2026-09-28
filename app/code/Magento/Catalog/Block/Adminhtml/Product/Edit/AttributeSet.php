@@ -1,24 +1,20 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
+
+namespace Magento\Catalog\Block\Adminhtml\Product\Edit;
+
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
 
 /**
  * Create product attribute set selector
- *
- * @author     Magento Core Team <core@magentocommerce.com>
- */
-namespace Magento\Catalog\Block\Adminhtml\Product\Edit;
-
-/**
- * Admin AttributeSet block
  */
 class AttributeSet extends \Magento\Backend\Block\Widget\Form
 {
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
@@ -27,13 +23,16 @@ class AttributeSet extends \Magento\Backend\Block\Widget\Form
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param array $data
+     * @param JsonHelper|null $jsonHelper
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
-        array $data = []
+        array $data = [],
+        ?JsonHelper $jsonHelper = null
     ) {
         $this->_coreRegistry = $registry;
+        $data['jsonHelper'] = $jsonHelper ?? ObjectManager::getInstance()->get(JsonHelper::class);
         parent::__construct($context, $data);
     }
 

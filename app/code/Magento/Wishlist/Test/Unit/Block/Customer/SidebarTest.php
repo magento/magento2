@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Wishlist\Test\Unit\Block\Customer;
 
 use Magento\Catalog\Block\Product\Context;
 use Magento\Catalog\Model\Product;
+use Magento\Framework\App\Http\Context as HttpContext;
 use Magento\Framework\Pricing\Render;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\LayoutInterface;
@@ -24,7 +25,7 @@ class SidebarTest extends TestCase
     private $productContext;
 
     /**
-     * @var \Magento\Framework\App\Http\Context|MockObject
+     * @var HttpContext|MockObject
      */
     private $httpContext;
 
@@ -40,19 +41,12 @@ class SidebarTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->layout = $this->getMockBuilder(LayoutInterface::class)
-            ->getMockForAbstractClass();
+        $this->layout = $this->createMock(LayoutInterface::class);
 
-        $this->productContext = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->productContext->expects($this->any())
-            ->method('getLayout')
-            ->willReturn($this->layout);
+        $this->productContext = $this->createMock(Context::class);
+        $this->productContext->method('getLayout')->willReturn($this->layout);
 
-        $this->httpContext = $this->getMockBuilder(\Magento\Framework\App\Http\Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->httpContext = $this->createMock(HttpContext::class);
 
         $objectManager = new ObjectManager($this);
 
@@ -70,13 +64,9 @@ class SidebarTest extends TestCase
         $priceType = 'wishlist_configured_price';
         $expected = 'block content';
 
-        $productMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productMock = $this->createMock(Product::class);
 
-        $renderMock = $this->getMockBuilder(Render::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $renderMock = $this->createMock(Render::class);
         $renderMock->expects($this->once())
             ->method('render')
             ->with($priceType, $productMock, ['zone' => Render::ZONE_ITEM_LIST])
@@ -98,13 +88,9 @@ class SidebarTest extends TestCase
         $priceType = 'wishlist_configured_price';
         $expected = 'block content';
 
-        $productMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productMock = $this->createMock(Product::class);
 
-        $renderMock = $this->getMockBuilder(Render::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $renderMock = $this->createMock(Render::class);
         $renderMock->expects($this->once())
             ->method('render')
             ->with($priceType, $productMock, ['zone' => Render::ZONE_ITEM_LIST])

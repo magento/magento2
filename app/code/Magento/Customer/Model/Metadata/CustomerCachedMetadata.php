@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Model\Metadata;
 
@@ -25,7 +25,7 @@ class CustomerCachedMetadata extends CachedMetadata implements CustomerMetadataI
      */
     public function __construct(
         CustomerMetadata $metadata,
-        AttributeMetadataCache $attributeMetadataCache = null
+        ?AttributeMetadataCache $attributeMetadataCache = null
     ) {
         parent::__construct($metadata, $attributeMetadataCache);
     }

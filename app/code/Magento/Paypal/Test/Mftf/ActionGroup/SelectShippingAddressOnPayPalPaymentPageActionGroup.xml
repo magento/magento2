@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="SelectShippingAddressOnPayPalPaymentPageActionGroup">
+        <annotations>
+            <description>Select shipping address on paypal account payment page</description>
+        </annotations>
+        <arguments>
+            <argument name="address"/>
+        </arguments>
+        <waitForElementClickable selector="{{PayPalPaymentSection.changeShippingAddressButton}}" stepKey="waitForChangeShippingAddressButton"/>
+        <click selector="{{PayPalPaymentSection.changeShippingAddressButton}}" stepKey="clickChangeShippingAddressButton"/>
+        <waitForElementClickable selector="{{PayPalPaymentSection.shippingAddressDropdown(address.ShippingAddress)}}" stepKey="waitForAddressDropdown"/>
+        <scrollTo selector="{{PayPalPaymentSection.shippingAddressDropdown(address.ShippingAddress)}}" stepKey="scrollToShippingAddressRow"/>
+        <waitForElementClickable selector="{{PayPalPaymentSection.shippingAddressRadioButton(address.ShippingAddress)}}" stepKey="waitForAddressRadioButton"/>
+        <!-- PayPal's fixed bottom "Pay" bar overlaps this row in the viewport, so a native click is intercepted. Dispatch the click via JS. -->
+        <executeJS function="document.evaluate(&quot;{{PayPalPaymentSection.shippingAddressRadioButton(address.ShippingAddress)}}&quot;, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.click();" stepKey="selectShippingAddress"/>
+    </actionGroup>
+</actionGroups>
+

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\View\File\Collector;
 
@@ -65,7 +65,7 @@ class Base implements CollectorInterface
         foreach ($sharedFiles as $file) {
             $result[] = $this->fileFactory->create($file->getFullPath(), $file->getComponentName(), null, true);
         }
-        $area = $theme->getData('area');
+        $area = $theme->getArea();
         $themeFiles = $this->componentDirSearch->collectFilesWithContext(
             ComponentRegistrar::MODULE,
             "view/{$area}/{$this->subDir}{$filePath}"

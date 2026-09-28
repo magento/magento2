@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
  * Resolves the product from a configured item.
  *
  * @api
+ * @since 102.0.7
  */
 interface ItemResolverInterface
 {
@@ -21,6 +22,7 @@ interface ItemResolverInterface
      *
      * @param ItemInterface $item
      * @return ProductInterface
+     * @since 102.0.7
      */
     public function getFinalProduct(ItemInterface $item) : ProductInterface;
 }

@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
@@ -40,6 +40,7 @@
                 <field id="default_group" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Default Group</label>
                     <source_model>Magento\Customer\Model\Config\Source\Group</source_model>
+                    <validate>required-entry</validate>
                 </field>
                 <field id="viv_domestic_group" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Group for Valid VAT ID - Domestic</label>
@@ -191,6 +192,15 @@
                     <label>Change Email and Password Template</label>
                     <comment>Email template chosen based on theme fallback when "Default" option is selected.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
+                </field>
+                <field id="confirm" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" canRestore="1">
+                    <label>Require email confirmation if email has been changed</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="graphql_share_customer_group" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Allow to retrieve applied customer group details via GraphQL API</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Option to disable providing customer group details via GraphQl</comment>
                 </field>
             </group>
             <group id="address" translate="label" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">

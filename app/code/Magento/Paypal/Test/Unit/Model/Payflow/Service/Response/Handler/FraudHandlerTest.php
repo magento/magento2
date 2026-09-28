@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Payment\Model\InfoInterface;
 use Magento\Paypal\Model\Info;
 use Magento\Paypal\Model\Payflow\Service\Response\Handler\FraudHandler;
 use Magento\Paypal\Model\Payflowpro;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -41,14 +42,9 @@ class FraudHandlerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->paymentMock = $this->getMockBuilder(InfoInterface::class)
-            ->getMock();
-        $this->responseMock = $this->getMockBuilder(DataObject::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->paypalInfoManagerMock = $this->getMockBuilder(Info::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->paymentMock = $this->createMock(InfoInterface::class);
+        $this->responseMock = $this->createMock(DataObject::class);
+        $this->paypalInfoManagerMock = $this->createMock(Info::class);
 
         $this->fraudHandler = new FraudHandler(
             $this->paypalInfoManagerMock,
@@ -69,9 +65,7 @@ class FraudHandlerTest extends TestCase
         $this->fraudHandler->handle($this->paymentMock, $this->responseMock);
     }
 
-    /**
-     * @dataProvider handleMessagesDataProvider
-     */
+    #[DataProvider('handleMessagesDataProvider')]
     public function testHandle($message, $rulesString, $existingFrauds, $expectedMessage)
     {
         $this->responseMock->expects($this->atLeastOnce())
@@ -102,7 +96,7 @@ class FraudHandlerTest extends TestCase
     /**
      * @return array
      */
-    public function handleMessagesDataProvider()
+    public static function handleMessagesDataProvider()
     {
         return [
             ['Fraud message', null, null, ['RESPMSG' => 'Fraud message']],
@@ -114,13 +108,13 @@ class FraudHandlerTest extends TestCase
             ],
             [
                 'New fraud message',
-                $this->getRulesXmlString(),
+                self::getRulesXmlString(),
                 [
                     'Total Purchase Price Ceiling' => 'Existing fraud message',
                     'RESPMSG' => 'Existing fraud message'
                 ],
                 array_merge(
-                    $this->getRulesExpectedDictionary(),
+                    self::getRulesExpectedDictionary(),
                     [
                         'Total Purchase Price Ceiling' => 'Existing fraud message',
                         'RESPMSG' => 'Existing fraud message'
@@ -136,7 +130,7 @@ class FraudHandlerTest extends TestCase
      * @param string $fileName
      * @return string
      */
-    private function getRulesXmlString($fileName = 'fps_prexmldata.xml')
+    private static function getRulesXmlString($fileName = 'fps_prexmldata.xml')
     {
         return file_get_contents(__DIR__ . '/_files/' . $fileName);
     }
@@ -146,7 +140,7 @@ class FraudHandlerTest extends TestCase
      *
      * @return array
      */
-    private function getRulesExpectedDictionary()
+    private static function getRulesExpectedDictionary()
     {
         return [
             'Total Purchase Price Ceiling' => 'The purchase amount of 7501 is greater than the ceiling value set of 750'

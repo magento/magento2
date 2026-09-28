@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminVisualSwatchAttributeFunctionalityTest">
+        <annotations>
+            <features value="Swatches"/>
+            <stories value="Product attributes"/>
+            <title value="Visual Swatch Attribute"/>
+            <description value="Create visual swatch attribute with empty, color and image options"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-3943"/>
+        </annotations>
+        <before>
+            <!-- Login as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!--Delete created visual swatch attribute-->
+            <actionGroup ref="DeleteProductAttributeByAttributeCodeActionGroup" stepKey="deleteProductAttribute"/>
+            <!-- Admin logout -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+        <!-- Step1: Create Visual Swatch attribute -->
+        <!--Navigate to Stores > Attributes > Product.-->
+        <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="goToProductAttributes"/>
+        <!--Create new Product Attribute as TextField, with code and default value.-->
+        <actionGroup ref="AdminCreateProductAttributeWithSaveAndEditActionGroup" stepKey="createAttribute">
+            <argument name="attribute" value="VisualSwatchProductAttributeForm"/>
+        </actionGroup>
+        <!--Add empty swatch-->
+        <actionGroup ref="AdminAddEmptyVisualSwatchActionGroup" stepKey="addEmptySwatch">
+            <argument name="swatchType" value="Empty"/>
+            <argument name="adminInputByIndex" value="0"/>
+        </actionGroup>
+        <!-- Add color swatch-->
+        <waitForElementClickable selector="{{AdminManageSwatchSection.addSwatch}}" stepKey="waitToClickAddSwatchButtonForOption2"/>
+        <click selector="{{AdminManageSwatchSection.addSwatch}}" stepKey="clickAddSwatchButtonForOption2"/>
+        <actionGroup ref="OpenSwatchMenuByIndexActionGroup" stepKey="clickSwatch">
+            <argument name="index" value="1"/>
+        </actionGroup>
+        <waitForElementClickable selector="{{AdminManageSwatchSection.nthChooseColor('2')}}" stepKey="waitToClickChooseColor"/>
+        <click selector="{{AdminManageSwatchSection.nthChooseColor('2')}}" stepKey="clickChooseColor"/>
+        <actionGroup ref="SetColorPickerByHexActionGroup" stepKey="fillColor">
+            <argument name="nthColorPicker" value="1"/>
+            <argument name="hexColor" value="e74c3c"/>
+        </actionGroup>
+        <fillField selector="{{AdminManageSwatchSection.adminInputByIndex('1')}}" userInput="Color" stepKey="fillAdminForColorSwatch"/>
+        <waitForPageLoad stepKey="waitToAddColor"/>
+        <!-- Click on save and edit to assert the selected color swatch-->
+        <waitForElementClickable selector="{{AttributePropertiesSection.SaveAndEdit}}" stepKey="waitToClickSaveAndEditAfterAddingColorSwatch"/>
+        <click selector="{{AttributePropertiesSection.SaveAndEdit}}" stepKey="clickSaveAndEditAfterAddingColorSwatch"/>
+        <waitForElementVisible selector="{{AdminProductMessagesSection.successMessage}}" stepKey="waitForSuccessMessage"/>
+        <actionGroup ref="AssertSwatchColorActionGroup" stepKey="assertSwatch1">
+            <argument name="nthSwatch" value="2"/>
+            <argument name="expectedStyle" value="background: rgb(231, 76, 60);"/>
+        </actionGroup>
+        <!-- Add file swatch-->
+        <actionGroup ref="AdminUploadFileInVisualSwatchActionGroup" stepKey="addFileSwatch">
+            <argument name="defaultRadioButtonIndex" value="2"/>
+            <argument name="nthSwatchWindowEditRow" value="3"/>
+            <argument name="nthSwatchWindowEditColumn" value="1"/>
+            <argument name="nthUploadFileIndex" value="3"/>
+            <argument name="fileName" value="placeholderThumbnailImage"/>
+            <argument name="swatchWindowUnavailableIndex" value="0"/>
+            <argument name="swatchType" value="File"/>
+        </actionGroup>
+        <!-- click on save and edit after adding file-->
+        <waitForElementClickable selector="{{AttributePropertiesSection.SaveAndEdit}}" stepKey="waitToClickSaveAndEditAfterAddingFileSwatch"/>
+        <click selector="{{AttributePropertiesSection.SaveAndEdit}}" stepKey="clickSaveAndEditAfterAddingFileSwatch"/>
+    </test>
+</tests>

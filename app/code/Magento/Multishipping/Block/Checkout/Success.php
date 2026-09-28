@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Multishipping checkout success information
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Multishipping\Block\Checkout;
 
@@ -32,6 +30,8 @@ class Success extends \Magento\Multishipping\Block\Checkout\AbstractMultishippin
     }
 
     /**
+     * Get Order Ids
+     *
      * @return array|bool|string
      */
     public function getOrderIds()
@@ -44,6 +44,8 @@ class Success extends \Magento\Multishipping\Block\Checkout\AbstractMultishippin
     }
 
     /**
+     * Get order Url
+     *
      * @param int $orderId
      * @return string
      */
@@ -53,6 +55,8 @@ class Success extends \Magento\Multishipping\Block\Checkout\AbstractMultishippin
     }
 
     /**
+     * Get continue Url
+     *
      * @return string
      */
     public function getContinueUrl()

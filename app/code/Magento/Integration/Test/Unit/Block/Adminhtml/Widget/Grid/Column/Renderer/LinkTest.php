@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Backend\Block\Context;
 use Magento\Backend\Block\Widget\Grid\Column;
 use Magento\Framework\DataObject;
 use Magento\Framework\Escaper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
 use Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Link;
@@ -19,6 +20,7 @@ use PHPUnit\Framework\TestCase;
 
 class LinkTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Context|MockObject
      */
@@ -44,11 +46,14 @@ class LinkTest extends TestCase
      */
     protected $linkRenderer;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->escaperMock = $this->createMock(Escaper::class);
         $this->escaperMock->expects($this->any())->method('escapeHtml')->willReturnArgument(0);
-        $this->urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
         $this->urlBuilderMock->expects($this->once())->method('getUrl')->willReturn('http://magento.loc/linkurl');
         $this->contextMock = $this->createPartialMock(
             Context::class,
@@ -68,21 +73,25 @@ class LinkTest extends TestCase
 
     /**
      * Test the basic render action.
+     *
+     * @return void
      */
-    public function testRender()
+    public function testRender(): void
     {
         $expectedResult = '<a href="http://magento.loc/linkurl" title="Link Caption">Link Caption</a>';
-        $column = $this->getMockBuilder(Column::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getCaption', 'getId'])
-            ->getMock();
+        $column = $this->createPartialMockWithReflection(
+            Column::class,
+            ['getId', 'getCaption']
+        );
         $column->expects($this->any())
             ->method('getCaption')
             ->willReturn('Link Caption');
         $column->expects($this->any())
             ->method('getId')
             ->willReturn('1');
-        $this->escaperMock->expects($this->at(0))->method('escapeHtmlAttr')->willReturn('Link Caption');
+        $this->escaperMock
+            ->method('escapeHtmlAttr')
+            ->willReturn('Link Caption');
         $this->linkRenderer->setColumn($column);
         $object = new DataObject(['id' => '1']);
         $actualResult = $this->linkRenderer->render($object);

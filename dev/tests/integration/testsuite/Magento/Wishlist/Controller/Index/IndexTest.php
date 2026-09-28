@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,7 +14,7 @@ use Magento\TestFramework\TestCase\AbstractController;
 /**
  * Test wish list on customer account page.
  *
- * @magentoDbIsolation enabled
+ * @magentoDbIsolation disabled
  * @magentoAppArea frontend
  */
 class IndexTest extends AbstractController

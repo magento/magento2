@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Framework\Setup\Declaration\Schema\Dto\Table;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for internal (primary key, unique key) constraint definition.
@@ -56,15 +57,14 @@ class InternalTest extends TestCase
      *
      * @dataProvider toDefinitionDataProvider()
      */
+    #[DataProvider('toDefinitionDataProvider')]
     public function testToDefinition($name, $type, $columns, $expectedExpression)
     {
         /** @var InternalConstraintDto|MockObject $constraint */
         $constraint = $this->getMockBuilder(InternalConstraintDto::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $adapterMock = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $adapterMock = $this->createMock(AdapterInterface::class);
         $tableMock = $this->getMockBuilder(Table::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -95,7 +95,7 @@ class InternalTest extends TestCase
     /**
      * @return array
      */
-    public function toDefinitionDataProvider()
+    public static function toDefinitionDataProvider()
     {
         return [
             [
@@ -120,6 +120,7 @@ class InternalTest extends TestCase
      * @param array $expectedDefinition
      * @dataProvider definitionDataProvider()
      */
+    #[DataProvider('definitionDataProvider')]
     public function testFromDefinition($definition, $expectedDefinition)
     {
         $result = $this->internal->fromDefinition($definition);
@@ -129,7 +130,7 @@ class InternalTest extends TestCase
     /**
      * @return array
      */
-    public function definitionDataProvider()
+    public static function definitionDataProvider()
     {
         return [
             [
@@ -137,7 +138,7 @@ class InternalTest extends TestCase
                     'Key_name' => 'PRIMARY',
                     'Column_name' => 'id',
                 ],
-                'excpectedDefiniton' => [
+                'expectedDefinition' => [
                     'name' => 'PRIMARY',
                     'column' => ['id' => 'id'],
                     'type' => 'primary',
@@ -148,7 +149,7 @@ class InternalTest extends TestCase
                     'Key_name' => 'unique_key_1',
                     'Column_name' => 'parent_id',
                 ],
-                'excpectedDefiniton' => [
+                'expectedDefinition' => [
                     'name' => 'unique_key_1',
                     'column' => ['parent_id' => 'parent_id'],
                     'type' => 'unique',

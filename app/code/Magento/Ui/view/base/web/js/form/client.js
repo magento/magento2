@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 define([
@@ -60,7 +60,7 @@ define([
                          * @param {String} msg
                          */
                         insertMethod: function (msg) {
-                            var $wrapper = $('<div/>').addClass(messagesClass).html(msg);
+                            var $wrapper = $('<div></div>').addClass(messagesClass).html(msg);
 
                             $('.page-main-actions', selectorPrefix).after($wrapper);
                             $('html, body').animate({

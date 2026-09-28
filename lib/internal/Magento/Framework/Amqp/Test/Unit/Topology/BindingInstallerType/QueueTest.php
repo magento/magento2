@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -27,7 +27,7 @@ class QueueTest extends TestCase
     public function testInstall()
     {
         $channel = $this->createMock(AMQPChannel::class);
-        $binding = $this->getMockForAbstractClass(BindingInterface::class);
+        $binding = $this->createMock(BindingInterface::class);
         $binding->expects($this->once())->method('getDestination')->willReturn('queue01');
         $binding->expects($this->once())->method('getTopic')->willReturn('topic01');
         $binding->expects($this->once())->method('getArguments')->willReturn(['some' => 'value']);

@@ -2,8 +2,8 @@
 /**
  * SalesRule 10% discount coupon
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();

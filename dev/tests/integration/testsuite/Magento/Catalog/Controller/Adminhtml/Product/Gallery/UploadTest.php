@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Filesystem\DirectoryList;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\TestFramework\TestCase\AbstractBackendController;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Provide tests for admin product upload image action.
@@ -24,12 +25,12 @@ use Magento\TestFramework\TestCase\AbstractBackendController;
 class UploadTest extends AbstractBackendController
 {
     /**
-     * @inheritdoc
+     * @var string
      */
     protected $resource = 'Magento_Catalog::products';
 
     /**
-     * @inheritdoc
+     * @var string
      */
     protected $uri = 'backend/catalog/product_gallery/upload';
 
@@ -69,12 +70,12 @@ class UploadTest extends AbstractBackendController
     /**
      * Test upload image on admin product page.
      *
-     * @dataProvider uploadActionDataProvider
      * @magentoDbIsolation enabled
      * @param array $file
      * @param array $expectation
      * @return void
      */
+    #[DataProvider('uploadActionDataProvider')]
     public function testUploadAction(array $file, array $expectation): void
     {
         $this->copyFileToSysTmpDir($file);
@@ -87,15 +88,15 @@ class UploadTest extends AbstractBackendController
         $this->assertEquals($jsonBody['url'], $expectation['url']);
         $this->assertArrayNotHasKey('error', $jsonBody);
         $this->assertArrayNotHasKey('errorcode', $jsonBody);
-        $this->assertFileExists(
+        $this->assertTrue($this->mediaDirectory->isExist(
             $this->getFileAbsolutePath($expectation['tmp_media_path'])
-        );
+        ));
     }
 
     /**
      * @return array
      */
-    public function uploadActionDataProvider(): array
+    public static function uploadActionDataProvider(): array
     {
         return [
             'upload_image_with_type_jpg' => [
@@ -108,7 +109,7 @@ class UploadTest extends AbstractBackendController
                     'name' => 'magento_image.jpg',
                     'type' => 'image/jpeg',
                     'file' => '/m/a/magento_image.jpg.tmp',
-                    'url' => 'http://localhost/pub/media/tmp/catalog/product/m/a/magento_image.jpg',
+                    'url' => 'http://localhost/media/tmp/catalog/product/m/a/magento_image.jpg',
                     'tmp_media_path' => '/m/a/magento_image.jpg',
                 ],
             ],
@@ -122,7 +123,7 @@ class UploadTest extends AbstractBackendController
                     'name' => 'product_image.png',
                     'type' => 'image/png',
                     'file' => '/p/r/product_image.png.tmp',
-                    'url' => 'http://localhost/pub/media/tmp/catalog/product/p/r/product_image.png',
+                    'url' => 'http://localhost/media/tmp/catalog/product/p/r/product_image.png',
                     'tmp_media_path' => '/p/r/product_image.png',
                 ],
             ],
@@ -136,7 +137,7 @@ class UploadTest extends AbstractBackendController
                     'name' => 'magento_image.gif',
                     'type' => 'image/gif',
                     'file' => '/m/a/magento_image.gif.tmp',
-                    'url' => 'http://localhost/pub/media/tmp/catalog/product/m/a/magento_image.gif',
+                    'url' => 'http://localhost/media/tmp/catalog/product/m/a/magento_image.gif',
                     'tmp_media_path' => '/m/a/magento_image.gif',
                 ],
             ],
@@ -146,12 +147,12 @@ class UploadTest extends AbstractBackendController
     /**
      * Test upload image on admin product page.
      *
-     * @dataProvider uploadActionWithErrorsDataProvider
      * @magentoDbIsolation enabled
      * @param array $file
      * @param array $expectation
      * @return void
      */
+    #[DataProvider('uploadActionWithErrorsDataProvider')]
     public function testUploadActionWithErrors(array $file, array $expectation): void
     {
         if (!empty($file['create_file'])) {
@@ -176,7 +177,7 @@ class UploadTest extends AbstractBackendController
     /**
      * @return array
      */
-    public function uploadActionWithErrorsDataProvider(): array
+    public static function uploadActionWithErrorsDataProvider(): array
     {
         return [
             'upload_image_with_invalid_type' => [
@@ -198,7 +199,7 @@ class UploadTest extends AbstractBackendController
                     'current_path' => '/../../../../_files',
                 ],
                 'expectation' => [
-                    'message' => 'Wrong file size.',
+                    'message' => 'Something went wrong while saving the file(s).',
                     'errorcode' => 0,
                     'tmp_media_path' => '/m/a/magento_empty.jpg',
                 ],
@@ -206,10 +207,23 @@ class UploadTest extends AbstractBackendController
             'upload_without_image' => [
                 'file' => [],
                 'expectation' => [
-                    'message' => '$_FILES array is empty',
+                    'message' => 'Something went wrong while saving the file(s).',
                     'errorcode' => 0,
                 ],
             ],
+            'upload_wrong_png' => [
+                'file' => [
+                    'copy_file' => true,
+                    'name' => 'magento_wrong.png',
+                    'type' => 'image/png',
+                    'current_path' => '/../../../../_files',
+                ],
+                'expectation' => [
+                    'message' => 'Something went wrong while saving the file(s).',
+                    'errorcode' => 0,
+                    'tmp_media_path' => '/m/w/magento_wrong.png',
+                ],
+            ]
         ];
     }
 

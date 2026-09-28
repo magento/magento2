@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCreateCustomConditionInCartPriceRuleActionGroup">
+        <annotations>
+            <description>Create custom condition in cart price rule page.</description>
+        </annotations>
+        <arguments>
+            <argument name="condition" type="string" defaultValue="Product attribute combination"/>
+            <argument name="productAttribute" type="string" defaultValue="Category"/>
+            <argument name="categoryId" type="string" defaultValue="$$createFirstCategory.id$$"/>
+        </arguments>
+        <scrollTo selector="{{AdminCartPriceRulesFormSection.conditionsHeader}}" stepKey="scrollToConditionsHeader"/>
+        <conditionalClick selector="{{AdminCartPriceRulesFormSection.conditionsHeader}}" dependentSelector="{{AdminCartPriceRulesFormSection.conditionsHeader}}" visible="true" stepKey="clickToExpandConditions"/>
+        <click selector="{{AdminCartPriceRulesFormSection.addNewCondition('1')}}" stepKey="clickOnAddNewCondition"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.conditionSelectDropdown('1')}}" userInput="{{condition}}" stepKey="selectProductAttributeCombination"/>
+        <waitForPageLoad stepKey="waitForConditionLoad"/>
+        <waitForElementClickable selector="{{AdminCartPriceRulesFormSection.addNewCondition('1--1')}}" stepKey="waitForAddNewConditionToBeClickable"/>
+        <click selector="{{AdminCartPriceRulesFormSection.addNewCondition('1--1')}}" stepKey="clickOnTheAddNewCondition"/>
+        <waitForPageLoad stepKey="waitForToggleLoad"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.conditionSelectDropdown('1--1')}}" userInput="{{productAttribute}}" stepKey="selectCategory"/>
+        <waitForElementClickable selector="{{AdminCartPriceRulesFormSection.targetEllipsis}}" stepKey="waitForEllipsis"/>
+        <click selector="{{AdminCartPriceRulesFormSection.targetEllipsis}}" stepKey="clickOnEllipsis"/>
+        <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.ruleFieldByIndex('1--1--1')}}" stepKey="waitForCategoryToBeVisible"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.ruleFieldByIndex('1--1--1')}}" userInput="{{categoryId}}" stepKey="fillCategoryId"/>
+    </actionGroup>
+</actionGroups>

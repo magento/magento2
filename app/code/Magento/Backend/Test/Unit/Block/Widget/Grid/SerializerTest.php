@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -22,9 +22,9 @@ class SerializerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_layoutMock = $this->getMockBuilder(
+        $this->_layoutMock = $this->createMock(
             LayoutInterface::class
-        )->getMockForAbstractClass();
+        );
     }
 
     public function testPrepareLayout()

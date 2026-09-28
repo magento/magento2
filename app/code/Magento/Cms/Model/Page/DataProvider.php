@@ -1,28 +1,27 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Cms\Model\Page;
 
-use Magento\Cms\Model\Page;
+use Magento\Cms\Api\Data\PageInterface;
+use Magento\Cms\Model\Page\Service\PageService;
 use Magento\Cms\Model\ResourceModel\Page\CollectionFactory;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\App\RequestInterface;
-use Magento\Ui\DataProvider\Modifier\PoolInterface;
 use Magento\Framework\AuthorizationInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Ui\DataProvider\Modifier\PoolInterface;
+use Magento\Ui\DataProvider\ModifierPoolDataProvider;
+use Psr\Log\LoggerInterface;
 
 /**
- * Class DataProvider
+ * Cms Page DataProvider
  */
-class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
+class DataProvider extends ModifierPoolDataProvider
 {
-    /**
-     * @var \Magento\Cms\Model\ResourceModel\Page\Collection
-     */
-    protected $collection;
-
     /**
      * @var DataPersistorInterface
      */
@@ -44,14 +43,14 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
     private $request;
 
     /**
-     * @var CustomLayoutManagerInterface
+     * @var PageService
      */
-    private $customLayoutManager;
+    private $pageService;
 
     /**
-     * @var CollectionFactory
+     * @var LoggerInterface
      */
-    private $collectionFactory;
+    private $logger;
 
     /**
      * @param string $name
@@ -64,7 +63,8 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
      * @param PoolInterface|null $pool
      * @param AuthorizationInterface|null $auth
      * @param RequestInterface|null $request
-     * @param CustomLayoutManagerInterface|null $customLayoutManager
+     * @param PageService|null $pageService
+     * @param LoggerInterface|null $logger
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -75,36 +75,20 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
         DataPersistorInterface $dataPersistor,
         array $meta = [],
         array $data = [],
-        PoolInterface $pool = null,
+        ?PoolInterface $pool = null,
         ?AuthorizationInterface $auth = null,
         ?RequestInterface $request = null,
-        ?CustomLayoutManagerInterface $customLayoutManager = null
+        ?PageService $pageService = null,
+        ?LoggerInterface $logger = null
     ) {
-        $this->collection = $pageCollectionFactory->create();
-        $this->collectionFactory = $pageCollectionFactory;
-        $this->dataPersistor = $dataPersistor;
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data, $pool);
+        $this->collection = $pageCollectionFactory->create();
+        $this->dataPersistor = $dataPersistor;
         $this->auth = $auth ?? ObjectManager::getInstance()->get(AuthorizationInterface::class);
         $this->meta = $this->prepareMeta($this->meta);
         $this->request = $request ?? ObjectManager::getInstance()->get(RequestInterface::class);
-        $this->customLayoutManager = $customLayoutManager
-            ?? ObjectManager::getInstance()->get(CustomLayoutManagerInterface::class);
-    }
-
-    /**
-     * Find requested page.
-     *
-     * @return Page|null
-     */
-    private function findCurrentPage(): ?Page
-    {
-        if ($this->getRequestFieldName() && ($pageId = (int)$this->request->getParam($this->getRequestFieldName()))) {
-            //Loading data for the collection.
-            $this->getData();
-            return $this->collection->getItemById($pageId);
-        }
-
-        return null;
+        $this->pageService = $pageService ?: ObjectManager::getInstance()->get(PageService::class);
+        $this->logger = $logger ?: ObjectManager::getInstance()->get(LoggerInterface::class);
     }
 
     /**
@@ -128,29 +112,48 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
         if (isset($this->loadedData)) {
             return $this->loadedData;
         }
-        $this->collection = $this->collectionFactory->create();
-        $items = $this->collection->getItems();
-        /** @var $page \Magento\Cms\Model\Page */
-        foreach ($items as $page) {
-            $this->loadedData[$page->getId()] = $page->getData();
-            if ($page->getCustomLayoutUpdateXml() || $page->getLayoutUpdateXml()) {
-                //Deprecated layout update exists.
-                $this->loadedData[$page->getId()]['layout_update_selected'] = '_existing_';
-            }
-        }
 
-        $data = $this->dataPersistor->get('cms_page');
-        if (!empty($data)) {
-            $page = $this->collection->getNewEmptyItem();
-            $page->setData($data);
-            $this->loadedData[$page->getId()] = $page->getData();
-            if ($page->getCustomLayoutUpdateXml() || $page->getLayoutUpdateXml()) {
-                $this->loadedData[$page->getId()]['layout_update_selected'] = '_existing_';
-            }
-            $this->dataPersistor->clear('cms_page');
+        $page = $this->getCurrentPage();
+        $pageId = $page->getId() ?? '';
+        $this->loadedData[$pageId] = $page->getData();
+        if ($page->getCustomLayoutUpdateXml() || $page->getLayoutUpdateXml()) {
+            //Deprecated layout update exists.
+            $this->loadedData[$pageId]['layout_update_selected'] = '_existing_';
         }
 
         return $this->loadedData;
+    }
+
+    /**
+     * Return current page
+     *
+     * @return PageInterface
+     */
+    private function getCurrentPage(): PageInterface
+    {
+        $pageId = $this->getPageId();
+        if ($pageId) {
+            return $this->pageService->getPageById($pageId);
+        }
+
+        $data = $this->dataPersistor->get('cms_page');
+        if (empty($data)) {
+            return $this->pageService->createPageFactory();
+        }
+        $this->dataPersistor->clear('cms_page');
+
+        return $this->pageService->createPageFactory()
+            ->setData($data);
+    }
+
+    /**
+     * Returns current page id from request
+     *
+     * @return int
+     */
+    private function getPageId(): int
+    {
+        return (int) $this->request->getParam($this->getRequestFieldName());
     }
 
     /**
@@ -186,16 +189,23 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
 
         //List of custom layout files available for current page.
         $options = [['label' => 'No update', 'value' => '_no_update_']];
-        if ($page = $this->findCurrentPage()) {
-            //We must have a specific page selected.
-            //If custom layout XML is set then displaying this special option.
-            if ($page->getCustomLayoutUpdateXml() || $page->getLayoutUpdateXml()) {
-                $options[] = ['label' => 'Use existing layout update XML', 'value' => '_existing_'];
+
+        $page = null;
+        try {
+            $pageId = $this->getPageId();
+            if ($pageId) {
+                $page = $this->pageService->getPageById($pageId);
+                if ($page->getCustomLayoutUpdateXml() || $page->getLayoutUpdateXml()) {
+                    $options[] = ['label' => 'Use existing layout update XML', 'value' => '_existing_'];
+                }
+                foreach ($this->pageService->fetchAvailableCustomLayouts($page) as $layoutFile) {
+                    $options[] = ['label' => $layoutFile, 'value' => $layoutFile];
+                }
             }
-            foreach ($this->customLayoutManager->fetchAvailableFiles($page) as $layoutFile) {
-                $options[] = ['label' => $layoutFile, 'value' => $layoutFile];
-            }
+        } catch (LocalizedException $e) {
+            $this->logger->error($e->getMessage());
         }
+
         $customLayoutMeta = [
             'design' => [
                 'children' => [

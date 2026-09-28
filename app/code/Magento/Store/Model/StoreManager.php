@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Store\Model;
 
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Cache\CacheConstants;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Store\Api\StoreResolverInterface;
 use Magento\Store\Model\ResourceModel\StoreWebsiteRelation;
 
@@ -17,22 +18,23 @@ use Magento\Store\Model\ResourceModel\StoreWebsiteRelation;
  */
 class StoreManager implements
     \Magento\Store\Model\StoreManagerInterface,
-    \Magento\Store\Api\StoreWebsiteRelationInterface
+    \Magento\Store\Api\StoreWebsiteRelationInterface,
+    ResetAfterRequestInterface
 {
     /**
      * Application run code
      */
-    const PARAM_RUN_CODE = 'MAGE_RUN_CODE';
+    public const PARAM_RUN_CODE = 'MAGE_RUN_CODE';
 
     /**
      * Application run type (store|website)
      */
-    const PARAM_RUN_TYPE = 'MAGE_RUN_TYPE';
+    public const PARAM_RUN_TYPE = 'MAGE_RUN_TYPE';
 
     /**
      * Whether single store mode enabled or not
      */
-    const XML_PATH_SINGLE_STORE_MODE_ENABLED = 'general/single_store_mode/enabled';
+    public const XML_PATH_SINGLE_STORE_MODE_ENABLED = 'general/single_store_mode/enabled';
 
     /**
      * @var \Magento\Store\Api\StoreRepositoryInterface
@@ -50,8 +52,6 @@ class StoreManager implements
     protected $websiteRepository;
 
     /**
-     * Scope config
-     *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $scopeConfig;
@@ -74,9 +74,9 @@ class StoreManager implements
     protected $currentStoreId = null;
 
     /**
-     * Flag that shows that system has only one store view
+     * Flag that shows that system has only one store view; null is used as the cache sentinel.
      *
-     * @var bool
+     * @var bool|null
      */
     protected $_hasSingleStore;
 
@@ -137,8 +137,11 @@ class StoreManager implements
      */
     public function hasSingleStore()
     {
-        // TODO: MAGETWO-39902 add cache, move value to consts
-        return $this->isSingleStoreAllowed && count($this->getStores(true)) < 3;
+        if ($this->_hasSingleStore === null) {
+            $this->_hasSingleStore = $this->isSingleStoreAllowed && count($this->getStores(true)) < 3;
+        }
+
+        return $this->_hasSingleStore;
     }
 
     /**
@@ -237,7 +240,11 @@ class StoreManager implements
     public function reinitStores()
     {
         $this->currentStoreId = null;
-        $this->cache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, [StoreResolver::CACHE_TAG, Store::CACHE_TAG]);
+        $this->_hasSingleStore = null;
+        $this->cache->clean(
+            CacheConstants::CLEANING_MODE_MATCHING_ANY_TAG,
+            [StoreResolver::CACHE_TAG, Store::CACHE_TAG, Website::CACHE_TAG, Group::CACHE_TAG]
+        );
         $this->scopeConfig->clean();
         $this->storeRepository->clean();
         $this->websiteRepository->clean();
@@ -304,6 +311,7 @@ class StoreManager implements
      * Get Store Website Relation
      *
      * @deprecated 100.2.0
+     * @see Nothing
      * @return StoreWebsiteRelation
      */
     private function getStoreWebsiteRelation()
@@ -317,5 +325,25 @@ class StoreManager implements
     public function getStoreByWebsiteId($websiteId)
     {
         return $this->getStoreWebsiteRelation()->getStoreByWebsiteId($websiteId);
+    }
+
+    /**
+     * Disable show internals with var_dump
+     *
+     * @see https://www.php.net/manual/en/language.oop5.magic.php#object.debuginfo
+     * @return array
+     */
+    public function __debugInfo()
+    {
+        return ['currentStoreId' => $this->currentStoreId];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->currentStoreId = null;
+        $this->_hasSingleStore = null;
     }
 }

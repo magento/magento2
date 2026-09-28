@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 /* eslint-disable max-nested-callbacks */
@@ -64,7 +64,7 @@ define([
                     .toHaveBeenCalledWith(jasmine.any(Object), node);
 
                 done();
-            }, preset.timeout);
+            }, 100);
         });
     });
 });

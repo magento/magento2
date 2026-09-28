@@ -2,8 +2,8 @@
 /**
  * Test JSON Renderer for REST.
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -26,7 +26,7 @@ class JsonTest extends TestCase
         /** Prepare mocks and objects for SUT constructor. */
         $this->encoderMock = $this->getMockBuilder(Encoder::class)
             ->disableOriginalConstructor()
-            ->setMethods(['encode'])
+            ->onlyMethods(['encode'])
             ->getMock();
         /** Initialize SUT. */
         $this->_restJsonRenderer = new Json($this->encoderMock);

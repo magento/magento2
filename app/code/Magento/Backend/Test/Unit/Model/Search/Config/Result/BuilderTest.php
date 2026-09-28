@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -41,9 +41,9 @@ class BuilderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
-        $this->structureElementMock = $this->getMockForAbstractClass(StructureElementInterface::class);
-        $this->structureElementUrlParamsBuilderMock = $this->getMockForAbstractClass(ElementBuilderInterface::class);
+        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
+        $this->structureElementMock = $this->createMock(StructureElementInterface::class);
+        $this->structureElementUrlParamsBuilderMock = $this->createMock(ElementBuilderInterface::class);
         $this->model = new Builder($this->urlBuilderMock, ['section' => $this->structureElementUrlParamsBuilderMock]);
     }
 

@@ -1,15 +1,15 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Tax\Controller\Adminhtml\Rate;
 
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 
-class Delete extends \Magento\Tax\Controller\Adminhtml\Rate
+class Delete extends \Magento\Tax\Controller\Adminhtml\Rate implements HttpPostActionInterface
 {
     /**
      * Delete Rate and Data

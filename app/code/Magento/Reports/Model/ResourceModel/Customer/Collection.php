@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Reports\Model\ResourceModel\Customer;
@@ -108,7 +108,7 @@ class Collection extends \Magento\Customer\Model\ResourceModel\Customer\Collecti
         \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         \Magento\Quote\Model\ResourceModel\Quote\Item\CollectionFactory $quoteItemFactory,
         \Magento\Sales\Model\ResourceModel\Order\Collection $orderResource,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
+        ?\Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         $modelName = self::CUSTOMER_MODEL_NAME
     ) {
         parent::__construct(
@@ -213,7 +213,8 @@ class Collection extends \Magento\Customer\Model\ResourceModel\Customer\Collecti
                 \Magento\Sales\Model\Order::STATE_CANCELED
             )->where(
                 'orders.customer_id IN(?)',
-                $customerIds
+                $customerIds,
+                \Zend_Db::INT_TYPE
             )->group(
                 'orders.customer_id'
             );

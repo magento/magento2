@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,14 +12,15 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Indexer\StateInterface;
 use Magento\Indexer\Block\Backend\Grid\Column\Renderer\Status;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class StatusTest extends TestCase
 {
     /**
      * @param array $indexValues
      * @param string $expectedResult
-     * @dataProvider renderDataProvider
      */
+    #[DataProvider('renderDataProvider')]
     public function testRender($indexValues, $expectedResult)
     {
         $context = $this->getMockBuilder(Context::class)
@@ -44,7 +45,7 @@ class StatusTest extends TestCase
     /**
      * @return array
      */
-    public function renderDataProvider()
+    public static function renderDataProvider()
     {
         return [
             'set1' => [

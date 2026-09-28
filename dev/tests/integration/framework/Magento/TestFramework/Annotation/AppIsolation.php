@@ -1,14 +1,22 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
- */
-
-/**
- * Implementation of the @magentoAppIsolation DocBlock annotation - isolation of global application objects in memory
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\TestFramework\Annotation;
 
+use Magento\Framework\Exception\LocalizedException;
+use Magento\TestFramework\Application;
+use Magento\TestFramework\Fixture\ParserInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\TestCase\AbstractController;
+use PHPUnit\Framework\TestCase;
+
+/**
+ * Implementation of the @magentoAppIsolation DocBlock annotation - isolation of global application objects in memory
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class AppIsolation
 {
     /**
@@ -16,12 +24,12 @@ class AppIsolation
      *
      * @var bool
      */
-    private $_hasNonIsolatedTests = true;
+    private $hasNonIsolatedTests = true;
 
     /**
-     * @var \Magento\TestFramework\Application
+     * @var Application
      */
-    private $_application;
+    private $application;
 
     /**
      * @var array
@@ -31,11 +39,11 @@ class AppIsolation
     /**
      * Constructor
      *
-     * @param \Magento\TestFramework\Application $application
+     * @param Application $application
      */
-    public function __construct(\Magento\TestFramework\Application $application)
+    public function __construct(Application $application)
     {
-        $this->_application = $application;
+        $this->application = $application;
     }
 
     /**
@@ -43,12 +51,19 @@ class AppIsolation
      */
     protected function _isolateApp()
     {
-        if ($this->_hasNonIsolatedTests) {
-            $this->_application->reinitialize();
+        if ($this->hasNonIsolatedTests) {
+            // Clear fixture resolver state before app reinitialization
+            try {
+                $resolver = \Magento\TestFramework\Workaround\Override\Fixture\Resolver::getInstance();
+                $resolver->setCurrentTest(null);
+            } catch (\RuntimeException $e) {
+                // Resolver not initialized yet, ignore
+            }
+            $this->application->reinitialize();
             $_SESSION = [];
             $_COOKIE = [];
             session_write_close();
-            $this->_hasNonIsolatedTests = false;
+            $this->hasNonIsolatedTests = false;
         }
     }
 
@@ -72,31 +87,62 @@ class AppIsolation
     /**
      * Handler for 'endTest' event
      *
-     * @param \PHPUnit\Framework\TestCase $test
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @param TestCase $test
+     * @throws LocalizedException
      */
-    public function endTest(\PHPUnit\Framework\TestCase $test)
+    public function endTest(TestCase $test)
     {
-        $this->_hasNonIsolatedTests = true;
-
-        /* Determine an isolation from doc comment */
-        $annotations = $test->getAnnotations();
-        $annotations = array_replace((array) $annotations['class'], (array) $annotations['method']);
-        if (isset($annotations['magentoAppIsolation'])) {
-            $isolation = $annotations['magentoAppIsolation'];
-            if ($isolation !== ['enabled'] && $isolation !== ['disabled']) {
-                throw new \Magento\Framework\Exception\LocalizedException(
-                    __('Invalid "@magentoAppIsolation" annotation, can be "enabled" or "disabled" only.')
-                );
-            }
-            $isIsolationEnabled = $isolation === ['enabled'];
+        $this->hasNonIsolatedTests = true;
+        $values = [];
+        try {
+            $values = $this->parse($test);
+        } catch (\Throwable $exception) {
+            ExceptionHandler::handle(
+                'Unable to parse annotations',
+                $exception,
+                $test
+            );
+        }
+        if ($values) {
+            $isIsolationEnabled = $values[0]['enabled'];
         } else {
             /* Controller tests should be isolated by default */
-            $isIsolationEnabled = $test instanceof \Magento\TestFramework\TestCase\AbstractController;
+            $isIsolationEnabled = $test instanceof AbstractController;
         }
 
         if ($isIsolationEnabled) {
             $this->_isolateApp();
         }
+    }
+
+    /**
+     * Returns AppIsolation fixtures configuration
+     *
+     * @param TestCase $test
+     * @return array
+     * @throws LocalizedException
+     */
+    private function parse(TestCase $test): array
+    {
+        $objectManager = Bootstrap::getObjectManager();
+        $parsers = $objectManager
+            ->create(
+                \Magento\TestFramework\Annotation\Parser\Composite::class,
+                [
+                    'parsers' => [
+                        $objectManager->get(\Magento\TestFramework\Annotation\Parser\AppIsolation::class),
+                        $objectManager->get(\Magento\TestFramework\Fixture\Parser\AppIsolation::class)
+                    ]
+                ]
+            );
+        $values = $parsers->parse($test, ParserInterface::SCOPE_METHOD)
+            ?: $parsers->parse($test, ParserInterface::SCOPE_CLASS);
+
+        if (count($values) > 1) {
+            throw new LocalizedException(
+                __('Only one "@magentoAppIsolation" annotation is allowed per test')
+            );
+        }
+        return $values;
     }
 }

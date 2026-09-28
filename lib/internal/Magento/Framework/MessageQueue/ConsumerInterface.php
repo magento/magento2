@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\MessageQueue;
 
@@ -9,6 +9,8 @@ namespace Magento\Framework\MessageQueue;
  * Consumers will connect to a queue, read messages, and invoke a method to process the message contents.
  *
  * @api
+ * @since 103.0.0
+ * @since 100.0.2
  */
 interface ConsumerInterface
 {
@@ -18,6 +20,7 @@ interface ConsumerInterface
      * @param int|null $maxNumberOfMessages if not specified - process all queued incoming messages and terminate,
      *      otherwise terminate execution after processing the specified number of messages
      * @return void
+     * @since 103.0.0
      */
     public function process($maxNumberOfMessages = null);
 }

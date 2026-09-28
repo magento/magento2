@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Theme\Model\Theme\Image;
@@ -17,11 +17,9 @@ class Path implements \Magento\Framework\View\Design\Theme\Image\PathInterface
     /**
      * Default theme preview image
      */
-    const DEFAULT_PREVIEW_IMAGE = 'Magento_Theme::theme/default_preview.jpg';
+    public const DEFAULT_PREVIEW_IMAGE = 'Magento_Theme::theme/default_preview.jpg';
 
     /**
-     * Media Directory
-     *
      * @var \Magento\Framework\Filesystem\Directory\ReadInterface
      */
     protected $mediaDirectory;
@@ -103,6 +101,6 @@ class Path implements \Magento\Framework\View\Design\Theme\Image\PathInterface
      */
     public function getTemporaryDirectory()
     {
-        return $this->mediaDirectory->getRelativePath('/theme/origin');
+        return $this->mediaDirectory->getAbsolutePath('theme/origin');
     }
 }

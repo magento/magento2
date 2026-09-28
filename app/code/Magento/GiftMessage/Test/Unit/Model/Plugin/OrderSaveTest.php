@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\GiftMessage\Test\Unit\Model\Plugin;
 
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\GiftMessage\Api\Data\MessageInterface;
 use Magento\GiftMessage\Api\OrderItemRepositoryInterface;
 use Magento\GiftMessage\Api\OrderRepositoryInterface;
@@ -15,11 +16,14 @@ use Magento\Sales\Api\Data\OrderExtension;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderItemExtension;
 use Magento\Sales\Api\Data\OrderItemInterface;
+use Magento\Sales\Api\OrderRepositoryInterface as SalesOrderRepositoryInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class OrderSaveTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var OrderSave
      */
@@ -76,20 +80,16 @@ class OrderSaveTest extends TestCase
         $this->orderMock = $this->createMock(
             OrderInterface::class
         );
-        $this->orderExtensionMock = $this->getMockBuilder(OrderExtension::class)
-            ->addMethods(['getGiftMessage', 'setGiftMessage'])
-            ->getMock();
+        $this->orderExtensionMock = $this->getOrderExtensionMock();
         $this->giftMessageMock = $this->createMock(
             MessageInterface::class
         );
         $this->orderItemMock = $this->createMock(
             OrderItemInterface::class
         );
-        $this->orderItemExtensionMock = $this->getMockBuilder(OrderItemExtension::class)
-            ->addMethods(['setGiftMessage', 'getGiftMessage'])
-            ->getMock();
+        $this->orderItemExtensionMock = $this->getOrderItemExtensionMock();
         $this->orderRepositoryMock = $this->createMock(
-            \Magento\Sales\Api\OrderRepositoryInterface::class
+            SalesOrderRepositoryInterface::class
         );
 
         $this->plugin = new OrderSave(
@@ -191,5 +191,31 @@ class OrderSaveTest extends TestCase
             ->with($orderId, $orderItemId, $this->giftMessageMock)
             ->willThrowException(new \Exception('Test message'));
         $this->plugin->afterSave($this->orderRepositoryMock, $this->orderMock);
+    }
+
+    /**
+     * Build order extension mock.
+     *
+     * @return MockObject
+     */
+    private function getOrderExtensionMock(): MockObject
+    {
+        return $this->createPartialMockWithReflection(
+            OrderExtension::class,
+            ['getGiftMessage', 'setGiftMessage']
+        );
+    }
+
+    /**
+     * Build order item extension mock.
+     *
+     * @return MockObject
+     */
+    private function getOrderItemExtensionMock(): MockObject
+    {
+        return $this->createPartialMockWithReflection(
+            OrderItemExtension::class,
+            ['getGiftMessage', 'setGiftMessage']
+        );
     }
 }

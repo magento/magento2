@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,12 +12,13 @@ use Magento\Framework\GraphQl\Query\Resolver\BatchServiceContractResolverInterfa
 use Magento\Framework\GraphQl\Query\Resolver\ResolveRequest;
 use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Default logic to make batch contract resolvers work.
  */
-class BatchContractResolverWrapper implements ResolverInterface
+class BatchContractResolverWrapper implements ResolverInterface, ResetAfterRequestInterface
 {
     /**
      * @var BatchServiceContractResolverInterface
@@ -142,7 +143,7 @@ class BatchContractResolverWrapper implements ResolverInterface
     /**
      * @inheritDoc
      */
-    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
+    public function resolve(Field $field, $context, ResolveInfo $info, ?array $value = null, ?array $args = null)
     {
         if ($this->result !== null) {
             $this->clearAggregated();
@@ -159,5 +160,13 @@ class BatchContractResolverWrapper implements ResolverInterface
                 return $this->getResolvedFor($i);
             }
         );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->clearAggregated();
     }
 }

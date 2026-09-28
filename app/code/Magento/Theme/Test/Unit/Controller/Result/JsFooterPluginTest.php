@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,13 +15,14 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Theme\Controller\Result\JsFooterPlugin;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Unit test for Magento\Theme\Test\Unit\Controller\Result\JsFooterPlugin.
  */
 class JsFooterPluginTest extends TestCase
 {
-    const STUB_XML_PATH_DEV_MOVE_JS_TO_BOTTOM = 'dev/js/move_script_to_bottom';
+    private const STUB_XML_PATH_DEV_MOVE_JS_TO_BOTTOM = 'dev/js/move_script_to_bottom';
 
     /** @var JsFooterPlugin */
     private $plugin;
@@ -40,10 +41,7 @@ class JsFooterPluginTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->setMethods(['isSetFlag'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
 
         $this->httpMock = $this->createMock(Http::class);
         $this->layoutMock = $this->createMock(Layout::class);
@@ -62,7 +60,7 @@ class JsFooterPluginTest extends TestCase
      *
      * @return array
      */
-    public function renderResultDataProvider(): array
+    public static function renderResultDataProvider(): array
     {
         return [
             'content_with_script_tag' => [
@@ -70,7 +68,7 @@ class JsFooterPluginTest extends TestCase
                     "<script type=\"text/x-magento-init\">test</script>" .
                     "<script type=\"text/x-magento-template\">test</script>" .
                     "<p>Test Content</p></body>",
-                "flag" => true,
+                "isSetFlag" => true,
                 "result" => "<body><h1>Test Title</h1>" .
                     "<script type=\"text/x-magento-template\">test</script>" .
                     "<p>Test Content</p>\n" .
@@ -79,12 +77,12 @@ class JsFooterPluginTest extends TestCase
             ],
             'content_with_config_disable' => [
                 "content" => "<body><p>Test Content</p></body>",
-                "flag" => false,
+                "isSetFlag" => false,
                 "result" => "<body><p>Test Content</p></body>"
             ],
             'content_without_script_tag' => [
                 "content" => "<body><p>Test Content</p></body>",
-                "flag" => true,
+                "isSetFlag" => true,
                 "result" => "<body><p>Test Content</p>\n</body>"
             ]
         ];
@@ -97,8 +95,8 @@ class JsFooterPluginTest extends TestCase
      * @param bool $isSetFlag
      * @param string $result
      * @return void
-     * @dataProvider renderResultDataProvider
      */
+    #[DataProvider('renderResultDataProvider')]
     public function testAfterRenderResult($content, $isSetFlag, $result): void
     {
         // Given (context)
@@ -123,7 +121,7 @@ class JsFooterPluginTest extends TestCase
      *
      * @return array
      */
-    public function ifGetContentIsNotAStringDataProvider(): array
+    public static function ifGetContentIsNotAStringDataProvider(): array
     {
         return [
             'null' => [
@@ -137,8 +135,8 @@ class JsFooterPluginTest extends TestCase
      *
      * @param string $content
      * @return void
-     * @dataProvider ifGetContentIsNotAStringDataProvider
      */
+    #[DataProvider('ifGetContentIsNotAStringDataProvider')]
     public function testAfterRenderResultIfGetContentIsNotAString($content): void
     {
         $this->scopeConfigMock->method('isSetFlag')

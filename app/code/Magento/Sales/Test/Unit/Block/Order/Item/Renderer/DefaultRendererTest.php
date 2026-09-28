@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,9 +16,12 @@ use Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer;
 use Magento\Sales\Model\Order\Item as OrderItem;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class DefaultRendererTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var MockObject|DefaultRenderer
      */
@@ -51,7 +54,7 @@ class DefaultRendererTest extends TestCase
 
         $this->layoutMock = $this->getMockBuilder(Layout::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getBlock'])
+            ->onlyMethods(['getBlock'])
             ->getMock();
 
         $this->block = $this->objectManager->getObject(
@@ -64,10 +67,10 @@ class DefaultRendererTest extends TestCase
             ]
         );
 
-        $this->priceRenderBlock = $this->getMockBuilder(Template::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setItem', 'toHtml'])
-            ->getMock();
+        $this->priceRenderBlock = $this->createPartialMockWithReflection(
+            Template::class,
+            ['setItem', 'toHtml']
+        );
 
         $itemMockMethods = [
             'getRowTotal',
@@ -78,7 +81,7 @@ class DefaultRendererTest extends TestCase
         ];
         $this->itemMock = $this->getMockBuilder(OrderItem::class)
             ->disableOriginalConstructor()
-            ->setMethods($itemMockMethods)
+            ->onlyMethods($itemMockMethods)
             ->getMock();
     }
 

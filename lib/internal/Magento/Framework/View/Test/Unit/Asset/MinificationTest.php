@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Framework\View\Asset\Minification;
 use Magento\Store\Model\ScopeInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Unit test for Magento\Framework\View\Asset\Minification
@@ -39,9 +40,7 @@ class MinificationTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->appStateMock = $this->getMockBuilder(State::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -62,10 +61,9 @@ class MinificationTest extends TestCase
     /**
      * @param bool $configFlag
      * @param string $appMode
-     * @param bool $result
-     * @dataProvider isEnabledDataProvider
-     * @return void
+     * @param bool $result     * @return void
      */
+    #[DataProvider('isEnabledDataProvider')]
     public function testIsAssetMinification($configFlag, $appMode, $result)
     {
         $contentType = 'content type';
@@ -88,7 +86,7 @@ class MinificationTest extends TestCase
     /**
      * @return array
      */
-    public function isEnabledDataProvider()
+    public static function isEnabledDataProvider()
     {
         return [
             [false, State::MODE_DEFAULT, false],
@@ -103,9 +101,8 @@ class MinificationTest extends TestCase
     /**
      * @param string $filename
      * @param bool $isEnabled
-     * @param string $expected
-     * @dataProvider addMinifiedSignDataProvider
-     */
+     * @param string $expected     */
+    #[DataProvider('addMinifiedSignDataProvider')]
     public function testAddMinifiedSign($filename, $isEnabled, $expected)
     {
         $this->scopeConfigMock
@@ -126,7 +123,7 @@ class MinificationTest extends TestCase
     /**
      * @return array
      */
-    public function addMinifiedSignDataProvider()
+    public static function addMinifiedSignDataProvider()
     {
         return [
             ['test.css', true, 'test.min.css'],
@@ -138,9 +135,8 @@ class MinificationTest extends TestCase
     /**
      * @param string $filename
      * @param bool $isEnabled
-     * @param string $expected
-     * @dataProvider removeMinifiedSignDataProvider
-     */
+     * @param string $expected     */
+    #[DataProvider('removeMinifiedSignDataProvider')]
     public function testRemoveMinifiedSign($filename, $isEnabled, $expected)
     {
         $this->scopeConfigMock
@@ -161,7 +157,7 @@ class MinificationTest extends TestCase
     /**
      * @return array
      */
-    public function removeMinifiedSignDataProvider()
+    public static function removeMinifiedSignDataProvider()
     {
         return [
             ['test.css', true, 'test.css'],
@@ -173,9 +169,8 @@ class MinificationTest extends TestCase
     /**
      * @param string $filename
      * @param bool $result
-     * @return void
-     * @dataProvider isMinifiedFilenameDataProvider
-     */
+     * @return void     */
+    #[DataProvider('isMinifiedFilenameDataProvider')]
     public function testIsMinifiedFilename($filename, $result)
     {
         $this->assertEquals(
@@ -187,7 +182,7 @@ class MinificationTest extends TestCase
     /**
      * @return array
      */
-    public function isMinifiedFilenameDataProvider()
+    public static function isMinifiedFilenameDataProvider()
     {
         return [
             ['test.min.css', true],
@@ -226,9 +221,8 @@ class MinificationTest extends TestCase
      * @param string $value
      * @param array $expectedValue
      * @return void
-     *
-     * @dataProvider getExcludesTinyMceAsStringDataProvider
-     */
+     *     */
+    #[DataProvider('getExcludesTinyMceAsStringDataProvider')]
     public function testGetExcludesTinyMceAsString(string $value, array $expectedValue)
     {
         $this->scopeConfigMock
@@ -245,7 +239,7 @@ class MinificationTest extends TestCase
     /**
      * @return array
      */
-    public function getExcludesTinyMceAsStringDataProvider()
+    public static function getExcludesTinyMceAsStringDataProvider()
     {
         return [
             ["/tiny_mce/  \n  /tiny_mce2/", ['/tiny_mce/', '/tiny_mce2/']],

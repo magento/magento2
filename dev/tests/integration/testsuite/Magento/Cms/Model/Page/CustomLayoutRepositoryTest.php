@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -21,6 +21,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Test the repository.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CustomLayoutRepositoryTest extends TestCase
 {
@@ -50,6 +52,12 @@ class CustomLayoutRepositoryTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
+        $objectManager->configure([
+            'preferences' => [
+                \Magento\Cms\Model\Page\CustomLayoutManagerInterface::class =>
+                    \Magento\TestFramework\Cms\Model\CustomLayoutManager::class
+            ]
+        ]);
         $this->fakeManager = $objectManager->get(CustomLayoutManager::class);
         $this->repo = $objectManager->create(CustomLayoutRepositoryInterface::class, ['manager' => $this->fakeManager]);
         $this->pageFactory = $objectManager->get(PageFactory::class);

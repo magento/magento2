@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Vault\Model\Ui\Adminhtml;
@@ -24,9 +24,9 @@ use Magento\Vault\Model\Ui\TokenUiComponentProviderInterface;
 use Magento\Vault\Model\VaultPaymentInterface;
 
 /**
- * Class ConfigProvider
- * @api
+ * Provide tokens config
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  *
  * @api
  * @since 100.1.0
@@ -113,6 +113,8 @@ class TokensConfigProvider
     }
 
     /**
+     * Get list of tokens components
+     *
      * @param string $vaultPaymentCode
      * @return TokenUiComponentInterface[]
      * @since 100.1.0
@@ -184,7 +186,30 @@ class TokensConfigProvider
                     ->create(),
                 ]
         );
+        $this->searchCriteriaBuilder->addFilters(
+            [
+                $this->filterBuilder->setField(PaymentTokenInterface::IS_VISIBLE)
+                    ->setValue(1)
+                    ->create(),
+            ]
+        );
 
+        //Load stored cards based on website id @see AC-2901
+        $websiteId = $this->storeManager->getWebsite()->getId();
+        $quote = $this->session->getQuote() ?? null;
+        if ($quote) {
+            $websiteId = $quote->getStore()->getWebsite()->getId();
+        }
+        $this->searchCriteriaBuilder->addFilters(
+            [
+                $this->filterBuilder->setField(PaymentTokenInterface::WEBSITE_ID)
+                    ->setValue($websiteId)
+                    ->create(),
+                $this->filterBuilder->setField(PaymentTokenInterface::WEBSITE_ID)
+                    ->setConditionType('null')
+                    ->create(),
+            ]
+        );
         $searchCriteria = $this->searchCriteriaBuilder->create();
 
         foreach ($this->paymentTokenRepository->getList($searchCriteria)->getItems() as $token) {
@@ -195,6 +220,8 @@ class TokensConfigProvider
     }
 
     /**
+     * Get component provider
+     *
      * @param string $vaultProviderCode
      * @return TokenUiComponentProviderInterface|null
      */
@@ -210,18 +237,20 @@ class TokensConfigProvider
 
     /**
      * Get active vault payment by code
+     *
      * @param string $vaultPaymentCode
      * @return VaultPaymentInterface|null
      */
     private function getVaultPayment($vaultPaymentCode)
     {
-        $storeId = $this->storeManager->getStore()->getId();
+        $storeId = $this->session->getStoreId() ?? $this->storeManager->getStore()->getId();
         $vaultPayment = $this->getPaymentDataHelper()->getMethodInstance($vaultPaymentCode);
         return $vaultPayment->isActive($storeId) ? $vaultPayment : null;
     }
 
     /**
      * Returns payment token entity id by order payment id
+     *
      * @return int|null
      */
     private function getPaymentTokenEntityId()
@@ -237,6 +266,7 @@ class TokensConfigProvider
      * Returns order payment entity id
      * Using 'getReordered' for Reorder action
      * Using 'getOrder' for Edit action
+     *
      * @return int
      */
     private function getOrderPaymentEntityId()
@@ -250,8 +280,10 @@ class TokensConfigProvider
 
     /**
      * Get payment data helper instance
+     *
      * @return Data
      * @deprecated 100.1.0
+     * @see MAGETWO-71174
      */
     private function getPaymentDataHelper()
     {
@@ -263,8 +295,10 @@ class TokensConfigProvider
 
     /**
      * Returns order repository instance
+     *
      * @return OrderRepositoryInterface
      * @deprecated 100.2.0
+     * @see MAGETWO-71174
      */
     private function getOrderRepository()
     {
@@ -278,8 +312,10 @@ class TokensConfigProvider
 
     /**
      * Returns payment token management instance
+     *
      * @return PaymentTokenManagementInterface
      * @deprecated 100.2.0
+     * @see MAGETWO-71174
      */
     private function getPaymentTokenManagement()
     {

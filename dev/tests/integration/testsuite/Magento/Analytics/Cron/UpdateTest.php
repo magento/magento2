@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
 
 namespace Magento\Analytics\Cron;
 
+use Laminas\Http\Response;
 use Magento\Analytics\Model\Config\Backend\Baseurl\SubscriptionUpdateHandler;
 use Magento\Analytics\Model\Connector\Http\Client\Curl as CurlClient;
 use Magento\Analytics\Model\Connector\Http\ClientInterface;
@@ -66,8 +67,7 @@ class UpdateTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->httpClient = $this->getMockBuilder(ClientInterface::class)
-            ->getMockForAbstractClass();
+        $this->httpClient = $this->createMock(ClientInterface::class);
         $this->objectManager->addSharedInstance($this->httpClient, CurlClient::class);
         $this->preparedValueFactory = $this->objectManager->get(PreparedValueFactory::class);
         $this->configValueResourceModel = $this->objectManager->get(ConfigDataResource::class);
@@ -209,16 +209,11 @@ class UpdateTest extends \PHPUnit\Framework\TestCase
      */
     private function mockRequestCall(int $responseCode, string $responseMessage): void
     {
-        $response = $this->objectManager->create(
-            \Zend_Http_Response::class,
-            [
-                'code' => $responseCode,
-                'headers' => [
-                    'Content-Type' => 'application/json'
-                ],
-                'body' => json_encode(['message' => $responseMessage])
-            ]
-        );
+        /** @var Response $response */
+        $response = $this->objectManager->create(Response::class);
+        $response->setStatusCode($responseCode);
+        $response->getHeaders()->addHeaderLine('Content-Type', 'application/json');
+        $response->setContent(json_encode(['message' => $responseMessage]));
 
         $this->httpClient
             ->expects($this->once())

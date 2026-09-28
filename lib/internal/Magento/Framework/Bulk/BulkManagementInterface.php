@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Bulk;
 
 /**
  * Interface BulkManagementInterface
  * @api
- * @since 100.2.0
+ * @since 103.0.0
  */
 interface BulkManagementInterface
 {
@@ -20,7 +20,7 @@ interface BulkManagementInterface
      * @param string $description
      * @param int $userId
      * @return boolean
-     * @since 100.2.0
+     * @since 103.0.0
      */
     public function scheduleBulk($bulkUuid, array $operations, $description, $userId = null);
 
@@ -29,7 +29,7 @@ interface BulkManagementInterface
      *
      * @param string $bulkId
      * @return boolean
-     * @since 100.2.0
+     * @since 103.0.0
      */
     public function deleteBulk($bulkId);
 }

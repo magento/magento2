@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -19,6 +19,7 @@ use Magento\Widget\Model\Template\FilterEmulate;
 class CategoryBlockTest extends GraphQlAbstract
 {
     /**
+     * @magentoConfigFixture default_store web/seo/use_rewrites 1
      * @magentoApiDataFixture Magento/Catalog/_files/category_tree.php
      * @magentoApiDataFixture Magento/Cms/_files/block.php
      */

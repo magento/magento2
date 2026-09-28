@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab;
@@ -75,5 +75,22 @@ class NewsletterTest extends \Magento\TestFramework\TestCase\AbstractBackendCont
         $this->assertStringNotContainsString('checked="checked"', $body);
         $this->assertStringContainsString('\u003Cspan\u003ESubscribed to Newsletter\u003C\/span\u003E', $body);
         $this->assertStringContainsString('\u003ENo Newsletter Found\u003C', $body);
+    }
+
+    /**
+     * @magentoDataFixture Magento/Customer/_files/customer_sample.php
+     * @magentoDataFixture Magento/Newsletter/_files/newsletter_sample.php
+     * @magentoDataFixture Magento/Newsletter/_files/queue.php
+     */
+    public function testRenderingNewsletterBlockWithQueue()
+    {
+        $this->getRequest()->setParam('id', 1);
+        $this->dispatch('backend/customer/index/edit');
+        $body = $this->getResponse()->getBody();
+
+        $this->assertMatchesRegularExpression(
+            '~.+\/newsletter\\\/template\\\/preview\\\/id\\\/\d+\\\/subscriber\\\/\d+\\\/.+~',
+            $body
+        );
     }
 }

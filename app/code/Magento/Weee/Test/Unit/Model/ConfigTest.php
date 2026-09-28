@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Tax\Helper\Data;
 use Magento\Weee\Model\Config;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ConfigTest extends TestCase
@@ -23,13 +24,13 @@ class ConfigTest extends TestCase
      *
      * @param string $method
      * @param string $path
-     * @param bool $configValue
-     * @param bool $expectedValue
-     * @dataProvider dataProviderScopeConfigMethods
+     * @param bool   $configValue
+     * @param bool   $expectedValue
      */
+    #[DataProvider('dataProviderScopeConfigMethods')]
     public function testScopeConfigMethods($method, $path, $configValue, $expectedValue)
     {
-        $scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $scopeConfigMock->expects($this->any())
             ->method('getValue')
             ->with($path, ScopeInterface::SCOPE_STORE, null)
@@ -50,7 +51,7 @@ class ConfigTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function dataProviderScopeConfigMethods()
+    public static function dataProviderScopeConfigMethods()
     {
         return [
             [

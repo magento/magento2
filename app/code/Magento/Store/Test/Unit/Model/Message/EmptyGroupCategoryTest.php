@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Framework\UrlInterface;
 use Magento\Store\Model\Group;
 use Magento\Store\Model\Message\EmptyGroupCategory;
 use Magento\Store\Model\ResourceModel\Group\Collection;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -47,8 +48,7 @@ class EmptyGroupCategoryTest extends TestCase
         $this->collectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
-            ->getMockForAbstractClass();
+        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
 
         $this->model = new EmptyGroupCategory(
             $this->collectionMock,
@@ -59,8 +59,8 @@ class EmptyGroupCategoryTest extends TestCase
     /**
      * @param boolean $expected
      * @param array $items
-     * @dataProvider isDisplayedDataProvider
      */
+    #[DataProvider('isDisplayedDataProvider')]
     public function testIsDisplayed($expected, array $items)
     {
         $this->collectionMock->expects($this->once())
@@ -90,14 +90,13 @@ class EmptyGroupCategoryTest extends TestCase
             ->willReturn([$groupMock1, $groupMock2]);
         $this->urlBuilderMock->expects($this->exactly(2))
             ->method('getUrl')
-            ->withConsecutive(
-                ['adminhtml/system_store/editGroup', ['group_id' => 1]],
-                ['adminhtml/system_store/editGroup', ['group_id' => 2]]
-            )
-            ->willReturnOnConsecutiveCalls(
-                'http://url1.com',
-                'http://url2.com'
-            );
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1== 'adminhtml/system_store/editGroup' && $arg2['group_id'] == 1) {
+                    return 'http://url1.com';
+                } elseif ($arg1== 'adminhtml/system_store/editGroup' && $arg2['group_id'] == 2) {
+                    return 'http://url2.com';
+                }
+            });
 
         $this->assertEquals(
             'The following stores are not associated with a root category: <a href="http://url1.com">groupName1</a>, '
@@ -137,7 +136,7 @@ class EmptyGroupCategoryTest extends TestCase
     /**
      * @return array
      */
-    public function isDisplayedDataProvider()
+    public static function isDisplayedDataProvider()
     {
         return [
             [

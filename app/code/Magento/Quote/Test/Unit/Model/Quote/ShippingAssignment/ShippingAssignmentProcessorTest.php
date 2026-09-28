@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -88,18 +88,15 @@ class ShippingAssignmentProcessorTest extends TestCase
         $this->cartItemPersisterMock = $this->getMockBuilder(CartItemPersister::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->addressRepositoryMock = $this->getMockBuilder(AddressRepositoryInterface::class)
-            ->getMockForAbstractClass();
+        $this->addressRepositoryMock = $this->createMock(AddressRepositoryInterface::class);
         $this->quoteMock = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->shippingAssignmentMock = $this->getMockBuilder(ShippingAssignmentInterface::class)
-            ->getMockForAbstractClass();
+        $this->shippingAssignmentMock = $this->createMock(ShippingAssignmentInterface::class);
         $this->shippingAddressMock = $this->getMockBuilder(QuoteAddress::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->shippingMock = $this->getMockBuilder(ShippingInterface::class)
-            ->getMockForAbstractClass();
+        $this->shippingMock = $this->createMock(ShippingInterface::class);
 
         $this->quoteMock->expects(static::any())
             ->method('getShippingAddress')

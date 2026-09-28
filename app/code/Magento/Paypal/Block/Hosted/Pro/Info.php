@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Hosted Pro link infoblock
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Paypal\Block\Hosted\Pro;
 

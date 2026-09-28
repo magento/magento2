@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\MessageQueue\Config\Topology;
 
@@ -10,7 +10,7 @@ use Magento\Framework\MessageQueue\ConfigInterface as QueueConfig;
 /**
  * Plugin which provides access to topology declared in queue config using topology config interface.
  *
- * @deprecated 100.2.0
+ * @deprecated 103.0.0
  */
 class ConfigReaderPlugin
 {
@@ -47,6 +47,7 @@ class ConfigReaderPlugin
         $topologyConfigDataFromQueueConfig = $this->getTopologyConfigDataFromQueueConfig();
         foreach ($topologyConfigDataFromQueueConfig as $exchangeKey => $exchangeConfig) {
             if (isset($result[$exchangeKey])) {
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $result[$exchangeKey]['bindings'] = array_merge(
                     $exchangeConfig['bindings'],
                     $result[$exchangeKey]['bindings']
@@ -80,7 +81,7 @@ class ConfigReaderPlugin
                 'arguments' => []
             ];
 
-            $exchangeName = $queueConfigBinding['exchange'];
+            $exchangeName = $this->queueConfig->getExchangeByTopic($topic);
             $connection = $this->queueConfig->getConnectionByTopic($topic);
             if (isset($result[$exchangeName . '--' . $connection])) {
                 $result[$exchangeName . '--' . $connection]['bindings'][$bindingId] = $bindingData;

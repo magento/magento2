@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Module\Setup;
 
@@ -15,6 +15,7 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
  * @api
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Migration
 {
@@ -148,7 +149,7 @@ class Migration
         MigrationData $migrationData,
         $confPathToMapFile,
         $compositeModules = [],
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->_directory = $filesystem->getDirectoryRead(DirectoryList::ROOT);
         $this->_pathToMapFile = $confPathToMapFile;
@@ -703,7 +704,7 @@ class Migration
      * @return string|int|float|bool|array|null
      * @throws \InvalidArgumentException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @deprecated
+     * @deprecated 101.0.1
      * @see \Magento\Framework\Module\Setup\Migration::jsonDecode
      */
     protected function _jsonDecode($encodedValue, $objectDecodeType = 1)

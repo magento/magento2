@@ -1,16 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\PaypalGraphQl\Model\Resolver\Customer;
 
+use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\Paypal\Model\Api\Nvp;
 use Magento\PaypalGraphQl\PaypalExpressAbstractTest;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteId;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test createPaypalExpressToken graphql endpoint for customer
@@ -41,7 +43,6 @@ class PaypalExpressTokenTest extends PaypalExpressAbstractTest
      * Test create paypal token for customer
      *
      * @param string $paymentMethod
-     * @dataProvider getPaypalCodesProvider
      * @magentoConfigFixture default_store paypal/wpp/sandbox_flag 1
      * @magentoDataFixture Magento/Sales/_files/default_rollback.php
      * @magentoDataFixture Magento/Customer/_files/customer.php
@@ -52,6 +53,7 @@ class PaypalExpressTokenTest extends PaypalExpressAbstractTest
      * @magentoDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
      */
+    #[DataProvider('getPaypalCodesProvider')]
     public function testResolve($paymentMethod): void
     {
         $this->enablePaymentMethod($paymentMethod);
@@ -83,9 +85,9 @@ class PaypalExpressTokenTest extends PaypalExpressAbstractTest
             ->with(Nvp::SET_EXPRESS_CHECKOUT, $paypalRequest)
             ->willReturn($paypalResponse);
 
-        /** @var \Magento\Integration\Model\Oauth\Token $tokenModel */
-        $tokenModel = $this->objectManager->create(\Magento\Integration\Model\Oauth\Token::class);
-        $customerToken = $tokenModel->createCustomerToken(1)->getToken();
+        /** @var CustomerTokenServiceInterface $tokenService */
+        $tokenService = $this->objectManager->get(CustomerTokenServiceInterface::class);
+        $customerToken = $tokenService->createCustomerAccessToken('customer@example.com', 'password');
 
         $requestHeaders = [
             'Accept' => 'application/json',
@@ -105,7 +107,7 @@ class PaypalExpressTokenTest extends PaypalExpressAbstractTest
      *
      * @return array
      */
-    public function getPaypalCodesProvider(): array
+    public static function getPaypalCodesProvider(): array
     {
         return [
             ['paypal_express'],

@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
@@ -21,7 +21,7 @@
                             </item>
                             <item name="children" xsi:type="array">
                                 <item name="item.renderer" xsi:type="array">
-                                    <item name="component" xsi:type="string">uiComponent</item>
+                                    <item name="component" xsi:type="string">Magento_Checkout/js/view/cart-item-renderer</item>
                                     <item name="config" xsi:type="array">
                                         <item name="displayArea" xsi:type="string">defaultRenderer</item>
                                         <item name="template" xsi:type="string">Magento_Checkout/minicart/item/default</item>

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\DB;
@@ -32,7 +32,6 @@ class SelectFactory
     /**
      * @param SelectRenderer $selectRenderer
      * @param array $parts
-     * @since 100.1.0
      */
     public function __construct(
         SelectRenderer $selectRenderer,

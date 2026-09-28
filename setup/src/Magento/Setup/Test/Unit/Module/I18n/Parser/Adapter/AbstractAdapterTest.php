@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -25,20 +25,14 @@ class AbstractAdapterTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_adapterMock = $this->getMockForAbstractClass(
-            AbstractAdapter::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['_parse']
-        );
+        $this->_adapterMock = $this->getMockBuilder(AbstractAdapter::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['_parse'])
+            ->getMock();
         $this->_adapterReflection = new \ReflectionMethod(
             AbstractAdapter::class,
             '_addPhrase'
         );
-        $this->_adapterReflection->setAccessible(true);
     }
 
     public function testParse()

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,12 +14,15 @@ use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * Test for version control metadata model.
  */
 class MetadataTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Metadata
      */
@@ -44,29 +47,17 @@ class MetadataTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->model = $this->getMockBuilder(AbstractModel::class)
-            ->addMethods(['getAttributes'])
-            ->onlyMethods(['getResource'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-
-        $this->resource = $this->getMockForAbstractClass(
-            AdapterInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['getConnection', 'getEntityTable']
+        $this->model = $this->createPartialMockWithReflection(
+            AbstractModel::class,
+            ['getAttributes', 'getResource']
         );
 
-        $this->connection = $this->getMockForAbstractClass(
-            AdapterInterface::class,
-            [],
-            '',
-            false,
-            false
+        $this->resource = $this->createPartialMockWithReflection(
+            AbstractDb::class,
+            ['getConnection', 'getEntityTable', '_construct']
         );
+
+        $this->connection = $this->createMock(AdapterInterface::class);
 
         $this->model->expects($this->any())->method('getResource')->willReturn($this->resource);
 

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -71,7 +71,7 @@ class LinkedProductSelectBuilderByCatalogRulePrice implements LinkedProductSelec
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\EntityManager\MetadataPool $metadataPool,
-        BaseSelectProcessorInterface $baseSelectProcessor = null
+        ?BaseSelectProcessorInterface $baseSelectProcessor = null
     ) {
         $this->storeManager = $storeManager;
         $this->resource = $resourceConnection;

@@ -1,14 +1,18 @@
 <?php declare(strict_types=1);
 
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CatalogImportExport\Test\Unit\Model\Import;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\CatalogImportExport\Model\Import\Uploader;
+use Magento\Downloadable\Model\Url\DomainValidator;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\TargetDirectory;
+use Magento\Framework\Filesystem\Directory\Write;
 use Magento\Framework\Filesystem\Driver\Http;
 use Magento\Framework\Filesystem\Driver\Https;
 use Magento\Framework\Filesystem\DriverPool;
@@ -58,7 +62,7 @@ class UploaderTest extends TestCase
     protected $readFactory;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\Writer|MockObject
+     * @var WriteInterface|MockObject
      */
     protected $directoryMock;
 
@@ -72,46 +76,48 @@ class UploaderTest extends TestCase
      */
     protected $uploader;
 
+    /**
+     * @var TargetDirectory|MockObject
+     */
+    private $targetDirectory;
+
+    /**
+     * @var DomainValidator|MockObject
+     */
+    private $domainValidator;
+
     protected function setUp(): void
     {
-        $this->coreFileStorageDb = $this->getMockBuilder(Database::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->coreFileStorageDb = $this->createMock(Database::class);
 
-        $this->coreFileStorage = $this->getMockBuilder(Storage::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->coreFileStorage = $this->createMock(Storage::class);
 
-        $this->imageFactory = $this->getMockBuilder(AdapterFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->imageFactory = $this->createMock(AdapterFactory::class);
 
-        $this->validator = $this->getMockBuilder(
-            NotProtectedExtension::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        $this->validator = $this->createMock(NotProtectedExtension::class);
 
-        $this->readFactory = $this->getMockBuilder(ReadFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
+        $this->readFactory = $this->createPartialMock(ReadFactory::class, ['create']);
 
-        $this->directoryMock = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\Writer::class)
-            ->setMethods(['writeFile', 'getRelativePath', 'isWritable', 'getAbsolutePath'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->directoryMock = $this->createPartialMock(
+            Write::class,
+            ['writeFile', 'getRelativePath', 'isWritable', 'getAbsolutePath']
+        );
 
-        $this->filesystem = $this->getMockBuilder(Filesystem::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getDirectoryWrite'])
-            ->getMock();
-        $this->filesystem->expects($this->any())
-            ->method('getDirectoryWrite')
-            ->willReturn($this->directoryMock);
+        $this->filesystem = $this->createPartialMock(Filesystem::class, ['getDirectoryWrite']);
+        $this->filesystem->method('getDirectoryWrite')->willReturn($this->directoryMock);
 
-        $this->random = $this->getMockBuilder(Random::class)
+        $this->random = $this->createPartialMock(Random::class, ['getRandomString']);
+
+        $this->targetDirectory = $this->createPartialMock(
+            TargetDirectory::class,
+            ['getDirectoryWrite', 'getDirectoryRead']
+        );
+        $this->targetDirectory->method('getDirectoryWrite')->willReturn($this->directoryMock);
+        $this->targetDirectory->method('getDirectoryRead')->willReturn($this->directoryMock);
+
+        $this->domainValidator = $this->getMockBuilder(DomainValidator::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getRandomString'])
+            ->onlyMethods(['isValid'])
             ->getMock();
 
         $this->uploader = $this->getMockBuilder(Uploader::class)
@@ -124,26 +130,33 @@ class UploaderTest extends TestCase
                     $this->filesystem,
                     $this->readFactory,
                     null,
-                    $this->random
+                    $this->random,
+                    $this->targetDirectory,
+                    $this->domainValidator
                 ]
             )
-            ->setMethods(['_setUploadFile', 'save', 'getTmpDir', 'checkAllowedExtension'])
+            ->onlyMethods(['_setUploadFile', 'save', 'getTmpDir', 'checkAllowedExtension'])
             ->getMock();
     }
 
     /**
-     * @dataProvider moveFileUrlDataProvider
      * @param $fileUrl
      * @param $expectedHost
      * @param $expectedFileName
      * @param $checkAllowedExtension
      * @throws LocalizedException
      */
+    #[DataProvider('moveFileUrlDataProvider')]
     public function testMoveFileUrl($fileUrl, $expectedHost, $expectedFileName, $checkAllowedExtension)
     {
         $tmpDir = 'var/tmp';
         $destDir = 'var/dest/dir';
         $this->uploader->method('getTmpDir')->willReturn($tmpDir);
+
+        // Mock domain validator to allow the URL
+        $this->domainValidator->expects($this->once())
+            ->method('isValid')
+            ->willReturn(true);
 
         // Expected invocation to validate file extension
         $this->uploader->expects($this->exactly($checkAllowedExtension))->method('checkAllowedExtension')
@@ -159,10 +172,7 @@ class UploaderTest extends TestCase
             ->with($tmpDir . '/' . $expectedFileName);
 
         // Create adjusted reader which does not validate path.
-        $readMock = $this->getMockBuilder(Read::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['readAll'])
-            ->getMock();
+        $readMock = $this->createPartialMock(Read::class, ['readAll']);
 
         // Expected invocations to create reader and read contents from url
         $this->readFactory->expects($this->once())->method('create')
@@ -172,28 +182,37 @@ class UploaderTest extends TestCase
             ->willReturn(null);
 
         // Expected invocation to write the temp file
-        $this->directoryMock->expects($this->any())->method('writeFile')
-            ->willReturn($expectedFileName);
+        $this->directoryMock->method('writeFile')->willReturn($expectedFileName);
 
         // Expected invocations save the downloaded file to temp file
         // and move the temp file to the destination directory
         $this->directoryMock->expects($this->exactly(2))
             ->method('isWritable')
-            ->withConsecutive([$destDir], [$tmpDir])
-            ->willReturn(true);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$destDir] => true,
+                [$tmpDir] => true
+            });
+
         $this->directoryMock->expects($this->once())->method('getAbsolutePath')
             ->with($destDir)
             ->willReturn($destDir . '/' . $expectedFileName);
         $this->uploader->expects($this->once())->method('_setUploadFile')
             ->willReturnSelf();
+
+        $returnFile = $destDir . DIRECTORY_SEPARATOR . $expectedFileName;
+
         $this->uploader->expects($this->once())->method('save')
             ->with($destDir . '/' . $expectedFileName)
-            ->willReturn(['name' => $expectedFileName, 'path' => 'absPath']);
+            ->willReturn([
+                'name' => $expectedFileName,
+                'path' => 'absPath',
+                'file' => $returnFile
+            ]);
 
         $this->uploader->setDestDir($destDir);
         $result = $this->uploader->move($fileUrl);
 
-        $this->assertEquals(['name' => $expectedFileName], $result);
+        $this->assertEquals(['name' => $expectedFileName, 'file' => $returnFile], $result);
         $this->assertArrayNotHasKey('path', $result);
     }
 
@@ -209,27 +228,69 @@ class UploaderTest extends TestCase
         //Check invoking of getTmpDir(), _setUploadFile(), save() methods.
         $this->uploader->expects($this->once())->method('getTmpDir')->willReturn('');
         $this->uploader->expects($this->once())->method('_setUploadFile')->willReturnSelf();
+
+        $returnFile = $destDir . DIRECTORY_SEPARATOR . $fileName;
+
         $this->uploader->expects($this->once())->method('save')->with($destDir . '/' . $fileName)
-            ->willReturn(['name' => $fileName]);
+            ->willReturn(['name' => $fileName, 'file' => $returnFile]);
 
         $this->uploader->setDestDir($destDir);
-        $this->assertEquals(['name' => $fileName], $this->uploader->move($fileName));
+        $this->assertEquals(['name' => $fileName, 'file' => $returnFile], $this->uploader->move($fileName));
     }
 
-    /**
-     * @dataProvider moveFileUrlDriverPoolDataProvider
-     */
+    public function testFilenameLength()
+    {
+        $destDir = 'var/tmp/' . str_repeat('testFilenameLength', 13); // 242 characters
+
+        $fileName = \uniqid(); // 13 characters
+
+        $this->directoryMock->expects($this->once())
+            ->method('isWritable')
+            ->with($destDir)
+            ->willReturn(true);
+
+        $this->directoryMock->expects($this->once())
+            ->method('getRelativePath')
+            ->with($fileName)
+            ->willReturn(null);
+
+        $this->directoryMock->expects($this->once())
+            ->method('getAbsolutePath')
+            ->with($destDir)
+            ->willReturn($destDir);
+
+        $this->uploader->expects($this->once())
+            ->method('save')
+            ->with($destDir)
+            ->willReturn([
+                'name' => $fileName,
+                'file' => $destDir . DIRECTORY_SEPARATOR . $fileName // 256 characters
+            ]);
+
+        $this->uploader->setDestDir($destDir);
+
+        $this->expectException(\LengthException::class);
+
+        $this->uploader->move($fileName);
+    }
+
+    #[DataProvider('moveFileUrlDriverPoolDataProvider')]
     public function testMoveFileUrlDrivePool($fileUrl, $expectedHost, $expectedDriverPool, $expectedScheme)
     {
         $driverPool = $this->createPartialMock(DriverPool::class, ['getDriver']);
         $driverMock = $this->getMockBuilder($expectedDriverPool)
             ->disableOriginalConstructor()
-            ->addMethods(['readAll'])
             ->onlyMethods(['isExists'])
             ->getMock();
-        $driverMock->expects($this->any())->method('isExists')->willReturn(true);
-        $driverMock->expects($this->any())->method('readAll')->willReturn(null);
-        $driverPool->expects($this->any())->method('getDriver')->willReturn($driverMock);
+        $driverMock->method('isExists')->willReturn(true);
+        $driverPool->method('getDriver')->willReturn($driverMock);
+
+        // Create a Read mock that will be returned by readFactory->create()
+        $readMock = $this->getMockBuilder(Read::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['readAll'])
+            ->getMock();
+        $readMock->method('readAll')->willReturn(null);
 
         $readFactory = $this->getMockBuilder(ReadFactory::class)
             ->setConstructorArgs(
@@ -237,13 +298,42 @@ class UploaderTest extends TestCase
                     $driverPool,
                 ]
             )
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
-        $readFactory->expects($this->any())->method('create')
+        $readFactory->method('create')
             ->with($expectedHost, $expectedScheme)
-            ->willReturn($driverMock);
+            ->willReturn($readMock);
 
+        $domainValidatorMock = $this->getMockBuilder(DomainValidator::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['isValid'])
+            ->getMock();
+        $domainValidatorMock->expects($this->once())
+            ->method('isValid')
+            ->willReturn(true);
+
+        $directoryMock = $this->getMockBuilder(Write::class)
+            ->onlyMethods(['writeFile', 'getRelativePath', 'isWritable', 'getAbsolutePath'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $filesystemMock = $this->getMockBuilder(Filesystem::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getDirectoryWrite'])
+            ->getMock();
+        $filesystemMock->expects($this->any())
+            ->method('getDirectoryWrite')
+            ->willReturn($directoryMock);
+
+        $targetDirectoryMock = $this->getMockBuilder(TargetDirectory::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getDirectoryWrite', 'getDirectoryRead'])
+            ->getMock();
+        $targetDirectoryMock->method('getDirectoryWrite')->willReturn($directoryMock);
+        $targetDirectoryMock->method('getDirectoryRead')->willReturn($directoryMock);
+
+        /** @var Uploader $uploaderMock */
         $uploaderMock = $this->getMockBuilder(Uploader::class)
             ->setConstructorArgs(
                 [
@@ -251,33 +341,48 @@ class UploaderTest extends TestCase
                     $this->coreFileStorage,
                     $this->imageFactory,
                     $this->validator,
-                    $this->filesystem,
+                    $filesystemMock,
                     $readFactory,
+                    null,
+                    $this->random,
+                    $targetDirectoryMock,
+                    $domainValidatorMock
                 ]
             )
+            ->onlyMethods(['_setUploadFile', 'save', 'getTmpDir', 'checkAllowedExtension'])
             ->getMock();
 
+        $this->random->method('getRandomString')->willReturn('test123');
+        $uploaderMock->method('getTmpDir')->willReturn('var/tmp');
+        $uploaderMock->method('checkAllowedExtension')->willReturn(true);
+        $directoryMock->method('isWritable')->willReturn(true);
+        $directoryMock->method('getRelativePath')->willReturn('var/tmp/test_file');
+        $directoryMock->method('writeFile')->willReturn(true);
+        $directoryMock->method('getAbsolutePath')->willReturn('var/dest/dir');
+        $uploaderMock->method('_setUploadFile')->willReturnSelf();
+        $uploaderMock->method('save')->willReturn(['name' => 'test', 'file' => 'var/dest/test']);
+
         $result = $uploaderMock->move($fileUrl);
-        $this->assertNull($result);
+        $this->assertNotNull($result);
     }
 
     /**
      * @return array
      */
-    public function moveFileUrlDriverPoolDataProvider()
+    public static function moveFileUrlDriverPoolDataProvider()
     {
         return [
             [
-                '$fileUrl'              => 'http://test_uploader_file',
-                '$expectedHost'         => 'test_uploader_file',
-                '$expectedDriverPool'   => Http::class,
-                '$expectedScheme'       => DriverPool::HTTP,
+                'fileUrl'              => 'http://test_uploader_file',
+                'expectedHost'         => 'test_uploader_file',
+                'expectedDriverPool'   => Http::class,
+                'expectedScheme'       => DriverPool::HTTP,
             ],
             [
-                '$fileUrl'              => 'https://!:^&`;file',
-                '$expectedHost'         => '!:^&`;file',
-                '$expectedDriverPool'   => Https::class,
-                '$expectedScheme'       => DriverPool::HTTPS,
+                'fileUrl'              => 'https://!:^&`;file',
+                'expectedHost'         => '!:^&`;file',
+                'expectedDriverPool'   => Https::class,
+                'expectedScheme'       => DriverPool::HTTPS,
             ],
         ];
     }
@@ -285,68 +390,68 @@ class UploaderTest extends TestCase
     /**
      * @return array
      */
-    public function moveFileUrlDataProvider()
+    public static function moveFileUrlDataProvider()
     {
         return [
             'https_no_file_ext' => [
-                '$fileUrl' => 'https://test_uploader_file',
-                '$expectedHost' => 'test_uploader_file',
-                '$expectedFileName' => 'test_uploader_file_38GcEmPFKXXR8NMj',
-                '$checkAllowedExtension' => 0
+                'fileUrl' => 'https://test_uploader_file',
+                'expectedHost' => 'test_uploader_file',
+                'expectedFileName' => 'test_uploader_file_38GcEmPFKXXR8NMj',
+                'checkAllowedExtension' => 0
             ],
             'https_invalid_chars' => [
-                '$fileUrl' => 'https://www.google.com/!:^&`;image.jpg',
-                '$expectedHost' => 'www.google.com/!:^&`;image.jpg',
-                '$expectedFileName' => 'image_38GcEmPFKXXR8NMj.jpg',
-                '$checkAllowedExtension' => 1
+                'fileUrl' => 'https://www.google.com/!:^&`;image.jpg',
+                'expectedHost' => 'www.google.com/!:^&`;image.jpg',
+                'expectedFileName' => 'image_38GcEmPFKXXR8NMj.jpg',
+                'checkAllowedExtension' => 1
             ],
             'https_invalid_chars_no_file_ext' => [
-                '$fileUrl' => 'https://!:^&`;image',
-                '$expectedHost' => '!:^&`;image',
-                '$expectedFileName' => 'image_38GcEmPFKXXR8NMj',
-                '$checkAllowedExtension' => 0
+                'fileUrl' => 'https://!:^&`;image',
+                'expectedHost' => '!:^&`;image',
+                'expectedFileName' => 'image_38GcEmPFKXXR8NMj',
+                'checkAllowedExtension' => 0
             ],
             'http_jpg' => [
-                '$fileUrl' => 'http://www.google.com/image.jpg',
-                '$expectedHost' => 'www.google.com/image.jpg',
-                '$expectedFileName' => 'image_38GcEmPFKXXR8NMj.jpg',
-                '$checkAllowedExtension' => 1
+                'fileUrl' => 'http://www.google.com/image.jpg',
+                'expectedHost' => 'www.google.com/image.jpg',
+                'expectedFileName' => 'image_38GcEmPFKXXR8NMj.jpg',
+                'checkAllowedExtension' => 1
             ],
             'https_jpg' => [
-                '$fileUrl' => 'https://www.google.com/image.jpg',
-                '$expectedHost' => 'www.google.com/image.jpg',
-                '$expectedFileName' => 'image_38GcEmPFKXXR8NMj.jpg',
-                '$checkAllowedExtension' => 1
+                'fileUrl' => 'https://www.google.com/image.jpg',
+                'expectedHost' => 'www.google.com/image.jpg',
+                'expectedFileName' => 'image_38GcEmPFKXXR8NMj.jpg',
+                'checkAllowedExtension' => 1
             ],
             'https_jpeg' => [
-                '$fileUrl' => 'https://www.google.com/image.jpeg',
-                '$expectedHost' => 'www.google.com/image.jpeg',
-                '$expectedFileName' => 'image_38GcEmPFKXXR8NMj.jpeg',
-                '$checkAllowedExtension' => 1
+                'fileUrl' => 'https://www.google.com/image.jpeg',
+                'expectedHost' => 'www.google.com/image.jpeg',
+                'expectedFileName' => 'image_38GcEmPFKXXR8NMj.jpeg',
+                'checkAllowedExtension' => 1
             ],
             'https_png' => [
-                '$fileUrl' => 'https://www.google.com/image.png',
-                '$expectedHost' => 'www.google.com/image.png',
-                '$expectedFileName' => 'image_38GcEmPFKXXR8NMj.png',
-                '$checkAllowedExtension' => 1
+                'fileUrl' => 'https://www.google.com/image.png',
+                'expectedHost' => 'www.google.com/image.png',
+                'expectedFileName' => 'image_38GcEmPFKXXR8NMj.png',
+                'checkAllowedExtension' => 1
             ],
             'https_gif' => [
-                '$fileUrl' => 'https://www.google.com/image.gif',
-                '$expectedHost' => 'www.google.com/image.gif',
-                '$expectedFileName' => 'image_38GcEmPFKXXR8NMj.gif',
-                '$checkAllowedExtension' => 1
+                'fileUrl' => 'https://www.google.com/image.gif',
+                'expectedHost' => 'www.google.com/image.gif',
+                'expectedFileName' => 'image_38GcEmPFKXXR8NMj.gif',
+                'checkAllowedExtension' => 1
             ],
             'https_one_query_param' => [
-                '$fileUrl' => 'https://www.google.com/image.jpg?param=1',
-                '$expectedHost' => 'www.google.com/image.jpg?param=1',
-                '$expectedFileName' => 'image_38GcEmPFKXXR8NMj.jpg',
-                '$checkAllowedExtension' => 1
+                'fileUrl' => 'https://www.google.com/image.jpg?param=1',
+                'expectedHost' => 'www.google.com/image.jpg?param=1',
+                'expectedFileName' => 'image_38GcEmPFKXXR8NMj.jpg',
+                'checkAllowedExtension' => 1
             ],
             'https_two_query_params' => [
-                '$fileUrl' => 'https://www.google.com/image.jpg?param=1&param=2',
-                '$expectedHost' => 'www.google.com/image.jpg?param=1&param=2',
-                '$expectedFileName' => 'image_38GcEmPFKXXR8NMj.jpg',
-                '$checkAllowedExtension' => 1
+                'fileUrl' => 'https://www.google.com/image.jpg?param=1&param=2',
+                'expectedHost' => 'www.google.com/image.jpg?param=1&param=2',
+                'expectedFileName' => 'image_38GcEmPFKXXR8NMj.jpg',
+                'checkAllowedExtension' => 1
             ]
         ];
     }

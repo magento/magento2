@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -46,6 +46,16 @@ function getimagesize($file)
 function filesize($file)
 {
     return Gd2Test::$imageSize;
+}
+
+/**
+ * @param $file
+ * @return bool
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+ */
+function file_exists($file)
+{
+    return !($file === 'not_exist');
 }
 
 /**

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -26,27 +26,28 @@ class CompositeProductRelationsCalculatorTest extends TestCase
      */
     private $model;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
-        $this->defaultPriceMock = $this->getMockBuilder(DefaultPrice::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->defaultPriceMock = $this->createMock(DefaultPrice::class);
         $this->model = new CompositeProductRelationsCalculator($this->defaultPriceMock);
     }
 
-    public function testGetMaxRelationsCount()
+    /**
+     * @return void
+     */
+    public function testGetMaxRelationsCount(): void
     {
         $tableName = 'catalog_product_relation';
         $maxRelatedProductCount = 200;
 
-        $connectionMock = $this->getMockBuilder(AdapterInterface::class)
-            ->getMock();
+        $connectionMock = $this->createMock(AdapterInterface::class);
         $this->defaultPriceMock->expects($this->once())->method('getConnection')->willReturn($connectionMock);
         $this->defaultPriceMock->expects($this->once())->method('getTable')->with($tableName)->willReturn($tableName);
 
-        $relationSelectMock = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $relationSelectMock = $this->createMock(Select::class);
         $relationSelectMock->expects($this->once())
             ->method('from')
             ->with(
@@ -55,11 +56,8 @@ class CompositeProductRelationsCalculatorTest extends TestCase
             )
             ->willReturnSelf();
         $relationSelectMock->expects($this->once())->method('group')->with('parent_id')->willReturnSelf();
-        $connectionMock->expects($this->at(0))->method('select')->willReturn($relationSelectMock);
 
-        $maxSelectMock = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $maxSelectMock = $this->createMock(Select::class);
         $maxSelectMock->expects($this->once())
             ->method('from')
             ->with(
@@ -67,9 +65,11 @@ class CompositeProductRelationsCalculatorTest extends TestCase
                 ['count' => 'MAX(count)']
             )
             ->willReturnSelf();
-        $connectionMock->expects($this->at(1))->method('select')->willReturn($maxSelectMock);
 
-        $connectionMock->expects($this->at(2))
+        $connectionMock
+            ->method('select')
+            ->willReturnOnConsecutiveCalls($relationSelectMock, $maxSelectMock);
+        $connectionMock
             ->method('fetchOne')
             ->with($maxSelectMock)
             ->willReturn($maxRelatedProductCount);

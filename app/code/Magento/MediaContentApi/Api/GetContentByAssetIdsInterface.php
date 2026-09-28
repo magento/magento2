@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -13,6 +13,7 @@ use Magento\MediaContentApi\Api\Data\ContentIdentityInterface;
 /**
  * Get list of content identifiers for pieces of content that include the specified media asset
  * @api
+ * @since 100.4.0
  */
 interface GetContentByAssetIdsInterface
 {
@@ -22,6 +23,7 @@ interface GetContentByAssetIdsInterface
      * @param int[] $assetIds
      * @return ContentIdentityInterface[]
      * @throws \Magento\Framework\Exception\IntegrationException
+     * @since 100.4.0
      */
     public function execute(array $assetIds): array;
 }

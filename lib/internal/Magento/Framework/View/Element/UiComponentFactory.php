@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\View\Element;
@@ -25,6 +25,7 @@ use Magento\Framework\View\Element\UiComponent\Factory\ComponentFactoryInterface
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class UiComponentFactory extends DataObject
 {
@@ -50,7 +51,7 @@ class UiComponentFactory extends DataObject
     /**
      * UI component manager
      *
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      * @var ManagerInterface
      */
     protected $componentManager;
@@ -93,8 +94,8 @@ class UiComponentFactory extends DataObject
         ContextFactory $contextFactory,
         array $data = [],
         array $componentChildFactories = [],
-        DataInterface $definitionData = null,
-        DataInterfaceFactory $configFactory = null,
+        ?DataInterface $definitionData = null,
+        ?DataInterfaceFactory $configFactory = null,
         ?Sanitizer $sanitizer = null
     ) {
         $this->objectManager = $objectManager;

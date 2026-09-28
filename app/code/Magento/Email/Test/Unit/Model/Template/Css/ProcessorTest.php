@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -44,7 +44,7 @@ class ProcessorTest extends TestCase
 
     public function testProcess()
     {
-        $url = 'http://magento.local/pub/static/';
+        $url = 'http://magento.local/static/';
         $locale = 'en_US';
         $css = '@import url("{{base_url_path}}frontend/_view/{{locale}}/css/email.css");';
         $expectedCss = '@import url("' . $url . 'frontend/_view/' . $locale . '/css/email.css");';

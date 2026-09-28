@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,7 @@ use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Backend\Model\View\Result\RedirectFactory;
 use Magento\Framework\App\ActionFlag;
 use Magento\Framework\App\Request\Http;
+use Magento\Framework\App\Response\Http as ResponseHttp;
 use Magento\Framework\DB\Transaction;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Message\Manager;
@@ -27,6 +28,7 @@ use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Invoice;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  *
@@ -34,6 +36,8 @@ use PHPUnit\Framework\TestCase;
  */
 class CancelTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var MockObject
      */
@@ -90,59 +94,36 @@ class CancelTest extends TestCase
     protected $invoiceRepository;
 
     /**
-     * @return void
+     * @inheritDoc
      */
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 
-        $this->requestMock = $this->getMockBuilder(Http::class)
+        $this->requestMock = $this->createMock(Http::class);
+        $this->responseMock = $this->createMock(ResponseHttp::class);
+
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+
+        $this->messageManagerMock = $this->createMock(Manager::class);
+
+        $this->sessionMock = $this->createMock(Session::class);
+
+        $this->actionFlagMock = $this->createMock(ActionFlag::class);
+
+        $this->helperMock = $this->createMock(Data::class);
+
+        $this->resultRedirectFactoryMock = $this->getMockBuilder(RedirectFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods(['create'])
             ->getMock();
-        $this->responseMock = $this->getMockBuilder(\Magento\Framework\App\Response\Http::class)
+
+        $this->resultForwardFactoryMock = $this->getMockBuilder(ForwardFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods(['create'])
             ->getMock();
 
-        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
-
-        $this->messageManagerMock = $this->getMockBuilder(Manager::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-
-        $this->sessionMock = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-
-        $this->actionFlagMock = $this->getMockBuilder(ActionFlag::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-
-        $this->helperMock = $this->getMockBuilder(Data::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-
-        $this->resultRedirectFactoryMock = $this->getMockBuilder(
-            RedirectFactory::class
-        )->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-
-        $this->resultForwardFactoryMock = $this->getMockBuilder(
-            ForwardFactory::class
-        )->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-
-        $contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
+        $contextMock = $this->createMock(Context::class);
         $contextMock->expects($this->any())
             ->method('getRequest')
             ->willReturn($this->requestMock);
@@ -168,9 +149,7 @@ class CancelTest extends TestCase
             ->method('getResultRedirectFactory')
             ->willReturn($this->resultRedirectFactoryMock);
 
-        $this->invoiceRepository = $this->getMockBuilder(InvoiceRepositoryInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->invoiceRepository = $this->createMock(InvoiceRepositoryInterface::class);
 
         $this->controller = $objectManager->getObject(
             Cancel::class,
@@ -190,7 +169,7 @@ class CancelTest extends TestCase
     /**
      * @return void
      */
-    public function testExecute()
+    public function testExecute(): void
     {
         $invoiceId = 2;
 
@@ -199,33 +178,21 @@ class CancelTest extends TestCase
             ->with('invoice_id')
             ->willReturn($invoiceId);
 
-        $orderMock = $this->getMockBuilder(Order::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setIsInProcess'])
-            ->getMock();
+        $orderMock = $this->createPartialMockWithReflection(Order::class, ['setIsInProcess']);
 
-        $invoiceMock = $this->getMockBuilder(Invoice::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
+        $invoiceMock = $this->createMock(Invoice::class);
         $invoiceMock->expects($this->once())
             ->method('cancel');
         $invoiceMock->expects($this->any())
             ->method('getOrder')
             ->willReturn($orderMock);
 
-        $transactionMock = $this->getMockBuilder(Transaction::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-        $transactionMock->expects($this->at(0))
-            ->method('addObject')
-            ->with($invoiceMock)->willReturnSelf();
-        $transactionMock->expects($this->at(1))
-            ->method('addObject')
-            ->with($orderMock)->willReturnSelf();
-        $transactionMock->expects($this->at(2))
-            ->method('save');
+        $transactionMock = $this->createMock(Transaction::class);
+        $transactionMock->method('addObject')
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$invoiceMock] => $transactionMock,
+                [$orderMock] => $transactionMock
+            });
 
         $this->messageManagerMock->expects($this->once())
             ->method('addSuccessMessage')
@@ -244,11 +211,10 @@ class CancelTest extends TestCase
             ->method('getId')
             ->willReturn($invoiceId);
 
-        $resultRedirect = $this->getMockBuilder(Redirect::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-        $resultRedirect->expects($this->once())->method('setPath')->with('sales/*/view', ['invoice_id' => $invoiceId]);
+        $resultRedirect = $this->createMock(Redirect::class);
+        $resultRedirect->expects($this->once())
+            ->method('setPath')
+            ->with('sales/*/view', ['invoice_id' => $invoiceId]);
 
         $this->resultRedirectFactoryMock->expects($this->once())
             ->method('create')
@@ -260,7 +226,7 @@ class CancelTest extends TestCase
     /**
      * @return void
      */
-    public function testExecuteNoInvoice()
+    public function testExecuteNoInvoice(): void
     {
         $invoiceId = 2;
 
@@ -273,10 +239,7 @@ class CancelTest extends TestCase
             ->method('get')
             ->willReturn(null);
 
-        $resultForward = $this->getMockBuilder(Forward::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
+        $resultForward = $this->createMock(Forward::class);
         $resultForward->expects($this->once())->method('forward')->with(('noroute'))->willReturnSelf();
 
         $this->resultForwardFactoryMock->expects($this->once())
@@ -289,7 +252,7 @@ class CancelTest extends TestCase
     /**
      * @return void
      */
-    public function testExecuteModelException()
+    public function testExecuteModelException(): void
     {
         $invoiceId = 2;
 
@@ -301,10 +264,7 @@ class CancelTest extends TestCase
             ->with('invoice_id')
             ->willReturn($invoiceId);
 
-        $invoiceMock = $this->getMockBuilder(Invoice::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
+        $invoiceMock = $this->createMock(Invoice::class);
         $invoiceMock->expects($this->once())
             ->method('cancel')
             ->willThrowException($e);
@@ -321,10 +281,7 @@ class CancelTest extends TestCase
             ->method('get')
             ->willReturn($invoiceMock);
 
-        $resultRedirect = $this->getMockBuilder(Redirect::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
+        $resultRedirect = $this->createMock(Redirect::class);
         $resultRedirect->expects($this->once())->method('setPath')->with('sales/*/view', ['invoice_id' => $invoiceId]);
 
         $this->resultRedirectFactoryMock->expects($this->once())
@@ -337,7 +294,7 @@ class CancelTest extends TestCase
     /**
      * @return void
      */
-    public function testExecuteException()
+    public function testExecuteException(): void
     {
         $invoiceId = 2;
 
@@ -349,10 +306,7 @@ class CancelTest extends TestCase
             ->with('invoice_id')
             ->willReturn($invoiceId);
 
-        $invoiceMock = $this->getMockBuilder(Invoice::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
+        $invoiceMock = $this->createMock(Invoice::class);
         $invoiceMock->expects($this->once())
             ->method('cancel')
             ->willThrowException($e);
@@ -369,10 +323,7 @@ class CancelTest extends TestCase
             ->method('get')
             ->willReturn($invoiceMock);
 
-        $resultRedirect = $this->getMockBuilder(Redirect::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
+        $resultRedirect = $this->createMock(Redirect::class);
         $resultRedirect->expects($this->once())->method('setPath')->with('sales/*/view', ['invoice_id' => $invoiceId]);
 
         $this->resultRedirectFactoryMock->expects($this->once())

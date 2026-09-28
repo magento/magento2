@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,9 +13,13 @@ use Magento\Sales\Model\ResourceModel\Order\Address\Collection;
 use Magento\Sales\Model\ResourceModel\Order\Handler\Address;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use Magento\Sales\Model\Order\Address as OrderAddress;
 
 class AddressTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Address
      */
@@ -37,37 +41,23 @@ class AddressTest extends TestCase
     protected $orderMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Address|MockObject
+     * @var OrderAddress|MockObject
      */
     protected $addressMock;
 
     protected function setUp(): void
     {
         $this->attributeMock = $this->createMock(Attribute::class);
-        $this->orderMock = $this->getMockBuilder(Order::class)
-            ->addMethods(
-                [
-                    'hasBillingAddressId',
-                    'unsBillingAddressId',
-                    'hasShippingAddressId',
-                    'getShippingAddressId',
-                    'setShippingAddressId',
-                    'unsShippingAddressId'
-                ]
-            )
-            ->onlyMethods(
-                [
-                    'getAddresses',
-                    'save',
-                    'getBillingAddress',
-                    'getShippingAddress',
-                    'getBillingAddressId',
-                    'setBillingAddressId'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->addressMock = $this->createMock(\Magento\Sales\Model\Order\Address::class);
+        $this->orderMock = $this->createPartialMockWithReflection(
+            Order::class,
+            [
+                'hasBillingAddressId', 'unsBillingAddressId', 'hasShippingAddressId',
+                'getShippingAddressId', 'setShippingAddressId', 'unsShippingAddressId', 'getAddresses',
+                'save', 'getBillingAddress', 'getShippingAddress', 'getBillingAddressId',
+                'setBillingAddressId'
+            ]
+        );
+        $this->addressMock = $this->createMock(OrderAddress::class);
         $this->addressCollectionMock = $this->createMock(
             Collection::class
         );
@@ -130,6 +120,66 @@ class AddressTest extends TestCase
         $this->attributeMock->expects($this->once())
             ->method('saveAttribute')
             ->with($this->orderMock, ['shipping_address_id'])->willReturnSelf();
+        $this->assertEquals($this->address, $this->address->process($this->orderMock));
+    }
+
+    /**
+     * Test processing of the shipping address when shipping address id was not changed.
+     * setShippingAddressId and saveAttribute methods must not be executed.
+     */
+    public function testProcessShippingAddressNotChanged()
+    {
+        $this->orderMock->expects($this->exactly(2))
+            ->method('getAddresses')
+            ->willReturn([$this->addressMock]);
+        $this->addressMock->expects($this->once())
+            ->method('save')->willReturnSelf();
+        $this->orderMock->expects($this->once())
+            ->method('getBillingAddress')
+            ->willReturn(null);
+        $this->orderMock->expects($this->once())
+            ->method('getShippingAddress')
+            ->willReturn($this->addressMock);
+        $this->addressMock->expects($this->once())
+            ->method('getId')->willReturn(1);
+        $this->orderMock->expects($this->once())
+            ->method('getShippingAddressId')
+            ->willReturn(1);
+        $this->orderMock->expects($this->never())
+            ->method('setShippingAddressId')->willReturnSelf();
+        $this->attributeMock->expects($this->never())
+            ->method('saveAttribute')
+            ->with($this->orderMock, ['shipping_address_id'])->willReturnSelf();
+        $this->assertEquals($this->address, $this->address->process($this->orderMock));
+    }
+
+    /**
+     * Test processing of the billing address when billing address id was not changed.
+     * setBillingAddressId and saveAttribute methods must not be executed.
+     */
+    public function testProcessBillingAddressNotChanged()
+    {
+        $this->orderMock->expects($this->exactly(2))
+            ->method('getAddresses')
+            ->willReturn([$this->addressMock]);
+        $this->addressMock->expects($this->once())
+            ->method('save')->willReturnSelf();
+        $this->orderMock->expects($this->once())
+            ->method('getBillingAddress')
+            ->willReturn($this->addressMock);
+        $this->orderMock->expects($this->once())
+            ->method('getShippingAddress')
+            ->willReturn(null);
+        $this->addressMock->expects($this->once())
+            ->method('getId')->willReturn(1);
+        $this->orderMock->expects($this->once())
+            ->method('getBillingAddressId')
+            ->willReturn(1);
+        $this->orderMock->expects($this->never())
+            ->method('setBillingAddressId')->willReturnSelf();
+        $this->attributeMock->expects($this->never())
+            ->method('saveAttribute')
+            ->with($this->orderMock, ['billing_address_id'])->willReturnSelf();
         $this->assertEquals($this->address, $this->address->process($this->orderMock));
     }
 

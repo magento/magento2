@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Customer\Model\Data;
@@ -475,7 +475,7 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
      * @param \Magento\Customer\Api\Data\AddressInterface[] $addresses
      * @return $this
      */
-    public function setAddresses(array $addresses = null)
+    public function setAddresses(?array $addresses = null)
     {
         return $this->setData(self::KEY_ADDRESSES, $addresses);
     }

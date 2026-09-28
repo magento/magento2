@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -19,7 +19,9 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 
 /**
- * Class WhitelistDeclarationTest
+ * Checks whitelisted tables behaviour
+ *
+ * @magentoDbIsolation disabled
  */
 class WhitelistDeclarationTest extends \PHPUnit\Framework\TestCase
 {

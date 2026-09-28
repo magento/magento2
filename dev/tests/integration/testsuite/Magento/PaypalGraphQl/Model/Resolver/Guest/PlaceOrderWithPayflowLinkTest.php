@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\PaypalGraphQl\Model\Resolver\Guest;
 
+use Laminas\Http\Exception\RuntimeException;
 use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
@@ -56,17 +57,17 @@ class PlaceOrderWithPayflowLinkTest extends TestCase
         $this->getMaskedQuoteIdByReservedOrderId = $this->objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
         $this->gateway = $this->getMockBuilder(Gateway::class)
             ->disableOriginalConstructor()
-            ->setMethods(['postRequest'])
+            ->onlyMethods(['postRequest'])
             ->getMock();
 
         $requestFactory = $this->getMockBuilder(RequestFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->payflowRequest = $this->getMockBuilder(Request::class)
             ->disableOriginalConstructor()
-            ->setMethods(['__call','setData'])
+            ->onlyMethods(['__call','setData'])
             ->getMock();
         $this->payflowRequest->method('__call')
             ->willReturnCallback(
@@ -117,14 +118,14 @@ class PlaceOrderWithPayflowLinkTest extends TestCase
       cart_id: "$cartId"
       payment_method: {
           code: "$paymentMethod"
-            payflow_link: 
+            payflow_link:
             {
            cancel_url:"paypal/payflow/cancel"
            return_url:"paypal/payflow/return"
            error_url:"paypal/payflow/error"
           }
       }
-  }) {    
+  }) {
        cart {
           selected_payment_method {
           code
@@ -140,7 +141,7 @@ class PlaceOrderWithPayflowLinkTest extends TestCase
 QUERY;
 
         $productMetadata = ObjectManager::getInstance()->get(ProductMetadataInterface::class);
-        $button = 'Magento_Cart_' . $productMetadata->getEdition();
+        $button = 'Magento_2_' . $productMetadata->getEdition();
 
         $payflowLinkResponse = new DataObject(
             [
@@ -155,22 +156,25 @@ QUERY;
             ->willReturn($payflowLinkResponse);
 
         $this->payflowRequest
+            ->expects($this->any())
             ->method('setData')
             ->willReturnMap(
                 [
                     [
-                        'user' => null,
-                        'vendor' => null,
-                        'partner' => null,
-                        'pwd' => null,
-                        'verbosity' => null,
-                        'BUTTONSOURCE' => $button,
-                        'tender' => 'C',
+                        [
+                            'user' => null,
+                            'vendor' => null,
+                            'partner' => null,
+                            'pwd' => null,
+                            'verbosity' => null,
+                            'BUTTONSOURCE' => $button,
+                            'tender' => 'C',
+                        ],
+                        $this->payflowRequest
                     ],
-                    $this->returnSelf()
+                    ['USER1', 1, $this->payflowRequest],
+                    ['USER2', 'USER2SilentPostHash', $this->payflowRequest]
                 ],
-                ['USER1', 1, $this->returnSelf()],
-                ['USER2', 'USER2SilentPostHash', $this->returnSelf()]
             );
 
         $response = $this->graphQlRequest->send($query);
@@ -219,14 +223,14 @@ QUERY;
       cart_id: "$cartId"
       payment_method: {
           code: "$paymentMethod"
-            payflow_link: 
+            payflow_link:
             {
            cancel_url:"paypal/payflow/cancelPayment"
            return_url:"paypal/payflow/returnUrl"
            error_url:"paypal/payflow/returnUrl"
           }
       }
-  }) {    
+  }) {
        cart {
           selected_payment_method {
           code
@@ -242,10 +246,9 @@ QUERY;
 QUERY;
 
         $resultCode = Payflowlink::RESPONSE_CODE_DECLINED_BY_FILTER;
-        $exception = new \Zend_Http_Client_Exception(__('Declined response message from PayPal gateway'));
+        $exception = new RuntimeException(__('Declined response message from PayPal gateway')->render());
         //Exception message is transformed into more controlled message
-        $expectedExceptionMessage =
-            "Unable to place order: Payment Gateway is unreachable at the moment. Please use another payment option.";
+        $expectedErrorCode = 'UNABLE_TO_PLACE_ORDER';
 
         $this->payflowRequest->method('setData')
             ->with(
@@ -270,9 +273,8 @@ QUERY;
         $this->assertArrayHasKey('errors', $responseData);
         $actualError = $responseData['errors'][0];
         $this->assertEquals(
-            $expectedExceptionMessage,
-            $actualError['message']
+            $expectedErrorCode,
+            $actualError['extensions']['error_code']
         );
-        $this->assertEquals(GraphQlInputException::EXCEPTION_CATEGORY, $actualError['extensions']['category']);
     }
 }

@@ -1,15 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Downloadable\Helper\Catalog\Product;
 
 /**
  * Helper for fetching properties by product configurational item
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Configuration extends \Magento\Framework\App\Helper\AbstractHelper implements
     \Magento\Catalog\Helper\Product\Configuration\ConfigurationInterface
@@ -46,7 +44,8 @@ class Configuration extends \Magento\Framework\App\Helper\AbstractHelper impleme
         $linkIds = $item->getOptionByCode('downloadable_link_ids');
         if ($linkIds) {
             $productLinks = $product->getTypeInstance()->getLinks($product);
-            foreach (explode(',', $linkIds->getValue()) as $linkId) {
+            $links = $linkIds->getValue() !== null ? explode(',', $linkIds->getValue()) : [];
+            foreach ($links as $linkId) {
                 if (isset($productLinks[$linkId])) {
                     $itemLinks[] = $productLinks[$linkId];
                 }
@@ -64,7 +63,7 @@ class Configuration extends \Magento\Framework\App\Helper\AbstractHelper impleme
     public function getLinksTitle($product)
     {
         $title = $product->getLinksTitle();
-        if (strlen($title)) {
+        if ($title !== null && strlen($title)) {
             return $title;
         }
         return $this->scopeConfig->getValue(

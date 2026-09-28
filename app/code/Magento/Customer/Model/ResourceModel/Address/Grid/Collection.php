@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Model\ResourceModel\Address\Grid;
 
@@ -76,7 +76,7 @@ class Collection extends AbstractCollection implements SearchResultInterface
         ResolverInterface $localeResolver,
         $model = Document::class,
         $connection = null,
-        AbstractDb $resource = null
+        ?AbstractDb $resource = null
     ) {
         $this->_eventPrefix = $eventPrefix;
         $this->_eventObject = $eventObject;
@@ -92,6 +92,15 @@ class Collection extends AbstractCollection implements SearchResultInterface
             $connection,
             $resource
         );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->_idFieldName = 'entity_id';
     }
 
     /**
@@ -139,7 +148,7 @@ class Collection extends AbstractCollection implements SearchResultInterface
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function setSearchCriteria(SearchCriteriaInterface $searchCriteria = null)
+    public function setSearchCriteria(?SearchCriteriaInterface $searchCriteria = null)
     {
         return $this;
     }
@@ -173,7 +182,7 @@ class Collection extends AbstractCollection implements SearchResultInterface
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function setItems(array $items = null)
+    public function setItems(?array $items = null)
     {
         return $this;
     }
@@ -185,7 +194,7 @@ class Collection extends AbstractCollection implements SearchResultInterface
     {
         if ($field === 'region') {
             $conditionSql = $this->_getConditionSql(
-                $this->getRegionNameExpresion(),
+                $this->getRegionNameExpression(),
                 $condition
             );
             $this->getSelect()->where($conditionSql);
@@ -211,7 +220,7 @@ class Collection extends AbstractCollection implements SearchResultInterface
         $whereCondition = '';
         foreach ($fields as $key => $field) {
             $field = $field === 'region'
-                ? $this->getRegionNameExpresion()
+                ? $this->getRegionNameExpression()
                 : 'main_table.' . $field;
             $condition = $this->_getConditionSql(
                 $this->getConnection()->quoteIdentifier($field),
@@ -246,18 +255,18 @@ class Collection extends AbstractCollection implements SearchResultInterface
             )->joinLeft(
                 ['rnt' => $this->getTable('directory_country_region_name')],
                 "rnt.region_id={$regionIdField} AND {$localeCondition}",
-                ['region' => $this->getRegionNameExpresion()]
+                ['region' => $this->getRegionNameExpression()]
             );
 
         return $this;
     }
 
     /**
-     * Get SQL Expresion to define Region Name field by locale
+     * Get SQL Expression to define Region Name field by locale
      *
      * @return \Zend_Db_Expr
      */
-    private function getRegionNameExpresion(): \Zend_Db_Expr
+    private function getRegionNameExpression(): \Zend_Db_Expr
     {
         $connection = $this->getConnection();
         $defaultNameExpr = $connection->getIfNullSql(

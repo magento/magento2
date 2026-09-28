@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\ResourceModel\Order\Payment;
 
@@ -10,8 +10,6 @@ use Magento\Sales\Model\Spi\TransactionResourceInterface;
 
 /**
  * Sales transaction resource model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Transaction extends EntityAbstract implements TransactionResourceInterface
 {
@@ -34,7 +32,8 @@ class Transaction extends EntityAbstract implements TransactionResourceInterface
 
     /**
      * Update transactions in database using provided transaction as parent for them
-     * have to repeat the business logic to avoid accidental injection of wrong transactions
+     *
+     * Have to repeat the business logic to avoid accidental injection of wrong transactions
      *
      * @param \Magento\Sales\Model\Order\Payment\Transaction $transaction
      * @return void
@@ -126,11 +125,14 @@ class Transaction extends EntityAbstract implements TransactionResourceInterface
 
     /**
      * Lookup for parent_id in already saved transactions of this payment by the order_id
+     *
      * Also serialize additional information, if any
      *
      * @param \Magento\Framework\Model\AbstractModel|\Magento\Sales\Model\Order\Payment\Transaction $transaction
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return $this
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $transaction)
     {
@@ -140,7 +142,7 @@ class Transaction extends EntityAbstract implements TransactionResourceInterface
         $paymentId = $transaction->getData('payment_id');
         $idFieldName = $this->getIdFieldName();
 
-        if ($parentTxnId) {
+        if ($parentTxnId && $parentTxnId !== $txnId) {
             if (!$txnId || !$orderId || !$paymentId) {
                 throw new \Magento\Framework\Exception\LocalizedException(
                     __('We don\'t have enough information to save the parent transaction ID.')
@@ -169,7 +171,7 @@ class Transaction extends EntityAbstract implements TransactionResourceInterface
      * @param int $orderId
      * @param int $paymentId
      * @param string $txnId
-     * @param mixed (array|string|object) $columns
+     * @param mixed $columns (array|string|object) $columns
      * @param bool $isRow
      * @param string $txnType
      * @return array|string

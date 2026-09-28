@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class SamplesTest
@@ -52,12 +54,12 @@ class SamplesTest extends \PHPUnit\Framework\TestCase
      *
      * @magentoConfigFixture current_store catalog/downloadable/samples_title Samples Title Test
      * @magentoAppIsolation enabled
-     * @dataProvider productSamplesTitleDataProvider
      *
      * @param string $productType
      * @param string $samplesTitle
      * @param string $expectedResult
      */
+    #[DataProvider('productSamplesTitleDataProvider')]
     public function testGetSamplesTitle($productType, $samplesTitle, $expectedResult)
     {
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
@@ -87,7 +89,7 @@ class SamplesTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function productSamplesTitleDataProvider()
+    public static function productSamplesTitleDataProvider()
     {
         return [
             ['simple', null, 'Samples Title Test'],

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\Order\Payment\State;
 
@@ -26,7 +26,7 @@ class RegisterCaptureNotificationCommand implements CommandInterface
     /**
      * @param StatusResolver|null $statusResolver
      */
-    public function __construct(StatusResolver $statusResolver = null)
+    public function __construct(?StatusResolver $statusResolver = null)
     {
         $this->statusResolver = $statusResolver ?: ObjectManager::getInstance()->get(StatusResolver::class);
     }
@@ -73,7 +73,7 @@ class RegisterCaptureNotificationCommand implements CommandInterface
     /**
      * Sets the state and status of the order
      *
-     * @deprecated 100.2.0 Replaced by a StatusResolver class call.
+     * @deprecated 100.1.9 Replaced by a StatusResolver class call.
      *
      * @param Order $order
      * @param string $status

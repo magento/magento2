@@ -1,13 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Integration\Model\Oauth;
 
 /**
  * Nonce model
- * @author Magento Core Team <core@magentocommerce.com>
  * @method string getNonce()
  * @method \Magento\Integration\Model\Oauth\Nonce setNonce() setNonce(string $nonce)
  * @method int getConsumerId()
@@ -18,7 +17,7 @@ namespace Magento\Integration\Model\Oauth;
 class Nonce extends \Magento\Framework\Model\AbstractModel
 {
     /**
-     * Oauth data
+     * Oauth data function
      *
      * @var \Magento\Integration\Helper\Oauth\Data
      */
@@ -36,8 +35,8 @@ class Nonce extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Integration\Helper\Oauth\Data $oauthData,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);

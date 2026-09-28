@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -13,7 +13,7 @@ use Magento\Framework\App\ActionInterface;
 /**
  * Marker for actions processing HEAD requests.
  *
- * @deprecated Both GET and HEAD requests map to HttpGetActionInterface
+ * @deprecated 102.0.2 Both GET and HEAD requests map to HttpGetActionInterface
  */
 interface HttpHeadActionInterface extends ActionInterface
 {
