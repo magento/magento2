@@ -40,7 +40,7 @@ class ZendRedisBackendTest extends CacheFrontendTestCase
 
         $id = $this->cacheId('zend-redis', 'atomic_pair');
         $pairedId = $id . ':hash';
-        $tag = 'AC_18194_TAG_' . uniqid();
+        $tag = 'ZEND_REDIS_TAG_INDEX_' . uniqid();
 
         try {
             $saved = $backend->saveAtomicPair(
