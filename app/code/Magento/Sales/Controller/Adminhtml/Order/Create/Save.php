@@ -23,6 +23,16 @@ class Save extends \Magento\Sales\Controller\Adminhtml\Order\Create implements H
         $path = 'sales/*/';
         $pathParams = [];
 
+        if ($this->isFormOutdated()) {
+            $this->messageManager->addErrorMessage(
+                __(
+                    'The order form is outdated because another order was opened for editing in a different tab. '
+                    . 'Please reload the page.'
+                )
+            );
+            return $this->resultRedirectFactory->create()->setPath($path);
+        }
+
         try {
             // check if the creation of a new customer is allowed
             if (!$this->_authorization->isAllowed('Magento_Customer::manage')
@@ -77,5 +87,23 @@ class Save extends \Magento\Sales\Controller\Adminhtml\Order\Create implements H
         }
 
         return $this->resultRedirectFactory->create()->setPath($path, $pathParams);
+    }
+
+    /**
+     * Check whether the submitted form was rendered for a different order than the one held in the session
+     *
+     * The admin order create session is shared by all browser tabs, so opening another order for editing
+     * replaces the order the form was built for. Requests without the field are not checked.
+     *
+     * @return bool
+     */
+    private function isFormOutdated(): bool
+    {
+        $editedOrderId = $this->getRequest()->getPost('edited_order_id');
+        if ($editedOrderId === null) {
+            return false;
+        }
+
+        return (int)$editedOrderId !== (int)$this->_getSession()->getOrderId();
     }
 }
