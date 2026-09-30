@@ -210,6 +210,25 @@ define([
                 };
             });
 
+            sorting = sorting.map(function (item, index) {
+                item.order = index;
+
+                return item;
+            }).sort(function (a, b) {
+                var aSaved = typeof a.position !== 'undefined',
+                    bSaved = typeof b.position !== 'undefined';
+
+                if (aSaved && bSaved && a.position !== b.position) {
+                    return a.position - b.position;
+                }
+
+                if (aSaved !== bSaved) {
+                    return aSaved ? -1 : 1;
+                }
+
+                return a.order - b.order;
+            });
+
             this.insertChild(sorting);
 
             return this;
