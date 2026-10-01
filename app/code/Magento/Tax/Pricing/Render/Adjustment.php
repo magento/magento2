@@ -52,18 +52,18 @@ class Adjustment extends AbstractAdjustment
             $this->amountRender->setPriceId(
                 $this->buildIdWithPrefix('price-including-tax-')
             );
-        } elseif ($this->displayPriceExcludingTax() ) {
+        } elseif ($this->displayPriceExcludingTax()) {
             $product = $this->amountRender->getSaleableItem();
             $isBundleWithWeee =
             $product->getTypeId() === \Magento\Bundle\Model\Product\Type::TYPE_CODE
             && (float) $this->amountRender->getAmount()->getAdjustmentAmount(
-            \Magento\Weee\Pricing\Adjustment::ADJUSTMENT_CODE
+                \Magento\Weee\Pricing\Adjustment::ADJUSTMENT_CODE
             ) > 0;
 
             if (!$isBundleWithWeee) {
-            $this->amountRender->setDisplayValue(
-                $this->amountRender->getAmount()->getValue($this->getAdjustmentCode())
-            );
+                $this->amountRender->setDisplayValue(
+                    $this->amountRender->getAmount()->getValue($this->getAdjustmentCode())
+                );
             }
             
             if ($this->taxHelper->priceIncludesTax() && $this->amountRender->getPriceType() == 'finalPrice') {
