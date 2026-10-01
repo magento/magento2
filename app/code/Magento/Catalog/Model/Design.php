@@ -131,6 +131,7 @@ class Design extends \Magento\Framework\Model\AbstractModel
     /**
      * Get custom layout settings
      *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @param Category|Product $object
      * @return DataObject
      */
