@@ -9,6 +9,7 @@ namespace Magento\Amqp\Test\Unit\Setup;
 
 use Magento\Amqp\Setup\ConfigOptionsList;
 use Magento\Amqp\Setup\ConnectionValidator;
+use Magento\MessageQueue\Setup\ConfigOptionsList as MessageQueueConfigOptionsList;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\Data\ConfigData;
 use Magento\Framework\Setup\Option\TextConfigOption;
@@ -16,6 +17,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class ConfigOptionsListTest extends TestCase
 {
@@ -40,6 +42,11 @@ class ConfigOptionsListTest extends TestCase
     private $deploymentConfigMock;
 
     /**
+     * @var OutputInterface|MockObject
+     */
+    private $outputMock;
+
+    /**
      * @var array
      */
     private $options;
@@ -59,11 +66,13 @@ class ConfigOptionsListTest extends TestCase
         $this->objectManager = new ObjectManager($this);
         $this->connectionValidatorMock = $this->createMock(ConnectionValidator::class);
         $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);
+        $this->outputMock = $this->createMock(OutputInterface::class);
 
         $this->model = $this->objectManager->getObject(
             ConfigOptionsList::class,
             [
                 'connectionValidator' => $this->connectionValidatorMock,
+                'output' => $this->outputMock,
             ]
         );
     }
@@ -144,6 +153,7 @@ class ConfigOptionsListTest extends TestCase
     {
         $expectedResult = ['Could not connect to the Amqp Server.'];
         $this->connectionValidatorMock->expects($this->once())->method('isConnectionValid')->willReturn(false);
+        $this->connectionValidatorMock->expects($this->never())->method('getServerVersion');
         $this->assertEquals($expectedResult, $this->model->validate($this->options, $this->deploymentConfigMock));
     }
 
@@ -151,6 +161,10 @@ class ConfigOptionsListTest extends TestCase
     {
         $expectedResult = [];
         $this->connectionValidatorMock->expects($this->once())->method('isConnectionValid')->willReturn(true);
+        $this->connectionValidatorMock->expects($this->once())
+            ->method('getServerVersion')
+            ->willReturn('4.3.1');
+        $this->outputMock->expects($this->never())->method('writeln');
         $this->assertEquals($expectedResult, $this->model->validate($this->options, $this->deploymentConfigMock));
     }
 
@@ -159,7 +173,64 @@ class ConfigOptionsListTest extends TestCase
         $expectedResult = [];
         $options = [];
         $this->connectionValidatorMock->expects($this->never())->method('isConnectionValid');
+        $this->connectionValidatorMock->expects($this->never())->method('getServerVersion');
         $this->assertEquals($expectedResult, $this->model->validate($options, $this->deploymentConfigMock));
+    }
+
+    public function testValidateVersionBelowMinimumEmitsWarning()
+    {
+        $this->connectionValidatorMock->expects($this->once())->method('isConnectionValid')->willReturn(true);
+        $this->connectionValidatorMock->expects($this->once())
+            ->method('getServerVersion')
+            ->willReturn('4.2.0');
+
+        $this->outputMock->expects($this->once())
+            ->method('writeln')
+            ->with($this->stringContains('Warning: RabbitMQ version "4.2.0" detected'));
+
+        $errors = $this->model->validate($this->options, $this->deploymentConfigMock);
+
+        $this->assertEmpty($errors, 'Version warning should not block setup as an error.');
+    }
+
+    public function testValidateVersionExactMinimum()
+    {
+        $this->connectionValidatorMock->expects($this->once())->method('isConnectionValid')->willReturn(true);
+        $this->connectionValidatorMock->expects($this->once())
+            ->method('getServerVersion')
+            ->willReturn(ConnectionValidator::MINIMUM_RABBITMQ_VERSION);
+        $this->outputMock->expects($this->never())->method('writeln');
+
+        $errors = $this->model->validate($this->options, $this->deploymentConfigMock);
+
+        $this->assertEmpty($errors);
+    }
+
+    public function testValidateVersionNullSkipsCheck()
+    {
+        $this->connectionValidatorMock->expects($this->once())->method('isConnectionValid')->willReturn(true);
+        $this->connectionValidatorMock->expects($this->once())
+            ->method('getServerVersion')
+            ->willReturn(null);
+        $this->outputMock->expects($this->never())->method('writeln');
+
+        $errors = $this->model->validate($this->options, $this->deploymentConfigMock);
+
+        $this->assertEmpty($errors);
+    }
+
+    public function testValidateVersionCheckSkippedWhenDefaultConnectionNotAmqp()
+    {
+        $options = $this->options;
+        $options[MessageQueueConfigOptionsList::INPUT_KEY_QUEUE_DEFAULT_CONNECTION] = 'db';
+
+        $this->connectionValidatorMock->expects($this->never())->method('isConnectionValid');
+        $this->connectionValidatorMock->expects($this->never())->method('getServerVersion');
+
+        $errors = $this->model->validate($options, $this->deploymentConfigMock);
+
+        // Errors should be cleared because default connection is not 'amqp'
+        $this->assertEmpty($errors);
     }
 
     /**

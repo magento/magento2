@@ -3,30 +3,29 @@
  * All Rights Reserved.
  */
 
-'use strict';
-
 var tasks = {};
 
 function init(config) {
+    'use strict';
+
     var serveStatic = require('serve-static'),
-        grunt       = require('grunt'),
         _           = require('underscore'),
-        path        = require('path'),
-        ignoredPaths, middleware, themes, files, port;
+        ignoredPaths, middleware, themes, port;
 
     port         = config.port;
-    files        = config.files;
     themes       = config.themes;
     ignoredPaths = config.server.serveAsIs;
 
-    function serveAsIs(path) {
+    function serveAsIs(requestUrl) {
         return ignoredPaths.some(function (ignoredPath) {
-            return new RegExp(ignoredPath).test(path);
+            return new RegExp(ignoredPath).test(requestUrl);
         });
     }
 
     middleware = function (connect, options, middlewares) {
-        var server = serveStatic(process.cwd());
+        var server = serveStatic(process.cwd(), {
+            dotfiles: 'allow'
+        });
 
         middlewares.unshift(function (req, res, next) {
             var url = req.url;
@@ -55,6 +54,8 @@ function init(config) {
 }
 
 function getTasks() {
+    'use strict';
+
     return tasks;
 }
 

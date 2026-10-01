@@ -18,12 +18,12 @@ class Sidebar extends AbstractCart
     /**
      * Xml pah to checkout sidebar display value
      */
-    const XML_PATH_CHECKOUT_SIDEBAR_DISPLAY = 'checkout/sidebar/display';
+    public const XML_PATH_CHECKOUT_SIDEBAR_DISPLAY = 'checkout/sidebar/display';
 
     /**
      * Xml pah to checkout sidebar count value
      */
-    const XML_PATH_CHECKOUT_SIDEBAR_COUNT = 'checkout/sidebar/count';
+    public const XML_PATH_CHECKOUT_SIDEBAR_COUNT = 'checkout/sidebar/count';
 
     /**
      * @var \Magento\Catalog\Helper\Image
@@ -65,6 +65,112 @@ class Sidebar extends AbstractCart
         $this->imageHelper = $imageHelper;
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
+    }
+
+    /**
+     * Get js layout.
+     *
+     * Overridden to dynamically copy item renderers and other key layout components
+     * to any secondary minicarts declared under components.
+     *
+     * @return string
+     */
+    public function getJsLayout()
+    {
+        $jsLayout = $this->jsLayout;
+        $minicartContent = $this->getMinicartContent($jsLayout);
+
+        if ($minicartContent) {
+            $jsLayout = $this->processMinicartComponents($jsLayout, $minicartContent);
+        }
+
+        return $this->serializer->serialize($jsLayout);
+    }
+
+    /**
+     * Get minicart content configuration.
+     *
+     * @param array $jsLayout
+     * @return array|null
+     */
+    private function getMinicartContent(array $jsLayout): ?array
+    {
+        if (isset($jsLayout['components']['minicart_content'])
+            && isset($jsLayout['components']['minicart_content']['config']['itemRenderer'])
+        ) {
+            return $jsLayout['components']['minicart_content'];
+        }
+
+        $layout = $this->getLayout();
+        $minicartBlock = $layout ? $layout->getBlock('minicart') : null;
+        if ($minicartBlock && $minicartBlock !== $this) {
+            $minicartJsLayout = $this->serializer->unserialize($minicartBlock->getJsLayout());
+            if (isset($minicartJsLayout['components']['minicart_content'])) {
+                return $minicartJsLayout['components']['minicart_content'];
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Process and update secondary minicarts with primary minicart content.
+     *
+     * @param array $jsLayout
+     * @param array $minicartContent
+     * @return array
+     */
+    private function processMinicartComponents(array $jsLayout, array $minicartContent): array
+    {
+        if (!isset($jsLayout['components'])) {
+            return $jsLayout;
+        }
+
+        foreach ($jsLayout['components'] as $name => &$component) {
+            if ($name !== 'minicart_content'
+                && isset($component['component'])
+                && $component['component'] === 'Magento_Checkout/js/view/minicart'
+            ) {
+                $component = $this->updateComponentConfig($component, $minicartContent);
+            }
+        }
+
+        return $jsLayout;
+    }
+
+    /**
+     * Update component configuration and children with minicart content.
+     *
+     * @param array $component
+     * @param array $minicartContent
+     * @return array
+     */
+    private function updateComponentConfig(array $component, array $minicartContent): array
+    {
+        if (!isset($component['config'])) {
+            $component['config'] = [];
+        }
+        if (!isset($component['config']['itemRenderer'])
+            && isset($minicartContent['config']['itemRenderer'])
+        ) {
+            $component['config']['itemRenderer'] = $minicartContent['config']['itemRenderer'];
+        }
+        if (!isset($component['children'])) {
+            $component['children'] = [];
+        }
+        if (!isset($component['children']['item.renderer'])
+            && isset($minicartContent['children']['item.renderer'])
+        ) {
+            $component['children']['item.renderer'] = $minicartContent['children']['item.renderer'];
+        }
+        if (!isset($component['children']['subtotal.container'])
+            && isset($minicartContent['children']['subtotal.container'])
+        ) {
+            $component['children']['subtotal.container'] =
+                $minicartContent['children']['subtotal.container'];
+        }
+
+        return $component;
     }
 
     /**

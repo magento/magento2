@@ -950,7 +950,7 @@ class Product extends AbstractEntity
         $this->linkProcessor = $linkProcessor ?? ObjectManager::getInstance()
             ->get(LinkProcessor::class);
         $this->linkProcessor->addNameToIds($this->_linkNameToId);
-        $this->hashAlgorithm = (version_compare(PHP_VERSION, '8.1.0') >= 0) ? 'xxh128' : 'crc32c';
+        $this->hashAlgorithm = 'xxh128';
         parent::__construct(
             $jsonHelper,
             $importExportData,
