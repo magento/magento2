@@ -55,6 +55,14 @@
         <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="openNewPageForWysiwyg"/>
         <actionGroup ref="AdminOpenMediaGalleryFromPageNoEditorActionGroup" stepKey="openMediaGalleryForPageFromWysiwyg"/>
 
+        <!-- Step4 Explicitly re-expand 'wysiwyg' and re-select the child folder to avoid a racy app auto-restore. -->
+        <actionGroup ref="AdminMediaGalleryExpandFolderActionGroup" stepKey="expandWysiwygFolderForStep4">
+            <argument name="fieldId" value="wysiwyg"/>
+        </actionGroup>
+        <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectCreatedFolderForStep4">
+            <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
+        </actionGroup>
+
         <!-- Step4.1 Delete Folder is diabled by default for no selected folder -->
         <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="unselectFoldersToVerifyDeleteFolderButtonStatus">
             <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>

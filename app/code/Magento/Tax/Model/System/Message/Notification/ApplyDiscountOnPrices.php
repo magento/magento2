@@ -54,7 +54,8 @@ class ApplyDiscountOnPrices implements \Magento\Tax\Model\System\Message\Notific
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @codeCoverageIgnore
      */
     public function getIdentity()
@@ -63,7 +64,7 @@ class ApplyDiscountOnPrices implements \Magento\Tax\Model\System\Message\Notific
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isDisplayed()
     {
@@ -74,7 +75,7 @@ class ApplyDiscountOnPrices implements \Magento\Tax\Model\System\Message\Notific
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getText()
     {
@@ -99,7 +100,8 @@ class ApplyDiscountOnPrices implements \Magento\Tax\Model\System\Message\Notific
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @codeCoverageIgnore
      */
     public function getSeverity()
@@ -118,10 +120,15 @@ class ApplyDiscountOnPrices implements \Magento\Tax\Model\System\Message\Notific
             return $this->storesWithInvalidSettings;
         }
         $this->storesWithInvalidSettings = [];
-        $storeCollection = $this->storeManager->getStores(true);
-        foreach ($storeCollection as $store) {
-            if (!$this->checkSettings($store)) {
-                $website = $store->getWebsite();
+        $websites = $this->storeManager->getWebsites(true);
+        $checkedByWebsite = [];
+        foreach ($this->storeManager->getStores(true) as $store) {
+            $websiteId = (int)$store->getWebsiteId();
+            if (!array_key_exists($websiteId, $checkedByWebsite)) {
+                $checkedByWebsite[$websiteId] = $this->checkSettings($store);
+            }
+            if (!$checkedByWebsite[$websiteId]) {
+                $website = $websites[$websiteId] ?? $store->getWebsite();
                 $this->storesWithInvalidSettings[] = $website->getName() . ' (' . $store->getName() . ')';
             }
         }

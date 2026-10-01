@@ -23,4 +23,11 @@
     <entity name="DefaultYouTubeApiKey" type="youtube_api_key_config">
         <data key="value"/>
     </entity>
+    <!-- mftf test 2nd youtube api key configuration to manage data load-->
+    <entity name="ProductYoutubeApiKeyConfig" type="product_video_config">
+        <requiredEntity type="youtube_api_key_config">YouTubeApiKeyConfig</requiredEntity>
+    </entity>
+    <entity name="YouTubeApiKeyConfig" type="youtube_api_key_config">
+        <data key="value">{{_CREDS.magento/youtube_api_key}}</data>
+    </entity>
 </entities>
