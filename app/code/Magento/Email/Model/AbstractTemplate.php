@@ -528,6 +528,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
             // Force emulation in case email is being sent from same store so that theme will be loaded. Helpful
             // for situations where emails may be sent from bootstrap files that load frontend store, but not theme
             $this->appEmulation->startEnvironmentEmulation($storeId, $area, true);
+            $this->urlModel->setScope($storeId);
         }
         return true;
     }

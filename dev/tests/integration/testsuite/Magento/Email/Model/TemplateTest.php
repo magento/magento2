@@ -127,6 +127,64 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
+     * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
+     * @magentoConfigFixture default_store web/unsecure/base_url http://website1.example.test/
+     * @magentoConfigFixture default_store web/unsecure/base_link_url http://website1.example.test/
+     * @magentoConfigFixture default_store web/secure/base_url https://website1.example.test/
+     * @magentoConfigFixture default_store web/secure/base_link_url https://website1.example.test/
+     * @magentoConfigFixture fixturestore_store web/unsecure/base_url http://website2.example.test/
+     * @magentoConfigFixture fixturestore_store web/unsecure/base_link_url http://website2.example.test/
+     * @magentoConfigFixture fixturestore_store web/secure/base_url https://website2.example.test/
+     * @magentoConfigFixture fixturestore_store web/secure/base_link_url https://website2.example.test/
+     * @magentoConfigFixture default_store general/locale/code en_US
+     * @magentoConfigFixture fixturestore_store general/locale/code en_US
+     */
+    public function testAssetsUseEmulatedStoreBaseUrl(): void
+    {
+        Bootstrap::getInstance()->loadArea(Area::AREA_FRONTEND);
+        $storeManager = $this->objectManager->get(\Magento\Store\Model\StoreManagerInterface::class);
+        $stores = [$storeManager->getStore('default'), $storeManager->getStore('fixturestore')];
+        $config = $this->objectManager->get(\Magento\Framework\App\Config\MutableScopeConfigInterface::class);
+        $theme = $this->objectManager->create(\Magento\Framework\View\Design\ThemeInterface::class);
+        $theme->load('Magento/blank', 'theme_path');
+
+        foreach ($stores as $store) {
+            $config->setValue(
+                DesignInterface::XML_PATH_THEME_ID,
+                $theme->getId(),
+                ScopeInterface::SCOPE_STORE,
+                $store->getCode()
+            );
+        }
+
+        foreach ([0, 1, 0, 1] as $index) {
+            $template = $this->objectManager->create(Template::class);
+            $template->setDesignConfig(['area' => Area::AREA_FRONTEND, 'store' => $stores[$index]->getId()]);
+            $template->setTemplateType(TemplateTypesInterface::TYPE_HTML);
+            $template->setTemplateText(
+                '{{store url=""}}|{{var logo_url}}|{{view url="css/email-fonts.css"}}'
+            );
+            $urls = explode('|', $template->getProcessedTemplate());
+
+            $this->assertCount(3, $urls);
+            foreach ($urls as $url) {
+                $this->assertSame(
+                    'website' . ($index + 1) . '.example.test',
+                    parse_url($url, PHP_URL_HOST),
+                    $url
+                );
+            }
+            $this->assertStringEndsWith(
+                '/frontend/Magento/blank/en_US/Magento_Email/logo_email.png',
+                $urls[1]
+            );
+            $this->assertStringEndsWith('/frontend/Magento/blank/en_US/css/email-fonts.css', $urls[2]);
+        }
+    }
+
+    /**
      * Test template directive to ensure that templates can be loaded from modules
      *
      * @param string $area
