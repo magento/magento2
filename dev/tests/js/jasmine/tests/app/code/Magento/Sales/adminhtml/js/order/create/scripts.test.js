@@ -18,22 +18,23 @@ define([
         confirmSpy = jasmine.createSpy('confirm'),
         tmpl = '<form id="edit_form" action="/">' +
                 '<section id="order-methods">' +
-                    '<div id="order-billing_method"></div>' +
+                    '<div id="order-billing_method">' +
+                        '<div id="order-billing_method_form">' +
+                            '<input id="p_method_payment1" type="radio" name="payment[method]" value="payment1"/>' +
+                            '<fieldset id="payment_form_payment1">' +
+                                '<input type="number" name="payment[cc_number]"/>' +
+                                '<input type="number" name="payment[cc_cid]"/>' +
+                            '</fieldset>' +
+                            '<input id="p_method_payment2" type="radio" name="payment[method]" value="payment2"/>' +
+                            '<fieldset id="payment_form_payment2">' +
+                                '<input type="number" name="payment[cc_number]"/>' +
+                                '<input type="number" name="payment[cc_cid]"/>' +
+                            '</fieldset>' +
+                            '<input id="p_method_free" type="radio" name="payment[method]" value="free"/>' +
+                        '</div>' +
+                    '</div>' +
                     '<div id="order-shipping_method"></div>' +
                 '</section>' +
-                '<div id="order-billing_method_form">' +
-                    '<input id="p_method_payment1" type="radio" name="payment[method]" value="payment1"/>' +
-                    '<fieldset id="payment_form_payment1">' +
-                        '<input type="number" name="payment[cc_number]"/>' +
-                        '<input type="number" name="payment[cc_cid]"/>' +
-                    '</fieldset>' +
-                    '<input id="p_method_payment2" type="radio" name="payment[method]" value="payment2"/>' +
-                    '<fieldset id="payment_form_payment2">' +
-                        '<input type="number" name="payment[cc_number]"/>' +
-                        '<input type="number" name="payment[cc_cid]"/>' +
-                    '</fieldset>' +
-                    '<input id="p_method_free" type="radio" name="payment[method]" value="free"/>' +
-                '</div>' +
             '<button id="submit_order_top_button" type="button">Submit Order</button>' +
             '</form>';
 
@@ -100,7 +101,15 @@ define([
     function init(config) {
         config = config || {};
         order = new window.AdminOrder({});
-        $(formEl).validate({});
+        $(formEl).validate({
+            ignore: '',
+            errorClass: 'mage-error',
+            messages: {
+                'order[has_payment]': {
+                    required: 'This is a required field.'
+                }
+            }
+        });
         $(formEl).find(':radio[value="payment1"]').testPaymentMethodA({
             code: 'payment1',
             orderSaveUrl: '/admin/sales/order/create/payment_method/payment1',
@@ -275,6 +284,73 @@ define([
         });
 
         describe('submit()', function () {
+            var originalRequiredEntryRule;
+
+            beforeEach(function () {
+                originalRequiredEntryRule = $.validator.classRuleSettings['required-entry'];
+                $.validator.addClassRules('required-entry', {
+                    required: true
+                });
+            });
+
+            afterEach(function () {
+                if (typeof originalRequiredEntryRule === 'undefined') {
+                    delete $.validator.classRuleSettings['required-entry'];
+                } else {
+                    $.validator.classRuleSettings['required-entry'] = originalRequiredEntryRule;
+                }
+                originalRequiredEntryRule = undefined;
+            });
+
+            ['free', 'payment1', 'payment2'].forEach(function (method) {
+                it('blocks submission after resetting payment method ' + method, function () {
+                    init({
+                        method: method
+                    });
+                    $.ajax = jasmine.createSpy('$.ajax');
+
+                    order.resetPaymentMethod();
+                    order.submit();
+
+                    expect($.ajax).not.toHaveBeenCalled();
+                    expect($(formEl).valid()).toBeFalse();
+                    expect($('#order-billing_method label.mage-error').text()).toBe('This is a required field.');
+                    expect($('#submit_order_top_button').prop('disabled')).toBeFalse();
+                });
+            });
+
+            it('allows submission after payment methods are reloaded and selected', function () {
+                var paymentForm;
+
+                init({
+                    method: 'payment1'
+                });
+                paymentForm = $('#order-billing_method').html();
+                $.ajax = jasmine.createSpy('$.ajax');
+                order.resetPaymentMethod();
+                order.submit();
+                expect($.ajax).not.toHaveBeenCalled();
+
+                order.loadingAreas = ['billing_method'];
+                order.loadAreaResponseHandler({
+                    billing_method: paymentForm
+                });
+                $(formEl).find(':radio[value="free"]').prop('checked', true);
+                order.switchPaymentMethod('free');
+                order.submit();
+
+                expect($(formEl).find('[name="order[has_payment]"]').length).toBe(0);
+                expect($(formEl).valid()).toBeTrue();
+                expect($.ajax).toHaveBeenCalledTimes(1);
+                expect($.ajax).toHaveBeenCalledWith(jasmine.objectContaining({
+                    url: '/admin/sales/order/create',
+                    data: [{
+                        name: 'payment[method]',
+                        value: 'free'
+                    }]
+                }));
+            });
+
             function testSubmit(currentPaymentMethod, paymentMethod, ajaxParams) {
                 $.ajax = jasmine.createSpy('$.ajax');
                 init({
