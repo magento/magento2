@@ -103,9 +103,11 @@ class DesignAbstraction extends \Magento\Framework\View\Element\Html\Select
      */
     private function getPageLayoutDesignAbstractions(ThemeInterface $theme): array
     {
-        $pageLayoutsConfig = $this->pageLayoutConfigFactory->create(
-            ['configFiles' => $this->pageLayoutFileCollector->getFilesContent($theme, 'layouts.xml')]
-        );
+        $configFiles = $this->pageLayoutFileCollector->getFilesContent($theme, 'layouts.xml');
+        if (!$configFiles) {
+            return [];
+        }
+        $pageLayoutsConfig = $this->pageLayoutConfigFactory->create(['configFiles' => $configFiles]);
         $result = [];
         foreach ($pageLayoutsConfig->getPageLayouts() as $name => $label) {
             $result[$name] = [
@@ -153,6 +155,7 @@ class DesignAbstraction extends \Magento\Framework\View\Element\Html\Select
         // Sort list of design abstractions by label
         foreach ($designAbstractions as $key => $row) {
             $label[$key] = $row['label'];
+            $designAbstractions[$key]['name'] = $row['name'] ?? (string)$key;
         }
         array_multisort($label, SORT_STRING, $designAbstractions);
 

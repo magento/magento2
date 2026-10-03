@@ -125,7 +125,7 @@ class DesignAbstractionTest extends TestCase
         $this->themeCollectionMock->method('getItemById')->willReturn($themeMock);
         $this->pageLayoutFileCollectorMock->expects($this->once())
             ->method('getFilesContent')
-            ->willReturn([]);
+            ->willReturn(['layouts.xml' => '<page_layouts/>']);
         $pageLayoutConfigMock = $this->createStub(PageLayoutConfig::class);
         $pageLayoutConfigMock->method('getPageLayouts')->willReturn(['123' => 'B numeric', '45' => 'A numeric']);
         $this->pageLayoutConfigFactoryMock->expects($this->once())
@@ -143,6 +143,36 @@ class DesignAbstractionTest extends TestCase
             ],
             $options[2]['value']
         );
+    }
+
+    public function testThemeWithoutLayoutsXmlListsNoPageLayouts(): void
+    {
+        $this->themeCollectionMock->method('getItemById')->willReturn($this->createStub(Theme::class));
+        $this->pageLayoutFileCollectorMock->expects($this->once())->method('getFilesContent')->willReturn([]);
+        $this->pageLayoutConfigFactoryMock->expects($this->never())->method('create');
+
+        $this->block->setTheme(3);
+        $this->prepareOptions();
+        $options = $this->block->getOptions();
+
+        $this->assertSame([], $options[2]['value']);
+    }
+
+    public function testDesignAbstractionWithoutNameUsesItsKey(): void
+    {
+        $this->pageLayoutFileCollectorMock->expects($this->never())->method('getFilesContent');
+        $this->pageLayoutConfigFactoryMock->expects($this->never())->method('create');
+        (new \ReflectionMethod($this->block, '_addDesignAbstractionOptions'))->invoke(
+            $this->block,
+            [
+                'custom_handle' => ['label' => 'B custom', 'design_abstraction' => 'custom'],
+                77 => ['label' => 'A numeric', 'design_abstraction' => 'page_layout'],
+            ]
+        );
+        $options = $this->block->getOptions();
+
+        $this->assertSame([['value' => 'custom_handle', 'label' => 'B custom']], $options[0]['value']);
+        $this->assertSame([['value' => '77', 'label' => 'A numeric']], $options[1]['value']);
     }
 
     public function testNoPageLayoutsWithoutTheme(): void

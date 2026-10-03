@@ -36,6 +36,11 @@ class Plugin
     private $pageLayoutsByTheme = [];
 
     /**
+     * @var \WeakMap
+     */
+    private $pageLayoutMerges;
+
+    /**
      * @param Update $update
      * @param PageLayoutConfigFactory|null $pageLayoutConfigFactory
      * @param PageLayoutFileCollector|null $pageLayoutFileCollector
@@ -50,6 +55,7 @@ class Plugin
             ?? ObjectManager::getInstance()->get(PageLayoutConfigFactory::class);
         $this->pageLayoutFileCollector = $pageLayoutFileCollector
             ?? ObjectManager::getInstance()->get(PageLayoutFileCollector::class);
+        $this->pageLayoutMerges = new \WeakMap();
     }
 
     /**
@@ -90,8 +96,8 @@ class Plugin
         }
         $theme = $subject->getTheme();
         return $theme instanceof ThemeInterface
-            && in_array($handle, $this->getPageLayouts($theme), true)
-            && $this->isPageLayoutMerge($subject);
+            && $this->isPageLayoutMerge($subject)
+            && in_array($handle, $this->getPageLayouts($theme), true);
     }
 
     /**
@@ -105,7 +111,10 @@ class Plugin
      */
     private function isPageLayoutMerge(\Magento\Framework\View\Model\Layout\Merge $subject): bool
     {
-        return !$subject->getFileLayoutUpdatesXml()->xpath('handle');
+        if (!isset($this->pageLayoutMerges[$subject])) {
+            $this->pageLayoutMerges[$subject] = !$subject->getFileLayoutUpdatesXml()->xpath('handle[1]');
+        }
+        return $this->pageLayoutMerges[$subject];
     }
 
     /**
@@ -118,13 +127,11 @@ class Plugin
     {
         $themeKey = $theme->getId() . '|' . $theme->getFullPath();
         if (!isset($this->pageLayoutsByTheme[$themeKey])) {
-            $pageLayoutsConfig = $this->pageLayoutConfigFactory->create(
-                ['configFiles' => $this->pageLayoutFileCollector->getFilesContent($theme, 'layouts.xml')]
-            );
-            $this->pageLayoutsByTheme[$themeKey] = array_map(
-                'strval',
-                array_keys($pageLayoutsConfig->getPageLayouts())
-            );
+            $configFiles = $this->pageLayoutFileCollector->getFilesContent($theme, 'layouts.xml');
+            $pageLayouts = $configFiles
+                ? $this->pageLayoutConfigFactory->create(['configFiles' => $configFiles])->getPageLayouts()
+                : [];
+            $this->pageLayoutsByTheme[$themeKey] = array_map('strval', array_keys($pageLayouts));
         }
         return $this->pageLayoutsByTheme[$themeKey];
     }

@@ -23,6 +23,7 @@ class PluginTest extends TestCase
 {
     private const CURRENT_THEME = 'frontend/Vendor/current';
     private const OTHER_THEME = 'frontend/Vendor/other';
+    private const THEME_WITHOUT_LAYOUTS_XML = 'frontend/Vendor/bare';
 
     private const PAGE_LAYOUTS_BY_THEME = [
         self::CURRENT_THEME => [
@@ -56,7 +57,9 @@ class PluginTest extends TestCase
         $pageLayoutFileCollector->method('getFilesContent')->willReturnCallback(
             function (ThemeInterface $theme) {
                 $this->collectedThemes[] = $theme->getFullPath();
-                return ['layouts.xml' => $theme->getFullPath()];
+                return isset(self::PAGE_LAYOUTS_BY_THEME[$theme->getFullPath()])
+                    ? ['layouts.xml' => $theme->getFullPath()]
+                    : [];
             }
         );
         $pageLayoutConfigFactory = $this->createStub(PageLayoutConfigFactory::class);
@@ -100,16 +103,22 @@ class PluginTest extends TestCase
         );
     }
 
+    public function testInheritedPageLayoutOfMergeThemeGetsNoDbUpdates(): void
+    {
+        $this->updateMock->expects($this->never())->method('fetchUpdatesByHandle');
+
+        $this->assertSame('', $this->callPlugin(self::OTHER_THEME, true, ['2columns-left'], 'customer_account'));
+    }
+
     public function testPageLayoutDeclaredOnlyByAnotherThemeDoesNotSuppressDbUpdates(): void
     {
-        $this->assertSame('', $this->callPlugin(self::OTHER_THEME, true, ['2columns-left'], 'customer_account'));
-
         $this->expectDbUpdatesFetchedFor('customer_account');
+
         $this->assertSame(
             '<body/>',
             $this->callPlugin(self::CURRENT_THEME, true, ['2columns-left'], 'customer_account')
         );
-        $this->assertSame([self::OTHER_THEME, self::CURRENT_THEME], $this->collectedThemes);
+        $this->assertSame([self::CURRENT_THEME], $this->collectedThemes);
     }
 
     public function testPageLayoutNamedLikeLayoutHandleDoesNotSuppressDbUpdatesInLayoutMerge(): void
@@ -122,11 +131,43 @@ class PluginTest extends TestCase
         );
     }
 
+    public function testLayoutMergeDoesNotReadLayoutsXml(): void
+    {
+        $this->expectDbUpdatesFetchedFor('1column');
+
+        $this->assertSame('<body/>', $this->callPlugin(self::CURRENT_THEME, false, ['default'], '1column'));
+        $this->assertSame([], $this->collectedThemes);
+    }
+
+    public function testThemeWithoutLayoutsXmlSuppressesNothing(): void
+    {
+        $this->expectDbUpdatesFetchedFor('1column');
+
+        $this->assertSame(
+            '<body/>',
+            $this->callPlugin(self::THEME_WITHOUT_LAYOUTS_XML, true, ['2columns-left'], '1column')
+        );
+    }
+
     public function testRequestedNumericPageLayoutHandleGetsDbUpdates(): void
     {
         $this->expectDbUpdatesFetchedFor('123');
 
         $this->assertSame('<body/>', $this->callPlugin(self::CURRENT_THEME, true, [123], '123'));
+    }
+
+    public function testMergeKindIsDetectedOncePerMerge(): void
+    {
+        $this->updateMock->expects($this->never())->method('fetchUpdatesByHandle');
+        $merge = $this->createMock(Merge::class);
+        $merge->method('getTheme')->willReturn($this->createTheme(self::CURRENT_THEME));
+        $merge->method('getHandles')->willReturn(['2columns-left']);
+        $merge->expects($this->once())
+            ->method('getFileLayoutUpdatesXml')
+            ->willReturn(new Element('<layouts><layout id="1column"/></layouts>'));
+
+        $this->assertSame('', $this->invokePlugin($merge, '1column'));
+        $this->assertSame('', $this->invokePlugin($merge, 'empty'));
     }
 
     private function expectDbUpdatesFetchedFor(string $handle): void
@@ -143,11 +184,8 @@ class PluginTest extends TestCase
         array $requestedHandles,
         string $handle
     ): string {
-        $theme = $this->createStub(ThemeInterface::class);
-        $theme->method('getId')->willReturn(array_search($themePath, array_keys(self::PAGE_LAYOUTS_BY_THEME)));
-        $theme->method('getFullPath')->willReturn($themePath);
         $merge = $this->createStub(Merge::class);
-        $merge->method('getTheme')->willReturn($theme);
+        $merge->method('getTheme')->willReturn($this->createTheme($themePath));
         $merge->method('getScope')->willReturn($this->createStub(ScopeInterface::class));
         $merge->method('getHandles')->willReturn($requestedHandles);
         $merge->method('getFileLayoutUpdatesXml')->willReturn(
@@ -158,6 +196,19 @@ class PluginTest extends TestCase
             )
         );
 
+        return $this->invokePlugin($merge, $handle);
+    }
+
+    private function createTheme(string $themePath): ThemeInterface
+    {
+        $theme = $this->createStub(ThemeInterface::class);
+        $theme->method('getId')->willReturn(crc32($themePath));
+        $theme->method('getFullPath')->willReturn($themePath);
+        return $theme;
+    }
+
+    private function invokePlugin(Merge $merge, string $handle): string
+    {
         return $this->plugin->aroundGetDbUpdateString(
             $merge,
             function () {
