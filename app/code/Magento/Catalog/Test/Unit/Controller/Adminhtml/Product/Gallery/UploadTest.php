@@ -12,6 +12,7 @@ use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\UrlInterface as BackendUrlInterface;
 use Magento\Catalog\Controller\Adminhtml\Product\Gallery\Upload;
 use Magento\Catalog\Model\Product\Media\Config;
+use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Controller\Result\Raw;
 use Magento\Framework\Controller\Result\RawFactory;
 use Magento\Framework\Event\ManagerInterface;
@@ -23,12 +24,10 @@ use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Image\Adapter\AdapterInterface;
 use Magento\Framework\Image\AdapterFactory;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\UrlInterface;
+use Magento\MediaStorage\Helper\File\Storage\Database;
 use Magento\MediaStorage\Model\File\Uploader;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
-use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -37,29 +36,48 @@ use PHPUnit\Framework\TestCase;
 class UploadTest extends TestCase
 {
     private const REMOTE_MEDIA_URL = 'https://cdn.example.com/media/';
-    private const ADMIN_WEB_URL = 'https://admin.example.com/';
-
-    /**
-     * @var Filesystem|Stub
-     */
-    private $filesystem;
-
-    /**
-     * @var BackendUrlInterface|MockObject
-     */
-    private $backendUrl;
+    private const REQUEST_BASE_URL = 'https://admin.example.com/';
 
     /**
      * @var string|null
      */
     private $responseContents;
 
-    /**
-     * @var Upload
-     */
-    private $controller;
+    public function testPreviewUrlUsesUploadRequestHostWhenMediaIsStoredLocally(): void
+    {
+        $this->createController($this->createStub(File::class), false)->execute();
 
-    protected function setUp(): void
+        $result = json_decode((string)$this->responseContents, true);
+        $this->assertSame(
+            self::REQUEST_BASE_URL . 'media/tmp/catalog/product/m/a/magento_image.jpg',
+            $result['url']
+        );
+        $this->assertSame('/m/a/magento_image.jpg.tmp', $result['file']);
+    }
+
+    public function testPreviewUrlUsesMediaBaseWhenMediaIsStoredRemotely(): void
+    {
+        $this->createController($this->createStub(DriverInterface::class), false)->execute();
+
+        $result = json_decode((string)$this->responseContents, true);
+        $this->assertSame(
+            self::REMOTE_MEDIA_URL . 'tmp/catalog/product/m/a/magento_image.jpg',
+            $result['url']
+        );
+    }
+
+    public function testPreviewUrlUsesMediaBaseWhenMediaIsStoredInDatabase(): void
+    {
+        $this->createController($this->createStub(File::class), true)->execute();
+
+        $result = json_decode((string)$this->responseContents, true);
+        $this->assertSame(
+            self::REMOTE_MEDIA_URL . 'tmp/catalog/product/m/a/magento_image.jpg',
+            $result['url']
+        );
+    }
+
+    private function createController(DriverInterface $mediaDriver, bool $useDbStorage): Upload
     {
         $uploader = $this->createStub(Uploader::class);
         $uploader->method('save')->willReturn(
@@ -74,12 +92,17 @@ class UploadTest extends TestCase
         $objectManager = $this->createStub(ObjectManagerInterface::class);
         $objectManager->method('create')->willReturn($uploader);
 
-        $this->backendUrl = $this->createMock(BackendUrlInterface::class);
+        $request = $this->createStub(HttpRequest::class);
+        $request->method('getDistroBaseUrl')->willReturn(self::REQUEST_BASE_URL);
+
+        $backendUrl = $this->createMock(BackendUrlInterface::class);
+        $backendUrl->expects($this->never())->method('getBaseUrl');
 
         $context = $this->createStub(Context::class);
         $context->method('getObjectManager')->willReturn($objectManager);
         $context->method('getEventManager')->willReturn($this->createStub(ManagerInterface::class));
-        $context->method('getBackendUrl')->willReturn($this->backendUrl);
+        $context->method('getBackendUrl')->willReturn($backendUrl);
+        $context->method('getRequest')->willReturn($request);
 
         $response = $this->createStub(Raw::class);
         $response->method('setContents')->willReturnCallback(
@@ -94,60 +117,28 @@ class UploadTest extends TestCase
         $adapterFactory = $this->createStub(AdapterFactory::class);
         $adapterFactory->method('create')->willReturn($this->createStub(AdapterInterface::class));
 
-        $this->filesystem = $this->createStub(Filesystem::class);
-        $this->filesystem->method('getDirectoryRead')->willReturn($this->createStub(ReadInterface::class));
-        $this->filesystem->method('getUri')->willReturn('media');
+        $mediaWrite = $this->createStub(WriteInterface::class);
+        $mediaWrite->method('getDriver')->willReturn($mediaDriver);
+        $filesystem = $this->createStub(Filesystem::class);
+        $filesystem->method('getDirectoryRead')->willReturn($this->createStub(ReadInterface::class));
+        $filesystem->method('getDirectoryWrite')->willReturn($mediaWrite);
+        $filesystem->method('getUri')->willReturn('media');
 
         $store = $this->createStub(Store::class);
         $store->method('getBaseUrl')->willReturn(self::REMOTE_MEDIA_URL);
         $storeManager = $this->createStub(StoreManagerInterface::class);
         $storeManager->method('getStore')->willReturn($store);
 
-        $this->controller = new Upload(
+        $fileStorageDatabase = $this->createStub(Database::class);
+        $fileStorageDatabase->method('checkDbUsage')->willReturn($useDbStorage);
+
+        return new Upload(
             $context,
             $rawFactory,
             $adapterFactory,
-            $this->filesystem,
-            new Config($storeManager)
+            $filesystem,
+            new Config($storeManager),
+            $fileStorageDatabase
         );
-    }
-
-    public function testPreviewUrlUsesAdminWebBaseWhenMediaIsStoredLocally(): void
-    {
-        $this->mockMediaDriver($this->createStub(File::class));
-        $this->backendUrl->expects($this->once())
-            ->method('getBaseUrl')
-            ->with(['_type' => UrlInterface::URL_TYPE_WEB])
-            ->willReturn(self::ADMIN_WEB_URL);
-
-        $this->controller->execute();
-
-        $result = json_decode((string)$this->responseContents, true);
-        $this->assertSame(
-            self::ADMIN_WEB_URL . 'media/tmp/catalog/product/m/a/magento_image.jpg',
-            $result['url']
-        );
-        $this->assertSame('/m/a/magento_image.jpg.tmp', $result['file']);
-    }
-
-    public function testPreviewUrlUsesMediaBaseWhenMediaIsStoredRemotely(): void
-    {
-        $this->mockMediaDriver($this->createStub(DriverInterface::class));
-        $this->backendUrl->expects($this->never())->method('getBaseUrl');
-
-        $this->controller->execute();
-
-        $result = json_decode((string)$this->responseContents, true);
-        $this->assertSame(
-            self::REMOTE_MEDIA_URL . 'tmp/catalog/product/m/a/magento_image.jpg',
-            $result['url']
-        );
-    }
-
-    private function mockMediaDriver(DriverInterface $driver): void
-    {
-        $mediaWrite = $this->createStub(WriteInterface::class);
-        $mediaWrite->method('getDriver')->willReturn($driver);
-        $this->filesystem->method('getDirectoryWrite')->willReturn($mediaWrite);
     }
 }

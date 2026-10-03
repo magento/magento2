@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Controller\Adminhtml\Product\Gallery;
 
+use Laminas\Stdlib\Parameters;
 use Magento\Catalog\Model\Product\Media\Config;
 use Magento\Framework\App\Filesystem\DirectoryList as AppDirectoryList;
 use Magento\Framework\App\Request\Http as HttpRequest;
@@ -206,6 +207,47 @@ class UploadTest extends AbstractBackendController
         $this->assertArrayNotHasKey('error', $jsonBody);
         $this->assertEquals('http://localhost/media/tmp/catalog/product/m/a/magento_image.jpg', $jsonBody['url']);
         $this->assertTrue($this->mediaDirectory->isExist($this->getFileAbsolutePath('/m/a/magento_image.jpg')));
+    }
+
+    /**
+     * An HTTPS admin on its own host previews from that host and scheme, whatever the admin base URL settings say.
+     *
+     * @return void
+     */
+    #[
+        ConfigFixture('web/unsecure/base_media_url', 'https://cdn.example.com/media/'),
+        ConfigFixture('web/secure/base_media_url', 'https://cdn.example.com/media/'),
+        ConfigFixture('web/secure/use_in_adminhtml', '0'),
+    ]
+    public function testUploadActionPreviewUrlUsesHostAndSchemeOfUploadRequest(): void
+    {
+        $this->_objectManager->get(StoreManagerInterface::class)->getStore()->_resetState();
+        $this->copyFileToSysTmpDir(
+            [
+                'name' => 'magento_image.jpg',
+                'type' => 'image/jpeg',
+                'current_path' => '/../../../../_files',
+            ]
+        );
+        $request = $this->getRequest();
+        $server = $request->getServer();
+        $request->setServer(
+            new Parameters(
+                array_merge(
+                    $server ? $server->toArray() : [],
+                    ['HTTPS' => 'on', 'HTTP_HOST' => 'admin.example.com', 'SCRIPT_NAME' => '/index.php']
+                )
+            )
+        );
+        $request->setMethod($this->httpMethod);
+        $this->dispatch($this->uri);
+        $jsonBody = $this->serializer->unserialize($this->getResponse()->getBody());
+
+        $this->assertArrayNotHasKey('error', $jsonBody);
+        $this->assertEquals(
+            'https://admin.example.com/media/tmp/catalog/product/m/a/magento_image.jpg',
+            $jsonBody['url']
+        );
     }
 
     /**

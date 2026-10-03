@@ -8,9 +8,10 @@ namespace Magento\Catalog\Controller\Adminhtml\Product\Gallery;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem\Driver\File;
-use Magento\Framework\UrlInterface;
+use Magento\MediaStorage\Helper\File\Storage\Database;
 
 /**
  * The product gallery upload controller
@@ -57,18 +58,25 @@ class Upload extends \Magento\Backend\App\Action implements HttpPostActionInterf
     private $productMediaConfig;
 
     /**
+     * @var Database
+     */
+    private $fileStorageDatabase;
+
+    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
      * @param \Magento\Framework\Image\AdapterFactory $adapterFactory
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Catalog\Model\Product\Media\Config $productMediaConfig
+     * @param Database|null $fileStorageDatabase
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
         ?\Magento\Framework\Image\AdapterFactory $adapterFactory = null,
         ?\Magento\Framework\Filesystem $filesystem = null,
-        ?\Magento\Catalog\Model\Product\Media\Config $productMediaConfig = null
+        ?\Magento\Catalog\Model\Product\Media\Config $productMediaConfig = null,
+        ?Database $fileStorageDatabase = null
     ) {
         parent::__construct($context);
         $this->resultRawFactory = $resultRawFactory;
@@ -78,6 +86,8 @@ class Upload extends \Magento\Backend\App\Action implements HttpPostActionInterf
             ->get(\Magento\Framework\Filesystem::class);
         $this->productMediaConfig = $productMediaConfig ?: ObjectManager::getInstance()
             ->get(\Magento\Catalog\Model\Product\Media\Config::class);
+        $this->fileStorageDatabase = $fileStorageDatabase ?: ObjectManager::getInstance()
+            ->get(Database::class);
     }
 
     /**
@@ -132,20 +142,24 @@ class Upload extends \Magento\Backend\App\Action implements HttpPostActionInterf
      * Build the preview URL of an image that was just written to the temporary media directory.
      *
      * A locally stored file is not yet available on a remote "Base URL for User Media Files" (CDN, synced
-     * mirror), so it is previewed from the admin web base URL, which serves the local media directory.
-     * Files written through a non-local driver (remote storage) keep the configured media URL.
+     * mirror), so it is previewed from the host and scheme of the admin request that uploaded it.
+     * Remote storage and database media storage keep the configured media URL.
      *
      * @param string $file
      * @return string
      */
     private function getTmpPreviewUrl(string $file): string
     {
+        $request = $this->getRequest();
         $mediaDriver = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA)->getDriver();
-        if (!$mediaDriver instanceof File) {
+        if (!$mediaDriver instanceof File
+            || !$request instanceof HttpRequest
+            || $this->fileStorageDatabase->checkDbUsage()
+        ) {
             return $this->productMediaConfig->getTmpMediaUrl($file);
         }
 
-        return $this->_backendUrl->getBaseUrl(['_type' => UrlInterface::URL_TYPE_WEB])
+        return $request->getDistroBaseUrl()
             . $this->filesystem->getUri(DirectoryList::MEDIA) . '/'
             . $this->productMediaConfig->getTmpMediaShortUrl($file);
     }
