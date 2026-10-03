@@ -11,6 +11,7 @@ use Magento\Framework\MessageQueue\ConsumerConfigurationInterface;
 use Magento\Framework\MessageQueue\MessageStateResetter;
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 class MessageStateResetterTest extends TestCase
 {
@@ -21,7 +22,7 @@ class MessageStateResetterTest extends TestCase
         $first->expects($this->once())->method('_resetState');
         $second->expects($this->once())->method('_resetState');
 
-        (new MessageStateResetter(['first' => $first, 'second' => $second, 'other' => new \stdClass()]))
+        $this->createResetter(['first' => $first, 'second' => $second, 'other' => new \stdClass()])
             ->resetState($this->createConfiguration([]));
     }
 
@@ -32,7 +33,7 @@ class MessageStateResetterTest extends TestCase
         $sharedHandler->expects($this->once())->method('_resetState');
         $topicHandler->expects($this->once())->method('_resetState');
 
-        (new MessageStateResetter([$sharedHandler]))->resetState(
+        $this->createResetter([$sharedHandler])->resetState(
             $this->createConfiguration(
                 [
                     'topic.one' => [[$sharedHandler, 'execute'], [new \stdClass(), 'execute']],
@@ -40,6 +41,40 @@ class MessageStateResetterTest extends TestCase
                 ]
             )
         );
+    }
+
+    public function testResetStateReadsConsumerHandlersOncePerConfiguration(): void
+    {
+        $handler = $this->createMock(ResetAfterRequestInterface::class);
+        $configuration = $this->createMock(ConsumerConfigurationInterface::class);
+        $configuration->expects($this->once())->method('getTopicNames')->willReturn(['topic.one']);
+        $configuration->expects($this->once())->method('getHandlers')->with('topic.one')
+            ->willReturn([[$handler, 'execute']]);
+
+        $handler->expects($this->exactly(2))->method('_resetState');
+
+        $resetter = $this->createResetter([]);
+        $resetter->resetState($configuration);
+        $resetter->resetState($configuration);
+    }
+
+    public function testResetStateLogsFailingResetAndResetsTheRest(): void
+    {
+        $exception = new \RuntimeException('Reset failed');
+        $failing = $this->createMock(ResetAfterRequestInterface::class);
+        $failing->expects($this->once())->method('_resetState')->willThrowException($exception);
+        $next = $this->createMock(ResetAfterRequestInterface::class);
+        $next->expects($this->once())->method('_resetState');
+        $logger = $this->createMock(LoggerInterface::class);
+        $logger->expects($this->once())->method('error')
+            ->with($this->stringContains('Could not reset state'), ['exception' => $exception]);
+
+        (new MessageStateResetter([$failing, $next], $logger))->resetState($this->createConfiguration([]));
+    }
+
+    private function createResetter(array $services): MessageStateResetter
+    {
+        return new MessageStateResetter($services, $this->createStub(LoggerInterface::class));
     }
 
     private function createConfiguration(array $handlersByTopic): ConsumerConfigurationInterface

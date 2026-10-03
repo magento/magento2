@@ -7,7 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\Framework\MessageQueue;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+use Psr\Log\LoggerInterface;
+use Throwable;
+use WeakMap;
 
 /**
  * Resets the state of configured services and consumer handlers after a consumer has processed a message.
@@ -25,25 +29,60 @@ class MessageStateResetter
     private array $services;
 
     /**
-     * @param object[] $services Items not implementing ResetAfterRequestInterface are ignored
+     * @var LoggerInterface
      */
-    public function __construct(array $services = [])
+    private LoggerInterface $logger;
+
+    /**
+     * @var WeakMap<ConsumerConfigurationInterface, ResetAfterRequestInterface[]>
+     */
+    private WeakMap $instancesByConfiguration;
+
+    /**
+     * @param object[] $services Items not implementing ResetAfterRequestInterface are ignored
+     * @param LoggerInterface|null $logger
+     */
+    public function __construct(array $services = [], ?LoggerInterface $logger = null)
     {
         $this->services = array_filter(
             $services,
             static fn ($service) => $service instanceof ResetAfterRequestInterface
         );
+        $this->logger = $logger ?? ObjectManager::getInstance()->get(LoggerInterface::class);
+        $this->instancesByConfiguration = new WeakMap();
     }
 
     /**
      * Reset the registered services and the handler instances the consumer was configured with
      *
-     * Handlers are created per consumer rather than shared, so they hold their own caches.
+     * Handlers are created per consumer rather than shared, so they hold their own caches. A failing reset is
+     * logged and never thrown: it runs after the message was settled and must not fail or re-run it.
      *
      * @param ConsumerConfigurationInterface $configuration
      * @return void
      */
     public function resetState(ConsumerConfigurationInterface $configuration): void
+    {
+        $this->instancesByConfiguration[$configuration] ??= $this->collectInstances($configuration);
+        foreach ($this->instancesByConfiguration[$configuration] as $instance) {
+            try {
+                $instance->_resetState();
+            } catch (Throwable $exception) {
+                $this->logger->error(
+                    sprintf('Could not reset state of %s after a queue message.', get_class($instance)),
+                    ['exception' => $exception]
+                );
+            }
+        }
+    }
+
+    /**
+     * Collect the registered services and the resettable handler instances, each once
+     *
+     * @param ConsumerConfigurationInterface $configuration
+     * @return ResetAfterRequestInterface[]
+     */
+    private function collectInstances(ConsumerConfigurationInterface $configuration): array
     {
         $instances = [];
         foreach ($this->services as $service) {
@@ -57,8 +96,6 @@ class MessageStateResetter
                 }
             }
         }
-        foreach ($instances as $instance) {
-            $instance->_resetState();
-        }
+        return array_values($instances);
     }
 }
