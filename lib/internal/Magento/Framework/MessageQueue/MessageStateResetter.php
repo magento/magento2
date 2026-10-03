@@ -15,7 +15,8 @@ use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
  *
  * A consumer is a long-running process, so services that cache entities in memory would otherwise serve
  * data loaded while handling an earlier message. Only register services whose reset clears such caches;
- * services holding connections (database, AMQP) must never be registered here.
+ * services holding connections (database, AMQP) must never be registered here. Register the shared service
+ * itself, not its generated proxy: a proxy only resets a subject that was resolved through that same proxy.
  */
 class MessageStateResetter
 {

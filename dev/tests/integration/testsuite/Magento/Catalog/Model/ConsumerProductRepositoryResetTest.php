@@ -26,6 +26,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * A long-running consumer must not serve products cached while handling an earlier message.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ConsumerProductRepositoryResetTest extends TestCase
 {

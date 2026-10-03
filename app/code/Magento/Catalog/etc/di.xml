@@ -1407,8 +1407,8 @@
     <type name="Magento\Framework\MessageQueue\MessageStateResetter">
         <arguments>
             <argument name="services" xsi:type="array">
-                <item name="catalogProductRepository" xsi:type="object">Magento\Catalog\Model\ProductRepository\Proxy</item>
-                <item name="catalogCategoryRepository" xsi:type="object">Magento\Catalog\Model\CategoryRepository\Proxy</item>
+                <item name="productRepository" xsi:type="object">Magento\Catalog\Model\ProductRepository</item>
+                <item name="categoryRepository" xsi:type="object">Magento\Catalog\Model\CategoryRepository</item>
             </argument>
         </arguments>
     </type>

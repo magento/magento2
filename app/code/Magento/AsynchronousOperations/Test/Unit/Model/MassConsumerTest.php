@@ -74,9 +74,9 @@ class MassConsumerTest extends TestCase
         $envelope = $this->createStub(EnvelopeInterface::class);
         $this->invoker->expects($this->once())->method('invoke')
             ->willReturnCallback(
-                static function ($queue, $maxMessages, \Closure $callback) use ($envelope): void {
-                    $callback($envelope);
-                    $callback($envelope);
+                static function (...$arguments) use ($envelope): void {
+                    $arguments[2]($envelope);
+                    $arguments[2]($envelope);
                 }
             );
         $this->envelopeCallback->expects($this->exactly(2))->method('execute')->with($envelope);
