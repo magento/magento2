@@ -13,6 +13,7 @@ use Magento\Framework\MessageQueue\Consumer\ConfigInterface as ConsumerConfig;
 use Magento\Framework\MessageQueue\ConsumerConfigurationInterface;
 use Magento\Framework\MessageQueue\ConsumerInterface;
 use Magento\Framework\MessageQueue\EnvelopeInterface;
+use Magento\Framework\MessageQueue\MessageStateResetter;
 use Magento\Framework\MessageQueue\QueueInterface;
 use Magento\Framework\Registry;
 
@@ -49,6 +50,11 @@ class MassConsumer implements ConsumerInterface
     private $consumerConfig;
 
     /**
+     * @var MessageStateResetter
+     */
+    private $messageStateResetter;
+
+    /**
      * Initialize dependencies.
      *
      * @param CallbackInvokerInterface $invoker
@@ -56,19 +62,23 @@ class MassConsumer implements ConsumerInterface
      * @param MassConsumerEnvelopeCallbackFactory $massConsumerEnvelopeCallback
      * @param Registry $registry
      * @param ConsumerConfig|null $consumerConfig
+     * @param MessageStateResetter|null $messageStateResetter
      */
     public function __construct(
         CallbackInvokerInterface $invoker,
         ConsumerConfigurationInterface $configuration,
         MassConsumerEnvelopeCallbackFactory $massConsumerEnvelopeCallback,
         Registry $registry,
-        ?ConsumerConfig $consumerConfig = null
+        ?ConsumerConfig $consumerConfig = null,
+        ?MessageStateResetter $messageStateResetter = null
     ) {
         $this->invoker = $invoker;
         $this->configuration = $configuration;
         $this->massConsumerEnvelopeCallback = $massConsumerEnvelopeCallback;
         $this->registry = $registry;
         $this->consumerConfig = $consumerConfig ?: ObjectManager::getInstance()->get(ConsumerConfig::class);
+        $this->messageStateResetter = $messageStateResetter
+            ?: ObjectManager::getInstance()->get(MessageStateResetter::class);
     }
 
     /**
@@ -112,7 +122,11 @@ class MassConsumer implements ConsumerInterface
             ]
         );
         return function (EnvelopeInterface $message) use ($callbackInstance) {
-            $callbackInstance->execute($message);
+            try {
+                $callbackInstance->execute($message);
+            } finally {
+                $this->messageStateResetter->resetState();
+            }
         };
     }
 }

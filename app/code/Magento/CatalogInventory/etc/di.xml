@@ -141,4 +141,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\MessageQueue\MessageStateResetter">
+        <arguments>
+            <argument name="services" xsi:type="array">
+                <item name="catalogInventoryStockRegistryStorage" xsi:type="object">Magento\CatalogInventory\Model\StockRegistryStorage\Proxy</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
