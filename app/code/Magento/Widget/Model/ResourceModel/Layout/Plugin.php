@@ -9,7 +9,9 @@ declare(strict_types=1);
 namespace Magento\Widget\Model\ResourceModel\Layout;
 
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\View\Model\PageLayout\Config\BuilderInterface as PageLayoutConfigBuilder;
+use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Framework\View\PageLayout\ConfigFactory as PageLayoutConfigFactory;
+use Magento\Framework\View\PageLayout\File\Collector\Aggregated as PageLayoutFileCollector;
 
 class Plugin
 {
@@ -19,24 +21,35 @@ class Plugin
     private $update;
 
     /**
-     * @var PageLayoutConfigBuilder
+     * @var PageLayoutConfigFactory
      */
-    private $pageLayoutConfigBuilder;
+    private $pageLayoutConfigFactory;
 
     /**
-     * @var array|null
+     * @var PageLayoutFileCollector
      */
-    private $pageLayouts;
+    private $pageLayoutFileCollector;
+
+    /**
+     * @var array
+     */
+    private $pageLayoutsByTheme = [];
 
     /**
      * @param Update $update
-     * @param PageLayoutConfigBuilder|null $pageLayoutConfigBuilder
+     * @param PageLayoutConfigFactory|null $pageLayoutConfigFactory
+     * @param PageLayoutFileCollector|null $pageLayoutFileCollector
      */
-    public function __construct(Update $update, ?PageLayoutConfigBuilder $pageLayoutConfigBuilder = null)
-    {
+    public function __construct(
+        Update $update,
+        ?PageLayoutConfigFactory $pageLayoutConfigFactory = null,
+        ?PageLayoutFileCollector $pageLayoutFileCollector = null
+    ) {
         $this->update = $update;
-        $this->pageLayoutConfigBuilder = $pageLayoutConfigBuilder
-            ?? ObjectManager::getInstance()->get(PageLayoutConfigBuilder::class);
+        $this->pageLayoutConfigFactory = $pageLayoutConfigFactory
+            ?? ObjectManager::getInstance()->get(PageLayoutConfigFactory::class);
+        $this->pageLayoutFileCollector = $pageLayoutFileCollector
+            ?? ObjectManager::getInstance()->get(PageLayoutFileCollector::class);
     }
 
     /**
@@ -72,15 +85,31 @@ class Plugin
         \Magento\Framework\View\Model\Layout\Merge $subject,
         string $handle
     ): bool {
-        if (in_array($handle, $subject->getHandles(), true)) {
+        if (in_array($handle, array_map('strval', $subject->getHandles()), true)) {
             return false;
         }
-        if ($this->pageLayouts === null) {
-            $this->pageLayouts = array_map(
+        $theme = $subject->getTheme();
+        return $theme instanceof ThemeInterface && in_array($handle, $this->getPageLayouts($theme), true);
+    }
+
+    /**
+     * Page layout ids declared in the theme's layouts.xml
+     *
+     * @param ThemeInterface $theme
+     * @return string[]
+     */
+    private function getPageLayouts(ThemeInterface $theme): array
+    {
+        $themeKey = $theme->getId() . '|' . $theme->getFullPath();
+        if (!isset($this->pageLayoutsByTheme[$themeKey])) {
+            $pageLayoutsConfig = $this->pageLayoutConfigFactory->create(
+                ['configFiles' => $this->pageLayoutFileCollector->getFilesContent($theme, 'layouts.xml')]
+            );
+            $this->pageLayoutsByTheme[$themeKey] = array_map(
                 'strval',
-                array_keys($this->pageLayoutConfigBuilder->getPageLayoutsConfig()->getPageLayouts())
+                array_keys($pageLayoutsConfig->getPageLayouts())
             );
         }
-        return in_array($handle, $this->pageLayouts, true);
+        return $this->pageLayoutsByTheme[$themeKey];
     }
 }
