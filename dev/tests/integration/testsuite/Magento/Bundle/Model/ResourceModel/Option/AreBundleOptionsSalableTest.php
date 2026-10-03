@@ -55,9 +55,9 @@ class AreBundleOptionsSalableTest extends TestCase
         DataFixture(WebsiteFixture::class, as: 'website2'),
         DataFixture(StoreGroupFixture::class, ['website_id' => '$website2.id$'], 'group2'),
         DataFixture(StoreFixture::class, ['store_group_id' => '$group2.id$', 'code' => 'store2'], 'store2'),
-        DataFixture(ProductFixture::class, ['sku' => 'simple1', 'website_ids' => [1, '$website2.id']], 's1'),
-        DataFixture(ProductFixture::class, ['sku' => 'simple2', 'website_ids' => [1, '$website2.id']], 's2'),
-        DataFixture(ProductFixture::class, ['sku' => 'simple3', 'website_ids' => [1, '$website2.id']], 's3'),
+        DataFixture(ProductFixture::class, ['sku' => 'simple1', 'website_ids' => [1, '$website2.id$']], 's1'),
+        DataFixture(ProductFixture::class, ['sku' => 'simple2', 'website_ids' => [1, '$website2.id$']], 's2'),
+        DataFixture(ProductFixture::class, ['sku' => 'simple3', 'website_ids' => [1, '$website2.id$']], 's3'),
         DataFixture(BundleSelectionFixture::class, ['sku' => '$s1.sku$'], 'link1'),
         DataFixture(BundleSelectionFixture::class, ['sku' => '$s2.sku$'], 'link2'),
         DataFixture(BundleSelectionFixture::class, ['sku' => '$s3.sku$'], 'link3'),
@@ -65,7 +65,7 @@ class AreBundleOptionsSalableTest extends TestCase
         DataFixture(BundleOptionFixture::class, ['product_links' => ['$link3$'], 'required' => false], 'opt2'),
         DataFixture(
             BundleProductFixture::class,
-            ['sku' => 'bundle1', '_options' => ['$opt1$', '$opt2$'], 'website_ids' => [1, '$website2.id']]
+            ['sku' => 'bundle1', '_options' => ['$opt1$', '$opt2$'], 'website_ids' => [1, '$website2.id$']]
         ),
     ]
     /**
@@ -119,7 +119,7 @@ class AreBundleOptionsSalableTest extends TestCase
         DataFixture(BundleOptionFixture::class, ['product_links' => ['$link4$']], 'opt4'),
         DataFixture(
             BundleProductFixture::class,
-            ['sku' => 'bundle2', '_options' => ['$opt4$'], 'website_ids' => [1, '$website3.id']]
+            ['sku' => 'bundle2', '_options' => ['$opt4$'], 'website_ids' => [1, '$website3.id$']]
         ),
     ]
     public function testRequiredOptionWithChildNotAssignedToWebsiteIsNotSalable(): void
@@ -135,12 +135,12 @@ class AreBundleOptionsSalableTest extends TestCase
         DataFixture(WebsiteFixture::class, as: 'website4'),
         DataFixture(StoreGroupFixture::class, ['website_id' => '$website4.id$'], 'group4'),
         DataFixture(StoreFixture::class, ['store_group_id' => '$group4.id$', 'code' => 'store4'], 'store4'),
-        DataFixture(ProductFixture::class, ['sku' => 'simple5', 'website_ids' => [1, '$website4.id']], 's5'),
+        DataFixture(ProductFixture::class, ['sku' => 'simple5', 'website_ids' => [1, '$website4.id$']], 's5'),
         DataFixture(BundleSelectionFixture::class, ['sku' => '$s5.sku$'], 'link5'),
         DataFixture(BundleOptionFixture::class, ['product_links' => ['$link5$']], 'opt5'),
         DataFixture(
             BundleProductFixture::class,
-            ['sku' => 'bundle3', '_options' => ['$opt5$'], 'website_ids' => [1, '$website4.id']]
+            ['sku' => 'bundle3', '_options' => ['$opt5$'], 'website_ids' => [1, '$website4.id$']]
         ),
     ]
     public function testRequiredOptionWithChildAssignedToWebsiteIsSalable(): void
