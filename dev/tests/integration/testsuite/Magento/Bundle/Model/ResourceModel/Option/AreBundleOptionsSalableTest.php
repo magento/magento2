@@ -108,4 +108,46 @@ class AreBundleOptionsSalableTest extends TestCase
             ['admin', ['simple1', 'simple2'], 'store2', false],
         ];
     }
+
+    #[
+        DbIsolation(false),
+        DataFixture(WebsiteFixture::class, as: 'website3'),
+        DataFixture(StoreGroupFixture::class, ['website_id' => '$website3.id$'], 'group3'),
+        DataFixture(StoreFixture::class, ['store_group_id' => '$group3.id$', 'code' => 'store3'], 'store3'),
+        DataFixture(ProductFixture::class, ['sku' => 'simple4', 'website_ids' => [1]], 's4'),
+        DataFixture(BundleSelectionFixture::class, ['sku' => '$s4.sku$'], 'link4'),
+        DataFixture(BundleOptionFixture::class, ['product_links' => ['$link4$']], 'opt4'),
+        DataFixture(
+            BundleProductFixture::class,
+            ['sku' => 'bundle2', '_options' => ['$opt4$'], 'website_ids' => [1, '$website3.id']]
+        ),
+    ]
+    public function testRequiredOptionWithChildNotAssignedToWebsiteIsNotSalable(): void
+    {
+        $bundle = $this->productRepository->get('bundle2');
+        $store = $this->storeRepository->get('store3');
+        $result = $this->areBundleOptionsSalable->execute((int) $bundle->getId(), (int) $store->getId());
+        self::assertFalse($result);
+    }
+
+    #[
+        DbIsolation(false),
+        DataFixture(WebsiteFixture::class, as: 'website4'),
+        DataFixture(StoreGroupFixture::class, ['website_id' => '$website4.id$'], 'group4'),
+        DataFixture(StoreFixture::class, ['store_group_id' => '$group4.id$', 'code' => 'store4'], 'store4'),
+        DataFixture(ProductFixture::class, ['sku' => 'simple5', 'website_ids' => [1, '$website4.id']], 's5'),
+        DataFixture(BundleSelectionFixture::class, ['sku' => '$s5.sku$'], 'link5'),
+        DataFixture(BundleOptionFixture::class, ['product_links' => ['$link5$']], 'opt5'),
+        DataFixture(
+            BundleProductFixture::class,
+            ['sku' => 'bundle3', '_options' => ['$opt5$'], 'website_ids' => [1, '$website4.id']]
+        ),
+    ]
+    public function testRequiredOptionWithChildAssignedToWebsiteIsSalable(): void
+    {
+        $bundle = $this->productRepository->get('bundle3');
+        $store = $this->storeRepository->get('store4');
+        $result = $this->areBundleOptionsSalable->execute((int) $bundle->getId(), (int) $store->getId());
+        self::assertTrue($result);
+    }
 }
