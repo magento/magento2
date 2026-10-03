@@ -17,5 +17,7 @@ class Config extends \Magento\Framework\Interception\ObjectManager\Config\Develo
         $this->_arguments = [];
         $this->_nonShared = [];
         $this->_mergedArguments = [];
+        // Reset the key so the next extend() rebuilds the cache key from the emptied state.
+        $this->_currentCacheKey = null;
     }
 }
