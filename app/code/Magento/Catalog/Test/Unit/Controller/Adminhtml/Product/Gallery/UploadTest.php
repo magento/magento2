@@ -24,6 +24,7 @@ use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Image\Adapter\AdapterInterface;
 use Magento\Framework\Image\AdapterFactory;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\UrlInterface;
 use Magento\MediaStorage\Helper\File\Storage\Database;
 use Magento\MediaStorage\Model\File\Uploader;
 use Magento\Store\Model\Store;
@@ -38,6 +39,7 @@ class UploadTest extends TestCase
 {
     private const REMOTE_MEDIA_URL = 'https://cdn.example.com/media/';
     private const REQUEST_BASE_URL = 'https://admin.example.com/';
+    private const STORE_WEB_URL = 'https://www.example.com/';
 
     /**
      * @var string|null
@@ -116,14 +118,55 @@ class UploadTest extends TestCase
                 'https://admin.example.com:8443/media/',
                 self::REQUEST_BASE_URL . 'media/tmp/catalog/product/m/a/magento_image.jpg',
             ],
+            'storefront_base_url_origin' => [
+                'https://www.example.com/media/',
+                'https://www.example.com/media/tmp/catalog/product/m/a/magento_image.jpg',
+            ],
         ];
+    }
+
+    public function testPreviewUrlUsesMediaBaseWhenRequestHasNoScriptName(): void
+    {
+        $this->createController(
+            $this->createStub(File::class),
+            false,
+            'admin.example.com',
+            self::REMOTE_MEDIA_URL,
+            null
+        )->execute();
+
+        $result = json_decode((string)$this->responseContents, true);
+        $this->assertSame(
+            self::REMOTE_MEDIA_URL . 'tmp/catalog/product/m/a/magento_image.jpg',
+            $result['url']
+        );
+    }
+
+    public function testPreviewUrlHasSingleSlashWhenMediaUrlPathIsEmpty(): void
+    {
+        $this->createController(
+            $this->createStub(File::class),
+            false,
+            'admin.example.com',
+            self::REMOTE_MEDIA_URL,
+            '/index.php',
+            ''
+        )->execute();
+
+        $result = json_decode((string)$this->responseContents, true);
+        $this->assertSame(
+            self::REQUEST_BASE_URL . 'tmp/catalog/product/m/a/magento_image.jpg',
+            $result['url']
+        );
     }
 
     private function createController(
         DriverInterface $mediaDriver,
         bool $useDbStorage,
         string $httpHost = 'admin.example.com',
-        string $mediaUrl = self::REMOTE_MEDIA_URL
+        string $mediaUrl = self::REMOTE_MEDIA_URL,
+        ?string $scriptName = '/index.php',
+        string $mediaUrlPath = 'media'
     ): Upload {
         $uploader = $this->createStub(Uploader::class);
         $uploader->method('save')->willReturn(
@@ -140,15 +183,17 @@ class UploadTest extends TestCase
 
         $request = $this->createStub(HttpRequest::class);
         $request->method('getDistroBaseUrl')->willReturn(self::REQUEST_BASE_URL);
-        $request->method('getServer')->willReturn($httpHost);
-
-        $backendUrl = $this->createMock(BackendUrlInterface::class);
-        $backendUrl->expects($this->never())->method('getBaseUrl');
+        $request->method('getServer')->willReturnMap(
+            [
+                ['HTTP_HOST', null, $httpHost],
+                ['SCRIPT_NAME', null, $scriptName],
+            ]
+        );
 
         $context = $this->createStub(Context::class);
         $context->method('getObjectManager')->willReturn($objectManager);
         $context->method('getEventManager')->willReturn($this->createStub(ManagerInterface::class));
-        $context->method('getBackendUrl')->willReturn($backendUrl);
+        $context->method('getBackendUrl')->willReturn($this->createStub(BackendUrlInterface::class));
         $context->method('getRequest')->willReturn($request);
 
         $response = $this->createStub(Raw::class);
@@ -169,10 +214,12 @@ class UploadTest extends TestCase
         $filesystem = $this->createStub(Filesystem::class);
         $filesystem->method('getDirectoryRead')->willReturn($this->createStub(ReadInterface::class));
         $filesystem->method('getDirectoryWrite')->willReturn($mediaWrite);
-        $filesystem->method('getUri')->willReturn('media');
+        $filesystem->method('getUri')->willReturn($mediaUrlPath);
 
         $store = $this->createStub(Store::class);
-        $store->method('getBaseUrl')->willReturn($mediaUrl);
+        $store->method('getBaseUrl')->willReturnCallback(
+            fn (string $type) => $type === UrlInterface::URL_TYPE_MEDIA ? $mediaUrl : self::STORE_WEB_URL
+        );
         $storeManager = $this->createStub(StoreManagerInterface::class);
         $storeManager->method('getStore')->willReturn($store);
 
@@ -185,7 +232,8 @@ class UploadTest extends TestCase
             $adapterFactory,
             $filesystem,
             new Config($storeManager),
-            $fileStorageDatabase
+            $fileStorageDatabase,
+            $storeManager
         );
     }
 }

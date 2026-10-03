@@ -5,6 +5,7 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Gallery;
 
+use Laminas\Uri\Exception\ExceptionInterface as UriException;
 use Laminas\Uri\Http as HttpUri;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -12,7 +13,9 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem\Driver\File;
+use Magento\Framework\UrlInterface;
 use Magento\MediaStorage\Helper\File\Storage\Database;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * The product gallery upload controller
@@ -64,12 +67,18 @@ class Upload extends \Magento\Backend\App\Action implements HttpPostActionInterf
     private $fileStorageDatabase;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
      * @param \Magento\Framework\Image\AdapterFactory $adapterFactory
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Catalog\Model\Product\Media\Config $productMediaConfig
      * @param Database|null $fileStorageDatabase
+     * @param StoreManagerInterface|null $storeManager
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -77,7 +86,8 @@ class Upload extends \Magento\Backend\App\Action implements HttpPostActionInterf
         ?\Magento\Framework\Image\AdapterFactory $adapterFactory = null,
         ?\Magento\Framework\Filesystem $filesystem = null,
         ?\Magento\Catalog\Model\Product\Media\Config $productMediaConfig = null,
-        ?Database $fileStorageDatabase = null
+        ?Database $fileStorageDatabase = null,
+        ?StoreManagerInterface $storeManager = null
     ) {
         parent::__construct($context);
         $this->resultRawFactory = $resultRawFactory;
@@ -89,6 +99,8 @@ class Upload extends \Magento\Backend\App\Action implements HttpPostActionInterf
             ->get(\Magento\Catalog\Model\Product\Media\Config::class);
         $this->fileStorageDatabase = $fileStorageDatabase ?: ObjectManager::getInstance()
             ->get(Database::class);
+        $this->storeManager = $storeManager ?: ObjectManager::getInstance()
+            ->get(StoreManagerInterface::class);
     }
 
     /**
@@ -144,8 +156,8 @@ class Upload extends \Magento\Backend\App\Action implements HttpPostActionInterf
      *
      * A locally stored file is not yet available on a "Base URL for User Media Files" served by another host
      * (CDN, synced mirror), so it is previewed from the host and scheme of the admin request that uploaded it.
-     * A media URL on the request's own host, remote storage, database media storage and IPv6 literal hosts
-     * keep the configured media URL.
+     * A media URL on the request's own host or on the store's base URL host, remote storage, database media
+     * storage and requests without a usable host keep the configured media URL.
      *
      * @param string $file
      * @return string
@@ -158,21 +170,59 @@ class Upload extends \Magento\Backend\App\Action implements HttpPostActionInterf
         if (!$mediaDriver instanceof File
             || !$request instanceof HttpRequest
             || $this->fileStorageDatabase->checkDbUsage()
-            // getDistroBaseUrl() splits the host on every colon, which breaks an IPv6 literal such as [::1]:8080
-            || str_starts_with((string)$request->getServer('HTTP_HOST'), '[')
+            || !$this->hasUsableRequestHost($request)
         ) {
             return $tmpMediaUrl;
         }
 
         $requestBaseUrl = $request->getDistroBaseUrl();
-        $mediaOrigin = $this->getOrigin($tmpMediaUrl);
-        if ($mediaOrigin === null || $mediaOrigin === $this->getOrigin($requestBaseUrl)) {
+        if (!$this->isOnAnotherHost($tmpMediaUrl, $requestBaseUrl)) {
             return $tmpMediaUrl;
         }
 
-        return $requestBaseUrl
-            . $this->filesystem->getUri(DirectoryList::MEDIA) . '/'
+        return rtrim($requestBaseUrl . $this->filesystem->getUri(DirectoryList::MEDIA), '/') . '/'
             . $this->productMediaConfig->getTmpMediaShortUrl($file);
+    }
+
+    /**
+     * Check that the request carries what getDistroBaseUrl() needs to build a real URL.
+     *
+     * Without SCRIPT_NAME or HTTP_HOST it returns a hardcoded http://localhost/, and it splits the host on every
+     * colon, which breaks an IPv6 literal such as [::1]:8080.
+     *
+     * @param HttpRequest $request
+     * @return bool
+     */
+    private function hasUsableRequestHost(HttpRequest $request): bool
+    {
+        $httpHost = (string)$request->getServer('HTTP_HOST');
+
+        return $request->getServer('SCRIPT_NAME') !== null
+            && $httpHost !== ''
+            && !str_starts_with($httpHost, '[');
+    }
+
+    /**
+     * Check whether the media URL is served by a host other than the admin request's or the store's base URL.
+     *
+     * @param string $mediaUrl
+     * @param string $requestBaseUrl
+     * @return bool
+     */
+    private function isOnAnotherHost(string $mediaUrl, string $requestBaseUrl): bool
+    {
+        $mediaOrigin = $this->getOrigin($mediaUrl);
+        if ($mediaOrigin === null) {
+            return false;
+        }
+        $store = $this->storeManager->getStore();
+        $localOrigins = [
+            $this->getOrigin($requestBaseUrl),
+            $this->getOrigin((string)$store->getBaseUrl(UrlInterface::URL_TYPE_WEB, false)),
+            $this->getOrigin((string)$store->getBaseUrl(UrlInterface::URL_TYPE_WEB, true)),
+        ];
+
+        return !in_array($mediaOrigin, $localOrigins, true);
     }
 
     /**
@@ -181,17 +231,21 @@ class Upload extends \Magento\Backend\App\Action implements HttpPostActionInterf
      * The scheme itself is ignored, so http://example.com and https://example.com are the same origin here.
      *
      * @param string $url
-     * @return string|null Null for a URL without a host
+     * @return string|null Null for a URL without a host or one that cannot be parsed
      */
     private function getOrigin(string $url): ?string
     {
-        $uri = new HttpUri($url);
+        try {
+            $uri = new HttpUri($url);
+        } catch (UriException $e) {
+            return null;
+        }
         $host = $uri->getHost();
         if (!$host) {
             return null;
         }
         $port = (int)$uri->getPort();
-        $defaultPort = ['http' => 80, 'https' => 443][(string)$uri->getScheme()] ?? null;
+        $defaultPort = ['http' => 80, 'https' => 443][strtolower((string)$uri->getScheme())] ?? null;
 
         return strtolower($host) . ($port && $port !== $defaultPort ? ':' . $port : '');
     }
