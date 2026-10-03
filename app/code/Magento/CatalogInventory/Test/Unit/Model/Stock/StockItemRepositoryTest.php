@@ -14,6 +14,7 @@ use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\CatalogInventory\Api\Data as InventoryApiData;
 use Magento\CatalogInventory\Api\Data\StockItemCollectionInterface;
 use Magento\CatalogInventory\Api\Data\StockItemCollectionInterfaceFactory;
+use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Api\StockItemCriteriaInterface;
@@ -477,6 +478,7 @@ class StockItemRepositoryTest extends TestCase
      *
      * @param bool $isObjectNew
      * @param bool $hasFlag
+     * @param bool $hasStockStatus
      * @param bool $expectMarked
      * @return void
      * @throws CouldNotSaveException
@@ -485,9 +487,13 @@ class StockItemRepositoryTest extends TestCase
     public function testSaveMarksNewCompositeStockItemAsAutomaticallyMaintained(
         bool $isObjectNew,
         bool $hasFlag,
+        bool $hasStockStatus,
         bool $expectMarked
     ): void {
         $productId = 1;
+        if ($hasStockStatus) {
+            $this->stockItemMock->setData(StockItemInterface::IS_IN_STOCK, false);
+        }
 
         $this->productMock->expects($this->once())->method('getId')->willReturn($productId);
         $this->productMock->expects($this->once())->method('getTypeId')->willReturn('configurable');
@@ -522,9 +528,10 @@ class StockItemRepositoryTest extends TestCase
     public static function compositeStockItemDataProvider(): array
     {
         return [
-            'new item under no merchant decision is marked' => [true, false, true],
-            'new item with an explicit decision is left alone' => [true, true, false],
-            'existing item is left alone' => [false, false, false],
+            'new item under no merchant decision is marked' => [true, false, false, true],
+            'new item with an explicit automatic flag is left alone' => [true, true, false, false],
+            'new item with an explicit stock status is left alone' => [true, false, true, false],
+            'existing item is left alone' => [false, false, false, false],
         ];
     }
 

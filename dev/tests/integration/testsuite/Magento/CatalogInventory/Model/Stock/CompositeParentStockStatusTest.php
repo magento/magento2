@@ -43,6 +43,23 @@ class CompositeParentStockStatusTest extends TestCase
 
     private const BARE_BUNDLE_SKU = 'composite-latch-bare-bundle';
 
+    private const EXPLICIT_GROUPED_SKU = 'composite-latch-explicit-grouped';
+
+    private const EXPLICIT_CONFIGURABLE_SKU = 'composite-latch-explicit-configurable';
+
+    /**
+     * Stock data a merchant or integration sends deliberately: the product is taken off sale. The
+     * stock_status_changed_auto flag is omitted, as it is in every ordinary API request.
+     */
+    private const EXPLICITLY_OUT_OF_STOCK = [
+        'stock_item' => [
+            'use_config_manage_stock' => true,
+            'qty' => 0,
+            'is_qty_decimal' => false,
+            'is_in_stock' => false,
+        ],
+    ];
+
     /**
      * The children arrive before their stock does, which is the ordinary ERP import order: the structure
      * feed creates the catalogue, a later stock feed fills in quantities. The parent is therefore created
@@ -290,7 +307,7 @@ class CompositeParentStockStatusTest extends TestCase
     {
         $born = $this->loadStockRow(self::GROUPED_SKU);
 
-        $this->attachGroupedChildren();
+        $this->attachGroupedChildren(self::GROUPED_SKU);
         $attached = $this->loadStockRow(self::GROUPED_SKU);
 
         $this->resaveChild('child1');
@@ -316,22 +333,23 @@ class CompositeParentStockStatusTest extends TestCase
     /**
      * Attach the two simple children to the grouped parent in a save of its own.
      *
+     * @param string $sku
      * @return void
      */
-    private function attachGroupedChildren(): void
+    private function attachGroupedChildren(string $sku): void
     {
         $this->startNewRequest();
         $objectManager = Bootstrap::getObjectManager();
         $repository = $objectManager->get(ProductRepositoryInterface::class);
         $linkFactory = $objectManager->get(ProductLinkInterfaceFactory::class);
 
-        $product = $repository->get(self::GROUPED_SKU, true, null, true);
+        $product = $repository->get($sku, true, null, true);
         $links = [];
         $position = 1;
         foreach (['child1', 'child2'] as $fixtureName) {
             $child = $this->fixtures->get($fixtureName);
             $link = $linkFactory->create();
-            $link->setSku(self::GROUPED_SKU)
+            $link->setSku($sku)
                 ->setLinkType('associated')
                 ->setLinkedProductSku($child->getSku())
                 ->setLinkedProductType('simple')
@@ -413,6 +431,81 @@ class CompositeParentStockStatusTest extends TestCase
                 'A bundle created without stock data records no merchant decision, so it must start under '
                 . 'automatic control. Actual row: %s.',
                 json_encode($row)
+            )
+        );
+    }
+
+    /**
+     * A composite product created with an explicit out-of-stock status records a merchant decision, so it
+     * must not be put under automatic control just because the request omitted the automatic flag.
+     *
+     * @return void
+     */
+    #[
+        DbIsolation(false),
+        AppIsolation(true),
+        DataFixture(
+            ConfigurableProductFixture::class,
+            [
+                'sku' => self::EXPLICIT_CONFIGURABLE_SKU,
+                'extension_attributes' => self::EXPLICITLY_OUT_OF_STOCK,
+            ],
+            'explicitConfigurable'
+        ),
+    ]
+    public function testAnExplicitOutOfStockOnCreateIsNotMarkedAsAutomatic(): void
+    {
+        $row = $this->loadStockRow(self::EXPLICIT_CONFIGURABLE_SKU);
+
+        self::assertSame(
+            [0, 0],
+            [$row['is_in_stock'], $row['stock_status_changed_auto']],
+            sprintf(
+                'A composite product created explicitly out of stock must stay under manual control. '
+                . 'Actual row: %s.',
+                json_encode($row)
+            )
+        );
+    }
+
+    /**
+     * The merchant's explicit out-of-stock decision on create survives its children coming into stock.
+     *
+     * @return void
+     */
+    #[
+        DbIsolation(false),
+        AppIsolation(true),
+        DataFixture(ProductFixture::class, self::CHILD_WITHOUT_STOCK, 'child1'),
+        DataFixture(ProductFixture::class, self::CHILD_WITHOUT_STOCK, 'child2'),
+        DataFixture(
+            GroupedProductFixture::class,
+            [
+                'sku' => self::EXPLICIT_GROUPED_SKU,
+                'product_links' => [],
+                'extension_attributes' => self::EXPLICITLY_OUT_OF_STOCK,
+            ],
+            'explicitGrouped'
+        ),
+    ]
+    public function testAnExplicitOutOfStockOnCreateSurvivesItsChildrenComingIntoStock(): void
+    {
+        $born = $this->loadStockRow(self::EXPLICIT_GROUPED_SKU);
+
+        $this->attachGroupedChildren(self::EXPLICIT_GROUPED_SKU);
+        $this->resaveChild('child1');
+        $after = $this->loadStockRow(self::EXPLICIT_GROUPED_SKU);
+
+        self::assertSame(
+            0,
+            $after['is_in_stock'],
+            sprintf(
+                'A grouped parent created explicitly out of stock must not be brought back into stock by its '
+                . 'children. Born (is_in_stock=%d, auto=%d); after a child was stocked (is_in_stock=%d, auto=%d).',
+                $born['is_in_stock'],
+                $born['stock_status_changed_auto'],
+                $after['is_in_stock'],
+                $after['stock_status_changed_auto']
             )
         );
     }
