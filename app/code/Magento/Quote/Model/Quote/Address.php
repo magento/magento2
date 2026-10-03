@@ -470,7 +470,8 @@ class Address extends AbstractAddress implements
             }
 
             if (!$this->getId()
-                || ($this->getQuote()->dataHasChangedFor('customer_id') && $this->getSameAsBilling() !== 0)
+                || ($this->getQuote()->dataHasChangedFor('customer_id')
+                    && ($this->getSameAsBilling() === null || (int)$this->getSameAsBilling() !== 0))
             ) {
                 $this->setSameAsBilling((int)$this->_isSameAsBilling());
             }

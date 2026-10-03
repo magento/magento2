@@ -267,8 +267,8 @@ class AddressTest extends TestCase
     }
 
     /**
-     * An explicit "different billing address" choice on a persisted guest shipping address
-     * must survive assigning the cart to a customer.
+     * An explicit "different billing address" choice on a persisted shipping address
+     * must survive a change of the quote customer.
      */
     public function testSameAsBillingStaysZeroWhenCustomerIsAssigned()
     {
