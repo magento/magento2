@@ -26,8 +26,6 @@ use PHPUnit\Framework\TestCase;
  * Integration test for WEEE plugin on Configurable Product JSON config
  *
  * @magentoAppArea frontend
- * @magentoAppIsolation enabled
- * @magentoDbIsolation enabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ConfigurableTest extends TestCase
