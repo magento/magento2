@@ -8,6 +8,10 @@ declare(strict_types=1);
 namespace Magento\Sales\Test\Unit\Ui\Component\Listing\Column;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Sales\Ui\Component\Listing\Column\StorePaymentMethod;
@@ -23,6 +27,11 @@ class StorePaymentMethodTest extends TestCase
     private $scopeConfig;
 
     /**
+     * @var AdapterInterface|MockObject
+     */
+    private $connection;
+
+    /**
      * @var StorePaymentMethod
      */
     private $model;
@@ -30,10 +39,19 @@ class StorePaymentMethodTest extends TestCase
     protected function setUp(): void
     {
         $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $this->connection = $this->createMock(AdapterInterface::class);
+        $select = $this->createMock(Select::class);
+        $select->method('from')->willReturnSelf();
+        $select->method('where')->willReturnSelf();
+        $this->connection->method('select')->willReturn($select);
+        $resource = $this->createMock(ResourceConnection::class);
+        $resource->method('getConnection')->willReturn($this->connection);
+        $resource->method('getTableName')->willReturnArgument(0);
         $this->model = new StorePaymentMethod(
             $this->createMock(ContextInterface::class),
             $this->createMock(UiComponentFactory::class),
             $this->scopeConfig,
+            $resource,
             [],
             ['name' => 'payment_method']
         );
@@ -42,6 +60,7 @@ class StorePaymentMethodTest extends TestCase
     public function testPrepareDataSourceResolvesTitlePerRowStore(): void
     {
         $titles = [1 => 'Check One', 2 => 'Cheque Two'];
+        $this->connection->expects($this->once())->method('fetchPairs')->willReturn([10 => '1', 11 => '2']);
         $this->scopeConfig->method('getValue')
             ->willReturnCallback(
                 fn (string $path, string $scope, $storeId) => $path === 'payment/checkmo/title'
@@ -53,8 +72,8 @@ class StorePaymentMethodTest extends TestCase
         $result = $this->model->prepareDataSource([
             'data' => [
                 'items' => [
-                    ['store_id' => '1', 'payment_method' => 'checkmo'],
-                    ['store_id' => '2', 'payment_method' => 'checkmo'],
+                    ['entity_id' => '10', 'store_id' => 'Main Website', 'payment_method' => 'checkmo'],
+                    ['entity_id' => '11', 'store_id' => 'Other Website', 'payment_method' => 'checkmo'],
                 ],
             ],
         ]);
@@ -65,26 +84,44 @@ class StorePaymentMethodTest extends TestCase
 
     public function testPrepareDataSourceKeepsCodeWhenTitleIsNotConfigured(): void
     {
+        $this->connection->method('fetchPairs')->willReturn([10 => '1']);
         $this->scopeConfig->method('getValue')->willReturn(null);
 
         $result = $this->model->prepareDataSource([
-            'data' => ['items' => [['store_id' => '1', 'payment_method' => 'removed_method']]],
+            'data' => ['items' => [['entity_id' => '10', 'payment_method' => 'removed_method']]],
         ]);
 
         $this->assertSame('removed_method', $result['data']['items'][0]['payment_method']);
     }
 
-    public function testPrepareDataSourceFallsBackToDefaultScopeWithoutNumericStoreId(): void
+    public function testPrepareDataSourceFallsBackToDefaultScopeWhenStoreIsUnknown(): void
     {
-        $this->scopeConfig->expects($this->once())
-            ->method('getValue')
-            ->with('payment/checkmo/title', ScopeInterface::SCOPE_STORE, null)
-            ->willReturn('Default Title');
+        $this->connection->method('fetchPairs')->willReturn([10 => '99']);
+        $this->scopeConfig->method('getValue')
+            ->willReturnCallback(
+                function (...$args) {
+                    if (($args[2] ?? null) === 99) {
+                        throw new NoSuchEntityException(__('Store does not exist'));
+                    }
+                    return 'Default Title';
+                }
+            );
 
         $result = $this->model->prepareDataSource([
-            'data' => ['items' => [['store_id' => 'Main Website', 'payment_method' => 'checkmo']]],
+            'data' => ['items' => [['entity_id' => '10', 'store_id' => 'x', 'payment_method' => 'checkmo']]],
         ]);
 
         $this->assertSame('Default Title', $result['data']['items'][0]['payment_method']);
+    }
+
+    public function testPrepareDataSourceSkipsLookupWithoutPaymentCodes(): void
+    {
+        $this->connection->expects($this->never())->method('fetchPairs');
+
+        $result = $this->model->prepareDataSource([
+            'data' => ['items' => [['entity_id' => '10', 'payment_method' => '']]],
+        ]);
+
+        $this->assertSame('', $result['data']['items'][0]['payment_method']);
     }
 }

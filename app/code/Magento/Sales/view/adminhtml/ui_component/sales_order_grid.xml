@@ -144,15 +144,6 @@
                 <label translate="true">ID</label>
             </settings>
         </column>
-        <column name="payment_method" class="Magento\Sales\Ui\Component\Listing\Column\StorePaymentMethod">
-            <settings>
-                <filter>select</filter>
-                <options class="Magento\Payment\Ui\Component\Listing\Column\Method\Options"/>
-                <dataType>select</dataType>
-                <label translate="true">Payment Method</label>
-                <visible>false</visible>
-            </settings>
-        </column>
         <column name="store_id" class="Magento\Store\Ui\Component\Listing\Column\Store">
             <settings>
                 <label translate="true">Purchase Point</label>
@@ -258,6 +249,15 @@
             <settings>
                 <filter>text</filter>
                 <label translate="true">Customer Name</label>
+                <visible>false</visible>
+            </settings>
+        </column>
+        <column name="payment_method" class="Magento\Sales\Ui\Component\Listing\Column\StorePaymentMethod">
+            <settings>
+                <filter>select</filter>
+                <options class="Magento\Payment\Ui\Component\Listing\Column\Method\Options"/>
+                <dataType>select</dataType>
+                <label translate="true">Payment Method</label>
                 <visible>false</visible>
             </settings>
         </column>
