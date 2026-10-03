@@ -5,6 +5,7 @@
  */
 namespace Magento\TestFramework\Bootstrap;
 
+use Doctrine\Common\Annotations\AnnotationReader;
 use Magento\TestFramework\Application;
 
 /**
@@ -15,12 +16,15 @@ use Magento\TestFramework\Application;
 class DocBlock
 {
     /**
-     * Magento DocBlock annotations that the Doctrine annotation reader used by the Allure PHPUnit extension
-     * does not know about. Left unregistered, parsing a test docblock throws and Allure loses the test name.
+     * Non-Doctrine annotations the Allure PHPUnit extension may encounter while parsing test docblocks.
+     * Left unregistered, parsing throws and Allure loses the test name: the integration framework's own
+     * Magento annotations plus tags used by setup-integration, api-functional and PHPUnit-adjacent tests.
      *
      * @var string[]
      */
     private const DOCTRINE_IGNORED_ANNOTATIONS = [
+        'Override',
+        'dataProviderFromFile',
         'magentoAdminConfigFixture',
         'magentoApiDataFixture',
         'magentoAppArea',
@@ -32,6 +36,8 @@ class DocBlock
         'magentoDataFixtureBeforeTransaction',
         'magentoDbIsolation',
         'magentoIndexerDimensionMode',
+        'magentoSchemaFixture',
+        'moduleName',
     ];
 
     /**
@@ -54,9 +60,9 @@ class DocBlock
      */
     public function registerAnnotations(Application $application)
     {
-        if (\class_exists(\Doctrine\Common\Annotations\AnnotationReader::class)) {
+        if (\class_exists(AnnotationReader::class)) {
             foreach (self::DOCTRINE_IGNORED_ANNOTATIONS as $annotationName) {
-                \Doctrine\Common\Annotations\AnnotationReader::addGlobalIgnoredName($annotationName);
+                AnnotationReader::addGlobalIgnoredName($annotationName);
             }
         }
 
