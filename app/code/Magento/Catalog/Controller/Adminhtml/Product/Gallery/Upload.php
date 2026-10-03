@@ -143,7 +143,7 @@ class Upload extends \Magento\Backend\App\Action implements HttpPostActionInterf
      *
      * A locally stored file is not yet available on a remote "Base URL for User Media Files" (CDN, synced
      * mirror), so it is previewed from the host and scheme of the admin request that uploaded it.
-     * Remote storage and database media storage keep the configured media URL.
+     * Remote storage, database media storage and IPv6 literal hosts keep the configured media URL.
      *
      * @param string $file
      * @return string
@@ -155,6 +155,8 @@ class Upload extends \Magento\Backend\App\Action implements HttpPostActionInterf
         if (!$mediaDriver instanceof File
             || !$request instanceof HttpRequest
             || $this->fileStorageDatabase->checkDbUsage()
+            // getDistroBaseUrl() splits the host on every colon, which breaks an IPv6 literal such as [::1]:8080
+            || str_starts_with((string)$request->getServer('HTTP_HOST'), '[')
         ) {
             return $this->productMediaConfig->getTmpMediaUrl($file);
         }

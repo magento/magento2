@@ -77,8 +77,22 @@ class UploadTest extends TestCase
         );
     }
 
-    private function createController(DriverInterface $mediaDriver, bool $useDbStorage): Upload
+    public function testPreviewUrlUsesMediaBaseWhenRequestHostIsIpv6Literal(): void
     {
+        $this->createController($this->createStub(File::class), false, '[::1]:8080')->execute();
+
+        $result = json_decode((string)$this->responseContents, true);
+        $this->assertSame(
+            self::REMOTE_MEDIA_URL . 'tmp/catalog/product/m/a/magento_image.jpg',
+            $result['url']
+        );
+    }
+
+    private function createController(
+        DriverInterface $mediaDriver,
+        bool $useDbStorage,
+        string $httpHost = 'admin.example.com'
+    ): Upload {
         $uploader = $this->createStub(Uploader::class);
         $uploader->method('save')->willReturn(
             [
@@ -94,6 +108,7 @@ class UploadTest extends TestCase
 
         $request = $this->createStub(HttpRequest::class);
         $request->method('getDistroBaseUrl')->willReturn(self::REQUEST_BASE_URL);
+        $request->method('getServer')->willReturn($httpHost);
 
         $backendUrl = $this->createMock(BackendUrlInterface::class);
         $backendUrl->expects($this->never())->method('getBaseUrl');

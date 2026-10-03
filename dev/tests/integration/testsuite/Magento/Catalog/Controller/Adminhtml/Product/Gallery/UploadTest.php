@@ -212,12 +212,17 @@ class UploadTest extends AbstractBackendController
     /**
      * An HTTPS admin on its own host previews from that host and scheme, whatever the admin base URL settings say.
      *
+     * The custom admin URL is set in config only (no admin store base_url copy), and it must match the request
+     * host, otherwise the backend front name is not resolved and the request falls through to the storefront.
+     *
      * @return void
      */
     #[
         ConfigFixture('web/unsecure/base_media_url', 'https://cdn.example.com/media/'),
         ConfigFixture('web/secure/base_media_url', 'https://cdn.example.com/media/'),
         ConfigFixture('web/secure/use_in_adminhtml', '0'),
+        ConfigFixture('admin/url/use_custom', '1'),
+        ConfigFixture('admin/url/custom', 'https://admin.example.com/'),
     ]
     public function testUploadActionPreviewUrlUsesHostAndSchemeOfUploadRequest(): void
     {
@@ -241,8 +246,10 @@ class UploadTest extends AbstractBackendController
         );
         $request->setMethod($this->httpMethod);
         $this->dispatch($this->uri);
-        $jsonBody = $this->serializer->unserialize($this->getResponse()->getBody());
+        $body = (string)$this->getResponse()->getBody();
+        $jsonBody = json_decode($body, true);
 
+        $this->assertIsArray($jsonBody, 'Upload response is not JSON: ' . substr($body, 0, 500));
         $this->assertArrayNotHasKey('error', $jsonBody);
         $this->assertEquals(
             'https://admin.example.com/media/tmp/catalog/product/m/a/magento_image.jpg',
