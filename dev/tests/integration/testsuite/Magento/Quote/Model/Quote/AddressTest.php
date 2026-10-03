@@ -267,6 +267,23 @@ class AddressTest extends TestCase
     }
 
     /**
+     * An explicit "different billing address" choice on a persisted guest shipping address
+     * must survive assigning the cart to a customer.
+     */
+    public function testSameAsBillingStaysZeroWhenCustomerIsAssigned()
+    {
+        $shippingAddress = $this->_quote->getShippingAddress();
+        $shippingAddress->setSameAsBilling(0);
+        $shippingAddress->save();
+
+        $this->_quote->setCustomer($this->_customer);
+        $this->_quote->setOrigData('customer_id', null);
+        $this->_quote->getShippingAddress()->beforeSave();
+
+        $this->assertSame(0, $this->_quote->getShippingAddress()->getSameAsBilling());
+    }
+
+    /**
      * Import customer address to quote address
      */
     public function testImportCustomerAddressDataWithCustomer()
