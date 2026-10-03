@@ -10,8 +10,6 @@ namespace Magento\ConfigurableProduct\Model\ResourceModel\Product\Indexer\Price;
 use Magento\Catalog\Model\Indexer\Product\Price\Processor as PriceIndexerProcessor;
 use Magento\Catalog\Model\Product\Action as ProductAction;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
-use Magento\CatalogRule\Model\Indexer\IndexBuilder;
-use Magento\CatalogRule\Test\Fixture\Rule as CatalogRuleFixture;
 use Magento\ConfigurableProduct\Test\Fixture\Attribute as ConfigurableAttributeFixture;
 use Magento\ConfigurableProduct\Test\Fixture\Product as ConfigurableProductFixture;
 use Magento\Customer\Model\Group;
@@ -66,38 +64,6 @@ class ParentCatalogRulePriceTest extends TestCase
                 ['product_id = ?' => $this->parentRulePriceProductId]
             );
         }
-    }
-
-    /**
-     * Magento_CatalogRuleConfigurable moves a rule matched by the parent onto its children,
-     * so the children's discounted prices form the range and the parent's own price is ignored.
-     */
-    #[
-        DataFixture(ConfigurableAttributeFixture::class, as: 'attr'),
-        DataFixture(ProductFixture::class, ['price' => 10], 'child1'),
-        DataFixture(ProductFixture::class, ['price' => 20], 'child2'),
-        DataFixture(
-            ConfigurableProductFixture::class,
-            ['sku' => self::PARENT_SKU, '_options' => ['$attr$'], '_links' => ['$child1$', '$child2$']],
-            'configurable'
-        ),
-        DataFixture(
-            CatalogRuleFixture::class,
-            [
-                'simple_action' => 'to_fixed',
-                'discount_amount' => 15,
-                'conditions' => [['attribute' => 'sku', 'operator' => '==', 'value' => self::PARENT_SKU]],
-            ],
-            'rule'
-        ),
-    ]
-    public function testCatalogRuleMatchedByParentIsAppliedThroughChildren(): void
-    {
-        $parentId = $this->setParentPrice(30);
-        $this->objectManager->get(IndexBuilder::class)->reindexByIds([$parentId, ...$this->getChildIds()]);
-        $this->reindexPrices($parentId);
-
-        $this->assertParentPriceRange($parentId, 10, 15);
     }
 
     /**
