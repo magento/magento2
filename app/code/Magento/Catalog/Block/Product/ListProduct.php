@@ -235,7 +235,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
                         $product->setData('category_id', $categoryId);
                     }
                 }
-            } catch (\Throwable) {
+            } catch (\Exception) {
                 $this->response->setNoCacheHeaders();
                 $this->setData('has_error', true);
                 $collection = $this->productCollectionFactory->create();

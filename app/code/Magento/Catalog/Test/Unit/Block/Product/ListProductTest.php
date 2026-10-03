@@ -265,6 +265,34 @@ class ListProductTest extends TestCase
         $this->assertNull($this->block->getData('has_error'));
     }
 
+    /**
+     * @return void
+     * @throws Exception
+     */
+    public function testProgrammingErrorsWhileLoadingCollectionAreNotSwallowed(): void
+    {
+        $this->responseMock->expects($this->never())
+            ->method('setNoCacheHeaders');
+        $this->block->setData('translate_inline', true);
+        $this->prodCollectionMock->expects($this->any())
+            ->method('getItems')
+            ->willThrowException(new \TypeError('Unexpected type.'));
+        $this->layerMock->expects($this->once())
+            ->method('getProductCollection')
+            ->willReturn($this->prodCollectionMock);
+        $currentCategory = $this->createMock(\Magento\Catalog\Model\Category::class);
+        $currentCategory->expects($this->any())
+            ->method('getId')
+            ->willReturn('1');
+        $this->layerMock->expects($this->any())
+            ->method('getCurrentCategory')
+            ->willReturn($currentCategory);
+
+        $this->expectException(\TypeError::class);
+
+        $this->block->toHtml();
+    }
+
     public function testGetIdentities()
     {
         $productTag = 'cat_p_1';
