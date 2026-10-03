@@ -23,13 +23,16 @@ use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\ResourceModel\Order\Collection;
 use Magento\Sales\Test\Fixture\Invoice as InvoiceFixture;
 use Magento\Sales\Test\Fixture\InvoiceComment as InvoiceCommentFixture ;
+use Magento\TestFramework\Fixture\Config;
 use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\GraphQl\GetCustomerAuthenticationHeader;
 
 /**
  * Tests the Invoice query
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class InvoiceTest extends GraphQlAbstract
 {
@@ -480,6 +483,80 @@ QUERY;
         $this->assertCount(1, $invoice['comments']);
         $this->assertEquals('visible_comment', $invoice['comments'][0]['message']);
         $this->assertNotEmpty($invoice['comments'][0]['timestamp']);
+    }
+
+    #[
+        Config('general/locale/code', 'fr_FR'),
+        Config('general/locale/timezone', 'Europe/Paris'),
+        DataFixture(Customer::class, ['email' => 'customer_fr@search.example.com'], as: 'customer'),
+        DataFixture(ProductFixture::class, as: 'product'),
+        DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], as: 'cart'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$product.id$']),
+        DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetGuestEmailFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetDeliveryMethodFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetPaymentMethodFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(PlaceOrderFixture::class, ['cart_id' => '$cart.id$'], 'order'),
+        DataFixture(InvoiceFixture::class, ['order_id' => '$order.id$'], 'invoice'),
+        DataFixture(InvoiceCommentFixture::class, [
+            'parent_id' => '$invoice.id$',
+            'comment' => 'visible_comment',
+            'is_visible_on_front' => 1,
+            'created_at' => '2026-01-15 10:00:00',
+        ], as: 'invoiceComment'),
+    ]
+    public function testInvoiceCommentTimestampCalendarValueIsCorrectUnderFrenchLocale()
+    {
+        $query =
+            <<<QUERY
+{
+  customer {
+    orders {
+      items {
+        invoices {
+          comments {
+            message
+            timestamp
+          }
+        }
+      }
+    }
+  }
+}
+QUERY;
+
+        $currentEmail = 'customer_fr@search.example.com';
+        $currentPassword = 'password';
+        $response = $this->graphQlQuery(
+            $query,
+            [],
+            '',
+            $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword)
+        );
+
+        $invoice = $response['customer']['orders']['items'][0]['invoices'][0];
+        $timestamp = $invoice['comments'][0]['timestamp'];
+
+        $this->assertMatchesRegularExpression('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $timestamp);
+
+        $invoiceComment = DataFixtureStorageManager::getStorage()->get('invoiceComment');
+        // Independent computation - deliberately does NOT go through
+        // Timezone::date()/IntlDateFormatter, so it can detect a wrong
+        // calendar value rather than re-deriving the same bug (AC-18084).
+        $expectedTimestamp = (new \DateTime($invoiceComment->getCreatedAt(), new \DateTimeZone('UTC')))
+            ->setTimezone(new \DateTimeZone('Europe/Paris'))
+            ->format('Y-m-d H:i:s');
+
+        $this->assertSame(
+            $expectedTimestamp,
+            $timestamp,
+            sprintf(
+                'Invoice comment timestamp should equal its created_at (%s, UTC) converted to the '
+                . 'Europe/Paris store timezone under the fr_FR locale.',
+                $invoiceComment->getCreatedAt()
+            )
+        );
     }
 
     /**

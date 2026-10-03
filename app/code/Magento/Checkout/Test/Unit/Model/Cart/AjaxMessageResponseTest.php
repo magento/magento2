@@ -10,12 +10,14 @@ namespace Magento\Checkout\Test\Unit\Model\Cart;
 use Magento\Checkout\Model\Cart\AjaxMessageResponse;
 use Magento\Framework\Message\Collection;
 use Magento\Framework\Message\CollectionFactory;
+use Magento\Framework\Message\Error;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Message\MessageInterface;
+use Magento\Framework\Message\Notice;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Element\Messages;
 use Magento\Framework\View\Layout;
 use Magento\Framework\View\LayoutFactory;
-use Magento\Framework\View\Element\Messages;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -34,7 +36,7 @@ class AjaxMessageResponseTest extends TestCase
     /**
      * @var CollectionFactory&MockObject
      */
-    private CollectionFactory $collectionFactory;
+    private CollectionFactory $messageCollectionFactory;
 
     /**
      * @var AjaxMessageResponse
@@ -49,13 +51,13 @@ class AjaxMessageResponseTest extends TestCase
         $objectManager = new ObjectManager($this);
         $this->messageManager = $this->createMock(ManagerInterface::class);
         $this->layoutFactory = $this->createMock(LayoutFactory::class);
-        $this->collectionFactory = $this->createMock(CollectionFactory::class);
+        $this->messageCollectionFactory = $this->createMock(CollectionFactory::class);
         $this->model = $objectManager->getObject(
             AjaxMessageResponse::class,
             [
                 'messageManager' => $this->messageManager,
                 'layoutFactory' => $this->layoutFactory,
-                'collectionFactory' => $this->collectionFactory,
+                'messageCollectionFactory' => $this->messageCollectionFactory,
             ]
         );
     }
@@ -63,117 +65,176 @@ class AjaxMessageResponseTest extends TestCase
     /**
      * @return void
      */
-    public function testShouldNotDisplayInlineWithoutBackUrl(): void
+    public function testGetInlineErrorMessagesReturnsNullWhenNoErrors(): void
     {
-        $this->assertFalse($this->model->shouldDisplayInline(null, 'https://example.com/product.html'));
-    }
-
-    /**
-     * @return void
-     */
-    public function testShouldDisplayInlineForSamePageRedirect(): void
-    {
-        $this->assertTrue(
-            $this->model->shouldDisplayInline(
-                'https://example.com/product.html',
-                'https://example.com/product.html?foo=bar'
-            )
-        );
-    }
-
-    /**
-     * @return void
-     */
-    public function testShouldNotDisplayInlineForCrossPageRedirect(): void
-    {
-        $this->assertFalse(
-            $this->model->shouldDisplayInline(
-                'https://example.com/product.html',
-                'https://example.com/category.html'
-            )
-        );
-    }
-
-    /**
-     * @return void
-     */
-    public function testResolveReturnsNullForSuccessMessagesOnly(): void
-    {
-        $sessionMessages = $this->createMock(Collection::class);
-        $sessionMessages->expects($this->exactly(2))
+        $messages = $this->createMock(Collection::class);
+        $messages->expects($this->exactly(2))
             ->method('getItemsByType')
             ->willReturnMap([
                 [MessageInterface::TYPE_ERROR, []],
                 [MessageInterface::TYPE_NOTICE, []],
             ]);
 
-        $blockingMessages = $this->createMock(Collection::class);
-        $blockingMessages->expects($this->once())->method('getCount')->willReturn(0);
+        $errorMessages = $this->createMock(Collection::class);
+        $errorMessages->expects($this->once())->method('getCount')->willReturn(0);
 
         $this->messageManager->expects($this->once())
             ->method('getMessages')
-            ->with(false)
-            ->willReturn($sessionMessages);
-        $this->collectionFactory->expects($this->once())->method('create')->willReturn($blockingMessages);
+            ->with(true)
+            ->willReturn($messages);
+        $this->messageCollectionFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($errorMessages);
+        $this->layoutFactory->expects($this->never())->method('create');
 
-        $this->assertNull(
-            $this->model->resolve(
-                'https://example.com/product.html',
-                'https://example.com/product.html'
-            )
+        $this->assertNull($this->model->getInlineErrorMessages(true));
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetInlineErrorMessagesRendersErrors(): void
+    {
+        $error = new Error();
+        $error->setText('Product that you are trying to add is not available.');
+
+        $messages = $this->createMock(Collection::class);
+        $messages->expects($this->exactly(2))
+            ->method('getItemsByType')
+            ->willReturnMap([
+                [MessageInterface::TYPE_ERROR, [$error]],
+                [MessageInterface::TYPE_NOTICE, []],
+            ]);
+
+        $errorMessages = $this->createMock(Collection::class);
+        $errorMessages->expects($this->once())->method('addMessage')->with($error)->willReturnSelf();
+        $errorMessages->expects($this->once())->method('getCount')->willReturn(1);
+
+        $messagesBlock = $this->createMock(Messages::class);
+        $messagesBlock->expects($this->once())->method('setMessages')->with($errorMessages)->willReturnSelf();
+        $messagesBlock->expects($this->once())
+            ->method('getGroupedHtml')
+            ->willReturn('<div class="messages"><div class="message error">error</div></div>');
+
+        $layout = $this->createMock(Layout::class);
+        $layout->expects($this->once())
+            ->method('createBlock')
+            ->with(Messages::class)
+            ->willReturn($messagesBlock);
+
+        $this->messageManager->expects($this->once())
+            ->method('getMessages')
+            ->with(true)
+            ->willReturn($messages);
+        $this->messageCollectionFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($errorMessages);
+        $this->layoutFactory->expects($this->once())->method('create')->willReturn($layout);
+
+        $this->assertSame(
+            ['html' => '<div class="messages" role="alert" aria-atomic="true">'
+                . '<div class="message error">error</div></div>'],
+            $this->model->getInlineErrorMessages(true)
         );
     }
 
     /**
      * @return void
      */
-    public function testResolveReturnsBlockingMessagesForSamePageError(): void
+    public function testGetInlineErrorMessagesRendersNotices(): void
     {
-        $errorMessage = $this->createMock(MessageInterface::class);
-        $errorMessage->method('getType')->willReturn(MessageInterface::TYPE_ERROR);
-        $errorMessage->method('getIdentifier')->willReturn('error');
+        $notice = new Notice();
+        $notice->setText('Some options for this product were not found.');
 
-        $sessionMessages = $this->createMock(Collection::class);
-        $sessionMessages->expects($this->atLeastOnce())
+        $messages = $this->createMock(Collection::class);
+        $messages->expects($this->exactly(2))
             ->method('getItemsByType')
             ->willReturnMap([
-                [MessageInterface::TYPE_ERROR, [$errorMessage]],
-                [MessageInterface::TYPE_NOTICE, []],
+                [MessageInterface::TYPE_ERROR, []],
+                [MessageInterface::TYPE_NOTICE, [$notice]],
             ]);
-        $sessionMessages->expects($this->once())
-            ->method('deleteMessageByIdentifier')
-            ->with('error');
 
-        $blockingMessages = $this->createMock(Collection::class);
-        $blockingMessages->expects($this->once())->method('getCount')->willReturn(1);
-        $blockingMessages->expects($this->once())
-            ->method('addMessage')
-            ->with($errorMessage)
-            ->willReturnSelf();
+        $relevantMessages = $this->createMock(Collection::class);
+        $relevantMessages->expects($this->once())->method('addMessage')->with($notice)->willReturnSelf();
+        $relevantMessages->expects($this->once())->method('getCount')->willReturn(1);
 
         $messagesBlock = $this->createMock(Messages::class);
-        $messagesBlock->expects($this->once())->method('setMessages')->with($blockingMessages)->willReturnSelf();
-        $messagesBlock->expects($this->once())->method('getGroupedHtml')->willReturn('<div>error</div>');
+        $messagesBlock->expects($this->once())->method('setMessages')->with($relevantMessages)->willReturnSelf();
+        $messagesBlock->expects($this->once())
+            ->method('getGroupedHtml')
+            ->willReturn('<div class="messages"><div class="message notice">notice</div></div>');
 
         $layout = $this->createMock(Layout::class);
-        $layout->expects($this->once())->method('getMessagesBlock')->willReturn($messagesBlock);
+        $layout->expects($this->once())
+            ->method('createBlock')
+            ->with(Messages::class)
+            ->willReturn($messagesBlock);
 
         $this->messageManager->expects($this->once())
             ->method('getMessages')
-            ->with(false)
-            ->willReturn($sessionMessages);
-        $this->collectionFactory->expects($this->once())->method('create')->willReturn($blockingMessages);
+            ->with(true)
+            ->willReturn($messages);
+        $this->messageCollectionFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($relevantMessages);
         $this->layoutFactory->expects($this->once())->method('create')->willReturn($layout);
 
         $this->assertSame(
-            [
-                'html' => '<div>error</div>',
-                'displayMessages' => true,
-            ],
-            $this->model->resolve(
-                'https://example.com/product.html',
-                'https://example.com/product.html'
-            )
+            ['html' => '<div class="messages" role="alert" aria-atomic="true">'
+                . '<div class="message notice">notice</div></div>'],
+            $this->model->getInlineErrorMessages(true)
         );
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetInlineErrorMessagesPreservesExtraAttributesAndClasses(): void
+    {
+        $error = new Error();
+        $error->setText('Product that you are trying to add is not available.');
+
+        $messages = $this->createMock(Collection::class);
+        $messages->expects($this->exactly(2))
+            ->method('getItemsByType')
+            ->willReturnMap([
+                [MessageInterface::TYPE_ERROR, [$error]],
+                [MessageInterface::TYPE_NOTICE, []],
+            ]);
+
+        $errorMessages = $this->createMock(Collection::class);
+        $errorMessages->expects($this->once())->method('addMessage')->with($error)->willReturnSelf();
+        $errorMessages->expects($this->once())->method('getCount')->willReturn(1);
+
+        $messagesBlock = $this->createMock(Messages::class);
+        $messagesBlock->expects($this->once())->method('setMessages')->with($errorMessages)->willReturnSelf();
+        $messagesBlock->expects($this->once())
+            ->method('getGroupedHtml')
+            ->willReturn(
+                '<div data-bind="scope: \'messages\'" class="messages extra-class">'
+                . '<div class="message error">error</div></div>'
+            );
+
+        $layout = $this->createMock(Layout::class);
+        $layout->expects($this->once())
+            ->method('createBlock')
+            ->with(Messages::class)
+            ->willReturn($messagesBlock);
+
+        $this->messageManager->expects($this->once())
+            ->method('getMessages')
+            ->with(true)
+            ->willReturn($messages);
+        $this->messageCollectionFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($errorMessages);
+        $this->layoutFactory->expects($this->once())->method('create')->willReturn($layout);
+
+        $result = $this->model->getInlineErrorMessages(true);
+
+        $this->assertStringContainsString('data-bind="scope: \'messages\'"', $result['html']);
+        $this->assertStringContainsString('class="messages extra-class"', $result['html']);
+        $this->assertStringContainsString('role="alert"', $result['html']);
+        $this->assertStringContainsString('aria-atomic="true"', $result['html']);
     }
 }

@@ -27,6 +27,7 @@ use Magento\Backend\Model\Validator\UrlKey\CompositeUrlKey;
  * Class for set or update url path.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  */
 class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
 {
@@ -114,18 +115,80 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
                 $resultUrlKey = $category->formatUrlKey($category->getOrigData('name'));
                 $this->updateUrlKey($category, $resultUrlKey);
             }
-            if ($category->hasChildren()) {
-                $metadata = $this->metadataPool->getMetadata(CategoryInterface::class);
-                $linkField = $metadata->getLinkField();
-                $id = $category->getData($linkField);
-                if ($id) {
-                    $defaultUrlKey = $this->getDefaultUrlKey->execute((int)$id);
-                    if ($defaultUrlKey) {
-                        $this->updateUrlKey($category, $defaultUrlKey);
-                    }
-                }
+            $this->restoreDefaultUrlKeyIfNeeded($category);
+        }
+    }
+
+    /**
+     * Restore url_key/url_path from the default-scope value.
+     *
+     * Runs for categories with children (to cascade the default to descendants) and for
+     * categories reverted to the default url_key at a specific store view, including leaf
+     * categories without children, which the default-store-scope branch above never handles.
+     *
+     * @param Category $category
+     * @return void
+     * @throws LocalizedException
+     */
+    private function restoreDefaultUrlKeyIfNeeded(Category $category): void
+    {
+        $isStoreScopedRevert = !$category->isObjectNew() && $category->getStoreId() !== Store::DEFAULT_STORE_ID;
+        if (!$category->hasChildren()) {
+            $hasStoreScopedOverride = $isStoreScopedRevert
+                && $this->storeViewService->doesEntityHaveOverriddenUrlKeyForStore(
+                    $category->getStoreId(),
+                    $category->getId(),
+                    Category::ENTITY
+                );
+            if (!$hasStoreScopedOverride) {
+                return;
             }
         }
+        $metadata = $this->metadataPool->getMetadata(CategoryInterface::class);
+        $linkField = $metadata->getLinkField();
+        $id = $category->getData($linkField);
+        if (!$id) {
+            return;
+        }
+        $defaultUrlKey = $this->getDefaultUrlKey->execute((int)$id);
+        if (!$defaultUrlKey) {
+            return;
+        }
+        if ($isStoreScopedRevert) {
+            $this->removeStoreScopedAttributeOverride($category, $linkField, 'url_key');
+        }
+        $this->updateUrlKey($category, $defaultUrlKey);
+        if ($isStoreScopedRevert) {
+            $category->setUrlKey(null);
+        }
+    }
+
+    /**
+     * Remove a store-scoped attribute override row directly, without disturbing other stores.
+     *
+     * Category's resource model (unlike Product's) does not scope saveAttribute()/getAttributeRow()
+     * by store, so a store-scoped removal must be done explicitly here rather than through it.
+     *
+     * @param Category $category
+     * @param string $linkField
+     * @param string $attributeCode
+     * @return void
+     */
+    private function removeStoreScopedAttributeOverride(
+        Category $category,
+        string $linkField,
+        string $attributeCode
+    ): void {
+        $resource = $category->getResource();
+        $attribute = $resource->getAttribute($attributeCode);
+        $resource->getConnection()->delete(
+            $attribute->getBackendTable(),
+            [
+                'attribute_id = ?' => $attribute->getAttributeId(),
+                $linkField . ' = ?' => $category->getData($linkField),
+                'store_id = ?' => (int) $category->getStoreId(),
+            ]
+        );
     }
 
     /**
@@ -196,35 +259,132 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
      *
      * @param Category $category
      * @return void
+     * @throws NoSuchEntityException
      */
     protected function updateUrlPathForChildren(Category $category)
     {
         if ($this->isGlobalScope($category->getStoreId())) {
             $childrenIds = $this->childrenCategoriesProvider->getChildrenIds($category, true);
-            foreach ($childrenIds as $childId) {
-                foreach ($category->getStoreIds() as $storeId) {
-                    if ($this->storeViewService->doesEntityHaveOverriddenUrlPathForStore(
-                        $storeId,
-                        $childId,
-                        Category::ENTITY
-                    )) {
-                        $child = $this->categoryRepository->get($childId, $storeId);
-                        $this->updateUrlPathForCategory($child, $category);
-                    }
-                }
+            foreach ($category->getStoreIds() as $storeId) {
+                $this->updateOverriddenUrlPathForStore($category, $childrenIds, (int)$storeId);
             }
         } else {
             $children = $this->childrenCategoriesProvider->getChildren($category, true);
+            $childrenById = [];
             foreach ($children as $child) {
                 /** @var Category $child */
                 $child->setStoreId($category->getStoreId());
-                if ($child->getParentId() === $category->getId()) {
-                    $this->updateUrlPathForCategory($child, $category);
-                } else {
-                    $this->updateUrlPathForCategory($child);
-                }
+                $childrenById[(int)$child->getId()] = $child;
+            }
+            uasort(
+                $childrenById,
+                static fn (Category $first, Category $second) => $first->getLevel() <=> $second->getLevel()
+            );
+            foreach ($childrenById as $child) {
+                $parentId = (int)$child->getParentId();
+                $parent = $parentId === (int)$category->getId() ? $category : ($childrenById[$parentId] ?? null);
+                $this->updateUrlPathForCategory($child, $parent);
             }
         }
+    }
+
+    /**
+     * Refresh overridden url_path values for a category and its descendants at a specific store scope.
+     *
+     * @param Category $category
+     * @param int[] $childrenIds
+     * @param int $storeId
+     * @return void
+     * @throws NoSuchEntityException
+     */
+    private function updateOverriddenUrlPathForStore(Category $category, array $childrenIds, int $storeId): void
+    {
+        $overriddenChildren = [];
+        foreach ($childrenIds as $childId) {
+            if ($this->storeViewService->doesEntityHaveOverriddenUrlPathForStore(
+                $storeId,
+                $childId,
+                Category::ENTITY
+            )) {
+                $overriddenChildren[] = $this->categoryRepository->get($childId, $storeId);
+            }
+        }
+
+        $categoryHasOverride = $this->storeViewService->doesEntityHaveOverriddenUrlPathForStore(
+            $storeId,
+            $category->getId(),
+            Category::ENTITY
+        );
+        $needsStoreScopedParent = $categoryHasOverride || $this->hasDirectChild($overriddenChildren, $category);
+        $storeScopedCategory = $needsStoreScopedParent ? $this->getStoreScopedCategory($category, $storeId) : null;
+
+        if ($categoryHasOverride) {
+            $this->updateUrlPathForCategory($storeScopedCategory);
+        }
+
+        usort(
+            $overriddenChildren,
+            static fn (Category $first, Category $second) => $first->getLevel() <=> $second->getLevel()
+        );
+
+        // Indexed by id so a descendant that is not a direct child can still be given its actual,
+        // already-refreshed parent from this same pass, instead of falling through to a parentless
+        // recompute that relies on a repository lookup which can return a stale cached instance.
+        $overriddenChildrenById = [];
+        foreach ($overriddenChildren as $child) {
+            $overriddenChildrenById[(int)$child->getId()] = $child;
+        }
+
+        foreach ($overriddenChildren as $child) {
+            $parentId = (int)$child->getParentId();
+            if ($parentId === (int)$category->getId()) {
+                $parent = $storeScopedCategory;
+            } else {
+                $parent = $overriddenChildrenById[$parentId] ?? null;
+            }
+            $this->updateUrlPathForCategory($child, $parent);
+        }
+    }
+
+    /**
+     * Check whether any of the given categories is a direct child of the edited category.
+     *
+     * @param Category[] $categories
+     * @param Category $category
+     * @return bool
+     */
+    private function hasDirectChild(array $categories, Category $category): bool
+    {
+        foreach ($categories as $candidate) {
+            if ((int)$candidate->getParentId() === (int)$category->getId()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Re-scope the edited category to a specific store, preserving its just-changed url_key.
+     *
+     * @param Category $category
+     * @param int $storeId
+     * @return Category
+     * @throws NoSuchEntityException
+     */
+    private function getStoreScopedCategory(Category $category, int $storeId): Category
+    {
+        $isEditedScope = $storeId === (int)$category->getStoreId();
+        if (!$isEditedScope && $this->storeViewService->doesEntityHaveOverriddenUrlKeyForStore(
+            $storeId,
+            $category->getId(),
+            Category::ENTITY
+        )) {
+            return $this->categoryRepository->get($category->getId(), $storeId);
+        }
+
+        $storeScopedCategory = clone $category;
+        $storeScopedCategory->setStoreId($storeId);
+        return $storeScopedCategory;
     }
 
     /**

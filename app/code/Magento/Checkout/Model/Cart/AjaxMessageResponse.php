@@ -11,119 +11,96 @@ use Magento\Framework\Message\Collection;
 use Magento\Framework\Message\CollectionFactory;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Message\MessageInterface;
+use Magento\Framework\View\Element\Messages;
 use Magento\Framework\View\LayoutFactory;
 
 /**
- * Prepares storefront messages for AJAX add to cart responses.
+ * Prepares storefront error messages for AJAX add to cart responses.
  */
 class AjaxMessageResponse
 {
     /**
      * @param ManagerInterface $messageManager
      * @param LayoutFactory $layoutFactory
-     * @param CollectionFactory $collectionFactory
+     * @param CollectionFactory $messageCollectionFactory
      */
     public function __construct(
         private readonly ManagerInterface $messageManager,
         private readonly LayoutFactory $layoutFactory,
-        private readonly CollectionFactory $collectionFactory
+        private readonly CollectionFactory $messageCollectionFactory
     ) {
     }
 
     /**
-     * Whether messages should be rendered on the current page instead of relying on redirect.
+     * Returns rendered error messages for inline AJAX display.
      *
-     * @param string|null $backUrl
-     * @param string|null $refererUrl
-     * @return bool
+     * @param bool $clearMessages
+     * @return array{html: string}|null
      */
-    public function shouldDisplayInline(?string $backUrl, ?string $refererUrl): bool
+    public function getInlineErrorMessages(bool $clearMessages): ?array
     {
-        if ($backUrl === null || $backUrl === '') {
-            return false;
-        }
-
-        if ($refererUrl === null || $refererUrl === '') {
-            return false;
-        }
-
-        return $this->normalizeUrl($backUrl) === $this->normalizeUrl($refererUrl);
-    }
-
-    /**
-     * Returns rendered blocking messages for inline AJAX display.
-     *
-     * @param string|null $backUrl
-     * @param string|null $refererUrl
-     * @return array{html: string, displayMessages: bool}|null
-     */
-    public function resolve(?string $backUrl, ?string $refererUrl): ?array
-    {
-        if (!$this->shouldDisplayInline($backUrl, $refererUrl)) {
+        $messages = $this->messageManager->getMessages($clearMessages);
+        $errorMessages = $this->getRelevantMessages($messages);
+        if (!$errorMessages->getCount()) {
             return null;
         }
 
-        $sessionMessages = $this->messageManager->getMessages(false);
-        $blockingMessages = $this->createBlockingMessagesCollection($sessionMessages);
-        if (!$blockingMessages->getCount()) {
-            return null;
-        }
-
-        $block = $this->layoutFactory->create()->getMessagesBlock();
-        $block->setMessages($blockingMessages);
-
-        $this->clearBlockingMessages($sessionMessages);
+        $block = $this->layoutFactory->create()->createBlock(Messages::class);
+        $block->setMessages($errorMessages);
 
         return [
-            'html' => $block->getGroupedHtml(),
-            'displayMessages' => true,
+            'html' => $this->addAlertAttributes($block->getGroupedHtml()),
         ];
     }
 
     /**
-     * Creates collection that contains only blocking storefront messages.
+     * Add the role="alert" wrapper the storefront Knockout messages component renders
      *
-     * @param Collection $source
-     * @return Collection
-     */
-    private function createBlockingMessagesCollection(Collection $source): Collection
-    {
-        $collection = $this->collectionFactory->create();
-        foreach ([MessageInterface::TYPE_ERROR, MessageInterface::TYPE_NOTICE] as $type) {
-            foreach ($source->getItemsByType($type) as $message) {
-                $collection->addMessage($message);
-            }
-        }
-
-        return $collection;
-    }
-
-    /**
-     * Removes blocking messages from session after inline rendering.
-     *
-     * @param Collection $messages
-     * @return void
-     */
-    private function clearBlockingMessages(Collection $messages): void
-    {
-        foreach ([MessageInterface::TYPE_ERROR, MessageInterface::TYPE_NOTICE] as $type) {
-            foreach ($messages->getItemsByType($type) as $message) {
-                $messages->deleteMessageByIdentifier($message->getIdentifier());
-            }
-        }
-    }
-
-    /**
-     * Normalizes a URL path for comparison by stripping query, fragment, and trailing slash.
-     *
-     * @param string $url
+     * @param string $html
      * @return string
      */
-    private function normalizeUrl(string $url): string
+    private function addAlertAttributes(string $html): string
     {
-        $normalizedUrl = explode('?', $url, 2)[0];
-        $normalizedUrl = explode('#', $normalizedUrl, 2)[0];
+        if ($html === '') {
+            return $html;
+        }
 
-        return rtrim($normalizedUrl, '/');
+        $document = new \DOMDocument();
+        $useInternalErrors = libxml_use_internal_errors(true);
+        $document->loadHTML(
+            '<?xml encoding="UTF-8">' . $html,
+            LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD
+        );
+        libxml_clear_errors();
+        libxml_use_internal_errors($useInternalErrors);
+
+        $wrapper = $document->documentElement;
+        if (!$wrapper instanceof \DOMElement) {
+            return $html;
+        }
+
+        $wrapper->setAttribute('role', 'alert');
+        $wrapper->setAttribute('aria-atomic', 'true');
+
+        return $document->saveHTML($wrapper);
+    }
+
+    /**
+     * Extract error/notice messages from the message collection.
+     *
+     * @param Collection $messages
+     * @return Collection
+     */
+    private function getRelevantMessages(Collection $messages): Collection
+    {
+        $relevantMessages = $this->messageCollectionFactory->create();
+        foreach ($messages->getItemsByType(MessageInterface::TYPE_ERROR) as $message) {
+            $relevantMessages->addMessage($message);
+        }
+        foreach ($messages->getItemsByType(MessageInterface::TYPE_NOTICE) as $message) {
+            $relevantMessages->addMessage($message);
+        }
+
+        return $relevantMessages;
     }
 }

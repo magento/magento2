@@ -50,6 +50,7 @@ sub vcl_recv {
         req.method != "HEAD" &&
         req.method != "PUT" &&
         req.method != "POST" &&
+        req.method != "PATCH" &&
         req.method != "TRACE" &&
         req.method != "OPTIONS" &&
         req.method != "DELETE") {
