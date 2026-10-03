@@ -10,13 +10,12 @@ namespace Magento\TestFramework\TestCase\GraphQl;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\App\Area;
-use Magento\Framework\App\Cache\Frontend\Pool;
 use Magento\Framework\App\Cache\Manager;
 use Magento\Framework\App\Cache\StateInterface;
+use Magento\Framework\App\Cache\TypeListInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\ObjectManager\ConfigLoader;
-use Magento\Framework\Cache\CacheConstants;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\GraphQl\Model\Query\ContextFactory;
@@ -257,19 +256,9 @@ class ResolverCacheAbstract extends GraphQlAbstract
     private function cleanCacheType(string $cacheType): void
     {
         try {
-            // Get a fresh Pool instance without affecting shared instances
-            $cachePool = $this->objectManager->create(Pool::class);
-            $cache = $cachePool->get($cacheType);
-
-            // Clean all cache entries for this type
-            $cache->clean(CacheConstants::CLEANING_MODE_ALL);
+            $this->objectManager->get(TypeListInterface::class)->cleanType($cacheType);
 
             if ($cacheType === GraphQlResolverCache::TYPE_IDENTIFIER) {
-                $backend = $cache->getBackend();
-                if (method_exists($backend, 'clean')) {
-                    $backend->clean(CacheConstants::CLEANING_MODE_ALL);
-                }
-
                 $this->objectManager->removeSharedInstance(
                     GraphQlResolverCache::class
                 );
