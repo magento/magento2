@@ -146,7 +146,7 @@ class Consumer implements ConsumerInterface
             try {
                 $transactionCallback($message);
             } finally {
-                $this->messageStateResetter->resetState();
+                $this->messageStateResetter->resetState($this->configuration);
             }
         };
         if (!isset($maxNumberOfMessages)) {

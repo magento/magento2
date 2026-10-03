@@ -240,7 +240,7 @@ class ConsumerTest extends TestCase
         $this->messageController->method('lock')
             ->willThrowException(new NotFoundException(new Phrase('Not found')));
 
-        $messageStateResetter->expects($this->exactly(2))->method('resetState');
+        $messageStateResetter->expects($this->exactly(2))->method('resetState')->with($this->configuration);
 
         $this->consumer->process(2);
     }
@@ -257,7 +257,7 @@ class ConsumerTest extends TestCase
                 $callback($envelope);
             });
 
-        $messageStateResetter->expects($this->once())->method('resetState');
+        $messageStateResetter->expects($this->once())->method('resetState')->with($this->configuration);
         $this->expectException(\Error::class);
 
         $this->consumer->process();

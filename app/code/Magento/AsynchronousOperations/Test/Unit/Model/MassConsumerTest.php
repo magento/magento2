@@ -81,7 +81,8 @@ class MassConsumerTest extends TestCase
             );
         $this->envelopeCallback->expects($this->exactly(2))->method('execute')->with($envelope);
 
-        $this->messageStateResetter->expects($this->exactly(2))->method('resetState');
+        $this->messageStateResetter->expects($this->exactly(2))->method('resetState')
+            ->with($this->isInstanceOf(ConsumerConfigurationInterface::class));
 
         $this->massConsumer->process(2);
     }
@@ -97,7 +98,8 @@ class MassConsumerTest extends TestCase
         $this->envelopeCallback->expects($this->once())->method('execute')
             ->willThrowException(new \RuntimeException('Failed'));
 
-        $this->messageStateResetter->expects($this->once())->method('resetState');
+        $this->messageStateResetter->expects($this->once())->method('resetState')
+            ->with($this->isInstanceOf(ConsumerConfigurationInterface::class));
         $this->expectException(\RuntimeException::class);
 
         $this->massConsumer->process();

@@ -125,7 +125,7 @@ class MassConsumer implements ConsumerInterface
             try {
                 $callbackInstance->execute($message);
             } finally {
-                $this->messageStateResetter->resetState();
+                $this->messageStateResetter->resetState($this->configuration);
             }
         };
     }
