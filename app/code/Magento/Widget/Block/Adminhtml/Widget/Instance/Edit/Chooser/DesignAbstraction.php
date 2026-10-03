@@ -5,6 +5,12 @@
  */
 namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Framework\View\Model\Layout\Merge;
+use Magento\Framework\View\PageLayout\ConfigFactory as PageLayoutConfigFactory;
+use Magento\Framework\View\PageLayout\File\Collector\Aggregated as PageLayoutFileCollector;
+
 /**
  * Widget Instance design abstractions chooser
  *
@@ -29,22 +35,40 @@ class DesignAbstraction extends \Magento\Framework\View\Element\Html\Select
     protected $_appState;
 
     /**
+     * @var PageLayoutConfigFactory
+     */
+    private $pageLayoutConfigFactory;
+
+    /**
+     * @var PageLayoutFileCollector
+     */
+    private $pageLayoutFileCollector;
+
+    /**
      * @param \Magento\Framework\View\Element\Context $context
      * @param \Magento\Framework\View\Layout\ProcessorFactory $layoutProcessorFactory
      * @param \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory $themesFactory
      * @param \Magento\Framework\App\State $appState
      * @param array $data
+     * @param PageLayoutConfigFactory|null $pageLayoutConfigFactory
+     * @param PageLayoutFileCollector|null $pageLayoutFileCollector
      */
     public function __construct(
         \Magento\Framework\View\Element\Context $context,
         \Magento\Framework\View\Layout\ProcessorFactory $layoutProcessorFactory,
         \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory $themesFactory,
         \Magento\Framework\App\State $appState,
-        array $data = []
+        array $data = [],
+        ?PageLayoutConfigFactory $pageLayoutConfigFactory = null,
+        ?PageLayoutFileCollector $pageLayoutFileCollector = null
     ) {
         $this->_layoutProcessorFactory = $layoutProcessorFactory;
         $this->_themesFactory = $themesFactory;
         $this->_appState = $appState;
+        $this->pageLayoutConfigFactory = $pageLayoutConfigFactory
+            ?? ObjectManager::getInstance()->get(PageLayoutConfigFactory::class);
+        $this->pageLayoutFileCollector = $pageLayoutFileCollector
+            ?? ObjectManager::getInstance()->get(PageLayoutFileCollector::class);
         parent::__construct($context, $data);
     }
 
@@ -57,14 +81,40 @@ class DesignAbstraction extends \Magento\Framework\View\Element\Html\Select
     {
         if (!$this->getOptions()) {
             $this->addOption('', __('-- Please Select --'));
-            $layoutUpdateParams = ['theme' => $this->_getThemeInstance($this->getTheme())];
+            $theme = $this->_getThemeInstance($this->getTheme());
+            $layoutUpdateParams = ['theme' => $theme];
             $designAbstractions = $this->_appState->emulateAreaCode(
                 'frontend',
                 [$this->_getLayoutProcessor($layoutUpdateParams), 'getAllDesignAbstractions']
             );
+            if ($theme instanceof ThemeInterface) {
+                $designAbstractions += $this->getPageLayoutDesignAbstractions($theme);
+            }
             $this->_addDesignAbstractionOptions($designAbstractions);
         }
         return parent::_beforeToHtml();
+    }
+
+    /**
+     * Page layouts declared in the theme's layouts.xml, described as page layout design abstractions
+     *
+     * @param ThemeInterface $theme
+     * @return array
+     */
+    private function getPageLayoutDesignAbstractions(ThemeInterface $theme): array
+    {
+        $pageLayoutsConfig = $this->pageLayoutConfigFactory->create(
+            ['configFiles' => $this->pageLayoutFileCollector->getFilesContent($theme, 'layouts.xml')]
+        );
+        $result = [];
+        foreach ($pageLayoutsConfig->getPageLayouts() as $name => $label) {
+            $result[$name] = [
+                'name' => $name,
+                'label' => (string)__($label),
+                'design_abstraction' => Merge::DESIGN_ABSTRACTION_PAGE_LAYOUT,
+            ];
+        }
+        return $result;
     }
 
     /**
