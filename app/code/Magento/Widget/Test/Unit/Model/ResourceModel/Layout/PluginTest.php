@@ -9,6 +9,7 @@ namespace Magento\Widget\Test\Unit\Model\ResourceModel\Layout;
 
 use Magento\Framework\App\ScopeInterface;
 use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Framework\View\Layout\Element;
 use Magento\Framework\View\Model\Layout\Merge;
 use Magento\Framework\View\PageLayout\Config as PageLayoutConfig;
 use Magento\Framework\View\PageLayout\ConfigFactory as PageLayoutConfigFactory;
@@ -76,14 +77,17 @@ class PluginTest extends TestCase
     {
         $this->expectDbUpdatesFetchedFor('2columns-left');
 
-        $this->assertSame('<body/>', $this->callPlugin(self::CURRENT_THEME, ['2columns-left'], '2columns-left'));
+        $this->assertSame(
+            '<body/>',
+            $this->callPlugin(self::CURRENT_THEME, true, ['2columns-left'], '2columns-left')
+        );
     }
 
-    public function testInheritedPageLayoutHandleGetsNoDbUpdates(): void
+    public function testInheritedPageLayoutHandleGetsNoDbUpdatesInPageLayoutMerge(): void
     {
         $this->updateMock->expects($this->never())->method('fetchUpdatesByHandle');
 
-        $this->assertSame('', $this->callPlugin(self::CURRENT_THEME, ['2columns-left'], '1column'));
+        $this->assertSame('', $this->callPlugin(self::CURRENT_THEME, true, ['2columns-left'], '1column'));
     }
 
     public function testInheritedNonPageLayoutHandleGetsDbUpdates(): void
@@ -92,27 +96,37 @@ class PluginTest extends TestCase
 
         $this->assertSame(
             '<body/>',
-            $this->callPlugin(self::CURRENT_THEME, ['customer_account_index'], 'customer_account')
+            $this->callPlugin(self::CURRENT_THEME, false, ['customer_account_index'], 'customer_account')
         );
     }
 
     public function testPageLayoutDeclaredOnlyByAnotherThemeDoesNotSuppressDbUpdates(): void
     {
-        $this->assertSame('', $this->callPlugin(self::OTHER_THEME, ['customer_account_index'], 'customer_account'));
+        $this->assertSame('', $this->callPlugin(self::OTHER_THEME, true, ['2columns-left'], 'customer_account'));
 
         $this->expectDbUpdatesFetchedFor('customer_account');
         $this->assertSame(
             '<body/>',
-            $this->callPlugin(self::CURRENT_THEME, ['customer_account_index'], 'customer_account')
+            $this->callPlugin(self::CURRENT_THEME, true, ['2columns-left'], 'customer_account')
         );
         $this->assertSame([self::OTHER_THEME, self::CURRENT_THEME], $this->collectedThemes);
+    }
+
+    public function testPageLayoutNamedLikeLayoutHandleDoesNotSuppressDbUpdatesInLayoutMerge(): void
+    {
+        $this->expectDbUpdatesFetchedFor('customer_account');
+
+        $this->assertSame(
+            '<body/>',
+            $this->callPlugin(self::OTHER_THEME, false, ['customer_account_index'], 'customer_account')
+        );
     }
 
     public function testRequestedNumericPageLayoutHandleGetsDbUpdates(): void
     {
         $this->expectDbUpdatesFetchedFor('123');
 
-        $this->assertSame('<body/>', $this->callPlugin(self::CURRENT_THEME, [123], '123'));
+        $this->assertSame('<body/>', $this->callPlugin(self::CURRENT_THEME, true, [123], '123'));
     }
 
     private function expectDbUpdatesFetchedFor(string $handle): void
@@ -123,8 +137,12 @@ class PluginTest extends TestCase
             ->willReturn('<body/>');
     }
 
-    private function callPlugin(string $themePath, array $requestedHandles, string $handle): string
-    {
+    private function callPlugin(
+        string $themePath,
+        bool $isPageLayoutMerge,
+        array $requestedHandles,
+        string $handle
+    ): string {
         $theme = $this->createStub(ThemeInterface::class);
         $theme->method('getId')->willReturn(array_search($themePath, array_keys(self::PAGE_LAYOUTS_BY_THEME)));
         $theme->method('getFullPath')->willReturn($themePath);
@@ -132,6 +150,13 @@ class PluginTest extends TestCase
         $merge->method('getTheme')->willReturn($theme);
         $merge->method('getScope')->willReturn($this->createStub(ScopeInterface::class));
         $merge->method('getHandles')->willReturn($requestedHandles);
+        $merge->method('getFileLayoutUpdatesXml')->willReturn(
+            new Element(
+                $isPageLayoutMerge
+                    ? '<layouts><layout id="1column"/><layout id="2columns-left"/></layouts>'
+                    : '<layouts><handle id="default"/><layout id="catalog_product_prices"/></layouts>'
+            )
+        );
 
         return $this->plugin->aroundGetDbUpdateString(
             $merge,

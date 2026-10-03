@@ -89,7 +89,23 @@ class Plugin
             return false;
         }
         $theme = $subject->getTheme();
-        return $theme instanceof ThemeInterface && in_array($handle, $this->getPageLayouts($theme), true);
+        return $theme instanceof ThemeInterface
+            && in_array($handle, $this->getPageLayouts($theme), true)
+            && $this->isPageLayoutMerge($subject);
+    }
+
+    /**
+     * Whether the merge is built from page layout files only, as the one used by the page layout reader
+     *
+     * Layout files with a <page> root become <handle> nodes; the page layout reader merges page_layout files
+     * only, all with a <layout> root, so its merge is the one without <handle> nodes.
+     *
+     * @param \Magento\Framework\View\Model\Layout\Merge $subject
+     * @return bool
+     */
+    private function isPageLayoutMerge(\Magento\Framework\View\Model\Layout\Merge $subject): bool
+    {
+        return !$subject->getFileLayoutUpdatesXml()->xpath('handle');
     }
 
     /**
