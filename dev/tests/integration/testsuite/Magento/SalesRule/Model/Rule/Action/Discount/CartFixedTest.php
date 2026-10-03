@@ -759,6 +759,9 @@ class CartFixedTest extends TestCase
 
     /**
      * Non-taxable product 20.00, flat rate shipping 5.00 taxed at 20%, discount applied on prices including tax.
+     *
+     * The split between item and shipping follows the shipping price known when item discounts are collected,
+     * which differs between the first and later collects; the total must be the rule amount on every collect.
      */
     #[
         DbIsolation(true),
@@ -785,7 +788,16 @@ class CartFixedTest extends TestCase
         $cart = DataFixtureStorageManager::getStorage()->get('cart');
         $totals = $this->getTotals((int) $cart->getId());
         $this->assertEquals(-10, $totals->getDiscountAmount());
-        $this->assertEquals(2.31, $totals->getShippingDiscountAmount());
+        $this->assertEquals(8, current($totals->getItems())->getDiscountAmount());
+        $this->assertEquals(2, $totals->getShippingDiscountAmount());
+
+        $totals = $this->getTotals((int) $cart->getId());
+        $this->assertEquals(-10, $totals->getDiscountAmount());
+        $this->assertEqualsWithDelta(
+            10,
+            current($totals->getItems())->getDiscountAmount() + $totals->getShippingDiscountAmount(),
+            0.001
+        );
     }
 
     /**
@@ -816,6 +828,7 @@ class CartFixedTest extends TestCase
         $cart = DataFixtureStorageManager::getStorage()->get('cart');
         $totals = $this->getTotals((int) $cart->getId());
         $this->assertEquals(-10, $totals->getDiscountAmount());
+        $this->assertEquals(8, current($totals->getItems())->getDiscountAmount());
         $this->assertEquals(2, $totals->getShippingDiscountAmount());
     }
 

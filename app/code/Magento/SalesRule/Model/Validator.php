@@ -489,23 +489,10 @@ class Validator extends \Magento\Framework\Model\AbstractModel implements ResetA
                     }
                     if ($cartRules[$ruleId] > 0) {
                         $shippingQuoteAmount = (float) $address->getShippingAmount();
-                        $quoteBaseSubtotal = (float) $quote->getBaseSubtotal();
                         $isMultiShipping = $this->cartFixedDiscountHelper->checkMultiShippingQuote($quote);
-                        if ($isAppliedToShipping) {
-                            $isQuoteMultiShipping = $quote->getIsMultiShipping() && $isMultiShipping;
-                            // Same basis as the item shares in CartFixed::calculate(), so all shares add up
-                            // to the rule amount even when items and shipping are taxed differently.
-                            $shippingQuoteAmount = $isQuoteMultiShipping
-                                ? $shippingQuoteAmount
-                                : (float) $shippingAmount;
-                            $quoteBaseSubtotal = $isQuoteMultiShipping ?
-                                $this->cartFixedDiscountHelper->getQuoteTotalsForMultiShipping($quote) :
-                                $this->cartFixedDiscountHelper->getQuoteTotalsForRegularShipping(
-                                    $address,
-                                    (float) ($this->_rulesItemTotals[$ruleId]['base_items_price']
-                                        ?? $quoteBaseSubtotal),
-                                    $shippingQuoteAmount
-                                );
+                        if ($isAppliedToShipping && $quote->getIsMultiShipping() && $isMultiShipping) {
+                            $quoteBaseSubtotal = $this->cartFixedDiscountHelper
+                                ->getQuoteTotalsForMultiShipping($quote);
                             $discountAmount = $this->cartFixedDiscountHelper->
                             getShippingDiscountAmount(
                                 $rule,
@@ -513,6 +500,13 @@ class Validator extends \Magento\Framework\Model\AbstractModel implements ResetA
                                 $quoteBaseSubtotal
                             );
                             $baseDiscountAmount = $discountAmount;
+                        } elseif ($isAppliedToShipping) {
+                            // CartFixed::calculate() already took the item shares from the rule amount, based on
+                            // the shipping price it could see before shipping tax was collected. Shipping gets
+                            // the rest, so the shares always add up to the rule amount.
+                            $quoteCartRules = $quote->getCartFixedRules() ?: [];
+                            $baseDiscountAmount = max(0.0, (float) ($quoteCartRules[$ruleId] ?? $cartRules[$ruleId]));
+                            $discountAmount = $this->priceCurrency->convert($baseDiscountAmount, $quote->getStore());
                         } else {
                             $discountAmount = min($shippingQuoteAmount, $quoteAmount);
                             $baseDiscountAmount = min(

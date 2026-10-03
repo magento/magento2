@@ -701,61 +701,41 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * Non-taxable item 20.00, shipping 5.00 + 20% tax, discount on prices including tax.
+     * Shipping takes what CartFixed::calculate() left of the rule amount after the item shares.
      *
-     * The shipping share must be computed from the shipping incl. tax and the rule item totals,
-     * the same basis CartFixed uses for the item shares.
-     *
+     * @param array $quoteCartFixedRules
+     * @param float $expectedShippingDiscount
      * @return void
      * @throws Zend_Db_Select_Exception
      */
-    public function testProcessShippingAmountCartFixedUsesItemSharesBasis(): void
-    {
-        $actions = $this->createPartialMockWithReflection(Collection::class, ['validate']);
-        $actions->method('validate')->willReturn(true);
+    #[DataProvider('cartFixedShippingRemainderDataProvider')]
+    public function testProcessShippingAmountCartFixedTakesRemainderOfItemShares(
+        array $quoteCartFixedRules,
+        float $expectedShippingDiscount
+    ): void {
         $rule = $this->createPartialMockWithReflection(
             Rule::class,
-            ['getApplyToShipping', 'getDiscountAmount', 'getSimpleAction', 'getId', 'getActions']
+            ['getApplyToShipping', 'getDiscountAmount', 'getSimpleAction', 'getId']
         );
         $rule->method('getApplyToShipping')->willReturn(true);
         $rule->method('getDiscountAmount')->willReturn(10.0);
         $rule->method('getSimpleAction')->willReturn(Rule::CART_FIXED_ACTION);
         $rule->method('getId')->willReturn(1);
-        $rule->method('getActions')->willReturn($actions);
         $this->ruleCollection->method('getIterator')
             ->willReturnCallback(fn () => new \ArrayIterator([$rule]));
 
-        $item = $this->createPartialMockWithReflection(
-            AbstractItem::class,
-            [
-                'getDiscountCalculationPrice',
-                'getBaseDiscountCalculationPrice',
-                'getCalculationPrice',
-                'getParentItem',
-                'getQuote',
-                'getAddress',
-                'getOptionByCode'
-            ]
-        );
-        $item->method('getParentItem')->willReturn(null);
-        $item->method('getCalculationPrice')->willReturn(20.0);
-        $item->method('getDiscountCalculationPrice')->willReturn(20.0);
-        $item->method('getBaseDiscountCalculationPrice')->willReturn(20.0);
-
-        $this->validators->method('getValidators')->willReturn([]);
-        $this->utility->method('getItemQty')->willReturn(1);
         $this->utility->method('canProcessRule')->willReturn(true);
-        $this->priceCurrency->method('convert')->willReturn(10.0);
+        $this->priceCurrency->method('convert')->willReturnArgument(0);
         $this->priceCurrency->method('roundPrice')->willReturnArgument(0);
 
         $quote = $this->createPartialMockWithReflection(
             Quote::class,
-            ['getStore', 'isVirtual', 'setAppliedRuleIds', 'getBaseSubtotal']
+            ['getStore', 'isVirtual', 'setAppliedRuleIds', 'getCartFixedRules']
         );
         $quote->method('getStore')->willReturn($this->createMock(Store::class));
         $quote->method('setAppliedRuleIds')->willReturnSelf();
         $quote->method('isVirtual')->willReturn(false);
-        $quote->method('getBaseSubtotal')->willReturn(50.0);
+        $quote->method('getCartFixedRules')->willReturn($quoteCartFixedRules);
 
         $this->addressMock->method('getQuote')->willReturn($quote);
         $this->addressMock->method('getCustomAttributesCodes')->willReturn([]);
@@ -764,24 +744,31 @@ class ValidatorTest extends TestCase
         $this->addressMock->setShippingAmount(5.0);
         $this->addressMock->setBaseShippingAmount(5.0);
 
-        $this->cartFixedDiscountHelper->expects($this->once())
-            ->method('getQuoteTotalsForRegularShipping')
-            ->with($this->addressMock, 20.0, 6.0)
-            ->willReturn(26.0);
-        $this->cartFixedDiscountHelper->expects($this->once())
-            ->method('getShippingDiscountAmount')
-            ->with($rule, 6.0, 26.0)
-            ->willReturn(2.31);
+        $this->cartFixedDiscountHelper->expects($this->never())->method('getQuoteTotalsForRegularShipping');
+        $this->cartFixedDiscountHelper->expects($this->never())->method('getShippingDiscountAmount');
 
         $this->model->init(
             $this->model->getWebsiteId(),
             $this->model->getCustomerGroupId(),
             $this->model->getCouponCode()
         );
-        $this->model->initTotals([$item], $this->addressMock);
         $this->model->processShippingAmount($this->addressMock);
 
-        self::assertEquals(2.31, $this->addressMock->getShippingDiscountAmount());
+        self::assertEquals($expectedShippingDiscount, $this->addressMock->getShippingDiscountAmount());
+        self::assertEquals($expectedShippingDiscount, $this->addressMock->getBaseShippingDiscountAmount());
+    }
+
+    /**
+     * @return array
+     */
+    public static function cartFixedShippingRemainderDataProvider(): array
+    {
+        return [
+            'items took 8.00 of 10.00' => [[1 => 2.0], 2.0],
+            'items took 7.69 of 10.00' => [[1 => 2.31], 2.31],
+            'items took the whole amount' => [[1 => 0.0], 0.0],
+            'no item matched the rule, capped at shipping incl. tax' => [[], 6.0],
+        ];
     }
 
     /**
