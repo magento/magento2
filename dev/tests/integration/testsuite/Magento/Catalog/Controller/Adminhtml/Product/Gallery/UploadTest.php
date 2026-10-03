@@ -14,6 +14,9 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Filesystem\DirectoryList;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\UrlInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\TestFramework\Fixture\Config as ConfigFixture;
 use Magento\TestFramework\TestCase\AbstractBackendController;
 use PHPUnit\Framework\Attributes\DataProvider;
 
@@ -175,6 +178,37 @@ class UploadTest extends AbstractBackendController
     }
 
     /**
+     * The preview of a freshly uploaded image must not point at a remote media host that does not have it yet.
+     *
+     * @return void
+     */
+    #[
+        ConfigFixture('web/unsecure/base_media_url', 'https://cdn.example.com/media/'),
+        ConfigFixture('web/secure/base_media_url', 'https://cdn.example.com/media/'),
+    ]
+    public function testUploadActionPreviewUrlIgnoresRemoteMediaBaseUrl(): void
+    {
+        $store = $this->_objectManager->get(StoreManagerInterface::class)->getStore();
+        $store->_resetState();
+        $this->assertEquals('https://cdn.example.com/media/', $store->getBaseUrl(UrlInterface::URL_TYPE_MEDIA));
+
+        $this->copyFileToSysTmpDir(
+            [
+                'name' => 'magento_image.jpg',
+                'type' => 'image/jpeg',
+                'current_path' => '/../../../../_files',
+            ]
+        );
+        $this->getRequest()->setMethod($this->httpMethod);
+        $this->dispatch($this->uri);
+        $jsonBody = $this->serializer->unserialize($this->getResponse()->getBody());
+
+        $this->assertArrayNotHasKey('error', $jsonBody);
+        $this->assertEquals('http://localhost/media/tmp/catalog/product/m/a/magento_image.jpg', $jsonBody['url']);
+        $this->assertTrue($this->mediaDirectory->isExist($this->getFileAbsolutePath('/m/a/magento_image.jpg')));
+    }
+
+    /**
      * @return array
      */
     public static function uploadActionWithErrorsDataProvider(): array
@@ -234,6 +268,7 @@ class UploadTest extends AbstractBackendController
     {
         $_FILES = [];
         $this->mediaDirectory->delete('tmp');
+        $this->_objectManager->get(StoreManagerInterface::class)->getStore()->_resetState();
         parent::tearDown();
     }
 

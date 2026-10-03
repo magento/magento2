@@ -9,9 +9,13 @@ use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterf
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Filesystem\Driver\File;
+use Magento\Framework\UrlInterface;
 
 /**
  * The product gallery upload controller
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Upload extends \Magento\Backend\App\Action implements HttpPostActionInterface
 {
@@ -106,7 +110,7 @@ class Upload extends \Magento\Backend\App\Action implements HttpPostActionInterf
                 unset($result['tmp_name']);
                 unset($result['path']);
 
-                $result['url'] = $this->productMediaConfig->getTmpMediaUrl($result['file']);
+                $result['url'] = $this->getTmpPreviewUrl($result['file']);
                 $result['file'] = $result['file'] . '.tmp';
             } else {
                 $result = ['error' => 'Something went wrong while saving the file(s).'];
@@ -122,6 +126,28 @@ class Upload extends \Magento\Backend\App\Action implements HttpPostActionInterf
         $response->setHeader('Content-type', 'text/plain');
         $response->setContents(json_encode($result));
         return $response;
+    }
+
+    /**
+     * Build the preview URL of an image that was just written to the temporary media directory.
+     *
+     * A locally stored file is not yet available on a remote "Base URL for User Media Files" (CDN, synced
+     * mirror), so it is previewed from the admin web base URL, which serves the local media directory.
+     * Files written through a non-local driver (remote storage) keep the configured media URL.
+     *
+     * @param string $file
+     * @return string
+     */
+    private function getTmpPreviewUrl(string $file): string
+    {
+        $mediaDriver = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA)->getDriver();
+        if (!$mediaDriver instanceof File) {
+            return $this->productMediaConfig->getTmpMediaUrl($file);
+        }
+
+        return $this->_backendUrl->getBaseUrl(['_type' => UrlInterface::URL_TYPE_WEB])
+            . $this->filesystem->getUri(DirectoryList::MEDIA) . '/'
+            . $this->productMediaConfig->getTmpMediaShortUrl($file);
     }
 
     /**
