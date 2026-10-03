@@ -61,6 +61,26 @@ class PageLayoutWidgetTest extends AbstractController
         $this->assertStringContainsString('PageLayoutWidgetContent9537', $body);
     }
 
+    #[
+        DataFixture(BlockFixture::class, ['content' => 'PageLayoutWidgetContent9537'], 'block'),
+        DataFixture(PageFixture::class, ['page_layout' => '2columns-left'], 'page'),
+    ]
+    public function testWidgetAssignedToPageLayoutDoesNotRenderOnLayoutInheritingIt(): void
+    {
+        $fixtures = DataFixtureStorageManager::getStorage();
+        $this->widgetInstance = $this->saveWidgetForPageLayout(
+            (int)$fixtures->get('block')->getId(),
+            '1column'
+        );
+        $this->cleanLayoutCache();
+
+        $this->dispatch('/' . $fixtures->get('page')->getIdentifier());
+
+        $body = (string)$this->getResponse()->getBody();
+        $this->assertStringContainsString('page-layout-2columns-left', $body);
+        $this->assertStringNotContainsString('PageLayoutWidgetContent9537', $body);
+    }
+
     private function saveWidgetForPageLayout(int $blockId, string $pageLayout): Instance
     {
         $store = $this->_objectManager->get(StoreManagerInterface::class)->getDefaultStoreView();

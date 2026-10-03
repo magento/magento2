@@ -109,7 +109,7 @@ class DesignAbstraction extends \Magento\Framework\View\Element\Html\Select
         $result = [];
         foreach ($pageLayoutsConfig->getPageLayouts() as $name => $label) {
             $result[$name] = [
-                'name' => $name,
+                'name' => (string)$name,
                 'label' => (string)__($label),
                 'design_abstraction' => Merge::DESIGN_ABSTRACTION_PAGE_LAYOUT,
             ];
@@ -161,11 +161,11 @@ class DesignAbstraction extends \Magento\Framework\View\Element\Html\Select
         $pageLayouts = [];
         /** @var $layoutProcessor \Magento\Framework\View\Layout\ProcessorInterface */
         $layoutProcessor = $this->_layoutProcessorFactory->create();
-        foreach ($designAbstractions as $pageTypeName => $pageTypeInfo) {
+        foreach ($designAbstractions as $pageTypeInfo) {
             if ($layoutProcessor->isPageLayoutDesignAbstraction($pageTypeInfo)) {
-                $pageLayouts[] = ['value' => $pageTypeName, 'label' => $pageTypeInfo['label']];
+                $pageLayouts[] = ['value' => $pageTypeInfo['name'], 'label' => $pageTypeInfo['label']];
             } else {
-                $customLayouts[] = ['value' => $pageTypeName, 'label' => $pageTypeInfo['label']];
+                $customLayouts[] = ['value' => $pageTypeInfo['name'], 'label' => $pageTypeInfo['label']];
             }
         }
         $params = [];

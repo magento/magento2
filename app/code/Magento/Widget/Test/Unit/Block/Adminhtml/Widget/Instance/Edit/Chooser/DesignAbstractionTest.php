@@ -8,10 +8,7 @@ declare(strict_types=1);
 namespace Magento\Widget\Test\Unit\Block\Adminhtml\Widget\Instance\Edit\Chooser;
 
 use Magento\Backend\Block\Context;
-use Magento\Framework\App\Config;
 use Magento\Framework\App\State;
-use Magento\Framework\Escaper;
-use Magento\Framework\Event\Manager;
 use Magento\Framework\View\Layout\ProcessorFactory;
 use Magento\Framework\View\Layout\ProcessorInterface;
 use Magento\Framework\View\PageLayout\Config as PageLayoutConfig;
@@ -21,24 +18,22 @@ use Magento\Theme\Model\ResourceModel\Theme\Collection;
 use Magento\Theme\Model\ResourceModel\Theme\CollectionFactory;
 use Magento\Theme\Model\Theme;
 use Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\DesignAbstraction;
-use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 
 class DesignAbstractionTest extends TestCase
 {
     /**
-     * @var Collection&Stub
+     * @var Collection
      */
     private $themeCollectionMock;
 
     /**
-     * @var PageLayoutConfigFactory|MockObject
+     * @var PageLayoutConfigFactory
      */
     private $pageLayoutConfigFactoryMock;
 
     /**
-     * @var PageLayoutFileCollector|MockObject
+     * @var PageLayoutFileCollector
      */
     private $pageLayoutFileCollectorMock;
 
@@ -49,15 +44,7 @@ class DesignAbstractionTest extends TestCase
 
     protected function setUp(): void
     {
-        $scopeConfigMock = $this->createStub(Config::class);
-        $scopeConfigMock->method('getValue')->willReturn(false);
-        $escaperMock = $this->createStub(Escaper::class);
-        $escaperMock->method('escapeHtml')->willReturnCallback(fn ($value) => (string)$value);
-        $escaperMock->method('escapeHtmlAttr')->willReturnCallback(fn ($value) => (string)$value);
         $contextMock = $this->createStub(Context::class);
-        $contextMock->method('getEventManager')->willReturn($this->createStub(Manager::class));
-        $contextMock->method('getScopeConfig')->willReturn($scopeConfigMock);
-        $contextMock->method('getEscaper')->willReturn($escaperMock);
 
         $this->themeCollectionMock = $this->createStub(Collection::class);
         $themeCollectionFactoryMock = $this->createStub(CollectionFactory::class);
@@ -115,7 +102,7 @@ class DesignAbstractionTest extends TestCase
             ->willReturn($pageLayoutConfigMock);
 
         $this->block->setTheme(3);
-        $this->block->toHtml();
+        $this->prepareOptions();
         $options = $this->block->getOptions();
 
         $this->assertSame('Page Layouts', (string)$options[2]['label']);
@@ -132,16 +119,47 @@ class DesignAbstractionTest extends TestCase
         );
     }
 
+    public function testNumericPageLayoutIdsKeepTheirValue(): void
+    {
+        $themeMock = $this->createStub(Theme::class);
+        $this->themeCollectionMock->method('getItemById')->willReturn($themeMock);
+        $this->pageLayoutFileCollectorMock->expects($this->once())
+            ->method('getFilesContent')
+            ->willReturn([]);
+        $pageLayoutConfigMock = $this->createStub(PageLayoutConfig::class);
+        $pageLayoutConfigMock->method('getPageLayouts')->willReturn(['123' => 'B numeric', '45' => 'A numeric']);
+        $this->pageLayoutConfigFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($pageLayoutConfigMock);
+
+        $this->block->setTheme(3);
+        $this->prepareOptions();
+        $options = $this->block->getOptions();
+
+        $this->assertSame(
+            [
+                ['value' => '45', 'label' => 'A numeric'],
+                ['value' => '123', 'label' => 'B numeric'],
+            ],
+            $options[2]['value']
+        );
+    }
+
     public function testNoPageLayoutsWithoutTheme(): void
     {
         $this->themeCollectionMock->method('getItemById')->willReturn(null);
         $this->pageLayoutFileCollectorMock->expects($this->never())->method('getFilesContent');
         $this->pageLayoutConfigFactoryMock->expects($this->never())->method('create');
 
-        $this->block->toHtml();
+        $this->prepareOptions();
         $options = $this->block->getOptions();
 
         $this->assertSame('Page Layouts', (string)$options[2]['label']);
         $this->assertSame([], $options[2]['value']);
+    }
+
+    private function prepareOptions(): void
+    {
+        (new \ReflectionMethod($this->block, '_beforeToHtml'))->invoke($this->block);
     }
 }
