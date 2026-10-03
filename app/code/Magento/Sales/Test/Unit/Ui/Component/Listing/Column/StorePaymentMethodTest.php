@@ -45,8 +45,8 @@ class StorePaymentMethodTest extends TestCase
         $select->method('where')->willReturnSelf();
         $this->connection->method('select')->willReturn($select);
         $resource = $this->createMock(ResourceConnection::class);
-        $resource->method('getConnection')->willReturn($this->connection);
-        $resource->method('getTableName')->willReturnArgument(0);
+        $resource->method('getConnection')->with('sales')->willReturn($this->connection);
+        $resource->method('getTableName')->with('sales_order_grid', 'sales')->willReturnArgument(0);
         $this->model = new StorePaymentMethod(
             $this->createMock(ContextInterface::class),
             $this->createMock(UiComponentFactory::class),
@@ -103,7 +103,7 @@ class StorePaymentMethodTest extends TestCase
                     if (($args[2] ?? null) === 99) {
                         throw new NoSuchEntityException(__('Store does not exist'));
                     }
-                    return 'Default Title';
+                    return $args[1] === ScopeConfigInterface::SCOPE_TYPE_DEFAULT ? 'Default Title' : 'Wrong Scope';
                 }
             );
 

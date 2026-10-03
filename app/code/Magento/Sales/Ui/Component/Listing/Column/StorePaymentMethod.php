@@ -84,9 +84,9 @@ class StorePaymentMethod extends Column
             return [];
         }
 
-        $connection = $this->resourceConnection->getConnection();
+        $connection = $this->resourceConnection->getConnection('sales');
         $select = $connection->select()
-            ->from($this->resourceConnection->getTableName('sales_order_grid'), ['entity_id', 'store_id'])
+            ->from($this->resourceConnection->getTableName('sales_order_grid', 'sales'), ['entity_id', 'store_id'])
             ->where('entity_id IN (?)', $entityIds);
 
         return array_map('intval', $connection->fetchPairs($select));
@@ -105,7 +105,7 @@ class StorePaymentMethod extends Column
         try {
             return (string)$this->scopeConfig->getValue($path, ScopeInterface::SCOPE_STORE, $storeId);
         } catch (NoSuchEntityException) {
-            return (string)$this->scopeConfig->getValue($path, ScopeInterface::SCOPE_STORE);
+            return (string)$this->scopeConfig->getValue($path, ScopeConfigInterface::SCOPE_TYPE_DEFAULT);
         }
     }
 }
