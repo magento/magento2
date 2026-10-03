@@ -36,26 +36,29 @@ class Plugin
     private $pageLayoutsByTheme = [];
 
     /**
-     * @var \WeakMap
+     * @var PageLayoutReaderPlugin
      */
-    private $pageLayoutMerges;
+    private $pageLayoutReaderPlugin;
 
     /**
      * @param Update $update
      * @param PageLayoutConfigFactory|null $pageLayoutConfigFactory
      * @param PageLayoutFileCollector|null $pageLayoutFileCollector
+     * @param PageLayoutReaderPlugin|null $pageLayoutReaderPlugin
      */
     public function __construct(
         Update $update,
         ?PageLayoutConfigFactory $pageLayoutConfigFactory = null,
-        ?PageLayoutFileCollector $pageLayoutFileCollector = null
+        ?PageLayoutFileCollector $pageLayoutFileCollector = null,
+        ?PageLayoutReaderPlugin $pageLayoutReaderPlugin = null
     ) {
         $this->update = $update;
         $this->pageLayoutConfigFactory = $pageLayoutConfigFactory
             ?? ObjectManager::getInstance()->get(PageLayoutConfigFactory::class);
         $this->pageLayoutFileCollector = $pageLayoutFileCollector
             ?? ObjectManager::getInstance()->get(PageLayoutFileCollector::class);
-        $this->pageLayoutMerges = new \WeakMap();
+        $this->pageLayoutReaderPlugin = $pageLayoutReaderPlugin
+            ?? ObjectManager::getInstance()->get(PageLayoutReaderPlugin::class);
     }
 
     /**
@@ -91,30 +94,13 @@ class Plugin
         \Magento\Framework\View\Model\Layout\Merge $subject,
         string $handle
     ): bool {
-        if (in_array($handle, array_map('strval', $subject->getHandles()), true)) {
+        if (!$this->pageLayoutReaderPlugin->isReading()
+            || in_array($handle, array_map('strval', $subject->getHandles()), true)
+        ) {
             return false;
         }
         $theme = $subject->getTheme();
-        return $theme instanceof ThemeInterface
-            && $this->isPageLayoutMerge($subject)
-            && in_array($handle, $this->getPageLayouts($theme), true);
-    }
-
-    /**
-     * Whether the merge is built from page layout files only, as the one used by the page layout reader
-     *
-     * Layout files with a <page> root become <handle> nodes; the page layout reader merges page_layout files
-     * only, all with a <layout> root, so its merge is the one without <handle> nodes.
-     *
-     * @param \Magento\Framework\View\Model\Layout\Merge $subject
-     * @return bool
-     */
-    private function isPageLayoutMerge(\Magento\Framework\View\Model\Layout\Merge $subject): bool
-    {
-        if (!isset($this->pageLayoutMerges[$subject])) {
-            $this->pageLayoutMerges[$subject] = !$subject->getFileLayoutUpdatesXml()->xpath('handle[1]');
-        }
-        return $this->pageLayoutMerges[$subject];
+        return $theme instanceof ThemeInterface && in_array($handle, $this->getPageLayouts($theme), true);
     }
 
     /**

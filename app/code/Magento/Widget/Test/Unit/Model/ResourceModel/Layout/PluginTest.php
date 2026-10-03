@@ -9,11 +9,13 @@ namespace Magento\Widget\Test\Unit\Model\ResourceModel\Layout;
 
 use Magento\Framework\App\ScopeInterface;
 use Magento\Framework\View\Design\ThemeInterface;
-use Magento\Framework\View\Layout\Element;
+use Magento\Framework\View\Layout\Reader\Context as ReaderContext;
 use Magento\Framework\View\Model\Layout\Merge;
+use Magento\Framework\View\Page\Layout\Reader as PageLayoutReader;
 use Magento\Framework\View\PageLayout\Config as PageLayoutConfig;
 use Magento\Framework\View\PageLayout\ConfigFactory as PageLayoutConfigFactory;
 use Magento\Framework\View\PageLayout\File\Collector\Aggregated as PageLayoutFileCollector;
+use Magento\Widget\Model\ResourceModel\Layout\PageLayoutReaderPlugin;
 use Magento\Widget\Model\ResourceModel\Layout\Plugin;
 use Magento\Widget\Model\ResourceModel\Layout\Update;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -46,6 +48,11 @@ class PluginTest extends TestCase
     private $collectedThemes = [];
 
     /**
+     * @var PageLayoutReaderPlugin
+     */
+    private $pageLayoutReaderPlugin;
+
+    /**
      * @var Plugin
      */
     private $plugin;
@@ -73,7 +80,13 @@ class PluginTest extends TestCase
             }
         );
 
-        $this->plugin = new Plugin($this->updateMock, $pageLayoutConfigFactory, $pageLayoutFileCollector);
+        $this->pageLayoutReaderPlugin = new PageLayoutReaderPlugin();
+        $this->plugin = new Plugin(
+            $this->updateMock,
+            $pageLayoutConfigFactory,
+            $pageLayoutFileCollector,
+            $this->pageLayoutReaderPlugin
+        );
     }
 
     public function testRequestedPageLayoutHandleGetsDbUpdates(): void
@@ -86,7 +99,7 @@ class PluginTest extends TestCase
         );
     }
 
-    public function testInheritedPageLayoutHandleGetsNoDbUpdatesInPageLayoutMerge(): void
+    public function testInheritedPageLayoutHandleGetsNoDbUpdatesDuringPageLayoutRead(): void
     {
         $this->updateMock->expects($this->never())->method('fetchUpdatesByHandle');
 
@@ -121,7 +134,7 @@ class PluginTest extends TestCase
         $this->assertSame([self::CURRENT_THEME], $this->collectedThemes);
     }
 
-    public function testPageLayoutNamedLikeLayoutHandleDoesNotSuppressDbUpdatesInLayoutMerge(): void
+    public function testPageLayoutNamedLikeLayoutHandleDoesNotSuppressDbUpdatesOutsidePageLayoutRead(): void
     {
         $this->expectDbUpdatesFetchedFor('customer_account');
 
@@ -131,7 +144,7 @@ class PluginTest extends TestCase
         );
     }
 
-    public function testLayoutMergeDoesNotReadLayoutsXml(): void
+    public function testMergeOutsidePageLayoutReadDoesNotReadLayoutsXml(): void
     {
         $this->expectDbUpdatesFetchedFor('1column');
 
@@ -156,18 +169,16 @@ class PluginTest extends TestCase
         $this->assertSame('<body/>', $this->callPlugin(self::CURRENT_THEME, true, [123], '123'));
     }
 
-    public function testMergeKindIsDetectedOncePerMerge(): void
+    public function testPageLayoutReadDoesNotLoadMergeFileLayoutUpdates(): void
     {
         $this->updateMock->expects($this->never())->method('fetchUpdatesByHandle');
         $merge = $this->createMock(Merge::class);
         $merge->method('getTheme')->willReturn($this->createTheme(self::CURRENT_THEME));
         $merge->method('getHandles')->willReturn(['2columns-left']);
-        $merge->expects($this->once())
-            ->method('getFileLayoutUpdatesXml')
-            ->willReturn(new Element('<layouts><layout id="1column"/></layouts>'));
+        $merge->expects($this->never())->method('getFileLayoutUpdatesXml');
+        $merge->expects($this->never())->method('load');
 
-        $this->assertSame('', $this->invokePlugin($merge, '1column'));
-        $this->assertSame('', $this->invokePlugin($merge, 'empty'));
+        $this->assertSame('', $this->invokeDuringPageLayoutRead($merge, '1column'));
     }
 
     private function expectDbUpdatesFetchedFor(string $handle): void
@@ -180,7 +191,7 @@ class PluginTest extends TestCase
 
     private function callPlugin(
         string $themePath,
-        bool $isPageLayoutMerge,
+        bool $duringPageLayoutRead,
         array $requestedHandles,
         string $handle
     ): string {
@@ -188,15 +199,24 @@ class PluginTest extends TestCase
         $merge->method('getTheme')->willReturn($this->createTheme($themePath));
         $merge->method('getScope')->willReturn($this->createStub(ScopeInterface::class));
         $merge->method('getHandles')->willReturn($requestedHandles);
-        $merge->method('getFileLayoutUpdatesXml')->willReturn(
-            new Element(
-                $isPageLayoutMerge
-                    ? '<layouts><layout id="1column"/><layout id="2columns-left"/></layouts>'
-                    : '<layouts><handle id="default"/><layout id="catalog_product_prices"/></layouts>'
-            )
-        );
 
-        return $this->invokePlugin($merge, $handle);
+        return $duringPageLayoutRead
+            ? $this->invokeDuringPageLayoutRead($merge, $handle)
+            : $this->invokePlugin($merge, $handle);
+    }
+
+    private function invokeDuringPageLayoutRead(Merge $merge, string $handle): string
+    {
+        $result = null;
+        $this->pageLayoutReaderPlugin->aroundRead(
+            $this->createStub(PageLayoutReader::class),
+            function () use ($merge, $handle, &$result) {
+                $result = $this->invokePlugin($merge, $handle);
+            },
+            $this->createStub(ReaderContext::class),
+            '2columns-left'
+        );
+        return $result;
     }
 
     private function createTheme(string $themePath): ThemeInterface
