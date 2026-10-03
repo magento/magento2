@@ -5,6 +5,7 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Gallery;
 
+use Laminas\Uri\Http as HttpUri;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
@@ -141,15 +142,17 @@ class Upload extends \Magento\Backend\App\Action implements HttpPostActionInterf
     /**
      * Build the preview URL of an image that was just written to the temporary media directory.
      *
-     * A locally stored file is not yet available on a remote "Base URL for User Media Files" (CDN, synced
-     * mirror), so it is previewed from the host and scheme of the admin request that uploaded it.
-     * Remote storage, database media storage and IPv6 literal hosts keep the configured media URL.
+     * A locally stored file is not yet available on a "Base URL for User Media Files" served by another host
+     * (CDN, synced mirror), so it is previewed from the host and scheme of the admin request that uploaded it.
+     * A media URL on the request's own host, remote storage, database media storage and IPv6 literal hosts
+     * keep the configured media URL.
      *
      * @param string $file
      * @return string
      */
     private function getTmpPreviewUrl(string $file): string
     {
+        $tmpMediaUrl = $this->productMediaConfig->getTmpMediaUrl($file);
         $request = $this->getRequest();
         $mediaDriver = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA)->getDriver();
         if (!$mediaDriver instanceof File
@@ -158,12 +161,39 @@ class Upload extends \Magento\Backend\App\Action implements HttpPostActionInterf
             // getDistroBaseUrl() splits the host on every colon, which breaks an IPv6 literal such as [::1]:8080
             || str_starts_with((string)$request->getServer('HTTP_HOST'), '[')
         ) {
-            return $this->productMediaConfig->getTmpMediaUrl($file);
+            return $tmpMediaUrl;
         }
 
-        return $request->getDistroBaseUrl()
+        $requestBaseUrl = $request->getDistroBaseUrl();
+        $mediaOrigin = $this->getOrigin($tmpMediaUrl);
+        if ($mediaOrigin === null || $mediaOrigin === $this->getOrigin($requestBaseUrl)) {
+            return $tmpMediaUrl;
+        }
+
+        return $requestBaseUrl
             . $this->filesystem->getUri(DirectoryList::MEDIA) . '/'
             . $this->productMediaConfig->getTmpMediaShortUrl($file);
+    }
+
+    /**
+     * Get the lower-cased host of a URL with its port, omitting the default port of the URL's scheme.
+     *
+     * The scheme itself is ignored, so http://example.com and https://example.com are the same origin here.
+     *
+     * @param string $url
+     * @return string|null Null for a URL without a host
+     */
+    private function getOrigin(string $url): ?string
+    {
+        $uri = new HttpUri($url);
+        $host = $uri->getHost();
+        if (!$host) {
+            return null;
+        }
+        $port = (int)$uri->getPort();
+        $defaultPort = ['http' => 80, 'https' => 443][(string)$uri->getScheme()] ?? null;
+
+        return strtolower($host) . ($port && $port !== $defaultPort ? ':' . $port : '');
     }
 
     /**

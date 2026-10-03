@@ -28,6 +28,7 @@ use Magento\MediaStorage\Helper\File\Storage\Database;
 use Magento\MediaStorage\Model\File\Uploader;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -88,10 +89,41 @@ class UploadTest extends TestCase
         );
     }
 
+    #[DataProvider('mediaOriginDataProvider')]
+    public function testPreviewUrlDependsOnMediaOriginMatchingRequestOrigin(string $mediaUrl, string $expectedUrl): void
+    {
+        $this->createController($this->createStub(File::class), false, 'admin.example.com', $mediaUrl)->execute();
+
+        $result = json_decode((string)$this->responseContents, true);
+        $this->assertSame($expectedUrl, $result['url']);
+    }
+
+    /**
+     * @return array
+     */
+    public static function mediaOriginDataProvider(): array
+    {
+        return [
+            'same_origin_custom_media_path' => [
+                'https://admin.example.com/assets/',
+                'https://admin.example.com/assets/tmp/catalog/product/m/a/magento_image.jpg',
+            ],
+            'same_host_other_scheme_case_and_default_port' => [
+                'http://ADMIN.example.com:80/media/',
+                'http://ADMIN.example.com:80/media/tmp/catalog/product/m/a/magento_image.jpg',
+            ],
+            'same_host_other_port' => [
+                'https://admin.example.com:8443/media/',
+                self::REQUEST_BASE_URL . 'media/tmp/catalog/product/m/a/magento_image.jpg',
+            ],
+        ];
+    }
+
     private function createController(
         DriverInterface $mediaDriver,
         bool $useDbStorage,
-        string $httpHost = 'admin.example.com'
+        string $httpHost = 'admin.example.com',
+        string $mediaUrl = self::REMOTE_MEDIA_URL
     ): Upload {
         $uploader = $this->createStub(Uploader::class);
         $uploader->method('save')->willReturn(
@@ -140,7 +172,7 @@ class UploadTest extends TestCase
         $filesystem->method('getUri')->willReturn('media');
 
         $store = $this->createStub(Store::class);
-        $store->method('getBaseUrl')->willReturn(self::REMOTE_MEDIA_URL);
+        $store->method('getBaseUrl')->willReturn($mediaUrl);
         $storeManager = $this->createStub(StoreManagerInterface::class);
         $storeManager->method('getStore')->willReturn($store);
 
