@@ -48,6 +48,9 @@ use Magento\SalesRule\Test\Fixture\ProductFoundInCartConditions as ProductFoundI
 use Magento\SalesRule\Test\Fixture\ProductSubselectionInCartConditions as ProductSubselectionInCartConditionsFixture;
 use Magento\SalesRule\Test\Fixture\Rule as RuleFixture;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Tax\Test\Fixture\TaxRate as TaxRateFixture;
+use Magento\Tax\Test\Fixture\TaxRule as TaxRuleFixture;
+use Magento\TestFramework\Fixture\Config as ConfigFixture;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Fixture\DbIsolation;
@@ -752,6 +755,68 @@ class CartFixedTest extends TestCase
         $cart = DataFixtureStorageManager::getStorage()->get('cart');
         $totals = $this->getTotals((int) $cart->getId());
         $this->assertEquals(-167, $totals->getDiscountAmount());
+    }
+
+    /**
+     * Non-taxable product 20.00, flat rate shipping 5.00 taxed at 20%, discount applied on prices including tax.
+     */
+    #[
+        DbIsolation(true),
+        ConfigFixture('tax/calculation/discount_tax', '1', 'store', 'default'),
+        ConfigFixture('tax/classes/shipping_tax_class', '2', 'store', 'default'),
+        ConfigFixture('carriers/flatrate/active', '1', 'store', 'default'),
+        ConfigFixture('carriers/flatrate/type', 'I', 'store', 'default'),
+        ConfigFixture('carriers/flatrate/price', '5', 'store', 'default'),
+        DataFixture(TaxRateFixture::class, ['tax_country_id' => 'US', 'rate' => 20], 'rate'),
+        DataFixture(
+            TaxRuleFixture::class,
+            ['customer_tax_class_ids' => [3], 'product_tax_class_ids' => [2], 'tax_rate_ids' => ['$rate.id$']]
+        ),
+        DataFixture(ProductFixture::class, ['price' => 20, 'custom_attributes' => ['tax_class_id' => '0']], 'p1'),
+        DataFixture(
+            RuleFixture::class,
+            ['simple_action' => Rule::CART_FIXED_ACTION, 'discount_amount' => 10, 'apply_to_shipping' => 1]
+        ),
+        DataFixture(GuestCartFixture::class, as: 'cart'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$p1.id$', 'qty' => 1]),
+    ]
+    public function testCartFixedWithShippingOnNonTaxableItemDiscountIncludingTax(): void
+    {
+        $cart = DataFixtureStorageManager::getStorage()->get('cart');
+        $totals = $this->getTotals((int) $cart->getId());
+        $this->assertEquals(-10, $totals->getDiscountAmount());
+        $this->assertEquals(2.31, $totals->getShippingDiscountAmount());
+    }
+
+    /**
+     * Same cart with discount applied on prices excluding tax.
+     */
+    #[
+        DbIsolation(true),
+        ConfigFixture('tax/calculation/discount_tax', '0', 'store', 'default'),
+        ConfigFixture('tax/classes/shipping_tax_class', '2', 'store', 'default'),
+        ConfigFixture('carriers/flatrate/active', '1', 'store', 'default'),
+        ConfigFixture('carriers/flatrate/type', 'I', 'store', 'default'),
+        ConfigFixture('carriers/flatrate/price', '5', 'store', 'default'),
+        DataFixture(TaxRateFixture::class, ['tax_country_id' => 'US', 'rate' => 20], 'rate'),
+        DataFixture(
+            TaxRuleFixture::class,
+            ['customer_tax_class_ids' => [3], 'product_tax_class_ids' => [2], 'tax_rate_ids' => ['$rate.id$']]
+        ),
+        DataFixture(ProductFixture::class, ['price' => 20, 'custom_attributes' => ['tax_class_id' => '0']], 'p1'),
+        DataFixture(
+            RuleFixture::class,
+            ['simple_action' => Rule::CART_FIXED_ACTION, 'discount_amount' => 10, 'apply_to_shipping' => 1]
+        ),
+        DataFixture(GuestCartFixture::class, as: 'cart'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$p1.id$', 'qty' => 1]),
+    ]
+    public function testCartFixedWithShippingOnNonTaxableItemDiscountExcludingTax(): void
+    {
+        $cart = DataFixtureStorageManager::getStorage()->get('cart');
+        $totals = $this->getTotals((int) $cart->getId());
+        $this->assertEquals(-10, $totals->getDiscountAmount());
+        $this->assertEquals(2, $totals->getShippingDiscountAmount());
     }
 
     /**
