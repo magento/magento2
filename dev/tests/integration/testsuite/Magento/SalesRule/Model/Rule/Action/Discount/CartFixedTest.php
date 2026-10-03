@@ -791,13 +791,12 @@ class CartFixedTest extends TestCase
         $this->assertEquals(8, current($totals->getItems())->getDiscountAmount());
         $this->assertEquals(2, $totals->getShippingDiscountAmount());
 
+        // The repository hands back the cached quote; without this the second call reuses the first totals.
+        $this->quoteRepository->get((int) $cart->getId())->setTotalsCollectedFlag(false);
         $totals = $this->getTotals((int) $cart->getId());
         $this->assertEquals(-10, $totals->getDiscountAmount());
-        $this->assertEqualsWithDelta(
-            10,
-            current($totals->getItems())->getDiscountAmount() + $totals->getShippingDiscountAmount(),
-            0.001
-        );
+        $this->assertEquals(7.69, current($totals->getItems())->getDiscountAmount());
+        $this->assertEquals(2.31, $totals->getShippingDiscountAmount());
     }
 
     /**

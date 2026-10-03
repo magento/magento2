@@ -505,8 +505,15 @@ class Validator extends \Magento\Framework\Model\AbstractModel implements ResetA
                             // the shipping price it could see before shipping tax was collected. Shipping gets
                             // the rest, so the shares always add up to the rule amount.
                             $quoteCartRules = $quote->getCartFixedRules() ?: [];
-                            $baseDiscountAmount = max(0.0, (float) ($quoteCartRules[$ruleId] ?? $cartRules[$ruleId]));
-                            $discountAmount = $this->priceCurrency->convert($baseDiscountAmount, $quote->getStore());
+                            $remainingAmount = max(0.0, (float) ($quoteCartRules[$ruleId] ?? $cartRules[$ruleId]));
+                            $baseDiscountAmount = min(
+                                $remainingAmount,
+                                max(0.0, $baseShippingAmount - $address->getBaseShippingDiscountAmount())
+                            );
+                            $discountAmount = min(
+                                $this->priceCurrency->convert($remainingAmount, $quote->getStore()),
+                                max(0.0, $shippingAmount - $address->getShippingDiscountAmount())
+                            );
                         } else {
                             $discountAmount = min($shippingQuoteAmount, $quoteAmount);
                             $baseDiscountAmount = min(

@@ -746,6 +746,17 @@ class ValidatorTest extends TestCase
 
         $this->cartFixedDiscountHelper->expects($this->never())->method('getQuoteTotalsForRegularShipping');
         $this->cartFixedDiscountHelper->expects($this->never())->method('getShippingDiscountAmount');
+        $this->rulesApplier->expects($this->once())
+            ->method('addShippingDiscountDescription')
+            ->with(
+                $this->addressMock,
+                $rule,
+                ['amount' => $expectedShippingDiscount, 'base_amount' => $expectedShippingDiscount],
+                $this->anything()
+            );
+        $this->addressMock->expects($this->once())
+            ->method('setCartFixedRules')
+            ->with([1 => 10.0 - $expectedShippingDiscount]);
 
         $this->model->init(
             $this->model->getWebsiteId(),
@@ -767,6 +778,7 @@ class ValidatorTest extends TestCase
             'items took 8.00 of 10.00' => [[1 => 2.0], 2.0],
             'items took 7.69 of 10.00' => [[1 => 2.31], 2.31],
             'items took the whole amount' => [[1 => 0.0], 0.0],
+            'remainder above shipping, capped at shipping incl. tax' => [[1 => 7.0], 6.0],
             'no item matched the rule, capped at shipping incl. tax' => [[], 6.0],
         ];
     }
