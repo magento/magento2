@@ -795,6 +795,20 @@ class Request extends \Laminas\Http\PhpEnvironment\Request
     {
         $url = urldecode(parent::getBaseUrl());
         $url = str_replace(['\\', '/' . DirectoryList::PUB .'/'], '/', $url);
+
+        $pubSegment = '/' . DirectoryList::PUB;
+        if (substr($url, -strlen($pubSegment)) === $pubSegment) {
+            $requestUri = (string)$this->getRequestUri();
+            if (false !== ($pos = strpos($requestUri, '?'))) {
+                $requestUri = substr($requestUri, 0, $pos);
+            }
+            // laminas detectBaseUrl() matches a base directory as a plain string prefix, so '/pub'
+            // wrongly captures paths such as '/public-facing-url'. Only keep it on a path boundary.
+            if ($requestUri !== $url && strpos($requestUri, $url . '/') !== 0) {
+                return '';
+            }
+        }
+
         return $url;
     }
 
