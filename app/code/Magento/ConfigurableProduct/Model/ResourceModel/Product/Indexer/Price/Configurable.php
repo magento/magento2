@@ -9,6 +9,7 @@ namespace Magento\ConfigurableProduct\Model\ResourceModel\Product\Indexer\Price;
 
 use Magento\Catalog\Model\ResourceModel\Product\BaseSelectProcessorInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BasePriceModifier;
+use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\CustomOptionPriceModifier;
 use Magento\Framework\Indexer\DimensionalIndexerInterface;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer;
@@ -86,6 +87,11 @@ class Configurable implements DimensionalIndexerInterface
     private $optionsIndexer;
 
     /**
+     * @var CustomOptionPriceModifier
+     */
+    private $customOptionPriceModifier;
+
+    /**
      * @param BaseFinalPrice $baseFinalPrice
      * @param IndexTableStructureFactory $indexTableStructureFactory
      * @param TableMaintainer $tableMaintainer
@@ -97,6 +103,7 @@ class Configurable implements DimensionalIndexerInterface
      * @param ScopeConfigInterface|null $scopeConfig
      * @param BaseSelectProcessorInterface|null $baseSelectProcessor
      * @param OptionsIndexerInterface|null $optionsIndexer
+     * @param CustomOptionPriceModifier|null $customOptionPriceModifier
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -110,7 +117,8 @@ class Configurable implements DimensionalIndexerInterface
         $connectionName = 'indexer',
         ?ScopeConfigInterface $scopeConfig = null,
         ?BaseSelectProcessorInterface $baseSelectProcessor = null,
-        ?OptionsIndexerInterface $optionsIndexer = null
+        ?OptionsIndexerInterface $optionsIndexer = null,
+        ?CustomOptionPriceModifier $customOptionPriceModifier = null
     ) {
         $this->baseFinalPrice = $baseFinalPrice;
         $this->indexTableStructureFactory = $indexTableStructureFactory;
@@ -125,6 +133,8 @@ class Configurable implements DimensionalIndexerInterface
             ObjectManager::getInstance()->get(BaseSelectProcessorInterface::class);
         $this->optionsIndexer = $optionsIndexer
             ?: ObjectManager::getInstance()->get(OptionsIndexerInterface::class);
+        $this->customOptionPriceModifier = $customOptionPriceModifier
+            ?: ObjectManager::getInstance()->get(CustomOptionPriceModifier::class);
     }
 
     /**
@@ -169,14 +179,92 @@ class Configurable implements DimensionalIndexerInterface
             ]
         );
 
+        $customOptionPriceTable = $this->createCustomOptionPriceTable($temporaryPriceTable);
         $this->basePriceModifier->modifyPrice($temporaryPriceTable, iterator_to_array($entityIds));
-        $this->applyConfigurableOption($temporaryPriceTable, $dimensions, iterator_to_array($entityIds));
+        $this->applyConfigurableOption(
+            $temporaryPriceTable,
+            $customOptionPriceTable,
+            $dimensions,
+            iterator_to_array($entityIds)
+        );
+        $this->getConnection()->dropTemporaryTable($customOptionPriceTable);
+    }
+
+    /**
+     * Calculate the parent's custom option price range on its own, independent of its own price modifiers
+     *
+     * The parent row's min_price and max_price are later replaced by the children's range, so only the custom
+     * option part may be carried over. Deriving it from the modified row is not possible: the catalog rule
+     * modifier lowers min_price and final_price but not max_price, after custom options were already added.
+     *
+     * @param IndexTableStructure $temporaryPriceTable
+     * @return string
+     * @throws \Exception
+     */
+    private function createCustomOptionPriceTable(IndexTableStructure $temporaryPriceTable): string
+    {
+        $tableName = 'catalog_product_index_price_cfg_custom_opt_temp';
+        $connection = $this->getConnection();
+        $connection->createTemporaryTableLike(
+            $tableName,
+            $this->getTable('catalog_product_index_price_tmp'),
+            true
+        );
+        $select = $connection->select()->from(
+            $temporaryPriceTable->getTableName(),
+            [
+                'entity_id',
+                'customer_group_id',
+                'website_id',
+                'tax_class_id',
+                'price',
+                'final_price',
+                'min_price' => new \Zend_Db_Expr('0'),
+                'max_price' => new \Zend_Db_Expr('0'),
+                'tier_price',
+            ]
+        );
+        $connection->query(
+            $connection->insertFromSelect(
+                $select,
+                $tableName,
+                [
+                    'entity_id',
+                    'customer_group_id',
+                    'website_id',
+                    'tax_class_id',
+                    'price',
+                    'final_price',
+                    'min_price',
+                    'max_price',
+                    'tier_price',
+                ]
+            )
+        );
+
+        $this->customOptionPriceModifier->modifyPrice(
+            $this->indexTableStructureFactory->create([
+                'tableName' => $tableName,
+                'entityField' => 'entity_id',
+                'customerGroupField' => 'customer_group_id',
+                'websiteField' => 'website_id',
+                'taxClassField' => 'tax_class_id',
+                'originalPriceField' => 'price',
+                'finalPriceField' => 'final_price',
+                'minPriceField' => 'min_price',
+                'maxPriceField' => 'max_price',
+                'tierPriceField' => 'tier_price',
+            ])
+        );
+
+        return $tableName;
     }
 
     /**
      * Apply configurable option
      *
      * @param IndexTableStructure $temporaryPriceTable
+     * @param string $customOptionPriceTableName
      * @param array $dimensions
      * @param array $entityIds
      *
@@ -185,6 +273,7 @@ class Configurable implements DimensionalIndexerInterface
      */
     private function applyConfigurableOption(
         IndexTableStructure $temporaryPriceTable,
+        string $customOptionPriceTableName,
         array $dimensions,
         array $entityIds
     ) {
@@ -197,7 +286,11 @@ class Configurable implements DimensionalIndexerInterface
 
         $indexTableName = $this->getMainTable($dimensions);
         $this->optionsIndexer->execute($indexTableName, $temporaryOptionsTableName, $entityIds);
-        $this->updateTemporaryTable($temporaryPriceTable->getTableName(), $temporaryOptionsTableName);
+        $this->updateTemporaryTable(
+            $temporaryPriceTable->getTableName(),
+            $temporaryOptionsTableName,
+            $customOptionPriceTableName
+        );
 
         $this->getConnection()->delete($temporaryOptionsTableName);
 
@@ -209,24 +302,31 @@ class Configurable implements DimensionalIndexerInterface
      *
      * @param string $temporaryPriceTableName
      * @param string $temporaryOptionsTableName
+     * @param string $customOptionPriceTableName
      *
      * @return void
      */
-    private function updateTemporaryTable(string $temporaryPriceTableName, string $temporaryOptionsTableName)
-    {
+    private function updateTemporaryTable(
+        string $temporaryPriceTableName,
+        string $temporaryOptionsTableName,
+        string $customOptionPriceTableName
+    ) {
         $table = ['i' => $temporaryPriceTableName];
         $selectForCrossUpdate = $this->getConnection()->select()->join(
             ['io' => $temporaryOptionsTableName],
             'i.entity_id = io.entity_id AND i.customer_group_id = io.customer_group_id' .
             ' AND i.website_id = io.website_id',
             []
+        )->join(
+            ['ico' => $customOptionPriceTableName],
+            'i.entity_id = ico.entity_id AND i.customer_group_id = ico.customer_group_id' .
+            ' AND i.website_id = ico.website_id',
+            []
         );
-        // adds price of custom option, that was applied in DefaultPrice::_applyCustomOption;
-        // the delta is taken against final_price so the parent's own special or tier price is not carried over
         $selectForCrossUpdate->columns(
             [
-                'min_price' => new \Zend_Db_Expr('i.min_price - i.final_price + io.min_price'),
-                'max_price' => new \Zend_Db_Expr('i.max_price - i.final_price + io.max_price'),
+                'min_price' => new \Zend_Db_Expr('ico.min_price + io.min_price'),
+                'max_price' => new \Zend_Db_Expr('ico.max_price + io.max_price'),
                 'tier_price' => 'io.tier_price',
             ]
         );
