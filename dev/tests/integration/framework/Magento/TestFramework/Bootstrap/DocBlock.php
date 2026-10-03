@@ -15,6 +15,26 @@ use Magento\TestFramework\Application;
 class DocBlock
 {
     /**
+     * Magento DocBlock annotations that the Doctrine annotation reader used by the Allure PHPUnit extension
+     * does not know about. Left unregistered, parsing a test docblock throws and Allure loses the test name.
+     *
+     * @var string[]
+     */
+    private const DOCTRINE_IGNORED_ANNOTATIONS = [
+        'magentoAdminConfigFixture',
+        'magentoApiDataFixture',
+        'magentoAppArea',
+        'magentoAppIsolation',
+        'magentoCache',
+        'magentoComponentsDir',
+        'magentoConfigFixture',
+        'magentoDataFixture',
+        'magentoDataFixtureBeforeTransaction',
+        'magentoDbIsolation',
+        'magentoIndexerDimensionMode',
+    ];
+
+    /**
      * @var string
      */
     protected $_fixturesBaseDir;
@@ -34,6 +54,12 @@ class DocBlock
      */
     public function registerAnnotations(Application $application)
     {
+        if (\class_exists(\Doctrine\Common\Annotations\AnnotationReader::class)) {
+            foreach (self::DOCTRINE_IGNORED_ANNOTATIONS as $annotationName) {
+                \Doctrine\Common\Annotations\AnnotationReader::addGlobalIgnoredName($annotationName);
+            }
+        }
+
         $eventManager = new \Magento\TestFramework\EventManager($this->_getSubscribers($application));
         \Magento\TestFramework\Event\PhpUnit::setDefaultEventManager($eventManager);
         \Magento\TestFramework\Event\Magento::setDefaultEventManager($eventManager);

@@ -63,4 +63,21 @@ class DocBlockTest extends \PHPUnit\Framework\TestCase
         new \Magento\TestFramework\Event\PhpUnit();
         new \Magento\TestFramework\Event\Magento();
     }
+
+    /**
+     * The Doctrine annotation reader used by the Allure extension must ignore Magento DocBlock annotations,
+     * otherwise parsing a test docblock throws and the Allure report loses the test name.
+     *
+     * @magentoDataFixture Magento/Store/_files/store.php
+     */
+    public function testMagentoAnnotationsAreIgnoredByDoctrine()
+    {
+        $this->_object->registerAnnotations($this->createStub(\Magento\TestFramework\Application::class));
+
+        $reader = new \Doctrine\Common\Annotations\AnnotationReader();
+        $this->assertSame(
+            [],
+            $reader->getMethodAnnotations(new \ReflectionMethod($this, __FUNCTION__))
+        );
+    }
 }
