@@ -95,8 +95,11 @@ class DuplicatedProductAttributesCopier
             }
 
             foreach ($records as $index => $bind) {
-                if (isset($mediaAttributeIds[(int) $bind['attribute_id']])) {
-                    $bind['value'] = $mediaFileMap[$bind['value']] ?? $bind['value'];
+                if (isset($mediaAttributeIds[(int) $bind['attribute_id']])
+                    && $bind['value'] !== null
+                    && isset($mediaFileMap[$bind['value']])
+                ) {
+                    $bind['value'] = $mediaFileMap[$bind['value']];
                 }
                 $bind[$linkField] = $target->getData($linkField);
                 $records[$index] = $bind;
