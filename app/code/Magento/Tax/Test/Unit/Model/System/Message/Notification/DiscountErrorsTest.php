@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\Tax\Test\Unit\Model\System\Message\Notification;
 
 use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\Store;
@@ -62,13 +61,10 @@ class DiscountErrorsTest extends TestCase
 
         $this->urlBuilderMock = $this->createMock(UrlInterface::class);
         $this->taxConfigMock = $this->createMock(TaxConfig::class);
-        $this->discountErrorsNotification = (new ObjectManager($this))->getObject(
-            DiscountErrorsNotification::class,
-            [
-                'storeManager' => $this->storeManagerMock,
-                'urlBuilder' => $this->urlBuilderMock,
-                'taxConfig' => $this->taxConfigMock,
-            ]
+        $this->discountErrorsNotification = new DiscountErrorsNotification(
+            $this->storeManagerMock,
+            $this->urlBuilderMock,
+            $this->taxConfigMock
         );
     }
 
@@ -101,5 +97,33 @@ class DiscountErrorsTest extends TestCase
             . '</p><p>Click on the link to <a href="http://example.com">ignore this notification</a></p>',
             $this->discountErrorsNotification->getText()
         );
+    }
+
+    /**
+     * The website-scoped discount setting must be evaluated once per website.
+     */
+    public function testSettingsEvaluatedOncePerWebsite(): void
+    {
+        $websiteId = 1;
+        $website = $this->createMock(WebsiteInterface::class);
+        $website->expects($this->any())->method('getName')->willReturn('testWebsiteName');
+        $storeMocks = [];
+        foreach (['storeA', 'storeB', 'storeC'] as $storeName) {
+            $store = $this->createPartialMockWithReflection(
+                Store::class,
+                ['getWebsiteId', 'getWebsite', 'getName']
+            );
+            $store->expects($this->once())->method('getWebsiteId')->willReturn($websiteId);
+            $store->expects($this->once())->method('getWebsite')->willReturn($website);
+            $store->expects($this->once())->method('getName')->willReturn($storeName);
+            $storeMocks[] = $store;
+        }
+        $storeManager = $this->createMock(StoreManagerInterface::class);
+        $storeManager->expects($this->once())->method('getStores')->willReturn($storeMocks);
+        $taxConfig = $this->createMock(TaxConfig::class);
+        $taxConfig->expects($this->once())->method('isWrongDiscountSettingsIgnored')->willReturn(false);
+        $taxConfig->expects($this->once())->method('applyTaxAfterDiscount')->willReturn(false);
+        $notification = new DiscountErrorsNotification($storeManager, $this->urlBuilderMock, $taxConfig);
+        $this->assertTrue($notification->isDisplayed());
     }
 }
