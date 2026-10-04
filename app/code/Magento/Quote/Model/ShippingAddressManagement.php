@@ -10,6 +10,7 @@ use Magento\Customer\Model\Config\Backend\Show\Customer;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Store\Model\ScopeInterface;
 use Psr\Log\LoggerInterface as Logger;
 
 /**
@@ -102,8 +103,7 @@ class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressM
         $saveInAddressBook = $address->getSaveInAddressBook() ? 1 : 0;
         $sameAsBilling = $address->getSameAsBilling() ? 1 : 0;
         $customerAddressId = $address->getCustomerAddressId();
-        if ($saveInAddressBook &&
-            !$this->scopeConfig->getValue(Customer::XML_PATH_CUSTOMER_ADDRESS_SHOW_COMPANY)) {
+        if ($saveInAddressBook && !$this->isCompanyFieldVisibleForAddress()) {
             $address->setCompany(null);
         }
 
@@ -154,5 +154,18 @@ class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressM
         }
         /** @var \Magento\Quote\Model\Quote\Address $address */
         return $quote->getShippingAddress();
+    }
+
+    /**
+     * Determine whether the company field should be displayed for the customer address.
+     *
+     * @return bool
+     */
+    private function isCompanyFieldVisibleForAddress(): bool
+    {
+        return (bool)$this->scopeConfig->getValue(
+            Customer::XML_PATH_CUSTOMER_ADDRESS_SHOW_COMPANY,
+            ScopeInterface::SCOPE_WEBSITE
+        );
     }
 }

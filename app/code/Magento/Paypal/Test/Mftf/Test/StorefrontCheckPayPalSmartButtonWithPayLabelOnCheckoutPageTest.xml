@@ -18,9 +18,6 @@
             <testCaseId value="MC-28711"/>
             <group value="paypal"/>
             <group value="paypalExpress"/>
-            <skip>
-                <issueId value="MC-33951"/>
-            </skip>
             <group value="pr_exclude"/>
         </annotations>
         <before>

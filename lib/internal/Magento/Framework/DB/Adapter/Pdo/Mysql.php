@@ -983,7 +983,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
 
         foreach ($parts as $i => $part) {
             // strings
-            if (($part === "'" || $part === '"') && ($i === 0 || $parts[$i-1] !== '\\')) {
+            if (($part === "'" || $part === '"') && $this->countPrecedingBackslashes($parts, $i) % 2 === 0) {
                 if ($q === false) {
                     $q = $part;
                 } elseif ($q === $part) {
@@ -1020,6 +1020,25 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
         }
 
         return $stmts;
+    }
+
+    /**
+     * Count consecutive backslash delimiters immediately preceding the given position.
+     *
+     * A quote delimiter is escaped only when preceded by an odd number of backslashes.
+     *
+     * @param string[] $parts
+     * @param int $index
+     * @return int
+     */
+    private function countPrecedingBackslashes(array $parts, int $index): int
+    {
+        $count = 0;
+        for ($position = $index - 1; $position >= 0 && $parts[$position] === '\\'; $position--) {
+            $count++;
+        }
+
+        return $count;
     }
 
     /**

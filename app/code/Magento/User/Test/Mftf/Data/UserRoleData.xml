@@ -100,6 +100,7 @@
             <item>Magento_Backend::system_other_settings</item>
             <item>Magento_Backend::global_search</item>
             <item>Magento_Backend::system</item>
+            <item>Magento_TwoFactorAuth::tfa</item>
         </array>
     </entity>
     <entity name="adminProductInWebsiteRole" type="user_role">

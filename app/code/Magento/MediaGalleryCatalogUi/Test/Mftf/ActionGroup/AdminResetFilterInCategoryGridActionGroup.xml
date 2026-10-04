@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminResetFilterInCategoryGridActionGroup">
+        <annotations>
+            <description>Navigates to the Media Gallery Category grid and clears keyword search and column filters.</description>
+        </annotations>
+        <amOnPage url="{{AdminMediaGalleryCatalogUiCategoryGridPage.url}}" stepKey="amOnCategoryGridForFilterReset"/>
+        <waitForPageLoad stepKey="waitForCategoryGridForFilterReset"/>
+        <conditionalClick selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.clearFilters}}"
+                          dependentSelector="{{AdminMediaGalleryCatalogUiCategoryGridSection.clearFilters}}" visible="true"
+                          stepKey="clearCategoryGridKeywordFilters"/>
+        <conditionalClick selector="{{AdminGridFilterControls.clearAll}}"
+                          dependentSelector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] .admin__data-grid-filters-current._show"
+                          visible="true" stepKey="clearCategoryGridAppliedFilters"/>
+        <waitForPageLoad stepKey="waitForCategoryGridAfterFilterReset"/>
+    </actionGroup>
+</actionGroups>

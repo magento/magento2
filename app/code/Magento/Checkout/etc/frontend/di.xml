@@ -121,4 +121,8 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Message\ManagerInterface">
+        <plugin name="add_related_products_to_success_message"
+                type="Magento\Checkout\Plugin\Model\Message\AddRelatedProductsToSuccessMessagePlugin"/>
+    </type>
 </config>

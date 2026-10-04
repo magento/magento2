@@ -75,6 +75,16 @@ class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
     }
 
     /**
+     * Require review JS before grid row click callback is assigned.
+     *
+     * @return string[]
+     */
+    public function getRequireJsDependencies()
+    {
+        return ['Magento_Review/js/new-review'];
+    }
+
+    /**
      * Prepare product review grid
      *
      * @return void
