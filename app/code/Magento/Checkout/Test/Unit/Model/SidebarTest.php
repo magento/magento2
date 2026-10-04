@@ -15,6 +15,7 @@ use Magento\Quote\Api\Data\CartItemInterface;
 use Magento\Quote\Model\Quote;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class SidebarTest extends TestCase
 {
@@ -34,7 +35,7 @@ class SidebarTest extends TestCase
     {
         $this->cartMock = $this->createMock(Cart::class);
         $this->checkoutHelperMock = $this->createMock(Data::class);
-        $this->resolverMock = $this->getMockForAbstractClass(ResolverInterface::class);
+        $this->resolverMock = $this->createMock(ResolverInterface::class);
 
         $this->sidebar = new Sidebar(
             $this->cartMock,
@@ -47,8 +48,8 @@ class SidebarTest extends TestCase
      * @param string $error
      * @param array $result
      *
-     * @dataProvider dataProviderGetResponseData
      */
+    #[DataProvider('dataProviderGetResponseData')]
     public function testGetResponseData($error, $result)
     {
         $this->assertEquals($result, $this->sidebar->getResponseData($error));
@@ -97,9 +98,7 @@ class SidebarTest extends TestCase
             ->with($itemId)
             ->willReturn($itemMock);
 
-        $this->cartMock->expects($this->any())
-            ->method('getQuote')
-            ->willReturn($quoteMock);
+        $this->cartMock->method('getQuote')->willReturn($quoteMock);
 
         $this->assertEquals($this->sidebar, $this->sidebar->checkQuoteItem($itemId));
     }
@@ -118,9 +117,7 @@ class SidebarTest extends TestCase
             ->with($itemId)
             ->willReturn(null);
 
-        $this->cartMock->expects($this->any())
-            ->method('getQuote')
-            ->willReturn($quoteMock);
+        $this->cartMock->method('getQuote')->willReturn($quoteMock);
 
         $this->sidebar->checkQuoteItem($itemId);
     }
@@ -146,8 +143,8 @@ class SidebarTest extends TestCase
      * @param int|string|float $expectedItemQty
      * @param int|string|float $itemQty
      *
-     * @dataProvider dataProviderUpdateQuoteItem
      */
+    #[DataProvider('dataProviderUpdateQuoteItem')]
     public function testUpdateQuoteItem(
         string $locale,
         int|string $itemId,

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -222,6 +222,9 @@ class Multiselect extends AbstractElement
         $html .= isset($option['title']) ? 'title="' . $this->_escape($option['title']) . '"' : '';
         if (in_array((string)$option['value'], $selected)) {
             $html .= ' selected="selected"';
+        }
+        if ($option['disabled'] ?? false) {
+            $html .= ' disabled="disabled"';
         }
         $html .= '>' . $this->_escape($option['label']) . '</option>' . "\n";
         if (!empty($option['style'])) {

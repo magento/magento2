@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -14,6 +14,7 @@ use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Represents FilterPool methods test class
@@ -36,10 +37,10 @@ class ReportingTest extends TestCase
     /**
      * @magentoDataFixture Magento/Customer/_files/five_repository_customers.php
      * @magentoDbIsolation disabled
-     * @dataProvider filtersDataProvider
      * @param array $filters
      * @param int $expectedCount
      */
+    #[DataProvider('filtersDataProvider')]
     public function testSearchItemsByOrCondition(array $filters, int $expectedCount): void
     {
         $filterGroups = [];

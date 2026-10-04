@@ -16,6 +16,7 @@ use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class LinkTest extends TestCase
 {
@@ -46,7 +47,7 @@ class LinkTest extends TestCase
         $path = 'checkout/cart';
         $url = 'http://example.com/';
 
-        $urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
+        $urlBuilder = $this->createMock(UrlInterface::class);
         $urlBuilder->expects($this->once())->method('getUrl')->with($path)->willReturn($url . $path);
 
         $context = $this->_objectManagerHelper->getObject(
@@ -90,8 +91,8 @@ class LinkTest extends TestCase
     }
 
     /**
-     * @dataProvider getLabelDataProvider
      */
+    #[DataProvider('getLabelDataProvider')]
     public function testGetLabel($productCount, $label)
     {
         $helper = $this->getMockBuilder(
@@ -106,7 +107,7 @@ class LinkTest extends TestCase
             Link::class,
             ['cartHelper' => $helper]
         );
-        $helper->expects($this->any())->method('getSummaryCount')->willReturn($productCount);
+        $helper->method('getSummaryCount')->willReturn($productCount);
         $this->assertSame($label, (string)$block->getLabel());
     }
 

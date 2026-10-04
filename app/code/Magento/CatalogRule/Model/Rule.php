@@ -85,6 +85,35 @@ class Rule extends AbstractModel implements RuleInterface, IdentityInterface, Re
     protected $_productsFilter = null;
 
     /**
+     * Counter for products processed during validation
+     *
+     * @var int
+     */
+    private $productsProcessedCount = 0;
+
+    /**
+     * Total time spent in condition validation
+     *
+     * @var float
+     */
+    private $totalValidationTime = 0.0;
+
+    /**
+     * @var array|null
+     */
+    private $cachedWebsitesMap = null;
+
+    /**
+     * @var array|null
+     */
+    private $cachedWebsiteIdsArray = null;
+
+    /**
+     * @var \Magento\Rule\Model\Condition\Combine|null
+     */
+    private $cachedConditions = null;
+
+    /**
      * Store current date at "Y-m-d H:i:s" format
      *
      * @var string
@@ -348,7 +377,11 @@ class Rule extends AbstractModel implements RuleInterface, IdentityInterface, Re
         if ($this->_productIds === null) {
             $this->_productIds = [];
             $this->setCollectedAttributes([]);
-
+            $this->productsProcessedCount = 0;
+            $this->totalValidationTime = 0.0;
+            $this->cachedWebsitesMap = null;
+            $this->cachedWebsiteIdsArray = null;
+            $this->cachedConditions = null;
             if ($this->getWebsiteIds()) {
                 /** @var $productCollection \Magento\Catalog\Model\ResourceModel\Product\Collection */
                 $productCollection = $this->_productCollectionFactory->create();
@@ -358,12 +391,17 @@ class Rule extends AbstractModel implements RuleInterface, IdentityInterface, Re
                     $productCollection->addIdFilter($this->_productsFilter);
                 }
                 $this->getConditions()->collectValidatedAttributes($productCollection);
-
                 if ($this->canPreMapProducts()) {
-                    $productCollection = $this->conditionsToCollectionApplier
-                        ->applyConditionsToCollection($this->getConditions(), $productCollection);
+                    $productCollection = $this->conditionsToCollectionApplier->applyConditionsToCollection(
+                        $this->getConditions(),
+                        $productCollection
+                    );
                 }
 
+                $this->cachedWebsitesMap = $this->_getWebsitesMap();
+                $websiteIds = $this->getWebsiteIds();
+                $this->cachedWebsiteIdsArray = is_array($websiteIds) ? $websiteIds : explode(',', $websiteIds);
+                $this->cachedConditions = $this->getConditions();
                 $this->_resourceIterator->walk(
                     $productCollection->getSelect(),
                     [[$this, 'callbackValidateProduct']],
@@ -406,21 +444,21 @@ class Rule extends AbstractModel implements RuleInterface, IdentityInterface, Re
         $product = clone $args['product'];
         $product->setData($args['row']);
 
-        $websites = $this->_getWebsitesMap();
-        $websiteIds = $this->getWebsiteIds();
-        if (!is_array($websiteIds)) {
-            $websiteIds = explode(',', $websiteIds);
-        }
         $results = [];
 
-        foreach ($websites as $websiteId => $defaultStoreId) {
-            if (!in_array($websiteId, $websiteIds)) {
+        $validationStart = microtime(true);
+        foreach ($this->cachedWebsitesMap as $websiteId => $defaultStoreId) {
+            if (!in_array($websiteId, $this->cachedWebsiteIdsArray)) {
                 continue;
             }
             $product->setStoreId($defaultStoreId);
-            $results[$websiteId] = $this->getConditions()->validate($product);
+            $results[$websiteId] = $this->cachedConditions->validate($product);
         }
+        $this->totalValidationTime += (microtime(true) - $validationStart);
+
         $this->_productIds[$product->getId()] = $results;
+
+        $this->productsProcessedCount++;
     }
 
     /**
@@ -915,5 +953,11 @@ class Rule extends AbstractModel implements RuleInterface, IdentityInterface, Re
     public function _resetState(): void
     {
         self::$_priceRulesData = [];
+        $this->_productIds = null;
+        $this->productsProcessedCount = 0;
+        $this->totalValidationTime = 0.0;
+        $this->cachedWebsitesMap = null;
+        $this->cachedWebsiteIdsArray = null;
+        $this->cachedConditions = null;
     }
 }

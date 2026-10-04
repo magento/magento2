@@ -17,13 +17,13 @@ The Magento_Quote module creates the following table in the database:
 - `quote_shipping_rate`
 - `quote_id_mask`
 
-For information about a module installation in Magento 2, see [Enable or disable modules](https://experienceleague.adobe.com/docs/commerce-operations/installation-guide/tutorials/manage-modules.html).
+For information about a module installation, see [Enable or disable modules](https://experienceleague.adobe.com/en/docs/commerce-operations/installation-guide/tutorials/manage-modules).
 
 ## Extensibility
 
-Extension developers can interact with the Magento_Quote module. For more information about the Magento extension mechanism, see [Magento plug-ins](https://developer.adobe.com/commerce/php/development/components/plugins/).
+Extension developers can interact with the Magento_Quote module. For more information about the extension mechanism, see [Plugins](https://developer.adobe.com/commerce/php/development/components/plugins/).
 
-[The Magento dependency injection mechanism](https://developer.adobe.com/commerce/php/development/components/dependency-injection/) enables you to override the functionality of the Magento_Quote module.
+[The dependency injection mechanism](https://developer.adobe.com/commerce/php/development/components/dependency-injection/) enables you to override the functionality of the Magento_Quote module.
 
 ### Events
 
@@ -110,7 +110,7 @@ The module dispatches the following events:
 - `sales_quote_item_collection_products_after_load` event in the `\Magento\Quote\Model\QuoteManagement::_assignProducts` method. Parameters:
     - `collection` is a product collection object (`\Magento\Catalog\Model\ResourceModel\Product\Collection` class)
 
-For information about an event in Magento 2, see [Events and observers](https://developer.adobe.com/commerce/php/development/components/events-and-observers/#events).
+For information about an event, see [Events and observers](https://developer.adobe.com/commerce/php/development/components/events-and-observers/#events).
 
 ### Public APIs
 
@@ -128,7 +128,7 @@ For information about an event in Magento 2, see [Events and observers](https://
 - `\Magento\Quote\Api\Data\CartItemInterface`
     - quote item data
   
-- `\Magento\Quote\Api\Data\CartSearchResultsInterfac`
+- `\Magento\Quote\Api\Data\CartSearchResultsInterface`
     - quote search result data
 
 - `\Magento\Quote\Api\Data\CurrencyInterface`
@@ -147,7 +147,7 @@ For information about an event in Magento 2, see [Events and observers](https://
     - product option data
   
 - `\Magento\Quote\Api\Data\ShippingAssignmentInterface`
-    - shipping assigment data
+    - shipping assignment data
 
 - `\Magento\Quote\Api\Data\ShippingInterface`
     - shipping data
@@ -161,7 +161,7 @@ For information about an event in Magento 2, see [Events and observers](https://
 - `\Magento\Quote\Api\Data\TotalSegmentInterface`
     - total segment data
   
-- `\Magento\Quote\Api\Data\TotalsInterfacee`
+- `\Magento\Quote\Api\Data\TotalsInterface`
     - quote totals data
   
 - `\Magento\Quote\Api\Data\TotalsItemInterface`
@@ -269,9 +269,9 @@ For information about an event in Magento 2, see [Events and observers](https://
     - estimates shipping by address and return list of available shipping methods
 
 - `\Magento\Quote\Api\ShippingMethodManagementInterface`
-    - estimates shipping by quote ID an Address
-    - estimates shipping by quote ID an address ID
-    - get lists applicable shipping methods for a specified quote
+    - estimates shipping by quote ID and address
+    - estimates shipping by quote ID and address ID
+    - gets lists applicable shipping methods for a specified quote
 
 - `\Magento\Quote\Model\ShippingAddressManagementInterface`
     - assigns a specified shipping address to a specified quote
@@ -295,4 +295,4 @@ For information about an event in Magento 2, see [Events and observers](https://
 - `\Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface`
     - converts quote ID to the masked quote ID
 
-For information about a public API in Magento 2, see [Public interfaces & APIs](https://developer.adobe.com/commerce/php/development/components/api-concepts/).
+For information about a public API, see [Public interfaces & APIs](https://developer.adobe.com/commerce/php/development/components/api-concepts/).

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,6 +18,7 @@ use Magento\Framework\View\LayoutInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -70,7 +71,6 @@ class ConfigurableViewOnProductPageTest extends TestCase
     }
 
     /**
-     * @dataProvider oneChildNotVisibleDataProvider
      * @magentoDbIsolation disabled
      *
      * @param string $sku
@@ -78,6 +78,7 @@ class ConfigurableViewOnProductPageTest extends TestCase
      * @param array $expectedData
      * @return void
      */
+    #[DataProvider('oneChildNotVisibleDataProvider')]
     public function testOneChildNotVisible(string $sku, array $data, array $expectedData): void
     {
         $configurableProduct = $this->prepareConfigurableProduct($sku, $data);
@@ -134,13 +135,12 @@ class ConfigurableViewOnProductPageTest extends TestCase
     /**
      * @magentoConfigFixture current_store cataloginventory/options/show_out_of_stock 1
      *
-     * @dataProvider oneChildNotVisibleDataProviderWithEnabledConfig
-     *
      * @param string $sku
      * @param array $data
      * @param array $expectedData
      * @return void
      */
+    #[DataProvider('oneChildNotVisibleDataProviderWithEnabledConfig')]
     public function testOneChildNotVisibleWithEnabledShowOutOfStockProducts(
         string $sku,
         array $data,

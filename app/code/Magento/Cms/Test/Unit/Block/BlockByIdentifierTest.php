@@ -17,6 +17,7 @@ use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filter\Template;
 use Magento\Framework\View\Element\Context;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -27,6 +28,7 @@ use PHPUnit\Framework\TestCase;
  */
 class BlockByIdentifierTest extends TestCase
 {
+    use MockCreationTrait;
     private const STUB_MODULE_OUTPUT_DISABLED = false;
     private const STUB_EXISTING_IDENTIFIER = 'existingOne';
     private const STUB_UNAVAILABLE_IDENTIFIER = 'notExists';
@@ -202,11 +204,10 @@ class BlockByIdentifierTest extends TestCase
      */
     private function getPassthroughFilterMock(): Template
     {
-        $filterMock = $this->getMockBuilder(Template::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setStoreId'])
-            ->onlyMethods(['filter'])
-            ->getMock();
+        $filterMock = $this->createPartialMockWithReflection(
+            Template::class,
+            ['setStoreId', 'filter']
+        );
         $filterMock->method('setStoreId')->willReturnSelf();
         $filterMock->method('filter')->willReturnArgument(0);
 

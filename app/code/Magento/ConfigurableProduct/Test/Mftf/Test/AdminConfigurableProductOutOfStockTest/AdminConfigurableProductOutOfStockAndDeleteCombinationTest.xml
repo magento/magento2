@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
@@ -76,6 +76,9 @@
         </before>
 
         <after>
+            <!--Clear filter product listing grid-->
+            <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToProductCatalogPageBeforeClearFilters"/>
+            <actionGroup ref="ClearFiltersAdminProductGridActionGroup" stepKey="clearProductGridFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
@@ -87,6 +90,11 @@
                 <argument name="indices" value=""/>
             </actionGroup>
         </after>
+
+        <!-- Reindex to ensure newly created configurable product and its children are reflected before the first stock check -->
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexBeforeFirstStockCheck">
+            <argument name="indices" value=""/>
+        </actionGroup>
 
         <!-- Check to make sure that the configurable product shows up as in stock --><!--<amOnPage url="/{{ApiConfigurableProduct.urlKey}}2.html" stepKey="goToConfigProductPage"/>-->
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="goToConfigProductPage"/>

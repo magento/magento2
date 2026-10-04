@@ -1,7 +1,7 @@
 <?php
 /**
- *  Copyright © Magento, Inc. All rights reserved.
- *  See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Framework\TestFramework\Test\Unit\Autoloader;
 
 use Magento\Framework\TestFramework\Unit\Autoloader\FactoryGenerator;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class FactoryGeneratorTest extends TestCase
 {
@@ -30,10 +31,9 @@ class FactoryGeneratorTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider generateNonFactoryDataProvider
-     * @param string $className
+    /**     * @param string $className
      */
+    #[DataProvider('generateNonFactoryDataProvider')]
     public function testGenerateNonFactory($className)
     {
         $this->assertFalse($this->subject->generate($className));

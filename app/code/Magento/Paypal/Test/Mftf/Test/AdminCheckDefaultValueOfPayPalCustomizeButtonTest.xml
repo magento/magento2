@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2019 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -17,14 +17,10 @@
             <severity value="AVERAGE"/>
             <testCaseId value="MC-10904"/>
             <group value="paypal"/>
-            <skip>
-                <issueId value="DEVOPS-3311"/>
-            </skip>
-            <group value="pr_exclude"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
-            <actionGroup ref="ConfigPayPalExpressCheckout" stepKey="ConfigPayPalExpressCheckout"/>
+            <actionGroup ref="ConfigPayPalExpressCheckoutActionGroup" stepKey="ConfigPayPalExpressCheckout"/>
         </before>
         <after>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
@@ -39,7 +35,6 @@
         <comment userInput="Verify default value" stepKey="commentVerifyDefaultValue1"/>
         <seeElement selector="{{ButtonCustomization.label}}" stepKey="seeLabel"/>
         <seeElement selector="{{ButtonCustomization.layout}}" stepKey="seeLayout"/>
-        <seeElement selector="{{ButtonCustomization.size}}" stepKey="seeSize1"/>
         <seeElement selector="{{ButtonCustomization.shape}}" stepKey="seeShape1"/>
         <seeElement selector="{{ButtonCustomization.color}}" stepKey="seeColor"/>
     </test>

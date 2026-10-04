@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminOrderFormCustomOptionsSection">
+        <element name="optionsContainer" type="block" selector="#product_composite_configure_fields_options" timeout="30"/>
+        <!-- Use data attributes to avoid translation issues -->
+        <element name="radioButtonOptionByValue" type="radio" selector="//*[@id='product_composite_configure_fields_options']//input[@type='radio' and @value='{{optionId}}']" parameterized="true" timeout="30"/>
+        <element name="firstRadioButtonOption" type="radio" selector="(//*[@id='product_composite_configure_fields_options']//input[@type='radio'])[1]" timeout="30"/>
         <element name="quantity" type="input" selector="//input[@id='product_composite_configure_input_qty']"/>
         <element name="file" type="file" selector="//input[@type='file'][contains(@class, 'product-custom-option')]" />
         <element name="buttonOk" type="button" selector="//button[contains(@class, 'action-primary')][@data-role='action']" timeout="30"/>

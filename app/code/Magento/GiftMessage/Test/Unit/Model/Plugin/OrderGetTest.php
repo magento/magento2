@@ -1,20 +1,22 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\GiftMessage\Test\Unit\Model\Plugin;
 
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\GiftMessage\Api\Data\MessageInterface;
 use Magento\GiftMessage\Api\OrderItemRepositoryInterface;
 use Magento\GiftMessage\Api\OrderRepositoryInterface;
 use Magento\GiftMessage\Model\Plugin\OrderGet;
 use Magento\Sales\Api\Data\OrderExtension;
-use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderItemExtension;
-use Magento\Sales\Api\Data\OrderItemInterface;
+use Magento\Sales\Api\OrderRepositoryInterface as SalesOrderRepositoryInterface;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Item as OrderItem;
 use Magento\Sales\Model\ResourceModel\Order\Collection;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -24,6 +26,8 @@ use PHPUnit\Framework\TestCase;
  */
 class OrderGetTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var OrderGet
      */
@@ -82,27 +86,27 @@ class OrderGetTest extends TestCase
         $this->giftMessageOrderItemRepositoryMock = $this->createMock(
             OrderItemRepositoryInterface::class
         );
-        $this->orderMock = $this->getMockBuilder(OrderInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getGiftMessageId'])
-            ->getMockForAbstractClass();
-        $this->orderExtensionMock = $this->getMockBuilder(OrderExtension::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getGiftMessage', 'setGiftMessage'])
-            ->getMock();
+        $this->orderMock = $this->createPartialMockWithReflection(
+            Order::class,
+            ['getGiftMessageId', 'getEntityId', 'getExtensionAttributes', 'setExtensionAttributes', 'getItems']
+        );
+        $this->orderExtensionMock = $this->createPartialMockWithReflection(
+            OrderExtension::class,
+            ['getGiftMessage', 'setGiftMessage']
+        );
         $this->giftMessageMock = $this->createMock(
             MessageInterface::class
         );
-        $this->orderItemMock = $this->getMockBuilder(OrderItemInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getGiftMessageId'])
-            ->getMockForAbstractClass();
-        $this->orderItemExtensionMock = $this->getMockBuilder(OrderItemExtension::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getGiftMessage', 'setGiftMessage'])
-            ->getMock();
+        $this->orderItemMock = $this->createPartialMockWithReflection(
+            OrderItem::class,
+            ['getGiftMessageId', 'getExtensionAttributes', 'setExtensionAttributes', 'getItemId']
+        );
+        $this->orderItemExtensionMock = $this->createPartialMockWithReflection(
+            OrderItemExtension::class,
+            ['getGiftMessage', 'setGiftMessage']
+        );
         $this->orderRepositoryMock = $this->createMock(
-            \Magento\Sales\Api\OrderRepositoryInterface::class
+            SalesOrderRepositoryInterface::class
         );
 
         $this->collectionMock = $this->createMock(Collection::class);

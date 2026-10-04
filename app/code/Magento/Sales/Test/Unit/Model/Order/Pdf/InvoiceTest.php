@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -21,10 +21,12 @@ use Magento\Sales\Model\Order\Address;
 use Magento\Sales\Model\Order\Address\Renderer;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\Pdf\Config;
+use Magento\Sales\Model\Order\Pdf\Invoice as PdfInvoice;
 use Magento\Store\Model\App\Emulation;
 use Magento\Store\Model\ScopeInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  *
@@ -34,6 +36,8 @@ use PHPUnit\Framework\TestCase;
  */
 class InvoiceTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var \Magento\Sales\Model\Order\Pdf\Invoice
      */
@@ -79,9 +83,7 @@ class InvoiceTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->pdfConfigMock = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->pdfConfigMock = $this->createMock(Config::class);
         $this->directoryMock = $this->createMock(Write::class);
         $this->directoryMock->expects($this->any())->method('getAbsolutePath')->willReturnCallback(
             function ($argument) {
@@ -97,14 +99,14 @@ class InvoiceTest extends TestCase
             ->willReturn($this->directoryMock);
 
         $this->databaseMock = $this->createMock(Database::class);
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->addressRendererMock = $this->createMock(Renderer::class);
         $this->paymentDataMock = $this->createMock(Data::class);
         $this->appEmulation = $this->createMock(Emulation::class);
 
         $helper = new ObjectManager($this);
         $this->model = $helper->getObject(
-            \Magento\Sales\Model\Order\Pdf\Invoice::class,
+            PdfInvoice::class,
             [
                 'filesystem' => $filesystemMock,
                 'pdfConfig' => $this->pdfConfigMock,
@@ -138,7 +140,6 @@ class InvoiceTest extends TestCase
 
         $this->model->getPdf([]);
         $renderers = new \ReflectionProperty($this->model, '_renderers');
-        $renderers->setAccessible(true);
         $this->assertSame(
             [
                 'product_type_one' => ['model' => 'Renderer_Type_One_Product_One', 'renderer' => null],
@@ -176,10 +177,7 @@ class InvoiceTest extends TestCase
             ->method('getTotals')
             ->willReturn([]);
 
-        $block = $this->getMockBuilder(Template::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setIsSecureMode', 'toPdf'])
-            ->getMock();
+        $block = $this->createPartialMockWithReflection(Template::class, ['setIsSecureMode', 'toPdf']);
         $block->expects($this->any())
             ->method('setIsSecureMode')
             ->willReturn($block);
@@ -207,7 +205,7 @@ class InvoiceTest extends TestCase
         $orderMock->expects($this->any())
             ->method('getIsVirtual')
             ->willReturn(true);
-        $infoMock = $this->getMockForAbstractClass(InfoInterface::class);
+        $infoMock = $this->createMock(InfoInterface::class);
         $orderMock->expects($this->any())
             ->method('getPayment')
             ->willReturn($infoMock);
@@ -234,10 +232,7 @@ class InvoiceTest extends TestCase
         $this->directoryMock->expects($this->any())
             ->method('isFile')
             ->with($path . $filename)
-            ->willReturnOnConsecutiveCalls(
-                $this->returnValue(false),
-                $this->returnValue(false)
-            );
+            ->willReturnOnConsecutiveCalls(false, false);
 
         $this->databaseMock->expects($this->once())
             ->method('saveFileToFilesystem')

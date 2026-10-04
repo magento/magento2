@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Framework\Mview\View;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Indexer\Model\Indexer;
 use Magento\Indexer\Model\Indexer\DependencyDecorator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -52,11 +53,9 @@ class DependencyDecoratorTest extends TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->indexerMock = $this->getMockBuilder(IndexerInterface::class)
-            ->getMockForAbstractClass();
+        $this->indexerMock = $this->createMock(IndexerInterface::class);
 
-        $this->dependencyInfoProviderMock = $this->getMockBuilder(DependencyInfoProviderInterface::class)
-            ->getMockForAbstractClass();
+        $this->dependencyInfoProviderMock = $this->createMock(DependencyInfoProviderInterface::class);
 
         $this->indexerRegistryMock = $this->getMockBuilder(IndexerRegistry::class)
             ->disableOriginalConstructor()
@@ -76,8 +75,8 @@ class DependencyDecoratorTest extends TestCase
      * @param string $methodName
      * @param array $params
      * @param mixed $result
-     * @dataProvider overloadDataProvider
      */
+    #[DataProvider('overloadDataProvider')]
     public function testOverload(string $methodName, array $params = [], $result = null)
     {
         $indexerMock = $this->getMockBuilder(Indexer::class)
@@ -113,8 +112,8 @@ class DependencyDecoratorTest extends TestCase
     /**
      * @param string|\Closure $methodName
      * @param mixed $result
-     * @dataProvider transitMethodsDataProvider
      */
+    #[DataProvider('transitMethodsDataProvider')]
     public function testTransitMethods(string|\Closure $methodName, $result)
     {
         if (is_callable($result)) {
@@ -137,8 +136,7 @@ class DependencyDecoratorTest extends TestCase
 
     protected function getMockForStateInterfaceClass()
     {
-        return $this->getMockBuilder(StateInterface::class)
-            ->getMockForAbstractClass();
+        return $this->createMock(StateInterface::class);
     }
 
     /**
@@ -168,8 +166,8 @@ class DependencyDecoratorTest extends TestCase
     /**
      * @param string $methodName
      * @param array $params
-     * @dataProvider transitMethodsWithParamsAndEmptyReturnDataProvider
      */
+    #[DataProvider('transitMethodsWithParamsAndEmptyReturnDataProvider')]
     public function testTransitMethodsWithParamsAndEmptyReturn(string $methodName, array $params)
     {
         $this->indexerMock
@@ -192,8 +190,8 @@ class DependencyDecoratorTest extends TestCase
     /**
      * @param string $methodName
      * @param array $params
-     * @dataProvider transitMethodsWithParamsAndSelfReturnDataProvider
      */
+    #[DataProvider('transitMethodsWithParamsAndSelfReturnDataProvider')]
     public function testTransitMethodsWithParamsAndSelfReturn(string $methodName, array $params)
     {
         if (!empty($params) && is_callable($params[0])) {
@@ -333,8 +331,6 @@ class DependencyDecoratorTest extends TestCase
      */
     private function getIndexerMock()
     {
-        $indexer = $this->getMockBuilder(IndexerInterface::class)
-            ->getMockForAbstractClass();
-        return $indexer;
+        return $this->createMock(IndexerInterface::class);
     }
 }

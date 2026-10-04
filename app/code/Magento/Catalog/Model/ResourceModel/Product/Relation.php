@@ -13,7 +13,6 @@ use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
  * Catalog Product Relations Resource model
- *
  */
 class Relation extends AbstractDb
 {
@@ -162,5 +161,34 @@ class Relation extends AbstractDb
         }
 
         return $parentIdsOfChildIds;
+    }
+
+    /**
+     * Finds children relations by given parent ids.
+     *
+     * @param int[] $parentIds Parent products entity ids.
+     * @return array<int, int[]> Child products entity ids.
+     */
+    public function getRelationsByParent(array $parentIds): array
+    {
+        $connection = $this->getConnection();
+        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
+        $select = $connection->select()
+            ->from(
+                ['cpe' => $this->getTable('catalog_product_entity')],
+                ['cpe.entity_id']
+            )->joinInner(
+                ['relation' => $this->getMainTable()],
+                'relation.parent_id = cpe.' . $linkField,
+                ['relation.child_id']
+            )->where('cpe.entity_id IN (?)', $parentIds);
+        $result = $connection->fetchAll($select);
+
+        $childIdsOfParentIds = [];
+        foreach ($result as $row) {
+            $childIdsOfParentIds[$row['entity_id']][] = $row['child_id'];
+        }
+
+        return $childIdsOfParentIds;
     }
 }

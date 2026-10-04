@@ -12,10 +12,13 @@ use Magento\CatalogInventory\Helper\Stock;
 use Magento\CatalogInventory\Observer\AddInventoryDataObserver;
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+ */
 class AddInventoryDataObserverTest extends TestCase
 {
     /**
@@ -42,37 +45,23 @@ class AddInventoryDataObserverTest extends TestCase
     {
         $this->stockHelper = $this->createMock(Stock::class);
 
-        $this->event = $this->getMockBuilder(Event::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getProduct'])
-            ->getMock();
+        $this->event = new Event();
 
-        $this->eventObserver = $this->getMockBuilder(Observer::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getEvent'])
-            ->getMock();
-
+        $this->eventObserver = $this->createMock(Observer::class);
         $this->eventObserver->expects($this->atLeastOnce())
             ->method('getEvent')
             ->willReturn($this->event);
 
-        $this->observer = (new ObjectManager($this))->getObject(
-            AddInventoryDataObserver::class,
-            [
-                'stockHelper' => $this->stockHelper,
-            ]
+        $this->observer = new AddInventoryDataObserver(
+            $this->stockHelper
         );
     }
 
     public function testAddInventoryData()
     {
-        $product = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $product = $this->createMock(Product::class);
 
-        $this->event->expects($this->once())
-            ->method('getProduct')
-            ->willReturn($product);
+        $this->event->setProduct($product);
 
         $this->stockHelper->expects($this->once())
             ->method('assignStatusToProduct')

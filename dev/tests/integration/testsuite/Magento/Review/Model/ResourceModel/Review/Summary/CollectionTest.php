@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,7 @@ use Magento\Framework\DB\Select\SelectRenderer;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Review\Model\ResourceModel\Review\Summary\Collection;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 
@@ -69,11 +70,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             EntityFactory::class,
             ['create']
         );
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
-        $this->resourceMock = $this->getMockBuilder(AbstractDb::class)
-            ->onlyMethods(['getConnection', 'getMainTable', 'getTable'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->resourceMock = $this->createMock(AbstractDb::class);
         $this->connectionMock = $this->createPartialMock(
             Mysql::class,
             ['select', 'query']
@@ -113,8 +111,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     /**
      * @param array|int $storeId
      * @param string $expectedQuery
-     * @dataProvider storeIdDataProvider
      */
+    #[DataProvider('storeIdDataProvider')]
     public function testAddStoreFilter(array|int $storeId, string $expectedQuery)
     {
         $this->selectMock->expects($this->once())->method('where')->with($expectedQuery, $storeId);

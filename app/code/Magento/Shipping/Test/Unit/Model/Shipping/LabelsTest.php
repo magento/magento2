@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -26,6 +26,8 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManager;
 use Magento\User\Model\User;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -38,6 +40,7 @@ use PHPUnit\Framework\TestCase;
  */
 class LabelsTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Labels
      */
@@ -88,10 +91,10 @@ class LabelsTest extends TestCase
             ->onlyMethods(['getFirstname', 'getLastname', 'getEmail', 'getName'])
             ->getMock();
 
-        $authSession = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getUser'])
-            ->getMock();
+        $authSession = $this->createPartialMockWithReflection(
+            Session::class,
+            ['getUser']
+        );
         $authSession->expects(static::any())->method('getUser')->willReturn($this->user);
         $regionFactory = $this->getRegionFactory();
         $this->scopeConfig = $this->getMockBuilder(Config::class)
@@ -121,9 +124,7 @@ class LabelsTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider requestToShipmentDataProvider
-     */
+    #[DataProvider('requestToShipmentDataProvider')]
     public function testRequestToShipment($regionId)
     {
         $carrier = $this->getMockBuilder(AbstractCarrier::class)
@@ -137,10 +138,10 @@ class LabelsTest extends TestCase
         $this->user->expects($this->atLeastOnce())->method('getLastname')->willReturn('Doe');
         $this->user->expects($this->once())->method('getName')->willReturn('John Doe');
         $this->user->expects($this->once())->method('getEmail')->willReturn('admin@admin.test.com');
-        $shippingMethod = $this->getMockBuilder(DataObject::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getCarrierCode'])
-            ->getMock();
+        $shippingMethod = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['getCarrierCode']
+        );
         $shippingMethod->expects(static::once())
             ->method('getCarrierCode')
             ->willReturn('usps');
@@ -183,9 +184,7 @@ class LabelsTest extends TestCase
         $this->labels->requestToShipment($shipment);
     }
 
-    /**
-     * @dataProvider requestToShipmentLocalizedExceptionDataProvider
-     */
+    #[DataProvider('requestToShipmentLocalizedExceptionDataProvider')]
     public function testRequestToShipmentLocalizedException($isShipmentCarrierNotNull)
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');
@@ -195,10 +194,10 @@ class LabelsTest extends TestCase
         $shipment = $this->getMockBuilder(Shipment::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $shippingMethod = $this->getMockBuilder(DataObject::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getCarrierCode'])
-            ->getMock();
+        $shippingMethod = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['getCarrierCode']
+        );
         $order->expects($this->atLeastOnce())
             ->method('getShippingMethod')
             ->with(true)
@@ -236,11 +235,10 @@ class LabelsTest extends TestCase
      */
     protected function getRegionFactory()
     {
-        $this->region = $this->getMockBuilder(Region::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getCode'])
-            ->onlyMethods(['load'])
-            ->getMock();
+        $this->region = $this->createPartialMockWithReflection(
+            Region::class,
+            ['getCode', 'load']
+        );
         $regionFactory = $this->getMockBuilder(RegionFactory::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['create'])

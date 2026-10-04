@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\App\Route;
 
@@ -118,6 +118,7 @@ class Config implements ConfigInterface, ResetAfterRequestInterface
     public function getRouteFrontName($routeId, $scope = null)
     {
         $routes = $this->_getRoutes($scope);
+        $routeId = $routeId ?? '';
         return isset($routes[$routeId]) ? $routes[$routeId]['frontName'] : $routeId;
     }
 

@@ -38,10 +38,8 @@ class TextTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->context = $this->getMockBuilder(Context::class)
-            ->onlyMethods(['getEscaper'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->context = $this->createPartialMock(Context::class, ['getEscaper']);
+
         $this->escaper = $this->createPartialMock(
             Escaper::class,
             ['escapeHtml', 'escapeHtmlAttr']
@@ -66,10 +64,7 @@ class TextTest extends TestCase
             'id="escapedHtml" value="escapedHtml" ' .
             'class="input-text admin__control-text no-changes" data-ui-id="filter-escapedhtml"  />';
 
-        $column = $this->getMockBuilder(Column::class)
-            ->onlyMethods(['getId', 'getHtmlId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $column = $this->createPartialMock(Column::class, ['getId', 'getHtmlId']);
 
         $this->block->setColumn($column);
 

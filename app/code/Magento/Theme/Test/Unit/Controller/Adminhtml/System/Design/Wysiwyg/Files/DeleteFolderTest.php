@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -50,7 +50,7 @@ class DeleteFolderTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
         $this->response = $this->createMock(Http::class);
         $this->storage = $this->createMock(WysiwygStorage::class);
         $this->storageHelper = $this->createMock(Storage::class);

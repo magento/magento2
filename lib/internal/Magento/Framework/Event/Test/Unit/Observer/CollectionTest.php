@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\Observer\Collection;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class CollectionTest extends TestCase
 {
@@ -73,10 +74,9 @@ class CollectionTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider observerNameProvider
-     * @param string $name
+    /**     * @param string $name
      */
+    #[DataProvider('observerNameProvider')]
     public function testGetObserverByName($name)
     {
         $observer = $this->getObserverMock($name);

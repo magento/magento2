@@ -43,7 +43,7 @@ class BlockActionsTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $context = $this->getMockForAbstractClass(ContextInterface::class);
+        $context = $this->createMock(ContextInterface::class);
 
         $processor = $this->getMockBuilder(Processor::class)
             ->disableOriginalConstructor()
@@ -52,7 +52,7 @@ class BlockActionsTest extends TestCase
             ->method('getProcessor')
             ->willReturn($processor);
 
-        $this->urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->urlBuilder = $this->createMock(UrlInterface::class);
 
         $this->escaper = $this->getMockBuilder(Escaper::class)
             ->disableOriginalConstructor()

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -45,10 +45,7 @@ class ContextTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMockForAbstractClass();
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         \Magento\Framework\App\ObjectManager::setInstance($this->objectManagerMock);
 
         $this->objectManager = new ObjectManager($this);

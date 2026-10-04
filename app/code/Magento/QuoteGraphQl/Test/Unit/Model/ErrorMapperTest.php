@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Test\Unit\Model;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\QuoteGraphQl\Model\ErrorMapper;
 use PHPUnit\Framework\TestCase;
 
@@ -27,11 +28,11 @@ class ErrorMapperTest extends TestCase
     }
 
     /**
-     * @dataProvider dataProviderForTestGetErrorMessageId
      * @param $message
      * @param $expectedId
      * @return void
      */
+    #[DataProvider('dataProviderForTestGetErrorMessageId')]
     public function testGetErrorMessageId($message, $expectedId): void
     {
         $this->assertEquals($expectedId, $this->errorMapper->getErrorMessageId($message));
@@ -40,7 +41,7 @@ class ErrorMapperTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForTestGetErrorMessageId(): array
+    public static function dataProviderForTestGetErrorMessageId(): array
     {
         $data = [];
         foreach (ErrorMapper::MESSAGE_IDS as $code => $id) {

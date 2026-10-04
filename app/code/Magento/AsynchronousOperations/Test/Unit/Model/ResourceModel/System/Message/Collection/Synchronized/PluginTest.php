@@ -19,7 +19,10 @@ use Magento\AsynchronousOperations\Model\StatusMapper;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Bulk\BulkStatusInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
+
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -27,6 +30,8 @@ use PHPUnit\Framework\TestCase;
  */
 class PluginTest extends TestCase
 {
+    use MockCreationTrait;
+
     private const MESSAGES_LIMIT = 5;
     /**
      * @var Plugin
@@ -89,11 +94,11 @@ class PluginTest extends TestCase
             MessageFactory::class,
             ['create']
         );
-        $this->bulkStatusMock = $this->getMockForAbstractClass(BulkStatusInterface::class);
+        $this->bulkStatusMock = $this->createMock(BulkStatusInterface::class);
 
-        $this->userContextMock = $this->getMockForAbstractClass(UserContextInterface::class);
+        $this->userContextMock = $this->createMock(UserContextInterface::class);
         $this->operationsDetailsMock = $this->createMock(Details::class);
-        $this->authorizationMock = $this->getMockForAbstractClass(AuthorizationInterface::class);
+        $this->authorizationMock = $this->createMock(AuthorizationInterface::class);
         $this->messageMock = $this->createMock(Message::class);
         $this->collectionMock = $this->createMock(Synchronized::class);
         $this->bulkNotificationMock = $this->createMock(BulkNotificationManagement::class);
@@ -122,15 +127,14 @@ class PluginTest extends TestCase
 
     /**
      * @param array $operationDetails
-     * @dataProvider afterToDataProvider
      */
+    #[DataProvider('afterToDataProvider')]
     public function testAfterTo($operationDetails)
     {
-        $bulkMock = $this->getMockBuilder(BulkSummary::class)
-            ->addMethods(['getStatus'])
-            ->onlyMethods(['getBulkId', 'getDescription', 'getStartTime'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $bulkMock = $this->createPartialMockWithReflection(
+            BulkSummary::class,
+            ['getStatus', 'getBulkId', 'getDescription', 'getStartTime']
+        );
         $result = ['items' =>[], 'totalRecords' => 1];
         $userBulks = [$bulkMock];
         $userId = 1;
@@ -179,11 +183,10 @@ class PluginTest extends TestCase
             'status' => BulkSummaryInterface::NOT_STARTED
         ];
 
-        $bulkMock = $this->getMockBuilder(BulkSummary::class)
-            ->addMethods(['getStatus'])
-            ->onlyMethods(['getBulkId', 'getDescription', 'getStartTime'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $bulkMock = $this->createPartialMockWithReflection(
+            BulkSummary::class,
+            ['getStatus', 'getBulkId', 'getDescription', 'getStartTime']
+        );
         $userBulks = array_fill(0, $messagesCount, $bulkMock);
         $bulkMock->expects($this->exactly($messagesCount))
             ->method('getBulkId')->willReturn($bulkUuid);

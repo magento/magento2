@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -74,11 +74,11 @@ class CollectionTest extends TestCase
     {
         $this->entityFactory = $this->createMock(EntityFactory::class);
 
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
 
-        $this->fetchStrategy = $this->getMockForAbstractClass(FetchStrategyInterface::class);
+        $this->fetchStrategy = $this->createMock(FetchStrategyInterface::class);
 
-        $this->eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->eventManager = $this->createMock(ManagerInterface::class);
 
         $this->reportResource = $this->createPartialMock(
             Report::class,

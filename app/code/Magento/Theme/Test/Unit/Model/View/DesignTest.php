@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,7 +16,9 @@ use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Framework\View\DesignInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Theme\Model\ThemeFactory;
 use Magento\Theme\Model\View\Design;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -41,7 +43,7 @@ class DesignTest extends TestCase
     protected $flyweightThemeFactory;
 
     /**
-     * @var \Magento\Theme\Model\ThemeFactory|MockObject
+     * @var ThemeFactory|MockObject
      */
     protected $themeFactory;
 
@@ -67,11 +69,11 @@ class DesignTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
         $this->flyweightThemeFactory = $this->createMock(FlyweightFactory::class);
-        $this->config = $this->getMockForAbstractClass(ScopeConfigInterface::class);
-        $this->themeFactory = $this->createPartialMock(\Magento\Theme\Model\ThemeFactory::class, ['create']);
-        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->config = $this->createMock(ScopeConfigInterface::class);
+        $this->themeFactory = $this->createPartialMock(ThemeFactory::class, ['create']);
+        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
         $this->state = $this->createMock(State::class);
         $themes = [Design::DEFAULT_AREA => $this->defaultTheme];
         $this->model = new Design(
@@ -89,11 +91,11 @@ class DesignTest extends TestCase
      * @param string $themePath
      * @param string $themeId
      * @param string $expectedResult
-     * @dataProvider getThemePathDataProvider
      */
+    #[DataProvider('getThemePathDataProvider')]
     public function testGetThemePath($themePath, $themeId, $expectedResult)
     {
-        $theme = $this->getMockForAbstractClass(ThemeInterface::class);
+        $theme = $this->createMock(ThemeInterface::class);
         $theme->expects($this->once())->method('getThemePath')->willReturn($themePath);
         $theme->expects($this->any())->method('getId')->willReturn($themeId);
         /** @var ThemeInterface $theme */
@@ -127,9 +129,9 @@ class DesignTest extends TestCase
      * @test
      * @param bool $storeMode
      * @param string $scope
-     * @dataProvider designThemeDataProvider
      * @return void
      */
+    #[DataProvider('designThemeDataProvider')]
     public function testSetDefaultDesignTheme($storeMode, $scope)
     {
         $area = Design::DEFAULT_AREA;
@@ -161,7 +163,7 @@ class DesignTest extends TestCase
     {
         $locale = 'locale';
         $area = Design::DEFAULT_AREA;
-        $localeMock = $this->getMockForAbstractClass(ResolverInterface::class);
+        $localeMock = $this->createMock(ResolverInterface::class);
         $localeMock->expects($this->once())
             ->method('getLocale')
             ->willReturn($locale);
@@ -173,8 +175,7 @@ class DesignTest extends TestCase
             ->willReturn($area);
         $this->themeFactory->expects($this->once())
             ->method('create')
-            ->willReturn($this->getMockBuilder(ThemeInterface::class)
-            ->getMock());
+            ->willReturn($this->createMock(ThemeInterface::class));
 
         $params = $this->model->getDesignParams();
 
@@ -192,8 +193,7 @@ class DesignTest extends TestCase
     public function testSetDesignTheme()
     {
         $area = 'adminhtml';
-        $theme = $this->getMockBuilder(ThemeInterface::class)
-            ->getMock();
+        $theme = $this->createMock(ThemeInterface::class);
 
         $this->assertInstanceOf(get_class($this->model), $this->model->setDesignTheme($theme, $area));
     }

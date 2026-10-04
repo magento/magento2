@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Reports\Model\ResourceModel\Report\Collection;
 use Magento\Reports\Model\ResourceModel\Report\Collection\Factory as ReportCollectionFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -46,7 +47,7 @@ class CollectionTest extends TestCase
     protected function setUp(): void
     {
         $this->entityFactoryMock = $this->createMock(EntityFactory::class);
-        $this->timezoneMock = $this->getMockForAbstractClass(TimezoneInterface::class);
+        $this->timezoneMock = $this->createMock(TimezoneInterface::class);
         $this->factoryMock = $this->createMock(ReportCollectionFactory::class);
 
         $this->timezoneMock->method('formatDate')
@@ -84,9 +85,9 @@ class CollectionTest extends TestCase
      * @param \DateTimeInterface $fromDate
      * @param \DateTimeInterface $toDate
      * @param int $size
-     * @dataProvider intervalsDataProvider
      * @return void
      */
+    #[DataProvider('intervalsDataProvider')]
     public function testGetSize($period, $fromDate, $toDate, $size)
     {
         $this->collection->setPeriod($period);
@@ -110,9 +111,9 @@ class CollectionTest extends TestCase
      * @param \DateTimeInterface $fromDate
      * @param \DateTimeInterface $toDate
      * @param int $size
-     * @dataProvider intervalsDataProvider
      * @return void
      */
+    #[DataProvider('intervalsDataProvider')]
     public function testGetReports($period, $fromDate, $toDate, $size)
     {
         $this->collection->setPeriod($period);

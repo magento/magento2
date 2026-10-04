@@ -13,11 +13,10 @@
         </arguments>
         <!--Check in-context-->
         <switchToNextTab stepKey="switchToInContentTab"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <waitForPageLoad time="30" stepKey="waitForPayPalTabLoad"/>
         <seeCurrentUrlMatches regex="~\//www.sandbox.paypal.com/~" stepKey="seeCurrentUrlMatchesConfigPath1"/>
         <conditionalClick selector="{{PayPalPaymentSection.notYouLink}}" dependentSelector="{{PayPalPaymentSection.notYouLink}}" visible="true" stepKey="selectNotYouSection"/>
         <conditionalClick selector="{{PayPalPaymentSection.existingAccountLoginBtn}}" dependentSelector="{{PayPalPaymentSection.existingAccountLoginBtn}}" visible="true" stepKey="skipAccountCreationAndLogin"/>
-        <waitForPageLoad stepKey="waitForLoginPageLoad"/>
         <waitForElementClickable selector="{{PayPalPaymentSection.email}}" stepKey="waitForLoginForm"/>
         <click selector="{{PayPalPaymentSection.email}}" stepKey="focusOnEmailField"/>
         <clearField selector="{{PayPalPaymentSection.email}}" stepKey="clearEmailField"/>
@@ -28,6 +27,7 @@
         <fillField selector="{{PayPalPaymentSection.password}}" userInput="{{credentials.magento/PAYPAL_PWD}}" stepKey="fillPassword"/>
         <waitForElementClickable selector="{{PayPalPaymentSection.loginBtn}}" stepKey="waitForLoginBtn"/>
         <click selector="{{PayPalPaymentSection.loginBtn}}" stepKey="login"/>
-        <waitForPageLoad stepKey="wait"/>
+        <waitForPageLoad time="30" stepKey="wait"/>
+        <waitForElementVisible selector="{{PayPalPaymentSection.paypalSubmitBtn}}" stepKey="waitForPayPalReviewPage"/>
     </actionGroup>
 </actionGroups>

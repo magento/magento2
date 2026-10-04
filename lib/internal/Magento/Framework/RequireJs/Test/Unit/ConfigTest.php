@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -21,12 +21,14 @@ use Magento\Framework\View\DesignInterface;
 use Magento\Framework\View\File;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ConfigTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Aggregated|MockObject
      */
@@ -70,34 +72,31 @@ class ConfigTest extends TestCase
     protected function setUp(): void
     {
         $this->fileSource = $this->createMock(Aggregated::class);
-        $this->design = $this->getMockForAbstractClass(DesignInterface::class);
+        $this->design = $this->createMock(DesignInterface::class);
 
         $readFactory = $this->createMock(ReadFactory::class);
         $this->fileReader = $this->createMock(Read::class);
         $readFactory->method('create')
             ->willReturn($this->fileReader);
         $repo = $this->createMock(Repository::class);
-        $this->context = $this->getMockBuilder(ContextInterface::class)
-            ->addMethods([
+        $this->context = $this->createPartialMockWithReflection(
+            ContextInterface::class,
+            [
                 'getConfigPath',
                 'getAreaCode',
                 'getThemePath',
-                'getLocale'
-            ])
-            ->onlyMethods(
-                [
-                    'getPath',
-                    'getBaseUrl'
-                ]
-            )
-            ->getMockForAbstractClass();
+                'getLocale',
+                'getPath',
+                'getBaseUrl'
+            ]
+        );
         $repo->expects($this->once())->method('getStaticViewFileContext')->willReturn($this->context);
         $this->minificationMock = $this->getMockBuilder(Minification::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->minifyAdapterMock = $this->getMockBuilder(AdapterInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->repositoryMapMock = $this->getMockBuilder(RepositoryMap::class)
             ->disableOriginalConstructor()
@@ -137,7 +136,7 @@ class ConfigTest extends TestCase
         $fileTwo->expects($this->once())
             ->method('getName')
             ->willReturn('file_two.js');
-        $theme = $this->getMockForAbstractClass(ThemeInterface::class);
+        $theme = $this->createMock(ThemeInterface::class);
         $this->design->expects($this->once())
             ->method('getDesignTheme')
             ->willReturn($theme);

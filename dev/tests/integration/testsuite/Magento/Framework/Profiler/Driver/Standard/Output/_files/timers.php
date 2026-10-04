@@ -2,8 +2,8 @@
 /**
  * Fixture timers statistics for output tests
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 $timer = new \Magento\Framework\Profiler\Driver\Standard\Stat();
 $timer->start('root', 0.01, 50000, 1000);

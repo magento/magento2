@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Test\Fixture\Api;
 
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\Webapi\ServiceInputProcessor;
 use Magento\TestFramework\Fixture\Api\Service;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -21,6 +22,7 @@ use stdClass;
  */
 class ServiceTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Service
      */
@@ -48,9 +50,10 @@ class ServiceTest extends TestCase
                 }
             );
 
-        $this->fakeClass = $this->getMockBuilder(stdClass::class)
-            ->addMethods(['fakeMethod'])
-            ->getMock();
+        $this->fakeClass = $this->createPartialMockWithReflection(
+            stdClass::class,
+            ['fakeMethod']
+        );
 
         $objectManager->expects($this->once())
             ->method('get')

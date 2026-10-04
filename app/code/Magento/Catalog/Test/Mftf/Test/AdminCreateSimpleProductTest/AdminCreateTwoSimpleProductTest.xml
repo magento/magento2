@@ -33,11 +33,12 @@
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteProduct">
                 <argument name="sku" value="{{_defaultProduct.sku}}"/>
             </actionGroup>
-           <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
-               <argument name="customerEmail" value="Simple_US_Customer.email"/>
-           </actionGroup>
+                <argument name="customerEmail" value="Simple_US_Customer.email"/>
+            </actionGroup>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilter"/>
+            <deleteData createDataKey="createSimpleProduct2" stepKey="deleteSimpleProduct2"/>
            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
 

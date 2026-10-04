@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -147,7 +147,7 @@ class FixerIoApiLayer implements ImportInterface
                     $this->messages[] = __($message, self::CURRENCY_CONVERTER_HOST, $currencyTo);
                     $data[$currencyFrom][$currencyTo] = null;
                 } else {
-                    $data[$currencyFrom][$currencyTo] = (double)$response['rates'][$currencyTo];
+                    $data[$currencyFrom][$currencyTo] = (float)$response['rates'][$currencyTo];
                 }
             }
         }

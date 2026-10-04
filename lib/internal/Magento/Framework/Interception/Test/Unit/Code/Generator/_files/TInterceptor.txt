@@ -15,7 +15,7 @@ class Interceptor extends \Magento\Framework\Interception\Code\Generator\TSample
     /**
      * {@inheritdoc}
      */
-    public function returnVoid() : void
+    public function returnVoid(): void
     {
         $pluginInfo = $this->pluginList->getNext($this->subjectType, 'returnVoid');
         $pluginInfo ? $this->___callPlugins('returnVoid', func_get_args(), $pluginInfo) : parent::returnVoid();
@@ -24,7 +24,7 @@ class Interceptor extends \Magento\Framework\Interception\Code\Generator\TSample
     /**
      * {@inheritdoc}
      */
-    public function getNullableValue() : ?string
+    public function getNullableValue(): ?string
     {
         $pluginInfo = $this->pluginList->getNext($this->subjectType, 'getNullableValue');
         return $pluginInfo ? $this->___callPlugins('getNullableValue', func_get_args(), $pluginInfo) : parent::getNullableValue();
@@ -33,7 +33,7 @@ class Interceptor extends \Magento\Framework\Interception\Code\Generator\TSample
     /**
      * {@inheritdoc}
      */
-    public function getValue() : string
+    public function getValue(): string
     {
         $pluginInfo = $this->pluginList->getNext($this->subjectType, 'getValue');
         return $pluginInfo ? $this->___callPlugins('getValue', func_get_args(), $pluginInfo) : parent::getValue();

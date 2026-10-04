@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Integration\Helper\Oauth\Data;
 use Magento\Integration\Model\Oauth\Nonce;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -22,6 +23,8 @@ use PHPUnit\Framework\TestCase;
  */
 class NonceTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Nonce
      */
@@ -55,28 +58,15 @@ class NonceTest extends TestCase
     protected function setUp(): void
     {
         $this->contextMock = $this->createPartialMock(Context::class, ['getEventDispatcher']);
-        $eventManagerMock = $this->getMockForAbstractClass(
-            ManagerInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['dispatch']
-        );
+        $eventManagerMock = $this->createMock(ManagerInterface::class);
         $this->contextMock->expects($this->once())
             ->method('getEventDispatcher')
             ->willReturn($eventManagerMock);
         $this->registryMock = $this->createMock(Registry::class);
         $this->oauthDataMock = $this->createMock(Data::class);
-        $this->resourceMock = $this->getMockForAbstractClass(
+        $this->resourceMock = $this->createPartialMockWithReflection(
             AbstractResource::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['getIdFieldName', 'selectByCompositeKey', 'deleteOldEntries']
+            ['getIdFieldName', 'selectByCompositeKey', 'deleteOldEntries', '_construct', 'getConnection']
         );
         $this->resourceCollectionMock = $this->createMock(AbstractDb::class);
         $this->nonceModel = new Nonce(
@@ -88,7 +78,7 @@ class NonceTest extends TestCase
         );
     }
 
-    public function testAfterSave()
+    public function testAfterSave(): void
     {
         $this->oauthDataMock->expects($this->once())
             ->method('isCleanupProbability')
@@ -106,7 +96,7 @@ class NonceTest extends TestCase
         $this->assertEquals($this->nonceModel, $this->nonceModel->afterSave());
     }
 
-    public function testAfterSaveNoCleanupProbability()
+    public function testAfterSaveNoCleanupProbability(): void
     {
         $this->oauthDataMock->expects($this->once())
             ->method('isCleanupProbability')
@@ -121,7 +111,7 @@ class NonceTest extends TestCase
         $this->assertEquals($this->nonceModel, $this->nonceModel->afterSave());
     }
 
-    public function testLoadByCompositeKey()
+    public function testLoadByCompositeKey(): void
     {
         $expectedData = ['testData'];
         $nonce = 'testNonce';

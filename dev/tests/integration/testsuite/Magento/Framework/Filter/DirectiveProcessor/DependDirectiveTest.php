@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Framework\Filter\Template;
 use Magento\Framework\Filter\VariableResolver\StrictResolver;
 use Magento\Framework\Filter\VariableResolverInterface;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class DependDirectiveTest extends TestCase
 {
@@ -50,8 +51,8 @@ class DependDirectiveTest extends TestCase
     }
 
     /**
-     * @dataProvider useCasesProvider
      */
+    #[DataProvider('useCasesProvider')]
     public function testCases(string $parameter, array $variables, bool $isTrue)
     {
         $template = 'blah {{depend ' . $parameter . '}}blah{{/depend}} blah';

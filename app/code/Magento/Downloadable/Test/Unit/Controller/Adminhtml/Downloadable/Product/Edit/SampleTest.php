@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,14 +10,17 @@ namespace Magento\Downloadable\Test\Unit\Controller\Adminhtml\Downloadable\Produ
 use Magento\Downloadable\Controller\Adminhtml\Downloadable\Product\Edit\Sample;
 use Magento\Downloadable\Helper\Download;
 use Magento\Downloadable\Helper\File;
+use Magento\Downloadable\Model\Sample as SampleModel;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\ObjectManager\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\TestCase;
 
 class SampleTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Sample
      */
@@ -65,13 +68,17 @@ class SampleTest extends TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->request = $this->getMockBuilder(Http::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->response = $this->getMockBuilder(ResponseInterface::class)
-            ->addMethods(['setHttpResponseCode', 'clearBody', 'sendHeaders', 'setHeader'])
-            ->onlyMethods(['sendResponse'])
-            ->getMockForAbstractClass();
+        $this->request = $this->createMock(Http::class);
+        $this->response = $this->createPartialMockWithReflection(
+            ResponseInterface::class,
+            [
+                'setHttpResponseCode',
+                'clearBody',
+                'setHeader',
+                'sendHeaders',
+                'sendResponse'
+            ]
+        );
         $this->fileHelper = $this->createPartialMock(
             File::class,
             ['getFilePath']
@@ -87,20 +94,18 @@ class SampleTest extends TestCase
                 'getContentDisposition'
             ]
         );
-        $this->sampleModel = $this->getMockBuilder(Sample::class)
-            ->addMethods(
-                [
-                    'load',
-                    'getId',
-                    'getSampleType',
-                    'getSampleUrl',
-                    'getBasePath',
-                    'getBaseSamplePath',
-                    'getSampleFile'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->sampleModel = $this->createPartialMockWithReflection(
+            SampleModel::class,
+            [
+                'load',
+                'getId',
+                'getSampleType',
+                'getSampleUrl',
+                'getBasePath',
+                'getBaseSamplePath',
+                'getSampleFile'
+            ]
+        );
         $this->objectManager = $this->createPartialMock(
             ObjectManager::class,
             [
@@ -166,8 +171,7 @@ class SampleTest extends TestCase
             ->willReturnSelf();
         $this->sampleModel->expects($this->once())->method('getId')
             ->willReturn('1');
-        $this->sampleModel->expects($this->any())->method('getSampleType')
-            ->willReturn('file');
+        $this->sampleModel->method('getSampleType')->willReturn('file');
         $this->objectManager->expects($this->once())->method('create')
             ->willReturn($this->sampleModel);
 
@@ -213,8 +217,7 @@ class SampleTest extends TestCase
             ->willReturnSelf();
         $this->sampleModel->expects($this->once())->method('getId')
             ->willReturn('1');
-        $this->sampleModel->expects($this->any())->method('getSampleType')
-            ->willReturn('url');
+        $this->sampleModel->method('getSampleType')->willReturn('url');
         $this->sampleModel->expects($this->once())->method('getSampleUrl')
             ->willReturn('http://example.com/simple.jpg');
         $this->objectManager->expects($this->once())->method('create')

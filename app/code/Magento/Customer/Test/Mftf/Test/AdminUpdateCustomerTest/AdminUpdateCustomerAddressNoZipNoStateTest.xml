@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
@@ -33,7 +33,9 @@
         <remove keyForRemoval="filterByEamil"/>
         <remove keyForRemoval="checkCustomerInGrid"/>
         <remove keyForRemoval="checkCustomerAccountInformation"/>
-
+        <actionGroup ref="SelectCountriesWithRequiredRegionActionGroup" stepKey="setDefaultCountriesWithRequiredRegion" before="openCustomerEditPage">
+            <argument name="countries" value="DefaultCountriesWithRequiredRegions"/>
+        </actionGroup>
         <!--Update Customer Addresses With No Zip and No State -->
         <actionGroup stepKey="editCustomerAddress" ref="AdminEditCustomerAddressNoZipNoStateActionGroup">
             <argument name="customerAddress" value="addressNoZipNoState"/>

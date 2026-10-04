@@ -67,11 +67,11 @@ class CustomerAddressDataProviderTest extends TestCase
             ->willreturn([1]);
         $this->shareConfig->expects($this->any())->method('isGlobalScope')->willReturn(false);
 
-        $viableAddress = $this->getMockForAbstractClass(AddressInterface::class);
+        $viableAddress = $this->createMock(AddressInterface::class);
         $viableAddress->expects($this->once())->method('getId')->willReturn(1);
-        $faultyAddress = $this->getMockForAbstractClass(AddressInterface::class);
+        $faultyAddress = $this->createMock(AddressInterface::class);
 
-        $customer = $this->getMockForAbstractClass(CustomerInterface::class);
+        $customer = $this->createMock(CustomerInterface::class);
         $customer->expects($this->once())
             ->method('getAddresses')
             ->willReturn([$viableAddress, $faultyAddress]);

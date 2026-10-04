@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -45,7 +45,7 @@ class Synchronize extends Command
     /**
      * @inheritdoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $output->writeln('Synchronizing content with assets...');
         $this->synchronizeContent->execute();

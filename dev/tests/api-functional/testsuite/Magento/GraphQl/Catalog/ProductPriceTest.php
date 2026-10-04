@@ -31,6 +31,7 @@ use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -280,8 +281,8 @@ class ProductPriceTest extends GraphQlAbstract
      * @param array $expectedTierPrices
      * @param array $customerData
      * @param bool $isTierPriceExists
-     * @dataProvider priceDataProvider
      */
+    #[DataProvider('priceDataProvider')]
     public function testSimpleProductsWithSpecialPriceAndTierPrice(
         int $customerGroup,
         array $expectedPriceRange,
@@ -1296,9 +1297,8 @@ QUERY;
 
     /**
      * Check pricing for Configurable product with "Display Out of Stock Products" enabled
-     *
-     * @dataProvider configurableProductPriceRangeWithDisplayOutOfStockProductsEnabledDataProvider
      */
+    #[DataProvider('configurableProductPriceRangeWithDisplayOutOfStockProductsEnabledDataProvider')]
     #[
         Config(Configuration::XML_PATH_SHOW_OUT_OF_STOCK, 1, ScopeInterface::SCOPE_STORE, 'default'),
         DataFixture(ProductFixture::class, ['price' => 10, 'special_price' => 7], 'p1'),

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -80,7 +80,7 @@ class MassDeleteTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->messageManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
 
         $this->resultRedirectFactoryMock = $this->createPartialMock(
             RedirectFactory::class,
@@ -90,9 +90,7 @@ class MassDeleteTest extends TestCase
 
         $this->contextMock = $this->createMock(Context::class);
 
-        $this->filterMock = $this->getMockBuilder(Filter::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->filterMock = $this->createMock(Filter::class);
 
         $this->contextMock->expects($this->any())
             ->method('getMessageManager')

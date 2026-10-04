@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
+
 namespace Magento\TestFramework;
 
 use Magento\Framework\App\DeploymentConfig;
@@ -366,7 +367,7 @@ class Application
                             'filePath' => $this->installDir
                         ]
                     ),
-                    'debug'  => $objectManager->create(
+                    'debug' => $objectManager->create(
                         \Magento\Framework\Logger\Handler\Debug::class,
                         ['filePath' => $this->installDir]
                     ),
@@ -578,22 +579,34 @@ class Application
             PHP_BINARY . ' -f %s cache:disable -vvv --bootstrap=%s',
             [BP . '/bin/magento', $initParamsQuery]
         );
+
+        $enabledCaches = $this->getEnabledCaches();
+
         $this->_shell->execute(
-            PHP_BINARY . ' -f %s cache:enable -vvv %s %s %s %s --bootstrap=%s',
-            [
-                BP . '/bin/magento',
-                \Magento\Framework\App\Cache\Type\Config::TYPE_IDENTIFIER,
-                \Magento\Framework\App\Cache\Type\Layout::TYPE_IDENTIFIER,
-                \Magento\Framework\App\Cache\Type\Translate::TYPE_IDENTIFIER,
-                \Magento\Eav\Model\Cache\Type::TYPE_IDENTIFIER,
-                $initParamsQuery,
-            ]
+            PHP_BINARY . ' -f %s cache:enable -vvv ' . str_repeat('%s ', count($enabledCaches)) . ' --bootstrap=%s',
+            [BP . '/bin/magento', ...$enabledCaches, $initParamsQuery]
         );
 
         // right after a clean installation, store DB dump for future reuse in tests or running the test suite again
         if (!$db->isDbDumpExists() && $this->dumpDb) {
             $this->getDbInstance()->storeDbDump();
         }
+    }
+
+    /**
+     * Caches that should be enabled during the Integration Tests execution
+     *
+     * @return array<string>
+     */
+    private function getEnabledCaches(): array
+    {
+        return [
+            \Magento\Framework\App\Cache\Type\Config::TYPE_IDENTIFIER,
+            \Magento\Framework\App\Cache\Type\Layout::TYPE_IDENTIFIER,
+            \Magento\Framework\App\Cache\Type\Translate::TYPE_IDENTIFIER,
+            \Magento\Framework\App\Interception\Cache\CompiledConfig::TYPE_IDENTIFIER,
+            \Magento\Eav\Model\Cache\Type::TYPE_IDENTIFIER,
+        ];
     }
 
     /**

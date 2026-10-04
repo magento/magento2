@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -20,6 +20,7 @@ use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Provides tests for filters block on category page.
@@ -98,11 +99,11 @@ class CategoryTest extends TestCase
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/category_with_different_price_products.php
-     * @dataProvider canShowBlockWithDisplayModeDataProvider
      * @param string $displayMode
      * @param bool $canShow
      * @return void
      */
+    #[DataProvider('canShowBlockWithDisplayModeDataProvider')]
     public function testCanShowBlockWithDisplayMode(string $displayMode, bool $canShow): void
     {
         $this->updateCategoryDisplayMode('Category 999', $displayMode);
@@ -125,12 +126,12 @@ class CategoryTest extends TestCase
     /**
      * @magentoDataFixture Magento/Store/_files/second_store.php
      * @magentoDataFixture Magento/Catalog/_files/category_with_different_price_products.php
-     * @dataProvider canShowBlockWithDisplayModeDataProviderOnStoreView
      * @param string $defaultMode
      * @param string $storeMode
      * @param bool $canShow
      * @return void
      */
+    #[DataProvider('canShowBlockWithDisplayModeDataProviderOnStoreView')]
     public function testCanShowBlockWithDisplayModeOnStoreView(
         string $defaultMode,
         string $storeMode,

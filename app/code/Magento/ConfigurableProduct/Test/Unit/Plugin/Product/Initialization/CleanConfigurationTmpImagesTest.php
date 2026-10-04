@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -73,26 +73,13 @@ class CleanConfigurationTmpImagesTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->getMockForAbstractClass();
-        $this->fileStorageDb = $this->getMockBuilder(FileStorage::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->mediaConfig = $this->getMockBuilder(MediaConfig::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->filesystem = $this->getMockBuilder(Filesystem::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->writeFolder = $this->getMockBuilder(Write::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->serializer = $this->getMockBuilder(Json::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->subjectMock = $this->getMockBuilder(ProductInitializationHelper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->fileStorageDb = $this->createMock(FileStorage::class);
+        $this->mediaConfig = $this->createMock(MediaConfig::class);
+        $this->filesystem = $this->createMock(Filesystem::class);
+        $this->writeFolder = $this->createMock(Write::class);
+        $this->serializer = $this->createMock(Json::class);
+        $this->subjectMock = $this->createMock(ProductInitializationHelper::class);
 
         $this->filesystem->expects($this->once())
             ->method('getDirectoryWrite')
@@ -191,9 +178,7 @@ class CleanConfigurationTmpImagesTest extends TestCase
      */
     protected function getProductMock(?array $expectedData = null, $hasDataChanges = false, $wasChanged = false)
     {
-        $productMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productMock = $this->createMock(Product::class);
 
         if ($wasChanged !== false) {
             if ($expectedData !== null) {

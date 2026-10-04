@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminSelectTwoOptionsPerAttributeActionGroup"
+                 extends="GenerateConfigurationsByAttributeCodeActionGroup">
+        <annotations>
+            <description>EXTENDS: GenerateConfigurationsByAttributeCodeActionGroup. Selects only 2 specific options from
+                each attribute instead of all options. Removes confirm popup.
+            </description>
+        </annotations>
+        <arguments>
+            <argument name="secondAttributeCode" type="string"/>
+            <argument name="firstAttributeOption1" type="string"/>
+            <argument name="firstAttributeOption2" type="string"/>
+            <argument name="secondAttributeOption1" type="string"/>
+            <argument name="secondAttributeOption2" type="string"/>
+        </arguments>
+        <remove keyForRemoval="clickFilters"/>
+        <remove keyForRemoval="fillFilterAttributeCodeField"/>
+        <remove keyForRemoval="clickApplyFiltersButton"/>
+        <remove keyForRemoval="clickOnFirstCheckbox"/>
+        <remove keyForRemoval="clickOnSelectAll"/>
+        <remove keyForRemoval="clickOnSelectAllForFirstAttribute"/>
+        <remove keyForRemoval="clickOnSelectAllForSecondAttribute"/>
+        <remove keyForRemoval="clickOnConfirmInPopup"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.attributeCheckbox(attributeCode)}}"
+               stepKey="clickOnFirstAttributeCheckbox" after="clickCreateConfigurations"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.attributeCheckbox(secondAttributeCode)}}"
+               stepKey="clickOnSecondAttributeCheckbox" after="clickOnFirstAttributeCheckbox"/>
+        <grabTextFrom selector="{{AdminCreateProductConfigurationsPanel.defaultLabel(attributeCode)}}"
+                      stepKey="grabFirstAttributeDefaultLabel" after="clickOnSecondAttributeCheckbox"/>
+        <grabTextFrom selector="{{AdminCreateProductConfigurationsPanel.defaultLabel(secondAttributeCode)}}"
+                      stepKey="grabSecondAttributeDefaultLabel" after="grabFirstAttributeDefaultLabel"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.attributeCheckboxByName(firstAttributeOption1)}}"
+               stepKey="selectFirstAttributeOption1" after="clickOnNextButton1"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.attributeCheckboxByName(firstAttributeOption2)}}"
+               stepKey="selectFirstAttributeOption2" after="selectFirstAttributeOption1"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.attributeCheckboxByName(secondAttributeOption1)}}"
+               stepKey="selectSecondAttributeOption1" after="selectFirstAttributeOption2"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.attributeCheckboxByName(secondAttributeOption2)}}"
+               stepKey="selectSecondAttributeOption2" after="selectSecondAttributeOption1"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveButton2"
+               after="clickOnNextButton4"/>
+    </actionGroup>
+</actionGroups>

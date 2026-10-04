@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -21,5 +21,6 @@
         <element name="usernameUSPS" type="input" selector="//input[@id='carriers_usps_userid']"/>
         <element name="USPSshowMethodIfNotApplicableField" type="select" selector="//tr[@id='row_carriers_usps_showmethod']//td//select[@id='carriers_usps_showmethod']"/>
         <element name="debugSelectUSPS" type="select" selector="//tr[@id='row_carriers_usps_debug']//td//select[@id='carriers_usps_debug']"/>
+        <element name="allowedMethodsForRestAPICheckbox" type="checkbox" selector="//tr[@id='row_carriers_usps_rest_allowed_methods']//input[@id='carriers_usps_rest_allowed_methods_inherit']"/>
     </section>
 </sections>

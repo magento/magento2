@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,6 +18,7 @@ use Magento\Sales\Model\Order\Status\History\Validator;
 use Magento\Sales\Model\ResourceModel\Order\Status\History;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Sales\Model\Order\Status\History as StatusHistory;
 
 class HistoryTest extends TestCase
 {
@@ -32,7 +33,7 @@ class HistoryTest extends TestCase
     protected $appResourceMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Status\History|MockObject
+     * @var StatusHistory|MockObject
      */
     protected $historyMock;
 
@@ -94,7 +95,7 @@ class HistoryTest extends TestCase
      */
     public function testSave()
     {
-        $historyMock = $this->createMock(\Magento\Sales\Model\Order\Status\History::class);
+        $historyMock = $this->createMock(StatusHistory::class);
         $this->entitySnapshotMock->expects($this->once())->method('isModified')->with($historyMock)->willReturn(true);
         $historyMock->expects($this->any())->method('isSaveAllowed')->willReturn(true);
         $this->validatorMock->expects($this->once())
@@ -112,7 +113,7 @@ class HistoryTest extends TestCase
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionMessage('Cannot save comment:');
-        $historyMock = $this->createMock(\Magento\Sales\Model\Order\Status\History::class);
+        $historyMock = $this->createMock(StatusHistory::class);
         $this->entitySnapshotMock->expects($this->once())->method('isModified')->with($historyMock)->willReturn(true);
         $historyMock->expects($this->any())->method('isSaveAllowed')->willReturn(true);
         $this->validatorMock->expects($this->once())

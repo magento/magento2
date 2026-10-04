@@ -1,10 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Reports\Model\ResourceModel\Report;
+
+use Magento\Framework\DB\Select;
 
 /**
  * Abstract report aggregate resource model
@@ -50,6 +52,11 @@ abstract class AbstractReport extends \Magento\Framework\Model\ResourceModel\Db\
      * @var \Magento\Framework\Stdlib\DateTime\Timezone\Validator
      */
     private $timezoneValidator;
+
+    /**
+     * @var array
+     */
+    private array $rangesByQuery = [];
 
     /**
      * Constructor
@@ -152,10 +159,11 @@ abstract class AbstractReport extends \Magento\Framework\Model\ResourceModel\Db\
      * @param string $table
      * @param null|string $from
      * @param null|string $to
-     * @param null|\Magento\Framework\DB\Select|string $subSelect
+     * @param null|Select|string $subSelect
      * @param bool $doNotUseTruncate
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _clearTableByDateRange(
         $table,
@@ -171,7 +179,8 @@ abstract class AbstractReport extends \Magento\Framework\Model\ResourceModel\Db\
         }
 
         if ($subSelect !== null) {
-            $deleteCondition = $this->_makeConditionFromDateRangeSelect($subSelect, 'period', $connection);
+            $datesRange = $this->getRange($subSelect);
+            $deleteCondition = $this->getConnection()->prepareSqlCondition('period', ['in' => $datesRange]);
         } else {
             $condition = [];
             if ($from !== null) {
@@ -185,6 +194,30 @@ abstract class AbstractReport extends \Magento\Framework\Model\ResourceModel\Db\
         }
         $this->getConnection()->delete($table, $deleteCondition);
         return $this;
+    }
+
+    /**
+     * Get dates range to clear the table
+     *
+     * @param Select $select
+     * @return array
+     */
+    protected function getRange(Select $select): array
+    {
+        $queryHash = sha1($select->__toString());
+        if (!isset($this->rangesByQuery[$queryHash])) {
+
+            $connection = $this->getConnection();
+            try {
+                $query = $connection->query($select);
+                $range = $query->fetchAll(\Zend_Db::FETCH_COLUMN);
+            } catch (\Exception) {
+                $range = [];
+            }
+
+            $this->rangesByQuery[$queryHash] = $range;
+        }
+        return $this->rangesByQuery[$queryHash];
     }
 
     /**

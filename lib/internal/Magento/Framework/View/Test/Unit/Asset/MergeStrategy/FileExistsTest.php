@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -42,8 +42,8 @@ class FileExistsTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->mergerMock = $this->getMockForAbstractClass(MergeStrategyInterface::class);
-        $this->dirMock = $this->getMockForAbstractClass(ReadInterface::class);
+        $this->mergerMock = $this->createMock(MergeStrategyInterface::class);
+        $this->dirMock = $this->createMock(ReadInterface::class);
         $filesystem = $this->createMock(Filesystem::class);
         $filesystem->expects($this->once())
             ->method('getDirectoryRead')

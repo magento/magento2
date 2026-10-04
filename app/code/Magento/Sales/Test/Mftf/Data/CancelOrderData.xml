@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -13,5 +13,12 @@
     <entity name="CancelOrder" type="CancelOrder">
        <var key="quote_id" entityKey="return" entityType="CustomerCart"/>
     </entity>
-
+    <entity name="OrderCancellationModalTitleEnglish">
+        <data key="locale">en_US</data>
+        <data key="title">Cancel Order</data>
+    </entity>
+    <entity name="OrderCancellationModalTitleFrench">
+        <data key="locale">fr_FR</data>
+        <data key="title">Annuler la commande</data>
+    </entity>
 </entities>

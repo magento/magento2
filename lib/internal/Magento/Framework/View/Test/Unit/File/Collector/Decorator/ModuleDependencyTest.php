@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Framework\View\File\Collector\Decorator\ModuleDependency;
 use Magento\Framework\View\File\CollectorInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ModuleDependencyTest extends TestCase
 {
@@ -34,8 +35,8 @@ class ModuleDependencyTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_fileSource = $this->getMockForAbstractClass(CollectorInterface::class);
-        $this->_moduleListMock = $this->getMockForAbstractClass(ModuleListInterface::class);
+        $this->_fileSource = $this->createMock(CollectorInterface::class);
+        $this->_moduleListMock = $this->createMock(ModuleListInterface::class);
         $this->_moduleListMock->expects($this->any())
             ->method('getNames')
             ->willReturn(['Fixture_ModuleB', 'Fixture_ModuleA']);
@@ -48,12 +49,11 @@ class ModuleDependencyTest extends TestCase
     /**
      * @param array $fixtureFiles
      * @param array $expectedFiles
-     * @param string $message
-     * @dataProvider getFilesDataProvider
-     */
+     * @param string $message     */
+    #[DataProvider('getFilesDataProvider')]
     public function testGetFiles(array $fixtureFiles, array $expectedFiles, $message)
     {
-        $theme = $this->getMockForAbstractClass(ThemeInterface::class);
+        $theme = $this->createMock(ThemeInterface::class);
         $this->_fileSource
             ->expects($this->once())
             ->method('getFiles')

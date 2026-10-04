@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\LayeredNavigation\Block\Navigation\Search;
 use Magento\Catalog\Model\Layer\Resolver;
 use Magento\LayeredNavigation\Block\Navigation\Category\MultipleFiltersTest as CategoryFilterTest;
 use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Provides tests for multiple custom select filters in navigation block on search page.
@@ -24,12 +25,12 @@ class MultipleFiltersTest extends CategoryFilterTest
      * @magentoDataFixture Magento/Catalog/_files/product_dropdown_attribute.php
      * @magentoDataFixture Magento/Catalog/_files/configurable_attribute.php
      * @magentoDataFixture Magento/Catalog/_files/category_with_three_products.php
-     * @dataProvider getMultipleActiveFiltersDataProvider
      * @param array $products
      * @param array $filters
      * @param array $expectedProducts
      * @return void
      */
+    #[DataProvider('getMultipleActiveFiltersDataProvider')]
     public function testGetMultipleActiveFilters(
         array $products,
         array $filters,

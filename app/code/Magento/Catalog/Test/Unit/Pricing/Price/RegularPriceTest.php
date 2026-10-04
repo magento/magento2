@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Pricing\Price;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Pricing\Price\RegularPrice;
 use Magento\Framework\Pricing\Adjustment\Calculator;
@@ -57,7 +58,7 @@ class RegularPriceTest extends TestCase
             ->method('getPriceInfo')
             ->willReturn($this->priceInfoMock);
 
-        $this->priceCurrencyMock = $this->getMockForAbstractClass(PriceCurrencyInterface::class);
+        $this->priceCurrencyMock = $this->createMock(PriceCurrencyInterface::class);
 
         $this->regularPrice = new RegularPrice(
             $this->saleableItemMock,
@@ -71,8 +72,8 @@ class RegularPriceTest extends TestCase
      * Test method testGetValue
      *
      * @param float|bool $price
-     * @dataProvider testGetValueDataProvider
      */
+    #[DataProvider('getValueDataProvider')]
     public function testGetValue($price)
     {
         $convertedPrice = 85;
@@ -80,7 +81,7 @@ class RegularPriceTest extends TestCase
             ->method('getPrice')
             ->willReturn($price);
         $this->priceCurrencyMock->expects($this->any())
-            ->method('convertAndRound')
+            ->method('convert')
             ->with($price)
             ->willReturn($convertedPrice);
         $this->assertEquals($convertedPrice, $this->regularPrice->getValue());
@@ -93,7 +94,7 @@ class RegularPriceTest extends TestCase
      *
      * @return array
      */
-    public static function testGetValueDataProvider()
+    public static function getValueDataProvider()
     {
         return [
             'With price' => [100.00],
@@ -114,7 +115,7 @@ class RegularPriceTest extends TestCase
             ->method('getPrice')
             ->willReturn($priceValue);
         $this->priceCurrencyMock->expects($this->any())
-            ->method('convertAndRound')
+            ->method('convert')
             ->with($priceValue)
             ->willReturn($convertedPrice);
         $this->calculatorMock->expects($this->once())

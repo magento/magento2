@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Framework\View\Asset\NotationResolver\Variable;
 use Magento\Framework\View\Asset\Repository;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class VariableTest extends TestCase
 {
@@ -57,9 +58,8 @@ class VariableTest extends TestCase
 
     /**
      * @param $path
-     * @param $expectedResult
-     * @dataProvider convertVariableNotationDataProvider
-     */
+     * @param $expectedResult     */
+    #[DataProvider('convertVariableNotationDataProvider')]
     public function testConvertVariableNotation($path, $expectedResult)
     {
         $this->assertEquals($expectedResult, $this->object->convertVariableNotation($path));

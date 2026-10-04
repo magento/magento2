@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Model\ResourceModel\Type\Db\ConnectionFactoryInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class AclResourceTest extends TestCase
@@ -49,13 +50,8 @@ class AclResourceTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->connectionFactory = $this->getMockBuilder(ConnectionFactoryInterface::class)
-            ->onlyMethods(['create'])
-            ->getMockForAbstractClass();
-        $this->config = $this->getMockBuilder(ConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getConnectionName'])
-            ->getMockForAbstractClass();
+        $this->connectionFactory = $this->createMock(ConnectionFactoryInterface::class);
+        $this->config = $this->createMock(ConfigInterface::class);
         $this->config->expects($this->any())
             ->method('getConnectionName')
             ->with(self::RESOURCE_NAME)
@@ -84,7 +80,7 @@ class AclResourceTest extends TestCase
                 ]
             );
 
-        $this->connection = $this->getMockForAbstractClass(AdapterInterface::class);
+        $this->connection = $this->createMock(AdapterInterface::class);
         $this->connection->expects($this->any())
             ->method('getTableName')
             ->willReturnArgument(0);
@@ -112,12 +108,7 @@ class AclResourceTest extends TestCase
         $this->assertSame($this->connection, $this->resource->getConnection(self::RESOURCE_NAME));
     }
 
-    /**
-     * @param array|string $modelEntity
-     * @param string $expected
-     *
-     * @dataProvider getTableNameDataProvider
-     */
+    #[DataProvider('getTableNameDataProvider')]
     public function testGetTableName($modelEntity, $expected)
     {
         $this->connectionFactory->expects($this->once())
@@ -135,16 +126,9 @@ class AclResourceTest extends TestCase
             ['tableName', self::TABLE_PREFIX . 'tableName'],
             [['tableName', 'tableSuffix'], self::TABLE_PREFIX . 'tableName_tableSuffix'],
         ];
-    }
-
-    /**
-     * @param array|string $modelEntity
-     * @param string $tableName
-     * @param string $mappedName
-     * @param string $expected
-     *
-     * @dataProvider getTableNameMappedDataProvider
-     */
+    }        
+    
+    #[DataProvider('getTableNameMappedDataProvider')]
     public function testGetTableNameMapped($modelEntity, $tableName, $mappedName, $expected)
     {
         $this->connectionFactory->expects($this->once())

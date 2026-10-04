@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,6 +18,7 @@ use Magento\PageCache\Model\Layout\LayoutPlugin;
 use Magento\PageCache\Model\Spi\PageCacheTagsPreprocessorInterface;
 use Magento\PageCache\Test\Unit\Block\Controller\StubBlock;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -78,8 +79,8 @@ class LayoutPluginTest extends TestCase
      * @param $layoutIsCacheable
      * @param $maintenanceModeIsEnabled
      * @return void
-     * @dataProvider afterGenerateElementsDataProvider
      */
+    #[DataProvider('afterGenerateElementsDataProvider')]
     public function testAfterGenerateElements($cacheState, $layoutIsCacheable, $maintenanceModeIsEnabled): void
     {
         $maxAge = 180;
@@ -120,8 +121,8 @@ class LayoutPluginTest extends TestCase
      * @param $configCacheType
      * @param $ttl
      * @return void
-     * @dataProvider afterGetOutputDataProvider
      */
+    #[DataProvider('afterGetOutputDataProvider')]
     public function testAfterGetOutput($cacheState, $layoutIsCacheable, $expectedTags, $configCacheType, $ttl): void
     {
         $html = 'html';

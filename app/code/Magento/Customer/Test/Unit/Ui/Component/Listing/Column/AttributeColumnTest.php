@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -35,8 +35,7 @@ class AttributeColumnTest extends TestCase
 
     protected function setup(): void
     {
-        $this->context = $this->getMockBuilder(ContextInterface::class)
-            ->getMockForAbstractClass();
+        $this->context = $this->createMock(ContextInterface::class);
         $processor = $this->getMockBuilder(Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -45,11 +44,8 @@ class AttributeColumnTest extends TestCase
         $this->attributeRepository = $this->createMock(
             AttributeRepository::class
         );
-        $this->attributeMetadata = $this->getMockForAbstractClass(
-            AttributeMetadataInterface::class,
-            [],
-            '',
-            false
+        $this->attributeMetadata = $this->createMock(
+            AttributeMetadataInterface::class
         );
 
         $this->component = new AttributeColumn(

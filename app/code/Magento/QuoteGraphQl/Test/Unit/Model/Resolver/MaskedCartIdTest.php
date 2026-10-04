@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -86,15 +86,10 @@ class MaskedCartIdTest extends TestCase
             QuoteIdMaskFactory::class,
             ['create']
         );
-        $this->quoteIdMaskResourceModelMock = $this->getMockBuilder(QuoteIdMaskResourceModel::class)
-            ->disableOriginalConstructor()
-            ->addMethods(
-                [
-                    'setQuoteId',
-                ]
-            )
-            ->onlyMethods(['save'])
-            ->getMock();
+        $this->quoteIdMaskResourceModelMock = $this->createPartialMock(
+            QuoteIdMaskResourceModel::class,
+            ['save']
+        );
         $this->maskedCartId = new MaskedCartId(
             $this->quoteIdToMaskedQuoteId,
             $this->quoteIdMaskFactory,

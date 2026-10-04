@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -56,15 +56,10 @@ class CompositeTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->productLocatorMock = $this->getMockBuilder(LocatorInterface::class)
-            ->getMockForAbstractClass();
-        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->getMockForAbstractClass();
-        $this->associatedProductsMock = $this->getMockBuilder(AssociatedProducts::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->productMock = $this->getMockBuilder(ProductInterface::class)
-            ->getMockForAbstractClass();
+        $this->productLocatorMock = $this->createMock(LocatorInterface::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->associatedProductsMock = $this->createMock(AssociatedProducts::class);
+        $this->productMock = $this->createMock(ProductInterface::class);
         $this->allowedProductTypesMock = $this->createMock(AllowedProductTypes::class);
 
         $this->productLocatorMock->expects(static::any())
@@ -216,8 +211,7 @@ class CompositeTest extends TestCase
      */
     private function createModifierMock(array $initialMeta, array $resultMeta)
     {
-        $modifierMock = $this->getMockBuilder(ModifierInterface::class)
-            ->getMockForAbstractClass();
+        $modifierMock = $this->createMock(ModifierInterface::class);
 
         $modifierMock->expects(static::any())
             ->method('modifyMeta')

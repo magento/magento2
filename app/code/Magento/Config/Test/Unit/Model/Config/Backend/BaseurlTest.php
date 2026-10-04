@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2024 Adobe.
+ * Copyright 2024 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);
@@ -21,6 +21,7 @@ use Magento\Framework\Validator\Url as UrlValidator;
 use Magento\Framework\App\ObjectManager as AppObjectManager;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\Store;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -32,39 +33,30 @@ class BaseurlTest extends TestCase
 {
     public function testSaveMergedJsCssMustBeCleaned()
     {
-        $context = (new ObjectManager($this))->getObject(Context::class);
-
         $resource = $this->createMock(Data::class);
         $resource->expects($this->any())->method('addCommitCallback')->willReturn($resource);
-        $resourceCollection = $this->getMockBuilder(AbstractDb::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $resourceCollection = $this->createMock(AbstractDb::class);
         $mergeService = $this->createMock(MergeService::class);
         $coreRegistry = $this->createMock(Registry::class);
-        $coreConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
-        $cacheTypeListMock = $this->getMockBuilder(TypeListInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $model = $this->getMockBuilder(Baseurl::class)
-            ->onlyMethods(['getOldValue'])
-            ->setConstructorArgs(
-                [
-                    $context,
-                    $coreRegistry,
-                    $coreConfig,
-                    $cacheTypeListMock,
-                    $mergeService,
-                    $resource,
-                    $resourceCollection
-                ]
-            )
-            ->getMock();
-
+        $coreConfig = $this->createMock(ScopeConfigInterface::class);
+        $cacheTypeListMock = $this->createMock(TypeListInterface::class);
+        
         $cacheTypeListMock->expects($this->once())
             ->method('invalidate')
-            ->with(Config::TYPE_IDENTIFIER)
-            ->willReturn($model);
+            ->with(Config::TYPE_IDENTIFIER);
         $mergeService->expects($this->once())->method('cleanMergedJsCss');
+
+        $model = (new ObjectManager($this))->getObject(
+            Baseurl::class,
+            [
+                'config' => $coreConfig,
+                'registry' => $coreRegistry,
+                'resource' => $resource,
+                'resourceCollection' => $resourceCollection,
+                'cacheTypeList' => $cacheTypeListMock,
+                'mergeService' => $mergeService,
+            ]
+        );
 
         $model->setValue('http://example.com/')->setPath(Store::XML_PATH_UNSECURE_BASE_URL);
         $model->afterSave();
@@ -73,18 +65,16 @@ class BaseurlTest extends TestCase
     /**
      * Test beforeSave method to ensure URL is converted to lower case.
      *
-     * @dataProvider beforeSaveDataProvider
      * @param string $value
      * @param string $expectedValue
      * @return void
      */
+    #[DataProvider('beforeSaveDataProvider')]
     public function testBeforeSaveConvertLowerCase(string $value, string $expectedValue): void
     {
         $model = (new ObjectManager($this))->getObject(Baseurl::class);
 
-        $urlValidatorMock = $this->getMockBuilder(UrlValidator::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $urlValidatorMock = $this->createMock(UrlValidator::class);
 
         $objectManagerInterface = $this->createMock(ObjectManagerInterface::class);
         $objectManagerInterface->expects($this->exactly(1))

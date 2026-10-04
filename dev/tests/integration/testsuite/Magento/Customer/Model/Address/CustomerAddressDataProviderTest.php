@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,7 @@ use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Framework\Registry;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -80,10 +81,9 @@ class CustomerAddressDataProviderTest extends TestCase
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Customer/_files/customer_address.php
      *
-     * @dataProvider createAddressesDataProvider
-     *
      * @return void
      */
+    #[DataProvider('createAddressesDataProvider')]
     public function testGetAddressDataByCustomerForAllowedCountries($customerId, $allowedCountries) : void
     {
         /** @var ConfigInterface $config */

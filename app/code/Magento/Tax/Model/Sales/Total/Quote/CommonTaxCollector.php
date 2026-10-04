@@ -601,7 +601,7 @@ class CommonTaxCollector extends AbstractTotal
         /** @var AbstractItem[] $keyedAddressItems */
         $keyedAddressItems = [];
         foreach ($shippingAssignment->getItems() as $addressItem) {
-            $keyedAddressItems[$addressItem->getTaxCalculationItemId()] = $addressItem;
+            $keyedAddressItems[$addressItem->getTaxCalculationItemId() ?? ''] = $addressItem;
         }
 
         $subtotal = $baseSubtotal = 0;
@@ -675,7 +675,7 @@ class CommonTaxCollector extends AbstractTotal
         /** @var AbstractItem[] $keyedAddressItems */
         $keyedAddressItems = [];
         foreach ($shippingAssignment->getItems() as $addressItem) {
-            $keyedAddressItems[$addressItem->getTaxCalculationItemId()] = $addressItem;
+            $keyedAddressItems[$addressItem->getTaxCalculationItemId() ?? ''] = $addressItem;
         }
 
         foreach ($itemsByType as $itemType => $items) {
@@ -746,7 +746,7 @@ class CommonTaxCollector extends AbstractTotal
      */
     public function updateItemTaxInfo($quoteItem, $itemTaxDetails, $baseItemTaxDetails, $store)
     {
-        $quoteItem->setPrice($itemTaxDetails->getPrice());
+        $quoteItem->setPrice($baseItemTaxDetails->getPrice());
         if ($quoteItem->getCustomPrice() && $this->taxHelper->applyTaxOnCustomPrice()) {
             $quoteItem->setCustomPrice($itemTaxDetails->getPrice());
         }

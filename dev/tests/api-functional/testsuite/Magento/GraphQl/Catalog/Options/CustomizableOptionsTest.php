@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Exception;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\CompareArraysRecursively;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for customizable product options.
@@ -36,9 +37,9 @@ class CustomizableOptionsTest extends GraphQlAbstract
      *
      * @param array $optionDataProvider
      *
-     * @dataProvider getProductCustomizableOptionsProvider
      * @throws Exception
      */
+    #[DataProvider('getProductCustomizableOptionsProvider')]
     public function testQueryCustomizableOptions(array $optionDataProvider): void
     {
         $productSku = 'simple';

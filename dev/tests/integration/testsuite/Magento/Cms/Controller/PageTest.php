@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Cms\Controller;
@@ -15,6 +15,7 @@ use Magento\Framework\View\LayoutInterface;
 use Magento\TestFramework\Cms\Model\CustomLayoutManager;
 use Magento\Cms\Api\PageRepositoryInterface;
 use Magento\TestFramework\TestCase\AbstractController;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for \Magento\Cms\Controller\Page\View class.
@@ -127,11 +128,11 @@ class PageTest extends AbstractController
      * Tests page renders even with unavailable custom page layout.
      *
      * @magentoDataFixture Magento/Cms/Fixtures/page_list.php
-     * @dataProvider pageLayoutDataProvider
      * @param string $pageIdentifier
      * @return void
      * @throws NoSuchEntityException
      */
+    #[DataProvider('pageLayoutDataProvider')]
     public function testPageWithCustomLayout(string $pageIdentifier): void
     {
         $page = $this->pageRetriever->execute($pageIdentifier, 0);

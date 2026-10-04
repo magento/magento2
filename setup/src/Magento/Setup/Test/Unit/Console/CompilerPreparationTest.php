@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Setup\Console\Command\DiCompileCommand;
 use Magento\Setup\Console\CompilerPreparation;
 use Magento\Setup\Mvc\Bootstrap\InitParamListener;
 use PHPUnit\Framework\MockObject\MockObject as Mock;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\ArgvInput;
 
@@ -75,12 +76,12 @@ class CompilerPreparationTest extends TestCase
     }
 
     /**
-     * @dataProvider commandNameDataProvider
      * @param $commandName
      * @param $isCompileCommand
      * @param $isHelpOption
      * @param bool|null $dirExists
      */
+    #[DataProvider('commandNameDataProvider')]
     public function testClearGenerationDirWhenNeeded($commandName, $isCompileCommand, $isHelpOption, $dirExists = false)
     {
         $this->inputMock->expects($this->once())

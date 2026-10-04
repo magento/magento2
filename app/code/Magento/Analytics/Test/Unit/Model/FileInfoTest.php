@@ -9,6 +9,8 @@ namespace Magento\Analytics\Test\Unit\Model;
 
 use Magento\Analytics\Model\FileInfo;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\Attributes\DataProvider;
+
 use PHPUnit\Framework\TestCase;
 
 class FileInfoTest extends TestCase
@@ -30,8 +32,8 @@ class FileInfoTest extends TestCase
      * @param string|null $path
      * @param string|null $initializationVector
      * @return void
-     * @dataProvider constructDataProvider
      */
+    #[DataProvider('constructDataProvider')]
     public function testConstruct($path, $initializationVector)
     {
         $constructorArguments = [

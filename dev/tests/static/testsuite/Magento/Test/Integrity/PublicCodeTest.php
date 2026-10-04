@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Test\Integrity;
 
 use Exception;
 use Magento\Framework\App\Utility\Files;
 use Magento\Setup\Module\Di\Code\Reader\FileClassScanner;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use ReflectionMethod;
@@ -60,8 +61,8 @@ class PublicCodeTest extends TestCase
      *
      * @param $layoutFile
      * @throws \ReflectionException
-     * @dataProvider layoutFilesDataProvider
      */
+    #[DataProvider('layoutFilesDataProvider')]
     public function testAllBlocksReferencedInLayoutArePublic($layoutFile)
     {
         $nonPublishedBlocks = [];
@@ -104,8 +105,8 @@ class PublicCodeTest extends TestCase
      *
      * @param string $class
      * @throws \ReflectionException
-     * @dataProvider publicPHPTypesDataProvider
      */
+    #[DataProvider('publicPHPTypesDataProvider')]
     public function testAllPHPClassesReferencedFromPublicClassesArePublic($class)
     {
         $nonPublishedClasses = [];

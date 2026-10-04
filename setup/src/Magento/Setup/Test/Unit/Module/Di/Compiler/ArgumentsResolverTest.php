@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -27,7 +27,7 @@ class ArgumentsResolverTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->diContainerConfig = $this->getMockForAbstractClass(ConfigInterface::class);
+        $this->diContainerConfig = $this->createMock(ConfigInterface::class);
         $this->model = new ArgumentsResolver($this->diContainerConfig);
     }
 

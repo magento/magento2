@@ -27,6 +27,10 @@
             </actionGroup>
         </before>
         <after>
+            <!-- Delete bundle product created via UI -->
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteBundleProduct">
+                <argument name="sku" value="{{BundleProduct.sku}}"/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
             <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
             <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>

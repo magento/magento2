@@ -13,6 +13,7 @@ use Magento\CatalogSearch\Model\Source\Weight as WeightSource;
 use Magento\Framework\Data\Form;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\Data\Form\Element\Fieldset;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\View\Element\AbstractBlock;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -23,6 +24,7 @@ use PHPUnit\Framework\TestCase;
  */
 class FrontTabPluginTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var FrontTabPlugin
      */
@@ -65,25 +67,20 @@ class FrontTabPluginTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->weightSourceMock = $this->getMockBuilder(WeightSource::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->subjectMock = $this->getMockBuilder(ProductAttributeFrontTabBlock::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->formMock = $this->getMockBuilder(Form::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->fieldsetMock = $this->getMockBuilder(Fieldset::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->childElementMock = $this->getMockBuilder(AbstractElement::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->childBlockMock = $this->getMockBuilder(AbstractBlock::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['addFieldMap', 'addFieldDependence'])
-            ->getMockForAbstractClass();
+        $this->weightSourceMock = $this->createMock(WeightSource::class);
+
+        $this->subjectMock = $this->createMock(ProductAttributeFrontTabBlock::class);
+
+        $this->formMock = $this->createMock(Form::class);
+
+        $this->fieldsetMock = $this->createMock(Fieldset::class);
+
+        $this->childElementMock = $this->createMock(AbstractElement::class);
+
+        $this->childBlockMock = $this->createPartialMockWithReflection(
+            AbstractBlock::class,
+            ['addFieldMap', 'addFieldDependence']
+        );
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->plugin = $this->objectManagerHelper->getObject(

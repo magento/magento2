@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -69,24 +69,12 @@ class ProblemTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->registryMock = $this->getMockBuilder(Registry::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->subscriberFactoryMock = $this->getMockBuilder(SubscriberFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->subscriberMock = $this->getMockBuilder(Subscriber::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->resourceModelMock = $this->getMockBuilder(ProblemResource::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->abstractDbMock = $this->getMockBuilder(AbstractDb::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->contextMock = $this->createMock(Context::class);
+        $this->registryMock = $this->createMock(Registry::class);
+        $this->subscriberFactoryMock = $this->createMock(SubscriberFactory::class);
+        $this->subscriberMock = $this->createMock(Subscriber::class);
+        $this->resourceModelMock = $this->createMock(ProblemResource::class);
+        $this->abstractDbMock = $this->createMock(AbstractDb::class);
 
         $this->resourceModelMock->expects($this->any())
             ->method('getIdFieldName')
@@ -129,9 +117,7 @@ class ProblemTest extends TestCase
     public function testAddQueueData(): void
     {
         $queueId = 1;
-        $queueMock =  $this->getMockBuilder(Queue::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $queueMock = $this->createMock(Queue::class);
         $queueMock->expects($this->once())
             ->method('getId')
             ->willReturn($queueId);

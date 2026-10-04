@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\ConfigurableProductGraphQl\Test\Unit\Model\Cart\BuyRequest;
 
+use Magento\Framework\DataObject;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
@@ -29,6 +31,7 @@ use PHPUnit\Framework\TestCase;
  */
 class SuperAttributeDataProviderTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var ArrayManager|MockObject
      */
@@ -84,6 +87,7 @@ class SuperAttributeDataProviderTest extends TestCase
     /**
      * Check that website id is correctly retrieved
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testExecute(): void
     {
@@ -136,24 +140,44 @@ class SuperAttributeDataProviderTest extends TestCase
             ->method('getStore')
             ->willReturn($storeMock);
 
-        $productMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getId', 'getExtensionAttributes', 'getData', 'getWebsiteIds'])
-            ->addMethods(['getConfigurableProductLinks'])
-            ->getMock();
-        $productMock->method('getId')
-            ->willReturn(1);
-        $productMock->method('getExtensionAttributes')
-            ->willReturnSelf();
-        $productMock->method('getConfigurableProductLinks')
-            ->willReturn([1]);
-        $productMock->method('getData')
-            ->willReturn(1);
-        $productMock->method('getWebsiteIds')
-            ->willReturn([$websiteId]);
+        $extensionAttributes = $this->createPartialMockWithReflection(
+            \Magento\Catalog\Api\Data\ProductExtensionInterface::class,
+            ['getConfigurableProductLinks']
+        );
+        $extensionAttributes->method('getConfigurableProductLinks')->willReturn([1]);
+
+        $productMock = $this->createMock(Product::class);
+        $productMock->method('getWebsiteIds')->willReturn([$websiteId]);
+        $productMock->method('getId')->willReturn(1);
+        $productMock->method('getData')->willReturn(1);
+        $productMock->method('getExtensionAttributes')->willReturn($extensionAttributes);
+
+        $childProductMock = $this->createMock(Product::class);
+        $childProductMock->method('getId')->willReturn(1);
+        $childProductMock->method('getData')->willReturn(1);
+
         $this->productRepository->method('get')
-            ->willReturn($productMock);
-        $checkResult = new \Magento\Framework\DataObject();
+            ->willReturnCallback(
+                /** @param mixed $editMode @param mixed $storeId @param mixed $forceReload */
+                function (
+                    $sku,
+                    $editMode = false,
+                    $storeId = null,
+                    $forceReload = false
+                ) use (
+                    $productMock,
+                    $childProductMock
+                ) {
+                    unset($editMode, $storeId, $forceReload);
+                    if ($sku === 'configurable') {
+                        return $productMock;
+                    } elseif ($sku === 'simple1') {
+                        return $childProductMock;
+                    }
+                    return null;
+                }
+            );
+        $checkResult = new DataObject();
         $checkResult->setHasError(false);
         $this->stockState->method('checkQuoteItemQty')
             ->willReturn($checkResult);

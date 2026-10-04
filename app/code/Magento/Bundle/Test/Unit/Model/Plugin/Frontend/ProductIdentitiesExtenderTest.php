@@ -32,19 +32,18 @@ class ProductIdentitiesExtenderTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->product = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getEntityId', 'getTypeId'])
-            ->getMock();
+        $this->product = $this->createPartialMock(Product::class, ['getEntityId', 'getTypeId']);
 
-        $this->type = $this->getMockBuilder(Type::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getChildrenIds'])
-            ->getMock();
+        $this->type = $this->createPartialMock(Type::class, ['getChildrenIds']);
 
         $this->plugin = new ProductPlugin($this->type);
     }
 
+    /**
+     * Verify after get identities
+     *
+     * @return void
+     */
     public function testAfterGetIdentities(): void
     {
         $baseIdentities = [

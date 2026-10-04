@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 
 return [
@@ -13,4 +13,5 @@ return [
     \Magento\Framework\ObjectManager\DefinitionInterface::class,
     \Magento\Framework\Session\Config::class,
     \Magento\Framework\ObjectManager\Config\Mapper\Dom::class,
+    \Magento\Framework\Stomp\StompClientProvider::class,
 ];

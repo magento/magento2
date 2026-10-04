@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Model;
 
@@ -140,6 +140,7 @@ class AttributeMetadataResolver
                 $meta['arguments']['data']['config'][$metaName] = $value;
             }
             if ('frontend_input' === $origName) {
+                $value = $value ?? '';
                 $meta['arguments']['data']['config']['formElement'] = self::$formElement[$value] ?? $value;
             }
         }

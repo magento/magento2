@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\LayeredNavigation\Block\Navigation\AbstractFiltersTest;
 use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
 use Magento\Catalog\Model\Layer\Filter\Item;
 use Magento\Store\Model\ScopeInterface as StoreScope;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Provides price filter tests with different price ranges calculation in navigation block on category page.
@@ -40,12 +41,12 @@ class PriceFilterTest extends AbstractFiltersTest
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/category_with_three_products.php
-     * @dataProvider getFiltersDataProvider
      * @param array $config
      * @param array $products
      * @param array $expectation
      * @return void
      */
+    #[DataProvider('getFiltersDataProvider')]
     public function testGetFilters(array $config, array $products, array $expectation): void
     {
         $this->applyCatalogConfig($config);
@@ -164,13 +165,13 @@ class PriceFilterTest extends AbstractFiltersTest
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/category_with_three_products.php
-     * @dataProvider getActiveFiltersDataProvider
      * @param array $config
      * @param array $products
      * @param array $expectation
      * @param string $filterValue
      * @return void
      */
+    #[DataProvider('getActiveFiltersDataProvider')]
     public function testGetActiveFilters(array $config, array $products, array $expectation, string $filterValue): void
     {
         $this->applyCatalogConfig($config);

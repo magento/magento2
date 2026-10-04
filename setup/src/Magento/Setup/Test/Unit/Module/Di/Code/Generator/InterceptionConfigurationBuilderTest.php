@@ -16,6 +16,7 @@ use Magento\Setup\Module\Di\Code\Generator\InterceptionConfigurationBuilder;
 use Magento\Setup\Module\Di\Code\Generator\PluginList;
 use Magento\Setup\Module\Di\Code\Reader\Type;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class InterceptionConfigurationBuilderTest extends TestCase
@@ -78,8 +79,8 @@ class InterceptionConfigurationBuilderTest extends TestCase
     }
 
     /**
-     * @dataProvider getInterceptionConfigurationDataProvider
      */
+    #[DataProvider('getInterceptionConfigurationDataProvider')]
     public function testGetInterceptionConfiguration($plugins)
     {
         $definedClasses = ['Class1'];

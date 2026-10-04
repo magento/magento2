@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -94,7 +94,7 @@ class GroupedCollectionTest extends TestCase
     {
         $cssAsset = new Remote('http://127.0.0.1/style.css', 'css');
         $jsAsset = new Remote('http://127.0.0.1/script.js', 'js');
-        $jsAssetAllowingMerge = $this->getMockForAbstractClass(MergeableInterface::class);
+        $jsAssetAllowingMerge = $this->createMock(MergeableInterface::class);
         $jsAssetAllowingMerge->expects($this->any())->method('getContentType')->willReturn('js');
 
         // assets with identical properties should be grouped together

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -67,21 +67,12 @@ class AttributesTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->contextMock = $this->getMockBuilder(ContextInterface::class)
-            ->getMockForAbstractClass();
-        $this->attributeRepositoryMock = $this->getMockBuilder(ProductAttributeRepositoryInterface::class)
-            ->getMockForAbstractClass();
-        $this->searchCriteriaBuilderMock = $this->getMockBuilder(SearchCriteriaBuilder::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->uiElementProcessorMock = $this->getMockBuilder(UiElementProcessor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->searchCriteriaMock = $this->getMockBuilder(SearchCriteria::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->searchResultsMock = $this->getMockBuilder(ProductAttributeSearchResultsInterface::class)
-            ->getMockForAbstractClass();
+        $this->contextMock = $this->createMock(ContextInterface::class);
+        $this->attributeRepositoryMock = $this->createMock(ProductAttributeRepositoryInterface::class);
+        $this->searchCriteriaBuilderMock = $this->createMock(SearchCriteriaBuilder::class);
+        $this->uiElementProcessorMock = $this->createMock(UiElementProcessor::class);
+        $this->searchCriteriaMock = $this->createMock(SearchCriteria::class);
+        $this->searchResultsMock = $this->createMock(ProductAttributeSearchResultsInterface::class);
 
         $this->contextMock->expects(static::never())
             ->method('getProcessor')
@@ -209,8 +200,7 @@ class AttributesTest extends TestCase
      */
     private function createAttributeMock($attributeCode, $defaultFrontendLabel, array $options = [])
     {
-        $attributeMock = $this->getMockBuilder(ProductAttributeInterface::class)
-            ->getMockForAbstractClass();
+        $attributeMock = $this->createMock(ProductAttributeInterface::class);
 
         $attributeMock->expects(static::any())
             ->method('getAttributeCode')
@@ -234,8 +224,7 @@ class AttributesTest extends TestCase
      */
     private function createAttributeOptionMock($value, $label)
     {
-        $attributeOptionMock = $this->getMockBuilder(AttributeOptionInterface::class)
-            ->getMockForAbstractClass();
+        $attributeOptionMock = $this->createMock(AttributeOptionInterface::class);
 
         $attributeOptionMock->expects(static::any())
             ->method('getValue')

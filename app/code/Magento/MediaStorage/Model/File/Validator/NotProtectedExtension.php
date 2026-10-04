@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\MediaStorage\Model\File\Validator;
@@ -85,7 +85,9 @@ class NotProtectedExtension extends AbstractValidator
     {
         if (!$this->_protectedFileExtensions) {
             $extensions = $this->getProtectedFileExtensions();
-            if (is_string($extensions)) {
+            if ($extensions === null || $extensions === '') {
+                $extensions = [];
+            } elseif (is_string($extensions)) {
                 $extensions = explode(',', $extensions);
             }
             foreach ($extensions as &$ext) {

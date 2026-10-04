@@ -20,7 +20,8 @@
             "SEARCH_QUERY_QUERY_TEXT_STORE_ID_POPULARITY": false,
             "SEARCH_QUERY_STORE_ID_NUM_RESULTS_POPULARITY": true,
             "SEARCH_QUERY_STORE_ID": false,
-            "SEARCH_QUERY_STORE_ID_POPULARITY": false
+            "SEARCH_QUERY_STORE_ID_POPULARITY": false,
+            "SEARCH_QUERY_POPULARITY_QUERY_TEXT_STORE_ID_NUM_RESULTS": true
         },
         "constraint": {
             "PRIMARY": true,

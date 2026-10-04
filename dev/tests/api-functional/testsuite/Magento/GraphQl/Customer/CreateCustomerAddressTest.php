@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Create customer address tests
@@ -524,11 +525,11 @@ MUTATION;
      * Create new address with invalid input
      *
      * @magentoApiDataFixture Magento/Customer/_files/customer_without_addresses.php
-     * @dataProvider invalidInputDataProvider
      * @param string $input
      * @param $exceptionMessage
      * @throws Exception
      */
+    #[DataProvider('invalidInputDataProvider')]
     public function testCreateCustomerAddressWithInvalidInput($input, $exceptionMessage)
     {
         $mutation

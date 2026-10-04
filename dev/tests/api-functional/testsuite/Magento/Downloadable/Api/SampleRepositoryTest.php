@@ -1,14 +1,16 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Downloadable\Api;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Product;
 use Magento\Downloadable\Model\Sample;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Helper\DownloadableDomains;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
@@ -45,7 +47,7 @@ class SampleRepositoryTest extends WebapiAbstract
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->domainManager = $objectManager->get(DomainManagerInterface::class);
-        $this->domainManager->addDomains(['example.com']);
+        DownloadableDomains::addDomains($this->domainManager, ['example.com']);
 
         $this->createServiceInfo = [
             'rest' => [
@@ -90,7 +92,7 @@ class SampleRepositoryTest extends WebapiAbstract
     protected function tearDown(): void
     {
         parent::tearDown();
-        $this->domainManager->removeDomains(['example.com']);
+        DownloadableDomains::removeDomains($this->domainManager, ['example.com']);
     }
 
     /**
@@ -294,8 +296,8 @@ class SampleRepositoryTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable.php
-     * @dataProvider getInvalidSortOrder
      */
+    #[DataProvider('getInvalidSortOrder')]
     public function testCreateThrowsExceptionIfSortOrderIsInvalid($sortOrder)
     {
         $this->expectException(\Exception::class);
@@ -412,8 +414,8 @@ class SampleRepositoryTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable_with_files.php
-     * @dataProvider getInvalidSortOrder
      */
+    #[DataProvider('getInvalidSortOrder')]
     public function testUpdateThrowsExceptionIfSortOrderIsInvalid($sortOrder)
     {
         $this->expectException(\Exception::class);
@@ -453,8 +455,8 @@ class SampleRepositoryTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable_with_files.php
-     * @dataProvider getListForAbsentProductProvider
      */
+    #[DataProvider('getListForAbsentProductProvider')]
     public function testGetList($urlTail, $method, $expectations)
     {
         $sku = 'downloadable-product';
@@ -549,11 +551,6 @@ class SampleRepositoryTest extends WebapiAbstract
      */
     public function testCreateThrowsExceptionIfTargetProductDoesNotExist()
     {
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage(
-            'The product that was requested doesn\'t exist. Verify the product and try again.'
-        );
-
         $this->createServiceInfo['rest']['resourcePath'] = '/V1/products/wrong-sku/downloadable-links/samples';
         $requestData = [
             'isGlobalScopeContent' => false,
@@ -565,18 +562,22 @@ class SampleRepositoryTest extends WebapiAbstract
                 'sample_url' => 'http://example.com/',
             ],
         ];
-        $this->_webApiCall($this->createServiceInfo, $requestData);
+
+        $expectedMessage = 'The product with SKU "%1" does not exist.';
+        try {
+            $this->_webApiCall($this->createServiceInfo, $requestData);
+        } catch (\SoapFault $e) {
+            $this->assertEquals($expectedMessage, $e->getMessage());
+        } catch (\Exception $e) {
+            $errorObj = $this->processRestExceptionResult($e);
+            $this->assertEquals($expectedMessage, $errorObj['message']);
+        }
     }
 
     /**
      */
     public function testUpdateThrowsExceptionIfTargetProductDoesNotExist()
     {
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage(
-            'The product that was requested doesn\'t exist. Verify the product and try again.'
-        );
-
         $this->updateServiceInfo['rest']['resourcePath'] = '/V1/products/wrong-sku/downloadable-links/samples/1';
         $requestData = [
             'isGlobalScopeContent' => true,
@@ -588,6 +589,15 @@ class SampleRepositoryTest extends WebapiAbstract
                 'sample_type' => 'url',
             ],
         ];
-        $this->_webApiCall($this->updateServiceInfo, $requestData);
+
+        $expectedMessage = 'The product with SKU "%1" does not exist.';
+        try {
+            $this->_webApiCall($this->updateServiceInfo, $requestData);
+        } catch (\SoapFault $e) {
+            $this->assertEquals($expectedMessage, $e->getMessage());
+        } catch (\Exception $e) {
+            $errorObj = $this->processRestExceptionResult($e);
+            $this->assertEquals($expectedMessage, $errorObj['message']);
+        }
     }
 }

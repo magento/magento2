@@ -64,7 +64,7 @@ class ReEncryptDataCommand extends Command
     /**
      * @inheritDoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $requestedReEncryptorsNames = $input->getArgument(
             self::INPUT_KEY_ENCRYPTORS

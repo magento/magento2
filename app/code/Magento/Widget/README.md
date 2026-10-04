@@ -1,10 +1,10 @@
 # Magento_Widget module
 
-The Magento_Widget module allows Magento application to be extended with custom widget blocks.
+This module allows Magento application to be extended with custom widget blocks.
 
 ## Installation details
 
-Before installing this module, note that the Magento_Widget is dependent on the following modules:
+Before installing this module, note that this module is dependent on the following modules:
 
 - Magento_Catalog
 - Magento_Cms
@@ -16,13 +16,13 @@ Before disabling or uninstalling this module, note the following dependencies:
 - Magento_CurrencySymbol
 - Magento_Newsletter
 
-Refer to [how to enable or disable modules in Magento 2](https://experienceleague.adobe.com/docs/commerce-operations/installation-guide/tutorials/manage-modules.html).
+Refer to [how to enable or disable modules in Magento 2](https://experienceleague.adobe.com/en/docs/commerce-operations/installation-guide/tutorials/manage-modules).
 
 ## Extensibility
 
-Extension developers can interact with the Magento_Widget module. For more information about the Magento extension mechanism, see [Magento plug-ins](https://developer.adobe.com/commerce/php/development/components/plugins/).
+Extension developers can interact with this module. For more information about the extension mechanism, see [Plugins](https://developer.adobe.com/commerce/php/development/components/plugins/).
 
-[The Magento dependency injection mechanism](https://developer.adobe.com/commerce/php/development/components/dependency-injection/) enables you to override the functionality of the Magento_Widget module.
+[The dependency injection mechanism](https://developer.adobe.com/commerce/php/development/components/dependency-injection/) enables you to override the functionality of this module.
 
 ### Layouts
 

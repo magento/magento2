@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Widget\Setup;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class LayoutUpdateConverterTest extends \PHPUnit\Framework\TestCase
 {
@@ -22,8 +24,8 @@ class LayoutUpdateConverterTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $value
      * @param string $expected
-     * @dataProvider convertDataProvider
      */
+    #[DataProvider('convertDataProvider')]
     public function testConvert($value, $expected)
     {
         $this->assertEquals($expected, $this->converter->convert($value));

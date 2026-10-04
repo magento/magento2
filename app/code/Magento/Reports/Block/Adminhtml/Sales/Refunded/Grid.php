@@ -6,6 +6,8 @@
 
 namespace Magento\Reports\Block\Adminhtml\Sales\Refunded;
 
+use Magento\Reports\Block\Adminhtml\Grid\Column\Renderer\Currency;
+
 /**
  * Adminhtml refunded report grid block
  *
@@ -88,7 +90,8 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
                 'sortable' => false,
                 'rate' => $rate,
                 'header_css_class' => 'col-ref-total',
-                'column_css_class' => 'col-ref-total'
+                'column_css_class' => 'col-ref-total',
+                'renderer' => Currency::class
             ]
         );
 
@@ -103,7 +106,8 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
                 'sortable' => false,
                 'rate' => $rate,
                 'header_css_class' => 'col-ref-online',
-                'column_css_class' => 'col-ref-online'
+                'column_css_class' => 'col-ref-online',
+                'renderer' => Currency::class
             ]
         );
 
@@ -118,7 +122,8 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
                 'sortable' => false,
                 'rate' => $rate,
                 'header_css_class' => 'col-ref-offline',
-                'column_css_class' => 'col-ref-offline'
+                'column_css_class' => 'col-ref-offline',
+                'renderer' => Currency::class
             ]
         );
 

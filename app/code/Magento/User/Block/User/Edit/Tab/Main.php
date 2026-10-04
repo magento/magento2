@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2012 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\User\Block\User\Edit\Tab;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Locale\OptionInterface;
+use Magento\User\Model\UserValidationRules;
 
 /**
  * Cms page edit form main tab
@@ -16,7 +17,7 @@ use Magento\Framework\Locale\OptionInterface;
  */
 class Main extends \Magento\Backend\Block\Widget\Form\Generic
 {
-    const CURRENT_USER_PASSWORD_FIELD = 'current_password';
+    public const CURRENT_USER_PASSWORD_FIELD = 'current_password';
 
     /**
      * @var \Magento\Backend\Model\Auth\Session
@@ -200,6 +201,17 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
+     * Get minimum password length from configuration
+     *
+     * @return int
+     */
+    public function getMinimumPasswordLength(): int
+    {
+        return (int) $this->_scopeConfig->getValue('admin/security/minimum_password_length') ?:
+            UserValidationRules::MIN_PASSWORD_LENGTH;
+    }
+
+    /**
      * Add password input fields
      *
      * @param \Magento\Framework\Data\Form\Element\Fieldset $fieldset
@@ -215,6 +227,8 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic
         $isRequired = false
     ) {
         $requiredFieldClass = $isRequired ? ' required-entry' : '';
+        $minLength = $this->getMinimumPasswordLength();
+        
         $fieldset->addField(
             'password',
             'password',
@@ -223,7 +237,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic
                 'label' => $passwordLabel,
                 'id' => 'customer_pass',
                 'title' => $passwordLabel,
-                'class' => 'input-text validate-admin-password' . $requiredFieldClass,
+                'class' => 'input-text validate-admin-password admin-password-min-' . $minLength . $requiredFieldClass,
                 'required' => $isRequired
             ]
         );

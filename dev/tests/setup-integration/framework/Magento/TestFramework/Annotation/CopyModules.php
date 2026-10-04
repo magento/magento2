@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\TestFramework\Annotation;
@@ -91,7 +91,6 @@ class CopyModules
     {
         $reflection = new \ReflectionClass(ComponentRegistrar::class);
         $reflectionProperty = $reflection->getProperty('paths');
-        $reflectionProperty->setAccessible(true);
         $value = $reflectionProperty->getValue();
         unset($value[ComponentRegistrar::MODULE][$moduleName]);
         $reflectionProperty->setValue(null, $value);

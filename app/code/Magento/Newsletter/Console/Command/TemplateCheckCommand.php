@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -60,7 +60,7 @@ class TemplateCheckCommand extends DatabaseTemplateCompatibilityCommand
      * @param OutputInterface $output
      * @return int|null
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $collection = $this->templateCollection->create();
         $collection->load();

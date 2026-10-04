@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,9 +13,11 @@ use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class SaveRatesTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var SaveRates
      */
@@ -35,12 +37,12 @@ class SaveRatesTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->requestMock = $this->createMock(RequestInterface::class);
 
-        $this->responseMock = $this->getMockBuilder(ResponseInterface::class)
-            ->addMethods(['setRedirect'])
-            ->onlyMethods(['sendResponse'])
-            ->getMockForAbstractClass();
+        $this->responseMock = $this->createPartialMockWithReflection(
+            ResponseInterface::class,
+            ['setRedirect', 'sendResponse']
+        );
 
         $this->action = $objectManager->getObject(
             SaveRates::class,

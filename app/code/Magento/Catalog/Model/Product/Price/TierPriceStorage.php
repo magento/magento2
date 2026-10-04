@@ -11,6 +11,7 @@ use Magento\Catalog\Api\TierPriceStorageInterface;
 use Magento\Catalog\Model\Indexer\Product\Price\Processor as PriceIndexerProcessor;
 use Magento\Catalog\Model\Product\Price\Validation\TierPriceValidator;
 use Magento\Catalog\Model\ProductIdLocatorInterface;
+use Magento\Framework\Exception\InputException;
 use Magento\Customer\Model\ResourceModel\Group\GetCustomerGroupCodesByIds;
 
 class TierPriceStorage implements TierPriceStorageInterface
@@ -86,8 +87,13 @@ class TierPriceStorage implements TierPriceStorageInterface
     /**
      * @inheritdoc
      */
-    public function update(array $prices)
+    public function update($prices)
     {
+        if ($prices === null || !is_array($prices)) {
+            throw new InputException(
+                __('Invalid input data format. Expected an array of prices.')
+            );
+        }
         $affectedIds = $this->retrieveAffectedProductIdsForPrices($prices);
         $skus = array_unique(
             array_map(
@@ -124,8 +130,13 @@ class TierPriceStorage implements TierPriceStorageInterface
     /**
      * @inheritdoc
      */
-    public function delete(array $prices)
+    public function delete($prices)
     {
+        if ($prices === null || !is_array($prices)) {
+            throw new InputException(
+                __('Invalid input data format. Expected an array of prices.')
+            );
+        }
         $affectedIds = $this->retrieveAffectedProductIdsForPrices($prices);
         $result = $this->tierPriceValidator->retrieveValidationResult($prices);
         $prices = $this->removeIncorrectPrices($prices, $result->getFailedRowIds());
@@ -274,6 +285,7 @@ class TierPriceStorage implements TierPriceStorageInterface
                 && $existingPrice['qty'] == $price['qty']
                 && $this->isCorrectPriceValue($existingPrice, $price)
                 && $existingPrice[$linkField] == $price[$linkField]
+                && $existingPrice['website_id'] == $price['website_id']
             ) {
                 return (int) $existingPrice['value_id'];
             }

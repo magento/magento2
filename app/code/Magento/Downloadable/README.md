@@ -1,2 +1,4 @@
-Magento_Downloadable module introduces new product type in the Magento application called Downloadable Product.
-This module is designed to extend existing functionality of Magento_Catalog module by adding new product type.
+# Magento_Downloadable module
+
+This module introduces a new product type called Downloadable Product.
+It extends the functionality of the Magento_Catalog module by adding this new product type.

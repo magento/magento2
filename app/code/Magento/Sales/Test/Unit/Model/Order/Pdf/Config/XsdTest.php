@@ -12,12 +12,14 @@ use Magento\Framework\Config\Dom\UrnResolver;
 use Magento\Framework\Config\ValidationStateInterface;
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for validation rules implemented by XSD schema for sales PDF rendering configuration
  */
 class XsdTest extends TestCase
 {
+
     /**
      * @var string
      */
@@ -45,8 +47,8 @@ class XsdTest extends TestCase
     /**
      * @param string $fixtureXml
      * @param array $expectedErrors
-     * @dataProvider schemaByExemplarDataProvider
      */
+    #[DataProvider('schemaByExemplarDataProvider')]
     public function testSchemaByExemplar($fixtureXml, array $expectedErrors)
     {
         $this->_testSchema(self::$_schemaPath, $fixtureXml, $expectedErrors);
@@ -55,8 +57,8 @@ class XsdTest extends TestCase
     /**
      * @param string $fixtureXml
      * @param array $expectedErrors
-     * @dataProvider fileSchemaByExemplarDataProvider
      */
+    #[DataProvider('fileSchemaByExemplarDataProvider')]
     public function testFileSchemaByExemplar($fixtureXml, array $expectedErrors)
     {
         $this->_testSchema(self::$_schemaFilePath, $fixtureXml, $expectedErrors);
@@ -71,7 +73,7 @@ class XsdTest extends TestCase
      */
     protected function _testSchema($schema, $fixtureXml, array $expectedErrors)
     {
-        $validationStateMock = $this->getMockForAbstractClass(ValidationStateInterface::class);
+        $validationStateMock = $this->createMock(ValidationStateInterface::class);
         $validationStateMock->method('isValidationRequired')
             ->willReturn(true);
         $dom = new Dom($fixtureXml, $validationStateMock, [], null, null, '%message%');

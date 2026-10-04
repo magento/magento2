@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -18,6 +18,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\SendFriend\Model\CaptchaValidator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -26,7 +27,7 @@ use PHPUnit\Framework\TestCase;
  */
 class CaptchaValidatorTest extends TestCase
 {
-    const FORM_ID = 'product_sendtofriend_form';
+    private const FORM_ID = 'product_sendtofriend_form';
 
     /**
      * @var CaptchaValidator
@@ -72,12 +73,10 @@ class CaptchaValidatorTest extends TestCase
 
         $this->captchaHelperMock = $this->createMock(Data::class);
         $this->captchaStringResolverMock = $this->createMock(CaptchaStringResolver::class);
-        $this->currentUserMock = $this->getMockBuilder(UserContextInterface::class)
-            ->getMockForAbstractClass();
-        $this->customerRepositoryMock = $this->getMockForAbstractClass(CustomerRepositoryInterface::class);
+        $this->currentUserMock = $this->createMock(UserContextInterface::class);
+        $this->customerRepositoryMock = $this->createMock(CustomerRepositoryInterface::class);
         $this->captchaMock = $this->createMock(DefaultModel::class);
-        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->getMock();
+        $this->requestMock = $this->createMock(RequestInterface::class);
 
         $this->model = $objectManager->getObject(
             CaptchaValidator::class,
@@ -93,14 +92,13 @@ class CaptchaValidatorTest extends TestCase
     /**
      * Testing the captcha validation before sending the email
      *
-     * @dataProvider captchaProvider
-     *
      * @param bool $captchaIsRequired
      * @param bool $captchaWordIsValid
      *
      * @throws LocalizedException
      * @throws NoSuchEntityException
      */
+    #[DataProvider('captchaProvider')]
     public function testCaptchaValidationOnSend(bool $captchaIsRequired, bool $captchaWordIsValid)
     {
         $word = 'test-word';

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright 2018 Adobe.
+ * Copyright 2018 Adobe
  * All Rights Reserved.
  */
 -->
@@ -30,5 +30,6 @@
         <element name="rateValue" type="text" selector="//table[contains(@class, 'order-information-table')]//th[contains(text(), 'rate:')]/following-sibling::td"/>
         <element name="historyStatus" type="button" selector="//select[@name='history[status]']"/>
         <element name="statusUpdate" type="button" selector="//button[@title='Update']"/>
+        <element name="orderNote" type="block" selector="//div[@id='order_history_block']//ul[@class='note-list']"/>
     </section>
 </sections>

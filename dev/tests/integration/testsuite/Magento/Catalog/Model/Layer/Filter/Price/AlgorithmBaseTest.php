@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\Layer\Filter\Price;
 
-use Magento\Framework\Search\Dynamic\IntervalInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test class for \Magento\Catalog\Model\Layer\Filter\Price.
@@ -39,12 +39,12 @@ class AlgorithmBaseTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
-     * @dataProvider pricesSegmentationDataProvider
      * @param $categoryId
      * @param array $entityIds
      * @param array $intervalItems
      * @covers \Magento\Framework\Search\Dynamic\Algorithm::calculateSeparators
      */
+    #[DataProvider('pricesSegmentationDataProvider')]
     public function testPricesSegmentation($categoryId, array $entityIds, array $intervalItems)
     {
         $this->markTestSkipped('MC-33826:'

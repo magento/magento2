@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Filter;
 
@@ -27,12 +27,14 @@ class Translit implements FilterInterface
         'À' => 'a',
         'Á' => 'a',
         'Â' => 'a',
+        'Ã' => 'a',
         'Ä' => 'a',
         'Å' => 'a',
         'Æ' => 'ae',
         'Ç' => 'c',
         'È' => 'e',
         'É' => 'e',
+        'Ê' => 'e',
         'Ë' => 'e',
         'Ì' => 'i',
         'Í' => 'i',
@@ -53,6 +55,7 @@ class Translit implements FilterInterface
         'à' => 'a',
         'á' => 'a',
         'â' => 'a',
+        'ã' => 'a',
         'ä' => 'a',
         'å' => 'a',
         'æ' => 'ae',

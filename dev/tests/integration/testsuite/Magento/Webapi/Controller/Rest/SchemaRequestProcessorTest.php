@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Webapi\Controller\Rest;
 
 use Magento\TestFramework\TestCase\AbstractController;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class SchemaRequestProcessorTest extends AbstractController
 {
@@ -14,8 +15,8 @@ class SchemaRequestProcessorTest extends AbstractController
      * Test that the rest controller returns the correct schema response.
      *
      * @param string $path
-     * @dataProvider schemaRequestProvider
      */
+    #[DataProvider('schemaRequestProvider')]
     public function testSchemaRequest($path)
     {
         ob_start();

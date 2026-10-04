@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -35,9 +35,7 @@ class IndexTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->context = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->context = $this->createMock(Context::class);
 
         $resultPageFactory = $this->initResultPage();
 
@@ -49,13 +47,9 @@ class IndexTest extends TestCase
      */
     protected function initResultPage()
     {
-        $this->resultPage = $this->getMockBuilder(Page::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resultPage = $this->createMock(Page::class);
 
-        $resultPageFactory = $this->getMockBuilder(PageFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $resultPageFactory = $this->createMock(PageFactory::class);
         $resultPageFactory->expects($this->any())
             ->method('create')
             ->willReturn($this->resultPage);
@@ -64,17 +58,13 @@ class IndexTest extends TestCase
 
     public function testExecute()
     {
-        $pageTitle = $this->getMockBuilder(Title::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $pageTitle = $this->createMock(Title::class);
         $pageTitle->expects($this->once())
             ->method('prepend')
             ->with(__('Design Configuration'))
             ->willReturnSelf();
 
-        $pageConfig = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $pageConfig = $this->createMock(Config::class);
         $pageConfig->expects($this->once())
             ->method('getTitle')
             ->willReturn($pageTitle);

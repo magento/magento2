@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -69,7 +69,7 @@ class AttributeMetadataHydratorTest extends TestCase
         );
         $this->optionFactoryMock = $this->createPartialMock(OptionInterfaceFactory::class, ['create']);
         $this->validationRuleFactoryMock = $this->createPartialMock(ValidationRuleInterfaceFactory::class, ['create']);
-        $this->attributeMetadataMock = $this->getMockForAbstractClass(AttributeMetadataInterface::class);
+        $this->attributeMetadataMock = $this->createMock(AttributeMetadataInterface::class);
         $this->dataObjectProcessorMock = $this->createMock(DataObjectProcessor::class);
         $this->attributeMetadataHydrator = $objectManager->getObject(
             AttributeMetadataHydrator::class,

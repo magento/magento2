@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -72,15 +72,7 @@ class ContentUploaderTest extends TestCase
             ->disableOriginalConstructor()
             ->onlyMethods(['getDirectoryWrite'])
             ->getMock();
-        $systemTmpDirectory = $this->getMockForAbstractClass(
-            WriteInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['writeFile']
-        );
+        $systemTmpDirectory = $this->createMock(WriteInterface::class);
         $systemTmpDirectory->expects($this->once())->method('writeFile')->willReturn(1);
         $systemTmpDirectory->method('getAbsolutePath')->willReturn($this->filePath);
 
@@ -91,15 +83,10 @@ class ContentUploaderTest extends TestCase
         $sampleConfig = $this->getMockBuilder(Sample::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->model = $this->getMockForAbstractClass(
-            ContentUploader::class,
-            [$database, $storage, $validator, $filesystem, $link, $sampleConfig],
-            '',
-            true,
-            true,
-            true,
-            ['save']
-        );
+        $this->model = $this->getMockBuilder(ContentUploader::class)
+            ->setConstructorArgs([$database, $storage, $validator, $filesystem, $link, $sampleConfig])
+            ->onlyMethods(['save'])
+            ->getMock();
     }
 
     public function testUploadWithSuccessSave()

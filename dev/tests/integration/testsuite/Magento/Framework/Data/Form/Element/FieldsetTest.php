@@ -1,13 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Tests for \Magento\Framework\Data\Form\Element\Fieldset
  */
 namespace Magento\Framework\Data\Form\Element;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class FieldsetTest extends \PHPUnit\Framework\TestCase
 {
@@ -36,9 +38,8 @@ class FieldsetTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test whether fieldset contains advanced section or not
-     *
-     * @dataProvider fieldsDataProvider
      */
+    #[DataProvider('fieldsDataProvider')]
     public function testHasAdvanced(array $fields, $expect)
     {
         $this->_fillFieldset($fields);
@@ -145,9 +146,7 @@ class FieldsetTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @dataProvider getChildrenDataProvider
-     */
+    #[DataProvider('getChildrenDataProvider')]
     public function testGetChildren($fields, $expect)
     {
         $this->_fillFieldset($fields);
@@ -168,10 +167,10 @@ class FieldsetTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider getBasicChildrenDataProvider
      * @param array $fields
      * @param int $expect
      */
+    #[DataProvider('getBasicChildrenDataProvider')]
     public function testGetBasicChildren($fields, $expect)
     {
         $this->_fillFieldset($fields);
@@ -179,10 +178,10 @@ class FieldsetTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider getBasicChildrenDataProvider
      * @param array $fields
      * @param int $expect
      */
+    #[DataProvider('getBasicChildrenDataProvider')]
     public function testGetCountBasicChildren($fields, $expect)
     {
         $this->_fillFieldset($fields);
@@ -201,10 +200,10 @@ class FieldsetTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider getAdvancedChildrenDataProvider
      * @param array $fields
      * @param int $expect
      */
+    #[DataProvider('getAdvancedChildrenDataProvider')]
     public function testGetAdvancedChildren($fields, $expect)
     {
         $this->_fillFieldset($fields);
@@ -226,10 +225,10 @@ class FieldsetTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider getSubFieldsetDataProvider
      * @param array $fields
      * @param int $expect
      */
+    #[DataProvider('getSubFieldsetDataProvider')]
     public function testGetSubFieldset($fields, $expect)
     {
         $this->_fillFieldset($fields);

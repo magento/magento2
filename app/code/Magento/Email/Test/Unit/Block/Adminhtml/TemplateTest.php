@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -60,15 +60,7 @@ class TemplateTest extends TestCase
             ButtonList::class,
             [ 'itemFactory' => $this->itemFactoryMock]
         );
-        $this->urlBuilderMock = $this->getMockForAbstractClass(
-            UrlInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['getUrl']
-        );
+        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
         $this->context = $this->objectManager->getObject(
             Context::class,
             [

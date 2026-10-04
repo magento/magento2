@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -54,9 +54,7 @@ class ImageTest extends TestCase
         $this->backendHelperMock = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->urlEncoder = $this->getMockBuilder(EncoderInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->urlEncoder = $this->createMock(EncoderInterface::class);
         $this->image = $objectManager->getObject(
             Image::class,
             [

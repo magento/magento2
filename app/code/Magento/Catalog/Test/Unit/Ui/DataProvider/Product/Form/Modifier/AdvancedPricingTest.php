@@ -16,6 +16,7 @@ use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Module\Manager as ModuleManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 
@@ -25,6 +26,11 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 class AdvancedPricingTest extends AbstractModifierTestCase
 {
+    /**
+     * @var ObjectManager
+     */
+    protected $objectManager;
+
     /**
      * @var StoreManagerInterface|MockObject
      */
@@ -73,33 +79,18 @@ class AdvancedPricingTest extends AbstractModifierTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
-            ->getMockForAbstractClass();
-        $this->groupRepositoryMock = $this->getMockBuilder(GroupRepositoryInterface::class)
-            ->getMockForAbstractClass();
-        $this->groupManagementMock = $this->getMockBuilder(GroupManagementInterface::class)
-            ->getMockForAbstractClass();
-        $this->searchCriteriaBuilderMock = $this->getMockBuilder(SearchCriteriaBuilder::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->moduleManagerMock = $this->getMockBuilder(ModuleManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->directoryHelperMock = $this->getMockBuilder(DirectoryHelper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->productResourceMock = $this->getMockBuilder(ProductResource::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->attributeMock = $this->getMockBuilder(Attribute::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->customerGroupMock = $this->getMockBuilder(CustomerGroupInterface::class)
-            ->getMockForAbstractClass();
+        $this->objectManager = new ObjectManager($this);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->groupRepositoryMock = $this->createMock(GroupRepositoryInterface::class);
+        $this->groupManagementMock = $this->createMock(GroupManagementInterface::class);
+        $this->searchCriteriaBuilderMock = $this->createMock(SearchCriteriaBuilder::class);
+        $this->moduleManagerMock = $this->createMock(ModuleManager::class);
+        $this->directoryHelperMock = $this->createMock(DirectoryHelper::class);
+        $this->productResourceMock = $this->createMock(ProductResource::class);
+        $this->attributeMock = $this->createMock(Attribute::class);
+        $this->customerGroupMock = $this->createMock(CustomerGroupInterface::class);
 
-        $this->groupManagementMock->expects($this->any())
-            ->method('getAllCustomersGroup')
-            ->willReturn($this->customerGroupMock);
+        $this->groupManagementMock->method('getAllCustomersGroup')->willReturn($this->customerGroupMock);
     }
 
     /**

@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -76,9 +75,7 @@ class ReportTest extends TestCase
         $this->titleMock = $this->getMockBuilder(Title::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
         $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -81,6 +81,11 @@ class LastOrderedItems implements SectionSourceInterface
     private $logger;
 
     /**
+     * @var bool|null
+     */
+    private $skipDeletedProductLogging;
+
+    /**
      * @param CollectionFactoryInterface $orderCollectionFactory
      * @param Config $orderConfig
      * @param Session $customerSession
@@ -88,6 +93,7 @@ class LastOrderedItems implements SectionSourceInterface
      * @param StoreManagerInterface $storeManager
      * @param ProductRepositoryInterface $productRepository
      * @param LoggerInterface $logger
+     * @param bool|null $skipDeletedProductLogging
      */
     public function __construct(
         CollectionFactoryInterface $orderCollectionFactory,
@@ -96,7 +102,8 @@ class LastOrderedItems implements SectionSourceInterface
         StockRegistryInterface $stockRegistry,
         StoreManagerInterface $storeManager,
         ProductRepositoryInterface $productRepository,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        ?bool $skipDeletedProductLogging = null
     ) {
         $this->_orderCollectionFactory = $orderCollectionFactory;
         $this->_orderConfig = $orderConfig;
@@ -105,6 +112,7 @@ class LastOrderedItems implements SectionSourceInterface
         $this->_storeManager = $storeManager;
         $this->productRepository = $productRepository;
         $this->logger = $logger;
+        $this->skipDeletedProductLogging = $skipDeletedProductLogging;
     }
 
     /**
@@ -149,7 +157,9 @@ class LastOrderedItems implements SectionSourceInterface
                         $this->_storeManager->getStore()->getId()
                     );
                 } catch (NoSuchEntityException $noEntityException) {
-                    $this->logger->critical($noEntityException);
+                    if ($this->skipDeletedProductLogging !== true) {
+                        $this->logger->critical($noEntityException);
+                    }
                     continue;
                 }
                 if (in_array($website, $product->getWebsiteIds())) {

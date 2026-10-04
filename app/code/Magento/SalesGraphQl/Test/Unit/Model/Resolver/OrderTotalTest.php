@@ -7,21 +7,24 @@ declare(strict_types=1);
 
 namespace Magento\SalesGraphQl\Test\Unit\Model\Resolver;
 
-use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\Api\ExtensionAttributesInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
+use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use Magento\Sales\Api\Data\OrderInterface;
+use Magento\SalesGraphQl\Model\Resolver\OrderTotal;
 use Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface;
+use Magento\Tax\Api\Data\OrderTaxDetailsInterface;
 use Magento\Tax\Api\OrderTaxManagementInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\SalesGraphQl\Model\Resolver\OrderTotal;
-use Magento\Sales\Api\Data\OrderInterface;
-use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Tax\Api\Data\OrderTaxDetailsInterface;
 
 class OrderTotalTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var OrderInterface|MockObject
      */
@@ -105,10 +108,10 @@ class OrderTotalTest extends TestCase
         $this->orderTaxManagementMock->expects($this->any())->method('getOrderTaxDetails')->willReturn(
             $this->orderTaxDetailsMock
         );
-        $this->extensionAttributesMock = $this->getMockBuilder(ExtensionAttributesInterface::class)
-            ->addMethods(['getAppliedTaxes', 'getItemAppliedTaxes'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->extensionAttributesMock = $this->createPartialMockWithReflection(
+            ExtensionAttributesInterface::class,
+            ['getAppliedTaxes', 'getItemAppliedTaxes']
+        );
         $this->extensionAttributesMock->expects($this->atMost(1))->method('getAppliedTaxes')->willReturn([]);
         $this->extensionAttributesMock->expects($this->atMost(1))->method('getItemAppliedTaxes')->willReturn([]);
         $this->orderMock->method('getExtensionAttributes')->willReturn($this->extensionAttributesMock);

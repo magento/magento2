@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Unit test for SearchCriteriaResolver
@@ -38,8 +39,8 @@ class SearchCriteriaResolverTest extends TestCase
     /**
      * @param array $params
      * @param array $expected
-     * @dataProvider resolveSortOrderDataProvider
      */
+    #[DataProvider('resolveSortOrderDataProvider')]
     public function testResolve($params, $expected)
     {
         $searchRequestName = 'test';

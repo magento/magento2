@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Sitemap\Test\Unit\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sitemap\Model\EmailNotification;
 use Magento\Sitemap\Model\Observer;
@@ -25,6 +26,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ObserverTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var ObjectManager
      */
@@ -75,23 +77,14 @@ class ObserverTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->getMock();
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->getMock();
-        $this->collectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->collectionFactoryMock = $this->createPartialMock(CollectionFactory::class, ['create']);
         $this->sitemapCollectionMock = $this->createPartialMock(
             Collection::class,
             ['getIterator']
         );
-        $this->sitemapMock = $this->getMockBuilder(Sitemap::class)
-            ->addMethods(['getStoreId'])
-            ->onlyMethods(['generateXml'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->sitemapMock = $this->createPartialMockWithReflection(Sitemap::class, ['getStoreId', 'generateXml']);
         $this->appEmulationMock = $this->createMock(Emulation::class);
         $this->emailNotificationMock = $this->createMock(EmailNotification::class);
         $this->objectManager = new ObjectManager($this);

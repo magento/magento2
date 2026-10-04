@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Framework\Mail\TransportInterface;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\Stdlib\DateTime\Timezone\LocalizedDateToUtcConverterInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Newsletter\Model\ProblemFactory;
 use Magento\Newsletter\Model\Queue;
@@ -33,6 +34,8 @@ use PHPUnit\Framework\TestCase;
  */
 class QueueTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Queue
      */
@@ -85,40 +88,23 @@ class QueueTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->templateFilterMock = $this->getMockBuilder(Filter::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['create'])
-            ->getMock();
-        $this->dateMock = $this->getMockBuilder(DateTime::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->templateFactoryMock = $this->getMockBuilder(TemplateFactory::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['load'])
-            ->onlyMethods(['create'])
-            ->getMock();
-        $this->problemFactoryMock = $this->getMockBuilder(ProblemFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->transportBuilderMock = $this->getMockBuilder(TransportBuilder::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(
-                ['setTemplateData', 'setTemplateOptions', 'setTemplateVars', 'setFrom', 'addTo', 'getTransport']
-            )
-            ->getMock();
-        $this->subscribersCollectionMock =
-            $this->getMockBuilder(Collection::class)
-                ->disableOriginalConstructor()
-                ->getMock();
-        $this->queueResourseModelMock = $this->getMockBuilder(QueueResourseModel::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->subscribersCollectionFactoryMock = $this->getMockBuilder(
-            CollectionFactory::class
-        )
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
+        $this->templateFilterMock = $this->createPartialMockWithReflection(Filter::class, ['create']);
+        $this->dateMock = $this->createMock(DateTime::class);
+        $this->templateFactoryMock = $this->createPartialMockWithReflection(
+            TemplateFactory::class,
+            ['load', 'create']
+        );
+        $this->problemFactoryMock = $this->createMock(ProblemFactory::class);
+        $this->transportBuilderMock = $this->createPartialMock(
+            TransportBuilder::class,
+            ['setTemplateData', 'setTemplateOptions', 'setTemplateVars', 'setFrom', 'addTo', 'getTransport']
+        );
+        $this->subscribersCollectionMock = $this->createMock(Collection::class);
+        $this->queueResourseModelMock = $this->createMock(QueueResourseModel::class);
+        $this->subscribersCollectionFactoryMock = $this->createPartialMock(
+            CollectionFactory::class,
+            ['create']
+        );
         $this->subscribersCollectionFactoryMock->expects($this->any())->method('create')->willReturn(
             $this->subscribersCollectionMock
         );
@@ -176,18 +162,12 @@ class QueueTest extends TestCase
     {
         $this->queue->setQueueStatus(1);
         $this->queue->setQueueStartAt(1);
-        $collection = $this->getMockBuilder(DataCollection::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getItems'])
-            ->getMock();
-        $item = $this->getMockBuilder(Subscriber::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getStoreId', 'getSubscriberEmail'])
-            ->onlyMethods(
-                ['getSubscriberFullName', 'received', 'getUnsubscriptionLink']
-            )
-            ->getMock();
-        $transport = $this->getMockForAbstractClass(TransportInterface::class);
+        $collection = $this->createPartialMock(DataCollection::class, ['getItems']);
+        $item = $this->createPartialMockWithReflection(
+            Subscriber::class,
+            ['getSubscriberFullName', 'received', 'getUnsubscriptionLink', 'getStoreId', 'getSubscriberEmail']
+        );
+        $transport = $this->createMock(TransportInterface::class);
         $this->subscribersCollectionMock->expects($this->once())->method('getQueueJoinedFlag')->willReturn(false);
         $this->subscribersCollectionMock->expects($this->once())
             ->method('useQueue')
@@ -235,9 +215,7 @@ class QueueTest extends TestCase
 
     public function testGetTemplate()
     {
-        $template = $this->getMockBuilder(Template::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $template = $this->createMock(Template::class);
         $this->queue->setTemplateId(2);
         $this->templateFactoryMock->expects($this->once())->method('create')->willReturn($template);
         $template->expects($this->once())->method('load')->with(2)->willReturnSelf();

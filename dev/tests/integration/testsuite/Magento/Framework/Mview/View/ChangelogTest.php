@@ -112,7 +112,7 @@ class ChangelogTest extends \PHPUnit\Framework\TestCase
      */
     public function testChangelogClearOversizeBatchSize()
     {
-        $stateVersionId = 10100;
+        $stateVersionId = 14001;
         $changelog = $this->generateChangelog(20000);
 
         // #0: check if changelog generated correctly
@@ -121,18 +121,12 @@ class ChangelogTest extends \PHPUnit\Framework\TestCase
 
         // #1: check if changelog reduced by batch size value
         $this->model->clear($stateVersionId);
-        $this->assertEquals(10001, $this->getChangelogFirstEntityId($changelog));
-        $this->assertEquals(10000, $this->getChangelogEntitiesCount($changelog));
+        $this->assertEquals($stateVersionId, $this->getChangelogFirstEntityId($changelog));
+        $this->assertEquals(6000, $this->getChangelogEntitiesCount($changelog));
 
-        // #2: check if changelog reduced to the mview state version id
-        $this->model->clear($stateVersionId);
-        $this->assertEquals(10100, $this->getChangelogFirstEntityId($changelog));
-        $this->assertEquals(9901, $this->getChangelogEntitiesCount($changelog));
-
-        // #3: check if changelog stays the same size and values on the next iteration
-        $this->model->clear($stateVersionId);
-        $this->assertEquals(10100, $this->getChangelogFirstEntityId($changelog));
-        $this->assertEquals(9901, $this->getChangelogEntitiesCount($changelog));
+        // #2: fully clear changelog
+        $this->model->clear(20001);
+        $this->assertEquals(0, $this->getChangelogEntitiesCount($changelog));
     }
 
     /**

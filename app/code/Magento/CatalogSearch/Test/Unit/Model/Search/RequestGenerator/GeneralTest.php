@@ -25,10 +25,7 @@ class GeneralTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->attribute = $this->getMockBuilder(Attribute::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getAttributeCode'])
-            ->getMockForAbstractClass();
+        $this->attribute = $this->createMock(Attribute::class);
         $objectManager = new ObjectManager($this);
         $this->general = $objectManager->getObject(General::class);
     }

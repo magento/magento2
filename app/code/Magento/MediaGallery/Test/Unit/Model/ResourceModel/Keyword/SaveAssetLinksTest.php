@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\MediaGallery\Model\ResourceModel\Keyword\SaveAssetLinks;
 use Magento\MediaGalleryApi\Api\GetAssetsKeywordsInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -48,10 +49,10 @@ class SaveAssetLinksTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $this->connectionMock = $this->createMock(AdapterInterface::class);
         $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
-        $this->getAssetsKeywords = $this->getMockForAbstractClass(GetAssetsKeywordsInterface::class);
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->getAssetsKeywords = $this->createMock(GetAssetsKeywordsInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
 
         $this->sut = new SaveAssetLinks(
             $this->getAssetsKeywords,
@@ -63,13 +64,12 @@ class SaveAssetLinksTest extends TestCase
     /**
      * Test saving the asset keyword links
      *
-     * @dataProvider assetLinksDataProvider
-     *
      * @param int $assetId
      * @param array $keywordIds
      * @param array $values
      * @throws CouldNotSaveException
      */
+    #[DataProvider('assetLinksDataProvider')]
     public function testAssetKeywordsSave(int $assetId, array $keywordIds, array $values): void
     {
         $expectedCalls = (int) (count($keywordIds));

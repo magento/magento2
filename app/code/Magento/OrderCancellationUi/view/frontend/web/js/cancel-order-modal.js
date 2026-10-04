@@ -14,7 +14,7 @@ define([
             options = {
                 type: 'popup',
                 responsive: true,
-                title: 'Cancel Order',
+                title: $.mage.__('Cancel Order'),
                 buttons: [{
                     text: $.mage.__('Close'),
                     class: 'action-secondary action-dismiss close-modal-button',

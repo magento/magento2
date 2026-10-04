@@ -28,6 +28,7 @@
             </createData>
             <magentoCLI command="config:set {{CustomGridPerPageValuesConfigData.path}} {{CustomGridPerPageValuesConfigData.value}}" stepKey="setCustomGridPerPageValues"/>
             <magentoCLI command="config:set {{CustomGridPerPageDefaultConfigData.path}} {{CustomGridPerPageDefaultConfigData.value}}" stepKey="setCustomGridPerPageDefaults"/>
+            <magentoCLI command="config:set {{DefaultStoreFrontProductsSortByOrder.path}} {{DefaultStoreFrontProductsSortByOrder.value}}" stepKey="setDefaultSortByOrderValue"/>
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>

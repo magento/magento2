@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,10 +14,13 @@ use PHPUnit\Framework\IncompleteTestError;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\SkippedWithMessageException as SkippedTestError;
 use PHPUnit\Framework\Test;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class AggregateInvokerTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var AggregateInvoker
      */
@@ -30,21 +33,21 @@ class AggregateInvokerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_testCase = $this->getMockBuilder(Test::class)
-            ->addMethods(['fail', 'markTestIncomplete', 'markTestSkipped'])
-            ->onlyMethods(['run', 'count'])
-            ->getMock();
+        $this->_testCase = $this->createPartialMockWithReflection(
+            Test::class,
+            ['fail', 'markTestIncomplete', 'markTestSkipped', 'run', 'count']
+        );
         $this->_invoker = new AggregateInvoker($this->_testCase, []);
     }
 
     /**
-     * @dataProvider callbackDataProvider
      *
      * @param string $expectedMessage
      * @param string $expectedMethod
      * @param string $exceptionClass
      * @throws
      */
+    #[DataProvider('callbackDataProvider')]
     public function testMainFlow($expectedMessage, $expectedMethod, $exceptionClass)
     {
         $this->_testCase->expects(

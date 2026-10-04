@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
@@ -10,7 +10,9 @@
         <newrelicreporting>
             <general>
                 <enable>0</enable>
+                <api_mode>v2_rest</api_mode>
                 <api_url>https://api.newrelic.com/v2/applications/%s/deployments.json</api_url>
+                <nerd_graph_api_url>https://api.newrelic.com/graphql</nerd_graph_api_url>
                 <insights_api_url>https://insights-collector.newrelic.com/v1/accounts/%s/events</insights_api_url>
             </general>
             <cron>

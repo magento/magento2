@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Framework\Validator\Constraint\Property;
 use Magento\Framework\Validator\ValidatorInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test case for \Magento\Framework\Validator\Constraint\Property
@@ -35,7 +36,7 @@ class PropertyTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->_validatorMock = $this->getMockForAbstractClass(ValidatorInterface::class);
+        $this->_validatorMock = $this->createMock(ValidatorInterface::class);
         $this->_constraint = new Property(
             $this->_validatorMock,
             self::PROPERTY_NAME
@@ -59,15 +60,14 @@ class PropertyTest extends TestCase
 
     /**
      * Test isValid method
-     *
-     * @dataProvider isValidDataProvider
-     *
+     *     *
      * @param mixed $value
      * @param mixed $validateValue
      * @param bool $expectedResult
      * @param array $validatorMessages
      * @param array $expectedMessages
      */
+    #[DataProvider('isValidDataProvider')]
     public function testIsValid(
         $value,
         $validateValue,

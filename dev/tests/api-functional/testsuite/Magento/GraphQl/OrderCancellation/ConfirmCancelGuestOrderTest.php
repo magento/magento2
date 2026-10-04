@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\OrderCancellation;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Exception;
 use Magento\Checkout\Test\Fixture\SetGuestEmail as SetGuestEmailFixture;
 use Magento\Customer\Test\Fixture\Customer;
@@ -186,12 +187,11 @@ MUTATION);
      * @return void
      * @throws AuthenticationException
      * @throws LocalizedException
-     *
-     * @dataProvider orderStatusProvider
      */
     #[
         Config('sales/cancellation/enabled', 1)
     ]
+    #[DataProvider('orderStatusProvider')]
     public function testAttemptToConfirmCancelOrderWithSomeStatuses(string $status, string $expectedStatus): void
     {
         $order = $this->fixtures->get('order');

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -53,9 +53,7 @@ class IndexStructureTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->connectionInterface = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->connectionInterface = $this->createMock(AdapterInterface::class);
         $this->resource = $this->getMockBuilder(ResourceConnection::class)
             ->onlyMethods(['getConnection'])
             ->disableOriginalConstructor()

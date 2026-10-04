@@ -110,8 +110,12 @@ class Data extends \Magento\Framework\Url\Helper\Data
     /**
      * Create block instance
      *
-     * @param string|\Magento\Framework\View\Element\AbstractBlock $block
-     * @return \Magento\Framework\View\Element\AbstractBlock
+     * @template T of \Magento\Framework\View\Element\AbstractBlock
+     *
+     * @param class-string<T>|T $block
+     *
+     * @return T
+     *
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function createBlock($block)

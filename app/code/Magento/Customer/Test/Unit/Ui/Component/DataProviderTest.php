@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -26,7 +26,7 @@ use PHPUnit\Framework\TestCase;
  */
 class DataProviderTest extends TestCase
 {
-    const TEST_REQUEST_NAME = 'test_request_name';
+    private const TEST_REQUEST_NAME = 'test_request_name';
 
     /**
      * @var DataProvider
@@ -67,8 +67,7 @@ class DataProviderTest extends TestCase
 
         $searchCriteriaBuilder = $this->mockSearchCriteria();
 
-        $this->request = $this->getMockBuilder(RequestInterface::class)
-            ->getMockForAbstractClass();
+        $this->request = $this->createMock(RequestInterface::class);
 
         $this->filterBuilder = $this->getMockBuilder(FilterBuilder::class)
             ->disableOriginalConstructor()
@@ -109,8 +108,7 @@ class DataProviderTest extends TestCase
             ],
         ];
 
-        $attributeMock = $this->getMockBuilder(AttributeInterface::class)
-            ->getMockForAbstractClass();
+        $attributeMock = $this->createMock(AttributeInterface::class);
         $attributeMock->expects($this->once())
             ->method('getAttributeCode')
             ->willReturn($attributeCode);
@@ -118,14 +116,12 @@ class DataProviderTest extends TestCase
             ->method('getValue')
             ->willReturn('opt1_value');
 
-        $searchDocumentMock = $this->getMockBuilder(DocumentInterface::class)
-            ->getMockForAbstractClass();
+        $searchDocumentMock = $this->createMock(DocumentInterface::class);
         $searchDocumentMock->expects($this->once())
             ->method('getCustomAttributes')
             ->willReturn([$attributeMock]);
 
-        $searchResultMock = $this->getMockBuilder(SearchResultInterface::class)
-            ->getMockForAbstractClass();
+        $searchResultMock = $this->createMock(SearchResultInterface::class);
         $searchResultMock->expects($this->once())
             ->method('getTotalCount')
             ->willReturn(1);
@@ -162,8 +158,7 @@ class DataProviderTest extends TestCase
      */
     protected function mockSearchCriteria()
     {
-        $this->searchCriteria = $this->getMockBuilder(SearchCriteriaInterface::class)
-            ->getMockForAbstractClass();
+        $this->searchCriteria = $this->createMock(SearchCriteriaInterface::class);
 
         $searchCriteriaBuilder = $this->getMockBuilder(SearchCriteriaBuilder::class)
             ->disableOriginalConstructor()

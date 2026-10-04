@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,8 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\Sales\Model\ResourceModel\Helper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Reports\Model\ResourceModel\Helper as ReportsResourceHelper;
 
 class HelperTest extends TestCase
 {
@@ -45,7 +47,7 @@ class HelperTest extends TestCase
         $objectManager = new ObjectManagerHelper($this);
         $this->appResource = $this->createMock(ResourceConnection::class);
 
-        $this->resourceHelper = $this->createMock(\Magento\Reports\Model\ResourceModel\Helper::class);
+        $this->resourceHelper = $this->createMock(ReportsResourceHelper::class);
 
         $this->connectionMock = $this->createMock(Mysql::class);
 
@@ -62,9 +64,8 @@ class HelperTest extends TestCase
      * @param string $aggregation
      * @param array $aggregationAliases
      * @param string $expectedType
-     *
-     * @dataProvider getBestsellersReportUpdateRatingPosProvider
-     */
+     *     */
+    #[DataProvider('getBestsellersReportUpdateRatingPosProvider')]
     public function testGetBestsellersReportUpdateRatingPos($aggregation, $aggregationAliases, $expectedType)
     {
         $mainTable = 'main_table';

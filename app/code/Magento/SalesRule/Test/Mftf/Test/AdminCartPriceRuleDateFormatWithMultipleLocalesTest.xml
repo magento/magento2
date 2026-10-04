@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCartPriceRuleDateFormatWithMultipleLocalesTest">
+        <annotations>
+            <features value="SalesRule"/>
+            <stories value="Cart price rule date format preservation with different interface locales"/>
+            <title value="Cart price rule start/end dates display correctly with different admin interface locales"/>
+            <description value="Admin creates cart price rules with different interface locales and confirms dates display in correct locale format."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4200"/>
+            <group value="SalesRule"/>
+        </annotations>
+        <before>
+            <!-- Deploy static content for all required locales  -->
+            <magentoCLI command="setup:static-content:deploy -f nl_NL" stepKey="deployStaticContentNL"/>
+            <magentoCLI command="setup:static-content:deploy -f hi_IN" stepKey="deployStaticContentHI"/>
+            <magentoCLI command="setup:static-content:deploy -f de_DE" stepKey="deployStaticContentDE"/>
+            <!-- Step1: Log in to admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Reset locale to en_US -->
+            <actionGroup ref="SetAdminAccountActionGroup" stepKey="resetLocaleToUS">
+                <argument name="InterfaceLocaleByValue" value="en_US"/>
+            </actionGroup>
+            <!-- Delete all created cart price rules -->
+            <actionGroup ref="AdminCartPriceRuleDeleteAllActionGroup" stepKey="deleteAllCartPriceRules"/>
+            <!-- Logout -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Step2,3,4,5: Change interface locale to English (US) -->
+        <actionGroup ref="SetAdminAccountActionGroup" stepKey="setLocaleToUS">
+            <argument name="InterfaceLocaleByValue" value="en_US"/>
+        </actionGroup>
+        <generateDate date="+1 day" format="m/j/Y" stepKey="startDateUS"/>
+        <generateDate date="+2 day" format="m/j/Y" stepKey="endDateUS"/>
+        <!-- Step6: Navigate to cart price rules -->
+        <actionGroup ref="AdminOpenCartPriceRulesPageActionGroup" stepKey="openCartPriceRulesPageUS"/>
+        <!-- Step7: Fill cart price rule main information -->
+        <actionGroup ref="AdminCartPriceRuleMultiCustomerActionGroup" stepKey="fillUSCartPriceRuleMainInfo">
+            <argument name="ruleName" value="CartPriceRuleWithMaximumQuantity1"/>
+        </actionGroup>
+        <fillField selector="{{AdminCartPriceRulesFormSection.fromDate}}" userInput="{$startDateUS}" stepKey="fillFromDateUS"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.toDate}}" userInput="{$endDateUS}" stepKey="fillToDateUS"/>
+        <!-- Step8: Save cart price rule -->
+        <actionGroup ref="AssertCartPriceRuleSuccessSaveMessageActionGroup" stepKey="assertUSCartPriceRuleSuccessSaveMessage"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
+        <waitForElementVisible selector="{{AdminCartPriceRulesSection.filterByNameInput}}" stepKey="waitForGridStartDateUS"/>
+        <fillField selector="{{AdminCartPriceRulesSection.filterByNameInput}}" userInput="{{CartPriceRuleWithMaximumQuantity1.name}}" stepKey="filterByNameUS"/>
+        <click selector="{{AdminCartPriceRulesSection.searchButton}}" stepKey="clickSearchUS"/>
+        <waitForPageLoad stepKey="waitForFilterUS"/>
+        <generateDate date="+1 day" format="Y-m-d" stepKey="startDateUSRaw"/>
+        <generateDate date="+2 day" format="Y-m-d" stepKey="endDateUSRaw"/>
+        <executeJS function="return (new Date('{$startDateUSRaw}T00:00:00Z').toLocaleDateString('en-US', {timeZone: 'UTC', day: 'numeric', month: 'short', year: 'numeric'}))" stepKey="expectedStartDateUSGrid"/>
+        <executeJS function="return (new Date('{$endDateUSRaw}T00:00:00Z').toLocaleDateString('en-US', {timeZone: 'UTC', day: 'numeric', month: 'short', year: 'numeric'}))" stepKey="expectedEndDateUSGrid"/>
+        <grabTextFrom selector="{{AdminCartPriceRulesSection.gridStartDateByRuleName(CartPriceRuleWithMaximumQuantity1.name)}}" stepKey="actualStartDateUSGrid"/>
+        <grabTextFrom selector="{{AdminCartPriceRulesSection.gridEndDateByRuleName(CartPriceRuleWithMaximumQuantity1.name)}}" stepKey="actualEndDateUSGrid"/>
+        <!-- Verify start date and end date in grid -->
+        <assertStringContainsString stepKey="verifyStartDateUSInGrid">
+            <expectedResult type="variable">expectedStartDateUSGrid</expectedResult>
+            <actualResult type="variable">actualStartDateUSGrid</actualResult>
+        </assertStringContainsString>
+        <assertStringContainsString stepKey="verifyEndDateUSInGrid">
+            <expectedResult type="variable">expectedEndDateUSGrid</expectedResult>
+            <actualResult type="variable">actualEndDateUSGrid</actualResult>
+        </assertStringContainsString>
+        <!-- Step9: Open cart price rule edit page -->
+        <click selector="{{AdminCartPriceRulesSection.rowContainingText(CartPriceRuleWithMaximumQuantity1.name)}}" stepKey="openRuleUS"/>
+        <waitForPageLoad stepKey="waitForEditPageUS"/>
+        <!-- Verify start date and end date in edit page -->
+        <seeInField selector="{{AdminCartPriceRulesFormSection.fromDate}}" userInput="{$startDateUS}" stepKey="verifyFromDateUS"/>
+        <seeInField selector="{{AdminCartPriceRulesFormSection.toDate}}" userInput="{$endDateUS}" stepKey="verifyToDateUS"/>
+        <!-- Step10: Save cart price rule again -->
+        <actionGroup ref="AssertCartPriceRuleSuccessSaveMessageActionGroup" stepKey="saveRuleUSAgain"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFiltersAgain"/>
+        <fillField selector="{{AdminCartPriceRulesSection.filterByNameInput}}" userInput="{{CartPriceRuleWithMaximumQuantity1.name}}" stepKey="filterByNameUSAgain"/>
+        <click selector="{{AdminCartPriceRulesSection.searchButton}}" stepKey="clickSearchUSAgain"/>
+        <waitForPageLoad stepKey="waitForFilterUSAgain"/>
+        <click selector="{{AdminCartPriceRulesSection.rowContainingText(CartPriceRuleWithMaximumQuantity1.name)}}" stepKey="openRuleUSAgain"/>
+        <waitForPageLoad stepKey="waitForEditPageUSAgain"/>
+        <!-- Verify start date and end date in edit page again -->
+        <seeInField selector="{{AdminCartPriceRulesFormSection.fromDate}}" userInput="{$startDateUS}" stepKey="verifyFromDateUSPreserved"/>
+        <seeInField selector="{{AdminCartPriceRulesFormSection.toDate}}" userInput="{$endDateUS}" stepKey="verifyToDateUSPreserved"/>
+        <!-- Step11: Change interface locale to Dutch (Netherlands) -->
+        <actionGroup ref="SetAdminAccountActionGroup" stepKey="setLocaleToNL">
+            <argument name="InterfaceLocaleByValue" value="nl_NL"/>
+        </actionGroup>
+        <generateDate date="+1 day" format="d-m-Y" stepKey="startDateNL"/>
+        <generateDate date="+2 day" format="d-m-Y" stepKey="endDateNL"/>
+        <generateDate date="+1 day" format="Y-m-d" stepKey="startDateNLRaw"/>
+        <generateDate date="+2 day" format="Y-m-d" stepKey="endDateNLRaw"/>
+        <!-- Step12: Fill cart price rule main information -->
+        <actionGroup ref="AdminOpenCartPriceRulesPageActionGroup" stepKey="openCartPriceRulesPageNL"/>
+        <actionGroup ref="AdminCartPriceRuleMultiCustomerActionGroup" stepKey="fillNLCartPriceRuleMainInfo">
+            <argument name="ruleName" value="CustomSalesRuleWithNoCouponCode"/>
+        </actionGroup>
+        <fillField selector="{{AdminCartPriceRulesFormSection.fromDate}}" userInput="{$startDateNL}" stepKey="fillFromDateNL"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.toDate}}" userInput="{$endDateNL}" stepKey="fillToDateNL"/>
+        <!-- Step13: Save cart price rule -->
+        <actionGroup ref="AssertCartPriceRuleSuccessSaveMessageActionGroup" stepKey="assertNLCartPriceRuleSuccessSaveMessage"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFiltersNL"/>
+        <waitForElementVisible selector="{{AdminCartPriceRulesSection.filterByNameInput}}" stepKey="waitForGridStartDateNL"/>
+        <fillField selector="{{AdminCartPriceRulesSection.filterByNameInput}}" userInput="{{CustomSalesRuleWithNoCouponCode.name}}" stepKey="filterByNameNL"/>
+        <click selector="{{AdminCartPriceRulesSection.searchButton}}" stepKey="clickSearchNL"/>
+        <waitForPageLoad stepKey="waitForFilterNL"/>
+        <!-- Verify start date and end date in grid -->
+        <executeJS function="return (new Date('{$startDateNLRaw}T00:00:00Z').toLocaleDateString('nl-NL', {timeZone: 'UTC', day: 'numeric', month: 'short', year: 'numeric'}))" stepKey="expectedStartDateNLGrid"/>
+        <executeJS function="return (new Date('{$endDateNLRaw}T00:00:00Z').toLocaleDateString('nl-NL', {timeZone: 'UTC', day: 'numeric', month: 'short', year: 'numeric'}))" stepKey="expectedEndDateNLGrid"/>
+        <grabTextFrom selector="{{AdminCartPriceRulesSection.gridStartDateByRuleName(CustomSalesRuleWithNoCouponCode.name)}}" stepKey="actualStartDateNLGrid"/>
+        <grabTextFrom selector="{{AdminCartPriceRulesSection.gridEndDateByRuleName(CustomSalesRuleWithNoCouponCode.name)}}" stepKey="actualEndDateNLGrid"/>
+        <assertStringContainsString stepKey="verifyStartDateNLInGrid">
+            <expectedResult type="variable">expectedStartDateNLGrid</expectedResult>
+            <actualResult type="variable">actualStartDateNLGrid</actualResult>
+        </assertStringContainsString>
+        <assertStringContainsString stepKey="verifyEndDateNLInGrid">
+            <expectedResult type="variable">expectedEndDateNLGrid</expectedResult>
+            <actualResult type="variable">actualEndDateNLGrid</actualResult>
+        </assertStringContainsString>
+        <!-- Open cart price rule edit page -->
+        <click selector="{{AdminCartPriceRulesSection.rowContainingText(CustomSalesRuleWithNoCouponCode.name)}}" stepKey="openRuleNL"/>
+        <waitForPageLoad stepKey="waitForEditPageNL"/>
+        <!-- Verify start date and end date in edit page -->
+        <seeInField selector="{{AdminCartPriceRulesFormSection.fromDate}}" userInput="{$startDateNL}" stepKey="verifyFromDateNL"/>
+        <seeInField selector="{{AdminCartPriceRulesFormSection.toDate}}" userInput="{$endDateNL}" stepKey="verifyToDateNL"/>
+        <!-- Step14: Change interface locale to Hindi (India) -->
+        <actionGroup ref="SetAdminAccountActionGroup" stepKey="setLocaleToHI">
+            <argument name="InterfaceLocaleByValue" value="hi_IN"/>
+        </actionGroup>
+        <generateDate date="+1 day" format="j/m/Y" stepKey="startDateHI"/>
+        <generateDate date="+2 day" format="j/m/Y" stepKey="endDateHI"/>
+        <generateDate date="+1 day" format="Y-m-d" stepKey="startDateHIRaw"/>
+        <generateDate date="+2 day" format="Y-m-d" stepKey="endDateHIRaw"/>
+        <!-- Step15: Fill cart price rule main information -->
+        <actionGroup ref="AdminOpenCartPriceRulesPageActionGroup" stepKey="openCartPriceRulesPageHI"/>
+        <actionGroup ref="AdminCartPriceRuleMultiCustomerActionGroup" stepKey="fillHICartPriceRuleMainInfo">
+            <argument name="ruleName" value="TestCartPriceRule"/>
+        </actionGroup>
+        <fillField selector="{{AdminCartPriceRulesFormSection.fromDate}}" userInput="{$startDateHI}" stepKey="fillFromDateHI"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.toDate}}" userInput="{$endDateHI}" stepKey="fillToDateHI"/>
+        <!-- Step16: Save cart price rule -->
+        <actionGroup ref="AssertCartPriceRuleSuccessSaveMessageActionGroup" stepKey="assertHICartPriceRuleSuccessSaveMessage"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFiltersHI"/>
+        <waitForElementVisible selector="{{AdminCartPriceRulesSection.filterByNameInput}}" stepKey="waitForGridStartDateHI"/>
+        <fillField selector="{{AdminCartPriceRulesSection.filterByNameInput}}" userInput="{{TestCartPriceRule.name}}" stepKey="filterByNameHI"/>
+        <click selector="{{AdminCartPriceRulesSection.searchButton}}" stepKey="clickSearchHI"/>
+        <waitForPageLoad stepKey="waitForFilterHI"/>
+        <!-- Verify start date and end date in grid -->
+        <executeJS function="return (new Date('{$startDateHIRaw}T00:00:00Z').toLocaleDateString('hi-IN', {timeZone: 'UTC', day: 'numeric', month: 'short', year: 'numeric'}))" stepKey="expectedStartDateHindiGrid"/>
+        <executeJS function="return (new Date('{$endDateHIRaw}T00:00:00Z').toLocaleDateString('hi-IN', {timeZone: 'UTC', day: 'numeric', month: 'short', year: 'numeric'}))" stepKey="expectedEndDateHindiGrid"/>
+        <grabTextFrom selector="{{AdminCartPriceRulesSection.gridStartDateByRuleName(TestCartPriceRule.name)}}" stepKey="actualStartDateHindiGrid"/>
+        <grabTextFrom selector="{{AdminCartPriceRulesSection.gridEndDateByRuleName(TestCartPriceRule.name)}}" stepKey="actualEndDateHindiGrid"/>
+        <assertStringContainsString stepKey="verifyStartDateHindiInGrid">
+            <expectedResult type="variable">expectedStartDateHindiGrid</expectedResult>
+            <actualResult type="variable">actualStartDateHindiGrid</actualResult>
+        </assertStringContainsString>
+        <assertStringContainsString stepKey="verifyEndDateHindiInGrid">
+            <expectedResult type="variable">expectedEndDateHindiGrid</expectedResult>
+            <actualResult type="variable">actualEndDateHindiGrid</actualResult>
+        </assertStringContainsString>
+        <!-- Open cart price rule edit page -->
+        <click selector="{{AdminCartPriceRulesSection.rowContainingText(TestCartPriceRule.name)}}" stepKey="openRuleHI"/>
+        <waitForPageLoad stepKey="waitForEditPageHI"/>
+        <!-- Verify start date and end date in edit page -->
+        <seeInField selector="{{AdminCartPriceRulesFormSection.fromDate}}" userInput="{$startDateHI}" stepKey="verifyFromDateHI"/>
+        <seeInField selector="{{AdminCartPriceRulesFormSection.toDate}}" userInput="{$endDateHI}" stepKey="verifyToDateHI"/>
+        <!-- Step17: Change interface locale to German (Germany) -->
+        <actionGroup ref="SetAdminAccountActionGroup" stepKey="setLocaleToDE">
+            <argument name="InterfaceLocaleByValue" value="de_DE"/>
+        </actionGroup>
+        <generateDate date="+1 day" format="d.m.Y" stepKey="startDateDE"/>
+        <generateDate date="+2 day" format="d.m.Y" stepKey="endDateDE"/>
+        <generateDate date="+1 day" format="Y-m-d" stepKey="startDateDERaw"/>
+        <generateDate date="+2 day" format="Y-m-d" stepKey="endDateDERaw"/>
+        <!-- Step18: Fill cart price rule main information -->
+        <actionGroup ref="AdminOpenCartPriceRulesPageActionGroup" stepKey="openCartPriceRulesPageDE"/>
+        <actionGroup ref="AdminCartPriceRuleMultiCustomerActionGroup" stepKey="fillDECartPriceRuleMainInfo">
+            <argument name="ruleName" value="TestSalesRule"/>
+        </actionGroup>
+        <fillField selector="{{AdminCartPriceRulesFormSection.fromDate}}" userInput="{$startDateDE}" stepKey="fillFromDateDE"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.toDate}}" userInput="{$endDateDE}" stepKey="fillToDateDE"/>
+        <!-- Step19: Save cart price rule -->
+        <actionGroup ref="AssertCartPriceRuleSuccessSaveMessageActionGroup" stepKey="assertDECartPriceRuleSuccessSaveMessage"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFiltersDE"/>
+        <waitForElementVisible selector="{{AdminCartPriceRulesSection.filterByNameInput}}" stepKey="waitForGridStartDateDE"/>
+        <fillField selector="{{AdminCartPriceRulesSection.filterByNameInput}}" userInput="{{TestSalesRule.name}}" stepKey="filterByNameDE"/>
+        <click selector="{{AdminCartPriceRulesSection.searchButton}}" stepKey="clickSearchDE"/>
+        <waitForPageLoad stepKey="waitForFilterDE"/>
+        <!-- Verify start date and end date in grid -->
+        <grabTextFrom selector="{{AdminCartPriceRulesSection.gridStartDateByRuleName(TestSalesRule.name)}}" stepKey="actualStartDateDEGrid"/>
+        <grabTextFrom selector="{{AdminCartPriceRulesSection.gridEndDateByRuleName(TestSalesRule.name)}}" stepKey="actualEndDateDEGrid"/>
+        <assertStringContainsString stepKey="verifyStartDateDEInGrid">
+            <expectedResult type="variable">startDateDE</expectedResult>
+            <actualResult type="variable">actualStartDateDEGrid</actualResult>
+        </assertStringContainsString>
+        <assertStringContainsString stepKey="verifyEndDateDEInGrid">
+            <expectedResult type="variable">endDateDE</expectedResult>
+            <actualResult type="variable">actualEndDateDEGrid</actualResult>
+        </assertStringContainsString>
+        <!-- Open cart price rule edit page -->
+        <click selector="{{AdminCartPriceRulesSection.rowContainingText(TestSalesRule.name)}}" stepKey="openRuleDE"/>
+        <waitForPageLoad stepKey="waitForEditPageDE"/>
+        <!-- Verify start date and end date in edit page -->
+        <seeInField selector="{{AdminCartPriceRulesFormSection.fromDate}}" userInput="{$startDateDE}" stepKey="verifyFromDateDE"/>
+        <seeInField selector="{{AdminCartPriceRulesFormSection.toDate}}" userInput="{$endDateDE}" stepKey="verifyToDateDE"/>
+    </test>
+</tests>

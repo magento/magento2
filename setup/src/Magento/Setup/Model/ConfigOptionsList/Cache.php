@@ -27,6 +27,14 @@ class Cache implements ConfigOptionsListInterface
     public const INPUT_VALUE_CACHE_VALKEY = 'valkey';
     public const CONFIG_VALUE_CACHE_VALKEY = \Magento\Framework\Cache\Backend\Valkey::class;
 
+    public const INPUT_VALUE_CACHE_SYMFONY_REDIS = 'symfony_redis';
+    public const CONFIG_VALUE_CACHE_SYMFONY_REDIS = 'redis';
+
+    public const INPUT_VALUE_CACHE_SYMFONY_VALKEY = 'symfony_valkey';
+    public const CONFIG_VALUE_CACHE_SYMFONY_VALKEY = 'valkey';
+    public const INPUT_VALUE_CACHE_ZEND_L1_L2 = 'zend_l2';
+    public const INPUT_VALUE_CACHE_SYMFONY_L1_L2 = 'symfony_l2';
+
     public const INPUT_KEY_CACHE_BACKEND = 'cache-backend';
     public const INPUT_KEY_CACHE_BACKEND_REDIS_SERVER = 'cache-backend-redis-server';
     public const INPUT_KEY_CACHE_BACKEND_REDIS_DATABASE = 'cache-backend-redis-db';
@@ -34,6 +42,7 @@ class Cache implements ConfigOptionsListInterface
     public const INPUT_KEY_CACHE_BACKEND_REDIS_PASSWORD = 'cache-backend-redis-password';
     public const INPUT_KEY_CACHE_BACKEND_REDIS_COMPRESS_DATA = 'cache-backend-redis-compress-data';
     public const INPUT_KEY_CACHE_BACKEND_REDIS_COMPRESSION_LIB = 'cache-backend-redis-compression-lib';
+    public const INPUT_KEY_CACHE_BACKEND_REDIS_SERIALIZER = 'cache-backend-redis-serializer';
     public const INPUT_KEY_CACHE_BACKEND_REDIS_LUA_KEY = 'cache-backend-redis-lua-key';
     public const INPUT_KEY_CACHE_BACKEND_REDIS_USE_LUA = 'cache-backend-redis-use-lua';
     public const INPUT_KEY_CACHE_BACKEND_REDIS_USE_LUA_ON_GC = 'cache-backend-redis-use-lua-on-gc';
@@ -43,6 +52,7 @@ class Cache implements ConfigOptionsListInterface
     public const INPUT_KEY_CACHE_BACKEND_VALKEY_PASSWORD = 'cache-backend-valkey-password';
     public const INPUT_KEY_CACHE_BACKEND_VALKEY_COMPRESS_DATA = 'cache-backend-valkey-compress-data';
     public const INPUT_KEY_CACHE_BACKEND_VALKEY_COMPRESSION_LIB = 'cache-backend-valkey-compression-lib';
+    public const INPUT_KEY_CACHE_BACKEND_VALKEY_SERIALIZER = 'cache-backend-valkey-serializer';
     public const INPUT_KEY_CACHE_BACKEND_VALKEY_LUA_KEY = 'cache-backend-valkey-lua-key';
     public const INPUT_KEY_CACHE_BACKEND_VALKEY_USE_LUA = 'cache-backend-valkey-use-lua';
     public const INPUT_KEY_CACHE_BACKEND_VALKEY_USE_LUA_ON_GC = 'cache-backend-valkey-use-lua-on-gc';
@@ -56,6 +66,7 @@ class Cache implements ConfigOptionsListInterface
     public const CONFIG_PATH_CACHE_BACKEND_PASSWORD = 'cache/frontend/default/backend_options/password';
     public const CONFIG_PATH_CACHE_BACKEND_COMPRESS_DATA = 'cache/frontend/default/backend_options/compress_data';
     public const CONFIG_PATH_CACHE_BACKEND_COMPRESSION_LIB = 'cache/frontend/default/backend_options/compression_lib';
+    public const CONFIG_PATH_CACHE_BACKEND_SERIALIZER = 'cache/frontend/default/backend_options/serializer';
     public const CONFIG_PATH_CACHE_BACKEND_LUA_KEY = 'cache/frontend/default/backend_options/_useLua';
     public const CONFIG_PATH_CACHE_BACKEND_USE_LUA = 'cache/frontend/default/backend_options/use_lua';
     public const CONFIG_PATH_CACHE_BACKEND_USE_LUA_ON_GC = 'cache/frontend/default/backend_options/use_lua_on_gc';
@@ -72,6 +83,7 @@ class Cache implements ConfigOptionsListInterface
         self::INPUT_KEY_CACHE_BACKEND_REDIS_PASSWORD => '',
         self::INPUT_KEY_CACHE_BACKEND_REDIS_COMPRESS_DATA => '1',
         self::INPUT_KEY_CACHE_BACKEND_REDIS_COMPRESSION_LIB => '',
+        self::INPUT_KEY_CACHE_BACKEND_REDIS_SERIALIZER => 'igbinary',
         self::INPUT_KEY_CACHE_ALLOW_PARALLEL_CACHE_GENERATION => 'false',
         self::INPUT_KEY_CACHE_BACKEND_REDIS_USE_LUA => '0',
         self::INPUT_KEY_CACHE_BACKEND_REDIS_USE_LUA_ON_GC => '1',
@@ -81,6 +93,7 @@ class Cache implements ConfigOptionsListInterface
         self::INPUT_KEY_CACHE_BACKEND_VALKEY_PASSWORD => '',
         self::INPUT_KEY_CACHE_BACKEND_VALKEY_COMPRESS_DATA => '1',
         self::INPUT_KEY_CACHE_BACKEND_VALKEY_COMPRESSION_LIB => '',
+        self::INPUT_KEY_CACHE_BACKEND_VALKEY_SERIALIZER => 'igbinary',
         self::INPUT_KEY_CACHE_BACKEND_VALKEY_USE_LUA => '0',
         self::INPUT_KEY_CACHE_BACKEND_VALKEY_USE_LUA_ON_GC => '1',
     ];
@@ -90,7 +103,11 @@ class Cache implements ConfigOptionsListInterface
      */
     private $validBackendCacheOptions = [
         self::INPUT_VALUE_CACHE_REDIS,
-        self::INPUT_VALUE_CACHE_VALKEY
+        self::INPUT_VALUE_CACHE_VALKEY,
+        self::INPUT_VALUE_CACHE_SYMFONY_REDIS,
+        self::INPUT_VALUE_CACHE_SYMFONY_VALKEY,
+        self::INPUT_VALUE_CACHE_ZEND_L1_L2,
+        self::INPUT_VALUE_CACHE_SYMFONY_L1_L2
     ];
 
     /**
@@ -103,6 +120,7 @@ class Cache implements ConfigOptionsListInterface
         self::INPUT_KEY_CACHE_BACKEND_REDIS_PASSWORD => self::CONFIG_PATH_CACHE_BACKEND_PASSWORD,
         self::INPUT_KEY_CACHE_BACKEND_REDIS_COMPRESS_DATA => self::CONFIG_PATH_CACHE_BACKEND_COMPRESS_DATA,
         self::INPUT_KEY_CACHE_BACKEND_REDIS_COMPRESSION_LIB => self::CONFIG_PATH_CACHE_BACKEND_COMPRESSION_LIB,
+        self::INPUT_KEY_CACHE_BACKEND_REDIS_SERIALIZER => self::CONFIG_PATH_CACHE_BACKEND_SERIALIZER,
         self::INPUT_KEY_CACHE_ALLOW_PARALLEL_CACHE_GENERATION => self::CONFIG_PATH_ALLOW_PARALLEL_CACHE_GENERATION,
         self::INPUT_KEY_CACHE_BACKEND_REDIS_USE_LUA => self::CONFIG_PATH_CACHE_BACKEND_USE_LUA,
         self::INPUT_KEY_CACHE_BACKEND_REDIS_USE_LUA_ON_GC=> self::CONFIG_PATH_CACHE_BACKEND_USE_LUA_ON_GC,
@@ -118,6 +136,7 @@ class Cache implements ConfigOptionsListInterface
         self::INPUT_KEY_CACHE_BACKEND_VALKEY_PASSWORD => self::CONFIG_PATH_CACHE_BACKEND_PASSWORD,
         self::INPUT_KEY_CACHE_BACKEND_VALKEY_COMPRESS_DATA => self::CONFIG_PATH_CACHE_BACKEND_COMPRESS_DATA,
         self::INPUT_KEY_CACHE_BACKEND_VALKEY_COMPRESSION_LIB => self::CONFIG_PATH_CACHE_BACKEND_COMPRESSION_LIB,
+        self::INPUT_KEY_CACHE_BACKEND_VALKEY_SERIALIZER => self::CONFIG_PATH_CACHE_BACKEND_SERIALIZER,
         self::INPUT_KEY_CACHE_ALLOW_PARALLEL_CACHE_GENERATION => self::CONFIG_PATH_ALLOW_PARALLEL_CACHE_GENERATION,
         self::INPUT_KEY_CACHE_BACKEND_VALKEY_USE_LUA => self::CONFIG_PATH_CACHE_BACKEND_USE_LUA,
         self::INPUT_KEY_CACHE_BACKEND_VALKEY_USE_LUA_ON_GC=> self::CONFIG_PATH_CACHE_BACKEND_USE_LUA_ON_GC,
@@ -128,14 +147,19 @@ class Cache implements ConfigOptionsListInterface
      */
     private $redisValidator;
 
+    /** @var L1L2Cache */
+    private $l1L2Cache;
+
     /**
      * Construct the Cache ConfigOptionsList
      *
      * @param RedisConnectionValidator $redisValidator
+     * @param L1L2Cache $l1L2Cache
      */
-    public function __construct(RedisConnectionValidator $redisValidator)
+    public function __construct(RedisConnectionValidator $redisValidator, L1L2Cache $l1L2Cache)
     {
         $this->redisValidator = $redisValidator;
+        $this->l1L2Cache = $l1L2Cache;
     }
 
     /**
@@ -202,6 +226,12 @@ class Cache implements ConfigOptionsListInterface
                 'Compression lib to use [snappy,lzf,l4z,zstd,gzip] (leave blank to determine automatically)'
             ),
             new TextConfigOption(
+                self::INPUT_KEY_CACHE_BACKEND_REDIS_SERIALIZER,
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
+                self::CONFIG_PATH_CACHE_BACKEND_SERIALIZER,
+                'Serializer to use (igbinary is 70% faster, 58% smaller than PHP serialize)'
+            ),
+            new TextConfigOption(
                 self::INPUT_KEY_CACHE_BACKEND_REDIS_USE_LUA,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
                 self::CONFIG_PATH_CACHE_BACKEND_USE_LUA,
@@ -261,6 +291,12 @@ class Cache implements ConfigOptionsListInterface
                 'Compression lib to use [snappy,lzf,l4z,zstd,gzip] (leave blank to determine automatically)'
             ),
             new TextConfigOption(
+                self::INPUT_KEY_CACHE_BACKEND_VALKEY_SERIALIZER,
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
+                self::CONFIG_PATH_CACHE_BACKEND_SERIALIZER,
+                'Serializer to use (igbinary is 70% faster, 58% smaller than PHP serialize)'
+            ),
+            new TextConfigOption(
                 self::INPUT_KEY_CACHE_BACKEND_VALKEY_USE_LUA,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
                 self::CONFIG_PATH_CACHE_BACKEND_USE_LUA,
@@ -299,22 +335,53 @@ class Cache implements ConfigOptionsListInterface
 
     /**
      * @inheritdoc
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function createConfig(array $options, DeploymentConfig $deploymentConfig)
     {
         $configData = new ConfigData(ConfigFilePool::APP_ENV);
-        if (isset($options[self::INPUT_KEY_CACHE_ID_PREFIX])) {
-            $configData->set(self::CONFIG_PATH_CACHE_ID_PREFIX, $options[self::INPUT_KEY_CACHE_ID_PREFIX]);
-        } elseif (!$deploymentConfig->get(self::CONFIG_PATH_CACHE_ID_PREFIX)) {
-            $configData->set(self::CONFIG_PATH_CACHE_ID_PREFIX, $this->generateCachePrefix());
+        $idPrefix = $options[self::INPUT_KEY_CACHE_ID_PREFIX] ?? null;
+        if ($idPrefix !== null) {
+            $configData->set(self::CONFIG_PATH_CACHE_ID_PREFIX, $idPrefix);
+        } else {
+            $idPrefix = $deploymentConfig->get(self::CONFIG_PATH_CACHE_ID_PREFIX);
+            if (!$idPrefix) {
+                $idPrefix = $this->generateCachePrefix();
+                $configData->set(self::CONFIG_PATH_CACHE_ID_PREFIX, $idPrefix);
+            }
         }
 
         if (isset($options[self::INPUT_KEY_CACHE_BACKEND])) {
-            if ($options[self::INPUT_KEY_CACHE_BACKEND] == self::INPUT_VALUE_CACHE_REDIS) {
-                $configData->set(self::CONFIG_PATH_CACHE_BACKEND, self::CONFIG_VALUE_CACHE_REDIS);
+            if ($options[self::INPUT_KEY_CACHE_BACKEND] === self::INPUT_VALUE_CACHE_ZEND_L1_L2) {
+                $this->l1L2Cache->applyZend($configData, $options, $idPrefix);
+                return $configData;
+            }
+            if ($options[self::INPUT_KEY_CACHE_BACKEND] === self::INPUT_VALUE_CACHE_SYMFONY_L1_L2) {
+                $this->l1L2Cache->applySymfony($configData, $options, $idPrefix);
+                return $configData;
+            }
+            if (in_array($options[self::INPUT_KEY_CACHE_BACKEND], [
+                self::INPUT_VALUE_CACHE_REDIS,
+                self::INPUT_VALUE_CACHE_SYMFONY_REDIS,
+            ], true)) {
+                $configData->set(
+                    self::CONFIG_PATH_CACHE_BACKEND,
+                    $options[self::INPUT_KEY_CACHE_BACKEND] === self::INPUT_VALUE_CACHE_SYMFONY_REDIS
+                        ? self::CONFIG_VALUE_CACHE_SYMFONY_REDIS
+                        : self::CONFIG_VALUE_CACHE_REDIS
+                );
                 $this->setDefaultRedisConfig($deploymentConfig, $configData);
-            } elseif ($options[self::INPUT_KEY_CACHE_BACKEND] == self::INPUT_VALUE_CACHE_VALKEY) {
-                $configData->set(self::CONFIG_PATH_CACHE_BACKEND, self::CONFIG_VALUE_CACHE_VALKEY);
+            } elseif (in_array($options[self::INPUT_KEY_CACHE_BACKEND], [
+                self::INPUT_VALUE_CACHE_VALKEY,
+                self::INPUT_VALUE_CACHE_SYMFONY_VALKEY,
+            ], true)) {
+                $configData->set(
+                    self::CONFIG_PATH_CACHE_BACKEND,
+                    $options[self::INPUT_KEY_CACHE_BACKEND] === self::INPUT_VALUE_CACHE_SYMFONY_VALKEY
+                        ? self::CONFIG_VALUE_CACHE_SYMFONY_VALKEY
+                        : self::CONFIG_VALUE_CACHE_VALKEY
+                );
                 $this->setDefaultValkeyConfig($deploymentConfig, $configData);
             } else {
                 $configData->set(self::CONFIG_PATH_CACHE_BACKEND, $options[self::INPUT_KEY_CACHE_BACKEND]);
@@ -337,7 +404,10 @@ class Cache implements ConfigOptionsListInterface
     private function applyCacheBackendConfig(array $options, ConfigData $configData): void
     {
         if (isset($options[self::INPUT_KEY_CACHE_BACKEND])) {
-            $map = $options[self::INPUT_KEY_CACHE_BACKEND] === self::INPUT_VALUE_CACHE_VALKEY
+            $map = in_array($options[self::INPUT_KEY_CACHE_BACKEND], [
+                self::INPUT_VALUE_CACHE_VALKEY,
+                self::INPUT_VALUE_CACHE_SYMFONY_VALKEY,
+            ], true)
                 ? $this->inputKeyToValkeyConfigPathMap
                 : $this->inputKeyToConfigPathMap;
 
@@ -359,8 +429,14 @@ class Cache implements ConfigOptionsListInterface
         $selectedBackend = $options[self::INPUT_KEY_CACHE_BACKEND] ?? null;
         $currentBackend = $deploymentConfig->get(Cache::CONFIG_PATH_CACHE_BACKEND);
 
-        // Validate if selected backend is Redis or Valkey
-        if (in_array($selectedBackend, [self::INPUT_VALUE_CACHE_REDIS, self::INPUT_VALUE_CACHE_VALKEY], true)) {
+        // Validate if selected backend is Redis or Valkey (or an L1/L2 profile, which always
+        // connects to a Redis-compatible L2 server regardless of the L1 tier chosen)
+        if (in_array($selectedBackend, [
+            self::INPUT_VALUE_CACHE_REDIS,
+            self::INPUT_VALUE_CACHE_VALKEY,
+            self::INPUT_VALUE_CACHE_SYMFONY_REDIS,
+            self::INPUT_VALUE_CACHE_SYMFONY_VALKEY
+        ], true)) {
             if (!$this->validateRedisConfig($options, $deploymentConfig)) {
                 $errors[] = "Invalid {$selectedBackend} configuration. Could not connect to {$selectedBackend} server.";
             }
@@ -392,7 +468,10 @@ class Cache implements ConfigOptionsListInterface
     private function validateRedisConfig(array $options, DeploymentConfig $deploymentConfig)
     {
         $config = [];
-        if ($options[self::INPUT_KEY_CACHE_BACKEND] == self::INPUT_VALUE_CACHE_VALKEY
+        if (in_array($options[self::INPUT_KEY_CACHE_BACKEND], [
+            self::INPUT_VALUE_CACHE_VALKEY,
+            self::INPUT_VALUE_CACHE_SYMFONY_VALKEY,
+        ], true)
             || $options[PageCache::INPUT_KEY_PAGE_CACHE_BACKEND] == PageCache::INPUT_VALUE_PAGE_CACHE_VALKEY) {
             $config['host'] = $options[self::INPUT_KEY_CACHE_BACKEND_VALKEY_SERVER] ??
                 $deploymentConfig->get(
@@ -419,28 +498,28 @@ class Cache implements ConfigOptionsListInterface
                 );
         } else {
             $config['host'] = $options[self::INPUT_KEY_CACHE_BACKEND_REDIS_SERVER] ??
-            $deploymentConfig->get(
-                self::CONFIG_PATH_CACHE_BACKEND_SERVER,
-                $this->getDefaultConfigValue(self::INPUT_KEY_CACHE_BACKEND_REDIS_SERVER)
-            );
+                $deploymentConfig->get(
+                    self::CONFIG_PATH_CACHE_BACKEND_SERVER,
+                    $this->getDefaultConfigValue(self::INPUT_KEY_CACHE_BACKEND_REDIS_SERVER)
+                );
 
             $config['port'] = $options[self::INPUT_KEY_CACHE_BACKEND_REDIS_PORT] ??
-            $deploymentConfig->get(
-                self::CONFIG_PATH_CACHE_BACKEND_PORT,
-                $this->getDefaultConfigValue(self::INPUT_KEY_CACHE_BACKEND_REDIS_PORT)
-            );
+                $deploymentConfig->get(
+                    self::CONFIG_PATH_CACHE_BACKEND_PORT,
+                    $this->getDefaultConfigValue(self::INPUT_KEY_CACHE_BACKEND_REDIS_PORT)
+                );
 
             $config['db'] = $options[self::INPUT_KEY_CACHE_BACKEND_REDIS_DATABASE] ??
-            $deploymentConfig->get(
-                self::CONFIG_PATH_CACHE_BACKEND_DATABASE,
-                $this->getDefaultConfigValue(self::INPUT_KEY_CACHE_BACKEND_REDIS_DATABASE)
-            );
+                $deploymentConfig->get(
+                    self::CONFIG_PATH_CACHE_BACKEND_DATABASE,
+                    $this->getDefaultConfigValue(self::INPUT_KEY_CACHE_BACKEND_REDIS_DATABASE)
+                );
 
             $config['password'] = $options[self::INPUT_KEY_CACHE_BACKEND_REDIS_PASSWORD] ??
-            $deploymentConfig->get(
-                self::CONFIG_PATH_CACHE_BACKEND_PASSWORD,
-                $this->getDefaultConfigValue(self::INPUT_KEY_CACHE_BACKEND_REDIS_PASSWORD)
-            );
+                $deploymentConfig->get(
+                    self::CONFIG_PATH_CACHE_BACKEND_PASSWORD,
+                    $this->getDefaultConfigValue(self::INPUT_KEY_CACHE_BACKEND_REDIS_PASSWORD)
+                );
         }
         return $this->redisValidator->isValidConnection($config);
     }
@@ -455,6 +534,12 @@ class Cache implements ConfigOptionsListInterface
     private function setDefaultRedisConfig(DeploymentConfig $deploymentConfig, ConfigData $configData)
     {
         foreach ($this->inputKeyToConfigPathMap as $inputKey => $configPath) {
+            // 'serializer' is a Symfony-only option (legacy Zend/Cm backends have no such option and
+            // ignore it), so it is not forced by default. It is still written when the operator passes
+            // it explicitly (see applyCacheBackendConfig).
+            if ($inputKey === self::INPUT_KEY_CACHE_BACKEND_REDIS_SERIALIZER) {
+                continue;
+            }
             $configData->set($configPath, $deploymentConfig->get($configPath, $this->getDefaultConfigValue($inputKey)));
         }
 
@@ -462,7 +547,7 @@ class Cache implements ConfigOptionsListInterface
     }
 
     /**
-     * Set default values for the Redis configuration.
+     * Set default values for the Valkey configuration.
      *
      * @param DeploymentConfig $deploymentConfig
      * @param ConfigData $configData
@@ -471,6 +556,11 @@ class Cache implements ConfigOptionsListInterface
     private function setDefaultValkeyConfig(DeploymentConfig $deploymentConfig, ConfigData $configData)
     {
         foreach ($this->inputKeyToValkeyConfigPathMap as $inputKey => $configPath) {
+            // 'serializer' is a Symfony-only option (legacy Zend/Cm backends ignore it); not forced
+            // by default — written only when explicitly provided (see applyCacheBackendConfig).
+            if ($inputKey === self::INPUT_KEY_CACHE_BACKEND_VALKEY_SERIALIZER) {
+                continue;
+            }
             $configData->set($configPath, $deploymentConfig->get($configPath, $this->getDefaultConfigValue($inputKey)));
         }
 

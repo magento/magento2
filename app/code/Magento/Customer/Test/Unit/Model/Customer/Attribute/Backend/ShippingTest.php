@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,9 +12,12 @@ use Magento\Eav\Model\Entity\AbstractEntity;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\DataObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class ShippingTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Shipping
      */
@@ -27,10 +30,10 @@ class ShippingTest extends TestCase
 
     public function testBeforeSave()
     {
-        $object = $this->getMockBuilder(DataObject::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getDefaultShipping', 'unsetDefaultShipping'])
-            ->getMock();
+        $object = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['getDefaultShipping', 'unsetDefaultShipping']
+        );
 
         $object->expects($this->once())->method('getDefaultShipping')->willReturn(null);
         $object->expects($this->once())->method('unsetDefaultShipping')->willReturnSelf();
@@ -43,25 +46,31 @@ class ShippingTest extends TestCase
         $addressId = 1;
         $attributeCode = 'attribute_code';
         $defaultShipping = 'default Shipping address';
-        $object = $this->getMockBuilder(DataObject::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getDefaultShipping', 'getAddresses', 'setDefaultShipping'])
-            ->getMock();
+        $object = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['getDefaultShipping', 'getAddresses', 'setDefaultShipping']
+        );
 
-        $address = $this->getMockBuilder(DataObject::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getPostIndex', 'getId'])
-            ->getMock();
+        $address = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['getPostIndex', 'getId']
+        );
 
-        $attribute = $this->getMockBuilder(AbstractAttribute::class)
-            ->onlyMethods(['__wakeup', 'getEntity', 'getAttributeCode'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $attribute = $this->createPartialMock(
+            AbstractAttribute::class,
+            [
+                '__wakeup',
+                'getEntity',
+                'getAttributeCode'
+            ]
+        );
 
-        $entity = $this->getMockBuilder(AbstractEntity::class)
-            ->onlyMethods(['saveAttribute'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $entity = $this->createPartialMock(
+            AbstractEntity::class,
+            [
+                'saveAttribute'
+            ]
+        );
 
         $attribute->expects($this->once())->method('getEntity')->willReturn($entity);
         $attribute->expects($this->once())->method('getAttributeCode')->willReturn($attributeCode);

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -23,6 +23,7 @@ use Magento\Framework\View\Layout;
 use Magento\Framework\View\LayoutInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test class for \Magento\Framework\Pricing\Render\Amount
@@ -68,7 +69,7 @@ class AmountTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->priceCurrency = $this->getMockForAbstractClass(PriceCurrencyInterface::class);
+        $this->priceCurrency = $this->createMock(PriceCurrencyInterface::class);
         $data = [
             'default' => [
                 'adjustments' => [
@@ -88,12 +89,12 @@ class AmountTest extends TestCase
             ->getMock();
 
         $this->layout = $this->createMock(Layout::class);
-        $this->amount = $this->getMockForAbstractClass(AmountInterface::class);
-        $this->saleableItemMock = $this->getMockForAbstractClass(SaleableInterface::class);
-        $this->priceMock = $this->getMockForAbstractClass(PriceInterface::class);
+        $this->amount = $this->createMock(AmountInterface::class);
+        $this->saleableItemMock = $this->createMock(SaleableInterface::class);
+        $this->priceMock = $this->createMock(PriceInterface::class);
 
         $eventManager = $this->createMock(ManagerStub::class);
-        $scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $context = $this->createMock(Context::class);
         $context->expects($this->any())
             ->method('getEventManager')
@@ -149,9 +150,8 @@ class AmountTest extends TestCase
      *
      * @param bool $hasSkipAdjustments
      * @param bool|null $skipAdjustments
-     * @param string $expected
-     * @dataProvider dataProviderToHtmlSkipAdjustments
-     */
+     * @param string $expected     */
+    #[DataProvider('dataProviderToHtmlSkipAdjustments')]
     public function testToHtmlSkipAdjustments($hasSkipAdjustments, $skipAdjustments, $expected)
     {
         if ($hasSkipAdjustments) {
@@ -299,7 +299,7 @@ class AmountTest extends TestCase
      */
     protected function getAdjustmentRenderMock($data = [], $html = '', $code = 'adjustment_code')
     {
-        $adjustmentRender = $this->getMockForAbstractClass(
+        $adjustmentRender = $this->createMock(
             AdjustmentRenderInterface::class
         );
         $adjustmentRender->expects($this->once())

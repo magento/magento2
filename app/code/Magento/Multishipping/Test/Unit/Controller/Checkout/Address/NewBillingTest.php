@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -19,6 +19,7 @@ use Magento\Framework\View\Page\Config;
 use Magento\Framework\View\Page\Title;
 use Magento\Framework\View\Result\Page;
 use Magento\Multishipping\Controller\Checkout\Address\NewBilling;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Multishipping\Helper\Data;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -28,6 +29,8 @@ use PHPUnit\Framework\TestCase;
  */
 class NewBillingTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var NewBilling
      */
@@ -74,13 +77,9 @@ class NewBillingTest extends TestCase
         $this->configMock = $this->createMock(Config::class);
         $this->titleMock = $this->createMock(Title::class);
         $this->layoutMock = $this->createMock(Layout::class);
-        $this->viewMock = $this->getMockForAbstractClass(ViewInterface::class);
-        $request = $this->getMockBuilder(RequestInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $response = $this->getMockBuilder(ResponseInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->viewMock = $this->createMock(ViewInterface::class);
+        $request = $this->createMock(RequestInterface::class);
+        $response = $this->createMock(ResponseInterface::class);
         $contextMock = $this->createMock(Context::class);
         $contextMock->expects($this->atLeastOnce())
             ->method('getRequest')
@@ -89,13 +88,11 @@ class NewBillingTest extends TestCase
             ->method('getResponse')
             ->willReturn($response);
         $contextMock->expects($this->any())->method('getView')->willReturn($this->viewMock);
-        $this->addressFormMock =
-            $this->getMockBuilder(Edit::class)
-                ->addMethods(['setTitle', 'setSuccessUrl', 'setErrorUrl', 'setBackUrl'])
-                ->onlyMethods(['getTitle'])
-                ->disableOriginalConstructor()
-                ->getMock();
-        $this->urlMock = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->addressFormMock = $this->createPartialMockWithReflection(
+            Edit::class,
+            ['setTitle', 'setSuccessUrl', 'setErrorUrl', 'setBackUrl', 'getTitle']
+        );
+        $this->urlMock = $this->createMock(UrlInterface::class);
         $contextMock->expects($this->any())->method('getUrl')->willReturn($this->urlMock);
         $this->pageMock = $this->createMock(Page::class);
         $this->pageMock->expects($this->any())->method('getConfig')->willReturn($this->configMock);
@@ -121,10 +118,7 @@ class NewBillingTest extends TestCase
             ->method('setTitle')
             ->with('Create Billing Address')
             ->willReturnSelf();
-        $helperMock = $this->getMockBuilder(Data::class)
-            ->addMethods(['__'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $helperMock = $this->createPartialMockWithReflection(Data::class, ['__']);
         $helperMock->expects($this->any())->method('__')->willReturn('Create Billing Address');
         $valueMap = [
             ['*/*/selectBilling', null, 'success/url'],

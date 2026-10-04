@@ -12,7 +12,7 @@
         <annotations>
             <description>Clicks on 'Advanced Search' in the Storefront Footer. Validates that the URL and Title are present and correct.</description>
         </annotations>
-
+        <waitForElementClickable selector="{{StorefrontFooterSection.AdvancedSearch}}" stepKey="waitForClickAdvancedSearchLink"/>
         <click selector="{{StorefrontFooterSection.AdvancedSearch}}" stepKey="clickAdvancedSearchLink"/>
         <seeInCurrentUrl url="{{StorefrontCatalogSearchAdvancedFormPage.url}}" stepKey="checkUrl"/>
         <seeInTitle userInput="Advanced Search" stepKey="assertAdvancedSearchTitle1"/>

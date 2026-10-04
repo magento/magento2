@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -92,8 +92,7 @@ class OperationsExecutorTest extends TestCase
         $this->statementFactoryMock = $this->getMockBuilder(StatementFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->dbSchemaWriterMock = $this->getMockBuilder(DbSchemaWriterInterface::class)
-            ->getMockForAbstractClass();
+        $this->dbSchemaWriterMock = $this->createMock(DbSchemaWriterInterface::class);
         $this->statementAggregatorFactoryMock = $this->getMockBuilder(StatementAggregatorFactory::class)
             ->disableOriginalConstructor()
             ->getMock();

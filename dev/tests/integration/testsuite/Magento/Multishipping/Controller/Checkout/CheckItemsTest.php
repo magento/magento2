@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,6 +17,7 @@ use Magento\Quote\Model\Quote;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Quote\Api\CartRepositoryInterface as QuoteRepository;
 use Magento\Framework\Serialize\Serializer\Json;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test class for \Magento\Multishipping\Controller\Checkout
@@ -70,8 +71,8 @@ class CheckItemsTest extends \Magento\TestFramework\TestCase\AbstractController
      *
      * @magentoConfigFixture current_store multishipping/options/checkout_multiple 1
      * @magentoConfigFixture current_store multishipping/options/checkout_multiple_maximum_qty 200
-     * @dataProvider requestDataProvider
      */
+    #[DataProvider('requestDataProvider')]
     public function testExecute($requestQuantity, $expectedResponse)
     {
         $this->loginCustomer();

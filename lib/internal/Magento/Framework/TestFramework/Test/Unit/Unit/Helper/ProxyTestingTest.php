@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,9 +9,13 @@ namespace Magento\Framework\TestFramework\Test\Unit\Unit\Helper;
 
 use Magento\Framework\TestFramework\Unit\Helper\ProxyTesting;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class ProxyTestingTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @param string $method
      * @param array $params
@@ -21,9 +25,8 @@ class ProxyTestingTest extends TestCase
      * @param string $callProxiedMethod
      * @param array $passProxiedParams
      * @param mixed $expectedResult
-     *
-     * @dataProvider invokeWithExpectationsDataProvider
      */
+    #[DataProvider('invokeWithExpectationsDataProvider')]
     public function testInvokeWithExpectations(
         $method,
         $params,
@@ -35,18 +38,20 @@ class ProxyTestingTest extends TestCase
         $expectedResult
     ) {
         // Create proxied object with $callProxiedMethod
-        $proxiedObject = $this->getMockBuilder('stdClass')
-            ->addMethods([$callProxiedMethod])
-            ->getMock();
+        $proxiedObject = $this->createPartialMockWithReflection(
+            \stdClass::class,
+            [$callProxiedMethod]
+        );
 
         // Create object, which reacts on called $method by calling $callProxiedMethod from proxied object
         $callProxy = function () use ($proxiedObject, $callProxiedMethod, $passProxiedParams) {
             return call_user_func_array([$proxiedObject, $callProxiedMethod], $passProxiedParams);
         };
 
-        $object = $this->getMockBuilder('stdClass')
-            ->addMethods([$method])
-            ->getMock();
+        $object = $this->createPartialMockWithReflection(
+            \stdClass::class,
+            [$method]
+        );
         $builder = $object->expects($this->once())->method($method);
         call_user_func_array([$builder, 'with'], $params);
         $builder->willReturnCallback($callProxy);

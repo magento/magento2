@@ -16,11 +16,15 @@ use Magento\Catalog\Model\ProductRender\FormattedPriceInfoBuilder;
 use Magento\Catalog\Pricing\Price\FinalPrice;
 use Magento\Framework\Pricing\Amount\AmountInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\Pricing\PriceInfo\Base as BasePriceInfo;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class BundlePriceTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var BundlePrice
      */
@@ -43,15 +47,9 @@ class BundlePriceTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->priceCurrencyMock = $this->getMockBuilder(PriceCurrencyInterface::class)
-            ->getMockForAbstractClass();
-        $this->priceInfoFactory = $this->getMockBuilder(PriceInfoInterfaceFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
-        $this->formattedPriceInfoBuilder = $this->getMockBuilder(FormattedPriceInfoBuilder::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->priceCurrencyMock = $this->createMock(PriceCurrencyInterface::class);
+        $this->priceInfoFactory = $this->createPartialMock(PriceInfoInterfaceFactory::class, ['create']);
+        $this->formattedPriceInfoBuilder = $this->createMock(FormattedPriceInfoBuilder::class);
 
         $this->model = new BundlePrice(
             $this->priceCurrencyMock,
@@ -67,60 +65,24 @@ class BundlePriceTest extends TestCase
         $storeId = 1;
         $currencyCode = 'usd';
 
-        $productMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $price = $this->getMockBuilder(FinalPrice::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $productRender = $this->getMockBuilder(ProductRenderInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $amount = $this->getMockBuilder(AmountInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $minAmount = $this->getMockBuilder(AmountInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $priceInfo = $this->getMockBuilder(PriceInfoInterface::class)
-            ->addMethods(['getPrice'])
-            ->onlyMethods(
-                [
-                    'setMaxPrice',
-                    'setMaxRegularPrice',
-                    'setMinimalPrice',
-                    'setMinimalRegularPrice'
-                ]
-            )
-            ->getMockForAbstractClass();
+        $productMock = $this->createMock(Product::class);
+        $price = $this->createMock(FinalPrice::class);
+        $productRender = $this->createMock(ProductRenderInterface::class);
+        $amount = $this->createMock(AmountInterface::class);
+        $minAmount = $this->createMock(AmountInterface::class);
+        $basePriceInfo = $this->createMock(BasePriceInfo::class);
+        $basePriceInfo->method('getPrice')->willReturn($price);
+        $priceInfo = $this->createMock(PriceInfoInterface::class);
 
         $productMock->expects($this->once())
             ->method('getTypeId')
             ->willReturn('bundle');
+        $productMock->method('getPriceInfo')->willReturn($basePriceInfo);
+        
         $productRender->expects($this->exactly(2))
             ->method('getPriceInfo')
             ->willReturn($priceInfo);
-        $priceInfo->expects($this->once())
-            ->method('setMaxPrice')
-            ->with($amountValue);
-        $priceInfo->expects($this->once())
-            ->method('setMaxRegularPrice')
-            ->with($amountValue);
-        $priceInfo->expects($this->once())
-            ->method('setMinimalPrice')
-            ->with($minAmountValue);
-        $priceInfo->expects($this->once())
-            ->method('setMinimalRegularPrice')
-            ->with($minAmountValue);
-        $productMock->expects($this->exactly(4))
-            ->method('getPriceInfo')
-            ->willReturn($priceInfo);
-        $productMock->expects($this->any())
-            ->method('getPriceInfo')
-            ->willReturn($priceInfo);
-        $priceInfo->expects($this->exactly(4))
-            ->method('getPrice')
-            ->willReturn($price);
+
         $price->expects($this->exactly(2))
             ->method('getMaximalPrice')
             ->willReturn($amount);

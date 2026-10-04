@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection;
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory;
 use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Swatches\Helper\Data;
 use Magento\Swatches\Model\AttributesList;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -18,6 +19,7 @@ use PHPUnit\Framework\TestCase;
 
 class AttributesListTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var AttributesList
      */
@@ -51,11 +53,18 @@ class AttributesListTest extends TestCase
         );
         $collectionFactoryMock->expects($this->once())->method('create')->willReturn($this->collectionMock);
 
-        $this->attributeMock = $this->getMockBuilder(Attribute::class)
-            ->onlyMethods(['getId', 'getAttributeCode', 'getSource'])
-            ->addMethods(['getFrontendLabel'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $sourceMock = $this->createPartialMockWithReflection(\stdClass::class, ['getAllOptions']);
+        $sourceMock->method('getAllOptions')->willReturn(['options']);
+
+        $this->attributeMock = $this->createPartialMockWithReflection(
+            Attribute::class,
+            ['getId', 'getFrontendLabel', 'getAttributeCode', 'getSource']
+        );
+        $this->attributeMock->method('getId')->willReturn('id');
+        $this->attributeMock->method('getFrontendLabel')->willReturn('label');
+        $this->attributeMock->method('getAttributeCode')->willReturn('code');
+        $this->attributeMock->method('getSource')->willReturn($sourceMock);
+
         $this->collectionMock
             ->expects($this->once())
             ->method('getItems')
@@ -84,14 +93,6 @@ class AttributesListTest extends TestCase
             ->expects($this->any())
             ->method('addFieldToFilter')
             ->with('main_table.attribute_id', $ids);
-
-        $this->attributeMock->expects($this->once())->method('getId')->willReturn('id');
-        $this->attributeMock->expects($this->once())->method('getFrontendLabel')->willReturn('label');
-        $this->attributeMock->expects($this->once())->method('getAttributeCode')->willReturn('code');
-
-        $source = $this->createMock(AbstractSource::class);
-        $source->expects($this->once())->method('getAllOptions')->with(false)->willReturn(['options']);
-        $this->attributeMock->expects($this->once())->method('getSource')->willReturn($source);
 
         $this->swatchHelper->expects($this->once())->method('isSwatchAttribute')
             ->with($this->attributeMock)

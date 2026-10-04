@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -1030,7 +1030,7 @@ XMLRequest;
             $successConversion = true;
             if ($responseCurrencyCode) {
                 if (in_array($responseCurrencyCode, $allowedCurrencies)) {
-                    $cost = (double)$cost * $this->_getBaseCurrencyRate($responseCurrencyCode);
+                    $cost = (float)$cost * $this->_getBaseCurrencyRate($responseCurrencyCode);
                 } else {
                     $errorTitle = __(
                         'We can\'t convert a rate from "%1-%2".',
@@ -1118,8 +1118,7 @@ XMLRequest;
                             "AddressLine" => ["{$params['49_residential']}"],
                             "StateProvinceCode" => "{$params['destRegionCode']}",
                             "PostalCode" => "{$params['19_destPostal']}",
-                            "CountryCode" => "{$params['22_destCountry']}",
-                            "ResidentialAddressIndicator" => "{$residentialAddressIndicator}"
+                            "CountryCode" => "{$params['22_destCountry']}"
                         ]
                     ],
                     "ShipFrom" => [
@@ -1133,6 +1132,11 @@ XMLRequest;
                 ]
             ]
         ];
+
+        if ($params['49_residential'] === '01') {
+            $rateParams['RateRequest']['Shipment']['ShipTo']['Address']['ResidentialAddressIndicator']
+                = $residentialAddressIndicator;
+        }
 
         if ($this->getConfigFlag('negotiated_active')) {
             $rateParams['RateRequest']['Shipment']['ShipmentRatingOptions']['TPFCNegotiatedRatesIndicator'] = "Y";
@@ -1398,7 +1402,7 @@ XMLRequest;
             $successConversion = true;
             if ($responseCurrencyCode) {
                 if (in_array($responseCurrencyCode, $allowedCurrencies)) {
-                    $cost = (double)$cost * $this->_getBaseCurrencyRate($responseCurrencyCode);
+                    $cost = (float)$cost * $this->_getBaseCurrencyRate($responseCurrencyCode);
                 } else {
                     $errorTitle = __(
                         'We can\'t convert a rate from "%1-%2".',

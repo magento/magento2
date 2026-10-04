@@ -40,9 +40,7 @@ class FilterTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->storeMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
             ->getMock();

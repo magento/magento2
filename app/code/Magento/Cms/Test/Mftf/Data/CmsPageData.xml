@@ -119,4 +119,10 @@
         <data key="identifier" unique="suffix" >block</data>
         <data key="active">true</data>
     </entity>
+    <entity name="PageBuilderHtmlCmsHomePageContent" type="pagebuilder_html_property">
+        <data key="name">HTML</data>
+        <data key="section">general</data>
+        <data key="value">CMS homepage content goes here</data>
+        <data key="fieldName">html</data>
+    </entity>
 </entities>

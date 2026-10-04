@@ -16,6 +16,7 @@ use Magento\Framework\Locale\ResolverInterface as LocalResolverInterface;
 use Magento\Framework\NumberFormatterFactory;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -53,12 +54,11 @@ class CurrencyTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->localeCurrencyMock = $this->getMockForAbstractClass(CurrencyInterface::class);
+        $this->localeCurrencyMock = $this->createMock(CurrencyInterface::class);
         $currencyFilterFactory = $this->getMockBuilder(\Magento\Directory\Model\Currency\FilterFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->localeResolver = $this->getMockBuilder(LocalResolverInterface::class)
-            ->getMockForAbstractClass();
+        $this->localeResolver = $this->createMock(LocalResolverInterface::class);
         $this->numberFormatterFactory = $this->getMockBuilder(NumberFormatterFactory::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['create'])
@@ -102,11 +102,11 @@ class CurrencyTest extends TestCase
     }
 
     /**
-     * @dataProvider getOutputFormatDataProvider
      * @param string $locale
      * @param string $currency
      * @param string $expected
      */
+    #[DataProvider('getOutputFormatDataProvider')]
     public function testGetOutputFormat(string $locale, string $currency, string $expected): void
     {
         $this->localeResolver->expects(self::atLeastOnce())
@@ -218,13 +218,13 @@ class CurrencyTest extends TestCase
     }
 
     /**
-     * @dataProvider getFormatTxtNumberFormatterDataProvider
      * @param string $locale
      * @param string $currency
      * @param string $price
      * @param array $options
      * @param string $expected
      */
+    #[DataProvider('getFormatTxtNumberFormatterDataProvider')]
     public function testFormatTxtWithNumberFormatter(
         string $locale,
         string $currency,
@@ -302,12 +302,12 @@ class CurrencyTest extends TestCase
     }
 
     /**
-     * @dataProvider getFormatTxtZendCurrencyDataProvider
      * @param string $price
      * @param array $options
      * @param string $expected
      * @throws CurrencyException
      */
+    #[DataProvider('getFormatTxtZendCurrencyDataProvider')]
     public function testFormatTxtWithZendCurrency(string $price, array $options, string $expected): void
     {
         $this->localeCurrencyMock

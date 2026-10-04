@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Framework\Oauth\Helper\Request;
 use Magento\Framework\Oauth\OauthInputException;
 use Magento\Framework\Phrase;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class RequestTest extends TestCase
 {
@@ -44,9 +45,8 @@ class RequestTest extends TestCase
     /**
      * @param \Exception $exception
      * @param array $expected
-     * @return void
-     * @dataProvider dataProviderForPrepareErrorResponseTest
-     */
+     * @return void     */
+    #[DataProvider('dataProviderForPrepareErrorResponseTest')]
     public function testPrepareErrorResponse($exception, $expected)
     {
         $this->response
@@ -85,9 +85,8 @@ class RequestTest extends TestCase
     /**
      * @param string $url
      * @param string $host
-     * @return void
-     * @dataProvider hostsDataProvider
-     */
+     * @return void     */
+    #[DataProvider('hostsDataProvider')]
     public function testGetRequestUrl($url, $host)
     {
         $httpRequestMock = $this->createPartialMock(
@@ -123,9 +122,8 @@ class RequestTest extends TestCase
      * Test that the OAuth parameters are correctly extracted from the Authorization header.
      *
      * @param $authHeaderValue
-     * @param $expectedParams
-     * @dataProvider dataProviderForTestPrepareRequestOAuthHeader
-     */
+     * @param $expectedParams     */
+    #[DataProvider('dataProviderForTestPrepareRequestOAuthHeader')]
     public function testPrepareRequestOAuthHeader($authHeaderValue, $expectedParams)
     {
         $httpRequestMock = $this->getMockBuilder(Http::class)

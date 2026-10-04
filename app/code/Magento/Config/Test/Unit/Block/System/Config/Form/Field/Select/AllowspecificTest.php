@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,8 @@ use Magento\Framework\Data\Form;
 use Magento\Framework\Data\Form\Element\Select;
 use Magento\Framework\Escaper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\Framework\Math\Random;
@@ -20,6 +22,8 @@ use Magento\Framework\DataObject;
 
 class AllowspecificTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Allowspecific
      */
@@ -30,9 +34,15 @@ class AllowspecificTest extends TestCase
      */
     protected $_formMock;
 
+    /**
+     * @var ObjectManager
+     */
+    private $objectManager;
+
     protected function setUp(): void
     {
         $testHelper = new ObjectManager($this);
+        $this->objectManager = new ObjectManager($this);
         $objects = [
             [
                 SecureHtmlRenderer::class,
@@ -70,11 +80,10 @@ class AllowspecificTest extends TestCase
             ]
         );
         $this->_object->setId('spec_element');
-        $this->_formMock = $this->getMockBuilder(Form::class)
-            ->addMethods(['getHtmlIdPrefix', 'getHtmlIdSuffix'])
-            ->onlyMethods(['getElement'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_formMock = $this->createPartialMockWithReflection(
+            Form::class,
+            ['getHtmlIdPrefix', 'getHtmlIdSuffix', 'getElement']
+        );
     }
 
     public function testGetAfterElementHtml()
@@ -108,16 +117,16 @@ class AllowspecificTest extends TestCase
 
     /**
      * @param $value
-     * @dataProvider getHtmlWhenValueIsEmptyDataProvider
      */
+    #[DataProvider('getHtmlWhenValueIsEmptyDataProvider')]
     public function testGetHtmlWhenValueIsEmpty($value)
     {
         $this->_object->setForm($this->_formMock);
 
-        $elementMock = $this->getMockBuilder(Select::class)
-            ->addMethods(['setDisabled'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $elementMock = $this->createPartialMockWithReflection(
+            Select::class,
+            ['setDisabled']
+        );
 
         $elementMock->expects($this->once())->method('setDisabled')->with('disabled');
         $countryId = 'tetst_county_specificcountry';

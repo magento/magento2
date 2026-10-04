@@ -24,6 +24,7 @@ use Magento\TestFramework\Fixture\AppIsolation;
 use Magento\TestFramework\Fixture\Config;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Integration test for \Magento\CatalogImportExport\Model\Import\Product class.
@@ -75,7 +76,6 @@ class ProductOptionsTest extends ProductTestBase
      * Tests adding of custom options with existing and new product.
      *
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
-     * @dataProvider getBehaviorDataProvider
      * @param string $importFile
      * @param string $sku
      * @param int $expectedOptionsQty
@@ -84,6 +84,7 @@ class ProductOptionsTest extends ProductTestBase
      *
      * @return void
      */
+    #[DataProvider('getBehaviorDataProvider')]
     public function testSaveCustomOptions(string $importFile, string $sku, int $expectedOptionsQty): void
     {
         $pathToFile = __DIR__ . '/../_files/' . $importFile;
@@ -153,11 +154,11 @@ class ProductOptionsTest extends ProductTestBase
     /**
      * Tests adding of custom options with multiple store views
      *
-     * @dataProvider saveCustomOptionsWithMultipleStoreViewsDataProvider
      * @param string $importFile
      * @param array $expected
      */
     #[
+        DataProvider('saveCustomOptionsWithMultipleStoreViewsDataProvider'),
         AppIsolation(true),
         Config(CatalogConfig::XML_PATH_PRICE_SCOPE, CatalogConfig::PRICE_SCOPE_WEBSITE, ScopeInterface::SCOPE_STORE),
         DataFixture(StoreFixture::class, ['code' => 'secondstore']),
@@ -250,11 +251,11 @@ class ProductOptionsTest extends ProductTestBase
     /**
      * Tests adding of custom options with multiple store views across bunches
      *
-     * @dataProvider saveCustomOptionsWithMultipleStoreViewsDataProvider
      * @param string $importFile
      * @param array $expected
      */
     #[
+        DataProvider('saveCustomOptionsWithMultipleStoreViewsDataProvider'),
         AppIsolation(true),
         Config(CatalogConfig::XML_PATH_PRICE_SCOPE, CatalogConfig::PRICE_SCOPE_WEBSITE, ScopeInterface::SCOPE_STORE),
         Config(ImportExportConfig::XML_PATH_BUNCH_SIZE, 2, ScopeInterface::SCOPE_STORE),
@@ -966,7 +967,6 @@ class ProductOptionsTest extends ProductTestBase
     /**
      * Tests import products with custom options.
      *
-     * @dataProvider getCustomOptionDataProvider
      * @param string $importFile
      * @param string $sku1
      * @param string $sku2
@@ -974,6 +974,7 @@ class ProductOptionsTest extends ProductTestBase
      * @return void
      */
     #[
+        DataProvider('getCustomOptionDataProvider'),
         Config(CatalogConfig::XML_PATH_PRICE_SCOPE, CatalogConfig::PRICE_SCOPE_WEBSITE, ScopeInterface::SCOPE_STORE),
         DataFixture(StoreFixture::class, ['code' => 'secondstore']),
     ]
@@ -1033,7 +1034,6 @@ class ProductOptionsTest extends ProductTestBase
     /**
      * Tests import product custom options with multiple uploads.
      *
-     * @dataProvider getProductCustomOptionDataProvider
      * @param string $importFile
      * @param string $sku
      * @param int $uploadCount
@@ -1041,6 +1041,7 @@ class ProductOptionsTest extends ProductTestBase
      * @throws NoSuchEntityException
      * @throws StateException
      */
+    #[DataProvider('getProductCustomOptionDataProvider')]
     public function testImportProductCustomOptionsOnMultipleUploads(
         string $importFile,
         string $sku,

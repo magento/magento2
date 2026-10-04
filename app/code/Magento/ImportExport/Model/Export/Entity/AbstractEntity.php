@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\ImportExport\Model\Export\Entity;
 
@@ -290,7 +290,7 @@ abstract class AbstractEntity
                 $attrFilterType = \Magento\ImportExport\Model\Export::getAttributeFilterType($attribute);
 
                 if (\Magento\ImportExport\Model\Export::FILTER_TYPE_SELECT == $attrFilterType) {
-                    if (is_scalar($exportFilter[$attrCode]) && trim($exportFilter[$attrCode])) {
+                    if (is_scalar($exportFilter[$attrCode]) && strlen(trim($exportFilter[$attrCode]))) {
                         $collection->addAttributeToFilter($attrCode, ['eq' => $exportFilter[$attrCode]]);
                     }
                 } elseif (\Magento\ImportExport\Model\Export::FILTER_TYPE_MULTISELECT == $attrFilterType) {

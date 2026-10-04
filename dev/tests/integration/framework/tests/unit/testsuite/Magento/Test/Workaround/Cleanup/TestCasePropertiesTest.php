@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Test\Workaround\Cleanup;
@@ -49,7 +49,6 @@ class TestCasePropertiesTest extends TestCase
 
         foreach ($classProperties as $property) {
             if (in_array($property->getName(), $fixturePropertiesNames)) {
-                $property->setAccessible(true);
                 $value = $property->getValue($testSuite);
                 $this->assertNotNull($value);
             }
@@ -59,7 +58,6 @@ class TestCasePropertiesTest extends TestCase
 
         foreach ($classProperties as $property) {
             if (in_array($property->getName(), $fixturePropertiesNames)) {
-                $property->setAccessible(true);
                 $value = $property->getValue($testSuite);
                 $this->assertNull($value);
             }

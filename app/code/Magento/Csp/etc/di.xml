@@ -121,6 +121,10 @@
     <type name="Magento\Framework\View\Asset\GroupedCollection">
         <plugin name="addDefaultPropertiesToGroup" type="Magento\Csp\Plugin\AddDefaultPropertiesToGroupPlugin" />
     </type>
+    <type name="Magento\Framework\View\Page\Config\Renderer">
+        <plugin name="addIntegrityToAssetHtml" type="Magento\Csp\Plugin\AddIntegrityToAssetHtml" />
+        <plugin name="prependSriHashesToHeadAssets" type="Magento\Csp\Plugin\PrependSriHashesToHeadAssets" />
+    </type>
     <type name="Magento\Deploy\Service\DeployStaticContent">
         <plugin name="removeAllAssetIntegrityHashes" type="Magento\Csp\Plugin\RemoveAllAssetIntegrityHashes" />
         <plugin name="storeAssetIntegrityHashes" type="Magento\Csp\Plugin\StoreAssetIntegrityHashes" />
@@ -152,4 +156,8 @@
         </arguments>
     </type>
     <preference for="Magento\Csp\Model\SubresourceIntegrity\StorageInterface" type="Magento\Csp\Model\SubresourceIntegrity\Storage\File" />
+    <preference for="Magento\Csp\Model\SubresourceIntegrity\HashResolver\HashResolverInterface" type="Magento\Csp\Model\SubresourceIntegrity\HashResolver\HashResolver" />
+    <type name="Magento\RequireJs\Block\Html\Head\Config">
+        <plugin name="repositionSriBeforeRequireJsConfig" type="Magento\Csp\Plugin\RepositionSriBeforeRequireJsConfig" />
+    </type>
 </config>

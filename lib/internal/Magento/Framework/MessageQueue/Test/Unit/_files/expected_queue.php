@@ -5,8 +5,8 @@ use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Quote\Api\Data\CartInterface;
 
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 return [
     'publishers' => [

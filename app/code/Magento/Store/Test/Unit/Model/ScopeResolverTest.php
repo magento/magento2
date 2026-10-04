@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Store\Test\Unit\Model;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ScopeTreeProviderInterface;
 use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Store\Model\ScopeResolver;
@@ -34,8 +35,7 @@ class ScopeResolverTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->scopeTreeMock = $this->getMockBuilder(ScopeTreeProviderInterface::class)
-            ->getMockForAbstractClass();
+        $this->scopeTreeMock = $this->createMock(ScopeTreeProviderInterface::class);
         $this->scopeResolver = new ScopeResolver($this->scopeTreeMock);
     }
 
@@ -47,8 +47,8 @@ class ScopeResolverTest extends TestCase
      * @param string $requestedScope
      * @param int $requestedScopeId
      * @param bool $isBelong
-     * @dataProvider testIsBelongsToScopeDataProvider
      */
+    #[DataProvider('isBelongsToScopeDataProvider')]
     public function testIsBelongsToScope(
         string $baseScope,
         int $baseScopeId,
@@ -72,7 +72,7 @@ class ScopeResolverTest extends TestCase
      *
      * @return array[]
      */
-    public static function testIsBelongsToScopeDataProvider()
+    public static function isBelongsToScopeDataProvider()
     {
         return [
             'All scopes belongs to Default' => [

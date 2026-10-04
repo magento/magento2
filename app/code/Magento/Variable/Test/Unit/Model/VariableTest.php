@@ -1,7 +1,7 @@
 <?php
-/***
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,11 +11,11 @@ use Magento\Framework\Escaper;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\TestFramework\Unit\Listener\ReplaceObjectManager\TestProvidesServiceInterface;
 use Magento\Framework\Validation\ValidationException;
 use Magento\Framework\Validator\HTML\WYSIWYGValidatorInterface;
 use Magento\Variable\Model\ResourceModel\Variable;
 use Magento\Variable\Model\ResourceModel\Variable\Collection;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -89,8 +89,7 @@ class VariableTest extends TestCase
     public function getServicesForObjMap()
     {
         $value = $this->resourceCollectionMock;
-        $objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->getMockForAbstractClass();
+        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $objectManagerMock->method('create')->willReturnCallback(function () use ($value){
             return $value;
         });
@@ -135,6 +134,7 @@ class VariableTest extends TestCase
     /**
      * @dataProvider validateMissingInfoDataProvider
      */
+    #[DataProvider('validateMissingInfoDataProvider')]
     public function testValidateMissingInfo($code, $name)
     {
         $this->model->setCode($code)->setName($name);
@@ -144,6 +144,7 @@ class VariableTest extends TestCase
     /**
      * @dataProvider validateDataProvider
      */
+    #[DataProvider('validateDataProvider')]
     public function testValidate($variableArray, $objectId, $expectedResult)
     {
         $code = 'variable_code';
@@ -236,6 +237,7 @@ class VariableTest extends TestCase
      * @param bool $exceptionThrown
      * @dataProvider getWysiwygValidationCases
      */
+    #[DataProvider('getWysiwygValidationCases')]
     public function testBeforeSave(string $value, bool $isChanged, bool $isValidated, bool $exceptionThrown): void
     {
         $actuallyThrown = false;

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -43,6 +43,8 @@
             <!-- Delete User & Role -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin1"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdminAfter"/>
+            <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openStandaloneMediaGallery"/>
+            <actionGroup ref="AdminEnhancedMediaGalleryClearGalleryFiltersForCategoryActionGroup" stepKey="clearMediaGalleryFilters"/>
             <actionGroup ref="AdminUserOpenAdminRolesPageActionGroup" stepKey="navigateToUserRoleGrid"/>
             <comment userInput="BIC workaround" stepKey="waitForRolesGridLoad"/>
             <actionGroup ref="AdminDeleteRoleActionGroup" stepKey="deleteUserRole">

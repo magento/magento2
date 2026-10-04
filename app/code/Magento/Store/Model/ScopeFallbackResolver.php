@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Store\Model;
 
@@ -34,6 +34,7 @@ class ScopeFallbackResolver implements ScopeFallbackResolverInterface
      */
     public function getFallbackScope($scope, $scopeId, $forConfig = true)
     {
+        $scopeId = $scopeId ?? '';
         if (!isset($this->fallback[$scope][$scopeId][$forConfig])) {
             $fallback = [null, null];
             switch ($scope) {

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Theme\Block\Html\Pager;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test For Page class
@@ -47,7 +48,7 @@ class PagerTest extends TestCase
     protected function setUp(): void
     {
         $this->context = $this->createMock(Context::class);
-        $this->urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
         $this->context->expects($this->any())
             ->method('getUrlBuilder')
             ->willReturn($this->urlBuilderMock);
@@ -94,14 +95,13 @@ class PagerTest extends TestCase
     /**
      * Test get limit url.
      *
-     * @dataProvider limitUrlDataProvider
-     *
      * @param int $page
      * @param int $size
      * @param int $limit
      * @param array $expectedParams
      * @return void
      */
+    #[DataProvider('limitUrlDataProvider')]
     public function testGetLimitUrl(int $page, int $size, int $limit, array $expectedParams): void
     {
         $expectedArray = [
@@ -154,7 +154,6 @@ class PagerTest extends TestCase
     {
         $reflection = new \ReflectionClass($this->pager);
         $reflection_property = $reflection->getProperty('_collection');
-        $reflection_property->setAccessible(true);
         $reflection_property->setValue($this->pager, $collection);
     }
 }

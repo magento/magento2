@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,14 +14,15 @@ use Magento\Directory\Model\Currency;
 use Magento\Setup\Model\StoreConfigurationDataMapper;
 use Magento\Store\Model\Store;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class StoreConfigurationDataMapperTest extends TestCase
 {
     /**
      * @param array $data
      * @param array $expected
-     * @dataProvider getConfigDataDataProvider
      */
+    #[DataProvider('getConfigDataDataProvider')]
     public function testGetConfigData(array $data, array $expected)
     {
         $userConfigurationDataMapper = new StoreConfigurationDataMapper();

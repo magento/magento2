@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\App\Config;
 
@@ -9,6 +9,7 @@ use Magento\TestFramework\Helper\CacheCleaner;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\App\Config\Initial as Config;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class InitialTest extends \PHPUnit\Framework\TestCase
 {
@@ -32,8 +33,8 @@ class InitialTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param string $scope
-     * @dataProvider getDataDataProvider
      */
+    #[DataProvider('getDataDataProvider')]
     public function testGetData($scope)
     {
         $this->assertEquals(

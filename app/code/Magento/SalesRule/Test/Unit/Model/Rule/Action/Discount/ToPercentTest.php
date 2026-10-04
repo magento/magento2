@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\SalesRule\Test\Unit\Model\Rule\Action\Discount;
 
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
 use Magento\SalesRule\Model\Rule;
@@ -14,11 +15,13 @@ use Magento\SalesRule\Model\Rule\Action\Discount\Data;
 use Magento\SalesRule\Model\Rule\Action\Discount\DataFactory;
 use Magento\SalesRule\Model\Rule\Action\Discount\ToPercent;
 use Magento\SalesRule\Model\Validator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class ToPercentTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var ToPercent
      */
@@ -65,9 +68,9 @@ class ToPercentTest extends TestCase
      * @param $validItemData
      * @param $expectedRuleDiscountQty
      * @param $expectedDiscountData
-     * @dataProvider calculateDataProvider
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
+    #[DataProvider('calculateDataProvider')]
     public function testCalculate(
         $qty,
         $ruleData,
@@ -85,25 +88,23 @@ class ToPercentTest extends TestCase
 
         $this->discountDataFactory->expects($this->once())->method('create')->willReturn($discountData);
 
-        $rule = $this->getMockBuilder(
-            Rule::class
-        )->disableOriginalConstructor()
-            ->addMethods(
-                ['getDiscountAmount', 'getDiscountQty']
-            )->getMock();
+        $rule = $this->createPartialMockWithReflection(
+            Rule::class,
+            ['getDiscountAmount', 'getDiscountQty']
+        );
 
-        $item = $this->getMockBuilder(
-            AbstractItem::class
-        )->disableOriginalConstructor()
-            ->addMethods(['getDiscountAmount', 'getBaseDiscountAmount',
-                'getDiscountPercent', 'setDiscountPercent',])
-            ->onlyMethods(
-                [
-                    'getQuote',
-                    'getAddress',
-                    'getOptionByCode',
-                ]
-            )->getMock();
+        $item = $this->createPartialMockWithReflection(
+            AbstractItem::class,
+            [
+                'getDiscountAmount',
+                'getBaseDiscountAmount',
+                'getDiscountPercent',
+                'setDiscountPercent',
+                'getQuote',
+                'getAddress',
+                'getOptionByCode',
+            ]
+        );
 
         $this->validator->expects(
             $this->atLeastOnce()

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -43,25 +43,27 @@
                 <argument name="customerEmail" value="CustomerEntityOne.email"/>
             </actionGroup>
             <!-- delete Category and Products -->
-            <deleteData createDataKey="createProduct1" stepKey="deleteProduct1"/>
-            <deleteData createDataKey="createProduct2" stepKey="deleteProduct2"/>
+            <helper class="Magento\Catalog\Test\Mftf\Helper\ProductApiHelper" method="deleteAllProductsApi" stepKey="deleteAllProductsViaApi"/>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
             <!-- Logout -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <!-- Disable single store view back -->
             <magentoCLI command="config:set general/single_store_mode/enabled 0" stepKey="enabledSingleStoreMode"/>
         </after>
-        
+
         <!-- Go to frontend and make a user account and login with it -->
-        <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="signUpNewUser">
-            <argument name="Customer" value="CustomerEntityOne"/>
+        <actionGroup ref="StorefrontOpenCustomerAccountCreatePageActionGroup" stepKey="openCreateAccountPage"/>
+        <actionGroup ref="StorefrontFillCustomerAccountCreationFormActionGroup" stepKey="fillCreateAccountForm">
+            <argument name="customer" value="CustomerEntityOne"/>
         </actionGroup>
+        <actionGroup ref="StorefrontClickCreateAnAccountCustomerAccountCreationFormActionGroup" stepKey="submitCreateAccountForm"/>
         <!-- Go to the first product view page -->
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openStorefrontProductPage1">
             <argument name="productUrl" value="$$createProduct1.custom_attributes[url_key]$$"/>
         </actionGroup>
         <!-- Click on reviews and add reviews with current user -->
         <click selector="{{StorefrontProductReviewsSection.reviewsTab}}" stepKey="openReviewTab1"/>
+        <waitForElementVisible selector="{{StorefrontProductReviewsSection.reviewsTab}}" stepKey="waitForReviewFormVisible1"/>
         <!-- Set product rating stars -->
         <actionGroup ref="StorefrontSetProductRatingStarsActionGroup" stepKey="setQualityStars1">
             <argument name="ratingName" value="Quality"/>
@@ -83,6 +85,7 @@
         </actionGroup>
         <!-- Click on reviews and add reviews with current user -->
         <click selector="{{StorefrontProductReviewsSection.reviewsTab}}" stepKey="openReviewTab2"/>
+        <waitForElementVisible selector="{{StorefrontProductReviewsSection.reviewsTab}}" stepKey="waitForReviewFormVisible2"/>
         <!-- Set product rating stars -->
         <actionGroup ref="StorefrontSetProductRatingStarsActionGroup" stepKey="setQualityStars2">
             <argument name="ratingName" value="Quality"/>

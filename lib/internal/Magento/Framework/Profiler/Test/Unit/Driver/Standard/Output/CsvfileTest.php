@@ -2,23 +2,23 @@
 /**
  * Test class for \Magento\Framework\Profiler\Driver\Standard\Output\Csvfile
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Profiler\Test\Unit\Driver\Standard\Output;
 
 use Magento\Framework\Profiler\Driver\Standard\Output\Csvfile;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class CsvfileTest extends TestCase
 {
-    /**
-     * @dataProvider constructorProvider
-     * @param array $config
+    /**     * @param array $config
      * @param string $expectedFilePath
      * @param string $expectedDelimiter
      * @param string $expectedEnclosure
      */
+    #[DataProvider('constructorProvider')]
     public function testConstructor($config, $expectedFilePath, $expectedDelimiter, $expectedEnclosure)
     {
         $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');

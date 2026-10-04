@@ -1,15 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Framework\Interception;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\State;
 use Magento\Framework\Config\ReaderInterface;
 use Magento\Framework\Config\ScopeInterface;
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Interception\ObjectManager\ConfigInterface;
 use Magento\Framework\ObjectManager\DefinitionInterface as ClassDefinitions;
 use Magento\Framework\ObjectManager\RelationsInterface;
@@ -21,93 +24,36 @@ use Psr\Log\LoggerInterface;
 class PluginListGenerator implements ConfigWriterInterface, ConfigLoaderInterface
 {
     /**
-     * @var ScopeInterface
-     */
-    private $scopeConfig;
-
-    /**
-     * Configuration reader
-     *
-     * @var ReaderInterface
-     */
-    private $reader;
-
-    /**
      * Cache tag
      *
      * @var string
      */
-    private $cacheId = 'plugin-list';
+    private string $cacheId = 'plugin-list';
 
     /**
-     * @var array
-     */
-    private $loadedScopes = [];
-
-    /**
-     * Type config
-     *
-     * @var ConfigInterface
-     */
-    private $omConfig;
-
-    /**
-     * Class relations information provider
-     *
-     * @var RelationsInterface
-     */
-    private $relations;
-
-    /**
-     * List of interception methods per plugin
-     *
-     * @var DefinitionInterface
-     */
-    private $definitions;
-
-    /**
-     * List of interceptable application classes
-     *
-     * @var ClassDefinitions
-     */
-    private $classDefinitions;
-
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
-     * @var DirectoryList
-     */
-    private $directoryList;
-
-    /**
-     * @var array
-     */
-    private $pluginData;
-
-    /**
-     * @var array
-     */
-    private $inherited = [];
-
-    /**
-     * @var array
-     */
-    private $processed;
-
-    /**
-     * Scope priority loading scheme
-     *
      * @var string[]
      */
-    private $scopePriorityScheme;
+    private array $loadedScopes = [];
 
     /**
      * @var array
      */
-    private $globalScopePluginData = [];
+    private array $pluginData = [];
+
+    /**
+     * @var array
+     */
+    private array $inherited = [];
+
+    /**
+     * @var array
+     */
+    private array $processed = [];
+
+    /**
+     * @var array
+     */
+    private array $globalScopePluginData = [];
 
     /**
      * @param ReaderInterface $reader
@@ -118,28 +64,22 @@ class PluginListGenerator implements ConfigWriterInterface, ConfigLoaderInterfac
      * @param ClassDefinitions $classDefinitions
      * @param LoggerInterface $logger
      * @param DirectoryList $directoryList
-     * @param array $scopePriorityScheme
+     * @param array $scopePriorityScheme [optional]
+     * @param string $appMode [optional]
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        ReaderInterface $reader,
-        ScopeInterface $scopeConfig,
-        ConfigInterface $omConfig,
-        RelationsInterface $relations,
-        DefinitionInterface $definitions,
-        ClassDefinitions $classDefinitions,
-        LoggerInterface $logger,
-        DirectoryList $directoryList,
-        array $scopePriorityScheme = ['global']
+        private ReaderInterface $reader,
+        private ScopeInterface $scopeConfig,
+        private ConfigInterface $omConfig,
+        private RelationsInterface $relations,
+        private DefinitionInterface $definitions,
+        private ClassDefinitions $classDefinitions,
+        private LoggerInterface $logger,
+        private DirectoryList $directoryList,
+        private array $scopePriorityScheme = ['global'],
+        private string $appMode = State::MODE_DEFAULT
     ) {
-        $this->reader = $reader;
-        $this->scopeConfig = $scopeConfig;
-        $this->omConfig = $omConfig;
-        $this->relations = $relations;
-        $this->definitions = $definitions;
-        $this->classDefinitions = $classDefinitions;
-        $this->logger = $logger;
-        $this->directoryList = $directoryList;
-        $this->scopePriorityScheme = $scopePriorityScheme;
     }
 
     /**
@@ -245,10 +185,8 @@ class PluginListGenerator implements ConfigWriterInterface, ConfigLoaderInterfac
 
     /**
      * Returns class definitions
-     *
-     * @return array
      */
-    private function getClassDefinitions()
+    private function getClassDefinitions(): array
     {
         return $this->classDefinitions->getClasses();
     }
@@ -256,11 +194,12 @@ class PluginListGenerator implements ConfigWriterInterface, ConfigLoaderInterfac
     /**
      * Whether scope code is current scope code
      *
-     * @param string $scopeCode
+     * @param string|null $scopeCode
      * @return bool
      */
-    private function isCurrentScope($scopeCode)
+    private function isCurrentScope(?string $scopeCode): bool
     {
+        // ToDo: $scopeCode can be null in integration tests because of how scope is reset.
         return $this->scopeConfig->getCurrentScope() === $scopeCode;
     }
 
@@ -366,9 +305,12 @@ class PluginListGenerator implements ConfigWriterInterface, ConfigLoaderInterfac
     public function filterPlugins(array &$plugins)
     {
         foreach ($plugins as $name => $plugin) {
-            if (empty($plugin['instance'])) {
+            if (!isset($plugin['instance'])) {
                 unset($plugins[$name]);
-                $this->logger->info("Reference to undeclared plugin with name '{$name}'.");
+                // Log the undeclared plugin when it is not disabled or when the app is in Developer mode.
+                if ($this->appMode === State::MODE_DEVELOPER || !($plugin['disabled'] ?? false)) {
+                    $this->logger->debug("Reference to undeclared plugin with name '{$name}'.");
+                }
             }
         }
     }
@@ -401,26 +343,23 @@ class PluginListGenerator implements ConfigWriterInterface, ConfigLoaderInterfac
      *
      * @param string $key
      * @param array $config
-     * @return void
-     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws FileSystemException
      */
-    private function writeConfig(string $key, array $config)
+    private function writeConfig(string $key, array $config): void
     {
         $this->initialize();
-        $configuration = sprintf('<?php return %s;', var_export($config, true));
         file_put_contents(
             $this->directoryList->getPath(DirectoryList::GENERATED_METADATA) . '/' . $key  . '.php',
-            $configuration
+            sprintf('<?php return %s;', var_export($config, true))
         );
     }
 
     /**
      * Initializes writer
      *
-     * @return void
-     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws FileSystemException
      */
-    private function initialize()
+    private function initialize(): void
     {
         if (!file_exists($this->directoryList->getPath(DirectoryList::GENERATED_METADATA))) {
             mkdir($this->directoryList->getPath(DirectoryList::GENERATED_METADATA));

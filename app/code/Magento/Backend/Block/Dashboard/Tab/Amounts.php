@@ -10,8 +10,6 @@ namespace Magento\Backend\Block\Dashboard\Tab;
  * Adminhtml dashboard order amounts diagram
  * @deprecated dashboard graphs were migrated to dynamic chart.js solution
  * @see dashboard.chart.amounts in adminhtml_dashboard_index.xml
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Amounts extends \Magento\Backend\Block\Dashboard\Graph
 {

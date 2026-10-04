@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Model;
 
@@ -373,6 +373,7 @@ abstract class AbstractModel extends DataObject
             $this->_data = $key;
         } else {
             $this->checkAndConvertNumericValue($key, $value);
+            $key = $key ?? '';
             if (!array_key_exists($key, $this->_data) || $this->_data[$key] !== $value) {
                 $this->_hasDataChanges = true;
             }
@@ -1039,6 +1040,7 @@ abstract class AbstractModel extends DataObject
      */
     private function checkAndConvertNumericValue(mixed $key, mixed $value): void
     {
+        $key = $key ?? '';
         if (array_key_exists($key, $this->_data) && is_numeric($this->_data[$key])
             && $value !== null
         ) {

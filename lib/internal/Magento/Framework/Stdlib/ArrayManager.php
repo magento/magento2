@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Stdlib;
 
@@ -251,7 +251,9 @@ class ArrayManager
         $startPath = is_array($startPath) ? implode($delimiter, $startPath) : $startPath;
         $internalPath = is_array($internalPath) ? implode($delimiter, $internalPath) : $internalPath;
         $data = $startPath !== null ? $this->get($startPath, $data, [], $delimiter) : $data;
-        $checkList = [$startPath => ['start' => $startPath === null, 'children' => $data]];
+        // Use empty string as array key when startPath is null to avoid array offset deprecation
+        $checkListKey = $startPath ?? '';
+        $checkList = [$checkListKey => ['start' => $startPath === null, 'children' => $data]];
         $paths = [];
 
         while ($checkList) {

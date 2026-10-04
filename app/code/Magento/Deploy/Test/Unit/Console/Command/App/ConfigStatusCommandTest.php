@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Deploy\Test\Unit\Console\Command\App;
 use Magento\Deploy\Console\Command\App\ConfigStatusCommand;
 use Magento\Deploy\Model\DeploymentConfig\ChangeDetector;
 use Magento\Framework\Console\Cli;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -44,9 +45,8 @@ class ConfigStatusCommandTest extends TestCase
      * @param bool $hasChanges
      * @param string $expectedMessage
      * @param int $expectedCode
-     *
-     * @dataProvider executeDataProvider
      */
+    #[DataProvider('executeDataProvider')]
     public function testExecute(bool $hasChanges, $expectedMessage, $expectedCode)
     {
         $this->changeDetector->expects($this->once())

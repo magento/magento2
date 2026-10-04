@@ -65,7 +65,7 @@ class SubscriptionUpdateHandlerTest extends TestCase
     {
         $this->reinitableConfigMock = $this->getMockBuilder(ReinitableConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->analyticsTokenMock = $this->createMock(AnalyticsToken::class);
 
@@ -73,7 +73,7 @@ class SubscriptionUpdateHandlerTest extends TestCase
 
         $this->configWriterMock = $this->getMockBuilder(WriterInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 

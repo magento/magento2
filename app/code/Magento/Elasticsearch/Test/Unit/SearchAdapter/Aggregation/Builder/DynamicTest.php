@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -69,9 +69,7 @@ class DynamicTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->requestBuckedInterface = $this->getMockBuilder(BucketInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->requestBuckedInterface = $this->createMock(BucketInterface::class);
 
         $this->dataProviderContainer = $this
             ->getMockBuilder(DataProvider::class)
@@ -90,10 +88,7 @@ class DynamicTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->algorithmInterface = $this
-            ->getMockBuilder(AlgorithmInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->algorithmInterface = $this->createMock(AlgorithmInterface::class);
 
         $this->bucket = $this->getMockBuilder(DynamicBucket::class)
             ->onlyMethods(['getMethod'])

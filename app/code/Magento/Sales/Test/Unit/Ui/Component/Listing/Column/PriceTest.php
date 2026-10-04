@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,12 +16,14 @@ use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Contains tests for Price class
  */
 class PriceTest extends TestCase
 {
+
     /**
      * @var Price
      */
@@ -44,18 +46,14 @@ class PriceTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
         $contextMock = $this->getMockBuilder(ContextInterface::class)
-            ->getMockForAbstractClass();
-        $processor = $this->getMockBuilder(Processor::class)
-            ->disableOriginalConstructor()
             ->getMock();
+        $processor = $this->createMock(Processor::class);
         $contextMock->expects($this->never())->method('getProcessor')->willReturn($processor);
         $this->currencyMock = $this->getMockBuilder(Currency::class)
             ->onlyMethods(['load', 'format'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->model = $objectManager->getObject(
             Price::class,
             ['currency' => $this->currencyMock, 'context' => $contextMock, 'storeManager' => $this->storeManagerMock]
@@ -69,47 +67,43 @@ class PriceTest extends TestCase
      * @param array $dataSource
      * @param string $currencyCode
      * @param int|null $expectedStoreId
-     * @dataProvider testPrepareDataSourceDataProvider
      */
+    #[DataProvider('prepareDataSourceDataProvider')]
     public function testPrepareDataSource(
         bool $hasCurrency,
         array $dataSource,
         string $currencyCode,
         ?int $expectedStoreId = null
     ): void {
-        $itemName = 'itemName';
-        $oldItemValue = 'oldItemValue';
-        $newItemValue = 'newItemValue';
+         $itemName = 'itemName';
+         $oldItemValue = 'oldItemValue';
+         $newItemValue = 'newItemValue';
 
-        $store = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $currencyMock = $this->getMockBuilder(Currency::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $currencyMock->expects($hasCurrency ? $this->never() : $this->once())
+         $store = $this->createMock(Store::class);
+         $currencyMock = $this->createMock(Currency::class);
+         $currencyMock->expects($hasCurrency ? $this->never() : $this->once())
             ->method('getCurrencyCode')
             ->willReturn($currencyCode);
-        $this->storeManagerMock->expects($hasCurrency ? $this->never() : $this->once())
+         $this->storeManagerMock->expects($hasCurrency ? $this->never() : $this->once())
             ->method('getStore')
             ->with($expectedStoreId)
             ->willReturn($store);
-        $store->expects($hasCurrency ? $this->never() : $this->once())
+         $store->expects($hasCurrency ? $this->never() : $this->once())
             ->method('getBaseCurrency')
             ->willReturn($currencyMock);
 
-        $this->currencyMock->expects($this->once())
+         $this->currencyMock->expects($this->once())
             ->method('load')
             ->willReturnSelf();
 
-        $this->currencyMock->expects($this->once())
+         $this->currencyMock->expects($this->once())
             ->method('format')
             ->with($oldItemValue, [], false)
             ->willReturn($newItemValue);
 
-        $this->model->setData('name', $itemName);
-        $dataSource = $this->model->prepareDataSource($dataSource);
-        $this->assertEquals($newItemValue, $dataSource['data']['items'][0][$itemName]);
+         $this->model->setData('name', $itemName);
+         $dataSource = $this->model->prepareDataSource($dataSource);
+         $this->assertEquals($newItemValue, $dataSource['data']['items'][0][$itemName]);
     }
 
     /**
@@ -117,7 +111,7 @@ class PriceTest extends TestCase
      *
      * @return array
      */
-    public static function testPrepareDataSourceDataProvider(): array
+    public static function prepareDataSourceDataProvider(): array
     {
         $dataSource1 = [
             'data' => [

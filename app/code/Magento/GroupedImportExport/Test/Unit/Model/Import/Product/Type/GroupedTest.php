@@ -22,7 +22,9 @@ use Magento\GroupedImportExport;
 use Magento\GroupedImportExport\Model\Import\Product\Type\Grouped;
 use Magento\GroupedImportExport\Model\Import\Product\Type\Grouped\Links;
 use Magento\Catalog\Model\ProductTypes\ConfigInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\ImportExport\Test\Unit\Model\Import\AbstractImportTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
@@ -30,6 +32,7 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 class GroupedTest extends AbstractImportTestCase
 {
+    use MockCreationTrait;
     /**
      * @var GroupedImportExport\Model\Import\Product\Type\Grouped
      */
@@ -123,7 +126,7 @@ class GroupedTest extends AbstractImportTestCase
             1 => 'grouped'
         ];
         $this->links = $this->createMock(Links::class);
-        $this->configMock = $this->getMockForAbstractClass(ConfigInterface::class);
+        $this->configMock = $this->createMock(ConfigInterface::class);
         $this->configMock->expects($this->once())
             ->method('getComposableTypes')
             ->willReturn(['simple', 'virtual', 'downloadable']);
@@ -133,11 +136,10 @@ class GroupedTest extends AbstractImportTestCase
                 'attribute_id' => 'attributeSetName',
             ]
         ];
-        $this->connection = $this->getMockBuilder(Mysql::class)
-            ->addMethods(['joinLeft'])
-            ->onlyMethods(['select', 'fetchAll', 'fetchPairs', 'insertOnDuplicate', 'delete', 'quoteInto'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->connection = $this->createPartialMockWithReflection(
+            Mysql::class,
+            ['select', 'fetchAll', 'fetchPairs', 'insertOnDuplicate', 'delete', 'quoteInto', 'joinLeft']
+        );
         $this->select = $this->createPartialMock(
             Select::class,
             ['from', 'where', 'joinLeft', 'getConnection']
@@ -196,7 +198,6 @@ class GroupedTest extends AbstractImportTestCase
             ->willReturn('entity_id');
         $reflection = new \ReflectionClass(Grouped::class);
         $reflectionProperty = $reflection->getProperty('metadataPool');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->grouped, $metadataPoolMock);
     }
 
@@ -207,8 +208,8 @@ class GroupedTest extends AbstractImportTestCase
      * @param array $bunch
      *
      * @return void
-     * @dataProvider saveDataProvider
      */
+    #[DataProvider('saveDataProvider')]
     public function testSaveData($skus, $bunch): void
     {
         $this->entityModel->expects($this->once())->method('getNewSku')->willReturn($skus['newSku']);

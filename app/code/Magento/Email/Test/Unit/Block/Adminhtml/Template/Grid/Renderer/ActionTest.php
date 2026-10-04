@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Email\Test\Unit\Block\Adminhtml\Template\Grid\Renderer;
 use Magento\Backend\Block\Widget\Grid\Column;
 use Magento\Email\Block\Adminhtml\Template\Grid\Renderer\Action;
 use Magento\Framework\DataObject;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -19,6 +20,8 @@ use PHPUnit\Framework\TestCase;
  */
 class ActionTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Action
      */
@@ -32,10 +35,10 @@ class ActionTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->columnMock = $this->getMockBuilder(Column::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setActions', 'getActions'])
-            ->getMock();
+        $this->columnMock = $this->createPartialMockWithReflection(
+            Column::class,
+            ['setActions', 'getActions']
+        );
         $this->action = $objectManager->getObject(Action::class);
     }
 

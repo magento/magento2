@@ -39,7 +39,7 @@ class OptionsTest extends TestCase
             CollectionFactory::class,
             ['create']
         );
-        $this->userContextMock = $this->getMockForAbstractClass(UserContextInterface::class);
+        $this->userContextMock = $this->createMock(UserContextInterface::class);
         $this->model = new Options(
             $this->bulkCollectionFactoryMock,
             $this->userContextMock

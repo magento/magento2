@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -67,8 +67,7 @@ class UpdateTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->httpClient = $this->getMockBuilder(ClientInterface::class)
-            ->getMockForAbstractClass();
+        $this->httpClient = $this->createMock(ClientInterface::class);
         $this->objectManager->addSharedInstance($this->httpClient, CurlClient::class);
         $this->preparedValueFactory = $this->objectManager->get(PreparedValueFactory::class);
         $this->configValueResourceModel = $this->objectManager->get(ConfigDataResource::class);

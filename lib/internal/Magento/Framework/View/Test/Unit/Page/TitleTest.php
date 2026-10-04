@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -34,9 +34,7 @@ class TitleTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
 
         $objectManagerHelper = new ObjectManager($this);
         $this->title = $objectManagerHelper->getObject(

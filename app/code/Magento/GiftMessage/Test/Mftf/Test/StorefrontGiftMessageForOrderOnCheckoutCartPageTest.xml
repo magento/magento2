@@ -22,6 +22,7 @@
             <createData entity="SimpleProduct2" stepKey="simpleProduct"/>
         </before>
         <after>
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrdersGridFiltersAfter"/>
             <magentoCLI command="config:set sales/gift_options/allow_order 0" stepKey="disableGiftMessageForOrder"/>
             <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
         </after>

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Setup\Model;
@@ -77,7 +77,7 @@ class ConfigModel
         foreach ($optionCollection as $option) {
             $currentValue = $this->deploymentConfig->get($option->getConfigPath());
             if ($currentValue !== null) {
-                $option->setDefault();
+                $option->setDefault(null);
             }
         }
 

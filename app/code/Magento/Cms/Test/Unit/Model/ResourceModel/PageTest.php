@@ -69,8 +69,7 @@ class PageTest extends TestCase
         $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
-            ->getMockForAbstractClass();
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->dateTimeMock = $this->getMockBuilder(DateTime::class)
             ->disableOriginalConstructor()
             ->getMock();

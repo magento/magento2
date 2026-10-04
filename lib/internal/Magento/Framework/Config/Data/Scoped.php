@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Config\Data;
 
@@ -82,7 +82,7 @@ class Scoped extends \Magento\Framework\Config\Data
      */
     protected function _loadScopedData()
     {
-        $scope = $this->_configScope->getCurrentScope();
+        $scope = $this->_configScope->getCurrentScope() ?? '';
         if (false == isset($this->_loadedScopes[$scope])) {
             if (false == in_array($scope, $this->_scopePriorityScheme)) {
                 $this->_scopePriorityScheme[] = $scope;

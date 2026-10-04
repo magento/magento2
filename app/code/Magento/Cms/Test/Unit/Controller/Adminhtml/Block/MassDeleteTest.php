@@ -11,10 +11,12 @@ use Magento\Cms\Controller\Adminhtml\Block\MassDelete;
 use Magento\Cms\Model\ResourceModel\Block\Collection;
 use Magento\Cms\Model\ResourceModel\Block\CollectionFactory;
 use Magento\Cms\Test\Unit\Controller\Adminhtml\AbstractMassActionTestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 
 class MassDeleteTest extends AbstractMassActionTestCase
 {
+    use MockCreationTrait;
     /**
      * @var MassDelete
      */
@@ -93,10 +95,10 @@ class MassDeleteTest extends AbstractMassActionTestCase
      */
     protected function getBlockMock()
     {
-        $blockMock = $this->getMockBuilder(Collection::class)
-            ->addMethods(['delete'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $blockMock = $this->createPartialMockWithReflection(
+            Collection::class,
+            ['delete']
+        );
         $blockMock->expects($this->once())->method('delete')->willReturn(true);
 
         return $blockMock;

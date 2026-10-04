@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminVerifyFileUploadLinkInOrderForProductCustomOptionTest">
+        <annotations>
+            <features value="Sales"/>
+            <stories value="Product custom options with file upload"/>
+            <title value="Admin can view file upload link in order for product custom option"/>
+            <description value="Verify uploaded file link is visible in admin order page"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="AC-4423"/>
+            <group value="sales"/>
+            <group value="catalog"/>
+        </annotations>
+        <before>
+            <!-- Step 1: Create simple product with file custom option via API -->
+            <createData entity="SimpleProduct2" stepKey="createProduct">
+                <field key="price">100.00</field>
+            </createData>
+            <createData entity="productWithFileOption" stepKey="addFileOptionToProduct">
+                <requiredEntity createDataKey="createProduct"/>
+            </createData>
+            <!-- Login to admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Delete created product -->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <!-- Logout from admin -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <!-- Step 2: Open created product on storefront -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPageOnStorefront">
+            <argument name="productUrl" value="$createProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <!-- Step 3: Upload any file and add product to cart -->
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.addLinkFileUploadFile(ProductOptionFile.title)}}" stepKey="waitForFileUploadField"/>
+        <attachFile selector="{{StorefrontProductInfoMainSection.addLinkFileUploadFile(ProductOptionFile.title)}}" userInput="{{MagentoLogo.file}}" stepKey="attachFileToCustomOption"/>
+        <waitForPageLoad stepKey="waitForFileUploaded"/>
+        <actionGroup ref="StorefrontAddToTheCartActionGroup" stepKey="addProductToCart"/>
+        <!-- Step 4: Open the cart -->
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openShoppingCart"/>
+        <!-- Step 4 Expected Result: The cart displays the product and the custom option as a clickable filename -->
+        <waitForElementVisible selector="{{CheckoutCartProductSection.ProductLinkByName($createProduct.name$)}}" stepKey="waitForProductInCart"/>
+        <waitForText selector="{{CheckoutCartProductSection.ProductLinkByName($createProduct.name$)}}" userInput="$createProduct.name$" stepKey="waitForProductNameInCart"/>
+        <waitForElementVisible selector="{{CheckoutCartProductSection.ProductOptionByNameAndAttribute($createProduct.name$, ProductOptionFile.title)}}" stepKey="waitForCustomOptionVisible"/>
+        <waitForText selector="{{CheckoutCartProductSection.ProductOptionByNameAndAttribute($createProduct.name$, ProductOptionFile.title)}}" userInput="{{MagentoLogo.filename}}" stepKey="waitForUploadedFileNameInCart"/>
+        <!-- Step 5: Proceed to checkout and create order -->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromCart"/>
+        <waitForPageLoad stepKey="waitForCheckoutPageLoad"/>
+        <!-- Fill shipping information -->
+        <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="fillShippingInformation">
+            <argument name="customerVar" value="CustomerEntityOne"/>
+            <argument name="customerAddressVar" value="CustomerAddressSimple"/>
+        </actionGroup>
+        <!-- Place order -->
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="placeOrder"/>
+        <!-- Get order ID -->
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderId"/>
+        <!-- Step 6: Open order from admin -->
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="goToOrderInAdmin">
+            <argument name="entityId" value="{$grabOrderId}"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForOrderPageLoad"/>
+        <!-- Step 6 Expected Result: Verify the uploaded file link is present and visible -->
+        <waitForElementVisible selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" stepKey="waitForProductOptions"/>
+        <waitForText selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="{{ProductOptionFile.title}}" stepKey="waitForCustomOptionTitleInOrder"/>
+        <!-- Verify the file download link is present in order -->
+        <waitForElementVisible selector="{{AdminOrderItemsOrderedSection.productNameOptionsLink(MagentoLogo.file)}}" stepKey="waitForFileDownloadLinkInOrder"/>
+    </test>
+</tests>

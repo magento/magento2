@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\FedEx;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -69,11 +70,10 @@ class SetFedExShippingMethodsOnCartTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/FedEx/_files/enable_fedex_shipping_method.php
      * @magentoConfigFixture carriers/fedex/api_key TESTAPIKEY
      * @magentoConfigFixture carriers/fedex/secret_key TESTSECRETKEY
-     *
-     * @dataProvider dataProviderShippingMethods
      * @param string $methodCode
      * @param string $methodLabel
      */
+    #[DataProvider('dataProviderShippingMethods')]
     public function testSetFedExShippingMethod(string $methodCode, string $methodLabel)
     {
         $quoteReservedId = 'test_quote';
@@ -128,11 +128,10 @@ class SetFedExShippingMethodsOnCartTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/FedEx/_files/enable_fedex_shipping_method.php
      * @magentoConfigFixture carriers/fedex/api_key TESTAPIKEY
      * @magentoConfigFixture carriers/fedex/secret_key TESTSECRETKEY
-     *
-     * @dataProvider dataProviderShippingMethodsBasedOnCanadaAddress
      * @param string $methodCode
      * @param string $methodLabel
      */
+    #[DataProvider('dataProviderShippingMethodsBasedOnCanadaAddress')]
     public function testSetFedExShippingMethodBasedOnCanadaAddress(string $methodCode, string $methodLabel)
     {
         $quoteReservedId = 'test_quote';

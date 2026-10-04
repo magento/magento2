@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -59,14 +59,13 @@ class DescriptionGeneratorTest extends TestCase
     {
         $this->descriptionParagraphGeneratorMock =
             $this->createMock(DescriptionParagraphGenerator::class);
+        $callCount = 0;
         $this->descriptionParagraphGeneratorMock
             ->expects($this->exactly(3))
             ->method('generate')
-            ->will($this->onConsecutiveCalls(
-                $this->paragraphs[0],
-                $this->paragraphs[1],
-                $this->paragraphs[2]
-            ));
+            ->willReturnCallback(function() use (&$callCount) {
+                return $this->paragraphs[$callCount++];
+            });
 
         $this->mixinManagerMock = $this->createMock(MixinManager::class);
     }

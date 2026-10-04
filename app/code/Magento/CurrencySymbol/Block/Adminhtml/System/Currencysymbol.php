@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Manage currency symbols block
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\CurrencySymbol\Block\Adminhtml\System;
 
@@ -21,11 +19,6 @@ class Currencysymbol extends \Magento\Backend\Block\Widget\Form
      * @var \Magento\CurrencySymbol\Model\System\CurrencysymbolFactory
      */
     protected $_symbolSystemFactory;
-
-    /**
-     * @var string
-     */
-    private $_controller;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -50,10 +50,8 @@ class ConfigChangeDetectorTest extends TestCase
         $this->changeDetectorMock = $this->getMockBuilder(ChangeDetector::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->frontControllerMock = $this->getMockBuilder(FrontControllerInterface::class)
-            ->getMockForAbstractClass();
-        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->getMockForAbstractClass();
+        $this->frontControllerMock = $this->createMock(FrontControllerInterface::class);
+        $this->requestMock = $this->createMock(RequestInterface::class);
         $this->deploymentConfig =$this->getMockBuilder(DeploymentConfig::class)
             ->disableOriginalConstructor()
             ->getMock();

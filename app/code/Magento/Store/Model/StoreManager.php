@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Store\Model;
 
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Cache\CacheConstants;
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Store\Api\StoreResolverInterface;
 use Magento\Store\Model\ResourceModel\StoreWebsiteRelation;
@@ -73,9 +74,9 @@ class StoreManager implements
     protected $currentStoreId = null;
 
     /**
-     * Flag that shows that system has only one store view
+     * Flag that shows that system has only one store view; null is used as the cache sentinel.
      *
-     * @var bool
+     * @var bool|null
      */
     protected $_hasSingleStore;
 
@@ -136,8 +137,11 @@ class StoreManager implements
      */
     public function hasSingleStore()
     {
-        // TODO: MAGETWO-39902 add cache, move value to consts
-        return $this->isSingleStoreAllowed && count($this->getStores(true)) < 3;
+        if ($this->_hasSingleStore === null) {
+            $this->_hasSingleStore = $this->isSingleStoreAllowed && count($this->getStores(true)) < 3;
+        }
+
+        return $this->_hasSingleStore;
     }
 
     /**
@@ -236,8 +240,9 @@ class StoreManager implements
     public function reinitStores()
     {
         $this->currentStoreId = null;
+        $this->_hasSingleStore = null;
         $this->cache->clean(
-            \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
+            CacheConstants::CLEANING_MODE_MATCHING_ANY_TAG,
             [StoreResolver::CACHE_TAG, Store::CACHE_TAG, Website::CACHE_TAG, Group::CACHE_TAG]
         );
         $this->scopeConfig->clean();
@@ -339,5 +344,6 @@ class StoreManager implements
     public function _resetState(): void
     {
         $this->currentStoreId = null;
+        $this->_hasSingleStore = null;
     }
 }

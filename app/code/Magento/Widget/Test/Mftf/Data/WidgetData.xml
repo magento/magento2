@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -20,5 +20,40 @@
         <data key="display">All Pages</data>
         <data key="container">Page Top</data>
         <data key="display_on">All Pages</data>
+    </entity>
+    <entity name="WidgetWithBlockMainContent" type="widget">
+        <data key="type">CMS Static Block</data>
+        <data key="designTheme">Magento Luma</data>
+        <data key="design_theme">Magento Luma</data>
+        <data key="name" unique="suffix">testName</data>
+        <data key="store_id">All Store Views</data>
+        <array key="store_ids">
+            <item>All Store Views</item>
+        </array>
+        <data key="display">All Pages</data>
+        <data key="container">Main Content Area</data>
+        <data key="display_on">All Pages</data>
+    </entity>
+    <entity name="SampleCatalogProductsListWidget" type="widget">
+        <data key="type">Catalog Products List</data>
+        <data key="design_theme">Magento Luma</data>
+        <data key="name" unique="suffix">Catalog Products List</data>
+        <array key="store_ids">
+            <item>All Store Views</item>
+        </array>
+        <data key="sort_order">0</data>
+        <data key="display_on">Configurable Product</data>
+        <data key="container">Main Content Area</data>
+        <data key="widget_options_title">Catalog Products List</data>
+        <data key="products_per_page">1</data>
+        <data key="products_to_display">1</data>
+    </entity>
+    <entity name="CmsBlockWidgetDefaultStoreView" extends="WidgetWithBlockMainContent">
+        <data key="name" unique="suffix">WidgetDefaultStoreView</data>
+        <data key="store_id">Default Store View</data>
+    </entity>
+    <entity name="CmsBlockWidgetCustomStoreView" extends="WidgetWithBlockMainContent">
+        <data key="name" unique="suffix">WidgetCustomStoreView</data>
+        <data key="store_id">EN</data>
     </entity>
 </entities>

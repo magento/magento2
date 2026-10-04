@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -70,7 +70,7 @@ class CustomerTest extends TestCase
     public function testGetSectionDataWithCustomer()
     {
         $this->currentCustomerMock->expects($this->any())->method('getCustomerId')->willReturn(1);
-        $customerMock = $this->getMockForAbstractClass(CustomerInterface::class);
+        $customerMock = $this->createMock(CustomerInterface::class);
         $customerMock->expects($this->any())->method('getFirstname')->willReturn('John');
         $customerMock->expects($this->any())->method('getWebsiteId')->willReturn(1);
         $this->currentCustomerMock->expects($this->any())->method('getCustomer')->willReturn($customerMock);

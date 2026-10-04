@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer;
 use Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\PhraseCollector;
 use Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\Token;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -57,8 +58,8 @@ class PhraseCollectorTest extends TestCase
      * @param array $getFunctionArgumentsTokensReturnValues
      * @param array $isMatchingClassReturnValues
      * @param array $result
-     * @dataProvider testParseDataProvider
      */
+    #[DataProvider('parseDataProvider')]
     public function testParse(
         $file,
         array $isEndOfLoopReturnValues,
@@ -87,31 +88,31 @@ class PhraseCollectorTest extends TestCase
         $this->tokenizerMock->expects($this->once())
             ->method('parse')
             ->with($file);
+        $isEndOfLoopCallCount = 0;
         $this->tokenizerMock->expects($this->atLeastOnce())
             ->method('isEndOfLoop')
-            ->will(call_user_func_array(
-                [$this, 'onConsecutiveCalls'],
-                $isEndOfLoopReturnValues
-            ));
+            ->willReturnCallback(function() use (&$isEndOfLoopCallCount, $isEndOfLoopReturnValues) {
+                return $isEndOfLoopReturnValues[$isEndOfLoopCallCount++] ?? false;
+            });
+        $getNextRealTokenCallCount = 0;
         $this->tokenizerMock->expects($this->any())
             ->method('getNextRealToken')
-            ->will(call_user_func_array(
-                [$this, 'onConsecutiveCalls'],
-                $nextRealToken
-            ));
+            ->willReturnCallback(function() use (&$getNextRealTokenCallCount, $nextRealToken) {
+                return $nextRealToken[$getNextRealTokenCallCount++] ?? null;
+            });
+        $getFunctionArgumentsTokensCallCount = 0;
         $this->tokenizerMock->expects($this->any())
             ->method('getFunctionArgumentsTokens')
-            ->will(call_user_func_array(
-                [$this, 'onConsecutiveCalls'],
-                $getFunctionArgumentsTokensReturnValues
-            ));
+            ->willReturnCallback(function() use (&$getFunctionArgumentsTokensCallCount, $getFunctionArgumentsTokensReturnValues) {
+                return $getFunctionArgumentsTokensReturnValues[$getFunctionArgumentsTokensCallCount++] ?? [];
+            });
+        $isMatchingClassCallCount = 0;
         $this->tokenizerMock->expects($this->any())
             ->method('isMatchingClass')
             ->with($matchingClass)
-            ->will(call_user_func_array(
-                [$this, 'onConsecutiveCalls'],
-                $isMatchingClassReturnValues
-            ));
+            ->willReturnCallback(function() use (&$isMatchingClassCallCount, $isMatchingClassReturnValues) {
+                return $isMatchingClassReturnValues[$isMatchingClassCallCount++] ?? false;
+            });
 
         $this->phraseCollector->setIncludeObjects();
         $this->phraseCollector->parse($file);
@@ -121,7 +122,7 @@ class PhraseCollectorTest extends TestCase
     /**
      * @return array
      */
-    public static function testParseDataProvider()
+    public static function parseDataProvider()
     {
         $file = 'path/to/file.php';
         $line = 110;
@@ -251,7 +252,6 @@ class PhraseCollectorTest extends TestCase
             '_collectPhrase'
         );
 
-        $reflectionMethod->setAccessible(true);
         $this->assertSame($phraseString, $reflectionMethod->invoke($this->phraseCollector, $phraseTokens));
     }
 }

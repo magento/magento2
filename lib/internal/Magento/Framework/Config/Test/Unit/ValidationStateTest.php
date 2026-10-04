@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,14 +10,14 @@ namespace Magento\Framework\Config\Test\Unit;
 use Magento\Framework\App\Arguments\ValidationState;
 use Magento\Framework\App\State;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ValidationStateTest extends TestCase
 {
     /**
      * @param string $appMode
-     * @param boolean $expectedResult
-     * @dataProvider isValidationRequiredDataProvider
-     */
+     * @param boolean $expectedResult     */
+    #[DataProvider('isValidationRequiredDataProvider')]
     public function testIsValidationRequired($appMode, $expectedResult)
     {
         $model = new ValidationState($appMode);

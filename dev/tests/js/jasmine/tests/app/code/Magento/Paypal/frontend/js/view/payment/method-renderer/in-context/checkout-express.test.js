@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 /* eslint-disable max-nested-callbacks */
@@ -12,7 +12,7 @@ define([
 ], function (Squire, ko, $, Component) {
     'use strict';
 
-    describe('paypal/js/view/payment/method-renderer/paypal-express-abstract', function () {
+    describe('paypal/js/view/payment/method-renderer/paypal-express-in-context', function () {
         var injector = new Squire(),
             mocks = {
                 'Magento_Paypal/js/action/set-payment-method': jasmine.createSpy(),

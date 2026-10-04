@@ -10,6 +10,7 @@ namespace Magento\CardinalCommerce\Test\Unit\Model;
 use Magento\CardinalCommerce\Model\JwtManagement;
 use Magento\Framework\Serialize\Serializer\Json;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Tests JWT encode and decode.
@@ -67,8 +68,8 @@ class JwtManagementTest extends TestCase
      *
      * @param string $jwt
      * @param string $errorMessage
-     * @dataProvider decodeWithExceptionDataProvider
      */
+    #[DataProvider('decodeWithExceptionDataProvider')]
     public function testDecodeWithException(string $jwt, string $errorMessage)
     {
         $this->expectException(\InvalidArgumentException::class);

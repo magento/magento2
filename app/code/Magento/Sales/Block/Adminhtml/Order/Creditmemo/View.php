@@ -14,6 +14,8 @@ namespace Magento\Sales\Block\Adminhtml\Order\Creditmemo;
 class View extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
+     * Application data storage
+     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
@@ -65,14 +67,15 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
         }
 
         if ($this->_isAllowedAction('Magento_Sales::emails')) {
+            $confirmMessage = $this->escapeJs(
+                $this->escapeHtml(__('Are you sure you want to send a credit memo email to customer?'))
+            );
             $this->addButton(
                 'send_notification',
                 [
                     'label' => __('Send Email'),
                     'class' => 'send-email',
-                    'onclick' => 'confirmSetLocation(\'' . __(
-                        'Are you sure you want to send a credit memo email to customer?'
-                    ) . '\', \'' . $this->getEmailUrl() . '\')'
+                    'onclick' => 'confirmSetLocation(\'' . $confirmMessage . '\', \'' . $this->getEmailUrl() . '\')'
                 ]
             );
         }

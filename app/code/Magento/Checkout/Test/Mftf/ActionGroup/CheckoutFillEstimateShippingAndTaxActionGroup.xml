@@ -18,6 +18,7 @@
         <selectOption selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="{{address.state}}" stepKey="selectState"/>
         <waitForElementVisible selector="{{CheckoutCartSummarySection.postcode}}" stepKey="waitForPostCodeVisible"/>
         <fillField selector="{{CheckoutCartSummarySection.postcode}}" userInput="{{address.postcode}}" stepKey="selectPostCode"/>
-        <waitForPageLoad stepKey="waitForLoadingMaskToDiappear"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDiappear"/>
+        <waitForAjaxLoad stepKey="waitForAjax"/>
     </actionGroup>
 </actionGroups>

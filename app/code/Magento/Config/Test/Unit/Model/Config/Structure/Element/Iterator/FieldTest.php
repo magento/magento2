@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Config\Test\Unit\Model\Config\Structure\Element\Iterator;
 
+use Magento\Config\Model\Config\Structure\Element\Field as StructureField;
 use Magento\Config\Model\Config\Structure\Element\Group;
 use Magento\Config\Model\Config\Structure\Element\Iterator\Field;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -34,7 +35,7 @@ class FieldTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->_fieldMock = $this->createMock(\Magento\Config\Model\Config\Structure\Element\Field::class);
+        $this->_fieldMock = $this->createMock(StructureField::class);
         $this->_groupMock = $this->createMock(Group::class);
         $this->_model = new Field(
             $this->_groupMock,

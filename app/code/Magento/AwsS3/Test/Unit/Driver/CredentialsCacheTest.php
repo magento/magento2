@@ -42,8 +42,7 @@ class CredentialsCacheTest extends TestCase
     protected function setUp(): void
     {
         $this->cacheMock = $this->createMock(CacheInterface::class);
-        $this->credentialsFactory =
-            $this->getMockBuilder(CredentialsFactory::class)->disableOriginalConstructor()->getMock();
+        $this->credentialsFactory = $this->createMock(CredentialsFactory::class);
         $this->jsonMock = $this->createMock(Json::class);
         $this->adapter = new CredentialsCache($this->cacheMock, $this->credentialsFactory, $this->jsonMock);
     }

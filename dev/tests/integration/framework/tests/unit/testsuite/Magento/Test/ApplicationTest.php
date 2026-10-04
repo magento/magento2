@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Test;
@@ -20,6 +20,7 @@ use Magento\TestFramework\Application;
 use Magento\TestFramework\Helper\Bootstrap as TestFrameworkBootstrap;
 use Magento\TestFramework\Db\Mysql;
 use ReflectionClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Provides tests for \Magento\TestFramework\Application.
@@ -145,8 +146,8 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
      * @param string|null $postInstallSetupCommandsFilePath
      * @param array $expectedShellExecutionCalls
      * @param bool $isExceptionExpected
-     * @dataProvider installDataProvider
      */
+    #[DataProvider('installDataProvider')]
     public function testInstall(
         string $installConfigFilePath,
         string $globalConfigFilePath,
@@ -170,14 +171,12 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
 
         // bypass db dump logic
         $reflectionProperty = new \ReflectionProperty($subject, '_factory');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($subject, $this->factoryMock);
         $this->_factory = $this->factoryMock;
         $dbMock = $this->getMockBuilder(Mysql::class)->disableOriginalConstructor()->getMock();
 
         $reflectionSubject = new ReflectionClass($subject);
         $dbProperty = $reflectionSubject->getProperty('_db');
-        $dbProperty->setAccessible(true);
         $dbProperty->setValue($subject, $dbMock);
         $property = $reflectionSubject->getProperty('canLoadArea');
         $property->setValue($subject, false);
@@ -319,11 +318,10 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test \Magento\TestFramework\Application will correctly load specified areas.
-     *
-     * @dataProvider partialLoadAreaDataProvider
      * @param string $areaCode
      * @return void
      */
+    #[DataProvider('partialLoadAreaDataProvider')]
     public function testPartialLoadArea(string $areaCode)
     {
         $configScope = $this->getMockBuilder(Scope::class)
@@ -359,7 +357,7 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
         /** @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject $objectManager */
         $objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $objectManager->expects($this->once())
             ->method('configure')
             ->with($this->identicalTo([]));

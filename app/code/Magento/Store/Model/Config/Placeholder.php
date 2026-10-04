@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Store\Model\Config;
@@ -9,7 +9,7 @@ namespace Magento\Store\Model\Config;
 /**
  * Placeholder configuration values processor. Replace placeholders in configuration with config values
  */
-class Placeholder
+class Placeholder implements PlaceholderInterface
 {
     /**
      * @var \Magento\Framework\App\RequestInterface

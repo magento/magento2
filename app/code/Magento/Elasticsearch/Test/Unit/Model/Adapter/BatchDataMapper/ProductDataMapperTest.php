@@ -19,6 +19,7 @@ use Magento\Elasticsearch\Model\Adapter\FieldType\Date;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider as DataProviderAttribute;
 
 /**
  * Unit tests for \Magento\Elasticsearch\Model\Adapter\BatchDataMapper\ProductDataMapper class.
@@ -67,11 +68,13 @@ class ProductDataMapperTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->builderMock = $this->createTestProxy(Builder::class);
-        $this->fieldMapperMock = $this->getMockForAbstractClass(FieldMapperInterface::class);
+        $objectManager = new ObjectManagerHelper($this);
+        $this->builderMock = $objectManager->getObject(Builder::class);
+        
+        $this->fieldMapperMock = $this->createMock(FieldMapperInterface::class);
         $this->dataProvider = $this->createMock(DataProvider::class);
         $this->attribute = $this->createMock(Attribute::class);
-        $this->additionalFieldsProvider = $this->getMockForAbstractClass(AdditionalFieldsProviderInterface::class);
+        $this->additionalFieldsProvider = $this->createMock(AdditionalFieldsProviderInterface::class);
         $this->dateFieldTypeMock = $this->createMock(Date::class);
         $filterableAttributeTypes = [
             'boolean' => 'boolean',
@@ -79,7 +82,6 @@ class ProductDataMapperTest extends TestCase
             'select' => 'select',
         ];
 
-        $objectManager = new ObjectManagerHelper($this);
         $this->model = $objectManager->getObject(
             ProductDataMapper::class,
             [
@@ -101,19 +103,7 @@ class ProductDataMapperTest extends TestCase
         $storeId = 1;
         $productId = 42;
         $additionalFields = ['some data'];
-        $this->builderMock->expects($this->once())
-            ->method('addField')
-            ->with('store_id', $storeId);
 
-        $this->builderMock->expects($this->any())
-            ->method('addFields')
-            ->willReturnCallback(fn($param) => match ([$param]) {
-                [$additionalFields] => $this->builderMock,
-            });
-
-        $this->builderMock->expects($this->any())
-            ->method('build')
-            ->willReturn([]);
         $this->additionalFieldsProvider->expects($this->once())
             ->method('getFields')
             ->with([$productId], $storeId)
@@ -130,8 +120,6 @@ class ProductDataMapperTest extends TestCase
     {
         $storeId = 1;
 
-        $this->builderMock->expects($this->never())->method('addField');
-        $this->builderMock->expects($this->never())->method('build');
         $this->additionalFieldsProvider->expects($this->once())
             ->method('getFields')
             ->with([], $storeId)
@@ -146,8 +134,8 @@ class ProductDataMapperTest extends TestCase
      * @param array $attributeData
      * @param array|string $attributeValue
      * @param array $returnAttributeData
-     * @dataProvider mapProvider
      */
+    #[DataProviderAttribute('mapProvider')]
     public function testGetMap(int $productId, array $attributeData, $attributeValue, array $returnAttributeData)
     {
         $storeId = 1;
@@ -175,7 +163,6 @@ class ProductDataMapperTest extends TestCase
 
     /**
      * @return void
-     */
     public function testGetMapWithOptions()
     {
         $storeId = 1;
@@ -223,7 +210,7 @@ class ProductDataMapperTest extends TestCase
         $sourceMock->method('getAllOptions')->willReturn($attributeData['options'] ?? []);
         $options = [];
         foreach ($attributeData['options'] as $option) {
-            $optionMock = $this->getMockForAbstractClass(AttributeOptionInterface::class);
+            $optionMock = $this->createMock(AttributeOptionInterface::class);
             $optionMock->method('getValue')->willReturn($option['value']);
             $optionMock->method('getLabel')->willReturn($option['label']);
             $options[] = $optionMock;

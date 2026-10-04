@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,12 +16,14 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\Locale\Currency;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * Test for \Magento\CurrencySymbol\Observer\CurrencyDisplayOptions
  */
 class CurrencyDisplayOptionsTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var CurrencyDisplayOptions
      */
@@ -61,10 +63,10 @@ class CurrencyDisplayOptionsTest extends TestCase
 
         $this->mockEventObserver = $this->createPartialMock(Observer::class, ['getEvent']);
 
-        $this->mockEvent = $this->getMockBuilder(Event::class)
-            ->addMethods(['getBaseCode', 'getCurrencyOptions'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->mockEvent = $this->createPartialMockWithReflection(
+            Event::class,
+            ['getBaseCode', 'getCurrencyOptions']
+        );
 
         $this->mockEventObserver->expects($this->any())->method('getEvent')->willReturn($this->mockEvent);
         $this->mockSymbolFactory->expects($this->any())->method('create')->willReturn($this->mockSymbol);

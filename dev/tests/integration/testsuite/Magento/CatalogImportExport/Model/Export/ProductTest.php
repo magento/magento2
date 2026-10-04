@@ -10,6 +10,7 @@ namespace Magento\CatalogImportExport\Model\Export;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product\Action as ProductAction;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection as ProductAttributeCollection;
 use Magento\Catalog\Observer\SwitchPriceAttributeScopeOnConfigChange;
@@ -21,8 +22,10 @@ use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
 use Magento\CatalogInventory\Model\Stock\Item;
 use Magento\Directory\Helper\Data as DirectoryData;
+use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\ImportExport\Api\Data\LocalizedExportInfoInterface;
@@ -37,6 +40,7 @@ use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\Translation\Test\Fixture\Translation;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_reindex_schedule.php
@@ -198,11 +202,11 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Catalog/_files/product_text_attribute.php
      * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
      * @magentoDbIsolation enabled
-     * @dataProvider exportWithJsonAndMarkupTextAttributeDataProvider
      * @param string $attributeData
      * @param string $expectedResult
      * @return void
      */
+    #[DataProvider('exportWithJsonAndMarkupTextAttributeDataProvider')]
     public function testExportWithJsonAndMarkupTextAttribute(string $attributeData, string $expectedResult): void
     {
         /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
@@ -276,11 +280,21 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $rows = $this->csvToArray($exportData);
 
         $this->assertCount(4, $rows);
-        $this->assertEquals('simple &quot;1&quot;', $rows[0]['sku']);
-        $this->assertEquals('simple_ms_1', $rows[1]['sku']);
-        $this->assertEquals('simple_ms_2', $rows[2]['sku']);
-        $this->assertEquals('simple_ms_3', $rows[3]['sku']);
-        $this->assertEquals('Description with &lt;h2&gt;this is test page&lt;/h2&gt;', $rows[0]['description']);
+        $actualSkus = array_column($rows, 'sku');
+        sort($actualSkus);
+        $expectedSkus = ['simple &quot;1&quot;', 'simple_ms_1', 'simple_ms_2', 'simple_ms_3'];
+        sort($expectedSkus);
+        $this->assertEquals($expectedSkus, $actualSkus);
+
+        $rowBySku = [];
+        foreach ($rows as $row) {
+            $rowBySku[$row['sku']] = $row;
+        }
+        $this->assertArrayHasKey('simple &quot;1&quot;', $rowBySku);
+        $this->assertEquals(
+            'Description with &lt;h2&gt;this is test page&lt;/h2&gt;',
+            $rowBySku['simple &quot;1&quot;']['description']
+        );
         $this->assertStringContainsString('Category with slash\/ symbol', $exportData);
     }
 
@@ -789,13 +803,13 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      * Verify that "stock status" filter correctly applies to export result
      *
      * @magentoDataFixture Magento/Catalog/_files/multiple_products_with_few_out_of_stock.php
-     * @dataProvider filterByQuantityAndStockStatusDataProvider
      *
      * @param string $value
      * @param array $productsIncluded
      * @param array $productsNotIncluded
      * @return void
      */
+    #[DataProvider('filterByQuantityAndStockStatusDataProvider')]
     public function testFilterByQuantityAndStockStatus(
         string $value,
         array $productsIncluded,
@@ -856,8 +870,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      *
      * @magentoDataFixture Magento/Catalog/_files/product_simple_with_options.php
      * @magentoDataFixture Magento/Catalog/_files/product_with_two_websites.php
-     * @dataProvider websiteIdFilterDataProvider
      */
+    #[DataProvider('websiteIdFilterDataProvider')]
     public function testFilterByWebsiteId(string $websiteIdFilter): void
     {
         $websiteRepository = $this->objectManager->get(\Magento\Store\Api\WebsiteRepositoryInterface::class);
@@ -997,5 +1011,120 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $csv = $this->doExport(['sku' => $sku]);
         $this->assertMatchesRegularExpression('#datetime_attr=7/19/15,\p{Zs}3:30\p{Zs}AM#u', $csv);
         $this->assertMatchesRegularExpression('#date_attr=2/7/17("|(,\w+=))#', $csv);
+    }
+
+    #[
+        AppArea(Area::AREA_ADMINHTML),
+        DataFixture(
+            AttributeFixture::class,
+            ['frontend_input' => 'boolean', 'backend_type' => 'int', 'attribute_code' => 'yesno_attr']
+        ),
+        DataFixture(ProductFixture::class, ['sku' => 'prod1']),
+        DataFixture(ProductFixture::class, ['sku' => 'prod2', 'yesno_attr' => '0']),
+        DataFixture(ProductFixture::class, ['sku' => 'prod3', 'yesno_attr' => '1']),
+    ]
+    public function testExportProductWithYesNoAttribute(): void
+    {
+        $csv = $this->doExport(['yesno_attr' => '0']);
+        self::assertStringContainsString('prod2', $csv);
+        self::assertStringNotContainsString('prod1', $csv);
+        self::assertStringNotContainsString('prod3', $csv);
+    }
+
+    #[
+        AppArea(Area::AREA_ADMINHTML),
+        DataFixture(ProductFixture::class, ['sku' => 'prod1']),
+        DataFixture(ProductFixture::class, ['sku' => 'prod2']),
+        DataFixture(ProductFixture::class, ['sku' => 'prod3']),
+        DataFixture(ProductFixture::class, ['sku' => 'prod4']),
+        DataFixture(ProductFixture::class, ['sku' => 'prod5']),
+        DataFixture(ProductFixture::class, ['sku' => 'prod6']),
+        DataFixture(ProductFixture::class, ['sku' => 'prod7']),
+        DataFixture(ProductFixture::class, ['sku' => 'prod8']),
+        DataFixture(ProductFixture::class, ['sku' => 'prod9']),
+        DataFixture(ProductFixture::class, ['sku' => 'prod10']),
+    ]
+    public function testExportedSkusMatchDbSkus(): void
+    {
+        $this->model->setWriter(
+            $this->objectManager->create(\Magento\ImportExport\Model\Export\Adapter\Csv::class)
+        );
+        $exportData = $this->model->export();
+        $rows = $this->csvToArray($exportData);
+
+        $defaultStoreSkus = [];
+        foreach ($rows as $row) {
+            if (($row['store_view_code'] ?? '') !== '') {
+                continue;
+            }
+            if (!empty($row['sku'])) {
+                $defaultStoreSkus[] = $row['sku'];
+            }
+        }
+
+        $this->assertCount(
+            count(array_unique($defaultStoreSkus)),
+            $defaultStoreSkus,
+            'Exported CSV contains duplicate SKUs for default store rows.'
+        );
+
+        $resource = $this->objectManager->get(ResourceConnection::class);
+        $connection = $resource->getConnection();
+        $productEntityTable = $resource->getTableName('catalog_product_entity');
+        $select = $connection->select()->from($productEntityTable, ['sku']);
+
+        $dbSkus = array_values(array_unique($connection->fetchCol($select)));
+        sort($dbSkus);
+
+        $exportedSkus = array_values(array_unique($defaultStoreSkus));
+        sort($exportedSkus);
+
+        $this->assertSame($dbSkus, $exportedSkus);
+    }
+
+    /**
+     * A single product left in an orphaned gallery state (an image label at a non-default store view
+     * with no default-scope image) must not cause the whole export batch to be silently truncated.
+     */
+    #[
+        AppArea(Area::AREA_ADMINHTML),
+        DbIsolation(false),
+        DataFixture(StoreFixture::class, as: 'store2'),
+        DataFixture(ProductFixture::class, ['sku' => 'prod1'], 'p1'),
+        DataFixture(ProductFixture::class, ['sku' => 'prod2'], 'p2'),
+        DataFixture(ProductFixture::class, ['sku' => 'prod3'], 'p3'),
+        DataFixture(ProductFixture::class, ['sku' => 'prod4'], 'p4'),
+        DataFixture(ProductFixture::class, ['sku' => 'prod5'], 'p5'),
+    ]
+    public function testExportIsNotTruncatedByOrphanedImageLabel(): void
+    {
+        // Put one of the middle products into the orphaned gallery state: clear the default-scope
+        // image so the fallback lookup has no value to read, then leave an image label at a store view.
+        $productId = (int)$this->fixtures->get('p3')->getId();
+        $store2Id = (int)$this->fixtures->get('store2')->getId();
+        $action = $this->objectManager->get(ProductAction::class);
+        $action->updateAttributes([$productId], ['image' => ''], Store::DEFAULT_STORE_ID);
+        $action->updateAttributes([$productId], ['image_label' => 'Orphaned Label - No Image'], $store2Id);
+
+        $this->model->setWriter(
+            $this->objectManager->create(\Magento\ImportExport\Model\Export\Adapter\Csv::class)
+        );
+        $exportData = $this->model->export();
+        $rows = $this->csvToArray($exportData);
+
+        $exportedSkus = [];
+        foreach ($rows as $row) {
+            if (($row['store_view_code'] ?? '') === '' && !empty($row['sku'])) {
+                $exportedSkus[] = $row['sku'];
+            }
+        }
+
+        foreach (['prod1', 'prod2', 'prod3', 'prod4', 'prod5'] as $sku) {
+            $this->assertContains(
+                $sku,
+                $exportedSkus,
+                sprintf('Product "%s" is missing from the export - the batch was truncated.', $sku)
+            );
+        }
     }
 }

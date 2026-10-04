@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\TestModuleOverrideConfig\Inheritance\Fixtures;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\TestModuleOverrideConfig\Model\FixtureCallStorage;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class checks that fixtures override config inherited from abstract class and interface.
@@ -50,12 +51,12 @@ class FixturesTest extends FixturesAbstractClass implements FixturesInterface
      * @magentoDataFixture Magento/TestModuleOverrideConfig/_files/fixture3_first_module.php
      * @magentoDataFixtureBeforeTransaction Magento/TestModuleOverrideConfig/_files/fixture2_first_module.php
      * @magentoDataFixtureBeforeTransaction Magento/TestModuleOverrideConfig/_files/fixture3_first_module.php
-     * @dataProvider interfaceDataProvider
      * @param array $configs
      * @param array $storeConfigs
      * @param array $fixtures
      * @return void
      */
+    #[DataProvider('interfaceDataProvider')]
     public function testInterfaceInheritance(
         array $configs,
         array $storeConfigs,
@@ -71,12 +72,12 @@ class FixturesTest extends FixturesAbstractClass implements FixturesInterface
      * @magentoConfigFixture current_store test_section/test_group/field_2 new_value
      * @magentoDataFixture Magento/TestModuleOverrideConfig/_files/fixture2_first_module.php
      * @magentoDataFixtureBeforeTransaction Magento/TestModuleOverrideConfig/_files/fixture2_first_module.php
-     * @dataProvider abstractDataProvider
      * @param array $configs
      * @param array $storeConfigs
      * @param array $fixtures
      * @return void
      */
+    #[DataProvider('abstractDataProvider')]
     public function testAbstractInheritance(
         array $configs,
         array $storeConfigs,

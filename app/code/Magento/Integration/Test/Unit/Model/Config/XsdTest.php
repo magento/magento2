@@ -11,6 +11,7 @@ use Magento\Framework\Config\Dom;
 use Magento\Framework\Config\Dom\UrnResolver;
 use Magento\Framework\Config\ValidationStateInterface;
 use PHPUnit\Framework\AssertionFailedError;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -34,14 +35,10 @@ class XsdTest extends TestCase
         );
     }
 
-    /**
-     * @param string $fixtureXml
-     * @param array $expectedErrors
-     * @dataProvider exemplarXmlDataProvider
-     */
-    public function testExemplarXml($fixtureXml, array $expectedErrors)
+    #[DataProvider('exemplarXmlDataProvider')]
+    public function testExemplarXml(string $fixtureXml, array $expectedErrors): void
     {
-        $validationStateMock = $this->getMockForAbstractClass(ValidationStateInterface::class);
+        $validationStateMock = $this->createMock(ValidationStateInterface::class);
         $validationStateMock->method('isValidationRequired')
             ->willReturn(true);
         $messageFormat = '%message%';

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -20,6 +20,7 @@ use Magento\Theme\Model\Theme;
 use Magento\Theme\Model\Theme\Domain\Virtual;
 use Magento\Theme\Model\ThemeFactory;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class VirtualTest extends TestCase
 {
@@ -69,7 +70,6 @@ class VirtualTest extends TestCase
         $appState = $this->createPartialMock(State::class, ['getAreaCode']);
         $appState->expects($this->any())->method('getAreaCode')->willReturn('fixture_area');
         $appStateProperty = new \ReflectionProperty(Theme::class, '_appState');
-        $appStateProperty->setAccessible(true);
         /** @var DataObject $theme */
         $theme->setData(
             [
@@ -146,10 +146,13 @@ class VirtualTest extends TestCase
         $this->assertTrue($model->isAssigned());
     }
 
-    protected function getMockForPhysicalTheme() {
-        $physicalTheme = $this->getMockBuilder(ThemeInterface::class)
-            ->onlyMethods(['isPhysical', 'getId'])
-            ->getMockForAbstractClass();
+    protected function getMockForPhysicalTheme()
+    {
+        $physicalTheme = $this->createPartialMock(
+            ThemeInterface::class,
+            ['getArea', 'getThemePath', 'getFullPath', 'getParentTheme',
+             'getCode', 'isPhysical', 'getInheritedThemes', 'getId']
+        );
         $physicalTheme->expects($this->once())
             ->method('isPhysical')
             ->willReturn(true);
@@ -174,9 +177,9 @@ class VirtualTest extends TestCase
     /**
      * @test
      * @return void
-     * @dataProvider physicalThemeDataProvider
      * @covers \Magento\Theme\Model\Theme\Domain\Virtual::getPhysicalTheme
      */
+    #[DataProvider('physicalThemeDataProvider')]
     public function testGetPhysicalTheme($data): void
     {
         if (is_callable($data)) {

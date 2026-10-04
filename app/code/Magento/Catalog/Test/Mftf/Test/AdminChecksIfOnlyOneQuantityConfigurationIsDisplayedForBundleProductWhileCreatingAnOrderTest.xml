@@ -28,6 +28,8 @@
             <!--Delete customer-->
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <!-- Delete bundle product via API -->
+            <helper class="Magento\Catalog\Test\Mftf\Helper\ProductApiHelper" method="deleteAllProductsApi" stepKey="deleteAllProductsViaApi"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Go to bundle product creation page -->

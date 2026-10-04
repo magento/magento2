@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Reports\Block\Adminhtml\Sales\Invoiced;
+
+use PHPUnit\Framework\Attributes\Depends;
 
 /**
  * @magentoAppArea adminhtml
@@ -46,9 +48,9 @@ class GridTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @depends testGetResourceCollectionNameNormal
      * @param  string $normalCollection
      */
+    #[Depends('testGetResourceCollectionNameNormal')]
     public function testGetResourceCollectionNameWithFilter($normalCollection)
     {
         $block = $this->_createBlock('created_at_invoice');

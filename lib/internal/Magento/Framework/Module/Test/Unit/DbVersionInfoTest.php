@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Framework\Module\Output\ConfigInterface;
 use Magento\Framework\Module\ResourceInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class DbVersionInfoTest extends TestCase
 {
@@ -38,7 +39,7 @@ class DbVersionInfoTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->moduleList = $this->getMockForAbstractClass(ModuleListInterface::class);
+        $this->moduleList = $this->createMock(ModuleListInterface::class);
         $this->moduleList->expects($this->any())
             ->method('getOne')
             ->willReturnMap([
@@ -50,8 +51,8 @@ class DbVersionInfoTest extends TestCase
             ->method('getNames')
             ->willReturn(['Module_One', 'Module_Two']);
 
-        $this->_outputConfig = $this->getMockForAbstractClass(ConfigInterface::class);
-        $this->moduleResource = $this->getMockForAbstractClass(ResourceInterface::class);
+        $this->_outputConfig = $this->createMock(ConfigInterface::class);
+        $this->moduleResource = $this->createMock(ResourceInterface::class);
 
         $this->dbVersionInfo = new DbVersionInfo(
             $this->moduleList,
@@ -63,9 +64,8 @@ class DbVersionInfoTest extends TestCase
      * @param string $moduleName
      * @param string|bool $dbVersion
      * @param bool $expectedResult
-     *
-     * @dataProvider isDbUpToDateDataProvider
-     */
+     *     */
+    #[DataProvider('isDbUpToDateDataProvider')]
     public function testIsDbSchemaUpToDate($moduleName, $dbVersion, $expectedResult)
     {
         $this->moduleResource->expects($this->once())
@@ -88,9 +88,8 @@ class DbVersionInfoTest extends TestCase
      * @param string $moduleName
      * @param string|bool $dbVersion
      * @param bool $expectedResult
-     *
-     * @dataProvider isDbUpToDateDataProvider
-     */
+     *     */
+    #[DataProvider('isDbUpToDateDataProvider')]
     public function testIsDbDataUpToDate($moduleName, $dbVersion, $expectedResult)
     {
         $this->moduleResource->expects($this->once())

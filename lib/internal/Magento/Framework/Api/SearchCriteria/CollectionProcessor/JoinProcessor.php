@@ -66,9 +66,11 @@ class JoinProcessor implements CollectionProcessorInterface
         if ($searchCriteria->getSortOrders()) {
             // Process Sortings
             foreach ($searchCriteria->getSortOrders() as $order) {
-                if (!isset($this->appliedFields[$order->getField()])) {
-                    $this->applyCustomJoin($order->getField(), $collection);
-                    $this->appliedFields[$order->getField()] = true;
+                $field = $order->getField();
+                // PHP 8.5 Compatibility: Check for null before using as array offset
+                if ($field !== null && !isset($this->appliedFields[$field])) {
+                    $this->applyCustomJoin($field, $collection);
+                    $this->appliedFields[$field] = true;
                 }
             }
         }

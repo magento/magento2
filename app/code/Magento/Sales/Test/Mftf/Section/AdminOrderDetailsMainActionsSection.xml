@@ -27,9 +27,15 @@
         <element name="shipBtn" type="button" selector="//button[@title='Ship']"/>
         <element name="shipmentsTab" type="button" selector="#sales_order_view_tabs_order_shipments"/>
         <element name="authorize" type="button" selector="#order_authorize"/>
+        <element name="getPaymentUpdate" type="button" selector="#get_review_payment_update"/>
         <element name="ok" type="button" selector=".//*[@data-role='action']"/>
         <element name="void" type="button" selector="#void_payment span"/>
         <element name="invoiceTabContent1" type="text" selector="#sales_order_view_tabs_order_invoices_content > div > div.admin__data-grid-wrap > table > tbody > tr > td"/>
         <element name="creditMemoWarning" type="text" selector="//div[@class='modal-content']//div[text()='This will create an offline refund. To create an online refund, open an invoice and create credit memo for it. Do you want to continue?']"/>
+        <element name="linkOrder" type="text" selector="//*[@id='sales_order_view_tabs_order_info_content']//table[contains(@class,'order-information-table')]/tbody//tr//th[text()='{{orderInfo}}']/following-sibling::td//a" parameterized="true"/>
+        <element name="sendShipmentEmail" type="button" selector="//*[@id='save']"/>
+        <element name="sendCreditMemoEmail" type="button" selector="//*[@id='send_notification']"/>
+        <element name="openShipmentFromGrid" type="button" selector="table.data-grid tbody > tr:first-child a.action-menu-item[href*='order_shipment/view']"/>
+        <element name="openCreditMemoFromGrid" type="button" selector="table.data-grid tbody > tr:first-child a.action-menu-item[href*='order_creditmemo/view']"/>
     </section>
 </sections>

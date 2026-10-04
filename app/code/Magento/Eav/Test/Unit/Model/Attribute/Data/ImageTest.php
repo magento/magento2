@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,6 +17,7 @@ use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\Url\EncoderInterface;
 use Magento\MediaStorage\Model\File\Validator\NotProtectedExtension;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\LoggerInterface;
 
 class ImageTest extends TestCase
@@ -29,10 +30,10 @@ class ImageTest extends TestCase
     protected function setUp(): void
     {
         $this->markTestSkipped('MAGETWO-34751: Test fails after being moved.  Might have hidden dependency.');
-        $timezoneMock = $this->getMockForAbstractClass(TimezoneInterface::class);
-        $loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
-        $localeResolverMock = $this->getMockForAbstractClass(ResolverInterface::class);
-        $urlEncoder = $this->getMockForAbstractClass(EncoderInterface::class);
+        $timezoneMock = $this->createMock(TimezoneInterface::class);
+        $loggerMock = $this->createMock(LoggerInterface::class);
+        $localeResolverMock = $this->createMock(ResolverInterface::class);
+        $urlEncoder = $this->createMock(EncoderInterface::class);
         $fileValidatorMock = $this->createMock(NotProtectedExtension::class);
         $filesystemMock = $this->createMock(Filesystem::class);
 
@@ -58,8 +59,8 @@ class ImageTest extends TestCase
      * @param bool $isAjaxRequest
      * @param array $rules
      * @param array $expectedResult
-     * @dataProvider validateValueDataProvider
      */
+    #[DataProvider('validateValueDataProvider')]
     public function testValidateValue(
         $value,
         $originalValue,

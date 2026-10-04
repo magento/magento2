@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 
 use Magento\Framework\Exception\NoSuchEntityException;

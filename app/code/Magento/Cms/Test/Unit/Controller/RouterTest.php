@@ -17,6 +17,7 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\Url;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
@@ -28,6 +29,7 @@ use PHPUnit\Framework\TestCase;
  */
 class RouterTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Router
      */
@@ -60,19 +62,16 @@ class RouterTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
-            ->getMockForAbstractClass();
+        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
 
         $this->pageFactoryMock = $this->getMockBuilder(PageFactory::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['create'])
             ->getMock();
 
-        $this->storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->getMockForAbstractClass();
+        $this->storeMock = $this->createMock(StoreInterface::class);
 
-        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
-            ->getMockForAbstractClass();
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->storeManagerMock->expects($this->any())
             ->method('getStore')
             ->willReturn($this->storeMock);
@@ -101,18 +100,32 @@ class RouterTest extends TestCase
         $storeId = 1;
 
         /** @var RequestInterface|MockObject $requestMock */
-        $requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->addMethods([
+        $requestMock = $this->createPartialMockWithReflection(
+            RequestInterface::class,
+            [
                 'getPathInfo',
                 'setControllerName',
                 'setParam',
                 'setAlias',
-            ])
-            ->onlyMethods([
                 'setModuleName',
-                'setActionName'
-            ])
-            ->getMockForAbstractClass();
+                'setActionName',
+                'getModuleName',
+                'getActionName',
+                'getParam',
+                'setParams',
+                'getParams',
+                'isSecure',
+                'isPost',
+                'getCookie',
+                'getOriginalPathInfo',
+                'getFrontName',
+                'getControllerName',
+                'getRouteName',
+                'getFullActionName',
+                'setPathInfo',
+                'getBeforeForwardInfo'
+            ]
+        );
         $requestMock->expects($this->once())
             ->method('getPathInfo')
             ->willReturn($identifier);
@@ -166,8 +179,7 @@ class RouterTest extends TestCase
             ->method('getId')
             ->willReturn($storeId);
 
-        $actionMock = $this->getMockBuilder(ActionInterface::class)
-            ->getMockForAbstractClass();
+        $actionMock = $this->createMock(ActionInterface::class);
 
         $this->actionFactoryMock->expects($this->once())
             ->method('create')

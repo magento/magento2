@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2012 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -13,12 +13,14 @@
  */
 namespace Magento\Test\Db\Adapter;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 class TransactionInterfaceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param string $class
-     * @dataProvider transparentTransactionDataProvider
      */
+    #[DataProvider('transparentTransactionDataProvider')]
     public function testBeginTransparentTransaction($class)
     {
         $connectionMock = $this->_getConnectionMock($class);
@@ -31,8 +33,8 @@ class TransactionInterfaceTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param string $class
-     * @dataProvider transparentTransactionDataProvider
      */
+    #[DataProvider('transparentTransactionDataProvider')]
     public function testRollbackTransparentTransaction($class)
     {
         $connectionMock = $this->_getConnectionMock($class);
@@ -45,8 +47,8 @@ class TransactionInterfaceTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param string $class
-     * @dataProvider transparentTransactionDataProvider
      */
+    #[DataProvider('transparentTransactionDataProvider')]
     public function testCommitTransparentTransaction($class)
     {
         $connectionMock = $this->_getConnectionMock($class);

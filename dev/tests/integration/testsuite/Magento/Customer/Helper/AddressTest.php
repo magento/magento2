@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Helper;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class AddressTest extends \PHPUnit\Framework\TestCase
 {
@@ -19,8 +21,8 @@ class AddressTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param $attributeCode
-     * @dataProvider getAttributeValidationClass
      */
+    #[DataProvider('getAttributeValidationClass')]
     public function testGetAttributeValidationClass($attributeCode, $expectedClass)
     {
         $this->assertEquals($expectedClass, $this->helper->getAttributeValidationClass($attributeCode));

@@ -11,6 +11,7 @@ namespace Magento\Captcha\Test\Unit\Model\Config;
 use Magento\Captcha\Helper\Data as HelperData;
 use Magento\Captcha\Model\Config\Font;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -53,8 +54,8 @@ class FontTest extends TestCase
      *
      * @param array $fonts
      * @param array $expectedResult
-     * @dataProvider toOptionArrayDataProvider
      */
+    #[DataProvider('toOptionArrayDataProvider')]
     public function testToOptionArray($fonts, $expectedResult)
     {
         $this->helperDataMock->expects($this->any())->method('getFonts')

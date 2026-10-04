@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -26,7 +26,7 @@ class TemplateEngineFactoryTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->_objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->_objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $this->_factory = new TemplateEngineFactory(
             $this->_objectManagerMock,
             ['test' => \Fixture\Module\Model\TemplateEngine::class]
@@ -35,7 +35,7 @@ class TemplateEngineFactoryTest extends TestCase
 
     public function testCreateKnownEngine()
     {
-        $engine = $this->getMockForAbstractClass(TemplateEngineInterface::class);
+        $engine = $this->createMock(TemplateEngineInterface::class);
         $this->_objectManagerMock->expects(
             $this->once()
         )->method(

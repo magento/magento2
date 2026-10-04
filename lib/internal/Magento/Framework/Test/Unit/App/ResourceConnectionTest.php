@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -49,15 +49,11 @@ class ResourceConnectionTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);
 
-        $this->connectionFactoryMock = $this->getMockBuilder(ConnectionFactoryInterface::class)
-            ->getMock();
+        $this->connectionFactoryMock = $this->createMock(ConnectionFactoryInterface::class);
 
-        $this->configMock = $this->getMockBuilder(ConfigInterface::class)
-            ->getMock();
+        $this->configMock = $this->createMock(ConfigInterface::class);
 
         $this->objectManager = (new ObjectManager($this));
         $this->unit = $this->objectManager->getObject(
@@ -163,7 +159,7 @@ class ResourceConnectionTest extends TestCase
             ->with('default')
             ->willReturn('default');
 
-        $connection = $this->getMockBuilder(AdapterInterface::class)->getMock();
+        $connection = $this->createMock(AdapterInterface::class);
         $connection->expects($this->once())->method('getTableName')->with('pref_1');
         $this->connectionFactoryMock->expects($this->once())->method('create')
             ->with(['config'])

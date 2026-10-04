@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,6 +18,7 @@ use Magento\Setup\Console\Command\ModuleDisableCommand;
 use Magento\Setup\Console\Command\ModuleEnableCommand;
 use Magento\Setup\Model\ObjectManagerProvider;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -64,7 +65,7 @@ class ModuleEnableDisableCommandTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManagerProviderMock = $this->createMock(ObjectManagerProvider::class);
-        $objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $objectManager = $this->createMock(ObjectManagerInterface::class);
         $this->objectManagerProviderMock
             ->method('get')
             ->willReturn($objectManager);
@@ -90,8 +91,8 @@ class ModuleEnableDisableCommandTest extends TestCase
      * @param bool $clearStaticContent
      * @param string $expectedMessage
      *
-     * @dataProvider executeDataProvider
      */
+    #[DataProvider('executeDataProvider')]
     public function testExecute($isEnable, $clearStaticContent, $expectedMessage)
     {
         $this->statusMock->expects($this->once())
@@ -181,8 +182,8 @@ class ModuleEnableDisableCommandTest extends TestCase
      * @param bool $isEnable
      * @param string $expectedMessage
      *
-     * @dataProvider executeAllDataProvider
      */
+    #[DataProvider('executeAllDataProvider')]
     public function testExecuteAll($isEnable, $expectedMessage)
     {
         $setupUpgradeMessage = 'To make sure that the enabled modules are properly registered, run \'setup:upgrade\'.';
@@ -233,8 +234,8 @@ class ModuleEnableDisableCommandTest extends TestCase
     /**
      * @param bool $isEnable
      *
-     * @dataProvider executeWithConstraintsDataProvider
      */
+    #[DataProvider('executeWithConstraintsDataProvider')]
     public function testExecuteWithConstraints($isEnable)
     {
         $this->statusMock->expects($this->once())
@@ -269,8 +270,8 @@ class ModuleEnableDisableCommandTest extends TestCase
      * @param bool $isEnable
      * @param string $expectedMessage
      *
-     * @dataProvider executeExecuteForceDataProvider
      */
+    #[DataProvider('executeExecuteForceDataProvider')]
     public function testExecuteForce($isEnable, $expectedMessage)
     {
         $this->statusMock->expects($this->once())
@@ -304,8 +305,8 @@ class ModuleEnableDisableCommandTest extends TestCase
     /**
      * @param bool $isEnable
      *
-     * @dataProvider executeWithConstraintsDataProvider
      */
+    #[DataProvider('executeWithConstraintsDataProvider')]
     public function testExecuteNoChanges($isEnable)
     {
         $this->statusMock->expects($this->once())
@@ -331,10 +332,8 @@ class ModuleEnableDisableCommandTest extends TestCase
         $class = $isEnable ? ModuleEnableCommand::class : ModuleDisableCommand::class;
         $command = new $class($this->objectManagerProviderMock);
         $deploymentConfigProperty = new \ReflectionProperty($class, 'deploymentConfig');
-        $deploymentConfigProperty->setAccessible(true);
         $deploymentConfigProperty->setValue($command, $this->deploymentConfigMock);
         $deploymentConfigProperty = new \ReflectionProperty($class, 'generatedFiles');
-        $deploymentConfigProperty->setAccessible(true);
         $deploymentConfigProperty->setValue($command, $this->generatedFiles);
         return new CommandTester($command);
     }

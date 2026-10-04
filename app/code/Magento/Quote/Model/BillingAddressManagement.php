@@ -65,6 +65,11 @@ class BillingAddressManagement implements BillingAddressManagementInterface
     private $cartAddressMutex;
 
     /**
+     * @var QuoteAddressValidationService
+     */
+    private $quoteAddressValidationService;
+
+    /**
      * Constructs a quote billing address service object.
      *
      * @param CartRepositoryInterface $quoteRepository Quote repository.
@@ -72,13 +77,15 @@ class BillingAddressManagement implements BillingAddressManagementInterface
      * @param Logger $logger Logger.
      * @param AddressRepositoryInterface $addressRepository
      * @param CartAddressMutexInterface|null $cartAddressMutex
+     * @param QuoteAddressValidationService|null $quoteAddressValidationService
      */
     public function __construct(
         CartRepositoryInterface $quoteRepository,
         QuoteAddressValidator $addressValidator,
         Logger $logger,
         AddressRepositoryInterface $addressRepository,
-        ?CartAddressMutexInterface $cartAddressMutex = null
+        ?CartAddressMutexInterface $cartAddressMutex = null,
+        ?QuoteAddressValidationService $quoteAddressValidationService = null
     ) {
         $this->addressValidator = $addressValidator;
         $this->logger = $logger;
@@ -86,6 +93,8 @@ class BillingAddressManagement implements BillingAddressManagementInterface
         $this->addressRepository = $addressRepository;
         $this->cartAddressMutex = $cartAddressMutex ??
             ObjectManager::getInstance()->get(CartAddressMutex::class);
+        $this->quoteAddressValidationService = $quoteAddressValidationService ??
+            ObjectManager::getInstance()->get(QuoteAddressValidationService::class);
     }
 
     /**
@@ -118,12 +127,18 @@ class BillingAddressManagement implements BillingAddressManagementInterface
     private function assignBillingAddress(AddressInterface $address, Quote $quote, bool $useForShipping = false)
     {
         $address->setCustomerId($quote->getCustomerId());
+
+        $this->quoteAddressValidationService->validateAddressesWithRules($quote, null, $address);
+
         $quote->removeAddress($quote->getBillingAddress()->getId());
         $quote->setBillingAddress($address);
+
         try {
             $this->getShippingAddressAssignment()->setAddress($quote, $address, $useForShipping);
             $quote->setDataChanges(true);
             $this->quoteRepository->save($quote);
+        } catch (\Magento\Framework\Exception\InputException $e) {
+            throw new InputException(__($e->getMessage()), $e);
         } catch (\Exception $e) {
             $this->logger->critical($e->getMessage());
             throw new InputException(__('The address failed to save. Verify the address and try again.'));

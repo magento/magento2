@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\UrlRewrite\Controller;
 
 use Magento\TestFramework\TestCase\AbstractController;
 use Magento\Framework\App\Response\Http as HttpResponse;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class to test Match corresponding URL Rewrite
@@ -26,9 +27,8 @@ class UrlRewriteTest extends AbstractController
      * @param string $redirect
      * @param int $expectedCode
      * @return void
-     *
-     * @dataProvider requestDataProvider
      */
+    #[DataProvider('requestDataProvider')]
     public function testMatchUrlRewrite(
         string $request,
         string $redirect,

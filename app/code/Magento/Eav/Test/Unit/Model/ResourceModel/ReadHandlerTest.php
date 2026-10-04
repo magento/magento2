@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -20,6 +20,8 @@ use Magento\Framework\Model\Entity\ScopeResolver;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * Eav attributes read handler tests
@@ -28,6 +30,8 @@ use PHPUnit\Framework\TestCase;
  */
 class ReadHandlerTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Config|MockObject
      */
@@ -58,18 +62,14 @@ class ReadHandlerTest extends TestCase
         $objectManager = new ObjectManager($this);
         $args = $objectManager->getConstructArguments(ReadHandler::class);
         $this->metadataPoolMock = $args['metadataPool'];
-        $this->metadataMock = $this->getMockBuilder(EntityMetadataInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->metadataMock = $this->createMock(EntityMetadataInterface::class);
         $this->metadataPoolMock->expects($this->any())
             ->method('getMetadata')
             ->willReturn($this->metadataMock);
         $this->configMock = $args['config'];
         $this->scopeResolverMock = $args['scopeResolver'];
 
-        $scopeMock = $this->getMockBuilder(ScopeInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $scopeMock = $this->createMock(ScopeInterface::class);
         $fallback = clone $scopeMock;
         $scopeMock->method('getIdentifier')->willReturn('store_id');
         $scopeMock->method('getValue')->willReturn(1);
@@ -86,8 +86,8 @@ class ReadHandlerTest extends TestCase
      * @param int $callNum
      * @param array $expected
      * @param bool $isStatic
-     * @dataProvider executeDataProvider
      */
+    #[DataProvider('executeDataProvider')]
     public function testExecute(
         $eavEntityType,
         $callNum,
@@ -97,12 +97,8 @@ class ReadHandlerTest extends TestCase
         $entityData = ['linkField' => 'theLinkField'];
         $this->metadataMock->method('getEavEntityType')
             ->willReturn($eavEntityType);
-        $connectionMock = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $selectMock = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $connectionMock = $this->createMock(AdapterInterface::class);
+        $selectMock = $this->createMock(Select::class);
         $selectMock->method('from')
             ->willReturnSelf();
         $selectMock->method('where')
@@ -123,16 +119,13 @@ class ReadHandlerTest extends TestCase
         $this->metadataMock->method('getLinkField')
             ->willReturn('linkField');
 
-        $attributeMock = $this->getMockBuilder(AbstractAttribute::class)
-            ->addMethods(['isScopeWebsite'])
-            ->onlyMethods(['getAttributeCode', 'isStatic', 'getBackend', 'getAttributeId'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $attributeMock = $this->createPartialMockWithReflection(
+            AbstractAttribute::class,
+            ['isScopeWebsite', 'getAttributeCode', 'isStatic', 'getBackend', 'getAttributeId']
+        );
         $attributeMock->method('isStatic')
             ->willReturn($isStatic);
-        $backendMock = $this->getMockBuilder(AbstractBackend::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $backendMock = $this->createMock(AbstractBackend::class);
         $backendMock->method('getTable')
             ->willReturn('backendTable');
         $attributeMock->method('getBackend')
@@ -155,8 +148,8 @@ class ReadHandlerTest extends TestCase
      * @param null|int $isGlobalScope
      * @throws \Magento\Framework\Exception\ConfigurationMismatchException
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @dataProvider executeGlobalScopeDataProvider
      */
+    #[DataProvider('executeGlobalScopeDataProvider')]
     public function testExecuteGlobalScope(
         $eavEntityType,
         $callNum,
@@ -167,12 +160,8 @@ class ReadHandlerTest extends TestCase
         $entityData = ['linkField' => 'theLinkField'];
         $this->metadataMock->method('getEavEntityType')
             ->willReturn($eavEntityType);
-        $connectionMock = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $selectMock = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $connectionMock = $this->createMock(AdapterInterface::class);
+        $selectMock = $this->createMock(Select::class);
         $selectMock->method('from')
             ->willReturnSelf();
         $selectMock->method('where')
@@ -194,26 +183,22 @@ class ReadHandlerTest extends TestCase
         $this->metadataMock->method('getLinkField')
             ->willReturn('linkField');
 
-        $attributeMock = $this->getMockBuilder(AbstractAttribute::class)
-            ->addMethods([
+        $attributeMock = $this->createPartialMockWithReflection(
+            AbstractAttribute::class,
+            [
                 'isScopeWebsite',
-                'getIsGlobal'
-            ])
-            ->onlyMethods([
+                'getIsGlobal',
                 'getAttributeCode',
                 'isStatic',
                 'getBackend',
                 'getAttributeId'
-            ])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ]
+        );
         $attributeMock->method('isStatic')
             ->willReturn($isStatic);
         $attributeMock->method('getIsGlobal')
             ->willReturn($isGlobalScope);
-        $backendMock = $this->getMockBuilder(AbstractBackend::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $backendMock = $this->createMock(AbstractBackend::class);
         $backendMock->method('getTable')
             ->willReturn('backendTable');
         $attributeMock->method('getBackend')
@@ -264,8 +249,7 @@ class ReadHandlerTest extends TestCase
                     'attributeCode' => 'attributeValue'
                 ],
                 false,
-                null,
-                1
+                null
             ],
             'non-static attribute2' => [
                 'env-entity-type',
@@ -275,8 +259,7 @@ class ReadHandlerTest extends TestCase
                     'attributeCode' => 'attributeValue'
                 ],
                 false,
-                1,
-                0
+                1
             ],
         ];
     }

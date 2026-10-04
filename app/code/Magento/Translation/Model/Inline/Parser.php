@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,7 @@ use Magento\Translation\Model\ResourceModel\StringUtilsFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\State;
 use Magento\Framework\App\Cache\TypeListInterface;
+use Magento\Framework\Filter\Input\MaliciousCode;
 use Magento\Framework\Translate\InlineInterface;
 use Magento\Framework\Escaper;
 
@@ -23,6 +24,7 @@ use Magento\Framework\Escaper;
  * Parses content and applies necessary html element wrapping and client scripts for inline translation.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class Parser implements ParserInterface
 {
@@ -107,6 +109,24 @@ class Parser implements ParserInterface
         'img' => 'Image',
         'input' => 'Form element',
     ];
+
+    /**
+     * List of filter expressions for translations
+     *
+     * @var array
+     */
+    private $filterTagsExpression = [
+        '/\b(alert|eval|setTimeout|setInterval|Function|setImmediate|requestAnimationFrame|document\.(write' .
+            '|writeln)|innerHTML|outerHTML|insertAdjacentHTML|console\.(log|error|warn|info|debug))\s*[=(]/i',
+        '/\b(window|this|self)\s*\[\s*[\'"]?(alert|eval)[\'"]?\s*\]/i',
+    ];
+
+    /**
+     * Flag to track if filter expressions have been added
+     *
+     * @var bool
+     */
+    private $filterExpressionsAdded = false;
 
     /**
      * @var StringFactory
@@ -257,10 +277,29 @@ class Parser implements ParserInterface
      */
     protected function _filterTranslationParams(array &$translateParams, array $fieldNames)
     {
+        $this->addTranslationFilterExpression();
         foreach ($translateParams as &$param) {
             foreach ($fieldNames as $fieldName) {
                 $param[$fieldName] = $this->_inputFilter->filter($param[$fieldName]);
             }
+        }
+    }
+
+    /**
+     * Add additional filters to translation strings
+     *
+     * @return void
+     */
+    private function addTranslationFilterExpression()
+    {
+        if ($this->filterExpressionsAdded) {
+            return;
+        }
+        if ($this->_inputFilter instanceof MaliciousCode) {
+            foreach ($this->filterTagsExpression as $expression) {
+                $this->_inputFilter->addExpression($expression);
+            }
+            $this->filterExpressionsAdded = true;
         }
     }
 

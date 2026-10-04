@@ -11,6 +11,7 @@ use Magento\AdminNotification\Model\System\Message\Media\Synchronization\Error;
 use Magento\Framework\Notification\MessageInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\MediaStorage\Model\File\Storage\Flag;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -58,8 +59,8 @@ class ErrorTest extends TestCase
     /**
      * @param bool $expectedFirstRun
      * @param array $data
-     * @dataProvider isDisplayedDataProvider
      */
+    #[DataProvider('isDisplayedDataProvider')]
     public function testIsDisplayed($expectedFirstRun, $data)
     {
         $arguments = ['fileStorage' => $this->_fileStorage];

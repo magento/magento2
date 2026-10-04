@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -30,7 +30,6 @@ class SchemaLocatorTest extends TestCase
         $this->urnResolverMock = $this->createMock(UrnResolver::class);
         $this->model = new SchemaLocatorConfig($this->urnResolverMock);
         $property = new \ReflectionProperty($this->model, 'urnResolver');
-        $property->setAccessible(true);
         $property->setValue($this->model, $this->urnResolverMock);
     }
 

@@ -31,7 +31,7 @@
         <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="navigateToCreateNewPage"/>
         <actionGroup ref="FillOutCMSPageContent" stepKey="fillBasicPageData"/>
         <actionGroup ref="AdminFillCMSPageContentFieldActionGroup" stepKey="fillContentField">
-            <argument name="content" value="{{block class=&apos;Magento\Framework\View\Element\Text&apos; text=&apos;bla bla bla&apos; cache_key=&apos;BACKEND_ACL_RESOURCES&apos; cache_lifetime=999}}"/>
+            <argument name="content" value="{{block class=&quot;Magento\Framework\View\Element\Text&quot; text=&quot;bla bla bla&quot; cache_key=&quot;BACKEND_ACL_RESOURCES&quot; cache_lifetime=999}}"/>
         </actionGroup>
         <actionGroup ref="AdminSelectCMSPageStoreViewActionGroup" stepKey="selectCMSPageStoreViewForPageWithBlock">
             <argument name="storeViewName" value="Default Store View"/>

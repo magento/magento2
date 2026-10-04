@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Theme\Model\ResourceModel\Theme;
 
 use Magento\Framework\View\Design\ThemeInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class CollectionTest extends \PHPUnit\Framework\TestCase
 {
@@ -45,11 +46,9 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param string $fullPath
-     * @param bool $shouldExist
      * @magentoDataFixture setThemeFixture
-     * @dataProvider getThemeByFullPathDataProvider
      */
+    #[DataProvider('getThemeByFullPathDataProvider')]
     public function testGetThemeByFullPath($fullPath, $shouldExist)
     {
         $themeCollection = self::_getThemesCollection();
@@ -65,10 +64,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($shouldExist, $hasFound, $message);
     }
 
-    /**
-     * @return array
-     */
-    public static function getThemeByFullPathDataProvider()
+    public static function getThemeByFullPathDataProvider(): array
     {
         return [
             ['test_area/test/default', true],
@@ -85,8 +81,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture setThemeFixture
      * @magentoDbIsolation enabled
-     * @dataProvider addAreaFilterDataProvider
      */
+    #[DataProvider('addAreaFilterDataProvider')]
     public function testAddAreaFilter($area, $themeCount)
     {
         /** @var $themeCollection \Magento\Theme\Model\ResourceModel\Theme\Collection */
@@ -97,10 +93,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertCount($themeCount, $themeCollection);
     }
 
-    /**
-     * @return array
-     */
-    public static function addAreaFilterDataProvider()
+    public static function addAreaFilterDataProvider(): array
     {
         return [
             ['area' => 'test_area', 'themeCount' => 1],
@@ -112,9 +105,9 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture setThemeFixture
      * @magentoDbIsolation enabled
-     * @dataProvider addTypeFilterDataProvider
      * @covers \Magento\Theme\Model\ResourceModel\Theme\Collection::addAreaFilter
      */
+    #[DataProvider('addTypeFilterDataProvider')]
     public function testAddTypeFilter($themeType, $themeCount)
     {
         /** @var $themeCollection \Magento\Theme\Model\ResourceModel\Theme\Collection */
@@ -128,10 +121,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertCount($themeCount, $themeCollection);
     }
 
-    /**
-     * @return array
-     */
-    public static function addTypeFilterDataProvider()
+    public static function addTypeFilterDataProvider(): array
     {
         return [
             ['themeType' => ThemeInterface::TYPE_PHYSICAL, 'themeCount' => 1],

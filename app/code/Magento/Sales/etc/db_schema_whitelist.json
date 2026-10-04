@@ -1124,11 +1124,13 @@
             "product_name": true,
             "product_price": true,
             "qty_ordered": true,
-            "rating_pos": true
+            "rating_pos": true,
+            "period_month": true
         },
         "index": {
             "SALES_BESTSELLERS_AGGREGATED_DAILY_STORE_ID": true,
-            "SALES_BESTSELLERS_AGGREGATED_DAILY_PRODUCT_ID": true
+            "SALES_BESTSELLERS_AGGREGATED_DAILY_PRODUCT_ID": true,
+            "SALES_BESTSELLERS_AGGRED_DAILY_STORE_ID_PERIOD_MONTH_PRD_ID": true
         },
         "constraint": {
             "PRIMARY": true,

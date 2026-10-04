@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -21,6 +21,7 @@ use Magento\Framework\App\Request\InvalidRequestException;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Message\AbstractMessage;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\Phrase;
 use Magento\Store\Model\StoreManagerInterface;
@@ -40,6 +41,7 @@ use Magento\Framework\Exception\StateException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Customer\Controller\AbstractAccount;
+use Magento\Customer\Model\ValidatorExceptionProcessor;
 
 /**
  * Post create customer action
@@ -145,6 +147,11 @@ class CreatePost extends AbstractAccount implements CsrfAwareActionInterface, Ht
     private $formKeyValidator;
 
     /**
+     * @var ValidatorExceptionProcessor
+     */
+    private $validatorExceptionProcessor;
+
+    /**
      * @var CustomerRepository
      */
     private $customerRepository;
@@ -175,6 +182,7 @@ class CreatePost extends AbstractAccount implements CsrfAwareActionInterface, Ht
      * @param AccountRedirect $accountRedirect
      * @param CustomerRepository $customerRepository
      * @param Validator $formKeyValidator
+     * @param ValidatorExceptionProcessor|null $validatorExceptionProcessor
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -198,7 +206,8 @@ class CreatePost extends AbstractAccount implements CsrfAwareActionInterface, Ht
         DataObjectHelper $dataObjectHelper,
         AccountRedirect $accountRedirect,
         CustomerRepository $customerRepository,
-        ?Validator $formKeyValidator = null
+        ?Validator $formKeyValidator = null,
+        ?ValidatorExceptionProcessor $validatorExceptionProcessor = null
     ) {
         $this->session = $customerSession;
         $this->scopeConfig = $scopeConfig;
@@ -220,12 +229,18 @@ class CreatePost extends AbstractAccount implements CsrfAwareActionInterface, Ht
         $this->formKeyValidator = $formKeyValidator ?: ObjectManager::getInstance()->get(Validator::class);
         $this->customerRepository = $customerRepository;
         parent::__construct($context);
+        $this->validatorExceptionProcessor = $validatorExceptionProcessor
+            ?? ObjectManager::getInstance()->get(ValidatorExceptionProcessor::class);
+        if ($this->validatorExceptionProcessor !== null) {
+            $this->validatorExceptionProcessor->setMessageManager($context->getMessageManager());
+        }
     }
 
     /**
      * Retrieve cookie manager
      *
      * @deprecated 100.1.0
+     * @see https://jira.corp.magento.com/browse/MAGETWO-71174
      * @return \Magento\Framework\Stdlib\Cookie\PhpCookieManager
      */
     private function getCookieManager()
@@ -242,6 +257,7 @@ class CreatePost extends AbstractAccount implements CsrfAwareActionInterface, Ht
      * Retrieve cookie metadata factory
      *
      * @deprecated 100.1.0
+     * @see https://jira.corp.magento.com/browse/MAGETWO-71174
      * @return \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
      */
     private function getCookieMetadataFactory()
@@ -361,6 +377,8 @@ class CreatePost extends AbstractAccount implements CsrfAwareActionInterface, Ht
             return $this->resultRedirectFactory->create()
                 ->setUrl($this->_redirect->error($url));
         }
+
+        $this->decodePunycodeEmail();
         $this->session->regenerateId();
         try {
             $address = $this->extractAddress();
@@ -419,9 +437,10 @@ class CreatePost extends AbstractAccount implements CsrfAwareActionInterface, Ht
                 ]
             );
         } catch (InputException $e) {
-            $this->messageManager->addErrorMessage($e->getMessage());
-            foreach ($e->getErrors() as $error) {
-                $this->messageManager->addErrorMessage($error->getMessage());
+            if ($this->validatorExceptionProcessor !== null) {
+                $this->validatorExceptionProcessor->processInputException($e);
+            } else {
+                $this->messageManager->addErrorMessage($e->getMessage());
             }
         } catch (LocalizedException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
@@ -511,5 +530,29 @@ class CreatePost extends AbstractAccount implements CsrfAwareActionInterface, Ht
         }
 
         return $message;
+    }
+
+    /**
+     * Convert punycode email back to Unicode
+     *
+     * @return void
+     */
+    private function decodePunycodeEmail(): void
+    {
+        $email = $this->getRequest()->getParam('email');
+        if (!$email || strpos($email, '@') === false) {
+            return;
+        }
+
+        // Split local part and domain
+        [$localPart, $domain] = explode('@', $email, 2);
+
+        // Only decode if domain contains punycode (contains 'xn--')
+        if (function_exists('idn_to_utf8') && strpos($domain, 'xn--') !== false) {
+            $decodedDomain = idn_to_utf8($domain, IDNA_DEFAULT, INTL_IDNA_VARIANT_UTS46);
+            if ($decodedDomain !== false && $decodedDomain !== $domain) {
+                $this->getRequest()->setParam('email', $localPart . '@' . $decodedDomain);
+            }
+        }
     }
 }

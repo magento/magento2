@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -19,8 +19,6 @@ $customer->setWebsiteId(1)
     ->setMiddlename('A')
     ->setLastname('Smith')
     ->setSuffix('Esq.')
-    ->setDefaultBilling(1)
-    ->setDefaultShipping(1)
     ->setTaxvat('12')
     ->setGender(0);
 $repository->save($customer, 'password');

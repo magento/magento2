@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Config\Test\Unit\Model\Config\Structure\Mapper;
 
 use Magento\Config\Model\Config\Structure\Mapper\ExtendsMapper;
 use Magento\Config\Model\Config\Structure\Mapper\Helper\RelativePathConverter;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ExtendsTest extends TestCase
@@ -26,10 +27,10 @@ class ExtendsTest extends TestCase
     }
 
     /**
-     * @dataProvider mapDataProvider
      * @param array $sourceData
      * @param array $resultData
      */
+    #[DataProvider('mapDataProvider')]
     public function testMap($sourceData, $resultData)
     {
         $this->assertEquals($resultData, $this->_sut->map($sourceData));

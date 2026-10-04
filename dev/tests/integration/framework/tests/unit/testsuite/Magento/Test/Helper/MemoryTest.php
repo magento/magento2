@@ -1,10 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Test\Helper;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class MemoryTest extends \PHPUnit\Framework\TestCase
 {
@@ -54,8 +56,8 @@ class MemoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $number
      * @param string $expected
-     * @dataProvider convertToBytesDataProvider
      */
+    #[DataProvider('convertToBytesDataProvider')]
     public function testConvertToBytes($number, $expected)
     {
         $this->assertEquals($expected, \Magento\TestFramework\Helper\Memory::convertToBytes($number));
@@ -81,8 +83,8 @@ class MemoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param string $number
-     * @dataProvider convertToBytesBadFormatDataProvider
      */
+    #[DataProvider('convertToBytesBadFormatDataProvider')]
     public function testConvertToBytesBadFormat($number)
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -105,8 +107,8 @@ class MemoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $number
      * @param string $expected
-     * @dataProvider convertToBytes64DataProvider
      */
+    #[DataProvider('convertToBytes64DataProvider')]
     public function testConvertToBytes64($number, $expected)
     {
         if (PHP_INT_SIZE <= 4) {

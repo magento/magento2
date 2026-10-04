@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\ImportExport\Controller\Adminhtml\Import;
@@ -10,6 +10,7 @@ use Magento\Framework\Filesystem\DirectoryList;
 use Magento\Framework\HTTP\Adapter\FileTransferFactory;
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoAppArea adminhtml
@@ -17,7 +18,6 @@ use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorI
 class ValidateImportTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
-     * @dataProvider validationDataProvider
      * @param string $fileName
      * @param string $mimeType
      * @param string $message
@@ -27,6 +27,7 @@ class ValidateImportTest extends \Magento\TestFramework\TestCase\AbstractBackend
      * @magentoDbIsolation enabled
      * @SuppressWarnings(PHPMD.Superglobals)
      */
+    #[DataProvider('validationDataProvider')]
     public function testValidationReturn(string $fileName, string $mimeType, string $message, string $delimiter): void
     {
         $validationStrategy = ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_STOP_ON_ERROR;

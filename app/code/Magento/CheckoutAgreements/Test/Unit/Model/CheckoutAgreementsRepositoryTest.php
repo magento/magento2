@@ -10,6 +10,7 @@ namespace Magento\CheckoutAgreements\Test\Unit\Model;
 use Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface;
 use Magento\CheckoutAgreements\Model\Agreement as AgreementModel;
 use Magento\CheckoutAgreements\Model\AgreementFactory;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\CheckoutAgreements\Model\Api\SearchCriteria\ActiveStoreAgreementsFilter;
 use Magento\CheckoutAgreements\Model\CheckoutAgreementsRepository;
 use Magento\CheckoutAgreements\Model\ResourceModel\Agreement;
@@ -29,6 +30,8 @@ use PHPUnit\Framework\TestCase;
  */
 class CheckoutAgreementsRepositoryTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var CheckoutAgreementsRepository
      */
@@ -97,18 +100,17 @@ class CheckoutAgreementsRepositoryTest extends TestCase
             CollectionFactory::class,
             ['create']
         );
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->resourceMock = $this->createMock(Agreement::class);
         $this->agrFactoryMock = $this->createPartialMock(
             AgreementFactory::class,
             ['create']
         );
-        $this->agreementMock = $this->getMockBuilder(AgreementModel::class)
-            ->addMethods(['setStores'])
-            ->onlyMethods(['addData', 'getData', 'getAgreementId', 'getId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->agreementMock = $this->createPartialMockWithReflection(
+            AgreementModel::class,
+            ['setStores', 'addData', 'getData', 'getAgreementId', 'getId']
+        );
         $this->storeMock = $this->createMock(Store::class);
         $this->extensionAttributesJoinProcessorMock = $this->createPartialMock(
             JoinProcessor::class,
@@ -188,7 +190,7 @@ class CheckoutAgreementsRepositoryTest extends TestCase
         $this->storeManagerMock->expects($this->never())->method('getStore');
         $this->agreementMock->expects($this->once())->method('setStores');
         $this->agreementMock->expects($this->once())->method('getId')->willReturn($agreementId);
-        $this->agreementMock->expects($this->any())->method('getData')->willReturn(['data']);
+        $this->agreementMock->method('getData')->willReturn(['data']);
         $this->agreementMock
             ->expects($this->once())
             ->method('addData')->with(['data'])

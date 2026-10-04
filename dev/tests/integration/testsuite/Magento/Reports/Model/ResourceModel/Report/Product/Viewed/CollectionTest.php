@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Reports\Model\ResourceModel\Report\Product\Viewed;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoAppArea adminhtml
@@ -41,8 +43,6 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider tableForPeriodDataProvider
-     *
      * @param $period
      * @param $expectedTable
      * @param $dateFrom
@@ -50,6 +50,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      * @param $isTotal
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
+    #[DataProvider('tableForPeriodDataProvider')]
     public function testTableSelection($period, $expectedTable, $dateFrom, $dateTo, $isTotal = false)
     {
         $dbTableName = $this->_collection->getTable($expectedTable);

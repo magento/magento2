@@ -29,14 +29,11 @@ class GeneratorResolverTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->defaultGenerator = $this->getMockBuilder(GeneratorInterface::class)
-            ->getMockForAbstractClass();
+        $this->defaultGenerator = $this->createMock(GeneratorInterface::class);
 
-        $this->datetimeGenerator = $this->getMockBuilder(GeneratorInterface::class)
-            ->getMockForAbstractClass();
+        $this->datetimeGenerator = $this->createMock(GeneratorInterface::class);
 
-        $this->rangeGenerator = $this->getMockBuilder(GeneratorInterface::class)
-            ->getMockForAbstractClass();
+        $this->rangeGenerator = $this->createMock(GeneratorInterface::class);
 
         $invalidTypeGenerator = $this->getMockBuilder(\stdClass::class);
 

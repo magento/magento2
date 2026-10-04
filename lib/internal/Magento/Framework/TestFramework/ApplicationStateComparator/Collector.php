@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -102,7 +102,6 @@ class Collector
                 throw new \Exception('Cannot get shared objects from ' . get_class($this->objectManager));
             }
             $property = $obj->getProperty('_sharedInstances');
-            $property->setAccessible(true);
             $sharedInstances = $property->getValue($this->objectManager);
         }
         $sharedObjects = [];
@@ -202,7 +201,6 @@ class Collector
         $properties = [];
         foreach ($objReflection->getProperties() as $property) {
             $propertyName = $property->getName();
-            $property->setAccessible(true);
             if (!$property->isInitialized($object)) {
                 continue;
             }

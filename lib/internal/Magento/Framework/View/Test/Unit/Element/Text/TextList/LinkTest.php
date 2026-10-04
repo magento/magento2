@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ namespace Magento\Framework\View\Test\Unit\Element\Text\TextList;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\Text\TextList\Link;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class LinkTest extends TestCase
 {
@@ -47,9 +48,8 @@ class LinkTest extends TestCase
         $this->assertEquals($afterText, $this->link->getAfterText());
     }
 
-    /**
-     * @dataProvider toHtmlDataProvider
-     */
+    /**     */
+    #[DataProvider('toHtmlDataProvider')]
     public function testToHtml($liParams, $aParams, $innerText, $afterText, $expectedHtml)
     {
         $this->link->setLink($liParams, $aParams, $innerText, $afterText);

@@ -38,9 +38,7 @@
 
         <!-- Conditions sub-form -->
         <element name="conditionsHeader" type="button" selector="div[data-index='conditions']" timeout="30"/>
-        <element name="conditionsHeaderNew" type="button" selector="div[data-index='block_promo_catalog_edit_tab_conditions'] " timeout="30"/>
         <element name="conditionsHeaderOpen" type="button" selector="div[data-index='conditions'] div[data-state-collapsible='open']" timeout="30"/>
-        <element name="conditionsHeaderOpenNew" type="button" selector="div[data-index='block_promo_catalog_edit_tab_conditions'] div[data-state-collapsible='open']" timeout="30"/>
         <element name="conditionsValue" type="input" selector=".rule-param-edit input"/>
         <element name="conditionsOperator" type="select" selector=".rule-param-edit select"/>
         <element name="addCondition" type="button" selector="//*[@id='conditions__{{arg}}__children']//span" parameterized="true"/>
@@ -113,5 +111,11 @@
         <element name="fieldError" type="text" selector="//input[@name='{{fieldName}}']/following-sibling::label[@class='admin__field-error']" parameterized="true"/>
         <element name="modalMessage" type="text" selector="aside.modal-popup div.modal-content div"/>
         <element name="errorMessage" type="text" selector="div.message.message-error.error"/>
+        <element name="actionsCondition" type="text" selector="//div[@data-index='actions']//span[@class='rule-param']/a[@class='label' and normalize-space()='{{arg}}']" parameterized="true"/>
+        <element name="actionsValueSelect" type="select" selector="//div[@data-index='actions']//span[contains(@class,'rule-param-edit')]//select[@id='actions__1__value']"/>
+        <element name="actionsAddCondition" type="button" selector="//ul[@id='actions__1__children']//span[contains(@class,'rule-param-new-child')]//a"/>
+        <element name="actionsChildAttributeSelect" type="select" selector="select[name='rule[actions][1][new_child]']"/>
+        <element name="actionsChildOperator" type="select" selector="//ul[@id='actions__1__children']//span[contains(@class,'rule-param-edit')]//select[@id='actions__1--1__operator']"/>
+        <element name="actionsChildValue" type="input" selector="[id='actions__1--1__value']"/>
     </section>
 </sections>

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,12 +14,14 @@ use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\TemplateEngine\Php;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * Test template engine that enables PHP templates to be used for rendering.
  */
 class PhpTest extends TestCase
 {
+    use MockCreationTrait;
     const TEST_PROP_VALUE = 'TEST_PROP_VALUE';
 
     /** @var  Php */
@@ -35,7 +37,7 @@ class PhpTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->_helperFactoryMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->_helperFactoryMock = $this->createMock(ObjectManagerInterface::class);
         $this->_phpEngine = new Php($this->_helperFactoryMock);
     }
 
@@ -46,12 +48,10 @@ class PhpTest extends TestCase
      */
     public function testRender()
     {
-        $blockMock = $this->getMockBuilder(
-            Template::class
-        )->addMethods(
+        $blockMock = $this->createPartialMockWithReflection(
+            Template::class,
             ['testMethod']
-        )->disableOriginalConstructor()
-            ->getMock();
+        );
 
         $blockMock->expects($this->once())->method('testMethod');
         $blockMock->property = self::TEST_PROP_VALUE;
@@ -73,12 +73,10 @@ class PhpTest extends TestCase
     public function testRenderException()
     {
         $this->expectException('PHPUnit\Framework\Exception');
-        $blockMock = $this->getMockBuilder(
-            Template::class
-        )->onlyMethods(
+        $blockMock = $this->createPartialMockWithReflection(
+            Template::class,
             ['testMethod']
-        )->disableOriginalConstructor()
-            ->getMock();
+        );
 
         $filename = 'This_is_not_a_file';
 
@@ -105,7 +103,9 @@ class PhpTest extends TestCase
     public function testHelperWithValidClass()
     {
         $class = AbstractHelper::class;
-        $object = $this->getMockForAbstractClass($class, [], '', false);
+        $object = $this->getMockBuilder($class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->_helperFactoryMock->expects(
             $this->once()
         )->method(

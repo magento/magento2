@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\MediaGallery\Test\Unit\Model\Asset\Command;
 
-use Laminas\Db\Adapter\Driver\Pdo\Statement;
+use PhpDb\Adapter\Driver\Pdo\Statement;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
@@ -18,6 +18,7 @@ use Magento\MediaGalleryApi\Api\Data\AssetInterfaceFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
+use Zend_Db_Statement_Interface;
 
 /**
  * Test the GetById command successful scenario
@@ -72,7 +73,7 @@ class GetByIdSuccessfulTest extends TestCase
     {
         $resourceConnection = $this->createMock(ResourceConnection::class);
         $this->assetFactory = $this->createMock(AssetInterfaceFactory::class);
-        $logger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $logger = $this->createMock(LoggerInterface::class);
 
         $this->getMediaAssetById = (new ObjectManager($this))->getObject(
             GetById::class,
@@ -82,7 +83,7 @@ class GetByIdSuccessfulTest extends TestCase
                 'logger' =>  $logger,
             ]
         );
-        $this->adapter = $this->getMockForAbstractClass(AdapterInterface::class);
+        $this->adapter = $this->createMock(AdapterInterface::class);
         $resourceConnection->method('getConnection')->willReturn($this->adapter);
 
         $this->selectStub = $this->createMock(Select::class);
@@ -90,7 +91,7 @@ class GetByIdSuccessfulTest extends TestCase
         $this->selectStub->method('where')->willReturnSelf();
         $this->adapter->method('select')->willReturn($this->selectStub);
 
-        $this->statementMock = $this->getMockBuilder(\Zend_Db_Statement_Interface::class)->getMock();
+        $this->statementMock = $this->createMock(Zend_Db_Statement_Interface::class);
     }
 
     /**
@@ -101,8 +102,7 @@ class GetByIdSuccessfulTest extends TestCase
         $this->statementMock->method('fetch')->willReturn(self::MEDIA_ASSET_DATA);
         $this->adapter->method('query')->willReturn($this->statementMock);
 
-        $mediaAssetStub = $this->getMockBuilder(AssetInterface::class)
-            ->getMock();
+        $mediaAssetStub = $this->createMock(AssetInterface::class);
         $this->assetFactory->expects($this->once())->method('create')->willReturn($mediaAssetStub);
 
         $this->assertEquals(

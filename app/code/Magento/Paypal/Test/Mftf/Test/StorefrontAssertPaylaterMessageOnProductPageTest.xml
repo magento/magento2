@@ -23,6 +23,9 @@
             <!-- US Customer is created -->
             <createData entity="Simple_US_Customer_CA"  stepKey="createCustomer" before="configPayPalExpress"/>
             <createData entity="SimpleProduct3" stepKey="simpleProduct" after="createCustomer"/>
+            <actionGroup ref="AdminPayPalExpressCheckoutEnableBillingAgreementActionGroup" stepKey="disableBillingAgreement">
+                <argument name="countryCode" value="{{MerchantUnitedStates.value}}"/>
+            </actionGroup>
         </before>
         <after>
             <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>

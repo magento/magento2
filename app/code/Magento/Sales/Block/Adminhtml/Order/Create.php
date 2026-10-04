@@ -72,7 +72,9 @@ class Create extends \Magento\Backend\Block\Widget\Form\Container
             $this->buttonList->update('back', 'style', 'display:none');
         }
 
-        $confirm = __('Are you sure you want to cancel this order?');
+        $confirm = $this->escapeJs(
+            $this->escapeHtml(__('Are you sure you want to cancel this order?'))
+        );
         $this->buttonList->update('reset', 'label', __('Cancel'));
         $this->buttonList->update('reset', 'class', 'cancel');
         $this->buttonList->update(

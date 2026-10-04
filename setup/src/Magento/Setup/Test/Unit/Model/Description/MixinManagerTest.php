@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -36,25 +36,19 @@ class MixinManagerTest extends TestCase
         $description = '>o<';
         $mixinList = ['x', 'y', 'z'];
 
-        $xMixinMock = $this->getMockForAbstractClass(
-            DescriptionMixinInterface::class
-        );
+        $xMixinMock = $this->createMock(DescriptionMixinInterface::class);
         $xMixinMock->expects($this->once())
             ->method('apply')
             ->with($description)
             ->willReturn($description . 'x');
 
-        $yMixinMock = $this->getMockForAbstractClass(
-            DescriptionMixinInterface::class
-        );
+        $yMixinMock = $this->createMock(DescriptionMixinInterface::class);
         $yMixinMock->expects($this->once())
             ->method('apply')
             ->with($description . 'x')
             ->willReturn($description . 'xy');
 
-        $zMixinMock = $this->getMockForAbstractClass(
-            DescriptionMixinInterface::class
-        );
+        $zMixinMock = $this->createMock(DescriptionMixinInterface::class);
         $zMixinMock->expects($this->once())
             ->method('apply')
             ->with($description . 'xy')

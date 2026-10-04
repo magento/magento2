@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\DownloadableImportExport\Model;
 
 use Magento\CatalogImportExport\Model\AbstractProductExportImportTestCase;
 use Magento\Catalog\Model\Product;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test export and import downloadable products
@@ -41,8 +42,8 @@ class DownloadableTest extends AbstractProductExportImportTestCase
      * @param string[] $skus
      * @param string[] $skippedAttributes
      * @return void
-     * @dataProvider exportImportDataProvider
      */
+    #[DataProvider('exportImportDataProvider')]
     public function testImportExport(array $fixtures, array $skus, array $skippedAttributes = []): void
     {
         $skippedAttributes = array_merge(self::$skippedAttributes, ['downloadable_links']);
@@ -59,9 +60,9 @@ class DownloadableTest extends AbstractProductExportImportTestCase
      * @param array $fixtures
      * @param string[] $skus
      * @param string[] $skippedAttributes
-     * @dataProvider exportImportDataProvider
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[DataProvider('exportImportDataProvider')]
     public function testImportExportWithPagination(array $fixtures, array $skus, array $skippedAttributes = [])
     {
         $skippedAttributes = array_merge(self::$skippedAttributes, ['downloadable_links']);

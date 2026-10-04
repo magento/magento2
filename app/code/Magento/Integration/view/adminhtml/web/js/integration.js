@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -213,8 +213,6 @@ define([
                         IdentityLogin.jqInfoDialog.modal('closeModal');
                         clearInterval(IdentityLogin.checker);
                     }
-
-                    return;
                 }
             }
         },
@@ -365,7 +363,8 @@ define([
                     try {
                         // Get integration name either from current element or from neighbor column
                         integrationName = $(ctx).attr('data-row-name') ||
-                            $(ctx).parents('tr').find('.col-name').html().trim(); // eslint-disable-line jquery-no-trim
+                            // eslint-disable-next-line magento-coding-standard-eslint-plugin/jquery-no-trim
+                            $(ctx).parents('tr').find('.col-name').html().trim();
 
                         if (integrationName.indexOf('<span') > -1) {
                             // Remove unsecure URL warning from popup window title if it is present

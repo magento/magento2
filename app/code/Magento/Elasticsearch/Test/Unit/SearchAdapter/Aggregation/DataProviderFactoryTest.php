@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -31,9 +31,7 @@ class DataProviderFactoryTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->onlyMethods(['create'])
-            ->getMockForAbstractClass();
+        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
         $this->factory = $objectManager->getObject(
             DataProviderFactory::class,
             ['objectManager' => $this->objectManager]
@@ -44,8 +42,7 @@ class DataProviderFactoryTest extends TestCase
     {
         $this->objectManager->expects($this->never())->method('create');
         /** @var DataProviderInterface $dataProvider */
-        $dataProvider = $this->getMockBuilder(DataProviderInterface::class)
-            ->getMockForAbstractClass();
+        $dataProvider = $this->createMock(DataProviderInterface::class);
         $this->assertSame($dataProvider, $this->factory->create($dataProvider));
     }
 
@@ -53,8 +50,7 @@ class DataProviderFactoryTest extends TestCase
     {
         $this->objectManager->expects($this->never())->method('create');
         /** @var DataProviderInterface $dataProvider */
-        $dataProvider = $this->getMockBuilder(DataProviderInterface::class)
-            ->getMockForAbstractClass();
+        $dataProvider = $this->createMock(DataProviderInterface::class);
         $this->assertSame($dataProvider, $this->factory->create($dataProvider, null));
     }
 
@@ -62,8 +58,7 @@ class DataProviderFactoryTest extends TestCase
     {
         $this->objectManager->expects($this->never())->method('create');
         /** @var DataProviderInterface $dataProvider */
-        $dataProvider = $this->getMockBuilder(DataProviderInterface::class)
-            ->getMockForAbstractClass();
+        $dataProvider = $this->createMock(DataProviderInterface::class);
         /** @var MockObject $queryContainerMock */
         $queryContainerMock = $this->getMockBuilder(QueryContainer::class)
             ->onlyMethods(['getQuery'])
@@ -91,7 +86,7 @@ class DataProviderFactoryTest extends TestCase
             ->getMock();
         $this->objectManager->expects($this->once())
             ->method('create')
-            ->with($this->isType('string'), ['queryContainer' => $queryContainer, 'aggregationFieldName' => null])
+            ->with($this->isString(), ['queryContainer' => $queryContainer, 'aggregationFieldName' => null])
             ->willReturn($recreatedDataProvider);
         $result = $this->factory->create($dataProvider, $queryContainer);
         $this->assertNotSame($dataProvider, $result);

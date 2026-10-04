@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -28,7 +28,7 @@ class RawTest extends TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->response = $this->getMockForAbstractClass(HttpResponseInterface::class);
+        $this->response = $this->createMock(HttpResponseInterface::class);
         $this->raw = $this->objectManagerHelper->getObject(Raw::class);
     }
 

@@ -1,8 +1,7 @@
 <?php
-
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -16,6 +15,7 @@ use Magento\Store\Api\StoreCookieManagerInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Locale\ResolverInterface;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\App\Request\Http;
 
 /**
  * Process the "Store" header entry
@@ -48,24 +48,32 @@ class StoreProcessor implements HttpHeaderProcessorInterface
     private $logger;
 
     /**
+     * @var Http
+     */
+    private $httpRequest;
+
+    /**
      * @param StoreManagerInterface $storeManager
      * @param HttpContext $httpContext
      * @param StoreCookieManagerInterface $storeCookieManager
-     * @param ResolverInterface $localeResolver
-     * @param LoggerInterface $logger
+     * @param ResolverInterface|null $localeResolver
+     * @param LoggerInterface|null $logger
+     * @param Http|null $httpRequest
      */
     public function __construct(
         StoreManagerInterface $storeManager,
         HttpContext $httpContext,
         StoreCookieManagerInterface $storeCookieManager,
         ?ResolverInterface $localeResolver = null,
-        ?LoggerInterface $logger = null
+        ?LoggerInterface $logger = null,
+        ?Http $httpRequest = null
     ) {
         $this->storeManager = $storeManager;
         $this->httpContext = $httpContext;
         $this->storeCookieManager = $storeCookieManager;
         $this->localeResolver = $localeResolver ?: ObjectManager::getInstance()->get(ResolverInterface::class);
         $this->logger = $logger ?: ObjectManager::getInstance()->get(LoggerInterface::class);
+        $this->httpRequest = $httpRequest ?: ObjectManager::getInstance()->get(Http::class);
     }
 
     /**
@@ -90,8 +98,10 @@ class StoreProcessor implements HttpHeaderProcessorInterface
                 $this->logger->error($e->getMessage());
             }
         } elseif (!$this->isAlreadySet()) {
-            $storeCode = $this->storeCookieManager->getStoreCodeFromCookie()
-                ?: $this->storeManager->getDefaultStoreView()->getCode();
+            $storeCode = $this->httpRequest->getParam(
+                StoreManagerInterface::PARAM_NAME,
+                $this->storeCookieManager->getStoreCodeFromCookie()
+            ) ?: $this->storeManager->getDefaultStoreView()->getCode();
             $this->storeManager->setCurrentStore($storeCode);
             $this->updateContext($storeCode);
         }

@@ -31,12 +31,11 @@ class DefaultColumnTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
+        $this->objectManagerHelper->prepareObjectManager();
         $this->defaultColumn = $this->objectManagerHelper->getObject(
             DefaultColumn::class
         );
-        $this->itemMock = $this->getMockBuilder(Item::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->itemMock = $this->createMock(Item::class);
     }
 
     public function testGetTotalAmount()

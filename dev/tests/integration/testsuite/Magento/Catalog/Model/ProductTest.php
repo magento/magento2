@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -29,6 +29,7 @@ use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use Magento\Widget\Model\Widget\Instance;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Tests product model:
@@ -761,13 +762,13 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      * Check stock status changing if backorders functionality enabled.
      *
      * @magentoDataFixture Magento/Catalog/_files/product_simple_out_of_stock.php
-     * @dataProvider productWithBackordersDataProvider
      * @param int $qty
      * @param int $stockStatus
      * @param bool $expectedStockStatus
      *
      * @return void
      */
+    #[DataProvider('productWithBackordersDataProvider')]
     public function testSaveWithBackordersEnabled(int $qty, int $stockStatus, bool $expectedStockStatus): void
     {
         $product = $this->productRepository->get('simple-out-of-stock', true, null, true);

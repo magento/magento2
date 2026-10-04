@@ -15,6 +15,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\FlagManager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class SubscriptionStatusProviderTest extends TestCase
@@ -50,7 +51,7 @@ class SubscriptionStatusProviderTest extends TestCase
     protected function setUp(): void
     {
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->analyticsTokenMock = $this->createMock(AnalyticsToken::class);
 
@@ -70,8 +71,8 @@ class SubscriptionStatusProviderTest extends TestCase
 
     /**
      * @param array $flagManagerData
-     * @dataProvider getStatusShouldBeFailedDataProvider
      */
+    #[DataProvider('getStatusShouldBeFailedDataProvider')]
     public function testGetStatusShouldBeFailed(array $flagManagerData)
     {
         $this->analyticsTokenMock->expects($this->once())
@@ -110,8 +111,8 @@ class SubscriptionStatusProviderTest extends TestCase
     /**
      * @param array $flagManagerData
      * @param bool $isTokenExist
-     * @dataProvider getStatusShouldBePendingDataProvider
      */
+    #[DataProvider('getStatusShouldBePendingDataProvider')]
     public function testGetStatusShouldBePending(array $flagManagerData, bool $isTokenExist)
     {
         $this->analyticsTokenMock->expects($this->once())

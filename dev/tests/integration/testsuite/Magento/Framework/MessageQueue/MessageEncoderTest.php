@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\MessageQueue;
@@ -104,6 +104,18 @@ class MessageEncoderTest extends \PHPUnit\Framework\TestCase
             $addresses[0]->getRegion()
         );
         $this->assertEquals('AL', $addresses[0]->getRegion()->getRegionCode());
+    }
+
+    public function testEncodeDecodeReadonlyMessage()
+    {
+        $message = new ReadonlyMessage(10, 'Test Message');
+
+        $encodedMessage = $this->encoder->encode('readonly.message.created', $message);
+        $decodedMessage = $this->encoder->decode('readonly.message.created', $encodedMessage);
+
+        $this->assertInstanceOf(ReadonlyMessage::class, $decodedMessage);
+        $this->assertSame(10, $decodedMessage->entityId);
+        $this->assertSame('Test Message', $decodedMessage->name);
     }
 
     /**
@@ -223,7 +235,6 @@ JSON;
     {
         $reflection = new \ReflectionClass(get_class($object));
         $reflectionProperty = $reflection->getProperty($propertyName);
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($object, $propertyValue);
     }
 }

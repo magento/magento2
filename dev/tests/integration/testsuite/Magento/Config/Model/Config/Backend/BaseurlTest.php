@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Config\Model\Config\Backend;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoAppArea adminhtml
@@ -14,8 +16,8 @@ class BaseurlTest extends \PHPUnit\Framework\TestCase
      * @param string $path
      * @param string $value
      * @magentoDbIsolation enabled
-     * @dataProvider validationDataProvider
      */
+    #[DataProvider('validationDataProvider')]
     public function testValidation($path, $value)
     {
         /** @var $model \Magento\Config\Model\Config\Backend\Baseurl */
@@ -74,8 +76,8 @@ class BaseurlTest extends \PHPUnit\Framework\TestCase
      * @param string $path
      * @param string $value
      * @magentoDbIsolation enabled
-     * @dataProvider validationExceptionDataProvider
      */
+    #[DataProvider('validationExceptionDataProvider')]
     public function testValidationException($path, $value)
     {
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -86,7 +86,6 @@ class FooterTest extends TestCase
     {
         $reflection = new \ReflectionClass($this->block);
         $method = $reflection->getMethod('getCacheLifetime');
-        $method->setAccessible(true);
         $this->assertEquals(3600, $method->invoke($this->block));
     }
 }

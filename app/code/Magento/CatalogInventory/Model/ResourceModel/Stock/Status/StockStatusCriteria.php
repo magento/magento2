@@ -1,18 +1,18 @@
 <?php
 /**
- * Copyright 2015 Adobe
+ * Copyright 2014 Adobe
  * All Rights Reserved.
  */
 
 namespace Magento\CatalogInventory\Model\ResourceModel\Stock\Status;
 
+use Magento\CatalogInventory\Api\StockStatusCriteriaInterface;
 use Magento\Framework\Data\AbstractCriteria;
-use Magento\CatalogInventory\Model\ResourceModel\Stock\Status\StockStatusCriteriaMapper;
 
 /**
- * Class StockStatusCriteria
+ * Class StockStatusCriteria Resource model
  */
-class StockStatusCriteria extends AbstractCriteria implements \Magento\CatalogInventory\Api\StockStatusCriteriaInterface
+class StockStatusCriteria extends AbstractCriteria implements StockStatusCriteriaInterface
 {
     /**
      * @param string $mapper
@@ -24,7 +24,10 @@ class StockStatusCriteria extends AbstractCriteria implements \Magento\CatalogIn
     }
 
     /**
-     * @inheritdoc
+     * Filter by scope(s)
+     *
+     * @param int $scope
+     * @return void
      */
     public function setScopeFilter($scope)
     {
@@ -32,7 +35,10 @@ class StockStatusCriteria extends AbstractCriteria implements \Magento\CatalogIn
     }
 
     /**
-     * @inheritdoc
+     * Add product(s) filter
+     *
+     * @param int $products
+     * @return void
      */
     public function setProductsFilter($products)
     {
@@ -40,7 +46,10 @@ class StockStatusCriteria extends AbstractCriteria implements \Magento\CatalogIn
     }
 
     /**
-     * @inheritdoc
+     * Add filter by quantity
+     *
+     * @param float $qty
+     * @return void
      */
     public function setQtyFilter($qty)
     {
@@ -48,9 +57,12 @@ class StockStatusCriteria extends AbstractCriteria implements \Magento\CatalogIn
     }
 
     /**
-     * @inheritdoc
+     * Add Criteria object
+     *
+     * @param \Magento\CatalogInventory\Api\StockStatusCriteriaInterface $criteria
+     * @return void
      */
-    public function addCriteria(\Magento\CatalogInventory\Api\StockStatusCriteriaInterface $criteria)
+    public function addCriteria(StockStatusCriteriaInterface $criteria)
     {
         $this->data[self::PART_CRITERIA_LIST]['list'][] = $criteria;
     }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,6 +17,7 @@ use Magento\Framework\View\Layout\Generator\Context;
 use Magento\Framework\View\Layout\ScheduledStructure;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ContainerTest extends TestCase
 {
@@ -85,9 +86,8 @@ class ContainerTest extends TestCase
      * @param array $structureElements
      * @param array $setAttributeData
      * @param int $setAttributeCalls
-     *
-     * @dataProvider processDataProvider
-     */
+     *     */
+    #[DataProvider('processDataProvider')]
     public function testProcess($structureElements, $setAttributeData, $setAttributeCalls)
     {
         $this->scheduledStructureMock->expects($this->once())
@@ -174,9 +174,8 @@ class ContainerTest extends TestCase
 
     /**
      * @param array $structureElements
-     *
-     * @dataProvider processWithExceptionDataProvider
-     */
+     *     */
+    #[DataProvider('processWithExceptionDataProvider')]
     public function testProcessWithException($structureElements)
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');

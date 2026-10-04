@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Paypal\Model\ConfigFactory;
 use Magento\Paypal\Model\SmartButtonConfig;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -42,21 +43,19 @@ class SdkUrlTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->localeResolverMock = $this->getMockForAbstractClass(ResolverInterface::class);
-        $this->configMock = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->localeResolverMock = $this->createMock(ResolverInterface::class);
+        $this->configMock = $this->createMock(Config::class);
 
         /** @var ScopeConfigInterface|MockObject $scopeConfigMock */
-        $scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $scopeConfigMock->method('isSetFlag')
             ->willReturn(true);
 
         /** @var ConfigFactory|MockObject $configFactoryMock */
-        $configFactoryMock = $this->getMockBuilder(ConfigFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
+        $configFactoryMock = $this->createPartialMock(
+            ConfigFactory::class,
+            ['create']
+        );
         $configFactoryMock->expects($this->any())->method('create')->willReturn($this->configMock);
 
         /** @var Store|MockObject $storeMock */
@@ -65,7 +64,7 @@ class SdkUrlTest extends TestCase
             ->willReturn('USD');
 
         /** @var StoreManagerInterface|MockObject $storeManagerMock */
-        $storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $storeManagerMock->method('getStore')
             ->willReturn($storeMock);
 
@@ -89,8 +88,8 @@ class SdkUrlTest extends TestCase
      * @param bool $isBuyerCountryEnabled
      * @param bool $isPaypalGuestCheckoutEnabled
      * @param array $expected
-     * @dataProvider getConfigDataProvider
      */
+    #[DataProvider('getConfigDataProvider')]
     public function testGetConfig(
         string $locale,
         string $intent,

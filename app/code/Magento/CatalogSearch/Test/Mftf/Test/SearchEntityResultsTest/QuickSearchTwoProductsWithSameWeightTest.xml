@@ -70,6 +70,7 @@
                 <argument name="value" value="{{_defaultProduct.name}}"/>
             </actionGroup>
             <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct2b"/>
+            <magentoCLI command="config:set {{DefaultStoreFrontProductsSortByOrder.path}} {{DefaultStoreFrontProductsSortByOrder.value}}" stepKey="setDefaultSortByOrderValue"/>
             <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
                 <argument name="indices" value=""/>
             </actionGroup>

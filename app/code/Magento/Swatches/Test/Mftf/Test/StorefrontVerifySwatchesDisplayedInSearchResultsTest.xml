@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontVerifySwatchesDisplayedInSearchResultsTest">
+        <annotations>
+            <features value="Swatches"/>
+            <stories value="Swatches are displayed when using search"/>
+            <title value="Swatches displayed in search results"/>
+            <description value="This test case verifies whether the swatches are displayed when using search"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4126"/>
+            <group value="swatch"/>
+        </annotations>
+        <before>
+            <!-- Pre-condition 2:  Create swatch attribute visual with options -->
+            <createData entity="visualSwatchProductAttribute" stepKey="swatchAttribute"/>
+            <createData entity="SwatchProductAttributeOption1" stepKey="swatchOption1">
+                <requiredEntity createDataKey="swatchAttribute"/>
+            </createData>
+            <createData entity="SwatchProductAttributeOption2" stepKey="swatchOption2">
+                <requiredEntity createDataKey="swatchAttribute"/>
+            </createData>
+            <createData entity="AddToDefaultSet" stepKey="addAttrToDefaultSet">
+                <requiredEntity createDataKey="swatchAttribute"/>
+            </createData>
+            <!-- Resolve option data for use in products and assertions -->
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getSwatchOption1">
+                <requiredEntity createDataKey="swatchAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getSwatchOption2">
+                <requiredEntity createDataKey="swatchAttribute"/>
+            </getData>
+            <!-- Pre-condition 1: Create configurable product -->
+            <createData entity="BaseConfigurableProduct" stepKey="configProduct"/>
+            <!-- Two child simples assigned attribute value -->
+            <createData entity="ApiSimpleOne" stepKey="child1">
+                <requiredEntity createDataKey="swatchAttribute"/>
+                <requiredEntity createDataKey="getSwatchOption1"/>
+            </createData>
+            <createData entity="ApiSimpleTwo" stepKey="child2">
+                <requiredEntity createDataKey="swatchAttribute"/>
+                <requiredEntity createDataKey="getSwatchOption2"/>
+            </createData>
+            <!-- Apply configurable attribute and add children -->
+            <createData entity="ConfigurableProductTwoOptions" stepKey="configOptions">
+                <requiredEntity createDataKey="configProduct"/>
+                <requiredEntity createDataKey="swatchAttribute"/>
+                <requiredEntity createDataKey="getSwatchOption1"/>
+                <requiredEntity createDataKey="getSwatchOption2"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="addChild1">
+                <requiredEntity createDataKey="configProduct"/>
+                <requiredEntity createDataKey="child1"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="addChild2">
+                <requiredEntity createDataKey="configProduct"/>
+                <requiredEntity createDataKey="child2"/>
+            </createData>
+            <!-- Pre-condition 3,4: Ensure Used in product listing is enabled for the swatch attribute -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
+            <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="openAttrGrid"/>
+            <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openSwatchAttribute">
+                <argument name="productAttributeCode" value="$$swatchAttribute.attribute_code$$"/>
+            </actionGroup>
+            <actionGroup ref="AdminUpdateAttributeUsedInProductListingActionGroup" stepKey="setUsedInProductListingToYes"/>
+            <actionGroup ref="SaveProductAttributeActionGroup" stepKey="saveForYesNoAttribute"/>
+        </before>
+        <after>
+            <!-- Delete products, swatches and logout from admin -->
+            <deleteData createDataKey="configProduct" stepKey="deleteConfig"/>
+            <deleteData createDataKey="child1" stepKey="deleteChild1"/>
+            <deleteData createDataKey="child2" stepKey="deleteChild2"/>
+            <deleteData createDataKey="swatchAttribute" stepKey="deleteAttribute"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+        <!-- Step 1: Go to storefront -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openHome"/>
+        <!-- Step 2: Use basic search to find product-->
+        <actionGroup ref="StoreFrontFillSearchActionGroup" stepKey="fillSearch">
+            <argument name="query" value="$$configProduct.name$$"/>
+        </actionGroup>
+        <waitForElementClickable selector="{{StorefrontQuickSearchSection.searchButton}}" stepKey="waitToSubmitSearch"/>
+        <click selector="{{StorefrontQuickSearchSection.searchButton}}" stepKey="submitSearch"/>
+        <waitForPageLoad stepKey="waitSearchResults"/>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.productsList}}" stepKey="waitListBasic"/>
+        <!--Step 2: Assert product is displayed with swatches -->
+        <waitForText selector="{{StorefrontCategoryMainSection.productName}}" userInput="$$configProduct.name$$" stepKey="seeProductBasic"/>
+        <waitForElementVisible selector="{{StorefrontCategoryPageProductInfoSection.visualSwatchOption($$configProduct.id$$, $$getSwatchOption1.label$$)}}" stepKey="seeListingSwatchBasic"/>
+        <waitForElementVisible selector="{{StorefrontCategoryPageProductInfoSection.visualSwatchOption($$configProduct.id$$, $$getSwatchOption2.label$$)}}" stepKey="seeListingSwatch"/>
+        <!-- Step 3: Use advance search to find product-->
+        <actionGroup ref="StorefrontOpenAdvancedSearchActionGroup" stepKey="openAdvancedSearch"/>
+        <actionGroup ref="StorefrontFillFormAdvancedSearchActionGroup" stepKey="fillAdvancedForm">
+            <argument name="productName" value="$$configProduct.name$$"/>
+            <argument name="sku" value="$$configProduct.sku$$"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.productsList}}" stepKey="waitListAdvanced"/>
+        <!-- Step 3: Assert product is displayed with swatches -->
+        <waitForText selector="{{StorefrontCategoryMainSection.productName}}" userInput="$$configProduct.name$$" stepKey="seeProductAdvanced"/>
+        <waitForElementVisible selector="{{StorefrontCategoryPageProductInfoSection.visualSwatchOption($$configProduct.id$$, $$getSwatchOption2.label$$)}}" stepKey="seeListingSwatchAdvanced"/>
+        <waitForElementVisible selector="{{StorefrontCategoryPageProductInfoSection.visualSwatchOption($$configProduct.id$$, $$getSwatchOption1.label$$)}}" stepKey="seeListing1SwatchBasic"/>
+    </test>
+</tests>

@@ -114,6 +114,7 @@
     <type name="Magento\Config\App\Config\Type\System\Reader">
         <arguments>
             <argument name="source" xsi:type="object">systemConfigSourceAggregated</argument>
+            <argument name="fallback" xsi:type="object">Magento\Store\Model\Config\Processor\Fallback</argument>
             <argument name="postProcessor" xsi:type="object">systemConfigPostProcessorComposite</argument>
             <argument name="preProcessor" xsi:type="object">Magento\Framework\App\Config\PreProcessorComposite</argument>
         </arguments>
@@ -397,6 +398,16 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Config\App\Config\ReloadConfig">
+        <arguments>
+            <argument name="system" xsi:type="object">Magento\Config\App\Config\Type\System</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Config\Plugin\Framework\App\Cache\TypeList\WarmConfigCache">
+        <arguments>
+            <argument name="system" xsi:type="object">Magento\Config\App\Config\Type\System</argument>
+        </arguments>
+    </type>
     <!-- TODO: Move these to Framework's di.xml after issue with array_replace_recursive in configuration are resolved.
     -->
     <type name="Magento\Framework\ObjectManager\Resetter\WeakMapSorter">
@@ -420,6 +431,11 @@
             <argument name="reEncryptors" xsi:type="array">
                 <item name="core_config_data" xsi:type="object">Magento\Config\Model\Data\ReEncryptorList\CoreConfigDataReEncryptor</item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Config\Model\Config\PathValidatorFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">Magento\Theme\Model\Config\PathValidator</argument>
         </arguments>
     </type>
 </config>

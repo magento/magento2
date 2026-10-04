@@ -330,4 +330,7 @@
         <data key="url_path">catalog/seo/category_url_suffix</data>
         <data key="url_suffix">.html</data>
     </entity>
+    <entity name="ImportCategoryFromCSV" type="category">
+        <data key="name">simpleCategory5d53a993b7ccb2</data>
+    </entity>
 </entities>

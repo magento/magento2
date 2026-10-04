@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Customer\Api;
 
 use Magento\Authorization\Test\Fixture\Role as RoleFixture;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Customer\Api\Data\AddressInterface as Address;
 use Magento\Customer\Api\Data\CustomerInterface as Customer;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
@@ -152,7 +153,6 @@ class CustomerRepositoryTest extends WebapiAbstract
 
     /**
      * Validate update operation by invalid customer
-     *
      */
     public function testInvalidCustomerUpdate()
     {
@@ -687,9 +687,8 @@ class CustomerRepositoryTest extends WebapiAbstract
      *
      * @param bool $subscribeStatus
      * @return void
-     *
-     * @dataProvider subscriptionDataProvider
-     */
+     * */
+    #[DataProvider('subscriptionDataProvider')]
     public function testSearchCustomers(bool $subscribeStatus): void
     {
         $builder = Bootstrap::getObjectManager()->create(FilterBuilder::class);
@@ -1050,7 +1049,11 @@ class CustomerRepositoryTest extends WebapiAbstract
         $customerLoadedData = $this->_webApiCall($serviceInfo, ['customerId' => $customerData[Customer::ID]]);
         self::assertGreaterThanOrEqual($customerData[Customer::UPDATED_AT], $customerLoadedData[Customer::UPDATED_AT]);
         unset($customerData[Customer::UPDATED_AT]);
-        unset($customerLoadedData[Customer::UPDATED_AT], $customerLoadedData[Customer::CONFIRMATION]);
+        unset(
+            $customerLoadedData[Customer::UPDATED_AT],
+            $customerLoadedData[Customer::CONFIRMATION],
+            $customerLoadedData[Customer::CUSTOM_ATTRIBUTES]
+        );
         self::assertEquals($customerData, $customerLoadedData);
 
         $revokeToken = $customerTokenService->revokeCustomerAccessToken($customerData[Customer::ID]);
@@ -1112,9 +1115,8 @@ class CustomerRepositoryTest extends WebapiAbstract
      * @param string $fieldValue
      * @param string $expectedMessage
      * @return void
-     *
-     * @dataProvider customerDataProvider
-     */
+     * */
+    #[DataProvider('customerDataProvider')]
     public function testCreateCustomerWithInvalidCustomerFirstName(
         string $fieldName,
         string $fieldValue,
@@ -1182,9 +1184,8 @@ class CustomerRepositoryTest extends WebapiAbstract
      * @param string $fieldName
      * @param string $fieldValue
      * @return void
-     *
-     * @dataProvider customerWithMultiByteDataProvider
-     */
+     * */
+    #[DataProvider('customerWithMultiByteDataProvider')]
     public function testCreateCustomerWithMultibyteCharacters(string $fieldName, string $fieldValue): void
     {
         $customerData = $this->dataObjectProcessor->buildOutputDataArray(
@@ -1238,9 +1239,8 @@ class CustomerRepositoryTest extends WebapiAbstract
      * @param string $fieldName
      * @param string $fieldValue
      * @return void
-     *
-     * @dataProvider customerValidNameDataProvider
-     */
+     * */
+    #[DataProvider('customerValidNameDataProvider')]
     public function testCreateCustomerWithValidName(string $fieldName, string $fieldValue): void
     {
         $customerData = $this->dataObjectProcessor->buildOutputDataArray(

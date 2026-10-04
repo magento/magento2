@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Framework\Code\File\Validator;
 
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class NotProtectedExtension
@@ -16,8 +17,8 @@ class NotProtectedExtensionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test that phpt, pht is invalid extension type
-     * @dataProvider isValidDataProvider
      */
+    #[DataProvider('isValidDataProvider')]
     public function testIsValid($extension)
     {
         $objectManager = Bootstrap::getObjectManager();

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Observer\AbstractDataAssignObserver;
@@ -35,6 +36,8 @@ use PHPUnit\Framework\TestCase;
  */
 class ExpressTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var string
      */
@@ -95,29 +98,20 @@ class ExpressTest extends TestCase
     protected function setUp(): void
     {
         $this->errorCodes[] = self::$authorizationExpiredCode;
-        $this->checkoutSession = $this->getMockBuilder(Session::class)
-            ->addMethods(['getPaypalTransactionData', 'setPaypalTransactionData'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->transactionBuilder = $this->getMockForAbstractClass(
-            BuilderInterface::class,
-            [],
-            '',
-            false,
-            false
+        $this->checkoutSession = $this->createPartialMockWithReflection(
+            Session::class,
+            ['getPaypalTransactionData', 'setPaypalTransactionData']
         );
-        $this->nvp = $this->getMockBuilder(Nvp::class)
-            ->addMethods(['setProcessableErrors', 'setAmount', 'setCurrencyCode', 'setTransactionId'])
-            ->onlyMethods(['callDoAuthorization', 'setData'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->transactionBuilder = $this->createMock(BuilderInterface::class);
+        $this->nvp = $this->createPartialMockWithReflection(
+            Nvp::class,
+            ['setProcessableErrors', 'setAmount', 'setCurrencyCode', 'setTransactionId', 'callDoAuthorization', 'setData']
+        );
         $this->pro = $this->createPartialMock(
             Pro::class,
             ['setMethod', 'getApi', 'importPaymentInfo', 'resetApi', 'void']
         );
-        $this->eventManager = $this->getMockBuilder(ManagerInterface::class)
-            ->onlyMethods(['dispatch'])
-            ->getMockForAbstractClass();
+        $this->eventManager = $this->createMock(ManagerInterface::class);
 
         $this->pro->method('getApi')
             ->willReturn($this->nvp);
@@ -219,13 +213,7 @@ class ExpressTest extends TestCase
     {
         $transportValue = 'something';
 
-        $extensionAttribute = $this->getMockForAbstractClass(
-            PaymentExtensionInterface::class,
-            [],
-            '',
-            false,
-            false
-        );
+        $extensionAttribute = $this->createMock(PaymentExtensionInterface::class);
 
         $data = new DataObject(
             [
@@ -248,7 +236,7 @@ class ExpressTest extends TestCase
             ]
         );
 
-        $paymentInfo = $this->getMockForAbstractClass(InfoInterface::class);
+        $paymentInfo = $this->createMock(InfoInterface::class);
         $this->model->setInfoInstance($paymentInfo);
 
         $this->parentAssignDataExpectation($data);

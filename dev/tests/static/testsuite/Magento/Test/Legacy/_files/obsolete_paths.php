@@ -4,8 +4,8 @@
  *
  * Format: array(<path>[, <replacement>])
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 return [
     ['/app/code/core/Mage', '/app/code/Magento'],

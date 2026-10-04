@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -45,26 +45,16 @@ class UsersTest extends TestCase
         ];
         $objectManager->prepareObjectManager($objects);
         /** @var Collection|MockObject $userCollectionFactoryMock $userCollectionMock */
-        $userCollectionMock = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $userCollectionMock = $this->createMock(Collection::class);
         /** @var CollectionFactory|MockObject $userCollectionFactoryMock */
-        $userCollectionFactoryMock = $this->getMockBuilder(
-            CollectionFactory::class
-        )->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
+        $userCollectionFactoryMock = $this->createPartialMock(CollectionFactory::class, ['create']);
         /** @var RequestInterface|MockObject $requestMock */
-        $requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $requestMock = $this->createMock(RequestInterface::class);
         $userCollectionFactoryMock->expects($this->any())->method('create')->willReturn($userCollectionMock);
         $userCollectionMock->expects($this->any())->method('load')->willReturn($userCollectionMock);
         $userCollectionMock->expects($this->any())->method('getItems');
 
-        $this->layoutMock = $this->getMockBuilder(LayoutInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->layoutMock = $this->createMock(LayoutInterface::class);
         $this->model = $objectManager->getObject(
             Users::class,
             [

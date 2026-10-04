@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Payment\Model\Checks\CanUseForCurrency;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Store\Model\Store;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class CanUseForCurrencyTest extends TestCase
@@ -28,24 +29,18 @@ class CanUseForCurrencyTest extends TestCase
     }
 
     /**
-     * @dataProvider paymentMethodDataProvider
      * @param bool $expectation
      */
+    #[DataProvider('paymentMethodDataProvider')]
     public function testIsApplicable($expectation)
     {
-        $paymentMethod = $this->getMockBuilder(
-            MethodInterface::class
-        )->disableOriginalConstructor()->getMock();
+        $paymentMethod = $this->createMock(MethodInterface::class);
         $paymentMethod->expects($this->once())->method('canUseForCurrency')->with(
             self::EXPECTED_CURRENCY_CODE
         )->willReturn($expectation);
 
-        $quoteMock = $this->getMockBuilder(Quote::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $store = $this->getMockBuilder(
-            Store::class
-        )->disableOriginalConstructor()->getMock();
+        $quoteMock = $this->createMock(Quote::class);
+        $store = $this->createMock(Store::class);
         $store->expects($this->once())->method('getBaseCurrencyCode')->willReturn(
             self::EXPECTED_CURRENCY_CODE
         );

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Framework\View\Test\Unit\Layout\ScheduledStructure;
 
 use Magento\Framework\App\State;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\View\Layout\Data\Structure;
 use Magento\Framework\View\Layout\Element;
 use Magento\Framework\View\Layout\ScheduledStructure;
@@ -16,6 +17,7 @@ use Magento\Framework\View\Layout\ScheduledStructure\Helper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Rule\InvokedCount;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -23,6 +25,7 @@ use Psr\Log\LoggerInterface;
  */
 class HelperTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var ScheduledStructure|MockObject
      */
@@ -59,7 +62,7 @@ class HelperTest extends TestCase
         $this->dataStructureMock = $this->getMockBuilder(Structure::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->stateMock = $this->createMock(State::class);
 
         $helperObjectManager = new ObjectManager($this);
@@ -78,9 +81,8 @@ class HelperTest extends TestCase
      * @param int $unsetPathElementCount
      * @param int $unsetStructureElementCount
      * @return void
-     *
-     * @dataProvider scheduleStructureDataProvider
-     */
+     *     */
+    #[DataProvider('scheduleStructureDataProvider')]
     public function testScheduleStructure(
         $currentNodeName,
         $actualNodeName,
@@ -154,11 +156,15 @@ class HelperTest extends TestCase
     /**
      * @param InvokedCount $loggerExpects
      * @param string $stateMode
-     * @return void
-     * @dataProvider scheduleElementLogDataProvider
-     */
+     * @return void     */
+    #[DataProvider('scheduleElementLogDataProvider')]
     public function testScheduleElementLog($loggerExpects, $stateMode)
     {
+        // Convert string expectation to matcher
+        $loggerExpects = is_string($loggerExpects) 
+            ? $this->createInvocationMatcher($loggerExpects) 
+            : $loggerExpects;
+        
         $key = 'key';
         $parentName = 'parent';
         $alias = 'alias';
@@ -205,15 +211,15 @@ class HelperTest extends TestCase
     {
         return [
             [
-                'loggerExpects' => self::once(),
+                'loggerExpects' => 'once',
                 'stateMode' => State::MODE_DEVELOPER
             ],
             [
-                'loggerExpects' => self::never(),
+                'loggerExpects' => 'never',
                 'stateMode' => State::MODE_DEFAULT
             ],
             [
-                'loggerExpects' => self::never(),
+                'loggerExpects' => 'never',
                 'stateMode' => State::MODE_PRODUCTION
             ]
         ];
@@ -227,9 +233,8 @@ class HelperTest extends TestCase
      * @param bool $isAfter
      * @param int $toSortList
      * @return void
-     *
-     * @dataProvider scheduleElementDataProvider
-     */
+     *     */
+    #[DataProvider('scheduleElementDataProvider')]
     public function testScheduleElement($hasParent, $setAsChild, $toRemoveList, $siblingName, $isAfter, $toSortList)
     {
         $key = 'key';

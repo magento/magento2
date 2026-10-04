@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 /** Creates scope binding and registers in to ko.bindingHandlers object */
 define([

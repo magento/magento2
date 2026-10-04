@@ -17,6 +17,9 @@ class RemoveTest extends TestCase
      */
     protected $_model;
 
+    /**
+     * @var array
+     */
     protected $_params = ['id' => 'item'];
 
     protected function setUp(): void

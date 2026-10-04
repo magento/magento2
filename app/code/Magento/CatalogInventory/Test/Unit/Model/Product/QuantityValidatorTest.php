@@ -7,15 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\CatalogInventory\Test\Unit\Model\Product;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\CatalogInventory\Model\Product\QuantityValidator;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @covers \Magento\CatalogInventory\Model\Product\QuantityValidator
- */
+#[CoversClass(QuantityValidator::class)]
 class QuantityValidatorTest extends TestCase
 {
     private const PRODUCT_ID = 42;

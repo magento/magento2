@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontVerifyUSPSShippingMethodIsAvailableTest">
+        <annotations>
+            <features value="Shipping"/>
+            <stories value="Place order for international address other than US using USPS"/>
+            <title value="Storefront place order with usps shipping method"/>
+            <description value="Verify storefront able to see First-Class Package International Service usps shipping method"/>
+            <testCaseId value="AC-14499"/>
+            <severity value="MAJOR"/>
+            <group value="3rd_party_integration"/>
+            <group value="EnableUSPSShippingForRestAPISuite"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <!-- Create Product and customer data -->
+            <createData entity="SimpleProduct" stepKey="createProduct"/>
+            <createData entity="Simple_Customer_Without_Address" stepKey="createCustomer"/>
+        </before>
+        <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogoutStorefront"/>
+            <!--Delete product and customer data-->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+        </after>
+        <!-- Step 1:Navigate to storefront -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginCustomerToStorefront">
+            <argument name="Customer" value="$createCustomer$" />
+        </actionGroup>
+        <!-- Step 2:Add product to cart -->
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="navigateToProductPage">
+            <argument name="productUrlKey" value="$createProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$createProduct$" />
+            <argument name="productCount" value="1" />
+        </actionGroup>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+        <!-- Step 3:Select International Address other than USA -->
+        <actionGroup ref="CustomerCheckoutFillNewShippingAddressActionGroup" stepKey="fillShippingAddress">
+            <argument name="address" value="Canada_Address"/>
+        </actionGroup>
+        <!-- Step 4:Select First-Class Package International Service  USPS Shipping method  -->
+        <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="setUSPSShippingMethodOnCheckout">
+            <argument name="shippingMethodName" value="{{USPSFirstClassInternationalShippingMethodData.value}}"/>
+        </actionGroup>
+        <!-- Step 5:Place order  -->
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="goToPaymentStep"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectPaymentMethod"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrder"/>
+        <waitForElementVisible selector="{{CheckoutSuccessMainSection.orderLink}}" stepKey="waitForOrderNumber"/>
+    </test>
+</tests>

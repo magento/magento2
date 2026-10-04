@@ -14,7 +14,7 @@ class FlushAll extends \Magento\Backend\Controller\Adminhtml\Cache implements Ht
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Backend::flush_cache_storage';
+    public const ADMIN_RESOURCE = 'Magento_Backend::flush_cache_storage';
 
     /**
      * Flush cache storage

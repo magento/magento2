@@ -20,6 +20,7 @@ use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Message\Manager;
 use Magento\Framework\Phrase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Url;
 use Magento\Framework\UrlFactory;
@@ -34,6 +35,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ResultTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * Test result action filters set before load layout scenario
      *
@@ -50,10 +52,10 @@ class ResultTest extends TestCase
         );
         $update = $this->createPartialMock(Merge::class, ['getHandles']);
         $update->expects($this->once())->method('getHandles')->willReturn([]);
-        $layout = $this->getMockBuilder(Layout::class)
-            ->addMethods(['getUpdate'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $layout = $this->createPartialMockWithReflection(
+            Layout::class,
+            ['getUpdate']
+        );
         $layout->expects($this->once())->method('getUpdate')->willReturn($update);
         $view->expects($this->once())->method('getLayout')->willReturn($layout);
         $page = $this->createPartialMock(Page::class, ['initLayout']);
@@ -64,10 +66,10 @@ class ResultTest extends TestCase
             }
         );
 
-        $request = $this->getMockBuilder(Request::class)
-            ->addMethods(['getQueryValue'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $request = $this->createPartialMockWithReflection(
+            Request::class,
+            ['getQueryValue']
+        );
         $request->expects($this->once())->method('getQueryValue')->willReturn($expectedQuery);
 
         $catalogSearchAdvanced = $this->createPartialMock(
@@ -105,13 +107,12 @@ class ResultTest extends TestCase
         $redirectResultMock->expects($this->once())
             ->method('setUrl');
 
-        $redirectFactoryMock = $this->getMockBuilder(RedirectFactory::class)
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $redirectFactoryMock = $this->createPartialMock(
+            RedirectFactory::class,
+            ['create']
+        );
 
-        $redirectFactoryMock->expects($this->any())
-            ->method('create')
+        $redirectFactoryMock->method('create')
             ->willReturn($redirectResultMock);
 
         $catalogSearchAdvanced = $this->createPartialMock(
@@ -130,33 +131,27 @@ class ResultTest extends TestCase
             Http::class,
             ['getQueryValue']
         );
-        $requestMock->expects($this->any())->method('getQueryValue')->willReturn(['key' => 'value']);
+        $requestMock->method('getQueryValue')->willReturn(['key' => 'value']);
 
-        $redirectMock = $this->getMockForAbstractClass(RedirectInterface::class);
-        $redirectMock->expects($this->any())->method('error')->with('urlstring');
+        $redirectMock = $this->createMock(RedirectInterface::class);
+        $redirectMock->method('error')->with('urlstring');
 
         $messageManagerMock = $this->createMock(Manager::class);
 
-        $eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $eventManagerMock = $this->createMock(ManagerInterface::class);
 
         $contextMock = $this->createMock(Context::class);
-        $contextMock->expects($this->any())
-            ->method('getRequest')
+        $contextMock->method('getRequest')
             ->willReturn($requestMock);
-        $contextMock->expects($this->any())
-            ->method('getResponse')
+        $contextMock->method('getResponse')
             ->willReturn($responseMock);
-        $contextMock->expects($this->any())
-            ->method('getRedirect')
+        $contextMock->method('getRedirect')
             ->willReturn($redirectMock);
-        $contextMock->expects($this->any())
-            ->method('getMessageManager')
+        $contextMock->method('getMessageManager')
             ->willReturn($messageManagerMock);
-        $contextMock->expects($this->any())
-            ->method('getEventManager')
+        $contextMock->method('getEventManager')
             ->willReturn($eventManagerMock);
-        $contextMock->expects($this->any())
-            ->method('getResultRedirectFactory')
+        $contextMock->method('getResultRedirectFactory')
             ->willReturn($redirectFactoryMock);
 
         $urlMock = $this->createMock(Url::class);
@@ -198,10 +193,10 @@ class ResultTest extends TestCase
         $update = $this->createPartialMock(Merge::class, ['getHandles']);
         $update->expects($this->once())->method('getHandles')->willReturn([]);
 
-        $layout = $this->getMockBuilder(Layout::class)
-            ->addMethods(['getUpdate'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $layout = $this->createPartialMockWithReflection(
+            Layout::class,
+            ['getUpdate']
+        );
         $layout->expects($this->once())->method('getUpdate')->willReturn($update);
 
         $page = $this->createPartialMock(Page::class, ['initLayout']);
@@ -217,10 +212,10 @@ class ResultTest extends TestCase
         $view->expects($this->once())->method('getPage')->willReturn($page);
         $view->expects($this->once())->method('getLayout')->willReturn($layout);
 
-        $request = $this->getMockBuilder(Request::class)
-            ->addMethods(['getQueryValue'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $request = $this->createPartialMockWithReflection(
+            Request::class,
+            ['getQueryValue']
+        );
         $request->expects($this->once())->method('getQueryValue')->willReturn($expectedQuery);
 
         $catalogSearchAdvanced = $this->createPartialMock(

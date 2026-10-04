@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -44,13 +44,9 @@ class NameTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
-            ->getMockForAbstractClass();
-        $this->contextMock = $this->getMockBuilder(ContextInterface::class)
-            ->getMockForAbstractClass();
-        $this->uiElementProcessorMock = $this->getMockBuilder(UiElementProcessor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
+        $this->contextMock = $this->createMock(ContextInterface::class);
+        $this->uiElementProcessorMock = $this->createMock(UiElementProcessor::class);
 
         $this->contextMock->expects(static::never())
             ->method('getProcessor')

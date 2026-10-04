@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -42,18 +42,14 @@ class AggregateSalesReportBestsellersDataTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->localeResolverMock = $this->getMockBuilder(ResolverInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->localeResolverMock = $this->createMock(ResolverInterface::class);
 
         $this->bestsellersFactoryMock =
             $this->getMockBuilder(BestsellersFactory::class)
                 ->disableOriginalConstructor()
                 ->onlyMethods(['create'])
                 ->getMock();
-        $this->localeDateMock = $this->getMockBuilder(TimezoneInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->localeDateMock = $this->createMock(TimezoneInterface::class);
 
         $this->observer = new AggregateSalesReportBestsellersData(
             $this->localeResolverMock,
@@ -65,9 +61,7 @@ class AggregateSalesReportBestsellersDataTest extends TestCase
     public function testExecute()
     {
         $date = $this->setupAggregate();
-        $bestsellersMock = $this->getMockBuilder(Bestsellers::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $bestsellersMock = $this->createMock(Bestsellers::class);
         $bestsellersMock->expects($this->once())
             ->method('aggregate')
             ->with($date);

@@ -11,8 +11,6 @@ namespace Magento\Backend\Block\System\Store\Edit\Form;
 /**
  * Adminhtml store edit form for website
  *
- * @author      Magento Core Team <core@magentocommerce.com>
- *
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Website extends \Magento\Backend\Block\System\Store\Edit\AbstractForm

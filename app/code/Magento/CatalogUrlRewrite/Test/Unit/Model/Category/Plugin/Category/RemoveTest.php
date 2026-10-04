@@ -50,8 +50,7 @@ class RemoveTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->urlPersistMock = $this->getMockBuilder(UrlPersistInterface::class)
-            ->getMockForAbstractClass();
+        $this->urlPersistMock = $this->createMock(UrlPersistInterface::class);
         $this->childrenCategoriesProviderMock = $this->getMockBuilder(ChildrenCategoriesProvider::class)
             ->getMock();
         $this->subjectMock = $this->getMockBuilder(CategoryResourceModel::class)

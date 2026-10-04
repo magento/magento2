@@ -26,14 +26,10 @@ class ProductWebsiteFilterTest extends TestCase
     public function testApply()
     {
         /** @var Filter|MockObject $filterMock */
-        $filterMock = $this->getMockBuilder(Filter::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $filterMock = $this->createMock(Filter::class);
 
         /** @var Collection|MockObject $collectionMock */
-        $collectionMock = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $collectionMock = $this->createMock(Collection::class);
 
         $filterMock->expects($this->once())
             ->method('getValue')

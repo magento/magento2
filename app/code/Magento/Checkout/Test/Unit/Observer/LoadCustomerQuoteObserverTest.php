@@ -34,7 +34,7 @@ class LoadCustomerQuoteObserverTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
         $this->checkoutSession = $this->createMock(Session::class);
-        $this->messageManager = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->messageManager = $this->createMock(ManagerInterface::class);
         $this->object = $this->objectManager->getObject(
             LoadCustomerQuoteObserver::class,
             [

@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Framework\Test\Unit;
 
 use Magento\Framework\App\Language\Dictionary;
+use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\App\State;
@@ -21,12 +22,14 @@ use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Module\Dir\Reader;
 use Magento\Framework\Module\ModuleList;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Translate;
 use Magento\Framework\Translate\ResourceInterface;
 use Magento\Framework\View\DesignInterface;
 use Magento\Framework\View\FileSystem as FilesystemView;
 use Magento\Theme\Model\Theme;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -36,6 +39,7 @@ use PHPUnit\Framework\TestCase;
  */
 class TranslateTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Translate
      */
@@ -122,30 +126,22 @@ class TranslateTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->viewDesign = $this->getMockForAbstractClass(DesignInterface::class);
-        $this->cache = $this->getMockForAbstractClass(FrontendInterface::class);
+        $this->viewDesign = $this->createMock(DesignInterface::class);
+        $this->cache = $this->createMock(FrontendInterface::class);
         $this->viewFileSystem = $this->createMock(FilesystemView::class);
         $this->moduleList = $this->createMock(ModuleList::class);
         $this->modulesReader = $this->createMock(Reader::class);
-        $this->scopeResolver = $this->getMockForAbstractClass(ScopeResolverInterface::class);
-        $this->resource = $this->getMockForAbstractClass(ResourceInterface::class);
-        $this->locale = $this->getMockForAbstractClass(ResolverInterface::class);
+        $this->scopeResolver = $this->createMock(ScopeResolverInterface::class);
+        $this->resource = $this->createMock(ResourceInterface::class);
+        $this->locale = $this->createMock(ResolverInterface::class);
         $this->appState = $this->createMock(State::class);
-        $this->request = $this->getMockForAbstractClass(
-            RequestInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['getParam', 'getControllerModule']
-        );
+        $this->request = $this->createMock(Http::class);
         $this->csvParser = $this->createMock(Csv::class);
         $this->packDictionary = $this->createMock(Dictionary::class);
-        $this->directory = $this->getMockForAbstractClass(ReadInterface::class);
+        $this->directory = $this->createMock(ReadInterface::class);
         $filesystem = $this->createMock(Filesystem::class);
         $filesystem->expects($this->once())->method('getDirectoryRead')->willReturn($this->directory);
-        $this->fileDriver = $this->getMockForAbstractClass(DriverInterface::class);
+        $this->fileDriver = $this->createMock(DriverInterface::class);
 
         $this->translate = new Translate(
             $this->viewDesign,
@@ -164,7 +160,7 @@ class TranslateTest extends TestCase
             $this->fileDriver
         );
 
-        $serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
+        $serializerMock = $this->createMock(SerializerInterface::class);
         $serializerMock->method('serialize')
             ->willReturnCallback(function ($data) {
                 return json_encode($data);
@@ -186,8 +182,8 @@ class TranslateTest extends TestCase
      * @param array $cachedData
      *
      * @return void
-     * @dataProvider dataProviderLoadDataCachedTranslation
      */
+    #[DataProvider('dataProviderLoadDataCachedTranslation')]
     public function testLoadDataCachedTranslation($area, $forceReload, $cachedData): void
     {
         $this->expectsSetConfig('Magento/luma');
@@ -222,9 +218,9 @@ class TranslateTest extends TestCase
      * @param bool $forceReload
      *
      * @return void
-     * @dataProvider dataProviderForTestLoadData
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
+    #[DataProvider('dataProviderForTestLoadData')]
     public function testLoadData($area, $forceReload): void
     {
         $this->expectsSetConfig('Magento/luma');
@@ -333,8 +329,8 @@ class TranslateTest extends TestCase
      * @param $result
      *
      * @return void
-     * @dataProvider dataProviderForTestGetData
      */
+    #[DataProvider('dataProviderForTestGetData')]
     public function testGetData($data, $result): void
     {
         $this->cache->expects($this->once())

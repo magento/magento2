@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class CollectionTest extends TestCase
 {
@@ -31,9 +32,9 @@ class CollectionTest extends TestCase
     /**
      * Verifies that filter condition date is being converted to config timezone before select sql query
      *
-     * @dataProvider getCollectionFiltersDataProvider
      * @return void
      */
+    #[DataProvider('getCollectionFiltersDataProvider')]
     public function testAddFieldToFilter($field): void
     {
         $filterDate = "2021-12-05 00:00:00";
@@ -47,9 +48,11 @@ class CollectionTest extends TestCase
                 'resourceModel' => Page::class
             ]
         );
+        $filterDate = new \DateTime($filterDate);
+        $filterDate->setTimezone(new \DateTimeZone($timeZone->getConfigTimezone()));
         $convertedDate = $timeZone->convertConfigTimeToUtc($filterDate);
 
-        $collection = $gridCollection->addFieldToFilter($field, ['qteq' => $filterDate]);
+        $collection = $gridCollection->addFieldToFilter($field, ['qteq' => $filterDate->format('Y-m-d H:i:s')]);
         $expectedSelectCondition = "`{$field}` = '{$convertedDate}'";
 
         $this->assertStringContainsString($expectedSelectCondition, $collection->getSelectSql(true));

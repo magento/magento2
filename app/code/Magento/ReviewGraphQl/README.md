@@ -1,3 +1,3 @@
-# ReviewGraphQl
+# Magento_ReviewGraphQl module
 
-**ReviewGraphQl** provides endpoints for getting and creating the Product reviews by guest and logged in customers.
+This module provides endpoints for getting and creating the Product reviews by guest and logged in customers.

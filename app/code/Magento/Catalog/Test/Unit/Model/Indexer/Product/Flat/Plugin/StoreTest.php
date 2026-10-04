@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Flat\Plugin;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Indexer\Product\Flat\Plugin\Store as StorePlugin;
 use Magento\Catalog\Model\Indexer\Product\Flat\Processor;
 use Magento\Store\Model\ResourceModel\Store as StoreResourceModel;
@@ -55,8 +56,8 @@ class StoreTest extends TestCase
     /**
      * @param string $matcherMethod
      * @param int|null $storeId
-     * @dataProvider storeDataProvider
      */
+    #[DataProvider('storeDataProvider')]
     public function testAfterSave(string $matcherMethod, ?int $storeId): void
     {
         $this->processorMock->expects($this->{$matcherMethod}())->method('markIndexerAsInvalid');
@@ -72,8 +73,8 @@ class StoreTest extends TestCase
     /**
      * @param string $matcherMethod
      * @param bool $storeGroupChanged
-     * @dataProvider storeGroupDataProvider
      */
+    #[DataProvider('storeGroupDataProvider')]
     public function testAfterSaveSwitchStoreGroup(string $matcherMethod, bool $storeGroupChanged): void
     {
         $this->processorMock->expects($this->{$matcherMethod}())->method('markIndexerAsInvalid');

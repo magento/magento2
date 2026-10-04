@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -46,8 +46,8 @@ class TopologyInstallerTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->topologyConfigMock = $this->getMockForAbstractClass(ConfigInterface::class);
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->topologyConfigMock = $this->createMock(ConfigInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->topologyInstaller = $this->objectManager->getObject(
             TopologyInstaller::class,
             ['topologyConfig' => $this->topologyConfigMock, 'logger' => $this->loggerMock]

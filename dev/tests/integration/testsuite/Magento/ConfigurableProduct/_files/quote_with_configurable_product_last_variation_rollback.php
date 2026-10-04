@@ -2,8 +2,8 @@
 /**
  * Rollback for quote_with_configurable_product_last_variation.php fixture.
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 /** @var $objectManager \Magento\TestFramework\ObjectManager */
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();

@@ -229,9 +229,22 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
         $product = $this->productFactory->create();
         $product->setData($attributesData);
 
-        foreach (array_keys($attributesData) as $attributeCode) {
-            $attribute = $this->eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $attributeCode);
-            $attribute->getBackend()->validate($product);
+        // Ensure Special Price From Date cannot exceed To Date during mass update
+        if (array_key_exists('special_from_date', $attributesData)
+            || array_key_exists('special_to_date', $attributesData)) {
+            $this->eavConfig
+                ->getAttribute(\Magento\Catalog\Model\Product::ENTITY, 'special_from_date')
+                ->setMaxValue($product->getSpecialToDate());
+        }
+
+        try {
+            foreach (array_keys($attributesData) as $attributeCode) {
+                $attribute = $this->eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $attributeCode);
+                $attribute->getBackend()->validate($product);
+            }
+        } catch (\Magento\Eav\Model\Entity\Attribute\Exception $e) {
+            // Re-throw as LocalizedException so the specific validation message is displayed
+            throw new LocalizedException(__($e->getMessage()));
         }
     }
 

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Framework\DB\Select\ColumnsRenderer;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ColumnsRendererTest extends TestCase
 {
@@ -65,9 +66,8 @@ class ColumnsRendererTest extends TestCase
     /**
      * @param array $columns
      * @param string $sql
-     * @param string $expectedResult
-     * @dataProvider renderDataProvider
-     */
+     * @param string $expectedResult     */
+    #[DataProvider('renderDataProvider')]
     public function testRender($columns, $sql, $expectedResult)
     {
         $mapValues = [

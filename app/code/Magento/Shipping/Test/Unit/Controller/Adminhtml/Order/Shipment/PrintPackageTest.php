@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -20,6 +20,7 @@ use Magento\Sales\Model\Order\Shipment;
 use Magento\Shipping\Controller\Adminhtml\Order\Shipment\PrintPackage;
 use Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader;
 use Magento\Shipping\Model\Order\Pdf\Packaging;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -28,6 +29,7 @@ use PHPUnit\Framework\TestCase;
  */
 class PrintPackageTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var ShipmentLoader|MockObject
      */
@@ -83,18 +85,17 @@ class PrintPackageTest extends TestCase
         $shipment = [];
         $tracking = [];
 
-        $this->shipmentLoaderMock = $this->getMockBuilder(ShipmentLoader::class)
-            ->addMethods(['setOrderId', 'setShipmentId', 'setShipment', 'setTracking'])
-            ->onlyMethods(['load'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->shipmentLoaderMock = $this->createPartialMockWithReflection(
+            ShipmentLoader::class,
+            ['setOrderId', 'setShipmentId', 'setShipment', 'setTracking', 'load']
+        );
         $this->requestMock = $this->createPartialMock(Http::class, ['getParam']);
-        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $this->responseMock = $this->createMock(\Magento\Framework\App\Response\Http::class);
-        $this->sessionMock = $this->getMockBuilder(Session::class)
-            ->addMethods(['setIsUrlNotice'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->sessionMock = $this->createPartialMockWithReflection(
+            Session::class,
+            ['setIsUrlNotice']
+        );
         $this->actionFlag = $this->createPartialMock(ActionFlag::class, ['get']);
         $this->shipmentMock = $this->createPartialMock(Shipment::class, ['__wakeup']);
         $this->fileFactoryMock = $this->createPartialMock(

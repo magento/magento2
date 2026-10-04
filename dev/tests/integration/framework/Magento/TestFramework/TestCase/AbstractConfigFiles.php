@@ -3,12 +3,13 @@
  * Abstract class that helps in writing tests that validate config xml files
  * are valid both individually and when merged.
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\TestFramework\TestCase;
 
 use Magento\Framework\Component\ComponentRegistrar;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 abstract class AbstractConfigFiles extends \PHPUnit\Framework\TestCase
 {
@@ -71,9 +72,7 @@ abstract class AbstractConfigFiles extends \PHPUnit\Framework\TestCase
         $this->_objectManager->removeSharedInstance($this->_getReaderClassName());
     }
 
-    /**
-     * @dataProvider xmlConfigFileProvider
-     */
+    #[DataProvider('xmlConfigFileProvider')]
     public function testXmlConfigFile($file, $skip = false)
     {
         if ($skip) {

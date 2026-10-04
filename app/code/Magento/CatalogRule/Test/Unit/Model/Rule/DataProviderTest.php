@@ -45,7 +45,7 @@ class DataProviderTest extends TestCase
         );
         $this->collectionMock = $this->createMock(Collection::class);
         $this->collectionFactoryMock->expects($this->once())->method('create')->willReturn($this->collectionMock);
-        $this->dataPersistorMock = $this->getMockForAbstractClass(DataPersistorInterface::class);
+        $this->dataPersistorMock = $this->createMock(DataPersistorInterface::class);
 
         $this->model = new DataProvider(
             'Name',

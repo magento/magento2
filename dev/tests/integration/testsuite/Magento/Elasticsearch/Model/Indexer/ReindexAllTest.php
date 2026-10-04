@@ -17,6 +17,7 @@ use Magento\Elasticsearch\Model\Config;
 use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
 use Magento\Framework\Search\EngineResolverInterface;
 use Magento\TestModuleCatalogSearch\Model\SearchEngineVersionReader;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Important: Please make sure that each integration test file works with unique search index. In order to
@@ -197,11 +198,11 @@ class ReindexAllTest extends \PHPUnit\Framework\TestCase
      *
      * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_products.php
      * @magentoDataFixture Magento/Catalog/_files/products.php
-     * @dataProvider searchSpecificProductDataProvider
      * @param string $searchName
      * @param string $sku
      * @param int $expectedCount
      */
+    #[DataProvider('searchSpecificProductDataProvider')]
     public function testSearchSpecificProduct(string $searchName, string $sku, int $expectedCount)
     {
         $this->reindexAll();

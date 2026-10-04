@@ -1,16 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Test\Integrity\Modular\Magento\Sales;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class PdfConfigFilesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param string $file
-     * @dataProvider fileFormatDataProvider
      */
+    #[DataProvider('fileFormatDataProvider')]
     public function testFileFormat($file)
     {
         /** @var \Magento\Sales\Model\Order\Pdf\Config\SchemaLocator $schemaLocator */

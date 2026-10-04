@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\ImportExport\Test\Unit\Model\Import\Source;
 
 use Magento\Framework\Filesystem\Directory\Write;
 use Magento\ImportExport\Model\Import\Source\Zip;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -38,8 +39,8 @@ class ZipTest extends TestCase
      * Test destination argument for the second getRelativePath after preg_replace.
      *
      * @return void
-     * @dataProvider constructorFileDestinationMatchDataProvider
      */
+    #[DataProvider('constructorFileDestinationMatchDataProvider')]
     public function testConstructorFileDestinationMatch($fileName, $expectedfileName): void
     {
         $this->markTestSkipped('The implementation of constructor has changed. Rewrite test to cover changes.');

@@ -18,7 +18,15 @@
             <group value="product"/>
             <group value="cloud"/>
         </annotations>
-        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Delete all products via API using ProductApiHelper -->
+            <helper class="Magento\Catalog\Test\Mftf\Helper\ProductApiHelper" method="deleteAllProductsApi" stepKey="deleteAllProductsViaApi"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        
         <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="goToCreateProduct"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="wait1"/>
         <actionGroup ref="FillProductNameAndSkuInProductFormActionGroup" stepKey="fillName">

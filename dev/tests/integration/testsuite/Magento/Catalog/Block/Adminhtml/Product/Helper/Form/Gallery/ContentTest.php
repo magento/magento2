@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery;
@@ -16,6 +16,7 @@ use Magento\Framework\Registry;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Model\Store;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoAppArea adminhtml
@@ -78,12 +79,12 @@ class ContentTest extends \PHPUnit\Framework\TestCase
     /**
      * Test get images json using registry or data persistor.
      *
-     * @dataProvider getImagesAndImageTypesDataProvider
      * @magentoDataFixture Magento/Catalog/_files/product_with_image.php
      * @magentoAppIsolation enabled
      * @param bool $isProductNew
      * @return void
      */
+    #[DataProvider('getImagesAndImageTypesDataProvider')]
     public function testGetImagesJson(bool $isProductNew)
     {
         $this->prepareProduct($isProductNew);
@@ -100,12 +101,12 @@ class ContentTest extends \PHPUnit\Framework\TestCase
     /**
      * Test get image types json using registry or data persistor.
      *
-     * @dataProvider getImagesAndImageTypesDataProvider
      * @magentoDataFixture Magento/Catalog/_files/product_with_image.php
      * @magentoAppIsolation enabled
      * @param bool $isProductNew
      * @return void
      */
+    #[DataProvider('getImagesAndImageTypesDataProvider')]
     public function testGetImageTypes(bool $isProductNew)
     {
         $this->prepareProduct($isProductNew);
@@ -142,7 +143,6 @@ class ContentTest extends \PHPUnit\Framework\TestCase
      *
      * @magentoDataFixture Magento/Catalog/_files/product_with_image.php
      * @magentoDataFixture Magento/Store/_files/second_store.php
-     * @dataProvider imagesPositionStoreViewDataProvider
      * @param string $addFromStore
      * @param array $newImages
      * @param string $viewFromStore
@@ -150,6 +150,7 @@ class ContentTest extends \PHPUnit\Framework\TestCase
      * @return void
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
+    #[DataProvider('imagesPositionStoreViewDataProvider')]
     public function testImagesPositionStoreView(
         string $addFromStore,
         array $newImages,

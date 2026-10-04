@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -23,6 +23,7 @@ use PHPUnit\Framework\TestCase;
  */
 class SalesSetupTest extends TestCase
 {
+
     /**
      * @var SalesSetup
      */
@@ -61,17 +62,13 @@ class SalesSetupTest extends TestCase
     protected function setUp(): void
     {
         $this->moduleDataSetupMock = $this->getMockBuilder(ModuleDataSetupInterface::class)
-            ->getMockForAbstractClass();
-        $this->contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
             ->getMock();
+        $this->contextMock = $this->createMock(Context::class);
         $this->cacheMock = $this->getMockBuilder(CacheInterface::class)
-            ->getMockForAbstractClass();
-        $this->collectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
-            ->disableOriginalConstructor()
             ->getMock();
+        $this->collectionFactoryMock = $this->createMock(CollectionFactory::class);
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(

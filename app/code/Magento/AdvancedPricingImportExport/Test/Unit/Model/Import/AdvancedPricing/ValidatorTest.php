@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\AdvancedPricingImportExport\Test\Unit\Model\Import\AdvancedPricing;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator as Validator;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as RowValidatorInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -31,18 +32,13 @@ class ValidatorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->validatorTest = $this->getMockForAbstractClass(
-            \Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface::class,
-            [],
-            '',
-            false
-        );
+        $this->validatorTest = $this->createMock(RowValidatorInterface::class);
         $messages = ['messages'];
         $this->validatorTest->method('getMessages')->willReturn($messages);
         $this->validators = [$this->validatorTest];
 
         $this->validator = $this->getMockBuilder(
-            \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator::class
+            Validator::class
         )
             ->onlyMethods(['_clearMessages', '_addMessages'])
             ->setConstructorArgs([$this->validators])
@@ -50,11 +46,11 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * @dataProvider isValidDataProvider
      *
      * @param array $validatorResult
      * @param bool  $expectedResult
      */
+    #[DataProvider('isValidDataProvider')]
     public function testIsValid($validatorResult, $expectedResult)
     {
         $this->validator->expects($this->once())->method('_clearMessages');

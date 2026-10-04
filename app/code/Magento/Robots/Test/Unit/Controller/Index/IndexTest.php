@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -28,10 +28,7 @@ class IndexTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->resultPageFactoryMock = $this->getMockBuilder(PageFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
+        $this->resultPageFactoryMock = $this->createPartialMock(PageFactory::class, ['create']);
 
         $objectManager = new ObjectManager($this);
         $this->controller = $objectManager->getObject(
@@ -47,9 +44,7 @@ class IndexTest extends TestCase
      */
     public function testExecute()
     {
-        $resultPageMock = $this->getMockBuilder(Page::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $resultPageMock = $this->createMock(Page::class);
         $resultPageMock->expects($this->once())
             ->method('addHandle')
             ->with('robots_index_index');

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Image\Adapter;
@@ -318,7 +318,7 @@ class ImageMagick extends AbstractAdapter
         $this->_checkCanProcess();
 
         $opacity = $this->getWatermarkImageOpacity() ? $this->getWatermarkImageOpacity() : $opacity;
-        $opacity = (double) number_format($opacity / 100, 1);
+        $opacity = (float) number_format($opacity / 100, 1);
 
         $watermark = new \Imagick($imagePath);
 

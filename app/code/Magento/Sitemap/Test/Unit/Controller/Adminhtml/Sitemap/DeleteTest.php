@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,6 +17,7 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\HTTP\PhpEnvironment\Request;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sitemap\Controller\Adminhtml\Sitemap\Delete;
 use Magento\Sitemap\Model\SitemapFactory;
@@ -27,6 +28,8 @@ use PHPUnit\Framework\TestCase;
  */
 class DeleteTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Context
      */
@@ -92,34 +95,29 @@ class DeleteTest extends TestCase
         $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getParam'])
-            ->getMockForAbstractClass();
-        $this->sessionMock = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setIsUrlNotice'])
-            ->getMock();
-        $this->response = $this->getMockBuilder(ResponseInterface::class)
-            ->addMethods(['setRedirect'])
-            ->onlyMethods(['sendResponse'])
-            ->getMockForAbstractClass();
+        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->sessionMock = $this->createPartialMockWithReflection(
+            Session::class,
+            ['setIsUrlNotice']
+        );
+        $this->response = $this->createPartialMockWithReflection(
+            ResponseInterface::class,
+            ['setRedirect', 'sendResponse']
+        );
         $this->response->expects($this->once())->method('setRedirect');
         $this->sessionMock->expects($this->any())->method('setIsUrlNotice')->willReturn($this->objectManager);
         $this->actionFlag = $this->createPartialMock(ActionFlag::class, ['get']);
         $this->actionFlag->expects($this->any())->method("get")->willReturn($this->objectManager);
-        $this->objectManager = $this->getMockBuilder(ObjectManager::class)
-            ->addMethods(['get'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->getMock();
-        $this->messageManagerMock = $this->getMockBuilder(ManagerInterface::class)
-            ->getMock();
-        $this->helperMock = $this->getMockBuilder(Data::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getUrl'])
-            ->getMock();
+        $this->objectManager = $this->createPartialMockWithReflection(
+            ObjectManager::class,
+            ['get']
+        );
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
+        $this->helperMock = $this->createPartialMock(
+            Data::class,
+            ['getUrl']
+        );
         $this->helperMock->expects($this->any())
             ->method('getUrl')
             ->willReturn('adminhtml/*/');

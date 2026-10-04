@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -46,13 +46,13 @@ class FormKeyTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->cookieManagerMock = $this->getMockForAbstractClass(CookieManagerInterface::class);
+        $this->cookieManagerMock = $this->createMock(CookieManagerInterface::class);
         $this->cookieMetadataFactory = $this->getMockBuilder(
             CookieMetadataFactory::class
         )
             ->disableOriginalConstructor()
             ->getMock();
-        $this->sessionManager = $this->getMockForAbstractClass(SessionManagerInterface::class);
+        $this->sessionManager = $this->createMock(SessionManagerInterface::class);
         $this->formKey = new FormKey(
             $this->cookieManagerMock,
             $this->cookieMetadataFactory,

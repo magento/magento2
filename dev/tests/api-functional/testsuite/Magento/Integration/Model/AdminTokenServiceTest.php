@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Integration\Model;
 
 use Magento\Framework\Exception\InputException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Integration\Model\Oauth\Token as TokenModel;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
@@ -20,9 +21,9 @@ use Magento\Integration\Model\Oauth\Token\RequestLog\Config as TokenThrottlerCon
  */
 class AdminTokenServiceTest extends WebapiAbstract
 {
-    const SERVICE_NAME = "integrationAdminTokenServiceV1";
-    const SERVICE_VERSION = "V1";
-    const RESOURCE_PATH_ADMIN_TOKEN = "/V1/integration/admin/token";
+    public const SERVICE_NAME = "integrationAdminTokenServiceV1";
+    public const SERVICE_VERSION = "V1";
+    public const RESOURCE_PATH_ADMIN_TOKEN = "/V1/integration/admin/token";
 
     /**
      * @var \Magento\Integration\Api\AdminTokenServiceInterface
@@ -93,10 +94,8 @@ class AdminTokenServiceTest extends WebapiAbstract
         ];
     }
 
-    /**
-     * @dataProvider validationDataProvider
-     */
-    public function testCreateAdminAccessTokenEmptyOrNullCredentials()
+    #[DataProvider('validationDataProvider')]
+    public function testCreateAdminAccessTokenEmptyOrNullCredentials($username, $password)
     {
         $noExceptionOccurred = false;
         try {
@@ -106,7 +105,7 @@ class AdminTokenServiceTest extends WebapiAbstract
                     'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
                 ],
             ];
-            $requestData = ['username' => '', 'password' => ''];
+            $requestData = ['username' => $username, 'password' => $password];
             $this->_webApiCall($serviceInfo, $requestData);
             $noExceptionOccurred = true;
         } catch (\Exception $exception) {

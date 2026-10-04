@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -86,7 +86,6 @@ class ShipmentTest extends TestCase
 
         $reflection = new \ReflectionClass(Collection::class);
         $reflectionProperty = $reflection->getProperty('_items');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->commentCollection, $collection);
 
         $actual = $this->shipmentModel->getCommentsCollection();
@@ -121,7 +120,6 @@ class ShipmentTest extends TestCase
 
         $reflection = new \ReflectionClass(Collection::class);
         $reflectionProperty = $reflection->getProperty('_items');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->commentCollection, $collection);
 
         $this->commentCollection->expects(self::once())

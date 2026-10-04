@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -12,6 +12,7 @@ use Magento\Framework\Image\Adapter\AbstractAdapter;
 use Magento\Framework\Image\Adapter\Gd2;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * \Magento\Framework\Image\Adapter\Gd2 class test
@@ -71,9 +72,8 @@ class Gd2Test extends TestCase
      *
      * @param array $fileData
      * @param string|bool|null $exception
-     * @param string $limit
-     * @dataProvider filesProvider
-     */
+     * @param string $limit     */
+    #[DataProvider('filesProvider')]
     public function testOpen($fileData, $exception, $limit)
     {
         self::$memoryLimit = $limit;

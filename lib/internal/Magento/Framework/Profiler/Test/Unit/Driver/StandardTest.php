@@ -2,8 +2,8 @@
 /**
  * Test class for \Magento\Framework\Profiler\Driver\Standard
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -130,8 +130,8 @@ class StandardTest extends TestCase
             'outputFactory' => $outputFactory
         ];
 
-        $outputOne = $this->getMockForAbstractClass(OutputInterface::class);
-        $outputTwo = $this->getMockForAbstractClass(OutputInterface::class);
+        $outputOne = $this->createMock(OutputInterface::class);
+        $outputTwo = $this->createMock(OutputInterface::class);
 
         $outputFactory->method('create')
             ->willReturnCallback(
@@ -156,9 +156,9 @@ class StandardTest extends TestCase
      */
     public function testDisplayAndRegisterOutput(): void
     {
-        $outputOne = $this->getMockForAbstractClass(OutputInterface::class);
+        $outputOne = $this->createMock(OutputInterface::class);
         $outputOne->expects($this->once())->method('display')->with($this->stat);
-        $outputTwo = $this->getMockForAbstractClass(OutputInterface::class);
+        $outputTwo = $this->createMock(OutputInterface::class);
         $outputTwo->expects($this->once())->method('display')->with($this->stat);
 
         $this->driver->registerOutput($outputOne);
@@ -177,7 +177,6 @@ class StandardTest extends TestCase
     public function testDefaultOutputFactory(): void
     {
         $method = new ReflectionMethod($this->driver, '_getOutputFactory');
-        $method->setAccessible(true);
         $this->assertInstanceOf(
             Factory::class,
             $method->invoke($this->driver)

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,6 +17,7 @@ use Magento\Framework\Reflection\MethodsMap;
 use Magento\Framework\Reflection\TypeCaster;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ExtensionAttributesProcessorTest extends TestCase
 {
@@ -77,9 +78,7 @@ class ExtensionAttributesProcessorTest extends TestCase
         $this->configMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->authorizationMock = $this->getMockBuilder(AuthorizationInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->authorizationMock = $this->createMock(AuthorizationInterface::class);
 
         $this->model = $objectManager->getObject(
             ExtensionAttributesProcessor::class,
@@ -97,9 +96,8 @@ class ExtensionAttributesProcessorTest extends TestCase
 
     /**
      * @param bool $isPermissionAllowed
-     * @param array $expectedValue
-     * @dataProvider buildOutputDataArrayWithPermissionProvider
-     */
+     * @param array $expectedValue     */
+    #[DataProvider('buildOutputDataArrayWithPermissionProvider')]
     public function testBuildOutputDataArrayWithPermission($isPermissionAllowed, $expectedValue)
     {
         $dataObject = new ExtensionAttributesObject();

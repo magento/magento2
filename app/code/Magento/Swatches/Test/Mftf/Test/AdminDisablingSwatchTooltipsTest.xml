@@ -35,6 +35,9 @@
             <waitForPageLoad stepKey="waitToClickSave"/>
             <click selector="{{AttributePropertiesSection.SaveAndEdit}}" stepKey="clickSaveAndEdit"/>
 
+            <!-- Delete all products via API using ProductApiHelper -->
+            <helper class="Magento\Catalog\Test\Mftf\Helper\ProductApiHelper" method="deleteAllProductsApi" stepKey="deleteAllProductsViaApi"/>
+
             <!-- Log out -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logOut"/>
 

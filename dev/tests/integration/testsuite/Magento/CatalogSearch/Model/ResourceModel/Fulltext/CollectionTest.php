@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CatalogSearch\Model\ResourceModel\Fulltext;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test class for \Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection.
@@ -17,11 +19,11 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider filtersDataProviderSearch
      * @magentoDataFixture Magento/Framework/Search/_files/products.php
      * @magentoDataFixture Magento/CatalogSearch/_files/full_reindex.php
      * @magentoAppIsolation enabled
      */
+    #[DataProvider('filtersDataProviderSearch')]
     public function testLoadWithFilterSearch($request, $filters, $expectedCount)
     {
         $objManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -42,10 +44,10 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider filtersDataProviderQuickSearch
      * @magentoDataFixture Magento/Framework/Search/_files/products.php
      * @magentoAppIsolation enabled
      */
+    #[DataProvider('filtersDataProviderQuickSearch')]
     public function testLoadWithFilterQuickSearch($filters, $expectedCount)
     {
         $objManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -64,10 +66,10 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider filtersDataProviderCatalogView
      * @magentoDataFixture Magento/Framework/Search/_files/products.php
      * @magentoAppIsolation enabled
      */
+    #[DataProvider('filtersDataProviderCatalogView')]
     public function testLoadWithFilterCatalogView($filters, $expectedCount)
     {
         $objManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -156,12 +158,12 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/CatalogSearch/_files/product_configurable_two_options.php
      * @magentoDataFixture Magento/CatalogSearch/_files/full_reindex.php
      * @magentoAppIsolation enabled
-     * @dataProvider configurableProductWithMultipleOptionsDataProvider
      * @param array $filters
      * @param bool $found
      * @param array $outOfStock
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
+    #[DataProvider('configurableProductWithMultipleOptionsDataProvider')]
     public function testConfigurableProductWithMultipleOptions(array $filters, bool $found, array $outOfStock = [])
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();

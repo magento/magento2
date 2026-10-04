@@ -26,6 +26,7 @@ use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\DB\Select;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Validator\UniversalFactory;
 use Magento\Search\Api\SearchInterface;
@@ -43,6 +44,7 @@ use PHPUnit\Framework\TestCase;
  */
 class CollectionTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var ObjectManager
      */
@@ -89,45 +91,37 @@ class CollectionTest extends TestCase
         $universalFactory = $this->getUniversalFactory();
         $this->criteriaBuilder = $this->getCriteriaBuilder();
         $this->filterBuilder = $this->createMock(FilterBuilder::class);
-        $this->search = $this->getMockForAbstractClass(SearchInterface::class);
+        $this->search = $this->createMock(SearchInterface::class);
 
         $productLimitationMock = $this->createMock(
             ProductLimitation::class
         );
-        $productLimitationFactoryMock = $this->getMockBuilder(ProductLimitationFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
+        $productLimitationFactoryMock = $this->createPartialMock(
+            ProductLimitationFactory::class,
+            ['create']
+        );
         $productLimitationFactoryMock->method('create')
             ->willReturn($productLimitationMock);
 
-        $searchCriteriaResolver = $this->getMockBuilder(SearchCriteriaResolverInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['resolve'])
-            ->getMockForAbstractClass();
-        $searchCriteriaResolverFactory = $this->getMockBuilder(SearchCriteriaResolverFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
-        $searchCriteriaResolverFactory->expects($this->any())
-            ->method('create')
+        $searchCriteriaResolver = $this->createMock(SearchCriteriaResolverInterface::class);
+        $searchCriteriaResolverFactory = $this->createPartialMock(
+            SearchCriteriaResolverFactory::class,
+            ['create']
+        );
+        $searchCriteriaResolverFactory->method('create')
             ->willReturn($searchCriteriaResolver);
 
-        $this->searchResultApplierFactory = $this->getMockBuilder(SearchResultApplierFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
+        $this->searchResultApplierFactory = $this->createPartialMock(
+            SearchResultApplierFactory::class,
+            ['create']
+        );
 
-        $totalRecordsResolver = $this->getMockBuilder(TotalRecordsResolverInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['resolve'])
-            ->getMockForAbstractClass();
-        $totalRecordsResolverFactory = $this->getMockBuilder(TotalRecordsResolverFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
-        $totalRecordsResolverFactory->expects($this->any())
-            ->method('create')
+        $totalRecordsResolver = $this->createMock(TotalRecordsResolverInterface::class);
+        $totalRecordsResolverFactory = $this->createPartialMock(
+            TotalRecordsResolverFactory::class,
+            ['create']
+        );
+        $totalRecordsResolverFactory->method('create')
             ->willReturn($totalRecordsResolver);
 
         $this->objectManager->prepareObjectManager();
@@ -176,15 +170,15 @@ class CollectionTest extends TestCase
             ->willReturn($this->filterBuilder);
 
         $filter = $this->createMock(Filter::class);
-        $this->filterBuilder->expects($this->any())->method('create')->willReturn($filter);
+        $this->filterBuilder->method('create')->willReturn($filter);
 
-        $searchResult = $this->getMockForAbstractClass(SearchResultInterface::class);
+        $searchResult = $this->createMock(SearchResultInterface::class);
         $this->search->expects($this->once())->method('search')->willReturn($searchResult);
 
         $this->advancedCollection->setPageSize($pageSize);
         $this->advancedCollection->setCurPage(0);
 
-        $searchResultApplier = $this->getMockForAbstractClass(SearchResultApplierInterface::class);
+        $searchResultApplier = $this->createMock(SearchResultApplierInterface::class);
         $this->searchResultApplierFactory->expects($this->once())
             ->method('create')
             ->with(
@@ -211,11 +205,10 @@ class CollectionTest extends TestCase
      */
     protected function getCriteriaBuilder()
     {
-        $criteriaBuilder = $this->getMockBuilder(SearchCriteriaBuilder::class)
-            ->addMethods(['setRequestName'])
-            ->onlyMethods(['addFilter', 'create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $criteriaBuilder = $this->createPartialMockWithReflection(
+            SearchCriteriaBuilder::class,
+            ['setRequestName', 'addFilter', 'create']
+        );
 
         return $criteriaBuilder;
     }
@@ -227,18 +220,15 @@ class CollectionTest extends TestCase
      */
     protected function getStoreManager()
     {
-        $store = $this->getMockBuilder(Store::class)
-            ->onlyMethods(['getId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $store = $this->createPartialMock(
+            Store::class,
+            ['getId']
+        );
         $store->expects($this->once())
             ->method('getId')
             ->willReturn(1);
 
-        $storeManager = $this->getMockBuilder(StoreManagerInterface::class)
-            ->onlyMethods(['getStore'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $storeManager = $this->createMock(StoreManagerInterface::class);
         $storeManager->expects($this->once())
             ->method('getStore')
             ->willReturn($store);
@@ -253,19 +243,14 @@ class CollectionTest extends TestCase
      */
     protected function getUniversalFactory()
     {
-        $connection = $this->getMockBuilder(Mysql::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['select'])
-            ->getMockForAbstractClass();
-        $select = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $connection->expects($this->any())->method('select')->willReturn($select);
+        $connection = $this->createMock(Mysql::class);
+        $select = $this->createMock(Select::class);
+        $connection->method('select')->willReturn($select);
 
-        $entity = $this->getMockBuilder(AbstractEntity::class)
-            ->onlyMethods(['getConnection', 'getTable', 'getDefaultAttributes', 'getEntityTable'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $entity = $this->createPartialMock(
+            AbstractEntity::class,
+            ['getConnection', 'getTable', 'getDefaultAttributes', 'getEntityTable']
+        );
         $entity->expects($this->once())
             ->method('getConnection')
             ->willReturn($connection);
@@ -279,10 +264,10 @@ class CollectionTest extends TestCase
             ->method('getEntityTable')
             ->willReturn('table');
 
-        $universalFactory = $this->getMockBuilder(UniversalFactory::class)
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $universalFactory = $this->createPartialMock(
+            UniversalFactory::class,
+            ['create']
+        );
         $universalFactory->expects($this->once())
             ->method('create')
             ->willReturn($entity);

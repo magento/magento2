@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\App\Language;
 
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class DictionaryTest extends \PHPUnit\Framework\TestCase
 {
@@ -42,9 +43,9 @@ class DictionaryTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $languageCode
      * @param array $expectation
-     * @dataProvider dictionaryDataProvider
      * @magentoComponentsDir Magento/Framework/App/Language/_files
      */
+    #[DataProvider('dictionaryDataProvider')]
     public function testDictionaryGetter($languageCode, $expectation)
     {
         $this->model = $this->objectManager->create(

@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogImportExport\Test\Unit\Model\Import\Product\Validator;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\CatalogImportExport\Model\Import\Product;
 use Magento\CatalogImportExport\Model\Import\Product\SkuStorage;
 use Magento\CatalogImportExport\Model\Import\Product\Validator\Name;
@@ -35,15 +36,15 @@ class NameTest extends TestCase
      * @param $value
      * @return void
      * @throws Exception
-     * @dataProvider getRowData
      */
+    #[DataProvider('getRowData')]
     public function testIsValid($expected, $value): void
     {
-        $this->skuStorage->expects($this->any())->method('has')->willReturn(false);
+        $this->skuStorage->method('has')->willReturn(false);
         $nameValidator = new Name($this->skuStorage);
         $context = $this->createMock(Product::class);
-        $context->expects($this->any())->method('getEmptyAttributeValueConstant')->willReturn('|');
-        $context->expects($this->any())->method('retrieveMessageTemplate')->willReturn('%s error %s');
+        $context->method('getEmptyAttributeValueConstant')->willReturn('|');
+        $context->method('retrieveMessageTemplate')->willReturn('%s error %s');
         $nameValidator->init($context);
         $this->assertSame($expected, $nameValidator->isValid($value));
     }

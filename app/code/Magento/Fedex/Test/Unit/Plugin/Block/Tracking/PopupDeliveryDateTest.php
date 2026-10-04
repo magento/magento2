@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -13,6 +13,8 @@ use Magento\Fedex\Plugin\Block\Tracking\PopupDeliveryDate;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Shipping\Block\Tracking\Popup;
 use Magento\Shipping\Model\Tracking\Result\Status;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -21,6 +23,8 @@ use PHPUnit\Framework\TestCase;
  */
 class PopupDeliveryDateTest extends TestCase
 {
+    use MockCreationTrait;
+
     public const STUB_CARRIER_CODE_NOT_FEDEX = 'not-fedex';
     public const STUB_DELIVERY_DATE = '2020-02-02';
     public const STUB_DELIVERY_TIME = '12:00';
@@ -70,8 +74,8 @@ class PopupDeliveryDateTest extends TestCase
 
     /**
      * Test the method with Fedex carrier with timezone impact
-     * @dataProvider getDates
      */
+    #[DataProvider('getDates')]
     public function testAfterFormatDeliveryDateTimeWithFedexCarrierWithTimezone(
         $date,
         $currentTimezone,
@@ -112,10 +116,7 @@ class PopupDeliveryDateTest extends TestCase
      */
     private function getStatusMock(): MockObject
     {
-        return $this->getMockBuilder(Status::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getCarrier'])
-            ->getMock();
+        return $this->createPartialMockWithReflection(Status::class, ['getCarrier']);
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2017 Adobe
+ * Copyright 2013 Adobe
  * All Rights Reserved.
  */
 namespace Magento\SalesRule\Model\Rule\Condition;
@@ -65,9 +65,8 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
         $attributes = [];
         foreach ($productAttributes as $attribute) {
             /* @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
-            if (!$attribute->isAllowedForRuleCondition()
-                || !$attribute->getDataUsingMethod($this->_isUsedForRuleProperty)
-            ) {
+            if (!$attribute->getDataUsingMethod($this->_isUsedForRuleProperty)
+                || !$attribute->isAllowedForRuleCondition()) {
                 continue;
             }
             $frontLabel = $attribute->getFrontendLabel();
@@ -171,12 +170,14 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
             $product = $this->productRepository->getById($model->getProductId());
         }
 
+        // For composite products (e.g., configurable), the parent item usually holds the price.
+        $priceContainerItem = $model->getParentItem() ?: $model;
         $product->setQuoteItemQty(
-            $model->getQty()
+            $priceContainerItem->getQty()
         )->setQuoteItemPrice(
-            $model->getPrice() // possible bug: need to use $model->getBasePrice()
+            $priceContainerItem->getPrice()
         )->setQuoteItemRowTotal(
-            $model->getBaseRowTotal()
+            $priceContainerItem->getBaseRowTotal()
         );
 
         $attrCode = $this->getAttribute();

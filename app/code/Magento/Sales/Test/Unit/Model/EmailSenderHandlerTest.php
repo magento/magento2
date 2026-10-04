@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,8 +11,8 @@ use Magento\Config\Model\Config\Backend\Encrypted;
 use Magento\Framework\App\Config;
 use Magento\Framework\App\Config\Value;
 use Magento\Framework\App\Config\ValueFactory;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Model\AbstractModel;
 use Magento\Sales\Model\EmailSenderHandler;
 use Magento\Sales\Model\Order\Email\Container\IdentityInterface;
@@ -23,6 +23,9 @@ use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use Magento\Framework\Lock\LockManagerInterface;
 
 /**
  * Unit test of sales emails sending observer.
@@ -31,6 +34,8 @@ use PHPUnit\Framework\TestCase;
  */
 class EmailSenderHandlerTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * Subject of testing.
      *
@@ -82,6 +87,11 @@ class EmailSenderHandlerTest extends TestCase
     private $configValueFactory;
 
     /**
+     * @var LockManagerInterface|MockObject
+     */
+    private $lockManagerMock;
+
+    /**
      * @var string
      */
     private $modifyStartFromDate = '-1 day';
@@ -91,32 +101,11 @@ class EmailSenderHandlerTest extends TestCase
      */
     protected function setUp(): void
     {
-        $objectManager = new ObjectManager($this);
+        $this->emailSender = $this->createPartialMockWithReflection(Sender::class, ['send']);
 
-        $this->emailSender = $this->getMockBuilder(Sender::class)
-            ->addMethods(['send'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->entityResource = $this->createMock(EntityAbstract::class);
 
-        $this->entityResource = $this->getMockForAbstractClass(
-            EntityAbstract::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['saveAttribute']
-        );
-
-        $this->entityCollection = $this->getMockForAbstractClass(
-            AbstractCollection::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['addFieldToFilter', 'getItems', 'addAttributeToSelect', 'getSelect']
-        );
+        $this->entityCollection = $this->createMock(AbstractCollection::class);
 
         $this->globalConfig = $this->createMock(Config::class);
 
@@ -132,18 +121,19 @@ class EmailSenderHandlerTest extends TestCase
             ValueFactory::class
         );
 
-        $this->object = $objectManager->getObject(
-            EmailSenderHandler::class,
-            [
-                'emailSender'         => $this->emailSender,
-                'entityResource'      => $this->entityResource,
-                'entityCollection'    => $this->entityCollection,
-                'globalConfig'        => $this->globalConfig,
-                'identityContainer'   => $this->identityContainerMock,
-                'storeManager'        => $this->storeManagerMock,
-                'configValueFactory'  => $this->configValueFactory,
-                'modifyStartFromDate' => $this->modifyStartFromDate
-            ]
+        $this->lockManagerMock = $this->createMock(LockManagerInterface::class);
+        $this->lockManagerMock->method('lock')->willReturn(true);
+        $this->lockManagerMock->method('unlock')->willReturn(true);
+        $this->object = new EmailSenderHandler(
+            $this->emailSender,
+            $this->entityResource,
+            $this->entityCollection,
+            $this->globalConfig,
+            $this->identityContainerMock,
+            $this->storeManagerMock,
+            $this->configValueFactory,
+            $this->modifyStartFromDate,
+            $this->lockManagerMock
         );
     }
 
@@ -154,16 +144,18 @@ class EmailSenderHandlerTest extends TestCase
      * @param int|null $expectedIsEmailSent
      *
      * @return void
-     * @dataProvider executeDataProvider
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
+    #[DataProvider('executeDataProvider')]
     public function testExecute(
         int $configValue,
         ?array $collectionItems,
         ?bool $emailSendingResult,
         ?int $expectedIsEmailSent
     ): void {
-        if ($collectionItems!=null && !empty($collectionItems)) {
+        if ($collectionItems !== null && count($collectionItems) > 0) {
             $collectionItems[0] = $collectionItems[0]($this);
         }
         $this->globalConfig
@@ -175,20 +167,23 @@ class EmailSenderHandlerTest extends TestCase
                 if ($path === 'sales_email/general/async_sending_attempts') {
                     return 3;
                 }
+                if ($path === 'sales_email/general/stale_claim_minutes') {
+                    return 10;
+                }
+                if ($path === 'sales_email/general/sending_limit') {
+                    return 50;
+                }
                 return null;
             });
 
         if ($configValue) {
-            $nowDate = date('Y-m-d H:i:s');
-            $fromDate = date('Y-m-d H:i:s', strtotime($nowDate . ' ' . $this->modifyStartFromDate));
-            $this->entityCollection
+             $nowDate = date('Y-m-d H:i:s');
+             $fromDate = date('Y-m-d H:i:s', strtotime($nowDate . ' ' . $this->modifyStartFromDate));
+             $this->entityCollection
                 ->method('addFieldToFilter')
                 ->willReturnCallback(
                     function ($arg1, $arg2) use ($fromDate) {
                         if ($arg1 == 'send_email' && $arg2 == ['eq' => 1]) {
-                            return null;
-                        } elseif ($arg1 == 'email_sent' &&
-                            ($arg2 == ['null' => true] || $arg2 == ['lteq' => -1])) {
                             return null;
                         } elseif ($arg1 == 'created_at' && $arg2 == ['from' => $fromDate]) {
                             return null;
@@ -196,86 +191,102 @@ class EmailSenderHandlerTest extends TestCase
                     }
                 );
 
-            $this->entityCollection
+             $this->entityCollection
                 ->expects($this->any())
                 ->method('addAttributeToSelect')
                 ->with('store_id')
                 ->willReturnSelf();
 
-            $selectMock = $this->createMock(Select::class);
+             $selectMock = $this->createMock(Select::class);
 
-            $selectMock
+             $selectMock
                 ->expects($this->atLeastOnce())
                 ->method('group')
                 ->with('store_id')
                 ->willReturnSelf();
+             $selectMock->expects($this->atLeastOnce())->method('where')->willReturnSelf();
 
-            $this->entityCollection
+             $this->entityCollection
                 ->expects($this->any())
                 ->method('getSelect')
                 ->willReturn($selectMock);
 
-            $this->entityCollection
+             $this->entityCollection
                 ->expects($this->any())
                 ->method('getItems')
                 ->willReturn($collectionItems);
 
-            /** @var Value|Encrypted|MockObject $valueMock */
-            $backendModelMock = $this->getMockBuilder(Value::class)
-                ->disableOriginalConstructor()
-                ->onlyMethods(['load', 'getId'])
-                ->addMethods(['getUpdatedAt'])
-                ->getMock();
-            $backendModelMock->expects($this->once())->method('load')->willReturnSelf();
-            $backendModelMock->expects($this->once())->method('getId')->willReturn(1);
-            $backendModelMock->expects($this->once())->method('getUpdatedAt')->willReturn($nowDate);
+             /** @var Value|Encrypted|MockObject $valueMock */
+             $backendModelMock = $this->createPartialMockWithReflection(
+                 Value::class,
+                 ['load', 'getId', 'getUpdatedAt']
+             );
+             $backendModelMock->expects($this->once())->method('load')->willReturnSelf();
+             $backendModelMock->expects($this->once())->method('getId')->willReturn(1);
+             $backendModelMock->expects($this->once())->method('getUpdatedAt')->willReturn($nowDate);
 
-            $this->configValueFactory->expects($this->once())
+             $this->configValueFactory->expects($this->once())
                 ->method('create')
-                ->willReturn($backendModelMock);
+               ->willReturn($backendModelMock);
 
             if ($collectionItems) {
 
-                /** @var AbstractModel|MockObject $collectionItem */
-                $collectionItem = $collectionItems[0];
+                 /** @var AbstractModel|MockObject $collectionItem */
+                 $collectionItem = $collectionItems[0];
 
-                $this->emailSender
+                 $collectionItem->method('getEmailSent')->willReturn(null);
+                 $collectionItem->method('getId')->willReturn(1);
+
+                 $connectionMock = $this->createMock(AdapterInterface::class);
+                 $connectionMock->method('quoteInto')->willReturnCallback(
+                     static fn (string $sql): string => $sql
+                 );
+                 $connectionMock->method('tableColumnExists')->willReturn(true);
+                 $connectionMock->method('update')->willReturn(1);
+                 $this->entityResource->method('getConnection')->willReturn($connectionMock);
+                 $this->entityResource->method('getMainTable')->willReturn('sales_order');
+                 $this->entityResource->method('getIdFieldName')->willReturn('entity_id');
+                 $this->entityResource
+                    ->expects($this->once())
+                    ->method('load')
+                    ->with($collectionItem, 1);
+                 $this->emailSender
                     ->expects($this->once())
                     ->method('send')
                     ->with($collectionItem, true)
                     ->willReturn($emailSendingResult);
 
-                $storeMock = $this->createMock(Store::class);
+                 $storeMock = $this->createMock(Store::class);
 
-                $this->storeManagerMock
+                 $this->storeManagerMock
                     ->expects($this->any())
                     ->method('getStore')
                     ->willReturn($storeMock);
 
-                $this->identityContainerMock
+                 $this->identityContainerMock
                     ->expects($this->any())
                     ->method('setStore')
                     ->with($storeMock);
 
-                $this->identityContainerMock
+                 $this->identityContainerMock
                     ->expects($this->any())
                     ->method('isEnabled')
                     ->willReturn(true);
 
-                $collectionItem
+                 $collectionItem
                     ->expects($this->once())
                     ->method('setEmailSent')
                     ->with($expectedIsEmailSent)
                     ->willReturn($collectionItem);
 
-                $this->entityResource
-                    ->expects($this->once())
-                    ->method('saveAttribute')
-                    ->with($collectionItem);
+                 $this->entityResource
+                   ->expects($this->once())
+                   ->method('saveAttribute')
+                   ->with($collectionItem);
             }
         }
 
-        $this->object->sendEmails();
+         $this->object->sendEmails();
     }
 
     /**
@@ -283,14 +294,9 @@ class EmailSenderHandlerTest extends TestCase
      */
     public static function executeDataProvider(): array
     {
-        $entityModel = static fn (self $testCase) => $testCase->getMockForAbstractClass(
+        $entityModel = static fn (self $testCase) => $testCase->createPartialMockWithReflection(
             AbstractModel::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['setEmailSent', 'getOrder']
+            ['setEmailSent', 'getEmailSent', 'getId', 'getOrder']
         );
 
         return [

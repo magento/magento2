@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\GraphQl\Catalog;
 
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test category read after children category was deleted
@@ -25,12 +26,12 @@ class ReadCategoryAfterDeleteTest extends GraphQlAbstract
      * Verify that after delete children category data category tree returns correct values for given category
      *
      * @magentoApiDataFixture Magento/Catalog/_files/category_tree.php
-     * @dataProvider categoriesDeleteDataProvider()
      * @param int $categoryToDelete
      * @param array $expectedResult
      * @return void
      * @throws \Exception
      */
+    #[DataProvider('categoriesDeleteDataProvider')]
     public function testCategoryDelete($categoryToDelete, $expectedResult): void
     {
         $this->deleteCategory($categoryToDelete);

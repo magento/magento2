@@ -4,8 +4,8 @@ use Magento\Cms\Block\Widget\Page\Link;
 use Magento\Cms\Model\Config\Source\Page;
 
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 return [
     '@' => ['type' => Link::class, 'module' => 'Magento_Cms'],

@@ -829,6 +829,7 @@ class Collection implements
      */
     public function getItemById($idValue)
     {
+        $idValue = $idValue ?? '';
         $this->load();
         if (isset($this->_items[$idValue])) {
             return $this->_items[$idValue];

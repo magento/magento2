@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -60,9 +60,7 @@ define([
             return escaper.escapeHtml(message, this.allowedTags);
         },
         purgeMessages: function () {
-            if (!_.isEmpty(this.messages().messages)) {
-                customerData.set('messages', {});
-            }
+            customerData.set('messages', {});
         }
     });
 });

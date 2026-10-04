@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Framework\View\Test\Unit\Result;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\Translate\InlineInterface;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Framework\View\Layout;
@@ -17,12 +18,14 @@ use Magento\Framework\View\Layout\ProcessorInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Rule\InvokedCount;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @covers \Magento\Framework\View\Result\Layout
  */
 class LayoutTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Http|MockObject
      */
@@ -52,8 +55,8 @@ class LayoutTest extends TestCase
     {
         $this->layout = $this->createMock(Layout::class);
         $this->request = $this->createMock(Http::class);
-        $this->eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
-        $this->translateInline = $this->getMockForAbstractClass(InlineInterface::class);
+        $this->eventManager = $this->createMock(ManagerInterface::class);
+        $this->translateInline = $this->createMock(InlineInterface::class);
 
         $context = $this->createMock(Context::class);
         $context->expects($this->any())->method('getLayout')->willReturn($this->layout);
@@ -86,7 +89,7 @@ class LayoutTest extends TestCase
 
     public function testAddHandle()
     {
-        $processor = $this->getMockForAbstractClass(ProcessorInterface::class);
+        $processor = $this->createMock(ProcessorInterface::class);
         $processor->expects($this->once())->method('addHandle')->with('module_controller_action');
 
         $this->layout->expects($this->once())->method('getUpdate')->willReturn($processor);
@@ -96,7 +99,7 @@ class LayoutTest extends TestCase
 
     public function testAddUpdate()
     {
-        $processor = $this->getMockForAbstractClass(ProcessorInterface::class);
+        $processor = $this->createMock(ProcessorInterface::class);
         $processor->expects($this->once())->method('addUpdate')->with('handle_name');
 
         $this->layout->expects($this->once())->method('getUpdate')->willReturn($processor);
@@ -110,9 +113,8 @@ class LayoutTest extends TestCase
      * @param string $headerValue
      * @param bool $replaceHeader
      * @param InvokedCount $setHttpResponseCodeCount
-     * @param InvokedCount $setHeaderCount
-     * @dataProvider renderResultDataProvider
-     */
+     * @param InvokedCount $setHeaderCount     */
+    #[DataProvider('renderResultDataProvider')]
     public function testRenderResult(
         $httpCode,
         $headerName,
@@ -121,6 +123,14 @@ class LayoutTest extends TestCase
         $setHttpResponseCodeCount,
         $setHeaderCount
     ) {
+        // Convert string expectations to matchers
+        $setHttpResponseCodeCount = is_string($setHttpResponseCodeCount) 
+            ? $this->createInvocationMatcher($setHttpResponseCodeCount) 
+            : $setHttpResponseCodeCount;
+        $setHeaderCount = is_string($setHeaderCount) 
+            ? $this->createInvocationMatcher($setHeaderCount) 
+            : $setHeaderCount;
+        
         $layoutOutput = 'output';
 
         $this->layout->expects($this->once())->method('getOutput')->willReturn($layoutOutput);
@@ -163,14 +173,14 @@ class LayoutTest extends TestCase
     public static function renderResultDataProvider()
     {
         return [
-            [200, 'content-type', 'text/html', true, self::once(), self::once()],
-            [0, '', '', false, self::never(), self::never()]
+            [200, 'content-type', 'text/html', true, 'once', 'once'],
+            [0, '', '', false, 'never', 'never']
         ];
     }
 
     public function testAddDefaultHandle()
     {
-        $processor = $this->getMockForAbstractClass(ProcessorInterface::class);
+        $processor = $this->createMock(ProcessorInterface::class);
         $processor->expects($this->once())->method('addHandle')->with('module_controller_action');
 
         $this->layout->expects($this->once())->method('getUpdate')->willReturn($processor);

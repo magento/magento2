@@ -1,8 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
- *
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +11,7 @@ use Magento\Framework\Exception\InvalidArgumentException;
 use Magento\MediaContentApi\Api\GetAssetIdsByContentFieldInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for GetAssetIdsByContentFieldTest
@@ -42,8 +42,6 @@ class GetAssetIdsByContentFieldTest extends TestCase
 
     /**
      * Test for getting asset id by block field
-     *
-     * @dataProvider blockDataProvider
      * @magentoConfigFixture system/media_gallery/enabled 1
      * @magentoDataFixture Magento/MediaGallery/_files/media_asset.php
      * @magentoDataFixture Magento/MediaContentCms/_files/block_with_asset.php
@@ -53,6 +51,7 @@ class GetAssetIdsByContentFieldTest extends TestCase
      * @param array $expectedAssetIds
      * @throws InvalidArgumentException
      */
+    #[DataProvider('blockDataProvider')]
     public function testBlockFields(string $field, string $value, array $expectedAssetIds): void
     {
         $this->assertEquals(
@@ -63,8 +62,6 @@ class GetAssetIdsByContentFieldTest extends TestCase
 
     /**
      * Test for getting asset id by page field
-     *
-     * @dataProvider pageDataProvider
      * @magentoConfigFixture system/media_gallery/enabled 1
      * @magentoDataFixture Magento/MediaGallery/_files/media_asset.php
      * @magentoDataFixture Magento/MediaContentCms/_files/page_with_asset.php
@@ -74,6 +71,7 @@ class GetAssetIdsByContentFieldTest extends TestCase
      * @param array $expectedAssetIds
      * @throws InvalidArgumentException
      */
+    #[DataProvider('pageDataProvider')]
     public function testPageFields(string $field, string $value, array $expectedAssetIds): void
     {
         $this->assertEquals(

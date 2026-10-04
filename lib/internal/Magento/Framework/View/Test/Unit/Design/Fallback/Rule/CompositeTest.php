@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -24,7 +24,7 @@ class CompositeTest extends TestCase
     {
         $inputParams = ['param_one' => 'value_one', 'param_two' => 'value_two'];
 
-        $ruleOne = $this->getMockForAbstractClass(RuleInterface::class);
+        $ruleOne = $this->createMock(RuleInterface::class);
         $ruleOne->expects(
             $this->once()
         )->method(
@@ -35,7 +35,7 @@ class CompositeTest extends TestCase
             ['rule_one/path/one', 'rule_one/path/two']
         );
 
-        $ruleTwo = $this->getMockForAbstractClass(RuleInterface::class);
+        $ruleTwo = $this->createMock(RuleInterface::class);
         $ruleTwo->expects(
             $this->once()
         )->method(

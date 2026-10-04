@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +9,7 @@ namespace Magento\Paypal\Test\Unit\Controller\Express;
 
 use Magento\Paypal\Model\Express\Checkout;
 use Magento\Paypal\Test\Unit\Controller\ExpressTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class StartTest extends ExpressTestCase
 {
@@ -22,8 +22,8 @@ class StartTest extends ExpressTestCase
      * @param null|bool $buttonParam
      *
      * @return void
-     * @dataProvider startActionDataProvider
      */
+    #[DataProvider('startActionDataProvider')]
     public function testStartAction($buttonParam): void
     {
         $this->checkout->expects($this->once())

@@ -33,7 +33,8 @@ $cookieSettings = $block->getCookieSettings();
                 "cookieLifeTime": "<?= $escaper->escapeJs($block->getCookieLifeTime()) ?>",
                 "cookieDomain": "<?= $escaper->escapeJs($cookieSettings->getCookieDomain()) ?>",
                 "updateSessionUrl": "<?= $escaper->escapeJs($customerDataUrl) ?>",
-                "isLoggedIn": "<?= /* @noEscape */ $auth->isLoggedIn() ?>"
+                "isLoggedIn": "<?= /* @noEscape */ $auth->isLoggedIn() ?>",
+                "customerShare": "<?= $escaper->escapeJs($auth->getCustomerShareScope()) ?>"
             }
         }
     }

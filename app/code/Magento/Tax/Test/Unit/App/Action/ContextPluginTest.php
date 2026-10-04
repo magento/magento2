@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Customer\Model\Session;
 use Magento\Framework\App\Http\Context as HttpContext;
 use Magento\Framework\App\Test\Unit\Action\Stub\ActionStub;
 use Magento\Framework\Module\Manager as ModuleManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\PageCache\Model\Config as PageCacheConfig;
 use Magento\Tax\Helper\Data as TaxHelper;
@@ -18,6 +19,7 @@ use Magento\Tax\Model\App\Action\ContextPlugin as TaxContextPlugin;
 use Magento\Tax\Model\Calculation;
 use Magento\Weee\Helper\Data as WeeeHelper;
 use Magento\Weee\Model\Tax;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -26,6 +28,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ContextPluginTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var ObjectManagerHelper
      */
@@ -105,16 +108,16 @@ class ContextPluginTest extends TestCase
             ->onlyMethods(['getTaxRates'])
             ->getMock();
 
-        $this->customerSessionMock = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['isLoggedIn'])
-            ->addMethods(
-                [
-                    'getDefaultTaxBillingAddress', 'getDefaultTaxShippingAddress', 'getCustomerTaxClassId',
-                    'getWebsiteId'
-                ]
-            )
-            ->getMock();
+        $this->customerSessionMock = $this->createPartialMockWithReflection(
+            Session::class,
+            [
+                'isLoggedIn',
+                'getDefaultTaxBillingAddress',
+                'getDefaultTaxShippingAddress',
+                'getCustomerTaxClassId',
+                'getWebsiteId'
+            ]
+        );
 
         $this->moduleManagerMock = $this->getMockBuilder(ModuleManager::class)
             ->disableOriginalConstructor()
@@ -143,9 +146,9 @@ class ContextPluginTest extends TestCase
      * @param bool $cache
      * @param bool $taxEnabled
      * @param bool $loggedIn
-     * @dataProvider beforeExecuteDataProvider
      */
-    public function testBeforeExecute($cache, $taxEnabled, $loggedIn)
+    #[DataProvider('beforeExecuteDataProvider')]
+    public function testBeforeExecute(bool $cache, bool $taxEnabled, bool $loggedIn): void
     {
         $this->customerSessionMock->expects($this->any())
             ->method('isLoggedIn')
@@ -199,9 +202,9 @@ class ContextPluginTest extends TestCase
     }
 
     /**
-     * @return array
+     * @return array<string, array<string, bool>>
      */
-    public static function beforeExecuteDataProvider()
+    public static function beforeExecuteDataProvider(): array
     {
         return [
             [false, false, false],

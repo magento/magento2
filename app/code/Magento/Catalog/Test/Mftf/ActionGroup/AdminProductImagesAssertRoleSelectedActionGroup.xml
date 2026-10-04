@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminProductImagesAssertRoleSelectedActionGroup" extends="AdminProductImagesAssertHiddenActionGroup">
+        <annotations>
+            <description>Expands "Images And Videos" section, clicks on provided image, assert role is selected for given image.</description>
+        </annotations>
+        <arguments>
+            <argument name="image" defaultValue="ProductImage"/>
+            <argument name="role" defaultValue="{{ProductAttributeMediaGalleryRole.Base}}" type="string"/>
+        </arguments>
+        <seeCheckboxIsChecked selector="{{AdminProductImagesSection.roleCheckbox(role)}}" stepKey="optionChecked"/>
+    </actionGroup>
+</actionGroups>

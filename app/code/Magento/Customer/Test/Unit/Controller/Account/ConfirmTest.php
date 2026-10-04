@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -25,17 +25,17 @@ use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\ViewInterface;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Exception\State\InputMismatchException;
+use Magento\Framework\Exception\State\InvalidTransitionException;
 use Magento\Framework\Message\Manager;
 use Magento\Framework\Message\ManagerInterface;
-use Magento\Framework\Phrase;
-use Magento\Framework\Stdlib\Cookie\CookieMetadata;
-use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlFactory;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -141,13 +141,13 @@ class ConfirmTest extends TestCase
     protected function setUp(): void
     {
         $this->customerSessionMock = $this->createMock(Session::class);
-        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
         $this->responseMock = $this->createPartialMock(
             Http::class,
             ['setRedirect', '__wakeup']
         );
-        $viewMock = $this->getMockForAbstractClass(ViewInterface::class);
-        $this->redirectMock = $this->getMockForAbstractClass(RedirectInterface::class);
+        $viewMock = $this->createMock(ViewInterface::class);
+        $this->redirectMock = $this->createMock(RedirectInterface::class);
 
         $this->urlMock = $this->createMock(\Magento\Framework\Url::class);
         $urlFactoryMock = $this->createMock(UrlFactory::class);
@@ -159,11 +159,11 @@ class ConfirmTest extends TestCase
         $this->logMock = $this->createMock(Log::class);
 
         $this->customerAccountManagementMock =
-            $this->getMockForAbstractClass(AccountManagementInterface::class);
-        $this->customerDataMock = $this->getMockForAbstractClass(CustomerInterface::class);
+            $this->createMock(AccountManagementInterface::class);
+        $this->customerDataMock = $this->createMock(CustomerInterface::class);
 
         $this->customerRepositoryMock =
-            $this->getMockForAbstractClass(CustomerRepositoryInterface::class);
+            $this->createMock(CustomerRepositoryInterface::class);
 
         $this->messageManagerMock = $this->createMock(Manager::class);
         $this->addressHelperMock = $this->createMock(Address::class);
@@ -177,7 +177,7 @@ class ConfirmTest extends TestCase
             ->with(ResultFactory::TYPE_REDIRECT)
             ->willReturn($this->redirectResultMock);
 
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->contextMock = $this->createMock(Context::class);
         $this->contextMock->expects($this->any())
             ->method('getRequest')
@@ -237,9 +237,8 @@ class ConfirmTest extends TestCase
     /**
      * @param $customerId
      * @param $key
-     * @return void
-     * @dataProvider getParametersDataProvider
-     */
+     * @return void */
+    #[DataProvider('getParametersDataProvider')]
     public function testNoCustomerIdInRequest($customerId, $key): void
     {
         $this->customerSessionMock->expects($this->once())
@@ -299,9 +298,9 @@ class ConfirmTest extends TestCase
      * @param $successMessage
      *
      * @return void
-     * @dataProvider getSuccessMessageDataProvider
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
+    #[DataProvider('getSuccessMessageDataProvider')]
     public function testSuccessMessage(
         $customerId,
         $key,
@@ -429,9 +428,8 @@ class ConfirmTest extends TestCase
      * @param $successMessage
      * @param $lastLoginAt
      *
-     * @return void
-     * @dataProvider getSuccessRedirectDataProvider
-     */
+     * @return void */
+    #[DataProvider('getSuccessRedirectDataProvider')]
     public function testSuccessRedirect(
         $customerId,
         $key,
@@ -564,6 +562,53 @@ class ConfirmTest extends TestCase
                 'some data',
                 null,
             ]
+        ];
+    }
+
+    /**
+     * @param \Exception $exception
+     */
+    #[DataProvider('stateExceptionsProvider')]
+    public function testStateExceptionOccurs(\Exception $exception): void
+    {
+        $customerId = 123;
+        $email = 'test@example.com';
+        $key = 'invalid_key';
+        $this->requestMock->method('getParam')->willReturnMap(
+            [
+                ['id', 0, $customerId],
+                ['key', false, $key],
+            ]
+        );
+
+        $this->customerSessionMock->expects(self::once())->method('isLoggedIn')->willReturn(false);
+        $this->customerRepositoryMock->expects(self::once())
+            ->method('getById')
+            ->with($customerId)
+            ->willReturn($this->customerDataMock);
+        $this->customerDataMock->expects(self::once())->method('getEmail')->willReturn($email);
+        $this->customerAccountManagementMock->expects(self::once())
+            ->method('activate')
+            ->with($email, $key)
+            ->willThrowException($exception);
+        $this->messageManagerMock->expects(self::once())->method('addNoticeMessage')->with(
+            __(
+                'Your account is already active, or the confirmation code was incorrect.'
+                . ' Sign in or request a new confirmation email.'
+            )
+        );
+
+        $this->model->execute();
+    }
+
+    /**
+     * @return array
+     */
+    public static function stateExceptionsProvider(): array
+    {
+        return [
+            [new InputMismatchException(__('The confirmation key is invalid.`'))],
+            [new InvalidTransitionException(__('The account is already active.'))],
         ];
     }
 }

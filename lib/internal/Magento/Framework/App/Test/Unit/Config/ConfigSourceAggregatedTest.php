@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -32,9 +32,9 @@ class ConfigSourceAggregatedTest extends TestCase
     protected function setUp(): void
     {
         $this->sourceMock = $this->getMockBuilder(ConfigSourceInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->sourceMockTwo = $this->getMockBuilder(ConfigSourceInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $sources = [
             [

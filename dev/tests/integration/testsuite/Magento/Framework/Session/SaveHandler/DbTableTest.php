@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Session\SaveHandler;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Encryption\EncryptorInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class DbTableTest extends \PHPUnit\Framework\TestCase
 {
@@ -110,7 +111,6 @@ class DbTableTest extends \PHPUnit\Framework\TestCase
     public function testCheckConnection()
     {
         $method = new \ReflectionMethod(\Magento\Framework\Session\SaveHandler\DbTable::class, 'checkConnection');
-        $method->setAccessible(true);
         $this->assertNull($method->invoke($this->_model));
     }
 
@@ -205,10 +205,9 @@ class DbTableTest extends \PHPUnit\Framework\TestCase
      *
      * @param string $sessionData
      *
-     * @dataProvider readEncodedDataProvider
-     *
      * @return void
      */
+    #[DataProvider('readEncodedDataProvider')]
     public function testReadEncoded($sessionData)
     {
         $sessionRecord = [self::COLUMN_SESSION_ID => $this->_encryptor->hash(self::SESSION_ID), self::COLUMN_SESSION_DATA => $sessionData];

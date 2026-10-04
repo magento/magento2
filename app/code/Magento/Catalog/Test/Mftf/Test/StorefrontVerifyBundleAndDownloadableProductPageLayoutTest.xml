@@ -62,7 +62,9 @@
         <after>
             <!-- Delete created data -->
             <actionGroup ref="RemoveDownloadableDomainActionGroup" stepKey="removeDownloadableDomain"/>
-            <createData entity="SimpleSubCategory" stepKey="deleteCreateCategory"/>
+            <deleteData createDataKey="createSimpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="createSimpleProduct2" stepKey="deleteSimpleProduct2"/>
+            <deleteData createDataKey="createCategory" stepKey="deletecreateCategory"/>
             <deleteData createDataKey="createCustomerViaTheStorefront" stepKey="deleteCustomerViaTheStorefront"/>
             <deleteData createDataKey="bundleProduct" stepKey="deleteBundleProduct"/>
             <deleteData createDataKey="downloadableProduct" stepKey="deleteDownloadableProduct"/>

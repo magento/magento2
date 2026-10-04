@@ -137,11 +137,11 @@ class PlaceOrderWithPaymentsAdvancedTest extends TestCase
                             'BUTTONSOURCE' => $button,
                             'tender' => 'C',
                         ],
-                        $this->returnSelf()
+                        $this->paymentRequest
                     ]
                 ],
-                ['USER1', 1, $this->returnSelf()],
-                ['USER2', 'USER2SilentPostHash', $this->returnSelf()]
+                ['USER1', 1, $this->paymentRequest],
+                ['USER2', 'USER2SilentPostHash', $this->paymentRequest]
             );
 
         $responseData = $this->setPaymentMethodAndPlaceOrder($cartId, $paymentMethod);

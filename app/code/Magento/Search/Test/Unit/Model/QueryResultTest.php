@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Search\Test\Unit\Model;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Search\Model\QueryResult;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class QueryResultTest extends TestCase
 {
@@ -23,9 +24,7 @@ class QueryResultTest extends TestCase
         $this->objectManager = new ObjectManager($this);
     }
 
-    /**
-     * @dataProvider getPropertiesDataProvider
-     */
+    #[DataProvider('getPropertiesDataProvider')]
     public function testGetProperties($queryText, $resultsCount)
     {
         /** @var QueryResult $queryResult */

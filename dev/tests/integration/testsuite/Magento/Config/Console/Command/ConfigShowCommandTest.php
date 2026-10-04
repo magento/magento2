@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Config\Console\Command;
@@ -23,6 +23,7 @@ use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
@@ -123,8 +124,8 @@ class ConfigShowCommandTest extends TestCase
      *
      * @magentoDbIsolation enabled
      * @magentoDataFixture Magento/Config/_files/config_data.php
-     * @dataProvider executeDataProvider
      */
+    #[DataProvider('executeDataProvider')]
     public function testExecute($scope, $scopeCode, $resultCode, array $configs): void
     {
         $this->setConfigPaths();
@@ -141,7 +142,6 @@ class ConfigShowCommandTest extends TestCase
     {
         $reflection = new \ReflectionClass(Structure::class);
         $mappedPaths = $reflection->getProperty('mappedPaths');
-        $mappedPaths->setAccessible(true);
         $mappedPaths->setValue($this->structure, $this->getConfigPaths());
     }
 

@@ -171,7 +171,12 @@ class EmailTemplateTest extends AbstractController
     {
         $messageContent = $this->getMessageRawContent($message);
         $emailDom = new \DOMDocument();
-        $emailDom->loadHTML($messageContent);
+        // PHP 8.5 Compatibility: Use LIBXML options to suppress warnings for email HTML
+        // Email templates may have whitespace before DOCTYPE, which triggers warnings in PHP 8.5
+        $emailDom->loadHTML(
+            $messageContent,
+            LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOERROR | LIBXML_NOWARNING
+        );
 
         $emailXpath = new \DOMXPath($emailDom);
         $greeting = $emailXpath->query('//p[@class="greeting"]');

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -107,7 +107,7 @@ class CheckProductPriceTest extends TestCase
     {
         $priceHtml = $this->getProductPriceHtml('simple-product-tax-both');
         $this->assertFinalPrice($priceHtml, 10.00);
-        $this->assertAsLowAsPriceWithTaxes($priceHtml, 5.500001, 5.00);
+        $this->assertAsLowAsPriceWithTaxes($priceHtml, 5.5, 5.00);
     }
 
     /**

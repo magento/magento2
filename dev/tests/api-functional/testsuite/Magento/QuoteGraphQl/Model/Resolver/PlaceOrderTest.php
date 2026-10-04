@@ -93,6 +93,10 @@ class PlaceOrderTest extends GraphQlAbstract
                 'Sommige adressen kunnen niet worden',
                 $exceptionData['errors'][0]['message']
             );
+            self::assertEquals(
+                'UNABLE_TO_PLACE_ORDER',
+                $exceptionData['data']['placeOrder']['errors'][0]['code']
+            );
         }
     }
 

@@ -1,5 +1,5 @@
-# Copyright © Magento, Inc. All rights reserved.
-# See COPYING.txt for license details.
+# Copyright 2018 Adobe
+# All Rights Reserved.
 
 type Mutation {
     sendEmailToFriend (input: SendEmailToFriendInput @doc(description: "An input object that defines sender, recipients, and product.")): SendEmailToFriendOutput @resolver(class: "\\Magento\\SendFriendGraphQl\\Model\\Resolver\\SendEmailToFriend") @doc(description: "Send a message on behalf of a customer to the specified email addresses.")

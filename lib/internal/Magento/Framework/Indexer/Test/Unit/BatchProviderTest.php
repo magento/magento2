@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Indexer\BatchProvider;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class BatchProviderTest extends TestCase
 {
@@ -28,16 +29,15 @@ class BatchProviderTest extends TestCase
      * @param int $batchSize preferable batch size
      * @param int $maxLinkFieldValue maximum value of the entity identifier in the table
      * @param int $expectedResult list of expected consecutive entity ID ranges (batches)
-     *
-     * @dataProvider getBatchesDataProvider
-     */
+     *     */
+    #[DataProvider('getBatchesDataProvider')]
     public function testGetBatches($batchSize, $maxLinkFieldValue, $expectedResult)
     {
         $tableName = 'test_table';
         $linkField = 'id';
 
         $selectMock = $this->createMock(Select::class);
-        $adapterMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $adapterMock = $this->createMock(AdapterInterface::class);
 
         $selectMock->expects($this->once())->method('from')->willReturnSelf();
         $adapterMock->expects($this->once())->method('select')->willReturn($selectMock);
@@ -64,7 +64,7 @@ class BatchProviderTest extends TestCase
     public function testGetBatchIds()
     {
         $selectMock = $this->createMock(Select::class);
-        $adapterMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $adapterMock = $this->createMock(AdapterInterface::class);
 
         $selectMock->expects($this->once())->method('where')->with('(entity_id BETWEEN 10 AND 100)')->willReturnSelf();
         $adapterMock->expects($this->atLeastOnce())->method('quote')->willReturnArgument(0);

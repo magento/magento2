@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -28,15 +28,11 @@ class TypeTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
         $this->cacheFrontendPoolMock = $this->getMockBuilder(FrontendPool::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $cacheFrontend = $this->getMockBuilder(FrontendInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $cacheFrontend = $this->createMock(FrontendInterface::class);
         $this->cacheFrontendPoolMock->expects($this->once())
             ->method('get')
             ->willReturn($cacheFrontend);

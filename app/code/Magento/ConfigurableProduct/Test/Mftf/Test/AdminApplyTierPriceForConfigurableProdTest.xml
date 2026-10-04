@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
+ */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
@@ -98,6 +98,8 @@
         </before>
         <after>
             <!-- Delete Created Data -->
+            <amOnPage url="{{ProductCatalogPage.url}}" stepKey="openProductPage"/>
+            <actionGroup ref="ClearFiltersAdminProductGridActionGroup" stepKey="clearProductGridFilter"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
             <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>

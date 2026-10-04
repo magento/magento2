@@ -336,6 +336,9 @@ class FlatTableBuilder
                 /* @var $attribute Attribute */
                 $attributeCode = $attribute->getAttributeCode();
                 if ($attribute->getBackend()->getType() != 'static') {
+                    if ($attributeCode === null) {
+                        continue;
+                    }
                     $joinCondition = sprintf('t.%s = e.%s', $linkField, $linkField) .
                         ' AND t.attribute_id=' .
                         $attribute->getId() .

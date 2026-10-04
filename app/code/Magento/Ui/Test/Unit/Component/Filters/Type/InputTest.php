@@ -17,6 +17,7 @@ use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Ui\Component\Filters\FilterModifier;
 use Magento\Ui\Component\Filters\Type\Input;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class InputTest extends TestCase
@@ -46,12 +47,7 @@ class InputTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->contextMock = $this->getMockForAbstractClass(
-            ContextInterface::class,
-            [],
-            '',
-            false
-        );
+        $this->contextMock = $this->createMock(ContextInterface::class);
         $this->uiComponentFactory = $this->createPartialMock(
             UiComponentFactory::class,
             ['create']
@@ -88,22 +84,14 @@ class InputTest extends TestCase
      * @param array $data
      * @param array $filterData
      * @param array|null $expectedCondition
-     * @dataProvider getPrepareDataProvider
-     * @return void
      */
+    #[DataProvider('getPrepareDataProvider')]
     public function testPrepare(array $data, array $filterData, ?array $expectedCondition): void
     {
-        $processor = $this->getMockBuilder(Processor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $processor = $this->createMock(Processor::class);
         $this->contextMock->expects($this->atLeastOnce())->method('getProcessor')->willReturn($processor);
         /** @var UiComponentInterface $uiComponent */
-        $uiComponent = $this->getMockForAbstractClass(
-            UiComponentInterface::class,
-            [],
-            '',
-            false
-        );
+        $uiComponent = $this->createMock(UiComponentInterface::class);
 
         $uiComponent->expects($this->any())
             ->method('getContext')
@@ -118,12 +106,7 @@ class InputTest extends TestCase
         $this->contextMock->expects($this->any())
             ->method('getFiltersParams')
             ->willReturn($filterData);
-        $dataProvider = $this->getMockForAbstractClass(
-            DataProviderInterface::class,
-            [],
-            '',
-            false
-        );
+        $dataProvider = $this->createMock(DataProviderInterface::class);
 
         $this->contextMock->expects($this->any())
             ->method('getDataProvider')
@@ -150,9 +133,7 @@ class InputTest extends TestCase
                 ->with($expectedCondition['setValue'])
                 ->willReturnSelf();
 
-            $filterMock = $this->getMockBuilder(Filter::class)
-                ->disableOriginalConstructor()
-                ->getMock();
+            $filterMock = $this->createMock(Filter::class);
 
             $this->filterBuilderMock->expects($this->once())
                 ->method('create')

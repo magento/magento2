@@ -11,6 +11,7 @@ namespace Magento\Captcha\Test\Unit\Model\Config\Form;
 use Magento\Captcha\Model\Config\Form\Backend;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -36,7 +37,7 @@ class BackendTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->configMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->configMock = $this->createMock(ScopeConfigInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
@@ -53,8 +54,8 @@ class BackendTest extends TestCase
      *
      * @param string|array $config
      * @param array $expectedResult
-     * @dataProvider toOptionArrayDataProvider
      */
+    #[DataProvider('toOptionArrayDataProvider')]
     public function testToOptionArray($config, $expectedResult)
     {
         $this->configMock->expects($this->any())->method('getValue')

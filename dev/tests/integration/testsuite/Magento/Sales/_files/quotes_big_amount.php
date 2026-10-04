@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -29,7 +29,7 @@ $appConfig->clean();
 /** @var Store $defaultStore */
 $defaultStore = $storeRepository->getActiveStoreByCode('default');
 
-for ($i = 0; $i < 1000; $i++) {
+for ($i = 0; $i < 6000; $i++) {
     /** @var Quote $quote */
     $quote = $quoteFactory->create();
     $quote->setStoreId($defaultStore->getId());

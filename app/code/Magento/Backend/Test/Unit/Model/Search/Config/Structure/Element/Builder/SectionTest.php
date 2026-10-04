@@ -26,7 +26,7 @@ class SectionTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->structureElementMock = $this->getMockForAbstractClass(StructureElementInterface::class);
+        $this->structureElementMock = $this->createMock(StructureElementInterface::class);
         $this->model = new Section();
     }
 

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -23,9 +23,7 @@ class StatusTest extends AbstractColumnTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->sourceMock = $this->getMockBuilder(StatusSource::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->sourceMock = $this->createMock(StatusSource::class);
     }
 
     /**

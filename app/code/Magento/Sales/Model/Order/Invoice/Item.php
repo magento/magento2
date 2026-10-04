@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\Order\Invoice;
 
@@ -260,7 +260,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
      */
     public function isLast()
     {
-        if ((string)(double)$this->getQty() == (string)(double)$this->getOrderItem()->getQtyToInvoice()) {
+        if ((string)(float)$this->getQty() == (string)(float)$this->getOrderItem()->getQtyToInvoice()) {
             return true;
         }
         return false;

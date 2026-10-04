@@ -598,4 +598,7 @@
             <argument name="indexerId" xsi:type="string">customer_grid</argument>
         </arguments>
     </virtualType>
+    <type name="Magento\Framework\Webapi\ErrorProcessor">
+        <plugin name="processValidatorException" type="Magento\Customer\Model\Plugin\Webapi\ErrorProcessorPlugin" sortOrder="10"/>
+    </type>
 </config>

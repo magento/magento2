@@ -89,7 +89,7 @@ class TemporaryTableStrategyTest extends TestCase
         $tempTableName = $tablePrefix . StrategyInterface::TMP_SUFFIX;
 
         $this->tableStrategyMock->expects($this->once())->method('getUseIdxTable')->willReturn(false);
-        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $connectionMock = $this->createMock(AdapterInterface::class);
 
         $this->resourceMock->expects($this->once())
             ->method('getConnection')

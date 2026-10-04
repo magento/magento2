@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Code\Generator;

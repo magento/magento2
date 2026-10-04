@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Theme\Test\Unit\Controller\Adminhtml\System\Design;
 use Magento\Backend\Helper\Data;
 use Magento\Backend\Model\Session;
 use Magento\Framework\App\ActionFlag;
+use Magento\Framework\App\Request\Http as RequestHttp;
 use Magento\Framework\App\Response\Http;
 use Magento\Framework\App\Response\Http\FileFactory;
 use Magento\Framework\App\Response\RedirectInterface;
@@ -17,10 +18,12 @@ use Magento\Framework\App\ViewInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Message\ManagerInterface as MessageManagerInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Asset\Repository;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Theme\Controller\Adminhtml\System\Design\Theme;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -31,6 +34,8 @@ use PHPUnit\Framework\TestCase;
  */
 abstract class ThemeTestCase extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var string
      */
@@ -96,37 +101,28 @@ abstract class ThemeTestCase extends TestCase
 
     protected function setUp(): void
     {
-        $this->_objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->_objectManagerMock = $this->createMock(ObjectManagerInterface::class);
 
-        $this->_request = $this->createMock(\Magento\Framework\App\Request\Http::class);
-        $this->eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
-        $this->view = $this->getMockForAbstractClass(ViewInterface::class);
-        $this->messageManager = $this->getMockForAbstractClass(
-            \Magento\Framework\Message\ManagerInterface::class,
-            [],
-            '',
-            false
-        );
+        $this->_request = $this->createMock(RequestHttp::class);
+        $this->eventManager = $this->createMock(ManagerInterface::class);
+        $this->view = $this->createMock(ViewInterface::class);
+        $this->messageManager = $this->createMock(MessageManagerInterface::class);
         $this->resultFactory = $this->createMock(ResultFactory::class);
         $this->assetRepo = $this->createMock(Repository::class);
         $this->appFileSystem = $this->createMock(Filesystem::class);
         $this->fileFactory = $this->createMock(FileFactory::class);
         $this->response = $this->createMock(Http::class);
-        $this->redirect = $this->getMockForAbstractClass(
-            RedirectInterface::class,
-            [],
-            '',
-            false
+        $this->redirect = $this->createMock(RedirectInterface::class);
+        $this->session = $this->createPartialMockWithReflection(
+            Session::class,
+            ['setIsUrlNotice', 'setThemeData', 'setThemeCustomCssData']
         );
-        $this->session = $this->getMockBuilder(Session::class)
-            ->addMethods(['setIsUrlNotice', 'setThemeData', 'setThemeCustomCssData'])
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->actionFlag = $this->createMock(ActionFlag::class);
         $this->backendHelper = $this->createMock(Data::class);
         $this->coreRegistry = $this->createMock(Registry::class);
 
         $helper = new ObjectManager($this);
+        $helper->prepareObjectManager();
         $this->_model = $helper->getObject(
             'Magento\Theme\Controller\Adminhtml\System\Design\Theme\\' . $this->name,
             [

@@ -1398,4 +1398,10 @@
             <argument name="attributeSetFactory" xsi:type="object">Magento\Catalog\Virtual\Product\Attribute\SetFactory</argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Model\CustomOptions\CustomOptionProcessor">
+        <arguments>
+            <argument name="imageContentProcessor" xsi:type="object">Magento\Catalog\Model\Product\Option\Type\File\ImageContentProcessor\Proxy</argument>
+            <argument name="productRepository" xsi:type="object">Magento\Catalog\Api\ProductRepositoryInterface\Proxy</argument>
+        </arguments>
+    </type>
 </config>

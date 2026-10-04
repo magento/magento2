@@ -13,6 +13,7 @@ use Magento\Directory\Model\CurrencyFactory;
 use Magento\Backend\Block\Widget\Grid\Column;
 use Magento\Framework\DataObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Backend\Block\Widget\Grid\Column\Renderer\Currency;
 use Magento\Framework\Locale\Currency as LocaleCurrency;
 use Magento\Directory\Model\Currency as CurrencyData;
@@ -26,6 +27,8 @@ use PHPUnit\Framework\TestCase;
  */
 class CurrencyTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Currency
      */
@@ -83,18 +86,17 @@ class CurrencyTest extends TestCase
         $this->currencyLocatorMock->method('getDefaultCurrency')
             ->with($this->requestMock)
             ->willReturn($defaultCurrencyCode);
-        $this->columnMock = $this->getMockBuilder(Column::class)
-            ->addMethods(['getIndex', 'getShowNumberSign', 'getDefault'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->columnMock = $this->createPartialMockWithReflection(
+            Column::class,
+            ['getIndex', 'getShowNumberSign', 'getDefault']
+        );
         $this->columnMock->method('getIndex')->willReturn('value');
         $this->columnMock->method('getShowNumberSign')->willReturn(false);
         $this->columnMock->method('getDefault')->willReturn('');
-        $this->localeCurrencyMock = $this->getMockBuilder(LocaleCurrency::class)
-            ->onlyMethods(['getCurrency'])
-            ->addMethods(['toCurrency'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->localeCurrencyMock = $this->createPartialMockWithReflection(
+            LocaleCurrency::class,
+            ['getCurrency', 'toCurrency']
+        );
         $this->currencyRenderer = $this->objectManager->getObject(
             Currency::class,
             [
@@ -135,10 +137,10 @@ class CurrencyTest extends TestCase
             'store_id' => $storeId
         ]);
         $this->currencyRenderer->setColumn($this->columnMock);
-        $storeMock = $this->getMockBuilder(Store::class)
-            ->onlyMethods(['getCurrentCurrencyCode'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $storeMock = $this->createPartialMock(
+            Store::class,
+            ['getCurrentCurrencyCode']
+        );
         $this->storeManagerMock->method('getStore')
             ->with($storeId)
             ->willReturn($storeMock);

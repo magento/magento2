@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,17 +12,22 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\Rss\UrlBuilderInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\UrlInterface;
 use Magento\SalesRule\Model\Rss\Discounts;
+use Magento\SalesRule\Block\Rss\Discounts as DiscountsBlock;
 use Magento\SalesRule\Model\Rule;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class DiscountsTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var \Magento\SalesRule\Block\Rss\Discounts
      */
@@ -80,12 +85,12 @@ class DiscountsTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->storeManagerInterface = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $this->requestInterface = $this->getMockForAbstractClass(RequestInterface::class);
-        $this->rssBuilderInterface = $this->getMockForAbstractClass(UrlBuilderInterface::class);
-        $this->urlBuilderInterface = $this->getMockForAbstractClass(UrlInterface::class);
-        $this->scopeConfigInterface = $this->getMockForAbstractClass(ScopeConfigInterface::class);
-        $this->timezoneInterface = $this->getMockForAbstractClass(TimezoneInterface::class);
+        $this->storeManagerInterface = $this->createMock(StoreManagerInterface::class);
+        $this->requestInterface = $this->createMock(RequestInterface::class);
+        $this->rssBuilderInterface = $this->createMock(UrlBuilderInterface::class);
+        $this->urlBuilderInterface = $this->createMock(UrlInterface::class);
+        $this->scopeConfigInterface = $this->createMock(ScopeConfigInterface::class);
+        $this->timezoneInterface = $this->createMock(TimezoneInterface::class);
         $this->rssModel = $this->createPartialMock(
             Discounts::class,
             [
@@ -108,7 +113,7 @@ class DiscountsTest extends TestCase
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->block = $this->objectManagerHelper->getObject(
-            \Magento\SalesRule\Block\Rss\Discounts::class,
+            DiscountsBlock::class,
             [
                 'storeManager' => $this->storeManagerInterface,
                 'rssUrlBuilder' => $this->rssBuilderInterface,
@@ -150,11 +155,10 @@ class DiscountsTest extends TestCase
         $rssUrl = 'http://rss.magento.com/discount';
         $url = 'http://rss.magento.com';
 
-        $ruleModel = $this->getMockBuilder(Rule::class)
-            ->addMethods(['getCouponCode', 'getDescription', 'getName'])
-            ->onlyMethods(['getToDate', 'getFromDate'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $ruleModel = $this->createPartialMockWithReflection(
+            Rule::class,
+            ['getCouponCode', 'getDescription', 'getName', 'getToDate', 'getFromDate']
+        );
 
         $this->storeModel->expects($this->once())->method('getWebsiteId')->willReturn(1);
         $this->storeModel->expects($this->never())->method('getName');
@@ -207,9 +211,9 @@ class DiscountsTest extends TestCase
     }
 
     /**
-     * @dataProvider isAllowedDataProvider
      * @param bool $isAllowed
      */
+    #[DataProvider('isAllowedDataProvider')]
     public function testIsAllowed($isAllowed)
     {
         $this->scopeConfigInterface->expects($this->once())->method('isSetFlag')->willReturn($isAllowed);

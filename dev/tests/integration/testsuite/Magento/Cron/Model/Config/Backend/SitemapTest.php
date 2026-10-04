@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Cron\Model\Config\Source\Frequency;
 use Magento\Framework\App\Config\ValueFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -34,10 +35,10 @@ class SitemapTest extends TestCase
     }
 
     /**
-     * @dataProvider frequencyDataProvider
      * @param string $frequency
      * @param string $expectedCronExpr
      */
+    #[DataProvider('frequencyDataProvider')]
     public function testDirectSave(string $frequency, string $expectedCronExpr): void
     {
         $preparedValueFactory = $this->objectManager->get(PreparedValueFactory::class);
@@ -49,10 +50,10 @@ class SitemapTest extends TestCase
     }
 
     /**
-     * @dataProvider frequencyDataProvider
      * @param string $frequency
      * @param string $expectedCronExpr
      */
+    #[DataProvider('frequencyDataProvider')]
     public function testSaveFromAdmin(string $frequency, string $expectedCronExpr): void
     {
         $config = $this->objectManager->create(ConfigModel::class);
@@ -78,9 +79,18 @@ class SitemapTest extends TestCase
     public static function frequencyDataProvider(): array
     {
         return [
-            'daily' => [Frequency::CRON_DAILY, '0 0 * * *'],
-            'weekly' => [Frequency::CRON_WEEKLY, '0 0 * * 1'],
-            'monthly' => [Frequency::CRON_MONTHLY, '0 0 1 * *'],
+            'daily' => [
+                Frequency::CRON_DAILY,  // $frequency
+                '0 0 * * *'  // $expectedCronExpr
+            ],
+            'weekly' => [
+                Frequency::CRON_WEEKLY,  // $frequency
+                '0 0 * * 1'  // $expectedCronExpr
+            ],
+            'monthly' => [
+                Frequency::CRON_MONTHLY,  // $frequency
+                '0 0 1 * *'  // $expectedCronExpr
+            ],
         ];
     }
 

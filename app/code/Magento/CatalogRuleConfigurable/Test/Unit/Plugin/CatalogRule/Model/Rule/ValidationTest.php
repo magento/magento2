@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogRuleConfigurable\Test\Unit\Plugin\CatalogRule\Model\Rule;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\CatalogRule\Model\Rule;
@@ -97,9 +98,9 @@ class ValidationTest extends TestCase
      * @param $validationResult
      * @param $runValidateAmount
      * @param $result
-     * @dataProvider dataProviderForValidateWithValidConfigurableProduct
      * @return void
      */
+    #[DataProvider('dataProviderForValidateWithValidConfigurableProduct')]
     public function testAfterValidateWithValidConfigurableProduct(
         $parentsIds,
         $validationResult,

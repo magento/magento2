@@ -26,9 +26,7 @@ class CompositeProductBatchSizeAdjusterTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->relationsCalculatorMock = $this->getMockBuilder(CompositeProductRelationsCalculator::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->relationsCalculatorMock = $this->createMock(CompositeProductRelationsCalculator::class);
         $this->model = new CompositeProductBatchSizeAdjuster($this->relationsCalculatorMock);
     }
 

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,6 +17,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\ShippingAssignmentInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Magento\Quote\Model\QuoteIdMask;
 use Magento\Quote\Model\QuoteIdMaskFactory;
@@ -78,8 +79,8 @@ class GuestShippingInformationManagementTest extends TestCase
      *
      * @magentoDataFixture Magento/Sales/_files/quote.php
      * @magentoDataFixture Magento/Customer/_files/customer_with_addresses.php
-     * @dataProvider getAddressesVariation
      */
+    #[DataProvider('getAddressesVariation')]
     public function testDifferentAddresses(bool $swapShipping): void
     {
         $carts = $this->cartRepo->getList(

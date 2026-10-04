@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Framework\GraphQl\Schema\Type;
 
+use LogicException;
 use Magento\Framework\GraphQl\ConfigInterface;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Schema\TypeInterface;
@@ -66,7 +67,13 @@ class TypeRegistry implements ResetAfterRequestInterface
     public function get(string $typeName): TypeInterface
     {
         if (!isset($this->types[$typeName])) {
-            $configElement = $this->config->getConfigElement($typeName);
+            try {
+                $configElement = $this->config->getConfigElement($typeName);
+            } catch (LogicException) {
+                throw new GraphQlInputException(
+                    new Phrase('Unknown type "%1".', [$typeName])
+                );
+            }
 
             $configElementClass = get_class($configElement);
             if (!isset($this->configToTypeMap[$configElementClass])) {

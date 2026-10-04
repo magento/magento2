@@ -1,14 +1,16 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\GiftMessage\Test\Unit\Model\Plugin;
 
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\GiftMessage\Helper\Message;
 use Magento\GiftMessage\Model\Plugin\QuoteItem as QuoteItemPlugin;
+use Magento\Quote\Model\Quote\Item as QuoteItem;
 use Magento\Quote\Model\Quote\Item\ToOrderItem;
 use Magento\Sales\Model\Order\Item;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -16,6 +18,8 @@ use PHPUnit\Framework\TestCase;
 
 class QuoteItemTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var \Magento\Bundle\Model\Plugin\QuoteItem
      */
@@ -48,26 +52,23 @@ class QuoteItemTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->orderItemMock = $this->getMockBuilder(Item::class)
-            ->addMethods(['setGiftMessageId', 'setGiftMessageAvailable'])
-            ->onlyMethods(['__wakeup'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->quoteItemMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
-            ->addMethods(['getGiftMessageId', 'getStoreId'])
-            ->onlyMethods(['__wakeup'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->orderItemMock = $this->createPartialMockWithReflection(
+            Item::class,
+            ['setGiftMessageId', 'setGiftMessageAvailable', '__wakeup']
+        );
+        $this->quoteItemMock = $this->createPartialMockWithReflection(
+            QuoteItem::class,
+            ['getGiftMessageId', 'getStoreId', '__wakeup']
+        );
         $orderItems = $this->orderItemMock;
         $this->closureMock = function () use ($orderItems) {
             return $orderItems;
         };
         $this->subjectMock = $this->createMock(ToOrderItem::class);
-        $this->helperMock = $this->getMockBuilder(Message::class)
-            ->addMethods(['setGiftMessageId'])
-            ->onlyMethods(['isMessagesAllowed'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->helperMock = $this->createPartialMockWithReflection(
+            Message::class,
+            ['setGiftMessageId', 'isMessagesAllowed']
+        );
         $this->model = new QuoteItemPlugin($this->helperMock);
     }
 

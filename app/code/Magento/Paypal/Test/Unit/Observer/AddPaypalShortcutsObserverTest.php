@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Catalog\Block\ShortcutButtons;
 use Magento\Catalog\Block\ShortcutInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Event\Observer;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\View\Layout;
 use Magento\Paypal\Block\Express\InContext\Minicart\SmartButton as MinicartButton;
 use Magento\Paypal\Block\Express\InContext\SmartButton as Button;
@@ -18,6 +19,7 @@ use Magento\Paypal\Block\Express\Shortcut;
 use Magento\Paypal\Helper\Shortcut\Factory;
 use Magento\Paypal\Model\Config;
 use Magento\Paypal\Observer\AddPaypalShortcutsObserver;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -27,6 +29,8 @@ use PHPUnit\Framework\TestCase;
  */
 class AddPaypalShortcutsObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     public const PAYMENT_CODE = 'code';
 
     public const PAYMENT_AVAILABLE = 'isAvailable';
@@ -38,28 +42,18 @@ class AddPaypalShortcutsObserverTest extends TestCase
      *
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @dataProvider dataProviderShortcutsButtons
      */
+    #[DataProvider('dataProviderShortcutsButtons')]
     public function testAddShortcutsButtons(array $blocks): void
     {
         /** @var ShortcutButtons|MockObject $shortcutButtonsMock */
-        $shortcutButtonsMock = $this->getMockBuilder(ShortcutButtons::class)
-            ->onlyMethods(['getLayout', 'addShortcut'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $shortcutButtonsMock = $this->createMock(ShortcutButtons::class);
 
         /** @var ShortcutButtons|MockObject $shortcutButtonsMock */
-        $eventMock = $this->getMockBuilder(DataObject::class)
-            ->addMethods(
-                [
-                    'getContainer',
-                    'getCheckoutSession',
-                    'getIsCatalogProduct',
-                    'getOrPosition'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $eventMock = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['getContainer', 'getCheckoutSession', 'getIsCatalogProduct', 'getOrPosition']
+        );
 
         $eventMock->expects(self::once())
             ->method('getContainer')
@@ -69,14 +63,9 @@ class AddPaypalShortcutsObserverTest extends TestCase
         $observer->setEvent($eventMock);
 
         /** @var Config|MockObject $paypalConfigMock */
-        $paypalConfigMock = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $paypalConfigMock = $this->createMock(Config::class);
         /** @var Factory|MockObject $shortcutFactoryMock */
-        $shortcutFactoryMock = $this->getMockBuilder(Factory::class)
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $shortcutFactoryMock = $this->createMock(Factory::class);
 
         $model = new AddPaypalShortcutsObserver(
             $shortcutFactoryMock,
@@ -84,10 +73,7 @@ class AddPaypalShortcutsObserverTest extends TestCase
         );
 
         /** @var Layout|MockObject $layoutMock */
-        $layoutMock = $this->getMockBuilder(Layout::class)
-            ->onlyMethods(['createBlock'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $layoutMock = $this->createMock(Layout::class);
 
         $callIndexBlock = 0;
         $callIndexShortcutFactory = 0;
@@ -121,10 +107,10 @@ class AddPaypalShortcutsObserverTest extends TestCase
                 ++$callIndexSession;
             }
 
-            $blockMock = $this->getMockBuilder(MinicartButton::class)
-                ->addMethods(['setIsInCatalogProduct', 'setShowOrPosition'])
-                ->disableOriginalConstructor()
-                ->getMockForAbstractClass();
+            $blockMock = $this->createPartialMockWithReflection(
+                MinicartButton::class,
+                ['setIsInCatalogProduct', 'setShowOrPosition']
+            );
 
             $blockMock->expects(self::once())
                 ->method('setIsInCatalogProduct')

@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Backend\Test\Unit\Console\Command;
 
 use Magento\Backend\Console\Command\CacheEnableCommand;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class CacheEnableCommandTest extends AbstractCacheSetCommandTestCase
@@ -23,8 +24,8 @@ class CacheEnableCommandTest extends AbstractCacheSetCommandTestCase
      * @param array $enable
      * @param array $result
      * @param string $output
-     * @dataProvider executeDataProvider
      */
+    #[DataProvider('executeDataProvider')]
     public function testExecute($param, $enable, $result, $output)
     {
         $this->cacheManagerMock->expects($this->once())->method('getAvailableTypes')->willReturn(['A', 'B', 'C']);

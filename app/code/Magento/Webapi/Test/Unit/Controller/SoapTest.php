@@ -1,9 +1,7 @@
 <?php
 /**
- * Test SOAP controller class.
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,6 +15,7 @@ use Magento\Framework\App\State;
 use Magento\Framework\Escaper;
 use Magento\Framework\Locale\Resolver;
 use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Webapi\ErrorProcessor;
 use Magento\Framework\Webapi\Exception;
@@ -35,6 +34,8 @@ use PHPUnit\Framework\TestCase;
  */
 class SoapTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Soap
      */
@@ -75,6 +76,9 @@ class SoapTest extends TestCase
      */
     protected $_appStateMock;
 
+    /**
+     * @var mixed
+     */
     protected $_appconfig;
 
     /**
@@ -86,39 +90,36 @@ class SoapTest extends TestCase
 
         $objectManagerHelper = new ObjectManager($this);
 
-        $this->_soapServerMock = $this->getMockBuilder(Server::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setWSDL', 'setEncoding', 'setReturnResponse'])
-            ->onlyMethods(['getApiCharset', 'generateUri', 'handle'])
-            ->getMock();
-        $this->_wsdlGeneratorMock = $this->getMockBuilder(Generator::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['generate'])
-            ->getMock();
-        $this->_requestMock = $this->getMockBuilder(Request::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getParams', 'getParam', 'getRequestedServices', 'getHttpHost'])
-            ->getMock();
+        $this->_soapServerMock = $this->createPartialMockWithReflection(
+            Server::class,
+            ['setWSDL', 'setEncoding', 'setReturnResponse', 'getApiCharset', 'generateUri', 'handle']
+        );
+        $this->_wsdlGeneratorMock = $this->createPartialMock(
+            Generator::class,
+            ['generate']
+        );
+        $this->_requestMock = $this->createPartialMock(
+            Request::class,
+            ['getParams', 'getParam', 'getRequestedServices', 'getHttpHost']
+        );
         $this->_requestMock->expects($this->any())
             ->method('getHttpHost')
             ->willReturn('testHostName.com');
-        $this->_responseMock = $this->getMockBuilder(Response::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['clearHeaders', 'setHeader', 'sendResponse', 'getHeaders'])
-            ->getMock();
-        $this->_errorProcessorMock = $this->getMockBuilder(ErrorProcessor::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['maskException'])
-            ->getMock();
+        $this->_responseMock = $this->createPartialMock(
+            Response::class,
+            ['clearHeaders', 'setHeader', 'sendResponse', 'getHeaders']
+        );
+        $this->_errorProcessorMock = $this->createPartialMock(
+            ErrorProcessor::class,
+            ['maskException']
+        );
 
         $this->_appStateMock =  $this->createMock(State::class);
 
-        $localeResolverMock = $this->getMockBuilder(
-            Resolver::class
-        )->disableOriginalConstructor()
-            ->onlyMethods(
-                ['getLocale']
-            )->getMock();
+        $localeResolverMock = $this->createPartialMock(
+            Resolver::class,
+            ['getLocale']
+        );
         $localeResolverMock->expects($this->any())->method('getLocale')->willReturn('en');
 
         $this->_responseMock->expects($this->any())->method('clearHeaders')->willReturnSelf();
@@ -139,12 +140,10 @@ class SoapTest extends TestCase
         $this->_soapServerMock->expects($this->any())->method('setReturnResponse')->willReturnSelf();
         $pathProcessorMock = $this->createMock(PathProcessor::class);
         $areaListMock = $this->createMock(AreaList::class);
-        $areaMock = $this->getMockForAbstractClass(AreaInterface::class);
+        $areaMock = $this->createMock(AreaInterface::class);
         $areaListMock->expects($this->any())->method('getArea')->willReturn($areaMock);
 
-        $rendererMock = $this->getMockBuilder(RendererFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $rendererMock = $this->createMock(RendererFactory::class);
         $this->_soapController = new Soap(
             $this->_requestMock,
             $this->_responseMock,

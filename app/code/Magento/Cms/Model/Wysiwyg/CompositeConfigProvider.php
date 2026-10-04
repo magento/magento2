@@ -153,7 +153,7 @@ class CompositeConfigProvider
      */
     private function updateConfig($config, array $configProviders)
     {
-        $adapterType = $this->getActiveEditorPath($config);
+        $adapterType = $this->getActiveEditorPath($config) ?? '';
         //Extension point to update plugin settings by adapter type
         $providerClass = isset($configProviders[$adapterType])
             ? $configProviders[$adapterType]

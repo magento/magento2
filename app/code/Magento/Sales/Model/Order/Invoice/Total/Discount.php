@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\Order\Invoice\Total;
 
@@ -44,8 +44,8 @@ class Discount extends AbstractTotal
                 continue;
             }
 
-            $orderItemDiscount = (double)$orderItem->getDiscountAmount();
-            $baseOrderItemDiscount = (double)$orderItem->getBaseDiscountAmount();
+            $orderItemDiscount = (float)$orderItem->getDiscountAmount();
+            $baseOrderItemDiscount = (float)$orderItem->getBaseDiscountAmount();
             $orderItemQty = $orderItem->getQtyOrdered();
 
             if ($orderItemDiscount && $orderItemQty) {

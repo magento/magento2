@@ -21,9 +21,7 @@ abstract class AbstractCacheManageCommandTestCase extends AbstractCacheCommandTe
 
     protected function setUp(): void
     {
-        $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
         parent::setUp();
     }
 

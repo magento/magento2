@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,13 +10,18 @@ namespace Magento\ConfigurableProduct\Test\Unit\Model;
 use Magento\Catalog\Model\Product;
 use Magento\ConfigurableProduct\Model\ConfigurableAttributeData;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute as ConfigurableAttribute;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute;
 use Magento\Framework\DataObject;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute as EavAttribute;
 
 class ConfigurableAttributeDataTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Product|MockObject
      */
@@ -37,11 +42,10 @@ class ConfigurableAttributeDataTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->product = $this->getMockBuilder(Product::class)
-            ->addMethods(['setParentId', 'hasPreconfiguredValues'])
-            ->onlyMethods(['getTypeInstance', 'getPreconfiguredValues', 'getPriceInfo', 'getStoreId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->product = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getStoreId', 'setStoreId']
+        );
         $this->attributeMock = $this->createMock(
             Attribute::class
         );
@@ -89,70 +93,37 @@ class ConfigurableAttributeDataTest extends TestCase
             $attributeId => ['option_id_1' => 'option_products_1', 'option_id_2' => 'option_products_2'],
         ];
 
-        $productAttributeMock = $this->getMockBuilder(\Magento\Catalog\Model\Entity\Attribute::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getAttributeLabel'])
-            ->onlyMethods(['getStoreLabel', 'getAttributeCode', 'getId'])
-            ->getMock();
-        $productAttributeMock->expects($this->once())
-            ->method('getId')
-            ->willReturn($attributeId);
-        $productAttributeMock->expects($this->once())
-            ->method('getAttributeCode')
-            ->willReturn($expected['attributes'][$attributeId]['code']);
+        $productAttributeMock = $this->createPartialMockWithReflection(
+            EavAttribute::class,
+            ['getId', 'setId', 'getAttributeCode', 'setAttributeCode', 'getStoreLabel', 'setStoreLabel']
+        );
+        $productAttributeMock->method('getId')->willReturn($attributeId);
+        $productAttributeMock->method('getAttributeCode')->willReturn($expected['attributes'][$attributeId]['code']);
+        $productAttributeMock->method('getStoreLabel')->willReturn($expected['attributes'][$attributeId]['label']);
 
-        $attributeMock = $this->getMockBuilder(
-            \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute::class
-        )
-            ->disableOriginalConstructor()
-            ->addMethods(['getProductAttribute'])
-            ->onlyMethods(['getLabel', 'getOptions', 'getAttributeId', 'getPosition'])
-            ->getMock();
-        $attributeMock->expects($this->once())
-            ->method('getProductAttribute')
-            ->willReturn($productAttributeMock);
-        $attributeMock->expects($this->once())
-            ->method('getPosition')
-            ->willReturn($position);
+        $attributeMock = $this->createPartialMock(ConfigurableAttribute::class, []);
+        $attributeMock->setProductAttribute($productAttributeMock);
+        $attributeMock->setPosition($position);
+        $attributeMock->setAttributeId($attributeId);
+        $attributeMock->setOptions($attributeOptions);
 
-        $this->product->expects($this->once())->method('getStoreId')->willReturn($storeId);
-        $productAttributeMock->expects($this->once())
-            ->method('getStoreLabel')
-            ->with($storeId)
-            ->willReturn($expected['attributes'][$attributeId]['label']);
+        $this->product->method('getStoreId')->willReturn($storeId);
 
-        $attributeMock->expects($this->atLeastOnce())
-            ->method('getAttributeId')
-            ->willReturn($attributeId);
-        $attributeMock->expects($this->atLeastOnce())
-            ->method('getOptions')
-            ->willReturn($attributeOptions);
-
-        $configurableProduct = $this->getMockBuilder(
+        $configurableProduct = $this->createMock(
             Configurable::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        );
         $configurableProduct->expects($this->once())
             ->method('getConfigurableAttributes')
             ->with($this->product)
             ->willReturn([$attributeMock]);
 
-        $configuredValueMock = $this->getMockBuilder(DataObject::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $configuredValueMock->expects($this->any())
-            ->method('getData')
-            ->willReturn($expected['defaultValues'][$attributeId]);
+        $configuredValueMock = $this->createMock(DataObject::class);
+        $configuredValueMock->method('getData')->willReturn($expected['defaultValues'][$attributeId]);
 
-        $this->product->expects($this->once())
-            ->method('getTypeInstance')
-            ->willReturn($configurableProduct);
-        $this->product->expects($this->once())
-            ->method('hasPreconfiguredValues')
-            ->willReturn(true);
-        $this->product->expects($this->once())
-            ->method('getPreconfiguredValues')
-            ->willReturn($configuredValueMock);
+        // Configure product mock with expected values
+        $this->product->setTypeInstance($configurableProduct);
+        $this->product->setHasPreconfiguredValues(true);
+        $this->product->setPreconfiguredValues($configuredValueMock);
 
         $this->assertEquals($expected, $this->configurableAttributeData->getAttributesData($this->product, $options));
     }

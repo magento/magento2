@@ -145,6 +145,7 @@
                 <argument name="customerEmail" value="Simple_CA_Customer.email"/>
             </actionGroup>
             <!-- Logout from admin -->
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrdersGridFiltersAfter"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
             <!-- reindex -->
             <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexBrokenIndices">

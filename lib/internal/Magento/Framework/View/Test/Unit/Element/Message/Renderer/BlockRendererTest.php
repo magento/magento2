@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -40,7 +40,7 @@ class BlockRendererTest extends TestCase
     public function testRender()
     {
         /** @var MessageInterface|MockObject $message */
-        $message = $this->getMockForAbstractClass(MessageInterface::class);
+        $message = $this->createMock(MessageInterface::class);
         $messageData = [
             'painting' => 'The Last Supper',
             'apostles_cnt' => 28,
@@ -82,7 +82,7 @@ class BlockRendererTest extends TestCase
     public function testRenderNoTemplate()
     {
         /** @var MessageInterface|MockObject $message */
-        $message = $this->getMockForAbstractClass(MessageInterface::class);
+        $message = $this->createMock(MessageInterface::class);
         $messageData = [
             'who' => 'Brian',
             'is' => 'a Very Naughty Boy'

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,8 +9,9 @@ namespace Magento\Reports\Test\Unit\Block\Adminhtml\Grid;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Reports\Block\Adminhtml\Grid\AbstractGrid;
-use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -32,16 +33,9 @@ class AbstractGridTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
+        $objectManager->prepareObjectManager();
 
-        $this->storeManagerMock = $this->getMockForAbstractClass(
-            StoreManagerInterface::class,
-            [],
-            '',
-            true,
-            true,
-            true,
-            ['getStore']
-        );
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
 
         $this->model = $objectManager->getObject(
             AbstractGrid::class,
@@ -51,19 +45,13 @@ class AbstractGridTest extends TestCase
 
     /**
      * @param $storeIds
-     *
-     * @dataProvider getCurrentCurrencyCodeDataProvider
      */
+    #[DataProvider('getCurrentCurrencyCodeDataProvider')]
     public function testGetCurrentCurrencyCode($storeIds)
     {
-        $storeMock = $this->getMockForAbstractClass(
-            StoreInterface::class,
-            [],
-            '',
-            true,
-            true,
-            true,
-            ['getBaseCurrencyCode', 'getCurrentCurrencyCode']
+        $storeMock = $this->createPartialMock(
+            Store::class,
+            ['getCurrentCurrencyCode', 'getBaseCurrencyCode']
         );
 
         $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($storeMock);

@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 define([
     'jquery',
@@ -308,6 +308,7 @@ define([
 
             try {
                 videoForm.validation('clearError');
+                // eslint-disable-next-line no-unused-vars
             } catch (e) {
                 // Do nothing
             }
@@ -583,6 +584,7 @@ define([
 
             try {
                 data = JSON.parse(result);
+                // eslint-disable-next-line no-unused-vars
             } catch (e) {
                 data = result;
             }
@@ -891,15 +893,32 @@ define([
                             _tmp = _inputSelector.slice(0, _inputSelector.length - 2) + '[' + fieldName + ']"]';
                             this._gallery.find(_tmp).val(_field.val());
                             imageData[fieldName] = _field.val();
+                            const $useDefaultCheckBox = _field.closest('.field').find('[data-role="use-default"]');
+
+                            if ($useDefaultCheckBox.length > 0) {
+                                fieldName += '_use_default';
+                                _tmp = _inputSelector.slice(0, _inputSelector.length - 2) + '[' + fieldName + ']"]';
+                                imageData[fieldName] = $useDefaultCheckBox.is(':checked') ? 1 : 0;
+                                this._gallery.find(_tmp).val(imageData[fieldName]);
+                            }
                         }
                     }.bind(this));
-                    flagChecked = this.element.find(this._videoDisableinputSelector).prop('checked') ? 1 : 0;
+                    const $disabledCheckBox = this.element.find(this._videoDisableinputSelector),
+                        $useDefaultCheckBox = $disabledCheckBox.closest('.field').find('[data-role="use-default"]');
+
+                    flagChecked = $disabledCheckBox.prop('checked') ? 1 : 0;
                     this._gallery.find('input[name*="' + itemId + '][disabled]"]').val(flagChecked);
                     this._gallery.find(_inputSelector).siblings('.image-fade').css(
                         'visibility',
                         flagChecked ? 'visible' : 'hidden'
                     );
                     imageData.disabled = flagChecked;
+
+                    if ($useDefaultCheckBox.length > 0) {
+                        imageData.disabled_use_default = $useDefaultCheckBox.is(':checked') ? 1 : 0;
+                        this._gallery.find('input[name*="' + itemId + '][disabled_use_default]"]')
+                            .val(imageData.disabled_use_default);
+                    }
 
                     if (this._tempPreviewImageData) {
                         this._onImageLoaded(
@@ -1113,10 +1132,15 @@ define([
 
             try {
                 newVideoForm.validation('clearError');
+                // eslint-disable-next-line no-unused-vars
             } catch (e) {
 
             }
             newVideoForm.trigger('reset');
+            newVideoForm.find('.field')
+                .removeClass('_disabled')
+                .find('input, textarea')
+                .prop('disabled', false);
         },
 
         /**
@@ -1153,6 +1177,10 @@ define([
                         );
 
                     self._changeRole(imageType, imageCheckbox.prop('checked'), imageData);
+                    const $useDefaultCheckBox = imageCheckbox.closest('.field').find('[data-role="use-default"]');
+
+                    self._gallery.find('input[name="use_default[' + imageType + ']"]')
+                        .val($useDefaultCheckBox.is(':checked') ? 1 : 0);
                 });
             }
         },
@@ -1203,7 +1231,14 @@ define([
                 formFields = modal.find(this._videoFormSelector).find('.edited-data');
 
                 $.each(formFields, function (i, field) {
-                    $(field).val(imageData[field.name]);
+                    const $field = $(field);
+
+                    $field.prop('disabled', false).val(imageData[field.name]);
+                    if (imageData[field.name + '_use_default'] !== undefined) {
+                        $field.closest('.field').find('[data-role="use-default"]')
+                            .prop('checked', !!imageData[field.name + '_use_default'])
+                            .trigger('change');
+                    }
                 });
 
                 flagChecked = imageData.disabled > 0;
@@ -1224,6 +1259,17 @@ define([
                         imageRole = this.name.substring(start, end);
                         modal.find('#new_video_form input[value="' + imageRole + '"]').prop('checked', true);
                     }
+                    if (this.name.startsWith('use_default[')) {
+                        start = this.name.indexOf('[') + 1;
+                        end = this.name.length - 1;
+                        imageRole = this.name.substring(start, end);
+                        const $field = modal.find('#new_video_form input[value="' + imageRole + '"]')
+                            .closest('.field');
+
+                        $field.find('[data-role="use-default"]')
+                            .prop('checked', $(this).val() === '1')
+                            .trigger('change');
+                    }
                 });
             }
 
@@ -1235,6 +1281,16 @@ define([
         toggleButtons: function () {
             var self = this,
                 modal = this.element.closest('.mage-new-video-dialog');
+
+            modal.on('change', '[data-role="use-default"]', function (e) {
+                const $target = $(e.target),
+                    isChecked = $target.is(':checked');
+
+                $target.closest('.field')
+                    .toggleClass('_disabled', isChecked)
+                    .find('input:not([data-role="use-default"]), textarea:not([data-role="use-default"])')
+                    .prop('disabled', isChecked);
+            });
 
             modal.find('.video-placeholder, .add-video-button-container > button').click(function () {
                 modal.find('.video-create-button').show();

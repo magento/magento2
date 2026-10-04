@@ -81,9 +81,7 @@ class ProductTestBase extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->logger = $this->createMock(LoggerInterface::class);
         $this->createNewModel();
         $this->importedProducts = [];
         $this->searchCriteriaBuilder = $this->objectManager->get(SearchCriteriaBuilder::class);

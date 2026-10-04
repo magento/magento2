@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Category;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Category\FileInfo;
 use Magento\Catalog\Model\Category\Image;
@@ -60,8 +61,8 @@ class ImageTest extends TestCase
      * @param string $baseUrl
      * @param string $imagePath
      * @param string $url
-     * @dataProvider getUrlDataProvider
      */
+    #[DataProvider('getUrlDataProvider')]
     public function testGetUrl(string $imagePath, string $baseUrl, string $url)
     {
         $this->store->method('getBaseUrl')

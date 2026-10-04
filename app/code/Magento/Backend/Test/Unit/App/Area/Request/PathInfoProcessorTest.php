@@ -10,6 +10,7 @@ namespace Magento\Backend\Test\Unit\App\Area\Request;
 use Magento\Backend\App\Request\PathInfoProcessor;
 use Magento\Backend\Helper\Data;
 use Magento\Framework\App\RequestInterface;
+use Magento\Store\App\Request\PathInfoProcessor as StorePathInfoProcessor;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -42,8 +43,8 @@ class PathInfoProcessorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_requestMock = $this->getMockForAbstractClass(RequestInterface::class);
-        $this->_subjectMock = $this->createMock(\Magento\Store\App\Request\PathInfoProcessor::class);
+        $this->_requestMock = $this->createMock(RequestInterface::class);
+        $this->_subjectMock = $this->createMock(StorePathInfoProcessor::class);
         $this->_backendHelperMock = $this->createMock(Data::class);
         $this->_model = new PathInfoProcessor(
             $this->_subjectMock,

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Framework\Stdlib\Test\Unit;
 use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ArrayManagerTest extends TestCase
 {
@@ -32,9 +33,8 @@ class ArrayManagerTest extends TestCase
     /**
      * @param string $path
      * @param array $data
-     * @param bool $result
-     * @dataProvider existsDataProvider
-     */
+     * @param bool $result     */
+    #[DataProvider('existsDataProvider')]
     public function testExists($path, $data, $result)
     {
         $this->assertSame($result, $this->arrayManager->exists($path, $data));
@@ -75,9 +75,8 @@ class ArrayManagerTest extends TestCase
     /**
      * @param string $path
      * @param array $data
-     * @param mixed $result
-     * @dataProvider getDataProvider
-     */
+     * @param mixed $result     */
+    #[DataProvider('getDataProvider')]
     public function testGet($path, $data, $result)
     {
         $this->assertSame($result, $this->arrayManager->get($path, $data));
@@ -111,9 +110,8 @@ class ArrayManagerTest extends TestCase
      * @param string $path
      * @param array $data
      * @param mixed $value
-     * @param array $result
-     * @dataProvider setDataProvider
-     */
+     * @param array $result     */
+    #[DataProvider('setDataProvider')]
     public function testSet($path, $data, $value, $result)
     {
         $this->assertSame($result, $this->arrayManager->set($path, $data, $value));
@@ -156,9 +154,8 @@ class ArrayManagerTest extends TestCase
      * @param string $path
      * @param array $data
      * @param mixed $value
-     * @param array $result
-     * @dataProvider setDataProvider
-     */
+     * @param array $result     */
+    #[DataProvider('setDataProvider')]
     public function testReplace($path, $data, $value, $result)
     {
         $this->assertSame($result, $this->arrayManager->set($path, $data, $value));
@@ -202,9 +199,8 @@ class ArrayManagerTest extends TestCase
      * @param string $targetPath
      * @param array $data
      * @param bool $overwrite
-     * @param array $result
-     * @dataProvider moveDataProvider
-     */
+     * @param array $result     */
+    #[DataProvider('moveDataProvider')]
     public function testMove($path, $targetPath, array $data, $overwrite, array $result)
     {
         $this->assertSame($result, $this->arrayManager->move($path, $targetPath, $data, $overwrite));
@@ -258,9 +254,8 @@ class ArrayManagerTest extends TestCase
      * @param string $path
      * @param array $data
      * @param array $value
-     * @param array $result
-     * @dataProvider mergeDataProvider
-     */
+     * @param array $result     */
+    #[DataProvider('mergeDataProvider')]
     public function testMerge($path, $data, $value, $result)
     {
         $this->assertSame($result, $this->arrayManager->merge($path, $data, $value));
@@ -302,9 +297,8 @@ class ArrayManagerTest extends TestCase
     /**
      * @param string $path
      * @param array $data
-     * @param array $result
-     * @dataProvider populateDataProvider
-     */
+     * @param array $result     */
+    #[DataProvider('populateDataProvider')]
     public function testPopulate($path, $data, $result)
     {
         $this->assertSame($result, $this->arrayManager->populate($path, $data));
@@ -337,9 +331,8 @@ class ArrayManagerTest extends TestCase
     /**
      * @param string $path
      * @param array $data
-     * @param array $result
-     * @dataProvider removeDataProvider
-     */
+     * @param array $result     */
+    #[DataProvider('removeDataProvider')]
     public function testRemove($path, $data, $result)
     {
         $this->assertSame($result, $this->arrayManager->remove($path, $data));
@@ -379,9 +372,8 @@ class ArrayManagerTest extends TestCase
      * @param array $data
      * @param string|array|null $startPath
      * @param string|array|null $internalPath
-     * @param array $result
-     * @dataProvider findPathsDataProvider
-     */
+     * @param array $result     */
+    #[DataProvider('findPathsDataProvider')]
     public function testFindPaths($indexes, array $data, $startPath, $internalPath, $result)
     {
         $this->assertSame($result, $this->arrayManager->findPaths($indexes, $data, $startPath, $internalPath));
@@ -459,9 +451,8 @@ class ArrayManagerTest extends TestCase
      * @param array $data
      * @param string|array|null $startPath
      * @param string|array|null $internalPath
-     * @param array $result
-     * @dataProvider findPathDataProvider
-     */
+     * @param array $result     */
+    #[DataProvider('findPathDataProvider')]
     public function testFindPath($indexes, array $data, $startPath, $internalPath, $result)
     {
         $this->assertSame($result, $this->arrayManager->findPath($indexes, $data, $startPath, $internalPath));
@@ -538,9 +529,8 @@ class ArrayManagerTest extends TestCase
      * @param string $path
      * @param int $offset
      * @param int|null $length
-     * @param string $result
-     * @dataProvider slicePathDataProvider
-     */
+     * @param string $result     */
+    #[DataProvider('slicePathDataProvider')]
     public function testSlicePath($path, $offset, $length, $result)
     {
         $this->assertSame($result, $this->arrayManager->slicePath($path, $offset, $length));

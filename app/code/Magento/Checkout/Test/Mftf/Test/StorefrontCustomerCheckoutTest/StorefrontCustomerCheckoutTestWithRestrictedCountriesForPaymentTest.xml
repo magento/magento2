@@ -34,6 +34,7 @@
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="simpleuscustomer" stepKey="deleteCustomer"/>
             <magentoCLI command="config:set payment/checkmo/allowspecific 0" stepKey="allowSpecificValue"/>
             <magentoCLI command="config:set payment/checkmo/specificcountry ''" stepKey="specificCountryValue"/>
             <magentoCLI command="config:set checkout/options/display_billing_address_on 0" stepKey="setDisplayBillingAddressOnPaymentMethod"/>

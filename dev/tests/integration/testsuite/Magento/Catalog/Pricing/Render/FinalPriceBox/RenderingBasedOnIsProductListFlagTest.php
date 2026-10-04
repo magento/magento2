@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Pricing\Render\FinalPriceBox;
 
@@ -12,6 +12,7 @@ use Magento\Catalog\Pricing\Render\FinalPriceBox;
 use Magento\Framework\Pricing\Render\Amount;
 use Magento\Framework\Pricing\Render\RendererPool;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test price rendering according to is_product_list flag
@@ -97,8 +98,8 @@ class RenderingBasedOnIsProductListFlagTest extends \PHPUnit\Framework\TestCase
      * @param bool $flag
      * @magentoDataFixture Magento/Catalog/_files/product_special_price.php
      * @magentoAppArea frontend
-     * @dataProvider isProductListDataProvider
      */
+    #[DataProvider('isProductListDataProvider')]
     public function testRenderingAccordingToIsProductListFlag($flag)
     {
         $this->finalPriceBox->setData('is_product_list', $flag);

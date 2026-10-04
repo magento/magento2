@@ -8,18 +8,24 @@ declare(strict_types=1);
 namespace Magento\CatalogRule\Test\Unit\Model\Indexer;
 
 use Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher;
+use Magento\CatalogRule\Model\Indexer\DynamicBatchSizeCalculator;
 use Magento\CatalogRule\Model\Indexer\IndexerTableSwapperInterface;
 use Magento\CatalogRule\Model\Indexer\ReindexRuleProduct;
 use Magento\CatalogRule\Model\Rule;
+use Magento\Framework\Api\ExtensionAttributesInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class ReindexRuleProductTest extends TestCase
 {
+    use MockCreationTrait;
+
     private const ADMIN_WEBSITE_ID = 0;
 
     /**
@@ -53,6 +59,11 @@ class ReindexRuleProductTest extends TestCase
     private $ruleMock;
 
     /**
+     * @var DynamicBatchSizeCalculator|MockObject
+     */
+    private $batchSizeCalculatorMock;
+
+    /**
      * @var string
      */
     private $adminTimeZone;
@@ -69,17 +80,22 @@ class ReindexRuleProductTest extends TestCase
     {
         $this->resourceMock = $this->createMock(ResourceConnection::class);
         $activeTableSwitcherMock = $this->createMock(ActiveTableSwitcher::class);
-        $this->tableSwapperMock = $this->getMockForAbstractClass(IndexerTableSwapperInterface::class);
-        $this->localeDateMock = $this->getMockForAbstractClass(TimezoneInterface::class);
-        $this->connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $this->tableSwapperMock = $this->createMock(IndexerTableSwapperInterface::class);
+        $this->localeDateMock = $this->createMock(TimezoneInterface::class);
+        $this->connectionMock = $this->createMock(AdapterInterface::class);
         $this->ruleMock = $this->createMock(Rule::class);
+        $this->batchSizeCalculatorMock = $this->createMock(DynamicBatchSizeCalculator::class);
+
+        $this->batchSizeCalculatorMock->method('getAttributeBatchSize')
+            ->willReturn(1000);
 
         $this->model = new ReindexRuleProduct(
             $this->resourceMock,
             $activeTableSwitcherMock,
             $this->tableSwapperMock,
             $this->localeDateMock,
-            true
+            true,
+            $this->batchSizeCalculatorMock
         );
 
         $this->adminTimeZone = 'America/Chicago';
@@ -187,7 +203,7 @@ class ReindexRuleProductTest extends TestCase
                     }
                 }
             );
-        
+
         self::assertTrue($this->model->execute($this->ruleMock, 2, true));
     }
 
@@ -218,17 +234,17 @@ class ReindexRuleProductTest extends TestCase
      * @param array $productIds
      * @param array $batchRows
      * @return void
-     * @dataProvider executeDataProvider
      */
+    #[DataProvider('executeDataProvider')]
     public function testExecuteWithExcludedWebsites(array $websitesIds, array $productIds, array $batchRows): void
     {
         $this->prepareResourceMock();
         $this->prepareRuleMock($websitesIds, $productIds, [10, 20]);
 
-        $extensionAttributes = $this->getMockBuilder(\Magento\Framework\Api\ExtensionAttributesInterface::class)
-            ->addMethods(['getExtensionAttributes', 'getExcludeWebsiteIds'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $extensionAttributes = $this->createPartialMockWithReflection(
+            ExtensionAttributesInterface::class,
+            ['getExtensionAttributes', 'getExcludeWebsiteIds']
+        );
         $this->ruleMock->expects(self::once())->method('getExtensionAttributes')
             ->willReturn($extensionAttributes);
         $extensionAttributes->expects(self::exactly(2))->method('getExcludeWebsiteIds')

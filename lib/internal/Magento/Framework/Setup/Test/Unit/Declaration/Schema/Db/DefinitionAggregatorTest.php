@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -38,12 +38,8 @@ class DefinitionAggregatorTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $intDefProcessor = $this->getMockBuilder(DbDefinitionProcessorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $varcharDefProcessor = $this->getMockBuilder(DbDefinitionProcessorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $intDefProcessor = $this->createMock(DbDefinitionProcessorInterface::class);
+        $varcharDefProcessor = $this->createMock(DbDefinitionProcessorInterface::class);
 
         $this->definitonProcessors = [
             'int' => $intDefProcessor,
@@ -62,17 +58,11 @@ class DefinitionAggregatorTest extends TestCase
         $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('Cannot process object to definition for type text');
         /** @var ElementInterface|MockObject $columnInt */
-        $columnInt = $this->getMockBuilder(ElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $columnInt = $this->createMock(ElementInterface::class);
         /** @var ElementInterface|MockObject $columnVarchar */
-        $columnVarchar = $this->getMockBuilder(ElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $columnVarchar = $this->createMock(ElementInterface::class);
         /** @var ElementInterface|MockObject $columnText */
-        $columnText = $this->getMockBuilder(ElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $columnText = $this->createMock(ElementInterface::class);
         $columnInt->expects($this->any())->method('getType')->willReturn('int');
         $columnVarchar->expects($this->any())->method('getType')->willReturn('varchar');
         $columnText->expects($this->any())->method('getType')->willReturn('text');

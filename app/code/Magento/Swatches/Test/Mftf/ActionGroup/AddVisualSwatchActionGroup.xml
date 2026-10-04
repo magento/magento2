@@ -15,6 +15,7 @@
         <!-- Begin creating a new product attribute of type "Image Swatch" -->
         <amOnPage url="{{ProductAttributePage.url}}" stepKey="goToNewProductAttributePage"/>
         <waitForPageLoad stepKey="waitForAttributePageLoad"/>
+        <waitForElementVisible selector="{{AttributePropertiesSection.DefaultLabel}}" stepKey="waitForDefaultLabelFieldVisible" time="30"/>
         <fillField selector="{{AttributePropertiesSection.DefaultLabel}}" userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="fillDefaultLabel"/>
         <grabValueFrom stepKey="grabAttributeName" selector="{{AttributePropertiesSection.DefaultLabel}}"/>
         <!-- Select visual swatch -->

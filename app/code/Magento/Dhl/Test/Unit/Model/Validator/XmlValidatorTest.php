@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Framework\Phrase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Xml\Security;
 use Magento\Sales\Exception\DocumentValidationException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -82,8 +83,8 @@ class XmlValidatorTest extends TestCase
      * Tests validate() on an invalid XML response
      *
      * @param array $data
-     * @dataProvider invalidXmlResponseProvider
      */
+    #[DataProvider('invalidXmlResponseProvider')]
     public function testValidateInvalidXml($data)
     {
         $phrase = new Phrase('Error #%1 : %2', ['111', 'Error in parsing request XML']);

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -21,6 +21,7 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
         Attribute::class,
         [
             'frontend_input' => 'multiselect',
+            'backend_type' => 'text',
             'is_filterable_in_search' => true,
             'position' => 6,
             'additional_data' =>

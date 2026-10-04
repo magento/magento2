@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -65,7 +65,7 @@ class Preview extends \Magento\Backend\Block\Widget
             $template->load($id);
         } else {
             $template->setTemplateType($request->getParam('type'));
-            $template->setTemplateText($request->getParam('text'));
+            $template->setTemplateText($this->_maliciousCode->filter($request->getParam('text')));
             $template->setTemplateStyles($request->getParam('styles'));
 
         }

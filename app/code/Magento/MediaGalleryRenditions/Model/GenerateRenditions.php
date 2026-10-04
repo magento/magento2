@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -162,7 +162,7 @@ class GenerateRenditions implements GenerateRenditionsInterface
             );
         }
 
-        if (!preg_match(self::IMAGE_FILE_NAME_PATTERN, $path)) {
+        if (!preg_match($this->getImageFileNamePattern(), $path)) {
             throw new LocalizedException(
                 __('Could not create rendition for image, unsupported file type: %path.', ['path' => $path])
             );
@@ -221,5 +221,15 @@ class GenerateRenditions implements GenerateRenditionsInterface
     private function getMediaDirectory(): WriteInterface
     {
         return $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+    }
+
+    /**
+     * Get image file name pattern for validation
+     *
+     * @return string
+     */
+    public function getImageFileNamePattern(): string
+    {
+        return self::IMAGE_FILE_NAME_PATTERN;
     }
 }

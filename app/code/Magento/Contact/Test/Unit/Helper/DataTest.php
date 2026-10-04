@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -54,7 +54,7 @@ class DataTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
 
         $contextMock = $this->getMockBuilder(Context::class)
             ->onlyMethods(['getScopeConfig'])
@@ -159,7 +159,7 @@ class DataTest extends TestCase
             ->method('isLoggedIn')
             ->willReturn(true);
 
-        $customerDataObject = $this->getMockForAbstractClass(CustomerInterface::class);
+        $customerDataObject = $this->createMock(CustomerInterface::class);
         $customerDataObject->expects($this->once())
             ->method('getEmail')
             ->willReturn('customer@email.com');
@@ -181,8 +181,7 @@ class DataTest extends TestCase
             'email' => 'Some Email'
         ];
 
-        $dataPersistorMock = $this->getMockBuilder(DataPersistorInterface::class)
-            ->getMockForAbstractClass();
+        $dataPersistorMock = $this->createMock(DataPersistorInterface::class);
         $dataPersistorMock->expects($this->once())
             ->method('get')
             ->with('contact_us')

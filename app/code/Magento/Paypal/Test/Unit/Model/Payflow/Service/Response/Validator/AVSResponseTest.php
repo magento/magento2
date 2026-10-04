@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Framework\DataObject;
 use Magento\Payment\Model\Method\ConfigInterface;
 use Magento\Paypal\Model\Payflow\Service\Response\Validator\AVSResponse;
 use Magento\Paypal\Model\Payflow\Transparent;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -36,12 +37,8 @@ class AVSResponseTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->config = $this->getMockBuilder(ConfigInterface::class)
-            ->getMockForAbstractClass();
-
-        $this->payflowproFacade = $this->getMockBuilder(Transparent::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->config = $this->createMock(ConfigInterface::class);
+        $this->payflowproFacade = $this->createMock(Transparent::class);
 
         $this->validator = new AVSResponse();
     }
@@ -51,8 +48,8 @@ class AVSResponseTest extends TestCase
      * @param DataObject $response
      * @param array $configMap
      *
-     * @dataProvider validationDataProvider
      */
+    #[DataProvider('validationDataProvider')]
     public function testValidation(
         $expectedResult,
         DataObject $response,

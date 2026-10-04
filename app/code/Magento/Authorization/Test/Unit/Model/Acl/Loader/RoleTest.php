@@ -16,7 +16,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -25,6 +25,8 @@ use PHPUnit\Framework\TestCase;
  */
 class RoleTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Role
      */
@@ -70,18 +72,16 @@ class RoleTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->groupFactoryMock = $this->getMockBuilder(GroupFactory::class)
-            ->onlyMethods(['create'])
-            ->addMethods(['getModelInstance'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->roleFactoryMock = $this->getMockBuilder(UserFactory::class)
-            ->onlyMethods(['create'])
-            ->addMethods(['getModelInstance'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->groupFactoryMock = $this->createPartialMockWithReflection(
+            GroupFactory::class,
+            ['create', 'getModelInstance']
+        );
+        $this->roleFactoryMock = $this->createPartialMockWithReflection(
+            UserFactory::class,
+            ['create', 'getModelInstance']
+        );
         $this->resourceMock = $this->createMock(ResourceConnection::class);
-        $this->aclDataCacheMock = $this->getMockForAbstractClass(CacheInterface::class);
+        $this->aclDataCacheMock = $this->createMock(CacheInterface::class);
         $this->serializerMock = $this->createPartialMock(
             Json::class,
             ['serialize', 'unserialize']
@@ -107,16 +107,12 @@ class RoleTest extends TestCase
 
         $this->adapterMock = $this->createMock(Mysql::class);
 
-        $objectManager = new ObjectManager($this);
-        $this->model = $objectManager->getObject(
-            Role::class,
-            [
-                'groupFactory' => $this->groupFactoryMock,
-                'roleFactory' => $this->roleFactoryMock,
-                'resource' => $this->resourceMock,
-                'aclDataCache' => $this->aclDataCacheMock,
-                'serializer' => $this->serializerMock
-            ]
+        $this->model = new Role(
+            $this->groupFactoryMock,
+            $this->roleFactoryMock,
+            $this->resourceMock,
+            $this->aclDataCacheMock,
+            $this->serializerMock
         );
     }
 

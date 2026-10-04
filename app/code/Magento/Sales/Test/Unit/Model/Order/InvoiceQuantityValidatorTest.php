@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,15 +13,20 @@ use Magento\Sales\Api\Data\InvoiceItemInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Model\Order\Invoice;
+use Magento\Sales\Model\Order\Item;
 use Magento\Sales\Model\Order\InvoiceQuantityValidator;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * Test for \Magento\Sales\Model\Order\InvoiceValidator class
  */
 class InvoiceQuantityValidatorTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var InvoiceQuantityValidator|MockObject
      */
@@ -51,18 +56,13 @@ class InvoiceQuantityValidatorTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->orderMock = $this->getMockBuilder(OrderInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->orderMock = $this->createMock(OrderInterface::class);
 
-        $this->invoiceMock = $this->getMockBuilder(InvoiceInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getTotalQty', 'getItems'])
-            ->getMockForAbstractClass();
-        $this->orderRepositoryMock = $this->getMockBuilder(
-            OrderRepositoryInterface::class
-        )->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->invoiceMock = $this->createPartialMock(
+            Invoice::class,
+            ['getTotalQty', 'getItems', 'getOrderId']
+        );
+        $this->orderRepositoryMock = $this->createMock(OrderRepositoryInterface::class);
         $this->orderRepositoryMock->expects($this->any())->method('get')->willReturn($this->orderMock);
         $this->model = $this->objectManager->getObject(
             InvoiceQuantityValidator::class,
@@ -172,10 +172,7 @@ class InvoiceQuantityValidatorTest extends TestCase
      */
     private function getInvoiceItemMock($orderItemId, $qty)
     {
-        $invoiceItemMock = $this->getMockBuilder(InvoiceItemInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getOrderItemId', 'getQty'])
-            ->getMockForAbstractClass();
+        $invoiceItemMock = $this->createMock(InvoiceItemInterface::class);
         $invoiceItemMock->expects($this->once())->method('getOrderItemId')->willReturn($orderItemId);
         $invoiceItemMock->expects($this->once())->method('getQty')->willReturn($qty);
         return $invoiceItemMock;
@@ -189,11 +186,10 @@ class InvoiceQuantityValidatorTest extends TestCase
      */
     private function getOrderItemMock($id, $qtyToInvoice, $isDummy)
     {
-        $orderItemMock = $this->getMockBuilder(OrderItemInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getSku'])
-            ->addMethods(['getId', 'getQtyToInvoice', 'isDummy'])
-            ->getMockForAbstractClass();
+        $orderItemMock = $this->createPartialMockWithReflection(
+            Item::class,
+            ['getSku', 'getId', 'getQtyToInvoice', 'isDummy']
+        );
         $orderItemMock->expects($this->any())->method('getId')->willReturn($id);
         $orderItemMock->expects($this->any())->method('getQtyToInvoice')->willReturn($qtyToInvoice);
         $orderItemMock->expects($this->any())->method('isDummy')->willReturn($isDummy);

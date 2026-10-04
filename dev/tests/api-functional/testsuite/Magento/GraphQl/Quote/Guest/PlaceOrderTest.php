@@ -34,6 +34,7 @@ use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQl\ResponseContainsErrorsException;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use Magento\OfflinePayments\Model\Checkmo;
 
 /**
  * Test for placing an order for guest
@@ -531,6 +532,56 @@ class PlaceOrderTest extends GraphQlAbstract
         $order = $this->orderFactory->create();
         $order->loadByIncrementId($orderIncrementId);
         $this->assertNotEmpty($order->getGiftMessageId());
+    }
+
+    #[
+        Config('carriers/flatrate/active', '1', 'store', 'default'),
+        Config('carriers/tablerate/active', '1', 'store', 'default'),
+        Config('carriers/freeshipping/active', '1', 'store', 'default'),
+        Config('payment/checkmo/active', '1', 'store', 'default'),
+        DataFixture(ProductFixture::class, as: 'product'),
+        DataFixture(Indexer::class, as: 'indexer'),
+        DataFixture(GuestCartFixture::class, ['reserved_order_id' => 'test_quote'], as: 'cart'),
+        DataFixture(SetGuestEmailFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$product.id$']),
+        DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(
+            SetPaymentMethodFixture::class,
+            ['cart_id' => '$cart.id$', 'method' => Checkmo::PAYMENT_METHOD_CHECKMO_CODE]
+        ),
+        Config('payment/checkmo/active', '0', 'store', 'default'),
+    ]
+    public function testSetPreviouslyAddedPaymentMethodAfterItWasDisabled()
+    {
+        $cart = DataFixtureStorageManager::getStorage()->get('cart');
+        $maskedQuoteId = $this->quoteIdToMaskedQuoteIdInterface->execute((int)$cart->getId());
+
+        $query = $this->setPaymentMethodQuery($maskedQuoteId, Checkmo::PAYMENT_METHOD_CHECKMO_CODE);
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The requested Payment Method is not available.');
+        $this->graphQlMutation($query);
+    }
+
+    /**
+     * @param string $maskedQuoteId
+     * @param string $methodCode
+     * @return string
+     */
+    private function setPaymentMethodQuery(string $maskedQuoteId, string $methodCode): string
+    {
+        return <<<QUERY
+mutation {
+  setPaymentMethodOnCart(input: {
+    cart_id: "{$maskedQuoteId}",
+    payment_method: { code: "{$methodCode}" }
+  }) {
+    cart {
+      selected_payment_method { code }
+    }
+  }
+}
+QUERY;
     }
 
     /**

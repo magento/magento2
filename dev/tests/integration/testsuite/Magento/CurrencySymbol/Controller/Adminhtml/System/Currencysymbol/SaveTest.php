@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CurrencySymbol\Controller\Adminhtml\System\Currencysymbol;
 
 use Magento\Framework\App\Request\Http as HttpRequest;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class SaveTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
@@ -19,8 +20,8 @@ class SaveTest extends \Magento\TestFramework\TestCase\AbstractBackendController
      * @magentoConfigFixture               currency/options/allow USD
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
-     * @dataProvider currencySymbolDataProvider
      */
+    #[DataProvider('currencySymbolDataProvider')]
     public function testSaveAction($currencyCode, $inputCurrencySymbol, $outputCurrencySymbol)
     {
         /** @var \Magento\CurrencySymbol\Model\System\Currencysymbol $currencySymbol */

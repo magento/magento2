@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -40,7 +40,7 @@ class ContainerTest extends TestCase
         );
         $buttonList->expects($this->once())->method('add');
         $buttonList->expects($this->once())->method('remove')->with('add');
-        $urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
+        $urlBuilderMock = $this->createMock(UrlInterface::class);
         $contextMock = $this->createPartialMock(
             Context::class,
             ['getUrlBuilder', 'getButtonList']

@@ -52,7 +52,7 @@ class SubscriptionHandlerTest extends TestCase
     {
         $this->flagManagerMock = $this->createMock(FlagManager::class);
 
-        $this->configWriterMock = $this->getMockForAbstractClass(WriterInterface::class);
+        $this->configWriterMock = $this->createMock(WriterInterface::class);
 
         $this->tokenMock = $this->createMock(AnalyticsToken::class);
 

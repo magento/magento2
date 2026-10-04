@@ -1,12 +1,13 @@
 <?php declare(strict_types=1);
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Profiler\Test\Unit\Driver\Standard;
 
 use Magento\Framework\Profiler\Driver\Standard\Stat;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class StatTest extends TestCase
 {
@@ -22,11 +23,10 @@ class StatTest extends TestCase
 
     /**
      * Test start and stop methods of \Magento\Framework\Profiler\Driver\Standard\Stat
-     *
-     * @dataProvider actionsDataProvider
-     * @param array $actions
+     *     * @param array $actions
      * @param array $expected
      */
+    #[DataProvider('actionsDataProvider')]
     public function testActions(array $actions, array $expected)
     {
         foreach ($actions as $actionData) {
@@ -177,11 +177,10 @@ class StatTest extends TestCase
 
     /**
      * Test getFilteredTimerIds for sorting
-     *
-     * @dataProvider timersSortingDataProvider
-     * @param array $timers
+     *     * @param array $timers
      * @param array $expectedTimerIds
      */
+    #[DataProvider('timersSortingDataProvider')]
     public function testTimersSorting($timers, $expectedTimerIds)
     {
         foreach ($timers as $timerData) {
@@ -260,13 +259,12 @@ class StatTest extends TestCase
 
     /**
      * Test getFilteredTimerIds for filtering
-     *
-     * @dataProvider timersFilteringDataProvider
-     * @param array $timers
+     *     * @param array $timers
      * @param array $thresholds
      * @param string $filterPattern
      * @param array $expectedTimerIds
      */
+    #[DataProvider('timersFilteringDataProvider')]
     public function testTimersFiltering($timers, $thresholds, $filterPattern, $expectedTimerIds)
     {
         foreach ($timers as $timerData) {
@@ -316,11 +314,10 @@ class StatTest extends TestCase
 
     /**
      * Test positive cases of fetch method
-     *
-     * @dataProvider fetchDataProvider
-     * @param array $timers
+     *     * @param array $timers
      * @param array $expects
      */
+    #[DataProvider('fetchDataProvider')]
     public function testFetch($timers, $expects)
     {
         foreach ($timers as $timerData) {

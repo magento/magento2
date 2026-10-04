@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -20,6 +20,7 @@ use Magento\MediaStorage\Model\File\Validator\NotProtectedExtension;
 use Psr\Log\LoggerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for Magento\Eav\Model\Attribute\Data\File class.
@@ -48,10 +49,10 @@ class FileTest extends TestCase
      */
     protected function setUp(): void
     {
-        $timezoneMock = $this->getMockForAbstractClass(TimezoneInterface::class);
-        $loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
-        $localeResolverMock = $this->getMockForAbstractClass(ResolverInterface::class);
-        $this->urlEncoder = $this->getMockForAbstractClass(EncoderInterface::class);
+        $timezoneMock = $this->createMock(TimezoneInterface::class);
+        $loggerMock = $this->createMock(LoggerInterface::class);
+        $localeResolverMock = $this->createMock(ResolverInterface::class);
+        $this->urlEncoder = $this->createMock(EncoderInterface::class);
         $this->fileValidatorMock = $this->createPartialMock(
             NotProtectedExtension::class,
             ['isValid', 'getMessages']
@@ -77,8 +78,8 @@ class FileTest extends TestCase
      * @param mixed $value
      * @param mixed $expectedResult
      * @param int $callTimes
-     * @dataProvider outputValueDataProvider
      */
+    #[DataProvider('outputValueDataProvider')]
     public function testOutputValue($format, $value, $callTimes, $expectedResult)
     {
         $entityMock = $this->createMock(AbstractModel::class);
@@ -132,8 +133,8 @@ class FileTest extends TestCase
      * @param array $rules
      * @param bool $fileIsValid
      * @param array $expectedResult
-     * @dataProvider validateValueDataProvider
      */
+    #[DataProvider('validateValueDataProvider')]
     public function testValidateValue(
         $value,
         $originalValue,

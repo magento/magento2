@@ -1,24 +1,30 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Persistent\Test\Unit\Model\Checkout;
 
 use Magento\Checkout\Model\DefaultConfigProvider;
+use Magento\Customer\Model\Session as CustomerSession;
+use Magento\Checkout\Model\Session as CheckoutSession;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Persistent\Helper\Data;
 use Magento\Persistent\Helper\Session;
 use Magento\Persistent\Model\Checkout\ConfigProviderPlugin;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\QuoteIdMask;
 use Magento\Quote\Model\QuoteIdMaskFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class ConfigProviderPluginTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var MockObject
      */
@@ -58,12 +64,12 @@ class ConfigProviderPluginTest extends TestCase
     {
         $this->persistentHelperMock = $this->createMock(Data::class);
         $this->persistentSessionMock = $this->createMock(Session::class);
-        $this->checkoutSessionMock = $this->createMock(\Magento\Checkout\Model\Session::class);
+        $this->checkoutSessionMock = $this->createMock(CheckoutSession::class);
         $this->maskFactoryMock = $this->createPartialMock(
             QuoteIdMaskFactory::class,
             ['create']
         );
-        $this->customerSessionMock = $this->createMock(\Magento\Customer\Model\Session::class);
+        $this->customerSessionMock = $this->createMock(CustomerSession::class);
         $this->subjectMock = $this->createMock(DefaultConfigProvider::class);
 
         $this->plugin = new ConfigProviderPlugin(
@@ -79,9 +85,8 @@ class ConfigProviderPluginTest extends TestCase
      * @param bool $persistenceEnabled
      * @param bool $isPersistent
      * @param bool $isLoggedIn
-     *
-     * @dataProvider configDataProvider
      */
+    #[DataProvider('configDataProvider')]
     public function testAfterGetConfigNegative($persistenceEnabled, $isPersistent, $isLoggedIn)
     {
         $result = [40, 30, 50];
@@ -116,11 +121,10 @@ class ConfigProviderPluginTest extends TestCase
         $this->persistentSessionMock->expects($this->once())->method('isPersistent')->willReturn(true);
         $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->willReturn(false);
 
-        $quoteMaskMock = $this->getMockBuilder(QuoteIdMask::class)
-            ->addMethods(['getMaskedId'])
-            ->onlyMethods(['load'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $quoteMaskMock = $this->createPartialMockWithReflection(
+            QuoteIdMask::class,
+            ['getMaskedId', 'load']
+        );
         $this->maskFactoryMock->expects($this->once())->method('create')->willReturn($quoteMaskMock);
         $quoteMock = $this->createMock(Quote::class);
 

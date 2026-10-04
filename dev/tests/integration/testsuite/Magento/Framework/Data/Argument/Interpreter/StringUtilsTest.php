@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Data\Argument\Interpreter;
 
 use Magento\Framework\Phrase\RendererInterface;
 use Magento\Framework\Stdlib\BooleanUtils;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @covers \Magento\Framework\Data\Argument\Interpreter\StringUtils
@@ -41,9 +42,7 @@ class StringUtilsTest extends \PHPUnit\Framework\TestCase
         $baseStringUtils = new BaseStringUtils($this->booleanUtils);
         $this->model = new StringUtils($this->booleanUtils, $baseStringUtils);
         /** @var RendererInterface|\PHPUnit\Framework\MockObject\MockObject $translateRenderer */
-        $translateRenderer = $this->getMockBuilder(RendererInterface::class)
-          ->onlyMethods(['render'])
-          ->getMockForAbstractClass();
+        $translateRenderer = $this->createMock(RendererInterface::class);
         $translateRenderer->expects($this->any())->method('render')->willReturnCallback(
 
                 function ($input) {
@@ -59,9 +58,8 @@ class StringUtilsTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $input
      * @param string $expected
-     *
-     * @dataProvider evaluateDataProvider
      */
+    #[DataProvider('evaluateDataProvider')]
     public function testEvaluate($input, $expected)
     {
         $actual = $this->model->evaluate($input);
@@ -90,9 +88,8 @@ class StringUtilsTest extends \PHPUnit\Framework\TestCase
      * Check StringUtils::evaluate() throws exception in case $input['value'] is not a string.
      *
      * @param array $input
-     *
-     * @dataProvider evaluateExceptionDataProvider
      */
+    #[DataProvider('evaluateExceptionDataProvider')]
     public function testEvaluateException($input)
     {
         $this->expectException(\InvalidArgumentException::class);

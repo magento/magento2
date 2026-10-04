@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -33,8 +33,8 @@ class AggregationResolverTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->request = $this->getMockForAbstractClass(RequestInterface::class);
-        $this->specificAggregationResolver = $this->getMockForAbstractClass(AggregationResolverInterface::class);
+        $this->request = $this->createMock(RequestInterface::class);
+        $this->specificAggregationResolver = $this->createMock(AggregationResolverInterface::class);
 
         $this->aggregationResolver = (new ObjectManager($this))->getObject(
             AggregationResolver::class,

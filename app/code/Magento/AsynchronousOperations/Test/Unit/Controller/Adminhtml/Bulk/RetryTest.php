@@ -66,7 +66,7 @@ class RetryTest extends TestCase
         $objectManager = new ObjectManager($this);
         $this->bulkManagementMock = $this->createMock(BulkManagement::class);
         $this->notificationManagementMock = $this->createMock(BulkNotificationManagement::class);
-        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->requestMock = $this->createMock(RequestInterface::class);
         $this->resultFactoryMock = $this->createPartialMock(ResultFactory::class, ['create']);
         $this->jsonResultMock = $this->createMock(Json::class);
 

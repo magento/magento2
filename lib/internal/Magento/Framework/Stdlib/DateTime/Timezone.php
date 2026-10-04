@@ -350,7 +350,11 @@ class Timezone implements TimezoneInterface
             }
         }
 
-        $date->setTimezone(new \DateTimeZone('UTC'));
+        if ($date instanceof \DateTimeImmutable) {
+            $date = $date->setTimezone(new \DateTimeZone('UTC'));
+        } else {
+            $date->setTimezone(new \DateTimeZone('UTC'));
+        }
 
         return $date->format($format);
     }

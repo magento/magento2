@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Backend\Test\Unit\Helper;
 
 use Magento\Backend\Helper\Js;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -33,11 +34,10 @@ class JsTest extends TestCase
     /**
      * Test decoding the serialized input
      *
-     * @dataProvider getEncodedDataProvider
-     *
      * @param string $encoded
      * @param array $expected
      */
+    #[DataProvider('getEncodedDataProvider')]
     public function testDecodeGridSerializedInput(string $encoded, array $expected)
     {
         $this->assertEquals($expected, $this->helper->decodeGridSerializedInput($encoded));

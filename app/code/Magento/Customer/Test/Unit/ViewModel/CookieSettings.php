@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -23,8 +23,7 @@ class CookieSettings extends TestCase
 
     protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
-            ->getMockForAbstractClass();
+        $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
 
         $this->cookieSettings = new \Magento\Customer\ViewModel\CookieSettings(
             $this->scopeConfigMock

@@ -58,7 +58,7 @@ class WysiwygRestrictCommand extends Command
     /**
      * @inheritDoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $restrictArg = mb_strtolower((string)$input->getArgument('restrict'));
         $restrict = $restrictArg === 'y' ? '1' : '0';

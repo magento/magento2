@@ -2,8 +2,8 @@
 /**
  * Not paid invoice fixture for online payment method.
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 use Magento\Sales\Api\Data\OrderInterfaceFactory;

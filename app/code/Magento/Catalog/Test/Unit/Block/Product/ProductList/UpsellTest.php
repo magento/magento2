@@ -14,7 +14,7 @@ use PHPUnit\Framework\TestCase;
 
 class UpsellTest extends TestCase
 {
-    const STUB_EMPTY_ARRAY = [];
+    private const STUB_EMPTY_ARRAY = [];
     /**
      * @var UpsellBlock
      */
@@ -38,7 +38,6 @@ class UpsellTest extends TestCase
         $product->expects($this->once())->method('getIdentities')->willReturn($productTag);
 
         $itemsCollection = new \ReflectionProperty(UpsellBlock::class, '_items');
-        $itemsCollection->setAccessible(true);
         $itemsCollection->setValue($this->block, [$product]);
 
         $this->assertEquals(
@@ -54,7 +53,6 @@ class UpsellTest extends TestCase
             ->willReturn(self::STUB_EMPTY_ARRAY);
 
         $itemsCollection = new \ReflectionProperty(UpsellBlock::class, '_items');
-        $itemsCollection->setAccessible(true);
         $itemsCollection->setValue($this->block, [$product]);
 
         $this->assertEquals(
@@ -66,7 +64,6 @@ class UpsellTest extends TestCase
     public function testGetIdentitiesWhenGetItemsReturnEmptyArray()
     {
         $itemsCollection = new \ReflectionProperty(UpsellBlock::class, '_items');
-        $itemsCollection->setAccessible(true);
         $itemsCollection->setValue($this->block, self::STUB_EMPTY_ARRAY);
 
         $this->assertEquals(

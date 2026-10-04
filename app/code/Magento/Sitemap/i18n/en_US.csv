@@ -30,6 +30,8 @@ Weekly,Weekly
 Monthly,Monthly
 Yearly,Yearly
 Never,Never
+Standard,Standard
+"Batch (Memory Optimized)","Batch (Memory Optimized)"
 "File handler unreachable","File handler unreachable"
 "Please define a correct path.","Please define a correct path."
 "Please create the specified folder ""%1"" before saving the sitemap.","Please create the specified folder ""%1"" before saving the sitemap."
@@ -51,6 +53,8 @@ Priority,Priority
 "Store Url Options","Store Url Options"
 "Generation Settings","Generation Settings"
 Enabled,Enabled
+"Generation Method","Generation Method"
+"Standard method processes all data in memory. Batch method uses memory-optimized processing for large catalogs.","Standard method processes all data in memory. Batch method uses memory-optimized processing for large catalogs."
 "Error Email Recipient","Error Email Recipient"
 "Error Email Sender","Error Email Sender"
 "Error Email Template","Error Email Template"

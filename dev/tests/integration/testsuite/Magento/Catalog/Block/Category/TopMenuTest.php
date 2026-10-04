@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -19,6 +19,7 @@ use Magento\Framework\View\LayoutInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Theme\Block\Html\Topmenu;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -77,10 +78,10 @@ class TopMenuTest extends TestCase
     /**
      * Checks that menu item is not displayed if the category is disabled or include in menu is disabled.
      *
-     * @dataProvider invisibilityDataProvider
      * @param array $data
      * @return void
      */
+    #[DataProvider('invisibilityDataProvider')]
     public function testTopMenuItemInvisibility(array $data): void
     {
         $category = $this->categoryFactory->create();
@@ -118,13 +119,13 @@ class TopMenuTest extends TestCase
     /**
      * Check category visibility in the category tree in the menu
      *
-     * @dataProvider categoriesVisibleInTreeProvider
      * @magentoDataFixture Magento/Catalog/_files/category_tree.php
      * @magentoAppIsolation enabled
      * @param array $categories
      * @param array $expectedCategories
      * @return void
      */
+    #[DataProvider('categoriesVisibleInTreeProvider')]
     public function testCategoriesInTreeVisible(array $categories, array $expectedCategories): void
     {
         $this->updateCategories($categories);
@@ -188,13 +189,13 @@ class TopMenuTest extends TestCase
     /**
      * Check invisibility of a category in the category tree in the menu
      *
-     * @dataProvider categoriesInTreeInvisibleProvider
      * @magentoDataFixture Magento/Catalog/_files/category_tree.php
      * @magentoAppIsolation enabled
      * @param array $categories
      * @param array $expectedCategories
      * @return void
      */
+    #[DataProvider('categoriesInTreeInvisibleProvider')]
     public function testCategoriesInTreeInvisible(array $categories, array $expectedCategories): void
     {
         $this->updateCategories($categories);
@@ -275,13 +276,13 @@ class TopMenuTest extends TestCase
     /**
      * Check menu structure after moving category or changing position
      *
-     * @dataProvider menuStructureProvider
      * @magentoDataFixture Magento/Catalog/_files/categories_no_products_with_two_tree.php
      * @magentoAppIsolation enabled
      * @param array $moveCategory
      * @param array $expectedMenuTree
      * @return void
      */
+    #[DataProvider('menuStructureProvider')]
     public function testMenuStructure(array $moveCategory, array $expectedMenuTree): void
     {
         /** @var Category $category */
@@ -415,7 +416,6 @@ class TopMenuTest extends TestCase
     /**
      * Test the display of category in menu on different websites
      *
-     * @dataProvider multipleWebsitesCategoryDisplayProvider
      * @magentoDataFixture Magento/Catalog/_files/category.php
      * @magentoDataFixture Magento/Catalog/_files/category_in_second_root_category.php
      * @param string $storeCode
@@ -423,6 +423,7 @@ class TopMenuTest extends TestCase
      * @param string $notExpectedCategory
      * @return void
      */
+    #[DataProvider('multipleWebsitesCategoryDisplayProvider')]
     public function testMultipleWebsitesCategoryDisplay(
         string $storeCode,
         string $expectedCategory,

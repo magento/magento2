@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Model;
 
@@ -83,6 +83,10 @@ class FileUploader
      */
     public function validate()
     {
+        if (!\in_array($this->attributeMetadata->getFrontendInput(), ['file', 'image'])) {
+            return [__('Attribute input type is not valid for file uploading.')];
+        }
+
         $formElement = $this->elementFactory->create(
             $this->attributeMetadata,
             null,

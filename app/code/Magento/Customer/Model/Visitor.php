@@ -269,7 +269,7 @@ class Visitor extends AbstractModel
     public function isModuleIgnored($observer)
     {
         if (is_array($this->ignores) && $observer) {
-            $curModule = $this->requestSafety->getRouteName();
+            $curModule = $this->requestSafety->getRouteName() ?? '';
             if (isset($this->ignores[$curModule])) {
                 return true;
             }
@@ -292,7 +292,13 @@ class Visitor extends AbstractModel
         if (!$this->getCustomerId()) {
             $this->setDoCustomerLogin(true);
             $this->setCustomerId($customer->getId());
-            $this->setCreatedAt((new \DateTime())->format(DateTime::DATETIME_PHP_FORMAT));
+            $currentTime = (new \DateTime())->format(DateTime::DATETIME_PHP_FORMAT);
+            $this->setCreatedAt($currentTime);
+            if (!$this->getId()) {
+                $this->setLastVisitAt($currentTime);
+                $this->save();
+                $this->session->setVisitorData($this->getData());
+            }
         }
         return $this;
     }

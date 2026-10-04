@@ -1,14 +1,15 @@
 <?php
 
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Customer\Ui\Component\Listing\Column;
 
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -43,10 +44,10 @@ class ConfirmationTest extends TestCase
      * @param array $customerDataSource
      * @param array $expectedResult
      * @magentoConfigFixture base_website customer/create_account/confirm 1
-     * @dataProvider customersDataProvider
      *
      * @return void
      */
+    #[DataProvider('customersDataProvider')]
     public function testPrepareDataSource(array $customerDataSource, array $expectedResult): void
     {
         $result = $this->confirmation->prepareDataSource($customerDataSource);

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -26,6 +26,7 @@
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
         </before>
         <after>
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrdersGridFiltersAfter"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>

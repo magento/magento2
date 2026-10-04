@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Elasticsearch\Catalog\Controller\Adminhtml\Product\Attribute;
 
 use Magento\Catalog\Controller\Adminhtml\Product\Attribute\Save\AbstractSaveAttributeTest;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test cases related to creating attribute and search engine.
@@ -46,8 +47,8 @@ class SaveTest extends AbstractSaveAttributeTest
     /**
      * @param array $data
      * @param string $errorMessage
-     * @dataProvider createAttributeWithErrorDataProvider
      */
+    #[DataProvider('createAttributeWithErrorDataProvider')]
     public function testCreateAttributeWithError(array $data, string $errorMessage): void
     {
         $this->createAttributeUsingDataWithErrorAndAssert(

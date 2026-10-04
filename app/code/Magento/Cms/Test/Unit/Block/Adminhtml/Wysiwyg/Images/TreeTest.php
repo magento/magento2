@@ -18,6 +18,7 @@ use Magento\Framework\Filesystem\Directory\Read;
 use Magento\Framework\Registry;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -26,6 +27,7 @@ use PHPUnit\Framework\TestCase;
  */
 class TreeTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Tree
      */
@@ -106,10 +108,10 @@ class TreeTest extends TestCase
         $fileNames = ['fileName'];
         foreach ($fileNames as $filename) {
             /** @var DataObject|MockObject $objectMock */
-            $objectMock = $this->getMockBuilder(DataObject::class)
-                ->addMethods(['getFilename'])
-                ->disableOriginalConstructor()
-                ->getMock();
+            $objectMock = $this->createPartialMockWithReflection(
+                DataObject::class,
+                ['getFilename']
+            );
             $objectMock->method('getFilename')
                 ->willReturn('/storage/root/dir/' . $filename);
             $collection[] = $objectMock;

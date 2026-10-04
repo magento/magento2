@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Security\Model\UserExpirationFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\User\Model\ResourceModel\User as UserResource;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -36,10 +37,11 @@ class UserExpirationTest extends TestCase
      * Verify user expiration saved with correct date.
      *
      * @magentoDataFixture Magento/User/_files/dummy_user.php
-     * @dataProvider userExpirationSaveDataProvider
      * @magentoAppArea adminhtml
+     * @param string $locale
      * @return void
      */
+    #[DataProvider('userExpirationSaveDataProvider')]
     public function testUserExpirationSave(string $locale): void
     {
         $localeResolver = Bootstrap::getObjectManager()->get(ResolverInterface::class);

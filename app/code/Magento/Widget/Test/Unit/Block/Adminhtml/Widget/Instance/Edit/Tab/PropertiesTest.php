@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab\Properties;
 use Magento\Widget\Model\Widget\Instance;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -33,10 +34,12 @@ class PropertiesTest extends TestCase
 
     protected function setUp(): void
     {
+        $objectManager = new ObjectManager($this);
+        $objectManager->prepareObjectManager();
+
         $this->widget = $this->createMock(Instance::class);
         $this->registry = $this->createMock(Registry::class);
 
-        $objectManager = new ObjectManager($this);
         $this->propertiesBlock = $objectManager->getObject(
             Properties::class,
             [
@@ -48,9 +51,8 @@ class PropertiesTest extends TestCase
     /**
      * @param array $widgetConfig
      * @param boolean $isHidden
-     *
-     * @dataProvider isHiddenDataProvider
      */
+    #[DataProvider('isHiddenDataProvider')]
     public function testIsHidden($widgetConfig, $isHidden)
     {
         $this->widget->expects($this->atLeastOnce())->method('getWidgetConfigAsArray')->willReturn($widgetConfig);

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,7 +16,7 @@ class OperationPoolTest extends TestCase
 {
     public function testGetOperationUsesDefaultValueForEntityThatDoesNotProvideCustomMapping()
     {
-        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $operationPool = new OperationPool(
             $objectManagerMock,
             []
@@ -31,7 +31,7 @@ class OperationPoolTest extends TestCase
     public function testGetOperationUsesOverriddenDefaultValueForEntityThatDoesNotProvideCustomMapping()
     {
         $customReadOperation = 'CustomReadOperation';
-        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $operationPool = new OperationPool(
             $objectManagerMock,
             [

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2013 Adobe
+ * Copyright 2011 Adobe
  * All Rights Reserved.
  */
 namespace Magento\Backend\Block;
@@ -28,6 +28,7 @@ class Cache extends \Magento\Backend\Block\Widget\Grid\Container
                 'flush_magento',
                 [
                     'label' => __('Flush Magento Cache'),
+                    'title' => __('Removes only Magento-generated cache. Safe to use when refreshing outdated data.'),
                     'onclick' => 'setLocation(\'' . $this->getFlushSystemUrl() . '\')',
                     'class' => 'primary flush-cache-magento'
                 ]
@@ -35,11 +36,19 @@ class Cache extends \Magento\Backend\Block\Widget\Grid\Container
         }
 
         if ($this->_authorization->isAllowed('Magento_Backend::flush_cache_storage')) {
-            $message = __('The cache storage may contain additional data. Are you sure that you want to flush it?');
+            $message = $this->escapeJs(
+                $this->escapeHtml(
+                    __('The cache storage may contain additional data. Are you sure that you want to flush it?')
+                )
+            );
             $this->buttonList->add(
                 'flush_system',
                 [
                     'label' => __('Flush Cache Storage'),
+                    'title' => __(
+                        'Clears all cache data, including shared or external cache. ' .
+                        'Use if standard cache refresh does not resolve issues.'
+                    ),
                     'onclick' => 'confirmSetLocation(\'' . $message . '\', \'' . $this->getFlushStorageUrl() . '\')',
                     'class' => 'flush-cache-storage'
                 ]

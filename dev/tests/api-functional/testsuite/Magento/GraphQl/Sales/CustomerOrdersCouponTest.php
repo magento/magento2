@@ -155,6 +155,15 @@ class CustomerOrdersCouponTest extends GraphQlAbstract
         $this->assertArrayHasKey('code', $discount['coupon']);
         $this->assertEquals(self::COUPON_CODE, $discount['coupon']['code']);
 
+        // Validate applied_coupons at order level (bug fix validation)
+        $this->assertArrayHasKey('applied_coupons', $order);
+        $this->assertIsArray($order['applied_coupons']);
+        $this->assertNotEmpty($order['applied_coupons']);
+        
+        // Validate applied_coupons is an array of objects (not a single object)
+        $this->assertArrayHasKey('code', $order['applied_coupons'][0]);
+        $this->assertEquals(self::COUPON_CODE, $order['applied_coupons'][0]['code']);
+
         // Validate order status and other basic properties
         $this->assertArrayHasKey('order_number', $order);
         $this->assertArrayHasKey('status', $order);
@@ -233,6 +242,11 @@ class CustomerOrdersCouponTest extends GraphQlAbstract
                 $this->assertNull($discount['coupon']);
             }
         }
+        
+        // Validate applied_coupons is empty for orders without coupons
+        $this->assertArrayHasKey('applied_coupons', $order);
+        $this->assertIsArray($order['applied_coupons']);
+        $this->assertEmpty($order['applied_coupons']);
     }
 
     /**
@@ -252,6 +266,9 @@ query {
                 order_number
                 status
                 order_date
+                applied_coupons {
+                    code
+                }
                 items {
                     product_sku
                     product_name

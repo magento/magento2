@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 module.exports = function (grunt) {
@@ -13,6 +13,20 @@ module.exports = function (grunt) {
             var config = grunt.config.get(task);
 
             config[target].src = data;
+            // Add parser options to support ES6+ features (spread operators, etc.)
+            if (task === 'eslint' && config[target].options) {
+                // Merge overrideConfig if it exists, otherwise create it
+                if (!config[target].options.overrideConfig) {
+                    config[target].options.overrideConfig = [];
+                }
+                // Add language options to support ES2021 features
+                config[target].options.overrideConfig.push({
+                    languageOptions: {
+                        ecmaVersion: 2021,
+                        sourceType: 'script'
+                    }
+                });
+            }
             grunt.config.set(task, config);
         };
 

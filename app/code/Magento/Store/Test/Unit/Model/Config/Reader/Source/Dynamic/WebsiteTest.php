@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -58,14 +58,14 @@ class WebsiteTest extends TestCase
         $this->collectionFactory = $this->getMockBuilder(ScopedFactory::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['create'])
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->converter = $this->getMockBuilder(Converter::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->websiteFactory = $this->getMockBuilder(WebsiteFactory::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['create'])
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->website = $this->getMockBuilder(\Magento\Store\Model\Website::class)
             ->disableOriginalConstructor()
             ->getMock();

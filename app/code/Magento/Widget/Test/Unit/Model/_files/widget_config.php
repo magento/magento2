@@ -6,8 +6,8 @@ use Magento\Config\Model\Config\Source\Yesno;
 use Magento\Sales\Block\Widget\Guest\Form;
 
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 return [
     'sales_widget_guestform' => [

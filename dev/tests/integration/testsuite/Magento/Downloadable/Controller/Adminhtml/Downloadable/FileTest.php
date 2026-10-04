@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Downloadable\Controller\Adminhtml\Downloadable;
 
 use Magento\Framework\Serialize\Serializer\Json;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Magento\Downloadable\Controller\Adminhtml\Downloadable\File
@@ -71,8 +72,8 @@ class FileTest extends \Magento\TestFramework\TestCase\AbstractBackendController
      * Checks a case when php files are not allowed to upload.
      *
      * @param string $fileName
-     * @dataProvider extensionsDataProvider
      */
+    #[DataProvider('extensionsDataProvider')]
     public function testUploadProhibitedExtensions($fileName)
     {
         // phpcs:ignore Magento2.Functions.DiscouragedFunction
@@ -117,9 +118,9 @@ class FileTest extends \Magento\TestFramework\TestCase\AbstractBackendController
     }
 
     /**
-     * @dataProvider uploadWrongUploadTypeDataProvider
      * @return void
      */
+    #[DataProvider('uploadWrongUploadTypeDataProvider')]
     public function testUploadWrongUploadType($postData): void
     {
         $this->getRequest()->setPostValue($postData);

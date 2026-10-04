@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Framework\GraphQl\Schema\SchemaGenerator;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\GraphQl\Model\Query\Logger\LoggerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -58,11 +59,11 @@ class LogDataTest extends TestCase
      * @param string $query
      * @param array $headers
      * @param array $expectedResult
-     * @dataProvider getQueryInformationDataProvider
      * @return void
      *
      * @magentoAppIsolation enabled
      */
+    #[DataProvider('getQueryInformationDataProvider')]
     public function testGetQueryInformation(string $query, array $headers, array $expectedResult): void
     {
         $this->request->setPathInfo('/graphql');

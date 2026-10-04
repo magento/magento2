@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,9 +12,12 @@ use Magento\Framework\DataObject;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class StoreTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Store
      */
@@ -27,18 +30,17 @@ class StoreTest extends TestCase
 
     protected function setUp(): void
     {
-        $storeManager = $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
-            ->getMock();
+        $storeManager = $this->storeManager = $this->createMock(StoreManagerInterface::class);
         /** @var StoreManagerInterface $storeManager */
         $this->testable = new Store($storeManager);
     }
 
     public function testBeforeSaveWithId()
     {
-        $object = $this->getMockBuilder(DataObject::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getId'])
-            ->getMock();
+        $object = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['getId']
+        );
 
         $object->expects($this->once())->method('getId')->willReturn(1);
         /** @var DataObject $object */
@@ -52,15 +54,22 @@ class StoreTest extends TestCase
     {
         $storeId = 1;
         $storeName = 'store';
-        $object = $this->getMockBuilder(DataObject::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getId', 'hasStoreId', 'setStoreId', 'getStoreId'])
-            ->onlyMethods(['hasData', 'setData'])
-            ->getMock();
+        $object = $this->createPartialMockWithReflection(
+            DataObject::class,
+            [
+                'getId',
+                'hasStoreId',
+                'setStoreId',
+                'getStoreId',
+                'hasData',
+                'setData'
+            ]
+        );
 
-        $store = $this->getMockBuilder(
-            DataObject::class
-        )->addMethods(['getId', 'getName'])->getMock();
+        $store = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['getId', 'getName']
+        );
         $store->expects($this->once())->method('getId')->willReturn($storeId);
         $store->expects($this->once())->method('getName')->willReturn($storeName);
 

@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Css\PreProcessor\File\Collector;
 
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoComponentsDir Magento/Framework/Css/PreProcessor/_files/code/Magento
@@ -79,9 +80,9 @@ class AggregatedTest extends \PHPUnit\Framework\TestCase
      * @param string $path
      * @param string $themeName
      * @param string[] $expectedFiles
-     * @dataProvider getFilesDataProvider
      * @magentoComponentsDir Magento/Framework/Css/PreProcessor/_files/design
      */
+    #[DataProvider('getFilesDataProvider')]
     public function testGetFiles($path, $themeName, array $expectedFiles)
     {
         /** @var \Magento\Framework\View\Design\Theme\FlyweightFactory $themeFactory */

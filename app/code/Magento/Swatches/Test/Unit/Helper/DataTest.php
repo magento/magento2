@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -29,6 +29,7 @@ use Magento\Swatches\Model\ResourceModel\Swatch\Collection;
 use Magento\Swatches\Model\SwatchAttributesProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -139,7 +140,7 @@ class DataTest extends TestCase
             ['create']
         );
 
-        $this->productRepoMock = $this->getMockForAbstractClass(ProductRepositoryInterface::class);
+        $this->productRepoMock = $this->createMock(ProductRepositoryInterface::class);
 
         $this->storeManagerMock = $this->createMock(StoreManager::class);
         $this->swatchCollectionFactoryMock = $this->createPartialMock(
@@ -147,14 +148,11 @@ class DataTest extends TestCase
             ['create']
         );
 
-        $this->attributeMock = $this->getMockBuilder(Attribute::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getData', 'setData', 'getSource', 'hasData'])
-            ->addMethods(['setStoreId'])
-            ->getMock();
-        $this->metaDataPoolMock = $this->getMockBuilder(MetadataPool::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->attributeMock = $this->createPartialMock(
+            Attribute::class,
+            ['getData', 'setData', 'getSource', 'hasData']
+        );
+        $this->metaDataPoolMock = $this->createMock(MetadataPool::class);
 
         $serializer = $this->createPartialMock(
             Json::class,
@@ -169,13 +167,8 @@ class DataTest extends TestCase
                 return json_decode($parameter, true);
             });
 
-        $this->swatchAttributesProvider = $this->getMockBuilder(SwatchAttributesProvider::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->imageUrlBuilderMock = $this->getMockBuilder(UrlBuilder::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getUrl'])
-            ->getMock();
+        $this->swatchAttributesProvider = $this->createMock(SwatchAttributesProvider::class);
+        $this->imageUrlBuilderMock = $this->createPartialMock(UrlBuilder::class, ['getUrl']);
 
         $this->swatchHelperObject = $this->objectManager->getObject(
             Data::class,
@@ -227,8 +220,8 @@ class DataTest extends TestCase
 
     /**
      * @return void
-     * @dataProvider dataForAssembleEavAttribute
      */
+    #[DataProvider('dataForAssembleEavAttribute')]
     public function testAssembleAdditionalDataEavAttribute($dataFromDb, $attributeData): void
     {
         $withArgs = $willReturnArgs = [];
@@ -284,8 +277,8 @@ class DataTest extends TestCase
 
     /**
      * @return void
-     * @dataProvider dataForVariationWithSwatchImage
      */
+    #[DataProvider('dataForVariationWithSwatchImage')]
     public function testLoadFirstVariationWithSwatchImage($imageTypes, $expected, $requiredAttributes): void
     {
         $this->getSwatchAttributes();
@@ -333,7 +326,7 @@ class DataTest extends TestCase
      */
     public function testLoadVariationByFallback(): void
     {
-        $metadataMock = $this->getMockForAbstractClass(EntityMetadataInterface::class);
+        $metadataMock = $this->createMock(EntityMetadataInterface::class);
         $this->metaDataPoolMock->expects($this->once())->method('getMetadata')->willReturn($metadataMock);
         $metadataMock->expects($this->once())->method('getLinkField')->willReturn('id');
 
@@ -351,8 +344,8 @@ class DataTest extends TestCase
 
     /**
      * @return void
-     * @dataProvider dataForVariationWithImage
      */
+    #[DataProvider('dataForVariationWithImage')]
     public function testLoadFirstVariationWithImage($imageTypes, $expected, $requiredAttributes): void
     {
         $this->getSwatchAttributes();
@@ -415,17 +408,17 @@ class DataTest extends TestCase
 
     /**
      * @return void
-     * @dataProvider dataForMediaGallery
      */
+    #[DataProvider('dataForMediaGallery')]
     public function testGetProductMediaGallery($mediaGallery, $image): void
     {
         $mediaGalleryEntries = [];
         $id = 0;
         $mediaUrls = [];
         foreach ($mediaGallery as $mediaType => $mediaFile) {
-            $mediaGalleryEntryMock = $this->getMockBuilder(
+            $mediaGalleryEntryMock = $this->createMock(
                 ProductAttributeMediaGalleryEntryInterface::class
-            )->getMock();
+            );
             $mediaGalleryEntryMock->expects($this->atLeastOnce())
                 ->method('isDisabled')
                 ->willReturn(false);
@@ -523,17 +516,14 @@ class DataTest extends TestCase
 
         $simpleProducts = [];
         for ($i = 0; $i < 2; $i++) {
-            $simpleProduct = $this->getMockBuilder(Product::class)
-                ->disableOriginalConstructor()
-                ->onlyMethods(['hasData', 'getMediaGalleryEntries'])
-                ->getMock();
+            $simpleProduct = $this->createPartialMock(Product::class, ['hasData', 'getMediaGalleryEntries']);
             $simpleProduct->setData($attributes);
 
             $mediaGalleryEntries = [];
             foreach (array_keys($imageTypes) as $mediaType) {
-                $mediaGalleryEntryMock = $this->getMockBuilder(
+                $mediaGalleryEntryMock = $this->createMock(
                     ProductAttributeMediaGalleryEntryInterface::class
-                )->getMock();
+                );
                 $mediaGalleryEntryMock->expects($this->any())
                     ->method('isDisabled')
                     ->willReturn(false);
@@ -649,8 +639,8 @@ class DataTest extends TestCase
 
     /**
      * @return void
-     * @dataProvider dataForGettingSwatchAsArray
      */
+    #[DataProvider('dataForGettingSwatchAsArray')]
     public function testGetSwatchAttributesAsArray($optionsArray, $attributeData, $expected): void
     {
         $this->swatchAttributesProvider
@@ -660,7 +650,6 @@ class DataTest extends TestCase
 
         $storeId = 1;
 
-        $this->attributeMock->method('setStoreId')->with($storeId)->willReturnSelf();
         $storeMock = $this->createMock(Store::class);
         $storeMock->method('getId')->willReturn($storeId);
         $this->storeManagerMock->method('getStore')->willReturn($storeMock);

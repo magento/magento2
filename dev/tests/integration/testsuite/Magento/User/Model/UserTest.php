@@ -18,6 +18,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Exception\State\UserLockedException;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\Stdlib\DateTime;
@@ -26,6 +27,7 @@ use Magento\TestFramework\Entity;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Mail\Template\TransportBuilderMock;
 use Magento\User\Model\User as UserModel;
@@ -444,10 +446,10 @@ class UserTest extends TestCase
     }
 
     /**
-     * @dataProvider beforeSavePasswordInsecureDataProvider
      * @magentoDbIsolation enabled
      * @param string $password
      */
+    #[DataProvider('beforeSavePasswordInsecureDataProvider')]
     public function testBeforeSavePasswordInsecure($password)
     {
         $this->expectException(LocalizedException::class);
@@ -493,6 +495,61 @@ class UserTest extends TestCase
             '1234abc'
         );
         $this->_model->save();
+    }
+
+    /**
+     * Test that password validation works with various custom minimum lengths
+     *
+     * @param int $minLength
+     * @param string $password
+     * @param bool $shouldPass
+     * @throws \Exception
+     */
+    #[DataProvider('customPasswordLengthDataProvider')]
+    #[DbIsolation(true)]
+    public function testPasswordValidationWithVariousCustomLengths(int $minLength, string $password, bool $shouldPass)
+    {
+        /** @var MutableScopeConfigInterface $config */
+        $config = $this->objectManager->get(MutableScopeConfigInterface::class);
+        $config->setValue('admin/security/minimum_password_length', $minLength);
+
+        $this->_model->setUsername('testuser' . uniqid())
+            ->setFirstname('Test')
+            ->setLastname('User')
+            ->setEmail('testuser' . uniqid() . '@example.com')
+            ->setPassword($password)
+            ->setPasswordConfirmation($password);
+
+        if (!$shouldPass) {
+            $this->expectException(LocalizedException::class);
+            $this->expectExceptionMessage("Your password must be at least {$minLength} characters.");
+        }
+
+        $this->_model->save();
+
+        if ($shouldPass) {
+            $this->assertNotEmpty(
+                $this->_model->getId(),
+                "User should be saved with {$minLength}-character minimum when password is valid"
+            );
+        }
+    }
+
+    /**
+     * Data provider for testing various custom password lengths
+     *
+     * @return array
+     */
+    public static function customPasswordLengthDataProvider(): array
+    {
+        return [
+            'Min 8, password 7 chars - should fail' => [8, 'abc123d', false],
+            'Min 8, password 8 chars - should pass' => [8, 'abc123de', true],
+            'Min 10, password 9 chars - should fail' => [10, 'abc123def', false],
+            'Min 10, password 10 chars - should pass' => [10, 'abc123defg', true],
+            'Min 15, password 14 chars - should fail' => [15, 'abc123defghijk', false],
+            'Min 15, password 15 chars - should pass' => [15, 'abc123defghijkl', true],
+        ];
     }
 
     /**

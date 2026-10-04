@@ -27,6 +27,7 @@
         </before>
         <after>
             <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <magentoCLI command="config:set payment/payflow_advanced/active 0" stepKey="disablePaymentsAdvanced"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>

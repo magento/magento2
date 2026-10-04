@@ -31,6 +31,10 @@ abstract class Create extends \Magento\Backend\App\Action
      */
     private const CONTROLLER_NAME_ORDER_EDIT = 'order_edit';
     /**
+     * Controller name for loadblock actions
+     */
+    private const CONTROLLER_NAME_LOADBLOCK = 'loadblock';
+    /**
      * @var \Magento\Framework\Escaper
      */
     protected $escaper;
@@ -164,6 +168,7 @@ abstract class Create extends \Magento\Backend\App\Action
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
+    // phpcs:disable Generic.Metrics.NestingLevel
     protected function _processActionData($action = null)
     {
         $eventData = [
@@ -249,7 +254,62 @@ abstract class Create extends \Magento\Backend\App\Action
         ) {
             $items = $this->getRequest()->getPost('item');
             $items = $this->_processFiles($items);
-            $this->_getOrderCreateModel()->addProducts($items);
+            /**
+             * Filter out products that are already in the quote with required options
+             * when the current bulk payload does not contain any options for them.
+             * This avoids accidental re-adding of previously configured products with qty=1.
+             */
+            if (is_array($items)) {
+                $filtered = [];
+                foreach ($items as $productId => $config) {
+                    $config = is_array($config) ? $config : [];
+                    $hasOptionsInConfig = false;
+                    if (isset($config['options']) && is_array($config['options'])) {
+                        $opts = $config['options'];
+                        unset($opts['files_prefix']);
+                        $opts = array_filter(
+                            $opts,
+                            function ($v) {
+                                if (is_array($v)) {
+                                    return !empty($v);
+                                }
+
+                                return $v !== '' && $v !== null;
+                            }
+                        );
+                        $hasOptionsInConfig = !empty($opts);
+                    }
+                    if ($this->_getQuote()->hasProductId((int)$productId) && !$hasOptionsInConfig) {
+                        try {
+                            /** @var \Magento\Catalog\Model\Product $product */
+                            $product = $this
+                                ->_objectManager
+                                ->create(\Magento\Catalog\Model\Product::class)
+                                ->load($productId);
+                            if ($product->getId() && $product->getHasOptions()) {
+                                $hasRequired = false;
+                                foreach ($product->getOptions() as $option) {
+                                    if ($option->getIsRequire()) {
+                                        $hasRequired = true;
+                                        break;
+                                    }
+                                }
+                                if ($hasRequired) {
+                                    continue;
+                                }
+                            }
+                        //phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
+                        } catch (\Throwable $e) {
+                            // Intentionally swallow any exception during pre-check to allow normal add flow.
+                        }
+                    }
+                    $filtered[$productId] = $config;
+                }
+                $items = $filtered;
+            }
+            if (!empty($items)) {
+                $this->_getOrderCreateModel()->addProducts($items);
+            }
         }
 
         /**
@@ -382,13 +442,8 @@ abstract class Create extends \Magento\Backend\App\Action
      */
     protected function _getAclResource()
     {
-        $action = strtolower($this->getRequest()->getActionName() ?? '');
-        if (in_array($action, ['index', 'save', 'cancel']) && $this->_getSession()->getReordered()) {
-            $action = 'reorder';
-        }
-        if (strtolower($this->getRequest()->getControllerName() ?? '') === self::CONTROLLER_NAME_ORDER_EDIT) {
-            $action = 'actions_edit';
-        }
+        $action = $this->getAclResourceAction();
+
         switch ($action) {
             case 'index':
             case 'save':
@@ -403,10 +458,34 @@ abstract class Create extends \Magento\Backend\App\Action
             case 'actions_edit':
                 $aclResource = 'Magento_Sales::actions_edit';
                 break;
+            case 'actions_sidebar':
+                $aclResource = 'Magento_Customer::customer';
+                break;
             default:
                 $aclResource = 'Magento_Sales::actions';
                 break;
         }
         return $aclResource;
+    }
+
+    /**
+     * Get acl resource action
+     *
+     * @return string
+     */
+    private function getAclResourceAction(): string
+    {
+        $action = strtolower($this->getRequest()->getActionName() ?? '');
+
+        if (in_array($action, ['index', 'save', 'cancel']) && $this->_getSession()->getReordered()) {
+            $action = 'reorder';
+        }
+        if (strtolower($this->getRequest()->getControllerName() ?? '') === self::CONTROLLER_NAME_ORDER_EDIT) {
+            $action = 'actions_edit';
+        }
+        if ($action == self::CONTROLLER_NAME_LOADBLOCK && $this->getRequest()->getPost('sidebar')) {
+            $action = 'actions_sidebar';
+        }
+        return $action;
     }
 }

@@ -56,12 +56,12 @@ class IndexTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->requestMock = $this->createMock(Http::class);
         $this->responseMock = $this->createMock(\Magento\Framework\App\Response\Http::class);
         $this->ipnFactoryMock = $this->createMock(IpnFactory::class);
         $this->orderFactoryMock = $this->createMock(OrderFactory::class);
-        $this->eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
 
         $objectManagerHelper = new ObjectManager($this);
         $this->model = $objectManagerHelper->getObject(
@@ -105,7 +105,7 @@ class IndexTest extends TestCase
             'other' => 'other data'
         ];
         $this->requestMock->expects($this->once())->method('getPostValue')->willReturn($data);
-        $ipnMock = $this->getMockForAbstractClass(IpnInterface::class);
+        $ipnMock = $this->createMock(IpnInterface::class);
         $this->ipnFactoryMock->expects($this->once())
             ->method('create')
             ->with(['data' => $data])

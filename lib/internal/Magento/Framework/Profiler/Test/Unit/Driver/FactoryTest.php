@@ -1,7 +1,8 @@
 <?php declare(strict_types=1);
 /**
- *  Copyright © Magento, Inc. All rights reserved.
- *  See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ *
  *
  * Test class for \Magento\Framework\Profiler\Driver\Factory
  */
@@ -10,6 +11,7 @@ namespace Magento\Framework\Profiler\Test\Unit\Driver;
 use Magento\Framework\Profiler\Driver\Factory;
 use Magento\Framework\Profiler\DriverInterface;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class FactoryTest extends TestCase
 {
@@ -53,11 +55,10 @@ class FactoryTest extends TestCase
         $this->assertAttributeNotEmpty('_defaultDriverType', $factory);
     }
 
-    /**
-     * @dataProvider createDataProvider
-     * @param array $config
+    /**     * @param array $config
      * @param string $expectedClass
      */
+    #[DataProvider('createDataProvider')]
     public function testCreate($config, $expectedClass)
     {
         if (isset($config['type']) && is_callable($config['type'])) {

@@ -10,8 +10,6 @@ namespace Magento\Backend\Block\Dashboard\Tab;
  * Adminhtml dashboard orders diagram
  * @deprecated dashboard graphs were migrated to dynamic chart.js solution
  * @see dashboard.chart.orders in adminhtml_dashboard_index.xml
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Orders extends \Magento\Backend\Block\Dashboard\Graph
 {

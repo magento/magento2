@@ -10,6 +10,8 @@ namespace Magento\Cms\Test\Unit\Model;
 use Magento\Cms\Model\Block;
 use Magento\Cms\Model\BlockFactory;
 use Magento\Cms\Model\GetBlockByIdentifier;
+use Magento\Cms\Model\ResourceModel\Block as CmsModelResourceBlock;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -19,6 +21,7 @@ use PHPUnit\Framework\TestCase;
 
 class GetBlockByIdentifierTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var GetBlockByIdentifier
      */
@@ -35,7 +38,7 @@ class GetBlockByIdentifierTest extends TestCase
     private $blockFactory;
 
     /**
-     * @var MockObject|\Magento\Cms\Model\ResourceModel\Block
+     * @var MockObject|CmsModelResourceBlock
      */
     private $blockResource;
 
@@ -46,15 +49,14 @@ class GetBlockByIdentifierTest extends TestCase
             ->onlyMethods(['create'])
             ->getMock();
 
-        $this->blockResource = $this->getMockBuilder(\Magento\Cms\Model\ResourceModel\Block::class)
+        $this->blockResource = $this->getMockBuilder(CmsModelResourceBlock::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->block = $this->getMockBuilder(Block::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setStoreId'])
-            ->onlyMethods(['getId'])
-            ->getMock();
+        $this->block = $this->createPartialMockWithReflection(
+            Block::class,
+            ['setStoreId', 'getId']
+        );
 
         $this->getBlockByIdentifierCommand = new GetBlockByIdentifier($this->blockFactory, $this->blockResource);
     }

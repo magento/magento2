@@ -8,21 +8,24 @@ declare(strict_types=1);
 namespace Magento\SalesGraphQl\Test\Unit\Model\Resolver;
 
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\Lock\LockManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\GraphQl\Model\Query\Context;
 use Magento\GraphQl\Model\Query\ContextExtensionInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\OrderFactory;
 use Magento\Sales\Model\Reorder\Reorder;
+use Magento\SalesGraphQl\Model\Resolver\Reorder as Subject;
 use Magento\Store\Api\Data\StoreInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\SalesGraphQl\Model\Resolver\Reorder as Subject;
-use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 
 class ReorderTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Subject|MockObject
      */
@@ -118,10 +121,10 @@ class ReorderTest extends TestCase
         $contextCustomerId = 1;
         $orderCustomerId = 1;
 
-        $this->extensionAttributesMock = $this->getMockBuilder(ContextExtensionInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getIsCustomer', 'getStore'])
-            ->getMockForAbstractClass();
+        $this->extensionAttributesMock = $this->createPartialMockWithReflection(
+            ContextExtensionInterface::class,
+            ['getIsCustomer', 'getStore']
+        );
         $this->extensionAttributesMock->expects($this->once())
             ->method('getIsCustomer')
             ->willReturn(true);

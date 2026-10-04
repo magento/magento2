@@ -1,10 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Api;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Eav\Api\Data\AttributeOptionInterface;
 use Magento\Eav\Api\Data\AttributeOptionLabelInterface;
 use Magento\Framework\Webapi\Rest\Request;
@@ -15,9 +16,9 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
  */
 class ProductAttributeOptionManagementInterfaceTest extends WebapiAbstract
 {
-    const SERVICE_NAME = 'catalogProductAttributeOptionManagementV1';
-    const SERVICE_VERSION = 'V1';
-    const RESOURCE_PATH = '/V1/products/attributes';
+    public const SERVICE_NAME = 'catalogProductAttributeOptionManagementV1';
+    public const SERVICE_VERSION = 'V1';
+    public const RESOURCE_PATH = '/V1/products/attributes';
 
     /**
      * Test to get attribute options
@@ -52,8 +53,8 @@ class ProductAttributeOptionManagementInterfaceTest extends WebapiAbstract
      *
      * @param array $optionData
      * @magentoApiDataFixture Magento/Catalog/Model/Product/Attribute/_files/select_attribute.php
-     * @dataProvider addDataProvider
      */
+    #[DataProvider('addDataProvider')]
     public function testAdd(array $optionData)
     {
         $testAttributeCode = 'select_attribute';
@@ -114,6 +115,62 @@ class ProductAttributeOptionManagementInterfaceTest extends WebapiAbstract
                 array_merge($optionPayload, [AttributeOptionInterface::VALUE => '123'])
             ],
         ];
+    }
+
+    /**
+     * A new option whose label equals an existing option's id (value) must be added successfully.
+     *
+     * Regression for ACP2E-5107: the REST API must not reject the label as a duplicate just because
+     * it coincides with another option's numeric id - matching the Admin UI behaviour.
+     *
+     * @magentoApiDataFixture Magento/Catalog/Model/Product/Attribute/_files/select_attribute.php
+     */
+    public function testAddOptionWithLabelMatchingExistingOptionId()
+    {
+        $testAttributeCode = 'select_attribute';
+
+        // Capture the id (value) of the pre-existing fixture option.
+        $existingOptions = $this->getAttributeOptions($testAttributeCode);
+        $existingOptionId = null;
+        foreach ($existingOptions as $option) {
+            if (!empty($option['value'])) {
+                $existingOptionId = $option['value'];
+                break;
+            }
+        }
+        $this->assertNotNull($existingOptionId, 'Fixture attribute is expected to have at least one option.');
+
+        // Create a new option whose label is the existing option's id.
+        $optionData = [
+            AttributeOptionInterface::LABEL => (string)$existingOptionId,
+            AttributeOptionInterface::SORT_ORDER => 100,
+            AttributeOptionInterface::IS_DEFAULT => false,
+            AttributeOptionInterface::STORE_LABELS => [
+                [
+                    AttributeOptionLabelInterface::LABEL => (string)$existingOptionId,
+                    AttributeOptionLabelInterface::STORE_ID => 0,
+                ],
+            ],
+            AttributeOptionInterface::VALUE => '',
+        ];
+
+        $response = $this->webApiCallAttributeOptions(
+            $testAttributeCode,
+            Request::HTTP_METHOD_POST,
+            'add',
+            [
+                'attributeCode' => $testAttributeCode,
+                'option' => $optionData,
+            ]
+        );
+
+        $this->assertTrue(is_numeric($response));
+        $this->assertNotEquals($existingOptionId, $response, 'A distinct option id must be assigned.');
+
+        // The new option must exist with the requested label alongside the original option.
+        $newOption = $this->getAttributeOption($testAttributeCode, (string)$existingOptionId);
+        $this->assertNotNull($newOption);
+        $this->assertEquals($response, $newOption['value']);
     }
 
     /**

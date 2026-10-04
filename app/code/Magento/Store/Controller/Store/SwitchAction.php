@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,17 +9,17 @@ namespace Magento\Store\Controller\Store;
 
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context as ActionContext;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\Http\Context as HttpContext;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Api\StoreCookieManagerInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
+use Magento\Store\Controller\Store\SwitchAction\CookieManager;
 use Magento\Store\Model\StoreIsInactiveException;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\StoreSwitcher;
 use Magento\Store\Model\StoreSwitcherInterface;
-use Magento\Framework\App\Action\HttpPostActionInterface;
-use Magento\Framework\App\Action\HttpGetActionInterface;
-use Magento\Store\Controller\Store\SwitchAction\CookieManager;
 
 /**
  * Handles store switching url and makes redirect.
@@ -37,6 +36,7 @@ class SwitchAction extends Action implements HttpGetActionInterface, HttpPostAct
     /**
      * @var HttpContext
      * @deprecated 100.2.5
+     * @see Nothing
      */
     protected $httpContext;
 
@@ -48,6 +48,7 @@ class SwitchAction extends Action implements HttpGetActionInterface, HttpPostAct
     /**
      * @var StoreManagerInterface
      * @deprecated 100.2.5
+     * @see Nothing
      */
     protected $storeManager;
 
@@ -115,6 +116,9 @@ class SwitchAction extends Action implements HttpGetActionInterface, HttpPostAct
         try {
             $fromStore = $this->storeRepository->get($fromStoreCode);
             $targetStore = $this->storeRepository->getActiveStoreByCode($targetStoreCode);
+
+            $redirectUrl = $this->storeSwitcher->switch($fromStore, $targetStore, $requestedUrlToRedirect);
+            $this->cookieManager->setCookieForStore($targetStore);
         } catch (StoreIsInactiveException $e) {
             $error = __('Requested store is inactive');
         } catch (NoSuchEntityException $e) {
@@ -122,9 +126,7 @@ class SwitchAction extends Action implements HttpGetActionInterface, HttpPostAct
         }
         if ($error !== null) {
             $this->messageManager->addErrorMessage($error);
-        } else {
-            $redirectUrl = $this->storeSwitcher->switch($fromStore, $targetStore, $requestedUrlToRedirect);
-            $this->cookieManager->setCookieForStore($targetStore);
+            $this->cookieManager->setCookieForStore($this->storeManager->getStore());
         }
 
         $this->getResponse()->setRedirect($redirectUrl);

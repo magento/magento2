@@ -37,7 +37,7 @@ class ConnectorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $this->signUpCommandMock = $this->createMock(SignUpCommand::class);
         $this->commands = ['signUp' => SignUpCommand::class];
         $this->connector = new Connector($this->commands, $this->objectManagerMock);

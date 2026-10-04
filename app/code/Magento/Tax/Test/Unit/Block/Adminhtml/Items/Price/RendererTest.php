@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Tax\Test\Unit\Block\Adminhtml\Items\Price;
 
+use Magento\Framework\App\ObjectManager as AppObjectManager;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Block\Adminhtml\Items\Column\DefaultColumn;
 use Magento\Sales\Model\Order\Item;
@@ -33,6 +35,10 @@ class RendererTest extends TestCase
 
     protected function setUp(): void
     {
+        // Mock ObjectManager to prevent initialization errors
+        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        AppObjectManager::setInstance($objectManagerMock);
+
         $objectManager = new ObjectManager($this);
 
         $this->itemPriceRenderer = $this->getMockBuilder(\Magento\Tax\Block\Item\Price\Renderer::class)
@@ -63,7 +69,7 @@ class RendererTest extends TestCase
         );
     }
 
-    public function testDisplayPriceInclTax()
+    public function testDisplayPriceInclTax(): void
     {
         $flag = false;
         $this->itemPriceRenderer->expects($this->once())
@@ -73,7 +79,7 @@ class RendererTest extends TestCase
         $this->assertEquals($flag, $this->renderer->displayPriceInclTax());
     }
 
-    public function testDisplayPriceExclTax()
+    public function testDisplayPriceExclTax(): void
     {
         $flag = true;
         $this->itemPriceRenderer->expects($this->once())
@@ -83,7 +89,7 @@ class RendererTest extends TestCase
         $this->assertEquals($flag, $this->renderer->displayPriceExclTax());
     }
 
-    public function testDisplayBothPrices()
+    public function testDisplayBothPrices(): void
     {
         $flag = true;
         $this->itemPriceRenderer->expects($this->once())
@@ -93,7 +99,7 @@ class RendererTest extends TestCase
         $this->assertEquals($flag, $this->renderer->displayBothPrices());
     }
 
-    public function testDisplayPrices()
+    public function testDisplayPrices(): void
     {
         $basePrice = 3;
         $price = 4;
@@ -107,7 +113,7 @@ class RendererTest extends TestCase
         $this->assertEquals($display, $this->renderer->displayPrices($basePrice, $price));
     }
 
-    public function testFormatPrice()
+    public function testFormatPrice(): void
     {
         $price = 4;
         $display = "$3";
@@ -120,7 +126,7 @@ class RendererTest extends TestCase
         $this->assertEquals($display, $this->renderer->formatPrice($price));
     }
 
-    public function testGetTotalAmount()
+    public function testGetTotalAmount(): void
     {
         $totalAmount = 10;
         $itemMock = $this->getMockBuilder(Item::class)

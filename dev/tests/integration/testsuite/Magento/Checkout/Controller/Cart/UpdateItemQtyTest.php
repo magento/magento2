@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Data\Form\FormKey;
 use Magento\Framework\Serialize\Serializer\Json;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class UpdateItemQtyTest extends \Magento\TestFramework\TestCase\AbstractController
 {
@@ -55,8 +56,8 @@ class UpdateItemQtyTest extends \Magento\TestFramework\TestCase\AbstractControll
      * @magentoDbIsolation enabled
      * @magentoAppArea frontend
      * @magentoDataFixture Magento/Checkout/_files/quote_with_simple_product.php
-     * @dataProvider requestDataProvider
      */
+    #[DataProvider('requestDataProvider')]
     public function testExecute($requestQuantity, $expectedResponse)
     {
         try {

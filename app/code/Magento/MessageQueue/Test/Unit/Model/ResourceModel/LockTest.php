@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -50,15 +50,9 @@ class LockTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->dateTimeMock = $this->getMockBuilder(DateTime::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->lockFactoryMock = $this->getMockBuilder(LockFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->resourceConnectionMock = $this->getMockBuilder(ResourceConnection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->dateTimeMock = $this->createMock(DateTime::class);
+        $this->lockFactoryMock = $this->createMock(LockFactory::class);
+        $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
         $this->lockResourceModel = $this->objectManager->getObject(
             LockResourceModel::class,
             [
@@ -73,9 +67,7 @@ class LockTest extends TestCase
     public function testReleaseOutdatedLocks()
     {
         /** @var AdapterInterface|MockObject $adapterMock */
-        $adapterMock = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $adapterMock = $this->createMock(AdapterInterface::class);
         $this->resourceConnectionMock->expects($this->once())->method('getConnection')->willReturn($adapterMock);
         $tableName = 'queue_lock_mock';
         $this->resourceConnectionMock->expects($this->once())->method('getTableName')->willReturn($tableName);

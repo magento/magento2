@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogRule\Test\Unit\Model\Indexer\Product;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Product;
 use Magento\CatalogRule\Model\Indexer\IndexBuilder;
 use Magento\CatalogRule\Model\Indexer\Product\ProductRuleIndexer;
@@ -49,15 +50,14 @@ class ProductRuleIndexerTest extends TestCase
             ProductRuleIndexer::class,
             'cacheContext'
         );
-        $cacheContextProperty->setAccessible(true);
         $cacheContextProperty->setValue($this->indexer, $this->cacheContextMock);
     }
 
     /**
      * @param array $ids
      * @param array $idsForIndexer
-     * @dataProvider dataProviderForExecuteList
      */
+    #[DataProvider('dataProviderForExecuteList')]
     public function testDoExecuteList($ids, $idsForIndexer)
     {
         $this->indexBuilder->expects($this->once())

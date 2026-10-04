@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,7 @@ use Magento\Security\Model\PasswordResetRequestEvent;
 use Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\Collection;
 use Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\CollectionFactory;
 use Magento\Security\Model\SecurityChecker\Frequency;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -65,18 +66,7 @@ class FrequencyTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->securityConfigMock =  $this->getMockBuilder(ConfigInterface::class)
-            ->addMethods(['getScopeByEventType'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->securityConfigMock->expects($this->any())
-            ->method('getScopeByEventType')
-            ->willReturnMap(
-                [
-                    [0, 1],
-                    [1, 0]
-                ]
-            );
+        $this->securityConfigMock = $this->createMock(ConfigInterface::class);
 
         $this->collectionFactoryMock = $this->createPartialMock(
             CollectionFactory::class,
@@ -88,13 +78,9 @@ class FrequencyTest extends TestCase
             ['addFieldToFilter', 'filterLastItem', 'getFirstItem']
         );
 
-        $this->dateTimeMock =  $this->getMockBuilder(DateTime::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->dateTimeMock = $this->createMock(DateTime::class);
 
-        $this->remoteAddressMock =  $this->getMockBuilder(RemoteAddress::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->remoteAddressMock = $this->createMock(RemoteAddress::class);
 
         $this->model = $this->objectManager->getObject(
             Frequency::class,
@@ -110,8 +96,8 @@ class FrequencyTest extends TestCase
     /**
      * @param int $securityEventType
      * @param int $requestsMethod
-     * @dataProvider dataProviderSecurityEventTypeWithRequestsMethod
      */
+    #[DataProvider('dataProviderSecurityEventTypeWithRequestsMethod')]
     public function testCheck($securityEventType, $requestsMethod)
     {
         $limitTimeBetweenPasswordResetRequests = 600;
@@ -139,8 +125,8 @@ class FrequencyTest extends TestCase
     /**
      * @param int $securityEventType
      * @param int $requestsMethod
-     * @dataProvider dataProviderSecurityEventTypeWithRequestsMethod
      */
+    #[DataProvider('dataProviderSecurityEventTypeWithRequestsMethod')]
     public function testCheckException($securityEventType, $requestsMethod)
     {
         $this->expectException('Magento\Framework\Exception\SecurityViolationException');

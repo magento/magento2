@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -68,7 +68,7 @@ class CleanupFilesTest extends TestCase
      */
     private function getDirectoryCleanMock($subPath = null)
     {
-        $dir = $this->getMockForAbstractClass(WriteInterface::class);
+        $dir = $this->createMock(WriteInterface::class);
         $dir->expects($this->once())->method('search')->with('*', $subPath)->willReturn(['one', 'two']);
         $dir->expects($this->exactly(2))->method('delete');
         $dir->expects($this->once())->method('isExist')->willReturn(true);

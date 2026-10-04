@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Framework\App\Cache;
 
 use Magento\Framework\App\Cache\Tag\Resolver;
 use Magento\Framework\App\Cache\Type\FrontendPool;
+use Magento\Framework\Cache\CacheConstants;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 
@@ -110,7 +111,7 @@ class FlushCacheByTags
         foreach ($this->cacheList as $cacheType) {
             if ($this->cacheState->isEnabled($cacheType)) {
                 $this->cachePool->get($cacheType)->clean(
-                    \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
+                    CacheConstants::CLEANING_MODE_MATCHING_ANY_TAG,
                     $uniqueTags = $uniqueTags ?? \array_unique($tags)
                 );
             }

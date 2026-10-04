@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -28,7 +28,7 @@ class SecurityInfoTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->_scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->_model = new SecurityInfo($this->_scopeConfigMock);
     }
 

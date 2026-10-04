@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Wishlist\Controller\Index;
 
@@ -96,6 +95,11 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex implements Action\
     private $captchaStringResolver;
 
     /**
+     * @var \Magento\Wishlist\Model\Validator\MessageValidator
+     */
+    private $messageValidator;
+
+    /**
      * @param Action\Context $context
      * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      * @param \Magento\Customer\Model\Session $customerSession
@@ -110,6 +114,7 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex implements Action\
      * @param CaptchaHelper|null $captchaHelper
      * @param CaptchaStringResolver|null $captchaStringResolver
      * @param Escaper|null $escaper
+     * @param \Magento\Wishlist\Model\Validator\MessageValidator|null $messageValidator
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -126,7 +131,8 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex implements Action\
         StoreManagerInterface $storeManager,
         ?CaptchaHelper $captchaHelper = null,
         ?CaptchaStringResolver $captchaStringResolver = null,
-        ?Escaper $escaper = null
+        ?Escaper $escaper = null,
+        ?\Magento\Wishlist\Model\Validator\MessageValidator $messageValidator = null
     ) {
         $this->_formKeyValidator = $formKeyValidator;
         $this->_customerSession = $customerSession;
@@ -144,6 +150,9 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex implements Action\
         );
         $this->escaper = $escaper ?? ObjectManager::getInstance()->get(
             Escaper::class
+        );
+        $this->messageValidator = $messageValidator ?? ObjectManager::getInstance()->get(
+            \Magento\Wishlist\Model\Validator\MessageValidator::class
         );
         parent::__construct($context);
     }
@@ -194,6 +203,11 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex implements Action\
 
         $error = false;
         $message = (string)$this->getRequest()->getPost('message');
+
+        if (!$this->messageValidator->isValid($message)) {
+            $error = __('Invalid content detected in message. Please remove any special codes or scripts.');
+        }
+
         if (strlen($message) > $textLimit) {
             $error = __('Message length must not exceed %1 symbols', $textLimit);
         } else {

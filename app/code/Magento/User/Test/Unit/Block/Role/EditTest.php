@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Framework\Json\EncoderInterface;
 use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\LayoutInterface;
 use Magento\User\Block\Role\Edit;
@@ -25,6 +26,8 @@ use PHPUnit\Framework\TestCase;
  */
 class EditTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var Edit|MockObject */
     protected $model;
 
@@ -45,25 +48,24 @@ class EditTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->jsonEncoderMock = $this->getMockBuilder(EncoderInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-
-        $this->authSessionsMock = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->registryMock = $this->getMockBuilder(Registry::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['registry'])
-            ->getMock();
-
-        $this->layoutInterfaceMock = $this->getMockBuilder(LayoutInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setRole', 'setActive', 'getId'])
-            ->getMockForAbstractClass();
-
         $objectManagerHelper = new ObjectManager($this);
+        
+        $this->jsonEncoderMock = $this->createMock(EncoderInterface::class);
+        $this->authSessionsMock = $this->createMock(Session::class);
+        $this->registryMock = $this->createPartialMock(Registry::class, ['registry']);
+        $this->layoutInterfaceMock = $this->createPartialMockWithReflection(
+            LayoutInterface::class,
+            [
+                'getUpdate', 'generateXml', 'generateElements', 'renderElement', 'addOutputElement',
+                'getOutput', 'hasElement', 'unsetElement', 'getAllBlocks', 'getBlock',
+                'getChildBlock', 'setChild', 'reorderChild', 'unsetChild', 'getChildNames',
+                'getChildBlocks', 'getChildName', 'addToParentGroup', 'getGroupChildNames',
+                'getParentName', 'createBlock', 'addBlock', 'addContainer', 'renameElement',
+                'getElementAlias', 'removeOutputElement', 'getMessagesBlock', 'getBlockSingleton',
+                'getElementProperty', 'isBlock', 'isContainer', 'isManipulationAllowed',
+                'setBlock', 'isCacheable', 'setRole', 'setActive', 'getId'
+            ]
+        );
         $objects = [
             [
                 JsonHelper::class,
@@ -115,7 +117,6 @@ class EditTest extends TestCase
     {
         $reflection = new \ReflectionClass(get_class($object));
         $method = $reflection->getMethod($methodName);
-        $method->setAccessible(true);
 
         return $method->invokeArgs($object, $parameters);
     }

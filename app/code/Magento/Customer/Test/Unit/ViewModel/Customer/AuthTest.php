@@ -1,14 +1,16 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Customer\Test\Unit\ViewModel\Customer;
 
 use Magento\Customer\ViewModel\Customer\Auth;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Http\Context;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -20,6 +22,11 @@ class AuthTest extends TestCase
     private mixed $contextMock;
 
     /**
+     * @var ScopeConfigInterface|MockObject
+     */
+    private mixed $scopeConfigMock;
+
+    /**
      * @var Auth
      */
     private Auth $model;
@@ -29,12 +36,13 @@ class AuthTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->contextMock = $this->createMock(Context::class);
+
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
 
         $this->model = new Auth(
-            $this->contextMock
+            $this->contextMock,
+            $this->scopeConfigMock
         );
         parent::setUp();
     }
@@ -54,5 +62,33 @@ class AuthTest extends TestCase
             true,
             $this->model->isLoggedIn()
         );
+    }
+
+    /** */
+    #[DataProvider('getCustomerShareScopeDataProvider')]
+    public function testGetCustomerShareScope($configValue, int $expected): void
+    {
+        $this->scopeConfigMock->expects($this->once())
+            ->method('getValue')
+            ->with(
+                'customer/account_share/scope',
+                \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE
+            )
+            ->willReturn($configValue);
+
+        $this->assertSame($expected, $this->model->getCustomerShareScope());
+    }
+
+    /**
+     * @return array
+     */
+    public static function getCustomerShareScopeDataProvider(): array
+    {
+        return [
+            'global scope as string 0' => ['0', 0],
+            'website scope as string 1' => ['1', 1],
+            'null value defaults to 0' => [null, 0],
+            'empty string defaults to 0' => ['', 0],
+        ];
     }
 }

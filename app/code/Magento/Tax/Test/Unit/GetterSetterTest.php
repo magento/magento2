@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -36,6 +36,7 @@ use Magento\Tax\Model\TaxClass\Key;
 use Magento\Tax\Model\TaxDetails\AppliedTax;
 use Magento\Tax\Model\TaxDetails\AppliedTaxRate;
 use Magento\Tax\Model\TaxDetails\TaxDetails;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -43,12 +44,8 @@ use PHPUnit\Framework\TestCase;
  */
 class GetterSetterTest extends TestCase
 {
-    /**
-     * @param string $className
-     * @param array $variables
-     * @dataProvider dataProviderGettersSetters
-     */
-    public function testGettersSetters($className = null, $variables = null)
+    #[DataProvider('dataProviderGettersSetters')]
+    public function testGettersSetters(string $className, array $variables): void
     {
         $objectManager = new ObjectManager($this);
         $classObject = $objectManager->getObject($className);
@@ -105,7 +102,7 @@ class GetterSetterTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public static function dataProviderGettersSetters()
+    public static function dataProviderGettersSetters(): array
     {
         // Test each class that implements the Tax Api Data Interfaces
         return [

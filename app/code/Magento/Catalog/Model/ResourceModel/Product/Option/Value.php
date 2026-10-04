@@ -119,7 +119,7 @@ class Value extends AbstractDb
         $priceTable = $this->getTable('catalog_product_option_type_price');
         $formattedPrice = $this->getLocaleFormatter()->getNumber($objectPrice);
 
-        $price = (double)sprintf('%F', $formattedPrice);
+        $price = (float)sprintf('%F', $formattedPrice);
         $priceType = $object->getPriceType();
 
         if (isset($objectPrice) && $priceType) {

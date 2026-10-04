@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Email\Block\Adminhtml\Template\Edit;
 
@@ -61,7 +61,6 @@ class FormTest extends \PHPUnit\Framework\TestCase
             \Magento\Email\Block\Adminhtml\Template\Edit\Form::class,
             '_prepareForm'
         );
-        $this->prepareFormMethod->setAccessible(true);
     }
 
     /**

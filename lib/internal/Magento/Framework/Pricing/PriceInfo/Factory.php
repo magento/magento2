@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -60,13 +60,13 @@ class Factory
     {
         $type = $saleableItem->getTypeId();
 
-        if (isset($this->types[$type]['infoClass'])) {
+        if ($type !== null && isset($this->types[$type]['infoClass'])) {
             $priceInfo = $this->types[$type]['infoClass'];
         } else {
             $priceInfo = $this->types['default']['infoClass'];
         }
 
-        if (isset($this->types[$type]['prices'])) {
+        if ($type !== null && isset($this->types[$type]['prices'])) {
             $priceCollection = $this->types[$type]['prices'];
         } else {
             $priceCollection = $this->types['default']['prices'];

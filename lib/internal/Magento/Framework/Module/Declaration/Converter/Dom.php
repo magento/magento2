@@ -2,8 +2,8 @@
 /**
  * Module declaration xml converter. Converts declaration DOM Document to internal array representation.
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Module\Declaration\Converter;
 

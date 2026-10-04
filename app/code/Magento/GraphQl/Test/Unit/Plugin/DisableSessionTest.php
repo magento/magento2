@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Framework\Session\SessionStartChecker;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\GraphQl\Model\Config\DisableSession;
 use Magento\GraphQl\Plugin\DisableSession as DisableSessionPlugin;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -63,8 +64,8 @@ class DisableSessionTest extends TestCase
      * @param bool $methodResult
      * @param bool $expectedResult
      * @return void
-     * @dataProvider testAfterCheckDataProvider
      */
+    #[DataProvider('afterCheckDataProvider')]
     public function testAfterCheck(string $area, bool $config, bool $methodResult, bool $expectedResult)
     {
         $this->disableSessionConfigMock->expects($this->any())->method('isDisabled')->willReturn($config);
@@ -77,7 +78,7 @@ class DisableSessionTest extends TestCase
      *
      * @return array[]
      */
-    public static function testAfterCheckDataProvider()
+    public static function afterCheckDataProvider()
     {
         return [
             ['area' => 'graphql', 'config' => true, 'methodResult' =>  false, 'expectedResult' => false],
@@ -98,8 +99,8 @@ class DisableSessionTest extends TestCase
      * @param bool $methodResult
      * @param bool $expectedResult
      * @return void
-     * @dataProvider testAfterCheckDataProviderNoAreaCode
      */
+    #[DataProvider('afterCheckDataProviderNoAreaCode')]
     public function testAfterCheckNoArea(bool $config, bool $methodResult, bool $expectedResult)
     {
         $this->disableSessionConfigMock->expects($this->any())->method('isDisabled')->willReturn($config);
@@ -114,7 +115,7 @@ class DisableSessionTest extends TestCase
      *
      * @return array[]
      */
-    public static function testAfterCheckDataProviderNoAreaCode()
+    public static function afterCheckDataProviderNoAreaCode()
     {
         return [
             ['config' => true, 'methodResult' =>  true, 'expectedResult' => true],

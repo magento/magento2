@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Framework\View\Layout\Reader\Move;
 use Magento\Framework\View\Layout\ScheduledStructure;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class MoveTest extends TestCase
 {
@@ -62,9 +63,8 @@ class MoveTest extends TestCase
      * @param bool $isAfter
      * @param string $alias
      * @param Element $parentElement
-     *
-     * @dataProvider processDataProvider
-     */
+     *     */
+    #[DataProvider('processDataProvider')]
     public function testProcess($currentElement, $destination, $siblingName, $isAfter, $alias, $parentElement)
     {
         $this->scheduledStructureMock->expects($this->any())

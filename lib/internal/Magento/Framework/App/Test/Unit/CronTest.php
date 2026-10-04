@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -56,7 +56,7 @@ class CronTest extends TestCase
         $this->_stateMock = $this->createMock(State::class);
         $this->_request = $this->createMock(Request::class);
         $this->_responseMock = $this->createMock(Response::class);
-        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
         $this->_model = new Cron(
             $this->_stateMock,
             $this->_request,
@@ -88,8 +88,8 @@ class CronTest extends TestCase
 
     public function testLaunchDispatchesCronEvent()
     {
-        $configLoader = $this->getMockForAbstractClass(ConfigLoaderInterface::class);
-        $eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $configLoader = $this->createMock(ConfigLoaderInterface::class);
+        $eventManagerMock = $this->createMock(ManagerInterface::class);
 
         $this->objectManager->expects($this->any())
             ->method('get')

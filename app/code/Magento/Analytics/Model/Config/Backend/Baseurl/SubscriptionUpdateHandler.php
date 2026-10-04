@@ -24,7 +24,7 @@ class SubscriptionUpdateHandler
     /**
      * Config path for schedule setting of update handler.
      */
-    public const UPDATE_CRON_STRING_PATH = "crontab/default/jobs/analytics_update/schedule/cron_expr";
+    public const UPDATE_CRON_STRING_PATH = "crontab/analytics/jobs/analytics_update/schedule/cron_expr";
 
     /**
      * Flag code for the previous Base URL.

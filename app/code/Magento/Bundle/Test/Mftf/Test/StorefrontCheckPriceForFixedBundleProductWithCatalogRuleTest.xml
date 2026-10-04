@@ -147,6 +147,7 @@
             <deleteData createDataKey="createFixedBundleProduct" stepKey="deleteBundleProduct"/>
             <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteCatalogPriceRules"/>
             <!-- logout admin -->
+            <deleteData createDataKey="category1" stepKey="deletecategory1"/> 
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- check product prices on category and product page -->

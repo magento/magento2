@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -42,37 +42,12 @@ class PluginTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->eventManager = $this->getMockForAbstractClass(
-            ManagerInterface::class,
-            [],
-            '',
-            false
-        );
-        $this->storeManager = $this->getMockForAbstractClass(
-            StoreManagerInterface::class,
-            [],
-            '',
-            false
-        );
+        $this->eventManager = $this->createMock(ManagerInterface::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
         $this->repository = $this->createMock(DesignConfigRepository::class);
-        $this->designConfig = $this->getMockForAbstractClass(
-            DesignConfigInterface::class,
-            [],
-            '',
-            false
-        );
-        $this->website = $this->getMockForAbstractClass(
-            WebsiteInterface::class,
-            [],
-            '',
-            false
-        );
-        $this->store = $this->getMockForAbstractClass(
-            StoreInterface::class,
-            [],
-            '',
-            false
-        );
+        $this->designConfig = $this->createMock(DesignConfigInterface::class);
+        $this->website = $this->createMock(WebsiteInterface::class);
+        $this->store = $this->createMock(StoreInterface::class);
         $this->plugin = new Plugin($this->eventManager, $this->storeManager);
     }
 

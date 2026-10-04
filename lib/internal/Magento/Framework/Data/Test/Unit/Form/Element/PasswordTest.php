@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,8 @@ use Magento\Framework\Data\Form\Element\Obscure;
 use Magento\Framework\Data\Form\Element\Password;
 use Magento\Framework\DataObject;
 use Magento\Framework\Escaper;
+use Magento\Framework\Math\Random;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -31,12 +33,44 @@ class PasswordTest extends TestCase
      */
     protected $_model;
 
+        /**
+     * @var \Magento\Framework\ObjectManagerInterface|null
+     */
+    private $originalObjectManager;
+
     protected function setUp(): void
     {
+        // Configure ObjectManager mock for AbstractElement parent constructor
+        try {
+            $this->originalObjectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        } catch (\RuntimeException $e) {
+            $this->originalObjectManager = null;
+        }
+
+        $randomMock = $this->createMock(Random::class);
+        $randomMock->method('getRandomString')->willReturn('some-rando-string');
+
+        $secureRendererMock = $this->createMock(SecureHtmlRenderer::class);
+        $secureRendererMock->method('renderEventListenerAsTag')->willReturn('');
+        $secureRendererMock->method('renderTag')->willReturn('');
+
+        $objectManagerMock = $this->createMock(\Magento\Framework\App\ObjectManager::class);
+        $objectManagerMock->method('get')
+            ->willReturnCallback(function ($className) use ($randomMock, $secureRendererMock) {
+                if ($className === Random::class) {
+                    return $randomMock;
+                }
+                if ($className === SecureHtmlRenderer::class) {
+                    return $secureRendererMock;
+                }
+                return null;
+            });
+        \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
+
         $factoryMock = $this->createMock(Factory::class);
         $collectionFactoryMock = $this->createMock(CollectionFactory::class);
         $escaperMock = $this->createMock(Escaper::class);
-        $this->_model = new Obscure(
+        $this->_model = new Password(
             $factoryMock,
             $collectionFactoryMock,
             $escaperMock
@@ -45,6 +79,14 @@ class PasswordTest extends TestCase
         $formMock->getHtmlIdPrefix('id_prefix');
         $formMock->getHtmlIdPrefix('id_suffix');
         $this->_model->setForm($formMock);
+    }
+
+    protected function tearDown(): void
+    {
+        if ($this->originalObjectManager) {
+            \Magento\Framework\App\ObjectManager::setInstance($this->originalObjectManager);
+        }
+        parent::tearDown();
     }
 
     /**

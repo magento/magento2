@@ -21,6 +21,7 @@ use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  *  Unit Test for Magento\Checkout\Block\Cart\Shipping
@@ -101,10 +102,10 @@ class ShippingTest extends TestCase
         $this->customerSessionMock = $this->createMock(CustomerSession::class);
         $this->checkoutSessionMock = $this->createMock(CheckoutSession::class);
         $this->configProviderMock = $this->createMock(CompositeConfigProvider::class);
-        $this->layoutProcessorMock = $this->getMockForAbstractClass(LayoutProcessorInterface::class);
+        $this->layoutProcessorMock = $this->createMock(LayoutProcessorInterface::class);
         $this->serializerMock = $this->createMock(JsonHexTag::class);
         $this->jsonHexTagSerializerMock = $this->createMock(JsonHexTag::class);
-        $this->storeManagerInterfaceMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManagerInterfaceMock = $this->createMock(StoreManagerInterface::class);
         self::$layout = self::STUB_PREINITIALIZED_COMPONENTS;
 
         $objectManager = new ObjectManager($this);
@@ -140,8 +141,8 @@ class ShippingTest extends TestCase
      * Test for getJsLayout()
      *
      * @return void
-     * @dataProvider getJsLayoutDataProvider
      */
+    #[DataProvider('getJsLayoutDataProvider')]
     public function testGetJsLayout(array $layoutProcessed, string $jsonLayoutProcessed): void
     {
         $this->layoutProcessorMock->expects($this->once())
@@ -197,8 +198,8 @@ class ShippingTest extends TestCase
      * Test for getSerializedCheckoutConfig()
      *
      * @return void
-     * @dataProvider jsonEncodeDataProvider
      */
+    #[DataProvider('jsonEncodeDataProvider')]
     public function testGetSerializedCheckoutConfig(array $checkoutConfig, string $expectedJson): void
     {
         $this->configProviderMock->expects($this->once())

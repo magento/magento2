@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Developer\Test\Unit\Helper;
 
@@ -12,6 +12,7 @@ use Magento\Framework\HTTP\Header;
 use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -53,8 +54,8 @@ class DataTest extends TestCase
     /**
      * @param array $allowedIps
      * @param bool $expected
-     * @dataProvider isDevAllowedDataProvider
      */
+    #[DataProvider('isDevAllowedDataProvider')]
     public function testIsDevAllowed($allowedIps, $expected, $callNum = 1)
     {
         $storeId = 'storeId';

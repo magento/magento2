@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -90,9 +90,7 @@ class ShipmentLoaderTest extends TestCase
         $this->messageManagerMock = $this->getMockBuilder(Manager::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->orderRepositoryMock = $this->getMockBuilder(OrderRepositoryInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->orderRepositoryMock = $this->createMock(OrderRepositoryInterface::class);
         $this->itemFactoryMock = $this->getMockBuilder(ShipmentItemCreationInterfaceFactory::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['create'])
@@ -163,10 +161,7 @@ class ShipmentLoaderTest extends TestCase
         $shipmentModelMock = $this->getMockBuilder(Shipment::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $trackMock = $this->getMockBuilder(ShipmentTrackCreationInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['setCarrierCode', 'setTrackNumber', 'setTitle'])
-            ->getMockForAbstractClass();
+        $trackMock = $this->createMock(ShipmentTrackCreationInterface::class);
         $this->trackFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($trackMock);
@@ -176,9 +171,7 @@ class ShipmentLoaderTest extends TestCase
         $this->registryMock->expects($this->once())
             ->method('register')
             ->with('current_shipment', $shipmentModelMock);
-        $itemMock = $this->getMockBuilder(ShipmentItemCreationInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $itemMock = $this->createMock(ShipmentItemCreationInterface::class);
         $this->itemFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($itemMock);
