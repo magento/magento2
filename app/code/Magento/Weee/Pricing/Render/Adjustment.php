@@ -55,6 +55,16 @@ class Adjustment extends AbstractAdjustment
         $weeeTaxAmount =
             $this->amountRender->getAmount()->getAdjustmentAmount(\Magento\Weee\Pricing\TaxAdjustment::ADJUSTMENT_CODE);
 
+        $product = $this->amountRender->getSaleableItem();
+            if (
+                $product->getTypeId() === \Magento\Bundle\Model\Product\Type::TYPE_CODE
+                && $this->displayPriceExcludingTax()
+                && !$this->typeOfDisplay([Tax::DISPLAY_EXCL])
+            ) {
+             $this->amountRender->setDisplayValue(
+                $this->amountRender->getDisplayValue() + $weeeAmount 
+            );
+            }
         $this->finalAmount = $this->amountRender->getDisplayValue();
 
         if ($this->typeOfDisplay([Tax::DISPLAY_EXCL_DESCR_INCL])) {
