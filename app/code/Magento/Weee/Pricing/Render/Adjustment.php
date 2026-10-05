@@ -9,6 +9,7 @@ namespace Magento\Weee\Pricing\Render;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Pricing\Render\AbstractAdjustment;
 use Magento\Framework\View\Element\Template;
+use Magento\Tax\Helper\Data as TaxHelper;
 use Magento\Weee\Model\Tax;
 
 /**
@@ -24,6 +25,13 @@ class Adjustment extends AbstractAdjustment
     protected $weeeHelper;
 
     /**
+     * Tax helper class
+     *
+     * @var TaxHelper
+     */
+    protected $taxHelper;
+
+    /**
      * @var float
      */
     protected $finalAmount;
@@ -34,15 +42,18 @@ class Adjustment extends AbstractAdjustment
      * @param Template\Context $context
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Weee\Helper\Data $weeeHelper
+     * @param TaxHelper $taxHelper
      * @param array $data
      */
     public function __construct(
         Template\Context $context,
         PriceCurrencyInterface $priceCurrency,
         \Magento\Weee\Helper\Data $weeeHelper,
+        TaxHelper $taxHelper,
         array $data = []
     ) {
         $this->weeeHelper = $weeeHelper;
+        $this->taxHelper = $taxHelper;
         parent::__construct($context, $priceCurrency, $data);
     }
 
@@ -248,5 +259,15 @@ class Adjustment extends AbstractAdjustment
     {
         $showPriceWithTax = $this->weeeHelper->displayTotalsInclTax();
         return $showPriceWithTax;
+    }
+
+    /**
+     * Check whether catalog prices are configured to display excluding tax
+     *
+     * @return bool
+     */
+    public function displayPriceExcludingTax()
+    {
+        return $this->taxHelper->displayPriceExcludingTax();
     }
 }

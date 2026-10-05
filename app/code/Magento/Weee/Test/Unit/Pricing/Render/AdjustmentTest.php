@@ -17,6 +17,7 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Pricing\Render\Amount;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use Magento\Tax\Helper\Data as TaxHelper;
 use Magento\Weee\Helper\Data;
 use Magento\Weee\Model\Tax;
 use Magento\Weee\Pricing\Adjustment as PricingAdjustment;
@@ -42,6 +43,11 @@ class AdjustmentTest extends TestCase
     protected $weeeHelperMock;
 
     /**
+     * @var TaxHelper
+     */
+    protected $taxHelperMock;
+
+    /**
      * @var Context
      */
     protected $contextMock;
@@ -64,6 +70,7 @@ class AdjustmentTest extends TestCase
         );
         $this->priceCurrencyMock = $this->createMock(PriceCurrencyInterface::class);
         $this->weeeHelperMock = $this->createMock(Data::class);
+        $this->taxHelperMock = $this->createMock(TaxHelper::class);
         $eventManagerMock = $this->createMock(ManagerInterface::class);
 
         $scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
@@ -78,8 +85,21 @@ class AdjustmentTest extends TestCase
         $this->model = new Adjustment(
             $this->contextMock,
             $this->priceCurrencyMock,
-            $this->weeeHelperMock
+            $this->weeeHelperMock,
+            $this->taxHelperMock
         );
+    }
+
+    /**
+     * Test for method displayPriceExcludingTax
+     */
+    public function testDisplayPriceExcludingTax()
+    {
+        $this->taxHelperMock->expects($this->once())
+            ->method('displayPriceExcludingTax')
+            ->willReturn(true);
+
+        $this->assertTrue($this->model->displayPriceExcludingTax());
     }
 
     /**
