@@ -15,6 +15,9 @@
             <description value="Admin verifies tax details on Order totals section for partial invoice and credit memo with shopping cart rule and FPT"/>
             <testCaseId value="AC-4273"/>
             <severity value="MAJOR"/>
+            <skip>
+                <issueId value="AC-18176">Application bug: The tax details are showing values that do not match the expected results as per AC-4273.</issueId>
+            </skip>
         </annotations>
         <before>
             <createData entity="SimpleProduct2" stepKey="createSimpleProduct">

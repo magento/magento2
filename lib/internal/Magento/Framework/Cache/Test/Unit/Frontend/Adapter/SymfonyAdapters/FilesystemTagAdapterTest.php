@@ -78,11 +78,15 @@ class FilesystemTagAdapterTest extends TestCase
     }
 
     /**
-     * Test constructor creates tag directory
+     * Test constructor does not eagerly create the tag directory; it's created lazily on first write
      */
     public function testConstructorCreatesTagDirectory(): void
     {
         $tagDir = $this->tempDir . '/tags/';
+
+        $this->assertDirectoryDoesNotExist($tagDir);
+
+        $this->adapter->onSave('test_id', ['tag1']);
 
         $this->assertDirectoryExists($tagDir);
     }
@@ -92,7 +96,8 @@ class FilesystemTagAdapterTest extends TestCase
      */
     public function testConstructorWithExistingDirectory(): void
     {
-        // Directory already exists from setUp
+        // Constructing a second adapter over the same base dir must not fail, whether or not the
+        // lazily-created tags dir already exists on disk
         $newAdapter = new FilesystemTagAdapter($this->cachePoolMock, $this->tempDir);
 
         $this->assertInstanceOf(FilesystemTagAdapter::class, $newAdapter);
@@ -100,21 +105,21 @@ class FilesystemTagAdapterTest extends TestCase
 
     /**
      * Test constructor normalizes trailing slash
+     *
+     * Directories are no longer created eagerly, so normalization is verified directly against the
+     * resolved tagDirectory property rather than the filesystem.
      */
     public function testConstructorNormalizesTrailingSlash(): void
     {
         $tempDir = sys_get_temp_dir() . '/magento_normalize_test_' . uniqid();
 
-        // Test with trailing slash
-        new FilesystemTagAdapter($this->cachePoolMock, $tempDir . '/');
-        $this->assertDirectoryExists($tempDir . '/tags/');
+        $withTrailingSlash = new FilesystemTagAdapter($this->cachePoolMock, $tempDir . '/');
+        $withoutTrailingSlash = new FilesystemTagAdapter($this->cachePoolMock, $tempDir);
 
-        // Test without trailing slash
-        new FilesystemTagAdapter($this->cachePoolMock, $tempDir);
-        $this->assertDirectoryExists($tempDir . '/tags/');
+        $property = new \ReflectionProperty(FilesystemTagAdapter::class, 'tagDirectory');
 
-        // Clean up
-        $this->removeDirectory($tempDir);
+        $this->assertSame($tempDir . '/tags/', $property->getValue($withTrailingSlash));
+        $this->assertSame($tempDir . '/tags/', $property->getValue($withoutTrailingSlash));
     }
 
     /**

@@ -7,67 +7,276 @@ declare(strict_types=1);
 
 namespace Magento\Persistent\Test\Unit\Model\ResourceModel;
 
-use Magento\Framework\DB\Adapter\AdapterInterface;
-use Magento\Persistent\Model\ResourceModel\ExpiredPersistentQuotesCollection;
-use Magento\Quote\Model\ResourceModel\Quote\CollectionFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Quote\Model\ResourceModel\Quote\Collection;
-use Magento\Store\Api\Data\StoreInterface;
-use Magento\Persistent\Helper\Data;
-use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\DB\Select;
+use Magento\Persistent\Helper\Data;
+use Magento\Persistent\Model\ResourceModel\ExpiredPersistentQuotesCollection;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\ResourceModel\Quote\Collection;
+use Magento\Quote\Model\ResourceModel\Quote\CollectionFactory;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\ScopeInterface;
 use PHPUnit\Framework\MockObject\Exception;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+ */
 class ExpiredPersistentQuotesCollectionTest extends TestCase
 {
     /**
-     * @var ScopeConfigInterface
+     * @var ScopeConfigInterface|MockObject
      */
     private ScopeConfigInterface $scopeConfigMock;
 
     /**
-     * @var CollectionFactory
+     * @var CollectionFactory|MockObject
      */
     private CollectionFactory $quoteCollectionFactoryMock;
 
     /**
-     * @var ExpiredPersistentQuotesCollection
+     * @var StoreInterface|MockObject
      */
-    private ExpiredPersistentQuotesCollection $model;
+    private StoreInterface $storeMock;
+
+    /**
+     * @var int
+     */
+    private int $batchSize = 2;
 
     protected function setUp(): void
     {
         $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->quoteCollectionFactoryMock = $this->createMock(CollectionFactory::class);
 
-        $this->model = new ExpiredPersistentQuotesCollection(
-            $this->scopeConfigMock,
-            $this->quoteCollectionFactoryMock
-        );
-    }
-
-    /**
-     * Test getExpiredPersistentQuotes method
-     *
-     * @return void
-     * @throws Exception
-     */
-    public function testGetExpiredPersistentQuotes(): void
-    {
-        $storeMock = $this->createMock(StoreInterface::class);
-        $storeMock->method('getId')->willReturn(1);
-        $storeMock->method('getWebsiteId')->willReturn(1);
+        $this->storeMock = $this->createMock(StoreInterface::class);
+        $this->storeMock->method('getId')->willReturn(1);
+        $this->storeMock->method('getWebsiteId')->willReturn(1);
 
         $this->scopeConfigMock->method('getValue')
             ->with(Data::XML_PATH_LIFE_TIME, ScopeInterface::SCOPE_WEBSITE, 1)
             ->willReturn(60);
+    }
 
-        $quoteCollectionMock = $this->createMock(Collection::class);
-        $this->quoteCollectionFactoryMock->method('create')->willReturn($quoteCollectionMock);
+    /**
+     * @param int $batchSize
+     * @return ExpiredPersistentQuotesCollection
+     */
+    private function createModel(int $batchSize): ExpiredPersistentQuotesCollection
+    {
+        return new ExpiredPersistentQuotesCollection(
+            $this->scopeConfigMock,
+            $this->storeMock,
+            $this->quoteCollectionFactoryMock,
+            $batchSize
+        );
+    }
 
-        $quoteCollectionMock->method('addFieldToFilter')
-            ->willReturnCallback(function ($field) use ($quoteCollectionMock) {
+    /**
+     * Build a permissively-stubbed batch Collection mock yielding the given quotes.
+     *
+     * @param Quote[] $quotes
+     * @return Collection|MockObject
+     * @throws Exception
+     */
+    private function mockBatch(array $quotes): Collection|MockObject
+    {
+        $batchMock = $this->createMock(Collection::class);
+        $batchMock->method('addFieldToFilter')->willReturnSelf();
+        $batchMock->method('setOrder')->willReturnSelf();
+        $batchMock->method('setPageSize')->willReturnSelf();
+        $batchMock->method('getTable')->willReturn('customer_log');
+
+        $selectMock = $this->createMock(Select::class);
+        $selectMock->method('joinLeft')->willReturnSelf();
+        $selectMock->method('where')->willReturnSelf();
+        $batchMock->method('getSelect')->willReturn($selectMock);
+
+        $batchMock->method('getIterator')->willReturn(new \ArrayIterator($quotes));
+
+        return $batchMock;
+    }
+
+    /**
+     * A batch mock representing the "no more rows" confirmation fetch.
+     *
+     * @return Collection|MockObject
+     * @throws Exception
+     */
+    private function mockEmptyBatch(): Collection|MockObject
+    {
+        return $this->mockBatch([]);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testIterationYieldsAllQuotesInSingleBatch(): void
+    {
+        $quote1 = $this->createMock(Quote::class);
+        $quote1->method('getId')->willReturn(101);
+        $quote2 = $this->createMock(Quote::class);
+        $quote2->method('getId')->willReturn(102);
+        $quote3 = $this->createMock(Quote::class);
+        $quote3->method('getId')->willReturn(103);
+
+        $this->quoteCollectionFactoryMock->method('create')
+            ->willReturnOnConsecutiveCalls(
+                $this->mockBatch([$quote1, $quote2, $quote3]),
+                $this->mockEmptyBatch()
+            );
+
+        $model = $this->createModel(10);
+        $collected = [];
+        $keys = [];
+        foreach ($model as $key => $quote) {
+            $collected[] = $quote;
+            $keys[] = $key;
+        }
+
+        $this->assertSame([$quote1, $quote2, $quote3], $collected);
+        $this->assertSame([101, 102, 103], $keys);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testIterationSpansMultipleBatchesUsingCursor(): void
+    {
+        $quote1 = $this->createMock(Quote::class);
+        $quote1->method('getId')->willReturn(1);
+        $quote2 = $this->createMock(Quote::class);
+        $quote2->method('getId')->willReturn(2);
+        $quote3 = $this->createMock(Quote::class);
+        $quote3->method('getId')->willReturn(3);
+
+        $this->quoteCollectionFactoryMock->expects($this->exactly(3))
+            ->method('create')
+            ->willReturnOnConsecutiveCalls(
+                $this->mockBatch([$quote1, $quote2]),
+                $this->mockBatch([$quote3]),
+                $this->mockEmptyBatch()
+            );
+
+        $model = $this->createModel($this->batchSize);
+        $collected = [];
+        foreach ($model as $quote) {
+            $collected[] = $quote;
+        }
+
+        $this->assertSame([$quote1, $quote2, $quote3], $collected);
+    }
+
+    /**
+     * The lifetime config value is fixed for this iterator's store/website for its whole
+     * lifetime, so it should be fetched once and reused, not re-fetched on every batch.
+     *
+     * @throws Exception
+     */
+    public function testLifetimeConfigIsFetchedOnlyOnceAcrossMultipleBatches(): void
+    {
+        $quote1 = $this->createMock(Quote::class);
+        $quote1->method('getId')->willReturn(1);
+        $quote2 = $this->createMock(Quote::class);
+        $quote2->method('getId')->willReturn(2);
+
+        $this->scopeConfigMock->expects($this->once())
+            ->method('getValue')
+            ->with(Data::XML_PATH_LIFE_TIME, ScopeInterface::SCOPE_WEBSITE, 1)
+            ->willReturn(60);
+
+        $this->quoteCollectionFactoryMock->expects($this->exactly(3))
+            ->method('create')
+            ->willReturnOnConsecutiveCalls(
+                $this->mockBatch([$quote1]),
+                $this->mockBatch([$quote2]),
+                $this->mockEmptyBatch()
+            );
+
+        $model = $this->createModel($this->batchSize);
+        $collected = [];
+        foreach ($model as $quote) {
+            $collected[] = $quote;
+        }
+
+        $this->assertSame([$quote1, $quote2], $collected);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testCurrentAndValidWorkWithoutExplicitRewind(): void
+    {
+        $quote1 = $this->createMock(Quote::class);
+        $quote1->method('getId')->willReturn(501);
+
+        $this->quoteCollectionFactoryMock->method('create')
+            ->willReturnOnConsecutiveCalls($this->mockBatch([$quote1]), $this->mockEmptyBatch());
+
+        $model = $this->createModel($this->batchSize);
+
+        $this->assertTrue($model->valid());
+        $this->assertSame($quote1, $model->current());
+        $this->assertSame(501, $model->key());
+    }
+
+    /**
+     * Calling next() as the very first call (no prior rewind()/current()) should behave
+     * like a plain PHP array whose internal pointer already starts at the first element:
+     * it lands on the second item, not an uninitialized/skipped state.
+     *
+     * @throws Exception
+     */
+    public function testNextWorksWithoutExplicitRewind(): void
+    {
+        $quote1 = $this->createMock(Quote::class);
+        $quote1->method('getId')->willReturn(501);
+        $quote2 = $this->createMock(Quote::class);
+        $quote2->method('getId')->willReturn(502);
+
+        $this->quoteCollectionFactoryMock->method('create')
+            ->willReturnOnConsecutiveCalls($this->mockBatch([$quote1, $quote2]), $this->mockEmptyBatch());
+
+        $model = $this->createModel($this->batchSize);
+        $model->next();
+
+        $this->assertTrue($model->valid());
+        $this->assertSame($quote2, $model->current());
+        $this->assertSame(502, $model->key());
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testEmptyResultSetProducesZeroIterations(): void
+    {
+        $this->quoteCollectionFactoryMock->method('create')
+            ->willReturn($this->mockEmptyBatch());
+
+        $model = $this->createModel($this->batchSize);
+        $model->rewind();
+        $this->assertFalse($model->valid());
+
+        $iterations = 0;
+        foreach ($model as $quote) {
+            $iterations++;
+        }
+        $this->assertSame(0, $iterations);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testBatchQueryFiltersByStoreAndLifetime(): void
+    {
+        $quote = $this->createMock(Quote::class);
+        $quote->method('getId')->willReturn(1);
+
+        $batchMock = $this->mockBatch([$quote]);
+        $batchMock->method('addFieldToFilter')
+            ->willReturnCallback(function ($field) use ($batchMock) {
                 static $filterCallCount = 0;
                 $filterCallCount++;
 
@@ -78,70 +287,63 @@ class ExpiredPersistentQuotesCollectionTest extends TestCase
                     4 => $this->assertEquals('main_table.entity_id', $field)
                 };
 
-                return $quoteCollectionMock;
+                return $batchMock;
             });
 
-        $quoteCollectionMock->method('setOrder')
-            ->with('entity_id', Collection::SORT_ORDER_ASC)
-            ->willReturnSelf();
+        $this->quoteCollectionFactoryMock->method('create')
+            ->willReturnOnConsecutiveCalls($batchMock, $this->mockEmptyBatch());
 
-        $quoteCollectionMock->method('setPageSize')
-            ->with($this->isType('integer'))
-            ->willReturnSelf();
+        $model = $this->createModel($this->batchSize);
+        foreach ($model as $q) {
+            // drain the first (real) batch
+        }
+    }
 
-        $dbSelectMock1 = $this->createMock(Select::class);
-        $dbSelectMock2 = $this->createMock(Select::class);
-        $dbSelectMock3 = $this->createMock(Select::class);
-        $quoteCollectionMock->method('getSelect')
-            ->willReturnOnConsecutiveCalls($dbSelectMock1, $dbSelectMock2, $dbSelectMock3);
-        $quoteCollectionMock->method('getTable')
-            ->willReturn('customer_log');
+    /**
+     * Case 1, 2, and 3 are expressed as a single OR'd condition against one join to customer_log.
+     *
+     * @throws Exception
+     */
+    public function testJoinsCustomerLogWithSingleCombinedCaseCondition(): void
+    {
+        $quote = $this->createMock(Quote::class);
+        $quote->method('getId')->willReturn(1);
 
-        $dbSelectMock1->method('reset')
-            ->with(Select::COLUMNS)
-            ->willReturn($dbSelectMock1);
-        $dbSelectMock1->method('columns')->willReturnSelf();
-        $dbSelectMock1->method('joinLeft')
+        $selectMock = $this->createMock(Select::class);
+        $selectMock->expects($this->once())
+            ->method('joinLeft')
             ->with(
-                ['cl1' => 'customer_log'],
-                'cl1.customer_id = main_table.customer_id',
+                ['cl' => 'customer_log'],
+                'cl.customer_id = main_table.customer_id',
                 []
             )
             ->willReturnSelf();
-        $dbSelectMock1->method('where')
-            ->with('cl1.last_login_at < cl1.last_logout_at
-            AND cl1.last_logout_at IS NOT NULL')
-            ->willReturnSelf();
-
-        $dbSelectMock2->method('reset')
-            ->with(Select::COLUMNS)
-            ->willReturn($dbSelectMock2);
-        $dbSelectMock2->method('columns')->willReturnSelf();
-        $dbSelectMock2->method('joinLeft')
+        $selectMock->expects($this->once())
+            ->method('where')
             ->with(
-                ['cl2' => 'customer_log'],
-                'cl2.customer_id = main_table.customer_id',
-                []
+                '(cl.last_logout_at IS NOT NULL AND cl.last_login_at < cl.last_logout_at)
+                OR (cl.last_login_at < "' . gmdate("Y-m-d H:i:s", time() - 60) . '"
+                    AND (cl.last_logout_at IS NULL OR cl.last_login_at > cl.last_logout_at))'
             )
             ->willReturnSelf();
-        $dbSelectMock2->method('where')
-            ->with('cl2.last_login_at < "' . gmdate("Y-m-d H:i:s", time() - 60) . '"
-        AND (cl2.last_logout_at IS NULL OR cl2.last_login_at > cl2.last_logout_at)')
-            ->willReturnSelf();
 
-        $dbSelectMockUnion = $this->createMock(Select::class);
-        $connectionMock = $this->createMock(AdapterInterface::class);
-        $quoteCollectionMock->method('getConnection')->willReturn($connectionMock);
-        $connectionMock->method('select')->willReturn($dbSelectMockUnion);
-        $dbSelectMockUnion->method('union')
-            ->with([$dbSelectMock1, $dbSelectMock2], Select::SQL_UNION_ALL)
-            ->willReturn($dbSelectMockUnion);
+        $batchMock = $this->createMock(Collection::class);
+        $batchMock->method('addFieldToFilter')->willReturnSelf();
+        $batchMock->method('setOrder')->willReturnSelf();
+        $batchMock->method('setPageSize')->willReturnSelf();
+        $batchMock->method('getTable')->willReturn('customer_log');
+        $batchMock->method('getSelect')->willReturn($selectMock);
+        $batchMock->method('getIterator')->willReturn(new \ArrayIterator([$quote]));
 
-        $dbSelectMockUnion->method('where')
-            ->with($this->stringContains('main_table.entity_id IN ('))
-            ->willReturnSelf();
+        $this->quoteCollectionFactoryMock->method('create')
+            ->willReturnOnConsecutiveCalls($batchMock, $this->mockEmptyBatch());
 
-        $result = $this->model->getExpiredPersistentQuotes($storeMock, 0, 100);
-        $this->assertSame($quoteCollectionMock, $result);
+        $model = $this->createModel($this->batchSize);
+        $collected = [];
+        foreach ($model as $q) {
+            $collected[] = $q;
+        }
+
+        $this->assertSame([$quote], $collected);
     }
 }
