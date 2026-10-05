@@ -16,10 +16,11 @@ use Magento\Downloadable\Model\Link;
 use Magento\Downloadable\Model\Product\Type;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Downloadable\Api\DomainManagerInterface;
+use Magento\TestFramework\Helper\DownloadableDomains;
 
 /** @var DomainManagerInterface $domainManager */
 $domainManager = Bootstrap::getObjectManager()->get(DomainManagerInterface::class);
-$domainManager->addDomains(['example.com']);
+DownloadableDomains::addDomains($domainManager, ['example.com']);
 
 /** @var ProductRepositoryInterface $productRepository */
 $productRepository = Bootstrap::getObjectManager()
