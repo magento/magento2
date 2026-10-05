@@ -163,7 +163,7 @@ class AddProductsToCart
             $result = $cart->addProduct($product, $this->requestBuilder->build($cartItem));
         } catch (\Throwable $e) {
             $errors[] = $this->error->create(
-                __($e->getMessage())->render(),
+                __($e->getMessage()),
                 $cartItemPosition,
                 $stockItemQuantity
             );
@@ -171,7 +171,7 @@ class AddProductsToCart
 
         if (is_string($result)) {
             foreach (array_unique(explode("\n", $result)) as $error) {
-                $errors[] = $this->error->create(__($error)->render(), $cartItemPosition, $stockItemQuantity);
+                $errors[] = $this->error->create(__($error), $cartItemPosition, $stockItemQuantity);
             }
         }
 
