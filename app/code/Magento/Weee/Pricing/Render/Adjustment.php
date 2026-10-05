@@ -17,7 +17,7 @@ use Magento\Weee\Model\Tax;
 class Adjustment extends AbstractAdjustment
 {
     /**
-     * Weee helper
+     * Weee helper class
      *
      * @var \Magento\Weee\Helper\Data
      */
@@ -47,6 +47,8 @@ class Adjustment extends AbstractAdjustment
     }
 
     /**
+     * Apply adjustment amount and return result value
+     *
      * @return null
      */
     protected function apply()
@@ -56,15 +58,14 @@ class Adjustment extends AbstractAdjustment
             $this->amountRender->getAmount()->getAdjustmentAmount(\Magento\Weee\Pricing\TaxAdjustment::ADJUSTMENT_CODE);
 
         $product = $this->amountRender->getSaleableItem();
-            if (
-                $product->getTypeId() === \Magento\Bundle\Model\Product\Type::TYPE_CODE
+        if ($product->getTypeId() === \Magento\Bundle\Model\Product\Type::TYPE_CODE
                 && $this->displayPriceExcludingTax()
                 && !$this->typeOfDisplay([Tax::DISPLAY_EXCL])
             ) {
-             $this->amountRender->setDisplayValue(
-                $this->amountRender->getDisplayValue() + $weeeAmount 
+            $this->amountRender->setDisplayValue(
+                $this->amountRender->getDisplayValue() + $weeeAmount
             );
-            }
+        }
         $this->finalAmount = $this->amountRender->getDisplayValue();
 
         if ($this->typeOfDisplay([Tax::DISPLAY_EXCL_DESCR_INCL])) {
@@ -76,6 +77,8 @@ class Adjustment extends AbstractAdjustment
     }
 
     /**
+     * Get raw final amount
+     *
      * @return float
      */
     public function getRawFinalAmount()
@@ -94,6 +97,8 @@ class Adjustment extends AbstractAdjustment
     }
 
     /**
+     * Get final amount formatted as currency
+     *
      * @return float
      */
     public function getFinalAmount()
