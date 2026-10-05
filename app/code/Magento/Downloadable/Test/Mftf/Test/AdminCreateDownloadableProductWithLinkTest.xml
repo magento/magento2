@@ -24,6 +24,16 @@
             <!-- Create category -->
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
 
+            <!-- Defensive cleanup: a predecessor test sharing this browser session's guest cart
+                 (e.g. StorefrontCartPriceRuleOverCategoryAndQuantityTest / ACQE-10902) can leave
+                 items behind without clearing them in its <after>, which corrupts this test's
+                 later minicart-count assertion (ACQE-10901). Clear any leftover cart up front;
+                 no-op when the cart is already empty (button only renders when it has items). -->
+            <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="openCartPageForLeftoverCleanupCheck"/>
+            <conditionalClick selector="{{CheckoutCartProductSection.emptyCartButton}}" dependentSelector="{{CheckoutCartProductSection.emptyCartButton}}" visible="true" stepKey="clickClearCartIfLeftoverItemsPresent"/>
+            <conditionalClick selector="{{CheckoutCartProductSection.modalConfirmButton}}" dependentSelector="{{CheckoutCartProductSection.modalConfirmButton}}" visible="true" stepKey="confirmClearCartIfModalShown"/>
+            <waitForPageLoad stepKey="waitForCartPageLoadAfterLeftoverCleanup"/>
+
             <!-- Login as admin -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
         </before>

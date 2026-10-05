@@ -43,6 +43,20 @@ class Store extends \Magento\Framework\DataObject implements OptionSourceInterfa
     protected $_storeCollection;
 
     /**
+     * Groups indexed by website id: websiteId => \Magento\Store\Model\Group[]
+     *
+     * @var array|null
+     */
+    private $groupsByWebsiteId;
+
+    /**
+     * Stores indexed by group id: groupId => \Magento\Store\Model\Store[]
+     *
+     * @var array|null
+     */
+    private $storesByGroupId;
+
+    /**
      * @var bool
      */
     private $_isAdminScopeAllowed = true;
@@ -95,6 +109,7 @@ class Store extends \Magento\Framework\DataObject implements OptionSourceInterfa
         foreach ($groups as $group) {
             $this->_groupCollection[$group->getId()] = $group;
         }
+        $this->groupsByWebsiteId = null;
         return $this;
     }
 
@@ -106,7 +121,40 @@ class Store extends \Magento\Framework\DataObject implements OptionSourceInterfa
     protected function _loadStoreCollection()
     {
         $this->_storeCollection = $this->_storeManager->getStores();
+        $this->storesByGroupId = null;
         return $this;
+    }
+
+    /**
+     * Groups indexed by website id, built once from the loaded group collection
+     *
+     * @return array
+     */
+    private function getGroupsByWebsiteId()
+    {
+        if ($this->groupsByWebsiteId === null) {
+            $this->groupsByWebsiteId = [];
+            foreach ($this->_groupCollection as $group) {
+                $this->groupsByWebsiteId[(int)$group->getWebsiteId()][] = $group;
+            }
+        }
+        return $this->groupsByWebsiteId;
+    }
+
+    /**
+     * Stores indexed by group id, built once from the loaded store collection
+     *
+     * @return array
+     */
+    private function getStoresByGroupId()
+    {
+        if ($this->storesByGroupId === null) {
+            $this->storesByGroupId = [];
+            foreach ($this->_storeCollection as $store) {
+                $this->storesByGroupId[(int)$store->getGroupId()][] = $store;
+            }
+        }
+        return $this->storesByGroupId;
     }
 
     /**
@@ -127,18 +175,14 @@ class Store extends \Magento\Framework\DataObject implements OptionSourceInterfa
         if ($all && $this->_isAdminScopeAllowed) {
             $options[] = ['label' => __('All Store Views'), 'value' => 0];
         }
+        $groupsByWebsiteId = $this->getGroupsByWebsiteId();
+        $storesByGroupId = $this->getStoresByGroupId();
 
         foreach ($this->_websiteCollection as $website) {
             $websiteShow = false;
-            foreach ($this->_groupCollection as $group) {
-                if ($website->getId() != $group->getWebsiteId()) {
-                    continue;
-                }
+            foreach ($groupsByWebsiteId[(int)$website->getId()] ?? [] as $group) {
                 $values = [];
-                foreach ($this->_storeCollection as $store) {
-                    if ($group->getId() != $store->getGroupId()) {
-                        continue;
-                    }
+                foreach ($storesByGroupId[(int)$group->getId()] ?? [] as $store) {
                     if (!$websiteShow) {
                         $options[] = ['label' => $website->getName(), 'value' => []];
                         $websiteShow = true;
@@ -184,6 +228,8 @@ class Store extends \Magento\Framework\DataObject implements OptionSourceInterfa
         if ($isAll) {
             $out[] = ['value' => 0, 'label' => __('All Store Views')];
         }
+        $groupsByWebsiteId = $this->getGroupsByWebsiteId();
+        $storesByGroupId = $this->getStoresByGroupId();
 
         foreach ($websites as $website) {
             $websiteId = $website->getId();
@@ -191,15 +237,13 @@ class Store extends \Magento\Framework\DataObject implements OptionSourceInterfa
                 continue;
             }
             $out[$websiteId] = ['value' => $websiteId, 'label' => $website->getName()];
-
-            foreach ($website->getGroups() as $group) {
+            foreach ($groupsByWebsiteId[(int)$websiteId] ?? [] as $group) {
                 $groupId = $group->getId();
                 if ($groupIds && !in_array($groupId, $groupIds)) {
                     continue;
                 }
                 $out[$websiteId]['children'][$groupId] = ['value' => $groupId, 'label' => $group->getName()];
-
-                foreach ($group->getStores() as $store) {
+                foreach ($storesByGroupId[(int)$groupId] ?? [] as $store) {
                     $storeId = $store->getId();
                     if ($storeIds && !in_array($storeId, $storeIds)) {
                         continue;

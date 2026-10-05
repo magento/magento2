@@ -9,6 +9,9 @@ namespace Magento\Catalog\Model\Product\Gallery;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\Catalog\Model\Product\Type;
+use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\Catalog\Model\ResourceModel\Product\Gallery;
 use Magento\Framework\ObjectManagerInterface;
@@ -21,6 +24,8 @@ use PHPUnit\Framework\Attributes\DataProvider;
  * @magentoDataFixture Magento/Catalog/_files/product_simple.php
  * @magentoDataFixture Magento/Catalog/_files/product_image.php
  * @magentoDbIsolation enabled
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CreateHandlerTest extends \PHPUnit\Framework\TestCase
 {
@@ -276,6 +281,59 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
             $product->getStoreId()
         );
         $this->assertEquals(self::$fileName, $mediaAttributeValue);
+    }
+
+    /**
+     * Ensures alt text (label) is persisted for a newly added image on a brand-new product.
+     *
+     * @return void
+     */
+    public function testExecutePersistsLabelForNewProductImage(): void
+    {
+        $label = 'Alt Text Label';
+
+        $mediaConfig = $this->objectManager->get(\Magento\Catalog\Model\Product\Media\Config::class);
+        $mediaDirectory = $this->objectManager->get(\Magento\Framework\Filesystem::class)
+            ->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::MEDIA);
+        $mediaDirectory->writeFile($mediaConfig->getMediaPath(self::$fileName), 'existing');
+
+        $product = $this->objectManager->create(Product::class);
+        $product->isObjectNew(true);
+        $product->setTypeId(Type::TYPE_SIMPLE)
+            ->setAttributeSetId(4)
+            ->setWebsiteIds([1])
+            ->setName('New Alt Product')
+            ->setSku('new-alt-product')
+            ->setPrice(10)
+            ->setVisibility(Visibility::VISIBILITY_BOTH)
+            ->setStatus(Status::STATUS_ENABLED)
+            ->setStockData(['use_config_manage_stock' => 1, 'qty' => 100, 'is_in_stock' => 1])
+            ->setImage(self::$fileName)
+            ->setSmallImage(self::$fileName)
+            ->setThumbnail(self::$fileName)
+            ->setData(
+                'media_gallery',
+                ['images' => [
+                    [
+                        'file' => self::$fileName,
+                        'position' => 1,
+                        'label' => $label,
+                        'disabled' => 0,
+                        'media_type' => 'image',
+                    ],
+                ]]
+            )
+            ->setCanSaveCustomOptions(true);
+        $product->save();
+
+        $labels = $this->productResource->getAttributeRawValue(
+            $product->getId(),
+            ['image_label', 'small_image_label', 'thumbnail_label'],
+            0
+        );
+        $this->assertEquals($label, $labels['image_label'] ?? null);
+        $this->assertEquals($label, $labels['small_image_label'] ?? null);
+        $this->assertEquals($label, $labels['thumbnail_label'] ?? null);
     }
 
     /**

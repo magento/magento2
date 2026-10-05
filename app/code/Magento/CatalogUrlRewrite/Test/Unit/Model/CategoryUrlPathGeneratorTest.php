@@ -195,6 +195,57 @@ class CategoryUrlPathGeneratorTest extends TestCase
     }
 
     /**
+     * When a parent category is explicitly passed in, its own url_path must be trusted directly,
+     * not re-derived from scratch. Re-deriving it can read the parent's not-yet-flushed database
+     * state mid-save, so forcing the parent into a state where re-deriving it would require a repository lookup,
+     * and asserts that lookup never happens.
+     *
+     * @return void
+     */
+    public function testGetUrlPathTrustsExplicitlyProvidedParentWithoutRederivingIt(): void
+    {
+        $this->category->method('getParentId')->willReturn(20);
+        $this->category->method('getLevel')
+            ->willReturn(CategoryUrlPathGenerator::MINIMAL_CATEGORY_LEVEL_FOR_PROCESSING);
+        $this->category->method('getUrlPath')->willReturn(null);
+        $this->category->method('getUrlKey')->willReturn('child-key');
+        $this->category->method('isObjectNew')->willReturn(false);
+
+        $parentCategory = $this->createPartialMockWithReflection(
+            Category::class,
+            [
+                'getUrlPath',
+                '__wakeup',
+                'getParentId',
+                'getLevel',
+                'dataHasChangedFor',
+                'getUrlKey',
+                'getStoreId',
+                'isObjectNew',
+                'getParentCategories'
+            ]
+        );
+        // If this were re-derived instead of trusted, shouldReturnCurrentUrlPath() would need to
+        // fall through to a full recompute, which for a category at or above the processing level
+        // reaches out to the category repository for its own parent, the exact stale-read defect.
+        $parentCategory->method('getUrlPath')->willReturn('already-correct-parent-path');
+        $parentCategory->method('getUrlKey')->willReturn('parent-key');
+        $parentCategory->method('getLevel')
+            ->willReturn(CategoryUrlPathGenerator::MINIMAL_CATEGORY_LEVEL_FOR_PROCESSING);
+        $parentCategory->method('isObjectNew')->willReturn(false);
+        $parentCategory->method('getParentId')->willReturn(10);
+        $parentCategory->method('getStoreId')->willReturn(Store::DEFAULT_STORE_ID);
+        $parentCategory->method('dataHasChangedFor')->willReturn(false);
+        $parentCategory->method('getParentCategories')->willReturn([]);
+
+        $this->categoryRepository->expects($this->never())->method('get');
+
+        $result = $this->categoryUrlPathGenerator->getUrlPath($this->category, $parentCategory);
+
+        $this->assertEquals('already-correct-parent-path/child-key', $result);
+    }
+
+    /**
      * @return array
      */
     public static function getUrlPathWithSuffixDataProvider()

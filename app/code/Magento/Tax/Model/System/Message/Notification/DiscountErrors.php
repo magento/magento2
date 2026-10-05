@@ -52,7 +52,8 @@ class DiscountErrors implements \Magento\Tax\Model\System\Message\NotificationIn
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @codeCoverageIgnore
      */
     public function getIdentity()
@@ -61,7 +62,7 @@ class DiscountErrors implements \Magento\Tax\Model\System\Message\NotificationIn
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isDisplayed()
     {
@@ -72,7 +73,7 @@ class DiscountErrors implements \Magento\Tax\Model\System\Message\NotificationIn
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getText()
     {
@@ -92,12 +93,13 @@ class DiscountErrors implements \Magento\Tax\Model\System\Message\NotificationIn
             );
             $messageDetails .= "</p>";
         }
-        
+
         return $messageDetails;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @codeCoverageIgnore
      */
     public function getSeverity()
@@ -122,6 +124,7 @@ class DiscountErrors implements \Magento\Tax\Model\System\Message\NotificationIn
 
     /**
      * Return list of store names where tax discount settings are compatible.
+     *
      * Return true if settings are wrong for default store.
      *
      * @return array
@@ -132,10 +135,15 @@ class DiscountErrors implements \Magento\Tax\Model\System\Message\NotificationIn
             return $this->storesWithInvalidSettings;
         }
         $this->storesWithInvalidSettings = [];
-        $storeCollection = $this->storeManager->getStores(true);
-        foreach ($storeCollection as $store) {
-            if (!$this->checkSettings($store)) {
-                $website = $store->getWebsite();
+        $websites = $this->storeManager->getWebsites(true);
+        $checkedByWebsite = [];
+        foreach ($this->storeManager->getStores(true) as $store) {
+            $websiteId = (int)$store->getWebsiteId();
+            if (!array_key_exists($websiteId, $checkedByWebsite)) {
+                $checkedByWebsite[$websiteId] = $this->checkSettings($store);
+            }
+            if (!$checkedByWebsite[$websiteId]) {
+                $website = $websites[$websiteId] ?? $store->getWebsite();
                 $this->storesWithInvalidSettings[] = $website->getName() . ' (' . $store->getName() . ')';
             }
         }

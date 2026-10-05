@@ -44,7 +44,7 @@ class RouterListTest extends TestCase
             'anotherRouter' => ['class' => 'AnotherClass', 'disable' => false, 'sortOrder' => 15]
         ];
 
-        $this->objectManagerMock = $this->createStub(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $this->model = new RouterList($this->objectManagerMock, $this->routerList);
     }
 

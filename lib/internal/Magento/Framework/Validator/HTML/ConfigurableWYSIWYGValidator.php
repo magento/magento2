@@ -255,7 +255,7 @@ class ConfigurableWYSIWYGValidator implements WYSIWYGValidatorInterface
             }
         );
         $matches = [];
-        preg_match_all(self::$contentFiltrationPattern, $content, $matches);
+        preg_match_all(self::$contentFiltrationPattern, $this->maskQuotedAttributeValues($content), $matches);
         $valueCounts = array_count_values($matches[0]);
 
         $hasMultipleBody = isset($valueCounts['<body']) && $valueCounts['<body'] > 1;
@@ -270,6 +270,17 @@ class ConfigurableWYSIWYGValidator implements WYSIWYGValidatorInterface
         }
 
         return $dom;
+    }
+
+    /**
+     * Blank out quoted attribute values so their content cannot trigger malformed-syntax detection.
+     *
+     * @param string $content
+     * @return string
+     */
+    private function maskQuotedAttributeValues(string $content): string
+    {
+        return (string) preg_replace('/"[^"]*"|\'[^\']*\'/', '""', $content);
     }
 
     /**
