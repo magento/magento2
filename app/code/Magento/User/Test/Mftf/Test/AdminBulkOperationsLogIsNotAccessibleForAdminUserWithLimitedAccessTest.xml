@@ -1,3 +1,9 @@
+<!--
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
+-->
 <?xml version="1.0" encoding="UTF-8"?>
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
@@ -104,8 +110,18 @@
             </actionGroup>
             <actionGroup ref="AdminSaveUserRoleActionGroup" stepKey="saveRole"/>
         </before>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAdmin"/>
 
+            <actionGroup ref="AdminDeleteCustomUserActionGroup" stepKey="deleteNewUser">
+                <argument name="user" value="NewAdminUser"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteUserRoleActionGroup" stepKey="deleteRestrictedRole">
+                <argument name="roleName" value="{{adminProductInWebsiteRole.rolename}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout2"/>
         <after>
+
         </after>
         <actionGroup ref="AdminCreateUserWithApiRoleActionGroup" stepKey="adminCreateUser">
             <argument name="user" value="NewAdminUser"/>
