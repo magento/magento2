@@ -5,10 +5,14 @@
  */
 namespace Magento\Catalog\Helper;
 
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\Customer\Test\Fixture\Customer as CustomerFixture;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Tax\Model\ClassModel;
 use Magento\Tax\Model\Config;
 use Magento\Tax\Model\TaxRuleFixtureFactory;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
@@ -245,12 +249,17 @@ class DataTest extends \PHPUnit\Framework\TestCase
      * @param string[] $configs
      * @param string $productClassName
      *
-     * @magentoDataFixture Magento/Catalog/_files/products.php
-     * @magentoDataFixture Magento/Customer/_files/customer.php
-     * @magentoDataFixture Magento/Customer/_files/customer_address.php
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
      */
+    #[
+        DataFixture(ProductFixture::class, as: 'product'),
+        DataFixture(
+            CustomerFixture::class,
+            ['addresses' => [['country_id' => 'US', 'region_id' => 42, 'region' => 'New Jersey']]],
+            'customer'
+        )
+    ]
     #[DataProvider('getTaxPriceDataProvider')]
     public function testGetTaxPrice(
         $input,
@@ -259,10 +268,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $productClassName = 'DefaultProductClass'
     ) {
         $this->setUpDefaultRules();
-        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
-        $productRepository = $this->objectManager->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
         /** @var \Magento\Catalog\Model\Product $product */
-        $product = $productRepository->get('simple');
+        $product = DataFixtureStorageManager::getStorage()->get('product');
         $product->setTaxClassId($this->taxClasses[$productClassName]);
         $shippingAddress = $this->getCustomerAddress();
         $billingAddress = $shippingAddress;
@@ -284,7 +291,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         if ($input->getNotEqual()) {
             $this->assertNotEquals($expectOutputPrice, $price);
         } else {
-            $this->assertEquals($expectOutputPrice, $price);
+            $this->assertEqualsWithDelta((float)$expectOutputPrice, $price, 0.0000000001);
         }
     }
 
@@ -293,7 +300,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
      */
     public static function getTaxPriceDataProvider()
     {
-        return [
+        $cases = [
             'price is 0' => [
                 (new \Magento\Framework\DataObject())->setPrice(0),
                 0,
@@ -321,8 +328,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
                 ],
             ],
             'price conversion, display including tax, no round' => [
-                (new \Magento\Framework\DataObject())->setPrice(3.256)->setNotEqual(true),
-                '3.5',  // should be not equal to rounded value (eg, 3.5045009999999999)
+                (new \Magento\Framework\DataObject())->setPrice(3.256)->setRoundPrice(false),
+                3.5002,
                 [
                     [
                         'path' => Config::CONFIG_XML_PATH_PRICE_INCLUDES_TAX,
@@ -432,6 +439,99 @@ class DataTest extends \PHPUnit\Framework\TestCase
                 'HigherProductClass',
             ],
         ];
+        return array_merge($cases, self::getExplicitTaxInputCases(), self::getShippingDisplayCases());
+    }
+
+    private static function getExplicitTaxInputCases(): array
+    {
+        $cases = [];
+        $prices = [
+            'exclusive to default' => [false, null, 3.256],
+            'exclusive to exclusive' => [false, false, 3.256],
+            'exclusive to inclusive' => [false, true, 3.5002],
+            'inclusive to default' => [true, null, 3.256 / 1.075],
+            'inclusive to exclusive' => [true, false, 3.256 / 1.075],
+            'inclusive to inclusive' => [true, true, 3.256],
+        ];
+        foreach ([
+            \Magento\Tax\Api\TaxCalculationInterface::CALC_UNIT_BASE,
+            \Magento\Tax\Api\TaxCalculationInterface::CALC_ROW_BASE,
+            \Magento\Tax\Api\TaxCalculationInterface::CALC_TOTAL_BASE,
+        ] as $algorithm) {
+            foreach ($prices as $basis => [$inputIncludesTax, $outputIncludesTax, $expected]) {
+                foreach ([false, true] as $roundPrice) {
+                    $name = $algorithm . ' ' . $basis . ' rounding ' . (int)$roundPrice;
+                    $cases[$name] = [
+                        (new \Magento\Framework\DataObject())
+                            ->setPrice(3.256)
+                            ->setPriceIncludesTax($inputIncludesTax)
+                            ->setIncludingTax($outputIncludesTax)
+                            ->setRoundPrice($roundPrice),
+                        $roundPrice ? round($expected, 2) : $expected,
+                        [
+                            ['path' => Config::XML_PATH_ALGORITHM, 'value' => $algorithm],
+                            ['path' => Config::CONFIG_XML_PATH_PRICE_INCLUDES_TAX, 'value' => 0],
+                            [
+                                'path' => Config::CONFIG_XML_PATH_PRICE_DISPLAY_TYPE,
+                                'value' => Config::DISPLAY_TYPE_EXCLUDING_TAX,
+                            ],
+                            [
+                                'path' => Config::XML_PATH_DISPLAY_CART_PRICE,
+                                'value' => Config::DISPLAY_TYPE_EXCLUDING_TAX,
+                            ],
+                            [
+                                'path' => Config::XML_PATH_DISPLAY_CART_SHIPPING,
+                                'value' => Config::DISPLAY_TYPE_EXCLUDING_TAX,
+                            ],
+                            ['path' => Config::CONFIG_XML_PATH_SHIPPING_INCLUDES_TAX, 'value' => 0],
+                            ['path' => Config::CONFIG_XML_PATH_CROSS_BORDER_TRADE_ENABLED, 'value' => 0],
+                            ['path' => 'shipping/origin/country_id', 'value' => 'US'],
+                            ['path' => 'shipping/origin/region_id', 'value' => 12],
+                            ['path' => 'shipping/origin/postcode', 'value' => '*'],
+                        ],
+                    ];
+                }
+            }
+        }
+        return $cases;
+    }
+
+    private static function getShippingDisplayCases(): array
+    {
+        $cases = [];
+        foreach ([
+            Config::DISPLAY_TYPE_EXCLUDING_TAX,
+            Config::DISPLAY_TYPE_INCLUDING_TAX,
+            Config::DISPLAY_TYPE_BOTH,
+        ] as $catalogDisplay) {
+            foreach ([0, 1] as $shippingInput) {
+                foreach ([
+                    Config::DISPLAY_TYPE_EXCLUDING_TAX,
+                    Config::DISPLAY_TYPE_INCLUDING_TAX,
+                    Config::DISPLAY_TYPE_BOTH,
+                ] as $shippingDisplay) {
+                    $includingTax = $catalogDisplay !== Config::DISPLAY_TYPE_EXCLUDING_TAX;
+                    $cases["catalog display $catalogDisplay shipping input $shippingInput display $shippingDisplay"] = [
+                        (new \Magento\Framework\DataObject())
+                            ->setPrice(50)
+                            ->setIncludingTax($includingTax)
+                            ->setRoundPrice(true),
+                        $includingTax ? 53.75 : 50.0,
+                        [
+                            ['path' => Config::CONFIG_XML_PATH_PRICE_INCLUDES_TAX, 'value' => 0],
+                            ['path' => Config::CONFIG_XML_PATH_PRICE_DISPLAY_TYPE, 'value' => $catalogDisplay],
+                            [
+                                'path' => Config::XML_PATH_DISPLAY_CART_PRICE,
+                                'value' => Config::DISPLAY_TYPE_EXCLUDING_TAX,
+                            ],
+                            ['path' => Config::CONFIG_XML_PATH_SHIPPING_INCLUDES_TAX, 'value' => $shippingInput],
+                            ['path' => Config::XML_PATH_DISPLAY_CART_SHIPPING, 'value' => $shippingDisplay],
+                        ],
+                    ];
+                }
+            }
+        }
+        return $cases;
     }
 
     /**
@@ -485,13 +585,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
      */
     private function getCustomerAddress()
     {
-        $fixtureCustomerId = 1;
-        $customerAddress = $this->objectManager->create(
-            \Magento\Customer\Model\Address::class
-        )->load($fixtureCustomerId);
-        /** Set data which corresponds tax class fixture */
-        $customerAddress->setCountryId('US')->setRegionId(42)->save();
-        return $customerAddress;
+        return DataFixtureStorageManager::getStorage()->get('customer')->getDefaultShippingAddress();
     }
 
     /**

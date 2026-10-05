@@ -25,6 +25,17 @@ use Magento\Catalog\Test\Fixture\Product as ProductFixture;
  */
 class PriceRangeTest extends GraphQlAbstract
 {
+    private const TAX_RULE_DATA = [
+        'customer_tax_class_ids' => [3],
+        'product_tax_class_ids' => ['$product_tax_class.classId$'],
+        'tax_rate_ids' => ['$rate.id$']
+    ];
+
+    private const TAX_PRODUCT_DATA = [
+        'price' => 50,
+        'custom_attributes' => ['tax_class_id' => '$product_tax_class.classId$']
+    ];
+
     /**
      * @var ObjectManager|null
      */
@@ -309,6 +320,425 @@ class PriceRangeTest extends GraphQlAbstract
         $this->assertEquals(9.3, $priceRange['minimum_price']['final_price']['value']);
         $this->assertEquals(9.3, $priceRange['maximum_price']['regular_price']['value']);
         $this->assertEquals(9.3, $priceRange['maximum_price']['final_price']['value']);
+    }
+
+    #[
+        Config('tax/calculation/price_includes_tax', 0, 'store', 'default'),
+        Config('tax/calculation/shipping_includes_tax', 0, 'store', 'default'),
+        Config('tax/display/type', 1, 'store', 'default'),
+        Config('tax/cart_display/price', 1, 'store', 'default'),
+        Config('tax/cart_display/shipping', 1, 'store', 'default'),
+        Config('tax/display/shipping', 1, 'store', 'default'),
+        Config('tax/defaults/country', 'US', 'store', 'default'),
+        Config('tax/defaults/region', 0, 'store', 'default'),
+        Config('tax/defaults/postcode', '*', 'store', 'default'),
+        DataFixture(ProductTaxClass::class, as: 'product_tax_class'),
+        DataFixture(TaxRateFixture::class, ['rate' => 5], 'rate'),
+        DataFixture(TaxRuleFixture::class, self::TAX_RULE_DATA),
+        DataFixture(ProductFixture::class, self::TAX_PRODUCT_DATA, 'product')
+    ]
+    public function testExclusivePricesWithExclusiveShippingInputAndDisplay(): void
+    {
+        $this->assertTaxPriceRange(50);
+    }
+
+    #[
+        Config('tax/calculation/price_includes_tax', 0, 'store', 'default'),
+        Config('tax/calculation/shipping_includes_tax', 0, 'store', 'default'),
+        Config('tax/display/type', 2, 'store', 'default'),
+        Config('tax/cart_display/price', 1, 'store', 'default'),
+        Config('tax/cart_display/shipping', 1, 'store', 'default'),
+        Config('tax/display/shipping', 1, 'store', 'default'),
+        Config('tax/defaults/country', 'US', 'store', 'default'),
+        Config('tax/defaults/region', 0, 'store', 'default'),
+        Config('tax/defaults/postcode', '*', 'store', 'default'),
+        DataFixture(ProductTaxClass::class, as: 'product_tax_class'),
+        DataFixture(TaxRateFixture::class, ['rate' => 5], 'rate'),
+        DataFixture(TaxRuleFixture::class, self::TAX_RULE_DATA),
+        DataFixture(ProductFixture::class, self::TAX_PRODUCT_DATA, 'product')
+    ]
+    public function testInclusivePricesWithExclusiveShippingInputAndDisplay(): void
+    {
+        $this->assertTaxPriceRange(52.5);
+    }
+
+    #[
+        Config('tax/calculation/price_includes_tax', 0, 'store', 'default'),
+        Config('tax/calculation/shipping_includes_tax', 0, 'store', 'default'),
+        Config('tax/display/type', 3, 'store', 'default'),
+        Config('tax/cart_display/price', 1, 'store', 'default'),
+        Config('tax/cart_display/shipping', 1, 'store', 'default'),
+        Config('tax/display/shipping', 1, 'store', 'default'),
+        Config('tax/defaults/country', 'US', 'store', 'default'),
+        Config('tax/defaults/region', 0, 'store', 'default'),
+        Config('tax/defaults/postcode', '*', 'store', 'default'),
+        DataFixture(ProductTaxClass::class, as: 'product_tax_class'),
+        DataFixture(TaxRateFixture::class, ['rate' => 5], 'rate'),
+        DataFixture(TaxRuleFixture::class, self::TAX_RULE_DATA),
+        DataFixture(ProductFixture::class, self::TAX_PRODUCT_DATA, 'product')
+    ]
+    public function testBothPricesWithExclusiveShippingInputAndDisplay(): void
+    {
+        $this->assertTaxPriceRange(52.5);
+    }
+
+    #[
+        Config('tax/calculation/price_includes_tax', 0, 'store', 'default'),
+        Config('tax/calculation/shipping_includes_tax', 0, 'store', 'default'),
+        Config('tax/display/type', 1, 'store', 'default'),
+        Config('tax/cart_display/price', 1, 'store', 'default'),
+        Config('tax/cart_display/shipping', 2, 'store', 'default'),
+        Config('tax/display/shipping', 2, 'store', 'default'),
+        Config('tax/defaults/country', 'US', 'store', 'default'),
+        Config('tax/defaults/region', 0, 'store', 'default'),
+        Config('tax/defaults/postcode', '*', 'store', 'default'),
+        DataFixture(ProductTaxClass::class, as: 'product_tax_class'),
+        DataFixture(TaxRateFixture::class, ['rate' => 5], 'rate'),
+        DataFixture(TaxRuleFixture::class, self::TAX_RULE_DATA),
+        DataFixture(ProductFixture::class, self::TAX_PRODUCT_DATA, 'product')
+    ]
+    public function testExclusivePricesWithExclusiveShippingInputAndInclusiveDisplay(): void
+    {
+        $this->assertTaxPriceRange(50);
+    }
+
+    #[
+        Config('tax/calculation/price_includes_tax', 0, 'store', 'default'),
+        Config('tax/calculation/shipping_includes_tax', 0, 'store', 'default'),
+        Config('tax/display/type', 2, 'store', 'default'),
+        Config('tax/cart_display/price', 1, 'store', 'default'),
+        Config('tax/cart_display/shipping', 2, 'store', 'default'),
+        Config('tax/display/shipping', 2, 'store', 'default'),
+        Config('tax/defaults/country', 'US', 'store', 'default'),
+        Config('tax/defaults/region', 0, 'store', 'default'),
+        Config('tax/defaults/postcode', '*', 'store', 'default'),
+        DataFixture(ProductTaxClass::class, as: 'product_tax_class'),
+        DataFixture(TaxRateFixture::class, ['rate' => 5], 'rate'),
+        DataFixture(TaxRuleFixture::class, self::TAX_RULE_DATA),
+        DataFixture(ProductFixture::class, self::TAX_PRODUCT_DATA, 'product')
+    ]
+    public function testInclusivePricesWithExclusiveShippingInputAndInclusiveDisplay(): void
+    {
+        $this->assertTaxPriceRange(52.5);
+    }
+
+    #[
+        Config('tax/calculation/price_includes_tax', 0, 'store', 'default'),
+        Config('tax/calculation/shipping_includes_tax', 0, 'store', 'default'),
+        Config('tax/display/type', 3, 'store', 'default'),
+        Config('tax/cart_display/price', 1, 'store', 'default'),
+        Config('tax/cart_display/shipping', 2, 'store', 'default'),
+        Config('tax/display/shipping', 2, 'store', 'default'),
+        Config('tax/defaults/country', 'US', 'store', 'default'),
+        Config('tax/defaults/region', 0, 'store', 'default'),
+        Config('tax/defaults/postcode', '*', 'store', 'default'),
+        DataFixture(ProductTaxClass::class, as: 'product_tax_class'),
+        DataFixture(TaxRateFixture::class, ['rate' => 5], 'rate'),
+        DataFixture(TaxRuleFixture::class, self::TAX_RULE_DATA),
+        DataFixture(ProductFixture::class, self::TAX_PRODUCT_DATA, 'product')
+    ]
+    public function testBothPricesWithExclusiveShippingInputAndInclusiveDisplay(): void
+    {
+        $this->assertTaxPriceRange(52.5);
+    }
+
+    #[
+        Config('tax/calculation/price_includes_tax', 0, 'store', 'default'),
+        Config('tax/calculation/shipping_includes_tax', 0, 'store', 'default'),
+        Config('tax/display/type', 1, 'store', 'default'),
+        Config('tax/cart_display/price', 1, 'store', 'default'),
+        Config('tax/cart_display/shipping', 3, 'store', 'default'),
+        Config('tax/display/shipping', 3, 'store', 'default'),
+        Config('tax/defaults/country', 'US', 'store', 'default'),
+        Config('tax/defaults/region', 0, 'store', 'default'),
+        Config('tax/defaults/postcode', '*', 'store', 'default'),
+        DataFixture(ProductTaxClass::class, as: 'product_tax_class'),
+        DataFixture(TaxRateFixture::class, ['rate' => 5], 'rate'),
+        DataFixture(TaxRuleFixture::class, self::TAX_RULE_DATA),
+        DataFixture(ProductFixture::class, self::TAX_PRODUCT_DATA, 'product')
+    ]
+    public function testExclusivePricesWithExclusiveShippingInputAndBothDisplays(): void
+    {
+        $this->assertTaxPriceRange(50);
+    }
+
+    #[
+        Config('tax/calculation/price_includes_tax', 0, 'store', 'default'),
+        Config('tax/calculation/shipping_includes_tax', 0, 'store', 'default'),
+        Config('tax/display/type', 2, 'store', 'default'),
+        Config('tax/cart_display/price', 1, 'store', 'default'),
+        Config('tax/cart_display/shipping', 3, 'store', 'default'),
+        Config('tax/display/shipping', 3, 'store', 'default'),
+        Config('tax/defaults/country', 'US', 'store', 'default'),
+        Config('tax/defaults/region', 0, 'store', 'default'),
+        Config('tax/defaults/postcode', '*', 'store', 'default'),
+        DataFixture(ProductTaxClass::class, as: 'product_tax_class'),
+        DataFixture(TaxRateFixture::class, ['rate' => 5], 'rate'),
+        DataFixture(TaxRuleFixture::class, self::TAX_RULE_DATA),
+        DataFixture(ProductFixture::class, self::TAX_PRODUCT_DATA, 'product')
+    ]
+    public function testInclusivePricesWithExclusiveShippingInputAndBothDisplays(): void
+    {
+        $this->assertTaxPriceRange(52.5);
+    }
+
+    #[
+        Config('tax/calculation/price_includes_tax', 0, 'store', 'default'),
+        Config('tax/calculation/shipping_includes_tax', 0, 'store', 'default'),
+        Config('tax/display/type', 3, 'store', 'default'),
+        Config('tax/cart_display/price', 1, 'store', 'default'),
+        Config('tax/cart_display/shipping', 3, 'store', 'default'),
+        Config('tax/display/shipping', 3, 'store', 'default'),
+        Config('tax/defaults/country', 'US', 'store', 'default'),
+        Config('tax/defaults/region', 0, 'store', 'default'),
+        Config('tax/defaults/postcode', '*', 'store', 'default'),
+        DataFixture(ProductTaxClass::class, as: 'product_tax_class'),
+        DataFixture(TaxRateFixture::class, ['rate' => 5], 'rate'),
+        DataFixture(TaxRuleFixture::class, self::TAX_RULE_DATA),
+        DataFixture(ProductFixture::class, self::TAX_PRODUCT_DATA, 'product')
+    ]
+    public function testBothPricesWithExclusiveShippingInputAndBothDisplays(): void
+    {
+        $this->assertTaxPriceRange(52.5);
+    }
+
+    #[
+        Config('tax/calculation/price_includes_tax', 0, 'store', 'default'),
+        Config('tax/calculation/shipping_includes_tax', 1, 'store', 'default'),
+        Config('tax/display/type', 1, 'store', 'default'),
+        Config('tax/cart_display/price', 1, 'store', 'default'),
+        Config('tax/cart_display/shipping', 1, 'store', 'default'),
+        Config('tax/display/shipping', 1, 'store', 'default'),
+        Config('tax/defaults/country', 'US', 'store', 'default'),
+        Config('tax/defaults/region', 0, 'store', 'default'),
+        Config('tax/defaults/postcode', '*', 'store', 'default'),
+        DataFixture(ProductTaxClass::class, as: 'product_tax_class'),
+        DataFixture(TaxRateFixture::class, ['rate' => 5], 'rate'),
+        DataFixture(TaxRuleFixture::class, self::TAX_RULE_DATA),
+        DataFixture(ProductFixture::class, self::TAX_PRODUCT_DATA, 'product')
+    ]
+    public function testExclusivePricesWithInclusiveShippingInputAndExclusiveDisplay(): void
+    {
+        $this->assertTaxPriceRange(50);
+    }
+
+    #[
+        Config('tax/calculation/price_includes_tax', 0, 'store', 'default'),
+        Config('tax/calculation/shipping_includes_tax', 1, 'store', 'default'),
+        Config('tax/display/type', 2, 'store', 'default'),
+        Config('tax/cart_display/price', 1, 'store', 'default'),
+        Config('tax/cart_display/shipping', 1, 'store', 'default'),
+        Config('tax/display/shipping', 1, 'store', 'default'),
+        Config('tax/defaults/country', 'US', 'store', 'default'),
+        Config('tax/defaults/region', 0, 'store', 'default'),
+        Config('tax/defaults/postcode', '*', 'store', 'default'),
+        DataFixture(ProductTaxClass::class, as: 'product_tax_class'),
+        DataFixture(TaxRateFixture::class, ['rate' => 5], 'rate'),
+        DataFixture(TaxRuleFixture::class, self::TAX_RULE_DATA),
+        DataFixture(ProductFixture::class, self::TAX_PRODUCT_DATA, 'product')
+    ]
+    public function testInclusivePricesWithInclusiveShippingInputAndExclusiveDisplay(): void
+    {
+        $this->assertTaxPriceRange(52.5);
+    }
+
+    #[
+        Config('tax/calculation/price_includes_tax', 0, 'store', 'default'),
+        Config('tax/calculation/shipping_includes_tax', 1, 'store', 'default'),
+        Config('tax/display/type', 3, 'store', 'default'),
+        Config('tax/cart_display/price', 1, 'store', 'default'),
+        Config('tax/cart_display/shipping', 1, 'store', 'default'),
+        Config('tax/display/shipping', 1, 'store', 'default'),
+        Config('tax/defaults/country', 'US', 'store', 'default'),
+        Config('tax/defaults/region', 0, 'store', 'default'),
+        Config('tax/defaults/postcode', '*', 'store', 'default'),
+        DataFixture(ProductTaxClass::class, as: 'product_tax_class'),
+        DataFixture(TaxRateFixture::class, ['rate' => 5], 'rate'),
+        DataFixture(TaxRuleFixture::class, self::TAX_RULE_DATA),
+        DataFixture(ProductFixture::class, self::TAX_PRODUCT_DATA, 'product')
+    ]
+    public function testBothPricesWithInclusiveShippingInputAndExclusiveDisplay(): void
+    {
+        $this->assertTaxPriceRange(52.5);
+    }
+
+    #[
+        Config('tax/calculation/price_includes_tax', 0, 'store', 'default'),
+        Config('tax/calculation/shipping_includes_tax', 1, 'store', 'default'),
+        Config('tax/display/type', 1, 'store', 'default'),
+        Config('tax/cart_display/price', 1, 'store', 'default'),
+        Config('tax/cart_display/shipping', 2, 'store', 'default'),
+        Config('tax/display/shipping', 2, 'store', 'default'),
+        Config('tax/defaults/country', 'US', 'store', 'default'),
+        Config('tax/defaults/region', 0, 'store', 'default'),
+        Config('tax/defaults/postcode', '*', 'store', 'default'),
+        DataFixture(ProductTaxClass::class, as: 'product_tax_class'),
+        DataFixture(TaxRateFixture::class, ['rate' => 5], 'rate'),
+        DataFixture(TaxRuleFixture::class, self::TAX_RULE_DATA),
+        DataFixture(ProductFixture::class, self::TAX_PRODUCT_DATA, 'product')
+    ]
+    public function testExclusivePricesWithInclusiveShippingInputAndInclusiveDisplay(): void
+    {
+        $this->assertTaxPriceRange(50);
+    }
+
+    #[
+        Config('tax/calculation/price_includes_tax', 0, 'store', 'default'),
+        Config('tax/calculation/shipping_includes_tax', 1, 'store', 'default'),
+        Config('tax/display/type', 2, 'store', 'default'),
+        Config('tax/cart_display/price', 1, 'store', 'default'),
+        Config('tax/cart_display/shipping', 2, 'store', 'default'),
+        Config('tax/display/shipping', 2, 'store', 'default'),
+        Config('tax/defaults/country', 'US', 'store', 'default'),
+        Config('tax/defaults/region', 0, 'store', 'default'),
+        Config('tax/defaults/postcode', '*', 'store', 'default'),
+        DataFixture(ProductTaxClass::class, as: 'product_tax_class'),
+        DataFixture(TaxRateFixture::class, ['rate' => 5], 'rate'),
+        DataFixture(TaxRuleFixture::class, self::TAX_RULE_DATA),
+        DataFixture(ProductFixture::class, self::TAX_PRODUCT_DATA, 'product')
+    ]
+    public function testInclusivePricesWithInclusiveShippingInputAndInclusiveDisplay(): void
+    {
+        $this->assertTaxPriceRange(52.5);
+    }
+
+    #[
+        Config('tax/calculation/price_includes_tax', 0, 'store', 'default'),
+        Config('tax/calculation/shipping_includes_tax', 1, 'store', 'default'),
+        Config('tax/display/type', 3, 'store', 'default'),
+        Config('tax/cart_display/price', 1, 'store', 'default'),
+        Config('tax/cart_display/shipping', 2, 'store', 'default'),
+        Config('tax/display/shipping', 2, 'store', 'default'),
+        Config('tax/defaults/country', 'US', 'store', 'default'),
+        Config('tax/defaults/region', 0, 'store', 'default'),
+        Config('tax/defaults/postcode', '*', 'store', 'default'),
+        DataFixture(ProductTaxClass::class, as: 'product_tax_class'),
+        DataFixture(TaxRateFixture::class, ['rate' => 5], 'rate'),
+        DataFixture(TaxRuleFixture::class, self::TAX_RULE_DATA),
+        DataFixture(ProductFixture::class, self::TAX_PRODUCT_DATA, 'product')
+    ]
+    public function testBothPricesWithInclusiveShippingInputAndInclusiveDisplay(): void
+    {
+        $this->assertTaxPriceRange(52.5);
+    }
+
+    #[
+        Config('tax/calculation/price_includes_tax', 0, 'store', 'default'),
+        Config('tax/calculation/shipping_includes_tax', 1, 'store', 'default'),
+        Config('tax/display/type', 1, 'store', 'default'),
+        Config('tax/cart_display/price', 1, 'store', 'default'),
+        Config('tax/cart_display/shipping', 3, 'store', 'default'),
+        Config('tax/display/shipping', 3, 'store', 'default'),
+        Config('tax/defaults/country', 'US', 'store', 'default'),
+        Config('tax/defaults/region', 0, 'store', 'default'),
+        Config('tax/defaults/postcode', '*', 'store', 'default'),
+        DataFixture(ProductTaxClass::class, as: 'product_tax_class'),
+        DataFixture(TaxRateFixture::class, ['rate' => 5], 'rate'),
+        DataFixture(TaxRuleFixture::class, self::TAX_RULE_DATA),
+        DataFixture(ProductFixture::class, self::TAX_PRODUCT_DATA, 'product')
+    ]
+    public function testExclusivePricesWithInclusiveShippingInputAndBothDisplays(): void
+    {
+        $this->assertTaxPriceRange(50);
+    }
+
+    #[
+        Config('tax/calculation/price_includes_tax', 0, 'store', 'default'),
+        Config('tax/calculation/shipping_includes_tax', 1, 'store', 'default'),
+        Config('tax/display/type', 2, 'store', 'default'),
+        Config('tax/cart_display/price', 1, 'store', 'default'),
+        Config('tax/cart_display/shipping', 3, 'store', 'default'),
+        Config('tax/display/shipping', 3, 'store', 'default'),
+        Config('tax/defaults/country', 'US', 'store', 'default'),
+        Config('tax/defaults/region', 0, 'store', 'default'),
+        Config('tax/defaults/postcode', '*', 'store', 'default'),
+        DataFixture(ProductTaxClass::class, as: 'product_tax_class'),
+        DataFixture(TaxRateFixture::class, ['rate' => 5], 'rate'),
+        DataFixture(TaxRuleFixture::class, self::TAX_RULE_DATA),
+        DataFixture(ProductFixture::class, self::TAX_PRODUCT_DATA, 'product')
+    ]
+    public function testInclusivePricesWithInclusiveShippingInputAndBothDisplays(): void
+    {
+        $this->assertTaxPriceRange(52.5);
+    }
+
+    #[
+        Config('tax/calculation/price_includes_tax', 0, 'store', 'default'),
+        Config('tax/calculation/shipping_includes_tax', 1, 'store', 'default'),
+        Config('tax/display/type', 3, 'store', 'default'),
+        Config('tax/cart_display/price', 1, 'store', 'default'),
+        Config('tax/cart_display/shipping', 3, 'store', 'default'),
+        Config('tax/display/shipping', 3, 'store', 'default'),
+        Config('tax/defaults/country', 'US', 'store', 'default'),
+        Config('tax/defaults/region', 0, 'store', 'default'),
+        Config('tax/defaults/postcode', '*', 'store', 'default'),
+        DataFixture(ProductTaxClass::class, as: 'product_tax_class'),
+        DataFixture(TaxRateFixture::class, ['rate' => 5], 'rate'),
+        DataFixture(TaxRuleFixture::class, self::TAX_RULE_DATA),
+        DataFixture(ProductFixture::class, self::TAX_PRODUCT_DATA, 'product')
+    ]
+    public function testBothPricesWithInclusiveShippingInputAndBothDisplays(): void
+    {
+        $this->assertTaxPriceRange(52.5);
+    }
+
+    #[
+        Config('tax/calculation/price_includes_tax', 0, 'store', 'default'),
+        Config('tax/calculation/shipping_includes_tax', 1, 'store', 'default'),
+        Config('tax/display/type', 2, 'store', 'default'),
+        Config('tax/cart_display/price', 2, 'store', 'default'),
+        Config('tax/cart_display/shipping', 1, 'store', 'default'),
+        Config('tax/display/shipping', 1, 'store', 'default'),
+        Config('tax/defaults/country', 'US', 'store', 'default'),
+        Config('tax/defaults/region', 0, 'store', 'default'),
+        Config('tax/defaults/postcode', '*', 'store', 'default'),
+        DataFixture(ProductTaxClass::class, as: 'product_tax_class'),
+        DataFixture(TaxRateFixture::class, ['rate' => 5], 'rate'),
+        DataFixture(TaxRuleFixture::class, self::TAX_RULE_DATA),
+        DataFixture(ProductFixture::class, self::TAX_PRODUCT_DATA, 'product')
+    ]
+    public function testInclusivePricesWithInclusiveCartPricesAndShippingInput(): void
+    {
+        $this->assertTaxPriceRange(52.5);
+    }
+
+    #[
+        Config('tax/calculation/price_includes_tax', 0, 'store', 'default'),
+        Config('tax/calculation/shipping_includes_tax', 1, 'store', 'default'),
+        Config('tax/display/type', 1, 'store', 'default'),
+        Config('tax/cart_display/price', 3, 'store', 'default'),
+        Config('tax/cart_display/shipping', 3, 'store', 'default'),
+        Config('tax/display/shipping', 3, 'store', 'default'),
+        Config('tax/defaults/country', 'US', 'store', 'default'),
+        Config('tax/defaults/region', 0, 'store', 'default'),
+        Config('tax/defaults/postcode', '*', 'store', 'default'),
+        DataFixture(ProductTaxClass::class, as: 'product_tax_class'),
+        DataFixture(TaxRateFixture::class, ['rate' => 5], 'rate'),
+        DataFixture(TaxRuleFixture::class, self::TAX_RULE_DATA),
+        DataFixture(ProductFixture::class, self::TAX_PRODUCT_DATA, 'product')
+    ]
+    public function testExclusivePricesWithBothCartPriceDisplaysAndInclusiveShippingInput(): void
+    {
+        $this->assertTaxPriceRange(50);
+    }
+
+    private function assertTaxPriceRange(float $expectedPrice): void
+    {
+        $product = DataFixtureStorageManager::getStorage()->get('product');
+        $response = $this->graphQlQuery(
+            $this->getProductSearchQuery($product->getSku()),
+            [],
+            '',
+            ['Store' => 'default']
+        );
+
+        self::assertCount(1, $response['products']['items']);
+        $priceRange = $response['products']['items'][0]['price_range'];
+        foreach (['minimum_price', 'maximum_price'] as $range) {
+            foreach (['regular_price', 'final_price'] as $price) {
+                self::assertEquals($expectedPrice, $priceRange[$range][$price]['value'], "$range.$price");
+            }
+        }
     }
 
     /**

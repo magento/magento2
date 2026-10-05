@@ -368,49 +368,98 @@ class ConfigTest extends TestCase
         ];
     }
 
-    /**
-     * Tests check if necessary do product price conversion
-     *
-     * @return void
-     */
-    public function testNeedPriceConversion(): void
-    {
+    #[DataProvider('needPriceConversionDataProvider')]
+    public function testNeedPriceConversion(
+        bool $catalogIncludesTax,
+        int $catalogDisplay,
+        int $cartDisplay,
+        bool $shippingIncludesTax,
+        int $shippingDisplay,
+        int|bool $expected,
+        bool $useShippingExcludeTax = false
+    ): void {
         $scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $scopeConfigMock
             ->method('getValue')
-            ->willReturnMap(
-                [
-                    [
-                        Config::XML_PATH_DISPLAY_CART_SHIPPING,
-                        ScopeInterface::SCOPE_STORE,
-                        null,
-                        true
-                    ],
-                    [
-                        Config::XML_PATH_DISPLAY_CART_SHIPPING,
-                        ScopeInterface::SCOPE_STORE,
-                        null,
-                        false
-                    ],
-                    [
-                        Config::CONFIG_XML_PATH_PRICE_DISPLAY_TYPE,
-                        ScopeInterface::SCOPE_STORE,
-                        null,
-                        true
-                    ],
-                    [
-                        Config::XML_PATH_DISPLAY_CART_PRICE,
-                        ScopeInterface::SCOPE_STORE,
-                        null,
-                        false
-                    ]
-                ]
-            );
-        /** @var Config */
+            ->willReturnMap([
+                [Config::CONFIG_XML_PATH_PRICE_INCLUDES_TAX, ScopeInterface::SCOPE_STORE, null, $catalogIncludesTax],
+                [Config::CONFIG_XML_PATH_PRICE_DISPLAY_TYPE, ScopeInterface::SCOPE_STORE, null, $catalogDisplay],
+                [Config::XML_PATH_DISPLAY_CART_PRICE, ScopeInterface::SCOPE_STORE, null, $cartDisplay],
+                [Config::XML_PATH_DISPLAY_CART_SHIPPING, ScopeInterface::SCOPE_STORE, null, $shippingDisplay],
+            ]);
         $model = new Config($scopeConfigMock);
-        $model->setPriceIncludesTax(false);
-        $model->setNeedUseShippingExcludeTax(false);
-        $model->setShippingPriceIncludeTax(false);
-        $this->assertEquals(true, $model->needPriceConversion());
+        $model->setNeedUseShippingExcludeTax($useShippingExcludeTax);
+        $model->setShippingPriceIncludeTax($shippingIncludesTax);
+        $this->assertSame($expected, $model->needPriceConversion());
+    }
+
+    public static function needPriceConversionDataProvider(): array
+    {
+        $excluding = Config::DISPLAY_TYPE_EXCLUDING_TAX;
+        $including = Config::DISPLAY_TYPE_INCLUDING_TAX;
+        $both = Config::DISPLAY_TYPE_BOTH;
+        $plus = Config::PRICE_CONVERSION_PLUS;
+        $minus = Config::PRICE_CONVERSION_MINUS;
+        $catalogCases = [
+            [false, $excluding, $excluding, false],
+            [false, $excluding, $including, false],
+            [false, $excluding, $both, true],
+            [false, $including, $excluding, $plus],
+            [false, $including, $including, $plus],
+            [false, $including, $both, $plus],
+            [false, $both, $excluding, $plus],
+            [false, $both, $including, $plus],
+            [false, $both, $both, $plus],
+            [true, $excluding, $excluding, $minus],
+            [true, $excluding, $including, $minus],
+            [true, $excluding, $both, $minus],
+            [true, $including, $excluding, false],
+            [true, $including, $including, true],
+            [true, $including, $both, true],
+            [true, $both, $excluding, $minus],
+            [true, $both, $including, $minus],
+            [true, $both, $both, $minus],
+        ];
+        $cases = [];
+        foreach ($catalogCases as [$catalogIncludesTax, $catalogDisplay, $cartDisplay, $expected]) {
+            foreach ([false, true] as $shippingIncludesTax) {
+                foreach ([
+                    Config::DISPLAY_TYPE_EXCLUDING_TAX,
+                    Config::DISPLAY_TYPE_INCLUDING_TAX,
+                    Config::DISPLAY_TYPE_BOTH,
+                ] as $shippingDisplay) {
+                    $name = sprintf(
+                        'catalog input %d display %d cart %d shipping input %d display %d',
+                        $catalogIncludesTax,
+                        $catalogDisplay,
+                        $cartDisplay,
+                        $shippingIncludesTax,
+                        $shippingDisplay
+                    );
+                    $cases[$name] = [
+                        $catalogIncludesTax,
+                        $catalogDisplay,
+                        $cartDisplay,
+                        $shippingIncludesTax,
+                        $shippingDisplay,
+                        $expected,
+                    ];
+                }
+            }
+        }
+        foreach ($catalogCases as [$catalogIncludesTax, $catalogDisplay, $cartDisplay, $expected]) {
+            if ($catalogIncludesTax) {
+                $cases['legacy flag display ' . $catalogDisplay . ' cart ' . $cartDisplay] = [
+                    false,
+                    $catalogDisplay,
+                    $cartDisplay,
+                    false,
+                    Config::DISPLAY_TYPE_EXCLUDING_TAX,
+                    $expected,
+                    true,
+                ];
+            }
+        }
+        return $cases;
     }
 }

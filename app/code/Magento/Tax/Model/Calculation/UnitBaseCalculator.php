@@ -139,7 +139,7 @@ class UnitBaseCalculator extends AbstractCalculator
         $discountTaxCompensationAmount = 0;
 
         // Calculate $price
-        $price = $this->calculationTool->round($item->getUnitPrice());
+        $price = $round ? $this->calculationTool->round($item->getUnitPrice()) : $item->getUnitPrice();
         $unitTaxes = [];
         $unitTaxesBeforeDiscount = [];
         $appliedTaxes = [];
