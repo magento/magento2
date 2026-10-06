@@ -19,7 +19,6 @@ use Magento\Framework\Pricing\Amount\AmountInterface;
 use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Tax\Helper\Data as TaxHelper;
-use Psr\Log\LoggerInterface;
 
 /**
  * Bundle price calculator
@@ -65,18 +64,12 @@ class Calculator implements BundleCalculatorInterface, ResetAfterRequestInterfac
     private $selectionPriceListProvider;
 
     /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
      * @param CalculatorBase $calculator
      * @param AmountFactory $amountFactory
      * @param BundleSelectionFactory $bundleSelectionFactory
      * @param TaxHelper $taxHelper
      * @param PriceCurrencyInterface $priceCurrency
      * @param SelectionPriceListProviderInterface $selectionPriceListProvider
-     * @param LoggerInterface $logger
      */
     public function __construct(
         CalculatorBase $calculator,
@@ -85,7 +78,6 @@ class Calculator implements BundleCalculatorInterface, ResetAfterRequestInterfac
         TaxHelper $taxHelper,
         PriceCurrencyInterface $priceCurrency,
         SelectionPriceListProviderInterface $selectionPriceListProvider,
-        LoggerInterface $logger
     ) {
         $this->calculator = $calculator;
         $this->amountFactory = $amountFactory;
@@ -93,7 +85,6 @@ class Calculator implements BundleCalculatorInterface, ResetAfterRequestInterfac
         $this->taxHelper = $taxHelper;
         $this->priceCurrency = $priceCurrency;
         $this->selectionPriceListProvider = $selectionPriceListProvider;
-        $this->logger = $logger;
     }
 
     /**
@@ -353,6 +344,7 @@ class Calculator implements BundleCalculatorInterface, ResetAfterRequestInterfac
         $adjustments['tax'] = $this->priceCurrency->round(
             $fullAmount - $excludeTaxTotal - $nonTaxAdjustmentTotal
         );
+    //    $adjustments['tax'] =  $fullAmount - $excludeTaxTotal;
         if (is_array($exclude) == false) {
             if ($exclude && isset($adjustments[$exclude])) {
                 $fullAmount -= $adjustments[$exclude];
@@ -366,7 +358,6 @@ class Calculator implements BundleCalculatorInterface, ResetAfterRequestInterfac
                 }
             }
         }
-        
         return $this->amountFactory->create($fullAmount, $adjustments);
     }
 
