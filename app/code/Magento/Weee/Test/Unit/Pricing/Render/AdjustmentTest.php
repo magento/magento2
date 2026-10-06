@@ -17,7 +17,6 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Pricing\Render\Amount;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
-use Magento\Tax\Helper\Data as TaxHelper;
 use Magento\Weee\Helper\Data;
 use Magento\Weee\Model\Tax;
 use Magento\Weee\Pricing\Adjustment as PricingAdjustment;
@@ -43,11 +42,6 @@ class AdjustmentTest extends TestCase
     protected $weeeHelperMock;
 
     /**
-     * @var TaxHelper
-     */
-    protected $taxHelperMock;
-
-    /**
      * @var Context
      */
     protected $contextMock;
@@ -70,7 +64,6 @@ class AdjustmentTest extends TestCase
         );
         $this->priceCurrencyMock = $this->createMock(PriceCurrencyInterface::class);
         $this->weeeHelperMock = $this->createMock(Data::class);
-        $this->taxHelperMock = $this->createMock(TaxHelper::class);
         $eventManagerMock = $this->createMock(ManagerInterface::class);
 
         $scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
@@ -85,21 +78,8 @@ class AdjustmentTest extends TestCase
         $this->model = new Adjustment(
             $this->contextMock,
             $this->priceCurrencyMock,
-            $this->weeeHelperMock,
-            $this->taxHelperMock
+            $this->weeeHelperMock
         );
-    }
-
-    /**
-     * Test for method displayPriceExcludingTax
-     */
-    public function testDisplayPriceExcludingTax()
-    {
-        $this->taxHelperMock->expects($this->once())
-            ->method('displayPriceExcludingTax')
-            ->willReturn(true);
-
-        $this->assertTrue($this->model->displayPriceExcludingTax());
     }
 
     /**
@@ -116,46 +96,29 @@ class AdjustmentTest extends TestCase
     public function testGetFinalAmount()
     {
         $this->priceCurrencyMock->expects($this->once())
-        ->method('format')
-        ->with(10, true, 2)
-        ->willReturn('$10.00');
+            ->method('format')
+            ->with(10, true, 2)
+            ->willReturn("$10.00");
 
         $displayValue = 10;
-        $expectedValue = '$10.00';
-
-    /** @var Product $saleable */
-        $saleable = $this->createMock(Product::class);
-        $saleable->expects($this->once())
-        ->method('getTypeId')
-        ->willReturn('simple');
-
-    /** @var Base $baseAmount */
-        $baseAmount = $this->createMock(Base::class);
-        $baseAmount->expects($this->exactly(2))
-        ->method('getAdjustmentAmount')
-        ->willReturn(0);
-
-    /** @var Amount $amountRender */
-        $amountRender = $this->createMock(Amount::class);
-
+        $expectedValue = "$10.00";
+        $typeOfDisplay = 1; //Just to set it to not false
+        /** @var Amount $amountRender */
+        $amountRender = $this->createPartialMock(
+            Amount::class,
+            ['getSaleableItem', 'getDisplayValue', 'getAmount']
+        );
         $amountRender->expects($this->any())
-        ->method('getSaleableItem')
-        ->willReturn($saleable);
-
+            ->method('getDisplayValue')
+            ->willReturn($displayValue);
+        $this->weeeHelperMock->expects($this->any())->method('typeOfDisplay')->willReturn($typeOfDisplay);
+        /** @var Base $baseAmount */
+        $baseAmount = $this->createPartialMock(Base::class, ['getValue']);
         $amountRender->expects($this->any())
-        ->method('getDisplayValue')
-        ->willReturn($displayValue);
-
-        $amountRender->expects($this->any())
-        ->method('getAmount')
-        ->willReturn($baseAmount);
-
-        $this->weeeHelperMock->expects($this->any())
-        ->method('typeOfDisplay')
-        ->willReturn(1);
+            ->method('getAmount')
+            ->willReturn($baseAmount);
 
         $this->model->render($amountRender);
-
         $result = $this->model->getFinalAmount();
 
         $this->assertEquals($expectedValue, $result);
@@ -168,47 +131,36 @@ class AdjustmentTest extends TestCase
     public function testShowInclDescr($typeOfDisplay, $amount, $expectedResult)
     {
         /** @var Amount $amountRender */
-        $amountRender = $this->createMock(Amount::class);
-
-    /** @var Product $saleable */
+        $amountRender = $this->createPartialMock(
+            Amount::class,
+            ['getSaleableItem', 'getDisplayValue', 'getAmount']
+        );
+        /** @var Product $saleable */
         $saleable = $this->createMock(Product::class);
-        $saleable->method('getTypeId')
-        ->willReturn('simple');
+        /** @var Base $baseAmount */
+        $baseAmount = $this->createPartialMock(Base::class, ['getValue']);
 
-    /** @var Base $baseAmount */
-        $baseAmount = $this->createMock(Base::class);
+        $baseAmount->expects($this->any())
+            ->method('getValue')
+            ->willReturn($amount);
 
-        $baseAmount->method('getValue')
-        ->willReturn($amount);
-
-        $baseAmount->method('getAdjustmentAmount')
-        ->willReturn(0);
-
-        $amountRender->method('getAmount')
-        ->willReturn($baseAmount);
-
-        $amountRender->method('getSaleableItem')
-        ->willReturn($saleable);
-
-        $amountRender->method('getDisplayValue')
-        ->willReturn($amount);
+        $amountRender->expects($this->any())
+            ->method('getAmount')
+            ->willReturn($baseAmount);
 
         $callback = function ($argument) use ($typeOfDisplay) {
             if (is_array($argument)) {
                 return in_array($typeOfDisplay, $argument);
+            } else {
+                return $argument == $typeOfDisplay;
             }
-
-            return $argument == $typeOfDisplay;
         };
 
-        $this->weeeHelperMock->method('typeOfDisplay')
-        ->willReturnCallback($callback);
-
-        $this->weeeHelperMock->method('getAmountExclTax')
-        ->willReturn($amount);
+        $this->weeeHelperMock->expects($this->any())->method('typeOfDisplay')->willReturnCallback($callback);
+        $this->weeeHelperMock->expects($this->any())->method('getAmountExclTax')->willReturn($amount);
+        $amountRender->expects($this->any())->method('getSaleableItem')->willReturn($saleable);
 
         $this->model->render($amountRender);
-
         $result = $this->model->showInclDescr();
 
         $this->assertEquals($expectedResult, $result);
@@ -246,47 +198,34 @@ class AdjustmentTest extends TestCase
     public function testShowExclDescrIncl($typeOfDisplay, $amount, $expectedResult)
     {
         /** @var Amount $amountRender */
-        $amountRender = $this->createMock(Amount::class);
-
-    /** @var Product $saleable */
-        $saleable = $this->createMock(Product::class);
-        $saleable->method('getTypeId')
-        ->willReturn('simple');
-
-    /** @var Base $baseAmount */
-        $baseAmount = $this->createMock(Base::class);
-
-        $baseAmount->method('getValue')
-        ->willReturn($amount);
-
-        $baseAmount->method('getAdjustmentAmount')
-        ->willReturn(0);
-
-        $amountRender->method('getAmount')
-        ->willReturn($baseAmount);
-
-        $amountRender->method('getSaleableItem')
-        ->willReturn($saleable);
-
-        $amountRender->method('getDisplayValue')
-        ->willReturn($amount);
+        $amountRender = $this->createPartialMock(
+            Amount::class,
+            ['getSaleableItem', 'getDisplayValue', 'getAmount']
+        );
+        /** @var Product $saleable */
+        $saleable = $this->createPartialMock(Product::class, ['__wakeup']);
+        /** @var Base $baseAmount */
+        $baseAmount = $this->createPartialMock(Base::class, ['getValue']);
+        $baseAmount->expects($this->any())
+            ->method('getValue')
+            ->willReturn($amount);
+        $amountRender->expects($this->any())
+            ->method('getAmount')
+            ->willReturn($baseAmount);
 
         $callback = function ($argument) use ($typeOfDisplay) {
             if (is_array($argument)) {
                 return in_array($typeOfDisplay, $argument);
+            } else {
+                return $argument == $typeOfDisplay;
             }
-
-            return $argument == $typeOfDisplay;
         };
 
-        $this->weeeHelperMock->method('typeOfDisplay')
-        ->willReturnCallback($callback);
-
-        $this->weeeHelperMock->method('getAmountExclTax')
-        ->willReturn($amount);
+        $this->weeeHelperMock->expects($this->any())->method('typeOfDisplay')->willReturnCallback($callback);
+        $this->weeeHelperMock->expects($this->any())->method('getAmountExclTax')->willReturn($amount);
+        $amountRender->expects($this->any())->method('getSaleableItem')->willReturn($saleable);
 
         $this->model->render($amountRender);
-
         $result = $this->model->showExclDescrIncl();
 
         $this->assertEquals($expectedResult, $result);
@@ -324,44 +263,31 @@ class AdjustmentTest extends TestCase
     public function testGetWeeeTaxAttributes($typeOfDisplay, $attributes, $expectedResult)
     {
         /** @var Amount $amountRender */
-        $amountRender = $this->createMock(Amount::class);
-
-    /** @var Product $saleable */
+        $amountRender = $this->createPartialMock(
+            Amount::class,
+            ['getSaleableItem', 'getDisplayValue', 'getAmount']
+        );
+        /** @var Product $saleable */
         $saleable = $this->createMock(Product::class);
-        $saleable->method('getTypeId')
-        ->willReturn('simple');
-
-    /** @var Base $baseAmount */
-        $baseAmount = $this->createMock(Base::class);
-
-        $baseAmount->method('getAdjustmentAmount')
-        ->willReturn(0);
-
-        $amountRender->method('getAmount')
-        ->willReturn($baseAmount);
-
-        $amountRender->method('getSaleableItem')
-        ->willReturn($saleable);
-
-        $amountRender->method('getDisplayValue')
-        ->willReturn(0);
-
+        /** @var Base $baseAmount */
+        $baseAmount = $this->createPartialMock(Base::class, ['getValue']);
+        $amountRender->expects($this->any())
+            ->method('getAmount')
+            ->willReturn($baseAmount);
         $callback = function ($argument) use ($typeOfDisplay) {
             if (is_array($argument)) {
                 return in_array($typeOfDisplay, $argument);
+            } else {
+                return $argument == $typeOfDisplay;
             }
-
-            return $argument == $typeOfDisplay;
         };
-
-        $this->weeeHelperMock->method('typeOfDisplay')
-        ->willReturnCallback($callback);
-
-        $this->weeeHelperMock->method('getProductWeeeAttributesForDisplay')
-        ->willReturn($attributes);
+        $this->weeeHelperMock->expects($this->any())->method('typeOfDisplay')->willReturnCallback($callback);
+        $this->weeeHelperMock->expects($this->any())
+            ->method('getProductWeeeAttributesForDisplay')
+            ->willReturn($attributes);
+        $amountRender->expects($this->any())->method('getSaleableItem')->willReturn($saleable);
 
         $this->model->render($amountRender);
-
         $result = $this->model->getWeeeTaxAttributes();
 
         $this->assertEquals($expectedResult, $result);
