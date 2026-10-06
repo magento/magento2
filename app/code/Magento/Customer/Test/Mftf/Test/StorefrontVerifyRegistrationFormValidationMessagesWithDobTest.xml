@@ -19,14 +19,22 @@
             <group value="customer_registration"/>
         </annotations>
         <before>
-            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <amOnPage url="{{AdminLoginPage.url}}" stepKey="navigateToAdmin"/>
+            <fillField selector="input[name='login[username]']" userInput="{{_ENV.MAGENTO_ADMIN_USERNAME}}" stepKey="fillAdminUsername"/>
+            <fillField selector="input[name='login[password]']" userInput="{{_CREDS.magento/MAGENTO_ADMIN_PASSWORD}}" stepKey="fillAdminPassword"/>
+            <click selector="{{AdminLoginFormSection.signIn}}" stepKey="clickLogin"/>
+            <closeAdminNotification stepKey="closeAdminNotification"/>
             <actionGroup ref="AdminCustomerShowDateOfBirthActionGroup" stepKey="showDateOfBirth">
                 <argument name="value" value="{{ShowDateOfBirth.required}}"/>
             </actionGroup>
         </before>
         <after>
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogoutStorefront"/>
-            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAdmin"/>
+            <amOnPage url="{{AdminLoginPage.url}}" stepKey="navigateToAdminForCleanup"/>
+            <fillField selector="input[name='login[username]']" userInput="{{_ENV.MAGENTO_ADMIN_USERNAME}}" stepKey="fillAdminUsernameForCleanup"/>
+            <fillField selector="input[name='login[password]']" userInput="{{_CREDS.magento/MAGENTO_ADMIN_PASSWORD}}" stepKey="fillAdminPasswordForCleanup"/>
+            <click selector="{{AdminLoginFormSection.signIn}}" stepKey="clickLoginForCleanup"/>
+            <closeAdminNotification stepKey="closeAdminNotificationForCleanup"/>
             <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
                 <argument name="customerEmail" value="Simple_US_Customer.email"/>
             </actionGroup>
