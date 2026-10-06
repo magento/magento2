@@ -39,6 +39,7 @@ use Magento\Store\Model\StoreRepository;
 use Magento\Store\Model\Website;
 use Magento\Store\Model\WebsiteRepository;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Helper\DownloadableDomains;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -118,7 +119,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->urlRewriteCollectionFactory = $objectManager->get(UrlRewriteCollectionFactory::class);
         /** @var DomainManagerInterface $domainManager */
         $domainManager = $objectManager->get(DomainManagerInterface::class);
-        $domainManager->addDomains(['example.com']);
+        DownloadableDomains::addDomains($domainManager, ['example.com']);
     }
 
     /**
@@ -132,7 +133,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $objectManager = Bootstrap::getObjectManager();
         /** @var DomainManagerInterface $domainManager */
         $domainManager = $objectManager->get(DomainManagerInterface::class);
-        $domainManager->removeDomains(['example.com']);
+        DownloadableDomains::removeDomains($domainManager, ['example.com']);
     }
 
     /**

@@ -11,6 +11,7 @@ namespace Magento\Downloadable\Api;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Helper\DownloadableDomains;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
@@ -42,7 +43,7 @@ class ProductRepositoryTest extends WebapiAbstract
 
         /** @var DomainManagerInterface $domainManager */
         $domainManager = $objectManager->get(DomainManagerInterface::class);
-        $domainManager->addDomains(['www.example.com']);
+        DownloadableDomains::addDomains($domainManager, ['www.example.com']);
     }
 
     /**
@@ -57,7 +58,7 @@ class ProductRepositoryTest extends WebapiAbstract
 
         /** @var DomainManagerInterface $domainManager */
         $domainManager = $objectManager->get(DomainManagerInterface::class);
-        $domainManager->removeDomains(['www.example.com']);
+        DownloadableDomains::removeDomains($domainManager, ['www.example.com']);
     }
 
     protected function getLinkData()
