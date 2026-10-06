@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2025 Adobe
+ * Copyright 2026 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);
@@ -9,18 +9,19 @@ namespace Magento\Eav\Test\Unit\Model\TypeLocator;
 
 use Magento\Eav\Api\AttributeRepositoryInterface;
 use Magento\Eav\Api\Data\AttributeInterface;
+use Magento\Eav\Model\Entity\Attribute\Backend\ArrayBackend;
 use Magento\Eav\Model\TypeLocator\SimpleType;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Framework\Webapi\CustomAttribute\ServiceTypeListInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 
 class SimpleTypeTest extends TestCase
 {
     /**
-     * @var AttributeRepositoryInterface|MockObject
+     * @var AttributeRepositoryInterface&Stub
      */
     private $attributeRepository;
 
@@ -31,10 +32,10 @@ class SimpleTypeTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->attributeRepository = $this->createMock(AttributeRepositoryInterface::class);
+        $this->attributeRepository = $this->createStub(AttributeRepositoryInterface::class);
         $this->simpleType = new SimpleType(
             $this->attributeRepository,
-            $this->createMock(ServiceTypeListInterface::class)
+            $this->createStub(ServiceTypeListInterface::class)
         );
     }
 
@@ -52,12 +53,12 @@ class SimpleTypeTest extends TestCase
     #[DataProvider('multiselectBackendTypeDataProvider')]
     public function testGetTypeReturnsAnyTypeForMultiselect(string $backendType): void
     {
-        $attribute = $this->createMock(AttributeInterface::class);
+        $attribute = $this->createStub(AttributeInterface::class);
         $attribute->method('getFrontendInput')->willReturn('multiselect');
+        $attribute->method('getBackendModel')->willReturn(ArrayBackend::class);
         $attribute->method('getBackendType')->willReturn($backendType);
         $this->attributeRepository->method('get')
-            ->with('catalog_product', 'color_multi')
-            ->willReturn($attribute);
+            ->willReturnMap([['catalog_product', 'color_multi', $attribute]]);
 
         $this->assertSame(
             TypeProcessor::NORMALIZED_ANY_TYPE,
@@ -65,9 +66,23 @@ class SimpleTypeTest extends TestCase
         );
     }
 
+    public function testGetTypeReturnsStringForMultiselectWithoutArrayBackend(): void
+    {
+        $attribute = $this->createStub(AttributeInterface::class);
+        $attribute->method('getFrontendInput')->willReturn('multiselect');
+        $attribute->method('getBackendModel')->willReturn(null);
+        $attribute->method('getBackendType')->willReturn('text');
+        $this->attributeRepository->method('get')->willReturn($attribute);
+
+        $this->assertSame(
+            TypeProcessor::NORMALIZED_STRING_TYPE,
+            $this->simpleType->getType('color_multi', 'catalog_product')
+        );
+    }
+
     public function testGetTypeReturnsIntForSelectIntAttribute(): void
     {
-        $attribute = $this->createMock(AttributeInterface::class);
+        $attribute = $this->createStub(AttributeInterface::class);
         $attribute->method('getFrontendInput')->willReturn('select');
         $attribute->method('getBackendType')->willReturn('int');
         $this->attributeRepository->method('get')->willReturn($attribute);
@@ -80,7 +95,7 @@ class SimpleTypeTest extends TestCase
 
     public function testGetTypeReturnsStringForVarcharAttribute(): void
     {
-        $attribute = $this->createMock(AttributeInterface::class);
+        $attribute = $this->createStub(AttributeInterface::class);
         $attribute->method('getFrontendInput')->willReturn('text');
         $attribute->method('getBackendType')->willReturn('varchar');
         $this->attributeRepository->method('get')->willReturn($attribute);
