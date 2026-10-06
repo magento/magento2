@@ -110,6 +110,7 @@
             </actionGroup>
             <actionGroup ref="AdminSaveUserRoleActionGroup" stepKey="saveRole"/>
         </before>
+        <after>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAdmin"/>
 
@@ -120,8 +121,6 @@
                 <argument name="roleName" value="{{adminProductInWebsiteRole.rolename}}"/>
             </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout2"/>
-        <after>
-
         </after>
         <actionGroup ref="AdminCreateUserWithApiRoleActionGroup" stepKey="adminCreateUser">
             <argument name="user" value="NewAdminUser"/>
