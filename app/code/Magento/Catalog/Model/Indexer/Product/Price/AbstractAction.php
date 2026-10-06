@@ -17,6 +17,7 @@ use Magento\Directory\Model\CurrencyFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Adapter\DeadlockException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -622,6 +623,73 @@ abstract class AbstractAction
         }
 
         return $byType;
+    }
+
+    /**
+     * Run a price-index step again when MariaDB aborts the transaction.
+     *
+     * Error 1020 (innodb_snapshot_isolation) and deadlock 1213 roll the current
+     * transaction back. The index statements have to run in a new transaction.
+     *
+     * @param callable $operation
+     * @return mixed
+     * @throws \Exception
+     */
+    protected function executeToleratingTransactionConflict(callable $operation)
+    {
+        $maxAttempts = 3;
+        for ($attempt = 1; $attempt <= $maxAttempts; $attempt++) {
+            try {
+                return $operation();
+            } catch (\Exception $exception) {
+                if ($attempt === $maxAttempts || !$this->isRestartableTransactionConflict($exception)) {
+                    throw $exception;
+                }
+                $this->restartTransactionAfterConflict();
+            }
+        }
+    }
+
+    /**
+     * Whether MariaDB or InnoDB already aborted this transaction.
+     *
+     * @param \Throwable $exception
+     * @return bool
+     */
+    private function isRestartableTransactionConflict(\Throwable $exception): bool
+    {
+        $current = $exception;
+        while ($current !== null) {
+            if ($current instanceof DeadlockException) {
+                return true;
+            }
+            if ($current instanceof \PDOException) {
+                $driverCode = isset($current->errorInfo[1]) ? (int)$current->errorInfo[1] : 0;
+                if ($driverCode === 1020 || $driverCode === 1213) {
+                    return true;
+                }
+            }
+            $current = $current->getPrevious();
+        }
+
+        return false;
+    }
+
+    /**
+     * Clear the adapter transaction that the server has already aborted.
+     *
+     * @return void
+     */
+    private function restartTransactionAfterConflict(): void
+    {
+        $connection = $this->getConnection();
+        while ($connection->getTransactionLevel() > 0) {
+            try {
+                $connection->rollBack();
+            } catch (\Throwable $exception) {
+                break;
+            }
+        }
     }
 
     /**

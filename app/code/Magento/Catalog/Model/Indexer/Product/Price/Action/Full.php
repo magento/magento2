@@ -306,20 +306,24 @@ class Full extends AbstractAction
         Select $batchQuery,
         array $dimensions
     ): void {
-        $entityIds = $this->getEntityIdsFromBatch($batchQuery);
+        $this->executeToleratingTransactionConflict(
+            function () use ($priceIndexer, $batchQuery, $dimensions) {
+                $entityIds = $this->getEntityIdsFromBatch($batchQuery);
 
-        if (!empty($entityIds)) {
-            $this->dimensionTableMaintainer->createMainTmpTable($dimensions);
-            $temporaryTable = $this->dimensionTableMaintainer->getMainTmpTable($dimensions);
-            $priceIndexer->executeByDimensions($dimensions, \SplFixedArray::fromArray($entityIds, false));
+                if (!empty($entityIds)) {
+                    $this->dimensionTableMaintainer->createMainTmpTable($dimensions);
+                    $temporaryTable = $this->dimensionTableMaintainer->getMainTmpTable($dimensions);
+                    $priceIndexer->executeByDimensions($dimensions, \SplFixedArray::fromArray($entityIds, false));
 
-            // Sync data from temp table to index table
-            $this->_insertFromTable(
-                $temporaryTable,
-                $this->dimensionTableMaintainer->getMainReplicaTable($dimensions)
-            );
-            $this->_defaultIndexerResource->getConnection()->dropTable($temporaryTable);
-        }
+                    // Sync data from temp table to index table
+                    $this->_insertFromTable(
+                        $temporaryTable,
+                        $this->dimensionTableMaintainer->getMainReplicaTable($dimensions)
+                    );
+                    $this->_defaultIndexerResource->getConnection()->dropTable($temporaryTable);
+                }
+            }
+        );
     }
 
     /**
@@ -348,25 +352,29 @@ class Full extends AbstractAction
      */
     private function reindexBatch(PriceInterface $priceIndexer, Select $batch): void
     {
-        $entityIds = $this->getEntityIdsFromBatch($batch);
+        $this->executeToleratingTransactionConflict(
+            function () use ($priceIndexer, $batch) {
+                $entityIds = $this->getEntityIdsFromBatch($batch);
 
-        if (!empty($entityIds)) {
-            // Temporary table will created if not exists
-            $idxTableName = $this->_defaultIndexerResource->getIdxTable();
+                if (!empty($entityIds)) {
+                    // Temporary table will created if not exists
+                    $idxTableName = $this->_defaultIndexerResource->getIdxTable();
 
-            if ($priceIndexer->getIsComposite()) {
-                $this->_copyRelationIndexData($entityIds);
+                    if ($priceIndexer->getIsComposite()) {
+                        $this->_copyRelationIndexData($entityIds);
+                    }
+
+                    // Reindex entities by id
+                    $priceIndexer->reindexEntity($entityIds);
+
+                    // Sync data from temp table to index table
+                    $this->_insertFromTable($idxTableName, $this->getReplicaTable());
+
+                    // Drop temporary index table
+                    $this->_defaultIndexerResource->getConnection()->dropTable($idxTableName);
+                }
             }
-
-            // Reindex entities by id
-            $priceIndexer->reindexEntity($entityIds);
-
-            // Sync data from temp table to index table
-            $this->_insertFromTable($idxTableName, $this->getReplicaTable());
-
-            // Drop temporary index table
-            $this->_defaultIndexerResource->getConnection()->dropTable($idxTableName);
-        }
+        );
     }
 
     /**

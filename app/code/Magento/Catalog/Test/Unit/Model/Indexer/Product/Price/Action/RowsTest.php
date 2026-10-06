@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Price\Action;
 
+use Magento\Framework\DB\Adapter\DeadlockException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Indexer\CacheContext;
 use Magento\Framework\Indexer\DimensionalIndexerInterface;
@@ -264,5 +265,49 @@ class RowsTest extends TestCase
             ->willReturn('entity_id');
 
         $this->actionRows->execute($ids);
+    }
+
+    /**
+     * MariaDB error 1020 aborts the transaction. The batch must run again after rollback.
+     *
+     * @return void
+     */
+    public function testRetriesBatchAfterSnapshotConflict(): void
+    {
+        $adapter = $this->createMock(AdapterInterface::class);
+        $this->defaultIndexerResource->method('getConnection')->willReturn($adapter);
+        $adapter->method('getTransactionLevel')->willReturnOnConsecutiveCalls(1, 0);
+        $adapter->expects($this->once())->method('rollBack');
+
+        $action = $this->getMockBuilder(Rows::class)
+            ->setConstructorArgs([
+                $this->config,
+                $this->storeManager,
+                $this->currencyFactory,
+                $this->localeDate,
+                $this->dateTime,
+                $this->catalogProductType,
+                $this->indexerPriceFactory,
+                $this->defaultIndexerResource,
+                $this->tierPriceIndexResource,
+                $this->dimensionCollectionFactory,
+                $this->tableMaintainer,
+                2,
+            ])
+            ->onlyMethods(['_reindexRows'])
+            ->getMock();
+        $attempt = 0;
+        $action->expects($this->exactly(2))
+            ->method('_reindexRows')
+            ->with([1])
+            ->willReturnCallback(function () use (&$attempt) {
+                if (++$attempt === 1) {
+                    throw new DeadlockException('Record has changed since last read', 1020);
+                }
+
+                return [1];
+            });
+
+        $action->execute([1]);
     }
 }
