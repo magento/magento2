@@ -152,22 +152,20 @@ class ShippingMethodManagementTest extends WebapiAbstract
         $this->assertEquals($expectedData, $result[0]);
     }
 
-    /**
-     * @magentoConfigFixture default_store tax/calculation/price_includes_tax 0
-     * @magentoConfigFixture default_store tax/calculation/shipping_includes_tax 1
-     * @magentoConfigFixture default_store tax/calculation/based_on shipping
-     * @magentoConfigFixture default_store tax/cart_display/price 1
-     * @magentoConfigFixture default_store tax/cart_display/shipping 1
-     * @magentoConfigFixture default_store tax/display/type 2
-     * @magentoConfigFixture default_store tax/display/shipping 1
-     * @magentoConfigFixture default_store shipping/origin/country_id US
-     * @magentoConfigFixture default_store shipping/origin/region_id 1
-     * @magentoConfigFixture default_store shipping/origin/postcode 75477
-     * @magentoConfigFixture default_store carriers/flatrate/active 1
-     * @magentoConfigFixture default_store carriers/flatrate/price 10
-     * @magentoConfigFixture default_store carriers/flatrate/type O
-     */
     #[
+        Config('tax/calculation/price_includes_tax', 0, 'store', 'default'),
+        Config('tax/calculation/shipping_includes_tax', 1, 'store', 'default'),
+        Config('tax/calculation/based_on', 'shipping', 'store', 'default'),
+        Config('tax/cart_display/price', 1, 'store', 'default'),
+        Config('tax/cart_display/shipping', 1, 'store', 'default'),
+        Config('tax/display/type', 2, 'store', 'default'),
+        Config('tax/display/shipping', 1, 'store', 'default'),
+        Config('shipping/origin/country_id', 'US', 'store', 'default'),
+        Config('shipping/origin/region_id', 1, 'store', 'default'),
+        Config('shipping/origin/postcode', '75477', 'store', 'default'),
+        Config('carriers/flatrate/active', 1, 'store', 'default'),
+        Config('carriers/flatrate/price', 10, 'store', 'default'),
+        Config('carriers/flatrate/type', 'O', 'store', 'default'),
         Config('tax/classes/shipping_tax_class', 0, 'store', 'default'),
         DataFixture(CustomerTaxClass::class, as: 'customer_tax_class'),
         DataFixture(CustomerGroup::class, ['tax_class_id' => '$customer_tax_class.classId$'], 'customer_group'),
@@ -185,22 +183,20 @@ class ShippingMethodManagementTest extends WebapiAbstract
         $this->assertShippingListPrices(9.3, 10);
     }
 
-    /**
-     * @magentoConfigFixture default_store tax/calculation/price_includes_tax 0
-     * @magentoConfigFixture default_store tax/calculation/shipping_includes_tax 1
-     * @magentoConfigFixture default_store tax/calculation/based_on shipping
-     * @magentoConfigFixture default_store tax/cart_display/price 1
-     * @magentoConfigFixture default_store tax/cart_display/shipping 1
-     * @magentoConfigFixture default_store tax/display/type 3
-     * @magentoConfigFixture default_store tax/display/shipping 1
-     * @magentoConfigFixture default_store shipping/origin/country_id US
-     * @magentoConfigFixture default_store shipping/origin/region_id 1
-     * @magentoConfigFixture default_store shipping/origin/postcode 75477
-     * @magentoConfigFixture default_store carriers/flatrate/active 1
-     * @magentoConfigFixture default_store carriers/flatrate/price 10
-     * @magentoConfigFixture default_store carriers/flatrate/type O
-     */
     #[
+        Config('tax/calculation/price_includes_tax', 0, 'store', 'default'),
+        Config('tax/calculation/shipping_includes_tax', 1, 'store', 'default'),
+        Config('tax/calculation/based_on', 'shipping', 'store', 'default'),
+        Config('tax/cart_display/price', 1, 'store', 'default'),
+        Config('tax/cart_display/shipping', 1, 'store', 'default'),
+        Config('tax/display/type', 3, 'store', 'default'),
+        Config('tax/display/shipping', 1, 'store', 'default'),
+        Config('shipping/origin/country_id', 'US', 'store', 'default'),
+        Config('shipping/origin/region_id', 1, 'store', 'default'),
+        Config('shipping/origin/postcode', '75477', 'store', 'default'),
+        Config('carriers/flatrate/active', 1, 'store', 'default'),
+        Config('carriers/flatrate/price', 10, 'store', 'default'),
+        Config('carriers/flatrate/type', 'O', 'store', 'default'),
         Config('tax/classes/shipping_tax_class', 0, 'store', 'default'),
         DataFixture(CustomerTaxClass::class, as: 'customer_tax_class'),
         DataFixture(CustomerGroup::class, ['tax_class_id' => '$customer_tax_class.classId$'], 'customer_group'),
@@ -218,22 +214,20 @@ class ShippingMethodManagementTest extends WebapiAbstract
         $this->assertShippingListPrices(9.3, 10);
     }
 
-    /**
-     * @magentoConfigFixture default_store tax/calculation/price_includes_tax 1
-     * @magentoConfigFixture default_store tax/calculation/shipping_includes_tax 0
-     * @magentoConfigFixture default_store tax/calculation/based_on shipping
-     * @magentoConfigFixture default_store tax/cart_display/price 1
-     * @magentoConfigFixture default_store tax/cart_display/shipping 1
-     * @magentoConfigFixture default_store tax/display/type 2
-     * @magentoConfigFixture default_store tax/display/shipping 1
-     * @magentoConfigFixture default_store shipping/origin/country_id US
-     * @magentoConfigFixture default_store shipping/origin/region_id 1
-     * @magentoConfigFixture default_store shipping/origin/postcode 75477
-     * @magentoConfigFixture default_store carriers/flatrate/active 1
-     * @magentoConfigFixture default_store carriers/flatrate/price 10
-     * @magentoConfigFixture default_store carriers/flatrate/type O
-     */
     #[
+        Config('tax/calculation/price_includes_tax', 1, 'store', 'default'),
+        Config('tax/calculation/shipping_includes_tax', 0, 'store', 'default'),
+        Config('tax/calculation/based_on', 'shipping', 'store', 'default'),
+        Config('tax/cart_display/price', 1, 'store', 'default'),
+        Config('tax/cart_display/shipping', 1, 'store', 'default'),
+        Config('tax/display/type', 2, 'store', 'default'),
+        Config('tax/display/shipping', 1, 'store', 'default'),
+        Config('shipping/origin/country_id', 'US', 'store', 'default'),
+        Config('shipping/origin/region_id', 1, 'store', 'default'),
+        Config('shipping/origin/postcode', '75477', 'store', 'default'),
+        Config('carriers/flatrate/active', 1, 'store', 'default'),
+        Config('carriers/flatrate/price', 10, 'store', 'default'),
+        Config('carriers/flatrate/type', 'O', 'store', 'default'),
         Config('tax/classes/shipping_tax_class', 0, 'store', 'default'),
         DataFixture(CustomerTaxClass::class, as: 'customer_tax_class'),
         DataFixture(CustomerGroup::class, ['tax_class_id' => '$customer_tax_class.classId$'], 'customer_group'),
@@ -251,22 +245,20 @@ class ShippingMethodManagementTest extends WebapiAbstract
         $this->assertShippingListPrices(10, 10.75);
     }
 
-    /**
-     * @magentoConfigFixture default_store tax/calculation/price_includes_tax 1
-     * @magentoConfigFixture default_store tax/calculation/shipping_includes_tax 0
-     * @magentoConfigFixture default_store tax/calculation/based_on shipping
-     * @magentoConfigFixture default_store tax/cart_display/price 1
-     * @magentoConfigFixture default_store tax/cart_display/shipping 1
-     * @magentoConfigFixture default_store tax/display/type 3
-     * @magentoConfigFixture default_store tax/display/shipping 1
-     * @magentoConfigFixture default_store shipping/origin/country_id US
-     * @magentoConfigFixture default_store shipping/origin/region_id 1
-     * @magentoConfigFixture default_store shipping/origin/postcode 75477
-     * @magentoConfigFixture default_store carriers/flatrate/active 1
-     * @magentoConfigFixture default_store carriers/flatrate/price 10
-     * @magentoConfigFixture default_store carriers/flatrate/type O
-     */
     #[
+        Config('tax/calculation/price_includes_tax', 1, 'store', 'default'),
+        Config('tax/calculation/shipping_includes_tax', 0, 'store', 'default'),
+        Config('tax/calculation/based_on', 'shipping', 'store', 'default'),
+        Config('tax/cart_display/price', 1, 'store', 'default'),
+        Config('tax/cart_display/shipping', 1, 'store', 'default'),
+        Config('tax/display/type', 3, 'store', 'default'),
+        Config('tax/display/shipping', 1, 'store', 'default'),
+        Config('shipping/origin/country_id', 'US', 'store', 'default'),
+        Config('shipping/origin/region_id', 1, 'store', 'default'),
+        Config('shipping/origin/postcode', '75477', 'store', 'default'),
+        Config('carriers/flatrate/active', 1, 'store', 'default'),
+        Config('carriers/flatrate/price', 10, 'store', 'default'),
+        Config('carriers/flatrate/type', 'O', 'store', 'default'),
         Config('tax/classes/shipping_tax_class', 0, 'store', 'default'),
         DataFixture(CustomerTaxClass::class, as: 'customer_tax_class'),
         DataFixture(CustomerGroup::class, ['tax_class_id' => '$customer_tax_class.classId$'], 'customer_group'),
