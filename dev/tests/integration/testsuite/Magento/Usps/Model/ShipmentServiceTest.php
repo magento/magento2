@@ -207,6 +207,84 @@ class ShipmentServiceTest extends TestCase
     }
 
     /**
+     * Flat rate, cubic and destination-entry variants must not price the single-piece method of their mail class.
+     *
+     * @return void
+     * @magentoConfigFixture default_store carriers/usps/rest_allowed_methods MEDIA_MAIL_MACHINABLE_5-DIGIT,USPS_GROUND_ADVANTAGE_MACHINABLE_SINGLE-PIECE,PRIORITY_MAIL_MACHINABLE_SINGLE-PIECE,PRIORITY_MAIL_EXPRESS_MACHINABLE_SINGLE-PIECE
+     * @magentoConfigFixture default_store carriers/usps/showmethod 1
+     * @magentoConfigFixture current_store carriers/usps/usps_type USPS_REST
+     * @magentoConfigFixture default_store carriers/usps/debug 1
+     * @magentoConfigFixture default_store carriers/usps/client_id test_user
+     * @magentoConfigFixture default_store carriers/usps/client_secret test_password
+     * @magentoConfigFixture default_store carriers/usps/mode 0
+     * @magentoConfigFixture default_store carriers/usps/active 1
+     * @magentoConfigFixture default_store shipping/origin/country_id US
+     * @magentoConfigFixture default_store shipping/origin/postcode 90034
+     * @magentoConfigFixture default_store carriers/usps/machinable true
+     */
+    public function testCollectRatesPricesSinglePieceMethodsOnlyFromTheirOwnVariants(): void
+    {
+        //phpcs:ignore Magento2.Functions.DiscouragedFunction
+        $responseBody = file_get_contents(__DIR__ .'/../Fixtures/success_usps_response_rates.json');
+        $this->httpClient->nextResponses([new Response(200, [], $responseBody)]);
+        /** @var RateRequest $request */
+        $request = Bootstrap::getObjectManager()->create(
+            RateRequest::class,
+            [
+                'data' => [
+                    'orig_country_id' => 'US',
+                    'orig_postcode' => '90034',
+                    'dest_country_id' => 'US',
+                    'dest_region_id' => '12',
+                    'dest_region_code' => 'CA',
+                    'dest_street' => 'main st1',
+                    'dest_city' => 'Los Angeles',
+                    'dest_postcode' => '90032',
+                    'package_value' => '5',
+                    'package_value_with_discount' => '5',
+                    'package_weight' => '4.2657',
+                    'package_qty' => '1',
+                    'package_physical_value' => '5',
+                    'free_method_weight' => '5',
+                    'store_id' => '1',
+                    'website_id' => '1',
+                    'free_shipping' => '0',
+                    'limit_carrier' => 'null',
+                    'base_subtotal_incl_tax' => '5',
+                    'country_id' => 'US',
+                    'region_id' => '12',
+                    'city' => 'Culver City',
+                    'postcode' => '90034',
+                    'usps_container' => 'VARIABLE',
+                    'usps_size' => 'REGULAR',
+                    'girth' => null,
+                    'height' => null,
+                    'length' => null,
+                    'width' => null,
+                ]
+            ]
+        );
+        $this->uspsAuthMock->method('getAccessToken')
+            ->willReturn('test_eyJraWQiOiJ5MmRGRGY3eDdFQkFsQXlob0RLYld2ejlNaWxHTzlnaEJZS2c3OV9zRko4IiwidHlw');
+
+        $prices = [];
+        foreach ($this->carrier->collectRates($request)->getAllRates() as $rate) {
+            $prices[strtoupper((string)$rate->getMethod())] = (float)$rate->getPrice();
+        }
+        ksort($prices);
+
+        $this->assertSame(
+            [
+                'MEDIA_MAIL_MACHINABLE_5-DIGIT' => 3.26,
+                'PRIORITY_MAIL_EXPRESS_MACHINABLE_SINGLE-PIECE' => 45.45,
+                'PRIORITY_MAIL_MACHINABLE_SINGLE-PIECE' => 10.21,
+                'USPS_GROUND_ADVANTAGE_MACHINABLE_SINGLE-PIECE' => 8.99,
+            ],
+            $prices
+        );
+    }
+
+    /**
      * Test collecting rates only for available services.
      *
      * @return void

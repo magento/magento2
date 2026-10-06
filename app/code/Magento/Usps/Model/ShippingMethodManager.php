@@ -435,4 +435,60 @@ class ShippingMethodManager
         }
         return null;
     }
+
+    /**
+     * Find the allowed method code a USPS API rate variant is priced for.
+     *
+     * Rates that share a mail class are not interchangeable: flat rate envelopes and boxes, cubic tiers,
+     * destination-entry (PMOD, DDU, SCF) and presort rates carry the mail class of the single-piece rate.
+     * A variant maps to a method only when its rate indicator and destination entry facility type match,
+     * unless the mail class has one method only (e.g. Media Mail), which then takes every variant.
+     *
+     * @param array $rate Rate element from the USPS API response
+     * @param array $allowedMethodCodes List of allowed method codes from config
+     * @return string|null
+     */
+    public function findAllowedMethodForRate(array $rate, array $allowedMethodCodes): ?string
+    {
+        $mailClass = strtoupper((string)($rate['mailClass'] ?? ''));
+        if ($mailClass === '') {
+            return null;
+        }
+        $rateIndicator = strtoupper((string)($rate['rateIndicator'] ?? ''));
+        $facilityType = strtoupper((string)($rate['destinationEntryFacilityType'] ?? 'NONE'));
+
+        $candidates = [];
+        foreach ($allowedMethodCodes as $code) {
+            if ($this->getMethodMailClass($code) !== $mailClass) {
+                continue;
+            }
+            if ($facilityType !== 'NONE' && $facilityType !== $this->getMethodDestinationEntryFacilityType($code)) {
+                continue;
+            }
+            if ($this->getRateIndicator($code) === $rateIndicator) {
+                return $code;
+            }
+            $candidates[] = $code;
+        }
+
+        if (count($candidates) === 1 && $this->countMethodsByMailClass($mailClass) === 1) {
+            return $candidates[0];
+        }
+
+        return null;
+    }
+
+    /**
+     * Count the shipping methods defined for a mail class
+     *
+     * @param string $mailClass
+     * @return int
+     */
+    private function countMethodsByMailClass(string $mailClass): int
+    {
+        return count(array_filter(
+            $this->shippingMethods,
+            static fn (array $method): bool => $method['mail_class'] === $mailClass
+        ));
+    }
 }
