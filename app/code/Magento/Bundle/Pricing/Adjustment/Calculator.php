@@ -77,7 +77,7 @@ class Calculator implements BundleCalculatorInterface, ResetAfterRequestInterfac
         BundleSelectionFactory $bundleSelectionFactory,
         TaxHelper $taxHelper,
         PriceCurrencyInterface $priceCurrency,
-        SelectionPriceListProviderInterface $selectionPriceListProvider,
+        SelectionPriceListProviderInterface $selectionPriceListProvider
     ) {
         $this->calculator = $calculator;
         $this->amountFactory = $amountFactory;
@@ -344,7 +344,6 @@ class Calculator implements BundleCalculatorInterface, ResetAfterRequestInterfac
         $adjustments['tax'] = $this->priceCurrency->round(
             $fullAmount - $excludeTaxTotal - $nonTaxAdjustmentTotal
         );
-    //    $adjustments['tax'] =  $fullAmount - $excludeTaxTotal;
         if (is_array($exclude) == false) {
             if ($exclude && isset($adjustments[$exclude])) {
                 $fullAmount -= $adjustments[$exclude];
