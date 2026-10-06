@@ -25,6 +25,8 @@ use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 /**
  * Test class to verify catalog price rule is applied for
  * tier prices for different customer groups.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PriceRangeTest extends GraphQlAbstract
 {
@@ -333,7 +335,11 @@ class PriceRangeTest extends GraphQlAbstract
         DataFixture(CustomerGroup::class, ['tax_class_id' => '$customer_tax_class.classId$'], 'customer_group'),
         DataFixture(CustomerFixture::class, self::TAX_GROUP_CUSTOMER_DATA, 'customer'),
         DataFixture(CustomerTaxClass::class, as: 'other_customer_tax_class'),
-        DataFixture(CustomerGroup::class, ['tax_class_id' => '$other_customer_tax_class.classId$'], 'other_customer_group'),
+        DataFixture(
+            CustomerGroup::class,
+            ['tax_class_id' => '$other_customer_tax_class.classId$'],
+            'other_customer_group'
+        ),
         DataFixture(CustomerFixture::class, [
             'group_id' => '$other_customer_group.id$',
             'addresses' => self::TAX_GROUP_CUSTOMER_DATA['addresses']
