@@ -631,7 +631,7 @@ abstract class AbstractAction
      * Error 1020 (innodb_snapshot_isolation) and deadlock 1213 roll the current
      * transaction back. The index statements have to run in a new transaction.
      *
-     * @param callable(): array $operation
+     * @param callable $operation
      * @return array
      * @throws \Exception
      */
