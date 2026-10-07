@@ -105,7 +105,10 @@ class CatalogRulePrice extends AbstractPrice implements BasePriceProviderInterfa
                 // Catalog rule prices for a whole product collection are fetched in one
                 // query by PrepareCatalogProductCollectionPricesObserver and kept in
                 // RulePricesStorage. Reuse that result when it is present instead of
-                // issuing a single-row query for every product being rendered.
+                // issuing a single-row query for every product being rendered. A price
+                // queried here is not stored: the storage lives for the whole process,
+                // and a price kept from outside a collection prefetch would outlive a
+                // reindex in a long-running process.
                 $key = "{$date->format('Y-m-d H:i:s')}|{$websiteId}|{$customerGroupId}|{$productId}";
                 if ($this->rulePricesStorage->hasRulePrice($key)) {
                     $this->value = $this->rulePricesStorage->getRulePrice($key);
@@ -116,7 +119,6 @@ class CatalogRulePrice extends AbstractPrice implements BasePriceProviderInterfa
                         $customerGroupId,
                         $productId
                     );
-                    $this->rulePricesStorage->setRulePrice($key, $this->value);
                 }
                 $this->value = $this->value ? (float)$this->value : false;
             }

@@ -142,7 +142,7 @@ class CatalogRulePriceTest extends TestCase
         $this->rulePricesStorageMock->expects($this->once())
             ->method('hasRulePrice')
             ->willReturn(false);
-        $this->rulePricesStorageMock->expects($this->once())
+        $this->rulePricesStorageMock->expects($this->never())
             ->method('setRulePrice');
         $this->catalogRuleResourceMock->expects($this->once())
             ->method('getRulePrice')
