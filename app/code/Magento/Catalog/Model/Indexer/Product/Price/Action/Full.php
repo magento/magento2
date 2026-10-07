@@ -322,6 +322,8 @@ class Full extends AbstractAction
                     );
                     $this->_defaultIndexerResource->getConnection()->dropTable($temporaryTable);
                 }
+
+                return [];
             }
         );
     }
@@ -373,6 +375,8 @@ class Full extends AbstractAction
                     // Drop temporary index table
                     $this->_defaultIndexerResource->getConnection()->dropTable($idxTableName);
                 }
+
+                return [];
             }
         );
     }

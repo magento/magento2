@@ -631,11 +631,11 @@ abstract class AbstractAction
      * Error 1020 (innodb_snapshot_isolation) and deadlock 1213 roll the current
      * transaction back. The index statements have to run in a new transaction.
      *
-     * @param callable $operation
-     * @return mixed
+     * @param callable(): array $operation
+     * @return array
      * @throws \Exception
      */
-    protected function executeToleratingTransactionConflict(callable $operation)
+    protected function executeToleratingTransactionConflict(callable $operation): array
     {
         $maxAttempts = 3;
         for ($attempt = 1; $attempt <= $maxAttempts; $attempt++) {
@@ -648,6 +648,8 @@ abstract class AbstractAction
                 $this->restartTransactionAfterConflict();
             }
         }
+
+        throw new \LogicException('The price index transaction was not restarted.');
     }
 
     /**
