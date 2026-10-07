@@ -108,7 +108,11 @@
         <see userInput="{{ImportProduct_Downloadable_FileLinks.importSummary}}" selector="{{AdminDataGridTableSection.firstRow}}" stepKey="seeSummary"/>
 
         <!-- Admin: Verify Downloadable Product on Edit Product Page -->
-        <actionGroup ref="NavigateToCreatedProductEditPageActionGroup" stepKey="goToDownloadableProductEditPage">
+        <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="openProductCatalogPageForImportedProduct"/>
+        <actionGroup ref="SearchProductGridByKeywordActionGroup" stepKey="searchImportedDownloadableProductByKeyword">
+            <argument name="keyword" value="{{ImportProduct_Downloadable_FileLinks.sku}}"/>
+        </actionGroup>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="goToDownloadableProductEditPage">
             <argument name="product" value="ImportProduct_Downloadable_FileLinks"/>
         </actionGroup>
         <actionGroup ref="AdminAssertProductInfoOnEditPageActionGroup" stepKey="assertDownloadableProductOnEditPage">
@@ -124,15 +128,15 @@
         <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertProductBaseImageOnEditPage">
             <argument name="image" value="{{ImportProduct_Downloadable_FileLinks.baseImageName}}"/>
         </actionGroup>
-        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProduct_Downloadable_FileLinks.baseImageName, 'image')}}" stepKey="seeBaseImageRole"/>
+        <waitForElementVisible selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProduct_Downloadable_FileLinks.baseImageName, 'image')}}" stepKey="seeBaseImageRole"/>
         <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertProductSmallImageOnEditPage">
             <argument name="image" value="{{ImportProduct_Downloadable_FileLinks.smallImageName}}"/>
         </actionGroup>
-        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProduct_Downloadable_FileLinks.smallImageName, 'small_image')}}" stepKey="seeSmallImageRole"/>
+        <waitForElementVisible selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProduct_Downloadable_FileLinks.smallImageName, 'small_image')}}" stepKey="seeSmallImageRole"/>
         <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertProductThumbnailImageOnEditPage">
             <argument name="image" value="{{ImportProduct_Downloadable_FileLinks.thumbnailImageName}}"/>
         </actionGroup>
-        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProduct_Downloadable_FileLinks.thumbnailImageName, 'thumbnail')}}" stepKey="seeThumbnailImageRole"/>
+        <waitForElementVisible selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProduct_Downloadable_FileLinks.thumbnailImageName, 'thumbnail')}}" stepKey="seeThumbnailImageRole"/>
 
         <!-- Admin: Verify Downloadable Information -->
         <actionGroup ref="ExpandAdminProductSectionActionGroup" stepKey="expandDownloadableSection">
@@ -179,18 +183,18 @@
         </actionGroup>
         <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{ImportProduct_Downloadable_FileLinks.sku}}" stepKey="seeSku"/>
         <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="${{ImportProduct_Downloadable_FileLinks.price}}" stepKey="seePrice"/>
-        <seeElement selector="{{StorefrontProductInfoMainSection.productImageSrc(ImportProduct_Downloadable_FileLinks.baseImageName)}}" stepKey="seeBaseImage"/>
-        <seeElement selector="{{StorefrontProductInfoMainSection.productImageSrc(ImportProduct_Downloadable_FileLinks.smallImageName)}}" stepKey="seeSmallImage"/>
-        <seeElement selector="{{StorefrontProductInfoMainSection.productImageSrc(ImportProduct_Downloadable_FileLinks.thumbnailImageName)}}" stepKey="seeThumbnailImage"/>
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.productImageSrc(ImportProduct_Downloadable_FileLinks.baseImageName)}}" stepKey="seeBaseImage"/>
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.productImageSrc(ImportProduct_Downloadable_FileLinks.smallImageName)}}" stepKey="seeSmallImage"/>
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.productImageSrc(ImportProduct_Downloadable_FileLinks.thumbnailImageName)}}" stepKey="seeThumbnailImage"/>
 
         <!-- Storefront: Verify Downloadable Product Link Data -->
-        <seeElement selector="{{StorefrontDownloadableProductSection.downloadableSampleLabel(ImportProduct_Downloadable_FileLinks.sampleTitle)}}" stepKey="seeDownloadableSampleLink"/>
+        <waitForElementVisible selector="{{StorefrontDownloadableProductSection.downloadableSampleLabel(ImportProduct_Downloadable_FileLinks.sampleTitle)}}" stepKey="seeDownloadableSampleLink"/>
         <click selector="{{StorefrontDownloadableProductSection.downloadableSampleLabel(ImportProduct_Downloadable_FileLinks.sampleTitle)}}" stepKey="clickDownloadableSampleLink"/>
         <switchToNextTab stepKey="switchToDownloadedLinkTab"/>
         <waitForElement selector="{{StorefrontDownloadableLinkSection.downloadableLinkImage}}" stepKey="seeImage"/>
         <closeTab stepKey="closeTab"/>
-        <seeElement selector="{{StorefrontDownloadableProductSection.downloadableLinkByTitle(ImportProduct_Downloadable_FileLinks.linkTitle)}}" stepKey="seeDownloadableLink"/>
-        <seeElement selector="{{StorefrontDownloadableProductSection.downloadableLinkSampleByTitle('sample')}}" stepKey="seeDownloadableLinkSampleLink"/>
+        <waitForElementVisible selector="{{StorefrontDownloadableProductSection.downloadableLinkByTitle(ImportProduct_Downloadable_FileLinks.linkTitle)}}" stepKey="seeDownloadableLink"/>
+        <waitForElementVisible selector="{{StorefrontDownloadableProductSection.downloadableLinkSampleByTitle('sample')}}" stepKey="seeDownloadableLinkSampleLink"/>
         <click selector="{{StorefrontDownloadableProductSection.downloadableLinkSampleByTitle('sample')}}" stepKey="clickDownloadableLinkSampleLink"/>
         <switchToNextTab stepKey="switchToDownloadedLinkTab2"/>
         <waitForElement selector="{{StorefrontDownloadableLinkSection.downloadableLinkImage}}" stepKey="seeImage2"/>
