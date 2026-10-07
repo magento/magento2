@@ -25,6 +25,7 @@ use Magento\Store\Model\StoreManagerInterface;
  * Magento\CatalogRule\Observer\PrepareCatalogProductCollectionPricesObserver does not cover them.
  * Each rendered configurable therefore produced its own single row catalogrule_product_price query.
  *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PrefetchChildRulePricesObserver implements ObserverInterface
@@ -91,50 +92,68 @@ class PrefetchChildRulePricesObserver implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
-        $parentIds = [];
-        foreach ($observer->getEvent()->getCollection() as $product) {
-            if ($product->getTypeId() === Configurable::TYPE_CODE) {
-                $parentIds[] = (int)$product->getId();
-            }
-        }
-
-        if (!$parentIds) {
-            return;
-        }
-
-        $childIds = $this->getChildIds($parentIds);
+        $event = $observer->getEvent();
+        $childIds = $this->getChildIds($this->getConfigurableIds($event->getCollection()));
         if (!$childIds) {
             return;
         }
 
-        $event = $observer->getEvent();
         $store = $this->storeManager->getStore($event->getStoreId());
-        $websiteId = $store->getWebsiteId();
         $customerGroupId = $event->hasCustomerGroupId()
             ? $event->getCustomerGroupId()
             : $this->customerSession->getCustomerGroupId();
         $date = $event->hasDate()
             ? new \DateTime($event->getDate())
             : $this->localeDate->scopeDate($store->getId());
-        $dateKey = $date->format('Y-m-d H:i:s');
 
-        $missing = [];
-        foreach ($childIds as $childId) {
-            if (!$this->rulePricesStorage->hasRulePrice("{$dateKey}|{$websiteId}|{$customerGroupId}|{$childId}")) {
-                $missing[] = $childId;
+        $this->prefetchRulePrices($date, $store->getWebsiteId(), $customerGroupId, $childIds);
+    }
+
+    /**
+     * Ids of the configurable products in the collection.
+     *
+     * @param iterable $collection
+     * @return int[]
+     */
+    private function getConfigurableIds(iterable $collection): array
+    {
+        $parentIds = [];
+        foreach ($collection as $product) {
+            if ($product->getTypeId() === Configurable::TYPE_CODE) {
+                $parentIds[] = (int)$product->getId();
             }
         }
 
+        return $parentIds;
+    }
+
+    /**
+     * Store the rule prices of the given products that are not stored yet, fetched in one query.
+     *
+     * @param \DateTimeInterface $date
+     * @param int|string $websiteId
+     * @param int|string $customerGroupId
+     * @param int[] $productIds
+     * @return void
+     */
+    private function prefetchRulePrices(
+        \DateTimeInterface $date,
+        $websiteId,
+        $customerGroupId,
+        array $productIds
+    ): void {
+        $keyPrefix = "{$date->format('Y-m-d H:i:s')}|{$websiteId}|{$customerGroupId}|";
+        $missing = array_values(array_filter(
+            $productIds,
+            fn (int $productId): bool => !$this->rulePricesStorage->hasRulePrice($keyPrefix . $productId)
+        ));
         if (!$missing) {
             return;
         }
 
         $prices = $this->ruleFactory->create()->getRulePrices($date, $websiteId, $customerGroupId, $missing);
-        foreach ($missing as $childId) {
-            $this->rulePricesStorage->setRulePrice(
-                "{$dateKey}|{$websiteId}|{$customerGroupId}|{$childId}",
-                $prices[$childId] ?? false
-            );
+        foreach ($missing as $productId) {
+            $this->rulePricesStorage->setRulePrice($keyPrefix . $productId, $prices[$productId] ?? false);
         }
     }
 
@@ -149,6 +168,10 @@ class PrefetchChildRulePricesObserver implements ObserverInterface
      */
     private function getChildIds(array $parentIds): array
     {
+        if (!$parentIds) {
+            return [];
+        }
+
         $childIds = $this->configurableResource->getChildrenIds($parentIds)[0] ?? [];
 
         return array_map('intval', array_values($childIds));

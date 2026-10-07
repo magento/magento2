@@ -113,23 +113,6 @@ class ListProductTest extends TestCase
      */
     private CollectionFactory $collectionFactory;
 
-    /**
-     * @var ManagerInterface|MockObject
-     */
-    private $eventManagerMock;
-
-    /**
-     * @var StoreInterface|MockObject
-     */
-    private $storeMock;
-
-    /**
-     * Data of every event the block dispatched, by event name
-     *
-     * @var array
-     */
-    private array $dispatchedEvents = [];
-
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
@@ -152,15 +135,16 @@ class ListProductTest extends TestCase
         $this->urlHelperMock = $this->createMock(Data::class);
         $this->context = $this->createMock(Context::class);
         $this->renderer = $this->createMock(Render::class);
-        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
+        $eventManager = $this->createMock(ManagerInterface::class);
 
         $this->context->expects($this->any())->method('getRegistry')->willReturn($this->registryMock);
         $this->context->expects($this->any())->method('getCartHelper')->willReturn($this->cartHelperMock);
         $this->context->expects($this->any())->method('getLayout')->willReturn($this->layoutMock);
-        $this->context->expects($this->any())->method('getEventManager')->willReturn($this->eventManagerMock);
+        $this->context->expects($this->any())->method('getEventManager')->willReturn($eventManager);
         $storeManager = $this->createMock(StoreManagerInterface::class);
-        $this->storeMock = $this->createMock(StoreInterface::class);
-        $storeManager->expects($this->any())->method('getStore')->willReturn($this->storeMock);
+        $store = $this->createMock(StoreInterface::class);
+        $store->method('getId')->willReturn(1);
+        $storeManager->expects($this->any())->method('getStore')->willReturn($store);
         $this->context->expects($this->any())->method('getStoreManager')->willReturn($storeManager);
         $scopeConfig = $this->createMock(ScopeConfigInterface::class);
         $this->context->expects($this->any())->method('getScopeConfig')->willReturn($scopeConfig);
@@ -326,18 +310,18 @@ class ListProductTest extends TestCase
      */
     public function testBeforeToHtmlPreparesListingPricesInBulk(): void
     {
-        $this->storeMock->method('getId')->willReturn(1);
         $this->prodCollectionMock->method('isLoaded')->willReturn(true);
         $this->prodCollectionMock->method('count')->willReturn(2);
         $this->prodCollectionMock->expects($this->once())->method('addTierPriceData');
         $this->mockListingLayer();
 
-        $this->recordDispatchedEvents();
+        $dispatchedEvents = [];
+        $this->recordDispatchedEvents($dispatchedEvents);
         $this->block->toHtml();
 
         $this->assertSame(
             [['collection' => $this->prodCollectionMock, 'store_id' => 1]],
-            $this->dispatchedEvents['prepare_catalog_product_collection_prices'] ?? []
+            $dispatchedEvents['prepare_catalog_product_collection_prices'] ?? []
         );
     }
 
@@ -353,10 +337,11 @@ class ListProductTest extends TestCase
         $this->prodCollectionMock->expects($this->never())->method('addTierPriceData');
         $this->mockListingLayer();
 
-        $this->recordDispatchedEvents();
+        $dispatchedEvents = [];
+        $this->recordDispatchedEvents($dispatchedEvents);
         $this->block->toHtml();
 
-        $this->assertArrayNotHasKey('prepare_catalog_product_collection_prices', $this->dispatchedEvents);
+        $this->assertArrayNotHasKey('prepare_catalog_product_collection_prices', $dispatchedEvents);
     }
 
     /**
@@ -377,13 +362,16 @@ class ListProductTest extends TestCase
     /**
      * Record the data of every event the block dispatches, by event name.
      *
+     * @param array $dispatchedEvents
      * @return void
      */
-    private function recordDispatchedEvents(): void
+    private function recordDispatchedEvents(array &$dispatchedEvents): void
     {
-        $this->eventManagerMock->method('dispatch')->willReturnCallback(
-            function (string $eventName, array $data = []): void {
-                $this->dispatchedEvents[$eventName][] = $data;
+        /** @var ManagerInterface|MockObject $eventManager */
+        $eventManager = $this->context->getEventManager();
+        $eventManager->method('dispatch')->willReturnCallback(
+            function (string $eventName, array $data = []) use (&$dispatchedEvents): void {
+                $dispatchedEvents[$eventName][] = $data;
             }
         );
     }
