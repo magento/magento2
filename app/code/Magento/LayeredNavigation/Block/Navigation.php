@@ -7,6 +7,7 @@ namespace Magento\LayeredNavigation\Block;
 
 use Magento\Framework\View\Element\Template;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\Catalog\Block\Product\ListProduct;
 use Magento\Catalog\Block\Product\ProductList\Toolbar;
 
 /**
@@ -23,8 +24,6 @@ class Navigation extends \Magento\Framework\View\Element\Template
     private const PRODUCT_LISTING_TOOLBAR_BLOCK = 'product_list_toolbar';
 
     /**
-     * Catalog layer
-     *
      * @var \Magento\Catalog\Model\Layer
      */
     protected $_catalogLayer;
@@ -146,9 +145,42 @@ class Navigation extends \Magento\Framework\View\Element\Template
         /** @var Toolbar $toolbarBlock */
         $toolbarBlock = $this->getLayout()->getBlock(self::PRODUCT_LISTING_TOOLBAR_BLOCK);
         if ($toolbarBlock) {
+            $listBlock = $toolbarBlock->getParentBlock();
+            if ($listBlock instanceof ListProduct) {
+                $this->applyListSortConfig($listBlock, $toolbarBlock);
+            }
             /** @var Collection $collection */
             $collection = $this->getLayer()->getProductCollection();
             $toolbarBlock->setCollection($collection);
+        }
+    }
+
+    /**
+     * Copies the sorting configuration of the product list block to the toolbar
+     *
+     * @param ListProduct $listBlock
+     * @param Toolbar $toolbarBlock
+     * @return void
+     */
+    private function applyListSortConfig(ListProduct $listBlock, Toolbar $toolbarBlock): void
+    {
+        $listBlock->getLoadedProductCollection();
+
+        $orders = $listBlock->getAvailableOrders();
+        if ($orders) {
+            $toolbarBlock->setAvailableOrders($orders);
+        }
+        $sort = $listBlock->getSortBy();
+        if ($sort) {
+            $toolbarBlock->setDefaultOrder($sort);
+        }
+        $dir = $listBlock->getDefaultDirection();
+        if ($dir) {
+            $toolbarBlock->setDefaultDirection($dir);
+        }
+        $modes = $listBlock->getModes();
+        if ($modes) {
+            $toolbarBlock->setModes($modes);
         }
     }
 }

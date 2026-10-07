@@ -7,7 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\LayeredNavigation\Test\Unit\Block;
 
+use Magento\Catalog\Block\Product\ListProduct;
+use Magento\Catalog\Block\Product\ProductList\Toolbar;
 use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Model\Layer;
 use Magento\Catalog\Model\Layer\AvailabilityFlagInterface;
 use Magento\Catalog\Model\Layer\FilterList;
@@ -24,6 +27,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 /**
  * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class NavigationTest extends TestCase
 {
@@ -198,5 +202,95 @@ class NavigationTest extends TestCase
 
         $this->layoutMock->expects($this->once())->method('getBlock')->willReturn($blockMock);
         $this->assertEquals($clearUrl, $this->model->getClearUrl());
+    }
+
+    /**
+     * @return void
+     */
+    public function testBeforeToHtmlAppliesListSortConfigToToolbarBeforeSettingCollection(): void
+    {
+        $orders = ['relevance' => 'Relevance', 'price' => 'Price'];
+        $modes = ['grid' => 'Grid'];
+        $collection = $this->createMock(Collection::class);
+        $this->catalogLayerMock->method('getProductCollection')->willReturn($collection);
+        $this->filterListMock->method('getFilters')->willReturn([]);
+
+        $listBlock = $this->createPartialMockWithReflection(
+            ListProduct::class,
+            ['getLoadedProductCollection', 'getAvailableOrders', 'getSortBy', 'getDefaultDirection', 'getModes']
+        );
+        $listBlock->expects($this->once())->method('getLoadedProductCollection')->willReturn($collection);
+        $listBlock->method('getAvailableOrders')->willReturn($orders);
+        $listBlock->method('getSortBy')->willReturn('relevance');
+        $listBlock->method('getDefaultDirection')->willReturn('desc');
+        $listBlock->method('getModes')->willReturn($modes);
+
+        $toolbar = $this->createPartialMockWithReflection(
+            Toolbar::class,
+            ['getParentBlock', 'setAvailableOrders', 'setDefaultOrder', 'setDefaultDirection', 'setModes',
+                'setCollection']
+        );
+        $toolbar->method('getParentBlock')->willReturn($listBlock);
+        $calls = [];
+        $record = function (string $name) use (&$calls, $toolbar) {
+            return function (...$args) use (&$calls, $name, $toolbar) {
+                $calls[] = [$name, $args];
+                return $toolbar;
+            };
+        };
+        $setters = ['setAvailableOrders', 'setDefaultOrder', 'setDefaultDirection', 'setModes', 'setCollection'];
+        foreach ($setters as $method) {
+            $toolbar->expects($this->once())->method($method)->willReturnCallback($record($method));
+        }
+        $this->layoutMock->method('getBlock')->with('product_list_toolbar')->willReturn($toolbar);
+        $this->model->setLayout($this->layoutMock);
+
+        $this->invokeConfigureToolbarBlock();
+
+        $this->assertSame(
+            [
+                ['setAvailableOrders', [$orders]],
+                ['setDefaultOrder', ['relevance']],
+                ['setDefaultDirection', ['desc']],
+                ['setModes', [$modes]],
+                ['setCollection', [$collection]],
+            ],
+            $calls
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testBeforeToHtmlOnlySetsCollectionWhenToolbarHasNoListParent(): void
+    {
+        $collection = $this->createMock(Collection::class);
+        $this->catalogLayerMock->method('getProductCollection')->willReturn($collection);
+        $this->filterListMock->method('getFilters')->willReturn([]);
+
+        $toolbar = $this->createPartialMockWithReflection(
+            Toolbar::class,
+            ['getParentBlock', 'setAvailableOrders', 'setDefaultOrder', 'setDefaultDirection', 'setModes',
+                'setCollection']
+        );
+        $toolbar->method('getParentBlock')->willReturn(null);
+        $toolbar->expects($this->never())->method('setAvailableOrders');
+        $toolbar->expects($this->never())->method('setDefaultOrder');
+        $toolbar->expects($this->never())->method('setDefaultDirection');
+        $toolbar->expects($this->never())->method('setModes');
+        $toolbar->expects($this->once())->method('setCollection')->with($collection);
+        $this->layoutMock->method('getBlock')->with('product_list_toolbar')->willReturn($toolbar);
+        $this->model->setLayout($this->layoutMock);
+
+        $this->invokeConfigureToolbarBlock();
+    }
+
+    /**
+     * @return void
+     */
+    private function invokeConfigureToolbarBlock(): void
+    {
+        $method = new \ReflectionMethod($this->model, 'configureToolbarBlock');
+        $method->invoke($this->model);
     }
 }
