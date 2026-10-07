@@ -56,6 +56,8 @@
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <createData entity="RollbackPaypalPayflowPro" stepKey="rollbackPaypalPayflowProConfig"/>
+            <magentoCLI command="config:set payment/payflow_link/active 0" stepKey="disablePayflowLinkConfig"/>
+            <magentoCLI command="cache:flush config" stepKey="flushConfigCacheAfterDisablingPayflowLink"/>
             <!-- Logout from storefront -->
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
