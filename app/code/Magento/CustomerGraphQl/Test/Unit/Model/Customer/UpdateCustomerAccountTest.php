@@ -107,7 +107,11 @@ class UpdateCustomerAccountTest extends TestCase
             ->willReturnCallback(
                 function () use (&$addressesState, &$addressUpdates): void {
                     $this->assertSame(1, $addressUpdates, 'Addresses must be restored only after saving.');
-                    $this->assertNull($addressesState, 'Addresses must be null during saving.');
+                    $this->assertNull(
+                        $addressesState,
+                        'Addresses must be null during saving to prevent performance degradation '
+                        . 'for customers with large address books.'
+                    );
                 }
             );
 
