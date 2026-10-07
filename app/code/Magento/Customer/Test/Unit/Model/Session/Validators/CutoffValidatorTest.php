@@ -16,6 +16,7 @@ use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -26,12 +27,12 @@ class CutoffValidatorTest extends TestCase
     use MockCreationTrait;
 
     /**
-     * @var ResourceCustomer|MockObject
+     * @var ResourceCustomer|Stub
      */
     private $customerResourceMock;
 
     /**
-     * @var ResourceVisitor|MockObject
+     * @var ResourceVisitor|Stub
      */
     private $visitorResourceMock;
 
@@ -52,8 +53,8 @@ class CutoffValidatorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->customerResourceMock = $this->createMock(ResourceCustomer::class);
-        $this->visitorResourceMock = $this->createMock(ResourceVisitor::class);
+        $this->customerResourceMock = $this->createStub(ResourceCustomer::class);
+        $this->visitorResourceMock = $this->createStub(ResourceVisitor::class);
         $this->visitorSessionMock = $this->createPartialMockWithReflection(Generic::class, ['getVisitorData']);
         $this->sessionMock = $this->createMock(SessionManagerInterface::class);
 
@@ -66,14 +67,13 @@ class CutoffValidatorTest extends TestCase
 
     public function testValidateThrowsSessionExpiredExceptionWhenCutoffIsAfterSessionCreation(): void
     {
-        $this->visitorSessionMock->method('getVisitorData')
+        $this->visitorSessionMock->expects($this->once())
+            ->method('getVisitorData')
             ->willReturn(['customer_id' => 1, 'visitor_id' => 2]);
         $this->customerResourceMock->method('findSessionCutOff')
-            ->with(1)
-            ->willReturn(200);
+            ->willReturnMap([[1, 200]]);
         $this->visitorResourceMock->method('fetchCreatedAt')
-            ->with(2)
-            ->willReturn(100);
+            ->willReturnMap([[2, 100]]);
         $this->sessionMock->expects($this->once())
             ->method('destroy')
             ->with(['clear_storage' => false]);
@@ -93,7 +93,8 @@ class CutoffValidatorTest extends TestCase
     #[DataProvider('validSessionDataProvider')]
     public function testValidateKeepsValidSession(?array $visitorData, ?int $cutoff, ?int $createdAt): void
     {
-        $this->visitorSessionMock->method('getVisitorData')
+        $this->visitorSessionMock->expects($this->once())
+            ->method('getVisitorData')
             ->willReturn($visitorData);
         $this->customerResourceMock->method('findSessionCutOff')
             ->willReturn($cutoff);
