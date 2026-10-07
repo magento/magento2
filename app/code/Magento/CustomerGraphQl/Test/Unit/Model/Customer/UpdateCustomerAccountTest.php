@@ -72,8 +72,7 @@ class UpdateCustomerAccountTest extends TestCase
     }
 
     /**
-     * The addresses must be detached (set to null) while the customer is saved and restored afterwards, so the
-     * repository never re-saves the address book during an account-only update.
+     * Detach addresses to skip repository synchronization, then restore them for the mutation response.
      */
     public function testExecuteDetachesAndRestoresAddressesAroundSave(): void
     {
@@ -88,30 +87,32 @@ class UpdateCustomerAccountTest extends TestCase
                 return $addressesState;
             }
         );
-        $customer->method('setAddresses')->willReturnCallback(
-            static function ($value) use (&$addressesState, $customer) {
-                $addressesState = $value;
-                return $customer;
-            }
-        );
+        $addressUpdates = 0;
+        $customer->expects($this->exactly(2))
+            ->method('setAddresses')
+            ->willReturnCallback(
+                function ($value) use (&$addressesState, &$addressUpdates, $originalAddresses, $customer) {
+                    $this->assertSame($addressUpdates++ === 0 ? null : $originalAddresses, $value);
+                    $addressesState = $value;
+                    return $customer;
+                }
+            );
 
         $store = $this->createMock(StoreInterface::class);
         $store->method('getId')->willReturn(1);
 
-        // Capture the addresses value at the exact moment the customer is handed to the repository.
-        $addressesDuringSave = 'not-called';
         $this->saveCustomer->expects($this->once())
             ->method('execute')
             ->with($customer)
             ->willReturnCallback(
-                static function () use (&$addressesState, &$addressesDuringSave) {
-                    $addressesDuringSave = $addressesState;
+                function () use (&$addressesState, &$addressUpdates): void {
+                    $this->assertSame(1, $addressUpdates, 'Addresses must be restored only after saving.');
+                    $this->assertNull($addressesState, 'Addresses must be null during saving.');
                 }
             );
 
         $this->model->execute($customer, ['lastname' => 'Rowe'], $store);
 
-        $this->assertNull($addressesDuringSave, 'Addresses must be detached (null) while the customer is saved.');
         $this->assertSame($originalAddresses, $addressesState, 'Original addresses must be restored after save.');
     }
 }

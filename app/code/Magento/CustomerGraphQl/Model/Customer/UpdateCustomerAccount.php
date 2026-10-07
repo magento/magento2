@@ -21,7 +21,7 @@ use Magento\Store\Api\Data\StoreInterface;
 /**
  * Update customer account data
  *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects) - https://jira.corp.magento.com/browse/MC-18152
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class UpdateCustomerAccount
 {
@@ -114,13 +114,11 @@ class UpdateCustomerAccount
             throw new GraphQlNoSuchEntityException(__($exception->getMessage()), $exception);
         }
 
-        // The customer update mutation cannot modify the address book, so detach the loaded addresses to prevent
-        // the customer repository save from re-validating and re-saving every address (performance scales with count).
+        // Account updates must not synchronize the address book.
         $addresses = $customer->getAddresses();
         $customer->setAddresses(null);
         $this->saveCustomer->execute($customer);
-        // Restore the addresses on the same object: the resolver reuses this instance to build the mutation
-        // response (ExtractCustomerData reads getAddresses()), and it keeps the argument's observable state intact.
+        // Preserve addresses for the mutation response.
         $customer->setAddresses($addresses);
 
         if (isset($data['is_subscribed'])) {
