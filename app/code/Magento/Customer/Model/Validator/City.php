@@ -76,7 +76,7 @@ class City extends AbstractAddressFieldValidator
     public function getCharsetErrorMessage(): Phrase
     {
         return __(
-            "Invalid City. Please use letters, numbers, spaces, and the following characters: - _ ' \u{2019} . , & ( ) /"
+            "Invalid City. Please use letters, numbers, spaces and the following characters: - _ ' \u{2019} . , & ( ) /"
         );
     }
 
