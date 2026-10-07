@@ -31,8 +31,9 @@ class City extends AbstractAddressFieldValidator
      * ,: Comma.
      * &: Ampersand.
      * (): Parentheses.
+     * /: Forward slash.
      */
-    private const PATTERN_CITY_CHARSET = "/^[\p{L}\p{M}\d\s\-_'\u{2019}\.,&\(\)]+\$/u";
+    private const PATTERN_CITY_CHARSET = "/^[\p{L}\p{M}\d\s\-_'\u{2019}\.,&\(\)\/]+\$/u";
 
     /**
      * @inheritdoc
@@ -75,7 +76,7 @@ class City extends AbstractAddressFieldValidator
     public function getCharsetErrorMessage(): Phrase
     {
         return __(
-            "Invalid City. Please use letters, numbers, spaces, and the following characters: - _ ' \u{2019} . , & ( )"
+            "Invalid City. Please use letters, numbers, spaces, and the following characters: - _ ' \u{2019} . , & ( ) /"
         );
     }
 
