@@ -9,7 +9,7 @@
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="UpdatedImageDetails" type="image">
-        <data key="title">renamed title</data>
+        <data key="title" unique="suffix">renamed title</data>
         <data key="description">test description</data>
         <data key="file">magento.jpg</data>
         <data key="fileName">renamed title</data>

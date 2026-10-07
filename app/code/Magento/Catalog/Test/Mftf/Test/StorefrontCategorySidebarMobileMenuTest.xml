@@ -50,6 +50,9 @@
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createParentCategory.name$$)}}" stepKey="expandCategoryMenu"/>
         <waitForPageLoad stepKey="waitForSearchResult" time="60"/>
 
+        <conditionalClick selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createParentCategory.name$$)}}" dependentSelector="{{StorefrontHeaderSection.NavigationCategoryByName($$createSubCategory.name$$)}}" visible="false" stepKey="reclickCategoryMenuIfNotExpanded"/>
+        <waitForPageLoad stepKey="waitForSubmenuExpand"/>
+
         <!-- Assert the category expanded successfully -->
         <actionGroup ref="StorefrontAssertCategoryNameIsShownInMenuActionGroup" stepKey="verifySubCatMenuItemIsVisibleInTheSidebar">
             <argument name="categoryName" value="$$createSubCategory.name$$"/>

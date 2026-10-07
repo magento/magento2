@@ -264,14 +264,16 @@ class ProductOtherTest extends ProductTestBase
             ->addFieldToFilter('entity_id', ['eq'=> $product->getEntityId()])
             ->addFieldToFilter('entity_type', ['eq'=> 'product'])
             ->load();
-        $listOfUrlRewriteIds = $collUrlRewrite->getAllIds();
-        $this->assertCount(3, $collUrlRewrite);
-        foreach ($listOfUrlRewriteIds as $key => $id) {
-            $this->assertEquals(
-                $listOfProductUrlKeys[$key],
-                $collUrlRewrite->getItemById($id)->getRequestPath()
-            );
-        }
+        $this->assertCount(3, $collUrlRewrite->getItems());
+        $this->assertEqualsCanonicalizing(
+            $listOfProductUrlKeys,
+            array_map(
+                function ($item) {
+                    return $item->getRequestPath();
+                },
+                $collUrlRewrite->getItems()
+            )
+        );
     }
 
     /**

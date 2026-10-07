@@ -52,10 +52,10 @@
         <conditionalClick selector="{{StorefrontProductMediaSection.fotoramaImageThumbnail('2')}}"
                           dependentSelector="{{StorefrontProductMediaSection.fotoramaImageThumbnailActive('2')}}"
                           visible="false" stepKey="clickOnVideoThumbnail"/>
-        <wait stepKey="waitTenSecondsToPlayVideo" time="10"/>
+        <waitForElementVisible selector=".fotorama--fullscreen.fotorama-item iframe" stepKey="waitTenSecondsToPlayVideo" time="10"/>
         <!-- On clicking video thumbnail, assert the video iframe is loaded with autoplay attribute -->
-        <seeElementInDOM selector="iframe" stepKey="AssertVideoIsPlayed"/>
-        <grabAttributeFrom selector="iframe" userInput="allow" stepKey="grabAllowAttribute"/>
+        <seeElementInDOM selector=".fotorama--fullscreen.fotorama-item iframe" stepKey="AssertVideoIsPlayed"/>
+        <grabAttributeFrom selector=".fotorama--fullscreen.fotorama-item iframe" userInput="allow" stepKey="grabAllowAttribute"/>
         <assertStringContainsString stepKey="assertAllowAttribute">
             <actualResult type="string">$grabAllowAttribute</actualResult>
             <expectedResult type="string">autoplay</expectedResult>

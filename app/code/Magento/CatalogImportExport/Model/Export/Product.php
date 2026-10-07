@@ -1497,17 +1497,23 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             $this->setHeaderColumns($multirawData['customOptionsData'], $stockItemRows);
 
             foreach ($rawData as $productId => $productData) {
-                foreach ($productData as $storeId => $dataRow) {
-                    if ($storeId == Store::DEFAULT_STORE_ID && isset($stockItemRows[$productId])) {
-                        // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                        $dataRow = array_merge($dataRow, $stockItemRows[$productId]);
+                try {
+                    foreach ($productData as $storeId => $dataRow) {
+                        if ($storeId == Store::DEFAULT_STORE_ID && isset($stockItemRows[$productId])) {
+                            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
+                            $dataRow = array_merge($dataRow, $stockItemRows[$productId]);
+                        }
+                        $this->updateGalleryImageData($dataRow, $rawData);
+                        $this->appendMultirowData($dataRow, $multirawData);
+                        if ($dataRow) {
+                            $rowProcessor($dataRow);
+                            ++$processedRows;
+                        }
                     }
-                    $this->updateGalleryImageData($dataRow, $rawData);
-                    $this->appendMultirowData($dataRow, $multirawData);
-                    if ($dataRow) {
-                        $rowProcessor($dataRow);
-                        ++$processedRows;
-                    }
+                } catch (\Exception $e) {
+                    // Isolate per-product failures so a single malformed product cannot
+                    // silently truncate the remainder of the export.
+                    $this->_logger->critical($e);
                 }
             }
             $this->commitPendingLastProcessedLinkFieldValue();
@@ -2027,6 +2033,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 && isset($dataRow[$imageLabelCode])
                 && $dataRow[$imageLabelCode]
                 && (!isset($dataRow[$imageAttributeCode]) || !$dataRow[$imageAttributeCode])
+                && isset($rawData[$productId][Store::DEFAULT_STORE_ID][$imageAttributeCode])
             ) {
                 $dataRow[$imageAttributeCode] = $rawData[$productId][Store::DEFAULT_STORE_ID][$imageAttributeCode];
             }

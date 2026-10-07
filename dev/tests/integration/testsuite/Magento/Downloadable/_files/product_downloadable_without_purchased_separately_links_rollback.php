@@ -8,10 +8,11 @@ declare(strict_types=1);
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Downloadable\Api\DomainManagerInterface;
+use Magento\TestFramework\Helper\DownloadableDomains;
 
 /** @var DomainManagerInterface $domainManager */
 $domainManager = Bootstrap::getObjectManager()->get(DomainManagerInterface::class);
-$domainManager->removeDomains(['example.com']);
+DownloadableDomains::removeDomains($domainManager, ['example.com']);
 
 /** @var \Magento\Framework\Registry $registry */
 $registry = Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);
