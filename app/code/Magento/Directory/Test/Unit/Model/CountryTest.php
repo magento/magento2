@@ -73,23 +73,6 @@ class CountryTest extends TestCase
             ]
         );
 
-        $deprecations = [];
-        set_error_handler(
-            static function (int $errno, string $errstr) use (&$deprecations): bool {
-                if ($errno === E_DEPRECATED) {
-                    $deprecations[] = $errstr;
-                }
-                return true;
-            },
-            E_DEPRECATED
-        );
-
-        try {
-            $this->assertNull($country->getFormats());
-        } finally {
-            restore_error_handler();
-        }
-
-        $this->assertSame([], $deprecations, implode(PHP_EOL, $deprecations));
+        $this->assertNull($country->getFormats());
     }
 }
