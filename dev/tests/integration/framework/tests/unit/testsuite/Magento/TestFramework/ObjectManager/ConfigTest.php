@@ -18,7 +18,7 @@ class ConfigTest extends TestCase
         $configuration = ['preferences' => ['Foo' => 'Bar']];
         $savedConfigs = [];
         $requestedKeys = [];
-        $cache = $this->createMock(ConfigCacheInterface::class);
+        $cache = $this->createStub(ConfigCacheInterface::class);
         $cache->method('save')
             ->willReturnCallback(function (array $config, $key) use (&$savedConfigs): void {
                 $savedConfigs[$key] = $config;
@@ -59,7 +59,6 @@ class ConfigTest extends TestCase
         $arrayProperties = ['_preferences', '_virtualTypes', '_arguments', '_nonShared', '_mergedArguments'];
         foreach ($arrayProperties as $name) {
             $property = $reflection->getProperty($name);
-            $property->setAccessible(true);
             $property->setValue($model, [uniqid()]);
             $properties[$name] = $property;
         }
@@ -76,7 +75,6 @@ class ConfigTest extends TestCase
         $model = new Config();
         $model->setCache($cache);
         $serializer = new \ReflectionProperty(\Magento\Framework\ObjectManager\Config\Config::class, 'serializer');
-        $serializer->setAccessible(true);
         $serializer->setValue($model, new Json());
 
         return $model;
