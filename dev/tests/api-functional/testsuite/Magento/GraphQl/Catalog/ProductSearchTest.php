@@ -3063,4 +3063,67 @@ QUERY;
             ],
         ];
     }
+
+    /**
+     * Verify that explicit null values for sort and filter arguments are treated as omitted.
+     */
+    #[
+        DataFixture('Magento/Catalog/_files/products_with_layered_navigation_custom_attribute.php'),
+        DataFixture('Magento/Indexer/_files/reindex_all_invalid.php'),
+    ]
+    public function testSearchWithNullSortAndFilter(): void
+    {
+        $omittedQuery = <<<QUERY
+{
+  products(search: "Simple") {
+    total_count
+    items {
+      sku
+    }
+  }
+}
+QUERY;
+        $sortNullQuery = <<<QUERY
+{
+  products(search: "Simple", sort: null) {
+    total_count
+    items {
+      sku
+    }
+  }
+}
+QUERY;
+        $filterNullQuery = <<<QUERY
+{
+  products(search: "Simple", filter: null) {
+    total_count
+    items {
+      sku
+    }
+  }
+}
+QUERY;
+        $sortVariableQuery = <<<QUERY
+query getProducts(\$sort: ProductAttributeSortInput) {
+  products(search: "Simple", sort: \$sort) {
+    total_count
+    items {
+      sku
+    }
+  }
+}
+QUERY;
+
+        $omittedResponse = $this->graphQlQuery($omittedQuery)['products'];
+
+        foreach ([$sortNullQuery, $filterNullQuery] as $query) {
+            $response = $this->graphQlQuery($query)['products'];
+            $this->assertEquals($omittedResponse['total_count'], $response['total_count']);
+            $this->assertEquals($omittedResponse['items'], $response['items']);
+        }
+
+        $response = $this->graphQlQuery($sortVariableQuery, ['sort' => null])['products'];
+        $this->assertEquals($omittedResponse['total_count'], $response['total_count']);
+        $this->assertEquals($omittedResponse['items'], $response['items']);
+    }
 }
