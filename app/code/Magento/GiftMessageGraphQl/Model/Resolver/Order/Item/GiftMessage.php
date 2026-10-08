@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\GiftMessageGraphQl\Model\Resolver\Order\Item;
 
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
@@ -58,6 +59,8 @@ class GiftMessage implements ResolverInterface
 
         try {
             $giftItemMessage = $this->orderItemRepository->get($orderItem->getOrderId(), $orderItem->getItemId());
+        } catch (NoSuchEntityException) {
+            return null;
         } catch (LocalizedException $e) {
             $this->logger->error('Can\'t load message for order item', [
                 'order_id' => $orderItem->getOrderId(),
