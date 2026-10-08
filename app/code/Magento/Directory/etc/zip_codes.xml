@@ -564,6 +564,7 @@
     <zip countryCode="NG">
         <codes>
             <code id="pattern_1" active="true" example="123456">^(\d{6})?$</code>
+            <code id="pattern_2" active="true" example="EK-01-A03-FK-01">^[a-zA-Z]{2}[ -]?(0[1-9]|[1-9][0-9])[ -]?[a-zA-Z0-9]{3}[ -]?[a-zA-Z]{2}[ -]?(0[1-9]|[1-9][0-9])$</code>
         </codes>
     </zip>
     <zip countryCode="NI">
