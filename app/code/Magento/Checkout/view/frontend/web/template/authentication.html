@@ -53,7 +53,7 @@
                                        id="login-email"
                                        type="email"
                                        class="input-text"
-                                       data-bind="attr: {autocomplete: autocomplete}"
+                                       data-bind="attr: {autocomplete: autocomplete === 'off' ? 'off' : 'username'}"
                                        data-validate="{required:true, 'validate-email':true}"
                                 />
                             </div>
@@ -65,7 +65,7 @@
                                        class="input-text"
                                        id="login-password"
                                        name="password"
-                                       data-bind="attr: {autocomplete: autocomplete}"
+                                       data-bind="attr: {autocomplete: autocomplete === 'off' ? 'off' : 'current-password'}"
                                        data-validate="{required:true}"
                                        autocomplete="off"/>
                             </div>
