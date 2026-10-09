@@ -59,12 +59,18 @@ class Utility
     private $validateCoupon;
 
     /**
+     * @var OrderEditUsageOffset
+     */
+    private $orderEditUsageOffset;
+
+    /**
      * @param UsageFactory $usageFactory
      * @param CouponFactory $couponFactory
      * @param Rule\CustomerFactory $customerFactory
      * @param DataObjectFactory $objectFactory
      * @param PriceCurrencyInterface $priceCurrency
      * @param ValidateCoupon|null $validateCoupon
+     * @param OrderEditUsageOffset|null $orderEditUsageOffset
      */
     public function __construct(
         UsageFactory $usageFactory,
@@ -72,7 +78,8 @@ class Utility
         CustomerFactory $customerFactory,
         DataObjectFactory $objectFactory,
         PriceCurrencyInterface $priceCurrency,
-        ?ValidateCoupon $validateCoupon = null
+        ?ValidateCoupon $validateCoupon = null,
+        ?OrderEditUsageOffset $orderEditUsageOffset = null
     ) {
         $this->couponFactory = $couponFactory;
         $this->customerFactory = $customerFactory;
@@ -80,6 +87,8 @@ class Utility
         $this->objectFactory = $objectFactory;
         $this->priceCurrency = $priceCurrency;
         $this->validateCoupon = $validateCoupon ?: ObjectManager::getInstance()->get(ValidateCoupon::class);
+        $this->orderEditUsageOffset = $orderEditUsageOffset
+            ?: ObjectManager::getInstance()->get(OrderEditUsageOffset::class);
     }
 
     /**
@@ -93,7 +102,9 @@ class Utility
      */
     public function canProcessRule(Rule $rule, Address $address): bool
     {
-        if ($rule->hasIsValidForAddress($address) && !$address->isObjectNew()) {
+        $ruleId = (int)$rule->getId();
+        $orderEditOffset = $this->orderEditUsageOffset->getOffset($address, $ruleId);
+        if ($rule->hasIsValidForAddress($address) && !$address->isObjectNew() && $orderEditOffset === 0) {
             return $rule->getIsValidForAddress($address);
         }
 
@@ -104,14 +115,15 @@ class Utility
         /**
          * check per rule usage limit
          */
-        $ruleId = $rule->getId();
         if ($ruleId && $rule->getUsesPerCustomer()) {
             $customerId = $address->getQuote()->getCustomerId();
             /** @var \Magento\SalesRule\Model\Rule\Customer $ruleCustomer */
             $ruleCustomer = $this->customerFactory->create();
             $ruleCustomer->loadByCustomerRule($customerId, $ruleId);
             if ($ruleCustomer->getId()) {
-                if ($ruleCustomer->getTimesUsed() >= $rule->getUsesPerCustomer()) {
+                $timesUsed = $ruleCustomer->getTimesUsed();
+                $timesUsed -= $orderEditOffset;
+                if ($timesUsed >= $rule->getUsesPerCustomer()) {
                     $rule->setIsValidForAddress($address, false);
                     return false;
                 }

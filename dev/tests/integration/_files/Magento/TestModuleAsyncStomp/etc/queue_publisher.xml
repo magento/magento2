@@ -5,33 +5,33 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/publisher.xsd">
-    <publisher topic="stomp.multi.topic.queue.topic.c" queue="stomp.mixed.sync.and.async.queue">
+    <publisher topic="stomp.multi.topic.queue.topic.c" >
         <connection name="stomp" exchange="magento" />
     </publisher>
 
-    <publisher topic="stomp.segment1.segment2.segment3.wildcard" queue="stomp.wildcard.queue.one">
+    <publisher topic="stomp.segment1.segment2.segment3.wildcard" >
         <connection name="stomp" exchange="magento" />
     </publisher>
-    <publisher topic="stomp.segment2.segment3.wildcard" queue="stomp.wildcard.queue.one">
+    <publisher topic="stomp.segment2.segment3.wildcard" >
         <connection name="stomp" exchange="magento" />
     </publisher>
-    <publisher topic="no.match.at.all" queue="unused.queue">
+    <publisher topic="no.match.at.all" >
         <connection name="stomp" exchange="magento" />
     </publisher>
 
     <!-- Publishers for AsyncMultipleTopicsWithEachQueueTest -->
-    <publisher topic="stomp.multi.topic.queue.topic.y" queue="stomp.queue.for.multiple.topics.test.y">
+    <publisher topic="stomp.multi.topic.queue.topic.y" >
         <connection name="stomp" exchange="magento" />
     </publisher>
-    <publisher topic="stomp.multi.topic.queue.topic.z" queue="stomp.queue.for.multiple.topics.test.z">
+    <publisher topic="stomp.multi.topic.queue.topic.z" >
         <connection name="stomp" exchange="magento" />
     </publisher>
 
     <!-- Publishers for AsyncMultipleHandlersTest -->
-    <publisher topic="stomp.mtmh.topic.1" queue="stomp.mtmh.queue.1">
+    <publisher topic="stomp.mtmh.topic.1" >
         <connection name="stomp" exchange="magento" />
     </publisher>
-    <publisher topic="stomp.mtmh.topic.2" queue="stomp.mtmh.queue.2">
+    <publisher topic="stomp.mtmh.topic.2" >
         <connection name="stomp" exchange="magento" />
     </publisher>
 </config>

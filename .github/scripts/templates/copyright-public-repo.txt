@@ -1,4 +1,0 @@
-/**
- * Copyright {{YEAR}} Adobe
- * All Rights Reserved.
- */

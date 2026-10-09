@@ -224,13 +224,17 @@ class Queue implements QueueInterface
     }
 
     /**
-     * Clear queue
-     *
-     * @return int
+     * @inheritdoc
      */
     public function clearQueue(): int
     {
-        throw new \BadMethodCallException('clearQueue is not supported in amqp queue.');
+        $count = 0;
+        while ($message = $this->dequeue()) {
+            $this->acknowledge($message);
+            $count++;
+        }
+
+        return $count;
     }
 
     /**
@@ -238,6 +242,7 @@ class Queue implements QueueInterface
      *
      * @return string
      */
+    #[\Deprecated('Connection name is just a config alias. It should not be used outside of loading config data.')]
     public function getConnectionName(): string
     {
         return $this->amqpConfig->getConnectionName();

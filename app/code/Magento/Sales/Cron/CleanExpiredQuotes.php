@@ -6,6 +6,7 @@
 namespace Magento\Sales\Cron;
 
 use Exception;
+use Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
 use Magento\Quote\Model\ResourceModel\Quote\Collection as QuoteCollection;
 use Magento\Sales\Model\ResourceModel\Collection\ExpiredQuotesCollection;
 use Magento\Sales\Model\ResourceModel\Quote\Delete;
@@ -49,10 +50,16 @@ class CleanExpiredQuotes
     private $batchSize;
 
     /**
+     * @var Snapshot
+     */
+    private $quoteSnapshot;
+
+    /**
      * @param StoreManagerInterface $storeManager
      * @param ExpiredQuotesCollection $expiredQuotesCollection
      * @param Delete $quoteDelete
      * @param LoggerInterface $logger
+     * @param Snapshot $quoteSnapshot
      * @param int $batchSize
      */
     public function __construct(
@@ -60,12 +67,14 @@ class CleanExpiredQuotes
         ExpiredQuotesCollection $expiredQuotesCollection,
         Delete $quoteDelete,
         LoggerInterface $logger,
+        Snapshot $quoteSnapshot,
         int $batchSize = self::DEFAULT_BATCH_SIZE
     ) {
         $this->storeManager = $storeManager;
         $this->expiredQuotesCollection = $expiredQuotesCollection;
         $this->quoteDelete = $quoteDelete;
         $this->logger = $logger;
+        $this->quoteSnapshot = $quoteSnapshot;
         $this->batchSize = $batchSize > 0 ? $batchSize : self::DEFAULT_BATCH_SIZE;
     }
 
@@ -100,6 +109,9 @@ class CleanExpiredQuotes
             $quoteCollection->setCurPage(1);
             $quoteCollection->getSelect()->distinct(true);
             $processedCount = $this->deleteQuotes($quoteCollection, $lastProcessedId);
+            // Release the version-control snapshots registered for this batch so memory
+            // does not accumulate across iterations when cleaning large quote volumes.
+            $this->quoteSnapshot->clear($quoteCollection->getNewEmptyItem());
         } while ($processedCount === $this->batchSize);
     }
 

@@ -147,6 +147,9 @@
             <!--  Disable PayPal Express Checkout and Basic setting change -->
             <actionGroup ref="AdminPayPalExpressCheckoutDisableActionGroup" stepKey="configPaypalExpressCheckoutDisable"/>
             <magentoCLI command="config:set {{StorefrontPaypalExpressAuthorizationPaymentActionOptionConfigData.path}} {{StorefrontPaypalExpressAuthorizationPaymentActionOptionConfigData.value}}" stepKey="paymentActionChangeToAuthorization"/>
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrdersGridFilters"/>
+            <actionGroup ref="ClearInvoicesGridFiltersActionGroup" stepKey="clearInvoiceGridFilters"/>
+            <actionGroup ref="AdminCreditMemosGridClearFiltersActionGroup" stepKey="clearCreditMemosGridFiltersAfter"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
     </test>

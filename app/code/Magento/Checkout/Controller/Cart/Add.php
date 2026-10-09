@@ -8,6 +8,7 @@ namespace Magento\Checkout\Controller\Cart;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Checkout\Model\AddProductToCart;
 use Magento\Checkout\Model\Cart as CustomerCart;
+use Magento\Checkout\Model\Cart\AjaxMessageResponse;
 use Magento\Checkout\Model\Cart\RequestQuantityProcessor;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\App\ObjectManager;
@@ -39,6 +40,11 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
     private AddProductToCart $addProductToCart;
 
     /**
+     * @var AjaxMessageResponse
+     */
+    private AjaxMessageResponse $ajaxMessageResponse;
+
+    /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Checkout\Model\Session $checkoutSession
@@ -48,7 +54,9 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
      * @param ProductRepositoryInterface $productRepository
      * @param RequestQuantityProcessor|null $quantityProcessor
      * @param AddProductToCart|null $addProductToCart
+     * @param AjaxMessageResponse|null $ajaxMessageResponse
      * @codeCoverageIgnore
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -59,7 +67,8 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
         CustomerCart $cart,
         ProductRepositoryInterface $productRepository,
         ?RequestQuantityProcessor $quantityProcessor = null,
-        ?AddProductToCart $addProductToCart = null
+        ?AddProductToCart $addProductToCart = null,
+        ?AjaxMessageResponse $ajaxMessageResponse = null
     ) {
         parent::__construct(
             $context,
@@ -74,6 +83,8 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
             ?? ObjectManager::getInstance()->get(RequestQuantityProcessor::class);
         $this->addProductToCart = $addProductToCart
             ?? ObjectManager::getInstance()->get(AddProductToCart::class);
+        $this->ajaxMessageResponse = $ajaxMessageResponse
+            ?? ObjectManager::getInstance()->get(AjaxMessageResponse::class);
     }
 
     /**
@@ -113,6 +124,7 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
         }
 
         $params = $this->getRequest()->getParams();
+        $product = null;
         try {
             if (isset($params['qty'])) {
                 $filter = new LocalizedToNormalized(
@@ -186,14 +198,14 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
                 $url = $this->_redirect->getRedirectUrl($this->getCartUrl());
             }
 
-            return $this->goBack($url);
+            return $this->goBack($url, $product, true);
         } catch (\Exception $e) {
             $this->messageManager->addExceptionMessage(
                 $e,
                 __('We can\'t add this item to your shopping cart right now.')
             );
             $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
-            return $this->goBack();
+            return $this->goBack(null, $product, true);
         }
 
         return $this->getResponse();
@@ -202,26 +214,37 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
     /**
      * Resolve response
      *
-     * @param string $backUrl
-     * @param \Magento\Catalog\Model\Product $product
+     * @param string|null $backUrl
+     * @param \Magento\Catalog\Model\Product|null $product
+     * @param bool $displayInlineErrors
      * @return ResponseInterface|ResultInterface
      */
-    protected function goBack($backUrl = null, $product = null)
+    protected function goBack($backUrl = null, $product = null, bool $displayInlineErrors = false)
     {
         if (!$this->getRequest()->isAjax()) {
             return parent::_goBack($backUrl);
         }
 
+        $resolvedBackUrl = $backUrl ?: $this->getBackUrl();
         $result = [];
 
-        if ($backUrl || $backUrl = $this->getBackUrl()) {
-            $result['backUrl'] = $backUrl;
-        } else {
-            if ($product && !$product->getIsSalable()) {
-                $result['product'] = [
-                    'statusText' => __('Out of stock')
-                ];
+        if ($displayInlineErrors) {
+            $inlineMessages = $this->ajaxMessageResponse->getInlineErrorMessages(true);
+            if ($inlineMessages) {
+                $result['messages'] = $inlineMessages['html'];
+                $result['displayMessages'] = true;
             }
+        }
+
+        if (!$result && $resolvedBackUrl) {
+            $result['backUrl'] = $resolvedBackUrl;
+        }
+
+        //If the product is no longer salable after the add-to-cart request, display the "Out of stock" message.
+        if ($product && !$product->getIsSalable()) {
+            $result['product'] = [
+                'statusText' => __('Out of stock')
+            ];
         }
 
         $this->getResponse()->representJson(

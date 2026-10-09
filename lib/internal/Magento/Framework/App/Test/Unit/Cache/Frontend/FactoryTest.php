@@ -8,12 +8,14 @@ declare(strict_types=1);
 namespace Magento\Framework\App\Test\Unit\Cache\Frontend;
 
 use Magento\Framework\App\Cache\Frontend\Factory;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Cache\Frontend\Adapter\SymfonyAdapterProvider;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\App\Test\Unit\Cache\Frontend\FactoryTest\CacheDecoratorDummy;
 use Magento\Framework\Cache\Frontend\Adapter\SymfonyAdapters\TagAdapterInterface;
 use Magento\Framework\Cache\Frontend\Adapter\Symfony;
 use Magento\Framework\Cache\Frontend\Adapter\Symfony\BackendWrapper;
+use Magento\Framework\Cache\Frontend\Adapter\Symfony\BackendWrapperFactory;
 use Magento\Framework\Cache\Frontend\Adapter\Symfony\LowLevelBackend;
 use Magento\Framework\Cache\Frontend\Adapter\Symfony\LowLevelFrontend;
 use Magento\Framework\Cache\FrontendInterface;
@@ -26,8 +28,6 @@ use Magento\Framework\Serialize\Serializer\Serialize;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Cache\Adapter\FilesystemAdapter;
-use Symfony\Component\Cache\Adapter\NullAdapter;
 
 /**
  * Unit tests for Cache Frontend Factory
@@ -45,7 +45,7 @@ class FactoryTest extends TestCase
     public function testCreate()
     {
         $model = $this->_buildModelForCreate();
-        $result = $model->create(['backend' => NullAdapter::class]);
+        $result = $model->create(['backend' => 'file']);
 
         $this->assertInstanceOf(
             FrontendInterface::class,
@@ -73,7 +73,7 @@ class FactoryTest extends TestCase
         $model = $this->_buildModelForCreate();
         $result = $model->create(
             [
-                'backend' => FilesystemAdapter::class,
+                'backend' => 'file',
                 'frontend_options' => ['lifetime' => 2601],
                 'backend_options' => ['file_extension' => '.wtf'],
             ]
@@ -84,18 +84,18 @@ class FactoryTest extends TestCase
 
         $this->assertEquals(2601, $frontend->getOption('lifetime'));
 
-        // For Symfony, backend options are not stored in the wrapper (returns null)
-        $fileExtension = $backend->getOption('file_extension');
-        $this->assertNull(
-            $fileExtension,
-            'Backend options are not stored in Symfony wrapper, should return null'
+        // For Symfony, backend options are not stored in the wrapper; the backend is a BackendWrapper
+        $this->assertInstanceOf(
+            BackendWrapper::class,
+            $backend,
+            'Backend options are not stored in Symfony wrapper'
         );
     }
 
     public function testCreateEnforcedOptions()
     {
-        $model = $this->_buildModelForCreate(['backend' => FilesystemAdapter::class]);
-        $result = $model->create(['backend' => NullAdapter::class]);
+        $model = $this->_buildModelForCreate(['backend' => 'file']);
+        $result = $model->create(['backend' => 'redis']);
 
         // The enforced option test verifies that enforced options override regular options
         // Since Symfony uses wrappers, we verify the backend has the correct interface
@@ -112,7 +112,7 @@ class FactoryTest extends TestCase
     #[DataProvider('idPrefixDataProvider')]
     public function testIdPrefix($options, $expectedPrefix)
     {
-        $model = $this->_buildModelForCreate(['backend' => FilesystemAdapter::class]);
+        $model = $this->_buildModelForCreate(['backend' => 'file']);
         $result = $model->create($options);
 
         $frontend = $result->getLowLevelFrontend();
@@ -126,13 +126,13 @@ class FactoryTest extends TestCase
     {
         return [
             // start of md5('DIR')
-            'default id prefix' => [['backend' => NullAdapter::class], 'c15_'],
+            'default id prefix' => [['backend' => 'file'], 'c15_'],
             'id prefix in "id_prefix" option' => [
-                ['backend' => NullAdapter::class, 'id_prefix' => 'id_prefix_value'],
+                ['backend' => 'file', 'id_prefix' => 'id_prefix_value'],
                 'id_prefix_value',
             ],
             'id prefix in "prefix" option' => [
-                ['backend' => NullAdapter::class, 'prefix' => 'prefix_value'],
+                ['backend' => 'file', 'prefix' => 'prefix_value'],
                 'prefix_value',
             ]
         ];
@@ -149,7 +149,7 @@ class FactoryTest extends TestCase
                 ]
             ]
         );
-        $result = $model->create(['backend' => NullAdapter::class]);
+        $result = $model->create(['backend' => 'file']);
 
         $this->assertInstanceOf(
             CacheDecoratorDummy::class,
@@ -274,6 +274,105 @@ class FactoryTest extends TestCase
     }
 
     /**
+     * Test that absolute cache_dir paths (e.g. /dev/shm/magento_l1) are returned as-is.
+     *
+     */
+    public function testResolveCacheDirAbsolutePathReturnedAsIs(): void
+    {
+        // The default CACHE directory is still resolved by _getBackendOptions; only the VAR_DIR
+        // resolution done by resolveCacheDir() must be skipped for an absolute cache_dir.
+        $cacheDirMock = $this->createMock(WriteInterface::class);
+        $cacheDirMock->expects($this->any())->method('getAbsolutePath')->willReturn('CACHE_DIR');
+        $cacheDirMock->expects($this->any())->method('create')->willReturn(true);
+
+        $filesystem = $this->createMock(Filesystem::class);
+        $filesystem->expects($this->any())
+            ->method('getDirectoryWrite')
+            ->willReturnCallback(function ($dir) use ($cacheDirMock) {
+                // Absolute cache_dir must never trigger the VAR_DIR resolution branch.
+                if ($dir === DirectoryList::VAR_DIR) {
+                    $this->fail('Absolute cache_dir must not be resolved under VAR_DIR');
+                }
+                return $cacheDirMock;
+            });
+
+        $model = $this->buildModelWithFilesystem($filesystem);
+        $model->create([
+            'backend'         => 'file',
+            'backend_options' => ['cache_dir' => '/dev/shm/magento_l1'],
+            'id_prefix'       => 'test_',
+        ]);
+    }
+
+    /**
+     * Test that relative cache_dir paths are resolved under VAR_DIR.
+     *
+     * Relative paths must go through the Magento filesystem abstraction:
+     * getDirectoryWrite(VAR_DIR) → create(path) → resolve to absolute path.
+     */
+    public function testResolveCacheDirRelativePathResolvedUnderVarDir(): void
+    {
+        $relativePath = 'custom/cache/dir';
+        $resolved     = '/var/www/html/var/' . $relativePath;
+
+        // resolveCacheDir() must resolve the relative path under VAR_DIR.
+        $varDirMock = $this->createMock(WriteInterface::class);
+        $varDirMock->expects($this->once())->method('create')->with($relativePath)->willReturn(true);
+        $varDirMock->expects($this->once())->method('getAbsolutePath')->with($relativePath)->willReturn($resolved);
+
+        // _getBackendOptions still resolves the default CACHE directory for the "file" backend.
+        $cacheDirMock = $this->createMock(WriteInterface::class);
+        $cacheDirMock->expects($this->any())->method('getAbsolutePath')->willReturn('CACHE_DIR');
+        $cacheDirMock->expects($this->any())->method('create')->willReturn(true);
+
+        $filesystem = $this->createMock(Filesystem::class);
+        $filesystem->expects($this->any())
+            ->method('getDirectoryWrite')
+            ->willReturnCallback(function ($dir) use ($varDirMock, $cacheDirMock) {
+                return $dir === DirectoryList::VAR_DIR ? $varDirMock : $cacheDirMock;
+            });
+
+        $model = $this->buildModelWithFilesystem($filesystem);
+        $model->create([
+            'backend'         => 'file',
+            'backend_options' => ['cache_dir' => $relativePath],
+            'id_prefix'       => 'test_',
+        ]);
+    }
+
+    /**
+     * Build Factory with a specific filesystem mock; all other deps use defaults.
+     *
+     * @param Filesystem $filesystem
+     * @return Factory
+     */
+    private function buildModelWithFilesystem(Filesystem $filesystem): Factory
+    {
+        $resource   = $this->createResourceConnectionMock();
+        $serializer = $this->createSerializerMock();
+
+        $cachePoolMock = $this->createMock(\Psr\Cache\CacheItemPoolInterface::class);
+        $adapterMock   = $this->createMock(TagAdapterInterface::class);
+
+        $cacheFactory        = fn() => $cachePoolMock;
+        $processFrontendFunc = $this->createFrontendProcessor(
+            $filesystem,
+            $resource,
+            $serializer,
+            $cacheFactory,
+            $adapterMock
+        );
+
+        $objectManager = $this->createMock(ObjectManagerInterface::class);
+        $objectManager->expects($this->any())->method('create')->willReturnCallback($processFrontendFunc);
+
+        $adapterProviderMock = $this->createMock(SymfonyAdapterProvider::class);
+        $adapterProviderMock->expects($this->any())->method('createTagAdapter')->willReturn($adapterMock);
+
+        return new Factory($objectManager, $filesystem, $resource, $adapterProviderMock);
+    }
+
+    /**
      * Create frontend processor callback
      *
      * @param Filesystem $filesystem
@@ -297,7 +396,11 @@ class FactoryTest extends TestCase
                 case Symfony::class:
                     $defaultLifetime = $params['defaultLifetime'] ?? 7200;
                     $idPrefix = $params['idPrefix'] ?? '';
-                    return new $class($cacheFactory, $adapterMock, $defaultLifetime, $idPrefix);
+                    $bwFactory = $this->createMock(BackendWrapperFactory::class);
+                    $bwFactory->method('create')->willReturnCallback(
+                        fn(array $a) => new BackendWrapper($a['cache'], $a['adapter'], $a['symfony'])
+                    );
+                    return new $class($cacheFactory, $adapterMock, $defaultLifetime, $idPrefix, null, $bwFactory);
                 default:
                     throw new \Exception("Test is not designed to create {$class} objects");
             }

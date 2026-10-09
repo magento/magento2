@@ -1036,43 +1036,53 @@ class SaveTest extends AttributeTest
         ]);
     }
 
-    public function testMarkAttributeOptionsAsDeletedMarksGhostOptionsForSelect(): void
+    public function testSynchronizeOptionsWithPresentationRowsRebuildsOptionFromSelectRows(): void
     {
         $controller = $this->getModel();
 
-        // 23 real records => valid option_0 .. option_22
         $data = [
-            'attribute_options_select' => array_fill(0, 23, ['record_id' => 0]),
-            'option' => [
-                'value' => [],
-                'delete' => [
-                    // simulate real user deletions too
-                    'option_12' => 1,
-                    'option_22' => 1,
+            'attribute_options_select' => [
+                [
+                    'record_id' => 0,
+                    'position' => 2,
+                    'value_option_0' => 'B',
+                    'value_option_1' => 'b'
+                ],
+                [
+                    'record_id' => 1,
+                    'position' => 1,
+                    'value_option_0' => 'A',
+                    'value_option_1' => 'a',
+                    'is_default' => '1'
                 ],
             ],
+            'option' => [
+                'value' => [
+                    'option_0' => [0 => 'stale', 1 => 's'],
+                    'option_5' => [0 => 'ghost', 1 => 'g'],
+                ],
+                'delete' => ['option_0' => '1'],
+                'order' => ['option_5' => '9'],
+            ],
+            'default' => ['option_5'],
         ];
 
-        // UI sometimes sends extra ghost keys (option_23/option_24) repeating the last value
-        for ($i = 0; $i <= 24; $i++) {
-            $data['option']['value']['option_' . $i] = [0 => (string)($i + 1), 1 => (string)($i + 1)];
-        }
+        $this->invokeSynchronizeOptionsWithPresentationRows($controller, $data);
 
-        $this->invokeMarkAttributeOptionsAsDeleted($controller, $data);
-
-        // Ghost keys must be forced deleted:
-        $this->assertSame(1, $data['option']['delete']['option_23']);
-        $this->assertSame(1, $data['option']['delete']['option_24']);
-
-        // Real keys should not be auto-deleted by this method:
-        $this->assertArrayNotHasKey('option_0', $data['option']['delete']);
-
-        // Existing delete flags should remain:
-        $this->assertSame(1, $data['option']['delete']['option_12']);
-        $this->assertSame(1, $data['option']['delete']['option_22']);
+        $this->assertArrayNotHasKey('attribute_options_select', $data);
+        $this->assertCount(2, $data['option']['value']);
+        $this->assertSame('A', $data['option']['value']['option_0'][0]);
+        $this->assertSame('a', $data['option']['value']['option_0'][1]);
+        $this->assertSame('B', $data['option']['value']['option_1'][0]);
+        $this->assertSame('b', $data['option']['value']['option_1'][1]);
+        $this->assertSame('1', $data['option']['order']['option_0']);
+        $this->assertSame('2', $data['option']['order']['option_1']);
+        $this->assertSame('', $data['option']['delete']['option_0']);
+        $this->assertSame('', $data['option']['delete']['option_1']);
+        $this->assertSame(['option_0'], $data['default']);
     }
 
-    public function testMarkAttributeOptionsAsDeletedDoesNothingWhenNoRowsKey(): void
+    public function testSynchronizeOptionsWithPresentationRowsDoesNothingWhenNoRowsKey(): void
     {
         $controller = $this->getModel();
 
@@ -1087,7 +1097,7 @@ class SaveTest extends AttributeTest
             ],
         ];
 
-        $this->invokeMarkAttributeOptionsAsDeleted($controller, $data);
+        $this->invokeSynchronizeOptionsWithPresentationRows($controller, $data);
 
         $this->assertSame([], $data['option']['delete']);
     }
@@ -1095,13 +1105,13 @@ class SaveTest extends AttributeTest
     /**
      * Helper to call the private method via reflection.
      */
-    private function invokeMarkAttributeOptionsAsDeleted(
+    private function invokeSynchronizeOptionsWithPresentationRows(
         \Magento\Catalog\Controller\Adminhtml\Product\Attribute\Save $controller,
         array &$data
     ): void {
-        $method = new \ReflectionMethod($controller, 'markAttributeOptionsAsDeleted');
+        $method = new \ReflectionMethod($controller, 'synchronizeOptionsWithPresentationRows');
 
-        $args = [&$data]; // pass by reference
+        $args = [&$data];
         $method->invokeArgs($controller, $args);
     }
 }

@@ -41,4 +41,12 @@
             <column name="mode"/>
         </index>
     </table>
+    <table name="indexer_no_ddl_state" resource="default" engine="innodb" comment="No DDL Reindex Active Table State">
+        <column xsi:type="varchar" name="indexer_id" nullable="false" length="255" comment="Indexer ID"/>
+        <column xsi:type="boolean" name="is_main_active" nullable="false" default="true"
+                comment="Whether the main (non-replica) table is currently active"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="indexer_id"/>
+        </constraint>
+    </table>
 </schema>

@@ -243,10 +243,35 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
             $this->getProductsPerPage(),
             $this->getProductsCount(),
             $conditions,
-            $this->json->serialize($this->getRequest()->getParams()),
+            $this->json->serialize($this->scrubInvalidUtf8($this->getRequest()->getParams())),
             $this->getTemplate(),
             $this->getTitle()
         ];
+    }
+
+    /**
+     * Replace invalid UTF-8 byte sequences in request params before serialization.
+     *
+     * Request params come from raw $_GET / $_POST and may contain malformed UTF-8
+     * (truncated fbclid/gclid/utm_*, bot scanners, overlong encodings). Passing such
+     * data to json_encode without JSON_INVALID_UTF8_* flags raises JSON_ERROR_UTF8 and
+     * breaks block rendering. Substituting invalid bytes is safe here because the
+     * result is used only as part of a cache key.
+     *
+     * @param string|array $value
+     * @return string|array
+     */
+    private function scrubInvalidUtf8(string|array $value): string|array
+    {
+        if (is_string($value)) {
+            return mb_scrub($value, 'UTF-8');
+        }
+        if (is_array($value)) {
+            foreach ($value as $key => $item) {
+                $value[$key] = $this->scrubInvalidUtf8($item);
+            }
+        }
+        return $value;
     }
 
     /**

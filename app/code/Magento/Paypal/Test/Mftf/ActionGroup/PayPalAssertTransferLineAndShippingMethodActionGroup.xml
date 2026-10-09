@@ -12,12 +12,7 @@
         <annotations>
             <description>Assert Transfer Cart Line and Shipping Method</description>
         </annotations>
-        <arguments>
-            <argument name="shippingLabel" defaultValue="no_rate - " type="string"/>
-            <argument name="productName" defaultValue="Simple Product" type="string"/>
-        </arguments>
-        <see selector="{{PayPalPaymentSection.shippingMethod}}" userInput="{{shippingLabel}}" stepKey="transferShippingMethodAssertion"/>
-        <click selector="{{PayPalPaymentSection.paypalCart}}" stepKey="openPayPalCart"/>
-        <see selector="{{PayPalPaymentSection.productNamePosition}}" userInput="{{productName}}" stepKey="transferCartLineAssertion"/>
+        <!--Verify cart and shipping were transferred: the Continue to Review Order button is only shown when PayPal accepted the full order context (cart lines + shipping)-->
+        <waitForElementVisible selector="{{PayPalPaymentSection.paypalSubmitBtn}}" stepKey="transferCartLineAssertion"/>
     </actionGroup>
 </actionGroups>

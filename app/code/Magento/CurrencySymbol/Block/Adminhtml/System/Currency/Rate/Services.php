@@ -6,8 +6,6 @@
 
 /**
  * Manage currency import services block
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\CurrencySymbol\Block\Adminhtml\System\Currency\Rate;
 

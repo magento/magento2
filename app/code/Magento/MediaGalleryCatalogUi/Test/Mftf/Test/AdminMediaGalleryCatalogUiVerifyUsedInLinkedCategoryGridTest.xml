@@ -37,6 +37,7 @@
             <actionGroup ref="AdminMediaGalleryFolderDeleteActionGroup" stepKey="deleteFolder"/>
             <actionGroup ref="AdminMediaGalleryAssertFolderDoesNotExistActionGroup" stepKey="assertFolderWasDeleted"/>
             <comment userInput="BIC workaround" stepKey="deleteAllMediaGalleryImages"/>
+            <actionGroup ref="AdminEnhancedMediaGalleryClearGalleryFiltersForCategoryActionGroup" stepKey="clearMediaGalleryFilters"/>
             <actionGroup ref="AdminOpenCategoryGridPageActionGroup" stepKey="openMediaGalleryCategoryGridPage"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>

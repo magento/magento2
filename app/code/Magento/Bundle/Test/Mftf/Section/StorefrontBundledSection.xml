@@ -11,6 +11,9 @@
     <section name="StorefrontBundledSection">
         <element name="productCheckbox" type="select" selector="//*[@id='customizeTitle']/following-sibling::div[{{arg1}}]//div[{{arg2}}][@class='field choice']/input" parameterized="true"/>
         <element name="bundleProductsPrice" type="text" selector="//*[@class='bundle-info']//*[contains(@id,'product-price')]/span"/>
+        <element name="customizationExcludingTaxPrice" type="text" selector="#bundleSummary .price-excluding-tax .price"/>
+        <element name="customizationChildExcludingTaxPrice" type="text" parameterized="true" selector="//*[@id='product-options-wrapper']//span[contains(@class,'product-name')][contains(.,'{{productName}}')]/../span[contains(@class,'price-notice')]//span[contains(@class,'price-excluding-tax')]//span[contains(@class,'price')]"/>
+        <element name="cartItemSubtotalExcludingTaxByName" type="text" parameterized="true" selector="//a[contains(text(),'{{productName}}')]/ancestor::tr//td[contains(@class, 'subtotal')]//span[contains(@class,'price-excluding-tax')]//span[contains(@class,'price')]"/>
         <element name="bundleSummary" type="text" selector="#bundle-summary"/>
         <element name="nthBundledOption" type="input" selector=".option:nth-of-type({{numOption}}) .choice:nth-of-type({{numOptionSelect}}) input" parameterized="true"/>
         <element name="addToCart" type="button" selector="#bundle-slide" timeout="30"/>
