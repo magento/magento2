@@ -20,10 +20,10 @@ use PHPUnit\Framework\TestCase;
 class LiveCodeTest extends TestCase
 {
     private const FILE_EXTENSION = 'graphqls';
-    /**
-     * @var string
-     */
-    private static $reportDir = '';
+
+    protected static string $reportDir = '';
+
+    protected string $rulesetDir = 'Magento';
 
     /**
      * @var string
@@ -54,7 +54,7 @@ class LiveCodeTest extends TestCase
     public function testCodeStyle(): void
     {
         $reportFile = self::$reportDir . '/graphql_phpcs_report.txt';
-        $codeSniffer = new CodeSniffer('Magento', $reportFile, new Wrapper());
+        $codeSniffer = new CodeSniffer($this->rulesetDir, $reportFile, new Wrapper());
         $codeSniffer->setExtensions([self::FILE_EXTENSION]);
         $result = $codeSniffer->run(PHPCodeTest::getWhitelist([self::FILE_EXTENSION]));
         $report = file_exists($reportFile) ? file_get_contents($reportFile) : '';
