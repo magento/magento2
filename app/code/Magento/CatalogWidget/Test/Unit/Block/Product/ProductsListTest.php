@@ -270,8 +270,7 @@ class ProductsListTest extends TestCase
 
     public function testGetProductPriceHtml()
     {
-        $product = $this->createPartialMock(Product::class, ['getId']);
-        $product->expects($this->once())->method('getId')->willReturn(1);
+        $product = $this->createMock(Product::class);
 
         $priceRenderer = $this->createPartialMock(Render::class, ['render']);
         $priceRenderer->expects($this->once())
@@ -280,7 +279,7 @@ class ProductsListTest extends TestCase
                 'include_container' => false,
                 'display_minimal_price' => false,
                 'zone' => 'item_list',
-                'price_id' => 'old-price-1-some-price-type'
+                'price_id_suffix' => '-some-price-type'
             ])
             ->willReturn('<html>');
         $this->layout->expects($this->once())->method('getBlock')->willReturn($priceRenderer);
