@@ -58,6 +58,13 @@ class State implements StateInterface, ResetAfterRequestInterface
     private readonly bool $banAll;
 
     /**
+     * Cache type codes mutated via setEnabled() since the last persist()
+     *
+     * @var array
+     */
+    private array $mutatedCacheTypes = [];
+
+    /**
      * Constructor
      *
      * @param DeploymentConfig $config
@@ -94,10 +101,13 @@ class State implements StateInterface, ResetAfterRequestInterface
     {
         $this->load();
         $this->statuses[$cacheType] = (int)$isEnabled;
+        $this->mutatedCacheTypes[$cacheType] = true;
     }
 
     /**
-     * Save the current statuses (enabled/disabled) of cache types to the persistent storage
+     * Save the statuses (enabled/disabled) of cache types mutated through setEnabled() to the persistent storage
+     *
+     * Does nothing when no cache type has been mutated since the last persist() call.
      *
      * @return void
      * @throws \Magento\Framework\Exception\FileSystemException
@@ -105,7 +115,12 @@ class State implements StateInterface, ResetAfterRequestInterface
     public function persist(): void
     {
         $this->load();
-        $this->writer->saveConfig([ConfigFilePool::APP_ENV => [self::CACHE_KEY => $this->statuses]]);
+        if (!$this->mutatedCacheTypes) {
+            return;
+        }
+        $mutatedStatuses = array_intersect_key($this->statuses, $this->mutatedCacheTypes);
+        $this->writer->saveConfig([ConfigFilePool::APP_ENV => [self::CACHE_KEY => $mutatedStatuses]]);
+        $this->mutatedCacheTypes = [];
     }
 
     /**
@@ -132,5 +147,6 @@ class State implements StateInterface, ResetAfterRequestInterface
     public function _resetState(): void
     {
         $this->statuses = null;
+        $this->mutatedCacheTypes = [];
     }
 }

@@ -97,11 +97,50 @@ class StateTest extends TestCase
         $this->assertFalse($model->isEnabled('cache_type'));
     }
 
-    public function testPersist()
+    public function testPersistWithoutMutationIsNoOp()
     {
         $model = new State($this->config, $this->writer);
-        $this->config->expects($this->once())->method('getConfigData')->willReturn(['test_cache_type' => true]);
-        $configValue = [ConfigFilePool::APP_ENV => ['cache_types' => ['test_cache_type' => true]]];
+        $this->config->expects($this->once())->method('getConfigData')
+            ->willReturn(['test_cache_type' => true, 'other_cache_type' => false]);
+        $this->writer->expects($this->never())->method('saveConfig');
+        $model->persist();
+    }
+
+    public function testPersistWritesOnlyMutatedType()
+    {
+        $model = new State($this->config, $this->writer);
+        $this->config->expects($this->once())->method('getConfigData')
+            ->willReturn(['test_cache_type' => true, 'other_cache_type' => false]);
+        $model->setEnabled('test_cache_type', false);
+        $configValue = [ConfigFilePool::APP_ENV => ['cache_types' => ['test_cache_type' => 0]]];
+        $this->writer->expects($this->once())->method('saveConfig')->with($configValue);
+        $model->persist();
+    }
+
+    public function testPersistWritesAllTypesMutatedSincePreviousPersist()
+    {
+        $model = new State($this->config, $this->writer);
+        $this->config->expects($this->once())->method('getConfigData')
+            ->willReturn(['test_cache_type' => true, 'other_cache_type' => true]);
+        $model->setEnabled('test_cache_type', false);
+        $model->setEnabled('other_cache_type', false);
+        $configValue = [
+            ConfigFilePool::APP_ENV => ['cache_types' => ['test_cache_type' => 0, 'other_cache_type' => 0]],
+        ];
+        $this->writer->expects($this->once())->method('saveConfig')->with($configValue);
+        $model->persist();
+    }
+
+    public function testPersistDoesNotRewriteTypesMutatedInPreviousPersistCall()
+    {
+        $model = new State($this->config, $this->writer);
+        $this->config->expects($this->once())->method('getConfigData')
+            ->willReturn(['test_cache_type' => true, 'other_cache_type' => true]);
+        $model->setEnabled('test_cache_type', false);
+        $model->persist();
+
+        $model->setEnabled('other_cache_type', false);
+        $configValue = [ConfigFilePool::APP_ENV => ['cache_types' => ['other_cache_type' => 0]]];
         $this->writer->expects($this->once())->method('saveConfig')->with($configValue);
         $model->persist();
     }
