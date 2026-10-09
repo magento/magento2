@@ -7,13 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Observer;
 
-use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Sales\Api\Data\OrderInterface;
-use Magento\Sales\Api\OrderRepositoryInterface;
-use Magento\Sales\Model\ResourceModel\Order\Collection;
-use Magento\Customer\Model\Data\Customer;
 
 /**
  * Class observer UpgradeOrderCustomerEmailObserver
@@ -21,26 +19,22 @@ use Magento\Customer\Model\Data\Customer;
  */
 class UpgradeOrderCustomerEmailObserver implements ObserverInterface
 {
-    /**
-     * @var OrderRepositoryInterface
-     */
-    private $orderRepository;
+    private const CONNECTION = 'sales';
+
+    private const TABLES = ['sales_order', 'sales_order_grid'];
 
     /**
-     * @var SearchCriteriaBuilder
+     * @var ResourceConnection
      */
-    private $searchCriteriaBuilder;
+    private $resourceConnection;
 
     /**
-     * @param OrderRepositoryInterface $orderRepository
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param ResourceConnection $resourceConnection
      */
     public function __construct(
-        OrderRepositoryInterface $orderRepository,
-        SearchCriteriaBuilder $searchCriteriaBuilder
+        ResourceConnection $resourceConnection
     ) {
-        $this->orderRepository = $orderRepository;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->resourceConnection = $resourceConnection;
     }
 
     /**
@@ -51,29 +45,30 @@ class UpgradeOrderCustomerEmailObserver implements ObserverInterface
      */
     public function execute(Observer $observer): void
     {
-        /** @var Customer $originalCustomer */
+        /** @var CustomerInterface|null $originalCustomer */
         $originalCustomer = $observer->getEvent()->getOrigCustomerDataObject();
         if (!$originalCustomer) {
             return;
         }
 
-        /** @var Customer $customer */
+        /** @var CustomerInterface $customer */
         $customer = $observer->getEvent()->getCustomerDataObject();
         $customerEmail = $customer->getEmail();
 
         if ($customerEmail === $originalCustomer->getEmail()) {
             return;
         }
-        $searchCriteria = $this->searchCriteriaBuilder
-            ->addFilter(OrderInterface::CUSTOMER_ID, $customer->getId())
-            ->addFilter(OrderInterface::CUSTOMER_EMAIL, $originalCustomer->getEmail())
-            ->create();
 
-        /**
-         * @var Collection $orders
-         */
-        $orders = $this->orderRepository->getList($searchCriteria);
-        $orders->setDataToAll(OrderInterface::CUSTOMER_EMAIL, $customerEmail);
-        $orders->save();
+        $connection = $this->resourceConnection->getConnection(self::CONNECTION);
+        foreach (self::TABLES as $table) {
+            $connection->update(
+                $this->resourceConnection->getTableName($table, self::CONNECTION),
+                [OrderInterface::CUSTOMER_EMAIL => $customerEmail],
+                [
+                    OrderInterface::CUSTOMER_ID . ' = ?' => (int) $customer->getId(),
+                    OrderInterface::CUSTOMER_EMAIL . ' = ?' => (string) $originalCustomer->getEmail(),
+                ]
+            );
+        }
     }
 }
