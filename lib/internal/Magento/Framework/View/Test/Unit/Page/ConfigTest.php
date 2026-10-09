@@ -206,8 +206,8 @@ class ConfigTest extends TestCase
      */
     public function testContentTypeEmpty(): void
     {
-        $expectedData = null;
-        $this->assertEquals($expectedData, $this->model->getContentType());
+        $expectedData = '';
+        $this->assertSame($expectedData, $this->model->getContentType());
     }
 
     /**
@@ -353,6 +353,64 @@ class ConfigTest extends TestCase
         $robots = 'test_robots';
         $this->model->setRobots($robots);
         $this->assertEquals('NOINDEX,NOFOLLOW', $this->model->getRobots());
+    }
+
+    /**
+     * @param string $method
+     * @param string $configPath
+     * @param mixed $configValue
+     *
+     * @return void
+     */
+    #[DataProvider('metadataEmptyDataProvider')]
+    public function testMetadataEmpty($method, $configPath, $configValue): void
+    {
+        $this->areaResolverMock->method('getAreaCode')->willReturn('frontend');
+        $expectedData = '';
+        $this->scopeConfig->expects($this->once())
+            ->method('getValue')
+            ->with($configPath, 'store')
+            ->willReturn($configValue);
+        $this->assertSame($expectedData, $this->model->$method());
+    }
+
+    /**
+     * @return array
+     */
+    public static function metadataEmptyDataProvider(): array
+    {
+        return [
+            [
+                'getMediaType',
+                'design/head/default_media_type',
+                null
+            ],
+            [
+                'getCharset',
+                'design/head/default_charset',
+                null
+            ],
+            [
+                'getDescription',
+                'design/head/default_description',
+                null
+            ],
+            [
+                'getKeywords',
+                'design/head/default_keywords',
+                null
+            ],
+            [
+                'getRobots',
+                'design/search_engine_robots/default_robots',
+                null
+            ],
+            [
+                'getDescription',
+                'design/head/default_description',
+                false
+            ]
+        ];
     }
 
     /**
