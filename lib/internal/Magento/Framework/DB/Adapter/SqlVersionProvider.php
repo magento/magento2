@@ -8,13 +8,14 @@ declare(strict_types=1);
 namespace Magento\Framework\DB\Adapter;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Class GetDbVersion provides sql engine version requesting version variable
  *
  * Rather then depending on this class, please implement this logic in your extension
  */
-class SqlVersionProvider
+class SqlVersionProvider implements ResetAfterRequestInterface
 {
     /**#@+
      * Database version specific templates
@@ -70,6 +71,13 @@ class SqlVersionProvider
     private $version;
 
     /**
+     * Raw version string per resource name
+     *
+     * @var array
+     */
+    private $fetchedVersions = [];
+
+    /**
      * @var array
      */
     private $supportedVersionPatterns;
@@ -84,6 +92,15 @@ class SqlVersionProvider
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->supportedVersionPatterns = $supportedVersionPatterns;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function _resetState(): void
+    {
+        $this->version = null;
+        $this->fetchedVersions = [];
     }
 
     /**
@@ -138,10 +155,13 @@ class SqlVersionProvider
      */
     private function fetchSqlVersion(string $resource): string
     {
-        $versionOutput = $this->resourceConnection->getConnection($resource)
-            ->fetchPairs(sprintf('SHOW variables LIKE "%s"', self::VERSION_VAR_NAME));
+        if (!isset($this->fetchedVersions[$resource])) {
+            $versionOutput = $this->resourceConnection->getConnection($resource)
+                ->fetchPairs(sprintf('SHOW variables LIKE "%s"', self::VERSION_VAR_NAME));
+            $this->fetchedVersions[$resource] = $versionOutput[self::VERSION_VAR_NAME];
+        }
 
-        return $versionOutput[self::VERSION_VAR_NAME];
+        return $this->fetchedVersions[$resource];
     }
 
     /**
