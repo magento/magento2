@@ -456,6 +456,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel implements ResetA
 
             $discountAmount = 0;
             $baseDiscountAmount = 0;
+            $addShippingDiscountDescription = true;
             $rulePercent = min(100, $rule->getDiscountAmount());
             switch ($rule->getSimpleAction()) {
                 case Rule::TO_PERCENT_ACTION:
@@ -491,8 +492,16 @@ class Validator extends \Magento\Framework\Model\AbstractModel implements ResetA
                         $shippingQuoteAmount = (float) $address->getShippingAmount();
                         $quoteBaseSubtotal = (float) $quote->getBaseSubtotal();
                         $isMultiShipping = $this->cartFixedDiscountHelper->checkMultiShippingQuote($quote);
-                        if ($isAppliedToShipping) {
-                            $quoteBaseSubtotal = ($quote->getIsMultiShipping() && $isMultiShipping) ?
+                        $isQuoteMultiShipping = $quote->getIsMultiShipping() && $isMultiShipping;
+                        $quoteCartRules = (array) $quote->getCartFixedRules();
+                        if (!$isAppliedToShipping) {
+                            $discountAmount = min($shippingQuoteAmount, $quoteAmount);
+                            $baseDiscountAmount = min(
+                                $baseShippingAmount - $address->getBaseShippingDiscountAmount(),
+                                $cartRules[$ruleId]
+                            );
+                        } elseif ($isQuoteMultiShipping || !isset($quoteCartRules[$ruleId])) {
+                            $quoteBaseSubtotal = $isQuoteMultiShipping ?
                                 $this->cartFixedDiscountHelper->getQuoteTotalsForMultiShipping($quote) :
                                 $this->cartFixedDiscountHelper->getQuoteTotalsForRegularShipping(
                                     $address,
@@ -507,11 +516,21 @@ class Validator extends \Magento\Framework\Model\AbstractModel implements ResetA
                             );
                             $baseDiscountAmount = $discountAmount;
                         } else {
-                            $discountAmount = min($shippingQuoteAmount, $quoteAmount);
-                            $baseDiscountAmount = min(
-                                $baseShippingAmount - $address->getBaseShippingDiscountAmount(),
-                                $cartRules[$ruleId]
-                            );
+                            // CartFixed::calculate() already took the item shares from the rule amount, based on
+                            // the shipping price it could see before shipping tax was collected. Shipping gets
+                            // the rest, so the shares always add up to the rule amount.
+                            $remainingAmount = max(0.0, (float) $quoteCartRules[$ruleId]);
+                            $baseDiscountAmount = $this->priceCurrency->roundPrice(min(
+                                $remainingAmount,
+                                max(0.0, $baseShippingAmount - $address->getBaseShippingDiscountAmount())
+                            ));
+                            $discountAmount = $this->priceCurrency->roundPrice(min(
+                                $this->priceCurrency->convert($remainingAmount, $quote->getStore()),
+                                max(0.0, $shippingAmount - $address->getShippingDiscountAmount())
+                            ));
+                            $quoteCartRules[$ruleId] -= $baseDiscountAmount;
+                            $quote->setCartFixedRules($quoteCartRules);
+                            $addShippingDiscountDescription = $discountAmount > 0;
                         }
                         $cartRules[$ruleId] -= $baseDiscountAmount;
                     }
@@ -524,7 +543,9 @@ class Validator extends \Magento\Framework\Model\AbstractModel implements ResetA
                     $baseDiscountAmount = $quoteAmount;
                     break;
             }
-            if ($address->getShippingDiscountAmount() + $discountAmount <= $shippingAmount) {
+            if ($addShippingDiscountDescription
+                && $address->getShippingDiscountAmount() + $discountAmount <= $shippingAmount
+            ) {
                 $data = [
                     'amount' => $discountAmount,
                     'base_amount' => $baseDiscountAmount
