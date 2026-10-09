@@ -6,14 +6,13 @@
 
 namespace Magento\MysqlMq\Setup;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Setup\InstallSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Framework\MessageQueue\Topology\ConfigInterface as MessageQueueConfig;
+use Magento\MysqlMq\Model\Queue\Synchronizer;
 
-/**
- * Class Recurring
- */
 class Recurring implements InstallSchemaInterface
 {
     /**
@@ -22,11 +21,20 @@ class Recurring implements InstallSchemaInterface
     private $messageQueueConfig;
 
     /**
-     * @param MessageQueueConfig $messageQueueConfig
+     * @var Synchronizer
      */
-    public function __construct(MessageQueueConfig $messageQueueConfig)
-    {
+    private $synchronizer;
+
+    /**
+     * @param MessageQueueConfig $messageQueueConfig
+     * @param Synchronizer|null $synchronizer
+     */
+    public function __construct(
+        MessageQueueConfig $messageQueueConfig,
+        ?Synchronizer $synchronizer = null
+    ) {
         $this->messageQueueConfig = $messageQueueConfig;
+        $this->synchronizer = $synchronizer ?? ObjectManager::getInstance()->get(Synchronizer::class);
     }
 
     /**
@@ -34,21 +42,6 @@ class Recurring implements InstallSchemaInterface
      */
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
-        $setup->startSetup();
-
-        $queues = [];
-        foreach ($this->messageQueueConfig->getQueues() as $queue) {
-            $queues[] = $queue->getName();
-        }
-
-        $connection = $setup->getConnection();
-        $existingQueues = $connection->fetchCol($connection->select()->from($setup->getTable('queue'), 'name'));
-        $queues = array_unique(array_diff($queues, $existingQueues));
-        /** Populate 'queue' table */
-        if (!empty($queues)) {
-            $connection->insertArray($setup->getTable('queue'), ['name'], $queues);
-        }
-
-        $setup->endSetup();
+        $this->synchronizer->synchronize();
     }
 }

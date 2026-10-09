@@ -78,4 +78,11 @@
             <argument name="output" xsi:type="object">Symfony\Component\Console\Output\ConsoleOutput</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\MessageQueue\Topology\CompositeSynchronizer">
+        <arguments>
+            <argument name="synchronizers" xsi:type="array">
+                <item name="amqp" xsi:type="object">Magento\Amqp\Model\Topology\Synchronizer</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
