@@ -37,6 +37,7 @@ class Rollback extends \Magento\Backup\Controller\Adminhtml\Index implements Htt
 
         $helper = $this->_objectManager->get(\Magento\Backup\Helper\Data::class);
         $response = new \Magento\Framework\DataObject();
+        $backupManager = null;
 
         try {
             /* @var $backup \Magento\Backup\Model\Backup */
@@ -143,7 +144,9 @@ class Rollback extends \Magento\Backup\Controller\Adminhtml\Index implements Htt
 
         if (!empty($errorMsg)) {
             $response->setError($errorMsg);
-            $backupManager->setErrorMessage($errorMsg);
+            if ($backupManager !== null) {
+                $backupManager->setErrorMessage($errorMsg);
+            }
         }
 
         if ($this->getRequest()->getParam('maintenance_mode')) {

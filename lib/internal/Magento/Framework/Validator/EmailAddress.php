@@ -7,6 +7,8 @@ namespace Magento\Framework\Validator;
 
 use Laminas\Validator\EmailAddress as LaminasEmailAddress;
 
+// Laminas 2.x uses a PHPDoc-only final marker; preserve Magento's inherited validator API.
+// @phpstan-ignore class.extendsFinalByPhpDoc
 class EmailAddress extends LaminasEmailAddress implements ValidatorInterface
 {
     /**

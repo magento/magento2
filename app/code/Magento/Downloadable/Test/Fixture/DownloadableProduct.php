@@ -23,6 +23,9 @@ use Magento\TestFramework\Fixture\Data\ProcessorInterface;
 use Magento\Downloadable\Api\DomainManagerInterface;
 use Magento\TestFramework\Helper\DownloadableDomains;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class DownloadableProduct extends Product
 {
     private const DEFAULT_DATA = [
