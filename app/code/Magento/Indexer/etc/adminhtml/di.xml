@@ -13,4 +13,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\App\ResourceConnection">
+        <plugin name="indexer_no_ddl_table_resolver" type="Magento\Indexer\Model\Plugin\NoDdlTableResolver" />
+    </type>
 </config>
