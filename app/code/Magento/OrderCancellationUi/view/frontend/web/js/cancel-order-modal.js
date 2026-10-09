@@ -30,7 +30,7 @@ define([
                     /** @inheritdoc */
                     click: function () {
                         let thisModal = this,
-                            reason = $('#cancel-order-reason-' + order_id).find(':selected').text(),
+                            reason = $('#cancel-order-reason-' + order_id).val(),
                             mutation = `
 mutation cancelOrder($order_id: ID!, $reason: String!) {
   cancelOrder(input: {order_id: $order_id, reason: $reason}) {
