@@ -15,10 +15,13 @@ use Magento\Framework\Debug;
 use Magento\Framework\Filesystem;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\Exception\SessionException;
+use Magento\Framework\Exception\SessionExpiredException;
 use Magento\Framework\Exception\State\InitException;
 
 /**
  * Handler of HTTP web application exception
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ExceptionHandler implements ExceptionHandlerInterface
 {
@@ -67,7 +70,8 @@ class ExceptionHandler implements ExceptionHandlerInterface
         ResponseHttp $response,
         RequestHttp $request
     ): bool {
-        $result = $this->handleDeveloperMode($bootstrap, $exception, $response)
+        $result = $this->handleSessionExpiredException($exception, $response, $request)
+            || $this->handleDeveloperMode($bootstrap, $exception, $response)
             || $this->handleBootstrapErrors($bootstrap, $exception, $response)
             || $this->handleSessionException($exception, $response, $request)
             || $this->handleInitException($exception)
@@ -181,6 +185,33 @@ class ExceptionHandler implements ExceptionHandlerInterface
             }
         }
         return false;
+    }
+
+    /**
+     * Handler for sessions that were invalidated on purpose, e.g. after a password change on another browser
+     *
+     * The session is already destroyed, so a safe request is sent back to the same URL to be served as a guest
+     * (customer-only pages then redirect to the login page). It is handled in all modes, as it is not an error.
+     *
+     * @param \Exception $exception
+     * @param ResponseHttp $response
+     * @param RequestHttp $request
+     * @return bool
+     */
+    private function handleSessionExpiredException(
+        \Exception $exception,
+        ResponseHttp $response,
+        RequestHttp $request
+    ): bool {
+        if (!$exception instanceof SessionExpiredException) {
+            return false;
+        }
+        $requestUri = (string)$request->getRequestUri();
+        $isLocalPath = preg_match('#^/(?![/\\\\])#', $requestUri) === 1;
+        $isSafeMethod = $request->isGet() || $request->isHead();
+        $response->setRedirect($isSafeMethod && $isLocalPath ? $requestUri : $request->getDistroBaseUrl());
+        $response->sendHeaders();
+        return true;
     }
 
     /**
