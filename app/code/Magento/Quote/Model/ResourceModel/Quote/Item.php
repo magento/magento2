@@ -34,7 +34,10 @@ class Item extends AbstractDb
 
         $result = parent::save($object);
 
-        if (!$object->isOptionsSaved() && ($hasDataChanges || $this->hasOptionsChanged($object))) {
+        if (!$object->isDeleted()
+            && !$object->isOptionsSaved()
+            && ($hasDataChanges || $this->hasOptionsChanged($object))
+        ) {
             $object->saveItemOptions();
         }
         return $result;
