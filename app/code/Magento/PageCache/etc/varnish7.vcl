@@ -149,9 +149,6 @@ sub process_graphql_headers {
 }
 
 sub vcl_backend_response {
-
-    set beresp.grace = 3d;
-
     if (beresp.http.content-type ~ "text") {
         set beresp.do_esi = true;
     }
@@ -213,16 +210,27 @@ sub vcl_backend_response {
     # The following blocks must always be the last ones in the vcl_backend_response subroutine, as they
     # manage default override behavior for TTL and grace values based on previous conditions.
 
-    # If page is not cacheable then bypass varnish for 2 minutes as Hit-For-Pass
+    # If page is not cacheable then bypass varnish for 2 minutes as Hit-For-Miss
     # This allows bypassing Varnish request coalescing for a short period of time
     if (beresp.ttl <= 0s ||
         beresp.http.Surrogate-control ~ "no-store" ||
         (!beresp.http.Surrogate-Control &&
         beresp.http.Cache-Control ~ "no-cache|no-store") ||
         beresp.http.Vary == "*") {
-        # Mark as Hit-For-Pass for the next 2 minutes
+        # Mark as Hit-For-Miss for the next 2 minutes
         set beresp.ttl = 120s;
         set beresp.uncacheable = true;
+        # Force a short grace value, as it may have been modified before, to be sure that
+        # the object won't be kept in memory for too long after the TTL expires
+        set beresp.grace = 10s;
+    }
+
+    # If the TTL is still set to a significant value, set a long grace period.
+    # This allows serving stale content for a long time if the backend is unhealthy.
+    # If the backend is healthy, the effective grace period is reduced to a shorter
+    # period (see logic in vcl_hit)
+    if (beresp.ttl > 1h) {
+        set beresp.grace = 3d;
     }
 
     return (deliver);
