@@ -389,7 +389,11 @@ class ErrorProcessor
      */
     public function registerShutdownFunction()
     {
-        register_shutdown_function([$this, self::DEFAULT_SHUTDOWN_FUNCTION]);
+        // A WeakReference, so the shutdown function list does not keep this processor alive until the process ends
+        $processor = \WeakReference::create($this);
+        register_shutdown_function(static function () use ($processor): void {
+            $processor->get()?->{self::DEFAULT_SHUTDOWN_FUNCTION}();
+        });
         return $this;
     }
 

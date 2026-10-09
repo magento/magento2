@@ -89,6 +89,21 @@ class ErrorProcessorTest extends TestCase
     }
 
     /**
+     * The shutdown function the constructor registers must not keep the processor alive once nothing else uses it.
+     *
+     * @return void
+     */
+    public function testRegisteredShutdownFunctionDoesNotKeepTheProcessorAlive(): void
+    {
+        $reference = \WeakReference::create($this->_errorProcessor);
+
+        unset($this->_errorProcessor);
+        gc_collect_cycles();
+
+        $this->assertNull($reference->get());
+    }
+
+    /**
      * Test render method in JSON format.
      *
      * @return void
