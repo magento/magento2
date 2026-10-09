@@ -22,10 +22,18 @@ define([
 
         /** @inheritdoc */
         initialize: function (config, element) {
+            var self = this;
+
             this._super();
             this.element = element;
             $(element).on('change', $.proxy(this.updateSignUpStatus, this));
             this.updateSignUpStatus();
+
+            $(window).on('pageshow', function (event) {
+                if (event.originalEvent.persisted) {
+                    $(self.submitButton).prop('disabled', false);
+                }
+            });
         },
 
         /**

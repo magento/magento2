@@ -39,6 +39,12 @@ define([
             loginAction.registerLoginCallback(function () {
                 self.isLoading(false);
             });
+
+            $(window).on('pageshow', function (event) {
+                if (event.originalEvent.persisted) {
+                    self.isLoading(false);
+                }
+            });
         },
 
         /**
