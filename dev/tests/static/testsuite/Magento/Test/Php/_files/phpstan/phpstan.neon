@@ -47,6 +47,10 @@ parameters:
         - '#Constant TESTS_MODULES_PATH not found.#'
         - '#Constant TESTS_INSTALLATION_DB_CONFIG_FILE not found.#'
         - '#Constant T_[A-Z_]+ not found.#'
+        # PHPStan 1.x ships no stubs for the PHP 8.4+ Pdo\Mysql class constants and reports them as
+        # undefined regardless of the runtime PHP version. ConfigOptionsListConstants resolves them
+        # behind a PHP_VERSION_ID >= 80400 guard.
+        - '#Access to undefined constant Pdo\\Mysql::ATTR_[A-Z_]+\.#'
         # Ignore Predis\Client - optional dependency for Redis fallback
         - '#Class Predis\\Client not found.#'
         - '#Instantiated class Predis\\Client not found.#'
