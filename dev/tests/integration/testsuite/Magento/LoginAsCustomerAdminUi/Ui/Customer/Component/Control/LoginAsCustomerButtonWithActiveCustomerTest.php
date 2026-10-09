@@ -22,7 +22,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @magentoAppArea adminhtml
  */
-class LoginAsCustomerButtonTestWithActiveCustomer extends TestCase
+class LoginAsCustomerButtonWithActiveCustomerTest extends TestCase
 {
     /**
      * @var ObjectManager
