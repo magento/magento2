@@ -20,6 +20,11 @@ use Psr\Log\LoggerInterface;
 class DeployPackage
 {
     /**
+     * Minimum ratio of inherited files required before a bulk directory copy is attempted.
+     * Below this threshold the per-file loop is used instead to avoid unnecessary overhead.
+     */
+    private const BULK_COPY_THRESHOLD = 0.5;
+    /**
      * Application state object
      *
      * Allows to switch between different application areas
@@ -119,6 +124,17 @@ class DeployPackage
     {
         $this->count = 0;
         $this->errorsCount = 0;
+
+        $parentPackage = $package->getParent();
+        $parentBulkCopied = false;
+        if ($parentPackage && $this->shouldBulkCopy($package, $parentPackage)) {
+            $copiedCount = $this->deployStaticFile->copyTree(
+                $parentPackage->getPath(),
+                $package->getPath()
+            );
+            $parentBulkCopied = ($copiedCount > 0);
+        }
+
         $this->register($package, null, $skipLogging);
 
         /** @var PackageFile $file */
@@ -131,7 +147,7 @@ class DeployPackage
             }
 
             try {
-                $this->processFile($file, $package);
+                $this->processFile($file, $package, $parentBulkCopied);
             } catch (ContentProcessorException $exception) {
                 $errorMessage = __(
                     'Compilation from source: %1',
@@ -161,15 +177,12 @@ class DeployPackage
     }
 
     /**
-     * Apply proper deployment action
-     *
-     * File can be created if content is already provided, or copied from parent package or published
-     *
      * @param PackageFile $file
      * @param Package $package
+     * @param bool $parentBulkCopied
      * @return void
      */
-    private function processFile(PackageFile $file, Package $package)
+    private function processFile(PackageFile $file, Package $package, bool $parentBulkCopied = false)
     {
         if ($file->getContent()) {
             $this->deployStaticFile->writeFile(
@@ -177,26 +190,98 @@ class DeployPackage
                 $package->getPath(),
                 $file->getContent()
             );
-        } else {
-            $parentPackage = $package->getParent();
-            if ($this->checkIfCanCopy($file, $package, $parentPackage)) {
-                $this->deployStaticFile->copyFile(
-                    $file->getDeployedFileId(),
-                    $parentPackage->getPath(),
-                    $package->getPath()
-                );
-            } else {
-                $this->deployStaticFile->deployFile(
-                    $file->getFileName(),
-                    [
-                        'area' => $package->getArea(),
-                        'theme' => $package->getTheme(),
-                        'locale' => $package->getLocale(),
-                        'module' => $file->getModule(),
-                    ]
-                );
+            return;
+        }
+
+        $parentPackage = $package->getParent();
+
+        if ($parentBulkCopied && $this->isInheritedFile($file, $package, $parentPackage)) {
+            return;
+        }
+
+        if (!$parentBulkCopied && $this->checkIfCanCopy($file, $package, $parentPackage)) {
+            $this->deployStaticFile->copyFile(
+                $file->getDeployedFileId(),
+                $parentPackage->getPath(),
+                $package->getPath()
+            );
+            return;
+        }
+
+        $this->deployStaticFile->deployFile(
+            $file->getFileName(),
+            [
+                'area' => $package->getArea(),
+                'theme' => $package->getTheme(),
+                'locale' => $package->getLocale(),
+                'module' => $file->getModule(),
+            ]
+        );
+    }
+
+    /**
+     * Check if file is inherited from a parent package.
+     *
+     * A file is inherited when it originates from a different scope (area/theme/locale) AND
+     * exists in the parent's deployed file list. The parent file list check is required because
+     * a scope mismatch alone is not enough — theme-specific files (e.g. critical.css in luma)
+     * also have a locale mismatch but are not present in the parent theme's output.
+     *
+     * @param PackageFile $file
+     * @param Package $package
+     * @param Package|null $parentPackage
+     * @return bool
+     */
+    private function isInheritedFile(PackageFile $file, Package $package, ?Package $parentPackage = null): bool
+    {
+        return $parentPackage
+            && $file->getOrigPackage() !== $package
+            && (
+                $file->getArea() !== $package->getArea()
+                || $file->getTheme() !== $package->getTheme()
+                || $file->getLocale() !== $package->getLocale()
+            )
+            && isset($parentPackage->getFiles()[$file->getFileId()]);
+    }
+
+    /**
+     * Check if a bulk directory copy is worth doing for this package.
+     *
+     * copyTree() is only faster than per-file copies when a large proportion of the package's
+     * files are inherited — otherwise the directory traversal overhead exceeds the savings.
+     * This uses the in-memory file lists to count without any filesystem calls.
+     *
+     * @param Package $package
+     * @param Package $parentPackage
+     * @return bool
+     */
+    private function shouldBulkCopy(Package $package, Package $parentPackage): bool
+    {
+        $packageFiles = $package->getFiles();
+        $total = count($packageFiles);
+        if ($total === 0) {
+            return false;
+        }
+
+        $parentFiles = $parentPackage->getFiles();
+        $inherited = 0;
+        foreach ($packageFiles as $file) {
+            if ($file->getContent()) {
+                continue;
+            }
+            if ($file->getOrigPackage() !== $package
+                && (
+                    $file->getArea() !== $package->getArea()
+                    || $file->getTheme() !== $package->getTheme()
+                    || $file->getLocale() !== $package->getLocale()
+                )
+                && isset($parentFiles[$file->getFileId()])
+            ) {
+                $inherited++;
             }
         }
+
+        return ($inherited / $total) >= self::BULK_COPY_THRESHOLD;
     }
 
     /**
@@ -216,8 +301,7 @@ class DeployPackage
                 || $file->getTheme() !== $package->getTheme()
                 || $file->getLocale() !== $package->getLocale()
             )
-            && $file->getOrigPackage() === $parentPackage
-            && $this->deployStaticFile->readFile($file->getDeployedFileId(), $parentPackage->getPath());
+            && $this->deployStaticFile->fileExists($file->getDeployedFileId(), $parentPackage->getPath());
     }
 
     /**
