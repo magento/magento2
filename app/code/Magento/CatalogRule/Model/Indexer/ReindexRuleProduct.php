@@ -232,6 +232,7 @@ class ReindexRuleProduct
     ): array {
         foreach ($websiteIds as $websiteId) {
             $websiteTimeData = $this->getWebsiteTimeData($rule, (int)$websiteId, $ruleData);
+            $applicableCustomerGroupIds = $this->getApplicableCustomerGroupIds($ruleData, (int)$websiteId);
 
             foreach ($productBatch as $productId => $validationByWebsite) {
                 if (empty($validationByWebsite[$websiteId])) {
@@ -244,7 +245,9 @@ class ReindexRuleProduct
                     $indexTable,
                     $connection,
                     (int)$ruleData['rule_id'],
-                    $ruleData['sort_order']
+                    $ruleData['sort_order'],
+                    (int)$websiteId,
+                    $applicableCustomerGroupIds
                 );
 
                 $rows = $this->addCustomerGroupRows(
@@ -293,6 +296,8 @@ class ReindexRuleProduct
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param int $ruleId
      * @param int $sortOrder
+     * @param int $websiteId
+     * @param array $customerGroupIds
      * @return void
      */
     private function handleAntecedentRules(
@@ -301,21 +306,43 @@ class ReindexRuleProduct
         string $indexTable,
         $connection,
         int $ruleId,
-        int $sortOrder
+        int $sortOrder,
+        int $websiteId,
+        array $customerGroupIds
     ): void {
-        if (!isset($validationByWebsite['has_antecedent_rule'])) {
+        if (!isset($validationByWebsite['has_antecedent_rule']) || empty($customerGroupIds)) {
             return;
         }
 
-        $antecedentRuleProductList = array_keys(
-            $connection->fetchAssoc(
-                $connection->select()->from($indexTable)
-                    ->where('product_id = ?', $productId)
-                    ->where('rule_id NOT IN (?)', $ruleId)
-                    ->where('sort_order = ?', $sortOrder)
-            )
+        $connection->delete(
+            $indexTable,
+            [
+                'product_id = ?' => $productId,
+                'rule_id NOT IN (?)' => $ruleId,
+                'sort_order = ?' => $sortOrder,
+                'website_id = ?' => $websiteId,
+                'customer_group_id IN (?)' => $customerGroupIds,
+            ]
         );
-        $connection->delete($indexTable, ['rule_product_id IN (?)' => $antecedentRuleProductList]);
+    }
+
+    /**
+     * Get customer group ids the rule applies to for the given website
+     *
+     * @param array $ruleData
+     * @param int $websiteId
+     * @return int[]
+     */
+    private function getApplicableCustomerGroupIds(array $ruleData, int $websiteId): array
+    {
+        $customerGroupIds = [];
+        foreach ($ruleData['customer_group_ids'] as $customerGroupId) {
+            $customerGroupId = (int)$customerGroupId;
+            if (!$this->isWebsiteExcluded($customerGroupId, $websiteId, $ruleData['excluded_websites'])) {
+                $customerGroupIds[] = $customerGroupId;
+            }
+        }
+        return $customerGroupIds;
     }
 
     /**
