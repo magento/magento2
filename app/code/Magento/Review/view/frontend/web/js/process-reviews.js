@@ -30,7 +30,12 @@ define([
                 });
             });
         }).always(function () {
+            var reviewTab = $('.product.data.items').find('[data-role="content"]').index($('#reviews'));
+
             if (fromPages == true) { //eslint-disable-line eqeqeq
+                if (reviewTab >= 0) {
+                    $('.product.data.items').tabs('activate', reviewTab);
+                }
                 $('html, body').animate({
                     scrollTop: $('#reviews').offset().top - 50
                 }, 300);
