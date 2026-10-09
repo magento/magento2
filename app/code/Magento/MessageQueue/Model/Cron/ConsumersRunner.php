@@ -6,6 +6,7 @@
 namespace Magento\MessageQueue\Model\Cron;
 
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\MessageQueue\ConnectionLostException;
 use Magento\Framework\MessageQueue\ConnectionTypeResolver;
 use Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItemInterface;
 use Magento\Framework\ShellInterface;
@@ -18,6 +19,8 @@ use Magento\MessageQueue\Model\CheckIsAvailableMessagesInQueue;
 
 /**
  * Class for running consumers processes by cron
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ConsumersRunner
 {
@@ -239,7 +242,7 @@ class ConsumersRunner
                     $connectionName,
                     $consumerConfig->getQueue()
                 );
-            } catch (\LogicException $e) {
+            } catch (\LogicException | ConnectionLostException $e) {
                 $this->logger->info(
                     sprintf(
                         'Consumer "%s" skipped as its related queue "%s" is not available. %s',
