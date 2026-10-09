@@ -407,7 +407,7 @@ abstract class AbstractDb extends AbstractResource
             $this->rollBack();
             $object->setHasDataChanges(true);
             throw new AlreadyExistsException(new Phrase('Unique constraint violation found'), $e);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->rollBack();
             $object->setHasDataChanges(true);
             throw $e;
@@ -440,7 +440,7 @@ abstract class AbstractDb extends AbstractResource
             $object->afterDelete();
             $this->transactionManager->commit();
             $object->afterDeleteCommit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->transactionManager->rollBack();
             throw $e;
         }
