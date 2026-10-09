@@ -210,7 +210,11 @@ class MessagePlugin
         if (!$messages) {
             return [];
         }
-        $messages = $this->serializer->unserialize($messages);
+        try {
+            $messages = $this->serializer->unserialize($messages);
+        } catch (\InvalidArgumentException) {
+            return [];
+        }
         if (!is_array($messages)) {
             $messages = [];
         }
