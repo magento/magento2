@@ -178,6 +178,18 @@
             <argument name="urlPlaceholder" xsi:type="string">{{base_url}}</argument>
         </arguments>
     </type>
+    <virtualType name="Magento\Store\Model\Config\RequestIndependentPlaceholder"
+                 type="Magento\Store\Model\Config\Placeholder">
+        <arguments>
+            <argument name="resolveUrlPlaceholder" xsi:type="boolean">false</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Store\Model\Config\Processor\Placeholder">
+        <arguments>
+            <argument name="configPlaceholder"
+                      xsi:type="object">Magento\Store\Model\Config\RequestIndependentPlaceholder</argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\Module\Output\Config">
         <arguments>
         <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>

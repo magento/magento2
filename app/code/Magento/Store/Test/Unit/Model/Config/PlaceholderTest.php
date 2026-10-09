@@ -77,6 +77,79 @@ class PlaceholderTest extends TestCase
         $this->assertEquals($expectedResult, $this->_model->process($data));
     }
 
+    public function testProcessKeepsUrlPlaceholderWhenItsResolutionIsDisabled(): void
+    {
+        $model = new \Magento\Store\Model\Config\Placeholder(
+            $this->_requestMock,
+            [
+                'unsecureBaseUrl' => Store::XML_PATH_UNSECURE_BASE_URL,
+                'secureBaseUrl' => Store::XML_PATH_SECURE_BASE_URL
+            ],
+            Store::BASE_URL_PLACEHOLDER,
+            false
+        );
+        $data = [
+            'web' => [
+                'unsecure' => [
+                    'base_url' => '{{base_url}}',
+                    'base_link_url' => '{{unsecure_base_url}}',
+                    'base_media_url' => '{{unsecure_base_url}}media/',
+                ],
+                'secure' => [
+                    'base_url' => '{{unsecure_base_url}}',
+                    'base_link_url' => '{{secure_base_url}}website/de',
+                ],
+            ],
+            'some_url' => '{{base_url}}some',
+        ];
+        $expectedResult = [
+            'web' => [
+                'unsecure' => [
+                    'base_url' => '{{base_url}}',
+                    'base_link_url' => '{{base_url}}',
+                    'base_media_url' => '{{base_url}}media/',
+                ],
+                'secure' => [
+                    'base_url' => '{{base_url}}',
+                    'base_link_url' => '{{base_url}}website/de',
+                ],
+            ],
+            'some_url' => '{{base_url}}some',
+        ];
+
+        $this->assertEquals($expectedResult, $model->process($data));
+        $this->assertEquals(
+            ['url' => 'http://localhost/website/de'],
+            $this->_model->process(['url' => $expectedResult['web']['secure']['base_link_url']])
+        );
+    }
+
+    public function testProcessResolvesSiblingPlaceholdersNextToKeptUrlPlaceholder(): void
+    {
+        $model = new \Magento\Store\Model\Config\Placeholder(
+            $this->_requestMock,
+            [
+                'unsecureBaseUrl' => Store::XML_PATH_UNSECURE_BASE_URL,
+                'secureBaseUrl' => Store::XML_PATH_SECURE_BASE_URL
+            ],
+            Store::BASE_URL_PLACEHOLDER,
+            false
+        );
+        $data = [
+            'web' => [
+                'unsecure' => ['base_url' => 'http://example.com/'],
+                'secure' => ['base_url' => 'https://example.com/'],
+            ],
+            'redirect' => '{{base_url}}redirect?target={{secure_base_url}}',
+            'mixed' => '{{unsecure_base_url}}a/{{base_url}}b/{{secure_base_url}}c',
+        ];
+
+        $result = $model->process($data);
+
+        $this->assertSame('{{base_url}}redirect?target=https://example.com/', $result['redirect']);
+        $this->assertSame('http://example.com/a/{{base_url}}b/https://example.com/c', $result['mixed']);
+    }
+
     public function testProcessEmptyArray()
     {
         $data = [];
