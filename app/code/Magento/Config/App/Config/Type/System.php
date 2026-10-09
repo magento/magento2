@@ -21,6 +21,7 @@ use Magento\Framework\Cache\LockGuardedCacheLoader;
 use Magento\Framework\Encryption\Encryptor;
 use Magento\Framework\Lock\LockManagerInterface;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Store\Model\Config\PlaceholderInterface;
 use Magento\Store\Model\Config\Processor\Fallback;
 use Magento\Store\Model\ScopeInterface as StoreScope;
 use Psr\Log\LoggerInterface;
@@ -110,6 +111,12 @@ class System implements ConfigTypeInterface
      * @var LoggerInterface
      */
     private $logger;
+
+    /**
+     * @var PlaceholderInterface
+     */
+    private $placeholder;
+
     /**
      * System constructor.
      * @param ConfigSourceInterface $source
@@ -126,6 +133,7 @@ class System implements ConfigTypeInterface
      * @param LockGuardedCacheLoader|null $lockQuery
      * @param StateInterface|null $cacheState
      * @param LoggerInterface $logger
+     * @param PlaceholderInterface|null $placeholder
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -143,7 +151,8 @@ class System implements ConfigTypeInterface
         ?LockManagerInterface $locker = null,
         ?LockGuardedCacheLoader $lockQuery = null,
         ?StateInterface $cacheState = null,
-        ?LoggerInterface $logger = null
+        ?LoggerInterface $logger = null,
+        ?PlaceholderInterface $placeholder = null
     ) {
         $this->postProcessor = $postProcessor;
         $this->cache = $cache;
@@ -158,6 +167,8 @@ class System implements ConfigTypeInterface
             ?: ObjectManager::getInstance()->get(StateInterface::class);
         $this->logger = $logger
             ?: ObjectManager::getInstance()->get(LoggerInterface::class);
+        $this->placeholder = $placeholder
+            ?: ObjectManager::getInstance()->get(PlaceholderInterface::class);
     }
 
     /**
@@ -184,10 +195,27 @@ class System implements ConfigTypeInterface
     {
         if ($path === '') {
             $this->data = $this->loadAllData();
-            return $this->data;
+            return $this->resolveRequestPlaceholders($this->data);
         }
 
-        return $this->getWithParts($path);
+        return $this->resolveRequestPlaceholders($this->getWithParts($path));
+    }
+
+    /**
+     * Resolve placeholders that depend on the current request, such as {{base_url}}.
+     *
+     * They are kept unresolved in the cached data, which is shared by all requests.
+     *
+     * @param mixed $value
+     * @return mixed
+     */
+    private function resolveRequestPlaceholders($value)
+    {
+        if (is_string($value)) {
+            return str_contains($value, '{{') ? $this->placeholder->process([$value])[0] : $value;
+        }
+
+        return is_array($value) ? $this->placeholder->process($value) : $value;
     }
 
     /**
