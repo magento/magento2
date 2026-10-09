@@ -7,7 +7,6 @@
 namespace Magento\Framework\Filter;
 
 use Exception;
-use IntlDateFormatter;
 use Laminas\Filter\FilterInterface;
 use Laminas\I18n\Filter\NumberParse;
 use NumberFormatter;
@@ -81,14 +80,8 @@ class LocalizedToNormalized implements FilterInterface
                     : $this->_options['decimal_style']
             );
             return (string)$numberParse->filter($value);
-        } elseif ($this->_options['date_format'] === null && strpos($value, ':') !== false) {
-            $formatter = new IntlDateFormatter(
-                $this->_options['locale'],
-                IntlDateFormatter::SHORT,
-                IntlDateFormatter::SHORT
-            );
-            $formatter->setPattern($this->_options['date_format']);
-            return $formatter->format(strtotime($value));
+        } elseif ($this->_options['date_format'] === null) {
+            return $value;
         } elseif ($this->checkDateFormat($value)) {
             return $this->parseDate($value);
         }
