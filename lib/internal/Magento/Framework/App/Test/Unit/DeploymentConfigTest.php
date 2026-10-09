@@ -309,8 +309,107 @@ class DeploymentConfigTest extends TestCase
         putenv('MAGENTO_DC_B__B__B=D');
         putenv('MAGENTO_DC_C=false');
         $this->assertSame('c', $this->deploymentConfig->get('a'));
+        $this->assertSame(['b' => ['b' => 'D']], $this->deploymentConfig->get('b'));
+        $this->assertSame(['b' => 'D'], $this->deploymentConfig->get('b/b'));
         $this->assertSame('D', $this->deploymentConfig->get('b/b/b'));
         $this->assertFalse($this->deploymentConfig->get('c'));
+    }
+
+    public function testNestedEnvVariablesOverrideAllConfigRepresentations(): void
+    {
+        $fileConnectionConfig = [
+            'host' => 'file-host',
+            'dbname' => 'file-database',
+            'username' => 'file-user',
+            'password' => 'file-password',
+            'active' => '0',
+            'model' => 'file-model',
+            'engine' => 'file-engine',
+            'driver_options' => [
+                1014 => true,
+                1002 => 'preserved-driver-option',
+            ],
+            'file_only' => 'preserved-value',
+        ];
+        $this->readerMock->expects($this->once())->method('load')->willReturn(
+            ['db' => ['connection' => ['default' => $fileConnectionConfig]]]
+        );
+
+        putenv('MAGENTO_DC_DB__CONNECTION__DEFAULT__HOST=db');
+        putenv('MAGENTO_DC_DB__CONNECTION__DEFAULT__DBNAME=magento');
+        putenv('MAGENTO_DC_DB__CONNECTION__DEFAULT__USERNAME=magento');
+        putenv('MAGENTO_DC_DB__CONNECTION__DEFAULT__PASSWORD=magento');
+        putenv('MAGENTO_DC_DB__CONNECTION__DEFAULT__ACTIVE=1');
+        putenv('MAGENTO_DC_DB__CONNECTION__DEFAULT__MODEL=mysql4');
+        putenv('MAGENTO_DC_DB__CONNECTION__DEFAULT__ENGINE=innodb');
+        putenv('MAGENTO_DC_DB__CONNECTION__DEFAULT__INITSTATEMENTS=SET NAMES utf8;');
+        putenv('MAGENTO_DC_DB__CONNECTION__DEFAULT__DRIVER_OPTIONS__1014=false');
+
+        $configDataConnection = $this->deploymentConfig->getConfigData('db')['connection']['default'];
+        $connectionConfig = $this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT);
+
+        $this->assertSame('db', $connectionConfig['host']);
+        $this->assertSame('magento', $connectionConfig['dbname']);
+        $this->assertSame('magento', $connectionConfig['username']);
+        $this->assertSame('magento', $connectionConfig['password']);
+        $this->assertSame('1', $connectionConfig['active']);
+        $this->assertSame('mysql4', $connectionConfig['model']);
+        $this->assertSame('innodb', $connectionConfig['engine']);
+        $this->assertSame('SET NAMES utf8;', $connectionConfig['initstatements']);
+        $this->assertFalse($connectionConfig['driver_options'][1014]);
+        $this->assertSame('preserved-driver-option', $connectionConfig['driver_options'][1002]);
+        $this->assertSame('preserved-value', $connectionConfig['file_only']);
+        $this->assertSame(
+            $connectionConfig,
+            $this->deploymentConfig->get()['db/connection/default']
+        );
+        $this->assertSame(
+            $connectionConfig,
+            $configDataConnection
+        );
+        $this->assertSame(
+            'db',
+            $this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT . '/host')
+        );
+        $this->assertFalse(
+            $this->deploymentConfig->get(
+                ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT_DRIVER_OPTIONS . '/1014'
+            )
+        );
+    }
+
+    public function testEnvVariablePrecedence(): void
+    {
+        $this->readerMock->expects($this->once())->method('load')->willReturn(['precedence' => 'file']);
+        $deploymentConfig = new DeploymentConfig($this->readerMock, ['precedence' => 'constructor']);
+        putenv('MAGENTO_DC__OVERRIDE={"precedence": "json"}');
+        putenv('MAGENTO_DC_PRECEDENCE=environment');
+
+        $this->assertSame('environment', $deploymentConfig->get('precedence'));
+        $this->assertSame('environment', $deploymentConfig->getConfigData('precedence'));
+    }
+
+    public function testNestedEnvVariablesAreReloadedAfterReset(): void
+    {
+        $this->readerMock->expects($this->exactly(2))->method('load')->willReturn([]);
+        putenv('MAGENTO_DC_A__B=first');
+
+        $this->assertSame(['b' => 'first'], $this->deploymentConfig->get('a'));
+        putenv('MAGENTO_DC_A__B=second');
+        $this->assertSame(['b' => 'first'], $this->deploymentConfig->get('a'));
+
+        $this->deploymentConfig->resetData();
+        $this->assertSame(['b' => 'second'], $this->deploymentConfig->get('a'));
+    }
+
+    public function testNestedEnvVariableWinsScalarParentConflict(): void
+    {
+        $this->readerMock->expects($this->once())->method('load')->willReturn([]);
+        putenv('MAGENTO_DC_A=parent');
+        putenv('MAGENTO_DC_A__B=child');
+
+        $this->assertSame(['b' => 'child'], $this->deploymentConfig->get('a'));
+        $this->assertSame('child', $this->deploymentConfig->get('a/b'));
     }
 
     public function testEnvVariablesSubstitution(): void
