@@ -21,6 +21,7 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldT
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\ResolverInterface
     as FieldTypeResolver;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProviderInterface;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\OwnValueSortField;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 use Magento\Framework\App\ObjectManager;
 
@@ -220,6 +221,8 @@ class StaticField implements FieldProviderInterface
                     ),
                     'normalizer' => 'folding',
                 ];
+                $fieldMapping[OwnValueSortField::PREFIX . $attributeAdapter->getAttributeCode()] =
+                    $fieldMapping[$childFieldName]['fields'][$sortFieldName];
             }
         }
 
