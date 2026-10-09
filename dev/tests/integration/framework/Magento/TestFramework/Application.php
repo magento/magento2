@@ -333,6 +333,16 @@ class Application
     }
 
     /**
+     * Retrieve path to the integration tests global configuration file.
+     *
+     * @return string
+     */
+    public function getGlobalConfigFile()
+    {
+        return $this->globalConfigFile;
+    }
+
+    /**
      * Weather the application is installed or not.
      *
      * @return bool
