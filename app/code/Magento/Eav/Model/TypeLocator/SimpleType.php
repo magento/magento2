@@ -7,6 +7,7 @@
 namespace Magento\Eav\Model\TypeLocator;
 
 use Magento\Eav\Api\AttributeRepositoryInterface;
+use Magento\Eav\Model\Entity\Attribute\Backend\ArrayBackend;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Framework\Webapi\CustomAttribute\ServiceTypeListInterface;
@@ -51,6 +52,13 @@ class SimpleType implements CustomAttributeTypeLocatorInterface
         } catch (NoSuchEntityException $exception) {
             return TypeProcessor::NORMALIZED_ANY_TYPE;
         }
+
+        if ($attribute->getFrontendInput() === 'multiselect'
+            && is_a((string)$attribute->getBackendModel(), ArrayBackend::class, true)
+        ) {
+            return TypeProcessor::NORMALIZED_ANY_TYPE;
+        }
+
         $backendType = $attribute->getBackendType();
         $backendTypeMap = [
             'static' => TypeProcessor::NORMALIZED_ANY_TYPE,
