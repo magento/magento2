@@ -9,6 +9,7 @@ namespace Magento\LoginAsCustomerAssistance\Plugin;
 
 use Magento\LoginAsCustomerAdminUi\Ui\Customer\Component\Button\DataProvider;
 use Magento\LoginAsCustomerAssistance\Model\IsAssistanceEnabled;
+use Magento\LoginAsCustomerAssistance\Model\IsCustomerEnabled;
 
 /**
  * Change Login as Customer button behavior if Customer has not granted permission.
@@ -21,12 +22,20 @@ class LoginAsCustomerButtonDataProviderPlugin
     private $isAssistanceEnabled;
 
     /**
+     * @var IsCustomerEnabled
+     */
+    private $isCustomerEnabled;
+
+    /**
      * @param IsAssistanceEnabled $isAssistanceEnabled
+     * @param IsCustomerEnabled $isCustomerEnabled
      */
     public function __construct(
-        IsAssistanceEnabled $isAssistanceEnabled
+        IsAssistanceEnabled $isAssistanceEnabled,
+        IsCustomerEnabled $isCustomerEnabled
     ) {
         $this->isAssistanceEnabled = $isAssistanceEnabled;
+        $this->isCustomerEnabled = $isCustomerEnabled;
     }
 
     /**
@@ -40,7 +49,9 @@ class LoginAsCustomerButtonDataProviderPlugin
      */
     public function afterGetData(DataProvider $subject, array $result, int $customerId): array
     {
-        if (isset($result['on_click']) && !$this->isAssistanceEnabled->execute($customerId)) {
+        if (isset($result['on_click'])
+            && !($this->isCustomerEnabled->execute($customerId) && $this->isAssistanceEnabled->execute($customerId))
+        ) {
             $result['on_click'] = 'window.lacNotAllowedPopup()';
         }
 
