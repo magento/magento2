@@ -9,6 +9,7 @@ namespace Magento\Customer\Test\Unit\Model\Validator;
 
 use Magento\Customer\Model\Validator\Name;
 use Magento\Customer\Model\Customer;
+use Magento\Framework\Phrase;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -97,5 +98,32 @@ class NameTest extends TestCase
                 'message' => 'Special character ampersand(&) must be allowed in names'
             ]
         ];
+    }
+
+    /**
+     * Verify validation errors remain translatable phrases.
+     *
+     * @return void
+     */
+    public function testInvalidNamesReturnPhraseMessages(): void
+    {
+        $this->customerMock->expects($this->once())->method('getFirstname')->willReturn('First@');
+        $this->customerMock->expects($this->once())->method('getMiddlename')->willReturn('Middle@');
+        $this->customerMock->expects($this->once())->method('getLastname')->willReturn('Last@');
+
+        $this->assertFalse($this->nameValidator->isValid($this->customerMock));
+
+        $messages = $this->nameValidator->getMessages();
+        $expectedMessages = [
+            ['firstname' => 'First Name is not valid!'],
+            ['lastname' => 'Last Name is not valid!'],
+            ['middlename' => 'Middle Name is not valid!']
+        ];
+
+        foreach ($expectedMessages as $index => $expectedMessage) {
+            $field = array_key_first($expectedMessage);
+            $this->assertInstanceOf(Phrase::class, $messages[$index][$field]);
+            $this->assertSame($expectedMessage[$field], (string)$messages[$index][$field]);
+        }
     }
 }
