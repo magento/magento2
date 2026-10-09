@@ -135,7 +135,11 @@ class CityTest extends TestCase
             [
                 'city' => 'Curaçao',
                 'message' => 'Diacritic ç (cedilla) must be allowed in city names'
-            ]
+            ],
+            [
+                'city' => 'Frankfurt / Main',
+                'message' => 'Forward slash must be allowed in city names'
+            ],
         ];
     }
 
@@ -181,10 +185,6 @@ class CityTest extends TestCase
             [
                 'rejectedChar' => '?',
                 'message' => 'Question mark must be rejected'
-            ],
-            [
-                'rejectedChar' => '/',
-                'message' => 'Forward slash must be rejected'
             ],
         ];
     }
