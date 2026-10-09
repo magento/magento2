@@ -16,6 +16,10 @@ use Magento\Sales\Api\Data\OrderInterface;
 /**
  * Class observer UpgradeOrderCustomerEmailObserver
  * Update orders customer email after corresponding customer email changed
+ *
+ * Patched: updates sales_order and sales_order_grid with a direct SQL update
+ * instead of loading and saving every order through the order repository.
+ * See https://github.com/magento/magento2/issues/36081
  */
 class UpgradeOrderCustomerEmailObserver implements ObserverInterface
 {
