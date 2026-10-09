@@ -172,17 +172,18 @@ T: {{telephone}}";
      */
     public function getFormats()
     {
-        if (!isset(self::$_format[$this->getId()]) && $this->getId()) {
-            self::$_format[$this->getId()] = $this->_formatFactory->create()->getCollection()->setCountryFilter(
+        $countryId = $this->getId();
+        if (!$countryId) {
+            return null;
+        }
+
+        if (!isset(self::$_format[$countryId])) {
+            self::$_format[$countryId] = $this->_formatFactory->create()->getCollection()->setCountryFilter(
                 $this
             )->load();
         }
 
-        if (isset(self::$_format[$this->getId()])) {
-            return self::$_format[$this->getId()];
-        }
-
-        return null;
+        return self::$_format[$countryId];
     }
 
     /**
