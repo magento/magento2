@@ -115,12 +115,13 @@ class SetLinkStatusObserver implements ObserverInterface
                         $availableStatuses[] = \Magento\Sales\Model\Order\Item::STATUS_BACKORDERED;
                     }
 
-                    if (in_array($item->getStatusId(), $availableStatuses)) {
-                        $downloadableItemsStatuses[$item->getId()] = $linkStatuses['avail'];
+                    $itemId = $item->getId();
+                    if ($itemId !== null && in_array($item->getStatusId(), $availableStatuses)) {
+                        $downloadableItemsStatuses[$itemId] = $linkStatuses['avail'];
                     }
 
-                    if ($item->getQtyOrdered() - $item->getQtyRefunded() == 0) {
-                        $expiredOrderItemIds[] = $item->getId();
+                    if ($itemId !== null && $item->getQtyOrdered() - $item->getQtyRefunded() == 0) {
+                        $expiredOrderItemIds[] = $itemId;
                     }
                 }
             }
@@ -130,7 +131,10 @@ class SetLinkStatusObserver implements ObserverInterface
                 if ($item->getProductType() == \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE
                     || $item->getRealProductType() == \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE
                 ) {
-                    $downloadableItemsStatuses[$item->getId()] = $status;
+                    $itemId = $item->getId();
+                    if ($itemId !== null) {
+                        $downloadableItemsStatuses[$itemId] = $status;
+                    }
                 }
             }
         }
