@@ -43,8 +43,7 @@ class GetAttributeSelectedOptionComposite implements GetAttributeSelectedOptionI
         }
         if (!$this->providers[$entityType] instanceof GetAttributeSelectedOptionInterface) {
             throw new RuntimeException(
-                __('Configured attribute selected option data providers should implement
-                GetAttributeSelectedOptionInterface')
+                __('Configured attribute selected option data providers should implement GetAttributeSelectedOptionInterface')
             );
         }
 
