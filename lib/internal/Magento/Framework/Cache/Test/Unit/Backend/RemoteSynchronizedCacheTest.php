@@ -8,9 +8,7 @@ declare(strict_types=1);
 namespace Magento\Framework\Cache\Test\Unit\Backend;
 
 use Magento\Framework\Cache\Backend\Database;
-use Magento\Framework\Cache\Backend\ExtendedBackendInterface;
 use Magento\Framework\Cache\Backend\RemoteSynchronizedCache;
-use Magento\Framework\Cache\Exception\CacheException;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -19,12 +17,12 @@ use PHPUnit\Framework\TestCase;
 class RemoteSynchronizedCacheTest extends TestCase
 {
     /**
-     * @var ExtendedBackendInterface|MockObject
+     * @var \Zend_Cache_Backend_ExtendedInterface|MockObject
      */
     private $localCacheMockExample;
 
     /**
-     * @var ExtendedBackendInterface|MockObject
+     * @var \Zend_Cache_Backend_ExtendedInterface|MockObject
      */
     private $remoteCacheMockExample;
 
@@ -38,8 +36,8 @@ class RemoteSynchronizedCacheTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->localCacheMockExample = $this->createMock(ExtendedBackendInterface::class);
-        $this->remoteCacheMockExample = $this->createMock(ExtendedBackendInterface::class);
+        $this->localCacheMockExample = $this->createMock(\Zend_Cache_Backend_ExtendedInterface::class);
+        $this->remoteCacheMockExample = $this->createMock(\Zend_Cache_Backend_ExtendedInterface::class);
         $this->remoteSyncCacheInstance = new RemoteSynchronizedCache(
             [
                 'remote_backend' => $this->remoteCacheMockExample,
@@ -57,7 +55,7 @@ class RemoteSynchronizedCacheTest extends TestCase
     #[DataProvider('initializeWithExceptionDataProvider')]
     public function testInitializeWithException($options): void
     {
-        $this->expectException(CacheException::class);
+        $this->expectException(\Zend_Cache_Exception::class);
         new RemoteSynchronizedCache($options);
     }
 
@@ -95,8 +93,8 @@ class RemoteSynchronizedCacheTest extends TestCase
      */
     public function testInitializeWithOutException(): void
     {
-        $remoteMock = $this->createMock(ExtendedBackendInterface::class);
-        $localMock = $this->createMock(ExtendedBackendInterface::class);
+        $remoteMock = $this->createMock(\Zend_Cache_Backend_ExtendedInterface::class);
+        $localMock = $this->createMock(\Zend_Cache_Backend_ExtendedInterface::class);
         
         $options = [
             'remote_backend' => $remoteMock,

@@ -17,6 +17,7 @@ define([
          * @param {Object} data - customer address and actions
          */
         onAction: function (data) {
+            // eslint-disable-next-line no-useless-call
             this[data.action + 'Action'].call(this, data.data);
         },
 
@@ -26,6 +27,7 @@ define([
          * @param {Object} data - customer address
          */
         onMassAction: function (data) {
+            // eslint-disable-next-line no-useless-call
             this[data.action + 'Massaction'].call(this, data.data);
         },
 

@@ -19,6 +19,10 @@
             <group value="3rd_party_integration"/>
             <group value="pr_exclude"/>
         </annotations>
+        <!-- Guard against the minicart-count AJAX race: AddSimpleProductToCartActionGroup (inherited) only waits for the
+             synchronous success message, not the async customer-data refresh that ClickViewAndEditCartFromMiniCartActionGroup
+             (inherited stepKey goToShoppingCartFromMinicart1) needs before .action.viewcart renders -->
+        <waitForElementVisible selector="{{StorefrontMinicartSection.nonEmptyCartCounter}}" stepKey="waitForNonEmptyCartCounterBeforeMinicart" before="goToShoppingCartFromMinicart1"/>
         <!-- Open Estimate Shipping and Tax section for united Kingdom-->
         <actionGroup ref="StorefrontCheckoutCartFillEstimateShippingAndTaxInShoppingCartActionGroup" stepKey="setEstimateShippingAndTaxInitialAddressToUnitedKingdomWithZipCode">
             <argument name="country" value="United Kingdom"/>

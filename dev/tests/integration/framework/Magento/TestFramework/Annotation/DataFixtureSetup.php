@@ -7,8 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\TestFramework\Annotation;
 
+use Magento\Framework\App\ScopeInterface;
+use Magento\Framework\App\ScopeResolverPool;
 use Magento\Framework\DataObject;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
 use Magento\TestFramework\Fixture\DataFixtureFactory;
@@ -25,11 +26,13 @@ class DataFixtureSetup
      * @param Registry $registry
      * @param DataFixtureFactory $dataFixtureFactory
      * @param ScopeSwitcherInterface $scopeSwitcher
+     * @param ScopeResolverPool $scopeResolverPool
      */
     public function __construct(
         private Registry $registry,
         private DataFixtureFactory $dataFixtureFactory,
-        private ScopeSwitcherInterface $scopeSwitcher
+        private ScopeSwitcherInterface $scopeSwitcher,
+        private ScopeResolverPool $scopeResolverPool,
     ) {
     }
 
@@ -38,14 +41,14 @@ class DataFixtureSetup
      *
      * @param array $fixture
      * @return DataObject|null
-     * @throws LocalizedException
+     * @throws \Exception
      */
     public function apply(array $fixture): ?DataObject
     {
         $data = $this->resolveVariables($fixture['data'] ?? []);
         $factory = $this->dataFixtureFactory->create($fixture['factory']);
         if (isset($fixture['scope'])) {
-            $scope = DataFixtureStorageManager::getStorage()->get($fixture['scope']);
+            $scope = $this->resolveScope($fixture['scope'], $fixture['scopeType']);
             $fromScope = $this->scopeSwitcher->switch($scope);
             try {
                 $result = $factory->apply($data);
@@ -90,6 +93,53 @@ class DataFixtureSetup
     }
 
     /**
+     * Resolve scope by name and type.
+     *
+     * @param string $scopeName
+     * @param string $scopeType
+     * @return ScopeInterface
+     * @throws \InvalidArgumentException
+     */
+    private function resolveScope(string $scopeName, string $scopeType): ScopeInterface
+    {
+        $scope = DataFixtureStorageManager::getStorage()->get($scopeName);
+        if (null === $scope) {
+            $scopeIdentifier = $this->resolveValue($scopeName);
+            if (null !== $scopeIdentifier) {
+                try {
+                    $scopeResolver = $this->scopeResolverPool->get($scopeType);
+                } catch (\Exception) {
+                    $msg = sprintf('"%s" is not valid scope type.', $scopeType);
+                    throw new \InvalidArgumentException($msg);
+                }
+                try {
+                    $scope = $scopeResolver->getScope($scopeIdentifier);
+                } catch (\Exception) {
+                    $msg = sprintf('"%s" is not valid scope for "%s" scope type.', $scopeIdentifier, $scopeType);
+                    throw new \InvalidArgumentException($msg);
+                }
+            }
+        }
+        if (!$scope instanceof ScopeInterface) {
+            $msg = sprintf('"%s" is not valid scope.', $scopeName);
+            throw new \InvalidArgumentException($msg);
+        }
+
+        return $scope;
+    }
+
+    /**
+     * Replace fixture reference by its value.
+     *
+     * @param string $value
+     * @return string|null
+     */
+    private function resolveValue(string $value): ?string
+    {
+        return $this->getParser($value)?->__invoke($value);
+    }
+
+    /**
      * Replace fixtures references in the data by their value
      *
      * Supported formats:
@@ -98,7 +148,7 @@ class DataFixtureSetup
      *
      * @param array $data
      * @return array
-     * @throws LocalizedException
+     * @throws \Exception
      */
     private function resolveVariables(array $data): array
     {
@@ -115,8 +165,7 @@ class DataFixtureSetup
             }
 
             if (is_string($key)) {
-                $parser = $this->getParser($key);
-                $newKey = $parser ? $parser($key) : null;
+                $newKey = $this->resolveValue($key);
                 if (is_string($newKey)) {
                     $value = $data[$key];
                     unset($data[$key]);
@@ -132,9 +181,9 @@ class DataFixtureSetup
      * Parse either key or value of the fixture data
      *
      * @param string $data
-     * @return callable|null
+     * @return \Closure|null
      */
-    private function getParser(string $data): ?callable
+    private function getParser(string $data): ?\Closure
     {
         // Check if entire string is a single placeholder
         if (preg_match('/^\$\w+(\.\w+)?\$$/', $data)) {
