@@ -110,8 +110,7 @@ class Importer implements ImporterInterface
     }
 
     /**
-     * Returns array of warning messages which contain information about which changes (removing, registration)
-     * will be applied to themes.
+     * Returns array of warning messages about theme changes (removing, registration) to be applied.
      *
      * @param array $data The data that should be imported, used for creating warning messages
      * @return array
