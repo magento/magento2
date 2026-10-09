@@ -44,11 +44,20 @@ class FinalPriceResolver
         float $result,
         SaleableInterface $product
     ):float {
-        return $this->weeePriceDisplay()
-            ? (float)$product->getPriceInfo()->getPrice(CatalogFinalPrice::PRICE_CODE)
-                ->getAmount()->getValue(Adjustment::ADJUSTMENT_CODE)
-            : (float)$product->getPriceInfo()->getPrice(CatalogFinalPrice::PRICE_CODE)
-                ->getValue();
+        $priceInfo = $product->getPriceInfo();
+        if (!$this->weeePriceDisplay()) {
+            return (float)$priceInfo->getPrice(CatalogFinalPrice::PRICE_CODE)->getValue();
+        }
+
+        // The configurable parent applies its adjustments to the resolved price as a base price.
+        // Keep the tax in it when the tax adjustment is included in the base price, as the
+        // calculator will then extract it; leave it out otherwise, so it is not added twice.
+        $amount = $priceInfo->getPrice(CatalogFinalPrice::PRICE_CODE)->getAmount();
+        $taxAdjustment = $priceInfo->getAdjustments()[Adjustment::ADJUSTMENT_CODE] ?? null;
+
+        return $taxAdjustment !== null && $taxAdjustment->isIncludedInBasePrice()
+            ? (float)$amount->getValue()
+            : (float)$amount->getValue(Adjustment::ADJUSTMENT_CODE);
     }
 
     /**

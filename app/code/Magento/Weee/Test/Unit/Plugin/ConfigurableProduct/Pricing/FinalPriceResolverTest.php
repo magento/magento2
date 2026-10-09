@@ -9,6 +9,7 @@ namespace Magento\Weee\Test\Unit\Plugin\ConfigurableProduct\Pricing;
 
 use Magento\Catalog\Pricing\Price\FinalPrice as CatalogFinalPrice;
 use Magento\ConfigurableProduct\Pricing\Price\FinalPriceResolver as ConfigurableProductFinalPriceResolver;
+use Magento\Framework\Pricing\Adjustment\AdjustmentInterface;
 use Magento\Framework\Pricing\Amount\AmountInterface;
 use Magento\Framework\Pricing\PriceInfo\Base as PriceInfo;
 use Magento\Framework\Pricing\SaleableInterface;
@@ -321,6 +322,75 @@ class FinalPriceResolverTest extends TestCase
         // The result should be the actual price from product, not the original result
         $this->assertEquals($actualPrice, $result);
         $this->assertNotEquals($originalResult, $result);
+    }
+
+    /**
+     * Test afterResolvePrice keeps the tax only when it is included in the base price
+     *
+     * The configurable parent treats the resolved value as a base price: with catalog prices
+     * including tax it must keep the tax, with catalog prices excluding tax it must not.
+     *
+     * @param bool|null $taxIncluded
+     * @param float $expected
+     * @return void
+     */
+    #[DataProvider('taxAdjustmentDataProvider')]
+    public function testAfterResolvePriceFollowsTaxIncludedInBasePrice(?bool $taxIncluded, float $expected): void
+    {
+        $priceInclTax = 120.0;
+        $priceExclTax = 100.0;
+
+        $adjustments = [];
+        if ($taxIncluded !== null) {
+            $taxAdjustmentMock = $this->createMock(AdjustmentInterface::class);
+            $taxAdjustmentMock->method('isIncludedInBasePrice')->willReturn($taxIncluded);
+            $adjustments[Adjustment::ADJUSTMENT_CODE] = $taxAdjustmentMock;
+        }
+
+        $this->weeeHelperDataMock->method('isDisplayIncl')->willReturn(true);
+
+        $this->productMock->expects($this->once())
+            ->method('getPriceInfo')
+            ->willReturn($this->priceInfoMock);
+        $this->priceInfoMock->method('getAdjustments')->willReturn($adjustments);
+        $this->priceInfoMock->method('getPrice')
+            ->with(CatalogFinalPrice::PRICE_CODE)
+            ->willReturn($this->finalPriceMock);
+        $this->finalPriceMock->method('getAmount')->willReturn($this->amountMock);
+        $this->amountMock->expects($this->once())
+            ->method('getValue')
+            ->willReturnCallback(
+                fn ($exclude = null) => $exclude === Adjustment::ADJUSTMENT_CODE ? $priceExclTax : $priceInclTax
+            );
+
+        $result = $this->plugin->afterResolvePrice(
+            $this->subjectMock,
+            $priceExclTax,
+            $this->productMock
+        );
+
+        $this->assertSame($expected, $result);
+    }
+
+    /**
+     * @return array
+     */
+    public static function taxAdjustmentDataProvider(): array
+    {
+        return [
+            'catalog prices include tax' => [
+                'taxIncluded' => true,
+                'expected' => 120.0
+            ],
+            'catalog prices exclude tax' => [
+                'taxIncluded' => false,
+                'expected' => 100.0
+            ],
+            'no tax adjustment' => [
+                'taxIncluded' => null,
+                'expected' => 100.0
+            ]
+        ];
     }
 
     public static function pricesDataProvider(): array
