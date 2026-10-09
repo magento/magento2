@@ -78,4 +78,35 @@ class DeferCacheCleaningUntilImportIsCompleteTest extends TestCase
         $result = $this->plugin->afterImportSource($subject, true);
         $this->assertTrue($result);
     }
+
+    public function testAroundMethodFlushesAndRethrowsWhenImportFails(): void
+    {
+        $exception = new \RuntimeException('Import failed');
+        $this->cacheCleaner->expects($this->never())->method('start');
+        $this->cacheCleaner->expects($this->once())->method('flush');
+        $subject = $this->createStub(Import::class);
+
+        $this->expectExceptionObject($exception);
+        $this->plugin->aroundImportSource(
+            $subject,
+            function () use ($exception) {
+                throw $exception;
+            }
+        );
+    }
+
+    public function testAroundMethodDoesNotFlushWhenImportSucceeds(): void
+    {
+        $this->cacheCleaner->expects($this->never())->method('flush');
+        $subject = $this->createStub(Import::class);
+
+        $result = $this->plugin->aroundImportSource(
+            $subject,
+            function () {
+                return false;
+            }
+        );
+
+        $this->assertFalse($result);
+    }
 }
