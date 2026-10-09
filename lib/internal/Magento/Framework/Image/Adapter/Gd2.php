@@ -348,7 +348,7 @@ class Gd2 extends AbstractAdapter
                 $colorsForIndex = imagecolorsforindex($this->_imageHandler, $transparentIndex);
                 list($red, $green, $blue) = array_values($colorsForIndex);
                 $transparentColor = imagecolorallocate($imageResourceTo, (int) $red, (int) $green, (int) $blue);
-            // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
+                // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
             } catch (\ValueError $e) {
             }
         }
@@ -485,7 +485,7 @@ class Gd2 extends AbstractAdapter
      */
     public function watermark($imagePath, $positionX = 0, $positionY = 0, $opacity = 30, $tile = false)
     {
-        list($watermarkSrcWidth, $watermarkSrcHeight, $watermarkFileType,) = $this->_getImageOptions($imagePath);
+        list($watermarkSrcWidth, $watermarkSrcHeight, $watermarkFileType, ) = $this->_getImageOptions($imagePath);
         $this->_getFileAttributes();
         $watermark = call_user_func(
             $this->_getCallback('create', $watermarkFileType, 'Unsupported watermark image format.'),
@@ -659,8 +659,8 @@ class Gd2 extends AbstractAdapter
     {
         $newWatermark = imagecreatetruecolor($width, $height);
         imagealphablending($newWatermark, false);
-        $col = imagecolorallocate($newWatermark, 255, 255, 255);
-        imagecolortransparent($newWatermark, $col);
+        // Start fully transparent; a white colour key would also drop the white pixels of the watermark.
+        $col = imagecolorallocatealpha($newWatermark, 255, 255, 255, 127);
         imagefilledrectangle($newWatermark, 0, 0, $width, $height, $col);
         imagesavealpha($newWatermark, true);
         imagecopyresampled(
