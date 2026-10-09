@@ -326,6 +326,9 @@
                 <item name="position_mapping" xsi:type="object">
                     Magento\Elasticsearch8\Model\Adapter\DynamicTemplates\PositionMapper
                 </item>
+                <item name="own_value_sort_mapping" xsi:type="object">
+                    Magento\Elasticsearch8\Model\Adapter\DynamicTemplates\OwnValueSortMapper
+                </item>
                 <item name="string_mapping" xsi:type="object">
                     Magento\Elasticsearch8\Model\Adapter\DynamicTemplates\StringMapper
                 </item>
