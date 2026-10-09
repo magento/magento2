@@ -177,8 +177,13 @@ sub vcl_backend_response {
 
     # cache only successfully responses and 404s that are not marked as private
     if ((beresp.status != 200 && beresp.status != 404) || beresp.http.Cache-Control ~ "private") {
+        # Mark as Hit-For-Miss for the next 2 minutes
+        set beresp.ttl = 120s;
         set beresp.uncacheable = true;
-        set beresp.ttl = 86400s;
+        # Force a short grace value, as it may have been modified before, to be sure that
+        # the object won't be kept in memory for too long after the TTL expires
+        set beresp.grace = 10s;
+        # Exit immediately to ensure no subsequent TTL or uncacheable modification can be made
         return (deliver);
     }
 
