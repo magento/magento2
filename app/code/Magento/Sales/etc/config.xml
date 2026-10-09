@@ -5,7 +5,8 @@
  * All Rights Reserved.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
         <sales>
             <general>
@@ -114,6 +115,7 @@
         <dev>
             <grid>
                 <async_indexing>0</async_indexing>
+                <async_indexing_lookback>300</async_indexing_lookback>
             </grid>
         </dev>
         <system>
