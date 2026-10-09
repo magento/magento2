@@ -70,7 +70,7 @@ class TopologyInstaller
                 $this->queueInstaller->install($queue);
             }
         } catch (\Exception $e) {
-            $this->logger->error("STOMP topology installation failed: {$e->getMessage()}\n{$e->getTraceAsString()}");
+            $this->logger->error('STOMP topology installation failed', ['exception' => $e]);
         }
     }
 }

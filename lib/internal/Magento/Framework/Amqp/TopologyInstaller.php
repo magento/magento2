@@ -93,7 +93,7 @@ class TopologyInstaller
                 $this->exchangeInstaller->install($amqpConfig->getChannel(), $exchange);
             }
         } catch (\Exception $e) {
-            $this->logger->error("AMQP topology installation failed: {$e->getMessage()}\n{$e->getTraceAsString()}");
+            $this->logger->error('AMQP topology installation failed', ['exception' => $e]);
         }
     }
 }

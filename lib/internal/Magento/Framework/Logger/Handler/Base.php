@@ -10,6 +10,7 @@ namespace Magento\Framework\Logger\Handler;
 use InvalidArgumentException;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+use Monolog\Formatter\FormatterInterface;
 use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
@@ -41,11 +42,13 @@ class Base extends StreamHandler implements ResetAfterRequestInterface
      * @param DriverInterface $filesystem
      * @param string|null $filePath
      * @param string|null $fileName
+     * @param FormatterInterface|null $formatter Defaults to a LineFormatter that includes stack traces
      */
     public function __construct(
         DriverInterface $filesystem,
         ?string $filePath = null,
-        ?string $fileName = null
+        ?string $fileName = null,
+        ?FormatterInterface $formatter = null
     ) {
         $this->filesystem = $filesystem;
 
@@ -58,7 +61,26 @@ class Base extends StreamHandler implements ResetAfterRequestInterface
             $this->loggerType
         );
 
-        $this->setFormatter(new LineFormatter(null, null, true));
+        $this->setFormatter($formatter ?? $this->createDefaultFormatter());
+    }
+
+    /**
+     * Create the formatter used when none was injected
+     *
+     * Stack traces are included so that a Throwable reported through the PSR-3 reserved
+     * $context['exception'] key stays diagnosable, instead of being reduced to its throw site.
+     *
+     * @return FormatterInterface
+     */
+    private function createDefaultFormatter(): FormatterInterface
+    {
+        return new LineFormatter(
+            format: null,
+            dateFormat: null,
+            allowInlineLineBreaks: true,
+            ignoreEmptyContextAndExtra: false,
+            includeStacktraces: true
+        );
     }
 
     /**

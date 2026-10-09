@@ -173,7 +173,8 @@ class MergedTest extends TestCase
             'versionStorage' => $this->versionStorage,
         ]);
 
-        $this->logger->expects($this->once())->method('critical')->with($this->identicalTo($mergeError));
+        $this->logger->expects($this->once())->method('critical')
+            ->with('Unable to merge assets', $this->identicalTo(['exception' => $mergeError]));
 
         $expectedResult = [$this->assetJsOne, $this->assetJsTwo, $assetBroken];
         $this->assertIteratorEquals($expectedResult, $merged);

@@ -192,7 +192,10 @@ class Helper
                 try {
                     $structure->setAsChild($name, $parentName, $alias);
                 } catch (\Exception $e) {
-                    $this->logger->critical($e);
+                    $this->logger->critical(
+                        'Unable to set the {elementName} element as a child of {parentName}',
+                        ['elementName' => $name, 'parentName' => $parentName, 'exception' => $e]
+                    );
                 }
             } else {
                 $scheduledStructure->setElementToBrokenParentList($key);
