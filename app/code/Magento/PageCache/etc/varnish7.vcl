@@ -164,6 +164,17 @@ sub vcl_backend_response {
         set beresp.http.X-Magento-Cache-Control = beresp.http.Cache-Control;
     }
 
+    # This if is from the built-in Varnish VCL.
+    # Since Varnish 5.1, if the request was marked as a simple "return (pass)", hit-for-pass will
+    # never be triggered. Generally speaking, hit-for-pass is deprecated in favor of hit-for-miss.
+    # See https://info.varnish-software.com/blog/the-difference-between-hit-for-miss-and-hit-for-pass
+    # Therefore it is useless to set TTL or grace values (and thus store the object in the Transient storage).
+    # Thus, we stop here before further processing that would alter the TTL or grace,
+    # preventing the object from being stored in and overloading the Transient storage.
+    if (bereq.uncacheable) {
+        return (deliver);
+    }
+
     # cache only successfully responses and 404s that are not marked as private
     if ((beresp.status != 200 && beresp.status != 404) || beresp.http.Cache-Control ~ "private") {
         set beresp.uncacheable = true;
