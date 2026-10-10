@@ -21,6 +21,10 @@ class UrlRewrite extends \Magento\Framework\App\Helper\AbstractHelper
 
     // Anchor is not supported in request path, e.g. 'foo#bar'
 
+    public const VERR_QUERY = 3;
+
+    // Query string is not supported in request path, e.g. 'foo?bar=1'
+
     /**
      * @var CompositeUrlKey
      */
@@ -56,6 +60,12 @@ class UrlRewrite extends \Magento\Framework\App\Helper\AbstractHelper
         }
         if (strpos($requestPath, '#') !== false) {
             throw new \Exception(__('Anchor symbol (#) is not supported in request path.'), self::VERR_ANCHOR);
+        }
+        if (strpos($requestPath, '?') !== false) {
+            throw new \Exception(
+                __('Query string (?) is not supported in request path.'),
+                self::VERR_QUERY
+            );
         }
         $requestPathArray = explode('/', $requestPath);
         foreach ($requestPathArray as $requestPathPart) {
@@ -109,6 +119,10 @@ class UrlRewrite extends \Magento\Framework\App\Helper\AbstractHelper
                 case self::VERR_ANCHOR:
                     throw new \Magento\Framework\Exception\LocalizedException(
                         __('Anchor symbol (#) is not supported in url rewrite suffix.')
+                    );
+                case self::VERR_QUERY:
+                    throw new \Magento\Framework\Exception\LocalizedException(
+                        __('Query string (?) is not supported in url rewrite suffix.')
                     );
             }
         }
