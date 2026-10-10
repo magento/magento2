@@ -275,8 +275,7 @@ class Image implements LocalInterface
         $data = implode('_', $this->convertToReadableFormat($this->miscParams));
 
         $pathTemplate = $this->getModule()
-            . DIRECTORY_SEPARATOR . "%s" . DIRECTORY_SEPARATOR
-            . $this->getFilePath();
+            . DIRECTORY_SEPARATOR . '%s' . DIRECTORY_SEPARATOR . '%s';
 
         /**
          * New paths are generated without dependency on
@@ -285,7 +284,7 @@ class Image implements LocalInterface
         return preg_replace(
             '|\Q' . DIRECTORY_SEPARATOR . '\E+|',
             DIRECTORY_SEPARATOR,
-            sprintf($pathTemplate, hash(self::HASH_ALGORITHM, $data))
+            sprintf($pathTemplate, hash(self::HASH_ALGORITHM, $data), $this->getFilePath())
         );
     }
 
