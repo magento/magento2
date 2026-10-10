@@ -127,4 +127,85 @@ class ConfigurableAttributeDataTest extends TestCase
 
         $this->assertEquals($expected, $this->configurableAttributeData->getAttributesData($this->product, $options));
     }
+
+    /**
+     * Options that are not used by any enabled variation must be excluded, while values used by enabled
+     * but out-of-stock variations must be kept so they are still rendered as unavailable.
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testDisabledVariationOptionsAreExcluded()
+    {
+        $storeId = '1';
+        $attributeId = 5;
+        $attributeOptions = [
+            ['value_index' => 'in_stock', 'label' => 'In Stock'],
+            ['value_index' => 'out_of_stock', 'label' => 'Out Of Stock'],
+            ['value_index' => 'disabled', 'label' => 'Disabled'],
+        ];
+        $position = 2;
+
+        // Only "in_stock" has salable products; "out_of_stock" appears in the index (enabled product,
+        // no salable products); "disabled" appears nowhere (only a disabled simple product uses it).
+        $options = [
+            $attributeId => ['in_stock' => ['1']],
+            'index' => [
+                '1' => [$attributeId => 'in_stock'],
+                '2' => [$attributeId => 'out_of_stock'],
+            ],
+        ];
+
+        $expected = [
+            'attributes' => [
+                $attributeId => [
+                    'id' => $attributeId,
+                    'code' => 'test_attribute',
+                    'label' => 'Test',
+                    'position' => $position,
+                    'options' => [
+                        0 => [
+                            'id' => 'in_stock',
+                            'label' => 'In Stock',
+                            'products' => ['1'],
+                        ],
+                        1 => [
+                            'id' => 'out_of_stock',
+                            'label' => 'Out Of Stock',
+                            'products' => [],
+                        ],
+                    ],
+                ],
+            ],
+            'defaultValues' => [
+                $attributeId => null,
+            ],
+        ];
+
+        $productAttributeMock = $this->createPartialMockWithReflection(
+            EavAttribute::class,
+            ['getId', 'setId', 'getAttributeCode', 'setAttributeCode', 'getStoreLabel', 'setStoreLabel']
+        );
+        $productAttributeMock->method('getId')->willReturn($attributeId);
+        $productAttributeMock->method('getAttributeCode')->willReturn($expected['attributes'][$attributeId]['code']);
+        $productAttributeMock->method('getStoreLabel')->willReturn($expected['attributes'][$attributeId]['label']);
+
+        $attributeMock = $this->createPartialMock(ConfigurableAttribute::class, []);
+        $attributeMock->setProductAttribute($productAttributeMock);
+        $attributeMock->setPosition($position);
+        $attributeMock->setAttributeId($attributeId);
+        $attributeMock->setOptions($attributeOptions);
+
+        $this->product->method('getStoreId')->willReturn($storeId);
+
+        $configurableProduct = $this->createMock(Configurable::class);
+        $configurableProduct->expects($this->once())
+            ->method('getConfigurableAttributes')
+            ->with($this->product)
+            ->willReturn([$attributeMock]);
+
+        $this->product->setTypeInstance($configurableProduct);
+        $this->product->setHasPreconfiguredValues(false);
+
+        $this->assertEquals($expected, $this->configurableAttributeData->getAttributesData($this->product, $options));
+    }
 }
