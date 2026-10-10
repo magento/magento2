@@ -39,6 +39,8 @@ use Magento\OfflinePayments\Model\Checkmo;
 
 /**
  * Test for placing an order for guest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PlaceOrderTest extends GraphQlAbstract
 {
