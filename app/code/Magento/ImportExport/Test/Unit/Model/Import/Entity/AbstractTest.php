@@ -124,6 +124,21 @@ class AbstractTest extends AbstractImportTestCase
             $errorAggregator->getRowsGroupedByErrorCode()
         );
     }
+    
+     /**
+      * Test for method validateData()
+      *
+      * @covers \Magento\ImportExport\Model\Import\Entity\AbstractEntity::validateData
+      */
+    public function testValidateColumnName()
+    {
+        $this->_createSourceAdapterMock(['Test_1']);
+        $errorAggregator = $this->_model->validateData();
+        $this->assertArrayNotHasKey(
+            AbstractEntity::ERROR_CODE_COLUMN_NAME_INVALID,
+            $errorAggregator->getRowsGroupedByErrorCode()
+        );
+    }
 
     /**
      * Test for method validateData()
@@ -132,7 +147,7 @@ class AbstractTest extends AbstractImportTestCase
      */
     public function testValidateDataAttributeNames()
     {
-        $this->_createSourceAdapterMock(['_test1']);
+        $this->_createSourceAdapterMock(['test.1', '@test']);
         $errorAggregator = $this->_model->validateData();
         $this->assertArrayHasKey(
             AbstractEntity::ERROR_CODE_COLUMN_NAME_INVALID,
