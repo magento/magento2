@@ -123,18 +123,23 @@ class LinkManagement implements LinkManagementInterface
             $attributes = [];
             foreach ($child->getAttributes() as $attribute) {
                 $attrCode = $attribute->getAttributeCode();
+                if ($attrCode === 'media_gallery_entries') {
+                    continue;
+                }
                 $value = $child->getDataUsingMethod($attrCode) ?: $child->getData($attrCode);
                 if (null !== $value) {
                     $attributes[$attrCode] = $value;
                 }
             }
             $attributes['store_id'] = $child->getStoreId();
+            /** @var \Magento\Catalog\Api\Data\ProductInterface $productDataObject */
             $productDataObject = $this->productFactory->create();
             $this->dataObjectHelper->populateWithArray(
-                $productDataObject->setMediaGalleryEntries($child->getMediaGalleryEntries()),
+                $productDataObject,
                 $attributes,
                 ProductInterface::class
             );
+            $productDataObject->setMediaGalleryEntries($child->getMediaGalleryEntries());
             $childrenList[] = $productDataObject;
         }
         return $childrenList;
