@@ -94,7 +94,17 @@ class CheckExpirePersistentQuoteObserverTest extends TestCase
     protected function setUp(): void
     {
         $this->sessionMock = $this->createMock(Session::class);
-        $this->customerSessionMock = $this->createMock(CustomerSession::class);
+        $this->customerSessionMock = $this->createPartialMockWithReflection(
+            CustomerSession::class,
+            [
+                'isLoggedIn',
+                'setCustomerId',
+                'setCustomerGroupId',
+                'setDefaultTaxBillingAddress',
+                'setDefaultTaxShippingAddress',
+                'setCustomerTaxClassId'
+            ]
+        );
         $this->persistentHelperMock = $this->createMock(Data::class);
         $this->observerMock = $this->createPartialMockWithReflection(
             Observer::class,
@@ -207,6 +217,26 @@ class CheckExpirePersistentQuoteObserverTest extends TestCase
         $this->customerSessionMock
             ->expects($this->{$setCustomerIdCounter}())
             ->method('setCustomerId')
+            ->with(null)
+            ->willReturnSelf();
+        $this->customerSessionMock
+            ->expects($this->{$setCustomerIdCounter}())
+            ->method('setCustomerGroupId')
+            ->with(null)
+            ->willReturnSelf();
+        $this->customerSessionMock
+            ->expects($this->{$setCustomerIdCounter}())
+            ->method('setDefaultTaxBillingAddress')
+            ->with(null)
+            ->willReturnSelf();
+        $this->customerSessionMock
+            ->expects($this->{$setCustomerIdCounter}())
+            ->method('setDefaultTaxShippingAddress')
+            ->with(null)
+            ->willReturnSelf();
+        $this->customerSessionMock
+            ->expects($this->{$setCustomerIdCounter}())
+            ->method('setCustomerTaxClassId')
             ->with(null)
             ->willReturnSelf();
         $this->requestMock->expects($this->atLeastOnce())->method('getRequestUri')->willReturn($refererUri);
