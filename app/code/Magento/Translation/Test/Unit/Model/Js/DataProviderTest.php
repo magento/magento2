@@ -112,6 +112,10 @@ class DataProviderTest extends TestCase
             ['base', $themePath, '*', '*', [$filePaths[2]]],
             [$areaCode, $themePath, '*', '*', [$filePaths[3]]]
         ];
+        $phtmlFilesMap = [
+            ['base', $themePath, '*', '*', []],
+            [$areaCode, $themePath, '*', '*', []]
+        ];
 
         $this->appStateMock->expects($this->once())
             ->method('getAreaCode')
@@ -122,6 +126,9 @@ class DataProviderTest extends TestCase
         $this->filesUtilityMock->expects($this->any())
             ->method('getStaticHtmlFiles')
             ->willReturnMap($staticFilesMap);
+        $this->filesUtilityMock->expects($this->any())
+            ->method('getPhtmlFilesByArea')
+            ->willReturnMap($phtmlFilesMap);
 
         $willReturn = [];
 
@@ -175,6 +182,9 @@ class DataProviderTest extends TestCase
         $this->filesUtilityMock->expects($this->any())
             ->method('getStaticHtmlFiles')
             ->willReturn(['test']);
+        $this->filesUtilityMock->expects($this->any())
+            ->method('getPhtmlFilesByArea')
+            ->willReturn(['test']);
         $this->configMock->expects($this->any())
             ->method('getPatterns')
             ->willReturn($patterns);
@@ -183,6 +193,58 @@ class DataProviderTest extends TestCase
             ->willThrowException(new \Exception('Test exception'));
 
         $this->model->getData($themePath);
+    }
+
+    /**
+     * Verify data translate from phtml files.
+     *
+     * @return void
+     */
+    public function testGetDataExtractsPhrasesFromPhtmlFiles(): void
+    {
+        $themePath = 'blank';
+        $areaCode = 'frontend';
+        $phtmlFilePath = ['path/to/template.phtml'];
+
+        $this->appStateMock->expects($this->once())
+            ->method('getAreaCode')
+            ->willReturn($areaCode);
+        $this->filesUtilityMock->expects($this->any())
+            ->method('getJsFiles')
+            ->willReturnMap([
+                ['base', $themePath, '*', '*', []],
+                [$areaCode, $themePath, '*', '*', []]
+            ]);
+        $this->filesUtilityMock->expects($this->any())
+            ->method('getStaticHtmlFiles')
+            ->willReturnMap([
+                ['base', $themePath, '*', '*', []],
+                [$areaCode, $themePath, '*', '*', []]
+            ]);
+        $this->filesUtilityMock->expects($this->any())
+            ->method('getPhtmlFilesByArea')
+            ->willReturnMap([
+                ['base', $themePath, '*', '*', [$phtmlFilePath]],
+                [$areaCode, $themePath, '*', '*', []]
+            ]);
+
+        $this->fileReadMock->expects($this->once())
+            ->method('readAll')
+            ->willReturn('content <!-- ko i18n: "Hello" --><!-- /ko -->');
+        $this->configMock->expects($this->any())
+            ->method('getPatterns')
+            ->willReturn([
+                '~(?:i18n\:|_\.i18n\()\s*(["\'])(.*?)(?<!\\\\)\1~'
+            ]);
+        $this->translateMock->expects($this->once())
+            ->method('render')
+            ->with(['Hello'], [])
+            ->willReturn('Hello translated');
+
+        $this->assertEquals(
+            ['Hello' => 'Hello translated'],
+            $this->model->getData($themePath)
+        );
     }
 
     /**

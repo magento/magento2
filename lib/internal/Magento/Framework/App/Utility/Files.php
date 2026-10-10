@@ -888,6 +888,43 @@ class Files
     }
 
     /**
+     * Returns list of PHTML files in Magento
+     *
+     * @param string $area
+     * @param string $themePath
+     * @param string $namespace
+     * @param string $module
+     * @return array
+     */
+    public function getPhtmlFilesByArea($area = '*', $themePath = '*/*', $namespace = '*', $module = '*')
+    {
+        $key = $area . $themePath . $namespace . $module . __METHOD__;
+        if (isset(self::$_cache[$key])) {
+            return self::$_cache[$key];
+        }
+        $moduleTemplatePaths = [];
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $moduleDir) {
+            $keyInfo = explode('_', $moduleName);
+            if ($keyInfo[0] == $namespace || $namespace == '*') {
+                if ($keyInfo[1] == $module || $module == '*') {
+                    $moduleTemplatePaths[] = $moduleDir . "/view/{$area}/templates";
+                }
+            }
+        }
+        $themePaths = $this->getThemePaths($area, $namespace . '_' . $module, '/templates');
+        $files = self::getFiles(
+            array_merge(
+                $themePaths,
+                $moduleTemplatePaths
+            ),
+            '*.phtml'
+        );
+        $result = self::composeDataSets($files);
+        self::$_cache[$key] = $result;
+        return $result;
+    }
+
+    /**
      * Get list of static view files that are subject of Magento static view files pre-processing system
      *
      * @param string $filePattern
@@ -1020,6 +1057,7 @@ class Files
      * Parse meta-info of a static file in module
      *
      * @deprecated 102.0.4 Replaced with method accumulateStaticFiles()
+     * @see Files::accumulateStaticFiles()
      *
      * @param string $file
      * @return array
