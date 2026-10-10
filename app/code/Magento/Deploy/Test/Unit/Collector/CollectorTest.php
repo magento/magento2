@@ -76,8 +76,7 @@ class CollectorTest extends TestCase
         $this->moduleManager = $this->getMockBuilder(Manager::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->source = $this->getMockBuilder(SourceInterface::class)
-            ->getMockForAbstractClass();
+        $this->source = $this->createMock(SourceInterface::class);
         $this->fileWithName = $this->getMockBuilder(PackageFile::class)
             ->disableOriginalConstructor()
             ->getMock();

@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Layer\Category;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Config;
 use Magento\Catalog\Model\Layer\Category\CollectionFilter;
@@ -15,6 +16,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+#[CoversClass(CollectionFilter::class)]
 class CollectionFilterTest extends TestCase
 {
     /**
@@ -39,10 +41,6 @@ class CollectionFilterTest extends TestCase
         $this->model = new CollectionFilter($this->visibilityMock, $this->catalogConfigMock);
     }
 
-    /**
-     * @covers \Magento\Catalog\Model\Layer\Category\CollectionFilter::filter
-     * @covers \Magento\Catalog\Model\Layer\Category\CollectionFilter::__construct
-     */
     public function testFilter()
     {
         $collectionMock = $this->createMock(Collection::class);

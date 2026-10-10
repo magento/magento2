@@ -12,6 +12,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\GraphQl\Model\Query\ContextExtensionInterface;
 use Magento\Weee\Helper\Data as WeeeHelper;
@@ -21,7 +22,9 @@ use PHPUnit\Framework\TestCase;
 
 class FixedProductTaxTest extends TestCase
 {
-    const STUB_STORE_ID = 1;
+    use MockCreationTrait;
+
+    private const STUB_STORE_ID = 1;
 
     /**
      * @var MockObject|ContextInterface
@@ -53,25 +56,25 @@ class FixedProductTaxTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->contextMock = $this->getMockBuilder(ContextInterface::class)
-            ->addMethods(['getExtensionAttributes'])
-            ->getMockForAbstractClass();
+        $this->contextMock = $this->createPartialMockWithReflection(
+            ContextInterface::class,
+            ['getExtensionAttributes']
+        );
 
-        $this->extensionAttributesMock = $this->getMockBuilder(ContextExtensionInterface::class)
-            ->addMethods(['getStore', 'setStore', 'getIsCustomer', 'setIsCustomer'])
-            ->getMockForAbstractClass();
+        $this->extensionAttributesMock = $this->createPartialMockWithReflection(
+            ContextExtensionInterface::class,
+            ['getStore', 'setStore', 'getIsCustomer', 'setIsCustomer']
+        );
 
         $this->contextMock->method('getExtensionAttributes')
             ->willReturn($this->extensionAttributesMock);
 
-        $this->productMock = $this->getMockBuilder(DataObject::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->productMock = $this->createMock(DataObject::class);
 
-        $this->weeeHelperMock = $this->getMockBuilder(WeeeHelper::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['isEnabled', 'getProductWeeeAttributesForDisplay'])
-            ->getMock();
+        $this->weeeHelperMock = $this->createPartialMock(
+            WeeeHelper::class,
+            ['isEnabled', 'getProductWeeeAttributesForDisplay']
+        );
 
         $objectManager = new ObjectManager($this);
         $this->resolver = $objectManager->getObject(FixedProductTax::class, [

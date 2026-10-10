@@ -14,6 +14,7 @@ use Magento\Framework\Filesystem\Directory\Write;
 use Magento\Framework\Setup\FilePermissions;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class FilePermissionsTest extends TestCase
 {
@@ -67,9 +68,8 @@ class FilePermissionsTest extends TestCase
     /**
      * @param string $mageMode
      *
-     * @return void
-     * @dataProvider modeDataProvider
-     */
+     * @return void     */
+    #[DataProvider('modeDataProvider')]
     public function testGetInstallationWritableDirectories($mageMode): void
     {
         $this->setUpDirectoryListInstallation();
@@ -141,9 +141,8 @@ class FilePermissionsTest extends TestCase
      * @param array $mockMethods
      * @param array $expected
      *
-     * @return void
-     * @dataProvider getApplicationCurrentNonWritableDirectoriesDataProvider
-     */
+     * @return void     */
+    #[DataProvider('getApplicationCurrentNonWritableDirectoriesDataProvider')]
     public function testGetApplicationCurrentNonWritableDirectories(array $mockMethods, array $expected): void
     {
         $this->directoryListMock
@@ -185,11 +184,10 @@ class FilePermissionsTest extends TestCase
     /**
      * @param string $mageMode
      *
-     * @return void
-     * @dataProvider modeDataProvider
-     * @covers \Magento\Framework\Setup\FilePermissions::getMissingWritableDirectoriesForInstallation
+     * @return void     * @covers \Magento\Framework\Setup\FilePermissions::getMissingWritableDirectoriesForInstallation
      * @covers \Magento\Framework\Setup\FilePermissions::getMissingWritablePathsForInstallation
      */
+    #[DataProvider('modeDataProvider')]
     public function testGetMissingWritableDirectoriesAndPathsForInstallation($mageMode): void
     {
         $this->setUpDirectoryListInstallation();
@@ -262,9 +260,8 @@ class FilePermissionsTest extends TestCase
      * @param array $mockMethods
      * @param array $expected
      *
-     * @return void
-     * @dataProvider getUnnecessaryWritableDirectoriesForApplicationDataProvider
-     */
+     * @return void     */
+    #[DataProvider('getUnnecessaryWritableDirectoriesForApplicationDataProvider')]
     public function testGetUnnecessaryWritableDirectoriesForApplication(array $mockMethods, array $expected): void
     {
         $this->directoryListMock

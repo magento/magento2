@@ -19,7 +19,7 @@ class QueueInstallerTest extends TestCase
         $model = new QueueInstaller();
         $channel = $this->createMock(AMQPChannel::class);
 
-        $queue = $this->getMockForAbstractClass(QueueConfigItemInterface::class);
+        $queue = $this->createMock(QueueConfigItemInterface::class);
         $queue->expects($this->once())->method('getName')->willReturn('queue01');
         $queue->expects($this->once())->method('isDurable')->willReturn(true);
         $queue->expects($this->once())->method('isAutoDelete')->willReturn(false);

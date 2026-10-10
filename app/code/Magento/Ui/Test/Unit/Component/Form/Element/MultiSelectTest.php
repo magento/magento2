@@ -35,10 +35,7 @@ class MultiSelectTest extends AbstractElementTestCase
 
     public function testPrepare()
     {
-        $processorMock = $this->getMockBuilder(Processor::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['register', 'notify'])
-            ->getMock();
+        $processorMock = $this->createPartialMock(Processor::class, ['register', 'notify']);
         $this->contextMock->expects($this->atLeastOnce())->method('getProcessor')->willReturn($processorMock);
         $this->getModel()->prepare();
 

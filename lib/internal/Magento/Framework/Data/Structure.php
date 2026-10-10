@@ -451,7 +451,7 @@ class Structure implements ResetAfterRequestInterface
      */
     public function getChildId($parentId, $alias)
     {
-        if (isset($this->_elements[$parentId][self::CHILDREN])) {
+        if ($parentId !== null && isset($this->_elements[$parentId][self::CHILDREN])) {
             return array_search($alias, $this->_elements[$parentId][self::CHILDREN]);
         }
         return false;
@@ -467,7 +467,9 @@ class Structure implements ResetAfterRequestInterface
      */
     public function getChildren($parentId)
     {
-        return $this->_elements[$parentId][self::CHILDREN] ?? [];
+        return ($parentId !== null && isset($this->_elements[$parentId][self::CHILDREN])) 
+            ? $this->_elements[$parentId][self::CHILDREN] 
+            : [];
     }
 
     /**
@@ -478,6 +480,7 @@ class Structure implements ResetAfterRequestInterface
      */
     public function getParentId($childId)
     {
+        $childId = $childId ?? '';
         return $this->_elements[$childId][self::PARENT] ?? false;
     }
 

@@ -19,11 +19,14 @@ use Magento\Framework\Data\Form;
 use Magento\Framework\Data\Form\Element\Checkbox;
 use Magento\Framework\Data\Form\Element\Fieldset;
 use Magento\Framework\Data\Form\Element\Select;
+use Magento\Framework\App\ObjectManager as AppObjectManager;
 use Magento\Framework\Data\FormFactory;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
+use Magento\Newsletter\Model\ResourceModel\Subscriber\Collection as SubscriberCollection;
+use Magento\Newsletter\Model\ResourceModel\Subscriber\CollectionFactory as SubscriberCollectionFactory;
 use Magento\Newsletter\Model\Subscriber;
 use Magento\Newsletter\Model\SubscriberFactory;
 use Magento\Store\Model\Store;
@@ -108,6 +111,11 @@ class NewsletterTest extends TestCase
     protected $localeDateMock;
 
     /**
+     * @var SubscriberCollectionFactory|MockObject
+     */
+    private $subscriberCollectionFactoryMock;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -136,22 +144,44 @@ class NewsletterTest extends TestCase
         $this->systemStore = $this->createMock(SystemStore::class);
         $this->customerRepository = $this->createMock(CustomerRepositoryInterface::class);
         $this->shareConfig = $this->createMock(Share::class);
-
-        $objectManager = new ObjectManager($this);
-        $objectManager->prepareObjectManager();
-        $this->model = $objectManager->getObject(
-            Newsletter::class,
-            [
-                'context' => $this->contextMock,
-                'registry' => $this->registryMock,
-                'formFactory' => $this->formFactoryMock,
-                'subscriberFactory' => $this->subscriberFactoryMock,
-                'customerAccountManagement' => $this->accountManagementMock,
-                'systemStore' => $this->systemStore,
-                'customerRepository' => $this->customerRepository,
-                'shareConfig' => $this->shareConfig,
-            ]
+        $this->subscriberCollectionFactoryMock = $this->createPartialMock(
+            SubscriberCollectionFactory::class,
+            ['create']
         );
+
+        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $objectManagerMock->method('get')
+            ->willReturnCallback(fn ($type) => $this->createMock($type));
+        AppObjectManager::setInstance($objectManagerMock);
+        $this->model = new Newsletter(
+            $this->contextMock,
+            $this->registryMock,
+            $this->formFactoryMock,
+            $this->subscriberFactoryMock,
+            $this->accountManagementMock,
+            $this->systemStore,
+            $this->customerRepository,
+            $this->shareConfig,
+            [],
+            $this->subscriberCollectionFactoryMock
+        );
+    }
+
+    /**
+     * Configure the subscriber collection factory to return a collection of the given subscribers
+     *
+     * @param array $subscribers
+     * @return SubscriberCollection|MockObject
+     */
+    private function stubSubscriberCollection(array $subscribers = [])
+    {
+        $collection = $this->createMock(SubscriberCollection::class);
+        $collection->method('addFieldToFilter')->willReturnSelf();
+        $collection->method('addOrder')->willReturnSelf();
+        $collection->method('getIterator')->willReturn(new \ArrayIterator($subscribers));
+        $this->subscriberCollectionFactoryMock->method('create')->willReturn($collection);
+
+        return $collection;
     }
 
     /**
@@ -239,18 +269,22 @@ class NewsletterTest extends TestCase
         $customer->method('getStoreId')->willReturn($storeId);
         $customer->method('getId')->willReturn($customerId);
         $this->customerRepository->method('getById')->with($customerId)->willReturn($customer);
+        $this->stubSubscriberCollection();
         $subscriberMock = $this->createMock(Subscriber::class);
         $subscriberMock->method('loadByCustomer')->with($customerId, $websiteId)->willReturnSelf();
         $subscriberMock->method('isSubscribed')->willReturn($isSubscribed);
         $subscriberMock->method('getData')->willReturn([]);
-        $this->subscriberFactoryMock->expects($this->once())->method('create')->willReturn($subscriberMock);
+        $this->subscriberFactoryMock->method('create')->willReturn($subscriberMock);
 
         $website = $this->createMock(Website::class);
         $website->method('getStoresCount')->willReturn(1);
         $website->method('getId')->willReturn($websiteId);
         $store = $this->createMock(Store::class);
+        $store->method('getId')->willReturn($storeId);
         $store->method('getWebsiteId')->willReturn($websiteId);
+        $store->method('getGroupId')->willReturn(1);
         $this->storeManager->method('getStore')->with($storeId)->willReturn($store);
+        $this->storeManager->method('getStores')->willReturn([$storeId => $store]);
         $this->storeManager->method('getWebsites')->willReturn([$website]);
         $this->storeManager->method('isSingleStoreMode')->willReturn(true);
         $this->systemStore->method('getStoreOptionsTree')->willReturn([]);
@@ -295,6 +329,62 @@ class NewsletterTest extends TestCase
     }
 
     /**
+     * In multi-website mode the customer's subscriptions must be loaded with a
+     * single batch query, never one query per website (the N+1 that was fixed).
+     */
+    public function testInitFormLoadsSubscriptionsWithSingleQuery()
+    {
+        $customerId = 1;
+        $this->registryMock->method('registry')->with(RegistryConstants::CURRENT_CUSTOMER_ID)
+            ->willReturn($customerId);
+        $customer = $this->createMock(CustomerInterface::class);
+        $customer->method('getId')->willReturn($customerId);
+        $this->customerRepository->method('getById')->with($customerId)->willReturn($customer);
+        $websites = [];
+        $stores = [];
+        foreach ([1, 2, 3] as $id) {
+            $website = $this->createMock(Website::class);
+            $website->method('getId')->willReturn($id);
+            $websites[] = $website;
+            $store = $this->createMock(Store::class);
+            $store->method('getId')->willReturn($id);
+            $store->method('getWebsiteId')->willReturn($id);
+            $store->method('getGroupId')->willReturn($id);
+            $stores[$id] = $store;
+        }
+        $this->storeManager->method('getWebsites')->willReturn($websites);
+        $this->storeManager->method('getStores')->willReturn($stores);
+        $this->storeManager->method('isSingleStoreMode')->willReturn(false);
+        $this->shareConfig->method('isGlobalScope')->willReturn(true);
+        $this->systemStore->method('getStoreOptionsTree')->willReturn([]);
+        $this->systemStore->method('getWebsiteName')->willReturn('Website');
+        $collection = $this->createMock(SubscriberCollection::class);
+        $collection->expects($this->once())
+            ->method('addFieldToFilter')
+            ->with('customer_id', $customerId)
+            ->willReturnSelf();
+        $collection->method('addOrder')->willReturnSelf();
+        $collection->method('getIterator')->willReturn(new \ArrayIterator([]));
+        $this->subscriberCollectionFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($collection);
+        $subscriberMock = $this->createMock(Subscriber::class);
+        $subscriberMock->expects($this->never())->method('loadByCustomer');
+        $subscriberMock->method('isSubscribed')->willReturn(false);
+        $subscriberMock->method('getData')->willReturn([]);
+        $this->subscriberFactoryMock->method('create')->willReturn($subscriberMock);
+        $fieldsetMock = $this->createMock(Fieldset::class);
+        $formMock = $this->createPartialMockWithReflection(
+            Form::class,
+            ['setHtmlIdPrefix', 'setForm', 'setParent', 'setBaseUrl', 'addFieldset']
+        );
+        $formMock->method('addFieldset')->willReturn($fieldsetMock);
+        $this->formFactoryMock->method('create')->willReturn($formMock);
+        $this->accountManagementMock->method('isReadOnly')->with($customerId)->willReturn(false);
+        $this->assertSame($this->model, $this->model->initForm());
+    }
+
+    /**
      * Test to initialize the form with session form data
      */
     public function testInitFormWithCustomerFormData()
@@ -313,17 +403,21 @@ class NewsletterTest extends TestCase
         $customer->method('getStoreId')->willReturn($storeId);
         $customer->method('getId')->willReturn($customerId);
         $this->customerRepository->method('getById')->with($customerId)->willReturn($customer);
+        $this->stubSubscriberCollection();
         $subscriberMock = $this->createMock(Subscriber::class);
         $subscriberMock->method('loadByCustomer')->with($customerId, $websiteId)->willReturnSelf();
         $subscriberMock->method('isSubscribed')->willReturn($isSubscribed);
         $subscriberMock->method('getData')->willReturn([]);
-        $this->subscriberFactoryMock->expects($this->once())->method('create')->willReturn($subscriberMock);
+        $this->subscriberFactoryMock->method('create')->willReturn($subscriberMock);
         $website = $this->createMock(Website::class);
         $website->method('getStoresCount')->willReturn(1);
         $website->method('getId')->willReturn($websiteId);
         $store = $this->createMock(Store::class);
+        $store->method('getId')->willReturn($storeId);
         $store->method('getWebsiteId')->willReturn($websiteId);
+        $store->method('getGroupId')->willReturn(1);
         $this->storeManager->method('getStore')->with($storeId)->willReturn($store);
+        $this->storeManager->method('getStores')->willReturn([$storeId => $store]);
         $this->storeManager->method('getWebsites')->willReturn([$website]);
         $this->storeManager->method('isSingleStoreMode')->willReturn(true);
         $this->systemStore->method('getStoreOptionsTree')->willReturn([]);

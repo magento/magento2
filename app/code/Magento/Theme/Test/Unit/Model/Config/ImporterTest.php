@@ -15,6 +15,7 @@ use Magento\Theme\Model\Theme\Collection as ThemeFilesystemCollection;
 use Magento\Theme\Model\Theme\Data;
 use Magento\Theme\Model\Theme\Registration;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ImporterTest extends TestCase
@@ -51,22 +52,14 @@ class ImporterTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->themeFilesystemCollectionMock = $this->getMockBuilder(ThemeFilesystemCollection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->themeDbCollectionMock = $this->getMockBuilder(ThemeDbCollection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->themeFilesystemCollectionMock = $this->createMock(ThemeFilesystemCollection::class);
+        $this->themeDbCollectionMock = $this->createMock(ThemeDbCollection::class);
         $this->themecollectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
             ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->themeRegistrationMock = $this->getMockBuilder(Registration::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->themeResourceModelMock = $this->getMockBuilder(ThemeResourceModel::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->themeRegistrationMock = $this->createMock(Registration::class);
+        $this->themeResourceModelMock = $this->createMock(ThemeResourceModel::class);
 
         $this->importer = new Importer(
             $this->themeFilesystemCollectionMock,
@@ -90,23 +83,17 @@ class ImporterTest extends TestCase
     public function testImport()
     {
         /** @var Data|MockObject $firstThemeMock */
-        $firstThemeMock = $this->getMockBuilder(Data::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $firstThemeMock = $this->createMock(Data::class);
         $firstThemeMock->expects($this->atLeastOnce())
             ->method('getFullPath')
             ->willReturn('frontend/Magento/luma');
         /** @var Data|MockObject $secondThemeMock */
-        $secondThemeMock = $this->getMockBuilder(Data::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $secondThemeMock = $this->createMock(Data::class);
         $secondThemeMock->expects($this->once())
             ->method('getFullPath')
             ->willReturn('frontend/Magento/blank');
         /** @var Data|MockObject $thirdThemeMock */
-        $thirdThemeMock = $this->getMockBuilder(Data::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $thirdThemeMock = $this->createMock(Data::class);
         $thirdThemeMock->expects($this->once())
             ->method('getFullPath')
             ->willReturn('frontend/Magento/test');
@@ -156,16 +143,14 @@ class ImporterTest extends TestCase
      * @param array $inDb
      * @param array $inFs
      * @param array $expectedResult
-     * @dataProvider getWarningMessagesDataProvider
      */
+    #[DataProvider('getWarningMessagesDataProvider')]
     public function testGetWarningMessages(array $inFile, array $inDb, array $inFs, array $expectedResult)
     {
         $themes = [];
         foreach ($inDb as $themePath) {
             /** @var Data|MockObject $themeMock */
-            $themeMock = $this->getMockBuilder(Data::class)
-                ->disableOriginalConstructor()
-                ->getMock();
+            $themeMock = $this->createMock(Data::class);
             $themeMock->expects($this->any())
                 ->method('getFullPath')
                 ->willReturn($themePath);

@@ -13,6 +13,7 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Webapi\Rest\Response\Renderer\Xml;
 use Magento\Framework\Xml\Generator;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class XmlTest extends TestCase
 {
@@ -36,9 +37,8 @@ class XmlTest extends TestCase
 
     /**
      * Test render method.
-     *
-     * @dataProvider providerXmlRender
-     */
+     *     */
+    #[DataProvider('providerXmlRender')]
     public function testRender($dataToRender, $expectedXml, $message)
     {
         $actualXml = $this->_restXmlRenderer->render($dataToRender);

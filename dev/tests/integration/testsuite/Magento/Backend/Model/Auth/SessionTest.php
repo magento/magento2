@@ -8,6 +8,7 @@ namespace Magento\Backend\Model\Auth;
 
 use Magento\TestFramework\Bootstrap as TestHelper;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoAppArea adminhtml
@@ -51,8 +52,8 @@ class SessionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider loginDataProvider
      */
+    #[DataProvider('loginDataProvider')]
     public function testIsLoggedIn($loggedIn)
     {
         if ($loggedIn) {

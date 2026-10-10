@@ -24,6 +24,7 @@ use Magento\Framework\View\DesignInterface;
 use Magento\Framework\View\File\CollectorInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -113,9 +114,8 @@ class MagentoImportTest extends TestCase
      * @param array $foundFiles
      * @param string $expectedContent
      * @param array $enabledModules
-     * @param bool $onlyEnabled
-     * @dataProvider processDataProvider
-     */
+     * @param bool $onlyEnabled     */
+    #[DataProvider('processDataProvider')]
     public function testProcess(
         string $originalContent,
         string $foundPath,
@@ -136,7 +136,7 @@ class MagentoImportTest extends TestCase
             ->with($foundPath, $this->assetMock)
             ->willReturn($relatedAsset);
         $relatedAsset->expects($this->once())->method('getContext')->willReturn($context);
-        $theme = $this->getMockForAbstractClass(ThemeInterface::class);
+        $theme = $this->createMock(ThemeInterface::class);
         $this->themeProviderMock->expects($this->once())->method('getThemeByFullPath')->willReturn($theme);
         $files = [];
         foreach ($foundFiles as $file) {

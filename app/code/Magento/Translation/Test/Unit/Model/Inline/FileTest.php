@@ -38,12 +38,8 @@ class FileTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->translateResourceMock = $this->getMockBuilder(ResourceInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->localeResolverMock = $this->getMockBuilder(ResolverInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->translateResourceMock = $this->createMock(ResourceInterface::class);
+        $this->localeResolverMock = $this->createMock(ResolverInterface::class);
         $this->jsonSerializer = new Json();
 
         $this->model = new File(

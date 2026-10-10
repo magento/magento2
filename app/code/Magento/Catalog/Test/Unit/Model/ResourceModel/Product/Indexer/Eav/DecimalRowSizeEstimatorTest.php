@@ -47,10 +47,10 @@ class DecimalRowSizeEstimatorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $this->connectionMock = $this->createMock(AdapterInterface::class);
         $this->indexerResourceMock = $this->createMock(Decimal::class);
-        $this->indexerResourceMock->expects($this->any())->method('getConnection')->willReturn($this->connectionMock);
-        $this->storeManagementMock = $this->getMockForAbstractClass(StoreManagementInterface::class);
+        $this->indexerResourceMock->method('getConnection')->willReturn($this->connectionMock);
+        $this->storeManagementMock = $this->createMock(StoreManagementInterface::class);
         $this->metadataPoolMock = $this->createMock(MetadataPool::class);
 
         $this->model = new DecimalRowSizeEstimator(
@@ -62,7 +62,7 @@ class DecimalRowSizeEstimatorTest extends TestCase
 
     public function testEstimateRowSize()
     {
-        $entityMetadataMock = $this->getMockForAbstractClass(EntityMetadataInterface::class);
+        $entityMetadataMock = $this->createMock(EntityMetadataInterface::class);
         $this->metadataPoolMock->expects($this->any())
             ->method('getMetadata')
             ->with(ProductInterface::class)
@@ -72,9 +72,9 @@ class DecimalRowSizeEstimatorTest extends TestCase
 
         $maxRowsPerStore = 100;
         $storeCount = 10;
-        $this->connectionMock->expects($this->any())->method('select')->willReturn($selectMock);
+        $this->connectionMock->method('select')->willReturn($selectMock);
         $this->connectionMock->expects($this->once())->method('fetchOne')->willReturn($maxRowsPerStore);
-        $this->storeManagementMock->expects($this->any())->method('getCount')->willReturn($storeCount);
+        $this->storeManagementMock->method('getCount')->willReturn($storeCount);
 
         $this->assertEquals($maxRowsPerStore * $storeCount * 500, $this->model->estimateRowSize());
     }

@@ -6,6 +6,7 @@
 namespace Magento\Framework\Code\Test\Unit;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Framework\Code\NameBuilder;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Backend\Block\System\Store\Edit;
@@ -26,9 +27,8 @@ class NameBuilderTest extends TestCase
     /**
      * @param array $parts
      * @param string $expected
-     *
-     * @dataProvider buildClassNameDataProvider
-     */
+     *     */
+    #[DataProvider('buildClassNameDataProvider')]
     public function testBuildClassName($parts, $expected)
     {
         $this->assertEquals($expected, $this->nameBuilder->buildClassName($parts));

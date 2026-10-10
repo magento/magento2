@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontSortBundleProductByPriceWithOutOfStockChildTest">
+        <annotations>
+            <features value="Bundle"/>
+            <stories value="Bundle products list on Storefront"/>
+            <title value="Bundle sorts by full children price when a required child is out of stock"/>
+            <description value="Verify bundle sort price on category page when display out of stock is enabled."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="ACP2E-4475"/>
+            <group value="bundle"/>
+        </annotations>
+        <before>
+            <!-- Step 1: Enable Display Out Of Stock Products -->
+            <magentoCLI command="config:set {{CatalogInventoryOptionsShowOutOfStockEnable.path}} {{CatalogInventoryOptionsShowOutOfStockEnable.value}}" stepKey="enableDisplayOutOfStockProducts"/>
+            <!-- Step 2: Create category -->
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <!-- Step 3: Create reference simple products in category for sort position validation -->
+            <createData entity="SimpleProduct" stepKey="createReferenceProductLow">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="price">25.00</field>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="createReferenceProductHigh">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="price">35.00</field>
+            </createData>
+            <!-- Step 4: Create bundle child simple products -->
+            <createData entity="SimpleProduct2" stepKey="createInStockSimple">
+                <field key="price">10.00</field>
+                <field key="quantity">100</field>
+            </createData>
+            <createData entity="SimpleProduct2" stepKey="createOutOfStockSimple">
+                <field key="price">20.00</field>
+                <field key="quantity">0</field>
+            </createData>
+            <!-- Step 5: Set second simple product stock status to Out of Stock -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openOutOfStockSimpleEditPage">
+                <argument name="productId" value="$createOutOfStockSimple.id$"/>
+            </actionGroup>
+            <selectOption selector="{{AdminProductFormSection.stockStatus}}" userInput="{{UpdateAttributeQtyAndStockToOutOfStock.stockAvailability}}" stepKey="setSimpleProductOutOfStock"/>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveOutOfStockSimple"/>
+            <!-- Step 6: Create bundle product with separate required options -->
+            <createData entity="ApiBundleProductPriceViewRange" stepKey="createBundleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="DropDownBundleOption" stepKey="createFirstBundleOption">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <field key="title">Bundle Option One</field>
+                <field key="position">1</field>
+            </createData>
+            <createData entity="DropDownBundleOption" stepKey="createSecondBundleOption">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <field key="title">Bundle Option Two</field>
+                <field key="position">2</field>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="linkInStockSimpleToFirstOption">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="createFirstBundleOption"/>
+                <requiredEntity createDataKey="createInStockSimple"/>
+                <field key="is_default">1</field>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="linkOutOfStockSimpleToSecondOption">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="createSecondBundleOption"/>
+                <requiredEntity createDataKey="createOutOfStockSimple"/>
+                <field key="is_default">1</field>
+            </createData>
+        </before>
+        <after>
+            <magentoCLI command="config:set {{CatalogInventoryOptionsShowOutOfStockDisable.path}} {{CatalogInventoryOptionsShowOutOfStockDisable.value}}" stepKey="disableDisplayOutOfStockProducts"/>
+            <helper class="Magento\Catalog\Test\Mftf\Helper\ProductApiHelper" method="deleteAllProductsApi" stepKey="deleteAllProductsViaApi"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <!-- Step 7: Sort category products by price and verify bundle sorts as $30 -->
+        <actionGroup ref="GoToStorefrontCategoryPageByParametersActionGroup" stepKey="openCategoryPageSortedByPriceDescending">
+            <argument name="category" value="$$createCategory.custom_attributes[url_key]$$"/>
+            <argument name="mode" value="list"/>
+            <argument name="numOfProductsPerPage" value="10"/>
+            <argument name="sortBy" value="price"/>
+            <argument name="sort" value="desc"/>
+        </actionGroup>
+        <!-- Verify high price product is first when sorted by price descending -->
+        <actionGroup ref="AssertStorefrontElementVisibleActionGroup" stepKey="seeHighPriceProductFirstWhenSortedByPriceDescending">
+            <argument name="selector" value="{{StorefrontCategoryMainSection.lineProductName('1')}}"/>
+            <argument name="userInput" value="$$createReferenceProductHigh.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontElementVisibleActionGroup" stepKey="seeBundleProductSecondWhenSortedByPriceDescending">
+            <argument name="selector" value="{{StorefrontCategoryMainSection.lineProductName('2')}}"/>
+            <argument name="userInput" value="$$createBundleProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontElementVisibleActionGroup" stepKey="seeLowPriceProductThirdWhenSortedByPriceDescending">
+            <argument name="selector" value="{{StorefrontCategoryMainSection.lineProductName('3')}}"/>
+            <argument name="userInput" value="$$createReferenceProductLow.name$$"/>
+        </actionGroup>
+        <!-- Verify low price product is first when sorted by price ascending -->
+        <actionGroup ref="GoToStorefrontCategoryPageByParametersActionGroup" stepKey="openCategoryPageSortedByPriceAscending">
+            <argument name="category" value="$$createCategory.custom_attributes[url_key]$$"/>
+            <argument name="mode" value="list"/>
+            <argument name="numOfProductsPerPage" value="10"/>
+            <argument name="sortBy" value="price"/>
+            <argument name="sort" value="asc"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontElementVisibleActionGroup" stepKey="seeLowPriceProductFirstWhenSortedByPriceAscending">
+            <argument name="selector" value="{{StorefrontCategoryMainSection.lineProductName('1')}}"/>
+            <argument name="userInput" value="$$createReferenceProductLow.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontElementVisibleActionGroup" stepKey="seeBundleProductSecondWhenSortedByPriceAscending">
+            <argument name="selector" value="{{StorefrontCategoryMainSection.lineProductName('2')}}"/>
+            <argument name="userInput" value="$$createBundleProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontElementVisibleActionGroup" stepKey="seeHighPriceProductThirdWhenSortedByPriceAscending">
+            <argument name="selector" value="{{StorefrontCategoryMainSection.lineProductName('3')}}"/>
+            <argument name="userInput" value="$$createReferenceProductHigh.name$$"/>
+        </actionGroup>
+    </test>
+</tests>

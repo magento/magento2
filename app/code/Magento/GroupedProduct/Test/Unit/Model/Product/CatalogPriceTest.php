@@ -9,6 +9,7 @@ namespace Magento\GroupedProduct\Test\Unit\Model\Product;
 
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Type\Price;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\GroupedProduct\Model\Product\CatalogPrice;
 use Magento\GroupedProduct\Model\Product\Type\Grouped;
 use Magento\Store\Api\Data\StoreInterface;
@@ -18,6 +19,7 @@ use PHPUnit\Framework\TestCase;
 
 class CatalogPriceTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var CatalogPrice
      */
@@ -60,15 +62,15 @@ class CatalogPriceTest extends TestCase
     {
         $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->commonPriceMock = $this->createMock(Product\CatalogPrice::class);
-        $this->productMock = $this->createPartialMock(
-            \Magento\Catalog\Test\Unit\Helper\ProductTestHelper::class,
+        $this->productMock = $this->createPartialMockWithReflection(
+            \Magento\Catalog\Model\Product::class,
             ['getTypeInstance', 'getWebsiteId', 'getCustomerGroupId', 'setTaxClassId']
         );
-        $this->associatedProductMock = $this->createPartialMock(
-            \Magento\Catalog\Test\Unit\Helper\ProductTestHelper::class,
+        $this->associatedProductMock = $this->createPartialMockWithReflection(
+            \Magento\Catalog\Model\Product::class,
             ['isSalable', 'setWebsiteId', 'setCustomerGroupId', 'getTaxClassId']
         );
-        $this->priceModelMock = new \Magento\Catalog\Test\Unit\Helper\PriceTestHelper();
+        $this->priceModelMock = $this->createMock(Price::class);
         $this->productTypeMock = $this->createMock(Grouped::class);
 
         $this->catalogPrice = new CatalogPrice(

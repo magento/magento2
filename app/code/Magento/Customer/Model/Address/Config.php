@@ -3,7 +3,11 @@
  * Copyright 2013 Adobe
  * All Rights Reserved.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Model\Address;
+
+use Magento\Customer\Block\Address\Renderer\DefaultRenderer;
 
 use Magento\Framework\Config\Data as ConfigData;
 use Magento\Framework\DataObject;
@@ -15,11 +19,11 @@ use Magento\Store\Model\ScopeInterface;
  */
 class Config extends ConfigData
 {
-    const DEFAULT_ADDRESS_RENDERER = \Magento\Customer\Block\Address\Renderer\DefaultRenderer::class;
+    public const DEFAULT_ADDRESS_RENDERER = DefaultRenderer::class;
 
-    const XML_PATH_ADDRESS_TEMPLATE = 'customer/address_templates/';
+    public const XML_PATH_ADDRESS_TEMPLATE = 'customer/address_templates/';
 
-    const DEFAULT_ADDRESS_FORMAT = 'oneline';
+    public const DEFAULT_ADDRESS_FORMAT = 'oneline';
 
     /**
      * Customer address templates per store
@@ -116,12 +120,12 @@ class Config extends ConfigData
     public function getFormats()
     {
         $store = $this->getStore();
-        $storeId = $store->getId();
+        $storeId = $store->getId() ?? '';
 
         if (!isset($this->_types[$storeId])) {
             $this->_types[$storeId] = [];
             foreach ($this->get() as $typeCode => $typeConfig) {
-                $path = sprintf('%s%s', self::XML_PATH_ADDRESS_TEMPLATE, $typeCode);
+                $path = sprintf('%s%s', static::XML_PATH_ADDRESS_TEMPLATE, $typeCode);
                 $type = new DataObject();
                 if (isset($typeConfig['escapeHtml'])) {
                     $escapeHtml = $typeConfig['escapeHtml'] == 'true' || $typeConfig['escapeHtml'] == '1';
@@ -136,7 +140,7 @@ class Config extends ConfigData
 
                 $renderer = isset($typeConfig['renderer']) ? (string)$typeConfig['renderer'] : null;
                 if (!$renderer) {
-                    $renderer = self::DEFAULT_ADDRESS_RENDERER;
+                    $renderer = static::DEFAULT_ADDRESS_RENDERER;
                 }
 
                 $type->setRenderer($this->_addressHelper->getRenderer($renderer)->setType($type));
@@ -167,7 +171,7 @@ class Config extends ConfigData
                 '{{var street}}, {{var city}}, {{var region}} {{var postcode}}, {{var country}}'
             );
 
-            $renderer = $this->_addressHelper->getRenderer(self::DEFAULT_ADDRESS_RENDERER)
+            $renderer = $this->_addressHelper->getRenderer(static::DEFAULT_ADDRESS_RENDERER)
                 ->setType($this->_defaultTypes[$storeId]);
             $this->_defaultTypes[$storeId]->setRenderer($renderer);
         }

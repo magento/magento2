@@ -81,12 +81,12 @@ class ViewTest extends TestCase
         $helper = new ObjectManager($this);
         $this->_layoutMock = $this->createMock(Layout::class);
         $this->_requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
-        $this->_configScopeMock = $this->getMockForAbstractClass(ScopeInterface::class);
+        $this->_configScopeMock = $this->createMock(ScopeInterface::class);
         $this->_layoutProcessor = $this->createMock(Merge::class);
         $this->_layoutMock->expects($this->any())->method('getUpdate')
             ->willReturn($this->_layoutProcessor);
         $this->_actionFlagMock = $this->createMock(ActionFlag::class);
-        $this->_eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->_eventManagerMock = $this->createMock(ManagerInterface::class);
         $pageConfigMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();

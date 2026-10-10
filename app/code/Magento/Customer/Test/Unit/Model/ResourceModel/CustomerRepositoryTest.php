@@ -3,6 +3,7 @@
  * Copyright 2015 Adobe
  * All Rights Reserved.
  */
+
 declare(strict_types=1);
 
 namespace Magento\Customer\Test\Unit\Model\ResourceModel;
@@ -177,6 +178,12 @@ class CustomerRepositoryTest extends TestCase
         $this->delegatedStorage = $this->createMock(DelegatedStorage::class);
         $this->groupRepository = $this->createMock(GroupRepositoryInterface::class);
 
+        $this->delegatedStorage = $this->getMockBuilder(DelegatedStorage::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->groupRepository = $this->getMockBuilder(GroupRepositoryInterface::class)
+            ->getMock();
+
         $this->model = new CustomerRepository(
             $this->customerFactory,
             $this->customerSecureFactory,
@@ -232,7 +239,16 @@ class CustomerRepositoryTest extends TestCase
 
         $customerAttributesMetaData = $this->createPartialMockWithReflection(
             \Magento\Customer\Model\Data\Customer::class,
-            ['getId', 'getEmail', 'getWebsiteId', 'getAddresses', 'setAddresses', 'getGroupId']
+            [
+                'getId',
+                'getEmail',
+                'getWebsiteId',
+                'getAddresses',
+                'setAddresses',
+                'getGroupId',
+                'getDefaultBilling',
+                'getDefaultShipping'
+            ]
         );
         $customerSecureData = $this->createPartialMockWithReflection(
             CustomerSecure::class,
@@ -410,7 +426,10 @@ class CustomerRepositoryTest extends TestCase
                 'setId',
                 'getAttributeSetId',
                 'getDataModel',
-                'save'
+                'save',
+                'getGroupId',
+                'getDefaultBilling',
+                'getDefaultShipping'
             ]
         );
         $customerAttributesMetaData = $this->createPartialMockWithReflection(

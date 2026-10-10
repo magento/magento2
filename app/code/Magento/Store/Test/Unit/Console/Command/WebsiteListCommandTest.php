@@ -37,7 +37,7 @@ class WebsiteListCommandTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->websiteRepositoryMock = $this->getMockForAbstractClass(WebsiteRepositoryInterface::class);
+        $this->websiteRepositoryMock = $this->createMock(WebsiteRepositoryInterface::class);
 
         $this->command = $this->objectManager->getObject(
             WebsiteListCommand::class,

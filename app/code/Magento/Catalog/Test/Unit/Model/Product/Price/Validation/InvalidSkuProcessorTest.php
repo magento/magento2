@@ -9,9 +9,11 @@ namespace Magento\Catalog\Test\Unit\Model\Product\Price\Validation;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Price\Validation\InvalidSkuProcessor;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\ProductIdLocatorInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -21,6 +23,7 @@ use PHPUnit\Framework\TestCase;
  */
 class InvalidSkuProcessorTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var InvalidSkuProcessor
      */
@@ -41,12 +44,8 @@ class InvalidSkuProcessorTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->productIdLocator = $this->getMockBuilder(ProductIdLocatorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->productRepository = $this->getMockBuilder(ProductRepositoryInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->productIdLocator = $this->createMock(ProductIdLocatorInterface::class);
+        $this->productRepository = $this->createMock(ProductRepositoryInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->invalidSkuProcessor = $objectManager->getObject(
@@ -70,12 +69,12 @@ class InvalidSkuProcessorTest extends TestCase
         $idsBySku = [$productSku => [235235235 => $productType]];
         $this->productIdLocator->expects($this->atLeastOnce())->method('retrieveProductIdsBySkus')
             ->willReturn($idsBySku);
-        $product = $this->getMockBuilder(ProductInterface::class)
-            ->addMethods(['getPriceType'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $productPriceType = 0;
-        $product->expects($this->atLeastOnce())->method('getPriceType')->willReturn($productPriceType);
+        /** @var ProductInterface $product */
+        $product = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getPriceType']
+        );
+        $product->method('getPriceType')->willReturn(0);
         $this->productRepository->expects($this->atLeastOnce())->method('get')->willReturn($product);
     }
 

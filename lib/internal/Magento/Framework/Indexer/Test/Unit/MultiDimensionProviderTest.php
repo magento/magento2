@@ -219,10 +219,8 @@ class MultiDimensionProviderTest extends TestCase
         $dimensionProviderMock = $this->getMockBuilder(DimensionProviderInterface::class)
             ->disableOriginalConstructor()
             ->disableOriginalClone()
-            ->disableArgumentCloning()
-            ->disallowMockingUnknownTypes()
             ->onlyMethods(['getIterator'])
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $dimensionProviderMock->expects($this->any())
             ->method('getIterator')
@@ -246,8 +244,6 @@ class MultiDimensionProviderTest extends TestCase
         $dimensionMock = $this->getMockBuilder(Dimension::class)
             ->disableOriginalConstructor()
             ->disableOriginalClone()
-            ->disableArgumentCloning()
-            ->disallowMockingUnknownTypes()
             ->onlyMethods(['getName', 'getValue'])
             ->getMock();
 

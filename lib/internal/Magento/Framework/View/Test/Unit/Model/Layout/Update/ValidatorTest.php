@@ -17,6 +17,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Model\Layout\Update\Validator;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ValidatorTest extends TestCase
 {
@@ -95,12 +96,11 @@ class ValidatorTest extends TestCase
         return $this->model;
     }
 
-    /**
-     * @dataProvider isValidNotSecurityCheckDataProvider
-     * @param string $layoutUpdate
+    /**     * @param string $layoutUpdate
      * @param boolean $expectedResult
      * @param array $messages
      */
+    #[DataProvider('isValidNotSecurityCheckDataProvider')]
     public function testIsValidNotSecurityCheck($layoutUpdate, $expectedResult, $messages)
     {
         $model = $this->_createValidator($layoutUpdate);
@@ -125,12 +125,11 @@ class ValidatorTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider isValidSecurityCheckDataProvider
-     * @param string $layoutUpdate
+    /**     * @param string $layoutUpdate
      * @param boolean $expectedResult
      * @param array $messages
      */
+    #[DataProvider('isValidSecurityCheckDataProvider')]
     public function testIsValidSecurityCheck($layoutUpdate, $expectedResult, $messages)
     {
         $model = $this->_createValidator($layoutUpdate);

@@ -18,6 +18,7 @@ use Magento\UrlRewrite\Block\Catalog\Edit\Form;
 use Magento\UrlRewrite\Block\Link;
 use Magento\UrlRewrite\Block\Selector;
 use Magento\UrlRewrite\Model\UrlRewrite;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -29,14 +30,13 @@ class EditTest extends TestCase
     /**
      * Test prepare layout.
      *
-     * @dataProvider prepareLayoutDataProvider
-     *
      * @param array $blockAttributes
      * @param array $expected
      *
      * @return void
      * @magentoAppIsolation enabled
      */
+    #[DataProvider('prepareLayoutDataProvider')]
     public function testPrepareLayout($blockAttributes, $expected): void
     {
         /** @var $layout LayoutInterface */

@@ -10,6 +10,7 @@ namespace Magento\Framework\App\Cache\Frontend;
 use Magento\Framework\ObjectManager\ConfigInterface as ObjectManagerConfig;
 use Magento\TestFramework\ObjectManager;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\Depends;
 
 /**
  * This superfluous comment can be removed as soon as the sniffs have been updated to match the coding guide lines.
@@ -34,8 +35,8 @@ class PoolTest extends TestCase
 
     /**
      * @covers  \Magento\Framework\App\Cache\Frontend\Pool::_getCacheSettings
-     * @depends testPageCacheNotSameAsDefaultCacheDirectory
      */
+    #[Depends('testPageCacheNotSameAsDefaultCacheDirectory')]
     public function testCleaningDefaultCachePreservesPageCache()
     {
         $testData = 'test data';

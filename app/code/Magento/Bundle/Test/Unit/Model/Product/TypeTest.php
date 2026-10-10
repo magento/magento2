@@ -8,14 +8,8 @@ declare(strict_types=1);
 namespace Magento\Bundle\Test\Unit\Model\Product;
 
 use Magento\Bundle\Model\Option as BundleOption;
-use Magento\Bundle\Test\Unit\Helper\CollectionTestHelper;
-use Magento\Catalog\Test\Unit\Helper\OptionTestHelper;
-use Magento\Bundle\Test\Unit\Helper\SelectionTestHelper;
-use Magento\Bundle\Test\Unit\Helper\TypeTestHelper;
-use Magento\Catalog\Test\Unit\Helper\PriceTestHelper;
-use Magento\Catalog\Test\Unit\Helper\ProductTestHelper;
-use Magento\Framework\Model\Test\Unit\Helper\AbstractCollectionTestHelper;
-use Magento\Framework\DataObject\Test\Unit\Helper\DataObjectTestHelper;
+use Magento\Bundle\Model\ResourceModel\Option\Collection as OptionCollection;
+use Magento\Bundle\Model\Selection;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Bundle\Model\OptionFactory;
 use Magento\Bundle\Model\Product\Type;
@@ -26,6 +20,7 @@ use Magento\Bundle\Model\ResourceModel\Selection\CollectionFactory;
 use Magento\Bundle\Model\SelectionFactory;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Helper\Data;
+use Magento\Bundle\Model\Product\Price as BundleProductPrice;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Configuration\Item\Option as ProductConfigurationItemOption;
@@ -46,6 +41,7 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Stdlib\ArrayUtils;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\Exception;
@@ -60,6 +56,7 @@ use PHPUnit\Framework\TestCase;
  */
 class TypeTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var BundleFactory|MockObject
      */
@@ -200,24 +197,24 @@ class TypeTest extends TestCase
                 'setProduct',
             'validateUserValue',
                 'prepareForCart']);
-        /** @var MockObject|DataObjectTestHelper $buyRequest */
-        $buyRequest = $this->createPartialMock(DataObjectTestHelper::class, ['unsetData',
+        /** @var MockObject|DataObject $buyRequest */
+        $buyRequest = $this->createPartialMockWithReflection(DataObject::class, ['unsetData',
                 'getData',
             'getOptions',
                 'getSuperProductConfig',
                 'getQty',
                 'getBundleOption',
                 'getBundleOptionsData']);
-        /* @var MockObject|OptionTestHelper $option */
-        $option = $this->createPartialMock(OptionTestHelper::class, ['groupFactory',
+        /* @var MockObject|Option $option */
+        $option = $this->createPartialMockWithReflection(Option::class, ['groupFactory',
                 'getType',
                 'getId',
             'getRequired',
                 'isMultiSelection']);
         /** @var MockObject|SelectionCollection $selectionCollection */
         $selectionCollection = $this->createPartialMock(SelectionCollection::class, ['getItems']);
-        /** @var MockObject|ProductTestHelper $product */
-        $product = $this->createPartialMock(ProductTestHelper::class, ['getOptions',
+        /** @var MockObject|Product $product */
+        $product = $this->createPartialMockWithReflection(Product::class, ['getOptions',
             'prepareCustomOptions',
                 'addCustomOption',
                 'setQty',
@@ -259,9 +256,10 @@ class TypeTest extends TestCase
         $buyRequest->expects($this->once())
             ->method('getBundleOption')
             ->willReturn('options');
+        // getId() is called multiple times: once to check option, then for each optionIds (3 times)
         $option
             ->method('getId')
-            ->willReturnOnConsecutiveCalls(333, 3);
+            ->willReturnOnConsecutiveCalls(333, 3, 3, 3);
         $option->expects($this->once())
             ->method('getRequired')
             ->willReturn(true);
@@ -277,16 +275,16 @@ class TypeTest extends TestCase
      */
     public function testPrepareForCartAdvancedWithShoppingCart(): void
     {
-        /** @var MockObject|PriceTestHelper $priceModel */
-        $priceModel = $this->createPartialMock(PriceTestHelper::class, ['getSelectionFinalTotalPrice']);
+        /** @var MockObject|BundleProductPrice $priceModel */
+        $priceModel = $this->createPartialMock(BundleProductPrice::class, ['getSelectionFinalTotalPrice']);
         /** @var MockObject|DefaultType $group */
         // Use parent DefaultType class - setRequest and setProcessMode work via DataObject magic methods
         $group = $this->createPartialMock(DefaultType::class, ['setOption',
                 'setProduct',
             'validateUserValue',
                 'prepareForCart']);
-        /** @var MockObject|DataObjectTestHelper $buyRequest */
-        $buyRequest = $this->createPartialMock(DataObjectTestHelper::class, ['unsetData',
+        /** @var MockObject|DataObject $buyRequest */
+        $buyRequest = $this->createPartialMockWithReflection(DataObject::class, ['unsetData',
                 'getData',
             'getOptions',
                 'getSuperProductConfig',
@@ -294,8 +292,8 @@ class TypeTest extends TestCase
                 'getBundleOption',
                 'getBundleOptionQty',
             'getBundleOptionsData']);
-        /* @var MockObject|OptionTestHelper $option */
-        $option = $this->createPartialMock(OptionTestHelper::class, ['groupFactory',
+        /* @var MockObject|Option $option */
+        $option = $this->createPartialMockWithReflection(Option::class, ['groupFactory',
                 'getType',
                 'getId',
             'getProduct',
@@ -306,16 +304,17 @@ class TypeTest extends TestCase
         /** @var MockObject|SelectionCollection $selectionCollection */
         $selectionCollection = $this->createPartialMock(SelectionCollection::class, ['getItems',
             'getSize']);
-        /** @var MockObject|DataObjectTestHelper $selection */
-        $selection = $this->createPartialMock(DataObjectTestHelper::class, ['isSalable',
+        /** @var MockObject|DataObject $selection */
+        $selection = $this->createPartialMockWithReflection(DataObject::class, ['isSalable',
                 'getOptionId',
             'getSelectionCanChangeQty',
                 'getSelectionId',
                 'getOption',
                 'getTypeInstance',
-                'getId']);
-        /** @var MockObject|ProductTestHelper $product */
-        $product = $this->createPartialMock(ProductTestHelper::class, ['getOptions',
+                'getId',
+                'addCustomOption']);
+        /** @var MockObject|Product $product */
+        $product = $this->createPartialMockWithReflection(Product::class, ['getOptions',
             'prepareCustomOptions',
                 'addCustomOption',
                 'setQty',
@@ -329,8 +328,8 @@ class TypeTest extends TestCase
                 'getHasOptions',
                 'setCartQty',
             'getSkipCheckRequiredOption']);
-        /** @var MockObject|TypeTestHelper $productType */
-        $productType = $this->createPartialMock(TypeTestHelper::class, ['setStoreFilter',
+        /** @var MockObject|Type $productType */
+        $productType = $this->createPartialMockWithReflection(Type::class, ['setStoreFilter',
                 'prepareForCart',
                 'setParentProductId',
                 'addCustomOption',
@@ -405,7 +404,7 @@ class TypeTest extends TestCase
             ->willReturn($productType);
         $option
             ->method('getId')
-            ->willReturnOnConsecutiveCalls(333, 3, 3);
+            ->willReturnOnConsecutiveCalls(333, 3, 3, 3, 3);
         $option->expects($this->once())
             ->method('getRequired')
             ->willReturn(false);
@@ -457,16 +456,16 @@ class TypeTest extends TestCase
      */
     public function testPrepareForCartAdvancedEmptyShoppingCart(): void
     {
-        /** @var MockObject|PriceTestHelper $priceModel */
-        $priceModel = $this->createPartialMock(PriceTestHelper::class, ['getSelectionFinalTotalPrice']);
+        /** @var MockObject|BundleProductPrice $priceModel */
+        $priceModel = $this->createPartialMock(BundleProductPrice::class, ['getSelectionFinalTotalPrice']);
         /** @var MockObject|DefaultType $group */
         // Use parent DefaultType class - setRequest and setProcessMode work via DataObject magic methods
         $group = $this->createPartialMock(DefaultType::class, ['setOption',
                 'setProduct',
             'validateUserValue',
                 'prepareForCart']);
-        /** @var MockObject|DataObjectTestHelper $buyRequest */
-        $buyRequest = $this->createPartialMock(DataObjectTestHelper::class, ['unsetData',
+        /** @var MockObject|DataObject $buyRequest */
+        $buyRequest = $this->createPartialMockWithReflection(DataObject::class, ['unsetData',
             'getData',
                 'getOptions',
                 'getSuperProductConfig',
@@ -474,8 +473,8 @@ class TypeTest extends TestCase
                 'getBundleOption',
                 'getBundleOptionQty',
             'getBundleOptionsData']);
-        /* @var MockObject|OptionTestHelper $option */
-        $option = $this->createPartialMock(OptionTestHelper::class, ['groupFactory',
+        /* @var MockObject|Option $option */
+        $option = $this->createPartialMockWithReflection(Option::class, ['groupFactory',
                 'getType',
                 'getId',
             'getProduct',
@@ -486,16 +485,17 @@ class TypeTest extends TestCase
         /** @var MockObject|SelectionCollection $selectionCollection */
         $selectionCollection = $this->createPartialMock(SelectionCollection::class, ['getItems',
             'getSize']);
-        /** @var MockObject|DataObjectTestHelper $selection */
-        $selection = $this->createPartialMock(DataObjectTestHelper::class, ['isSalable',
+        /** @var MockObject|DataObject $selection */
+        $selection = $this->createPartialMockWithReflection(DataObject::class, ['isSalable',
                 'getOptionId',
             'getSelectionCanChangeQty',
                 'getSelectionId',
                 'getOption',
                 'getTypeInstance',
-                'getId']);
-        /** @var MockObject|ProductTestHelper $product */
-        $product = $this->createPartialMock(ProductTestHelper::class, ['getOptions',
+                'getId',
+                'addCustomOption']);
+        /** @var MockObject|Product $product */
+        $product = $this->createPartialMockWithReflection(Product::class, ['getOptions',
             'prepareCustomOptions',
                 'addCustomOption',
                 'setQty',
@@ -585,7 +585,7 @@ class TypeTest extends TestCase
             ->willReturn($productType);
         $option
             ->method('getId')
-            ->willReturnOnConsecutiveCalls(333, 3, 3);
+            ->willReturnOnConsecutiveCalls(333, 3, 3, 3, 3);
         $option->expects($this->once())
             ->method('getRequired')
             ->willReturn(false);
@@ -622,16 +622,16 @@ class TypeTest extends TestCase
      */
     public function testPrepareForCartAdvancedStringInResult(): void
     {
-        /** @var MockObject|PriceTestHelper $priceModel */
-        $priceModel = $this->createPartialMock(PriceTestHelper::class, ['getSelectionFinalTotalPrice']);
+        /** @var MockObject|BundleProductPrice $priceModel */
+        $priceModel = $this->createPartialMock(BundleProductPrice::class, ['getSelectionFinalTotalPrice']);
         /** @var MockObject|DefaultType $group */
         // Use parent DefaultType class - setRequest and setProcessMode work via DataObject magic methods
         $group = $this->createPartialMock(DefaultType::class, ['setOption',
                 'setProduct',
             'validateUserValue',
                 'prepareForCart']);
-        /** @var MockObject|DataObjectTestHelper $buyRequest */
-        $buyRequest = $this->createPartialMock(DataObjectTestHelper::class, ['unsetData',
+        /** @var MockObject|DataObject $buyRequest */
+        $buyRequest = $this->createPartialMockWithReflection(DataObject::class, ['unsetData',
                 'getData',
             'getOptions',
                 'getSuperProductConfig',
@@ -639,8 +639,8 @@ class TypeTest extends TestCase
                 'getBundleOption',
                 'getBundleOptionQty',
             'getBundleOptionsData']);
-        /* @var MockObject|OptionTestHelper $option */
-        $option = $this->createPartialMock(OptionTestHelper::class, ['groupFactory',
+        /* @var MockObject|Option $option */
+        $option = $this->createPartialMockWithReflection(Option::class, ['groupFactory',
                 'getType',
                 'getId',
             'getProduct',
@@ -651,16 +651,17 @@ class TypeTest extends TestCase
         /** @var MockObject|SelectionCollection $selectionCollection */
         $selectionCollection = $this->createPartialMock(SelectionCollection::class, ['getItems',
             'getSize']);
-        /** @var MockObject|DataObjectTestHelper $selection */
-        $selection = $this->createPartialMock(DataObjectTestHelper::class, ['isSalable',
+        /** @var MockObject|DataObject $selection */
+        $selection = $this->createPartialMockWithReflection(DataObject::class, ['isSalable',
                 'getOptionId',
             'getSelectionCanChangeQty',
                 'getSelectionId',
                 'getOption',
                 'getTypeInstance',
-                'getId']);
-        /** @var MockObject|ProductTestHelper $product */
-        $product = $this->createPartialMock(ProductTestHelper::class, ['getOptions',
+                'getId',
+                'addCustomOption']);
+        /** @var MockObject|Product $product */
+        $product = $this->createPartialMockWithReflection(Product::class, ['getOptions',
             'prepareCustomOptions',
                 'addCustomOption',
                 'setQty',
@@ -746,7 +747,7 @@ class TypeTest extends TestCase
             ->willReturn($productType);
         $option
             ->method('getId')
-            ->willReturnOnConsecutiveCalls(333, 3, 3);
+            ->willReturnOnConsecutiveCalls(333, 3, 3, 3, 3);
         $option->expects($this->once())
             ->method('getRequired')
             ->willReturn(false);
@@ -792,8 +793,8 @@ class TypeTest extends TestCase
                 'setProduct',
             'validateUserValue',
                 'prepareForCart']);
-        /** @var MockObject|DataObjectTestHelper $buyRequest */
-        $buyRequest = $this->createPartialMock(DataObjectTestHelper::class, ['unsetData',
+        /** @var MockObject|DataObject $buyRequest */
+        $buyRequest = $this->createPartialMockWithReflection(DataObject::class, ['unsetData',
                 'getData',
             'getOptions',
                 'getSuperProductConfig',
@@ -801,15 +802,15 @@ class TypeTest extends TestCase
                 'getBundleOption',
                 'getBundleOptionQty',
             'getBundleOptionsData']);
-        /* @var MockObject|OptionTestHelper $option */
-        $option = $this->createPartialMock(OptionTestHelper::class, ['groupFactory',
+        /* @var MockObject|Option $option */
+        $option = $this->createPartialMockWithReflection(Option::class, ['groupFactory',
                 'getType',
             'getId',
                 'getRequired',
                 'isMultiSelection']);
 
-        /** @var MockObject|ProductTestHelper $product */
-        $product = $this->createPartialMock(ProductTestHelper::class, ['getOptions',
+        /** @var MockObject|Product $product */
+        $product = $this->createPartialMockWithReflection(Product::class, ['getOptions',
             'prepareCustomOptions',
                 'addCustomOption',
                 'setQty',
@@ -857,7 +858,7 @@ class TypeTest extends TestCase
             ->method('setStoreFilter');
         $option
             ->method('getId')
-            ->willReturnOnConsecutiveCalls(333);
+            ->willReturnOnConsecutiveCalls(333, 333, 333, 333);
 
         $bundleOptions = [];
         $buyRequest->expects($this->once())->method('getBundleOption')->willReturn($bundleOptions);
@@ -884,16 +885,16 @@ class TypeTest extends TestCase
                 'setProduct',
             'validateUserValue',
                 'prepareForCart']);
-        /** @var MockObject|DataObjectTestHelper $buyRequest */
-        $buyRequest = $this->createPartialMock(DataObjectTestHelper::class, ['unsetData',
+        /** @var MockObject|DataObject $buyRequest */
+        $buyRequest = $this->createPartialMockWithReflection(DataObject::class, ['unsetData',
                 'getData',
             'getOptions',
                 'getSuperProductConfig',
                 'getQty',
                 'getBundleOption',
                 'getBundleOptionsData']);
-        /* @var MockObject|OptionTestHelper $option */
-        $option = $this->createPartialMock(OptionTestHelper::class, ['groupFactory',
+        /* @var MockObject|Option $option */
+        $option = $this->createPartialMockWithReflection(Option::class, ['groupFactory',
                 'getType',
                 'getId',
             'getRequired',
@@ -901,11 +902,11 @@ class TypeTest extends TestCase
         /** @var MockObject|SelectionCollection $selectionCollection */
         $selectionCollection = $this->createPartialMock(SelectionCollection::class, ['getItems',
             'getSize']);
-        /** @var MockObject|DataObjectTestHelper $selection */
-        $selection = $this->createPartialMock(DataObjectTestHelper::class, ['isSalable',
+        /** @var MockObject|DataObject $selection */
+        $selection = $this->createPartialMockWithReflection(DataObject::class, ['isSalable',
             'getOptionId']);
-        /** @var MockObject|ProductTestHelper $product */
-        $product = $this->createPartialMock(ProductTestHelper::class, ['getOptions',
+        /** @var MockObject|Product $product */
+        $product = $this->createPartialMockWithReflection(Product::class, ['getOptions',
             'prepareCustomOptions',
                 'addCustomOption',
                 'setQty',
@@ -989,16 +990,16 @@ class TypeTest extends TestCase
                 'setProduct',
             'validateUserValue',
                 'prepareForCart']);
-        /** @var MockObject|DataObjectTestHelper $buyRequest */
-        $buyRequest = $this->createPartialMock(DataObjectTestHelper::class, ['unsetData',
+        /** @var MockObject|DataObject $buyRequest */
+        $buyRequest = $this->createPartialMockWithReflection(DataObject::class, ['unsetData',
                 'getData',
             'getOptions',
                 'getSuperProductConfig',
                 'getQty',
                 'getBundleOption',
                 'getBundleOptionsData']);
-        /* @var MockObject|OptionTestHelper $option */
-        $option = $this->createPartialMock(OptionTestHelper::class, ['groupFactory',
+        /* @var MockObject|Option $option */
+        $option = $this->createPartialMockWithReflection(Option::class, ['groupFactory',
                 'getType',
                 'getId',
             'getRequired',
@@ -1006,11 +1007,11 @@ class TypeTest extends TestCase
         /** @var MockObject|SelectionCollection $selectionCollection */
         $selectionCollection = $this->createPartialMock(SelectionCollection::class, ['getItems',
             'getSize']);
-        /** @var MockObject|DataObjectTestHelper $selection */
-        $selection = $this->createPartialMock(DataObjectTestHelper::class, ['isSalable',
+        /** @var MockObject|DataObject $selection */
+        $selection = $this->createPartialMockWithReflection(DataObject::class, ['isSalable',
             'getOptionId']);
-        /** @var MockObject|ProductTestHelper $product */
-        $product = $this->createPartialMock(ProductTestHelper::class, ['getOptions',
+        /** @var MockObject|Product $product */
+        $product = $this->createPartialMockWithReflection(Product::class, ['getOptions',
             'prepareCustomOptions',
                 'addCustomOption',
                 'setQty',
@@ -1073,7 +1074,7 @@ class TypeTest extends TestCase
             ->willReturn(false);
         $option
             ->method('getId')
-            ->willReturnOnConsecutiveCalls(333, 3);
+            ->willReturnOnConsecutiveCalls(333, 3, 3, 3, 3);
         $option->expects($this->once())
             ->method('getRequired')
             ->willReturn(true);
@@ -1093,11 +1094,11 @@ class TypeTest extends TestCase
     {
         $exceptedResult = 'String message';
 
-        /** @var MockObject|DataObjectTestHelper $buyRequest */
-        $buyRequest = $this->createPartialMock(DataObjectTestHelper::class, ['getItems']);
+        /** @var MockObject|DataObject $buyRequest */
+        $buyRequest = $this->createPartialMockWithReflection(DataObject::class, ['getItems']);
 
-        /** @var MockObject|ProductTestHelper $product */
-        $product = $this->createPartialMock(ProductTestHelper::class, ['getOptions', 'getHasOptions']);
+        /** @var MockObject|Product $product */
+        $product = $this->createPartialMockWithReflection(Product::class, ['getOptions', 'getHasOptions']);
         $product->expects($this->any())
             ->method('getOptions')
             ->willThrowException(new LocalizedException(__($exceptedResult)));
@@ -1123,19 +1124,19 @@ class TypeTest extends TestCase
                 'setProduct',
             'validateUserValue',
                 'prepareForCart']);
-        /** @var MockObject|DataObjectTestHelper $buyRequest */
-        $buyRequest = $this->createPartialMock(DataObjectTestHelper::class, ['unsetData',
+        /** @var MockObject|DataObject $buyRequest */
+        $buyRequest = $this->createPartialMockWithReflection(DataObject::class, ['unsetData',
                 'getData',
             'getOptions',
                 'getSuperProductConfig',
                 'getQty',
                 'getBundleOption',
                 'getBundleOptionsData']);
-        /* @var MockObject|OptionTestHelper $option */
-        $option = $this->createPartialMock(OptionTestHelper::class, ['groupFactory', 'getType', 'getId',
+        /* @var MockObject|Option $option */
+        $option = $this->createPartialMockWithReflection(Option::class, ['groupFactory', 'getType', 'getId',
             'getRequired']);
-        /** @var MockObject|ProductTestHelper $product */
-        $product = $this->createPartialMock(ProductTestHelper::class, ['getOptions',
+        /** @var MockObject|Product $product */
+        $product = $this->createPartialMockWithReflection(Product::class, ['getOptions',
             'prepareCustomOptions',
                 'addCustomOption',
                 'setQty',
@@ -1207,19 +1208,19 @@ class TypeTest extends TestCase
                 'setProduct',
             'validateUserValue',
                 'prepareForCart']);
-        /** @var MockObject|DataObjectTestHelper $buyRequest */
-        $buyRequest = $this->createPartialMock(DataObjectTestHelper::class, ['unsetData',
+        /** @var MockObject|DataObject $buyRequest */
+        $buyRequest = $this->createPartialMockWithReflection(DataObject::class, ['unsetData',
                 'getData',
             'getOptions',
                 'getSuperProductConfig',
                 'getQty',
                 'getBundleOption',
                 'getBundleOptionsData']);
-        /* @var MockObject|OptionTestHelper $option */
-        $option = $this->createPartialMock(OptionTestHelper::class, ['groupFactory', 'getType',
+        /* @var MockObject|Option $option */
+        $option = $this->createPartialMock(Option::class, ['groupFactory', 'getType',
             'getId']);
-        /** @var MockObject|ProductTestHelper $product */
-        $product = $this->createPartialMock(ProductTestHelper::class, ['getOptions',
+        /** @var MockObject|Product $product */
+        $product = $this->createPartialMockWithReflection(Product::class, ['getOptions',
             'prepareCustomOptions',
                 'addCustomOption',
                 'setQty',
@@ -1314,7 +1315,7 @@ class TypeTest extends TestCase
         $productMock = $this->createPartialMock(Product::class, ['__wakeup', 'getData', 'hasCustomOptions',
             'getCustomOption']);
         $customOptionMock = $this->createPartialMock(ProductConfigurationItemOption::class, ['getValue']);
-        $selectionItemMock = $this->createPartialMock(DataObjectTestHelper::class, ['getSku',
+        $selectionItemMock = $this->createPartialMockWithReflection(DataObject::class, ['getSku',
             'getEntityId']);
 
         $productMock->expects($this->once())
@@ -1381,7 +1382,7 @@ class TypeTest extends TestCase
         $productMock = $this->createPartialMock(Product::class, ['__wakeup', 'getData', 'hasCustomOptions',
             'getCustomOption']);
         $customOptionMock = $this->createPartialMock(ProductConfigurationItemOption::class, ['getValue']);
-        $selectionItemMock = $this->createPartialMock(DataObjectTestHelper::class, ['getSelectionId',
+        $selectionItemMock = $this->createPartialMockWithReflection(DataObject::class, ['getSelectionId',
             'getWeight']);
         $productMock->expects($this->once())
             ->method('hasCustomOptions')
@@ -1434,7 +1435,7 @@ class TypeTest extends TestCase
             'getCustomOption']);
         $customOptionMock = $this->createPartialMock(ProductConfigurationItemOption::class, ['getValue']);
         $qtyOptionMock = $this->createPartialMock(ProductConfigurationItemOption::class, ['getValue']);
-        $selectionItemMock = $this->createPartialMock(DataObjectTestHelper::class, ['getSelectionId',
+        $selectionItemMock = $this->createPartialMockWithReflection(DataObject::class, ['getSelectionId',
             'getWeight']);
 
         $productMock->expects($this->once())
@@ -1508,7 +1509,7 @@ class TypeTest extends TestCase
 
         $productMock = $this->createMock(Product::class);
         $customOptionMock = $this->createPartialMock(ProductConfigurationItemOption::class, ['getValue']);
-        $selectionItemMock = $this->createPartialMock(DataObjectTestHelper::class, ['isVirtual',
+        $selectionItemMock = $this->createPartialMockWithReflection(DataObject::class, ['isVirtual',
             'getItems']);
 
         $productMock->expects($this->once())
@@ -1561,9 +1562,9 @@ class TypeTest extends TestCase
     #[DataProvider('shakeSelectionsDataProvider')]
     public function testShakeSelections($expected, $firstId, $secondId): void
     {
-        $firstItemMock = $this->createPartialMock(ProductTestHelper::class, ['getOption',
+        $firstItemMock = $this->createPartialMockWithReflection(Product::class, ['getOption',
             'getOptionId', 'getPosition', 'getSelectionId']);
-        $secondItemMock = $this->createPartialMock(ProductTestHelper::class, ['getOption',
+        $secondItemMock = $this->createPartialMockWithReflection(Product::class, ['getOption',
             'getOptionId', 'getPosition', 'getSelectionId']);
         $optionFirstMock = $this->createPartialMock(\Magento\Bundle\Model\Option::class, ['getPosition',
             '__wakeup']);
@@ -1725,12 +1726,12 @@ class TypeTest extends TestCase
         $storeId = 2;
         $productMock = $this->createMock(Product::class);
         // Use helper for custom getResourceCollection() method
-        $usedOptionsMock = $this->createPartialMock(
-            CollectionTestHelper::class,
+        $usedOptionsMock = $this->createPartialMockWithReflection(
+            OptionCollection::class,
             ['getResourceCollection']
         );
         $dbResourceMock = $this->createPartialMock(
-            AbstractCollectionTestHelper::class,
+            Collection::class,
             ['setProductIdFilter', 'setPositionOrder', 'joinValues', 'setIdFilter']
         );
         $storeMock = $this->createPartialMock(Store::class, ['getId', '__wakeup']);
@@ -1878,9 +1879,11 @@ class TypeTest extends TestCase
             ->willReturn($group);
 
         $buyRequest->expects($this->once())
-            ->method('getData');
+            ->method('getData')
+            ->willReturn(null);
         $buyRequest->expects($this->once())
-            ->method('getOptions');
+            ->method('getOptions')
+            ->willReturn([]);
         $buyRequest->expects($this->once())
             ->method('getSuperProductConfig')
             ->willReturn([]);
@@ -1888,7 +1891,8 @@ class TypeTest extends TestCase
             ->method('unsetData')
             ->willReturnSelf();
         $buyRequest->expects($this->any())
-            ->method('getQty');
+            ->method('getQty')
+            ->willReturn(1);
 
         $product->expects($this->once())
             ->method('getOptions')
@@ -1961,7 +1965,7 @@ class TypeTest extends TestCase
     {
         $result = ['bundle_option' => [], 'bundle_option_qty' => []];
         $product = $this->createMock(Product::class);
-        $buyRequest = $this->createPartialMock(DataObjectTestHelper::class, ['getBundleOption',
+        $buyRequest = $this->createPartialMockWithReflection(DataObject::class, ['getBundleOption',
             'getBundleOptionQty']);
 
         $buyRequest->expects($this->once())->method('getBundleOption')->willReturn('bundleOption');
@@ -1980,7 +1984,7 @@ class TypeTest extends TestCase
         $this->expectProductEntityMetadata();
         $resourceClassName = AbstractCollection::class;
         $dbResourceMock = $this->createPartialMock($resourceClassName, ['getItems']);
-        $item = $this->createPartialMock(DataObjectTestHelper::class, ['getId', 'getRequired']);
+        $item = $this->createPartialMockWithReflection(DataObject::class, ['getId', 'getRequired']);
         $selectionCollection = $this->getSelectionCollection();
         $this->bundleCollectionFactory->expects($this->once())->method('create')->willReturn($selectionCollection);
 
@@ -2011,7 +2015,7 @@ class TypeTest extends TestCase
      */
     public function testGetSearchableData(): void
     {
-        $product = $this->createPartialMock(ProductTestHelper::class, ['getId', 'getStoreId',
+        $product = $this->createPartialMockWithReflection(Product::class, ['getId', 'getStoreId',
             'getHasOptions']);
         $option = $this->createPartialMock(\Magento\Bundle\Model\Option::class, ['getSearchableData']);
 
@@ -2146,7 +2150,7 @@ class TypeTest extends TestCase
         ]);
         $product->setCustomOption(json_encode([]));
 
-        $falseSelection = $this->createPartialMock(SelectionTestHelper::class, ['isSalable']);
+        $falseSelection = $this->createPartialMockWithReflection(Selection::class, ['isSalable']);
         $falseSelection->method('isSalable')->willReturn(false);
 
         $this->selectionCollectionMock->method('getItemById')->willReturn($falseSelection);
@@ -2172,7 +2176,7 @@ class TypeTest extends TestCase
      */
     public function getProductMock(): MockObject
     {
-        $product = $this->createPartialMock(ProductTestHelper::class, ['getId',
+        $product = $this->createPartialMockWithReflection(Product::class, ['getId',
                 'getStoreId',
             'getCustomOption',
                 'getTypeInstance',
@@ -2218,7 +2222,7 @@ class TypeTest extends TestCase
 
     protected function getMockForSectionClass()
     {
-        $falseSelection = $this->createPartialMock(SelectionTestHelper::class, ['isSalable']);
+        $falseSelection = $this->createPartialMockWithReflection(Selection::class, ['isSalable']);
         $falseSelection->method('isSalable')->willReturn(false);
         return $falseSelection;
     }

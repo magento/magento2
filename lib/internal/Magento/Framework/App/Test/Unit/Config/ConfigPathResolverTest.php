@@ -10,6 +10,7 @@ namespace Magento\Framework\App\Test\Unit\Config;
 use Magento\Framework\App\Config\ConfigPathResolver;
 use Magento\Framework\App\Config\ScopeCodeResolver;
 use PHPUnit\Framework\MockObject\MockObject as Mock;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -41,14 +42,9 @@ class ConfigPathResolverTest extends TestCase
         );
     }
 
-    /**
-     * @param string $path
-     * @param string $scope
-     * @param string $scopeCode
-     * @param string $type
-     * @param string $expected
-     * @dataProvider resolveDataProvider
+    /**     * @param string $expected
      */
+    #[DataProvider('resolveDataProvider')]
     public function testResolve($path, $scope, $scopeCode, $type, $expected)
     {
         $this->scopeCodeResolverMock->expects($this->any())

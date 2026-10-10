@@ -13,6 +13,7 @@ use Magento\Deploy\Model\DeploymentConfig\Hash\Generator;
 use Magento\Framework\Flag;
 use Magento\Framework\Flag\FlagResource;
 use Magento\Framework\FlagFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -81,8 +82,8 @@ class HashTest extends TestCase
      * @param string|array|null $dataFromStorage
      * @param array $expectedResult
      * @return void
-     * @dataProvider getDataProvider
      */
+    #[DataProvider('getDataProvider')]
     public function testGet($dataFromStorage, $expectedResult)
     {
         $this->flagMock->expects($this->once())

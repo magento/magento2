@@ -24,7 +24,6 @@ class TestCaseProperties
             $reflectionClass = new \ReflectionClass($test);
             $properties = $reflectionClass->getProperties();
             foreach ($properties as $property) {
-                $property->setAccessible(true);
                 if ($property->isInitialized($test)) {
                     $value = $property->getValue($test);
                     if (is_object($value) && method_exists($value, '__destruct') &&

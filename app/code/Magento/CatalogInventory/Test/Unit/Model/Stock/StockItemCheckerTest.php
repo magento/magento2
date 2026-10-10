@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogInventory\Test\Unit\Model\Stock;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Model\Stock\Item as StockItem;
 use Magento\CatalogInventory\Model\Stock\StockItemChecker;
@@ -83,8 +84,8 @@ class StockItemCheckerTest extends TestCase
      * @param array $model
      * @param bool $expectedResult
      * @return void
-     * @dataProvider stockItemModelDataProvider
      */
+    #[DataProvider('stockItemModelDataProvider')]
     public function testIsModified(
         array $itemFromRepository,
         array $model,

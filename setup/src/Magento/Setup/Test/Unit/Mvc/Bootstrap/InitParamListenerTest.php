@@ -19,6 +19,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Setup\Mvc\Bootstrap\InitParamListener;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -81,7 +82,7 @@ class InitParamListenerTest extends TestCase
             );
         $mvcApplication->expects($this->any())->method('getServiceManager')->willReturn($serviceManager);
 
-        $eventManager = $this->getMockForAbstractClass(EventManagerInterface::class);
+        $eventManager = $this->createMock(EventManagerInterface::class);
         $mvcApplication->expects($this->any())->method('getEventManager')->willReturn($eventManager);
         $eventManager->expects($this->any())->method('attach');
 
@@ -110,8 +111,8 @@ class InitParamListenerTest extends TestCase
      * @param array|string|null $argv Argv
      * @param array $expectedArray Expected result array
      *
-     * @dataProvider createServiceDataProvider
      */
+    #[DataProvider('createServiceDataProvider')]
     public function testCreateService($zfAppConfig, $env, $argv, $expectedArray)
     {
         foreach ($env as $envKey => $envValue) {
@@ -121,7 +122,7 @@ class InitParamListenerTest extends TestCase
         /**
          * @var ServiceLocatorInterface|MockObject $serviceLocator
          */
-        $serviceLocator = $this->getMockForAbstractClass(ServiceLocatorInterface::class);
+        $serviceLocator = $this->createMock(ServiceLocatorInterface::class);
         $mvcApplication = $this->getMockBuilder(MvcApplication::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -263,7 +264,7 @@ class InitParamListenerTest extends TestCase
         $this->callbacks[] = [$this->listener, 'onBootstrap'];
 
         /** @var EventManagerInterface|MockObject $events */
-        $eventManager = $this->getMockForAbstractClass(EventManagerInterface::class);
+        $eventManager = $this->createMock(EventManagerInterface::class);
 
         $sharedManager = $this->createMock(SharedEventManager::class);
         $sharedManager->expects($this->once())->method('attach')->with(

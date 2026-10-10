@@ -99,21 +99,33 @@ class PageTest extends TestCase
         $frontendPool = $objectManager->get(FrontendPool::class);
 
         $cacheProxy = $this->getMockBuilder(GraphQlResolverCache::class)
-            ->enableProxyingToOriginalMethods()
             ->setConstructorArgs([
                 $frontendPool
             ])
+            ->onlyMethods(['load', 'save'])
             ->getMock();
 
+        // Track call counts and delegate to real implementation
+        $realCache = $objectManager->create(GraphQlResolverCache::class, ['frontendPool' => $frontendPool]);
+        
         // assert cache proxy calls load at least once for the same CMS page query
         $cacheProxy
             ->expects($this->atLeastOnce())
-            ->method('load');
+            ->method('load')
+            ->willReturnCallback(fn($identifier) => $realCache->load($identifier));
 
         // assert save is called at most once for the same CMS page query
         $cacheProxy
             ->expects($this->once())
-            ->method('save');
+            ->method('save')
+            ->willReturnCallback(
+                fn($data, $identifier, $tags = [], $lifeTime = null) => $realCache->save(
+                    $data,
+                    $identifier,
+                    $tags,
+                    $lifeTime
+                )
+            );
 
         $resolverPluginWithCacheProxy = $objectManager->create(ResolverResultCachePlugin::class, [
             'graphQlResolverCache' => $cacheProxy,
@@ -155,10 +167,10 @@ class PageTest extends TestCase
         $frontendPool = $objectManager->get(FrontendPool::class);
 
         $cacheProxy = $this->getMockBuilder(GraphQlResolverCache::class)
-            ->enableProxyingToOriginalMethods()
             ->setConstructorArgs([
                 $frontendPool
             ])
+            ->onlyMethods(['load', 'save'])
             ->getMock();
 
         // assert cache proxy never calls load
@@ -192,10 +204,10 @@ class PageTest extends TestCase
         $frontendPool = $objectManager->get(FrontendPool::class);
 
         $cacheProxy = $this->getMockBuilder(GraphQlResolverCache::class)
-            ->enableProxyingToOriginalMethods()
             ->setConstructorArgs([
                 $frontendPool
             ])
+            ->onlyMethods(['save'])
             ->getMock();
 
         // assert cache proxy never calls save

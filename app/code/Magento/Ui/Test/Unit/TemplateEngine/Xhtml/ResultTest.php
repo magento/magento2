@@ -16,6 +16,7 @@ use Magento\Framework\View\TemplateEngine\Xhtml\Template;
 use Magento\Ui\Component\Listing;
 use Magento\Ui\TemplateEngine\Xhtml\Result;
 use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
@@ -70,9 +71,9 @@ class ResultTest extends TestCase
     protected function setUp(): void
     {
         $this->templateMock = $this->createMock(Template::class);
-        $this->compilerMock = $this->getMockForAbstractClass(CompilerInterface::class);
+        $this->compilerMock = $this->createMock(CompilerInterface::class);
         $this->componentMock = $this->createMock(Listing::class);
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->stateMock = $this->createMock(State::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);

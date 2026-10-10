@@ -92,8 +92,7 @@ class OperationsExecutorTest extends TestCase
         $this->statementFactoryMock = $this->getMockBuilder(StatementFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->dbSchemaWriterMock = $this->getMockBuilder(DbSchemaWriterInterface::class)
-            ->getMockForAbstractClass();
+        $this->dbSchemaWriterMock = $this->createMock(DbSchemaWriterInterface::class);
         $this->statementAggregatorFactoryMock = $this->getMockBuilder(StatementAggregatorFactory::class)
             ->disableOriginalConstructor()
             ->getMock();

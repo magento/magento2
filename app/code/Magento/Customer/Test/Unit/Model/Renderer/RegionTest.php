@@ -116,7 +116,6 @@ class RegionTest extends TestCase
         $escaper = $objectManager->getObject(Escaper::class);
         $reflection = new \ReflectionClass($elementMock);
         $reflection_property = $reflection->getProperty('_escaper');
-        $reflection_property->setAccessible(true);
         $reflection_property->setValue($elementMock, $escaper);
 
         $formMock->expects(
@@ -142,7 +141,6 @@ class RegionTest extends TestCase
         $model = new Region($countryFactoryMock, $directoryHelperMock, $escaperMock);
 
         $static = new \ReflectionProperty(Region::class, '_regionCollections');
-        $static->setAccessible(true);
         $static->setValue(null, null);
 
         $html = $model->render($elementMock);

@@ -10,20 +10,22 @@ namespace Magento\Quote\Test\Unit\Observer\Backend;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\Config\Share;
+use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
-use Magento\Quote\Test\Unit\Helper\EventTestHelper;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Observer\Backend\CustomerQuoteObserver;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Quote\Test\Unit\Helper\QuoteTestHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class CustomerQuoteObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var CustomerQuoteObserver
      */
@@ -50,21 +52,17 @@ class CustomerQuoteObserverTest extends TestCase
     protected $observerMock;
 
     /**
-     * @var MockObject|Event
+     * @var Event|MockObject
      */
     protected $eventMock;
 
     protected function setUp(): void
     {
         $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
-        $this->configMock = $this->getMockBuilder(Share::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->configMock = $this->createPartialMock(Share::class, ['isWebsiteScope']);
         $this->quoteRepositoryMock = $this->createMock(CartRepositoryInterface::class);
-        $this->observerMock = $this->getMockBuilder(Observer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->eventMock = new EventTestHelper();
+        $this->observerMock = $this->createPartialMock(Observer::class, ['getEvent']);
+        $this->eventMock = $this->createPartialMockWithReflection(Event::class, ['getCustomerDataObject']);
         $this->observerMock->method('getEvent')->willReturn($this->eventMock);
         $objectManager = new ObjectManager($this);
         $this->customerQuote = $objectManager->getObject(
@@ -81,10 +79,8 @@ class CustomerQuoteObserverTest extends TestCase
     {
         $customerDataObjectMock = $this->createMock(CustomerInterface::class);
         $customerDataObjectMock->method('getGroupId')->willReturn(1);
-        $origCustomerDataObjectMock = $this->createMock(CustomerInterface::class);
-        $origCustomerDataObjectMock->method('getGroupId')->willReturn(1);
-        $this->eventMock->setCustomerDataObject($customerDataObjectMock);
-        $this->eventMock->setOrigCustomerDataObject($origCustomerDataObjectMock);
+        $customerDataObjectMock->method('getId')->willReturn(1);
+        $this->eventMock->method('getCustomerDataObject')->willReturn($customerDataObjectMock);
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getForCustomer')
             ->willThrowException(new NoSuchEntityException());
@@ -103,6 +99,7 @@ class CustomerQuoteObserverTest extends TestCase
             ->method('isWebsiteScope')
             ->willReturn($isWebsiteScope);
         $customerDataObjectMock = $this->createMock(CustomerInterface::class);
+        $customerDataObjectMock->method('getId')->willReturn(1);
         $customerDataObjectMock->method('getGroupId')->willReturn(1);
         $customerDataObjectMock->method('getWebsiteId')->willReturn(2);
         if ($isWebsiteScope) {
@@ -116,12 +113,11 @@ class CustomerQuoteObserverTest extends TestCase
                 ->method('getWebsites')
                 ->willReturn($websites);
         }
-        $this->eventMock->setCustomerDataObject($customerDataObjectMock);
-        /** @var MockObject|Quote $quoteMock */
-        $quoteMock = $this->getMockBuilder(QuoteTestHelper::class)
-            ->onlyMethods(['getCustomerGroupId', 'collectTotals', '__wakeup', 'setWebsite', 'setCustomerGroupId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->eventMock->method('getCustomerDataObject')->willReturn($customerDataObjectMock);
+        $quoteMock = $this->createPartialMockWithReflection(
+            Quote::class,
+            ['getCustomerGroupId', 'collectTotals', 'setWebsite', 'setCustomerGroupId']
+        );
         $websiteCount = count($websites);
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getForCustomer')

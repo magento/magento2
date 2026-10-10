@@ -31,8 +31,8 @@ class CompositeTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->rendererOne = $this->getMockForAbstractClass(RendererInterface::class);
-        $this->rendererTwo = $this->getMockForAbstractClass(RendererInterface::class);
+        $this->rendererOne = $this->createMock(RendererInterface::class);
+        $this->rendererTwo = $this->createMock(RendererInterface::class);
         $this->object = new Composite([$this->rendererOne, $this->rendererTwo]);
     }
 

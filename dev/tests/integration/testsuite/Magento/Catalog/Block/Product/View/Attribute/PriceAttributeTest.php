@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Catalog\Block\Product\View\Attribute;
 
 use Magento\Directory\Model\PriceCurrency;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class checks price attribute displaying on frontend
@@ -32,10 +33,10 @@ class PriceAttributeTest extends AbstractAttributeTest
     }
 
     /**
-     * @dataProvider pricesDataProvider
      * @param string $price
      * @return void
      */
+    #[DataProvider('pricesDataProvider')]
     public function testAttributeView(string $price): void
     {
         $this->processAttributeView('simple2', $price, $this->priceCurrency->convertAndFormat($price));

@@ -30,11 +30,9 @@ class TMapTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->om = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->getMockForAbstractClass();
+        $this->om = $this->createMock(ObjectManagerInterface::class);
 
-        $this->omConfig = $this->getMockBuilder(ConfigInterface::class)
-            ->getMockForAbstractClass();
+        $this->omConfig = $this->createMock(ConfigInterface::class);
     }
 
     public function testConstructor()

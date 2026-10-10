@@ -5,6 +5,7 @@
  */
 namespace Magento\TestFramework\Integrity\Library\PhpParser;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -34,9 +35,8 @@ class ThrowsTest extends TestCase
 
     /**
      * Test get throws dependencies
-     *
-     * @dataProvider tokensDataProvider
      */
+    #[DataProvider('tokensDataProvider')]
     public function testGetDependencies(array $tokens)
     {
         $this->tokens->method('getTokenCodeByKey')

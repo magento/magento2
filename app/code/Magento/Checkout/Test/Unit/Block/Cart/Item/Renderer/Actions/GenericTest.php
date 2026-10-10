@@ -13,10 +13,12 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Model\Quote\Item;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\Quote\Test\Unit\Helper\QuoteItemIsVirtualTestHelper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class GenericTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Generic
      */
@@ -72,7 +74,8 @@ class GenericTest extends TestCase
         /**
          * @var Item|MockObject $itemMock
          */
-        $itemMock = new QuoteItemIsVirtualTestHelper();
+        $itemMock = $this->createPartialMockWithReflection(Item::class, ['getIsVirtual']);
+        $itemMock->method('getIsVirtual')->willReturn(true);
 
         $this->assertEquals($this->model, $this->model->setItem($itemMock));
         $this->assertTrue($this->model->isVirtual());

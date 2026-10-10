@@ -16,15 +16,21 @@ use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Invoice;
+use Magento\Sales\Model\Order\Invoice\Item as InvoiceItem;
 use Magento\Sales\Model\Order\Invoice\PayOperation;
+use Magento\Sales\Model\Order\Payment;
 use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Unit test for Invoice pay operation.
  */
 class PayOperationTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var PayOperation
      */
@@ -70,45 +76,20 @@ class PayOperationTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->orderMock = $this->getMockForAbstractClass(
-            OrderInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
+        $this->orderMock = $this->createPartialMockWithReflection(
+            Order::class,
             [
-                'getPayment',
-                'setTotalInvoiced',
-                'getTotalInvoiced',
-                'setBaseTotalInvoiced',
-                'getBaseTotalInvoiced',
-                'setSubtotalInvoiced',
-                'getSubtotalInvoiced',
-                'setBaseSubtotalInvoiced',
-                'getBaseSubtotalInvoiced',
-                'setTaxInvoiced',
-                'getTaxInvoiced',
-                'setBaseTaxInvoiced',
-                'getBaseTaxInvoiced',
-                'setDiscountTaxCompensationInvoiced',
-                'getDiscountTaxCompensationInvoiced',
-                'setBaseDiscountTaxCompensationInvoiced',
-                'getBaseDiscountTaxCompensationInvoiced',
-                'setShippingTaxInvoiced',
-                'getShippingTaxInvoiced',
-                'setBaseShippingTaxInvoiced',
-                'getBaseShippingTaxInvoiced',
-                'setShippingInvoiced',
-                'getShippingInvoiced',
-                'setBaseShippingInvoiced',
-                'getBaseShippingInvoiced',
-                'setDiscountInvoiced',
-                'getDiscountInvoiced',
-                'setBaseDiscountInvoiced',
-                'getBaseDiscountInvoiced',
-                'setBaseTotalInvoicedCost',
-                'getBaseTotalInvoicedCost',
+                'getPayment', 'setTotalInvoiced', 'getTotalInvoiced', 'setBaseTotalInvoiced',
+                'getBaseTotalInvoiced', 'setSubtotalInvoiced', 'getSubtotalInvoiced',
+                'setBaseSubtotalInvoiced', 'getBaseSubtotalInvoiced', 'setTaxInvoiced', 'getTaxInvoiced',
+                'setBaseTaxInvoiced', 'getBaseTaxInvoiced', 'setDiscountTaxCompensationInvoiced',
+                'getDiscountTaxCompensationInvoiced', 'setBaseDiscountTaxCompensationInvoiced',
+                'getBaseDiscountTaxCompensationInvoiced', 'setShippingTaxInvoiced',
+                'getShippingTaxInvoiced', 'setBaseShippingTaxInvoiced', 'getBaseShippingTaxInvoiced',
+                'setShippingInvoiced', 'getShippingInvoiced', 'setBaseShippingInvoiced',
+                'getBaseShippingInvoiced', 'setDiscountInvoiced', 'getDiscountInvoiced',
+                'setBaseDiscountInvoiced', 'getBaseDiscountInvoiced', 'setBaseTotalInvoicedCost',
+                'getBaseTotalInvoicedCost'
             ]
         );
         $this->orderMock->expects($this->any())
@@ -157,34 +138,14 @@ class PayOperationTest extends TestCase
             ->method('getBaseTotalInvoicedCost')
             ->willReturn(31);
 
-        $this->invoiceMock = $this->getMockForAbstractClass(
-            InvoiceInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
+        $this->invoiceMock = $this->createPartialMockWithReflection(
+            Invoice::class,
             [
-                'getItems',
-                'getState',
-                'capture',
-                'setCanVoidFlag',
-                'pay',
-                'getGrandTotal',
-                'getBaseGrandTotal',
-                'getSubtotal',
-                'getBaseSubtotal',
-                'getTaxAmount',
-                'getBaseTaxAmount',
-                'getDiscountTaxCompensationAmount',
-                'getBaseDiscountTaxCompensationAmount',
-                'getShippingTaxAmount',
-                'getBaseShippingTaxAmount',
-                'getShippingAmount',
-                'getBaseShippingAmount',
-                'getDiscountAmount',
-                'getBaseDiscountAmount',
-                'getBaseCost',
+                'getItems', 'getState', 'capture', 'setCanVoidFlag', 'pay', 'getGrandTotal',
+                'getBaseGrandTotal', 'getSubtotal', 'getBaseSubtotal', 'getTaxAmount', 'getBaseTaxAmount',
+                'getDiscountTaxCompensationAmount', 'getBaseDiscountTaxCompensationAmount',
+                'getShippingTaxAmount', 'getBaseShippingTaxAmount', 'getShippingAmount',
+                'getBaseShippingAmount', 'getDiscountAmount', 'getBaseDiscountAmount', 'getBaseCost'
             ]
         );
         $this->invoiceMock->expects($this->any())
@@ -235,17 +196,9 @@ class PayOperationTest extends TestCase
 
         $this->contextMock = $this->createMock(Context::class);
 
-        $this->invoiceItemMock = $this->getMockForAbstractClass(
-            InvoiceItemInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            [
-                'isDeleted',
-                'register',
-            ]
+        $this->invoiceItemMock = $this->createPartialMockWithReflection(
+            InvoiceItem::class,
+            ['isDeleted', 'register', 'getQty', 'getOrderItem']
         );
         $this->invoiceItemMock->expects($this->any())
             ->method('isDeleted')
@@ -254,45 +207,20 @@ class PayOperationTest extends TestCase
             ->method('getQty')
             ->willReturn(1);
 
-        $this->orderPaymentMock = $this->getMockForAbstractClass(
-            OrderPaymentInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            [
-                'canCapture',
-                'getMethodInstance',
-                'getIsTransactionPending',
-            ]
+        $this->orderPaymentMock = $this->createPartialMockWithReflection(
+            Payment::class,
+            ['canCapture', 'getMethodInstance', 'getIsTransactionPending']
         );
         $this->orderMock->expects($this->any())
             ->method('getPayment')
             ->willReturn($this->orderPaymentMock);
 
-        $this->eventManagerMock = $this->getMockForAbstractClass(
-            ManagerInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            []
-        );
+        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
         $this->contextMock->expects($this->any())
             ->method('getEventDispatcher')
             ->willReturn($this->eventManagerMock);
 
-        $this->paymentMethodMock = $this->getMockForAbstractClass(
-            MethodInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            []
-        );
+        $this->paymentMethodMock = $this->createMock(MethodInterface::class);
         $this->orderPaymentMock->expects($this->any())
             ->method('getMethodInstance')
             ->willReturn($this->paymentMethodMock);
@@ -307,12 +235,11 @@ class PayOperationTest extends TestCase
      * @param bool|null $isOnline
      * @param bool|null $isGateway
      * @param bool|null $isTransactionPending
-     *
-     * @dataProvider payDataProvider
-     *
+     *     *
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
+    #[DataProvider('payDataProvider')]
     public function testExecute($canCapture, $isOnline, $isGateway, $isTransactionPending)
     {
         $this->invoiceMock->expects($this->any())

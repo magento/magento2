@@ -47,7 +47,7 @@ class CleanOldJobsTest extends TestCase
         $this->dateTimeMock->method('gmtTimestamp')
             ->willReturn($this->time);
 
-        $this->retrierMock = $this->getMockForAbstractClass(DeadlockRetrierInterface::class);
+        $this->retrierMock = $this->createMock(DeadlockRetrierInterface::class);
 
         $this->scheduleFactoryMock = $this->getMockBuilder(ScheduleFactory::class)
             ->onlyMethods(['create'])
@@ -90,7 +90,7 @@ class CleanOldJobsTest extends TestCase
                 'history_failure_lifetime' => 200,
             ]);
 
-        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $connectionMock = $this->createMock(AdapterInterface::class);
 
         $connectionMock->expects($this->once())
             ->method('delete')

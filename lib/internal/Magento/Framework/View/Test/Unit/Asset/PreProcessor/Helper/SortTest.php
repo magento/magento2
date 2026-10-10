@@ -9,6 +9,7 @@ namespace Magento\Framework\View\Test\Unit\Asset\PreProcessor\Helper;
 
 use Magento\Framework\View\Asset\PreProcessor\Helper\Sort;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  *
@@ -19,9 +20,8 @@ class SortTest extends TestCase
     /**
      * @param array $arrayData
      * @param array $expected
-     *
-     * @dataProvider dataProviderTestSorting
-     */
+     *     */
+    #[DataProvider('dataProviderTestSorting')]
     public function testSorting(array $arrayData, array $expected, $message)
     {
         $sorter = new Sort();

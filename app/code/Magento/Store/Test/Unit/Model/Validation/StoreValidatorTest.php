@@ -11,6 +11,7 @@ use Magento\Framework\Validator\DataObject;
 use Magento\Framework\Validator\DataObjectFactory;
 use Magento\Framework\Validator\ValidatorInterface;
 use Magento\Store\Model\Validation\StoreValidator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -59,11 +60,11 @@ class StoreValidatorTest extends TestCase
     }
 
     /**
-     * @dataProvider isValidDataProvider
      * @param \Magento\Framework\DataObject $value
      * @param bool $isValid
      * @param array $messages
      */
+    #[DataProvider('isValidDataProvider')]
     public function testIsValid(\Magento\Framework\DataObject $value, bool $isValid, array $messages): void
     {
         $ruleMock = $this->ruleMocks;

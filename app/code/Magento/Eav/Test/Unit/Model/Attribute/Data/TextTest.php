@@ -15,9 +15,11 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\Stdlib\StringUtils;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\Validator\Alnum;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\Model\AbstractModel;
 
@@ -26,6 +28,8 @@ use Magento\Framework\Model\AbstractModel;
  */
 class TextTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Text
      */
@@ -36,9 +40,9 @@ class TextTest extends TestCase
      */
     protected function setUp(): void
     {
-        $locale = $this->getMockForAbstractClass(TimezoneInterface::class);
-        $localeResolver = $this->getMockForAbstractClass(ResolverInterface::class);
-        $logger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $locale = $this->createMock(TimezoneInterface::class);
+        $localeResolver = $this->createMock(ResolverInterface::class);
+        $logger = $this->createMock(LoggerInterface::class);
         $helper = new StringUtils();
 
         $this->model = new Text($locale, $logger, $localeResolver, $helper);
@@ -79,10 +83,10 @@ class TextTest extends TestCase
      */
     public function testValidateNotRequiredValidation(): void
     {
-        $entityMock = $this->getMockBuilder(AbstractModel::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getSkipRequiredValidation'])
-            ->getMock();
+        $entityMock = $this->createPartialMockWithReflection(
+            AbstractModel::class,
+            ['getSkipRequiredValidation']
+        );
         $entityMock->expects($this->once())->method('getSkipRequiredValidation')->willReturn(true);
         $this->model->setEntity($entityMock);
         $attributeMock = $this->createMock(Attribute::class);
@@ -137,8 +141,8 @@ class TextTest extends TestCase
      * @param {Boolean|Array} $expectedResult - validation result
      * @return void
      * @throws LocalizedException
-     * @dataProvider alphanumDataProvider
      */
+    #[DataProvider('alphanumDataProvider')]
     public function testAlphanumericValidation($value, $expectedResult): void
     {
         $defaultAttributeData = [
@@ -185,8 +189,8 @@ class TextTest extends TestCase
      * @param {Boolean|Array} $expectedResult - validation result
      * @return void
      * @throws LocalizedException
-     * @dataProvider alphanumWithSpacesDataProvider
      */
+    #[DataProvider('alphanumWithSpacesDataProvider')]
     public function testAlphanumericValidationWithSpaces($value, $expectedResult): void
     {
         $defaultAttributeData = [
@@ -241,10 +245,10 @@ class TextTest extends TestCase
     protected function createAttribute(array $attributeData): AbstractAttribute
     {
         $entityTypeMock = $this->createMock(Type::class);
-        $attribute = $this->getMockBuilder(Attribute::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getEntityType', 'getData', 'getStoreLabel'])
-            ->getMock();
+        $attribute = $this->createPartialMockWithReflection(
+            Attribute::class,
+            ['getEntityType', 'getData', 'getStoreLabel']
+        );
         $attribute->expects($this->any())->method('getStoreLabel')->willReturn($attributeData['store_label']);
         $attribute->expects($this->any())
             ->method('getEntityType')

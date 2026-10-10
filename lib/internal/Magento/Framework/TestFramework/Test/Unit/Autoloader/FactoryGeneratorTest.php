@@ -9,6 +9,7 @@ namespace Magento\Framework\TestFramework\Test\Unit\Autoloader;
 
 use Magento\Framework\TestFramework\Unit\Autoloader\FactoryGenerator;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class FactoryGeneratorTest extends TestCase
 {
@@ -30,10 +31,9 @@ class FactoryGeneratorTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider generateNonFactoryDataProvider
-     * @param string $className
+    /**     * @param string $className
      */
+    #[DataProvider('generateNonFactoryDataProvider')]
     public function testGenerateNonFactory($className)
     {
         $this->assertFalse($this->subject->generate($className));

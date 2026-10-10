@@ -24,9 +24,12 @@ use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test coverage for product reviews queries
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class GetProductReviewsTest extends GraphQlAbstract
 {
@@ -259,9 +262,9 @@ QUERY;
         DataFixture(ReviewFixture::class, ['entity_pk_value' => '$product1.id$', 'store_id' => '$store2.id$']),
     ]
     /**
-     * @dataProvider storesDataProvider
      * @param string $storeCode
      */
+    #[DataProvider('storesDataProvider')]
     public function testProductReviewDifferentStores(string $storeCode): void
     {
         $productSku = 'product1';
@@ -304,9 +307,9 @@ QUERY;
         ]),
     ]
     /**
-     * @dataProvider storesDataProvider
      * @param string $storeCode
      */
+    #[DataProvider('storesDataProvider')]
     public function testCustomerReviewDifferentStores(string $storeCode): void
     {
         $query = <<<QUERY

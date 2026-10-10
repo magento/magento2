@@ -14,11 +14,12 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\Website;
-use Magento\Wishlist\Model\ResourceModel\Item;
+use Magento\Wishlist\Model\Item;
 use Magento\Wishlist\Model\ResourceModel\Item\Collection as WishlistItemCollection;
 use Magento\Wishlist\Model\ResourceModel\Item\CollectionFactory as WishlistItemCollectionFactory;
 use Magento\Wishlist\Model\Wishlist;
 use Magento\WishlistGraphQl\Model\Resolver\WishlistItems;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -27,6 +28,8 @@ use PHPUnit\Framework\TestCase;
  */
 class WishlistItemsTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var WishlistItemCollectionFactory|MockObject
      */
@@ -61,10 +64,10 @@ class WishlistItemsTest extends TestCase
         $store->expects($this->once())->method('getWebsiteId')->willReturn($webId);
         $store->expects($this->any())->method('getId')->willReturn($storeId);
 
-        $extensionAttributes = $this->getMockBuilder(ContextExtensionInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getStore'])
-            ->getMock();
+        $extensionAttributes = $this->createPartialMockWithReflection(
+            ContextExtensionInterface::class,
+            ['getStore']
+        );
         $extensionAttributes->expects($this->exactly(2))
             ->method('getStore')
             ->willReturn($store);
@@ -74,10 +77,10 @@ class WishlistItemsTest extends TestCase
         $info = $this->createMock(ResolveInfo::class);
         $wishlist = $this->createMock(Wishlist::class);
 
-        $item = $this->getMockBuilder(Item::class)
-            ->addMethods(['getId', 'getData', 'getDescription', 'getAddedAt', 'getProduct'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $item = $this->createPartialMockWithReflection(
+            Item::class,
+            ['getId', 'getData', 'getDescription', 'getAddedAt', 'getProduct']
+        );
         $item->expects($this->once())->method('getId')->willReturn($itemId);
         $item->expects($this->once())->method('getData')->with('qty');
         $item->expects($this->once())->method('getDescription');

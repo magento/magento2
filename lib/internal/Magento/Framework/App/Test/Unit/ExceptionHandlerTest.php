@@ -64,9 +64,9 @@ class ExceptionHandlerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->encryptorInterfaceMock = $this->getMockForAbstractClass(EncryptorInterface::class);
+        $this->encryptorInterfaceMock = $this->createMock(EncryptorInterface::class);
         $this->filesystemMock = $this->createMock(Filesystem::class);
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->responseMock = $this->createMock(ResponseHttp::class);
         $this->requestMock = $this->getMockBuilder(RequestHttp::class)
             ->disableOriginalConstructor()
@@ -81,7 +81,7 @@ class ExceptionHandlerTest extends TestCase
 
     public function testHandleDeveloperModeNotInstalled()
     {
-        $dir = $this->getMockForAbstractClass(ReadInterface::class);
+        $dir = $this->createMock(ReadInterface::class);
         $dir->expects($this->once())
             ->method('getAbsolutePath')
             ->willReturn(__DIR__);
@@ -173,7 +173,7 @@ class ExceptionHandlerTest extends TestCase
     {
         $bootstrap = $this->getBootstrapInstalled();
         $exception = new InitException(new Phrase('Test'));
-        $dir = $this->getMockForAbstractClass(ReadInterface::class);
+        $dir = $this->createMock(ReadInterface::class);
         $dir->expects($this->once())
             ->method('getAbsolutePath')
             ->with('errors/404.php')
@@ -200,7 +200,7 @@ class ExceptionHandlerTest extends TestCase
     {
         $bootstrap = $this->getBootstrapInstalled();
         $exception = new \Exception('Test');
-        $dir = $this->getMockForAbstractClass(ReadInterface::class);
+        $dir = $this->createMock(ReadInterface::class);
         $dir->expects($this->once())
             ->method('getAbsolutePath')
             ->with('errors/report.php')

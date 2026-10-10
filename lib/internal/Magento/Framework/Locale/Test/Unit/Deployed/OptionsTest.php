@@ -17,6 +17,7 @@ use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Framework\View\DesignInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for Options class.
@@ -63,12 +64,9 @@ class OptionsTest extends TestCase
         $this->stateMock = $this->getMockBuilder(State::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->availableLocalesMock = $this->getMockBuilder(AvailableLocalesInterface::class)
-            ->getMockForAbstractClass();
-        $this->designMock = $this->getMockBuilder(DesignInterface::class)
-            ->getMockForAbstractClass();
-        $this->localeListsMock = $this->getMockBuilder(ListsInterface::class)
-            ->getMockForAbstractClass();
+        $this->availableLocalesMock = $this->createMock(AvailableLocalesInterface::class);
+        $this->designMock = $this->createMock(DesignInterface::class);
+        $this->localeListsMock = $this->createMock(ListsInterface::class);
         $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);
 
         $this->model = new Options(
@@ -85,9 +83,8 @@ class OptionsTest extends TestCase
      * @param int $scdOnDemand
      * @param array $locales
      * @return void
-     *
-     * @dataProvider getFullLocalesDataProvider
-     */
+     *     */
+    #[DataProvider('getFullLocalesDataProvider')]
     public function testGetOptionLocalesFull(string $mode, int $scdOnDemand, array $locales): void
     {
         $this->localeListsMock->expects($this->once())
@@ -104,9 +101,8 @@ class OptionsTest extends TestCase
      * @param int $scdOnDemand
      * @param array $locales
      * @return void
-     *
-     * @dataProvider getFullLocalesDataProvider
-     */
+     *     */
+    #[DataProvider('getFullLocalesDataProvider')]
     public function testGetTranslatedOptionLocalesFull(string $mode, int $scdOnDemand, array $locales): void
     {
         $this->localeListsMock->expects($this->once())
@@ -125,9 +121,8 @@ class OptionsTest extends TestCase
      * @param array $expectedLocales
      * @param array $deployedCodes
      * @return void
-     *
-     * @dataProvider getLimitedLocalesDataProvider
-     */
+     *     */
+    #[DataProvider('getLimitedLocalesDataProvider')]
     public function testGetOptionLocalesLimited(
         string $mode,
         int $scdOnDemand,
@@ -151,9 +146,8 @@ class OptionsTest extends TestCase
      * @param array $expectedLocales
      * @param array $deployedCodes
      * @return void
-     *
-     * @dataProvider getLimitedLocalesDataProvider
-     */
+     *     */
+    #[DataProvider('getLimitedLocalesDataProvider')]
     public function testGetTranslatedOptionLocalesLimited(
         string $mode,
         int $scdOnDemand,
@@ -188,8 +182,7 @@ class OptionsTest extends TestCase
 
         $area = 'area';
         $code = 'code';
-        $themeMock = $this->getMockBuilder(ThemeInterface::class)
-            ->getMockForAbstractClass();
+        $themeMock = $this->createMock(ThemeInterface::class);
         $themeMock->expects($this->once())
             ->method('getCode')
             ->willReturn($code);

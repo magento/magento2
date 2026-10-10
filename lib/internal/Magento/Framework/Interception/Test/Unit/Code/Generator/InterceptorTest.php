@@ -17,6 +17,7 @@ use Magento\Framework\Interception\Code\Generator\SampleBackendMenu;
 use Magento\Framework\Interception\Code\Generator\TSample;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -50,9 +51,8 @@ class InterceptorTest extends TestCase
      *
      * @param string $className
      * @param string $resultClassName
-     * @param string $fileName
-     * @dataProvider interceptorDataProvider
-     */
+     * @param string $fileName     */
+    #[DataProvider('interceptorDataProvider')]
     public function testGenerate($className, $resultClassName, $fileName)
     {
         /** @var Interceptor|MockObject $interceptor */

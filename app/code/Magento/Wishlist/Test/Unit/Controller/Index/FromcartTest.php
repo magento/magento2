@@ -5,23 +5,27 @@
  */
 declare(strict_types=1);
 
-
 namespace Magento\Wishlist\Test\Unit\Controller\Index;
 
 use Magento\Catalog\Model\Product;
 use Magento\Checkout\Helper\Cart as CartHelper;
+use Magento\Checkout\Model\Cart;
 use Magento\Checkout\Model\Cart as CheckoutCart;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Request\Http;
+use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\Result\Redirect as ResultRedirect;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Data\Form\FormKey\Validator;
+use Magento\Framework\Message\Manager as FrameworkMessageManager;
 use Magento\Framework\DataObject;
 use Magento\Framework\Escaper;
+use Exception;
 use Magento\Framework\Message\Manager as MessageManager;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Wishlist\Controller\Index\Fromcart;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Wishlist\Controller\WishlistProviderInterface;
 use Magento\Wishlist\Helper\Data as WishlistHelper;
 use Magento\Wishlist\Model\Wishlist;
@@ -33,6 +37,8 @@ use PHPUnit\Framework\TestCase;
  */
 class FromcartTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Fromcart
      */
@@ -97,28 +103,17 @@ class FromcartTest extends TestCase
     {
         $this->prepareContext();
 
-        $this->wishlistProvider = $this->getMockBuilder(WishlistProviderInterface::class)
-            ->getMockForAbstractClass();
+        $this->wishlistProvider = $this->createMock(WishlistProviderInterface::class);
 
-        $this->wishlistHelper = $this->getMockBuilder(\Magento\Wishlist\Helper\Data::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->wishlistHelper = $this->createMock(WishlistHelper::class);
 
-        $this->cart = $this->getMockBuilder(\Magento\Checkout\Model\Cart::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->cart = $this->createMock(Cart::class);
 
-        $this->cartHelper = $this->getMockBuilder(\Magento\Checkout\Helper\Cart::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->cartHelper = $this->createMock(CartHelper::class);
 
-        $this->escaper = $this->getMockBuilder(Escaper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->escaper = $this->createMock(Escaper::class);
 
-        $this->formKeyValidator = $this->getMockBuilder(Validator::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->formKeyValidator = $this->createMock(Validator::class);
 
         $this->controller = new Fromcart(
             $this->context,
@@ -172,9 +167,7 @@ class FromcartTest extends TestCase
             ->with($this->request)
             ->willReturn(true);
 
-        $wishlistMock = $this->getMockBuilder(Wishlist::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $wishlistMock = $this->createMock(Wishlist::class);
 
         $this->wishlistProvider->expects($this->once())
             ->method('getWishlist')
@@ -185,9 +178,7 @@ class FromcartTest extends TestCase
             ->with('item')
             ->willReturn($itemId);
 
-        $quoteMock = $this->getMockBuilder(Quote::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $quoteMock = $this->createMock(Quote::class);
 
         $quoteMock->expects($this->once())
             ->method('getItemById')
@@ -227,13 +218,9 @@ class FromcartTest extends TestCase
             ->with($this->request)
             ->willReturn(true);
 
-        $dataObjectMock = $this->getMockBuilder(DataObject::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $dataObjectMock = $this->createMock(DataObject::class);
 
-        $wishlistMock = $this->getMockBuilder(Wishlist::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $wishlistMock = $this->createMock(Wishlist::class);
         $wishlistMock->expects($this->once())
             ->method('addNewItem')
             ->with($productId, $dataObjectMock)
@@ -290,16 +277,14 @@ class FromcartTest extends TestCase
     {
         $cartUrl = 'cart_url';
         $exceptionMessage = 'exception_message';
-        $exception = new \Exception($exceptionMessage);
+        $exception = new Exception($exceptionMessage);
 
         $this->formKeyValidator->expects($this->once())
             ->method('validate')
             ->with($this->request)
             ->willReturn(true);
 
-        $wishlistMock = $this->getMockBuilder(Wishlist::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $wishlistMock = $this->createMock(Wishlist::class);
 
         $this->wishlistProvider->expects($this->once())
             ->method('getWishlist')
@@ -329,29 +314,19 @@ class FromcartTest extends TestCase
 
     protected function prepareContext()
     {
-        $this->request = $this->getMockBuilder(Http::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->request = $this->createMock(Http::class);
 
-        $this->messageManager = $this->getMockBuilder(\Magento\Framework\Message\Manager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->messageManager = $this->createMock(FrameworkMessageManager::class);
 
-        $this->resultRedirect = $this->getMockBuilder(\Magento\Framework\Controller\Result\Redirect::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resultRedirect = $this->createMock(Redirect::class);
 
-        $this->resultFactory = $this->getMockBuilder(ResultFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resultFactory = $this->createMock(ResultFactory::class);
         $this->resultFactory->expects($this->any())
             ->method('create')
             ->with(ResultFactory::TYPE_REDIRECT)
             ->willReturn($this->resultRedirect);
 
-        $this->context = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->context = $this->createMock(Context::class);
 
         $this->context->expects($this->any())
             ->method('getRequest')
@@ -373,34 +348,20 @@ class FromcartTest extends TestCase
      */
     protected function createQuoteMock($productId, $productName, $dataObjectMock, $itemId)
     {
-        $productMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productMock = $this->createMock(Product::class);
         $productMock->expects($this->once())
             ->method('getName')
             ->willReturn($productName);
 
-        $quoteItemMock = $this->getMockBuilder(Item::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getProductId'])
-            ->onlyMethods([
-                'getBuyRequest',
-                'getProduct',
-            ])
-            ->getMock();
-        $quoteItemMock->expects($this->once())
-            ->method('getProductId')
-            ->willReturn($productId);
-        $quoteItemMock->expects($this->once())
-            ->method('getBuyRequest')
-            ->willReturn($dataObjectMock);
-        $quoteItemMock->expects($this->once())
-            ->method('getProduct')
-            ->willReturn($productMock);
+        $quoteItemMock = $this->createPartialMockWithReflection(
+            Item::class,
+            ['getProductId', 'getBuyRequest', 'getProduct']
+        );
+        $quoteItemMock->method('getProductId')->willReturn($productId);
+        $quoteItemMock->method('getBuyRequest')->willReturn($dataObjectMock);
+        $quoteItemMock->method('getProduct')->willReturn($productMock);
 
-        $quoteMock = $this->getMockBuilder(Quote::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $quoteMock = $this->createMock(Quote::class);
         $quoteMock->expects($this->once())
             ->method('getItemById')
             ->with($itemId)

@@ -5,6 +5,8 @@
  */
 namespace Magento\Customer\Helper;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 class AddressTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Customer\Helper\Address */
@@ -19,8 +21,8 @@ class AddressTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param $attributeCode
-     * @dataProvider getAttributeValidationClass
      */
+    #[DataProvider('getAttributeValidationClass')]
     public function testGetAttributeValidationClass($attributeCode, $expectedClass)
     {
         $this->assertEquals($expectedClass, $this->helper->getAttributeValidationClass($attributeCode));

@@ -8,16 +8,18 @@ declare(strict_types=1);
 namespace Magento\Bundle\Test\Unit\Controller\Adminhtml\Product\Initialization\Helper\Plugin;
 
 use Magento\Bundle\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Bundle;
+use Magento\Catalog\Api\Data\ProductExtensionInterface;
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper;
 use Magento\Catalog\Model\Product;
-use Magento\Catalog\Test\Unit\Helper\ProductExtensionTestHelper;
-use Magento\Catalog\Test\Unit\Helper\ProductTestHelper;
 use Magento\Framework\App\Request\Http;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class BundleTest extends TestCase
 {
+    use MockCreationTrait;
+    
     /**
      * @var Bundle
      */
@@ -29,7 +31,7 @@ class BundleTest extends TestCase
     protected $requestMock;
 
     /**
-     * @var ProductTestHelper
+     * @var Product|MockObject
      */
     protected $productMock;
 
@@ -60,7 +62,13 @@ class BundleTest extends TestCase
     {
         $this->requestMock = $this->createMock(Http::class);
 
-        $this->productMock = new ProductTestHelper();
+        $this->productMock = $this->createPartialMockWithReflection(
+            Product::class,
+            [
+                'setBundleOptionsData', 'setBundleSelectionsData', 'setCanSaveCustomOptions',
+                'setCanSaveBundleSelections', 'setOptions'
+            ]
+        );
 
         $this->subjectMock = $this->createMock(
             Helper::class
@@ -124,27 +132,17 @@ class BundleTest extends TestCase
         $this->productMock->setProductOptions($productOptionsBefore);
         $this->productMock->setBundleOptionsDataResult(['option_1' => ['delete' => 1]]);
 
-        $extensionAttribute = new ProductExtensionTestHelper();
-        $extensionAttribute->setBundleProductOptions([]);
+        $extensionAttribute = $this->createMock(ProductExtensionInterface::class);
         $this->productMock->setExtensionAttributes($extensionAttribute);
 
-        $this->model->afterInitialize($this->subjectMock, $this->productMock);
-
         // Verify the methods were called with correct parameters
-        $this->assertTrue($this->productMock->wasSetBundleOptionsDataCalled());
-        $this->assertEquals($this->bundleOptionsCleaned, $this->productMock->getSetBundleOptionsDataParams());
+        $this->productMock->expects($this->once())->method('setBundleOptionsData')->with($this->bundleOptionsCleaned);
+        $this->productMock->expects($this->once())->method('setBundleSelectionsData')->with([$this->bundleSelections]);
+        $this->productMock->expects($this->once())->method('setCanSaveCustomOptions')->with(true);
+        $this->productMock->expects($this->once())->method('setCanSaveBundleSelections')->with(true);
+        $this->productMock->expects($this->once())->method('setOptions')->with(null);
 
-        $this->assertTrue($this->productMock->wasSetBundleSelectionsDataCalled());
-        $this->assertEquals([$this->bundleSelections], $this->productMock->getSetBundleSelectionsDataParams());
-
-        $this->assertTrue($this->productMock->wasSetCanSaveCustomOptionsCalled());
-        $this->assertEquals(true, $this->productMock->getSetCanSaveCustomOptionsParams());
-
-        $this->assertTrue($this->productMock->wasSetCanSaveBundleSelectionsCalled());
-        $this->assertEquals(true, $this->productMock->getSetCanSaveBundleSelectionsParams());
-
-        $this->assertTrue($this->productMock->wasSetOptionsCalled());
-        $this->assertEquals(null, $this->productMock->getSetOptionsParams());
+        $this->model->afterInitialize($this->subjectMock, $this->productMock);
 
         // Verify other properties
         $this->assertEquals(0, $this->productMock->getPriceType());
@@ -166,15 +164,13 @@ class BundleTest extends TestCase
         $this->productMock->setPriceType(2);
         $this->productMock->setOptionsReadonly(true);
 
-        $extensionAttribute = new ProductExtensionTestHelper();
-        $extensionAttribute->setBundleProductOptions([]);
+        $extensionAttribute = $this->createMock(ProductExtensionInterface::class);
         $this->productMock->setExtensionAttributes($extensionAttribute);
 
-        $this->model->afterInitialize($this->subjectMock, $this->productMock);
-
         // Verify the methods were called with correct parameters
-        $this->assertTrue($this->productMock->wasSetCanSaveBundleSelectionsCalled());
-        $this->assertEquals(false, $this->productMock->getSetCanSaveBundleSelectionsParams());
+        $this->productMock->expects($this->once())->method('setCanSaveBundleSelections')->with(false);
+
+        $this->model->afterInitialize($this->subjectMock, $this->productMock);
 
         // Verify other properties
         $this->assertEquals(2, $this->productMock->getPriceType());
@@ -195,15 +191,13 @@ class BundleTest extends TestCase
         // Set up the anonymous class properties using setters
         $this->productMock->setCompositeReadonly(false);
 
-        $extensionAttribute = new ProductExtensionTestHelper();
-        $extensionAttribute->setBundleProductOptions([]);
+        $extensionAttribute = $this->createMock(ProductExtensionInterface::class);
         $this->productMock->setExtensionAttributes($extensionAttribute);
 
-        $this->model->afterInitialize($this->subjectMock, $this->productMock);
-
         // Verify the methods were called with correct parameters
-        $this->assertTrue($this->productMock->wasSetCanSaveBundleSelectionsCalled());
-        $this->assertEquals(false, $this->productMock->getSetCanSaveBundleSelectionsParams());
+        $this->productMock->expects($this->once())->method('setCanSaveBundleSelections')->with(false);
+
+        $this->model->afterInitialize($this->subjectMock, $this->productMock);
 
         // Verify other properties
         $this->assertFalse($this->productMock->getCompositeReadonly());

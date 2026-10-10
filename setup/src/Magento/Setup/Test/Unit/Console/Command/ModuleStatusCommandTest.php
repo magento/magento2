@@ -20,7 +20,7 @@ class ModuleStatusCommandTest extends TestCase
     public function testExecute()
     {
         $objectManagerProvider = $this->createMock(ObjectManagerProvider::class);
-        $objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $objectManager = $this->createMock(ObjectManagerInterface::class);
         $objectManagerProvider->expects($this->any())
             ->method('get')
             ->willReturn($objectManager);

@@ -84,9 +84,9 @@ class Samples extends AbstractModifier
     public function modifyData(array $data)
     {
         $model = $this->locator->getProduct();
-
-        $data[$model->getId()][self::DATA_SOURCE_DEFAULT]['samples_title'] = $this->samplesData->getSamplesTitle();
-        $data[$model->getId()]['downloadable']['sample'] = $this->samplesData->getSamplesData();
+        $modelId = $model->getId() ?? '';
+        $data[$modelId][self::DATA_SOURCE_DEFAULT]['samples_title'] = $this->samplesData->getSamplesTitle();
+        $data[$modelId]['downloadable']['sample'] = $this->samplesData->getSamplesData();
 
         return $data;
     }

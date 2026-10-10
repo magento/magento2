@@ -17,6 +17,7 @@ use Magento\Store\App\Request\StorePathInfoValidator;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreIsInactiveException;
 use Magento\Store\Model\Validation\StoreCodeValidator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -134,9 +135,9 @@ class StorePathInfoValidatorTest extends TestCase
     }
 
     /**
-     * @dataProvider getValidStoreCodeExceptionDataProvider
      * @param \Throwable $exception
      */
+    #[DataProvider('getValidStoreCodeExceptionDataProvider')]
     public function testGetValidStoreCodeThrowsException(\Throwable $exception): void
     {
         $this->configMock->method('isSetFlag')
@@ -162,11 +163,11 @@ class StorePathInfoValidatorTest extends TestCase
     }
 
     /**
-     * @dataProvider getValidStoreCodeDataProvider
      * @param string $pathInfo
      * @param bool $isStoreCodeValid
      * @param string|null $expectedResult
      */
+    #[DataProvider('getValidStoreCodeDataProvider')]
     public function testGetValidStoreCode(string $pathInfo, bool $isStoreCodeValid, ?string $expectedResult): void
     {
         $this->configMock->method('isSetFlag')
@@ -185,11 +186,11 @@ class StorePathInfoValidatorTest extends TestCase
     }
 
     /**
-     * @dataProvider getValidStoreCodeDataProvider
      * @param string $pathInfo
      * @param bool $isStoreCodeValid
      * @param string|null $expectedResult
      */
+    #[DataProvider('getValidStoreCodeDataProvider')]
     public function testGetValidStoreCodeResultIsCached(
         string $pathInfo,
         bool $isStoreCodeValid,

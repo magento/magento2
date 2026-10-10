@@ -14,6 +14,7 @@ use Magento\Quote\Model\QuoteFactory;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Remove configurable product from cart testcases
@@ -55,9 +56,9 @@ class RemoveConfigurableProductFromCartTest extends GraphQlAbstract
     /**
      * @param string $itemArgName
      * @param string $reservedOrderId
-     * @dataProvider removeConfigurableProductFromCartDataProvider
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/quote_with_configurable_product.php
      */
+    #[DataProvider('removeConfigurableProductFromCartDataProvider')]
     public function testRemoveConfigurableProductFromCart(string $itemArgName, string $reservedOrderId)
     {
         $configurableOptionSku = 'simple_10';
@@ -135,5 +136,6 @@ QUERY;
                 return $item->getId();
             }
         }
+        throw new \RuntimeException("Quote item with SKU '{$sku}' not found");
     }
 }

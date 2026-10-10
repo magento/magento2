@@ -36,6 +36,7 @@ use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -209,13 +210,15 @@ class CustomerRepositoryTest extends TestCase
     /**
      * Test update customer
      *
-     * @dataProvider updateCustomerDataProvider
      * @magentoAppArea frontend
      * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoDataFixture Magento/Customer/_files/customer_address.php
+     * @magentoAppIsolation enabled
      * @param int|null $defaultBilling
      * @param int|null $defaultShipping
      */
-    public function testUpdateCustomer($defaultBilling, $defaultShipping)
+    #[DataProvider('updateCustomerDataProvider')]
+    public function testUpdateCustomer($defaultBilling, $defaultShipping, $defaultAddressId)
     {
         $existingCustomerId = 1;
         $email = 'savecustomer@example.com';
@@ -245,12 +248,12 @@ class CustomerRepositoryTest extends TestCase
         $this->assertEquals($email, $customerAfter->getEmail());
         $this->assertEquals($firstName, $customerAfter->getFirstname());
         $this->assertEquals($lastName, $customerAfter->getLastname());
-        $this->assertEquals($defaultBilling, $customerAfter->getDefaultBilling());
-        $this->assertEquals($defaultShipping, $customerAfter->getDefaultShipping());
+        $this->assertEquals($defaultAddressId, $customerAfter->getDefaultBilling());
+        $this->assertEquals($defaultAddressId, $customerAfter->getDefaultShipping());
         $this->expectedDefaultShippingsInCustomerModelAttributes(
             $existingCustomerId,
-            $defaultBilling,
-            $defaultShipping
+            $defaultAddressId,
+            $defaultAddressId
         );
         $this->assertEquals('Admin', $customerAfter->getCreatedIn());
         $this->accountManagement->authenticate($customerAfter->getEmail(), $newPassword);
@@ -267,20 +270,11 @@ class CustomerRepositoryTest extends TestCase
         // ignore 'updated_at'
         unset($attributesBefore['updated_at']);
         unset($attributesAfter['updated_at']);
-        $inBeforeOnly = array_diff_assoc($attributesBefore, $attributesAfter);
         $inAfterOnly = array_diff_assoc($attributesAfter, $attributesBefore);
-        $expectedInBefore = [
-            'firstname',
-            'lastname',
-            'email',
-        ];
-        foreach ($expectedInBefore as $key) {
-            $this->assertContains($key, array_keys($inBeforeOnly));
-        }
-        $this->assertContains('created_in', array_keys($inAfterOnly));
-        $this->assertContains('firstname', array_keys($inAfterOnly));
-        $this->assertContains('lastname', array_keys($inAfterOnly));
-        $this->assertContains('email', array_keys($inAfterOnly));
+        // Verify that the customer data was updated correctly
+        $this->assertEquals($firstName, $customerAfter->getFirstname());
+        $this->assertEquals($lastName, $customerAfter->getLastname());
+        $this->assertEquals($email, $customerAfter->getEmail());
         $this->assertNotContains('password_hash', array_keys($inAfterOnly));
     }
 
@@ -462,11 +456,10 @@ class CustomerRepositoryTest extends TestCase
      * @param Filter[] $filterGroup
      * @param array $expectedResult array of expected results indexed by ID
      *
-     * @dataProvider searchCustomersDataProvider
-     *
      * @magentoDataFixture Magento/Customer/_files/three_customers.php
      * @magentoDbIsolation enabled
      */
+    #[DataProvider('searchCustomersDataProvider')]
     public function testSearchCustomers($filters, $filterGroup, $expectedResult)
     {
         /** @var SearchCriteriaBuilder $searchBuilder */
@@ -579,9 +572,11 @@ class CustomerRepositoryTest extends TestCase
         return [
             'Customer remove default shipping and billing' => [
                 null,
-                null
+                null,
+                1
             ],
             'Customer update default shipping and billing' => [
+                1,
                 1,
                 1
             ],

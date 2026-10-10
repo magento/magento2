@@ -7,12 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\Quote\Test\Unit\Observer;
 
+use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
-use Magento\Quote\Test\Unit\Helper\EventTestHelper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Payment;
+use Magento\Quote\Observer\SendInvoiceEmailObserver;
 use Magento\Quote\Observer\SubmitObserver;
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Email\Container\InvoiceIdentity;
 use Magento\Sales\Model\Order\Email\Sender\InvoiceSender;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 use Magento\Sales\Model\Order\Invoice;
@@ -20,8 +23,6 @@ use Magento\Sales\Model\ResourceModel\Order\Invoice\Collection;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use Magento\Sales\Model\Order\Email\Container\InvoiceIdentity;
-use Magento\Quote\Observer\SendInvoiceEmailObserver;
 
 /**
  * Test for sending invoice email during order place on frontend
@@ -30,6 +31,8 @@ use Magento\Quote\Observer\SendInvoiceEmailObserver;
  */
 class SendInvoiceEmailObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var SendInvoiceEmailObserver
      */
@@ -84,9 +87,12 @@ class SendInvoiceEmailObserverTest extends TestCase
             ->disableOriginalConstructor()
             ->onlyMethods(['isEnabled'])
             ->getMock();
-        $eventMock = new EventTestHelper();
-        $eventMock->setQuote($this->quoteMock);
-        $eventMock->setOrder($this->orderMock);
+        $eventMock = $this->createPartialMockWithReflection(
+            Event::class,
+            ['setQuote', 'getQuote', 'setOrder', 'getOrder']
+        );
+        $eventMock->method('getQuote')->willReturn($this->quoteMock);
+        $eventMock->method('getOrder')->willReturn($this->orderMock);
         $this->observerMock = $this->createPartialMock(Observer::class, ['getEvent']);
         $this->observerMock->method('getEvent')->willReturn($eventMock);
         $this->quoteMock->method('getPayment')->willReturn($this->paymentMock);

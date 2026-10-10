@@ -222,7 +222,6 @@ class InlineEditTest extends TestCase
         );
         $reflection = new \ReflectionClass(get_class($this->controller));
         $reflectionProperty = $reflection->getProperty('emailNotification');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->controller, $this->emailNotification);
 
         $this->items = [

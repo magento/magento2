@@ -19,6 +19,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Catalog\Model\GetCategoryByName;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Indexer\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Checks category products indexing
@@ -83,12 +84,11 @@ class CategoryIndexTest extends TestCase
      * @magentoDataFixture Magento/Catalog/_files/category_with_parent_anchor.php
      * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
      *
-     * @dataProvider assignCategoriesDataProvider
-     *
      * @param string $categoryName
      * @param int $expectedItemsCount
      * @return void
      */
+    #[DataProvider('assignCategoriesDataProvider')]
     public function testProductAssignCategory(string $categoryName, int $expectedItemsCount): void
     {
         $product = $this->productRepository->get('simple2');
@@ -120,12 +120,11 @@ class CategoryIndexTest extends TestCase
      * @magentoDataFixture Magento/Catalog/_files/category_with_parent_anchor.php
      * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
      *
-     * @dataProvider assignProductsDataProvider
-     *
      * @param string $categoryName
      * @param int $expectedCount
      * @return void
      */
+    #[DataProvider('assignProductsDataProvider')]
     public function testCategoryAssignProduct(string $categoryName, int $expectedCount): void
     {
         $product = $this->productRepository->get('simple2');

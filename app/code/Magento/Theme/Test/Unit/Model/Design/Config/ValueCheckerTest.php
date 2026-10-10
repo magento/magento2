@@ -30,12 +30,7 @@ class ValueCheckerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->fallbackResolver = $this->getMockForAbstractClass(
-            ScopeFallbackResolverInterface::class,
-            [],
-            '',
-            false
-        );
+        $this->fallbackResolver = $this->createMock(ScopeFallbackResolverInterface::class);
         $this->appConfig = $this->createMock(Config::class);
         $this->valueProcessor = $this->getMockBuilder(ValueProcessor::class)
             ->disableOriginalConstructor()

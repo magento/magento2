@@ -9,12 +9,13 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Action\Attribute;
  * Adminhtml catalog product edit action attributes update tabs block
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Tabs extends \Magento\Backend\Block\Widget\Tabs
 {
     /**
+     * Initialise the block
+     *
      * @return void
      */
     protected function _construct()

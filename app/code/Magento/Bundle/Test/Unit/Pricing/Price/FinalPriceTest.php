@@ -21,6 +21,7 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Pricing\PriceInfo\Base;
 use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -31,6 +32,7 @@ use PHPUnit\Framework\TestCase;
  */
 class FinalPriceTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var FinalPrice
      */
@@ -96,8 +98,8 @@ class FinalPriceTest extends TestCase
      */
     protected function prepareMock()
     {
-        $this->saleableInterfaceMock = $this->createPartialMock(
-            \Magento\Catalog\Test\Unit\Helper\ProductTestHelper::class,
+        $this->saleableInterfaceMock = $this->createPartialMockWithReflection(
+            Product::class,
             ['getPriceType', 'getPriceInfo']
         );
         $this->bundleCalculatorMock = $this->createMock(

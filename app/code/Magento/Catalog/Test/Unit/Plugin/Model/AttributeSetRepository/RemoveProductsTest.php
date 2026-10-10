@@ -12,7 +12,9 @@ use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Catalog\Plugin\Model\AttributeSetRepository\RemoveProducts;
 use Magento\Eav\Api\AttributeSetRepositoryInterface;
 use Magento\Eav\Api\Data\AttributeSetInterface;
+use Magento\Eav\Model\Entity\Attribute\Set as AttributeSet;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -21,6 +23,7 @@ use PHPUnit\Framework\TestCase;
  */
 class RemoveProductsTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var RemoveProducts
      */
@@ -37,10 +40,7 @@ class RemoveProductsTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->collectionFactory = $this->getMockBuilder(CollectionFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
+        $this->collectionFactory = $this->createPartialMock(CollectionFactory::class, ['create']);
         $this->testSubject = $objectManager->getObject(
             RemoveProducts::class,
             [
@@ -57,9 +57,7 @@ class RemoveProductsTest extends TestCase
         $attributeSetId = '1';
 
         /** @var Collection|MockObject $collection */
-        $collection = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $collection = $this->createMock(Collection::class);
         $collection->expects(self::once())
             ->method('addFieldToFilter')
             ->with(self::identicalTo('attribute_set_id'), self::identicalTo(['eq' => $attributeSetId]));
@@ -71,15 +69,10 @@ class RemoveProductsTest extends TestCase
             ->willReturn($collection);
 
         /** @var AttributeSetRepositoryInterface|MockObject $attributeSetRepository */
-        $attributeSetRepository = $this->getMockBuilder(AttributeSetRepositoryInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $attributeSetRepository = $this->createMock(AttributeSetRepositoryInterface::class);
 
-        /** @var AttributeSetInterface|MockObject $attributeSet */
-        $attributeSet = $this->getMockBuilder(AttributeSetInterface::class)
-            ->addMethods(['getId'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        /** @var AttributeSet|MockObject $attributeSet */
+        $attributeSet = $this->createPartialMock(AttributeSet::class, ['getId']);
         $attributeSet->expects(self::once())
             ->method('getId')
             ->willReturn($attributeSetId);

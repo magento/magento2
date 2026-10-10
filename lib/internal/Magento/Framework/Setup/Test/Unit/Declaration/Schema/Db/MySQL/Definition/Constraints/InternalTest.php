@@ -15,6 +15,7 @@ use Magento\Framework\Setup\Declaration\Schema\Dto\Table;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for internal (primary key, unique key) constraint definition.
@@ -56,15 +57,14 @@ class InternalTest extends TestCase
      *
      * @dataProvider toDefinitionDataProvider()
      */
+    #[DataProvider('toDefinitionDataProvider')]
     public function testToDefinition($name, $type, $columns, $expectedExpression)
     {
         /** @var InternalConstraintDto|MockObject $constraint */
         $constraint = $this->getMockBuilder(InternalConstraintDto::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $adapterMock = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $adapterMock = $this->createMock(AdapterInterface::class);
         $tableMock = $this->getMockBuilder(Table::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -120,6 +120,7 @@ class InternalTest extends TestCase
      * @param array $expectedDefinition
      * @dataProvider definitionDataProvider()
      */
+    #[DataProvider('definitionDataProvider')]
     public function testFromDefinition($definition, $expectedDefinition)
     {
         $result = $this->internal->fromDefinition($definition);

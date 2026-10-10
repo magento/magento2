@@ -11,6 +11,7 @@ use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\ViewInterface;
+use Magento\Framework\Controller\Result\Raw;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
@@ -24,6 +25,7 @@ use Magento\Sales\Model\Order\Shipment;
 use Magento\Sales\Model\Order\Shipment\Track;
 use Magento\Shipping\Controller\Adminhtml\Order\Shipment\AddTrack;
 use Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -34,6 +36,7 @@ use PHPUnit\Framework\TestCase;
  */
 class AddTrackTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var ShipmentLoader|MockObject
      */
@@ -95,54 +98,23 @@ class AddTrackTest extends TestCase
     protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
-        $this->shipmentLoader = $this->getMockBuilder(
-            ShipmentLoader::class
-        )
-            ->disableOriginalConstructor()
-            ->onlyMethods(['load'])
-            ->addMethods(['setShipmentId', 'setOrderId', 'setShipment', 'setTracking'])
-            ->getMock();
-        $this->context = $this->getMockBuilder(Context::class)
-            ->addMethods(['getTitle'])
-            ->onlyMethods([
-                'getRequest',
-                'getResponse',
-                'getRedirect',
-                'getObjectManager',
-                'getView',
-                'getResultFactory'
-            ])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->response = $this->getMockBuilder(ResponseInterface::class)
-            ->addMethods(['setRedirect', 'setBody'])
-            ->onlyMethods(['sendResponse'])
-            ->getMockForAbstractClass();
-        $this->request = $this->getMockBuilder(Http::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->view = $this->getMockForAbstractClass(ViewInterface::class);
-        $this->resultPageMock = $this->getMockBuilder(Page::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->pageConfigMock = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->pageTitleMock = $this->getMockBuilder(Title::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->trackFactory = $this->getMockBuilder(ShipmentTrackInterfaceFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMockForAbstractClass();
-        $this->rawResult = $this->getMockBuilder(ResultInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setContents'])
-            ->getMockForAbstractClass();
-        $resultFactory = $this->getMockBuilder(ResultFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMockForAbstractClass();
+        $this->shipmentLoader = $this->createPartialMockWithReflection(
+            ShipmentLoader::class,
+            ['load', 'setShipmentId', 'setOrderId', 'setShipment', 'setTracking']
+        );
+        $this->context = $this->createPartialMockWithReflection(
+            Context::class,
+            ['getTitle', 'getRequest', 'getResponse', 'getRedirect', 'getObjectManager', 'getView', 'getResultFactory']
+        );
+        $this->response = $this->createMock(ResponseInterface::class);
+        $this->request = $this->createMock(Http::class);
+        $this->view = $this->createMock(ViewInterface::class);
+        $this->resultPageMock = $this->createMock(Page::class);
+        $this->pageConfigMock = $this->createMock(Config::class);
+        $this->pageTitleMock = $this->createMock(Title::class);
+        $this->trackFactory = $this->createMock(ShipmentTrackInterfaceFactory::class);
+        $this->rawResult = $this->createMock(Raw::class);
+        $resultFactory = $this->createMock(ResultFactory::class);
         $this->context->expects($this->once())
             ->method('getRequest')
             ->willReturn($this->request);
@@ -239,7 +211,7 @@ class AddTrackTest extends TestCase
             ->with($title)->willReturnSelf();
         $this->view->expects($this->once())
             ->method('loadLayout')->willReturnSelf();
-        $layout = $this->getMockForAbstractClass(LayoutInterface::class);
+        $layout = $this->createMock(LayoutInterface::class);
         $menuBlock = $this->createPartialMock(BlockInterface::class, ['toHtml']);
         $html = 'html string';
         $this->view->expects($this->once())

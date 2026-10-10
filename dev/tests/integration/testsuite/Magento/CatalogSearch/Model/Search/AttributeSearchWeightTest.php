@@ -12,6 +12,7 @@ use Magento\TestFramework\Catalog\Model\Layer\QuickSearchByQuery;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test founded products order after quick search with changed attribute search weight using mysql search engine.
@@ -64,7 +65,6 @@ class AttributeSearchWeightTest extends TestCase
      *
      * @magentoDataFixture Magento/CatalogSearch/_files/products_for_sku_search_weight_score.php
      * @magentoDataFixture Magento/CatalogSearch/_files/full_reindex.php
-     * @dataProvider attributeSearchWeightDataProvider
      * @magentoDbIsolation disabled
      *
      * @param string $searchQuery
@@ -72,6 +72,7 @@ class AttributeSearchWeightTest extends TestCase
      * @param array $expectedProductNames
      * @return void
      */
+    #[DataProvider('attributeSearchWeightDataProvider')]
     public function testAttributeSearchWeight(
         string $searchQuery,
         array $attributeWeights,

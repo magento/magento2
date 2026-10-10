@@ -13,6 +13,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Magento\Setup\Module\ConnectionFactory;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ConnectionFactoryTest extends TestCase
 {
@@ -24,7 +25,7 @@ class ConnectionFactoryTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $serviceLocatorMock = $this->getMockForAbstractClass(ServiceLocatorInterface::class);
+        $serviceLocatorMock = $this->createMock(ServiceLocatorInterface::class);
         $objectManagerProviderMock = $this->createMock(ObjectManagerProvider::class);
         $serviceLocatorMock->expects($this->once())
             ->method('get')
@@ -32,7 +33,7 @@ class ConnectionFactoryTest extends TestCase
                 ObjectManagerProvider::class
             )
             ->willReturn($objectManagerProviderMock);
-        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $objectManagerProviderMock->expects($this->once())
             ->method('get')
             ->willReturn($objectManagerMock);
@@ -46,8 +47,8 @@ class ConnectionFactoryTest extends TestCase
 
     /**
      * @param array $config
-     * @dataProvider createDataProvider
      */
+    #[DataProvider('createDataProvider')]
     public function testCreate($config)
     {
         $this->expectException('InvalidArgumentException');

@@ -41,8 +41,9 @@ class CategoryLayoutUpdateManager extends LayoutUpdateManager
      */
     public function fetchAvailableFiles(CategoryInterface $category): array
     {
-        if (array_key_exists($category->getId(), $this->fakeFiles)) {
-            return $this->fakeFiles[$category->getId()];
+        $categoryId = $category->getId();
+        if ($categoryId !== null && array_key_exists($categoryId, $this->fakeFiles)) {
+            return $this->fakeFiles[$categoryId];
         }
 
         return parent::fetchAvailableFiles($category);

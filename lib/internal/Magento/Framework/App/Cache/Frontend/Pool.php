@@ -66,6 +66,8 @@ class Pool implements \Iterator
         if ($this->_instances === null) {
             $this->_instances = [];
             foreach ($this->_getCacheSettings() as $frontendId => $frontendOptions) {
+                // Pass frontend ID to factory for cache type detection (e.g., FPC vs application cache)
+                $frontendOptions['frontend_id'] = $frontendId;
                 $this->_instances[$frontendId] = $this->_factory->create($frontendOptions);
             }
         }

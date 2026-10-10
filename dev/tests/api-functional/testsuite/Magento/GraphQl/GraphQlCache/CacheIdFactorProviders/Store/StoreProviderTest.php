@@ -25,12 +25,12 @@ class StoreProviderTest extends GraphQlAbstract
         $store1Response = $this->graphQlQueryWithResponseHeaders($query, [], '', ['store' => 'default']);
         $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $store1Response['headers']);
         $store1CacheId = $store1Response['headers'][CacheIdCalculator::CACHE_ID_HEADER];
-        $this->assertTrue((boolean)preg_match('/^[0-9a-f]{64}$/i', $store1CacheId));
+        $this->assertTrue((bool)preg_match('/^[0-9a-f]{64}$/i', $store1CacheId));
 
         $store2Response = $this->graphQlQueryWithResponseHeaders($query, [], '', ['store' => 'fixture_second_store']);
         $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $store2Response['headers']);
         $store2CacheId = $store2Response['headers'][CacheIdCalculator::CACHE_ID_HEADER];
-        $this->assertTrue((boolean)preg_match('/^[0-9a-f]{64}$/i', $store2CacheId));
+        $this->assertTrue((bool)preg_match('/^[0-9a-f]{64}$/i', $store2CacheId));
 
         // Assert that store1 and store2 return different cache ids
         $this->assertNotEquals($store1CacheId, $store2CacheId);

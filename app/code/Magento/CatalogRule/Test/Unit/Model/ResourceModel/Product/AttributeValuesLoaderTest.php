@@ -15,6 +15,7 @@ use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -25,6 +26,8 @@ use PHPUnit\Framework\TestCase;
  */
 class AttributeValuesLoaderTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Collection|MockObject
      */
@@ -71,12 +74,12 @@ class AttributeValuesLoaderTest extends TestCase
     protected function setUp(): void
     {
         $this->collectionMock = $this->createMock(Collection::class);
-        $this->attributeMock = $this->getMockBuilder(AbstractAttribute::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getId', 'getBackend', 'getEntity'])
-            ->getMock();
+        $this->attributeMock = $this->createPartialMock(
+            AbstractAttribute::class,
+            ['getId', 'getBackend', 'getEntity']
+        );
         $this->batchSizeCalculatorMock = $this->createMock(DynamicBatchSizeCalculator::class);
-        $this->connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $this->connectionMock = $this->createMock(AdapterInterface::class);
         $this->selectMock = $this->createMock(Select::class);
 
         $this->batchSizeCalculatorMock->method('getAttributeBatchSize')

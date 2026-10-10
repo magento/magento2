@@ -35,12 +35,7 @@ class AttributeTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->storeManagerMock = $this->getMockForAbstractClass(
-            StoreManagerInterface::class,
-            [],
-            '',
-            false
-        );
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
 
         $this->attribute = $objectManager->getObject(
             Attribute::class,

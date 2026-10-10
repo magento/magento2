@@ -22,6 +22,7 @@ use Magento\Sales\Test\Fixture\Invoice as InvoiceFixture;
 use Magento\Sales\Test\Fixture\Shipment as ShipmentFixture;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -34,8 +35,8 @@ class ItemTest extends TestCase
     /**
      * @param string $options
      * @param array $expectedData
-     * @dataProvider getProductOptionsDataProvider
      */
+    #[DataProvider('getProductOptionsDataProvider')]
     public function testGetProductOptions($options, $expectedData)
     {
         $model = \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Sales\Model\Order\Item::class);
@@ -46,7 +47,7 @@ class ItemTest extends TestCase
     /**
      * @return array
      */
-    public static function getProductOptionsDataProvider()
+    public static function getProductOptionsDataProvider(): array
     {
         return [
             [

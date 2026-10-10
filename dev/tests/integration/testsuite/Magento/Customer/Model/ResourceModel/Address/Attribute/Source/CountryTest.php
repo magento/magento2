@@ -12,6 +12,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Validator\UniversalFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class CountryTest extends \PHPUnit\Framework\TestCase
 {
@@ -58,8 +59,8 @@ class CountryTest extends \PHPUnit\Framework\TestCase
      * @magentoConfigFixture default_store general/country/allow NL
      * @magentoConfigFixture fixture_second_store_store general/country/default UA
      * @magentoConfigFixture fixture_second_store_store general/country/allow UA
-     * @dataProvider dataProvider
      */
+    #[DataProvider('dataProvider')]
     public function testMethod($website, $expectedCountryCont, $expectedCountryCode)
     {
         $websiteId = $this->storeManager->getWebsite($website)->getId();

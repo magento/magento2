@@ -12,6 +12,7 @@ use Magento\Framework\App\Request\Http;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Read;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -20,12 +21,12 @@ use PHPUnit\Framework\TestCase;
 class DocRootLocatorTest extends TestCase
 {
     /**
-     * @dataProvider isPubDataProvider
      *
      * @param string $path
      * @param bool $isExist
      * @param bool $result
      */
+    #[DataProvider('isPubDataProvider')]
     public function testIsPub($path, $isExist, $result)
     {
         $request = $this->createMock(Http::class);

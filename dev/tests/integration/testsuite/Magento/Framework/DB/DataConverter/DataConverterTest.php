@@ -72,10 +72,7 @@ class DataConverterTest extends TestCase
         $this->objectManager = Bootstrap::getObjectManager();
 
         /** @var InQueryModifier $queryModifier */
-        $this->queryModifierMock = $this->getMockBuilder(QueryModifierInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['modify'])
-            ->getMockForAbstractClass();
+        $this->queryModifierMock = $this->createMock(QueryModifierInterface::class);
 
         $this->dataConverter = $this->objectManager->get(SerializedToJson::class);
 

@@ -24,13 +24,16 @@ use Magento\Framework\Indexer\ActionInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\Catalog\Test\Unit\Helper\ProductExtensionTestHelper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use Magento\Catalog\Api\Data\ProductExtensionInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProductTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var PluginResourceModelProduct
      */
@@ -114,8 +117,11 @@ class ProductTest extends TestCase
             ConfigurableAttribute::class,
             ['getAttributeId']
         );
-        $extensionAttributes = new ProductExtensionTestHelper();
-        $extensionAttributes->setConfigurableProductOptions([$option]);
+        $extensionAttributes = $this->createPartialMockWithReflection(
+            ProductExtensionInterface::class,
+            ['getConfigurableProductOptions', 'setConfigurableProductOptions']
+        );
+        $extensionAttributes->method('getConfigurableProductOptions')->willReturn([$option]);
         $object->expects($this->once())
             ->method('getExtensionAttributes')
             ->willReturn($extensionAttributes);

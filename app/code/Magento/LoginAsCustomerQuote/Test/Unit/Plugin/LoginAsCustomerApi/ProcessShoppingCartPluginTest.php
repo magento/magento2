@@ -54,9 +54,7 @@ class ProcessShoppingCartPluginTest extends TestCase
     {
         $this->customerSession = $this->getMockBuilder(CustomerSession::class)->disableOriginalConstructor()->getMock();
         $this->checkoutSession = $this->getMockBuilder(CheckoutSession::class)->disableOriginalConstructor()->getMock();
-        $this->quoteRepository = $this->getMockBuilder(CartRepositoryInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->quoteRepository = $this->createMock(CartRepositoryInterface::class);
         $this->quote = $this->getMockBuilder(Quote::class)->disableOriginalConstructor()->getMock();
         $this->plugin = new ProcessShoppingCartPlugin(
             $this->customerSession,
@@ -119,9 +117,7 @@ class ProcessShoppingCartPluginTest extends TestCase
         $this->quote->expects($this->never())->method('removeAllItems');
         $this->quote->expects($this->never())->method('setCustomerIsGuest');
         $this->quoteRepository->expects($this->never())->method('save');
-        $subject = $this->getMockBuilder(AuthenticateCustomerBySecretInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $subject = $this->createMock(AuthenticateCustomerBySecretInterface::class);
         $secret = 'test-secret';
         $result = $this->plugin->beforeExecute($subject, $secret);
         $this->assertNull($result);

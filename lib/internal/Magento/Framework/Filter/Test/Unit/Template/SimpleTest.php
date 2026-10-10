@@ -9,6 +9,7 @@ namespace Magento\Framework\Filter\Test\Unit\Template;
 
 use Magento\Framework\Filter\Template\Simple;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class SimpleTest extends TestCase
 {
@@ -34,9 +35,8 @@ class SimpleTest extends TestCase
 
     /**
      * @param string $startTag
-     * @param string $endTag
-     * @dataProvider setTagsDataProvider
-     */
+     * @param string $endTag     */
+    #[DataProvider('setTagsDataProvider')]
     public function testSetTags($startTag, $endTag)
     {
         $this->_filter->setTags($startTag, $endTag);

@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Wishlist\Test\Unit\Model\Validator;
 
 use Magento\Wishlist\Model\Validator\MessageValidator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -77,10 +78,10 @@ class MessageValidatorTest extends TestCase
     /**
      * Test that valid messages pass validation
      *
-     * @dataProvider validMessageDataProvider
      * @param string $message
      * @return void
      */
+    #[DataProvider('validMessageDataProvider')]
     public function testValidMessagesPass(string $message): void
     {
         $this->assertTrue($this->validator->isValid($message));
@@ -110,10 +111,10 @@ class MessageValidatorTest extends TestCase
     /**
      * Test that PHP tags are rejected
      *
-     * @dataProvider phpTagsDataProvider
      * @param string $message
      * @return void
      */
+    #[DataProvider('phpTagsDataProvider')]
     public function testPhpTagsAreRejected(string $message): void
     {
         $this->assertFalse($this->validator->isValid($message));
@@ -138,10 +139,10 @@ class MessageValidatorTest extends TestCase
     /**
      * Test that template directives are rejected
      *
-     * @dataProvider templateDirectivesDataProvider
      * @param string $message
      * @return void
      */
+    #[DataProvider('templateDirectivesDataProvider')]
     public function testTemplateDirectivesAreRejected(string $message): void
     {
         $this->assertFalse($this->validator->isValid($message));
@@ -167,10 +168,10 @@ class MessageValidatorTest extends TestCase
     /**
      * Test that template object access patterns are rejected
      *
-     * @dataProvider templateObjectAccessDataProvider
      * @param string $message
      * @return void
      */
+    #[DataProvider('templateObjectAccessDataProvider')]
     public function testTemplateObjectAccessIsRejected(string $message): void
     {
         $this->assertFalse($this->validator->isValid($message));
@@ -194,10 +195,10 @@ class MessageValidatorTest extends TestCase
     /**
      * Test URL-encoded attacks are caught
      *
-     * @dataProvider urlEncodedAttacksDataProvider
      * @param string $message
      * @return void
      */
+    #[DataProvider('urlEncodedAttacksDataProvider')]
     public function testUrlEncodedAttacksAreCaught(string $message): void
     {
         $this->assertFalse($this->validator->isValid($message));
@@ -220,10 +221,10 @@ class MessageValidatorTest extends TestCase
     /**
      * Test newline obfuscation attacks are caught
      *
-     * @dataProvider newlineObfuscationDataProvider
      * @param string $message
      * @return void
      */
+    #[DataProvider('newlineObfuscationDataProvider')]
     public function testNewlineObfuscationIsCaught(string $message): void
     {
         $this->assertFalse($this->validator->isValid($message));

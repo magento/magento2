@@ -33,12 +33,7 @@ class BasePackageInfoTest extends \PHPUnit\Framework\TestCase
     protected function setup(): void
     {
         $this->readFactoryMock = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadFactory::class);
-        $this->readerMock = $this->getMockForAbstractClass(
-            \Magento\Framework\Filesystem\Directory\ReadInterface::class,
-            [],
-            '',
-            false
-        );
+        $this->readerMock = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
         $this->readFactoryMock->expects($this->once())->method('create')->willReturn($this->readerMock);
         $this->basePackageInfo = new BasePackageInfo($this->readFactoryMock);
     }

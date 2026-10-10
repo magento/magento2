@@ -73,9 +73,7 @@ class DeleteOutdatedPriceValuesTest extends \PHPUnit\Framework\TestCase
 
         $reflection = new \ReflectionClass(\Magento\Catalog\Model\Attribute\ScopeOverriddenValue::class);
         $paths = $reflection->getProperty('attributesValues');
-        $paths->setAccessible(true);
         $paths->setValue($this->objectManager->get(\Magento\Catalog\Model\Attribute\ScopeOverriddenValue::class), null);
-        $paths->setAccessible(false);
 
         $product = $this->productRepository->get('simple');
         $productResource = $this->objectManager->create(\Magento\Catalog\Model\ResourceModel\Product::class);

@@ -11,6 +11,7 @@ use Magento\Framework\Config\Dom;
 use Magento\Framework\Config\Dom\UrnResolver;
 use Magento\Framework\Config\ValidationStateInterface;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class XsdTest extends TestCase
 {
@@ -30,12 +31,11 @@ class XsdTest extends TestCase
 
     /**
      * @param string $fixtureXml
-     * @param array $expectedErrors
-     * @dataProvider exemplarXmlDataProvider
-     */
+     * @param array $expectedErrors     */
+    #[DataProvider('exemplarXmlDataProvider')]
     public function testExemplarXml($fixtureXml, array $expectedErrors)
     {
-        $validationState = $this->getMockForAbstractClass(ValidationStateInterface::class);
+        $validationState = $this->createMock(ValidationStateInterface::class);
         $validationState->expects($this->any())
             ->method('isValidationRequired')
             ->willReturn(true);

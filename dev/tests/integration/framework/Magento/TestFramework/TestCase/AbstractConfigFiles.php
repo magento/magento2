@@ -9,6 +9,7 @@
 namespace Magento\TestFramework\TestCase;
 
 use Magento\Framework\Component\ComponentRegistrar;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 abstract class AbstractConfigFiles extends \PHPUnit\Framework\TestCase
 {
@@ -71,9 +72,7 @@ abstract class AbstractConfigFiles extends \PHPUnit\Framework\TestCase
         $this->_objectManager->removeSharedInstance($this->_getReaderClassName());
     }
 
-    /**
-     * @dataProvider xmlConfigFileProvider
-     */
+    #[DataProvider('xmlConfigFileProvider')]
     public function testXmlConfigFile($file, $skip = false)
     {
         if ($skip) {

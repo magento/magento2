@@ -7,6 +7,7 @@
 namespace Magento\Backend\Model\Search;
 
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoAppArea adminhtml
@@ -16,8 +17,8 @@ use Magento\TestFramework\Helper\Bootstrap;
 class CustomerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @dataProvider loadDataProvider
      */
+    #[DataProvider('loadDataProvider')]
     public function testLoad($query, $limit, $start, $expectedResult)
     {
         /** Preconditions */

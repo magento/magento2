@@ -10,10 +10,14 @@ namespace Magento\Indexer\Test\Unit\Model\Indexer;
 use Magento\Framework\Indexer\IndexerRegistry;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class AbstractProcessorTest extends TestCase
 {
-    const INDEXER_ID = 'stub_indexer_id';
+    use MockCreationTrait;
+
+    private const INDEXER_ID = 'stub_indexer_id';
 
     /**
      * @var AbstractProcessorStub
@@ -27,11 +31,10 @@ class AbstractProcessorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_indexerRegistryMock = $this->getMockBuilder(IndexerRegistry::class)
-            ->addMethods(['isScheduled', 'reindexRow', 'reindexList', 'reindexAll', 'invalidate'])
-            ->onlyMethods(['get'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_indexerRegistryMock = $this->createPartialMockWithReflection(
+            IndexerRegistry::class,
+            ['isScheduled', 'reindexRow', 'reindexList', 'reindexAll', 'invalidate', 'get']
+        );
         $this->model = new AbstractProcessorStub(
             $this->_indexerRegistryMock
         );
@@ -70,8 +73,8 @@ class AbstractProcessorTest extends TestCase
 
     /**
      * @param bool $scheduled
-     * @dataProvider runDataProvider
      */
+    #[DataProvider('runDataProvider')]
     public function testReindexRow($scheduled)
     {
         $id = 1;
@@ -93,8 +96,8 @@ class AbstractProcessorTest extends TestCase
 
     /**
      * @param bool $scheduled
-     * @dataProvider runDataProvider
      */
+    #[DataProvider('runDataProvider')]
     public function testReindexList($scheduled)
     {
         $ids = [1];

@@ -71,7 +71,7 @@ class Cart
                 if ($item = $this->findItemById($itemAsArray['item_id'], $items)) {
                     $this->itemPriceRenderer->setItem($item);
                     $this->itemPriceRenderer->setTemplate('checkout/cart/item/price/sidebar.phtml');
-                    $result['items'][$key]['product_price']=$this->itemPriceRenderer->toHtml();
+                    $result['items'][$key]['product_price'] = $this->itemPriceRenderer->toHtml();
                     if ($this->itemPriceRenderer->displayPriceExclTax()) {
                         $result['items'][$key]['product_price_value'] = $item->getCalculationPrice();
                     } elseif ($this->itemPriceRenderer->displayPriceInclTax()) {

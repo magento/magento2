@@ -31,7 +31,7 @@ class StoreTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->_storeManagerMock = $this->createMock(StoreManagerInterface::class);
 
         $this->_model = new Store($this->_storeManagerMock);
     }
@@ -43,7 +43,7 @@ class StoreTest extends TestCase
 
     public function testGetScope()
     {
-        $scopeMock = $this->getMockForAbstractClass(ScopeInterface::class);
+        $scopeMock = $this->createMock(ScopeInterface::class);
         $this->_storeManagerMock
             ->expects($this->once())
             ->method('getStore')

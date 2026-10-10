@@ -17,9 +17,7 @@ class RendererProxyTest extends TestCase
 {
     public function testRender()
     {
-        $objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $objectManager = $this->createMock(ObjectManagerInterface::class);
         $selectRender = $this->getMockBuilder(SelectRenderer::class)
             ->disableOriginalConstructor()
             ->getMock();

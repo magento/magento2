@@ -511,7 +511,8 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
             Config::PAYMENT_ACTION_SALE => self::TRXTYPE_SALE
         ];
 
-        return $tokenTypes[$this->getConfigData('payment_action')] ?? '';
+        $paymentAction = $this->getConfigData('payment_action') ?? '';
+        return $tokenTypes[$paymentAction] ?? '';
     }
 
     /**

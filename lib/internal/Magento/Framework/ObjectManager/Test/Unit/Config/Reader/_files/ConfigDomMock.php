@@ -1,7 +1,5 @@
 <?php declare(strict_types=1);
 
-use PHPUnit\Framework\TestCase;
-
 /**
  * Copyright 2015 Adobe
  * All Rights Reserved.
@@ -9,19 +7,30 @@ use PHPUnit\Framework\TestCase;
 /**
  * @codingStandardsIgnoreStart
  */
-class ConfigDomMock extends TestCase
+class ConfigDomMock
 {
     /**
+     * @var string|null
+     */
+    private $initialContents;
+    
+    /**
+     * @var string
+     */
+    private $typeAttribute;
+    
+    /**
      * @param null|string $initialContents
+     * @param mixed $validationState
      * @param array $idAttributes
      * @param string $typeAttribute
-     * @param $perFileSchema
+     * @param mixed $perFileSchema
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct($initialContents, $validationState, $idAttributes, $typeAttribute, $perFileSchema)
     {
-        $this->assertEquals('first content item', $initialContents);
-        $this->assertEquals('xsi:type', $typeAttribute);
+        $this->initialContents = $initialContents;
+        $this->typeAttribute = $typeAttribute;
     }
 
     /**

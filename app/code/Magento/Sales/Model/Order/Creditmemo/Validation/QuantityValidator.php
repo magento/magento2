@@ -132,16 +132,17 @@ class QuantityValidator implements ValidatorInterface
             );
         }
         $orderItem = $orderItemsById[$item->getOrderItemId()];
+        $qtyRequested = (float)$item->getQty();
 
-        if (!$this->isValidDecimalRefundQty($orderItem->getIsQtyDecimal(), $item->getQty())) {
+        if (!$this->isValidDecimalRefundQty($orderItem->getIsQtyDecimal(), $qtyRequested)) {
             return __(
                 'We found an invalid quantity to refund item "%1".',
                 $orderItem->getSku()
             );
         }
 
-        if (!$this->canRefundItem($orderItem, $item->getQty(), $invoiceQtysRefundLimits) ||
-            !$this->isQtyAvailable($orderItem, $item->getQty())
+        if (!$this->canRefundItem($orderItem, $qtyRequested, $invoiceQtysRefundLimits) ||
+            !$this->isQtyAvailable($orderItem, $qtyRequested)
         ) {
             return __(
                 'The quantity to creditmemo must not be greater than the unrefunded quantity'
@@ -262,8 +263,9 @@ class QuantityValidator implements ValidatorInterface
         if ($item->getQtyToRefund() < 0) {
             return false;
         }
-        if (isset($invoiceQtysRefundLimits[$item->getId()])) {
-            return $invoiceQtysRefundLimits[$item->getId()] > 0;
+        $itemId = $item->getId() ?? '';
+        if (isset($invoiceQtysRefundLimits[$itemId])) {
+            return $invoiceQtysRefundLimits[$itemId] > 0;
         }
         return true;
     }

@@ -9,11 +9,13 @@ namespace Magento\Customer\Ui\Component\Listing\Address;
 
 use Magento\Backend\Model\Locale\Resolver;
 use Magento\Customer\Model\Customer;
+use Magento\Customer\Ui\Component\Listing\Address\DataProvider;
 use Magento\Framework\Api\Filter;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider as DataProviderAttribute;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -66,8 +68,8 @@ class DataProviderTest extends TestCase
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Customer/_files/customer_address.php
      * @magentoDataFixture Magento/Directory/_files/region_name_jp.php
-     * @dataProvider getDataByRegionDataProvider
      */
+    #[DataProviderAttribute('getDataByRegionDataProvider')]
     public function testGetDataByRegion(array $filterData)
     {
         $customerId = 1;

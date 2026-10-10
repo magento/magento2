@@ -36,7 +36,6 @@ class AppConfigTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $modelReflection = new \ReflectionClass($this->model);
         $testAppConfigProperty = $modelReflection->getProperty('testAppConfig');
-        $testAppConfigProperty->setAccessible(true);
         $testAppConfigMock = $this->getMockBuilder(\Magento\TestFramework\App\Config::class)
             ->disableOriginalConstructor()
             ->getMock();

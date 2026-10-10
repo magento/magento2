@@ -26,7 +26,6 @@ class FormTest extends \PHPUnit\Framework\TestCase
         );
         $block = $layout->addBlock(\Magento\Reports\Block\Adminhtml\Filter\Form::class);
         $prepareFormMethod = new \ReflectionMethod(\Magento\Reports\Block\Adminhtml\Filter\Form::class, '_prepareForm');
-        $prepareFormMethod->setAccessible(true);
         $prepareFormMethod->invoke($block);
 
         $form = $block->getForm();

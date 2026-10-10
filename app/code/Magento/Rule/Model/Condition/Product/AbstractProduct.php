@@ -237,7 +237,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
             $selectReady = null;
         } elseif (is_object($this->getAttributeObject())) {
             $attributeObject = $this->getAttributeObject();
-            if ($attributeObject->usesSource()) {
+            if (method_exists($attributeObject, 'usesSource') && $attributeObject->usesSource()) {
                 if ($attributeObject->getFrontendInput() == 'multiselect') {
                     $addEmptyOption = false;
                 } else {

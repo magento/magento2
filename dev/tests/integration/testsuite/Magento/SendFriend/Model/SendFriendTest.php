@@ -12,6 +12,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\SendFriend\Helper\Data as SendFriendHelper;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Laminas\Stdlib\Parameters;
 
@@ -54,14 +55,13 @@ class SendFriendTest extends TestCase
     /**
      * @magentoConfigFixture current_store sendfriend/email/max_recipients 1
      *
-     * @dataProvider validateDataProvider
-     *
      * @param array $sender
      * @param array $recipients
      * @param string|bool $expectedResult
      *
      * @return void
      */
+    #[DataProvider('validateDataProvider')]
     public function testValidate(array $sender, array $recipients, $expectedResult): void
     {
         $this->prepareData($sender, $recipients);

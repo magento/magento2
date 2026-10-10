@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Persistent\Test\Unit\Model\Layout;
 
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\View\LayoutInterface;
 use Magento\PageCache\Model\DepersonalizeChecker;
@@ -20,6 +21,8 @@ use PHPUnit\Framework\TestCase;
  */
 class DepersonalizePluginTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var PersistentSession|MockObject
      */
@@ -45,11 +48,11 @@ class DepersonalizePluginTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
-        $this->persistentSessionMock = $this->getMockBuilder(PersistentSession::class)
-            ->addMethods(['setCustomerId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->layoutMock = $this->createMock(LayoutInterface::class);
+        $this->persistentSessionMock = $this->createPartialMockWithReflection(
+            PersistentSession::class,
+            ['setCustomerId']
+        );
         $this->depersonalizeCheckerMock = $this->createMock(DepersonalizeChecker::class);
 
         $this->plugin = (new ObjectManagerHelper($this))->getObject(

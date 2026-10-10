@@ -42,9 +42,7 @@ class FactoryDecoratorTest extends TestCase
         require_once __DIR__ . '/../_files/logger_classes.php';
         $objectManager = new ObjectManager($this);
 
-        $this->objectManagerMock = $this->getMockBuilder(FactoryInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->objectManagerMock = $this->createMock(FactoryInterface::class);
 
         // Instantiate SUT
         $this->model = $objectManager->getObject(

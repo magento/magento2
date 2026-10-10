@@ -21,6 +21,8 @@ use Magento\Shipping\Model\Carrier\AbstractCarrier;
 use Magento\Shipping\Model\Rate\Result;
 use Magento\Shipping\Model\Rate\ResultFactory;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Constraint\Callback;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -31,6 +33,8 @@ use Psr\Log\LoggerInterface;
  */
 class FlatrateTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Flatrate
      */
@@ -73,20 +77,17 @@ class FlatrateTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['create'])
-            ->onlyMethods(['isSetFlag', 'getValue'])
-            ->getMockForAbstractClass();
+        $this->scopeConfigMock = $this->createPartialMockWithReflection(
+            ScopeConfigInterface::class,
+            ['create', 'isSetFlag', 'getValue']
+        );
 
         $this->errorFactoryMock = $this
             ->getMockBuilder(ErrorFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
 
         $this->resultFactoryMock = $this->getMockBuilder(ResultFactory::class)
             ->disableOriginalConstructor()
@@ -121,9 +122,9 @@ class FlatrateTest extends TestCase
 
     /**
      * @param bool $freeshipping
-     * @dataProvider collectRatesWithGlobalFreeShippingDataProvider
      * @return void
      */
+    #[DataProvider('collectRatesWithGlobalFreeShippingDataProvider')]
     public function testCollectRatesWithGlobalFreeShipping($freeshipping)
     {
         $this->markTestSkipped('Test needs refactoring.');

@@ -88,12 +88,16 @@ class TotalsReader
      */
     protected function merge(Total $totalInstance, $output)
     {
-        if (array_key_exists($totalInstance->getCode(), $output)) {
-            $output[$totalInstance->getCode()] = $output[$totalInstance->getCode()]->addData(
-                $totalInstance->getData()
-            );
-        } else {
-            $output[$totalInstance->getCode()] = $totalInstance;
+        $code = $totalInstance->getCode();
+        // PHP 8.5 Compatibility: Only process if code is not null
+        if ($code !== null) {
+            if (array_key_exists($code, $output)) {
+                $output[$code] = $output[$code]->addData(
+                    $totalInstance->getData()
+                );
+            } else {
+                $output[$code] = $totalInstance;
+            }
         }
         return $output;
     }

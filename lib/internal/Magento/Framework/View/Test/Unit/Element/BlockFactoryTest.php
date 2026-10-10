@@ -31,7 +31,7 @@ class BlockFactoryTest extends TestCase
     {
         $objectManagerHelper = new ObjectManager($this);
 
-        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
 
         $this->blockFactory = $objectManagerHelper->getObject(
             BlockFactory::class,

@@ -9,6 +9,7 @@ namespace Magento\TestModuleOverrideConfig\MagentoAdminConfigFixture;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\TestModuleOverrideConfig\AbstractOverridesTest;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class check that fixtures can be replaced using override config
@@ -48,11 +49,10 @@ class ReplaceFixtureTest extends AbstractOverridesTest
      *
      * @magentoAdminConfigFixture test_section/test_group/field_1 new_value
      *
-     * @dataProvider configDataProvider
-     *
      * @param string $expectedConfigValue
      * @return void
      */
+    #[DataProvider('configDataProvider')]
     public function testReplaceFixtureForMethod(string $expectedConfigValue): void
     {
         $value = $this->config->getValue('test_section/test_group/field_1', ScopeConfigInterface::SCOPE_TYPE_DEFAULT);
@@ -66,10 +66,10 @@ class ReplaceFixtureTest extends AbstractOverridesTest
     {
         return [
             'first_data_set' => [
-                'expectedConfigValue' => 'Overridden admin config fixture for method',
+                'Overridden admin config fixture for method',
             ],
             'second_data_set' => [
-                'expectedConfigValue' => 'Overridden admin config fixture for data set',
+                'Overridden admin config fixture for data set',
             ],
         ];
     }
@@ -79,11 +79,10 @@ class ReplaceFixtureTest extends AbstractOverridesTest
      *
      * @magentoAdminConfigFixture test_section/test_group/field_1 new_value
      *
-     * @dataProvider configValuesDataProvider
-     *
      * @param string $expectedConfigValue
      * @return void
      */
+    #[DataProvider('configValuesDataProvider')]
     public function testReplaceFixtureViaThirdModule(string $expectedConfigValue): void
     {
         $value = $this->config->getValue('test_section/test_group/field_1', ScopeConfigInterface::SCOPE_TYPE_DEFAULT);
@@ -97,10 +96,10 @@ class ReplaceFixtureTest extends AbstractOverridesTest
     {
         return [
             'first_data_set' => [
-                'expectedConfigValue' => 'Overridden admin config fixture for method from third module',
+                'Overridden admin config fixture for method from third module',
             ],
             'second_data_set' => [
-                'expectedConfigValue' => 'Overridden admin config fixture for data set from third module',
+                'Overridden admin config fixture for data set from third module',
             ],
         ];
     }

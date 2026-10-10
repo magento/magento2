@@ -6,7 +6,9 @@
 
 namespace Magento\Customer\Block\Address;
 
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Integration tests for the \Magento\Customer\Block\Address\Grid class
@@ -14,6 +16,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  */
 class GridTest extends \PHPUnit\Framework\TestCase
 {
+    use MockCreationTrait;
     /**
      * @var \Magento\Framework\View\LayoutInterface
      */
@@ -26,19 +29,10 @@ class GridTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        /** @var \PHPUnit\Framework\MockObject\MockObject $blockMock */
-//        $blockMock = $this->getMockBuilder(
-//            \Magento\Framework\View\Element\BlockInterface::class
-//        )->disableOriginalConstructor()->onlyMethods(
-//            ['setTitle', 'toHtml']
-//        )->getMock();
-        $blockMock = $this->getMockBuilder(
-            \Magento\Framework\View\Element\BlockInterface::class
-        )->disableOriginalConstructor()->addMethods(
-            ['setTitle']
-        )->onlyMethods(
-            ['toHtml']
-        )->getMock();
+        $blockMock = $this->createPartialMockWithReflection(
+            \Magento\Framework\View\Element\BlockInterface::class,
+            ['setTitle', 'toHtml']
+        );
         $blockMock->expects($this->any())->method('setTitle');
 
         $this->currentCustomer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
@@ -89,9 +83,9 @@ class GridTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Customer/_files/customer_no_address.php
-     * @dataProvider getAdditionalAddressesDataProvider
      * @magentoAppIsolation enabled
      */
+    #[DataProvider('getAdditionalAddressesDataProvider')]
     public function testGetAdditionalAddressesNegative($customerId, $expected)
     {
         $gridBlock = $this->createBlockForCustomer($customerId);

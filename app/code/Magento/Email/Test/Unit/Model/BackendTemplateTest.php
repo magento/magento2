@@ -67,7 +67,7 @@ class BackendTemplateTest extends TestCase
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->scopeConfigMock->expects($this->any())->method('getValue')->willReturn(['test' => 1]);
 
         $this->structureMock = $this->createMock(Structure::class);
@@ -79,7 +79,7 @@ class BackendTemplateTest extends TestCase
             ->method('getSystemConfigByPathsAndTemplateId')
             ->willReturn(['test_config' => 2015]);
         /** @var ObjectManagerInterface|MockObject $objectManagerMock*/
-        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $objectManagerMock->expects($this->any())
             ->method('get')
             ->willReturnCallback(
@@ -114,7 +114,7 @@ class BackendTemplateTest extends TestCase
     {
         parent::tearDown();
         /** @var ObjectManagerInterface|MockObject $objectManagerMock*/
-        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         ObjectManager::setInstance($objectManagerMock);
     }
 

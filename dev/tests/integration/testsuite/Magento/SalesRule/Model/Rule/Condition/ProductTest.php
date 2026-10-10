@@ -26,6 +26,7 @@ use Magento\TestFramework\Fixture\AppIsolation;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Fixture\DbIsolation;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -71,9 +72,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      *
      * @magentoDataFixture Magento/ConfigurableProduct/_files/quote_with_configurable_product.php
      * @magentoDataFixture Magento/Catalog/_files/category.php
-     * @dataProvider validateProductConditionDataProvider
      */
     #[
+        DataProvider('validateProductConditionDataProvider'),
         AppIsolation(true),
         DbIsolation(false),
         DataFixture(
@@ -201,8 +202,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      *
      * @magentoDataFixture Magento/ConfigurableProduct/_files/quote_with_configurable_product.php
      * @magentoDataFixture Magento/SalesRule/_files/rules_parent_category.php
-     * @dataProvider conditionsDataProvider
      */
+    #[DataProvider('conditionsDataProvider')]
     public function testValidateParentCategoryWithConfigurable(array $conditions, bool $expected): void
     {
         $quote = $this->getQuote('test_cart_with_configurable');

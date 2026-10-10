@@ -11,6 +11,7 @@ use Magento\Setup\Module\I18n\Dictionary\Options\ResolverFactory;
 use Magento\Setup\Module\I18n\Locale;
 use Magento\Setup\Module\I18n\Pack\Writer\File\Csv;
 use Magento\Framework\Filesystem\Driver\File;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -31,9 +32,8 @@ class TranslationFilesTest extends TranslationFiles
      *
      * @param string $file
      * @param array $phrases
-     *
-     * @dataProvider defaultLocaleDataProvider
      */
+    #[DataProvider('defaultLocaleDataProvider')]
     public function testDefaultLocale($file, $phrases)
     {
         $this->markTestSkipped('MAGETWO-26083');
@@ -139,8 +139,8 @@ class TranslationFilesTest extends TranslationFiles
      * Compares count numeric placeholders in keys and translates.
      *
      * @param string $placePath
-     * @dataProvider getLocalePlacePath
      */
+    #[DataProvider('getLocalePlacePath')]
     public function testPhrasePlaceHolders($placePath)
     {
         $this->markTestSkipped('MAGETWO-26083');

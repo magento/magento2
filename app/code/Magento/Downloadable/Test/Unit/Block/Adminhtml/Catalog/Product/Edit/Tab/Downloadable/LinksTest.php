@@ -14,12 +14,11 @@ use Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable\L
 use Magento\Downloadable\Helper\File;
 use Magento\Downloadable\Model\Link;
 use Magento\Downloadable\Model\Product\Type;
-use Magento\Downloadable\Test\Unit\Helper\LinkTestHelper;
-use Magento\Downloadable\Test\Unit\Helper\TypeTestHelper;
 use Magento\Eav\Model\Entity\AttributeFactory;
 use Magento\Framework\DataObject;
 use Magento\Framework\Escaper;
 use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
@@ -31,6 +30,8 @@ use PHPUnit\Framework\TestCase;
  */
 class LinksTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Links
      */
@@ -74,6 +75,7 @@ class LinksTest extends TestCase
     protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManager($this);
+        $objectManagerHelper->prepareObjectManager();
         $this->setupMocks();
         $this->setupDownloadableProductModel();
         $this->setupLinksBlock($objectManagerHelper);
@@ -108,19 +110,16 @@ class LinksTest extends TestCase
      */
     private function setupDownloadableProductModel(): void
     {
-        $this->downloadableProductModel = new TypeTestHelper();
-        $this->downloadableLinkModel = new LinkTestHelper();
-        // Set up the test data
-        $this->downloadableLinkModel->setId(1)
-            ->setTitle('Test Title')
-            ->setPrice('10.00')
-            ->setNumberOfDownloads('5')
-            ->setLinkUrl('http://example.com')
-            ->setLinkType('url')
-            ->setSampleFile('sample.pdf')
-            ->setSampleType('file')
-            ->setSortOrder(1)
-            ->setLinkFile('link.pdf');
+        $this->downloadableProductModel = $this->createPartialMockWithReflection(
+            Type::class,
+            ['getLinks']
+        );
+        
+        $this->downloadableLinkModel = $this->createPartialMockWithReflection(
+            Link::class,
+            ['getId', 'getTitle', 'getPrice', 'getNumberOfDownloads', 'getLinkUrl', 'getLinkType',
+             'getSampleFile', 'getSampleType', 'getSortOrder', 'getLinkFile', 'getStoreTitle']
+        );
 
         $this->coreRegistry = $this->createPartialMock(Registry::class, ['registry']);
 
@@ -179,20 +178,21 @@ class LinksTest extends TestCase
         $this->productModel->method('getTypeId')->willReturn('downloadable');
         $this->productModel->method('getTypeInstance')->willReturn($this->downloadableProductModel);
         $this->productModel->method('getStoreId')->willReturn(0);
-        // Configure the link model for this test
-        $this->downloadableLinkModel->setId(1)
-            ->setTitle('Link Title')
-            ->setPrice('10')
-            ->setNumberOfDownloads('6')
-            ->setLinkUrl(null)
-            ->setLinkType('file')
-            ->setSampleFile('file/sample.gif')
-            ->setSampleType('file')
-            ->setSortOrder(0)
-            ->setLinkFile('file/link.gif')
-            ->setStoreTitle('Store Title');
+        
+        // Configure the link model for this test with getter returns instead of setters
+        $this->downloadableLinkModel->method('getId')->willReturn(1);
+        $this->downloadableLinkModel->method('getTitle')->willReturn('Link Title');
+        $this->downloadableLinkModel->method('getPrice')->willReturn('10');
+        $this->downloadableLinkModel->method('getNumberOfDownloads')->willReturn('6');
+        $this->downloadableLinkModel->method('getLinkUrl')->willReturn(null);
+        $this->downloadableLinkModel->method('getLinkType')->willReturn('file');
+        $this->downloadableLinkModel->method('getSampleFile')->willReturn('file/sample.gif');
+        $this->downloadableLinkModel->method('getSampleType')->willReturn('file');
+        $this->downloadableLinkModel->method('getSortOrder')->willReturn(0);
+        $this->downloadableLinkModel->method('getLinkFile')->willReturn('file/link.gif');
+        $this->downloadableLinkModel->method('getStoreTitle')->willReturn('Store Title');
 
-        $this->downloadableProductModel->setLinks([$this->downloadableLinkModel]);
+        $this->downloadableProductModel->method('getLinks')->willReturn([$this->downloadableLinkModel]);
         $this->coreRegistry->method('registry')->willReturn($this->productModel);
         $this->escaper->method('escapeHtml')->willReturn('Link Title');
         $this->fileHelper->method('getFilePath')->willReturn('/file/path/link.gif');

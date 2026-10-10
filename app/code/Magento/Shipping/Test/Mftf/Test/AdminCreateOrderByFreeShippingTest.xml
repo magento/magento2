@@ -42,7 +42,8 @@
             <!-- delete category,product -->
             <deleteData createDataKey="testProduct" stepKey="deleteSimpleProduct"/>
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
-            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <!--Delete all customers via API-->
+            <helper class="Magento\Customer\Test\Mftf\Helper\CustomerApiHelper" method="deleteAllCustomersApi" stepKey="deleteAllCustomersViaApi"/>
             <deleteData createDataKey="testCategory" stepKey="deleteSimpleCategory"/>
             <!-- Free Shipping disabled -->
             <magentoCLI command="config:set {{DisableFreeShippingConfigData.path}} {{DisableFreeShippingConfigData.value}}" stepKey="disableFreeShipping"/>

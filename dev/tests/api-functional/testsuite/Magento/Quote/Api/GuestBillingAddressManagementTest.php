@@ -6,6 +6,7 @@
 
 namespace Magento\Quote\Api;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Framework\Webapi\Rest\Request;
 use Magento\Quote\Api\Data\AddressInterface;
@@ -17,6 +18,9 @@ use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class GuestBillingAddressManagementTest extends WebapiAbstract
 {
     public const SERVICE_VERSION = 'V1';
@@ -114,8 +118,8 @@ class GuestBillingAddressManagementTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
-     * @dataProvider setAddressDataProvider
      */
+    #[DataProvider('setAddressDataProvider')]
     public function testSetAddress($useForShipping)
     {
         /** @var \Magento\Quote\Model\Quote $quote */

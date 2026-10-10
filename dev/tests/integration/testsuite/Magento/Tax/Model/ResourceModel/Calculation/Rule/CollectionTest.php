@@ -5,6 +5,8 @@
  */
 namespace Magento\Tax\Model\ResourceModel\Calculation\Rule;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -23,9 +25,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      * @param $classType
      * @param $elementId
      * @param $expected
-     *
-     * @dataProvider setClassTypeFilterDataProvider
      */
+    #[DataProvider('setClassTypeFilterDataProvider')]
     public function testSetClassTypeFilter($classType, $elementId, $expected)
     {
         $collection = $this->_objectManager->create(

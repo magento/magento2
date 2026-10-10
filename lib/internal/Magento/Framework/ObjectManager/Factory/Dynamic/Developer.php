@@ -5,7 +5,9 @@
  */
 namespace Magento\Framework\ObjectManager\Factory\Dynamic;
 
-class Developer extends \Magento\Framework\ObjectManager\Factory\AbstractFactory
+use Magento\Framework\ObjectManager\Factory\AbstractFactory;
+
+class Developer extends AbstractFactory
 {
     /**
      * Resolve constructor arguments

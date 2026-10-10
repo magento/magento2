@@ -17,9 +17,6 @@
             <severity value="MAJOR"/>
             <testCaseId value="AC-5489"/>
             <group value="persistent"/>
-            <skip>
-                <issueId value="AC-15962"/>
-            </skip>
         </annotations>
         <before>
             <!-- Step 2: Enable Persistence shopping cart and set enable persistence to yes -->

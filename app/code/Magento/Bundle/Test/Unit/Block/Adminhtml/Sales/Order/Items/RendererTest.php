@@ -13,11 +13,11 @@ use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Sales\Model\Order\Creditmemo;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\Item;
 use Magento\Sales\Model\Order\Shipment;
-use Magento\Sales\Test\Unit\Helper\ItemTestHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -27,7 +27,9 @@ use PHPUnit\Framework\TestCase;
  */
 class RendererTest extends TestCase
 {
-    /** @var ItemTestHelper */
+    use MockCreationTrait;
+
+    /** @var Item|MockObject */
     protected $orderItem;
 
     /** @var Renderer $model */
@@ -38,7 +40,9 @@ class RendererTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->orderItem = new ItemTestHelper();
+        $this->orderItem = $this->createPartialMockWithReflection(Item::class, [
+            'getParentItem', 'getId', 'getProductOptions'
+        ]);
         $this->serializer = $this->createMock(Json::class);
         $objectManager = new ObjectManager($this);
         $objects = [
@@ -67,7 +71,7 @@ class RendererTest extends TestCase
         $item = $this->createPartialMock($class, [$method, 'getOrderItem']);
         $item->expects($this->once())->method($method)->willReturn($salesModel);
         $item->expects($this->once())->method('getOrderItem')->willReturn($this->orderItem);
-        $this->orderItem->setId(1);
+        $this->orderItem->method('getId')->willReturn(1);
 
         $this->assertNull($this->model->getChildren($item));
     }
@@ -161,8 +165,8 @@ class RendererTest extends TestCase
     #[DataProvider('isShipmentSeparatelyWithoutItemDataProvider')]
     public function testIsShipmentSeparatelyWithoutItem($productOptions, $result)
     {
+        $this->orderItem->method('getProductOptions')->willReturn($productOptions);
         $this->model->setItem($this->orderItem);
-        $this->orderItem->setProductOptions($productOptions);
 
         $this->assertSame($result, $this->model->isShipmentSeparately());
     }
@@ -182,18 +186,22 @@ class RendererTest extends TestCase
     #[DataProvider('isShipmentSeparatelyWithItemDataProvider')]
     public function testIsShipmentSeparatelyWithItem($productOptions, $result, $parentItem)
     {
+        $orderItemMock = $this->createPartialMockWithReflection(Item::class, [
+            'getParentItem', 'getProductOptions', 'getOrderItem'
+        ]);
+        
+        $parentItemMock = null;
         if ($parentItem) {
-            $parentItem =
-                $this->createPartialMock(Item::class, ['getProductOptions',
-                    '__wakeup']);
-            $parentItem->method('getProductOptions')->willReturn($productOptions);
+            $parentItemMock = $this->createPartialMockWithReflection(Item::class, ['getProductOptions']);
+            $parentItemMock->method('getProductOptions')->willReturn($productOptions);
+            $orderItemMock->method('getParentItem')->willReturn($parentItemMock);
         } else {
-            $this->orderItem->setProductOptions($productOptions);
+            $orderItemMock->method('getProductOptions')->willReturn($productOptions);
+            $orderItemMock->method('getParentItem')->willReturn(null);
         }
-        $this->orderItem->setParentItem($parentItem);
-        $this->orderItem->setOrderItem($this->orderItem);
+        $orderItemMock->method('getOrderItem')->willReturn($orderItemMock);
 
-        $this->assertSame($result, $this->model->isShipmentSeparately($this->orderItem));
+        $this->assertSame($result, $this->model->isShipmentSeparately($orderItemMock));
     }
 
     /**
@@ -212,8 +220,8 @@ class RendererTest extends TestCase
     #[DataProvider('isChildCalculatedWithoutItemDataProvider')]
     public function testIsChildCalculatedWithoutItem($productOptions, $result)
     {
+        $this->orderItem->method('getProductOptions')->willReturn($productOptions);
         $this->model->setItem($this->orderItem);
-        $this->orderItem->setProductOptions($productOptions);
 
         $this->assertSame($result, $this->model->isChildCalculated());
     }
@@ -233,18 +241,22 @@ class RendererTest extends TestCase
     #[DataProvider('isChildCalculatedWithItemDataProvider')]
     public function testIsChildCalculatedWithItem($productOptions, $result, $parentItem)
     {
+        $orderItemMock = $this->createPartialMockWithReflection(Item::class, [
+            'getParentItem', 'getProductOptions', 'getOrderItem'
+        ]);
+        
+        $parentItemMock = null;
         if ($parentItem) {
-            $parentItem =
-                $this->createPartialMock(Item::class, ['getProductOptions',
-                    '__wakeup']);
-            $parentItem->method('getProductOptions')->willReturn($productOptions);
+            $parentItemMock = $this->createPartialMockWithReflection(Item::class, ['getProductOptions']);
+            $parentItemMock->method('getProductOptions')->willReturn($productOptions);
+            $orderItemMock->method('getParentItem')->willReturn($parentItemMock);
         } else {
-            $this->orderItem->setProductOptions($productOptions);
+            $orderItemMock->method('getProductOptions')->willReturn($productOptions);
+            $orderItemMock->method('getParentItem')->willReturn(null);
         }
-        $this->orderItem->setParentItem($parentItem);
-        $this->orderItem->setOrderItem($this->orderItem);
+        $orderItemMock->method('getOrderItem')->willReturn($orderItemMock);
 
-        $this->assertSame($result, $this->model->isChildCalculated($this->orderItem));
+        $this->assertSame($result, $this->model->isChildCalculated($orderItemMock));
     }
 
     /**
@@ -262,8 +274,9 @@ class RendererTest extends TestCase
 
     public function testGetSelectionAttributes()
     {
-        $this->orderItem->setProductOptions([]);
-        $this->assertNull($this->model->getSelectionAttributes($this->orderItem));
+        $orderItemMock = $this->createPartialMockWithReflection(Item::class, ['getProductOptions']);
+        $orderItemMock->method('getProductOptions')->willReturn([]);
+        $this->assertNull($this->model->getSelectionAttributes($orderItemMock));
     }
 
     public function testGetSelectionAttributesWithBundle()
@@ -276,9 +289,11 @@ class RendererTest extends TestCase
             ->method('unserialize')
             ->with($bundleAttributes)
             ->willReturn($unserializedResult);
-        $this->orderItem->setProductOptions($options);
+        
+        $orderItemMock = $this->createPartialMockWithReflection(Item::class, ['getProductOptions']);
+        $orderItemMock->method('getProductOptions')->willReturn($options);
 
-        $this->assertEquals($unserializedResult, $this->model->getSelectionAttributes($this->orderItem));
+        $this->assertEquals($unserializedResult, $this->model->getSelectionAttributes($orderItemMock));
     }
 
     public function testGetOrderOptions()
@@ -288,8 +303,8 @@ class RendererTest extends TestCase
             'additional_options' => ['additional_options'],
             'attributes_info' => ['attributes_info'],
         ];
+        $this->orderItem->method('getProductOptions')->willReturn($productOptions);
         $this->model->setItem($this->orderItem);
-        $this->orderItem->setProductOptions($productOptions);
         $this->assertEquals(['attributes_info', 'options', 'additional_options'], $this->model->getOrderOptions());
     }
 
@@ -302,12 +317,21 @@ class RendererTest extends TestCase
     #[DataProvider('canShowPriceInfoDataProvider')]
     public function testCanShowPriceInfo($parentItem, $productOptions, $result)
     {
-        $this->model->setItem($this->orderItem);
-        $this->orderItem->setOrderItem($this->orderItem);
-        $this->orderItem->setParentItem($parentItem);
-        $this->orderItem->setProductOptions($productOptions);
+        $parentItemMock = null;
+        if ($parentItem) {
+            $parentItemMock = $this->createMock(Item::class);
+        }
+        
+        $orderItemMock = $this->createPartialMockWithReflection(Item::class, [
+            'getParentItem', 'getProductOptions', 'getOrderItem'
+        ]);
+        $orderItemMock->method('getParentItem')->willReturn($parentItemMock);
+        $orderItemMock->method('getProductOptions')->willReturn($productOptions);
+        $orderItemMock->method('getOrderItem')->willReturn($orderItemMock);
+        
+        $this->model->setItem($orderItemMock);
 
-        $this->assertSame($result, $this->model->canShowPriceInfo($this->orderItem));
+        $this->assertSame($result, $this->model->canShowPriceInfo($orderItemMock));
     }
 
     /**

@@ -10,6 +10,7 @@ namespace Magento\LayeredNavigation\Block\Navigation\Search;
 use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
 use Magento\Catalog\Model\Layer\Resolver;
 use Magento\LayeredNavigation\Block\Navigation\Category\PriceFilterTest as CategoryPriceFilterTest;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Provides price filter tests with different price ranges calculation in navigation block on search page.
@@ -22,12 +23,12 @@ class PriceFilterTest extends CategoryPriceFilterTest
 {
     /**
      * @magentoDataFixture Magento/Catalog/_files/category_with_three_products.php
-     * @dataProvider getFiltersDataProvider
      * @param array $config
      * @param array $products
      * @param array $expectation
      * @return void
      */
+    #[DataProvider('getFiltersDataProvider')]
     public function testGetFilters(array $config, array $products, array $expectation): void
     {
         $this->applyCatalogConfig($config);
@@ -43,13 +44,13 @@ class PriceFilterTest extends CategoryPriceFilterTest
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/category_with_three_products.php
-     * @dataProvider getActiveFiltersDataProvider
      * @param array $config
      * @param array $products
      * @param array $expectation
      * @param string $filterValue
      * @return void
      */
+    #[DataProvider('getActiveFiltersDataProvider')]
     public function testGetActiveFilters(array $config, array $products, array $expectation, string $filterValue): void
     {
         $this->applyCatalogConfig($config);

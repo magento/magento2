@@ -24,12 +24,10 @@ class EavAbstractTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->_model = $this->getMockForAbstractClass(
-            \Magento\ImportExport\Model\Import\Entity\AbstractEav::class,
-            [],
-            '',
-            false
-        );
+        $this->_model = $this->getMockBuilder(\Magento\ImportExport\Model\Import\Entity\AbstractEav::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getEntityTypeCode', 'validateRow', '_importData'])
+            ->getMock();
     }
 
     /**

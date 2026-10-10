@@ -10,8 +10,6 @@ use Magento\Framework\Data\Form\Element\AbstractElement;
 
 /**
  * Fieldset config form element renderer
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Watermark extends \Magento\Backend\Block\AbstractBlock implements
     \Magento\Framework\Data\Form\Element\Renderer\RendererInterface

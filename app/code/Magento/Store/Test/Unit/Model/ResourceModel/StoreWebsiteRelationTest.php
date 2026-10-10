@@ -36,7 +36,7 @@ class StoreWebsiteRelationTest extends TestCase
         $this->resourceConnection = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->connection = $this->getMockForAbstractClass(AdapterInterface::class);
+        $this->connection = $this->createMock(AdapterInterface::class);
 
         $this->model = new StoreWebsiteRelation($this->resourceConnection);
     }

@@ -45,7 +45,7 @@ class ProductTest extends TestCase
      */
     public function testExecute()
     {
-        $product = $this->getMockForAbstractClass(ProductInterface::class);
+        $product = $this->createStub(ProductInterface::class);
         $productResourceModel = $this->createMock(ProductResourceModel::class);
         $this->wishlistCleaner->expects($this->once())->method('execute')->with($product);
         $this->model->beforeDelete($productResourceModel, $product);

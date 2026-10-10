@@ -93,6 +93,7 @@ class ConfigurableProductWorkflowTest extends WebapiAbstract
                 'attribute_code' => 'test_configurable',
                 'frontend_input' => 'select',
                 'frontend_label' => 'Test Configurable',
+                'backend_type' => 'int',
                 'is_configurable' => true,
                 'options' => [
                     ['label' => 'Option 1', 'sort_order' => 10],

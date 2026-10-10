@@ -42,8 +42,7 @@ class SystemTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->filesystemMock = $this->getMockBuilder(DriverInterface::class)
-            ->getMockForAbstractClass();
+        $this->filesystemMock = $this->createMock(DriverInterface::class);
         $this->exceptionHandlerMock = $this->getMockBuilder(
             ExceptionHandler::class
         )->disableOriginalConstructor()->getMock();

@@ -196,7 +196,6 @@ class GatewayTest extends TestCase
         $request = new DataObject($requestData);
         $this->object->postRequest($request, $configInterfaceMock);
         $method = new ReflectionMethod($this->httpClientMock, 'prepareBody');
-        $method->setAccessible(true);
         $this->assertEquals($requestBody, urldecode($method->invoke($this->httpClientMock)));
     }
 

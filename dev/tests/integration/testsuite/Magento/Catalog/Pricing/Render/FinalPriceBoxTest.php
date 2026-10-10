@@ -88,7 +88,6 @@ class FinalPriceBoxTest extends \PHPUnit\Framework\TestCase
             $this->templateEnginePool,
             'engines'
         );
-        $enginesReflection->setAccessible(true);
         $enginesReflection->setValue($this->templateEnginePool, ['phtml' => $this->phtml]);
 
         $this->rendererPool = $this->objectManager->create(

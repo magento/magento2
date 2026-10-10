@@ -9,6 +9,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Reports\Model\ResourceModel\Product\Sold\Collection\Initial;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test class for \Magento\Reports\Block\Adminhtml\Grid
@@ -44,8 +45,8 @@ class GridTest extends \PHPUnit\Framework\TestCase
      * @param string $period
      * @param string $locale
      * @param int $expected
-     * @dataProvider getSalesRepresentativeIdDataProvider
      */
+    #[DataProvider('getSalesRepresentativeIdDataProvider')]
     public function testGetPreparedCollection($from, $to, $period, $locale, $expected)
     {
         $encodedFilter = base64_encode('report_from='. $from . '&report_to=' . $to . '&report_period=' . $period);

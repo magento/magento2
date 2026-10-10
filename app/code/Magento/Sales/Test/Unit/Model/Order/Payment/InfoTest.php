@@ -19,6 +19,7 @@ use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order\Payment\Info;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
@@ -27,6 +28,7 @@ use Magento\Framework\Exception\LocalizedException;
  */
 class InfoTest extends TestCase
 {
+
     /**
      * @var Info
      */
@@ -60,8 +62,8 @@ class InfoTest extends TestCase
         $contextMock = $this->createMock(Context::class);
         $registryMock = $this->createMock(Registry::class);
         $this->paymentHelperMock = $this->createPartialMock(Data::class, ['getMethodInstance']);
-        $this->encryptorInterfaceMock = $this->getMockForAbstractClass(EncryptorInterface::class);
-        $this->methodInstanceMock = $this->getMockForAbstractClass(MethodInterface::class);
+        $this->encryptorInterfaceMock = $this->createMock(EncryptorInterface::class);
+        $this->methodInstanceMock = $this->createMock(MethodInterface::class);
         $this->orderMock = $this->createMock(OrderInterface::class);
 
         $objectManagerHelper = new ObjectManagerHelper($this);
@@ -84,8 +86,8 @@ class InfoTest extends TestCase
      * @param string $keyCcEnc
      *
      * @return void
-     * @dataProvider ccKeysDataProvider
      */
+    #[DataProvider('ccKeysDataProvider')]
     public function testGetDataCcNumber(string $keyCc, string $keyCcEnc): void
     {
         // no data was set
@@ -262,8 +264,8 @@ class InfoTest extends TestCase
      * @param mixed $value
      *
      * @return void
-     * @dataProvider additionalInformationDataProvider
      */
+    #[DataProvider('additionalInformationDataProvider')]
     public function testSetAdditionalInformationMultipleTypes($key, $value = null): void
     {
         $this->info->setAdditionalInformation($key, $value);

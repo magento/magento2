@@ -8,7 +8,9 @@ declare(strict_types=1);
 namespace Magento\Store\Test\Unit\Url\Plugin;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\Url\QueryParamsResolverInterface;
+use Magento\Framework\Url\RouteParamsResolver as FrameworkRouteParamsResolver;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
@@ -18,6 +20,8 @@ use PHPUnit\Framework\TestCase;
 
 class RouteParamsResolverTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var MockObject|ScopeConfigInterface
      */
@@ -45,7 +49,7 @@ class RouteParamsResolverTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
 
         $this->storeMock = $this->getMockBuilder(Store::class)
             ->onlyMethods(['getCode'])
@@ -53,10 +57,10 @@ class RouteParamsResolverTest extends TestCase
             ->getMock();
         $this->storeMock->expects($this->any())->method('getCode')->willReturn('custom_store');
 
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->storeManagerMock->method('getStore')->willReturn($this->storeMock);
 
-        $this->queryParamsResolverMock = $this->getMockForAbstractClass(QueryParamsResolverInterface::class);
+        $this->queryParamsResolverMock = $this->createMock(QueryParamsResolverInterface::class);
         $this->model = new RouteParamsResolver(
             $this->scopeConfigMock,
             $this->storeManagerMock,
@@ -77,10 +81,10 @@ class RouteParamsResolverTest extends TestCase
         $this->storeManagerMock->expects($this->any())->method('hasSingleStore')->willReturn(false);
 
         /** @var MockObject $routeParamsResolverMock */
-        $routeParamsResolverMock = $this->getMockBuilder(\Magento\Framework\Url\RouteParamsResolver::class)
-            ->addMethods(['setScope', 'getScope'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $routeParamsResolverMock = $this->createPartialMockWithReflection(
+            FrameworkRouteParamsResolver::class,
+            ['setScope', 'getScope']
+        );
         $routeParamsResolverMock->expects($this->once())->method('setScope')->with($storeCode);
         $routeParamsResolverMock->expects($this->once())->method('getScope')->willReturn($storeCode);
 
@@ -106,10 +110,10 @@ class RouteParamsResolverTest extends TestCase
         $this->storeManagerMock->expects($this->never())->method('hasSingleStore');
 
         /** @var MockObject $routeParamsResolverMock */
-        $routeParamsResolverMock = $this->getMockBuilder(\Magento\Framework\Url\RouteParamsResolver::class)
-            ->addMethods(['setScope', 'getScope'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $routeParamsResolverMock = $this->createPartialMockWithReflection(
+            FrameworkRouteParamsResolver::class,
+            ['setScope', 'getScope']
+        );
         $routeParamsResolverMock->expects($this->once())->method('setScope')->with($storeCode);
         $routeParamsResolverMock->expects($this->never())->method('getScope');
 
@@ -131,10 +135,10 @@ class RouteParamsResolverTest extends TestCase
         $this->storeManagerMock->expects($this->once())->method('hasSingleStore')->willReturn(true);
 
         /** @var MockObject $routeParamsResolverMock */
-        $routeParamsResolverMock = $this->getMockBuilder(\Magento\Framework\Url\RouteParamsResolver::class)
-            ->addMethods(['setScope', 'getScope'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $routeParamsResolverMock = $this->createPartialMockWithReflection(
+            FrameworkRouteParamsResolver::class,
+            ['setScope', 'getScope']
+        );
         $routeParamsResolverMock->expects($this->once())->method('setScope')->with($storeCode);
         $routeParamsResolverMock->expects($this->never())->method('getScope');
 
@@ -160,10 +164,10 @@ class RouteParamsResolverTest extends TestCase
         $this->storeManagerMock->expects($this->never())->method('hasSingleStore');
 
         /** @var MockObject $routeParamsResolverMock */
-        $routeParamsResolverMock = $this->getMockBuilder(\Magento\Framework\Url\RouteParamsResolver::class)
-            ->addMethods(['setScope', 'getScope'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $routeParamsResolverMock = $this->createPartialMockWithReflection(
+            FrameworkRouteParamsResolver::class,
+            ['setScope', 'getScope']
+        );
         $routeParamsResolverMock->expects($this->never())->method('setScope');
         $routeParamsResolverMock->expects($this->never())->method('getScope');
 

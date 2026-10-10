@@ -76,12 +76,8 @@ class GalleryTest extends TestCase
             ->method('setCacheAdapter');
 
         $metadata = $this->createMock(EntityMetadata::class);
-        $metadata->expects($this->any())
-            ->method('getLinkField')
-            ->willReturn('entity_id');
-        $metadata->expects($this->any())
-            ->method('getEntityConnection')
-            ->willReturn($this->connection);
+        $metadata->method('getLinkField')->willReturn('entity_id');
+        $metadata->method('getEntityConnection')->willReturn($this->connection);
 
         $metadataPool = $this->createMock(MetadataPool::class);
         $metadataPool->expects($this->once())
@@ -90,7 +86,7 @@ class GalleryTest extends TestCase
             ->willReturn($metadata);
 
         $resource = $this->createMock(ResourceConnection::class);
-        $resource->expects($this->any())->method('getTableName')->willReturn('table');
+        $resource->method('getTableName')->willReturn('table');
         $this->resource = $objectManager->getObject(
             Gallery::class,
             [

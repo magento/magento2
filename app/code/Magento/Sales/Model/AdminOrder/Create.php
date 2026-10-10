@@ -41,6 +41,11 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      */
     public const XML_PATH_DEFAULT_EMAIL_DOMAIN = 'customer/create_account/email_domain';
 
+    /**
+     * Quote data key for applied rule IDs from the order being edited in admin.
+     */
+    public const ORIGINAL_ORDER_APPLIED_RULE_IDS = 'original_order_applied_rule_ids';
+
     private const XML_PATH_EMAIL_REQUIRED_CREATE_ORDER = 'customer/create_account/email_required_create_order';
     /**
      * Quote session object
@@ -626,6 +631,10 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         $this->setShippingMethod($order->getShippingMethod());
         $quote->getShippingAddress()->setShippingDescription($order->getShippingDescription());
 
+        if ($order->getAppliedRuleIds() && !$order->getReordered()) {
+            $quote->setData(self::ORIGINAL_ORDER_APPLIED_RULE_IDS, $order->getAppliedRuleIds());
+        }
+
         $orderCouponCode = $order->getCouponCode();
         if ($orderCouponCode) {
             $quote->setCouponCode($orderCouponCode);
@@ -942,7 +951,10 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                         $cartItems = $cart->getAllVisibleItems();
                         $cartItemsToRestore = [];
                         foreach ($cartItems as $cartItem) {
-                            $cartItemsToRestore[$cartItem->getItemId()] = $cartItem->getItemId();
+                            $itemId = $cartItem->getItemId();
+                            if ($itemId !== null) {
+                                $cartItemsToRestore[$itemId] = $itemId;
+                            }
                         }
                         $canBeRestored = $this->restoreTransferredItem('cart', $cartItemsToRestore);
 
@@ -1194,7 +1206,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     public function addProducts(array $products)
     {
         foreach ($products as $productId => $config) {
-            $config['qty'] = isset($config['qty']) ? (double)$config['qty'] : 1;
+            $config['qty'] = isset($config['qty']) ? (float)$config['qty'] : 1;
             try {
                 $this->addProduct($productId, $config);
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
@@ -1224,13 +1236,13 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             foreach ($items as $itemId => $info) {
                 if (!empty($info['configured'])) {
                     $item = $this->getQuote()->updateItem($itemId, $this->objectFactory->create($info));
-                    $info['qty'] = (double)$item->getQty();
+                    $info['qty'] = (float)$item->getQty();
                 } else {
                     $item = $this->getQuote()->getItemById($itemId);
                     if (!$item) {
                         continue;
                     }
-                    $info['qty'] = (double)$info['qty'];
+                    $info['qty'] = (float)$info['qty'];
                 }
                 $this->quoteItemUpdater->update($item, $info);
                 if ($item && !empty($info['action'])) {

@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\MediaGallery\Test\Unit\Model\Asset\Command;
 
-use Laminas\Db\Adapter\Driver\Pdo\Statement;
+use PhpDb\Adapter\Driver\Pdo\Statement;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;

@@ -72,7 +72,6 @@ class RuleProductIndexerTest extends TestCase
             RuleProductIndexer::class,
             'cacheContext'
         );
-        $cacheContextProperty->setAccessible(true);
         $cacheContextProperty->setValue($this->indexer, $this->cacheContextMock);
     }
 

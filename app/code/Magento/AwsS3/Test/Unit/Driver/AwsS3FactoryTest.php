@@ -123,7 +123,6 @@ class AwsS3FactoryTest extends TestCase
             AwsS3Factory::class,
             'prepareConfig'
         );
-        $method->setAccessible(true);
 
         return $method->invokeArgs($this->factory, [$config]);
     }

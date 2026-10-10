@@ -14,6 +14,7 @@ use Magento\Csp\Api\InlineUtilInterface;
 use Magento\Framework\App\Response\Http;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\View\Result\Layout;
@@ -56,10 +57,7 @@ class AsyncCssPluginTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->onlyMethods(['isSetFlag'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
 
         $this->httpMock = $this->createMock(Http::class);
         $this->layoutMock = $this->createMock(Layout::class);
@@ -149,8 +147,8 @@ class AsyncCssPluginTest extends TestCase
      * @param bool $isSetFlag
      * @param string $result
      * @return void
-     * @dataProvider renderResultDataProvider
      */
+    #[DataProvider('renderResultDataProvider')]
     public function testAfterRenderResult(string $content, bool $isSetFlag, string $result): void
     {
         // Given (context)
@@ -197,8 +195,8 @@ class AsyncCssPluginTest extends TestCase
      *
      * @param $content
      * @return void
-     * @dataProvider ifGetContentIsNotAStringDataProvider
      */
+    #[DataProvider('ifGetContentIsNotAStringDataProvider')]
     public function testAfterRenderResultIfGetContentIsNotAString($content): void
     {
         $this->scopeConfigMock->method('isSetFlag')

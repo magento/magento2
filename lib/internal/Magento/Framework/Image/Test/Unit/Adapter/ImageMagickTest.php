@@ -15,6 +15,7 @@ use Magento\Framework\Phrase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\LoggerInterface;
 
 class ImageMagickTest extends TestCase
@@ -63,9 +64,8 @@ class ImageMagickTest extends TestCase
 
     /**
      * @param string $imagePath
-     * @param string $expectedMessage
-     * @dataProvider watermarkDataProvider
-     */
+     * @param string $expectedMessage     */
+    #[DataProvider('watermarkDataProvider')]
     public function testWatermark($imagePath, $expectedMessage)
     {
         $this->expectException('LogicException');

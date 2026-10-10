@@ -128,7 +128,7 @@ class ResourceConnection implements ResetAfterRequestInterface
             }
             $this->connections = [];
         } else {
-            $processConnectionName = $this->config->getConnectionName($resourceName);
+            $processConnectionName = $this->config->getConnectionName($resourceName) ?? '';
             if (isset($this->connections[$processConnectionName])) {
                 if ($this->connections[$processConnectionName] !== null) {
                     $this->connections[$processConnectionName]->closeConnection();

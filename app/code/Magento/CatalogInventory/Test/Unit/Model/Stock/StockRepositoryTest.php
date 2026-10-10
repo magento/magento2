@@ -10,6 +10,7 @@ namespace Magento\CatalogInventory\Test\Unit\Model\Stock;
 use Magento\CatalogInventory\Api\Data\StockCollectionInterface;
 use Magento\CatalogInventory\Api\Data\StockCollectionInterfaceFactory;
 use Magento\CatalogInventory\Api\StockCriteriaInterface;
+use Magento\CatalogInventory\Model\ResourceModel\Stock as StockResource;
 use Magento\CatalogInventory\Model\Stock;
 use Magento\CatalogInventory\Model\Stock\StockRepository;
 use Magento\CatalogInventory\Model\StockFactory;
@@ -33,12 +34,12 @@ class StockRepositoryTest extends TestCase
     protected $model;
 
     /**
-     * @var \Magento\CatalogInventory\Model\Stock|MockObject
+     * @var Stock|MockObject
      */
     protected $stockMock;
 
     /**
-     * @var \Magento\CatalogInventory\Model\ResourceModel\Stock|MockObject
+     * @var StockResource|MockObject
      */
     protected $stockResourceMock;
 
@@ -73,7 +74,7 @@ class StockRepositoryTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->stockResourceMock = $this->getMockBuilder(\Magento\CatalogInventory\Model\ResourceModel\Stock::class)
+        $this->stockResourceMock = $this->getMockBuilder(StockResource::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->stockFactoryMock = $this->getMockBuilder(

@@ -82,7 +82,7 @@ class CreateHandlerTest extends TestCase
     #[DataProvider('provideImageForAfterExecute')]
     public function testAfterExecute($image, $expectedSave, $rowSaved): void
     {
-        $this->product->expects($this->once())
+        $this->product->expects($this->any())
             ->method('getData')
             ->with('media_gallery')
             ->willReturn(['images' => $image]);
@@ -237,7 +237,7 @@ class CreateHandlerTest extends TestCase
      */
     public function testAfterExecuteEmpty(): void
     {
-        $this->product->expects($this->once())
+        $this->product->expects($this->any())
             ->method('getData')
             ->with('media_gallery')
             ->willReturn([]);

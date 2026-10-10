@@ -5,14 +5,16 @@
  */
 namespace Magento\Test\Integrity\Modular\Magento\Email;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 class EmailTemplateConfigFilesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test that email template configuration file matches the format
      *
      * @param string $file
-     * @dataProvider fileFormatDataProvider
      */
+    #[DataProvider('fileFormatDataProvider')]
     public function testFileFormat($file)
     {
         $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
@@ -37,8 +39,8 @@ class EmailTemplateConfigFilesTest extends \PHPUnit\Framework\TestCase
      * Test that email template configuration contains references to existing template files
      *
      * @param string $templateId
-     * @dataProvider templateReferenceDataProvider
      */
+    #[DataProvider('templateReferenceDataProvider')]
     public function testTemplateReference($templateId)
     {
         /** @var \Magento\Email\Model\Template\Config $emailConfig */

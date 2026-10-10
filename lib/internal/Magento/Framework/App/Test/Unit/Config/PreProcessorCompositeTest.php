@@ -27,7 +27,7 @@ class PreProcessorCompositeTest extends TestCase
     protected function setUp(): void
     {
         $this->preProcessorMock = $this->getMockBuilder(PreProcessorInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->model = new PreProcessorComposite([$this->preProcessorMock]);
     }

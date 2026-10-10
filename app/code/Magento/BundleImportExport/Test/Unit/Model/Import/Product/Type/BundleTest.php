@@ -10,7 +10,7 @@ namespace Magento\BundleImportExport\Test\Unit\Model\Import\Product\Type;
 use Magento\BundleImportExport\Model\Import\Product\Type\Bundle\RelationsDataSaver;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\BundleImportExport\Model\Import\Product\Type\Bundle;
-use Magento\Framework\DB\Test\Unit\Helper\MysqlTestHelper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection as ProductAttributeCollection;
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory as ProductAttributeCollectionFactory;
@@ -19,6 +19,7 @@ use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory as At
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\App\ScopeInterface;
 use Magento\Framework\App\ScopeResolverInterface;
+use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\EntityMetadata;
 use Magento\Framework\EntityManager\MetadataPool;
@@ -34,6 +35,7 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 class BundleTest extends AbstractImportTestCase
 {
+    use MockCreationTrait;
     /**
      * @var Bundle
      */
@@ -59,7 +61,8 @@ class BundleTest extends AbstractImportTestCase
      */
     private $params;
 
-    /** @var MysqlTestHelper
+    /**
+     * @var Mysql|MockObject
      */
     private $connection;
 
@@ -103,8 +106,8 @@ class BundleTest extends AbstractImportTestCase
             'is_default' => '1'
         ]];
 
-        // Set up fetchAll responses for the test helper
-        $this->connection->setTestData('fetch_all_responses', [
+        // Set up fetchAll responses for consecutive calls
+        $this->connection->method('fetchAll')->willReturnOnConsecutiveCalls(
             $fetchAllForInitAttributes,
             $fetchAllForOtherCalls,
             $fetchAllForInitAttributes,
@@ -118,8 +121,7 @@ class BundleTest extends AbstractImportTestCase
             $fetchAllForInitAttributes,
             $fetchAllForInitAttributes,
             $fetchAllForInitAttributes
-        ]);
-        $this->connection->setTestData('fetch_all_call_count', 0);
+        );
     }
 
     /**
@@ -145,15 +147,18 @@ class BundleTest extends AbstractImportTestCase
         );
         $this->entityModel->method('getMultipleValueSeparator')->willReturn(',');
         $this->entityModel->method('getErrorAggregator')->willReturn($this->getErrorAggregatorObject());
-        $this->connection = new MysqlTestHelper();
+        $this->connection = $this->createPartialMockWithReflection(
+            Mysql::class,
+            ["select", "fetchAll", "fetchPairs", "fetchAssoc", "quoteInto", "delete", "insertOnDuplicate"]
+        );
         $this->select = $this->createMock(Select::class);
         $this->select->expects($this->any())->method('from')->willReturnSelf();
         $this->select->expects($this->any())->method('where')->willReturnSelf();
         $this->select->expects($this->any())->method('joinLeft')->willReturnSelf();
         $this->select->method('getConnection')->willReturn($this->connection);
-        $this->connection->setTestData('select', $this->select);
+        $this->connection->method('select')->willReturn($this->select);
         $this->initFetchAllCalls();
-        $this->connection->setTestData('quote_into', '');
+        $this->connection->method('quoteInto')->willReturn('');
         $this->resource = $this->createPartialMock(
             ResourceConnection::class,
             ['getConnection', 'getTableName']
@@ -215,7 +220,6 @@ class BundleTest extends AbstractImportTestCase
             ->willReturn($metadataMock);
         $reflection = new \ReflectionClass(Bundle::class);
         $reflectionProperty = $reflection->getProperty('metadataPool');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->bundle, $metadataPoolMock);
     }
 
@@ -242,8 +246,8 @@ class BundleTest extends AbstractImportTestCase
         $this->entityModel->method('isRowAllowedToImport')->willReturn($allowImport);
         $scope = $this->createMock(ScopeInterface::class);
         $this->scopeResolver->method('getScope')->willReturn($scope);
-        $this->connection->setTestData('fetch_pairs', [1 => 'sku']);
-        $this->connection->setTestData('fetch_assoc', [
+        $this->connection->method('fetchPairs')->willReturn([1 => 'sku']);
+        $this->connection->method('fetchAssoc')->willReturn([
                     '1' => [
                         'option_id' => '1',
                         'parent_id' => '1',
@@ -386,11 +390,10 @@ class BundleTest extends AbstractImportTestCase
             });
         $this->entityModel->method('isRowAllowedToImport')->willReturn(true);
         $select = $this->createMock(Select::class);
-        $this->connection->setTestData('select', $select);
         $select->expects($this->any())->method('from')->willReturnSelf();
         $select->expects($this->any())->method('where')->willReturnSelf();
         $select->expects($this->any())->method('joinLeft')->willReturnSelf();
-        $this->connection->setTestData('fetch_assoc', [
+        $this->connection->method('fetchAssoc')->willReturn([
             ['id1', 'id2', 'id_3']
         ]);
         $bundle = $this->bundle->saveData();
@@ -449,7 +452,6 @@ class BundleTest extends AbstractImportTestCase
     {
         $reflection = new \ReflectionClass(get_class($object));
         $reflectionProperty = $reflection->getProperty($property);
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($object, $value);
         return $object;
     }

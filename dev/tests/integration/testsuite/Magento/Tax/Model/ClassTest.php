@@ -5,6 +5,8 @@
  */
 namespace Magento\Tax\Model;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 class ClassTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -78,8 +80,8 @@ class ClassTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDbIsolation enabled
-     * @dataProvider classesDataProvider
      */
+    #[DataProvider('classesDataProvider')]
     public function testCheckClassCanBeDeletedPositiveResult($classType)
     {
         /** @var $model \Magento\Tax\Model\ClassModel */

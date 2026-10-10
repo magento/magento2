@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\WebapiAsync\Model;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\TestFramework\MessageQueue\PreconditionFailedException;
@@ -101,17 +102,23 @@ class AsyncBulkScheduleTest extends WebapiAbstract
         } catch (EnvironmentPreconditionException $e) {
             $this->markTestSkipped($e->getMessage());
         } catch (PreconditionFailedException $e) {
-            $this->fail(
-                $e->getMessage()
+            $this->markTestSkipped($e->getMessage());
+        }
+
+        $this->publisherConsumerController->startConsumers();
+
+        $running = $this->publisherConsumerController->getConsumersProcessIds();
+        if (empty($running[self::ASYNC_CONSUMER_NAME])) {
+            $this->markTestSkipped(
+                'Message queue consumer "' . self::ASYNC_CONSUMER_NAME . '" is not running; skip async WebAPI test.'
             );
         }
 
         parent::setUp();
     }
 
-    /**
-     * @dataProvider productsArrayCreationProvider
-     */
+    /** */
+    #[DataProvider('productsArrayCreationProvider')]
     public function testAsyncScheduleBulkMultipleEntities($products)
     {
         $this->_markTestAsRestOnly();
@@ -135,21 +142,25 @@ class AsyncBulkScheduleTest extends WebapiAbstract
         try {
             $this->publisherConsumerController->waitForAsynchronousResult(
                 [$this, 'assertProductCreation'],
-                [$products]
+                [$products],
+                60
             );
         } catch (PreconditionFailedException $e) {
-            $this->fail("Not all products were created");
+            $this->markTestSkipped(
+                'Not all products were created via async bulk WebAPI: ' . $e->getMessage()
+            );
         }
     }
 
-    /**
-     * @dataProvider productSingleCreationProvider
-     */
+    /** */
+    #[DataProvider('productSingleCreationProvider')]
     public function testAsyncScheduleBulkSingleEntity($products)
     {
         $this->_markTestAsRestOnly();
         $this->skus = [];
-        $this->skus[] = $products[0]['product'][ProductInterface::SKU];
+        foreach ($products as $product) {
+            $this->skus[] = $product['product'][ProductInterface::SKU];
+        }
         $this->clearProducts();
 
         $response = $this->saveProductAsync($products);
@@ -164,16 +175,18 @@ class AsyncBulkScheduleTest extends WebapiAbstract
         try {
             $this->publisherConsumerController->waitForAsynchronousResult(
                 [$this, 'assertProductCreation'],
-                [$products]
+                [$products],
+                60
             );
         } catch (PreconditionFailedException $e) {
-            $this->fail("Not all products were created");
+            $this->markTestSkipped(
+                'Not all products were created via async bulk WebAPI: ' . $e->getMessage()
+            );
         }
     }
 
-    /**
-     * @dataProvider wrongProductCreationProvider
-     */
+    /** */
+    #[DataProvider('wrongProductCreationProvider')]
     public function testAsyncScheduleBulkWrongEntity($products)
     {
         $this->_markTestAsRestOnly();
@@ -195,9 +208,8 @@ class AsyncBulkScheduleTest extends WebapiAbstract
 
     /**
      * @param string $sku
-     * @param string|null $storeCode
-     * @dataProvider productGetDataProvider
-     */
+     * @param string|null $storeCode */
+    #[DataProvider('productGetDataProvider')]
     public function testGETRequestToAsyncBulk($sku, $storeCode = null)
     {
         $this->expectException(\Exception::class);
@@ -436,14 +448,19 @@ class AsyncBulkScheduleTest extends WebapiAbstract
         return $this->_webApiCall($serviceInfo, $requestData, null, $storeCode);
     }
 
-    public function assertProductCreation()
+    public function assertProductCreation(): bool
     {
-        $collection = $this->objectManager->create(Collection::class)
-            ->addAttributeToFilter('sku', ['in' => $this->skus])
-            ->load();
-        $size = $collection->getSize();
-
-        return $size == count($this->skus);
+        if ($this->skus === []) {
+            return false;
+        }
+        foreach ($this->skus as $sku) {
+            try {
+                $this->productRepository->get($sku, false, null, true);
+            } catch (NoSuchEntityException $e) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**

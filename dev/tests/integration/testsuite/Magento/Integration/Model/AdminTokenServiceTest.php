@@ -10,6 +10,7 @@ use Magento\Framework\Exception\InputException;
 use Magento\Integration\Model\Oauth\Token as TokenModel;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\User\Model\User as UserModel;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test class for \Magento\Integration\Model\AdminTokenService.
@@ -72,9 +73,7 @@ class AdminTokenServiceTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @dataProvider validationDataProvider
-     */
+    #[DataProvider('validationDataProvider')]
     public function testCreateAdminAccessTokenEmptyOrNullCredentials($username, $password)
     {
         try {

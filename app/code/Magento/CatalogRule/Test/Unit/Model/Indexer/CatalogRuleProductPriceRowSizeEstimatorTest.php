@@ -8,7 +8,9 @@ declare(strict_types=1);
 namespace Magento\CatalogRule\Test\Unit\Model\Indexer;
 
 use Magento\CatalogRule\Model\Indexer\CatalogRuleProductPriceRowSizeEstimator;
+use Magento\Customer\Model\ResourceModel\Group\CollectionFactory;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\Website;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -19,6 +21,7 @@ use PHPUnit\Framework\TestCase;
  */
 class CatalogRuleProductPriceRowSizeEstimatorTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var ResourceConnection|MockObject
      */
@@ -51,18 +54,17 @@ class CatalogRuleProductPriceRowSizeEstimatorTest extends TestCase
     {
         $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
 
-        $this->customerGroupCollectionMock = $this->getMockBuilder(\stdClass::class)
-            ->addMethods(['getSize'])
-            ->getMock();
+        $this->customerGroupCollectionMock = $this->createPartialMockWithReflection(
+            \stdClass::class,
+            ['getSize']
+        );
 
-        $collectionFactoryClass = 'Magento\Customer\Model\ResourceModel\Group\CollectionFactory';
+        $this->customerGroupCollectionFactoryMock = $this->createPartialMock(
+            CollectionFactory::class,
+            ['create']
+        );
 
-        $this->customerGroupCollectionFactoryMock = $this->getMockBuilder($collectionFactoryClass)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
-
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
 
         $this->customerGroupCollectionFactoryMock->method('create')
             ->willReturn($this->customerGroupCollectionMock);

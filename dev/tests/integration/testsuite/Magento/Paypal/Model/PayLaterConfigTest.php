@@ -12,15 +12,16 @@ use Magento\Framework\App\Config\MutableScopeConfigInterface;
 use Magento\Framework\App\MutableScopeConfig;
 use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class PayLaterConfigTest extends TestCase
 {
     /**
-     * @dataProvider getStyleDataProvider
      * @magentoAppIsolation enabled
      * @covers \Magento\Paypal\Model\PayLaterConfig::getSectionConfig()
      */
+    #[DataProvider('getStyleDataProvider')]
     public function testGetStyleConfig($systemConfig, $expectedConfig)
     {
         $this->setConfig($systemConfig);
@@ -75,10 +76,10 @@ class PayLaterConfigTest extends TestCase
     }
 
     /**
-     * @dataProvider getPositionDataProvider
      * @magentoAppIsolation enabled
      * @covers \Magento\Paypal\Model\PayLaterConfig::getSectionConfig()
      */
+    #[DataProvider('getPositionDataProvider')]
     public function testGetPositionConfig($systemConfig, $expectedConfig)
     {
         $this->setConfig($systemConfig);
@@ -117,8 +118,8 @@ class PayLaterConfigTest extends TestCase
 
     /**
      * @magentoAppIsolation enabled
-     * @dataProvider isEnabledDataProvider
      */
+    #[DataProvider('isEnabledDataProvider')]
     public function testIsEnabled($systemConfig, $expected)
     {
         $systemConfig = array_replace([

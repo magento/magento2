@@ -16,9 +16,12 @@ use Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer;
 use Magento\Sales\Model\Order\Item as OrderItem;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class DefaultRendererTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var MockObject|DefaultRenderer
      */
@@ -64,11 +67,10 @@ class DefaultRendererTest extends TestCase
             ]
         );
 
-        $this->priceRenderBlock = $this->getMockBuilder(Template::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setItem'])
-            ->onlyMethods(['toHtml'])
-            ->getMock();
+        $this->priceRenderBlock = $this->createPartialMockWithReflection(
+            Template::class,
+            ['setItem', 'toHtml']
+        );
 
         $itemMockMethods = [
             'getRowTotal',

@@ -13,9 +13,13 @@ use Magento\Sales\Model\ResourceModel\Order\Address\Collection;
 use Magento\Sales\Model\ResourceModel\Order\Handler\Address;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use Magento\Sales\Model\Order\Address as OrderAddress;
 
 class AddressTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Address
      */
@@ -37,37 +41,23 @@ class AddressTest extends TestCase
     protected $orderMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Address|MockObject
+     * @var OrderAddress|MockObject
      */
     protected $addressMock;
 
     protected function setUp(): void
     {
         $this->attributeMock = $this->createMock(Attribute::class);
-        $this->orderMock = $this->getMockBuilder(Order::class)
-            ->addMethods(
-                [
-                    'hasBillingAddressId',
-                    'unsBillingAddressId',
-                    'hasShippingAddressId',
-                    'getShippingAddressId',
-                    'setShippingAddressId',
-                    'unsShippingAddressId'
-                ]
-            )
-            ->onlyMethods(
-                [
-                    'getAddresses',
-                    'save',
-                    'getBillingAddress',
-                    'getShippingAddress',
-                    'getBillingAddressId',
-                    'setBillingAddressId'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->addressMock = $this->createMock(\Magento\Sales\Model\Order\Address::class);
+        $this->orderMock = $this->createPartialMockWithReflection(
+            Order::class,
+            [
+                'hasBillingAddressId', 'unsBillingAddressId', 'hasShippingAddressId',
+                'getShippingAddressId', 'setShippingAddressId', 'unsShippingAddressId', 'getAddresses',
+                'save', 'getBillingAddress', 'getShippingAddress', 'getBillingAddressId',
+                'setBillingAddressId'
+            ]
+        );
+        $this->addressMock = $this->createMock(OrderAddress::class);
         $this->addressCollectionMock = $this->createMock(
             Collection::class
         );

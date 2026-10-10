@@ -29,7 +29,7 @@ class SendTest extends AbstractController
     protected function setUp(): void
     {
         parent::setUp();
-        $logger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $logger = $this->createMock(LoggerInterface::class);
         $session = Bootstrap::getObjectManager()->create(
             Session::class,
             [$logger]

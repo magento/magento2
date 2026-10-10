@@ -43,7 +43,7 @@ class Mysql extends \Magento\Framework\Model\ResourceModel\Type\Db implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getConnection(?DB\LoggerInterface $logger = null, ?SelectFactory $selectFactory = null)
     {
@@ -93,7 +93,7 @@ class Mysql extends \Magento\Framework\Model\ResourceModel\Type\Db implements
      */
     private function getValidConfig(array $config)
     {
-        $default = ['initStatements' => 'SET NAMES utf8', 'type' => 'pdo_mysql', 'active' => false];
+        $default = ['type' => 'pdo_mysql', 'active' => false];
         foreach ($default as $key => $value) {
             if (!isset($config[$key])) {
                 $config[$key] = $value;

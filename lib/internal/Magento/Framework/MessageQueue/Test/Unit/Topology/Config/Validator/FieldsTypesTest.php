@@ -9,6 +9,7 @@ namespace Magento\Framework\MessageQueue\Test\Unit\Topology\Config\Validator;
 
 use Magento\Framework\MessageQueue\Topology\Config\Validator\FieldsTypes;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class FieldsTypesTest extends TestCase
 {
@@ -48,11 +49,10 @@ class FieldsTypesTest extends TestCase
         $this->model->validate($configData);
     }
 
-    /**
-     * @dataProvider invalidConfigDataProvider
-     * @param array $configData
+    /**     * @param array $configData
      * @param string $expectedExceptionMessage
      */
+    #[DataProvider('invalidConfigDataProvider')]
     public function testValidateInvalid($configData, $expectedExceptionMessage)
     {
         $this->expectException('\LogicException');

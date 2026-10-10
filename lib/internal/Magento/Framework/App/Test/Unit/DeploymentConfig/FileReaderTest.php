@@ -57,7 +57,7 @@ class FileReaderTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->driverMock = $this->getMockBuilder(DriverInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->model = new FileReader(
             $this->dirListMock,

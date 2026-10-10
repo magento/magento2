@@ -226,7 +226,7 @@ class ProductTest extends TestCase
         $contextMock->method('getCacheManager')->willReturn($cacheInterfaceMock);
         $contextMock->method('getActionValidator')->willReturn($actionValidatorMock);
 
-        $this->optionInstanceMock = new \Magento\Catalog\Test\Unit\Helper\OptionTestHelper();
+        $this->optionInstanceMock = $this->createMock(Option::class);
 
         $this->resource = $this->createMock(ProductResourceModel::class);
 
@@ -340,7 +340,6 @@ class ProductTest extends TestCase
         $groupExtension = $this->objectManagerHelper->getObject(ProductLinkExtension::class);
         $reflectionOfExtension = new \ReflectionClass(ProductLinkExtension::class);
         $method = $reflectionOfExtension->getMethod('setData');
-        $method->setAccessible(true);
         $method->invokeArgs($groupExtension, ['qty', 1]);
 
         $outputGroupLink = $this->objectManagerHelper->getObject(Link::class);
@@ -363,7 +362,7 @@ class ProductTest extends TestCase
             });
 
         $expectedOutput = [$outputRelatedLink, $outputGroupLink];
-        $typeInstanceMock = new \Magento\Catalog\Test\Unit\Helper\ProductTypeSimpleTestHelper();
+        $typeInstanceMock = $this->createMock(SimpleProductType::class);
         $this->model->setTypeInstance($typeInstanceMock);
 
         $productLink1 = $this->objectManagerHelper->getObject(Link::class);

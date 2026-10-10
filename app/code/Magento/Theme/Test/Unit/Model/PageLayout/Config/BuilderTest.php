@@ -76,7 +76,7 @@ class BuilderTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->serializer = $this->getMockForAbstractClass(SerializerInterface::class);
+        $this->serializer = $this->createMock(SerializerInterface::class);
 
         $this->themeCollection->expects($this->once())
             ->method('setItemObjectClass')

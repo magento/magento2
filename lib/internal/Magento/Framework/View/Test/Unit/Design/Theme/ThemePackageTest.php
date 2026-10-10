@@ -9,14 +9,14 @@ namespace Magento\Framework\View\Test\Unit\Design\Theme;
 
 use Magento\Framework\View\Design\Theme\ThemePackage;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ThemePackageTest extends TestCase
 {
     /**
      * @param string $key
-     *
-     * @dataProvider constructBadKeyDataProvider
-     */
+     *     */
+    #[DataProvider('constructBadKeyDataProvider')]
     public function testConstructBadKey($key)
     {
         $this->expectException('UnexpectedValueException');

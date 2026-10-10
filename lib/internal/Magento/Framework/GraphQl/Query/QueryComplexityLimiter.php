@@ -11,6 +11,7 @@ use GraphQL\Language\AST\DocumentNode;
 use GraphQL\Language\AST\FieldNode;
 use GraphQL\Language\AST\NodeKind;
 use GraphQL\Language\AST\SelectionSetNode;
+use GraphQL\Language\Printer;
 use GraphQL\Language\Visitor;
 use GraphQL\Validator\DocumentValidator;
 use GraphQL\Validator\Rules\DisableIntrospection;
@@ -57,6 +58,11 @@ class QueryComplexityLimiter
     private $maximumAliasConfiguration;
 
     /**
+     * @var QueryLengthConfiguration
+     */
+    private $queryLengthConfiguration;
+
+    /**
      * @var array
      */
     private $rules = [];
@@ -69,13 +75,15 @@ class QueryComplexityLimiter
      * @param IntrospectionConfiguration $introspectionConfig
      * @param QueryParser|null $queryParser
      * @param MaximumAliasConfiguration|null $maximumAliasConfiguration
+     * @param QueryLengthConfiguration|null $queryLengthConfiguration
      */
     public function __construct(
         int $queryDepth,
         int $queryComplexity,
         IntrospectionConfiguration $introspectionConfig,
         ?QueryParser $queryParser = null,
-        ?MaximumAliasConfiguration $maximumAliasConfiguration = null
+        ?MaximumAliasConfiguration $maximumAliasConfiguration = null,
+        ?QueryLengthConfiguration $queryLengthConfiguration = null
     ) {
         $this->queryDepth = $queryDepth;
         $this->queryComplexity = $queryComplexity;
@@ -83,6 +91,8 @@ class QueryComplexityLimiter
         $this->queryParser = $queryParser ?: ObjectManager::getInstance()->get(QueryParser::class);
         $this->maximumAliasConfiguration = $maximumAliasConfiguration ?:
             ObjectManager::getInstance()->get(MaximumAliasConfiguration::class);
+        $this->queryLengthConfiguration = $queryLengthConfiguration ?:
+            ObjectManager::getInstance()->get(QueryLengthConfiguration::class);
     }
 
     /**
@@ -159,7 +169,6 @@ class QueryComplexityLimiter
      * @param DocumentNode $query
      * @return void
      * @throws GraphQlInputException
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function validateAliasCount(DocumentNode $query): void
     {
@@ -176,6 +185,29 @@ class QueryComplexityLimiter
                     'Max Aliases in query should be %1 but got %2.',
                     $allowedAliasCount,
                     $aliasCount
+                ));
+            }
+        }
+    }
+
+    /**
+     * This is necessary to make sure that the length of input query is within specified limits.
+     *
+     * @param DocumentNode $query
+     * @return void
+     * @throws GraphQlInputException
+     */
+    public function validateQueryLength(DocumentNode $query): void
+    {
+        if ($this->queryLengthConfiguration->isQueryLengthLimitEnabled()) {
+            $allowedQueryLength = $this->queryLengthConfiguration->getQueryLengthLimitAllowed();
+            $queryString = Printer::doPrint($query);
+            $actualQueryLength = strlen($queryString);
+            if ($actualQueryLength > $allowedQueryLength) {
+                throw new GraphQlInputException(__(
+                    'Query length exceeds maximum allowed length of %1 characters. Actual length: %2 characters.',
+                    $allowedQueryLength,
+                    $actualQueryLength
                 ));
             }
         }

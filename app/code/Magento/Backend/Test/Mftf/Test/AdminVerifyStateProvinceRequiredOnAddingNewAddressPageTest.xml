@@ -32,8 +32,8 @@
             <actionGroup ref="SetAdminAccountActionGroup" stepKey="setAdminAccountToUnitedStates">
                 <argument name="InterfaceLocaleByValue" value="en_US" />
             </actionGroup>
-            <!--Delete customer created during test execution-->
-            <actionGroup ref="AdminDeleteAllCustomerActionGroup" stepKey="deleteAllCustomerFromGrid"/>
+            <!--Delete all customers via API-->
+            <helper class="Magento\Customer\Test\Mftf\Helper\CustomerApiHelper" method="deleteAllCustomersApi" stepKey="deleteAllCustomersViaApi"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
                 <argument name="indices" value=""/>

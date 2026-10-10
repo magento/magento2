@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Cms\Controller\Adminhtml;
 
 use Magento\TestFramework\TestCase\AbstractBackendController;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Testing seach in grid.
@@ -23,8 +24,8 @@ class FulltextGridSearchTest extends AbstractBackendController
      * @param string $query
      * @param int $expectedRows
      * @param array $expectedTitles
-     * @dataProvider queryDataProvider
      */
+    #[DataProvider('queryDataProvider')]
     public function testSearchByTitle(string $query, int $expectedRows, array $expectedTitles)
     {
         $url = 'backend/mui/index/render/?namespace=cms_page_listing&search=' . $query;

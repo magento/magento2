@@ -36,10 +36,6 @@
         <element name="shippingMethodDhlMedicalExpress" type="radio" selector="#checkout-shipping-method-load input[value='dhl_Q']"/>
         <element name="shippingMethodFreeShippingLabel" type="text" selector="#label_carrier_freeshipping_freeshipping"/>
         <element name="shippingDHLErrorMessage" type="text" selector="#checkout-shipping-method-load .table-checkout-shipping-method tr.row-error .error div"/>
-        <element name="smartPostShippingMethod" type="radio" selector="#checkout-shipping-method-load input[value='fedex_SMART_POST']"/>
-        <element name="groundShippingMethod" type="radio" selector="#checkout-shipping-method-load input[value='fedex_FEDEX_GROUND']"/>
-        <element name="fedexExpressServerShippingMethod" type="radio" selector="#checkout-shipping-method-load input[value='fedex_FEDEX_EXPRESS_SAVER']"/>
-        <element name="fedex2dayShippingMethod" type="radio" selector="#checkout-shipping-method-load input[value='fedex_FEDEX_2_DAY']"/>
         <element name="shippingMethodDhlExpressEasyLabel" type="text" selector="#label_method_8_dhl"/>
         <element name="shippingMethodFedexLabel" type="text" selector="#label_carrier_null_fedex"/>
         <element name="smartPostFedexPrice" type="text" selector="//tr[td[@id='label_carrier_SMART_POST_fedex']]//td[contains(@class, 'col-price')]//span[contains(@class, 'price') and contains(@data-bind, 'price_excl_tax')]"/>

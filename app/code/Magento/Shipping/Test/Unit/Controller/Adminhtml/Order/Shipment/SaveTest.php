@@ -31,6 +31,8 @@ use Magento\Sales\Model\ValidatorResultInterface;
 use Magento\Shipping\Controller\Adminhtml\Order\Shipment\Save;
 use Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader;
 use Magento\Shipping\Model\Shipping\LabelGenerator;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -40,6 +42,7 @@ use PHPUnit\Framework\TestCase;
  */
 class SaveTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var ShipmentLoader|MockObject
      */
@@ -131,41 +134,25 @@ class SaveTest extends TestCase
     protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
-        $this->shipmentLoader = $this->getMockBuilder(ShipmentLoader::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['load'])
-            ->addMethods(['setShipmentId', 'setOrderId', 'setShipment', 'setTracking'])
-            ->getMock();
-        $this->validationResult = $this->getMockBuilder(ValidatorResultInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->labelGenerator = $this->getMockBuilder(LabelGenerator::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->shipmentSender = $this->getMockBuilder(ShipmentSender::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['send'])
-            ->getMock();
+        $this->shipmentLoader = $this->createPartialMockWithReflection(
+            ShipmentLoader::class,
+            ['load', 'setShipmentId', 'setOrderId', 'setShipment', 'setTracking']
+        );
+        $this->validationResult = $this->createMock(ValidatorResultInterface::class);
+        $this->labelGenerator = $this->createMock(LabelGenerator::class);
+        $this->shipmentSender = $this->createPartialMock(ShipmentSender::class, ['send']);
         $this->shipmentSender->expects($this->any())
             ->method('send')
             ->willReturn(true);
-        $this->salesData = $this->getMockBuilder(SalesData::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['canSendNewShipmentEmail'])
-            ->getMock();
-        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->salesData = $this->createPartialMock(SalesData::class, ['canSendNewShipmentEmail']);
+        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
         $this->context = $this->createPartialMock(Context::class, [
             'getRequest', 'getResponse', 'getMessageManager', 'getRedirect',
             'getObjectManager', 'getSession', 'getActionFlag', 'getHelper',
             'getResultRedirectFactory', 'getFormKeyValidator'
         ]);
-        $this->response = $this->getMockBuilder(ResponseInterface::class)
-            ->addMethods(['setRedirect'])
-            ->onlyMethods(['sendResponse'])
-            ->getMockForAbstractClass();
-        $this->request = $this->getMockBuilder(Http::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->response = $this->createMock(ResponseInterface::class);
+        $this->request = $this->createMock(Http::class);
         $this->objectManager = $this->createPartialMock(
             \Magento\Framework\ObjectManager\ObjectManager::class,
             ['create', 'get']
@@ -174,10 +161,10 @@ class SaveTest extends TestCase
             Manager::class,
             ['addSuccessMessage', 'addErrorMessage']
         );
-        $this->session = $this->getMockBuilder(Session::class)
-            ->addMethods(['setIsUrlNotice', 'getCommentText'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->session = $this->createPartialMockWithReflection(
+            Session::class,
+            ['setIsUrlNotice', 'getCommentText']
+        );
         $this->actionFlag = $this->createPartialMock(ActionFlag::class, ['get']);
         $this->helper = $this->createPartialMock(Data::class, ['getUrl']);
 
@@ -230,9 +217,7 @@ class SaveTest extends TestCase
             ->method('getFormKeyValidator')
             ->willReturn($this->formKeyValidator);
 
-        $this->shipmentValidatorMock = $this->getMockBuilder(ShipmentValidatorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->shipmentValidatorMock = $this->createMock(ShipmentValidatorInterface::class);
 
         $this->saveAction = $objectManagerHelper->getObject(
             Save::class,
@@ -258,8 +243,8 @@ class SaveTest extends TestCase
      *
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @dataProvider executeDataProvider
      */
+    #[DataProvider('executeDataProvider')]
     public function testExecute(
         $formKeyIsValid,
         $isPost,
@@ -387,9 +372,8 @@ class SaveTest extends TestCase
 
     /**
      * Test that canSendNewShipmentEmail is called with correct store ID
-     *
-     * @dataProvider storeIdDataProvider
      */
+    #[DataProvider('storeIdDataProvider')]
     public function testCanSendNewShipmentEmailWithStoreId(
         int $storeId,
         bool $sendEmailRequested,

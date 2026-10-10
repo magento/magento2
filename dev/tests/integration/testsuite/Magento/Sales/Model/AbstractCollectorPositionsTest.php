@@ -9,6 +9,8 @@
  */
 namespace Magento\Sales\Model;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 abstract class AbstractCollectorPositionsTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -16,9 +18,8 @@ abstract class AbstractCollectorPositionsTest extends \PHPUnit\Framework\TestCas
      * @param string $configType
      * @param array $before
      * @param array $after
-     *
-     * @dataProvider collectorPositionDataProvider
      */
+    #[DataProvider('collectorPositionDataProvider')]
     public function testCollectorPosition($collectorCode, $configType, array $before, array $after)
     {
         $allCollectors = self::_getConfigCollectors($configType);

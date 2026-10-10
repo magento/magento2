@@ -29,12 +29,15 @@ use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class FormTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var QuoteSession|MockObject
      */
@@ -78,41 +81,32 @@ class FormTest extends TestCase
         ];
         $objectManagerHelper->prepareObjectManager($objects);
         /** @var Context|MockObject $context */
-        $context = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $context = $this->createMock(Context::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
         $context->method('getStoreManager')
             ->willReturn($this->storeManager);
 
-        $this->quoteSession = $this->getMockBuilder(QuoteSession::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getStore', 'getQuote'])
-            ->addMethods(['getQuoteId', 'getStoreId', 'getCustomerId'])
-            ->getMock();
+        $this->quoteSession = $this->createPartialMockWithReflection(
+            QuoteSession::class,
+            ['getStore', 'getQuote', 'getQuoteId', 'getStoreId', 'getCustomerId']
+        );
         /** @var Create|MockObject $create */
-        $create = $this->getMockBuilder(Create::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $create = $this->createMock(Create::class);
         /** @var PriceCurrencyInterface|MockObject $priceCurrency */
-        $priceCurrency = $this->getMockForAbstractClass(PriceCurrencyInterface::class);
+        $priceCurrency = $this->createMock(PriceCurrencyInterface::class);
         /** @var EncoderInterface|MockObject $encoder */
-        $encoder = $this->getMockForAbstractClass(EncoderInterface::class);
+        $encoder = $this->createMock(EncoderInterface::class);
         $encoder->method('encode')
             ->willReturnCallback(function ($param) {
                 return json_encode($param);
             });
         /** @var FormFactory|MockObject $formFactory */
-        $formFactory = $this->getMockBuilder(FormFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->customerRepository = $this->getMockForAbstractClass(CustomerRepositoryInterface::class);
+        $formFactory = $this->createMock(FormFactory::class);
+        $this->customerRepository = $this->createMock(CustomerRepositoryInterface::class);
 
-        $this->localeCurrency = $this->getMockForAbstractClass(CurrencyInterface::class);
+        $this->localeCurrency = $this->createMock(CurrencyInterface::class);
         /** @var Mapper|MockObject $addressMapper */
-        $addressMapper = $this->getMockBuilder(Mapper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $addressMapper = $this->createMock(Mapper::class);
 
         $this->block = new Form(
             $context,
@@ -154,9 +148,7 @@ class FormTest extends TestCase
         $this->quoteSession->method('getQuoteId')
             ->willReturn($quoteId);
 
-        $customer = $this->getMockBuilder(CustomerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $customer = $this->createMock(CustomerInterface::class);
         $customer->method('getAddresses')
             ->willReturn([]);
         $this->customerRepository->method('getById')
@@ -177,17 +169,13 @@ class FormTest extends TestCase
      */
     private function withCurrencySymbol(string $symbol)
     {
-        $store = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $store = $this->createMock(Store::class);
         $store->method('getCurrentCurrencyCode')
             ->willReturn('USD');
         $this->quoteSession->method('getStore')
             ->willReturn($store);
 
-        $currency = $this->getMockBuilder(Currency::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $currency = $this->createMock(Currency::class);
         $currency->method('getSymbol')
             ->willReturn($symbol);
         $this->localeCurrency->method('getCurrency')
@@ -200,23 +188,17 @@ class FormTest extends TestCase
      */
     private function withQuote()
     {
-        $quote = $this->getMockBuilder(Quote::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $quote = $this->createMock(Quote::class);
         $this->quoteSession->method('getQuote')
             ->willReturn($quote);
 
-        $address = $this->getMockBuilder(Address::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $address = $this->createMock(Address::class);
         $address->method('getShippingMethod')
             ->willReturn('free');
         $quote->method('getShippingAddress')
             ->willReturn($address);
 
-        $payment = $this->getMockBuilder(Payment::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $payment = $this->createMock(Payment::class);
         $payment->method('getMethod')
             ->willReturn('free');
         $quote->method('getPayment')

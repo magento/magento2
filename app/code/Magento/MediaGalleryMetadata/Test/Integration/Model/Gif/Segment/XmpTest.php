@@ -12,6 +12,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\MediaGalleryMetadata\Model\Gif\Segment\WriteXmp;
 use Magento\MediaGalleryMetadata\Model\Gif\Segment\ReadXmp;
 use Magento\MediaGalleryMetadata\Model\Gif\ReadFile;
@@ -71,14 +72,13 @@ class XmpTest extends TestCase
 
     /**
      * Test for XMP reader and writer
-     *
-     * @dataProvider filesProvider
      * @param string $fileName
      * @param string $title
      * @param string $description
      * @param array $keywords
      * @throws LocalizedException
      */
+    #[DataProvider('filesProvider')]
     public function testWriteReadGif(
         string $fileName,
         string $title,

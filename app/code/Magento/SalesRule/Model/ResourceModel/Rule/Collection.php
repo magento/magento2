@@ -116,7 +116,10 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
 
         $items = [];
         foreach ($this->getItems() as $item) {
-            $items[$item->getData($ruleIdField)] = $item;
+            $itemRuleId = $item->getData($ruleIdField);
+            if ($itemRuleId !== null) {
+                $items[$itemRuleId] = $item;
+            }
         }
 
         $select = $this->getConnection()->select()->from(

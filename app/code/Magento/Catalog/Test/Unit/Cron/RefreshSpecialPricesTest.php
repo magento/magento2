@@ -76,10 +76,10 @@ class RefreshSpecialPricesTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->_storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->_resourceMock = $this->createMock(ResourceConnection::class);
         $this->_dateTimeMock = $this->createMock(DateTime::class);
-        $this->_localeDateMock = $this->getMockForAbstractClass(TimezoneInterface::class);
+        $this->_localeDateMock = $this->createMock(TimezoneInterface::class);
         $this->_eavConfigMock = $this->createMock(Config::class);
         $this->_priceProcessorMock = $this->createMock(Processor::class);
         $this->metadataPool = $this->createMock(MetadataPool::class);
@@ -113,8 +113,8 @@ class RefreshSpecialPricesTest extends TestCase
         $selectMock->expects($this->any())->method('joinLeft')->willReturnSelf();
         $selectMock->expects($this->any())->method('where')->willReturnSelf();
 
-        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
-        $connectionMock->expects($this->any())->method('select')->willReturn($selectMock);
+        $connectionMock = $this->createMock(AdapterInterface::class);
+        $connectionMock->method('select')->willReturn($selectMock);
         $connectionMock->expects($this->exactly(2))
             ->method('fetchCol')
             ->with($selectMock, [])
@@ -128,16 +128,12 @@ class RefreshSpecialPricesTest extends TestCase
             $connectionMock
         );
 
-        $this->_resourceMock->expects(
-            $this->any()
-        )->method(
-            'getTableName'
-        )->willReturn(
+        $this->_resourceMock->method('getTableName')->willReturn(
             'category'
         );
 
         $storeMock = $this->createMock(Store::class);
-        $storeMock->expects($this->any())->method('getId')->willReturn(1);
+        $storeMock->method('getId')->willReturn(1);
 
         $this->_storeManagerMock->expects(
             $this->once()
@@ -170,18 +166,10 @@ class RefreshSpecialPricesTest extends TestCase
             $indexerMock
         );
 
-        $attributeMock = $this->getMockForAbstractClass(
-            AbstractAttribute::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            [ 'getAttributeId']
-        );
-        $attributeMock->expects($this->any())->method('getAttributeId')->willReturn(1);
+        $attributeMock = $this->createMock(AbstractAttribute::class);
+        $attributeMock->method('getAttributeId')->willReturn(1);
 
-        $this->_eavConfigMock->expects($this->any())->method('getAttribute')->willReturn($attributeMock);
+        $this->_eavConfigMock->method('getAttribute')->willReturn($attributeMock);
 
         $this->_model->execute();
     }

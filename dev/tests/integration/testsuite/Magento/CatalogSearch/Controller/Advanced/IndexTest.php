@@ -9,6 +9,7 @@ namespace Magento\CatalogSearch\Controller\Advanced;
 
 use Magento\TestFramework\TestCase\AbstractController;
 use Laminas\Stdlib\Parameters;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test cases for catalog advanced index using params.
@@ -22,11 +23,11 @@ class IndexTest extends AbstractController
      * Advanced index test by params with the array in params.
      *
      * @magentoAppArea frontend
-     * @dataProvider fromParamsInArrayDataProvider
      *
      * @param array $searchParams
      * @return void
      */
+    #[DataProvider('fromParamsInArrayDataProvider')]
     public function testExecuteWithArrayInParams(array $searchParams): void
     {
         $this->getRequest()->setQuery(

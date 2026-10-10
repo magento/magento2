@@ -107,20 +107,20 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
             $staticAsset = $this->fileManager->createStaticJsAsset();
             /** @var \Magento\Framework\View\Asset\File $bundleAsset */
             if (!empty($bundleAssets) && $staticAsset !== false) {
-                $bundleAssets = array_reverse($bundleAssets);
+                $assetCollection->insert(
+                    $staticAsset->getFilePath(),
+                    $staticAsset,
+                    $after
+                );
+                $after = $staticAsset->getFilePath();
                 foreach ($bundleAssets as $bundleAsset) {
                     $assetCollection->insert(
                         $bundleAsset->getFilePath(),
                         $bundleAsset,
                         $after
                     );
+                    $after = $bundleAsset->getFilePath();
                 }
-                $assetCollection->insert(
-                    $staticAsset->getFilePath(),
-                    $staticAsset,
-                    reset($bundleAssets)->getFilePath()
-                );
-                $after = $staticAsset->getFilePath();
             }
         }
         $requireJsConfig = $this->fileManager->createRequireJsConfigAsset();

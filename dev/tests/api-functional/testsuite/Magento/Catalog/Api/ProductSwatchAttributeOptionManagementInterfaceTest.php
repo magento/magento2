@@ -5,20 +5,21 @@
  */
 namespace Magento\Catalog\Api;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Eav\Api\Data\AttributeOptionInterface;
 use Magento\Eav\Api\Data\AttributeOptionLabelInterface;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 class ProductSwatchAttributeOptionManagementInterfaceTest extends WebapiAbstract
 {
-    const SERVICE_NAME = 'catalogProductAttributeOptionManagementV1';
-    const SERVICE_VERSION = 'V1';
-    const RESOURCE_PATH = '/V1/products/attributes';
+    public const SERVICE_NAME = 'catalogProductAttributeOptionManagementV1';
+    public const SERVICE_VERSION = 'V1';
+    public const RESOURCE_PATH = '/V1/products/attributes';
 
     /**
      * @magentoApiDataFixture Magento/Swatches/_files/swatch_attribute.php
-     * @dataProvider addDataProvider
      */
+    #[DataProvider('addDataProvider')]
     public function testAdd($optionData)
     {
         $testAttributeCode = 'color_swatch';

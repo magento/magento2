@@ -14,6 +14,7 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Connection\AbstractConnection;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -159,8 +160,8 @@ class ConfigTest extends TestCase
      * @param array $config
      * @param array $expected
      * @return void
-     * @dataProvider configDataProvider
      */
+    #[DataProvider('configDataProvider')]
     public function testCreateConnection(array $config, array $expected): void
     {
         $this->deploymentConfigMock->expects($this->once())

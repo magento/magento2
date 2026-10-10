@@ -12,6 +12,7 @@ use Magento\Framework\App\ProductMetadata;
 use Magento\Framework\Composer\ComposerInformation;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ProductMetadataTest extends TestCase
@@ -43,15 +44,12 @@ class ProductMetadataTest extends TestCase
         $objectManager = new ObjectManager($this);
         $this->productMetadata = $objectManager->getObject(ProductMetadata::class, ['cache' => $this->cacheMock]);
         $reflectionProperty = new \ReflectionProperty($this->productMetadata, 'composerInformation');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->productMetadata, $this->composerInformationMock);
     }
 
-    /**
-     * @param array $packageList
-     * @param string $expectedVersion
-     * @dataProvider getVersionGitInstallationDataProvider
+    /**     * @param string $expectedVersion
      */
+    #[DataProvider('getVersionGitInstallationDataProvider')]
     public function testGetVersion($packageList, $expectedVersion)
     {
         $this->composerInformationMock->expects($this->any())->method('getSystemPackages')->willReturn($packageList);

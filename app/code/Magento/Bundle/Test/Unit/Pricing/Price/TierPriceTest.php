@@ -10,7 +10,7 @@ namespace Magento\Bundle\Test\Unit\Pricing\Price;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Bundle\Pricing\Price\TierPrice;
-use Magento\Catalog\Test\Unit\Helper\ProductTestHelper;
+use Magento\Catalog\Model\Product;
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Customer\Model\Data\Group as DataGroup;
 use Magento\Customer\Model\Group;
@@ -20,6 +20,7 @@ use Magento\Framework\Pricing\Amount\AmountInterface;
 use Magento\Framework\Pricing\Price\PriceInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Pricing\PriceInfo\Base;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -30,6 +31,7 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(TierPrice::class)]
 class TierPriceTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var MockObject
      */
@@ -67,12 +69,18 @@ class TierPriceTest extends TestCase
     {
         $this->priceInfo = $this->createMock(Base::class);
 
-        $this->product = $this->createPartialMock(
-            ProductTestHelper::class,
-            ['hasCustomerGroupId', 'getCustomerGroupId', 'getPriceInfo', 'getResource']
+        $this->product = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getPriceInfo', 'getResource']
         );
-
         $this->product->method('getPriceInfo')->willReturn($this->priceInfo);
+        
+        // Configure getResource to return a mock with getAttribute method
+        $resource = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product::class);
+        $resource->method('getAttribute')->willReturn(
+            $this->createMock(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
+        );
+        $this->product->method('getResource')->willReturn($resource);
 
         $this->calculator = $this->createMock(Calculator::class);
         $this->groupManagement = $this->createMock(GroupManagementInterface::class);

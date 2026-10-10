@@ -39,7 +39,6 @@ class ViewedTest extends TestCase
         $product->expects($this->once())->method('getIdentities')->willReturn($productTags);
 
         $collection = new \ReflectionProperty(Viewed::class, '_collection');
-        $collection->setAccessible(true);
         $collection->setValue($this->block, [$product]);
 
         $this->assertEquals($productTags, $this->block->getIdentities());

@@ -126,6 +126,10 @@ class ThemeProvider implements ThemeProviderInterface, ResetAfterRequestInterfac
      */
     public function getThemeById($themeId)
     {
+        if ($themeId === null) {
+            return $this->themeFactory->create();
+        }
+
         if (isset($this->themes[$themeId])) {
             return $this->themes[$themeId];
         }

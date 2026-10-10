@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Category\Product\Plugin;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Indexer\Category\Product;
 use Magento\Catalog\Model\Indexer\Category\Product\Plugin\MviewState;
 use Magento\Catalog\Model\Indexer\Product\Category;
@@ -27,27 +28,21 @@ class MviewStateTest extends TestCase
     /**
      * @param string $stateStatus
      * @param string $relatedStatus
-     * @dataProvider afterSetStatusSuspendDataProvider
      */
+    #[DataProvider('afterSetStatusSuspendDataProvider')]
     public function testAfterSetStatusSuspend($stateStatus, $relatedStatus)
     {
         $stateViewId = Category::INDEXER_ID;
         $relatedViewId = Product::INDEXER_ID;
         $relatedVersion = 'related_version';
 
-        $state = $this->getMockBuilder(
-            StateInterface::class
-        )->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $state = $this->createMock(StateInterface::class);
 
         $state->expects($this->exactly(2))->method('getViewId')->willReturn($stateViewId);
 
-        $state->expects($this->any())->method('getStatus')->willReturn($stateStatus);
+        $state->method('getStatus')->willReturn($stateStatus);
 
-        $relatedViewState = $this->getMockBuilder(
-            StateInterface::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        $relatedViewState = $this->createMock(StateInterface::class);
 
         $relatedViewState->expects(
             $this->once()
@@ -82,10 +77,7 @@ class MviewStateTest extends TestCase
         )->willReturnSelf(
         );
 
-        $relatedViewChangelog = $this->getMockBuilder(
-            ChangelogInterface::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        $relatedViewChangelog = $this->createMock(ChangelogInterface::class);
 
         $relatedViewChangelog->expects(
             $this->once()
@@ -116,26 +108,20 @@ class MviewStateTest extends TestCase
     /**
      * @param string $stateStatus
      * @param string $relatedStatus
-     * @dataProvider afterSetStatusResumeDataProvider
      */
+    #[DataProvider('afterSetStatusResumeDataProvider')]
     public function testAfterSetStatusResume($stateStatus, $relatedStatus)
     {
         $stateViewId = Category::INDEXER_ID;
         $relatedViewId = Product::INDEXER_ID;
 
-        $state = $this->getMockBuilder(
-            StateInterface::class
-        )->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $state = $this->createMock(StateInterface::class);
 
         $state->expects($this->exactly(2))->method('getViewId')->willReturn($stateViewId);
 
-        $state->expects($this->any())->method('getStatus')->willReturn($stateStatus);
+        $state->method('getStatus')->willReturn($stateStatus);
 
-        $relatedViewState = $this->getMockBuilder(
-            StateInterface::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        $relatedViewState = $this->createMock(StateInterface::class);
 
         $relatedViewState->expects(
             $this->once()
@@ -148,7 +134,7 @@ class MviewStateTest extends TestCase
 
         $relatedViewState->expects($this->once())->method('getMode')->willReturn('enabled');
 
-        $relatedViewState->expects($this->any())->method('getStatus')->willReturn($relatedStatus);
+        $relatedViewState->method('getStatus')->willReturn($relatedStatus);
 
         $relatedViewState->expects($this->once())->method('save')->willReturnSelf();
 
@@ -163,10 +149,7 @@ class MviewStateTest extends TestCase
         )->willReturnSelf(
         );
 
-        $relatedViewChangelog = $this->getMockBuilder(
-            ChangelogInterface::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        $relatedViewChangelog = $this->createMock(ChangelogInterface::class);
 
         $model = new MviewState(
             $relatedViewState,
@@ -192,26 +175,20 @@ class MviewStateTest extends TestCase
     /**
      * @param string $stateStatus
      * @param string $relatedStatus
-     * @dataProvider afterSetStatusSkipDataProvider
      */
+    #[DataProvider('afterSetStatusSkipDataProvider')]
     public function testAfterSetStatusSkip($stateStatus, $relatedStatus)
     {
         $stateViewId = Category::INDEXER_ID;
         $relatedViewId = Product::INDEXER_ID;
 
-        $state = $this->getMockBuilder(
-            StateInterface::class
-        )->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $state = $this->createMock(StateInterface::class);
 
         $state->expects($this->exactly(2))->method('getViewId')->willReturn($stateViewId);
 
-        $state->expects($this->any())->method('getStatus')->willReturn($stateStatus);
+        $state->method('getStatus')->willReturn($stateStatus);
 
-        $relatedViewState = $this->getMockBuilder(
-            StateInterface::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        $relatedViewState = $this->createMock(StateInterface::class);
 
         $relatedViewState->expects(
             $this->once()
@@ -224,7 +201,7 @@ class MviewStateTest extends TestCase
 
         $relatedViewState->expects($this->once())->method('getMode')->willReturn('enabled');
 
-        $relatedViewState->expects($this->any())->method('getStatus')->willReturn($relatedStatus);
+        $relatedViewState->method('getStatus')->willReturn($relatedStatus);
 
         $relatedViewState->expects($this->never())->method('save');
 
@@ -232,10 +209,7 @@ class MviewStateTest extends TestCase
 
         $relatedViewState->expects($this->never())->method('setStatus');
 
-        $relatedViewChangelog = $this->getMockBuilder(
-            ChangelogInterface::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        $relatedViewChangelog = $this->createMock(ChangelogInterface::class);
 
         $model = new MviewState(
             $relatedViewState,
@@ -254,26 +228,20 @@ class MviewStateTest extends TestCase
 
     /**
      * @param string $stateStatus
-     * @dataProvider afterSetStatusDisabledDataProvider
      */
+    #[DataProvider('afterSetStatusDisabledDataProvider')]
     public function testAfterSetStatusDisabled($stateStatus)
     {
         $stateViewId = Category::INDEXER_ID;
         $relatedViewId = Product::INDEXER_ID;
 
-        $state = $this->getMockBuilder(
-            StateInterface::class
-        )->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $state = $this->createMock(StateInterface::class);
 
         $state->expects($this->exactly(2))->method('getViewId')->willReturn($stateViewId);
 
-        $state->expects($this->any())->method('getStatus')->willReturn($stateStatus);
+        $state->method('getStatus')->willReturn($stateStatus);
 
-        $relatedViewState = $this->getMockBuilder(
-            StateInterface::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        $relatedViewState = $this->createMock(StateInterface::class);
 
         $relatedViewState->expects(
             $this->once()
@@ -294,10 +262,7 @@ class MviewStateTest extends TestCase
 
         $relatedViewState->expects($this->never())->method('setStatus');
 
-        $relatedViewChangelog = $this->getMockBuilder(
-            ChangelogInterface::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        $relatedViewChangelog = $this->createMock(ChangelogInterface::class);
 
         $model = new MviewState(
             $relatedViewState,

@@ -9,6 +9,7 @@ namespace Magento\Framework\App\Test\Unit\Console\CommandLoader;
 
 use Magento\Framework\Console\CommandLoader\Aggregate;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\CommandLoader\CommandLoaderInterface;
@@ -31,18 +32,14 @@ class AggregateTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->firstMockCommandLoader = $this->getMockBuilder(CommandLoaderInterface::class)->getMock();
-        $this->secondMockCommandLoader = $this->getMockBuilder(CommandLoaderInterface::class)->getMock();
+        $this->firstMockCommandLoader = $this->createMock(CommandLoaderInterface::class);
+        $this->secondMockCommandLoader = $this->createMock(CommandLoaderInterface::class);
         $this->aggregateCommandLoader = new Aggregate([$this->firstMockCommandLoader, $this->secondMockCommandLoader]);
     }
 
-    /**
-     * Test the various cases of `has` for the aggregate command loader:
-     *  - When at least one "internal" command loader has a command, the aggregate does as well
-     *  - When none of the "internal" command loaders has a command, neither does the aggregate
-     *
-     * @dataProvider provideTestCasesForHas
+        /**
      */
+    #[DataProvider('provideTestCasesForHas')]
     public function testHas(bool $firstResult, bool $secondResult, bool $overallResult): void
     {
         $this->firstMockCommandLoader->method('has')->with('foo')->willReturn($firstResult);
@@ -51,7 +48,7 @@ class AggregateTest extends TestCase
         $this->assertEquals($overallResult, $this->aggregateCommandLoader->has('foo'));
     }
 
-    public function provideTestCasesForHas(): array
+    public static function provideTestCasesForHas(): array
     {
         return [
             [true, false, true],
@@ -60,14 +57,9 @@ class AggregateTest extends TestCase
         ];
     }
 
-    /**
-     * Test the various cases of `get` for the aggregate command loader. Similar to `has`,
-     * the return value of `Aggregate::get` mirrors its internal command loaders.
-     *
-     * For simplicity, this test does not cover the "no results" case. @see testGetThrow
-     *
-     * @dataProvider provideTestCasesForGet
+        /**
      */
+    #[DataProvider('provideTestCasesForGet')]
     public function testGet(?Command $firstCmd, ?Command $secondCmd): void
     {
         $firstHas = (bool)$firstCmd;
@@ -86,7 +78,7 @@ class AggregateTest extends TestCase
         $this->assertInstanceOf(Command::class, $this->aggregateCommandLoader->get('foo'));
     }
 
-    public function provideTestCasesForGet(): array
+    public static function provideTestCasesForGet(): array
     {
         return [
             [

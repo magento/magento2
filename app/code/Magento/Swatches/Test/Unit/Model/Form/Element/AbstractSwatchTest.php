@@ -47,8 +47,6 @@ class AbstractSwatchTest extends TestCase
             ->willReturn($this->attribute);
 
         $method = new \ReflectionMethod(AbstractSwatch::class, 'getValues');
-        $method->setAccessible(true);
-
         $this->assertEquals($expected, $method->invoke($this->swatch));
     }
 
@@ -59,8 +57,6 @@ class AbstractSwatchTest extends TestCase
             ->willReturn(null);
 
         $method = new \ReflectionMethod(AbstractSwatch::class, 'getValues');
-        $method->setAccessible(true);
-
         $this->assertEmpty($method->invoke($this->swatch));
     }
 }

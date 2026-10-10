@@ -20,6 +20,8 @@ use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\ConfigurableFac
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use Magento\Catalog\Api\Data\ProductExtensionInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -27,6 +29,8 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(\Magento\ConfigurableProduct\Model\Product\SaveHandler::class)]
 class SaveHandlerTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var OptionRepository|MockObject
      */
@@ -98,14 +102,21 @@ class SaveHandlerTest extends TestCase
             ->method('getSku')
             ->willReturn($sku);
 
-        $extensionAttributes = new \Magento\Catalog\Test\Unit\Helper\ProductExtensionTestHelper();
+        $extensionAttributes = $this->createPartialMockWithReflection(
+            ProductExtensionInterface::class,
+            [
+                'getConfigurableProductOptions',
+                'setConfigurableProductOptions',
+                'getConfigurableProductLinks',
+                'setConfigurableProductLinks'
+            ]
+        );
+        $extensionAttributes->method('getConfigurableProductOptions')->willReturn([]);
+        $extensionAttributes->method('getConfigurableProductLinks')->willReturn($configurableProductLinks);
 
         $product->expects(static::atLeastOnce())
             ->method('getExtensionAttributes')
             ->willReturn($extensionAttributes);
-
-        $extensionAttributes->setConfigurableProductOptions([]);
-        $extensionAttributes->setConfigurableProductLinks($configurableProductLinks);
 
         $this->optionRepository->expects(static::once())
             ->method('getList')
@@ -138,7 +149,15 @@ class SaveHandlerTest extends TestCase
             ->method('getSku')
             ->willReturn($sku);
 
-        $extensionAttributes = new \Magento\Catalog\Test\Unit\Helper\ProductExtensionTestHelper();
+        $extensionAttributes = $this->createPartialMockWithReflection(
+            ProductExtensionInterface::class,
+            [
+                'getConfigurableProductOptions',
+                'setConfigurableProductOptions',
+                'getConfigurableProductLinks',
+                'setConfigurableProductLinks'
+            ]
+        );
 
         $product->expects(static::atLeastOnce())
             ->method('getExtensionAttributes')
@@ -177,8 +196,8 @@ class SaveHandlerTest extends TestCase
         $configurableAttributes = [
             $attributeNew
         ];
-        $extensionAttributes->setConfigurableProductOptions($configurableAttributes);
-        $extensionAttributes->setConfigurableProductLinks($configurableProductLinks);
+        $extensionAttributes->method('getConfigurableProductOptions')->willReturn($configurableAttributes);
+        $extensionAttributes->method('getConfigurableProductLinks')->willReturn($configurableProductLinks);
 
         $this->configurable->expects(static::once())
             ->method('saveProducts')

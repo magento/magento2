@@ -13,6 +13,7 @@ use Magento\Framework\Indexer\ConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class DependencyInfoProviderTest extends TestCase
 {
@@ -38,8 +39,7 @@ class DependencyInfoProviderTest extends TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->configMock = $this->getMockBuilder(ConfigInterface::class)
-            ->getMockForAbstractClass();
+        $this->configMock = $this->createMock(ConfigInterface::class);
 
         $this->dependencyInfoProvider = $this->objectManagerHelper->getObject(
             DependencyInfoProvider::class,
@@ -79,9 +79,8 @@ class DependencyInfoProviderTest extends TestCase
     /**
      * @param string $indexerId
      * @param array $indexersData
-     * @param array $dependentIndexerIds
-     * @dataProvider getDependentIndexerIdsDataProvider
-     */
+     * @param array $dependentIndexerIds     */
+    #[DataProvider('getDependentIndexerIdsDataProvider')]
     public function testGetDependentIndexerIds(string $indexerId, array $indexersData, array $dependentIndexerIds)
     {
         $this->addSeparateIndexersToConfigMock($indexersData);

@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Product;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\CartConfiguration;
 use PHPUnit\Framework\TestCase;
@@ -17,8 +18,8 @@ class CartConfigurationTest extends TestCase
      * @param string $productType
      * @param array $config
      * @param boolean $expected
-     * @dataProvider isProductConfiguredDataProvider
      */
+    #[DataProvider('isProductConfiguredDataProvider')]
     public function testIsProductConfigured($productType, $config, $expected)
     {
         $cartConfiguration = new CartConfiguration();

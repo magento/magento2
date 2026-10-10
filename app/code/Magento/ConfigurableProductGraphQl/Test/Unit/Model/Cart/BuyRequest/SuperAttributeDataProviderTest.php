@@ -8,8 +8,7 @@ declare(strict_types=1);
 namespace Magento\ConfigurableProductGraphQl\Test\Unit\Model\Cart\BuyRequest;
 
 use Magento\Framework\DataObject;
-use Magento\Catalog\Test\Unit\Helper\ProductTestHelper;
-use Magento\Catalog\Test\Unit\Helper\ProductExtensionTestHelper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
@@ -32,6 +31,7 @@ use PHPUnit\Framework\TestCase;
  */
 class SuperAttributeDataProviderTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var ArrayManager|MockObject
      */
@@ -140,20 +140,21 @@ class SuperAttributeDataProviderTest extends TestCase
             ->method('getStore')
             ->willReturn($storeMock);
 
-        $productMock = new ProductTestHelper();
-        $productMock->setWebsiteIds([$websiteId]);
-        $productMock->setId(1);
-        $productMock->setData('entity_id', 1);
+        $extensionAttributes = $this->createPartialMockWithReflection(
+            \Magento\Catalog\Api\Data\ProductExtensionInterface::class,
+            ['getConfigurableProductLinks']
+        );
+        $extensionAttributes->method('getConfigurableProductLinks')->willReturn([1]);
 
-        // Use existing helper for extension attributes
-        $extensionAttributes = new ProductExtensionTestHelper();
-        $extensionAttributes->setConfigurableProductLinks([1]);
-        $productMock->setExtensionAttributes($extensionAttributes);
+        $productMock = $this->createMock(Product::class);
+        $productMock->method('getWebsiteIds')->willReturn([$websiteId]);
+        $productMock->method('getId')->willReturn(1);
+        $productMock->method('getData')->willReturn(1);
+        $productMock->method('getExtensionAttributes')->willReturn($extensionAttributes);
 
-        // Create child product mock
-        $childProductMock = new ProductTestHelper();
-        $childProductMock->setId(1);
-        $childProductMock->setData('code', 1); // Set the attribute value that matches the option
+        $childProductMock = $this->createMock(Product::class);
+        $childProductMock->method('getId')->willReturn(1);
+        $childProductMock->method('getData')->willReturn(1);
 
         $this->productRepository->method('get')
             ->willReturnCallback(

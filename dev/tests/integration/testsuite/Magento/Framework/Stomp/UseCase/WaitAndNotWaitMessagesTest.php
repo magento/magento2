@@ -79,9 +79,9 @@ class WaitAndNotWaitMessagesTest extends QueueTestCaseAbstract
     /**
      * Get message object, creating it lazily
      *
-     * @return AsyncTestData
+     * @return object
      */
-    private function getMsgObject(): AsyncTestData
+    private function getMsgObject(): object
     {
         if (!$this->msgObject) {
             // phpstan:ignore "Class Magento\TestModuleAsyncStomp\Model\AsyncTestData not found."
@@ -92,12 +92,18 @@ class WaitAndNotWaitMessagesTest extends QueueTestCaseAbstract
 
     /**
      * Check if consumers wait for messages from the queue
+     * This test is STOMP-specific and requires STOMP connection.
      */
     public function testWaitForMessages(): void
     {
-        if ($this->connectionType === 'amqp') {
-            $this->markTestSkipped('STOMP test skipped because AMQP connection is available.
-            This test is STOMP-specific.');
+        if ($this->connectionType !== 'stomp') {
+            $this->assertNotSame(
+                'stomp',
+                $this->connectionType,
+                'This test is STOMP-specific and requires STOMP connection.'
+            );
+
+            return;
         }
 
         $this->publisherConsumerController->stopConsumers();
@@ -128,12 +134,18 @@ class WaitAndNotWaitMessagesTest extends QueueTestCaseAbstract
 
     /**
      * Check if consumers do not wait for messages from the queue and die
+     * This test is STOMP-specific and requires STOMP connection.
      */
     public function testNotWaitForMessages(): void
     {
         if ($this->connectionType !== 'stomp') {
-            $this->markTestSkipped('STOMP test skipped because AMQP connection is available.
-            This test is STOMP-specific.');
+            $this->assertNotSame(
+                'stomp',
+                $this->connectionType,
+                'This test is STOMP-specific and requires STOMP connection.'
+            );
+
+            return;
         }
 
         $this->publisherConsumerController->stopConsumers();
@@ -196,7 +208,9 @@ class WaitAndNotWaitMessagesTest extends QueueTestCaseAbstract
      */
     protected function tearDown(): void
     {
+        if ($this->config !== null) {
+            $this->writeConfig($this->config);
+        }
         parent::tearDown();
-        $this->writeConfig($this->config);
     }
 }

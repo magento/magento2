@@ -9,6 +9,7 @@ namespace Magento\Catalog\Block\Product\ProductList;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection as LinkProductCollection;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Check the correct behavior of related products on the product view page
@@ -77,12 +78,12 @@ class RelatedTest extends AbstractLinksTest
     /**
      * Test the display of related products in the block
      *
-     * @dataProvider displayLinkedProductsProvider
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoDataFixture Magento/Catalog/_files/products_list.php
      * @param array $data
      * @return void
      */
+    #[DataProvider('displayLinkedProductsProvider')]
     public function testDisplayRelatedProducts(array $data): void
     {
         $this->updateProducts($data['updateProducts']);
@@ -123,13 +124,13 @@ class RelatedTest extends AbstractLinksTest
     /**
      * Test the display of related products in the block on different websites
      *
-     * @dataProvider multipleWebsitesLinkedProductsProvider
      * @magentoDataFixture Magento/Catalog/_files/products_with_websites_and_stores.php
      * @magentoDataFixture Magento/Catalog/_files/products_list.php
      * @magentoAppIsolation enabled
      * @param array $data
      * @return void
      */
+    #[DataProvider('multipleWebsitesLinkedProductsProvider')]
     public function testMultipleWebsitesRelatedProducts(array $data): void
     {
         $this->updateProducts($this->prepareProductsWebsiteIds());

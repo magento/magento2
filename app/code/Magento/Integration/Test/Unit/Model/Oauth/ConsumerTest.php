@@ -226,7 +226,6 @@ class ConsumerTest extends TestCase
             ->willReturnOnConsecutiveCalls(time(), time() - 100);
 
         $dateHelper = new ReflectionProperty(Consumer::class, '_dateHelper');
-        $dateHelper->setAccessible(true);
         $dateHelper->setValue($this->consumerModel, $dateHelperMock);
 
         $this->consumerModel->setUpdatedAt((string) time());
@@ -246,7 +245,6 @@ class ConsumerTest extends TestCase
             ->willReturnOnConsecutiveCalls(time(), time() - 1000);
 
         $dateHelper = new ReflectionProperty(Consumer::class, '_dateHelper');
-        $dateHelper->setAccessible(true);
         $dateHelper->setValue($this->consumerModel, $dateHelperMock);
 
         $this->consumerModel->setUpdatedAt((string)time());

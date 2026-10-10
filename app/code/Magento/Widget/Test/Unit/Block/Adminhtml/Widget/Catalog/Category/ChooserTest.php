@@ -13,9 +13,11 @@ use Magento\Catalog\Model\ResourceModel\Category\Collection;
 use Magento\Catalog\Model\ResourceModel\Category\Tree;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Data\Tree\Node;
+use Magento\Framework\Data\Tree\Node\Collection as NodeCollection;
 use Magento\Framework\Escaper;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Widget\Block\Adminhtml\Widget\Catalog\Category\Chooser;
@@ -27,6 +29,8 @@ use PHPUnit\Framework\TestCase;
  */
 class ChooserTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Collection|MockObject
      */
@@ -79,24 +83,26 @@ class ChooserTest extends TestCase
 
     protected function setUp(): void
     {
+        $objectManager = new ObjectManager($this);
+        $objectManager->prepareObjectManager();
+
         $this->collection = $this->createMock(Collection::class);
 
-        $this->childNode = $this->getMockBuilder(Node::class)
-            ->addMethods(['getLevel'])
-            ->onlyMethods(['hasChildren', 'getIdField'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->rootNode = $this->getMockBuilder(Node::class)
-            ->addMethods(['getLevel'])
-            ->onlyMethods(['hasChildren', 'getChildren', 'getIdField'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->childNode = $this->createPartialMockWithReflection(
+            Node::class,
+            ['getLevel', 'hasChildren', 'getIdField']
+        );
+
+        $this->rootNode = $this->createPartialMockWithReflection(
+            Node::class,
+            ['getLevel', 'hasChildren', 'getChildren', 'getIdField']
+        );
         $this->categoryTree = $this->createMock(Tree::class);
         $this->store = $this->createMock(Store::class);
-        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $this->request = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->request = $this->createMock(RequestInterface::class);
         $this->escaper = $this->createMock(Escaper::class);
-        $this->eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->eventManager = $this->createMock(ManagerInterface::class);
         $this->context = $this->createMock(Context::class);
     }
 

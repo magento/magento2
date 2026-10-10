@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Swatches\Api;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Eav\Api\Data\AttributeOptionInterface;
@@ -34,7 +35,6 @@ class ProductAttributeOptionManagementInterfaceTest extends WebapiAbstract
     /**
      * Test add option to swatch attribute
      *
-     * @dataProvider addDataProvider
      * @magentoApiDataFixture Magento/Catalog/Model/Product/Attribute/_files/select_attribute.php
      * @param array $data
      * @param array $payload
@@ -44,6 +44,7 @@ class ProductAttributeOptionManagementInterfaceTest extends WebapiAbstract
      *
      * @return void
      */
+    #[DataProvider('addDataProvider')]
     public function testAdd(
         array $data,
         array $payload,

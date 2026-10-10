@@ -18,6 +18,7 @@ use Magento\Framework\Jwt\Header\Critical;
 use Magento\Framework\Jwt\Header\KeyId;
 use Magento\Framework\Jwt\Header\PrivateHeaderParameter;
 use Magento\Framework\Jwt\Header\PublicHeaderParameter;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Framework\Jwt\Jwe\Jwe;
 use Magento\Framework\Jwt\Jwe\JweEncryptionJwks;
 use Magento\Framework\Jwt\Jwe\JweEncryptionSettingsInterface;
@@ -58,9 +59,8 @@ class JwtManagerTest extends TestCase
      * @param EncryptionSettingsInterface $encryption
      * @param EncryptionSettingsInterface[] $readEncryption
      * @return void
-     *
-     * @dataProvider getTokenVariants
      */
+    #[DataProvider('getTokenVariants')]
     public function testCreateRead(
         JwtInterface $jwt,
         EncryptionSettingsInterface $encryption,
@@ -727,9 +727,8 @@ class JwtManagerTest extends TestCase
      * @param JwtInterface $tokenData
      * @param EncryptionSettingsInterface $settings
      * @return void
-     *
-     * @dataProvider getJwtsForHeaders
      */
+    #[DataProvider('getJwtsForHeaders')]
     public function testReadHeaders(JwtInterface $tokenData, EncryptionSettingsInterface $settings): void
     {
         $token = $this->manager->create($tokenData, $settings);

@@ -22,14 +22,17 @@ abstract class AbstractCalculator
     /**#@+
      * Constants for delta rounding key
      */
-    const KEY_REGULAR_DELTA_ROUNDING = 'regular';
+    public const KEY_REGULAR_DELTA_ROUNDING = 'regular';
 
-    const KEY_APPLIED_TAX_DELTA_ROUNDING = 'applied_tax_amount';
+    public const KEY_APPLIED_TAX_DELTA_ROUNDING = 'applied_tax_amount';
 
-    const KEY_TAX_BEFORE_DISCOUNT_DELTA_ROUNDING = 'tax_before_discount';
+    public const KEY_TAX_BEFORE_DISCOUNT_DELTA_ROUNDING = 'tax_before_discount';
     /**#@-*/
 
     /**#@-*/
+    /**
+     * @var TaxDetailsItemInterfaceFactory
+     */
     protected $taxDetailsItemDataObjectFactory;
 
     /**
@@ -40,36 +43,26 @@ abstract class AbstractCalculator
     protected $calculationTool;
 
     /**
-     * Store id
-     *
      * @var int
      */
     protected $storeId;
 
     /**
-     * Customer tax class id
-     *
      * @var int
      */
     protected $customerTaxClassId;
 
     /**
-     * Customer id
-     *
      * @var int
      */
     protected $customerId;
 
     /**
-     * Shipping Address
-     *
      * @var CustomerAddress
      */
     protected $shippingAddress;
 
     /**
-     * Billing Address
-     *
      * @var CustomerAddress
      */
     protected $billingAddress;
@@ -408,14 +401,15 @@ abstract class AbstractCalculator
         if ($price) {
             $rate = (string)$rate;
             $type = $type . $direction;
-            // initialize the delta to a small number to avoid non-deterministic behavior with rounding of 0.5
-            $delta = isset($this->roundingDeltas[$type][$rate]) ?
-                $this->roundingDeltas[$type][$rate] :
-                0.000001;
-            $price += $delta;
             $roundPrice = $price;
             if ($round) {
-                $roundPrice = $this->calculationTool->round($roundPrice);
+                // initialize the delta to a small number to avoid non-deterministic behavior with rounding of 0.5
+                $delta = isset($this->roundingDeltas[$type][$rate]) ?
+                $this->roundingDeltas[$type][$rate] :
+                0.000001;
+                $price += $delta;
+
+                $roundPrice = $this->calculationTool->round($price);
             }
             $this->roundingDeltas[$type][$rate] = $price - $roundPrice;
             $price = $roundPrice;
@@ -424,8 +418,10 @@ abstract class AbstractCalculator
     }
 
     /**
-     * Given a store price that includes tax at the store rate, this function will back out the store's tax, and add in
-     * the customer's tax.  Returns this new price which is the customer's price including tax.
+     * Calculate customer price including tax from store price including tax.
+     *
+     * Given a store price that includes tax at the store rate, this function will back out the store's tax,
+     * and add in the customer's tax. Returns this new price which is the customer's price including tax.
      *
      * @param float $storePriceInclTax
      * @param float $storeRate

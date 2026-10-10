@@ -15,6 +15,7 @@ use Magento\MediaContentApi\Api\GetContentByAssetIdsInterface;
 use Magento\MediaContentSynchronizationApi\Api\SynchronizeIdentitiesInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for catalog SynchronizeIdentities.
@@ -54,13 +55,13 @@ class SynchronizeIdentitiesTest extends TestCase
     }
 
     /**
-     * @dataProvider filesProvider
      * @magentoDataFixture Magento/MediaContentCatalog/_files/category_with_asset.php
      * @magentoDataFixture Magento/MediaContentCatalog/_files/product_with_asset.php
      * @magentoDataFixture Magento/MediaGallery/_files/media_asset.php
      * @param ContentIdentityInterface[] $mediaContentIdentities
      * @throws IntegrationException
      */
+    #[DataProvider('filesProvider')]
     public function testExecute(array $mediaContentIdentities): void
     {
         $assetId = 2020;

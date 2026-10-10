@@ -74,19 +74,16 @@ class AbstractProductTest extends TestCase
             AbstractProduct::class,
             'productCategoryList'
         );
-        $this->productCategoryListProperty->setAccessible(true);
 
         $this->_entityAttributeValuesProperty = new \ReflectionProperty(
             AbstractProduct::class,
             '_entityAttributeValues'
         );
-        $this->_entityAttributeValuesProperty->setAccessible(true);
 
         $this->_configProperty = new \ReflectionProperty(
             AbstractProduct::class,
             '_config'
         );
-        $this->_configProperty->setAccessible(true);
     }
 
     /**
@@ -127,7 +124,6 @@ class AbstractProductTest extends TestCase
             AbstractProduct::class,
             '_entityAttributeValues'
         );
-        $configProperty->setAccessible(true);
         $configProperty->setValue($this->_condition, []);
         $this->assertFalse($this->_condition->validate($product));
     }
@@ -360,7 +356,6 @@ class AbstractProductTest extends TestCase
             AbstractProduct::class,
             '_config'
         );
-        $configProperty->setAccessible(true);
         $configProperty->setValue($this->_condition, $configValueMock);
 
         $attrSetCollectionValueMock = $this->createPartialMock(
@@ -379,14 +374,12 @@ class AbstractProductTest extends TestCase
             AbstractProduct::class,
             '_attrSetCollection'
         );
-        $attrSetCollectionProperty->setAccessible(true);
         $attrSetCollectionProperty->setValue($this->_condition, $attrSetCollectionValueMock);
 
         $testedMethod = new \ReflectionMethod(
             AbstractProduct::class,
             '_prepareValueOptions'
         );
-        $testedMethod->setAccessible(true);
         $testedMethod->invoke($this->_condition);
 
         $this->assertEquals($expectedValueSelectOptions, $this->_condition->getData('value_select_options'));

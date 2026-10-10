@@ -66,7 +66,6 @@ class CollectionTest extends TestCase
 
         $reflection = new \ReflectionClass(get_class($this->collectionMock));
         $reflectionProperty = $reflection->getProperty('dateTime');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->collectionMock, $this->dateTimeMock);
 
         $this->collectionMock->expects($this->any())

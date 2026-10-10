@@ -9,6 +9,7 @@ namespace Magento\Quote\Model;
 
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -45,12 +46,11 @@ class QuoteInfiniteLoopTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider getLoadQuoteParametersProvider
-     *
      * @param $triggerRecollect
      * @param $observerEnabled
      * @return void
      */
+    #[DataProvider('getLoadQuoteParametersProvider')]
     public function testLoadQuoteSuccessfully($triggerRecollect, $observerEnabled): void
     {
         $originalQuote = $this->generateQuote($triggerRecollect);

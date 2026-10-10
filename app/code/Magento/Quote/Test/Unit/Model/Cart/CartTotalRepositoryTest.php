@@ -20,9 +20,9 @@ use Magento\Quote\Model\Cart\CartTotalRepository;
 use Magento\Quote\Model\Cart\Totals\ItemConverter;
 use Magento\Quote\Model\Cart\TotalsConverter;
 use Magento\Quote\Model\Quote;
-use Magento\Quote\Test\Unit\Helper\QuoteTestHelper;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Item as QuoteItem;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -33,6 +33,7 @@ use PHPUnit\Framework\TestCase;
  */
 class CartTotalRepositoryTest extends TestCase
 {
+    use MockCreationTrait;
     private const STUB_CART_ID = 12;
 
     private const STUB_ITEMS_QTY = 100;
@@ -100,7 +101,19 @@ class CartTotalRepositoryTest extends TestCase
                 'create'
             ]
         );
-        $this->quoteMock = $this->createMock(QuoteTestHelper::class);
+        $this->quoteMock = $this->createPartialMockWithReflection(
+            Quote::class,
+            [
+                'getBillingAddress',
+                'getShippingAddress',
+                'getAllVisibleItems',
+                'getBaseCurrencyCode',
+                'getQuoteCurrencyCode',
+                'getItemsQty',
+                'isVirtual',
+                'collectTotals'
+            ]
+        );
         $this->quoteRepositoryMock = $this->createMock(
             CartRepositoryInterface::class
         );
@@ -163,6 +176,11 @@ class CartTotalRepositoryTest extends TestCase
         $this->quoteMock->expects($this->once())
             ->method('isVirtual')
             ->willReturn($isVirtual);
+        if ($isVirtual) {
+            $this->quoteMock->expects($this->once())
+                ->method('collectTotals')
+                ->willReturnSelf();
+        }
         $this->quoteMock->expects($this->exactly(2))
             ->method($getAddressType)
             ->willReturn($this->addressMock);

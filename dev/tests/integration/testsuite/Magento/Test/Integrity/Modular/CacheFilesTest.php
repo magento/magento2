@@ -5,12 +5,14 @@
  */
 namespace Magento\Test\Integrity\Modular;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 class CacheFilesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param string $area
-     * @dataProvider cacheConfigDataProvider
      */
+    #[DataProvider('cacheConfigDataProvider')]
     public function testCacheConfig($area)
     {
         $validationStateMock = $this->createMock(\Magento\Framework\Config\ValidationStateInterface::class);

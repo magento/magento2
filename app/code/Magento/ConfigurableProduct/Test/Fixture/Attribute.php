@@ -14,6 +14,7 @@ class Attribute extends SelectAttribute
 {
     private const DEFAULT_DATA = [
         'scope' => 'global',
+        'backend_type' => 'int'
     ];
 
     /**

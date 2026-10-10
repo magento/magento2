@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\Message;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 /**
  * \Magento\Framework\Message\Factory test case
  */
@@ -26,9 +28,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         $this->model = $this->objectManager->create(\Magento\Framework\Message\Factory::class);
     }
 
-    /**
-     * @dataProvider createProvider
-     */
+    #[DataProvider('createProvider')]
     public function testCreate($messageType)
     {
         $message = $this->model->create($messageType, 'some text');

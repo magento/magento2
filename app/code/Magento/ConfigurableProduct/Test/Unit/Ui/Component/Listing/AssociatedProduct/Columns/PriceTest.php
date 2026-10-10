@@ -12,7 +12,7 @@ use Magento\Directory\Model\Currency as CurrencyModel;
 use Magento\Framework\Currency;
 use Magento\Framework\Locale\CurrencyInterface as LocaleCurrency;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Store\Test\Unit\Helper\StoreTestHelper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponent\Processor as UiElementProcessor;
 use Magento\Store\Api\Data\StoreInterface;
@@ -26,6 +26,8 @@ use PHPUnit\Framework\TestCase;
  */
 class PriceTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var PriceColumn
      */
@@ -77,7 +79,10 @@ class PriceTest extends TestCase
         $this->localeCurrencyMock = $this->createMock(LocaleCurrency::class);
         $this->uiElementProcessorMock = $this->createMock(UiElementProcessor::class);
         $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
-        $this->storeMock = new StoreTestHelper();
+        $this->storeMock = $this->createPartialMockWithReflection(
+            Store::class,
+            ['getBaseCurrencyCode']
+        );
         $this->currencyMock = $this->createMock(Currency::class);
         $this->currencyModelMock = $this->createMock(CurrencyModel::class);
 
@@ -148,7 +153,7 @@ class PriceTest extends TestCase
             ->method('getStore')
             ->with(Store::DEFAULT_STORE_ID)
             ->willReturn($this->storeMock);
-        $this->storeMock->setBaseCurrencyCode($baseCurrencyCode);
+        $this->storeMock->method('getBaseCurrencyCode')->willReturn($baseCurrencyCode);
         $this->localeCurrencyMock->expects($this->any())
             ->method('getCurrency')
             ->with($baseCurrencyCode)

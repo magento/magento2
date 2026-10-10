@@ -71,27 +71,15 @@ class SynchronizerTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->sessionMock = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->visitorMock = $this->getMockBuilder(Visitor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->productFrontendActionFactoryMock = $this->getMockBuilder(ProductFrontendActionFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
-        $this->entityManagerMock = $this->getMockBuilder(EntityManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->collectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
-        $this->frontendStorageConfigurationPoolMock = $this
-            ->getMockBuilder(FrontendStorageConfigurationPool::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->sessionMock = $this->createMock(Session::class);
+        $this->visitorMock = $this->createMock(Visitor::class);
+        $this->productFrontendActionFactoryMock = $this->createPartialMock(
+            ProductFrontendActionFactory::class,
+            ['create']
+        );
+        $this->entityManagerMock = $this->createMock(EntityManager::class);
+        $this->collectionFactoryMock = $this->createPartialMock(CollectionFactory::class, ['create']);
+        $this->frontendStorageConfigurationPoolMock = $this->createMock(FrontendStorageConfigurationPool::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
@@ -127,7 +115,7 @@ class SynchronizerTest extends TestCase
                 'product_id' => 3
             ]
         ];
-        $frontendConfiguration = $this->getMockForAbstractClass(FrontendStorageConfigurationInterface::class);
+        $frontendConfiguration = $this->createMock(FrontendStorageConfigurationInterface::class);
         $frontendConfiguration->expects($this->once())
             ->method('get')
             ->willReturn([
@@ -137,19 +125,12 @@ class SynchronizerTest extends TestCase
             ->method('get')
             ->with('recently_compared_product')
             ->willReturn($frontendConfiguration);
-        $action1 = $this->getMockBuilder(ProductFrontendActionInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $action2 = $this->getMockBuilder(ProductFrontendActionInterface::class)
-            ->getMockForAbstractClass();
+        $action1 = $this->createMock(ProductFrontendActionInterface::class);
+        $action2 = $this->createMock(ProductFrontendActionInterface::class);
 
-        $frontendAction = $this->getMockForAbstractClass(ProductFrontendActionInterface::class);
-        $collection = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->sessionMock->expects($this->any())
-            ->method('getCustomerId')
-            ->willReturn(1);
+        $frontendAction = $this->createMock(ProductFrontendActionInterface::class);
+        $collection = $this->createMock(Collection::class);
+        $this->sessionMock->method('getCustomerId')->willReturn(1);
         $this->visitorMock->expects($this->exactly(2))
             ->method('getId')
             ->willReturn(34);

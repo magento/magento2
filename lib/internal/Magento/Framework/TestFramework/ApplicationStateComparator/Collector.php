@@ -102,7 +102,6 @@ class Collector
                 throw new \Exception('Cannot get shared objects from ' . get_class($this->objectManager));
             }
             $property = $obj->getProperty('_sharedInstances');
-            $property->setAccessible(true);
             $sharedInstances = $property->getValue($this->objectManager);
         }
         $sharedObjects = [];
@@ -202,7 +201,6 @@ class Collector
         $properties = [];
         foreach ($objReflection->getProperties() as $property) {
             $propertyName = $property->getName();
-            $property->setAccessible(true);
             if (!$property->isInitialized($object)) {
                 continue;
             }

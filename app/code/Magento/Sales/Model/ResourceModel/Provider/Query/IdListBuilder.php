@@ -82,14 +82,20 @@ class IdListBuilder
     }
 
     /**
-     * Builds select object.
+     * Builds a select object.
      *
      * @param string $mainTableName
      * @param string $gridTableName
+     * @param int|null $startEntityId
+     * @param int|null $endEntityId
      * @return Select
      */
-    public function build(string $mainTableName, string $gridTableName): Select
-    {
+    public function build(
+        string $mainTableName,
+        string $gridTableName,
+        ?int $startEntityId = null,
+        ?int $endEntityId = null
+    ): Select {
         $select = $this->getConnection()->select()
             ->from(['main_table' => $mainTableName], ['main_table.entity_id'])
             ->joinLeft(
@@ -98,6 +104,12 @@ class IdListBuilder
                 []
             );
 
+        if ($startEntityId !== null) {
+            $select->where('main_table.entity_id > ?', $startEntityId);
+        }
+        if ($endEntityId !== null) {
+            $select->where('main_table.entity_id <= ?', $endEntityId);
+        }
         $select->where('grid_table.entity_id IS NULL');
         $select->limit(Grid::BATCH_SIZE);
         foreach ($this->additionalGridTables as $table) {

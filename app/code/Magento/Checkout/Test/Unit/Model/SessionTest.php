@@ -16,6 +16,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Message\CollectionFactory;
 use Magento\Framework\Session\SessionStartChecker;
 use Magento\Framework\Session\Storage;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\Quote;
@@ -26,10 +27,10 @@ use Magento\Sales\Model\Order;
 use Magento\Sales\Model\OrderFactory;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use Magento\Quote\Test\Unit\Helper\QuoteIdMaskTestHelper;
 
 /**
  * Test class for \Magento\Checkout\Model\Session
@@ -38,6 +39,8 @@ use Magento\Quote\Test\Unit\Helper\QuoteIdMaskTestHelper;
  */
 class SessionTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ObjectManager
      */
@@ -86,7 +89,8 @@ class SessionTest extends TestCase
             ->getMock();
         $quoteRepository = $this->createMock(CartRepositoryInterface::class);
 
-        // Removed unsupported addMethods() usage on State mock (unused in this test)
+        $appState = $this->createPartialMockWithReflection(State::class, ['isInstalled']);
+        $appState->method('isInstalled')->willReturn(true);
 
         $request = $this->createMock(Http::class);
         $request->method('getHttpHost')->willReturn([]);
@@ -320,10 +324,17 @@ class SessionTest extends TestCase
         $storage->expects($this->any())
             ->method('setData');
 
-        $quoteIdMask = new QuoteIdMaskTestHelper($replaceQuoteId);
+        $quoteIdMaskMock = $this->createPartialMockWithReflection(
+            QuoteIdMask::class,
+            ['getMaskedId', 'setQuoteId', 'load', 'save']
+        );
+        $quoteIdMaskMock->expects($this->once())->method('load')->with($replaceQuoteId, 'quote_id')->willReturnSelf();
+        $quoteIdMaskMock->expects($this->once())->method('getMaskedId')->willReturn(null);
+        $quoteIdMaskMock->expects($this->once())->method('setQuoteId')->with($replaceQuoteId)->willReturnSelf();
+        $quoteIdMaskMock->expects($this->once())->method('save');
 
-        $quoteIdMaskFactoryMock = $this->createMock(QuoteIdMaskFactory::class);
-        $quoteIdMaskFactoryMock->expects($this->once())->method('create')->willReturn($quoteIdMask);
+        $quoteIdMaskFactoryMock = $this->createPartialMock(QuoteIdMaskFactory::class, ['create']);
+        $quoteIdMaskFactoryMock->expects($this->once())->method('create')->willReturn($quoteIdMaskMock);
 
         $session = $this->helper->getObject(
             Session::class,
@@ -492,5 +503,73 @@ class SessionTest extends TestCase
             ]
         ];
         $this->assertEquals($expectedResult, $session->getSteps());
+    }
+
+    /**
+     * Test clearQuote() method dispatches event when quote exists
+     *
+     * @return void
+     * @throws Exception
+     * @throws \ReflectionException
+     */
+    public function testClearQuote(): void
+    {
+        $quote = $this->getMockBuilder(Quote::class)->disableOriginalConstructor()->getMock();
+        $eventManager = $this->createMock(ManagerInterface::class);
+        $eventManager->expects($this->once())
+            ->method('dispatch')
+            ->with('checkout_quote_destroy', ['quote' => $quote]);
+        $session = $this->getSessionObject($eventManager);
+        $reflection = new \ReflectionClass($session);
+        $quoteProperty = $reflection->getProperty('_quote');
+        $quoteProperty->setValue($session, $quote);
+        $session->setQuoteId(123);
+        $result = $session->clearQuote();
+        $this->assertInstanceOf(Session::class, $result);
+        $this->assertFalse($session->hasQuote());
+        $this->assertNull($session->getQuoteId());
+    }
+
+    /**
+     * Test clearQuote() when quote is already null - event should not be dispatched
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function testClearQuoteNoDispatch(): void
+    {
+        $eventManager = $this->createMock(ManagerInterface::class);
+        $eventManager->expects($this->never())->method('dispatch');
+        $session = $this->getSessionObject($eventManager);
+        $result = $session->clearQuote();
+        $this->assertInstanceOf(Session::class, $result);
+        $this->assertFalse($session->hasQuote());
+        $this->assertNull($session->getQuoteId());
+    }
+
+    /**
+     * @param MockObject|ManagerInterface $eventManager
+     *
+     * @return object
+     * @throws Exception
+     */
+    private function getSessionObject(MockObject|ManagerInterface $eventManager): object
+    {
+        $store = $this->getMockBuilder(Store::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getWebsiteId'])
+            ->getMock();
+        $store->expects($this->any())->method('getWebsiteId')->willReturn(1);
+        $storeManager = $this->createMock(StoreManagerInterface::class);
+        $storeManager->expects($this->any())->method('getStore')->willReturn($store);
+        $storage = new Storage();
+        return $this->helper->getObject(
+            Session::class,
+            [
+                'eventManager' => $eventManager,
+                'storeManager' => $storeManager,
+                'storage' => $storage
+            ]
+        );
     }
 }

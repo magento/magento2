@@ -11,6 +11,7 @@ use Magento\Bundle\Test\Fixture\Link as BundleSelectionFixture;
 use Magento\Bundle\Test\Fixture\Option as BundleOptionFixture;
 use Magento\Bundle\Test\Fixture\Product as BundleProductFixture;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -23,6 +24,8 @@ use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 
 /**
  * Test adding bundled products to cart
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AddBundleProductToCartTest extends GraphQlAbstract
 {
@@ -162,8 +165,8 @@ QUERY;
 
     /**
      * @magentoApiDataFixture Magento/Bundle/_files/quote_with_bundle_and_options.php
-     * @dataProvider dataProviderTestUpdateBundleItemQuantity
      */
+    #[DataProvider('dataProviderTestUpdateBundleItemQuantity')]
     public function testUpdateBundleItemQuantity(int $quantity)
     {
         $this->quoteResource->load(

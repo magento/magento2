@@ -17,6 +17,7 @@ use Magento\Framework\App\Config;
 use Magento\Framework\DataObject;
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Item;
@@ -29,6 +30,7 @@ use PHPUnit\Framework\TestCase;
  */
 class SetLinkStatusObserverTest extends TestCase
 {
+    use MockCreationTrait;
     /** @var MockObject|Order */
     private $orderMock;
 
@@ -75,15 +77,15 @@ class SetLinkStatusObserverTest extends TestCase
 
         $this->itemsFactory = $this->createPartialMock(CollectionFactory::class, ['create']);
 
-        $this->resultMock = $this->createPartialMock(
-            \Magento\Framework\DataObject\Test\Unit\Helper\DataObjectTestHelper::class,
+        $this->resultMock = $this->createPartialMockWithReflection(
+            DataObject::class,
             ['setIsAllowed']
         );
 
         $this->storeMock = $this->createMock(DataObject::class);
 
-        $this->eventMock = $this->createPartialMock(
-            \Magento\Framework\Event\Test\Unit\Helper\EventTestHelper::class,
+        $this->eventMock = $this->createPartialMockWithReflection(
+            Event::class,
             ['getStore', 'getResult', 'getQuote', 'getOrder']
         );
 

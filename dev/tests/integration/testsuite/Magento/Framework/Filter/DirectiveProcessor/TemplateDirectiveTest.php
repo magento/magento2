@@ -11,6 +11,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 use Magento\Framework\Filter\Template;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class TemplateDirectiveTest extends TestCase
 {
@@ -47,8 +48,8 @@ class TemplateDirectiveTest extends TestCase
     }
 
     /**
-     * @dataProvider useCaseProvider
      */
+    #[DataProvider('useCaseProvider')]
     public function testCases(string $template, array $variables, string $expect)
     {
         $this->filter->setTemplateProcessor([$this, 'processTemplate']);

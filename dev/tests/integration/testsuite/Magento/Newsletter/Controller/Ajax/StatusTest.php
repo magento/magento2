@@ -9,6 +9,7 @@ namespace Magento\Newsletter\Controller\Ajax;
 
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\TestFramework\TestCase\AbstractController;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test Subscriber status ajax
@@ -33,12 +34,12 @@ class StatusTest extends AbstractController
      * Check newsletter subscription status verification
      *
      * @magentoDataFixture Magento/Newsletter/_files/subscribers.php
-     * @dataProvider ajaxSubscriberDataProvider
      * @param bool $expStatus
      * @param string $email
      *
      * @return void
      */
+    #[DataProvider('ajaxSubscriberDataProvider')]
     public function testExecute(bool $expStatus, string $email): void
     {
         $this->getRequest()->setParam('email', $email);

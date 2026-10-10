@@ -9,14 +9,19 @@ namespace Magento\Wishlist\Test\Unit\ViewModel;
 
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
+use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Model\StockRegistry;
 use Magento\Store\Model\Store;
 use Magento\Wishlist\ViewModel\AllowedQuantity;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class AllowedQuantityTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var AllowedQuantity
      */
@@ -31,6 +36,11 @@ class AllowedQuantityTest extends TestCase
      * @var ItemInterface|MockObject
      */
     private $itemMock;
+
+    /**
+     * @var StockItemInterface|MockObject
+     */
+    private $stockItemMock;
 
     /**
      * @var Product|MockObject
@@ -48,21 +58,10 @@ class AllowedQuantityTest extends TestCase
     protected function setUp(): void
     {
         $this->stockRegistryMock = $this->createMock(StockRegistry::class);
-        $this->itemMock = $this->getMockForAbstractClass(
-            ItemInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['getMinSaleQty', 'getMaxSaleQty']
-        );
-        $this->productMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->storeMock = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->itemMock = $this->createMock(ItemInterface::class);
+        $this->stockItemMock = $this->createMock(StockItemInterface::class);
+        $this->productMock = $this->createMock(Product::class);
+        $this->storeMock = $this->createMock(Store::class);
 
         $this->sut = new AllowedQuantity(
             $this->stockRegistryMock
@@ -73,12 +72,11 @@ class AllowedQuantityTest extends TestCase
     /**
      * Getting min and max qty test.
      *
-     * @dataProvider saleQuantityDataProvider
-     *
      * @param int $minSaleQty
      * @param int $maxSaleQty
      * @param array $expectedResult
      */
+    #[DataProvider('saleQuantityDataProvider')]
     public function testGettingMinMaxQty(int $minSaleQty, int $maxSaleQty, array $expectedResult)
     {
         $this->storeMock->expects($this->atLeastOnce())
@@ -93,15 +91,15 @@ class AllowedQuantityTest extends TestCase
         $this->itemMock->expects($this->any())
             ->method('getProduct')
             ->willReturn($this->productMock);
-        $this->itemMock->expects($this->any())
+        $this->stockItemMock->expects($this->any())
             ->method('getMinSaleQty')
             ->willReturn($minSaleQty);
-        $this->itemMock->expects($this->any())
+        $this->stockItemMock->expects($this->any())
             ->method('getMaxSaleQty')
             ->willReturn($maxSaleQty);
         $this->stockRegistryMock->expects($this->any())
             ->method('getStockItem')
-            ->willReturn($this->itemMock);
+            ->willReturn($this->stockItemMock);
 
         $result = $this->sut->getMinMaxQty();
 

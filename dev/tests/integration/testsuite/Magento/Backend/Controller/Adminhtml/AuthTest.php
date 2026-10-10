@@ -6,6 +6,7 @@
 namespace Magento\Backend\Controller\Adminhtml;
 
 use Magento\Framework\Message\MessageInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test class for \Magento\Backend\Controller\Adminhtml\Auth
@@ -187,11 +188,11 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractController
 
     /**
      * Test user logging process when user not assigned to any role
-     * @dataProvider incorrectLoginDataProvider
      * @magentoDbIsolation enabled
      *
      * @param $params
      */
+    #[DataProvider('incorrectLoginDataProvider')]
     public function testIncorrectLogin($params)
     {
         /** @var \Magento\Framework\Data\Form\FormKey $formKey */

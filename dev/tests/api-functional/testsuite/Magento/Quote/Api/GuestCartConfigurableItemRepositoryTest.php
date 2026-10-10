@@ -229,11 +229,11 @@ class GuestCartConfigurableItemRepositoryTest extends WebapiAbstract
     {
         $configOptions = $configurableProduct->getExtensionAttributes()->getConfigurableProductOptions();
         $options = $configOptions[0]->getOptions();
-        $optionKey = isset($options[null]) ? null : 0;
+        $optionKey = !empty($options) ? array_key_first($options) : 0;
 
         return [
             'attribute_id' => $configOptions[0]->getAttributeId(),
-            'option_id' => $options[$optionKey]['value_index']
+            'option_id' => isset($options[$optionKey]) ? $options[$optionKey]['value_index'] : null
         ];
     }
 

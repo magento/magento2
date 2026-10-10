@@ -17,6 +17,7 @@ use Magento\Framework\View\LayoutInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Store\ExecuteInStoreContext;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -67,12 +68,11 @@ class MultiStoreConfigurableViewOnProductPageTest extends TestCase
     /**
      * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_product_different_option_labeles_per_stores.php
      *
-     * @dataProvider expectedLabelsDataProvider
-     *
      * @param array $expectedStoreData
      * @param array $expectedSecondStoreData
      * @return void
      */
+    #[DataProvider('expectedLabelsDataProvider')]
     public function testMultiStoreLabelView(array $expectedStoreData, array $expectedSecondStoreData): void
     {
         $this->executeInStoreContext->execute('default', [$this, 'assertProductLabel'], $expectedStoreData);
@@ -129,12 +129,11 @@ class MultiStoreConfigurableViewOnProductPageTest extends TestCase
     /**
      * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_product_two_websites.php
      *
-     * @dataProvider expectedProductDataProvider
-     *
      * @param array $expectedProducts
      * @param array $expectedSecondStoreProducts
      * @return void
      */
+    #[DataProvider('expectedProductDataProvider')]
     public function testMultiStoreOptionsView(array $expectedProducts, array $expectedSecondStoreProducts): void
     {
         $this->prepareConfigurableProduct('configurable', 'fixture_second_store');

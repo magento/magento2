@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Block\Guest;
 
+use Magento\Framework\App\Http\Context as HttpContext;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Sales\Block\Guest\Link;
@@ -22,7 +23,7 @@ class LinkTest extends TestCase
         $objectManagerHelper = new ObjectManager($this);
 
         $context = $objectManagerHelper->getObject(Context::class);
-        $httpContext = $this->getMockBuilder(\Magento\Framework\App\Http\Context::class)
+        $httpContext = $this->getMockBuilder(HttpContext::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['getValue'])
             ->getMock();

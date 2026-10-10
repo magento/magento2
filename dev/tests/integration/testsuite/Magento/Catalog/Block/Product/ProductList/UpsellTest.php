@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Block\Product\ProductList;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 /**
  * Check the correct behavior of up-sell products on the product view page
  *
@@ -65,12 +67,12 @@ class UpsellTest extends AbstractLinksTest
     /**
      * Test the display of up-sell products in the block
      *
-     * @dataProvider displayLinkedProductsProvider
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoDataFixture Magento/Catalog/_files/products_list.php
      * @param array $data
      * @return void
      */
+    #[DataProvider('displayLinkedProductsProvider')]
     public function testDisplayUpsellProducts(array $data): void
     {
         $this->updateProducts($data['updateProducts']);
@@ -111,13 +113,13 @@ class UpsellTest extends AbstractLinksTest
     /**
      * Test the display of up-sell products in the block on different websites
      *
-     * @dataProvider multipleWebsitesLinkedProductsProvider
      * @magentoDataFixture Magento/Catalog/_files/products_with_websites_and_stores.php
      * @magentoDataFixture Magento/Catalog/_files/products_list.php
      * @magentoAppIsolation enabled
      * @param array $data
      * @return void
      */
+    #[DataProvider('multipleWebsitesLinkedProductsProvider')]
     public function testMultipleWebsitesUpsellProducts(array $data): void
     {
         $this->updateProducts($this->prepareProductsWebsiteIds());

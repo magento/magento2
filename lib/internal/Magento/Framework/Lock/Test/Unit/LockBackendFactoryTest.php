@@ -17,6 +17,7 @@ use Magento\Framework\Lock\LockManagerInterface;
 use Magento\Framework\ObjectManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class LockBackendFactoryTest extends TestCase
 {
@@ -40,7 +41,7 @@ class LockBackendFactoryTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);
         $this->factory = new LockBackendFactory($this->objectManagerMock, $this->deploymentConfigMock);
     }
@@ -67,12 +68,11 @@ class LockBackendFactoryTest extends TestCase
     /**
      * @param string $lockProvider
      * @param string $lockProviderClass
-     * @param array $config
-     * @dataProvider createDataProvider
-     */
+     * @param array $config     */
+    #[DataProvider('createDataProvider')]
     public function testCreate(string $lockProvider, string $lockProviderClass, array $config)
     {
-        $lockManagerMock = $this->getMockForAbstractClass(LockManagerInterface::class);
+        $lockManagerMock = $this->createMock(LockManagerInterface::class);
         $this->deploymentConfigMock->expects($this->exactly(2))
             ->method('get')
             ->willReturnCallback(

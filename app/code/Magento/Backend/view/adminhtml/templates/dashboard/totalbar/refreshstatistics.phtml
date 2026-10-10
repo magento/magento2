@@ -12,7 +12,7 @@
         <div class="page-actions-buttons">
             <?= $block->getChildHtml() ?>
 
-            <?php if ($block->getAuthorization()->isAllowed('Magento_Reports::statistics')): ?>
+            <?php if ($block->getAuthorization()->isAllowed('Magento_Reports::statistics_refresh')): ?>
             <form class="action-element"
                   action="<?= $escaper->escapeUrl($block->getUrl('*/*/refreshStatistics')) ?>"
                   method="post">

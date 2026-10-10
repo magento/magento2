@@ -29,8 +29,7 @@ class GeneratorTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->serializerMock = $this->getMockBuilder(SerializerInterface::class)
-            ->getMockForAbstractClass();
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
 
         $this->generator = new Generator($this->serializerMock);
     }

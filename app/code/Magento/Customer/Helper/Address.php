@@ -211,7 +211,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper implements Re
      */
     public function getStreetLines($store = null)
     {
-        $websiteId = $this->_storeManager->getStore($store)->getWebsiteId();
+        $websiteId = $this->_storeManager->getStore($store)->getWebsiteId() ?? '';
         if (!isset($this->_streetLines[$websiteId])) {
             $attribute = $this->_addressMetadataService->getAttributeMetadata('street');
 

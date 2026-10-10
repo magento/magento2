@@ -9,17 +9,21 @@ namespace Magento\Persistent\Test\Unit\Observer;
 
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Persistent\Helper\Data;
 use Magento\Persistent\Helper\Session;
 use Magento\Persistent\Model\Persistent\Config;
 use Magento\Persistent\Model\Persistent\ConfigFactory;
 use Magento\Persistent\Observer\ApplyBlockPersistentDataObserver;
+use Magento\Customer\Model\Session as CustomerSession;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class ApplyBlockPersistentDataObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ApplyBlockPersistentDataObserver
      */
@@ -68,16 +72,15 @@ class ApplyBlockPersistentDataObserverTest extends TestCase
     protected function setUp(): void
     {
         $this->sessionMock = $this->createMock(Session::class);
-        $this->customerSessionMock = $this->createMock(\Magento\Customer\Model\Session::class);
+        $this->customerSessionMock = $this->createMock(CustomerSession::class);
         $this->persistentHelperMock = $this->createMock(Data::class);
         $this->configMock =
             $this->createPartialMock(ConfigFactory::class, ['create']);
         $this->observerMock = $this->createMock(Observer::class);
-        $this->eventMock = $this->getMockBuilder(Event::class)
-            ->addMethods(['getConfigFilePath'])
-            ->onlyMethods(['getBlock'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->eventMock = $this->createPartialMockWithReflection(
+            Event::class,
+            ['getConfigFilePath', 'getBlock']
+        );
         $this->blockMock = $this->createMock(AbstractBlock::class);
         $this->persistentConfigMock = $this->createMock(Config::class);
         $this->model = new ApplyBlockPersistentDataObserver(

@@ -28,7 +28,7 @@ class RawTest extends TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->response = $this->getMockForAbstractClass(HttpResponseInterface::class);
+        $this->response = $this->createMock(HttpResponseInterface::class);
         $this->raw = $this->objectManagerHelper->getObject(Raw::class);
     }
 

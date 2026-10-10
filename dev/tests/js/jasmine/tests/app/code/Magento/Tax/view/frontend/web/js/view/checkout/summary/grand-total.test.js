@@ -39,10 +39,11 @@ define(['squire', 'ko'], function (Squire, ko) {
         try {
             injector.clean();
             injector.remove();
-        } catch (e) {}
+        } catch (e) { // eslint-disable-line no-unused-vars
+        }
     });
 
-    describe('Magento_Tax/js/view/checkout/summary/grand-total', function () {
+    describe('Magento_Tax/js/view/checkout/summary/grand-total getGrandTotalExclTax method', function () {
         describe('"getGrandTotalExclTax" method', function () {
             it('Check if totals object empty.', function () {
                 expect(obj.getGrandTotalExclTax()).toBe(0);
@@ -59,7 +60,7 @@ define(['squire', 'ko'], function (Squire, ko) {
             });
         });
     });
-    describe('Magento_Tax/js/view/checkout/summary/grand-total', function () {
+    describe('Magento_Tax/js/view/checkout/summary/grand-total isBaseGrandTotalDisplayNeeded method', function () {
         describe('"isBaseGrandTotalDisplayNeeded" method', function () {
             it('Check if totals object empty.', function () {
                 expect(obj.isBaseGrandTotalDisplayNeeded()).toBe(false);

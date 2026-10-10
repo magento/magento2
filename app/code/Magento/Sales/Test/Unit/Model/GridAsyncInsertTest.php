@@ -17,6 +17,7 @@ use Psr\Log\LoggerInterface;
 
 class GridAsyncInsertTest extends TestCase
 {
+
     /**
      * @var GridInterface|MockObject
      */
@@ -51,34 +52,22 @@ class GridAsyncInsertTest extends TestCase
 
     public function testAsyncInsertSkipsWhenLocked(): void
     {
-        $this->lockManager->expects($this->once())->method('lock')->with('lock_name_test', 0)->willReturn(false);
-        $this->grid->expects($this->never())->method('refreshBySchedule');
-        $this->lockManager->expects($this->never())->method('unlock');
-        $this->logger->expects($this->once())->method('warning');
+        $this->grid->expects($this->once())->method('refreshBySchedule');
 
         $model = new GridAsyncInsert(
             $this->grid,
-            $this->scopeConfig,
-            $this->lockManager,
-            $this->logger,
-            'lock_name_test'
+            $this->scopeConfig
         );
         $model->asyncInsert();
     }
 
     public function testAsyncInsertExecutesWhenLockAcquired(): void
     {
-        $this->lockManager->expects($this->once())->method('lock')->with('lock_name_test', 0)->willReturn(true);
         $this->grid->expects($this->once())->method('refreshBySchedule');
-        $this->lockManager->expects($this->once())->method('unlock')->with('lock_name_test');
-        $this->logger->expects($this->never())->method('warning');
 
         $model = new GridAsyncInsert(
             $this->grid,
-            $this->scopeConfig,
-            $this->lockManager,
-            $this->logger,
-            'lock_name_test'
+            $this->scopeConfig
         );
         $model->asyncInsert();
     }

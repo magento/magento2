@@ -13,6 +13,7 @@ use Magento\Framework\App\Request\Http;
 use Magento\Framework\Session\SaveHandler\Redis\Logger;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class LoggerTest extends TestCase
 {
@@ -43,7 +44,7 @@ class LoggerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->config = $this->getMockForAbstractClass(ConfigInterface::class);
+        $this->config = $this->createMock(ConfigInterface::class);
         $this->config->expects($this->once())
             ->method('getLogLevel')
             ->willReturn(LoggerInterface::DEBUG);
@@ -61,9 +62,8 @@ class LoggerTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider logDataProvider
-     */
+    /**     */
+    #[DataProvider('logDataProvider')]
     public function testLog($logLevel, $method)
     {
         $message = 'Error message';

@@ -31,12 +31,12 @@ class JsonTest extends TestCase
         /** @var InlineInterface|MockObject
          * $translateInline
          */
-        $translateInline = $this->getMockForAbstractClass(InlineInterface::class);
+        $translateInline = $this->createMock(InlineInterface::class);
         $translateInline->expects($this->any())->method('processResponseBody')->with($json, true)->willReturn(
             $translatedJson
         );
 
-        $response = $this->getMockForAbstractClass(HttpInterface::class);
+        $response = $this->createMock(HttpInterface::class);
         $response->expects($this->atLeastOnce())->method('setHeader')->with('Content-Type', 'application/json', true);
         $response->expects($this->atLeastOnce())->method('setBody')->with($json);
 

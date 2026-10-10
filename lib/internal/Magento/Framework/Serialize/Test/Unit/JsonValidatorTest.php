@@ -9,6 +9,7 @@ namespace Magento\Framework\Serialize\Test\Unit;
 
 use Magento\Framework\Serialize\JsonValidator;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class JsonValidatorTest extends TestCase
 {
@@ -24,9 +25,8 @@ class JsonValidatorTest extends TestCase
 
     /**
      * @param string $value
-     * @param bool $expected
-     * @dataProvider isValidDataProvider
-     */
+     * @param bool $expected     */
+    #[DataProvider('isValidDataProvider')]
     public function testIsValid($value, $expected)
     {
         $this->assertEquals(

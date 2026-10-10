@@ -3,6 +3,8 @@
  * Copyright 2014 Adobe
  * All Rights Reserved.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\App\Cache;
 
 use \Magento\Framework\App\CacheInterface;
@@ -49,7 +51,7 @@ class Proxy implements
     /**
      * Get cache frontend API object
      *
-     * @return \Zend_Cache_Core
+     * @return \Magento\Framework\Cache\FrontendInterface
      */
     public function getFrontend()
     {

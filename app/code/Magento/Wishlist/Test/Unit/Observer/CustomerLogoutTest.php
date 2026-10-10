@@ -9,11 +9,15 @@ namespace Magento\Wishlist\Test\Unit\Observer;
 
 use Magento\Customer\Model\Session;
 use Magento\Wishlist\Observer\CustomerLogout as Observer;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use Magento\Framework\Event\Observer as EventObserver;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class CustomerLogoutTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Observer
      */
@@ -26,11 +30,10 @@ class CustomerLogoutTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->customerSession = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setWishlistItemCount'])
-            ->onlyMethods(['isLoggedIn', 'getCustomerId'])
-            ->getMock();
+        $this->customerSession = $this->createPartialMockWithReflection(
+            Session::class,
+            ['setWishlistItemCount', 'isLoggedIn', 'getCustomerId']
+        );
 
         $this->observer = new Observer(
             $this->customerSession
@@ -39,10 +42,8 @@ class CustomerLogoutTest extends TestCase
 
     public function testExecute()
     {
-        $event = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        /** @var \Magento\Framework\Event\Observer $event */
+        $event = $this->createMock(EventObserver::class);
+        /** @var EventObserver $event */
 
         $this->customerSession->expects($this->once())
             ->method('setWishlistItemCount')

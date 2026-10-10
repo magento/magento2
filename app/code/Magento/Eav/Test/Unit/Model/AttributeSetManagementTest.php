@@ -13,6 +13,7 @@ use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute\Set;
 use Magento\Eav\Model\Entity\Type;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class AttributeSetManagementTest extends TestCase
@@ -34,7 +35,7 @@ class AttributeSetManagementTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->repositoryMock = $this->getMockForAbstractClass(AttributeSetRepositoryInterface::class);
+        $this->repositoryMock = $this->createMock(AttributeSetRepositoryInterface::class);
         $this->eavConfigMock = $this->createPartialMock(Config::class, ['getEntityType']);
 
         $this->model = new AttributeSetManagement(

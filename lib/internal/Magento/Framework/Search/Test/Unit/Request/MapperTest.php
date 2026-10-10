@@ -26,6 +26,7 @@ use Magento\Framework\Search\Request\QueryInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -81,7 +82,7 @@ class MapperTest extends TestCase
     {
         $this->helper = new ObjectManager($this);
 
-        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
 
         $this->queryMatch = $this->getMockBuilder(MatchQuery::class)
             ->disableOriginalConstructor()
@@ -111,9 +112,8 @@ class MapperTest extends TestCase
     /**
      * @param $queries
      *
-     * @return void
-     * @dataProvider getQueryMatchProvider
-     */
+     * @return void     */
+    #[DataProvider('getQueryMatchProvider')]
     public function testGetQueryMatch($queries): void
     {
         $query = $queries[self::ROOT_QUERY];
@@ -229,9 +229,8 @@ class MapperTest extends TestCase
     /**
      * @param $queries
      *
-     * @return void
-     * @dataProvider getQueryFilterQueryReferenceProvider
-     */
+     * @return void     */
+    #[DataProvider('getQueryFilterQueryReferenceProvider')]
     public function testGetQueryFilterQueryReference($queries): void
     {
         $query = $queries['someQueryMatch'];
@@ -293,9 +292,8 @@ class MapperTest extends TestCase
     }
 
     /**
-     * @param $queries
-     * @dataProvider getQueryBoolProvider
-     */
+     * @param $queries     */
+    #[DataProvider('getQueryBoolProvider')]
     public function testGetQueryBool($queries): void
     {
         $query = $queries['someQueryMatch'];

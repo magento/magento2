@@ -7,6 +7,7 @@
 namespace Magento\Customer\Api;
 
 use Magento\Customer\Api\Data\GroupInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Customer\Model\Data\Group as CustomerGroup;
 use Magento\Customer\Model\GroupRegistry;
 use Magento\Customer\Model\ResourceModel\GroupRepository;
@@ -68,9 +69,8 @@ class GroupRepositoryTest extends WebapiAbstract
      * Verify the retrieval of a customer group by Id.
      *
      * @param array $testGroup The group data for the group being retrieved.
-     *
-     * @dataProvider getGroupDataProvider
-     */
+     * */
+    #[DataProvider('getGroupDataProvider')]
     public function testGetGroupById($testGroup)
     {
         $groupId = $testGroup[CustomerGroup::ID];
@@ -171,13 +171,13 @@ class GroupRepositoryTest extends WebapiAbstract
     /**
      * Verify that creating a new group with excluded website as extension attributes works via REST.
      *
-     * @dataProvider excludedWebsitesRestDataProvider
      * @param string $code
      * @param null|array $excludeWebsitesIds
      * @param null|array $result
      * @throws NoSuchEntityException
      * @throws LocalizedException
      */
+    #[DataProvider('excludedWebsitesRestDataProvider')]
     public function testCreateGroupWithExcludedWebsiteRest(
         string $code,
         array $excludeWebsitesIds,
@@ -612,13 +612,13 @@ class GroupRepositoryTest extends WebapiAbstract
     /**
      * Verify that creating a new group with excluded website as extension attributes works via SOAP.
      *
-     * @dataProvider excludedWebsitesSoapDataProvider
      * @param string $code
      * @param array $excludeWebsitesIds
      * @param array|null $result
      * @throws LocalizedException
      * @throws NoSuchEntityException
      */
+    #[DataProvider('excludedWebsitesSoapDataProvider')]
     public function testCreateGroupWithExcludedWebsiteSoap(
         string $code,
         array $excludeWebsitesIds,
@@ -1147,9 +1147,8 @@ class GroupRepositoryTest extends WebapiAbstract
      * @param string $filterField Customer Group field to filter by
      * @param string $filterValue Value of the field to be filtered by
      * @param array $expectedResult Expected search result
-     *
-     * @dataProvider searchGroupsDataProvider
-     */
+     * */
+    #[DataProvider('searchGroupsDataProvider')]
     public function testSearchGroups($filterField, $filterValue, $expectedResult)
     {
         $filterBuilder = Bootstrap::getObjectManager()->create(\Magento\Framework\Api\FilterBuilder::class);
@@ -1247,9 +1246,8 @@ class GroupRepositoryTest extends WebapiAbstract
      * @param string $filterField Customer Group field to filter by
      * @param string $filterValue Value of the field to be filtered by
      * @param array $expectedResult Expected search result
-     *
-     * @dataProvider searchGroupsDataProvider
-     */
+     * */
+    #[DataProvider('searchGroupsDataProvider')]
     public function testSearchGroupsWithGET($filterField, $filterValue, $expectedResult)
     {
         $this->_markTestAsRestOnly('SOAP is covered in ');

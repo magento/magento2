@@ -7,6 +7,7 @@
 namespace Magento\Integration\Model;
 
 use Magento\Authorization\Model\UserContextInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Integration authorization service test.
@@ -35,7 +36,7 @@ class AuthorizationServiceTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->userContextMock = $this->getMockForAbstractClass(
+        $this->userContextMock = $this->createMock(
             \Magento\Authorization\Model\UserContextInterface::class
         );
         $this->userContextMock
@@ -73,8 +74,8 @@ class AuthorizationServiceTest extends \PHPUnit\Framework\TestCase
      * @param string[] $initialResources
      * @param string[] $newResources
      * @magentoDbIsolation enabled
-     * @dataProvider changePermissionsProvider
      */
+    #[DataProvider('changePermissionsProvider')]
     public function testChangePermissions($integrationId, $initialResources, $newResources)
     {
         $this->_service->grantPermissions($integrationId, $initialResources);

@@ -9,7 +9,8 @@ namespace Magento\Bundle\Test\Unit\Block\DataProviders;
 
 use Magento\Bundle\Block\DataProviders\OptionPriceRenderer;
 use Magento\Catalog\Model\Product;
-use Magento\Framework\View\Test\Unit\Helper\AbstractBlockTestHelper;
+use Magento\Framework\Pricing\Render;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\LayoutInterface;
 use PHPUnit\Framework\MockObject\Exception;
@@ -21,6 +22,8 @@ use PHPUnit\Framework\TestCase;
  */
 class OptionPriceRendererTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var LayoutInterface|MockObject
      */
@@ -60,9 +63,9 @@ class OptionPriceRendererTest extends TestCase
 
         $productMock = $this->createMock(Product::class);
 
-        /** @var AbstractBlockTestHelper $priceRenderer */
-        $priceRenderer = new AbstractBlockTestHelper();
-        $priceRenderer->setRenderResult($expectedHtml);
+        /** @var Render $priceRenderer */
+        $priceRenderer = $this->createPartialMock(Render::class, ['render']);
+        $priceRenderer->method('render')->willReturn($expectedHtml);
 
         $this->layoutMock->method('getBlock')
             ->with('product.price.render.default')

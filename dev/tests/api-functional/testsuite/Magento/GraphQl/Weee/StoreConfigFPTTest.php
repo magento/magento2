@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Weee;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Framework\ObjectManager\ObjectManager;
@@ -37,9 +38,8 @@ class StoreConfigFPTTest extends GraphQlAbstract
      * @param array $weeTaxSettings
      * @param string $displayValue
      * @return void
-     *
-     * @dataProvider sameFPTDisplaySettingsProvider
      */
+    #[DataProvider('sameFPTDisplaySettingsProvider')]
     public function testSameFPTDisplaySettings(array $weeTaxSettings, $displayValue)
     {
        /** @var WriterInterface $configWriter */
@@ -127,9 +127,8 @@ class StoreConfigFPTTest extends GraphQlAbstract
      *
      * @param array $weeTaxSettings
      * @return void
-     *
-     * @dataProvider differentFPTDisplaySettingsProvider
      */
+    #[DataProvider('differentFPTDisplaySettingsProvider')]
     public function testDifferentFPTDisplaySettings(array $weeTaxSettings)
     {
         /** @var WriterInterface $configWriter */

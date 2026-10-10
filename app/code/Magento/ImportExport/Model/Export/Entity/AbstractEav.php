@@ -321,7 +321,8 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Export\AbstractEn
      */
     private function getAttributeValueById($attributeCode, $valueId)
     {
-        if (isset($this->_attributeValues[$attributeCode])
+        if ($valueId !== null 
+            && isset($this->_attributeValues[$attributeCode])
             && isset($this->_attributeValues[$attributeCode][$valueId])
         ) {
             return $this->_attributeValues[$attributeCode][$valueId];

@@ -33,5 +33,7 @@
         <click selector="{{AdminUrlRewriteEditSection.okButton}}" stepKey="clickOnOkButton"/>
         <waitForPageLoad stepKey="waitForPageToLoad3"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="You deleted the URL rewrite." stepKey="seeSuccessMessage"/>
+        <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clearFilters"/>
+        <waitForPageLoad stepKey="waitForPageToLoad4"/>
     </actionGroup>
 </actionGroups>

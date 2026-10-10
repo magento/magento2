@@ -217,6 +217,7 @@ class Config implements ResetAfterRequestInterface
      *
      * @return string
      */
+    #[\Deprecated('Connection name is just a config alias. It should not be used outside of loading config data.')]
     public function getConnectionName(): string
     {
         return$this->connectionName;

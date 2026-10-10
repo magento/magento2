@@ -17,6 +17,7 @@ use Magento\Framework\Filesystem;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test that initial scopes config are loaded if database is available
@@ -96,8 +97,8 @@ class InitialConfigSourceTest extends TestCase
      * @param string $defaultWebsite
      * @param bool $offline
      * @throws LocalizedException
-     * @dataProvider getDefaultDataProvider
      */
+    #[DataProvider('getDefaultDataProvider')]
     public function testGetWebsites(array $websites, string $defaultWebsite, bool $offline = false): void
     {
         if ($offline) {

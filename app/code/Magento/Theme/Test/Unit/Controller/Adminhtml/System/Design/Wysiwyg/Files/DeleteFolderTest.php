@@ -50,7 +50,7 @@ class DeleteFolderTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
         $this->response = $this->createMock(Http::class);
         $this->storage = $this->createMock(WysiwygStorage::class);
         $this->storageHelper = $this->createMock(Storage::class);

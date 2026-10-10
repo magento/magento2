@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Pricing\Price;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Pricing\Price\BasePrice;
 use Magento\Catalog\Pricing\Price\RegularPrice;
@@ -96,9 +97,8 @@ class BasePriceTest extends TestCase
 
     /**
      * test method getValue
-     *
-     * @dataProvider getValueDataProvider
      */
+    #[DataProvider('getValueDataProvider')]
     public function testGetValue($specialPriceValue, $expectedResult)
     {
         $this->priceInfoMock->expects($this->once())
@@ -110,9 +110,7 @@ class BasePriceTest extends TestCase
         $this->tierPriceMock->expects($this->exactly(2))
             ->method('getValue')
             ->willReturn(99);
-        $this->specialPriceMock->expects($this->any())
-            ->method('getValue')
-            ->willReturn($specialPriceValue);
+        $this->specialPriceMock->method('getValue')->willReturn($specialPriceValue);
         $this->assertSame($expectedResult, $this->basePrice->getValue());
     }
 
@@ -128,8 +126,7 @@ class BasePriceTest extends TestCase
     {
         $amount = 20.;
 
-        $priceMock = $this->getMockBuilder(PriceInterface::class)
-            ->getMockForAbstractClass();
+        $priceMock = $this->createMock(PriceInterface::class);
 
         $this->priceInfoMock->expects($this->once())
             ->method('getPrices')

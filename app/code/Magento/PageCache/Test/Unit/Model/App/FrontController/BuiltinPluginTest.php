@@ -20,6 +20,7 @@ use Magento\Framework\Controller\ResultInterface;
 use Magento\PageCache\Model\App\FrontController\BuiltinPlugin;
 use Magento\PageCache\Model\Config;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class BuiltinPluginTest extends TestCase
@@ -78,8 +79,8 @@ class BuiltinPluginTest extends TestCase
         $this->versionMock = $this->createMock(Version::class);
         $this->kernelMock = $this->createMock(Kernel::class);
         $this->stateMock = $this->createMock(State::class);
-        $this->frontControllerMock = $this->getMockForAbstractClass(FrontControllerInterface::class);
-        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->frontControllerMock = $this->createMock(FrontControllerInterface::class);
+        $this->requestMock = $this->createMock(RequestInterface::class);
         $this->responseMock = $this->createMock(Http::class);
         $response = $this->responseMock;
         $this->closure = function () use ($response) {
@@ -95,8 +96,8 @@ class BuiltinPluginTest extends TestCase
 
     /**
      * @return void
-     * @dataProvider dataProvider
      */
+    #[DataProvider('dataProvider')]
     public function testAroundDispatchProcessIfCacheMissed($state): void
     {
         $header = GenericHeader::fromString('Cache-Control: no-cache');
@@ -150,8 +151,8 @@ class BuiltinPluginTest extends TestCase
 
     /**
      * @return void
-     * @dataProvider dataProvider
      */
+    #[DataProvider('dataProvider')]
     public function testAroundDispatchReturnsResultInterfaceProcessIfCacheMissed($state): void
     {
         $this->configMock
@@ -172,7 +173,7 @@ class BuiltinPluginTest extends TestCase
             ->method('getMode')
             ->willReturn($state);
 
-        $result = $this->getMockForAbstractClass(ResultInterface::class);
+        $result = $this->createMock(ResultInterface::class);
         $result->expects($this->never())->method('setHeader');
         $closure =  function () use ($result) {
             return $result;
@@ -186,8 +187,8 @@ class BuiltinPluginTest extends TestCase
 
     /**
      * @return void
-     * @dataProvider dataProvider
      */
+    #[DataProvider('dataProvider')]
     public function testAroundDispatchReturnsCache($state): void
     {
         $this->configMock
@@ -224,8 +225,8 @@ class BuiltinPluginTest extends TestCase
 
     /**
      * @return void
-     * @dataProvider dataProvider
      */
+    #[DataProvider('dataProvider')]
     public function testAroundDispatchDisabled($state): void
     {
         $this->configMock

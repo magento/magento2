@@ -9,6 +9,7 @@
 namespace Magento\Tax\Model\Sales\Total\Quote;
 
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test \Magento\Tax\Model\Sales\Total\Quote\Subtotal
@@ -66,11 +67,11 @@ class SubtotalTest extends \Magento\TestFramework\Indexer\TestCase
      * @magentoDataFixture Magento/Customer/_files/customer_group.php
      * @magentoDataFixture Magento/Catalog/_files/products.php
      * @magentoConfigFixture current_store tax/calculation/algorithm UNIT_BASE_CALCULATION
-     * @dataProvider collectUnitBasedDataProvider
      * @param array $quoteItems
      * @param array $expected
      * @return void
      */
+    #[DataProvider('collectUnitBasedDataProvider')]
     public function testCollectUnitBased(array $quoteItems, array $expected): void
     {
         $this->quote($quoteItems, $expected);
@@ -116,11 +117,11 @@ class SubtotalTest extends \Magento\TestFramework\Indexer\TestCase
      * @magentoDataFixture Magento/Customer/_files/customer_group.php
      * @magentoDataFixture Magento/Bundle/_files/product.php
      * @magentoConfigFixture current_store tax/calculation/algorithm UNIT_BASE_CALCULATION
-     * @dataProvider collectUnitBasedBundleProductDataProvider
      * @param array $quoteItems
      * @param array $expected
      * @return void
      */
+    #[DataProvider('collectUnitBasedBundleProductDataProvider')]
     public function testCollectUnitBasedBundleProduct(array $quoteItems, array $expected): void
     {
         $productTaxClassId = $this->getProductTaxClassId();
@@ -188,10 +189,10 @@ class SubtotalTest extends \Magento\TestFramework\Indexer\TestCase
      * @magentoDataFixture Magento/Catalog/_files/products.php
      * @magentoConfigFixture current_store tax/calculation/algorithm UNIT_BASE_CALCULATION
      * @magentoConfigFixture current_store tax/calculation/price_includes_tax 1
-     * @dataProvider collectUnitBasedPriceIncludesTaxDataProvider
      * @param array $quoteItems
      * @param array $expected
      */
+    #[DataProvider('collectUnitBasedPriceIncludesTaxDataProvider')]
     public function testCollectUnitBasedPriceIncludesTax(array $quoteItems, array $expected): void
     {
         $this->quote($quoteItems, $expected);

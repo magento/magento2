@@ -11,6 +11,7 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\CatalogRule\Api\Data\RuleInterface;
 use Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor;
+use Magento\CatalogRule\Model\ResourceModel\Rule as RuleResourceModel;
 use Magento\CatalogRule\Model\Rule;
 use Magento\CatalogRule\Model\Rule\Condition\CombineFactory;
 use Magento\Framework\Api\AttributeValueFactory;
@@ -19,11 +20,13 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Framework\Model\ResourceModel\Iterator;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Rule\Model\Condition\Combine;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\Website;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -32,6 +35,7 @@ use PHPUnit\Framework\TestCase;
  */
 class RuleTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Rule
      */
@@ -83,7 +87,7 @@ class RuleTest extends TestCase
     private $resourceIterator;
 
     /**
-     * @var \Magento\CatalogRule\Model\ResourceModel\Rule|MockObject
+     * @var RuleResourceModel|MockObject
      */
     private $ruleResourceModel;
 
@@ -98,7 +102,7 @@ class RuleTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
         $this->storeModel = $this->createPartialMock(Store::class, ['__wakeup', 'getId']);
         $this->combineFactory = $this->createPartialMock(
             CombineFactory::class,
@@ -114,11 +118,10 @@ class RuleTest extends TestCase
                 'setData'
             ]
         );
-        $this->condition = $this->getMockBuilder(Combine::class)
-            ->addMethods(['setRule'])
-            ->onlyMethods(['validate'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->condition = $this->createPartialMockWithReflection(
+            Combine::class,
+            ['setRule', 'validate']
+        );
         $this->websiteModel = $this->createPartialMock(
             Website::class,
             [
@@ -141,7 +144,7 @@ class RuleTest extends TestCase
             ['walk']
         );
 
-        $this->ruleResourceModel = $this->createMock(\Magento\CatalogRule\Model\ResourceModel\Rule::class);
+        $this->ruleResourceModel = $this->createMock(RuleResourceModel::class);
 
         $extensionFactoryMock = $this->createMock(ExtensionAttributesFactory::class);
         $attributeValueFactoryMock = $this->createMock(AttributeValueFactory::class);
@@ -169,9 +172,10 @@ class RuleTest extends TestCase
      */
     private function getSerializerMock(): MockObject
     {
-        $serializerMock = $this->getMockBuilder(Json::class)->disableOriginalConstructor()
-            ->onlyMethods(['serialize', 'unserialize'])
-            ->getMock();
+        $serializerMock = $this->createPartialMock(
+            Json::class,
+            ['serialize', 'unserialize']
+        );
 
         $serializerMock->expects($this->any())
             ->method('serialize')
@@ -196,8 +200,8 @@ class RuleTest extends TestCase
      * @param bool $validate
      *
      * @return void
-     * @dataProvider dataProviderCallbackValidateProduct
      */
+    #[DataProvider('dataProviderCallbackValidateProduct')]
     public function testCallbackValidateProduct($validate): void
     {
         $args['product'] = $this->productModel;
@@ -277,8 +281,8 @@ class RuleTest extends TestCase
      * @param bool|array $expected True or an array of errors
      *
      * @return void
-     * @dataProvider validateDataDataProvider
      */
+    #[DataProvider('validateDataDataProvider')]
     public function testValidateData(array $data, $expected): void
     {
         $result = $this->rule->validateData(new DataObject($data));
@@ -366,8 +370,8 @@ class RuleTest extends TestCase
      * @param int $active
      *
      * @return void
-     * @dataProvider afterUpdateDataProvider
      */
+    #[DataProvider('afterUpdateDataProvider')]
     public function testAfterUpdate(int $active): void
     {
         $this->rule->isObjectNew(false);
@@ -413,8 +417,8 @@ class RuleTest extends TestCase
      * @param bool $result
      *
      * @return void
-     * @dataProvider isRuleBehaviorChangedDataProvider
      */
+    #[DataProvider('isRuleBehaviorChangedDataProvider')]
     public function testIsRuleBehaviorChanged(
         array $dataArray,
         array $originDataArray,
@@ -423,7 +427,7 @@ class RuleTest extends TestCase
     ): void {
         $this->rule->setData('website_ids', []);
         $this->rule->isObjectNew($isObjectNew);
-        $indexer = $this->getMockForAbstractClass(IndexerInterface::class);
+        $indexer = $this->createMock(IndexerInterface::class);
         $indexer->expects($this->any())->method('invalidate');
         $this->ruleProductProcessor->expects($this->any())->method('getIndexer')->willReturn($indexer);
 

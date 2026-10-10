@@ -9,6 +9,7 @@ namespace Magento\Framework\TestFramework\Test\Unit\Autoloader;
 
 use Magento\Framework\TestFramework\Unit\Autoloader\ExtensionAttributesGenerator;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ExtensionAttributesGeneratorTest extends TestCase
 {
@@ -30,10 +31,9 @@ class ExtensionAttributesGeneratorTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider generateNonExtensionAttributesDataProvider
-     * @param string $className
+    /**     * @param string $className
      */
+    #[DataProvider('generateNonExtensionAttributesDataProvider')]
     public function testGenerateNonExtensionAttributes($className)
     {
         $this->assertFalse($this->subject->generate($className));

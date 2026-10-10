@@ -8,14 +8,13 @@
  * \Directory currency abstract backend model
  *
  * Allows dispatching before and after events for each controller action
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Config\Model\Config\Backend\Currency;
 
 /**
  * Base currency class
  *
+ * phpcs:ignore Magento2.Classes.AbstractApi.AbstractApi
  * @api
  * @since 100.0.2
  */

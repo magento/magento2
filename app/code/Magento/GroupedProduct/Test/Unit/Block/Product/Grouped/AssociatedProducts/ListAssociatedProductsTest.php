@@ -19,10 +19,19 @@ use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 #[CoversClass(\Magento\GroupedProduct\Block\Product\Grouped\AssociatedProducts\ListAssociatedProducts::class)]
 class ListAssociatedProductsTest extends TestCase
 {
+    use MockCreationTrait;
+    
+    /**
+     * @var ObjectManager
+     */
+    private $objectManagerHelper;
+    
     /**
      * @var MockObject
      */
@@ -65,6 +74,10 @@ class ListAssociatedProductsTest extends TestCase
 
     protected function setUp(): void
     {
+        // Initialize ObjectManager to avoid "ObjectManager isn't initialized" errors
+        $this->objectManagerHelper = new ObjectManager($this);
+        $this->objectManagerHelper->prepareObjectManager();
+        
         $this->contextMock = $this->createMock(Context::class);
         $this->registryMock = $this->createMock(Registry::class);
         $this->productMock = $this->createMock(Product::class);
@@ -154,11 +167,11 @@ class ListAssociatedProductsTest extends TestCase
      * Generate associated product mock
      *
      * @param int $productKey
-     * @return \Magento\Framework\DataObject\Test\Unit\Helper\DataObjectTestHelper
+     * @return DataObject
      */
     protected function generateAssociatedProduct($productKey = 0)
     {
-        $associatedProduct = new \Magento\Framework\DataObject\Test\Unit\Helper\DataObjectTestHelper();
+        $associatedProduct = new DataObject();
         $associatedProduct->setId('id' . $productKey);
         $associatedProduct->setSku('sku' . $productKey);
         $associatedProduct->setName('name' . $productKey);

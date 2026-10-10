@@ -140,7 +140,6 @@ class LoginPostTest extends TestCase
         );
         $reflection = new \ReflectionClass(get_class($this->controller));
         $reflectionProperty = $reflection->getProperty('scopeConfig');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->controller, $this->scopeConfig);
     }
 
@@ -319,7 +318,6 @@ class LoginPostTest extends TestCase
             ->willReturn(false);
         $refClass = new \ReflectionClass(LoginPost::class);
         $refProperty = $refClass->getProperty('cookieMetadataManager');
-        $refProperty->setAccessible(true);
         $refProperty->setValue($this->controller, $cookieMetadataManager);
 
         $this->assertSame($this->resultRedirect, $this->controller->execute());
@@ -400,11 +398,9 @@ class LoginPostTest extends TestCase
 
         $refClass = new \ReflectionClass(LoginPost::class);
         $cookieMetadataManagerProperty = $refClass->getProperty('cookieMetadataManager');
-        $cookieMetadataManagerProperty->setAccessible(true);
         $cookieMetadataManagerProperty->setValue($this->controller, $cookieMetadataManager);
 
         $cookieMetadataFactoryProperty = $refClass->getProperty('cookieMetadataFactory');
-        $cookieMetadataFactoryProperty->setAccessible(true);
         $cookieMetadataFactoryProperty->setValue($this->controller, $cookieMetadataFactory);
 
         $this->assertSame($this->resultRedirect, $this->controller->execute());

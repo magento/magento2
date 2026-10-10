@@ -37,7 +37,6 @@ class NotificationTest extends TestCase
 
         $reflection = new \ReflectionClass(DateTimeFormatter::class);
         $reflectionProperty = $reflection->getProperty('localeResolver');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($dateTimeFormatter, $localeResolver);
 
         $formattedDate = $dateTimeFormatter->formatObject($testDatetime);

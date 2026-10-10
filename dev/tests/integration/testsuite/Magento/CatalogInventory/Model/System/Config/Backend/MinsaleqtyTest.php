@@ -8,6 +8,7 @@ namespace Magento\CatalogInventory\Model\System\Config\Backend;
 
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Customer\Api\GroupManagementInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class MinsaleqtyTest extends \PHPUnit\Framework\TestCase
 {
@@ -30,8 +31,8 @@ class MinsaleqtyTest extends \PHPUnit\Framework\TestCase
      * @param string $encodedExpectedValue
      * @param array $decodedExpectedValue
      * @magentoDbIsolation enabled
-     * @dataProvider saveAndLoadDataProvider
      */
+    #[DataProvider('saveAndLoadDataProvider')]
     public function testSaveAndLoad($value, $encodedExpectedValue, array $decodedExpectedValue)
     {
         $this->minSaleQtyConfig->setValue($value);

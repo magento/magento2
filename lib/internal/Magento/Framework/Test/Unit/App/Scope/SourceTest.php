@@ -27,9 +27,7 @@ class SourceTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->scopeResolverPoolMock = $this->getMockBuilder(ScopeResolverPool::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->scopeResolverPoolMock = $this->createMock(ScopeResolverPool::class);
 
         $this->model = new Source($this->scopeResolverPoolMock, $this->scope);
     }
@@ -45,12 +43,10 @@ class SourceTest extends TestCase
         $result = [$scopeData, $scopeData];
 
         /** @var ScopeResolverInterface|MockObject $scopeResolverMock */
-        $scopeResolverMock = $this->getMockBuilder(ScopeResolverInterface::class)
-            ->getMockForAbstractClass();
+        $scopeResolverMock = $this->createMock(ScopeResolverInterface::class);
 
         /** @var ScopeInterface|MockObject $scopeMock */
-        $scopeMock = $this->getMockBuilder(ScopeInterface::class)
-            ->getMockForAbstractClass();
+        $scopeMock = $this->createMock(ScopeInterface::class);
 
         $this->scopeResolverPoolMock->expects($this->once())
             ->method('get')

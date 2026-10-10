@@ -15,6 +15,7 @@ use Magento\Framework\Pricing\PriceInfoInterface;
 use Magento\Framework\Pricing\SaleableInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test class for \Magento\Framework\Pricing\PriceInfo\Factory
@@ -58,7 +59,7 @@ class FactoryTest extends TestCase
     {
         $this->objectManagerMock = $this->createMock(ObjectManager::class);
         $this->pricesMock = $this->createMock(Collection::class);
-        $this->saleableItemMock = $this->getMockForAbstractClass(
+        $this->saleableItemMock = $this->createMock(
             SaleableInterface::class,
             [],
             '',
@@ -67,7 +68,7 @@ class FactoryTest extends TestCase
             true,
             ['getQty']
         );
-        $this->priceInfoMock = $this->getMockForAbstractClass(
+        $this->priceInfoMock = $this->createMock(
             PriceInfoInterface::class,
             [],
             '',
@@ -114,9 +115,8 @@ class FactoryTest extends TestCase
      * @param $typeId
      * @param $quantity
      * @param $infoClass
-     * @param $prices
-     * @dataProvider createPriceInfoDataProvider
-     */
+     * @param $prices     */
+    #[DataProvider('createPriceInfoDataProvider')]
     public function testCreate($typeId, $quantity, $infoClass, $prices)
     {
         $this->saleableItemMock->expects($this->once())

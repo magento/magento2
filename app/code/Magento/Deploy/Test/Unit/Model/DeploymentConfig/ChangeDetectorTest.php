@@ -11,6 +11,7 @@ use Magento\Deploy\Model\DeploymentConfig\ChangeDetector;
 use Magento\Deploy\Model\DeploymentConfig\DataCollector;
 use Magento\Deploy\Model\DeploymentConfig\Hash;
 use Magento\Deploy\Model\DeploymentConfig\Hash\Generator as HashGenerator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -66,8 +67,8 @@ class ChangeDetectorTest extends TestCase
      * @param string $savedHash
      * @param bool $expectedResult
      * @return void
-     * @dataProvider hasChangesDataProvider
      */
+    #[DataProvider('hasChangesDataProvider')]
     public function testHasChanges(
         $sectionName,
         $fullConfigData,

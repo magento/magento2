@@ -15,11 +15,13 @@ use Magento\Directory\Model\CurrencyFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\LayoutInterface;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class MatrixTest extends TestCase
 {
+    use MockCreationTrait;
     /**
-     * Object manager helper
+     * Object manager for the test
      *
      * @var ObjectManager
      */
@@ -28,6 +30,7 @@ class MatrixTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManager($this);
+        $this->objectManagerHelper->prepareObjectManager([]);
     }
 
     protected function tearDown(): void
@@ -44,10 +47,7 @@ class MatrixTest extends TestCase
         $newRates = ['USD' => ['EUR' => 0.7767, 'UAH' => 20, 'GBP' => 12, 'USD' => 1]];
         $expectedNewRates = ['USD' => ['EUR' => '0.7767', 'UAH' => '20.0000', 'GBP' => '12.0000', 'USD' => '1.0000']];
 
-        $backendSessionMock = $this->getMockBuilder(Session::class)
-            ->addMethods(['getRates', 'unsetData'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $backendSessionMock = $this->createPartialMockWithReflection(Session::class, ['getRates', 'unsetData']);
         $backendSessionMock->expects($this->once())->method('getRates')->willReturn($newRates);
 
         $currencyFactoryMock = $this->createPartialMock(CurrencyFactory::class, ['create']);
@@ -63,16 +63,8 @@ class MatrixTest extends TestCase
             ->with($baseCurrencies, $allowCurrencies)
             ->willReturn($currencyRates);
 
-        /** @var LayoutInterface|MockObject $layoutMock */
-        $layoutMock = $this->getMockForAbstractClass(
-            LayoutInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            []
-        );
+        /** @var LayoutInterface $layoutMock */
+        $layoutMock = $this->createMock(LayoutInterface::class);
 
         /** @var Services $block */
         $block = $this->objectManagerHelper->getObject(

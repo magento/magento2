@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\Code\Reader;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 require_once __DIR__ . '/_files/SourceArgumentsReaderTest.php.sample';
 
 class SourceArgumentsReaderTest extends \PHPUnit\Framework\TestCase
@@ -22,8 +24,8 @@ class SourceArgumentsReaderTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $class
      * @param array $expectedResult
-     * @dataProvider getConstructorArgumentTypesDataProvider
      */
+    #[DataProvider('getConstructorArgumentTypesDataProvider')]
     public function testGetConstructorArgumentTypes($class, $expectedResult)
     {
         $class = new \ReflectionClass($class);

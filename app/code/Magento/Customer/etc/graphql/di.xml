@@ -16,4 +16,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Customer\Model\AccountManagement">
+        <plugin name="validate_captcha_graphql" type="Magento\Customer\Model\Plugin\ValidateCaptcha" sortOrder="10" />
+    </type>
 </config>

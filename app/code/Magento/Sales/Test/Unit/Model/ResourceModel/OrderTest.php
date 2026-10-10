@@ -25,6 +25,8 @@ use Magento\Store\Model\Website;
 use PHPUnit\Framework\MockObject\MockObject;
 
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use Magento\Sales\Model\Order as SalesOrder;
 
 /**
  *
@@ -33,6 +35,8 @@ use PHPUnit\Framework\TestCase;
  */
 class OrderTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Order
      */
@@ -54,7 +58,7 @@ class OrderTest extends TestCase
     protected $salesSequenceMock;
 
     /**
-     * @var \Magento\Sales\Model\Order|MockObject
+     * @var SalesOrder|MockObject
      */
     protected $orderMock;
 
@@ -104,12 +108,11 @@ class OrderTest extends TestCase
     protected function setUp(): void
     {
         $this->resourceMock = $this->createMock(ResourceConnection::class);
-        $this->orderMock = $this->createMock(\Magento\Sales\Model\Order::class);
-        $this->orderItemMock = $this->getMockBuilder(Item::class)
-            ->addMethods(['getQuoteParentItemId', 'setTotalItemCount'])
-            ->onlyMethods(['getChildrenItems'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->orderMock = $this->createMock(SalesOrder::class);
+        $this->orderItemMock = $this->createPartialMockWithReflection(
+            Item::class,
+            ['getQuoteParentItemId', 'setTotalItemCount', 'getChildrenItems']
+        );
         $this->storeMock = $this->createMock(Store::class);
         $this->storeGroupMock = $this->createPartialMock(
             Group::class,

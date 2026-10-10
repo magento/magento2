@@ -266,11 +266,9 @@ class CarrierTest extends TestCase
     {
         $refClass = new \ReflectionClass(Carrier::class);
         $property = $refClass->getProperty('_debugReplacePrivateDataKeys');
-        $property->setAccessible(true);
         $property->setValue($this->carrier, $maskFields);
 
         $refMethod = $refClass->getMethod('filterDebugData');
-        $refMethod->setAccessible(true);
         $result = $refMethod->invoke($this->carrier, $data);
         $expectedXml = new \SimpleXMLElement($expected);
         $resultXml = new \SimpleXMLElement($result);
@@ -440,8 +438,6 @@ class CarrierTest extends TestCase
     {
         $reflection = new \ReflectionClass($this->carrier);
         $method = $reflection->getMethod($method);
-        $method->setAccessible(true);
-
         return $method->invokeArgs($this->carrier, $parameters);
     }
 
@@ -455,7 +451,6 @@ class CarrierTest extends TestCase
     {
         $reflection = new \ReflectionClass($this->carrier);
         $property = $reflection->getProperty($property);
-        $property->setAccessible(true);
         $property->setValue($this->carrier, $value);
     }
 

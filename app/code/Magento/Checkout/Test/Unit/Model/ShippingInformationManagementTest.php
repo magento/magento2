@@ -26,7 +26,6 @@ use Magento\Quote\Api\Data\PaymentMethodInterface;
 use Magento\Quote\Api\Data\TotalsInterface;
 use Magento\Quote\Api\PaymentMethodManagementInterface;
 use Magento\Quote\Model\Quote;
-use Magento\Quote\Test\Unit\Helper\AddressShippingInfoTestHelper;
 use Magento\Quote\Model\QuoteAddressValidator;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Shipping;
@@ -38,8 +37,9 @@ use Magento\Quote\Model\Quote\TotalsCollector;
 use Psr\Log\LoggerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\Quote\Test\Unit\Helper\CartExtensionTestHelper;
 use Magento\Quote\Model\QuoteAddressValidationService;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use Magento\Quote\Api\Data\CartExtensionInterface;
 
 /**
  * Test for \Magento\Checkout\Model\ShippingInformationManagement.
@@ -49,6 +49,7 @@ use Magento\Quote\Model\QuoteAddressValidationService;
  */
 class ShippingInformationManagementTest extends TestCase
 {
+    use MockCreationTrait;
     private const STUB_CART_ID = 100;
 
     private const STUB_ITEMS_COUNT = 99;
@@ -158,7 +159,11 @@ class ShippingInformationManagementTest extends TestCase
         $this->paymentDetailsFactoryMock = $this->createMock(PaymentDetailsFactory::class);
         $this->cartTotalsRepositoryMock = $this->createMock(CartTotalRepositoryInterface::class);
         $this->quoteRepositoryMock = $this->createMock(CartRepositoryInterface::class);
-        $this->shippingAddressMock = new AddressShippingInfoTestHelper();
+        $this->shippingAddressMock = $this->createPartialMockWithReflection(
+            Address::class,
+            ['getCountryId', 'getShippingMethod', 'getShippingRateByCode']
+        );
+        $this->shippingAddressMock->method('getCountryId')->willReturn('US');
 
         $this->quoteMock = $this->createMock(Quote::class);
 
@@ -228,7 +233,12 @@ class ShippingInformationManagementTest extends TestCase
     private function setShippingAssignmentsMocks($shippingMethod): void
     {
         $this->quoteMock->method('getExtensionAttributes')->willReturn(null);
-        $this->cartExtensionMock = new CartExtensionTestHelper();
+        $this->cartExtensionMock = $this->createPartialMockWithReflection(
+            CartExtensionInterface::class,
+            ['setShippingAssignments', 'getShippingAssignments']
+        );
+        $this->cartExtensionMock->method('setShippingAssignments')->willReturnSelf();
+        $this->cartExtensionMock->method('getShippingAssignments')->willReturn([]);
         $this->cartExtensionFactoryMock->method('create')->willReturn($this->cartExtensionMock);
 
         $this->shippingAssignmentMock = $this->createMock(ShippingAssignment::class);
@@ -252,8 +262,6 @@ class ShippingInformationManagementTest extends TestCase
             ->with($shippingMock)
             ->willReturnSelf();
 
-        $this->cartExtensionMock->setShippingAssignments([$this->shippingAssignmentMock]);
-
         $this->quoteMock->method('setExtensionAttributes')->willReturnSelf();
     }
 
@@ -265,13 +273,15 @@ class ShippingInformationManagementTest extends TestCase
     public function testSaveAddressInformationIfShippingAddressNotSet(): void
     {
         $cartId = self::STUB_CART_ID;
+        
+        $addressMock = $this->createMock(Address::class);
+        $addressMock->method('getCountryId')->willReturn(null);
+        
         /** @var ShippingInformationInterface|MockObject $addressInformationMock */
         $addressInformationMock = $this->createMock(ShippingInformationInterface::class);
         $addressInformationMock->expects($this->once())
             ->method('getShippingAddress')
-            ->willReturn($this->shippingAddressMock);
-
-        $this->shippingAddressMock->setCountryIdVal(null);
+            ->willReturn($addressMock);
 
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getActive')
@@ -558,8 +568,8 @@ class ShippingInformationManagementTest extends TestCase
             ->method('save')
             ->with($this->quoteMock);
 
-        $this->shippingAddressMock->setShippingMethodVal($shippingMethod);
-        $this->shippingAddressMock->setShippingRateByCodeVal('rates');
+        $this->shippingAddressMock->method('getShippingMethod')->willReturn($shippingMethod);
+        $this->shippingAddressMock->method('getShippingRateByCode')->with($shippingMethod)->willReturn('rates');
 
         $paymentDetailsMock = $this->createMock(PaymentDetailsInterface::class);
         $this->paymentDetailsFactoryMock->expects($this->once())

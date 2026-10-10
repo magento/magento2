@@ -6,6 +6,8 @@
 
 namespace Magento\Fedex\Model;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 class CarrierTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -21,10 +23,10 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider getCodeDataProvider
      * @param string $type
      * @param int $expectedCount
      */
+    #[DataProvider('getCodeDataProvider')]
     public function testGetCode($type, $expectedCount)
     {
         $result = $this->_model->getCode($type);
@@ -48,9 +50,9 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider getCodeUnitOfMeasureDataProvider
      * @param string $code
      */
+    #[DataProvider('getCodeUnitOfMeasureDataProvider')]
     public function testGetCodeUnitOfMeasure($code)
     {
         $result = $this->_model->getCode('unit_of_measure', $code);

@@ -11,6 +11,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\View\Url\Config;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ConfigTest extends TestCase
 {
@@ -36,9 +37,8 @@ class ConfigTest extends TestCase
     /**
      * @param $path
      * @param $expectedValue
-     *
-     * @dataProvider getConfigDataProvider
-     */
+     *     */
+    #[DataProvider('getConfigDataProvider')]
     public function testGetValue($path, $expectedValue)
     {
         $this->_scopeConfig->expects(

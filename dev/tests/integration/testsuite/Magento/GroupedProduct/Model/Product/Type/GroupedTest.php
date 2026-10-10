@@ -15,6 +15,7 @@ use Magento\Framework\App\Config\Value;
 use Magento\GroupedProduct\Test\Fixture\Product as GroupedProductFixture;
 use Magento\TestFramework\Fixture\AppArea;
 use Magento\TestFramework\Fixture\DataFixture;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class GroupedTest extends \PHPUnit\Framework\TestCase
 {
@@ -166,11 +167,11 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
      * @magentoAppArea frontend
      * @magentoAppIsolation enabled
      * @magentoDbIsolation enabled
-     * @dataProvider outOfStockSubProductDataProvider
      * @param bool $outOfStockShown
      * @param array $data
      * @param array $expected
      */
+    #[DataProvider('outOfStockSubProductDataProvider')]
     public function testOutOfStockSubProduct(bool $outOfStockShown, array $data, array $expected)
     {
         $this->changeConfigValue(Configuration::XML_PATH_SHOW_OUT_OF_STOCK, $outOfStockShown);

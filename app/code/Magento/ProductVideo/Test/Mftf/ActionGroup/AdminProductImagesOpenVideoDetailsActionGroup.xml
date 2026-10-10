@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminProductImagesOpenVideoDetailsActionGroup">
+        <annotations>
+            <description>Expands "Images and Videos" section. Click on the video at given position.</description>
+        </annotations>
+        <arguments>
+            <argument name="position" defaultValue="1" type="string"/>
+        </arguments>
+        <waitForElementVisible selector="{{AdminProductImagesSection.productImagesToggle}}" stepKey="waitForImagesSection"/>
+        <conditionalClick selector="{{AdminProductImagesSection.productImagesToggle}}" dependentSelector="{{AdminProductImagesSection.nthImageContainer(position)}}" visible="false" stepKey="expandImages"/>
+        <waitForPageLoad stepKey="waitForImages"/>
+        <waitForElementVisible selector="{{AdminProductImagesSection.nthImageContainer(position)}}" stepKey="seeProductImageName"/>
+        <click selector="{{AdminProductImagesSection.nthImageContainer(position)}}" stepKey="clickProductImage"/>
+        <waitForPageLoad stepKey="waitForSlideOutToOpen"/>
+        <waitForElementVisible selector="{{AdminProductNewVideoSection.videoUrlTextField}}" stepKey="waitForUrlElementVisible"/>
+        <waitForPageLoad stepKey="waitForSlideOutToRender"/>
+    </actionGroup>
+</actionGroups>

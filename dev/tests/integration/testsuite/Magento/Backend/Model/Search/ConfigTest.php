@@ -15,6 +15,7 @@ use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Config\FileIteratorFactory;
 use Magento\Framework\Config\ScopeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoAppArea adminhtml
@@ -24,9 +25,9 @@ use Magento\TestFramework\Helper\Bootstrap;
 class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @dataProvider loadDataProvider
      * @magentoConfigFixture current_store general/store_information/name Foo
      */
+    #[DataProvider('loadDataProvider')]
     public function testLoad($query, $expectedResult)
     {
         /** @var \Magento\Backend\Model\Search\Config $configSearch */

@@ -10,6 +10,7 @@ namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Eav\Plugin\AttributeSe
 use Magento\Catalog\Model\Indexer\Product\Eav\Plugin\AttributeSet\IndexableAttributeFilter;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory;
+use Magento\Eav\Model\Entity\Attribute as EntityAttribute;
 use Magento\Eav\Model\Entity\Attribute\Group;
 use Magento\Eav\Model\Entity\Attribute\Set;
 use PHPUnit\Framework\TestCase;
@@ -21,10 +22,7 @@ class IndexableAttributeFilterTest extends TestCase
      */
     public function testFilter(): void
     {
-        $catalogResourceMock = $this->getMockBuilder(Attribute::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['load', 'isIndexable'])
-            ->getMock();
+        $catalogResourceMock = $this->createPartialMock(Attribute::class, ['load', 'isIndexable']);
         $catalogResourceMock->expects($this->any())
             ->method('load')
             ->willReturnSelf();
@@ -32,53 +30,36 @@ class IndexableAttributeFilterTest extends TestCase
             ->method('isIndexable')
             ->willReturnOnConsecutiveCalls(true, false);
 
-        $eavAttributeFactoryMock = $this->getMockBuilder(AttributeFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
+        $eavAttributeFactoryMock = $this->createPartialMock(AttributeFactory::class, ['create']);
         $eavAttributeFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($catalogResourceMock);
 
-        $attributeMock1 = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getId', 'getAttributeId', 'getAttributeCode', 'load'])
-            ->getMock();
-        $attributeMock1->expects($this->any())
-            ->method('getAttributeCode')
-            ->willReturn('indexable_attribute');
+        $attributeMock1 = $this->createPartialMock(
+            EntityAttribute::class,
+            ['getId', 'getAttributeId', 'getAttributeCode', 'load']
+        );
+        $attributeMock1->method('getAttributeCode')->willReturn('indexable_attribute');
         $attributeMock1->expects($this->any())
             ->method('load')
             ->willReturnSelf();
 
-        $attributeMock2 = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getId', 'getAttributeId', 'getAttributeCode', 'load'])
-            ->getMock();
-        $attributeMock2->expects($this->any())
-            ->method('getAttributeCode')
-            ->willReturn('non_indexable_attribute');
+        $attributeMock2 = $this->createPartialMock(
+            EntityAttribute::class,
+            ['getId', 'getAttributeId', 'getAttributeCode', 'load']
+        );
+        $attributeMock2->method('getAttributeCode')->willReturn('non_indexable_attribute');
         $attributeMock2->expects($this->any())
             ->method('load')
             ->willReturnSelf();
 
         $attributes = [$attributeMock1, $attributeMock2];
 
-        $groupMock = $this->getMockBuilder(Group::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getAttributes'])
-            ->getMock();
-        $groupMock->expects($this->once())
-            ->method('getAttributes')
-            ->willReturn($attributes);
+        $groupMock = $this->createPartialMock(Group::class, []);
+        $groupMock->setData('attributes', $attributes);
 
-        $attributeSetMock = $this->getMockBuilder(Set::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getGroups'])
-            ->getMock();
-        $attributeSetMock->expects($this->once())
-            ->method('getGroups')
-            ->willReturn([$groupMock]);
+        $attributeSetMock = $this->createPartialMock(Set::class, []);
+        $attributeSetMock->setData('groups', [$groupMock]);
 
         $model = new IndexableAttributeFilter(
             $eavAttributeFactoryMock

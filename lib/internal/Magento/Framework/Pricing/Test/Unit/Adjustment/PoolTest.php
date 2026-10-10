@@ -11,6 +11,7 @@ use Magento\Framework\Pricing\Adjustment\Factory;
 use Magento\Framework\Pricing\Adjustment\Pool;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class PoolTest extends TestCase
 {
@@ -58,9 +59,8 @@ class PoolTest extends TestCase
         $this->assertEquals($expectedResult, $result);
     }
 
-    /**
-     * @dataProvider getAdjustmentByCodeDataProvider
-     */
+    /**     */
+    #[DataProvider('getAdjustmentByCodeDataProvider')]
     public function testGetAdjustmentByCode($code, $expectedResult)
     {
         $result = $this->model->getAdjustmentByCode($code);

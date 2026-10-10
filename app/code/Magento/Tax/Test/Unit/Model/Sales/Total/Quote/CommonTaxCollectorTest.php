@@ -43,7 +43,7 @@ use PHPUnit\Framework\TestCase;
 class CommonTaxCollectorTest extends TestCase
 {
     use MockCreationTrait;
-    
+
     /** @var Config|MockObject */
     private $taxConfig;
 
@@ -730,7 +730,6 @@ class CommonTaxCollectorTest extends TestCase
 
         $ref = new \ReflectionClass(CommonTaxCollector::class);
         $method = $ref->getMethod('prepareQuoteDetails');
-        $method->setAccessible(true);
         $result = $method->invoke($sut, $shippingAssignment, []);
 
         $this->assertSame($quoteDetails, $result);
@@ -755,7 +754,6 @@ class CommonTaxCollectorTest extends TestCase
 
         $ref = new \ReflectionClass(CommonTaxCollector::class);
         $method = $ref->getMethod('prepareQuoteDetails');
-        $method->setAccessible(true);
         $result = $method->invoke($sut, $shippingAssignment, []);
 
         $this->assertSame($expectedQuoteDetails, $result);
@@ -831,7 +829,6 @@ class CommonTaxCollectorTest extends TestCase
 
         $ref = new \ReflectionClass(CommonTaxCollector::class);
         $method = $ref->getMethod('processProductItems');
-        $method->setAccessible(true);
         $method->invoke($sut, $shippingAssignment, [
             'code-xyz' => [
                 CommonTaxCollector::KEY_ITEM => $taxDetail,
@@ -855,7 +852,7 @@ class CommonTaxCollectorTest extends TestCase
         );
         $addressItem->method('getTaxCalculationItemId')->willReturn('code-1');
         $addressItem->method('getId')->willReturn(123);
-        $addressItem->expects($this->once())->method('setAppliedTaxes')->with($this->isType('array'));
+        $addressItem->expects($this->once())->method('setAppliedTaxes')->with($this->isArray());
 
         $address = $this->getMockBuilder(QuoteAddress::class)
             ->onlyMethods(['getQuote'])->disableOriginalConstructor()->getMock();
@@ -914,7 +911,6 @@ class CommonTaxCollectorTest extends TestCase
 
         $ref = new \ReflectionClass(CommonTaxCollector::class);
         $method = $ref->getMethod('processAppliedTaxes');
-        $method->setAccessible(true);
         // Ensure correct type is passed for $shippingAssignment
         $typedShippingAssignment = $this->getMockBuilder(ShippingAssignmentInterface::class)->getMock();
         $typedShippingAssignment->method('getItems')->willReturn([$addressItem]);
@@ -998,7 +994,6 @@ class CommonTaxCollectorTest extends TestCase
         $sut = $this->createSut();
         $ref = new \ReflectionClass(CommonTaxCollector::class);
         $method = $ref->getMethod('processAppliedTaxes');
-        $method->setAccessible(true);
         $method->invoke($sut, $total, $shippingAssignment, $itemsByType);
         $this->assertTrue(true);
     }
@@ -1071,7 +1066,6 @@ class CommonTaxCollectorTest extends TestCase
         $sut = $this->createSut();
         $ref = new \ReflectionClass(CommonTaxCollector::class);
         $method = $ref->getMethod('processAppliedTaxes');
-        $method->setAccessible(true);
         $method->invoke($sut, $total, $shippingAssignment, $itemsByType);
         $this->assertTrue(true);
     }
@@ -1120,7 +1114,6 @@ class CommonTaxCollectorTest extends TestCase
         $sut = $this->createSut();
         $ref = new \ReflectionClass(CommonTaxCollector::class);
         $method = $ref->getMethod('processShippingTaxInfo');
-        $method->setAccessible(true);
         $method->invoke($sut, $shippingAssignment, $total, $shippingTaxDetails, $baseShippingTaxDetails);
 
         $this->assertTrue(true);
@@ -1140,7 +1133,6 @@ class CommonTaxCollectorTest extends TestCase
         $sut = $this->createSut();
         $ref = new \ReflectionClass(CommonTaxCollector::class);
         $method = $ref->getMethod('_saveAppliedTaxes');
-        $method->setAccessible(true);
         $method->invoke($sut, $total, [[
             'percent' => 10.0,
             'id' => 'id1',
@@ -1156,23 +1148,18 @@ class CommonTaxCollectorTest extends TestCase
         $ref = new \ReflectionClass(CommonTaxCollector::class);
 
         $includeShipping = $ref->getMethod('includeShipping');
-        $includeShipping->setAccessible(true);
         $this->assertFalse($includeShipping->invoke($sut));
 
         $includeItems = $ref->getMethod('includeItems');
-        $includeItems->setAccessible(true);
         $this->assertFalse($includeItems->invoke($sut));
 
         $includeExtraTax = $ref->getMethod('includeExtraTax');
-        $includeExtraTax->setAccessible(true);
         $this->assertFalse($includeExtraTax->invoke($sut));
 
         $saveAppliedTaxes = $ref->getMethod('saveAppliedTaxes');
-        $saveAppliedTaxes->setAccessible(true);
         $this->assertFalse($saveAppliedTaxes->invoke($sut));
 
         $getNextIncrement = $ref->getMethod('getNextIncrement');
-        $getNextIncrement->setAccessible(true);
         $first = $getNextIncrement->invoke($sut);
         $second = $getNextIncrement->invoke($sut);
         $this->assertSame($first + 1, $second);
@@ -1187,7 +1174,6 @@ class CommonTaxCollectorTest extends TestCase
         $sut = $this->createSut();
         $ref = new \ReflectionClass(CommonTaxCollector::class);
         $method = $ref->getMethod('getQuoteItemId');
-        $method->setAccessible(true);
 
         $quoteItem = $this->createPartialMockWithReflection(\stdClass::class, ['getId']);
         $quoteItem->method('getId')->willReturn(999);
@@ -1273,6 +1259,152 @@ class CommonTaxCollectorTest extends TestCase
         $this->assertSame([$parentMapped, $childMapped, $extra1, $extra2], $result);
     }
 
+    public function testMapItemsSkipsDeletedChildren(): void
+    {
+        $sut = $this->getMockBuilder(CommonTaxCollector::class)
+            ->setConstructorArgs([
+                $this->taxConfig,
+                $this->taxCalculationService,
+                $this->quoteDetailsFactory,
+                $this->quoteDetailsItemFactory,
+                $this->taxClassKeyFactory,
+                $this->customerAddressFactory,
+                $this->customerAddressRegionFactory,
+                $this->taxHelper,
+                $this->quoteDetailsItemExtensionFactory,
+                $this->customerAccountManagement
+            ])
+            ->onlyMethods(['mapItem', 'mapItemExtraTaxables'])
+            ->getMock();
+        $parentItem = $this->createPartialMockWithReflection(
+            AbstractItem::class,
+            [
+                'getQuote', 'getAddress', 'getOptionByCode', 'isChildrenCalculated',
+                'getChildren', 'getParentItem', 'getHasChildren'
+            ]
+        );
+        $parentItem->method('getHasChildren')->willReturn(true);
+        $parentItem->method('isChildrenCalculated')->willReturn(true);
+        $parentItem->method('getParentItem')->willReturn(null);
+        $deletedChild = $this->createPartialMockWithReflection(
+            AbstractItem::class,
+            ['getQuote', 'getAddress', 'getOptionByCode', 'isDeleted']
+        );
+        $deletedChild->method('isDeleted')->willReturn(true);
+        $activeChild = $this->createPartialMockWithReflection(
+            AbstractItem::class,
+            ['getQuote', 'getAddress', 'getOptionByCode', 'isDeleted']
+        );
+        $activeChild->method('isDeleted')->willReturn(false);
+        $parentItem->method('getChildren')->willReturn([$deletedChild, $activeChild]);
+        $shippingAssignment = $this->createMock(ShippingAssignmentInterface::class);
+        $shippingAssignment->method('getItems')->willReturn([$parentItem]);
+        $parentMapped = $this->createMock(QuoteDetailsItemInterface::class);
+        $parentMapped->method('getCode')->willReturn('parent-code');
+        $childMapped = $this->createMock(QuoteDetailsItemInterface::class);
+        $extra1 = $this->createMock(QuoteDetailsItemInterface::class);
+        $sut->method('mapItem')->willReturnCallback(
+            function (...$args) use ($parentItem, $activeChild, $parentMapped, $childMapped) {
+                $item = $args[1] ?? null;
+                if ($item === $parentItem) {
+                    return $parentMapped;
+                }
+                if ($item === $activeChild) {
+                    return $childMapped;
+                }
+                $this->fail('mapItem should not be called for deleted children');
+            }
+        );
+        $sut->expects($this->once())
+            ->method('mapItemExtraTaxables')
+            ->with($this->quoteDetailsItemFactory, $parentItem, true, false)
+            ->willReturn([$extra1]);
+        $result = $sut->mapItems($shippingAssignment, true, false);
+        $this->assertSame([$parentMapped, $childMapped, $extra1], $result);
+    }
+
+    public function testProcessProductItemsIgnoresMissingTaxCalculationCodes(): void
+    {
+        $store = $this->createMock(Store::class);
+
+        $addressItem = $this->createPartialMockWithReflection(
+            SafeArrayObject::class,
+            ['getTaxCalculationItemId', 'isDeleted', 'getHasChildren', 'isChildrenCalculated']
+        );
+        $addressItem->method('getTaxCalculationItemId')->willReturn('sequence-1');
+        $addressItem->method('isDeleted')->willReturn(false);
+        $addressItem->method('getHasChildren')->willReturn(false);
+        $addressItem->method('isChildrenCalculated')->willReturn(false);
+        $address = $this->getMockBuilder(QuoteAddress::class)
+            ->onlyMethods(['getQuote'])->disableOriginalConstructor()->getMock();
+        $quote = $this->createPartialMockWithReflection(\stdClass::class, ['getStore']);
+        $quote->method('getStore')->willReturn($store);
+        $address->method('getQuote')->willReturn($quote);
+        $shipping = $this->createMock(ShippingInterface::class);
+        $shipping->method('getAddress')->willReturn($address);
+        $shippingAssignment = $this->createMock(ShippingAssignmentInterface::class);
+        $shippingAssignment->method('getItems')->willReturn([$addressItem]);
+        $shippingAssignment->method('getShipping')->willReturn($shipping);
+        $total = $this->createPartialMockWithReflection(
+            QuoteAddressTotal::class,
+            [
+                'setTotalAmount', 'setBaseTotalAmount', 'setSubtotalInclTax',
+                'setBaseSubtotalTotalInclTax', 'setBaseSubtotalInclTax', 'getSubtotal', 'getBaseSubtotal'
+            ]
+        );
+        $total->method('setTotalAmount')->willReturnSelf();
+        $total->method('setBaseTotalAmount')->willReturnSelf();
+        $total->method('setSubtotalInclTax')->willReturnSelf();
+        $total->method('setBaseSubtotalTotalInclTax')->willReturnSelf();
+        $total->method('setBaseSubtotalInclTax')->willReturnSelf();
+        $total->method('getSubtotal')->willReturn(100.0);
+        $total->method('getBaseSubtotal')->willReturn(90.0);
+        $taxDetail = $this->createMock(TaxDetailsItemInterface::class);
+        $taxDetail->method('getRowTotal')->willReturn(100.0);
+        $taxDetail->method('getDiscountTaxCompensationAmount')->willReturn(0.0);
+        $taxDetail->method('getRowTax')->willReturn(10.0);
+        $taxDetail->method('getRowTotalInclTax')->willReturn(110.0);
+        $baseTaxDetail = $this->createMock(TaxDetailsItemInterface::class);
+        $baseTaxDetail->method('getRowTotal')->willReturn(90.0);
+        $baseTaxDetail->method('getDiscountTaxCompensationAmount')->willReturn(0.0);
+        $baseTaxDetail->method('getRowTax')->willReturn(9.0);
+        $baseTaxDetail->method('getRowTotalInclTax')->willReturn(99.0);
+        $orphanTaxDetail = $this->createMock(TaxDetailsItemInterface::class);
+        $orphanBaseTaxDetail = $this->createMock(TaxDetailsItemInterface::class);
+        $sut = $this->getMockBuilder(CommonTaxCollector::class)
+            ->setConstructorArgs([
+                $this->taxConfig,
+                $this->taxCalculationService,
+                $this->quoteDetailsFactory,
+                $this->quoteDetailsItemFactory,
+                $this->taxClassKeyFactory,
+                $this->customerAddressFactory,
+                $this->customerAddressRegionFactory,
+                $this->taxHelper,
+                $this->quoteDetailsItemExtensionFactory,
+                $this->customerAccountManagement
+            ])
+            ->onlyMethods(['updateItemTaxInfo'])
+            ->getMock();
+        $sut->expects($this->once())
+            ->method('updateItemTaxInfo')
+            ->with($addressItem, $taxDetail, $baseTaxDetail, $store)
+            ->willReturnSelf();
+        $ref = new \ReflectionClass(CommonTaxCollector::class);
+        $method = $ref->getMethod('processProductItems');
+        $method->invoke($sut, $shippingAssignment, [
+            'sequence-1' => [
+                CommonTaxCollector::KEY_ITEM => $taxDetail,
+                CommonTaxCollector::KEY_BASE_ITEM => $baseTaxDetail
+            ],
+            'sequence-2' => [
+                CommonTaxCollector::KEY_ITEM => $orphanTaxDetail,
+                CommonTaxCollector::KEY_BASE_ITEM => $orphanBaseTaxDetail
+            ]
+        ], $total);
+        $this->assertTrue(true);
+    }
+
     /**
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -1336,7 +1468,6 @@ class CommonTaxCollectorTest extends TestCase
                 ->onlyMethods(['mapAddress'])->getMock();
             $ref = new \ReflectionClass(CommonTaxCollector::class);
             $method = $ref->getMethod('setPriceForTaxCalculation');
-            $method->setAccessible(true);
             $qdi = $this->createMock(QuoteDetailsItemInterface::class);
             $qdi->method('getExtensionAttributes')->willReturn(null);
             $qdi->expects($this->once())->method('setExtensionAttributes')->with($ext)->willReturnSelf();
@@ -1555,7 +1686,6 @@ class CommonTaxCollectorTest extends TestCase
 
         $ref = new \ReflectionClass(CommonTaxCollector::class);
         $method = $ref->getMethod('processProductItems');
-        $method->setAccessible(true);
         $method->invoke($sut, $shippingAssignment, [
             'code-skip' => [
                 CommonTaxCollector::KEY_ITEM => $taxDetail,

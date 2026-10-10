@@ -17,17 +17,18 @@ use Magento\Framework\App\Cache\Type\FrontendPool;
 use Magento\Framework\App\Cache\Type\Layout;
 use Magento\Framework\App\Cache\Type\Translate;
 use Magento\Framework\Cache\FrontendInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class GenericTest extends TestCase
 {
     /**
      * @param string $className
-     * @dataProvider constructorDataProvider
      */
+    #[DataProvider('constructorDataProvider')]
     public function testConstructor($className)
     {
-        $frontendMock = $this->getMockForAbstractClass(FrontendInterface::class);
+        $frontendMock = $this->createMock(FrontendInterface::class);
 
         $poolMock = $this->createMock(FrontendPool::class);
         /** @noinspection PhpUndefinedFieldInspection */

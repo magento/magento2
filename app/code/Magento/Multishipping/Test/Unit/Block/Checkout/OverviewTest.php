@@ -216,7 +216,6 @@ class OverviewTest extends TestCase
         ];
 
         $method = new \ReflectionMethod($this->model, 'sortTotals');
-        $method->setAccessible(true);
         $result = $method->invoke($this->model, $totalsNotSorted);
 
         $this->assertEquals(

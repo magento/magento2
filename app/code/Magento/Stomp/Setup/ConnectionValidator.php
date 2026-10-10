@@ -60,7 +60,7 @@ class ConnectionValidator
             }
 
             $connection = $this->connectionFactory->create($options);
-
+            $connection->connect();
             $connection->disconnect();
         } catch (\Exception $e) {
             return false;

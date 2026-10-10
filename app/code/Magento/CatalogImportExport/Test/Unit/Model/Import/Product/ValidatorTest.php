@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\CatalogImportExport\Test\Unit\Model\Import\Product;
 
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\CatalogImportExport\Model\Import\Product;
 use Magento\CatalogImportExport\Model\Import\Product\Type\Simple;
 use Magento\CatalogImportExport\Model\Import\Product\UniqueAttributeValidator;
@@ -53,7 +55,7 @@ class ValidatorTest extends TestCase
             Simple::class,
             ['retrieveAttributeFromCache']
         );
-        $entityTypeModel->expects($this->any())->method('retrieveAttributeFromCache')->willReturn([]);
+        $entityTypeModel->method('retrieveAttributeFromCache')->willReturn([]);
         $this->context = $this->createPartialMock(
             Product::class,
             [
@@ -64,8 +66,8 @@ class ValidatorTest extends TestCase
                 'getEmptyAttributeValueConstant'
             ]
         );
-        $this->context->expects($this->any())->method('retrieveProductTypeByName')->willReturn($entityTypeModel);
-        $this->context->expects($this->any())->method('retrieveMessageTemplate')->willReturn('error message');
+        $this->context->method('retrieveProductTypeByName')->willReturn($entityTypeModel);
+        $this->context->method('retrieveMessageTemplate')->willReturn('error message');
 
         $this->validatorOne = $this->createPartialMock(
             Media::class,
@@ -78,7 +80,7 @@ class ValidatorTest extends TestCase
         $this->uniqueAttributeValidator = $this->createMock(UniqueAttributeValidator::class);
 
         $this->validators = [$this->validatorOne, $this->validatorTwo];
-        $timezone = $this->createMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
+        $timezone = $this->createMock(TimezoneInterface::class);
         $timezone->expects($this->any())
             ->method('date')
             ->willReturnCallback(
@@ -103,8 +105,8 @@ class ValidatorTest extends TestCase
      * @param bool $isValid
      * @param string $attrCode
      * @param bool $uniqueAttributeValidatorResult
-     * @dataProvider attributeValidationProvider
      */
+    #[DataProvider('attributeValidationProvider')]
     public function testAttributeValidation(
         string $behavior,
         array $attrParams,
@@ -115,7 +117,7 @@ class ValidatorTest extends TestCase
     ) {
         $this->uniqueAttributeValidator->method('isValid')->willReturn($uniqueAttributeValidatorResult);
         $this->context->method('getMultipleValueSeparator')->willReturn(Product::PSEUDO_MULTI_LINE_SEPARATOR);
-        $this->context->expects($this->any())->method('getBehavior')->willReturn($behavior);
+        $this->context->method('getBehavior')->willReturn($behavior);
         $result = $this->validator->isAttributeValid(
             $attrCode,
             $attrParams,

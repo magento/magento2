@@ -58,6 +58,7 @@ class Orders implements ResolverInterface
                 'id' => $order->getId(),
                 'increment_id' => $order->getIncrementId(),
                 'order_number' => $order->getIncrementId(),
+                'number' => $order->getIncrementId(),
                 'created_at' => $order->getCreatedAt(),
                 'grand_total' => $order->getGrandTotal(),
                 'status' => $order->getStatus(),

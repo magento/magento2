@@ -719,7 +719,7 @@ abstract class AbstractEntity implements EntityInterface
                 break;
             case 'decimal':
                 $value = trim($rowData[$attributeCode]);
-                $valid = (double)$value == $value && is_numeric($value);
+                $valid = (float)$value == $value && is_numeric($value);
                 $message = self::ERROR_INVALID_ATTRIBUTE_TYPE;
                 break;
             case 'select':

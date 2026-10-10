@@ -12,6 +12,8 @@
             <argument name="productName" type="string"/>
         </arguments>
         <waitForPageLoad stepKey="waitForGridToAppear"/>
+        <scrollTo selector="{{AdminCreateNewReviewSection.filterProductName}}" stepKey="scrollToProductNameFilter"/>
+        <waitForElementVisible selector="{{AdminCreateNewReviewSection.filterProductName}}" stepKey="waitForProductNameFilterVisible"/>
         <fillField userInput="{{productName}}" selector="{{AdminCreateNewReviewSection.filterProductName}}" stepKey="searchReview"/>
         <click selector="{{AdminCreateNewReviewSection.searchButton}}" stepKey="startSearch"/>
         <waitForPageLoad stepKey="waitForResults"/>

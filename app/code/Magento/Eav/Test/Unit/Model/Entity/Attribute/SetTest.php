@@ -16,6 +16,7 @@ use Magento\Eav\Model\Entity\AttributeFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class SetTest extends TestCase
 {
@@ -46,8 +47,8 @@ class SetTest extends TestCase
     /**
      * @param string $attributeSetName
      * @param string $exceptionMessage
-     * @dataProvider invalidAttributeSetDataProvider
      */
+    #[DataProvider('invalidAttributeSetDataProvider')]
     public function testValidateWithExistingName($attributeSetName, $exceptionMessage)
     {
         $this->_model->getResource()->expects($this->any())->method('validate')->willReturn(false);

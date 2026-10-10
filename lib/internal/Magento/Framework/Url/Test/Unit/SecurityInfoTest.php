@@ -10,6 +10,7 @@ namespace Magento\Framework\Url\Test\Unit;
 use Magento\Framework\Url\SecurityInfo;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class SecurityInfoTest extends TestCase
 {
@@ -30,9 +31,8 @@ class SecurityInfoTest extends TestCase
 
     /**
      * @param string $url
-     * @param bool $expected
-     * @dataProvider secureUrlDataProvider
-     */
+     * @param bool $expected     */
+    #[DataProvider('secureUrlDataProvider')]
     public function testIsSecureChecksIfUrlIsInSecureList($url, $expected)
     {
         $this->assertEquals($expected, $this->_model->isSecure($url));

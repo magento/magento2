@@ -103,7 +103,7 @@ class FlagTest extends TestCase
         $contextMock->expects($this->once())
             ->method('getEventDispatcher')
             ->willReturn($eventManagerMock);
-        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $connectionMock = $this->createMock(AdapterInterface::class);
         $connectionMock->expects($this->any())
             ->method('beginTransaction')
             ->willReturnSelf();

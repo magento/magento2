@@ -434,6 +434,7 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected function _getConditionFullName($conditionName)
     {
+        $conditionName = $conditionName ?? '';
         if (!isset($this->_conditionFullNames[$conditionName])) {
             $name = $this->carrierTablerate->getCode('condition_name_short', $conditionName);
             $this->_conditionFullNames[$conditionName] = $name;

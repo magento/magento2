@@ -122,4 +122,18 @@ class UspsUrlTest extends TestCase
             ['http://shippingapis.com.foo.com/foo/bar?baz=bash&fizz=buzz'],
         ];
     }
+
+    /**
+     * Test for the case of invalid url
+     * @return void
+     */
+    public function testBeforeSaveWithInvalidUrl(): void
+    {
+        $this->url->expects($this->once())
+            ->method('isValid')
+            ->willReturn(false);
+
+        $this->expectException(ValidatorException::class);
+        $this->urlConfig->beforeSave();
+    }
 }

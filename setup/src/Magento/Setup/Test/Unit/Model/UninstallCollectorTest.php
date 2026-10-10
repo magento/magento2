@@ -33,16 +33,11 @@ class UninstallCollectorTest extends \PHPUnit\Framework\TestCase
 
         $objectManagerProvider = $this->createMock(\Magento\Setup\Model\ObjectManagerProvider::class);
         $objectManager =
-            $this->getMockForAbstractClass(\Magento\Framework\ObjectManagerInterface::class, [], '', false);
+            $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $objectManagerProvider->expects($this->once())->method('get')->willReturn($objectManager);
 
         $setup = $this->createMock(\Magento\Setup\Module\DataSetup::class);
-        $this->adapterInterface = $this->getMockForAbstractClass(
-            \Magento\Framework\DB\Adapter\AdapterInterface::class,
-            [],
-            '',
-            false
-        );
+        $this->adapterInterface = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
         $select = $this->createPartialMock(\Magento\Framework\DB\Select::class, ['from']);
         $this->adapterInterface->expects($this->once())->method('select')->willReturn($select);
         $setup->expects($this->exactly(2))->method('getConnection')->willReturn($this->adapterInterface);

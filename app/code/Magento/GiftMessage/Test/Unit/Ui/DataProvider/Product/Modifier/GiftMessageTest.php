@@ -98,7 +98,7 @@ class GiftMessageTest extends AbstractModifierTestCase
 
     public function testModifyDataUsesConfigurationValuesForNewProduct()
     {
-        $productId = null;
+        $productId = '';
         $configValue = 1;
         $this->scopeConfigMock->expects($this->any())
             ->method('getValue')

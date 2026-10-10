@@ -58,10 +58,9 @@ class FaviconTest extends TestCase
     {
         $storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->getMock();
-        $this->store = $this->getMockBuilder(
+        $this->store = $this->createMock(
             Store::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        );
         $storeManager->expects($this->any())
             ->method('getStore')
             ->willReturn($this->store);
@@ -69,12 +68,8 @@ class FaviconTest extends TestCase
         $this->scopeManager = $this->getMockBuilder(
             ScopeConfigInterface::class
         )->getMock();
-        $this->fileStorageDatabase = $this->getMockBuilder(Database::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $filesystem = $this->getMockBuilder(Filesystem::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->fileStorageDatabase = $this->createMock(Database::class);
+        $filesystem = $this->createMock(Filesystem::class);
         $this->mediaDir = $this->getMockBuilder(
             ReadInterface::class
         )->getMock();

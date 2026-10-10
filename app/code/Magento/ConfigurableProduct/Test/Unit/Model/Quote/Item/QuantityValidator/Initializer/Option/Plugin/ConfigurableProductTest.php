@@ -8,15 +8,18 @@ declare(strict_types=1);
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Quote\Item\QuantityValidator\Initializer\Option\Plugin;
 
 use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\CatalogInventory\Model\Stock\Item as StockItem;
 use Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\Option;
-use Magento\CatalogInventory\Test\Unit\Helper\ItemTestHelper;
 use Magento\ConfigurableProduct\Model\Quote\Item\QuantityValidator\Initializer\Option\Plugin\ConfigurableProduct
     as InitializerOptionPlugin;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Quote\Model\Quote\Item;
 use PHPUnit\Framework\TestCase;
 
 class ConfigurableProductTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @param array $data
      */
@@ -35,7 +38,7 @@ class ConfigurableProductTest extends TestCase
             ->method('getProductType')
             ->willReturn($data['product_type']);
 
-        $stockItemMock = new ItemTestHelper();
+        $stockItemMock = $this->createPartialMockWithReflection(StockItem::class, ['setProductName']);
 
         $optionMock = $this->createPartialMock(
             \Magento\Quote\Model\Quote\Item\Option::class,

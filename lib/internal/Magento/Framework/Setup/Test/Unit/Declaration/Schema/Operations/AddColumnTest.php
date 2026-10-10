@@ -81,8 +81,7 @@ class AddColumnTest extends TestCase
         $this->definitionAggregatorMock = $this->getMockBuilder(DefinitionAggregator::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->dbSchemaWriterMock = $this->getMockBuilder(DbSchemaWriterInterface::class)
-            ->getMockForAbstractClass();
+        $this->dbSchemaWriterMock = $this->createMock(DbSchemaWriterInterface::class);
         $this->elementFactoryMock = $this->getMockBuilder(ElementFactory::class)
             ->disableOriginalConstructor()
             ->getMock();

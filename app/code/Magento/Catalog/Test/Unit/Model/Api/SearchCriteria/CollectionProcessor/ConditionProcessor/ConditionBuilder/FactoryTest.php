@@ -46,23 +46,13 @@ class FactoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->productResourceMock = $this->getMockBuilder(ProductResource::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getEntityTable'])
-            ->getMock();
+        $this->productResourceMock = $this->createPartialMock(ProductResource::class, ['getEntityTable']);
 
-        $this->eavConfigMock = $this->getMockBuilder(EavConfig::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getAttribute'])
-            ->getMock();
+        $this->eavConfigMock = $this->createPartialMock(EavConfig::class, ['getAttribute']);
 
-        $this->eavAttrConditionBuilderMock = $this->getMockBuilder(CustomConditionInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->eavAttrConditionBuilderMock = $this->createMock(CustomConditionInterface::class);
 
-        $this->nativeAttrConditionBuilderMock = $this->getMockBuilder(CustomConditionInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->nativeAttrConditionBuilderMock = $this->createMock(CustomConditionInterface::class);
 
         $objectManagerHelper = new ObjectManager($this);
 
@@ -83,19 +73,13 @@ class FactoryTest extends TestCase
         $attributeTable = 'my-table';
         $productResourceTable = 'my-table';
 
-        $filterMock = $this->getMockBuilder(Filter::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getField'])
-            ->getMock();
+        $filterMock = $this->createPartialMock(Filter::class, ['getField']);
 
         $filterMock
             ->method('getField')
             ->willReturn($fieldName);
 
-        $attributeMock = $this->getMockBuilder(Attribute::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getBackendTable'])
-            ->getMock();
+        $attributeMock = $this->createPartialMock(Attribute::class, ['getBackendTable']);
 
         $this->eavConfigMock
             ->method('getAttribute')
@@ -122,19 +106,13 @@ class FactoryTest extends TestCase
         $attributeTable = 'my-table';
         $productResourceTable = 'not-my-table';
 
-        $filterMock = $this->getMockBuilder(Filter::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getField'])
-            ->getMock();
+        $filterMock = $this->createPartialMock(Filter::class, ['getField']);
 
         $filterMock
             ->method('getField')
             ->willReturn($fieldName);
 
-        $attributeMock = $this->getMockBuilder(Attribute::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getBackendTable'])
-            ->getMock();
+        $attributeMock = $this->createPartialMock(Attribute::class, ['getBackendTable']);
 
         $this->eavConfigMock
             ->method('getAttribute')

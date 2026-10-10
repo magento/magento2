@@ -33,7 +33,7 @@ class FactoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
@@ -47,7 +47,7 @@ class FactoryTest extends TestCase
         $quantity = 2.2;
         $className = PriceInterface::class;
         $priceMock = $this->createMock($className);
-        $saleableItem = $this->getMockForAbstractClass(SaleableInterface::class);
+        $saleableItem = $this->createMock(SaleableInterface::class);
         $arguments = [];
 
         $argumentsResult = array_merge($arguments, ['saleableItem' => $saleableItem, 'quantity' => $quantity]);
@@ -76,7 +76,7 @@ class FactoryTest extends TestCase
         $priceMock = $this->getMockBuilder($className)
             ->disableOriginalConstructor()
             ->getMock();
-        $saleableItem = $this->getMockForAbstractClass(SaleableInterface::class);
+        $saleableItem = $this->createMock(SaleableInterface::class);
         $arguments = [];
 
         $argumentsResult = array_merge($arguments, ['saleableItem' => $saleableItem, 'quantity' => $quantity]);

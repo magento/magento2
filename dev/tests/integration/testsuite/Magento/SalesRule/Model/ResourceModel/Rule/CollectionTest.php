@@ -9,6 +9,7 @@ use Magento\Config\Model\Config\Backend\Admin\Custom as AdminBackendConfig;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -41,11 +42,11 @@ class CollectionTest extends TestCase
     /**
      * @magentoDataFixture Magento/SalesRule/_files/rules.php
      * @magentoDataFixture Magento/SalesRule/_files/coupons.php
-     * @dataProvider setValidationFilterDataProvider()
      * @param string $couponCode
      * @param array $expectedItems
      * @magentoDbIsolation disabled
      */
+    #[DataProvider('setValidationFilterDataProvider')]
     public function testSetValidationFilter($couponCode, $expectedItems)
     {
         /** @var \Magento\SalesRule\Model\Rule[] $items */
@@ -264,10 +265,10 @@ class CollectionTest extends TestCase
     /**
      * @magentoAppIsolation disabled
      * @magentoDataFixture Magento/SalesRule/_files/multi_websites_rules.php
-     * @dataProvider addWebsiteFilterDataProvider
      * @param string[] $websiteCodes
      * @param int $count
      */
+    #[DataProvider('addWebsiteFilterDataProvider')]
     public function testAddWebsiteFilter(array $websiteCodes, int $count)
     {
         $websiteRepository = Bootstrap::getObjectManager()->get(WebsiteRepositoryInterface::class);

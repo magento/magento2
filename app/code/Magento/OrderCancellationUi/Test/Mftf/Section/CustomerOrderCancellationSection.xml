@@ -17,5 +17,6 @@
         <element name="messageAtTheTop" type="text" selector=".messages .message-error" />
         <element name="loadingMask" type="text" selector=".loading-mask" />
         <element name="linkToOpenViewOrder" type="button" selector=".actions .action.view" />
+        <element name="closeModalButton" type="button" selector="//aside[contains(@class, '_show')]//button[contains(@class, 'close-modal-button')]"/>
     </section>
 </sections>

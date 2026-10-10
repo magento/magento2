@@ -16,6 +16,7 @@ use Magento\Ui\Api\Data\BookmarkInterface;
 use Magento\Ui\Api\Data\BookmarkInterfaceFactory;
 use Magento\Ui\Api\Data\BookmarkSearchResultsInterface;
 use Magento\Ui\Api\Data\BookmarkSearchResultsInterfaceFactory;
+use Magento\Ui\Model\Bookmark as BookmarkModel;
 use Magento\Ui\Model\ResourceModel\Bookmark;
 use Magento\Ui\Model\ResourceModel\Bookmark\Collection;
 use Magento\Ui\Model\ResourceModel\BookmarkRepository;
@@ -57,29 +58,26 @@ class BookmarkRepositoryTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->bookmarkMock = $this->getMockBuilder(\Magento\Ui\Model\Bookmark::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $bookmarkFactoryMock = $this->getMockBuilder(BookmarkInterfaceFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
+        $this->bookmarkMock = $this->createMock(BookmarkModel::class);
+        $bookmarkFactoryMock = $this->createPartialMock(
+            BookmarkInterfaceFactory::class,
+            ['create']
+        );
         /** @var BookmarkInterfaceFactory $bookmarkFactoryMock */
         $bookmarkFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->bookmarkMock);
-        $this->bookmarkResourceMock = $this->getMockBuilder(Bookmark::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['load', 'save', 'delete'])
-            ->getMock();
+        $this->bookmarkResourceMock = $this->createPartialMock(
+            Bookmark::class,
+            ['load', 'save', 'delete']
+        );
 
-        $this->searchResultsMock = $this->getMockBuilder(BookmarkSearchResultsInterface::class)
-            ->getMockForAbstractClass();
+        $this->searchResultsMock = $this->createMock(BookmarkSearchResultsInterface::class);
         /** @var $searchResultsFactoryMock \Magento\Ui\Api\Data\BookmarkSearchResultsInterfaceFactory */
-        $searchResultsFactoryMock = $this->getMockBuilder(
-            BookmarkSearchResultsInterfaceFactory::class
-        )->disableOriginalConstructor()
-            ->onlyMethods(['create'])->getMock();
+        $searchResultsFactoryMock = $this->createPartialMock(
+            BookmarkSearchResultsInterfaceFactory::class,
+            ['create']
+        );
         $searchResultsFactoryMock->expects($this->any())->method('create')->willReturn($this->searchResultsMock);
         $this->collectionProcessor = $this->createMock(
             CollectionProcessorInterface::class
@@ -175,17 +173,14 @@ class BookmarkRepositoryTest extends TestCase
             ->method('load')
             ->with($this->bookmarkMock, $bookmarkId)
             ->willReturn($this->bookmarkMock);
-        $collection = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $collection = $this->createMock(Collection::class);
         $collection->expects($this->once())
             ->method('getItems')
             ->willReturn([$this->bookmarkMock]);
         $this->bookmarkMock->expects($this->once())
             ->method('getCollection')
             ->willReturn($collection);
-        $searchCriteria = $this->getMockBuilder(SearchCriteriaInterface::class)
-            ->getMockForAbstractClass();
+        $searchCriteria = $this->createMock(SearchCriteriaInterface::class);
         $this->assertEquals($this->searchResultsMock, $this->bookmarkRepository->getList($searchCriteria));
     }
 

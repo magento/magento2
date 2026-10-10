@@ -9,17 +9,18 @@ namespace Magento\Quote\Test\Unit\Model\Quote;
 
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\CouponManagement;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\Quote\Test\Unit\Helper\QuoteTestHelper;
-use Magento\Quote\Test\Unit\Helper\QuoteAddressTestHelper;
 
 class CouponManagementTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var CartRepositoryInterface|MockObject
      */
@@ -48,13 +49,13 @@ class CouponManagementTest extends TestCase
         $cartId = 1;
         $couponCode = ' code ';
 
-        $shippingAddress = $this->createPartialMock(
-            QuoteAddressTestHelper::class,
+        $shippingAddress = $this->createPartialMockWithReflection(
+            Address::class,
             ['setCollectShippingRates']
         );
         $shippingAddress->expects($this->once())->method('setCollectShippingRates')->with(true);
-        $quote = $this->createPartialMock(
-            QuoteTestHelper::class,
+        $quote = $this->createPartialMockWithReflection(
+            Quote::class,
             [
                 'getItemsCount',
                 'getStoreId',
@@ -90,8 +91,8 @@ class CouponManagementTest extends TestCase
         $this->expectException(NoSuchEntityException::class);
         $this->expectExceptionMessage('The "' . $cartId . '" Cart doesn\'t contain products.');
 
-        $quote = $this->createPartialMock(
-            QuoteTestHelper::class,
+        $quote = $this->createPartialMockWithReflection(
+            Quote::class,
             [
                 'getItemsCount',
                 'getStoreId',
@@ -121,8 +122,8 @@ class CouponManagementTest extends TestCase
         $this->expectException(NoSuchEntityException::class);
         $this->expectExceptionMessage('Cart isn\'t assigned to correct store');
 
-        $quote = $this->createPartialMock(
-            QuoteTestHelper::class,
+        $quote = $this->createPartialMockWithReflection(
+            Quote::class,
             [
                 'getItemsCount',
                 'getStoreId',
@@ -153,15 +154,15 @@ class CouponManagementTest extends TestCase
         $this->expectException(CouldNotSaveException::class);
         $this->expectExceptionMessage("The coupon code couldn't be applied. Verify the coupon code and try again.");
 
-        $shippingAddress = $this->createPartialMock(
-            QuoteAddressTestHelper::class,
+        $shippingAddress = $this->createPartialMockWithReflection(
+            Address::class,
             [
                 'setCollectShippingRates'
             ]
         );
         $shippingAddress->expects($this->once())->method('setCollectShippingRates')->with(true);
-        $quote = $this->createPartialMock(
-            QuoteTestHelper::class,
+        $quote = $this->createPartialMockWithReflection(
+            Quote::class,
             [
                 'getItemsCount',
                 'getStoreId',
@@ -198,8 +199,8 @@ class CouponManagementTest extends TestCase
 
         $shippingAddress = $this->getShippingAddressMock();
         $shippingAddress->expects($this->once())->method('setCollectShippingRates')->with(true);
-        $quote = $this->createPartialMock(
-            QuoteTestHelper::class,
+        $quote = $this->createPartialMockWithReflection(
+            Quote::class,
             [
                 'getItemsCount',
                 'getStoreId',
@@ -227,8 +228,8 @@ class CouponManagementTest extends TestCase
      */
     private function getShippingAddressMock(): MockObject
     {
-        return $this->createPartialMock(
-            QuoteAddressTestHelper::class,
+        return $this->createPartialMockWithReflection(
+            Address::class,
             [
                 'setCollectShippingRates'
             ]

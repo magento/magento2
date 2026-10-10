@@ -25,6 +25,7 @@ use Magento\Framework\Setup\Declaration\Schema\Dto\Table;
 use Magento\Framework\Setup\Declaration\Schema\Sharding;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for SchemaBuilder.
@@ -307,12 +308,11 @@ class SchemaBuilderTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider tablesProvider
-     * @param array $tablesData
+    /**     * @param array $tablesData
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @throws LocalizedException
      */
+    #[DataProvider('tablesProvider')]
     public function testBuild(array $tablesData)
     {
         $table = $this->createTable('first_table');

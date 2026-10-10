@@ -80,8 +80,6 @@ class ImagesGenerator
         }
         $mediaDirectory->writeFile($imagePath, stream_get_contents($memory, -1, 0));
         fclose($memory);
-        imagedestroy($image);
-        // phpcs:enable
 
         return $imagePath;
     }

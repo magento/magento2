@@ -19,6 +19,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ValidatorResultMergerTest extends TestCase
 {
+
     /**
      * @var ValidatorResultMerger
      */
@@ -61,9 +62,9 @@ class ValidatorResultMergerTest extends TestCase
      */
     public function testMerge(): void
     {
-        $validatorResultMock = $this->getMockForAbstractClass(ValidatorResultInterface::class);
-        $orderValidationResultMock = $this->getMockForAbstractClass(ValidatorResultInterface::class);
-        $creditmemoValidationResultMock = $this->getMockForAbstractClass(ValidatorResultInterface::class);
+        $validatorResultMock = $this->createMock(ValidatorResultInterface::class);
+        $orderValidationResultMock = $this->createMock(ValidatorResultInterface::class);
+        $creditmemoValidationResultMock = $this->createMock(ValidatorResultInterface::class);
         $itemsValidationMessages = [['test04', 'test05'], ['test06']];
         $this->validatorResultFactoryMock->expects($this->once())->method('create')
             ->willReturn($validatorResultMock);

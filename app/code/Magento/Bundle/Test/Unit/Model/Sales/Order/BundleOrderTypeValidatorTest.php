@@ -13,16 +13,17 @@ use Magento\Sales\Model\Order\Item;
 use Laminas\Uri\Http as HttpUri;
 use Magento\Bundle\Model\Sales\Order\BundleOrderTypeValidator;
 use Magento\Catalog\Model\Product;
-use Magento\Catalog\Test\Unit\Helper\ProductTestHelper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\Webapi\Request;
 use Magento\Sales\Model\Order\Shipment;
-use Magento\Sales\Test\Unit\Helper\ItemTestHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\Catalog\Model\Product\Type;
 
 class BundleOrderTypeValidatorTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Request|Request&MockObject|MockObject
      */
@@ -53,12 +54,15 @@ class BundleOrderTypeValidatorTest extends TestCase
      */
     public function testIsValidSuccessShipmentTypeTogether(): void
     {
-        $bundleProduct = new ProductTestHelper();
-        $bundleProduct->setShipmentType(BundleOrderTypeValidator::SHIPMENT_TYPE_TOGETHER);
+        $bundleProduct = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getShipmentType', 'setShipmentType']
+        );
+        $bundleProduct->method('getShipmentType')->willReturn(BundleOrderTypeValidator::SHIPMENT_TYPE_TOGETHER);
 
         $bundleOrderItem = $this->getBundleOrderItemMock();
-        $bundleOrderItem->setProductType(Type::TYPE_BUNDLE);
-        $bundleOrderItem->setProduct($bundleProduct);
+        $bundleOrderItem->method('getProductType')->willReturn(Type::TYPE_BUNDLE);
+        $bundleOrderItem->method('getProduct')->willReturn($bundleProduct);
 
         $order = $this->createMock(Order::class);
         $order->expects($this->once())
@@ -84,12 +88,15 @@ class BundleOrderTypeValidatorTest extends TestCase
 
     public function testIsValidSuccessShipmentTypeSeparately()
     {
-        $bundleProduct = new ProductTestHelper();
-        $bundleProduct->setShipmentType(BundleOrderTypeValidator::SHIPMENT_TYPE_SEPARATELY);
+        $bundleProduct = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getShipmentType', 'setShipmentType']
+        );
+        $bundleProduct->method('getShipmentType')->willReturn(BundleOrderTypeValidator::SHIPMENT_TYPE_SEPARATELY);
 
         $bundleOrderItem = $this->getBundleOrderItemMock();
-        $bundleOrderItem->setProductType(Type::TYPE_BUNDLE);
-        $bundleOrderItem->setProduct($bundleProduct);
+        $bundleOrderItem->method('getProductType')->willReturn(Type::TYPE_BUNDLE);
+        $bundleOrderItem->method('getProduct')->willReturn($bundleProduct);
 
         $childOrderItem = $this->createMock(Item::class);
         $childOrderItem->method('getParentItemId')->willReturn(1);
@@ -125,13 +132,16 @@ class BundleOrderTypeValidatorTest extends TestCase
      */
     public function testIsValidFailSeparateShipmentType(): void
     {
-        $bundleProduct = new ProductTestHelper();
-        $bundleProduct->setShipmentType(BundleOrderTypeValidator::SHIPMENT_TYPE_SEPARATELY);
+        $bundleProduct = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getShipmentType', 'setShipmentType']
+        );
+        $bundleProduct->method('getShipmentType')->willReturn(BundleOrderTypeValidator::SHIPMENT_TYPE_SEPARATELY);
 
         $bundleOrderItem = $this->getBundleOrderItemMock();
-        $bundleOrderItem->setProductType(Type::TYPE_BUNDLE);
-        $bundleOrderItem->setProduct($bundleProduct);
-        $bundleOrderItem->setSku('sku');
+        $bundleOrderItem->method('getProductType')->willReturn(Type::TYPE_BUNDLE);
+        $bundleOrderItem->method('getProduct')->willReturn($bundleProduct);
+        $bundleOrderItem->method('getSku')->willReturn('sku');
 
         $childOrderItem = $this->createMock(Item::class);
         $childOrderItem->method('getParentItemId')->willReturn(1);
@@ -168,13 +178,16 @@ class BundleOrderTypeValidatorTest extends TestCase
      */
     public function testIsValidFailTogetherShipmentType(): void
     {
-        $bundleProduct = new ProductTestHelper();
-        $bundleProduct->setShipmentType(BundleOrderTypeValidator::SHIPMENT_TYPE_TOGETHER);
+        $bundleProduct = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getShipmentType', 'setShipmentType']
+        );
+        $bundleProduct->method('getShipmentType')->willReturn(BundleOrderTypeValidator::SHIPMENT_TYPE_TOGETHER);
 
         $bundleOrderItem = $this->getBundleOrderItemMock();
-        $bundleOrderItem->setProductType(Type::TYPE_BUNDLE);
-        $bundleOrderItem->setProduct($bundleProduct);
-        $bundleOrderItem->setSku('sku');
+        $bundleOrderItem->method('getProductType')->willReturn(Type::TYPE_BUNDLE);
+        $bundleOrderItem->method('getProduct')->willReturn($bundleProduct);
+        $bundleOrderItem->method('getSku')->willReturn('sku');
 
         $bundleShipmentItem = $this->createMock(ShipmentItemInterface::class);
         $bundleShipmentItem->method('getOrderItemId')->willReturn(1);
@@ -213,10 +226,13 @@ class BundleOrderTypeValidatorTest extends TestCase
     }
 
     /**
-     * @return ItemTestHelper
+     * @return Item|MockObject
      */
-    private function getBundleOrderItemMock(): ItemTestHelper
+    private function getBundleOrderItemMock()
     {
-        return new ItemTestHelper();
+        return $this->createPartialMockWithReflection(
+            Item::class,
+            ['getProductType', 'setProductType', 'getProduct', 'setProduct', 'getSku', 'setSku']
+        );
     }
 }

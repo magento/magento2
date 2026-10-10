@@ -228,7 +228,7 @@ class ScopeOverriddenValue
     private function getAttributesValues(string $entityType, DataObject $entity): array
     {
         $metadata = $this->metadataPool->getMetadata($entityType);
-        $entityId = $entity->getData($metadata->getLinkField());
+        $entityId = $entity->getData($metadata->getLinkField()) ?? '';
         return $this->attributesValues[$entityType][$entityId] ?? [];
     }
 
@@ -244,7 +244,7 @@ class ScopeOverriddenValue
     private function setAttributesValues(string $entityType, DataObject $entity, array $values): void
     {
         $metadata = $this->metadataPool->getMetadata($entityType);
-        $entityId = $entity->getData($metadata->getLinkField());
+        $entityId = $entity->getData($metadata->getLinkField()) ?? '';
         $this->attributesValues[$entityType][$entityId] = $values;
     }
 }

@@ -15,9 +15,12 @@ use Magento\Framework\Mview\View\StateInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class DataTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Data
      */
@@ -56,7 +59,7 @@ class DataTest extends TestCase
     protected function setUp(): void
     {
         $this->reader = $this->createPartialMock(Reader::class, ['read']);
-        $this->cache = $this->getMockForAbstractClass(
+        $this->cache = $this->createMock(
             CacheInterface::class,
             [],
             '',
@@ -65,7 +68,7 @@ class DataTest extends TestCase
             true,
             ['test', 'load', 'save']
         );
-        $this->stateCollection = $this->getMockForAbstractClass(
+        $this->stateCollection = $this->createMock(
             CollectionInterface::class,
             [],
             '',
@@ -75,7 +78,7 @@ class DataTest extends TestCase
             ['getItems']
         );
 
-        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
     }
 
     public function testConstructorWithCache()
@@ -107,17 +110,19 @@ class DataTest extends TestCase
 
         $this->reader->expects($this->once())->method('read')->willReturn($this->views);
 
-        $stateExistent = $this->getMockBuilder(StateInterface::class)
-            ->addMethods(['__wakeup'])
-            ->onlyMethods(['getViewId', 'delete'])
-            ->getMockForAbstractClass();
+        $stateExistent = $this->createPartialMockWithReflection(
+            StateInterface::class,
+            ['__wakeup', 'loadByView', 'save', 'delete', 'getViewId', 'getMode', 'setMode', 
+             'getStatus', 'setStatus', 'getVersionId', 'setVersionId', 'getUpdated', 'setUpdated']
+        );
         $stateExistent->expects($this->once())->method('getViewId')->willReturn('view1');
         $stateExistent->expects($this->never())->method('delete');
 
-        $stateNonexistent = $this->getMockBuilder(StateInterface::class)
-            ->addMethods(['__wakeup'])
-            ->onlyMethods(['getViewId', 'delete'])
-            ->getMockForAbstractClass();
+        $stateNonexistent = $this->createPartialMockWithReflection(
+            StateInterface::class,
+            ['__wakeup', 'loadByView', 'save', 'delete', 'getViewId', 'getMode', 'setMode',
+             'getStatus', 'setStatus', 'getVersionId', 'setVersionId', 'getUpdated', 'setUpdated']
+        );
         $stateNonexistent->expects($this->once())->method('getViewId')->willReturn('view2');
         $stateNonexistent->expects($this->once())->method('delete');
 

@@ -52,8 +52,8 @@ class ConfigTest extends TestCase
     protected function setUp(): void
     {
         $this->_readerMock = $this->createMock(Reader::class);
-        $this->_cacheMock = $this->getMockForAbstractClass(CacheInterface::class);
-        $this->_configScopeMock = $this->getMockForAbstractClass(ScopeInterface::class);
+        $this->_cacheMock = $this->createMock(CacheInterface::class);
+        $this->_configScopeMock = $this->createMock(ScopeInterface::class);
         $this->_areaList = $this->createMock(AreaList::class);
         $this->_configScopeMock->expects($this->any())
             ->method('getCurrentScope')
@@ -68,7 +68,7 @@ class ConfigTest extends TestCase
                 'areaList' => $this->_areaList
             ]
         );
-        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
         $objectManager->setBackwardCompatibleProperty($this->_config, 'serializer', $this->serializerMock);
     }
 

@@ -131,7 +131,6 @@ class StoreManager implements \Magento\Store\Model\StoreManagerInterface
             $reflection = $reflection->getParentClass();
         }
         $dataProperty = $reflection->getProperty('data');
-        $dataProperty->setAccessible(true);
         $savedConfig = $dataProperty->getValue($testAppConfig);
 
         $this->decoratedStoreManager->reinitStores();

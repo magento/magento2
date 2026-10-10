@@ -18,6 +18,7 @@ use Magento\Framework\Setup\Declaration\Schema\Db\MySQL\DbSchemaWriter;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Factories\Table as DtoFactoriesTable;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class DbSchemaWriterTest extends TestCase
 {
@@ -71,8 +72,7 @@ class DbSchemaWriterTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->adapter = $this->getMockBuilder(AdapterInterface::class)
-            ->getMockForAbstractClass();
+        $this->adapter = $this->createMock(AdapterInterface::class);
         $this->resourceConnection->expects($this->any())
             ->method('getConnection')
             ->willReturn($this->adapter);
@@ -95,9 +95,8 @@ class DbSchemaWriterTest extends TestCase
      * @param string $dbVersion
      * @param int $numberOfQueries
      * @return void
-     *
-     * @dataProvider compileDataProvider
-     */
+     *     */
+    #[DataProvider('compileDataProvider')]
     public function testCompileWithColumnModificationAndFK(string $dbVersion, int $numberOfQueries) : void
     {
         $dryRun = false;
@@ -157,6 +156,9 @@ class DbSchemaWriterTest extends TestCase
         return [
             [SqlVersionProvider::MARIA_DB_10_4_VERSION, 2],
             [SqlVersionProvider::MARIA_DB_10_6_VERSION, 2],
+            [SqlVersionProvider::MARIA_DB_11_8_VERSION, 2],
+            [SqlVersionProvider::MARIA_DB_12_2_VERSION, 2],
+            [SqlVersionProvider::MARIA_DB_12_3_VERSION, 2],
             [SqlVersionProvider::MYSQL_8_0_VERSION, 1],
         ];
     }

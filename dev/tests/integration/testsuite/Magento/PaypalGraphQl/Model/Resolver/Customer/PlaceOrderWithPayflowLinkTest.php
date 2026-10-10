@@ -170,11 +170,11 @@ QUERY;
                             'BUTTONSOURCE' => $button,
                             'tender' => 'C',
                         ],
-                        $this->returnSelf()
+                        $this->payflowRequest
                     ]
                 ],
-                ['USER1', 1, $this->returnSelf()],
-                ['USER2', 'USER2SilentPostHash', $this->returnSelf()]
+                ['USER1', 1, $this->payflowRequest],
+                ['USER2', 'USER2SilentPostHash', $this->payflowRequest]
             );
 
         /** @var CustomerTokenServiceInterface $tokenService */

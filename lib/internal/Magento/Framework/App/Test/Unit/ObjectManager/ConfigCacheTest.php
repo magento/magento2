@@ -12,6 +12,7 @@ use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ConfigCacheTest extends TestCase
@@ -34,13 +35,13 @@ class ConfigCacheTest extends TestCase
     protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManager($this);
-        $this->cacheFrontendMock = $this->getMockForAbstractClass(FrontendInterface::class);
+        $this->cacheFrontendMock = $this->createMock(FrontendInterface::class);
         $this->configCache = $objectManagerHelper->getObject(
             ConfigCache::class,
             ['cacheFrontend' => $this->cacheFrontendMock]
         );
 
-        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
         $objectManagerHelper->setBackwardCompatibleProperty(
             $this->configCache,
             'serializer',
@@ -53,12 +54,9 @@ class ConfigCacheTest extends TestCase
         unset($this->configCache);
     }
 
-    /**
-     * @param $data
-     * @param $expectedResult
-     * @param $unserializeCalledNum
-     * @dataProvider getDataProvider
+    /**     * @param $unserializeCalledNum
      */
+    #[DataProvider('getDataProvider')]
     public function testGet($data, $expectedResult, $unserializeCalledNum = 1)
     {
         $key = 'key';

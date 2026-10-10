@@ -10,6 +10,7 @@ namespace Magento\Framework\Jwt\Test\Unit\Claim;
 
 use Magento\Framework\Jwt\Claim\AbstractClaim;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class AbstractClaimTest extends TestCase
 {
@@ -20,9 +21,8 @@ class AbstractClaimTest extends TestCase
      * @param string $expectedTime
      * @param string $expectedZone
      * @return void
-     *
-     * @dataProvider getDates
-     */
+     *     */
+    #[DataProvider('getDates')]
     public function testParseNumericDate(string $numericDate, string $expectedTime): void
     {
         $dt = AbstractClaim::parseNumericDate($numericDate);

@@ -12,6 +12,7 @@ use Magento\Framework\Unserialize\Unserialize;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test unserializer that does not unserialize objects.
@@ -53,9 +54,8 @@ class UnserializeTest extends TestCase
     }
 
     /**
-     * @param string $serialized The string containing serialized object
-     * @dataProvider unserializeObjectDataProvider
-     */
+     * @param string $serialized The string containing serialized object     */
+    #[DataProvider('unserializeObjectDataProvider')]
     public function testUnserializeObject($serialized)
     {
         $this->expectException('Exception');

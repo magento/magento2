@@ -14,6 +14,7 @@ use Magento\Framework\Setup\Declaration\Schema\Dto\Index as IndexDto;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for index (key) definition.
@@ -55,15 +56,14 @@ class IndexTest extends TestCase
      *
      * @dataProvider toDefinitionDataProvider()
      */
+    #[DataProvider('toDefinitionDataProvider')]
     public function testToDefinition($name, $type, $columns, $expectedExpression)
     {
         /** @var IndexDto|MockObject $index */
         $index = $this->getMockBuilder(IndexDto::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $adapterMock = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $adapterMock = $this->createMock(AdapterInterface::class);
         $this->resourceConnectionMock->expects($this->once())
             ->method('getConnection')
             ->willReturn($adapterMock);
@@ -125,6 +125,7 @@ class IndexTest extends TestCase
      * @param array $expectedDefinition
      * @dataProvider definitionDataProvider()
      */
+    #[DataProvider('definitionDataProvider')]
     public function testFromDefinition($definition, $expectedDefinition)
     {
         $result = $this->index->fromDefinition($definition);

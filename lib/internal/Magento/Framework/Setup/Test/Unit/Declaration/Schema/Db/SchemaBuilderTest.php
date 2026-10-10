@@ -25,6 +25,7 @@ use Magento\Framework\Setup\Declaration\Schema\Sharding;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -74,8 +75,7 @@ class SchemaBuilderTest extends TestCase
         $this->elementFactoryMock = $this->getMockBuilder(ElementFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->dbSchemaReaderMock = $this->getMockBuilder(DbSchemaReaderInterface::class)
-            ->getMockForAbstractClass();
+        $this->dbSchemaReaderMock = $this->createMock(DbSchemaReaderInterface::class);
         $this->shardingMock = $this->getMockBuilder(Sharding::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -285,13 +285,12 @@ class SchemaBuilderTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider dataProvider
-     * @param array $columns
+    /**     * @param array $columns
      * @param array $references
      * @param array $constraints
      * @param array $indexes
      */
+    #[DataProvider('dataProvider')]
     public function testBuild(array $columns, array $references, array $constraints, array $indexes)
     {
         $this->prepareSchemaMocks($columns, $references, $constraints, $indexes);
@@ -311,13 +310,12 @@ class SchemaBuilderTest extends TestCase
 
     /**
      * WARNING! The expected exception type may differ depending on PHPUnit version.
-     *
-     * @dataProvider dataProvider
-     * @param array $columns
+     *     * @param array $columns
      * @param array $references
      * @param array $constraints
      * @param array $indexes
      */
+    #[DataProvider('dataProvider')]
     public function testBuildUnknownIndexColumn(array $columns, array $references, array $constraints, array $indexes)
     {
         $indexes['second_table']['FIRST_INDEX']['column'][] = 'unknown_column';

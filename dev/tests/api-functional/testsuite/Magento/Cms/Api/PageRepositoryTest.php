@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Cms\Api;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Authorization\Model\Role;
 use Magento\Authorization\Model\RoleFactory;
 use Magento\Authorization\Model\Rules;
@@ -188,12 +189,12 @@ class PageRepositoryTest extends WebapiAbstract
     }
 
     /**
-     * @dataProvider byStoresProvider
      * @magentoApiDataFixture Magento/Cms/_files/pages.php
      * @magentoApiDataFixture Magento/Store/_files/second_website_with_store_group_and_store.php
      * @param string $requestStore
      * @return void
      */
+    #[DataProvider('byStoresProvider')]
     public function testGetByStores(string $requestStore): void
     {
         $newStoreId = $this->getStoreIdByRequestStore($requestStore);
@@ -248,11 +249,11 @@ class PageRepositoryTest extends WebapiAbstract
     }
 
     /**
-     * @dataProvider byStoresProvider
      * @magentoApiDataFixture Magento/Store/_files/second_website_with_store_group_and_store.php
      * @param string $requestStore
      * @return void
      */
+    #[DataProvider('byStoresProvider')]
     public function testCreateByStores(string $requestStore): void
     {
         $newStoreId = $this->getStoreIdByRequestStore($requestStore);
@@ -358,12 +359,12 @@ class PageRepositoryTest extends WebapiAbstract
     }
 
     /**
-     * @dataProvider byStoresProvider
      * @magentoApiDataFixture Magento/Cms/_files/pages.php
      * @magentoApiDataFixture Magento/Store/_files/second_website_with_store_group_and_store.php
      * @param string $requestStore
      * @return void
      */
+    #[DataProvider('byStoresProvider')]
     public function testUpdateByStores(string $requestStore): void
     {
         $newStoreId = $this->getStoreIdByRequestStore($requestStore);
@@ -416,12 +417,12 @@ class PageRepositoryTest extends WebapiAbstract
     }
 
     /**
-     * @dataProvider byStoresProvider
      * @magentoApiDataFixture Magento/Cms/_files/pages.php
      * @magentoApiDataFixture Magento/Store/_files/second_website_with_store_group_and_store.php
      * @param string $requestStore
      * @return void
      */
+    #[DataProvider('byStoresProvider')]
     public function testDeleteByStores(string $requestStore): void
     {
         $newStoreId = $this->getStoreIdByRequestStore($requestStore);

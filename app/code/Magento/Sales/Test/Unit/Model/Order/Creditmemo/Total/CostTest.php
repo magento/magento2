@@ -12,9 +12,12 @@ use Magento\Sales\Model\Order\Creditmemo\Item;
 use Magento\Sales\Model\Order\Creditmemo\Total\Cost;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class CostTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Cost
      */
@@ -32,16 +35,14 @@ class CostTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->creditmemoMock = $this->getMockBuilder(Creditmemo::class)
-            ->addMethods(['setBaseCost'])
-            ->onlyMethods(['getAllItems'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->creditmemoItemMock = $this->getMockBuilder(Item::class)
-            ->addMethods(['getHasChildren'])
-            ->onlyMethods(['getBaseCost', 'getQty'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->creditmemoMock = $this->createPartialMockWithReflection(
+            Creditmemo::class,
+            ['setBaseCost', 'getAllItems']
+        );
+        $this->creditmemoItemMock = $this->createPartialMockWithReflection(
+            Item::class,
+            ['getHasChildren', 'getBaseCost', 'getQty']
+        );
         $this->total = new Cost();
     }
 

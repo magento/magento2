@@ -5,6 +5,8 @@
  */
 namespace Magento\Persistent\Model;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 class SessionTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -61,8 +63,8 @@ class SessionTest extends \PHPUnit\Framework\TestCase
     /**
      * @param int $duration
      * @param string $cookieValue
-     * @dataProvider renewPersistentCookieDataProvider
      */
+    #[DataProvider('renewPersistentCookieDataProvider')]
     public function testRenewPersistentCookie($duration, $cookieValue = 'cookieValue')
     {
         $_COOKIE[Session::COOKIE_NAME] = $cookieValue;

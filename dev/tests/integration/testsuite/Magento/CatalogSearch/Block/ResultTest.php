@@ -13,6 +13,7 @@ use Magento\Framework\View\LayoutInterface;
 use Magento\Search\Model\QueryFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Search\ViewModel\ConfigProvider;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ResultTest extends \PHPUnit\Framework\TestCase
 {
@@ -60,13 +61,13 @@ class ResultTest extends \PHPUnit\Framework\TestCase
     /**
      * Verify search value escaping process
      *
-     * @dataProvider toEscapeSearchTextDataProvider
      * @magentoAppArea frontend
      * @param string $searchValue
      * @param string $expectedOutput
      * @param string $unexpectedOutput
      * @return void
      */
+    #[DataProvider('toEscapeSearchTextDataProvider')]
     public function testEscapeSearchText(string $searchValue, string $expectedOutput, string $unexpectedOutput): void
     {
         /** @var Result $searchResultBlock */

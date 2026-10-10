@@ -6,6 +6,8 @@
 
 namespace Magento\CheckoutAgreements\Model\Checkout\Plugin;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -86,9 +88,9 @@ class GuestValidationTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoDbIsolation enabled
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @dataProvider dataProvider
      * @param string[] $agreementNames
      */
+    #[DataProvider('dataProvider')]
     public function testBeforeSavePaymentInformationAndPlaceOrder($agreementNames)
     {
         $guestEmail = 'guest@example.com';

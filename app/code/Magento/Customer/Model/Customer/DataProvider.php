@@ -3,6 +3,8 @@
  * Copyright 2015 Adobe
  * All Rights Reserved.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Model\Customer;
 
 use Magento\Customer\Api\Data\AddressInterface;
@@ -14,12 +16,15 @@ use Magento\Customer\Model\FileProcessorFactory;
 use Magento\Customer\Model\ResourceModel\Address\Attribute\Source\CountryWithWebsites;
 use Magento\Customer\Model\ResourceModel\Customer\Collection;
 use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory as CustomerCollectionFactory;
+use Magento\Customer\Model\Config\Share;
+use Magento\Customer\Model\Customer\DataProviderWithDefaultAddresses;
 use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Eav\Model\Entity\Type;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Session\SessionManagerInterface;
+use Magento\Ui\DataProvider\AbstractDataProvider;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool;
 use Magento\Ui\Component\Form\Element\Multiline;
@@ -33,16 +38,17 @@ use Magento\Customer\Model\FileUploaderDataResolver;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  *
- * @deprecated 102.0.1 \Magento\Customer\Model\Customer\DataProviderWithDefaultAddresses is used instead
+ * @deprecated 102.0.1 Replaced by DataProviderWithDefaultAddresses.
+ * @see DataProviderWithDefaultAddresses
  * @api
  * @since 100.0.2
  */
-class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
+class DataProvider extends AbstractDataProvider
 {
     /**
      * Maximum file size allowed for file_uploader UI component
      */
-    const MAX_FILE_SIZE = 2097152;
+    public const MAX_FILE_SIZE = 2097152;
 
     /**
      * @var Collection
@@ -122,7 +128,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         'confirmation',
     ];
 
-    /*
+    /**
      * @var ContextInterface
      */
     private $context;
@@ -193,14 +199,15 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * Get session object
      *
      * @return SessionManagerInterface
-     * @deprecated 100.1.3
+     * @deprecated 100.1.3 Use constructor-injected SessionManagerInterface instead.
+     * @see SessionManagerInterface
      * @since 100.1.0
      */
     protected function getSession()
     {
         if ($this->session === null) {
             $this->session = ObjectManager::getInstance()->get(
-                \Magento\Framework\Session\SessionManagerInterface::class
+                SessionManagerInterface::class
             );
         }
         return $this->session;
@@ -238,12 +245,14 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 
                 $this->fileUploaderDataResolver->overrideFileUploaderData($address, $result['address'][$addressId]);
             }
-            $this->loadedData[$customer->getId()] = $result;
+            $customerId = $customer->getId() ?? '';
+            $this->loadedData[$customerId] = $result;
         }
 
         $data = $this->getSession()->getCustomerFormData();
         if (!empty($data)) {
             $customerId = isset($data['customer']['entity_id']) ? $data['customer']['entity_id'] : null;
+            $customerId = $customerId ?? '';
             $this->loadedData[$customerId] = $data;
             $this->getSession()->unsCustomerFormData();
         }
@@ -324,7 +333,8 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * Retrieve Country With Websites Source
      *
      * @return CountryWithWebsites
-     * @deprecated 101.0.0
+     * @deprecated 101.0.0 Use constructor-injected CountryWithWebsites instead.
+     * @see CountryWithWebsites
      */
     private function getCountryWithWebsiteSource()
     {
@@ -338,13 +348,14 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     /**
      * Retrieve Customer Config Share
      *
-     * @return \Magento\Customer\Model\Config\Share
-     * @deprecated 100.1.3
+     * @return Share
+     * @deprecated 100.1.3 Use constructor-injected Share config instead.
+     * @see Share
      */
     private function getShareConfig()
     {
         if (!$this->shareConfig) {
-            $this->shareConfig = ObjectManager::getInstance()->get(\Magento\Customer\Model\Config\Share::class);
+            $this->shareConfig = ObjectManager::getInstance()->get(Share::class);
         }
 
         return $this->shareConfig;

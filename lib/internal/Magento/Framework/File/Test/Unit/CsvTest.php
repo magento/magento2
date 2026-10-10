@@ -38,7 +38,6 @@ class CsvTest extends TestCase
         $expected = 4;
         $this->_model->setLineLength($expected);
         $lineLengthProperty = new \ReflectionProperty(Csv::class, '_lineLength');
-        $lineLengthProperty->setAccessible(true);
         $actual = $lineLengthProperty->getValue($this->_model);
         $this->assertEquals($expected, $actual);
     }

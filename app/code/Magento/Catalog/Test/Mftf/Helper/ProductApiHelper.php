@@ -116,7 +116,6 @@ class ProductApiHelper extends Helper
                 // Use reflection to access the private retrieveEntity method
                 $reflection = new \ReflectionClass($persistedHandler);
                 $retrieveEntityMethod = $reflection->getMethod('retrieveEntity');
-                $retrieveEntityMethod->setAccessible(true);
 
                 // Call the private method to get the actual DataPersistenceHandler object
                 $actualCategoryEntityObject = $retrieveEntityMethod->invoke(

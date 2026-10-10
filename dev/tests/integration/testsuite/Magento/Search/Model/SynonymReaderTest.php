@@ -5,6 +5,8 @@
  */
 namespace Magento\Search\Model;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 /**
  * @magentoDbIsolation disabled
  * @magentoDataFixture Magento/Search/_files/synonym_reader.php
@@ -85,8 +87,8 @@ class SynonymReaderTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $phrase
      * @param array $expectedResult
-     * @dataProvider loadByPhraseDataProvider
      */
+    #[DataProvider('loadByPhraseDataProvider')]
     public function testLoadByPhrase(string $phrase, array $expectedResult)
     {
         $data = $this->model->loadByPhrase($phrase)->getData();

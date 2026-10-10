@@ -14,8 +14,10 @@ use Magento\Framework\Data\Form\Element\Factory;
 use Magento\Framework\DataObject;
 use Magento\Framework\Escaper;
 use Magento\Framework\Math\Random;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -26,6 +28,8 @@ use PHPUnit\Framework\TestCase;
  */
 class DefaultSortbyTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var DefaultSortby
      */
@@ -95,11 +99,10 @@ class DefaultSortbyTest extends TestCase
         $this->randomMock = $this->createMock(Random::class);
         $this->randomMock->method('getRandomString')->willReturn('test123456');
         
-        $this->formMock = $this->getMockBuilder(Form::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getHtmlIdPrefix', 'getFieldNameSuffix', 'getHtmlIdSuffix'])
-            ->onlyMethods(['addSuffixToName'])
-            ->getMock();
+        $this->formMock = $this->createPartialMockWithReflection(
+            Form::class,
+            ['getHtmlIdPrefix', 'getFieldNameSuffix', 'getHtmlIdSuffix', 'addSuffixToName']
+        );
 
         $this->formMock->method('getHtmlIdPrefix')->willReturn('');
         $this->formMock->method('getFieldNameSuffix')->willReturn('');
@@ -238,8 +241,8 @@ class DefaultSortbyTest extends TestCase
      * @param string $htmlId
      * @param string $expectedId
      * @return void
-     * @dataProvider toggleCodeDataProvider
      */
+    #[DataProvider('toggleCodeDataProvider')]
     public function testGetToggleCodeWithDifferentIds(string $htmlId, string $expectedId): void
     {
         // Create new instance with specific html_id

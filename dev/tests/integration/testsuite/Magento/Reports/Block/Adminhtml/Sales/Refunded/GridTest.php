@@ -5,6 +5,8 @@
  */
 namespace Magento\Reports\Block\Adminhtml\Sales\Refunded;
 
+use PHPUnit\Framework\Attributes\Depends;
+
 /**
  * @magentoAppArea adminhtml
  */
@@ -46,9 +48,9 @@ class GridTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @depends testGetResourceCollectionNameNormal
      * @param  string $normalCollection
      */
+    #[Depends('testGetResourceCollectionNameNormal')]
     public function testGetResourceCollectionNameWithFilter($normalCollection)
     {
         $block = $this->_createBlock('created_at_refunded');

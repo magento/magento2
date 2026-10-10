@@ -32,7 +32,7 @@ class CompositeRequestTypeExtractorTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->extractorMock = $this->getMockForAbstractClass(
+        $this->extractorMock = $this->createMock(
             BackpressureRequestTypeExtractorInterface::class
         );
 

@@ -11,6 +11,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Eav\Model\Entity\Attribute\Exception;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -42,11 +43,11 @@ class AttributeFixedProductTaxTest extends TestCase
     }
 
     /**
-     * @dataProvider fPTProvider
      * @param array $data
      * @param array $expectedData
      * @return void
      */
+    #[DataProvider('fPTProvider')]
     public function testSaveProductWithFPTAttribute(array $data, array $expectedData): void
     {
         $product = $this->productRepository->get('simple2');

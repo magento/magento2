@@ -26,6 +26,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Quote\Model\GetQuoteByReservedOrderId;
 use Magento\TestFramework\TestCase\AbstractBackendController;
 use Magento\Wishlist\Model\Wishlist;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class checks create order load block controller.
@@ -94,14 +95,13 @@ class LoadBlockTest extends AbstractBackendController
     }
 
     /**
-     * @dataProvider responseFlagsProvider
-     *
      * @magentoDataFixture Magento/Checkout/_files/quote_with_customer_without_address.php
      *
      * @param bool $asJson
      * @param bool $asJsVarname
      * @return void
      */
+    #[DataProvider('responseFlagsProvider')]
     public function testAddProductToOrderFromShoppingCart(bool $asJson, bool $asJsVarname): void
     {
         $oldQuote = $this->getQuoteByReservedOrderId->execute('test_order_with_customer_without_address');

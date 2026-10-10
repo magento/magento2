@@ -39,7 +39,7 @@ class QueryModifierFactoryTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $this->inQueryModifierMock = $this->createMock(InQueryModifier::class);
     }
 

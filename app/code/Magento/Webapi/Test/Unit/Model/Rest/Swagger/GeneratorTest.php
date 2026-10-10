@@ -408,11 +408,9 @@ class GeneratorTest extends TestCase
     public function testGetObjectSchema($typeName, $description, $result)
     {
         $property = new \ReflectionProperty($this->generator, 'definitions');
-        $property->setAccessible(true);
         $property->setValue($this->generator, ['customer-data-customer-interface' => []]);
 
         $method = new \ReflectionMethod($this->generator, 'getObjectSchema');
-        $method->setAccessible(true);
         $actual = $method->invoke($this->generator, $typeName, $description);
 
         $this->assertSame(json_encode($result), json_encode($actual));
@@ -471,7 +469,6 @@ class GeneratorTest extends TestCase
             ->willReturnCallback($getTypeData);
 
         $method = new \ReflectionMethod($this->generator, 'generateDefinition');
-        $method->setAccessible(true);
         $actual = $method->invoke($this->generator, key($typeData));
 
         ksort($expected);
@@ -561,7 +558,6 @@ class GeneratorTest extends TestCase
     public function testGetDefinitionReference()
     {
         $method = new \ReflectionMethod($this->generator, 'getDefinitionReference');
-        $method->setAccessible(true);
         $actual = $method->invoke($this->generator, 'CustomerDataAddressInterface');
 
         $this->assertEquals('#/definitions/customer-data-address-interface', $actual);

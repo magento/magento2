@@ -15,6 +15,8 @@ use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Api\PaymentMethodManagementInterface;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 /**
  * Tests PayPal transparent response controller.
  */
@@ -31,8 +33,8 @@ class ResponseTest extends \Magento\TestFramework\TestCase\AbstractController
      *
      * @magentoConfigFixture current_store payment/payflowpro/active 1
      * @magentoDataFixture Magento/Sales/_files/quote.php
-     * @dataProvider paymentCcExpirationDateDataProvider
      */
+    #[DataProvider('paymentCcExpirationDateDataProvider')]
     public function testPaymentCcExpirationDate(
         string $currentDateTime,
         string $paypalExpDate,

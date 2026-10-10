@@ -13,6 +13,7 @@ use Magento\Framework\DB\Select\ColumnsRenderer;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ColumnsRendererTest extends TestCase
 {
@@ -65,9 +66,8 @@ class ColumnsRendererTest extends TestCase
     /**
      * @param array $columns
      * @param string $sql
-     * @param string $expectedResult
-     * @dataProvider renderDataProvider
-     */
+     * @param string $expectedResult     */
+    #[DataProvider('renderDataProvider')]
     public function testRender($columns, $sql, $expectedResult)
     {
         $mapValues = [

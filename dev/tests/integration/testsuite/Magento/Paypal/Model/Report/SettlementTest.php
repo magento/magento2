@@ -5,6 +5,8 @@
  */
 namespace Magento\Paypal\Model\Report;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 class SettlementTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -25,8 +27,8 @@ class SettlementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $config
-     * @dataProvider createConnectionExceptionDataProvider
      */
+    #[DataProvider('createConnectionExceptionDataProvider')]
     public function testCreateConnectionException($config)
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -38,8 +40,6 @@ class SettlementTest extends \PHPUnit\Framework\TestCase
      * @param array $automaticMode
      * @param array $expectedResult
      *
-     * @dataProvider createAutomaticModeDataProvider
-     *
      * @magentoConfigFixture default_store paypal/fetch_reports/active 0
      * @magentoConfigFixture default_store paypal/fetch_reports/ftp_ip 192.168.0.1
      * @magentoConfigFixture current_store paypal/fetch_reports/active 1
@@ -50,6 +50,7 @@ class SettlementTest extends \PHPUnit\Framework\TestCase
      * @magentoConfigFixture current_store paypal/fetch_reports/ftp_sandbox 0
      * @magentoDbIsolation enabled
      */
+    #[DataProvider('createAutomaticModeDataProvider')]
     public function testGetSftpCredentials($automaticMode, $expectedResult)
     {
         /** @var $model \Magento\Paypal\Model\Report\Settlement; */
@@ -65,7 +66,7 @@ class SettlementTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public static function createConnectionExceptionDataProvider()
+    public static function createConnectionExceptionDataProvider(): array
     {
         return [
             [[]],
@@ -79,7 +80,7 @@ class SettlementTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public static function createAutomaticModeDataProvider()
+    public static function createAutomaticModeDataProvider(): array
     {
         return [
             [

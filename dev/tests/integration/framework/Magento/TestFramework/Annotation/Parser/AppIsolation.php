@@ -24,7 +24,11 @@ class AppIsolation implements ParserInterface
      */
     public function parse(TestCase $test, string $scope): array
     {
-        $annotations = TestCaseAnnotation::getInstance()->getAnnotations($test);
+        try {
+            $annotations = TestCaseAnnotation::getInstance()->getAnnotations($test);
+        } catch (\Throwable $e) {
+            return [];
+        }
         $values = [];
 
         foreach ($annotations[$scope][self::ANNOTATION] ?? [] as $value) {

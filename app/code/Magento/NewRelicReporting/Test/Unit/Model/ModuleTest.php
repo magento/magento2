@@ -60,7 +60,6 @@ class ModuleTest extends TestCase
 
         $reflection = new ReflectionClass($module);
         $resourceNameProperty = $reflection->getProperty('_resourceName');
-        $resourceNameProperty->setAccessible(true);
         $this->assertEquals(
             ModuleResource::class,
             $resourceNameProperty->getValue($module)

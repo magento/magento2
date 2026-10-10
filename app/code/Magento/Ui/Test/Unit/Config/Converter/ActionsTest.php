@@ -10,6 +10,7 @@ namespace Magento\Ui\Test\Unit\Config\Converter;
 use Magento\Ui\Config\Converter\Actions;
 use Magento\Ui\Config\ConverterInterface;
 use Magento\Ui\Config\ConverterUtils;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -27,16 +28,15 @@ class ActionsTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->urlConverter = $this->getMockBuilder(ConverterInterface::class)
-            ->getMockForAbstractClass();
+        $this->urlConverter = $this->createMock(ConverterInterface::class);
         $this->converter = new Actions($this->urlConverter, new ConverterUtils());
     }
 
     /**
      * @param array $expectedResult
      * @param string $xpath
-     * @dataProvider convertDataProvider
      */
+    #[DataProvider('convertDataProvider')]
     public function testConvert(array $expectedResult, $xpath)
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');

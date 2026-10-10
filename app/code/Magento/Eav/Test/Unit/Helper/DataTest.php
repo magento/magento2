@@ -56,7 +56,7 @@ class DataTest extends TestCase
         $this->eavConfig = $this->createMock(\Magento\Eav\Model\Config::class);
         $this->context = $this->createPartialMock(Context::class, ['getScopeConfig']);
 
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->context->expects($this->once())->method('getScopeConfig')->willReturn($this->scopeConfigMock);
 
         $this->helper = $objectManager->getObject(

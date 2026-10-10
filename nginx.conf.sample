@@ -225,7 +225,6 @@ location ~ ^/(index|get|static|errors/report|errors/404|errors/503|health_check)
 }
 
 gzip on;
-gzip_disable "msie6";
 
 gzip_comp_level 6;
 gzip_min_length 1100;
@@ -242,6 +241,9 @@ gzip_types
     application/json
     application/xml
     application/xml+rss
+    application/manifest+json
+    application/vnd.ms-fontobject
+    font/opentype
     image/svg+xml;
 gzip_vary on;
 

@@ -51,28 +51,19 @@ class GridTest extends TestCase
 
     protected function setUp(): void
     {
-        $context = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $context = $this->createMock(Context::class);
         $this->view = $this->getMockBuilder(ViewInterface::class)
             ->getMock();
         $context->expects($this->any())
             ->method('getView')
             ->willReturn($this->view);
 
-        $this->registry = $this->getMockBuilder(
+        $this->registry = $this->createMock(
             Registry::class
-        )->disableOriginalConstructor()
-            ->getMock();
-        $this->fileFactory = $this->getMockBuilder(FileFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->repository = $this->getMockBuilder(Repository::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->filesystem = $this->getMockBuilder(Filesystem::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        );
+        $this->fileFactory = $this->createMock(FileFactory::class);
+        $this->repository = $this->createMock(Repository::class);
+        $this->filesystem = $this->createMock(Filesystem::class);
 
         /** @var Context $context */
         $this->controller = new Grid(

@@ -14,6 +14,7 @@ use Magento\Framework\View\File\FileList;
 use Magento\Framework\View\File\FileList\Factory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -110,15 +111,14 @@ class AggregatedTest extends TestCase
     }
 
     /**
-     *
-     * @dataProvider getFilesDataProvider
-     *
+     *     *
      * @param array $libraryFiles Files in lib directory
      * @param array $baseFiles Files in base directory
      * @param array $themeFiles Files in theme
      * *
      * @return void
      */
+    #[DataProvider('getFilesDataProvider')]
     public function testGetFiles($libraryFiles, $baseFiles, $themeFiles): void
     {
         $this->fileListMock

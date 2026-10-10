@@ -33,8 +33,8 @@ class UpdaterTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
-        $this->_interpreter = $this->getMockForAbstractClass(
+        $this->_objectManager = $this->createMock(ObjectManagerInterface::class);
+        $this->_interpreter = $this->createMock(
             InterpreterInterface::class
         );
         $this->_model = new Updater($this->_objectManager, $this->_interpreter);
@@ -59,7 +59,7 @@ class UpdaterTest extends TestCase
             $evaluatedValue
         );
 
-        $updater = $this->getMockForAbstractClass(UpdaterInterface::class);
+        $updater = $this->createMock(UpdaterInterface::class);
         $updater->expects(
             $this->once()
         )->method(
@@ -126,7 +126,7 @@ class UpdaterTest extends TestCase
         $self = $this;
         $this->_objectManager->expects($this->exactly(2))->method('get')->willReturnCallback(
             function ($className) use ($self) {
-                return $self->getMockForAbstractClass($className);
+                return $self->createMock($className);
             }
         );
 

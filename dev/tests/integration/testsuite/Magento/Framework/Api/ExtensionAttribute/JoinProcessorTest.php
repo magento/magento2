@@ -12,6 +12,7 @@ use Magento\Framework\Api\ExtensionAttribute\JoinDataInterfaceFactory;
 use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Framework\App\ResourceConnection as AppResource;
 use Magento\Framework\Api\ExtensionAttributesFactory;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * Class to test the JoinProcessor functionality
@@ -20,6 +21,7 @@ use Magento\Framework\Api\ExtensionAttributesFactory;
  */
 class JoinProcessorTest extends \PHPUnit\Framework\TestCase
 {
+    use MockCreationTrait;
     /**
      * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessor
      */
@@ -104,10 +106,10 @@ class JoinProcessorTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->willReturn($this->getConfig());
 
-        $collection = $this->getMockBuilder(\Magento\Framework\Data\Collection\AbstractDb::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['joinExtensionAttribute'])
-            ->getMockForAbstractClass();
+        $collection = $this->createPartialMockWithReflection(
+            \Magento\Framework\Data\Collection\AbstractDb::class,
+            ['joinExtensionAttribute', 'getResource']
+        );
 
         $extensionAttributeJoinData = new JoinData();
         $this->extensionAttributeJoinDataFactory

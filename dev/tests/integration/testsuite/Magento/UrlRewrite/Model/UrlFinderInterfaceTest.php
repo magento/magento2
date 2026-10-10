@@ -9,6 +9,7 @@ namespace Magento\UrlRewrite\Model;
 
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoDataFixture Magento/UrlRewrite/_files/url_rewrites.php
@@ -29,11 +30,11 @@ class UrlFinderInterfaceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider findOneDataProvider
      * @param string $requestPath
      * @param string $targetPath
      * @param int $redirectType
      */
+    #[DataProvider('findOneDataProvider')]
     public function testFindOneByData(string $requestPath, string $targetPath, int $redirectType)
     {
         $data = [

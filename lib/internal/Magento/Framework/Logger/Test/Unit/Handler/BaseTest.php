@@ -26,14 +26,11 @@ class BaseTest extends TestCase
 
     protected function setUp(): void
     {
-        $driverMock = $this->getMockBuilder(DriverInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $driverMock = $this->createMock(DriverInterface::class);
         $this->model = new Base($driverMock);
 
         $class = new \ReflectionClass($this->model);
         $this->sanitizeMethod = $class->getMethod('sanitizeFileName');
-        $this->sanitizeMethod->setAccessible(true);
     }
 
     public function testSanitizeEmpty()

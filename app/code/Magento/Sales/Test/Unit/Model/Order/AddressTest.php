@@ -14,9 +14,13 @@ use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Address;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class AddressTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Address
      */
@@ -42,11 +46,10 @@ class AddressTest extends TestCase
         $this->orderMock = $this->createMock(Order::class);
         $this->orderMock = $this->createMock(Order::class);
         $this->regionFactoryMock = $this->createMock(RegionFactory::class);
-        $this->regionMock = $this->getMockBuilder(Region::class)
-            ->addMethods(['getCountryId', 'getCode'])
-            ->onlyMethods(['load'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->regionMock = $this->createPartialMockWithReflection(
+            Region::class,
+            ['getCountryId', 'getCode', 'load']
+        );
         $objectManager = new ObjectManager($this);
         $this->address = $objectManager->getObject(
             Address::class,
@@ -91,9 +94,7 @@ class AddressTest extends TestCase
         return [ [1, null], [null, 1]];
     }
 
-    /**
-     * @dataProvider regionProvider
-     */
+    #[DataProvider('regionProvider')]
     public function testGetRegionCodeRegion($region, $regionId)
     {
         $this->address->setData('region', $region);

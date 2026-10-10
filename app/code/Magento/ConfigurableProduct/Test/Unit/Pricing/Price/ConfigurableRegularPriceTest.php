@@ -147,7 +147,6 @@ class ConfigurableRegularPriceTest extends TestCase
         // Verify the ObjectManager was called and the dependency was set
         $reflection = new \ReflectionClass($model);
         $lowestPriceOptionsProviderProperty = $reflection->getProperty('lowestPriceOptionsProvider');
-        $lowestPriceOptionsProviderProperty->setAccessible(true);
         $this->assertSame($mockLowestPriceOptionsProvider, $lowestPriceOptionsProviderProperty->getValue($model));
     }
 
@@ -290,12 +289,9 @@ class ConfigurableRegularPriceTest extends TestCase
 
         // Mock the getUsedProducts method through reflection
         $reflection = new \ReflectionClass($this->model);
-        $getUsedProductsMethod = $reflection->getMethod('getUsedProducts');
-        $getUsedProductsMethod->setAccessible(true);
-
+        $reflection->getMethod('getUsedProducts');
         // We need to mock the configurable options provider
         $configurableOptionsProviderProperty = $reflection->getProperty('configurableOptionsProvider');
-        $configurableOptionsProviderProperty->setAccessible(true);
         $configurableOptionsProviderProperty->setValue($this->model, $this->configurableOptionsProviderMock);
 
         $this->configurableOptionsProviderMock->expects($this->once())
@@ -349,7 +345,6 @@ class ConfigurableRegularPriceTest extends TestCase
         // Mock the configurable options provider
         $reflection = new \ReflectionClass($this->model);
         $configurableOptionsProviderProperty = $reflection->getProperty('configurableOptionsProvider');
-        $configurableOptionsProviderProperty->setAccessible(true);
         $configurableOptionsProviderProperty->setValue($this->model, $this->configurableOptionsProviderMock);
 
         $this->configurableOptionsProviderMock->expects($this->once()) // Should only be called once
@@ -796,7 +791,6 @@ class ConfigurableRegularPriceTest extends TestCase
         // Use reflection to pre-set the configurableOptionsProvider to our mock
         $reflection = new \ReflectionClass($this->model);
         $configurableOptionsProviderProperty = $reflection->getProperty('configurableOptionsProvider');
-        $configurableOptionsProviderProperty->setAccessible(true);
         $configurableOptionsProviderProperty->setValue($this->model, $mockProvider);
 
         // Set up the product mock chain
@@ -854,14 +848,11 @@ class ConfigurableRegularPriceTest extends TestCase
 
         $reflection = new \ReflectionClass($freshModel);
         $configurableOptionsProviderProperty = $reflection->getProperty('configurableOptionsProvider');
-        $configurableOptionsProviderProperty->setAccessible(true);
-
         // Verify it starts as null
         $this->assertNull($configurableOptionsProviderProperty->getValue($freshModel));
 
         // Access the private method to test the lazy loading
         $getConfigurableOptionsProviderMethod = $reflection->getMethod('getConfigurableOptionsProvider');
-        $getConfigurableOptionsProviderMethod->setAccessible(true);
 
         // First call should trigger ObjectManager and set the property
         $result1 = $getConfigurableOptionsProviderMethod->invoke($freshModel);

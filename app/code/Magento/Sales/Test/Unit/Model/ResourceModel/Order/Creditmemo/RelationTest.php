@@ -15,9 +15,12 @@ use Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item;
 use Magento\Sales\Model\ResourceModel\Order\Creditmemo\Relation;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class RelationTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Relation
      */
@@ -78,17 +81,8 @@ class RelationTest extends TestCase
                 ]
             )
             ->getMock();
-        $this->itemMock = $this->getMockBuilder(OrderItem::class)
-            ->disableOriginalConstructor()
-            ->addMethods(
-                [
-                    'setParentId'
-                ]
-            )
-            ->getMock();
-        $this->commentMock = $this->getMockBuilder(Creditmemo::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->itemMock = $this->createPartialMockWithReflection(OrderItem::class, ['setParentId']);
+        $this->commentMock = $this->createMock(Creditmemo::class);
         $this->relationProcessor = new Relation(
             $this->itemResourceMock,
             $this->commentResourceMock

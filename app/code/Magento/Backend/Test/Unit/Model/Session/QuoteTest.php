@@ -145,22 +145,22 @@ class QuoteTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
         $this->customerRepositoryMock = $this->createMock(CustomerRepositoryInterface::class);
-        
+
         $this->groupManagementMock = $this->createMock(GroupManagementInterface::class);
 
         $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
-        
+
         $this->quoteRepositoryMock = $this->createMock(CartRepositoryInterface::class);
 
         $this->requestMock = $this->createMock(Http::class);
         $this->sidResolverMock = $this->createMock(SidResolverInterface::class);
-        
+
         $this->sessionConfigMock = $this->createMock(ConfigInterface::class);
-        
+
         $this->saveHandlerMock = $this->createMock(SaveHandlerInterface::class);
-        
+
         $this->validatorMock = $this->createMock(ValidatorInterface::class);
-        
+
         $this->storage = new Storage();
         $this->cookieManagerMock = $this->createMock(CookieManagerInterface::class);
         $this->cookieMetadataFactoryMock = $this->createMock(
@@ -199,16 +199,15 @@ class QuoteTest extends TestCase
             'groupManagement' => $this->groupManagementMock,
             'quoteFactory' => $this->quoteFactoryMock
         ]);
-        
+
         // Use reflection to set methods property for magic methods
         $builderReflection = new \ReflectionClass($mockBuilder);
         $methodsProperty = $builderReflection->getProperty('methods');
-        $methodsProperty->setAccessible(true);
         $methodsProperty->setValue(
             $mockBuilder,
             ['getStoreId', 'getQuoteId', 'setQuoteId', 'hasCustomerId', 'getCustomerId']
         );
-        
+
         $this->quote = $mockBuilder->getMock();
     }
 

@@ -17,9 +17,11 @@ use Magento\Quote\Api\GuestCouponManagementInterface;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Quote\Model\Quote\Address\RateResult\Error;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\HTTP\AsyncClientInterfaceMock;
 use Magento\TestFramework\Quote\Model\GetQuoteByReservedOrderId;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -31,6 +33,8 @@ use Psr\Log\LoggerInterface;
  */
 class ShipmentServiceTest extends TestCase
 {
+    use MockCreationTrait;
+
     private const DEFAULT_GATEWAY_DEV_END_POINT = 'https://apis-tem.usps.com/';
     private const RESERVED_ORDER_ID = 'usps_test_quote';
     private const FREE_SHIPPING_COUPON_CODE = 'IMPHBR852R61';
@@ -104,7 +108,7 @@ class ShipmentServiceTest extends TestCase
         $this->getMaskedIdByQuoteId = $this->objectManager->get(QuoteIdToMaskedQuoteIdInterface::class);
         $this->config = Bootstrap::getObjectManager()->get(ReinitableConfigInterface::class);
         $this->logs = [];
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->loggerMock->method('debug')
             ->willReturnCallback(
                 function (string $message) {
@@ -129,7 +133,6 @@ class ShipmentServiceTest extends TestCase
      * @param string $methodTitle
      * @param float $price
      * @return void
-     * @dataProvider collectRatesDataProvider
      * @magentoConfigFixture default_store carriers/usps/rest_allowed_methods LIBRARY_MAIL_MACHINABLE_5-DIGIT,MEDIA_MAIL_MACHINABLE_5-DIGIT,USPS_GROUND_ADVANTAGE_MACHINABLE_SINGLE-PIECE,USPS_GROUND_ADVANTAGE_MACHINABLE_CUBIC_NON-SOFT_PACK_TIER_1,USPS_GROUND_ADVANTAGE_MACHINABLE_CUBIC_SOFT_PACK_TIER_1,PRIORITY_MAIL_MACHINABLE_SINGLE-PIECE,PRIORITY_MAIL_FLAT_RATE_ENVELOPE,PRIORITY_MAIL_MACHINABLE_MEDIUM_FLAT_RATE_BOX,PRIORITY_MAIL_MACHINABLE_LARGE_FLAT_RATE_BOX,PRIORITY_MAIL_MACHINABLE_SMALL_FLAT_RATE_BOX,PRIORITY_MAIL_PADDED_FLAT_RATE_ENVELOPE,PRIORITY_MAIL_LEGAL_FLAT_RATE_ENVELOPE,PRIORITY_MAIL_EXPRESS_MACHINABLE_SINGLE-PIECE,PRIORITY_MAIL_EXPRESS_FLAT_RATE_ENVELOPE,PRIORITY_MAIL_EXPRESS_LEGAL_FLAT_RATE_ENVELOPE,PRIORITY_MAIL_EXPRESS_LEGAL_FLAT_RATE_ENVELOPE_HOLIDAY_DELIVERY,PRIORITY_MAIL_EXPRESS_PADDED_FLAT_RATE_ENVELOPE,FIRST-CLASS_PACKAGE_INTERNATIONAL_SERVICE_MACHINABLE_ISC_SINGLE-PIECE,PRIORITY_MAIL_INTERNATIONAL_ISC_SINGLE-PIECE,PRIORITY_MAIL_EXPRESS_INTERNATIONAL_ISC_SINGLE-PIECE
      * @magentoConfigFixture default_store carriers/usps/showmethod 1
      * @magentoConfigFixture current_store carriers/usps/usps_type USPS_REST
@@ -142,6 +145,7 @@ class ShipmentServiceTest extends TestCase
      * @magentoConfigFixture default_store shipping/origin/postcode 90034
      * @magentoConfigFixture default_store carriers/usps/machinable true
      */
+    #[DataProvider('collectRatesDataProvider')]
     public function testCollectRates(string $shippingMethod, string $methodTitle, float $price): void
     {
         //phpcs:ignore Magento2.Functions.DiscouragedFunction
@@ -205,11 +209,7 @@ class ShipmentServiceTest extends TestCase
     /**
      * Test collecting rates only for available services.
      *
-     * @param string $shippingMethod
-     * @param string $methodTitle
-     * @param float $price
      * @return void
-     * @dataProvider collectRatesDataProvider
      * @magentoConfigFixture default_store carriers/usps/rest_allowed_methods LIBRARY_MAIL_MACHINABLE_5-DIGIT,MEDIA_MAIL_MACHINABLE_5-DIGIT,USPS_GROUND_ADVANTAGE_MACHINABLE_SINGLE-PIECE,USPS_GROUND_ADVANTAGE_MACHINABLE_CUBIC_NON-SOFT_PACK_TIER_1,USPS_GROUND_ADVANTAGE_MACHINABLE_CUBIC_SOFT_PACK_TIER_1,PRIORITY_MAIL_MACHINABLE_SINGLE-PIECE,PRIORITY_MAIL_FLAT_RATE_ENVELOPE,PRIORITY_MAIL_MACHINABLE_MEDIUM_FLAT_RATE_BOX,PRIORITY_MAIL_MACHINABLE_LARGE_FLAT_RATE_BOX,PRIORITY_MAIL_MACHINABLE_SMALL_FLAT_RATE_BOX,PRIORITY_MAIL_PADDED_FLAT_RATE_ENVELOPE,PRIORITY_MAIL_LEGAL_FLAT_RATE_ENVELOPE,PRIORITY_MAIL_EXPRESS_MACHINABLE_SINGLE-PIECE,PRIORITY_MAIL_EXPRESS_FLAT_RATE_ENVELOPE,PRIORITY_MAIL_EXPRESS_LEGAL_FLAT_RATE_ENVELOPE,PRIORITY_MAIL_EXPRESS_LEGAL_FLAT_RATE_ENVELOPE_HOLIDAY_DELIVERY,PRIORITY_MAIL_EXPRESS_PADDED_FLAT_RATE_ENVELOPE,FIRST-CLASS_PACKAGE_INTERNATIONAL_SERVICE_MACHINABLE_ISC_SINGLE-PIECE,PRIORITY_MAIL_INTERNATIONAL_ISC_SINGLE-PIECE,PRIORITY_MAIL_EXPRESS_INTERNATIONAL_ISC_SINGLE-PIECE
      * @magentoConfigFixture default_store carriers/usps/showmethod 1
      * @magentoConfigFixture current_store carriers/usps/usps_type USPS_REST
@@ -284,9 +284,10 @@ class ShipmentServiceTest extends TestCase
      */
     public function testGetRatesWithHttpException(): void
     {
-        $deferredResponse = $this->getMockBuilder(HttpResponseDeferredInterface::class)
-            ->onlyMethods(['get'])
-            ->getMockForAbstractClass();
+        $deferredResponse = $this->createPartialMockWithReflection(
+            HttpResponseDeferredInterface::class,
+            ['get', 'cancel', 'isCancelled', 'isDone']
+        );
         $exception = new HttpException('Exception message');
         $deferredResponse->method('get')->willThrowException($exception);
         $this->httpClient->setDeferredResponseMock($deferredResponse);

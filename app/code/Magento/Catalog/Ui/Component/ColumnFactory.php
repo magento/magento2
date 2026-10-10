@@ -82,7 +82,7 @@ class ColumnFactory
     {
         $filterModifiers = $context->getRequestParam(FilterModifier::FILTER_MODIFIER, []);
 
-        $columnName = $attribute->getAttributeCode();
+        $columnName = $attribute->getAttributeCode() ?? '';
         $config = array_merge(
             [
                 'label' => __($attribute->getDefaultFrontendLabel()),
@@ -163,7 +163,8 @@ class ColumnFactory
      */
     protected function getDataType($attribute)
     {
-        return $this->dataTypeMap[$attribute->getFrontendInput()] ?? $this->dataTypeMap['default'];
+        $frontendInput = $attribute->getFrontendInput() ?? '';
+        return $this->dataTypeMap[$frontendInput] ?? $this->dataTypeMap['default'];
     }
 
     /**
@@ -174,6 +175,7 @@ class ColumnFactory
      */
     protected function getFilterType($frontendInput)
     {
+        $frontendInput = (string)$frontendInput;
         $filtersMap = ['date' => 'dateRange', 'datetime' => 'dateRange'];
         $result = array_replace_recursive($this->dataTypeMap, $filtersMap);
 

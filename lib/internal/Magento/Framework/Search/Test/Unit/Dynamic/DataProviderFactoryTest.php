@@ -27,10 +27,8 @@ class DataProviderFactoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->getMockForAbstractClass();
-        $this->engineResolverMock = $this->getMockBuilder(EngineResolverInterface::class)
-            ->getMockForAbstractClass();
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->engineResolverMock = $this->createMock(EngineResolverInterface::class);
     }
 
     public function testCreate()
@@ -46,8 +44,7 @@ class DataProviderFactoryTest extends TestCase
             ->method('getCurrentSearchEngine')
             ->willReturn($dataProvider);
 
-        $dataProviderMock = $this->getMockBuilder($dataProviderClass)
-            ->getMockForAbstractClass();
+        $dataProviderMock = $this->createMock($dataProviderClass);
 
         $this->objectManagerMock->expects($this->once())
             ->method('create')
@@ -99,8 +96,7 @@ class DataProviderFactoryTest extends TestCase
             ->method('getCurrentSearchEngine')
             ->willReturn($dataProvider);
 
-        $dataProviderMock = $this->getMockBuilder($dataProviderClass)
-            ->getMockForAbstractClass();
+        $dataProviderMock = $this->createMock($dataProviderClass);
 
         $this->objectManagerMock->expects($this->once())
             ->method('create')

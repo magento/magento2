@@ -9,6 +9,7 @@ namespace Magento\Indexer\Test\Unit\Model;
 
 use Magento\Framework\Indexer\CacheContext;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test indexer cache context
@@ -46,8 +47,8 @@ class CacheContextTest extends TestCase
      * @param array $entities
      * @param array $tags
      * @param array $expected
-     * @dataProvider getIdentitiesDataProvider
      */
+    #[DataProvider('getIdentitiesDataProvider')]
     public function testGetIdentities(array $entities, array $tags = [], array $expected = []): void
     {
         foreach ($entities as $entity => $ids) {

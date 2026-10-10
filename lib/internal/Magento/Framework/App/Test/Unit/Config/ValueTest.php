@@ -13,6 +13,7 @@ use Magento\Framework\App\Config\Value;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ValueTest extends TestCase
@@ -42,11 +43,11 @@ class ValueTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->configMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
-        $this->eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->configMock = $this->createMock(ScopeConfigInterface::class);
+        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
         $this->cacheTypeListMock = $this->getMockBuilder(TypeListInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
@@ -72,14 +73,9 @@ class ValueTest extends TestCase
         $this->assertEquals('old_value', $this->model->getOldValue());
     }
 
-    /**
-     * @param string $oldValue
-     * @param string $value
-     * @param bool $result
-     *
-     * @return void
-     * @dataProvider dataIsValueChanged
+    /**     * @return void
      */
+    #[DataProvider('dataIsValueChanged')]
     public function testIsValueChanged($oldValue, $value, $result): void
     {
         $this->configMock->expects($this->once())
@@ -123,14 +119,9 @@ class ValueTest extends TestCase
         $this->model->afterLoad();
     }
 
-    /**
-     * @param mixed $fieldsetData
-     * @param string $key
-     * @param string $result
-     *
-     * @return void
-     * @dataProvider dataProviderGetFieldsetDataValue
+    /**     * @return void
      */
+    #[DataProvider('dataProviderGetFieldsetDataValue')]
     public function testGetFieldsetDataValue($fieldsetData, $key, $result): void
     {
         $this->model->setData('fieldset_data', $fieldsetData);
@@ -161,13 +152,9 @@ class ValueTest extends TestCase
         ];
     }
 
-    /**
-     * @param int $callNumber
-     * @param string $oldValue
-     *
-     * @return void
-     * @dataProvider afterSaveDataProvider
+    /**     * @return void
      */
+    #[DataProvider('afterSaveDataProvider')]
     public function testAfterSave($callNumber, $oldValue): void
     {
         $this->cacheTypeListMock->expects($this->exactly($callNumber))

@@ -7,18 +7,17 @@ declare(strict_types=1);
 
 namespace Magento\Quote\Test\Unit\Model\Quote\Address;
 
-use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Address\Relation;
-use Magento\Quote\Test\Unit\Helper\AddressRelationModelTestHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class RelationTest extends TestCase
 {
     /**
-     * @var AbstractModel|MockObject
+     * @var Address|MockObject
      */
     private $modelMock;
 
@@ -30,7 +29,8 @@ class RelationTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->modelMock = $this->getMockBuilder(AddressRelationModelTestHelper::class)
+        $this->modelMock = $this->getMockBuilder(Address::class)
+            ->disableOriginalConstructor()
             ->onlyMethods([
                 'getItemsCollection',
                 'getShippingRatesCollection',

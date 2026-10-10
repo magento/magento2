@@ -53,7 +53,7 @@ class MergedTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->assetJsOne = $this->getMockForAbstractClass(MergeableInterface::class);
+        $this->assetJsOne = $this->createMock(MergeableInterface::class);
         $this->assetJsOne->expects($this->any())
             ->method('getContentType')
             ->willReturn('js');
@@ -61,7 +61,7 @@ class MergedTest extends TestCase
             ->method('getPath')
             ->willReturn('script_one.js');
 
-        $this->assetJsTwo = $this->getMockForAbstractClass(MergeableInterface::class);
+        $this->assetJsTwo = $this->createMock(MergeableInterface::class);
         $this->assetJsTwo->expects($this->any())
             ->method('getContentType')
             ->willReturn('js');
@@ -69,12 +69,12 @@ class MergedTest extends TestCase
             ->method('getPath')
             ->willReturn('script_two.js');
 
-        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
-        $this->mergeStrategy = $this->getMockForAbstractClass(MergeStrategyInterface::class);
+        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->mergeStrategy = $this->createMock(MergeStrategyInterface::class);
         $this->assetRepo = $this->getMockBuilder(AssetRepository::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->versionStorage = $this->getMockForAbstractClass(StorageInterface::class);
+        $this->versionStorage = $this->createMock(StorageInterface::class);
     }
 
     public function testConstructorNothingToMerge()
@@ -109,7 +109,7 @@ class MergedTest extends TestCase
     {
         $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('Content type \'css\' cannot be merged with \'js\'.');
-        $assetCss = $this->getMockForAbstractClass(MergeableInterface::class);
+        $assetCss = $this->createMock(MergeableInterface::class);
         $assetCss->expects($this->any())
             ->method('getContentType')
             ->willReturn('css');
@@ -156,7 +156,7 @@ class MergedTest extends TestCase
     public function testIteratorInterfaceMergeFailure()
     {
         $mergeError = new \Exception('File not found');
-        $assetBroken = $this->getMockForAbstractClass(MergeableInterface::class);
+        $assetBroken = $this->createMock(MergeableInterface::class);
         $assetBroken->expects($this->any())
             ->method('getContentType')
             ->willReturn('js');

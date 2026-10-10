@@ -12,6 +12,7 @@ use Magento\Framework\File\Mime;
 use Magento\Framework\Filesystem;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test mime type utility for correct.
@@ -55,13 +56,13 @@ class MimeTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->localDriverMock = $this->getMockForAbstractClass(Filesystem\DriverInterface::class);
-        $this->remoteDriverMock = $this->getMockForAbstractClass(Filesystem\ExtendedDriverInterface::class);
+        $this->localDriverMock = $this->createMock(Filesystem\DriverInterface::class);
+        $this->remoteDriverMock = $this->createMock(Filesystem\ExtendedDriverInterface::class);
 
-        $this->localDirectoryMock = $this->getMockForAbstractClass(Filesystem\Directory\WriteInterface::class);
+        $this->localDirectoryMock = $this->createMock(Filesystem\Directory\WriteInterface::class);
         $this->localDirectoryMock->method('getDriver')
             ->willReturn($this->localDriverMock);
-        $this->remoteDirectoryMock = $this->getMockForAbstractClass(Filesystem\Directory\WriteInterface::class);
+        $this->remoteDirectoryMock = $this->createMock(Filesystem\Directory\WriteInterface::class);
         $this->remoteDirectoryMock->method('getDriver')
             ->willReturn($this->remoteDriverMock);
 
@@ -91,9 +92,8 @@ class MimeTest extends TestCase
     /**
      * @param string $file
      * @param string $expectedType
-     *
-     * @dataProvider getMimeTypeDataProvider
-     */
+     *     */
+    #[DataProvider('getMimeTypeDataProvider')]
     public function testGetMimeType($file, $expectedType): void
     {
         $this->filesystemMock->method('getDirectoryWrite')->willReturn(
@@ -125,9 +125,8 @@ class MimeTest extends TestCase
     /**
      * @param string $file
      * @param string $expectedType
-     *
-     * @dataProvider getMimeTypeDataProvider
-     */
+     *     */
+    #[DataProvider('getMimeTypeDataProvider')]
     public function testGetMimeTypeRemote($file, $expectedType): void
     {
         $this->filesystemMock->method('getDirectoryWrite')->willReturnOnConsecutiveCalls(

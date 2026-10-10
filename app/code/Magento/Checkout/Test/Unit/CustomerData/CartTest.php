@@ -22,16 +22,15 @@ use Magento\Quote\Model\Quote\Item\Option;
 use Magento\Store\Model\System\Store;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\Quote\Test\Unit\Helper\QuoteFixtureTestHelper;
-use Magento\Quote\Test\Unit\Helper\QuoteItemTestHelper;
-use Magento\Store\Test\Unit\Helper\StoreWebsiteIdTestHelper;
-use Magento\Catalog\Test\Unit\Helper\ProductTestHelper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CartTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Cart
      */
@@ -113,9 +112,12 @@ class CartTest extends TestCase
         $subtotalMock = new DataObject(['value' => $subtotalValue]);
         $totals = ['subtotal' => $subtotalMock];
 
-        $quoteMock = new QuoteFixtureTestHelper();
+        $quoteMock = $this->createPartialMockWithReflection(
+            Quote::class,
+            ['getTotals', 'getStore', 'getAllVisibleItems', 'getStoreId']
+        );
+        $quoteMock->method('getTotals')->willReturn($totals);
         $this->checkoutSessionMock->expects($this->exactly(2))->method('getQuote')->willReturn($quoteMock);
-        $quoteMock->setFixtureTotals($totals);
 
         $this->checkoutCartMock->expects($this->once())->method('getSummaryQty')->willReturn($summaryQty);
         $this->checkoutHelperMock->expects($this->once())
@@ -124,15 +126,27 @@ class CartTest extends TestCase
             ->willReturn($subtotalValue);
         $this->checkoutHelperMock->expects($this->once())->method('canOnepageCheckout')->willReturn(true);
 
-        $quoteItemMock = new QuoteItemTestHelper($storeId);
-        $quoteMock->setFixtureItems([$quoteItemMock]);
+        $quoteItemMock = $this->createPartialMockWithReflection(
+            Item::class,
+            ['getStoreId', 'getProduct', 'getOptionByCode']
+        );
+        $quoteItemMock->method('getStoreId')->willReturn($storeId);
+        $quoteItemMock->method('getOptionByCode')->with('product_type')->willReturn(null);
+        $quoteMock->method('getAllVisibleItems')->willReturn([$quoteItemMock]);
 
-        $storeMock = new StoreWebsiteIdTestHelper($websiteId);
-        $quoteMock->setFixtureStore($storeMock);
+        $storeMock = $this->createPartialMockWithReflection(Store::class, ['getWebsiteId']);
+        $storeMock->method('getWebsiteId')->willReturn($websiteId);
+        $quoteMock->method('getStore')->willReturn($storeMock);
+        $quoteMock->method('getStoreId')->willReturn(null);
 
-        $productMock = new ProductTestHelper();
-        $productMock->setId($productId);
-        $quoteItemMock->setProduct($productMock);
+        $productMock = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getId', 'isVisibleInSiteVisibility', 'setUrlDataObject']
+        );
+        $productMock->method('getId')->willReturn($productId);
+        $productMock->method('isVisibleInSiteVisibility')->willReturn(false);
+        $productMock->method('setUrlDataObject')->willReturnSelf();
+        $quoteItemMock->method('getProduct')->willReturn($productMock);
 
         $this->catalogUrlMock->expects($this->once())
             ->method('getRewriteByProductStore')
@@ -189,14 +203,24 @@ class CartTest extends TestCase
         $subtotalMock = new DataObject(['value' => $subtotalValue]);
         $totals = ['subtotal' => $subtotalMock];
 
-        $quoteMock = new QuoteFixtureTestHelper();
-        $quoteItemMock = new QuoteItemTestHelper($storeId);
+        $quoteMock = $this->createPartialMockWithReflection(
+            Quote::class,
+            ['getTotals', 'getStore', 'getAllVisibleItems', 'getStoreId']
+        );
+        $quoteMock->method('getTotals')->willReturn($totals);
+        
+        $quoteItemMock = $this->createPartialMockWithReflection(
+            Item::class,
+            ['getStoreId', 'getProduct', 'getOptionByCode']
+        );
+        $quoteItemMock->method('getStoreId')->willReturn($storeId);
 
         $this->checkoutSessionMock->expects($this->exactly(2))->method('getQuote')->willReturn($quoteMock);
-        $quoteMock->setFixtureTotals($totals);
 
-        $storeMock = new StoreWebsiteIdTestHelper($websiteId);
-        $quoteMock->setFixtureStore($storeMock);
+        $storeMock = $this->createPartialMockWithReflection(Store::class, ['getWebsiteId']);
+        $storeMock->method('getWebsiteId')->willReturn($websiteId);
+        $quoteMock->method('getStore')->willReturn($storeMock);
+        $quoteMock->method('getStoreId')->willReturn(null);
 
         $this->checkoutCartMock->expects($this->once())->method('getSummaryQty')->willReturn($summaryQty);
         $this->checkoutHelperMock->expects($this->once())
@@ -205,15 +229,21 @@ class CartTest extends TestCase
             ->willReturn($subtotalValue);
         $this->checkoutHelperMock->expects($this->once())->method('canOnepageCheckout')->willReturn(true);
 
-        $quoteMock->setFixtureItems([$quoteItemMock]);
+        $quoteMock->method('getAllVisibleItems')->willReturn([$quoteItemMock]);
 
-        $productMock = new ProductTestHelper();
-        $productMock->setId($productId);
+        $productMock = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getId', 'isVisibleInSiteVisibility', 'setUrlDataObject']
+        );
+        $productMock->method('getId')->willReturn($productId);
+        $productMock->method('isVisibleInSiteVisibility')->willReturn(false);
+        $productMock->method('setUrlDataObject')->willReturnSelf();
 
         $optionsMock = $this->createMock(Option::class);
         $optionsMock->expects($this->once())->method('getProduct')->willReturn($productMock);
 
-        $quoteItemMock->setProduct($productMock)->setOption('product_type', $optionsMock);
+        $quoteItemMock->method('getProduct')->willReturn($productMock);
+        $quoteItemMock->method('getOptionByCode')->with('product_type')->willReturn($optionsMock);
 
         $this->catalogUrlMock->expects($this->once())
             ->method('getRewriteByProductStore')

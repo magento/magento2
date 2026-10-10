@@ -37,7 +37,7 @@ class FileTest extends TestCase
 
     public function testGetFile()
     {
-        $theme = $this->getMockForAbstractClass(ThemeInterface::class);
+        $theme = $this->createMock(ThemeInterface::class);
         $expected = 'some/file.ext';
         $this->resolver->expects($this->once())
             ->method('resolve')

@@ -9,6 +9,7 @@ namespace Magento\UrlRewrite\Controller;
 
 use Magento\TestFramework\TestCase\AbstractController;
 use Magento\Framework\App\Response\Http as HttpResponse;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class to test Match corresponding URL Rewrite
@@ -26,9 +27,8 @@ class UrlRewriteTest extends AbstractController
      * @param string $redirect
      * @param int $expectedCode
      * @return void
-     *
-     * @dataProvider requestDataProvider
      */
+    #[DataProvider('requestDataProvider')]
     public function testMatchUrlRewrite(
         string $request,
         string $redirect,

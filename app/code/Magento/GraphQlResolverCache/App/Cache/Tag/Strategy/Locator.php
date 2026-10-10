@@ -50,7 +50,7 @@ class Locator
         );
 
         $result = array_intersect(array_keys($this->customStrategies), $classHierarchy);
-
-        return $this->customStrategies[array_shift($result)] ?? null;
+        $key = array_shift($result) ?? '';
+        return $this->customStrategies[$key] ?? null;
     }
 }

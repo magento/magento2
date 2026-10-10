@@ -20,6 +20,6 @@ class PhpCookieReader implements CookieReaderInterface
      */
     public function getCookie($name, $default = null)
     {
-        return (isset($_COOKIE[$name])) ? $_COOKIE[$name] : $default;
+        return ($name !== null && isset($_COOKIE[$name])) ? $_COOKIE[$name] : $default;
     }
 }

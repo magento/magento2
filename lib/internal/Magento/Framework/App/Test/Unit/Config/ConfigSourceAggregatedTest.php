@@ -32,9 +32,9 @@ class ConfigSourceAggregatedTest extends TestCase
     protected function setUp(): void
     {
         $this->sourceMock = $this->getMockBuilder(ConfigSourceInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->sourceMockTwo = $this->getMockBuilder(ConfigSourceInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $sources = [
             [

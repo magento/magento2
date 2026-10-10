@@ -45,7 +45,7 @@ class ResourceLoaderTest extends TestCase
         $factoryObject->expects($this->any())->method('createResource')->willReturn($aclResource);
 
         /** @var $resourceProvider ProviderInterface */
-        $resourceProvider = $this->getMockForAbstractClass(ProviderInterface::class);
+        $resourceProvider = $this->createMock(ProviderInterface::class);
         $resourceProvider->expects($this->once())
             ->method('getAclResources')
             ->willReturn(
@@ -91,7 +91,7 @@ class ResourceLoaderTest extends TestCase
         $factoryObject->expects($this->any())->method('createResource')->willReturn($aclResource);
 
         /** @var $resourceProvider ProviderInterface */
-        $resourceProvider = $this->getMockForAbstractClass(ProviderInterface::class);
+        $resourceProvider = $this->createMock(ProviderInterface::class);
         $resourceProvider->expects($this->once())
             ->method('getAclResources')
             ->willReturn(

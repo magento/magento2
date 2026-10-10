@@ -11,10 +11,10 @@ class Eaccelerator extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Ex
     /**
      * Log message
      */
-    const TAGS_UNSUPPORTED_BY_CLEAN_OF_EACCELERATOR_BACKEND =
+    private const string TAGS_UNSUPPORTED_BY_CLEAN_OF_EACCELERATOR_BACKEND =
         'Magento\Framework\Cache\Backend\Eaccelerator::clean() : tags are unsupported by the Eaccelerator backend';
 
-    const TAGS_UNSUPPORTED_BY_SAVE_OF_EACCELERATOR_BACKEND =
+    private const string TAGS_UNSUPPORTED_BY_SAVE_OF_EACCELERATOR_BACKEND =
         'Magento\Framework\Cache\Backend\Eaccelerator::save() : tags are unsupported by the Eaccelerator backend';
 
     /**
@@ -111,7 +111,7 @@ class Eaccelerator extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Ex
      * @param string $mode clean mode
      * @param string[] $tags array of tags
      * @throws \Zend_Cache_Exception
-     * @return bool|void true if no problem
+     * @return bool true if no problem
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL, $tags = [])
@@ -119,21 +119,19 @@ class Eaccelerator extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Ex
         switch ($mode) {
             case \Zend_Cache::CLEANING_MODE_ALL:
                 return eaccelerator_clean();
-                break;
             case \Zend_Cache::CLEANING_MODE_OLD:
                 $this->_log(
-                    "Magento\Framework\Cache\Backend\Eaccelerator::clean() : ".
+                    "Magento\Framework\Cache\Backend\Eaccelerator::clean() : " .
                     "CLEANING_MODE_OLD is unsupported by the Eaccelerator backend"
                 );
-                break;
+                return true;
             case \Zend_Cache::CLEANING_MODE_MATCHING_TAG:
             case \Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG:
             case \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG:
                 $this->_log(self::TAGS_UNSUPPORTED_BY_CLEAN_OF_EACCELERATOR_BACKEND);
-                break;
+                return true;
             default:
                 \Zend_Cache::throwException('Invalid mode for clean() method');
-                break;
         }
     }
 

@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Block\Category\Rss;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Block\Category\Rss\Link;
 use Magento\Catalog\Model\Category;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -51,9 +52,9 @@ class LinkTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->urlBuilderInterface = $this->getMockForAbstractClass(UrlBuilderInterface::class);
-        $this->scopeConfigInterface = $this->getMockForAbstractClass(ScopeConfigInterface::class);
-        $this->storeManagerInterface = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->urlBuilderInterface = $this->createMock(UrlBuilderInterface::class);
+        $this->scopeConfigInterface = $this->createMock(ScopeConfigInterface::class);
+        $this->storeManagerInterface = $this->createMock(StoreManagerInterface::class);
         $this->registry = $this->createMock(Registry::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
@@ -69,9 +70,9 @@ class LinkTest extends TestCase
     }
 
     /**
-     * @dataProvider isRssAllowedDataProvider
      * @param bool $isAllowed
      */
+    #[DataProvider('isRssAllowedDataProvider')]
     public function testIsRssAllowed($isAllowed)
     {
         $this->scopeConfigInterface->expects($this->once())->method('getValue')->willReturn($isAllowed);
@@ -95,15 +96,15 @@ class LinkTest extends TestCase
     }
 
     /**
-     * @dataProvider isTopCategoryDataProvider
      * @param bool $isTop
      * @param string $categoryLevel
      */
+    #[DataProvider('isTopCategoryDataProvider')]
     public function testIsTopCategory($isTop, $categoryLevel)
     {
         $categoryModel = $this->createPartialMock(Category::class, [ 'getLevel']);
         $this->registry->expects($this->once())->method('registry')->willReturn($categoryModel);
-        $categoryModel->expects($this->any())->method('getLevel')->willReturn($categoryLevel);
+        $categoryModel->method('getLevel')->willReturn($categoryLevel);
         $this->assertEquals($isTop, $this->link->isTopCategory());
     }
 
@@ -125,11 +126,11 @@ class LinkTest extends TestCase
 
         $categoryModel = $this->createPartialMock(Category::class, [ 'getId']);
         $this->registry->expects($this->once())->method('registry')->willReturn($categoryModel);
-        $categoryModel->expects($this->any())->method('getId')->willReturn('1');
+        $categoryModel->method('getId')->willReturn('1');
 
         $storeModel = $this->createPartialMock(Category::class, [ 'getId']);
-        $this->storeManagerInterface->expects($this->any())->method('getStore')->willReturn($storeModel);
-        $storeModel->expects($this->any())->method('getId')->willReturn('1');
+        $this->storeManagerInterface->method('getStore')->willReturn($storeModel);
+        $storeModel->method('getId')->willReturn('1');
 
         $this->assertEquals($rssUrl, $this->link->getLink());
     }

@@ -365,7 +365,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     protected function getConfigInstance($configFilePaths, $envConfigFilePath = null)
     {
-        $fileResolver = $this->getMockForAbstractClass(\Magento\Framework\Config\FileResolverInterface::class);
+        $fileResolver = $this->createMock(\Magento\Framework\Config\FileResolverInterface::class);
         $fileResolverResult = [];
         foreach ($configFilePaths as $configFilePath) {
             $fileResolverResult[] = file_get_contents($configFilePath);

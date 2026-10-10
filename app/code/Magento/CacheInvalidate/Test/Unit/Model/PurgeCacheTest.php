@@ -16,6 +16,7 @@ use Magento\Framework\Cache\InvalidateLogger;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\PageCache\Model\Cache\Server;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class PurgeCacheTest extends TestCase
@@ -73,8 +74,8 @@ class PurgeCacheTest extends TestCase
      * @param string[] $hosts
      *
      * @return void
-     * @dataProvider sendPurgeRequestDataProvider
      */
+    #[DataProvider('sendPurgeRequestDataProvider')]
     public function testSendPurgeRequest(array $hosts): void
     {
         $uris = [];

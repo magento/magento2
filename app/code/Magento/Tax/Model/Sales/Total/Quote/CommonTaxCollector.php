@@ -404,6 +404,9 @@ class CommonTaxCollector extends AbstractTotal
                 );
                 $itemDataObjects[] = [$parentItemDataObject];
                 foreach ($item->getChildren() as $child) {
+                    if ($child->isDeleted()) {
+                        continue;
+                    }
                     $childItemDataObject = $this->mapItem(
                         $itemDataObjectFactory,
                         $child,
@@ -601,7 +604,7 @@ class CommonTaxCollector extends AbstractTotal
         /** @var AbstractItem[] $keyedAddressItems */
         $keyedAddressItems = [];
         foreach ($shippingAssignment->getItems() as $addressItem) {
-            $keyedAddressItems[$addressItem->getTaxCalculationItemId()] = $addressItem;
+            $keyedAddressItems[$addressItem->getTaxCalculationItemId() ?? ''] = $addressItem;
         }
 
         $subtotal = $baseSubtotal = 0;
@@ -614,6 +617,9 @@ class CommonTaxCollector extends AbstractTotal
             $taxDetail = $itemTaxDetail[self::KEY_ITEM];
             /** @var TaxDetailsItemInterface $baseTaxDetail */
             $baseTaxDetail = $itemTaxDetail[self::KEY_BASE_ITEM];
+            if (!isset($keyedAddressItems[$code])) {
+                continue;
+            }
             $quoteItem = $keyedAddressItems[$code];
 
             if (!$quoteItem->isDeleted()) {
@@ -663,6 +669,7 @@ class CommonTaxCollector extends AbstractTotal
      * @param ShippingAssignmentInterface $shippingAssignment
      * @param array $itemsByType
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function processAppliedTaxes(
         QuoteAddress\Total $total,
@@ -675,7 +682,7 @@ class CommonTaxCollector extends AbstractTotal
         /** @var AbstractItem[] $keyedAddressItems */
         $keyedAddressItems = [];
         foreach ($shippingAssignment->getItems() as $addressItem) {
-            $keyedAddressItems[$addressItem->getTaxCalculationItemId()] = $addressItem;
+            $keyedAddressItems[$addressItem->getTaxCalculationItemId() ?? ''] = $addressItem;
         }
 
         foreach ($itemsByType as $itemType => $items) {
@@ -691,12 +698,18 @@ class CommonTaxCollector extends AbstractTotal
                 $itemId = null;
                 $associatedItemId = null;
                 if ($itemType == self::ITEM_TYPE_PRODUCT) {
+                    if (!isset($keyedAddressItems[$itemTaxCalculationId])) {
+                        continue;
+                    }
                     //Use item id instead of tax calculation id
                     $itemId = $this->getQuoteItemId($keyedAddressItems, $itemTaxCalculationId);
                 } else {
                     if ($taxDetails->getAssociatedItemCode()
                         && $taxDetails->getAssociatedItemCode() != self::ASSOCIATION_ITEM_CODE_FOR_QUOTE) {
                         //This item is associated with a product item
+                        if (!isset($keyedAddressItems[$taxDetails->getAssociatedItemCode()])) {
+                            continue;
+                        }
                         $associatedItemId = $keyedAddressItems[$taxDetails->getAssociatedItemCode()]->getId();
                     } else {
                         //This item is associated with an order, e.g., shipping, etc.

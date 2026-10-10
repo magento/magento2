@@ -10,7 +10,6 @@
 namespace Magento\TestFramework\CodingStandard\Tool;
 
 use \Magento\TestFramework\CodingStandard\ToolInterface;
-use Magento\TestFramework\CodingStandard\Tool\CodeMessOutput;
 
 class CodeMessDetector implements ToolInterface
 {
@@ -52,22 +51,21 @@ class CodeMessDetector implements ToolInterface
     public function run(array $whiteList)
     {
         if (empty($whiteList)) {
-            return \PHPMD\TextUI\ExitCode::Success;
+            return class_exists(\PHPMD\TextUI\ExitCode::class) ? \PHPMD\TextUI\ExitCode::Success : 0;
         }
 
-        $commandLineArguments = [
-            'run_file_mock', //emulate script name in console arguments
-            implode(',', $whiteList),
-            'text', //report format
-            $this->rulesetFile,
-            '--reportfile',
-            $this->reportFile,
-        ];
-
-        $options = new \PHPMD\TextUI\CommandLineOptions($commandLineArguments);
-
-        $command = new \PHPMD\TextUI\Command(new CodeMessOutput());
-
-        return $command->run($options, new \PHPMD\RuleSetFactory());
+        $command = new \PHPMD\TextUI\Command();
+        // Build ArrayInput matching PHPMD's Symfony Command definition:
+        $input = new \Symfony\Component\Console\Input\ArrayInput(
+            [
+                'paths' => array_values($whiteList),
+                '--format' => 'text',
+                '--ruleset' => [realpath($this->rulesetFile)],
+                '--reportfile-text' => $this->reportFile,
+            ],
+            $command->getDefinition()
+        );
+        $output = new \Symfony\Component\Console\Output\NullOutput();
+        return $command->run($input, $output);
     }
 }

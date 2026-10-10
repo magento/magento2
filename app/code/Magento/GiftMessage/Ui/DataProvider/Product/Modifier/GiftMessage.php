@@ -3,6 +3,8 @@
  * Copyright 2016 Adobe
  * All Rights Reserved.
  */
+declare(strict_types=1);
+
 namespace Magento\GiftMessage\Ui\DataProvider\Product\Modifier;
 
 use Magento\Catalog\Model\Locator\LocatorInterface;
@@ -20,7 +22,7 @@ use Magento\Catalog\Model\Product\Attribute\Source\Boolean;
  */
 class GiftMessage extends AbstractModifier
 {
-    const FIELD_MESSAGE_AVAILABLE = 'gift_message_available';
+    public const FIELD_MESSAGE_AVAILABLE = 'gift_message_available';
 
     /**
      * @var ScopeConfigInterface
@@ -57,7 +59,7 @@ class GiftMessage extends AbstractModifier
      */
     public function modifyData(array $data)
     {
-        $modelId = $this->locator->getProduct()->getId();
+        $modelId = $this->locator->getProduct()->getId() ?? '';
         $useConfigValue = Boolean::VALUE_USE_CONFIG;
 
         $isConfigUsed = isset($data[$modelId][static::DATA_SOURCE_DEFAULT][static::FIELD_MESSAGE_AVAILABLE])

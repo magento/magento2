@@ -14,13 +14,13 @@ use Magento\Catalog\Controller\Adminhtml\Product\Builder;
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\Response\Http as HttpResponse;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\ViewInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Framework\View\Test\Unit\Helper\AbstractBlockTestHelper;
-use Magento\Framework\App\Test\Unit\Helper\ResponseTestHelper;
+use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\LayoutInterface;
-use Magento\Catalog\Test\Unit\Helper\ProductTestHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -29,6 +29,8 @@ use PHPUnit\Framework\TestCase;
  */
 class FormTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var Form */
     protected $controller;
 
@@ -73,7 +75,10 @@ class FormTest extends TestCase
         $this->request = $this->createMock(RequestInterface::class);
 
         /** @var ResponseInterface $response */
-        $this->response = new ResponseTestHelper();
+        $this->response = $this->createPartialMockWithReflection(
+            HttpResponse::class,
+            ['setBody', 'getBody']
+        );
 
         $this->productBuilder = $this->createPartialMock(Builder::class, ['build']);
         $this->initializationHelper = $this->createPartialMock(
@@ -99,19 +104,22 @@ class FormTest extends TestCase
     public function testExecute()
     {
         /** @var Product $product */
-        $product = new ProductTestHelper();
+        $product = $this->createPartialMockWithReflection(Product::class, []);
 
         $layout = $this->createMock(LayoutInterface::class);
 
-        /** @var AbstractBlockTestHelper $block */
-        $block = new AbstractBlockTestHelper();
+        /** @var AbstractBlock $block */
+        $block = $this->createPartialMockWithReflection(
+            AbstractBlock::class,
+            ['toHtml', 'setHtmlResult']
+        );
+        $block->method('toHtml')->willReturn('');
 
         $this->productBuilder->expects($this->once())->method('build')->with($this->request)->willReturn($product);
         $this->initializationHelper->method('initialize')->willReturn($product);
-        $this->response->setBody(''); // Use setter instead of expects
+        $this->response->method('getBody')->willReturn('');
         $this->view->expects($this->once())->method('getLayout')->willReturn($layout);
         $layout->expects($this->once())->method('createBlock')->willReturn($block);
-        $block->setHtmlResult(''); // Use setter instead of expects
 
         $this->controller->execute();
     }

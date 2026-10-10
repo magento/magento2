@@ -23,9 +23,7 @@ class StoreResolverTest extends \PHPUnit\Framework\TestCase
     public function testGetStoreData()
     {
         $methodGetStoresData = new \ReflectionMethod(\Magento\Store\Model\StoreResolver::class, 'getStoresData');
-        $methodGetStoresData->setAccessible(true);
         $methodReadStoresData = new \ReflectionMethod(\Magento\Store\Model\StoreResolver::class, 'readStoresData');
-        $methodReadStoresData->setAccessible(true);
 
         $storeResolver = $this->objectManager->get(\Magento\Store\Model\StoreResolver::class);
 

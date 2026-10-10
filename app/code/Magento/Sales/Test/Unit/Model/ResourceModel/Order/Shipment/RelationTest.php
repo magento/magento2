@@ -65,27 +65,13 @@ class RelationTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->itemResource = $this->getMockBuilder(Item::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->commentResource = $this->getMockBuilder(Comment::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->trackResource = $this->getMockBuilder(Track::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->shipment = $this->getMockBuilder(Shipment::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->item = $this->getMockBuilder(ItemEntity::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->track = $this->getMockBuilder(TrackEntity::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->comment = $this->getMockBuilder(Shipment::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->itemResource = $this->createMock(Item::class);
+        $this->commentResource = $this->createMock(Comment::class);
+        $this->trackResource = $this->createMock(Track::class);
+        $this->shipment = $this->createMock(Shipment::class);
+        $this->item = $this->createMock(ItemEntity::class);
+        $this->track = $this->createMock(TrackEntity::class);
+        $this->comment = $this->createMock(Shipment::class);
         $this->relationProcessor = new Relation(
             $this->itemResource,
             $this->trackResource,

@@ -9,13 +9,16 @@ namespace Magento\Framework\Setup\Test\Unit\SampleData;
 
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\Filesystem\File\WriteInterface as FileWriteInterface;
 use Magento\Framework\Setup\SampleData\State;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class StateTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var State|MockObject
      */
@@ -30,6 +33,11 @@ class StateTest extends TestCase
      * @var WriteInterface|MockObject
      */
     protected $writeInterface;
+    
+    /**
+     * @var WriteInterface|MockObject
+     */
+    protected $directoryWriteMock;
 
     /**
      * @var string
@@ -42,15 +50,20 @@ class StateTest extends TestCase
             ->onlyMethods(['getDirectoryWrite'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->writeInterface = $this->getMockForAbstractClass(
-            WriteInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['write', 'close']
-        );
+        
+        // Directory WriteInterface (19 methods) - use createMock for all interface methods
+        $this->directoryWriteMock = $this->createMock(WriteInterface::class);
+        
+        // File WriteInterface (what openFile returns) has write(), read(), and close() methods
+        $this->writeInterface = $this->createMock(FileWriteInterface::class);
+        
+        // Configure directory mock: file exists and openFile returns file stream
+        $this->directoryWriteMock->method('isExist')->willReturn(true);
+        $this->directoryWriteMock->method('openFile')->willReturn($this->writeInterface);
+        $this->directoryWriteMock->method('delete')->willReturn(true);
+        
+        $this->filesystem->method('getDirectoryWrite')->willReturn($this->directoryWriteMock);
+        
         $objectManager = new ObjectManager($this);
         $this->state = $objectManager->getObject(
             State::class,
@@ -60,9 +73,7 @@ class StateTest extends TestCase
 
     public function testClearState()
     {
-        $this->filesystem->expects($this->any())->method('getDirectoryWrite')->willReturn($this->writeInterface);
-        $this->writeInterface->expects($this->any())->method('openFile')->willReturnSelf();
-
+        // Test clearState - should not throw any exceptions
         $this->state->clearState();
     }
 
@@ -71,13 +82,10 @@ class StateTest extends TestCase
      */
     public function testHasError()
     {
-        $this->filesystem->expects($this->any())->method('getDirectoryWrite')->willReturn($this->writeInterface);
-        $this->writeInterface->expects($this->any())->method('openFile')->willReturnSelf();
-        $this->writeInterface->expects($this->any())->method('write')->willReturnSelf();
-        $this->writeInterface->expects($this->any())->method('close');
-        $this->writeInterface->expects($this->any())->method('isExist')->willReturn(true);
-        $this->writeInterface->expects($this->any())->method('read')
-            ->willReturn(State::ERROR);
+        // Configure mocks for write and read operations
+        $this->writeInterface->method('write')->willReturnSelf();
+        $this->writeInterface->method('read')->willReturn(State::ERROR);
+        
         $this->state->setError();
         $this->assertTrue($this->state->hasError());
     }
@@ -87,9 +95,6 @@ class StateTest extends TestCase
      */
     protected function tearDown(): void
     {
-        $this->filesystem->expects($this->any())->method('getDirectoryWrite')->willReturn($this->writeInterface);
-        $this->writeInterface->expects($this->any())->method('openFile')->willReturnSelf($this->absolutePath);
-
-        $this->state->clearState();
+        unset($this->state, $this->filesystem, $this->directoryWriteMock, $this->writeInterface);
     }
 }

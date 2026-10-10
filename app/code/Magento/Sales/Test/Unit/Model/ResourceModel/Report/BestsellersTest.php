@@ -142,9 +142,7 @@ class BestsellersTest extends TestCase
         $from = new \DateTime('yesterday');
         $to = new \DateTime();
         $periodExpr = 'DATE(DATE_ADD(`source_table`.`created_at`, INTERVAL -25200 SECOND))';
-        $select = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $select = $this->createMock(Select::class);
         $select->expects($this->exactly(2))->method('group');
         $select->expects($this->exactly(5))->method('from')->willReturn($select);
         $select->expects($this->exactly(3))->method('distinct')->willReturn($select);
@@ -152,7 +150,20 @@ class BestsellersTest extends TestCase
         $select->expects($this->once())->method('joinLeft')->willReturn($select);
         $select->expects($this->any())->method('where')->willReturn($select);
         $select->expects($this->once())->method('useStraightJoin');
-        $select->expects($this->exactly(2))->method('insertFromSelect');
+        $select->expects($this->exactly(2))
+            ->method('insertFromSelect')
+            ->with(
+                null,
+                [
+                    'period',
+                    'store_id',
+                    'product_id',
+                    'product_name',
+                    'product_price',
+                    'qty_ordered',
+                    'period_month'
+                ]
+            );
         $connection = $this->createMock(AdapterInterface::class);
         $connection->expects($this->exactly(4))
             ->method('getDatePartSql')
@@ -219,9 +230,7 @@ class BestsellersTest extends TestCase
         $store->expects($this->once())->method('getId')->willReturn(1);
         $this->storeManager->expects($this->once())->method('getStores')->with(true)->willReturn([$store]);
 
-        $select = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $select = $this->createMock(Select::class);
         $select->expects($this->atLeastOnce())->method('from')->willReturnSelf();
         $select->expects($this->atLeastOnce())->method('joinInner')->willReturnSelf();
         $select->expects($this->atLeastOnce())->method('joinLeft')->willReturnSelf();
@@ -270,9 +279,7 @@ class BestsellersTest extends TestCase
     public function testAggregatePerStoreCalculationNoInterval(): void
     {
         $periodExpr = 'DATE(DATE_ADD(`source_table`.`created_at`, INTERVAL -25200 SECOND))';
-        $select = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $select = $this->createMock(Select::class);
         $select->expects($this->exactly(2))->method('group');
         $select->expects($this->exactly(3))->method('from')->willReturn($select);
         $select->expects($this->once())->method('joinInner')->willReturn($select);
@@ -340,9 +347,7 @@ class BestsellersTest extends TestCase
         array $randomDates
     ): void {
         $periodExpr = 'DATE(DATE_ADD(`source_table`.`created_at`, INTERVAL -25200 SECOND))';
-        $select = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $select = $this->createMock(Select::class);
         $select->expects($this->exactly(2))->method('group');
         $select->expects($this->exactly(5))->method('from')->willReturn($select);
         $select->expects($this->exactly(3))->method('distinct')->willReturn($select);

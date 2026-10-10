@@ -39,8 +39,8 @@
              <!-- delete category,product -->
             <deleteData createDataKey="testProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="testCategory" stepKey="deleteSimpleCategory"/>
-           <!--Delete created customer while generating Order-->
-           <actionGroup ref="AdminDeleteAllCustomerActionGroup" stepKey="deleteAllCustomers"/>
+           <!--Delete all customers via API-->
+           <helper class="Magento\Customer\Test\Mftf\Helper\CustomerApiHelper" method="deleteAllCustomersApi" stepKey="deleteAllCustomersViaApi"/>
              <!-- Free Shipping disabled -->
             <magentoCLI command="config:set {{DisableFreeShippingConfigData.path}} {{DisableFreeShippingConfigData.value}}" stepKey="disableFreeShipping"/>
             <magentoCLI command="config:set {{AdminFreeshippingMinimumOrderAmountConfigData.path}} {{AdminFreeshippingMinimumOrderAmountConfigData.default}}" stepKey="setFreeShippingMethodMinimumOrderAmountAsDefault"/>

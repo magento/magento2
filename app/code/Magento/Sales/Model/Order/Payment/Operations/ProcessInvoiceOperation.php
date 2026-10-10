@@ -85,7 +85,7 @@ class ProcessInvoiceOperation extends AbstractOperation
         // prepare parent transaction and its amount
         $paidWorkaround = 0;
         if (!$invoice->wasPayCalled()) {
-            $paidWorkaround = (double)$amountToCapture;
+            $paidWorkaround = (float)$amountToCapture;
         }
         if ($payment->isCaptureFinal($paidWorkaround)) {
             $payment->setShouldCloseParentTransaction(true);

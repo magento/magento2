@@ -10,6 +10,7 @@ namespace Magento\Framework\Reflection\Test\Unit;
 use Magento\Framework\Reflection\FieldNamer;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class FieldNamerTest extends TestCase
 {
@@ -29,9 +30,8 @@ class FieldNamerTest extends TestCase
 
     /**
      * @param string $methodName
-     * @param string $expectedName
-     * @dataProvider methodNameProvider
-     */
+     * @param string $expectedName     */
+    #[DataProvider('methodNameProvider')]
     public function testGetFieldNameForMethodName($methodName, $expectedName)
     {
         $value = $this->model->getFieldNameForMethodName($methodName);

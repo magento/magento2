@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontAssertCustomerRegistrationValidationMessagesActionGroup">
+        <annotations>
+            <description>Verify all required fields on customer registration form display validation error messages with correct text and CSS class.</description>
+        </annotations>
+        <!-- Verify First Name field validation -->
+        <waitForText selector="{{StorefrontCustomerCreateFormSection.fieldErrorByFieldId('firstname-error')}}" userInput="{{ProductWarningMessage.require_Message}}" stepKey="assertFirstNameError"/>
+        <waitForElementVisible selector="{{StorefrontCustomerCreateFormSection.fieldErrorWithClassByFieldId('firstname-error')}}" stepKey="assertFirstNameErrorClass"/>
+        <!-- Verify Last Name field validation -->
+        <waitForText selector="{{StorefrontCustomerCreateFormSection.fieldErrorByFieldId('lastname-error')}}" userInput="{{ProductWarningMessage.require_Message}}" stepKey="assertLastNameError"/>
+        <waitForElementVisible selector="{{StorefrontCustomerCreateFormSection.fieldErrorWithClassByFieldId('lastname-error')}}" stepKey="assertLastNameErrorClass"/>
+        <!-- Verify Email field validation -->
+        <waitForText selector="{{StorefrontCustomerCreateFormSection.fieldErrorByFieldId('email_address-error')}}" userInput="{{ProductWarningMessage.require_Message}}" stepKey="assertEmailError"/>
+        <waitForElementVisible selector="{{StorefrontCustomerCreateFormSection.fieldErrorWithClassByFieldId('email_address-error')}}" stepKey="assertEmailErrorClass"/>
+        <!-- Verify Password field validation -->
+        <waitForText selector="{{StorefrontCustomerCreateFormSection.fieldErrorByFieldId('password-error')}}" userInput="{{ProductWarningMessage.require_Message}}" stepKey="assertPasswordError"/>
+        <waitForElementVisible selector="{{StorefrontCustomerCreateFormSection.fieldErrorWithClassByFieldId('password-error')}}" stepKey="assertPasswordErrorClass"/>
+        <!-- Verify Password Confirmation field validation -->
+        <waitForText selector="{{StorefrontCustomerCreateFormSection.fieldErrorByFieldId('password-confirmation-error')}}" userInput="{{ProductWarningMessage.require_Message}}" stepKey="assertPasswordConfirmationError"/>
+        <waitForElementVisible selector="{{StorefrontCustomerCreateFormSection.fieldErrorWithClassByFieldId('password-confirmation-error')}}" stepKey="assertPasswordConfirmationErrorClass"/>
+    </actionGroup>
+</actionGroups>
+

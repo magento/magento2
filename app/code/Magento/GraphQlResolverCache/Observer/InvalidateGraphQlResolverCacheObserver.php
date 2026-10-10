@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\GraphQlResolverCache\Observer;
 
 use Magento\Framework\App\Cache\StateInterface as CacheState;
+use Magento\Framework\Cache\CacheConstants;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\TagResolver;
@@ -70,7 +71,7 @@ class InvalidateGraphQlResolverCacheObserver implements ObserverInterface
         $tags = $this->tagResolver->getTags($object);
 
         if (!empty($tags)) {
-            $this->graphQlResolverCache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, $tags);
+            $this->graphQlResolverCache->clean(CacheConstants::CLEANING_MODE_MATCHING_ANY_TAG, $tags);
         }
     }
 }

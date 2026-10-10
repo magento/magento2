@@ -15,15 +15,15 @@ use Magento\Bundle\Model\Product\Type;
 use Magento\Bundle\Model\Product\SaveHandler;
 use Magento\Bundle\Model\Product\CheckOptionLinkIfExist;
 use Magento\Bundle\Model\ProductRelationsProcessorComposite;
-use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\Data\ProductExtensionInterface;
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Product;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\EntityManager\EntityMetadataInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\Catalog\Test\Unit\Helper\ProductTestHelper;
-use Magento\Catalog\Test\Unit\Helper\ProductExtensionTestHelper;
 
 /**
  * Test class for \Magento\Bundle\Model\Product\SaveHandler
@@ -32,6 +32,8 @@ use Magento\Catalog\Test\Unit\Helper\ProductExtensionTestHelper;
  */
 class SaveHandlerTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ProductLinkManagementInterface|MockObject
      */
@@ -63,7 +65,7 @@ class SaveHandlerTest extends TestCase
     private $productRelationsProcessorComposite;
 
     /**
-     * @var ProductTestHelper
+     * @var Product|MockObject
      */
     private $entity;
 
@@ -82,8 +84,17 @@ class SaveHandlerTest extends TestCase
         $this->productRelationsProcessorComposite = $this->createMock(
             ProductRelationsProcessorComposite::class
         );
-        $this->entity = new ProductTestHelper();
-        $this->entity->setTypeId(Type::TYPE_CODE);
+        $this->entity = $this->createPartialMockWithReflection(
+            Product::class,
+            [
+                'getTypeId', 'setTypeId', 'getExtensionAttributes', 'setExtensionAttributes',
+                'getSku', 'getDropOptions', 'getCopyFromView', 'setCopyFromView'
+            ]
+        );
+        $this->entity->method('getTypeId')->willReturn(Type::TYPE_CODE);
+        $this->entity->method('getSku')->willReturn('test-sku');
+        $this->entity->method('getDropOptions')->willReturn(false);
+        $this->entity->method('getCopyFromView')->willReturn(false);
 
         $this->saveHandler = new SaveHandler(
             $this->optionRepository,
@@ -106,9 +117,12 @@ class SaveHandlerTest extends TestCase
         $option->method('getOptionId')->willReturn(1);
         $bundleOptions = [$option];
 
-        $extensionAttributes = new ProductExtensionTestHelper();
-        $extensionAttributes->setBundleProductOptions($bundleOptions);
-        $this->entity->setExtensionAttributes($extensionAttributes);
+        $extensionAttributes = $this->createPartialMockWithReflection(
+            ProductExtensionInterface::class,
+            ['getBundleProductOptions', 'setBundleProductOptions']
+        );
+        $extensionAttributes->method('getBundleProductOptions')->willReturn($bundleOptions);
+        $this->entity->method('getExtensionAttributes')->willReturn($extensionAttributes);
         $metadata = $this->createMock(EntityMetadataInterface::class);
         $this->metadataPool->expects($this->once())
             ->method('getMetadata')

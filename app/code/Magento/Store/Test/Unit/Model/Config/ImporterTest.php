@@ -73,13 +73,11 @@ class ImporterTest extends TestCase
         $this->processorFactoryMock = $this->getMockBuilder(ProcessorFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->processorMock = $this->getMockBuilder(ProcessorInterface::class)
-            ->getMockForAbstractClass();
+        $this->processorMock = $this->createMock(ProcessorInterface::class);
         $this->storeManagerMock = $this->getMockBuilder(StoreManager::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->cacheManagerMock = $this->getMockBuilder(CacheInterface::class)
-            ->getMockForAbstractClass();
+        $this->cacheManagerMock = $this->createMock(CacheInterface::class);
         $this->resourceMock = $this->getMockBuilder(Website::class)
             ->disableOriginalConstructor()
             ->getMock();

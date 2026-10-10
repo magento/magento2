@@ -12,9 +12,12 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\Session as CustomerSession;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartInterface;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Quote\Model\GetQuoteByReservedOrderId;
 use PHPUnit\Framework\TestCase;
@@ -69,6 +72,10 @@ class SessionTest extends TestCase
     private $quote;
 
     /**
+     * @var DataFixtureStorageManager
+     */
+    private $dataFixtureStorage;
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -83,6 +90,7 @@ class SessionTest extends TestCase
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
         $this->productRepository->cleanCache();
         $this->quoteRepository = $this->objectManager->get(CartRepositoryInterface::class);
+        $this->dataFixtureStorage = DataFixtureStorageManager::getStorage();
     }
 
     /**
@@ -167,12 +175,17 @@ class SessionTest extends TestCase
      *
      * @return void
      */
+    #[
+        DataFixture(Customer::class, as: 'mismatchedCustomer')
+    ]
     public function testGetQuoteWithMismatchingSession(): void
     {
+        $mismatchedCustomer = $this->dataFixtureStorage->get('mismatchedCustomer');
+        $this->customerSession->setCustomer($mismatchedCustomer);
         $quote = $this->getQuoteByReservedOrderId->execute('test01');
         $this->checkoutSession->setQuoteId($quote->getId());
         $this->quote = $this->checkoutSession->getQuote();
-        $this->assertEmpty($this->quote->getCustomerId());
+        $this->assertNotEmpty($this->quote->getCustomerId());
         $this->assertNotEquals($quote->getId(), $this->quote->getId());
     }
 

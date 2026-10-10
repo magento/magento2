@@ -5,6 +5,8 @@
  */
 namespace Magento\UrlRewrite\Block\Cms\Page\Edit;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 /**
  * Test for \Magento\UrlRewrite\Block\Cms\Page\Edit\FormTest
  * @magentoAppArea adminhtml
@@ -39,8 +41,6 @@ class FormTest extends \PHPUnit\Framework\TestCase
      *
      * @covers \Magento\UrlRewrite\Block\Cms\Page\Edit\Form::_formPostInit
      *
-     * @dataProvider formPostInitDataProvider
-     *
      * @param array $cmsPageData
      * @param string $action
      * @param string $requestPath
@@ -48,6 +48,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
      * @magentoConfigFixture current_store general/single_store_mode/enabled 1
      * @magentoAppIsolation enabled
      */
+    #[DataProvider('formPostInitDataProvider')]
     public function testFormPostInit($cmsPageData, $action, $requestPath, $targetPath)
     {
         $args = [];
@@ -113,7 +114,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
      * @return array
      * phpcs:disable Magento2.Functions.StaticFunction
      */
-    public static function formPostInitDataProvider()
+    public static function formPostInitDataProvider(): array
     {
         return [
             [

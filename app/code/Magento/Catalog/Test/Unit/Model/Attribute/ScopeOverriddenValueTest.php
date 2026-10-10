@@ -25,6 +25,7 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Store\Model\Store;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * Unit test for ScopeOverriddenValue class with 100% coverage
@@ -33,6 +34,8 @@ use PHPUnit\Framework\TestCase;
  */
 class ScopeOverriddenValueTest extends TestCase
 {
+
+    use MockCreationTrait;
     /**
      * Test containsValue method with default store ID (early return)
      */
@@ -369,11 +372,10 @@ class ScopeOverriddenValueTest extends TestCase
      */
     private function createMockEntity(): MockObject
     {
-        $entityMock = $this->getMockBuilder(AbstractModel::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getData'])
-            ->addMethods(['getStoreId'])
-            ->getMock();
+        $entityMock = $this->createPartialMockWithReflection(
+            AbstractModel::class,
+            ['getData', 'getStoreId']
+        );
         $entityMock->method('getData')->willReturn(1);
         $entityMock->method('getStoreId')->willReturn(0);
         return $entityMock;

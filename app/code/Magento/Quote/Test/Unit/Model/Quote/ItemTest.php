@@ -8,9 +8,7 @@ declare(strict_types=1);
 namespace Magento\Quote\Test\Unit\Model\Quote;
 
 use Magento\Catalog\Api\Data\ProductExtensionInterface;
-use Magento\Quote\Test\Unit\Helper\DataObjectTestHelper;
 use Magento\Catalog\Model\Product;
-use Magento\Catalog\Test\Unit\Helper\ProductTestHelper;
 use Magento\Catalog\Model\Product\Type\AbstractType;
 use Magento\Framework\DataObject;
 use Magento\Framework\Event\ManagerInterface;
@@ -18,6 +16,7 @@ use Magento\Framework\Locale\FormatInterface;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Quote\Model\Quote\Item\Compare;
@@ -27,7 +26,6 @@ use Magento\Quote\Model\Quote\Item\OptionFactory;
 use Magento\Sales\Model\Status\ListFactory;
 use Magento\Sales\Model\Status\ListStatus;
 use Magento\Store\Model\Store;
-use Magento\Quote\Test\Unit\Helper\OptionTestHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -36,6 +34,8 @@ use PHPUnit\Framework\TestCase;
  */
 class ItemTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Item
      */
@@ -450,8 +450,8 @@ class ItemTest extends TestCase
         int $productTaxClassId,
         float $productCost
     ): MockObject {
-        $productMock = $this->createPartialMock(
-            ProductTestHelper::class,
+        $productMock = $this->createPartialMockWithReflection(
+            Product::class,
             [
                 'getId',
                 'getTypeId',
@@ -482,7 +482,7 @@ class ItemTest extends TestCase
 
         $productMock->method('getStore')->willReturn($store);
         $extensionAttribute = $this->createPartialMock(
-            DataObjectTestHelper::class,
+            DataObject::class,
             []
         );
         $extensionAttribute->setData('stock_item', $this->stockItemMock);
@@ -872,22 +872,22 @@ class ItemTest extends TestCase
      */
     private function createOptionMock($optionCode, array $optionData = []): MockObject
     {
-        $optionMock = $this->getMockBuilder(OptionTestHelper::class)
-            ->onlyMethods(
-                [
-                    'setData',
-                    'setItem',
-                    'getItem',
-                    '__wakeup',
-                    'isDeleted',
-                    'delete',
-                    'getValue',
-                    'getProduct',
-                    'save'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $optionMock = $this->createPartialMockWithReflection(
+            Option::class,
+            [
+                'setData',
+                'setItem',
+                'getItem',
+                '__wakeup',
+                'isDeleted',
+                'delete',
+                'getValue',
+                'getProduct',
+                'save',
+                'setCode',
+                'getCode'
+            ]
+        );
         $optionMock->expects($this->any())
             ->method('setData')
             ->with($optionData)
@@ -896,7 +896,11 @@ class ItemTest extends TestCase
             ->method('setItem')
             ->with($this->model)
             ->willReturn($optionMock);
-        $optionMock->setCode($optionCode);
+        $optionMock->method('setCode')
+            ->with($optionCode)
+            ->willReturn($optionMock);
+        $optionMock->method('getCode')
+            ->willReturn($optionCode);
 
         return $optionMock;
     }
@@ -909,10 +913,10 @@ class ItemTest extends TestCase
         $optionCode = 1234;
         $optionData = ['product' => 'test', 'code' => $optionCode];
 
-        $optionMock = $this->getMockBuilder(OptionTestHelper::class)
-            ->onlyMethods(['setData', 'setItem', '__wakeup', 'isDeleted'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $optionMock = $this->createPartialMockWithReflection(
+            Option::class,
+            ['setData', 'setItem', '__wakeup', 'isDeleted', 'setCode', 'getCode']
+        );
         $optionMock->expects($this->once())
             ->method('setData')
             ->with($optionData)
@@ -921,7 +925,11 @@ class ItemTest extends TestCase
             ->method('setItem')
             ->with($this->model)
             ->willReturn($optionMock);
-        $optionMock->setCode($optionCode);
+        $optionMock->method('setCode')
+            ->with($optionCode)
+            ->willReturn($optionMock);
+        $optionMock->method('getCode')
+            ->willReturn($optionCode);
 
         $this->itemOptionFactory
             ->method('create')
@@ -972,7 +980,7 @@ class ItemTest extends TestCase
     {
         $optionCode = 1234;
 
-        $optionMock = $this->getMockBuilder(OptionTestHelper::class)
+        $optionMock = $this->getMockBuilder(Option::class)
             ->onlyMethods(['setItem', '__wakeup', 'isDeleted'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -1012,7 +1020,7 @@ class ItemTest extends TestCase
     {
         $optionCode = 1234;
 
-        $optionMock = $this->getMockBuilder(OptionTestHelper::class)
+        $optionMock = $this->getMockBuilder(Option::class)
             ->onlyMethods(['setItem', '__wakeup', 'isDeleted'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -1079,7 +1087,7 @@ class ItemTest extends TestCase
     {
         $optionCode = 'info_buyRequest';
         $buyRequestQuantity = 23;
-        $optionMock = $this->getMockBuilder(OptionTestHelper::class)
+        $optionMock = $this->getMockBuilder(Option::class)
             ->onlyMethods(['setItem', '__wakeup', 'getValue'])
             ->disableOriginalConstructor()
             ->getMock();

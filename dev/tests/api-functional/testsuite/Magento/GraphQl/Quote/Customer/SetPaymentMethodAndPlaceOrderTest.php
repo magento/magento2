@@ -17,6 +17,7 @@ use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for setting payment method and placing order by customer
@@ -99,11 +100,11 @@ class SetPaymentMethodAndPlaceOrderTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/set_simple_product_out_of_stock.php
      *
-     * @dataProvider dataProviderSetPaymentOnCartWithException
      * @param string $input
      * @param string $message
      * @throws \Exception
      */
+    #[DataProvider('dataProviderSetPaymentOnCartWithException')]
     public function testSetPaymentOnCartWithException(string $input, string $message)
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
@@ -138,11 +139,11 @@ QUERY;
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/set_simple_product_out_of_stock.php
      *
-     * @dataProvider dataProviderSetPaymentOnCartWithExceptionWithDisabledInventoryCheck
      * @param string $input
      * @param string $message
      * @throws \Exception
      */
+    #[DataProvider('dataProviderSetPaymentOnCartWithExceptionWithDisabledInventoryCheck')]
     public function testSetPaymentOnCartWithExceptionWithDisabledInventoryCheck(string $input, string $message)
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');

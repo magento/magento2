@@ -62,7 +62,6 @@ class EditTest extends TestCase
         $code = 'customer_edit';
         $buttonLock = $this->getMockBuilder(\Magento\ReCaptchaUi\Model\ButtonLock::class)
             ->disableOriginalConstructor()
-            ->disableAutoload()
             ->onlyMethods(['isDisabled', 'getCode'])
             ->getMock();
         $buttonLock->expects($this->atLeastOnce())->method('getCode')->willReturn($code);

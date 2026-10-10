@@ -8,10 +8,11 @@ declare(strict_types=1);
 namespace Magento\Quote\Test\Unit\Model;
 
 use Magento\Authorization\Model\UserContextInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Model\ChangeQuoteControl;
-use Magento\Quote\Test\Unit\Helper\QuoteTestHelper;
+use Magento\Quote\Model\Quote;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -20,6 +21,8 @@ use PHPUnit\Framework\TestCase;
  */
 class ChangeQuoteControlTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ChangeQuoteControl
      */
@@ -38,16 +41,14 @@ class ChangeQuoteControlTest extends TestCase
     protected function setUp(): void
     {
         $this->userContextMock = $this->createMock(UserContextInterface::class);
-
         $this->model = new ChangeQuoteControl($this->userContextMock);
-
-        $this->quoteMock = new QuoteTestHelper();
+        $this->quoteMock = $this->createPartialMockWithReflection(Quote::class, ['getCustomerId']);
     }
 
     public function testIsAllowedIfTheQuoteIsBelongedToCustomer()
     {
         $quoteCustomerId = 1;
-        $this->quoteMock->setCustomerId($quoteCustomerId);
+        $this->quoteMock->method('getCustomerId')->willReturn($quoteCustomerId);
         $this->userContextMock->method('getUserType')
             ->willReturn(UserContextInterface::USER_TYPE_CUSTOMER);
         $this->userContextMock->method('getUserId')
@@ -61,7 +62,7 @@ class ChangeQuoteControlTest extends TestCase
         $currentCustomerId = 1;
         $quoteCustomerId = 2;
 
-        $this->quoteMock->setCustomerId($quoteCustomerId);
+        $this->quoteMock->method('getCustomerId')->willReturn($quoteCustomerId);
         $this->userContextMock->method('getUserType')
             ->willReturn(UserContextInterface::USER_TYPE_CUSTOMER);
         $this->userContextMock->method('getUserId')
@@ -72,8 +73,7 @@ class ChangeQuoteControlTest extends TestCase
 
     public function testIsAllowedIfQuoteIsBelongedToGuestAndContextIsGuest()
     {
-        $quoteCustomerId = null;
-        $this->quoteMock->setCustomerId($quoteCustomerId);
+        $this->quoteMock->method('getCustomerId')->willReturn(null);
         $this->userContextMock->method('getUserType')
             ->willReturn(UserContextInterface::USER_TYPE_GUEST);
         $this->assertTrue($this->model->isAllowed($this->quoteMock));
@@ -81,8 +81,7 @@ class ChangeQuoteControlTest extends TestCase
 
     public function testIsAllowedIfQuoteIsBelongedToCustomerAndContextIsGuest()
     {
-        $quoteCustomerId = 1;
-        $this->quoteMock->setCustomerId($quoteCustomerId);
+        $this->quoteMock->method('getCustomerId')->willReturn(1);
         $this->userContextMock->method('getUserType')
             ->willReturn(UserContextInterface::USER_TYPE_GUEST);
         $this->assertFalse($this->model->isAllowed($this->quoteMock));

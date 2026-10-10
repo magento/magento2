@@ -12,16 +12,18 @@ use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Quote\Model\Quote\Item\Compare;
+use Magento\Quote\Model\Quote\Item\Option;
 use Magento\Quote\Model\Quote\Item\Option\Comparator;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\Quote\Test\Unit\Helper\OptionCompareTestHelper;
 
 /**
  * Tests the class that is used to compare Quote Item Options
  */
 class CompareTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Compare
      */
@@ -87,12 +89,16 @@ class CompareTest extends TestCase
     /**
      * @param string $code
      * @param mixed $value
-     * @return OptionCompareTestHelper
+     * @return Option
      */
-    protected function getOption($code, $value): OptionCompareTestHelper
+    protected function getOption($code, $value): Option
     {
-        $option = new OptionCompareTestHelper();
-        $option->setCode($code)->setValue($value);
+        $option = $this->createPartialMockWithReflection(
+            Option::class,
+            ['setCode', 'getCode', 'setValue', 'getValue']
+        );
+        $option->method('getCode')->willReturn($code);
+        $option->method('getValue')->willReturn($value);
         return $option;
     }
 

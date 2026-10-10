@@ -13,6 +13,7 @@ use Magento\Framework\Setup\Option\SelectConfigOption;
 use Magento\Framework\Setup\Option\TextConfigOption;
 use Magento\Setup\Model\ConfigOptionsList\Session as SessionConfigOptionsList;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
@@ -128,8 +129,8 @@ class SessionTest extends TestCase
 
     /**
      * @param string $backend
-     * @dataProvider sessionBackendProvider
      */
+    #[DataProvider('sessionBackendProvider')]
     public function testCreateConfigWithSessionSaveBackend(string $backend)
     {
         $this->deploymentConfigMock->expects($this->any())->method('get')->willReturn('');
@@ -233,8 +234,8 @@ class SessionTest extends TestCase
      * @param string $option
      * @param string $configArrayKey
      * @param string $optionValue
-     * @dataProvider redisOptionProvider
      */
+    #[DataProvider('redisOptionProvider')]
     public function testIndividualOptionsAreSetProperly($option, $configArrayKey, $optionValue)
     {
         $configData = $this->configList->createConfig([$option => $optionValue], $this->deploymentConfigMock);
@@ -260,8 +261,8 @@ class SessionTest extends TestCase
      * @param string $option
      * @param string $invalidInput
      * @param string $errorMessage
-     * @dataProvider invalidOptionsProvider
      */
+    #[DataProvider('invalidOptionsProvider')]
     public function testValidationWithInvalidOptions($option, $invalidInput, $errorMessage)
     {
         $errors = $this->configList->validate([$option => $invalidInput], $this->deploymentConfigMock);

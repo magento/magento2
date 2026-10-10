@@ -70,9 +70,10 @@ class Form extends AbstractComponent
 
         $data = $this->getContext()->getDataProvider()->getData();
 
-        if (isset($data[$id])) {
+        $dataKey = $id ?? '';
+        if (isset($data[$dataKey])) {
             $dataSource = [
-                'data' => $data[$id]
+                'data' => $data[$dataKey]
             ];
         } elseif (isset($data['items'])) {
             foreach ($data['items'] as $item) {

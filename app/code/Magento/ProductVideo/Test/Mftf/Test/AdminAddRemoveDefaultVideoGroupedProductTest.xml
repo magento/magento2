@@ -20,9 +20,6 @@
             <group value="catalog"/>
             <group value="groupedProduct"/>
             <group value="productVideo"/>
-            <skip>
-                <issueId value="MC-33903"/>
-            </skip>
             <group value="pr_exclude"/>
         </annotations>
         <before>

@@ -40,8 +40,7 @@ class StoreGroupTest extends TestCase
             ->getMock();
 
         /** @var IndexerInterface|MockObject $indexerMock */
-        $indexerMock = $this->getMockBuilder(IndexerInterface::class)
-            ->getMockForAbstractClass();
+        $indexerMock = $this->createMock(IndexerInterface::class);
         $indexerMock->expects($this->once())
             ->method('invalidate');
 

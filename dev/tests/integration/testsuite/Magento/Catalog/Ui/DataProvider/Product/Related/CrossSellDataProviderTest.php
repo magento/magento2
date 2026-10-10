@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Ui\DataProvider\Product\Related;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 /**
  * Checks cross-sell products data provider
  *
@@ -18,8 +20,6 @@ namespace Magento\Catalog\Ui\DataProvider\Product\Related;
 class CrossSellDataProviderTest extends AbstractRelationsDataProviderTest
 {
     /**
-     * @dataProvider productDataProvider
-     *
      * @magentoDataFixture Magento/Catalog/_files/products_crosssell.php
      * @magentoDataFixture Magento/Catalog/_files/product_with_price_on_second_website.php
      *
@@ -27,6 +27,7 @@ class CrossSellDataProviderTest extends AbstractRelationsDataProviderTest
      * @param float $price
      * @return void
      */
+    #[DataProvider('productDataProvider')]
     public function testGetData(string $storeCode, float $price): void
     {
         $this->prepareRequest('simple_with_cross', 'simple', $storeCode);

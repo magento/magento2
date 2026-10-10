@@ -61,7 +61,6 @@ class FormTest extends \PHPUnit\Framework\TestCase
             \Magento\Email\Block\Adminhtml\Template\Edit\Form::class,
             '_prepareForm'
         );
-        $this->prepareFormMethod->setAccessible(true);
     }
 
     /**

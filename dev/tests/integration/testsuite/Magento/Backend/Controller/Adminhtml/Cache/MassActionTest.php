@@ -10,6 +10,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\TestFramework\App\State as AppState;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class MassActionTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
@@ -51,9 +52,9 @@ class MassActionTest extends \Magento\TestFramework\TestCase\AbstractBackendCont
     }
 
     /**
-     * @dataProvider massActionsDataProvider
      * @param array $typesToEnable
      */
+    #[DataProvider('massActionsDataProvider')]
     public function testMassEnableActionDeveloperMode($typesToEnable = [])
     {
         $this->setAll(false);
@@ -71,9 +72,9 @@ class MassActionTest extends \Magento\TestFramework\TestCase\AbstractBackendCont
     }
 
     /**
-     * @dataProvider massActionsDataProvider
      * @param array $typesToEnable
      */
+    #[DataProvider('massActionsDataProvider')]
     public function testMassEnableActionProductionMode($typesToEnable = [])
     {
         Bootstrap::getObjectManager()->get(AppState::class)->setMode(AppState::MODE_PRODUCTION);
@@ -88,9 +89,9 @@ class MassActionTest extends \Magento\TestFramework\TestCase\AbstractBackendCont
     }
 
     /**
-     * @dataProvider massActionsDataProvider
      * @param array $typesToDisable
      */
+    #[DataProvider('massActionsDataProvider')]
     public function testMassDisableActionDeveloperMode($typesToDisable = [])
     {
         $this->setAll(true);
@@ -108,9 +109,9 @@ class MassActionTest extends \Magento\TestFramework\TestCase\AbstractBackendCont
     }
 
     /**
-     * @dataProvider massActionsDataProvider
      * @param array $typesToDisable
      */
+    #[DataProvider('massActionsDataProvider')]
     public function testMassDisableActionProductionMode($typesToDisable = [])
     {
         Bootstrap::getObjectManager()->get(AppState::class)->setMode(AppState::MODE_PRODUCTION);
@@ -127,18 +128,14 @@ class MassActionTest extends \Magento\TestFramework\TestCase\AbstractBackendCont
     /**
      * Retrieve cache states (enabled/disabled) information
      *
-     * Access configuration file directly as it is not possible to re-include modified file under HHVM
-     * @link https://github.com/facebook/hhvm/issues/1447
-     *
      * @return array
-     * @SuppressWarnings(PHPMD.EvalExpression)
      */
     protected function getCacheStates()
     {
         $configFilePool = new ConfigFilePool();
         $configPath = Bootstrap::getInstance()->getAppTempDir() . '/'. DirectoryList::CONFIG .'/'
             . $configFilePool->getPath($configFilePool::APP_ENV);
-        $configData = eval(str_replace('<?php', '', file_get_contents($configPath)));
+        $configData = include $configPath;
         return $configData[State::CACHE_KEY];
     }
 
@@ -160,9 +157,9 @@ class MassActionTest extends \Magento\TestFramework\TestCase\AbstractBackendCont
 
     /**
      * @magentoDataFixture Magento/Backend/controllers/_files/cache/all_types_invalidated.php
-     * @dataProvider massActionsDataProvider
      * @param array $typesToRefresh
      */
+    #[DataProvider('massActionsDataProvider')]
     public function testMassRefreshAction($typesToRefresh = [])
     {
         $this->getRequest()->setParams(['types' => $typesToRefresh]);

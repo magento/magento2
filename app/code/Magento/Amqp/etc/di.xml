@@ -5,7 +5,8 @@
  * All Rights Reserved.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <type name="Magento\Framework\MessageQueue\Consumer\Config\CompositeReader">
         <plugin name="queueConfigPlugin" type="Magento\Framework\MessageQueue\Config\Consumer\ConfigReaderPlugin" />
     </type>
@@ -72,4 +73,9 @@
             <argument name="instanceName" xsi:type="string">\Magento\Framework\Amqp\Bulk\Exchange</argument>
         </arguments>
     </virtualType>
+    <type name="Magento\Amqp\Setup\ConfigOptionsList">
+        <arguments>
+            <argument name="output" xsi:type="object">Symfony\Component\Console\Output\ConsoleOutput</argument>
+        </arguments>
+    </type>
 </config>

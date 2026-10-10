@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model\Product\Attribute\Save;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 /**
  * @magentoDbIsolation enabled
  * @magentoDataFixture  Magento/Catalog/_files/product_date_attribute.php
@@ -15,9 +17,9 @@ namespace Magento\Catalog\Model\Product\Attribute\Save;
 class AttributeDateTest extends AbstractAttributeTest
 {
     /**
-     * @dataProvider productProvider
      * @param string $productSku
      */
+    #[DataProvider('productProvider')]
     public function testDefaultValue(string $productSku): void
     {
         $this->markTestSkipped('Test is blocked by issue MC-28950');
@@ -43,10 +45,10 @@ class AttributeDateTest extends AbstractAttributeTest
      * @magentoDataFixture Magento/Catalog/_files/product_date_attribute.php
      * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
      * @magentoDataFixture Magento/Catalog/_files/product_simple_out_of_stock.php
-     * @dataProvider uniqueAttributeValueProvider
      * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      * @inheritdoc
      */
+    #[DataProvider('uniqueAttributeValueProvider')]
     public function testUniqueAttribute(string $firstSku, string $secondSku): void
     {
         parent::testUniqueAttribute($firstSku, $secondSku);

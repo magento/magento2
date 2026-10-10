@@ -17,6 +17,7 @@ use PHPUnit\Framework\TestCase;
 
 class StatusTest extends TestCase
 {
+
     public function testPrepareDataSource()
     {
         $itemName = 'itemName';
@@ -45,10 +46,8 @@ class StatusTest extends TestCase
 
         $objectManager = new ObjectManager($this);
         $contextMock = $this->getMockBuilder(ContextInterface::class)
-            ->getMockForAbstractClass();
-        $processor = $this->getMockBuilder(Processor::class)
-            ->disableOriginalConstructor()
             ->getMock();
+        $processor = $this->createMock(Processor::class);
         $contextMock->expects($this->never())->method('getProcessor')->willReturn($processor);
         $model = $objectManager->getObject(
             Status::class,

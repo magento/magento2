@@ -152,7 +152,7 @@ class CheckItems extends Checkout
                 if (!isset($itemsInfo[$quoteItemId])) {
                     $itemsInfo[$quoteItemId] = 0;
                 }
-                $itemsInfo[$quoteItemId] += (double)$data['qty'];
+                $itemsInfo[$quoteItemId] += (float)$data['qty'];
             }
         }
 

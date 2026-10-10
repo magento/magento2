@@ -14,9 +14,12 @@ use Magento\Quote\Model\ResourceModel\Quote;
 use Magento\Sales\Observer\Backend\SubtractQtyFromQuotesObserver;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class SubtractQtyFromQuotesObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var SubtractQtyFromQuotesObserver
      */
@@ -41,10 +44,10 @@ class SubtractQtyFromQuotesObserverTest extends TestCase
     {
         $this->_quoteMock = $this->createMock(Quote::class);
         $this->_observerMock = $this->createMock(Observer::class);
-        $this->_eventMock = $this->getMockBuilder(Event::class)
-            ->addMethods(['getProduct', 'getStatus', 'getProductId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_eventMock = $this->createPartialMockWithReflection(
+            Event::class,
+            ['getProduct', 'getStatus', 'getProductId']
+        );
         $this->_observerMock->expects($this->any())->method('getEvent')->willReturn($this->_eventMock);
         $this->_model = new SubtractQtyFromQuotesObserver($this->_quoteMock);
     }

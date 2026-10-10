@@ -27,8 +27,8 @@ class ConsoleLoggerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->console = $this->getMockForAbstractClass(OutputInterface::class);
-        $outputFormatter = $this->getMockForAbstractClass(OutputFormatterInterface::class);
+        $this->console = $this->createMock(OutputInterface::class);
+        $outputFormatter = $this->createMock(OutputFormatterInterface::class);
         $this->console
             ->expects($this->once())
             ->method('getFormatter')

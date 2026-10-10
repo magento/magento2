@@ -13,6 +13,7 @@ use Magento\Setup\Module\Di\Code\Scanner;
 use Magento\Setup\Module\Di\Code\Scanner\DirectoryScanner;
 use Magento\Setup\Module\Di\Code\Scanner\PhpScanner;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ApplicationCodeGeneratorTest extends TestCase
@@ -49,8 +50,8 @@ class ApplicationCodeGeneratorTest extends TestCase
     /**
      * @param array $data
      *
-     * @dataProvider doOperationWrongDataDataProvider
      */
+    #[DataProvider('doOperationWrongDataDataProvider')]
     public function testDoOperationWrongData($data)
     {
         $model = new ApplicationCodeGenerator(

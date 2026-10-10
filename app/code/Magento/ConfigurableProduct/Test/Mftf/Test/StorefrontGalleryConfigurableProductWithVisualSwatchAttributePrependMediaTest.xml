@@ -166,6 +166,18 @@
         <!--CASE 1: Selected options = B1; Expected media : D1, D2, D3, C1, C2, C3-->
         <click selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel($swatchAttributeFirstOption.option[store_labels][0][label]$)}}" stepKey="chooseFirstOptionCase1"/>
         <waitForPageLoad stepKey="waitForThumbnailsAppearCase1"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="waitForGalleryVisibleCase1"/>
+        <executeJS function="return document.querySelectorAll('.fotorama__nav__frame--thumb').length" stepKey="getThumbnailCountCase1"/>
+        <comment userInput="Thumbnail count: {$getThumbnailCountCase1}" stepKey="logThumbnailCountCase1"/>
+        <executeJS function="
+            var count = document.querySelectorAll('.fotorama__nav__frame--thumb').length;
+            if (count &lt; 6) {
+                var swatch = document.querySelector('div.swatch-option[data-option-label=&quot;{{$swatchAttributeFirstOption.option[store_labels][0][label]$}}&quot;]');
+                if (swatch) swatch.click();
+                return 'retried';
+            }
+            return 'ok';
+        " stepKey="retrySwatchIfNeededCase1"/>
         <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('1')}}" stepKey="waitForFirstThumbnailCase1"/>
         <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('2')}}" stepKey="waitForSecondThumbnailCase1"/>
         <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('3')}}" stepKey="waitForThirdThumbnailCase1"/>
@@ -241,6 +253,18 @@
         <!--CASE 3: Selected options = B3; Expected media : E1, E2, E3, C1, C2, C3-->
         <click selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel($swatchAttributeThirdOption.option[store_labels][0][label]$)}}" stepKey="chooseFirstOptionCase3"/>
         <waitForPageLoad stepKey="waitForThumbnailsAppearCase3"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="waitForGalleryVisibleCase3"/>
+        <executeJS function="return document.querySelectorAll('.fotorama__nav__frame--thumb').length" stepKey="getThumbnailCountCase3"/>
+        <comment userInput="Thumbnail count: {$getThumbnailCountCase3}" stepKey="logThumbnailCountCase3"/>
+        <executeJS function="
+            var count = document.querySelectorAll('.fotorama__nav__frame--thumb').length;
+            if (count &lt; 6) {
+                var swatch = document.querySelector('div.swatch-option[data-option-label=&quot;{{$swatchAttributeThirdOption.option[store_labels][0][label]$}}&quot;]');
+                if (swatch) swatch.click();
+                return 'retried';
+            }
+            return 'ok';
+        " stepKey="retrySwatchIfNeededCase3"/>
         <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('1')}}" stepKey="waitForFirstThumbnailCase3"/>
         <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('2')}}" stepKey="waitForSecondThumbnailCase3"/>
         <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('3')}}" stepKey="waitForThirdThumbnailCase3"/>

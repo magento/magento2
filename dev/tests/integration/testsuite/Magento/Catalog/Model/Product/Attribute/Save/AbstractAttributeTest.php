@@ -15,6 +15,7 @@ use Magento\Eav\Model\Entity\Attribute\Exception;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Base class for text product attributes
@@ -46,10 +47,10 @@ abstract class AbstractAttributeTest extends TestCase
     }
 
     /**
-     * @dataProvider productProvider
      * @param $productSku
      * @return void
      */
+    #[DataProvider('productProvider')]
     public function testSaveAttribute(string $productSku): void
     {
         $product = $this->setAttributeValueAndValidate($productSku, $this->getDefaultAttributeValue());
@@ -58,10 +59,10 @@ abstract class AbstractAttributeTest extends TestCase
     }
 
     /**
-     * @dataProvider productProvider
      * @param string $productSku
      * @return void
      */
+    #[DataProvider('productProvider')]
     public function testRequiredAttribute(string $productSku): void
     {
         $this->expectException(Exception::class);
@@ -74,10 +75,10 @@ abstract class AbstractAttributeTest extends TestCase
     }
 
     /**
-     * @dataProvider productProvider
      * @param string $productSku
      * @return void
      */
+    #[DataProvider('productProvider')]
     public function testDefaultValue(string $productSku): void
     {
         $this->prepareAttribute(['default_value' => $this->getDefaultAttributeValue()]);
@@ -87,11 +88,11 @@ abstract class AbstractAttributeTest extends TestCase
     }
 
     /**
-     * @dataProvider uniqueAttributeValueProvider
      * @param string $firstSku
      * @param string $secondSku
      * @return void
      */
+    #[DataProvider('uniqueAttributeValueProvider')]
     public function testUniqueAttribute(string $firstSku, string $secondSku): void
     {
         $this->expectException(Exception::class);

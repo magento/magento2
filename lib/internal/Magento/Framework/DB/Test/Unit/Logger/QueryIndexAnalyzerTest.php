@@ -16,6 +16,7 @@ use Magento\Framework\Serialize\Serializer\Json;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class QueryIndexAnalyzerTest extends TestCase
 {
@@ -112,10 +113,9 @@ class QueryIndexAnalyzerTest extends TestCase
      * @param array $bind
      * @return void
      * @throws QueryAnalyzerException
-     * @throws \Zend_Db_Statement_Exception
-     * @dataProvider statsNonSelectDataProvider
-     * @testdox $sql with bindings $bind to get $expectedResult
+     * @throws \Zend_Db_Statement_Exception     * @testdox $sql with bindings $bind to get $expectedResult
      */
+    #[DataProvider('statsNonSelectDataProvider')]
     public function testProcessThrowsExceptionForNonSelectQuery(string $sql, array $bind): void
     {
         $this->expectException(QueryAnalyzerException::class);
@@ -133,28 +133,19 @@ class QueryIndexAnalyzerTest extends TestCase
         return [
             'no-stats-for-update-query' => [
                 "UPDATE `admin_user_session` SET `updated_at` = '2025-07-23 14:42:02' WHERE (id=5)",
-                [],
-                0,
-                '{}',
-                new QueryAnalyzerException("Can't process query type")
+                []
             ],
             'no-stats-for-insert-query' => [
                 "INSERT INTO `table_logging_event` (`ip`, `x_forwarded_ip`, `event_code`, `time`, `action`, `info`,
                             `status`, `user`, `user_id`, `fullaction`, `error_message`) VALUES
                             (?, ?, ?, '2025-07-23 14:42:02', ?, ?, ?, ?, ?, ?, ?)",
-                [],
-                0,
-                '{}',
-                new QueryAnalyzerException("Can't process query type")
+                []
             ],
             'no-stats-for-delete-query' => [
                 "DELETE FROM `sales_order_grid` WHERE (entity_id IN
                                       (SELECT `magento_sales_order_grid_archive`.`entity_id`
                                        FROM `magento_sales_order_grid_archive`))",
-                [],
-                0,
-                '{}',
-                new QueryAnalyzerException("Can't process query type")
+                []
             ]
         ];
     }
@@ -168,9 +159,8 @@ class QueryIndexAnalyzerTest extends TestCase
      * @throws Exception
      * @throws QueryAnalyzerException
      * @throws \Zend_Db_Statement_Exception
-     * @testdox $sql with bindings $bind to get $expectedResult
-     * @dataProvider statsDataProvider
-     */
+     * @testdox $sql with bindings $bind to get $expectedResult     */
+    #[DataProvider('statsDataProvider')]
     public function testProcess(
         string $sql,
         array $bind,

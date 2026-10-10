@@ -28,13 +28,15 @@ class DefaultRouterTest extends TestCase
 
     public function testMatch()
     {
-        $request = $this->getMockForAbstractClass(RequestInterface::class);
+        $request = $this->createMock(RequestInterface::class);
         $helper = new ObjectManager($this);
         $actionFactory = $this->createMock(ActionFactory::class);
         $actionFactory->expects($this->once())->method('create')->with(
             Forward::class
         )->willReturn(
-            $this->getMockForAbstractClass(AbstractAction::class, [], '', false)
+            $this->getMockBuilder(AbstractAction::class)
+                ->disableOriginalConstructor()
+                ->getMock()
         );
         $noRouteHandler = $this->createMock(NoRouteHandler::class);
         $noRouteHandler->expects($this->any())->method('process')->willReturn(true);

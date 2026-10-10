@@ -43,10 +43,10 @@ class ScopeCodeResolverTest extends TestCase
             ->getMock();
         $this->scopeResolver = $this->getMockBuilder(ScopeResolverInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->scope = $this->getMockBuilder(ScopeInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->scopeCodeResolver = new ScopeCodeResolver($this->scopeResolverPool);
     }
@@ -68,5 +68,20 @@ class ScopeCodeResolverTest extends TestCase
             ->method('getCode')
             ->willReturn($scopeCode);
         $this->assertEquals($scopeCode, $this->scopeCodeResolver->resolve($scopeType, $scopeId));
+    }
+
+    public function testResolveWithScopeCodeNullAndScopeTypeDefault()
+    {
+        $scopeType = 'default';
+        $scopeCode = null;
+
+        $this->scopeResolverPool->expects($this->never())
+            ->method('get');
+        $this->scopeResolver->expects($this->never())
+            ->method('getScope');
+        $this->scope->expects($this->never())
+            ->method('getCode');
+
+        $this->scopeCodeResolver->resolve($scopeType, $scopeCode);
     }
 }

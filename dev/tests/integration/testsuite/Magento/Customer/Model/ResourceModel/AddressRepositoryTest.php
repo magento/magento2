@@ -24,6 +24,7 @@ use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -413,12 +414,12 @@ class AddressRepositoryTest extends TestCase
      * @param int $currentPage current page for search criteria
      *
      * @return void
-     * @dataProvider searchAddressDataProvider
      *
      * @magentoDataFixture  Magento/Customer/_files/customer.php
      * @magentoDataFixture  Magento/Customer/_files/customer_two_addresses.php
      * @magentoAppIsolation enabled
      */
+    #[DataProvider('searchAddressDataProvider')]
     public function testSearchAddresses(
         $filters,
         $filterGroup,

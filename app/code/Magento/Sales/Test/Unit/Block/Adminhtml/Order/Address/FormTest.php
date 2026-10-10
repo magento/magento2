@@ -25,12 +25,15 @@ use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Address;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class FormTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Form
      */
@@ -86,15 +89,12 @@ class FormTest extends TestCase
         $this->countriesCollection = $this->createMock(
             Collection::class
         );
-        $this->sessionQuote = $this->getMockBuilder(QuoteSession::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getStoreId'])
-            ->onlyMethods(['getStore'])
-            ->getMock();
+        $this->sessionQuote = $this->createPartialMockWithReflection(
+            QuoteSession::class,
+            ['getStoreId', 'getStore']
+        );
 
-        $this->orderCreate = $this->getMockBuilder(Create::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->orderCreate = $this->createMock(Create::class);
         $this->orderCreate->method('getSession')
             ->willReturn($this->sessionQuote);
 

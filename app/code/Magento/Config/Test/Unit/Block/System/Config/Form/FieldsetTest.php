@@ -101,12 +101,12 @@ class FieldsetTest extends TestCase
     protected function setUp(): void
     {
         $this->_testHelper = new ObjectManager($this);
-        $this->authSessionMock = $this->_testHelper->createPartialMockWithReflection(
+        $this->authSessionMock = $this->createPartialMockWithReflection(
             Session::class,
             ['getUser']
         );
 
-        $this->userMock = $this->_testHelper->createPartialMockWithReflection(
+        $this->userMock = $this->createPartialMockWithReflection(
             User::class,
             ['getExtra']
         );
@@ -144,7 +144,7 @@ class FieldsetTest extends TestCase
         ];
         $this->_object = $this->_testHelper->getObject(Fieldset::class, $data);
 
-        $this->_elementMock = $this->_testHelper->createPartialMockWithReflection(
+        $this->_elementMock = $this->createPartialMockWithReflection(
             Text::class,
             ['getLegend', 'getComment', 'getIsNested', 'getExpanded',
              'getId', 'getHtmlId', 'getName', 'getElements', 'getForm']
@@ -202,7 +202,7 @@ class FieldsetTest extends TestCase
     {
         $this->userMock->expects($this->any())->method('getExtra')->willReturn($extra);
         $this->_helperMock->expects($this->any())->method('getScript')->willReturnArgument(0);
-        $fieldMock = $this->_testHelper->createPartialMockWithReflection(
+        $fieldMock = $this->createPartialMockWithReflection(
             Text::class,
             ['getTooltip', 'getIsNested', 'getExpanded', 'getId', 'toHtml', 'getHtmlId']
         );
@@ -211,7 +211,7 @@ class FieldsetTest extends TestCase
         $fieldMock->expects($this->any())->method('toHtml')->willReturn('test_field_toHTML');
         $fieldMock->expects($this->any())->method('getHtmlId')->willReturn('test_field_HTML_id');
 
-        $fieldSetMock = $this->_testHelper->createPartialMockWithReflection(
+        $fieldSetMock = $this->createPartialMockWithReflection(
             FieldsetElement::class,
             ['getTooltip', 'getIsNested', 'getExpanded', 'getId', 'toHtml', 'getHtmlId']
         );

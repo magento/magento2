@@ -97,8 +97,9 @@ class InitialThemeSource implements ConfigSourceInterface
                 $themePath = $themeRow['area'] . '/' . $themeRow['theme_path'];
                 $themes[$themePath] = $themeRow;
 
-                if (isset($rawThemes[$themeRow['parent_id']]['code'])) {
-                    $themes[$themePath]['parent_id'] = $rawThemes[$themeRow['parent_id']]['code'];
+                $parentId = $themeRow['parent_id'] ?? '';
+                if (isset($rawThemes[$parentId]['code'])) {
+                    $themes[$themePath]['parent_id'] = $rawThemes[$parentId]['code'];
                 }
             }
 

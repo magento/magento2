@@ -197,7 +197,6 @@ class CollectionTest extends TestCase
     protected function tearDown(): void
     {
         $reflectionProperty = new ReflectionProperty(\Magento\Framework\App\ObjectManager::class, '_instance');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue(null, null);
     }
 

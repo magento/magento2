@@ -10,6 +10,7 @@ namespace Magento\Directory\Test\Unit\Model\Config\Source;
 use Magento\Directory\Model\Config\Source\Country;
 use Magento\Directory\Model\ResourceModel\Country\Collection;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class CountryTest extends TestCase
@@ -36,11 +37,11 @@ class CountryTest extends TestCase
     }
 
     /**
-     * @dataProvider toOptionArrayDataProvider
      * @param boolean $isMultiselect
      * @param string|array $foregroundCountries
      * @param array $expectedResult
      */
+    #[DataProvider('toOptionArrayDataProvider')]
     public function testToOptionArray($isMultiselect, $foregroundCountries, $expectedResult)
     {
         $this->_collectionMock->expects($this->once())->method('loadData')->willReturnSelf();

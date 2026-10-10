@@ -59,8 +59,8 @@ class ManagerTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->invokerMock = $this->getMockForAbstractClass(InvokerInterface::class);
-        $this->eventConfigMock = $this->getMockForAbstractClass(ConfigInterface::class);
+        $this->invokerMock = $this->createMock(InvokerInterface::class);
+        $this->eventConfigMock = $this->createMock(ConfigInterface::class);
 
         $this->eventManager = $this->objectManagerHelper->getObject(
             EventManager::class,

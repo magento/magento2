@@ -120,13 +120,11 @@ class DepthCalculatorTest extends TestCase
     {
         $this->depthCalculator = new DepthCalculator();
         $this->resolveInfoMock = $this->createMock(ResolveInfo::class);
-        $this->fieldNodeMock = $this->getMockBuilder(FieldNode::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->fieldNodeMock = $this->createMock(FieldNode::class);
     }
 
     /**
-     * @return \GraphQL\Language\AST\SelectionSetNode
+     * @return SelectionSetNode
      */
     protected function getSelectionSetNode($nodes = []): SelectionSetNode
     {
@@ -134,7 +132,7 @@ class DepthCalculatorTest extends TestCase
     }
 
     /**
-     * @return \GraphQL\Language\AST\NodeList
+     * @return NodeList
      */
     protected function getNodeList(): NodeList
     {

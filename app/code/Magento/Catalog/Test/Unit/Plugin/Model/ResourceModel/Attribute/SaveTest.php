@@ -39,7 +39,7 @@ class SaveTest extends TestCase
     protected function setUp(): void
     {
         $this->config = $this->createPartialMock(Config::class, ['isEnabled']);
-        $this->typeList = $this->getMockForAbstractClass(
+        $this->typeList = $this->createMock(
             TypeListInterface::class,
             [],
             '',

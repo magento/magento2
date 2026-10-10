@@ -45,8 +45,8 @@ class EraserTest extends TestCase
     protected function setUp(): void
     {
         $resource = $this->createMock(ResourceConnection::class);
-        $this->connection = $this->getMockForAbstractClass(AdapterInterface::class);
-        $resource->expects($this->any())->method('getConnection')->willReturn($this->connection);
+        $this->connection = $this->createMock(AdapterInterface::class);
+        $resource->method('getConnection')->willReturn($this->connection);
         $this->indexerHelper = $this->createMock(Indexer::class);
         $this->indexerHelper->expects($this->any())->method('getTable')->willReturnArgument(0);
         $this->indexerHelper->expects($this->any())->method('getFlatTableName')->willReturnMap([
@@ -54,7 +54,7 @@ class EraserTest extends TestCase
             [2, 'store_2_flat'],
         ]);
 
-        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
         $this->model = new Eraser(
             $resource,
             $this->indexerHelper,
@@ -94,9 +94,9 @@ class EraserTest extends TestCase
     public function testDeleteProductsFromStoreForAllStores(): void
     {
         $store1 = $this->createMock(Store::class);
-        $store1->expects($this->any())->method('getId')->willReturn(1);
+        $store1->method('getId')->willReturn(1);
         $store2 = $this->createMock(Store::class);
-        $store2->expects($this->any())->method('getId')->willReturn(2);
+        $store2->method('getId')->willReturn(2);
         $this->storeManager->expects($this->once())->method('getStores')
             ->willReturn([$store1, $store2]);
         $this->connection

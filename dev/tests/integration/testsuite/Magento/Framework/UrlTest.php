@@ -7,6 +7,7 @@ namespace Magento\Framework;
 
 use Laminas\Stdlib\Parameters;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test class for \Magento\Framework\Url
@@ -58,8 +59,6 @@ class UrlTest extends \PHPUnit\Framework\TestCase
      * Note: isolation flushes the URL memory cache
      * @magentoAppIsolation enabled
      *
-     * @dataProvider getBaseUrlConfiguredDataProvider
-     *
      * @magentoConfigFixture current_store web/secure/base_url http://sample.com/base_path/
      * @magentoConfigFixture current_store web/unsecure/base_link_url http://sample.com/base_link_path/
      * @magentoConfigFixture current_store web/secure/base_link_url https://sample.com/base_link_path/
@@ -68,6 +67,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
      * @param array $params
      * @param string $expectedUrl
      */
+    #[DataProvider('getBaseUrlConfiguredDataProvider')]
     public function testGetBaseUrlConfigured($params, $expectedUrl)
     {
         $actualUrl = $this->model->getBaseUrl($params);
@@ -204,24 +204,18 @@ class UrlTest extends \PHPUnit\Framework\TestCase
     {
         $this->model->setRouteName('catalog');
         $this->assertEquals('catalog', $this->model->getRouteName());
-
-        $this->markTestSkipped('setRouteName() logic is unclear.');
     }
 
     public function testSetGetControllerName()
     {
         $this->model->setControllerName('product');
         $this->assertEquals('product', $this->model->getControllerName());
-
-        $this->markTestSkipped('setControllerName() logic is unclear.');
     }
 
     public function testSetGetActionName()
     {
         $this->model->setActionName('view');
         $this->assertEquals('view', $this->model->getActionName());
-
-        $this->markTestSkipped('setActionName() logic is unclear.');
     }
 
     /**
@@ -289,8 +283,6 @@ class UrlTest extends \PHPUnit\Framework\TestCase
      * Note: isolation flushes the URL memory cache
      * @magentoAppIsolation enabled
      *
-     * @dataProvider consequentCallsDataProvider
-     *
      * @param string $firstCallUrl
      * @param string $secondCallUrl
      * @param array $firstRouteParams
@@ -299,6 +291,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
      * @param string $secondExpectedUrl
      * @covers \Magento\Framework\Url::getUrl
      */
+    #[DataProvider('consequentCallsDataProvider')]
     public function testGetUrlOnConsequentCalls(
         $firstCallUrl,
         $secondCallUrl,

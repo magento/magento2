@@ -21,13 +21,17 @@ use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AttributeRepositoryTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Config|MockObject
      */
@@ -70,33 +74,28 @@ class AttributeRepositoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->eavConfig = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->eavConfig = $this->createPartialMock(
+            Config::class,
+            ['getEntityType', 'getAttribute']
+        );
 
-        $this->eavResource = $this->getMockBuilder(Attribute::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->eavResource = $this->createMock(Attribute::class);
 
-        $this->attributeCollectionFactory = $this->getMockBuilder(CollectionFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
+        $this->attributeCollectionFactory = $this->createPartialMock(
+            CollectionFactory::class,
+            ['create']
+        );
 
-        $this->searchResultsFactory = $this->getMockBuilder(AttributeSearchResultsInterfaceFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
+        $this->searchResultsFactory = $this->createPartialMock(
+            AttributeSearchResultsInterfaceFactory::class,
+            ['create']
+        );
 
-        $this->attributeFactory = $this->getMockBuilder(AttributeFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->attributeFactory = $this->createMock(AttributeFactory::class);
 
-        $this->joinProcessor = $this->getMockBuilder(JoinProcessorInterface::class)
-            ->getMockForAbstractClass();
+        $this->joinProcessor = $this->createMock(JoinProcessorInterface::class);
 
-        $this->collectionProcessor = $this->getMockBuilder(CollectionProcessorInterface::class)
-            ->getMockForAbstractClass();
+        $this->collectionProcessor = $this->createMock(CollectionProcessorInterface::class);
 
         $this->model = new AttributeRepository(
             $this->eavConfig,
@@ -113,8 +112,7 @@ class AttributeRepositoryTest extends TestCase
     {
         $this->expectException('Magento\Framework\Exception\InputException');
         $this->expectExceptionMessage('"entity_type_code" is required. Enter and try again.');
-        $searchCriteriaMock = $this->getMockBuilder(SearchCriteriaInterface::class)
-            ->getMockForAbstractClass();
+        $searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);
 
         $this->model->getList(null, $searchCriteriaMock);
     }
@@ -132,19 +130,23 @@ class AttributeRepositoryTest extends TestCase
         $attributeId = 1;
         $collectionSize = 1;
 
-        $searchCriteriaMock = $this->getMockBuilder(SearchCriteriaInterface::class)
-            ->onlyMethods(['getPageSize'])
-            ->getMockForAbstractClass();
-
-        $searchCriteriaMock->expects($this->any())
-            ->method('getPageSize')
-            ->willReturn($collectionSize);
+        $searchCriteriaMock = $this->createStub(SearchCriteriaInterface::class);
+        $searchCriteriaMock->method('getPageSize')->willReturn($collectionSize);
 
         $attributeMock = $this->createAttributeMock($attributeCode, $attributeId);
 
-        $attributeCollectionMock = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $attributeCollectionMock = $this->createPartialMock(
+            Collection::class,
+            [
+                'addFieldToFilter',
+                'getTable',
+                'join',
+                'joinLeft',
+                'addAttributeGrouping',
+                'getIterator',
+                'getSize'
+            ]
+        );
         $attributeCollectionMock->expects($this->once())
             ->method('addFieldToFilter')
             ->with('entity_type_code', ['eq' => $entityTypeCode])
@@ -197,10 +199,10 @@ class AttributeRepositoryTest extends TestCase
             ->with($attributeCollectionMock)
             ->willReturnSelf();
 
-        $entityTypeMock = $this->getMockBuilder(Type::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getAdditionalAttributeTable'])
-            ->getMock();
+        $entityTypeMock = $this->createPartialMockWithReflection(
+            Type::class,
+            ['getAdditionalAttributeTable']
+        );
         $entityTypeMock->expects($this->once())
             ->method('getAdditionalAttributeTable')
             ->willReturn($additionalTable);
@@ -237,8 +239,7 @@ class AttributeRepositoryTest extends TestCase
     protected function createSearchResultsMock($searchCriteriaMock, $attributeMock, $collectionSize)
     {
         /** @var MockObject $searchResultsMock */
-        $searchResultsMock = $this->getMockBuilder(AttributeSearchResultsInterface::class)
-            ->getMockForAbstractClass();
+        $searchResultsMock = $this->createMock(AttributeSearchResultsInterface::class);
 
         $searchResultsMock->expects($this->once())
             ->method('setSearchCriteria')
@@ -264,19 +265,9 @@ class AttributeRepositoryTest extends TestCase
     protected function createAttributeMock($attributeCode, $attributeId)
     {
         /** @var MockObject $attributeMock */
-        $attributeMock = $this->getMockBuilder(AttributeInterface::class)
-            ->onlyMethods([
-                'getAttributeCode',
-                'getAttributeId',
-            ])
-            ->getMockForAbstractClass();
-
-        $attributeMock->expects($this->once())
-            ->method('getAttributeCode')
-            ->willReturn($attributeCode);
-        $attributeMock->expects($this->once())
-            ->method('getAttributeId')
-            ->willReturn($attributeId);
+        $attributeMock = $this->createStub(AttributeInterface::class);
+        $attributeMock->method('getAttributeCode')->willReturn($attributeCode);
+        $attributeMock->method('getAttributeId')->willReturn($attributeId);
 
         return $attributeMock;
     }

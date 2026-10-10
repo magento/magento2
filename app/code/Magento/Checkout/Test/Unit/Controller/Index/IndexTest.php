@@ -33,7 +33,6 @@ use PHPUnit\Framework\MockObject\Builder\InvocationMocker as InvocationMocker;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Rule\InvokedCount as InvokedCount;
 use PHPUnit\Framework\TestCase;
-use Magento\Quote\Test\Unit\Helper\QuoteMutableFlagsTestHelper;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -132,7 +131,12 @@ class IndexTest extends TestCase
         $this->objectManager = new ObjectManager($this);
         $this->objectManagerMock = $this->basicMock(ObjectManagerInterface::class);
         $this->data = $this->basicMock(Data::class);
-        $this->quote = new QuoteMutableFlagsTestHelper();
+        $this->quote = $this->getMockBuilder(Quote::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->quote->setData('has_error', false);
+        $this->quote->method('hasItems')->willReturn(true);
+        $this->quote->method('validateMinimumAmount')->willReturn(true);
         $this->contextMock = $this->basicMock(Context::class);
         $this->session = $this->basicMock(Session::class);
         $this->onepageMock = $this->basicMock(Onepage::class);
@@ -221,9 +225,6 @@ class IndexTest extends TestCase
     ) {
         $this->data->method('canOnepageCheckout')
             ->willReturn(true);
-        $this->quote->setHasItemsVal(true);
-        $this->quote->setHasErrorVal(false);
-        $this->quote->setValidateMinimumAmountVal(true);
         $this->session->method('isLoggedIn')
             ->willReturn(true);
         $this->request->method('isSecure')
@@ -284,7 +285,7 @@ class IndexTest extends TestCase
 
     public function testInvalidQuote()
     {
-        $this->quote->setHasErrorVal(true);
+        $this->quote->setData('has_error', true);
 
         $expectedPath = 'checkout/cart';
         $this->resultRedirectMock->expects($this->once())

@@ -9,6 +9,7 @@ use Magento\Framework\Math\Random;
 use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Framework\Session\SidResolverInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoAppIsolation enabled
@@ -44,14 +45,9 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Framework\View\DesignInterface $design */
         $design = Bootstrap::getObjectManager()->get(\Magento\Framework\View\DesignInterface::class);
         $design->setDefaultDesignTheme();
-        $this->_block = $this->getMockForAbstractClass(
-            AbstractBlock::class,
-            [
-                Bootstrap::getObjectManager()->get(
-                    \Magento\Framework\View\Element\Context::class
-                ),
-                ['module_name' => 'Magento_Theme']
-            ]
+        $this->_block = Bootstrap::getObjectManager()->create(
+            \Magento\Framework\View\Element\Text::class,
+            ['data' => ['module_name' => 'Magento_Theme']]
         );
         $this->session = Bootstrap::getObjectManager()->get(SessionManagerInterface::class);
     }
@@ -363,7 +359,9 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
         $parent = $this->_createBlockWithLayout('parent', 'parent');
         $block = $this->_createBlockWithLayout('');
         $parent->setChild('', $block);
-        $this->assertContains('abstractblockmock_0', $parent->getChildNames());
+        $childNames = $parent->getChildNames();
+        $this->assertNotEmpty($childNames);
+        $this->assertMatchesRegularExpression('/^magento\\\\framework\\\\view\\\\element\\\\text_\d+$/i', $childNames[0]);
     }
 
     /**
@@ -505,8 +503,8 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider escapeHtmlDataProvider
      */
+    #[DataProvider('escapeHtmlDataProvider')]
     public function testEscapeHtml($data, $expected)
     {
         $actual = $this->_block->escapeHtml($data);
@@ -656,26 +654,22 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
         $alias = null,
         $type = AbstractBlock::class
     ) {
-        $typePart = explode('\\', $type);
-        $mockClass = array_pop($typePart) . 'Mock';
-        if (!isset(self::$_mocks[$mockClass])) {
-            self::$_mocks[$mockClass] = $this->getMockForAbstractClass(
-                $type,
-                [
-                    Bootstrap::getObjectManager()->get(
-                        \Magento\Framework\View\Element\Context::class
-                    ),
-                    ['module_name' => 'Magento_Theme']
-                ],
-                $mockClass
-            );
-        }
         if ($this->_layout === null) {
             $this->_layout = Bootstrap::getObjectManager()->get(
                 \Magento\Framework\View\LayoutInterface::class
             );
         }
-        $block = $this->_layout->addBlock($mockClass, $name, '', $alias);
+        
+        if ($type === AbstractBlock::class) {
+            $type = \Magento\Framework\View\Element\Text::class;
+        }
+        
+        $block = $this->_layout->createBlock($type, $name, ['data' => ['module_name' => 'Magento_Theme']]);
+        
+        if ($alias !== null) {
+            $block->setNameInLayout($name);
+        }
+        
         return $block;
     }
 }

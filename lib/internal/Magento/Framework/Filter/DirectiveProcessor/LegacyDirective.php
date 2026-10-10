@@ -37,7 +37,6 @@ class LegacyDirective implements DirectiveProcessorInterface
         try {
             $reflectionClass = new \ReflectionClass($filter);
             $method = $reflectionClass->getMethod($construction[1] . 'Directive');
-            $method->setAccessible(true);
 
             return (string)$method->invokeArgs($filter, [$construction]);
         } catch (\ReflectionException $e) {

@@ -17,6 +17,7 @@ use PHPUnit\Framework\TestCase;
 
 class HistoryTest extends TestCase
 {
+
     /**
      * @var ObjectManager
      */
@@ -42,12 +43,7 @@ class HistoryTest extends TestCase
         $this->objectManager = new ObjectManager($this);
 
         $this->order = $this->createMock(Order::class);
-        $this->storeManager = $this->getMockForAbstractClass(
-            StoreManagerInterface::class,
-            [],
-            '',
-            false
-        );
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
 
         $this->model = $this->objectManager->getObject(
             History::class,

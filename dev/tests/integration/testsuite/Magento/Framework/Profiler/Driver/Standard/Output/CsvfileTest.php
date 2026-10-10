@@ -7,6 +7,8 @@
  */
 namespace Magento\Framework\Profiler\Driver\Standard\Output;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 class CsvfileTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -27,12 +29,12 @@ class CsvfileTest extends \PHPUnit\Framework\TestCase
     /**
      * Test display method
      *
-     * @dataProvider displayDataProvider
      * @param string $statFile
      * @param string $expectedFile
      * @param string $delimiter
      * @param string $enclosure
      */
+    #[DataProvider('displayDataProvider')]
     public function testDisplay($statFile, $expectedFile, $delimiter = ',', $enclosure = '"')
     {
         $this->_output = new \Magento\Framework\Profiler\Driver\Standard\Output\Csvfile(
@@ -50,12 +52,12 @@ class CsvfileTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'Default delimiter & enclosure' => [
-                'statFile' => __DIR__ . '/_files/timers.php',
-                'expectedFile' => __DIR__ . '/_files/output_default.csv',
+                __DIR__ . '/_files/timers.php',
+                __DIR__ . '/_files/output_default.csv',
             ],
             'Custom delimiter & enclosure' => [
-                'statFile' => __DIR__ . '/_files/timers.php',
-                'expectedFile' => __DIR__ . '/_files/output_custom.csv',
+                __DIR__ . '/_files/timers.php',
+                __DIR__ . '/_files/output_custom.csv',
                 '.',
                 '`',
             ]

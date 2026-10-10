@@ -9,14 +9,14 @@ namespace Magento\Framework\Config\Test\Unit\Converter;
 
 use Magento\Framework\Config\Converter\Dom;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class DomTest extends TestCase
 {
     /**
      * @param string $sourceFile
-     * @param string $resultFile
-     * @dataProvider convertDataProvider
-     */
+     * @param string $resultFile     */
+    #[DataProvider('convertDataProvider')]
     public function testConvert($sourceFile, $resultFile)
     {
         $dom = new \DOMDocument();

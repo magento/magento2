@@ -126,6 +126,8 @@ class Manager
     }
 
     /**
+     * Get list of available cache types
+     *
      * @return array
      */
     public function getAvailableTypes()

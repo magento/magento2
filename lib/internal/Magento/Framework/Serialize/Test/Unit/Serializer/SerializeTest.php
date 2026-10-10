@@ -10,6 +10,7 @@ namespace Magento\Framework\Serialize\Test\Unit\Serializer;
 use Magento\Framework\Serialize\Serializer\Serialize;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class SerializeTest extends TestCase
 {
@@ -26,9 +27,8 @@ class SerializeTest extends TestCase
 
     /**
      * @param string|int|float|bool|array|null $value
-     * @param string $serializedValue
-     * @dataProvider serializeDataProvider
-     */
+     * @param string $serializedValue     */
+    #[DataProvider('serializeDataProvider')]
     public function testSerialize($value, $serializedValue)
     {
         $this->assertEquals($serializedValue, $this->serialize->serialize($value));
@@ -52,9 +52,8 @@ class SerializeTest extends TestCase
 
     /**
      * @param string $serializedValue
-     * @param string|int|float|bool|array|null $value
-     * @dataProvider unserializeDataProvider
-     */
+     * @param string|int|float|bool|array|null $value     */
+    #[DataProvider('unserializeDataProvider')]
     public function testUnserialize($serializedValue, $value)
     {
         $this->assertEquals($value, $this->serialize->unserialize($serializedValue));
@@ -83,9 +82,8 @@ class SerializeTest extends TestCase
         $this->serialize->serialize(STDOUT);
     }
 
-    /**
-     * @dataProvider unserializeExceptionDataProvider
-     */
+    /**     */
+    #[DataProvider('unserializeExceptionDataProvider')]
     public function testUnserializeException($value)
     {
         $this->expectException('InvalidArgumentException');

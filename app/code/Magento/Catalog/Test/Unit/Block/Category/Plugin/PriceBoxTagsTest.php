@@ -18,6 +18,7 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Pricing\Render\PriceBox;
 use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Tax\Model\Calculation;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -28,6 +29,7 @@ use PHPUnit\Framework\TestCase;
  */
 class PriceBoxTagsTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var PriceCurrencyInterface|MockObject
      */
@@ -65,38 +67,19 @@ class PriceBoxTagsTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->priceCurrencyInterface = $this->getMockBuilder(
-            PriceCurrencyInterface::class
-        )->getMock();
-        $this->currency = $this->getMockBuilder(Currency::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->timezoneInterface = $this->getMockBuilder(
-            TimezoneInterface::class
-        )->getMock();
-        $this->scopeResolverInterface = $this->getMockBuilder(
-            ScopeResolverInterface::class
-        )
-            ->getMockForAbstractClass();
-        $this->session = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->addMethods(
-                [
-                    'getDefaultTaxBillingAddress',
-                    'getDefaultTaxShippingAddress',
-                    'getCustomerTaxClassId'
-                ]
-            )
-            ->onlyMethods(
-                [
-                    'getCustomerGroupId',
-                    'getCustomerId'
-                ]
-            )
-            ->getMock();
-        $this->taxCalculation = $this->getMockBuilder(Calculation::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->priceCurrencyInterface = $this->createMock(PriceCurrencyInterface::class);
+        $this->currency = $this->createPartialMock(Currency::class, ['getCode']);
+        $this->timezoneInterface = $this->createMock(TimezoneInterface::class);
+        $this->scopeResolverInterface = $this->createMock(ScopeResolverInterface::class);
+        $this->session = $this->createPartialMockWithReflection(
+            Session::class,
+            ['getCustomerGroupId', 'getDefaultTaxBillingAddress', 'getDefaultTaxShippingAddress',
+             'getCustomerTaxClassId', 'getCustomerId']
+        );
+        $this->taxCalculation = $this->createPartialMock(
+            Calculation::class,
+            ['getRateRequest', 'getResource']
+        );
         $objectManager = new ObjectManager($this);
         $this->priceBoxTags = $objectManager->getObject(
             PriceBoxTags::class,
@@ -133,26 +116,24 @@ class PriceBoxTagsTest extends TestCase
                 implode('_', $rateIds)
             ]
         );
-        $priceBox = $this->getMockBuilder(PriceBox::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+
+        $priceBox = $this->createPartialMock(PriceBox::class, ['getSaleableItem']);
         $this->priceCurrencyInterface->expects($this->once())->method('getCurrency')->willReturn($this->currency);
         $this->currency->expects($this->once())->method('getCode')->willReturn($currencyCode);
-        $scope = $this->getMockBuilder(ScopeInterface::class)
-            ->getMock();
-        $this->scopeResolverInterface->expects($this->any())->method('getScope')->willReturn($scope);
-        $scope->expects($this->any())->method('getId')->willReturn($scopeId);
-        $dateTime = $this->getMockBuilder(\DateTime::class)->getMock();
+        $scope = $this->createMock(ScopeInterface::class);
+        $this->scopeResolverInterface->method('getScope')->willReturn($scope);
+        $scope->method('getId')->willReturn($scopeId);
+        $dateTime = $this->createPartialMock(\DateTime::class, ['format']);
         $this->timezoneInterface->expects($this->any())->method('scopeDate')->with($scopeId)->willReturn($dateTime);
         $dateTime->expects($this->any())->method('format')->with('Ymd')->willReturn($date);
+        
         $this->session->expects($this->once())->method('getCustomerGroupId')->willReturn($customerGroupId);
         $this->session->expects($this->once())->method('getDefaultTaxBillingAddress')->willReturn($billingAddress);
         $this->session->expects($this->once())->method('getDefaultTaxShippingAddress')->willReturn($shippingAddress);
-        $this->session->expects($this->once())->method('getCustomerTaxClassId')
-            ->willReturn($customerTaxClassId);
+        $this->session->expects($this->once())->method('getCustomerTaxClassId')->willReturn($customerTaxClassId);
         $this->session->expects($this->once())->method('getCustomerId')->willReturn($customerId);
-        $rateRequest = $this->getMockBuilder(DataObject::class)
-            ->getMock();
+        
+        $rateRequest = $this->createMock(DataObject::class);
         $this->taxCalculation->expects($this->once())->method('getRateRequest')->with(
             new DataObject($shippingAddress),
             new DataObject($billingAddress),
@@ -160,16 +141,24 @@ class PriceBoxTagsTest extends TestCase
             $scopeId,
             $customerId
         )->willReturn($rateRequest);
-        $salableInterface = $this->getMockBuilder(SaleableInterface::class)
-            ->addMethods(['getTaxClassId'])
-            ->getMockForAbstractClass();
-        $priceBox->expects($this->once())->method('getSaleableItem')->willReturn($salableInterface);
+        $salableInterface = $this->createPartialMockWithReflection(
+            SaleableInterface::class,
+            ['getTaxClassId', 'getPriceInfo', 'getTypeId', 'getId', 'getQty']
+        );
         $salableInterface->expects($this->once())->method('getTaxClassId')->willReturn($customerTaxClassId);
-        $resource = $this->getMockBuilder(AbstractResource::class)
-            ->addMethods(['getRateIds'])
-            ->getMockForAbstractClass();
-        $this->taxCalculation->expects($this->once())->method('getResource')->willReturn($resource);
+        $salableInterface->method('getPriceInfo')->willReturn(null);
+        $salableInterface->method('getTypeId')->willReturn('simple');
+        $salableInterface->method('getId')->willReturn(1);
+        $salableInterface->method('getQty')->willReturn(1);
+        $priceBox->expects($this->once())->method('getSaleableItem')->willReturn($salableInterface);
+        $resource = $this->createPartialMockWithReflection(
+            AbstractResource::class,
+            ['getRateIds', '_construct', 'getConnection']
+        );
         $resource->expects($this->once())->method('getRateIds')->with($rateRequest)->willReturn($rateIds);
+        $resource->method('_construct')->willReturn(null);
+        $resource->method('getConnection')->willReturn(null);
+        $this->taxCalculation->expects($this->once())->method('getResource')->willReturn($resource);
 
         $this->assertEquals($expected, $this->priceBoxTags->afterGetCacheKey($priceBox, $result));
     }

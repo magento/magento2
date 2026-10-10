@@ -22,6 +22,7 @@ use Magento\Framework\Validator\RegexFactory;
 use Magento\PageCache\Controller\Block;
 use Magento\PageCache\Controller\Block\Esi;
 use Magento\PageCache\Test\Unit\Block\Controller\StubBlock;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -79,9 +80,7 @@ class EsiTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->layoutCacheKeyMock = $this->getMockForAbstractClass(
-            LayoutCacheKeyInterface::class
-        );
+        $this->layoutCacheKeyMock = $this->createMock(LayoutCacheKeyInterface::class);
 
         $contextMock =
             $this->getMockBuilder(Context::class)
@@ -101,8 +100,8 @@ class EsiTest extends TestCase
         $contextMock->expects($this->any())->method('getRequest')->willReturn($this->requestMock);
         $contextMock->expects($this->any())->method('getResponse')->willReturn($this->responseMock);
         $contextMock->expects($this->any())->method('getView')->willReturn($this->viewMock);
-
-        $this->translateInline = $this->getMockForAbstractClass(InlineInterface::class);
+        
+        $this->translateInline = $this->createMock(InlineInterface::class);
 
         $regexFactoryMock = $this->getMockBuilder(RegexFactory::class)
             ->disableOriginalConstructor()
@@ -129,10 +128,10 @@ class EsiTest extends TestCase
     }
 
     /**
-     * @dataProvider executeDataProvider
      * @param string $blockClass
      * @param bool $shouldSetHeaders
      */
+    #[DataProvider('executeDataProvider')]
     public function testExecute($blockClass, $shouldSetHeaders)
     {
         $block = 'block';

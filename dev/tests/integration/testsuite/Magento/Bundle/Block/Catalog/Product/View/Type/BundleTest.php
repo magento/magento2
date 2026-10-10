@@ -15,6 +15,7 @@ use Magento\Framework\Registry;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\View\LayoutInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -88,12 +89,11 @@ class BundleTest extends TestCase
     }
 
     /**
-     * @dataProvider isSalableForStockStatusProvider
-     *
      * @param bool $isSalable
      * @param string $expectedValue
      * @return void
      */
+    #[DataProvider('isSalableForStockStatusProvider')]
     public function testStockStatusView(bool $isSalable, string $expectedValue): void
     {
         $product = $this->productRepository->get('bundle-product');
@@ -121,12 +121,11 @@ class BundleTest extends TestCase
     }
 
     /**
-     * @dataProvider isSalableForCustomizeButtonProvider
-     *
      * @param bool $isSalable
      * @param string $expectedValue
      * @return void
      */
+    #[DataProvider('isSalableForCustomizeButtonProvider')]
     public function testCustomizeButton(bool $isSalable, string $expectedValue): void
     {
         $product = $this->productRepository->get('bundle-product');

@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\NewRelicReporting;
 
 use Magento\NewRelicReporting\Model\NewRelicWrapper;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class BrowserMonitoringTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
@@ -60,8 +61,8 @@ class BrowserMonitoringTest extends \Magento\TestFramework\TestCase\AbstractBack
     /**
      * @param string $url
      * @return void
-     * @dataProvider dataProvider
      */
+    #[DataProvider('dataProvider')]
     public function testPageShouldContainBrowserMonitoringScripts(string $url): void
     {
         $this->newRelicWrapperMock->expects($this->once())
@@ -102,8 +103,8 @@ class BrowserMonitoringTest extends \Magento\TestFramework\TestCase\AbstractBack
     /**
      * @param string $url
      * @return void
-     * @dataProvider dataProvider
      */
+    #[DataProvider('dataProvider')]
     public function testPageShouldNotContainBrowserMonitoringScripts(string $url): void
     {
         $this->newRelicWrapperMock->expects($this->never())

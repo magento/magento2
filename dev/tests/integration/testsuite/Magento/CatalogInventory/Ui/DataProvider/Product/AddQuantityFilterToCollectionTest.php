@@ -13,6 +13,7 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -44,12 +45,12 @@ class AddQuantityFilterToCollectionTest extends TestCase
     }
 
     /**
-     * @dataProvider quantityFilterProvider
      * @magentoDataFixture Magento/Catalog/_files/multiple_products.php
      * @param array $filter
      * @param array $expectedProducts
      * @return void
      */
+    #[DataProvider('quantityFilterProvider')]
     public function testQuantityFilter(array $filter, array $expectedProducts): void
     {
         $this->request->setParams([ContextInterface::FILTER_VAR => $filter]);

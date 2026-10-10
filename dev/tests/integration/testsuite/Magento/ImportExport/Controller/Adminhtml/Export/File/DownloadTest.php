@@ -15,6 +15,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\AbstractBackendController;
 use Magento\Backend\Model\UrlInterface as BackendUrl;
 use Magento\Backend\Model\Auth;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for \Magento\ImportExport\Controller\Adminhtml\Export\File\Download class.
@@ -72,11 +73,11 @@ class DownloadTest extends AbstractBackendController
      * Check that file can be downloaded.
      *
      * @param string $file
-     * @dataProvider csvExecuteProvider
      * @return void
      * @magentoConfigFixture default_store admin/security/use_form_key 1
      * @magentoAppArea adminhtml
      */
+    #[DataProvider('csvExecuteProvider')]
     public function testExecute($file): void
     {
         $this->copyFile('export/' . $file);

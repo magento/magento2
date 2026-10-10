@@ -36,6 +36,19 @@
                         <field id="alias_limit_enabled">1</field>
                     </depends>
                 </field>
+                <field id="query_length_limit_enabled" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <label>Enable Query Characters Limit</label>
+                    <config_path>graphql/validation/query_length_limit_enabled</config_path>
+                </field>
+                <field id="query_length_limit" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Allowed number of characters in a graphQL query</label>
+                    <comment>Maximum number of characters allowed in a graphql request.</comment>
+                    <config_path>graphql/validation/query_length_limit_allowed</config_path>
+                    <depends>
+                        <field id="query_length_limit_enabled">1</field>
+                    </depends>
+                </field>
             </group>
             <group id="graphql_session" translate="label" type="text" sortOrder="20" showInDefault="0" showInWebsite="0" showInStore="0">
                 <label>GraphQl Session Management</label>

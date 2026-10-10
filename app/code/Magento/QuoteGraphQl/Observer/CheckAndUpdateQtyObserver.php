@@ -25,6 +25,8 @@ class CheckAndUpdateQtyObserver implements ObserverInterface
         if ($item && $item->getHasError()) {
             $item->setUseOldQty(true);
             $item->getQuote()->setHasError(true);
+        } elseif ($item && $item->getHasError() === false) {
+            $item->setUseOldQty(false);
         }
     }
 }

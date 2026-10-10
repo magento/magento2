@@ -15,6 +15,7 @@ use Magento\Framework\View\Result\PageFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Theme\Model\ResourceModel\Theme as ThemeResource;
 use Magento\Theme\Model\ThemeFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -48,14 +49,13 @@ class InstanceTest extends TestCase
     }
 
     /**
-     * @dataProvider gridFiltersDataProvider
-     *
      * @magentoDataFixture Magento/Widget/_files/widgets.php
      *
      * @param array $filter
      * @param array $expectedWidgets
      * @return void
      */
+    #[DataProvider('gridFiltersDataProvider')]
     public function testGridFiltering(array $filter, array $expectedWidgets): void
     {
         $this->request->setParams($filter);
@@ -145,14 +145,13 @@ class InstanceTest extends TestCase
     }
 
     /**
-     * @dataProvider gridSortDataProvider
-     *
      * @magentoDataFixture Magento/Widget/_files/widgets.php
      *
      * @param array $filter
      * @param array $expectedWidgets
      * @return void
      */
+    #[DataProvider('gridSortDataProvider')]
     public function testGridSorting(array $filter, array $expectedWidgets): void
     {
         $this->request->setParams($filter);

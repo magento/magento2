@@ -13,6 +13,7 @@ namespace Magento\Framework\View\Test\Unit\Element\Text\TextList;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\Text\TextList\Item;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ItemTest extends TestCase
 {
@@ -41,12 +42,11 @@ class ItemTest extends TestCase
         $this->assertEquals($innerText, $this->item->getInnerText());
     }
 
-    /**
-     * @dataProvider toHtmlDataProvider
-     *
+    /**     *
      * @param array $liParams
      * @param string $innerText
      */
+    #[DataProvider('toHtmlDataProvider')]
     public function testToHtml($liParams, $innerText, $expectedHtml)
     {
         $this->item->setLink($liParams, $innerText);

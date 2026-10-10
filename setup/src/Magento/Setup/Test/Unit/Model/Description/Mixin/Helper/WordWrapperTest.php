@@ -9,6 +9,7 @@ namespace Magento\Setup\Test\Unit\Model\Description\Mixin\Helper;
 
 use Magento\Setup\Model\Description\Mixin\Helper\WordWrapper;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class WordWrapperTest extends TestCase
 {
@@ -25,8 +26,8 @@ class WordWrapperTest extends TestCase
     /**
      * @param array $inputData
      * @param string $expectedResult
-     * @dataProvider getTestData
      */
+    #[DataProvider('getTestData')]
     public function testWrapping($inputData, $expectedResult)
     {
         $this->assertEquals(

@@ -39,8 +39,7 @@ class FieldsetTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->context = $this->getMockBuilder(ContextInterface::class)
-            ->getMockForAbstractClass();
+        $this->context = $this->createMock(ContextInterface::class);
 
         $this->fieldset = new Fieldset(
             $this->context,

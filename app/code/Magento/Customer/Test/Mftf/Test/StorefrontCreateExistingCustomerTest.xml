@@ -25,7 +25,6 @@
         </before>
         <after>
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
-            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
         </after>
 
         <actionGroup ref="StorefrontFillCustomerAccountCreationFormActionGroup" stepKey="fillCreateAccountForm">

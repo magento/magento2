@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Swatches\Model;
 
 use Magento\Catalog\Model\Product\Attribute\Save\AbstractAttributeTest;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoDbIsolation enabled
@@ -36,10 +37,10 @@ class AttributeTextSwatchTest extends AbstractAttributeTest
      * @magentoDataFixture Magento/Swatches/_files/product_text_swatch_attribute.php
      * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
      * @magentoDataFixture Magento/Catalog/_files/product_simple_out_of_stock.php
-     * @dataProvider uniqueAttributeValueProvider
      * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      * @inheritdoc
      */
+    #[DataProvider('uniqueAttributeValueProvider')]
     public function testUniqueAttribute(string $firstSku, string $secondSku): void
     {
         parent::testUniqueAttribute($firstSku, $secondSku);

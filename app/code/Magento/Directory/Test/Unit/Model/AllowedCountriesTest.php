@@ -46,8 +46,8 @@ class AllowedCountriesTest extends TestCase
         $this->shareConfigMock = $this->getMockBuilder(Share::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
 
         $this->allowedCountriesReader = new AllowedCountries(
             $this->scopeConfigMock,
@@ -60,7 +60,7 @@ class AllowedCountriesTest extends TestCase
      */
     public function testGetAllowedCountriesWithEmptyFilter()
     {
-        $website1 = $this->getMockForAbstractClass(WebsiteInterface::class);
+        $website1 = $this->createMock(WebsiteInterface::class);
         $website1->expects($this->once())
             ->method('getId')
             ->willReturn(1);
@@ -123,7 +123,7 @@ class AllowedCountriesTest extends TestCase
             ->willReturn(true);
         if ($this->shareConfigMock->isGlobalScope()) {
 
-            $websiteMock = $this->getMockForAbstractClass(WebsiteInterface::class);
+            $websiteMock = $this->createMock(WebsiteInterface::class);
             $websiteMock->expects($this->once())
                 ->method('getId')
                 ->willReturn($expectedFilter);

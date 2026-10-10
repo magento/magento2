@@ -59,7 +59,7 @@ class ReaderTest extends TestCase
     protected function setUp(): void
     {
         $this->diContainerConfig =
-            $this->getMockForAbstractClass(ConfigInterface::class);
+            $this->createMock(ConfigInterface::class);
         $this->configLoader =
             $this->createMock(ConfigLoader::class);
 

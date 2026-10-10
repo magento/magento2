@@ -62,7 +62,6 @@ class SystemTest extends TestCase
 
         $reflection = new ReflectionClass($system);
         $resourceNameProperty = $reflection->getProperty('_resourceName');
-        $resourceNameProperty->setAccessible(true);
 
         $this->assertEquals(
             SystemResource::class,

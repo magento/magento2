@@ -152,6 +152,11 @@ abstract class AbstractItem extends AbstractExtensibleModel implements ItemInter
             $this->setProduct($product);
         }
 
+        // webapi/async flows there is no product_id and no attached product yet
+        if (!$product) {
+            return null;
+        }
+
         /**
          * Reset product final price because it related to custom options
          */
@@ -470,7 +475,7 @@ abstract class AbstractItem extends AbstractExtensibleModel implements ItemInter
     {
         if (!$this->hasBaseCalculationPrice()) {
             if ($this->hasCustomPrice()) {
-                $price = (double)$this->getCustomPrice();
+                $price = (float)$this->getCustomPrice();
                 if ($price) {
                     $rate = $this->priceCurrency->convert($price, $this->getStore()) / $price;
                     $price = $price / $rate;
@@ -492,7 +497,7 @@ abstract class AbstractItem extends AbstractExtensibleModel implements ItemInter
     {
         if (!$this->hasBaseCalculationPrice()) {
             if ($this->hasOriginalCustomPrice()) {
-                $price = (double)$this->getOriginalCustomPrice();
+                $price = (float)$this->getOriginalCustomPrice();
                 if ($price) {
                     $rate = $this->priceCurrency->convert($price, $this->getStore()) / $price;
                     $price = $price / $rate;

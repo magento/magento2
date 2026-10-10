@@ -11,6 +11,7 @@ use Magento\Catalog\Block\Adminhtml\Category\Helper\Image;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -41,21 +42,13 @@ class ImageTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $this->storeMock = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        // Using getMockBuilder to avoid parent constructor ObjectManager::getInstance() calls
-        $this->model = $this->getMockBuilder(Image::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods([])
-            ->getMock();
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeMock = $this->createMock(Store::class);
+        $this->model = $this->createPartialMock(Image::class, []);
 
         // Inject the storeManager dependency using reflection
         $reflection = new \ReflectionClass($this->model);
         $property = $reflection->getProperty('_storeManager');
-        $property->setAccessible(true);
         $property->setValue($this->model, $this->storeManagerMock);
     }
 
@@ -70,7 +63,6 @@ class ImageTest extends TestCase
 
         $reflection = new \ReflectionClass($this->model);
         $method = $reflection->getMethod('_getUrl');
-        $method->setAccessible(true);
 
         $result = $method->invoke($this->model);
 
@@ -101,7 +93,6 @@ class ImageTest extends TestCase
 
         $reflection = new \ReflectionClass($this->model);
         $method = $reflection->getMethod('_getUrl');
-        $method->setAccessible(true);
 
         $result = $method->invoke($this->model);
 
@@ -111,10 +102,10 @@ class ImageTest extends TestCase
     /**
      * Test _getUrl method with different image names
      *
-     * @dataProvider imageNameDataProvider
      * @param string $imageName
      * @return void
      */
+    #[DataProvider('imageNameDataProvider')]
     public function testGetUrlWithDifferentImageNames(string $imageName): void
     {
         $baseUrl = 'http://example.com/media/';
@@ -133,7 +124,6 @@ class ImageTest extends TestCase
 
         $reflection = new \ReflectionClass($this->model);
         $method = $reflection->getMethod('_getUrl');
-        $method->setAccessible(true);
 
         $result = $method->invoke($this->model);
 
@@ -151,7 +141,6 @@ class ImageTest extends TestCase
 
         $reflection = new \ReflectionClass($this->model);
         $method = $reflection->getMethod('_getUrl');
-        $method->setAccessible(true);
 
         $result = $method->invoke($this->model);
 

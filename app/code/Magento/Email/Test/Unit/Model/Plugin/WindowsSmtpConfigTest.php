@@ -47,8 +47,8 @@ class WindowsSmtpConfigTest extends TestCase
         $objectManager = new ObjectManager($this);
 
         $this->osInfoMock = $this->createMock(OsInfo::class);
-        $this->configMock = $this->getMockForAbstractClass(ReinitableConfigInterface::class);
-        $this->transportMock = $this->getMockForAbstractClass(TransportInterface::class);
+        $this->configMock = $this->createMock(ReinitableConfigInterface::class);
+        $this->transportMock = $this->createMock(TransportInterface::class);
 
         $this->windowsSmtpConfig = $objectManager->getObject(
             WindowsSmtpConfig::class,

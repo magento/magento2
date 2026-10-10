@@ -11,6 +11,7 @@ use Magento\Sales\Model\Order\Shipment\Track;
 use Magento\Sales\Model\Order\Shipment\Track\Validator;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ValidatorTest extends TestCase
 {
@@ -42,8 +43,8 @@ class ValidatorTest extends TestCase
      * @param $trackDataMap
      * @param $trackData
      * @param $expectedWarnings
-     * @dataProvider providerTrackData
      */
+    #[DataProvider('providerTrackData')]
     public function testValidate($trackDataMap, $trackData, $expectedWarnings)
     {
         $this->trackModelMock->expects($this->any())

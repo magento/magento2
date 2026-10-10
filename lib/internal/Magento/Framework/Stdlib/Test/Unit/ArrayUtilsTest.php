@@ -10,6 +10,7 @@ namespace Magento\Framework\Stdlib\Test\Unit;
 use Magento\Framework\DataObject;
 use Magento\Framework\Stdlib\ArrayUtils;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for ArrayUtils.
@@ -35,9 +36,8 @@ class ArrayUtilsTest extends TestCase
      * Tests ksort multibyte.
      *
      * @param array $input
-     * @param string $locale
-     * @dataProvider ksortMultibyteDataProvider
-     */
+     * @param string $locale     */
+    #[DataProvider('ksortMultibyteDataProvider')]
     public function testKsortMultibyte($input, $locale)
     {
         $this->_arrayUtils->ksortMultibyte($input, $locale);
@@ -90,9 +90,8 @@ class ArrayUtilsTest extends TestCase
      * @param array $data
      * @param array $expected
      * @param string $path
-     * @param string $separator
-     * @dataProvider flattenDataProvider
-     */
+     * @param string $separator     */
+    #[DataProvider('flattenDataProvider')]
     public function testFlatten(array $data, array $expected, $path, $separator)
     {
         $this->assertSame($expected, $this->_arrayUtils->flatten($data, $path, $separator));
@@ -170,9 +169,8 @@ class ArrayUtilsTest extends TestCase
      *
      * @param array $originalArray
      * @param array $newArray
-     * @param $expected
-     * @dataProvider recursiveDiffDataProvider
-     */
+     * @param $expected     */
+    #[DataProvider('recursiveDiffDataProvider')]
     public function testRecursiveDiff(array $originalArray, array $newArray, $expected)
     {
         $this->assertSame($expected, $this->_arrayUtils->recursiveDiff($originalArray, $newArray));

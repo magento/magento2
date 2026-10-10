@@ -28,6 +28,7 @@ use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test class for \Magento\Catalog\Model\Category.
@@ -416,9 +417,9 @@ class CategoryTest extends TestCase
     }
 
     /**
-     * @dataProvider categoryFieldsProvider
      * @param array $data
      */
+    #[DataProvider('categoryFieldsProvider')]
     public function testCategoryCreateWithDifferentFields(array $data): void
     {
         $requiredData = [

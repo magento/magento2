@@ -10,6 +10,7 @@ namespace Magento\Setup\Test\Unit\Module\I18n\Parser\Adapter\Php\Tokenizer;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\Token;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @covers \Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\Token
@@ -32,8 +33,8 @@ class TokenTest extends TestCase
      * @param int $name
      * @param string $value
      * @param bool $result
-     * @dataProvider isNewDataProvider
      */
+    #[DataProvider('isNewDataProvider')]
     public function testIsNew($name, $value, $result)
     {
         $token = $this->createToken($name, $value);
@@ -46,8 +47,8 @@ class TokenTest extends TestCase
      * @param int $name
      * @param string $value
      * @param bool $result
-     * @dataProvider isNamespaceSeparatorDataProvider
      */
+    #[DataProvider('isNamespaceSeparatorDataProvider')]
     public function testIsNamespaceSeparator($name, $value, $result)
     {
         $token = $this->createToken($name, $value);
@@ -60,8 +61,8 @@ class TokenTest extends TestCase
      * @param int $name
      * @param string $value
      * @param bool $result
-     * @dataProvider isIdentifierDataProvider
      */
+    #[DataProvider('isIdentifierDataProvider')]
     public function testIsIdentifier($name, $value, $result)
     {
         $token = $this->createToken($name, $value);

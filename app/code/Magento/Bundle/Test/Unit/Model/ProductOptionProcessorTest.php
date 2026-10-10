@@ -16,14 +16,15 @@ use Magento\Catalog\Api\Data\ProductOptionExtensionInterface;
 use Magento\Catalog\Api\Data\ProductOptionInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\DataObject\Factory as DataObjectFactory;
-use Magento\Framework\DataObject\Test\Unit\Helper\DataObjectTestHelper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Quote\Test\Unit\Helper\ProductOptionExtensionTestHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class ProductOptionProcessorTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ProductOptionProcessor
      */
@@ -51,7 +52,7 @@ class ProductOptionProcessorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->dataObject = new DataObjectTestHelper();
+        $this->dataObject = new DataObject();
 
         $this->dataObjectFactory = $this->createPartialMock(DataObjectFactory::class, ['create']);
         $this->dataObjectFactory->method('create')->willReturn($this->dataObject);
@@ -84,8 +85,11 @@ class ProductOptionProcessorTest extends TestCase
         }
         $productOptionMock = $this->createMock(ProductOptionInterface::class);
 
-        $productOptionExtensionMock = new ProductOptionExtensionTestHelper();
-        $productOptionExtensionMock->setBundleOptions($options);
+        $productOptionExtensionMock = $this->createPartialMockWithReflection(
+            ProductOptionExtensionInterface::class,
+            ['getBundleOptions', 'setBundleOptions']
+        );
+        $productOptionExtensionMock->method('getBundleOptions')->willReturn($options);
 
         $productOptionMock->method('getExtensionAttributes')->willReturn($productOptionExtensionMock);
 

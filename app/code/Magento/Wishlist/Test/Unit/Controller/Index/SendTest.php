@@ -9,10 +9,12 @@ namespace Magento\Wishlist\Test\Unit\Controller\Index;
 
 use Magento\Captcha\Helper\Data as CaptchaHelper;
 use Magento\Captcha\Model\DefaultModel as CaptchaModel;
+use Magento\Customer\Helper\View as CustomerViewHelper;
 use Magento\Customer\Model\Customer;
 use Magento\Customer\Model\Data\Customer as CustomerData;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Context as ActionContext;
+use Magento\Framework\App\Request\Http as RequestHttp;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\Redirect as ResultRedirect;
 use Magento\Framework\Controller\ResultFactory;
@@ -39,6 +41,7 @@ use Magento\Wishlist\Controller\WishlistProviderInterface;
 use Magento\Wishlist\Model\Config as WishlistConfig;
 use Magento\Wishlist\Model\Validator\MessageValidator;
 use Magento\Wishlist\Model\Wishlist;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -48,6 +51,8 @@ use PHPUnit\Framework\TestCase;
  */
 class SendTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var  Send|MockObject
      */
@@ -140,17 +145,11 @@ class SendTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->resultRedirect = $this->getMockBuilder(ResultRedirect::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resultRedirect = $this->createMock(ResultRedirect::class);
 
-        $this->resultLayout = $this->getMockBuilder(ResultLayout::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resultLayout = $this->createMock(ResultLayout::class);
 
-        $this->resultFactory = $this->getMockBuilder(ResultFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resultFactory = $this->createMock(ResultFactory::class);
         $this->resultFactory->expects($this->any())
             ->method('create')
             ->willReturnMap([
@@ -158,22 +157,15 @@ class SendTest extends TestCase
                 [ResultFactory::TYPE_LAYOUT, [], $this->resultLayout],
             ]);
 
-        $this->request = $this->getMockBuilder(RequestInterface::class)
-            ->addMethods(['getPost', 'getPostValue'])
-            ->getMockForAbstractClass();
+        $this->request = $this->createPartialMock(RequestHttp::class, ['getPost', 'getPostValue', 'getParam']);
 
-        $this->messageManager = $this->getMockBuilder(ManagerInterface::class)
-            ->getMockForAbstractClass();
+        $this->messageManager = $this->createMock(ManagerInterface::class);
 
-        $this->url = $this->getMockBuilder(UrlInterface::class)
-            ->getMockForAbstractClass();
+        $this->url = $this->createMock(UrlInterface::class);
 
-        $this->eventManager = $this->getMockBuilder(EventManagerInterface::class)
-            ->getMockForAbstractClass();
+        $this->eventManager = $this->createMock(EventManagerInterface::class);
 
-        $this->context = $this->getMockBuilder(ActionContext::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->context = $this->createMock(ActionContext::class);
         $this->context->expects($this->any())
             ->method('getRequest')
             ->willReturn($this->request);
@@ -190,15 +182,12 @@ class SendTest extends TestCase
             ->method('getEventManager')
             ->willReturn($this->eventManager);
 
-        $this->formKeyValidator = $this->getMockBuilder(FormKeyValidator::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->formKeyValidator = $this->createMock(FormKeyValidator::class);
 
-        $customerMock = $this->getMockBuilder(Customer::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getId'])
-            ->addMethods(['getEmail'])
-            ->getMock();
+        $customerMock = $this->createPartialMockWithReflection(
+            Customer::class,
+            ['getId', 'getEmail']
+        );
 
         $customerMock->expects($this->any())
             ->method('getEmail')
@@ -208,10 +197,7 @@ class SendTest extends TestCase
             ->method('getId')
             ->willReturn(false);
 
-        $this->customerSession = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getCustomer', 'getData'])
-            ->getMock();
+        $this->customerSession = $this->createPartialMock(Session::class, ['getCustomer', 'getData']);
 
         $this->customerSession->expects($this->any())
             ->method('getCustomer')
@@ -221,18 +207,11 @@ class SendTest extends TestCase
             ->method('getData')
             ->willReturn(false);
 
-        $this->wishlistProvider = $this->getMockBuilder(WishlistProviderInterface::class)
-            ->getMockForAbstractClass();
+        $this->wishlistProvider = $this->createMock(WishlistProviderInterface::class);
 
-        $this->captchaHelper = $this->getMockBuilder(CaptchaHelper::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getCaptcha'])
-            ->getMock();
+        $this->captchaHelper = $this->createPartialMock(CaptchaHelper::class, ['getCaptcha']);
 
-        $this->captchaModel = $this->getMockBuilder(CaptchaModel::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['isRequired', 'logAttempt'])
-            ->getMock();
+        $this->captchaModel = $this->createPartialMock(CaptchaModel::class, ['isRequired', 'logAttempt']);
 
         $objectHelper = new ObjectManager($this);
 
@@ -387,10 +366,7 @@ class SendTest extends TestCase
             ->with($this->request)
             ->willReturn(true);
 
-        $wishlist = $this->getMockBuilder(Wishlist::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getShared'])
-            ->getMock();
+        $wishlist = $this->createPartialMockWithReflection(Wishlist::class, ['getShared']);
         $wishlist->expects($this->any())->method('getShared')->willReturn(0);
         
         $this->wishlistProvider->expects($this->once())
@@ -456,10 +432,7 @@ class SendTest extends TestCase
             ->with($this->request)
             ->willReturn(true);
 
-        $wishlist = $this->getMockBuilder(Wishlist::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getShared'])
-            ->getMock();
+        $wishlist = $this->createPartialMockWithReflection(Wishlist::class, ['getShared']);
         $wishlist->expects($this->any())->method('getShared')->willReturn(0);
         
         $this->wishlistProvider->expects($this->once())
@@ -526,10 +499,7 @@ class SendTest extends TestCase
             ->with($this->request)
             ->willReturn(true);
 
-        $wishlist = $this->getMockBuilder(Wishlist::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getShared'])
-            ->getMock();
+        $wishlist = $this->createPartialMockWithReflection(Wishlist::class, ['getShared']);
         $wishlist->expects($this->any())->method('getShared')->willReturn(0);
         
         $this->wishlistProvider->expects($this->once())
@@ -565,15 +535,9 @@ class SendTest extends TestCase
      */
     public function testExecuteWithIncorrectCaptcha(): void
     {
-        $captchaModel = $this->getMockBuilder(CaptchaModel::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['isRequired', 'isCorrect', 'logAttempt'])
-            ->getMock();
-        
-        $captchaHelper = $this->getMockBuilder(CaptchaHelper::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getCaptcha'])
-            ->getMock();
+        $captchaModel = $this->createPartialMock(CaptchaModel::class, ['isRequired', 'isCorrect', 'logAttempt']);
+
+        $captchaHelper = $this->createPartialMock(CaptchaHelper::class, ['getCaptcha']);
 
         $captchaHelper->expects($this->once())
             ->method('getCaptcha')
@@ -635,24 +599,17 @@ class SendTest extends TestCase
         $transportBuilder = $this->createMock(TransportBuilder::class);
         $transport = $this->createMock(TransportInterface::class);
         $inlineTranslation = $this->createMock(StateInterface::class);
-        $customerHelper = $this->createMock(\Magento\Customer\Helper\View::class);
+        $customerHelper = $this->createMock(CustomerViewHelper::class);
         $wishlistSession = $this->createMock(WishlistSession::class);
         $scopeConfig = $this->createMock(ScopeConfigInterface::class);
         $storeManager = $this->createMock(StoreManagerInterface::class);
-        $store = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getStoreId'])
-            ->getMock();
+        $store = $this->createPartialMockWithReflection(Store::class, ['getStoreId']);
         $escaper = $this->createMock(Escaper::class);
         $messageValidator = $this->createMock(MessageValidator::class);
 
-        $customerData = $this->createMock(\Magento\Customer\Model\Data\Customer::class);
+        $customerData = $this->createMock(CustomerData::class);
         
-        $customerModel = $this->getMockBuilder(Customer::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getId'])
-            ->addMethods(['getEmail'])
-            ->getMock();
+        $customerModel = $this->createPartialMockWithReflection(Customer::class, ['getId', 'getEmail']);
         $customerModel->method('getId')->willReturn(null);
         $customerModel->method('getEmail')->willReturn('');
         
@@ -669,11 +626,7 @@ class SendTest extends TestCase
         $scopeConfig->method('getValue')->willReturn('template_id');
 
         $layout = $this->createMock(LayoutInterface::class);
-        $block = $this->getMockBuilder(AbstractBlock::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setWishlistId'])
-            ->onlyMethods(['toHtml'])
-            ->getMock();
+        $block = $this->createPartialMockWithReflection(AbstractBlock::class, ['setWishlistId', 'toHtml']);
         $block->method('toHtml')->willReturn('<html>test</html>');
         $block->method('setWishlistId')->willReturnSelf();
         $layout->method('getBlock')->willReturn($block);
@@ -689,11 +642,10 @@ class SendTest extends TestCase
 
         $transport->expects($this->once())->method('sendMessage');
 
-        $wishlist = $this->getMockBuilder(Wishlist::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getShared', 'getSharingCode'])
-            ->onlyMethods(['getId', 'save', 'isSalable'])
-            ->getMock();
+        $wishlist = $this->createPartialMockWithReflection(
+            Wishlist::class,
+            ['getShared', 'getSharingCode', 'getId', 'save', 'isSalable']
+        );
         $wishlist->method('getShared')->willReturn(0);
         $wishlist->method('getId')->willReturn(1);
         $wishlist->method('getSharingCode')->willReturn('abc123');
@@ -765,24 +717,17 @@ class SendTest extends TestCase
         $transportBuilder = $this->createMock(TransportBuilder::class);
         $transport = $this->createMock(TransportInterface::class);
         $inlineTranslation = $this->createMock(StateInterface::class);
-        $customerHelper = $this->createMock(\Magento\Customer\Helper\View::class);
+        $customerHelper = $this->createMock(CustomerViewHelper::class);
         $wishlistSession = $this->createMock(WishlistSession::class);
         $scopeConfig = $this->createMock(ScopeConfigInterface::class);
         $storeManager = $this->createMock(StoreManagerInterface::class);
-        $store = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getStoreId'])
-            ->getMock();
+        $store = $this->createPartialMockWithReflection(Store::class, ['getStoreId']);
         $escaper = $this->createMock(Escaper::class);
         $messageValidator = $this->createMock(MessageValidator::class);
 
-        $customerData = $this->createMock(\Magento\Customer\Model\Data\Customer::class);
+        $customerData = $this->createMock(CustomerData::class);
         
-        $customerModel = $this->getMockBuilder(Customer::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getId'])
-            ->addMethods(['getEmail'])
-            ->getMock();
+        $customerModel = $this->createPartialMockWithReflection(Customer::class, ['getId', 'getEmail']);
         $customerModel->method('getId')->willReturn(null);
         $customerModel->method('getEmail')->willReturn('');
         
@@ -799,11 +744,7 @@ class SendTest extends TestCase
         $scopeConfig->method('getValue')->willReturn('template_id');
 
         $layout = $this->createMock(LayoutInterface::class);
-        $block = $this->getMockBuilder(AbstractBlock::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setWishlistId'])
-            ->onlyMethods(['toHtml'])
-            ->getMock();
+        $block = $this->createPartialMockWithReflection(AbstractBlock::class, ['setWishlistId', 'toHtml']);
         $block->method('toHtml')->willReturn('<html>RSS Link</html>');
         $block->method('setWishlistId')->willReturnSelf();
         $layout->method('getBlock')->willReturn($block);
@@ -819,11 +760,10 @@ class SendTest extends TestCase
 
         $transport->expects($this->once())->method('sendMessage');
 
-        $wishlist = $this->getMockBuilder(Wishlist::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getShared', 'getSharingCode'])
-            ->onlyMethods(['getId', 'save', 'isSalable'])
-            ->getMock();
+        $wishlist = $this->createPartialMockWithReflection(
+            Wishlist::class,
+            ['getShared', 'getSharingCode', 'getId', 'save', 'isSalable']
+        );
         $wishlist->method('getShared')->willReturn(0);
         $wishlist->method('getId')->willReturn(1);
         $wishlist->method('getSharingCode')->willReturn('abc123');
@@ -895,27 +835,17 @@ class SendTest extends TestCase
         $transportBuilder = $this->createMock(TransportBuilder::class);
         $transport = $this->createMock(TransportInterface::class);
         $inlineTranslation = $this->createMock(StateInterface::class);
-        $customerHelper = $this->createMock(\Magento\Customer\Helper\View::class);
-        $wishlistSession = $this->getMockBuilder(WishlistSession::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setSharingForm'])
-            ->getMock();
+        $customerHelper = $this->createMock(CustomerViewHelper::class);
+        $wishlistSession = $this->createPartialMockWithReflection(WishlistSession::class, ['setSharingForm']);
         $scopeConfig = $this->createMock(ScopeConfigInterface::class);
         $storeManager = $this->createMock(StoreManagerInterface::class);
-        $store = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getStoreId'])
-            ->getMock();
+        $store = $this->createPartialMockWithReflection(Store::class, ['getStoreId']);
         $escaper = $this->createMock(Escaper::class);
         $messageValidator = $this->createMock(MessageValidator::class);
 
-        $customerData = $this->createMock(\Magento\Customer\Model\Data\Customer::class);
+        $customerData = $this->createMock(CustomerData::class);
         
-        $customerModel = $this->getMockBuilder(Customer::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getId'])
-            ->addMethods(['getEmail'])
-            ->getMock();
+        $customerModel = $this->createPartialMockWithReflection(Customer::class, ['getId', 'getEmail']);
         $customerModel->method('getId')->willReturn(null);
         $customerModel->method('getEmail')->willReturn('');
         
@@ -932,11 +862,7 @@ class SendTest extends TestCase
         $scopeConfig->method('getValue')->willReturn('template_id');
 
         $layout = $this->createMock(LayoutInterface::class);
-        $block = $this->getMockBuilder(AbstractBlock::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setWishlistId'])
-            ->onlyMethods(['toHtml'])
-            ->getMock();
+        $block = $this->createPartialMockWithReflection(AbstractBlock::class, ['setWishlistId', 'toHtml']);
         $block->method('toHtml')->willReturn('<html>test</html>');
         $block->method('setWishlistId')->willReturnSelf();
         $layout->method('getBlock')->willReturn($block);
@@ -953,11 +879,10 @@ class SendTest extends TestCase
         // Simulate exception during send
         $transport->method('sendMessage')->willThrowException(new \Exception('Email sending failed'));
 
-        $wishlist = $this->getMockBuilder(Wishlist::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getShared', 'getSharingCode'])
-            ->onlyMethods(['getId', 'save', 'isSalable'])
-            ->getMock();
+        $wishlist = $this->createPartialMockWithReflection(
+            Wishlist::class,
+            ['getShared', 'getSharingCode', 'getId', 'save', 'isSalable']
+        );
         $wishlist->method('getShared')->willReturn(0);
         $wishlist->method('getId')->willReturn(1);
         $wishlist->method('getSharingCode')->willReturn('abc123');
@@ -1023,11 +948,7 @@ class SendTest extends TestCase
      */
     public function testCaptchaLogAttemptWithCustomerId(): void
     {
-        $customerMock = $this->getMockBuilder(Customer::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getId'])
-            ->addMethods(['getEmail'])
-            ->getMock();
+        $customerMock = $this->createPartialMockWithReflection(Customer::class, ['getId', 'getEmail']);
 
         $customerMock->expects($this->any())
             ->method('getEmail')
@@ -1037,24 +958,15 @@ class SendTest extends TestCase
             ->method('getId')
             ->willReturn(123); // Customer has ID
 
-        $customerSession = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getCustomer'])
-            ->getMock();
+        $customerSession = $this->createPartialMock(Session::class, ['getCustomer']);
 
         $customerSession->expects($this->any())
             ->method('getCustomer')
             ->willReturn($customerMock);
 
-        $captchaModel = $this->getMockBuilder(CaptchaModel::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['isRequired', 'isCorrect', 'logAttempt'])
-            ->getMock();
-        
-        $captchaHelper = $this->getMockBuilder(CaptchaHelper::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getCaptcha'])
-            ->getMock();
+        $captchaModel = $this->createPartialMock(CaptchaModel::class, ['isRequired', 'isCorrect', 'logAttempt']);
+
+        $captchaHelper = $this->createPartialMock(CaptchaHelper::class, ['getCaptcha']);
 
         $captchaHelper->expects($this->once())
             ->method('getCaptcha')

@@ -122,7 +122,6 @@ class UpdateQuoteStoreTest extends \PHPUnit\Framework\TestCase
 
         $reflection = new \ReflectionClass($storeCookieManager);
         $cookieManager = $reflection->getProperty('cookieManager');
-        $cookieManager->setAccessible(true);
         $cookieManager->setValue($storeCookieManager, $cookieManagerMock);
 
         return $storeCookieManager;

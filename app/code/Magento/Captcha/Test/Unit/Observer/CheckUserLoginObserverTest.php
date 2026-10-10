@@ -89,11 +89,9 @@ class CheckUserLoginObserverTest extends TestCase
 
         $reflection = new \ReflectionClass(get_class($this->observer));
         $reflectionProperty = $reflection->getProperty('authentication');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->observer, $this->authenticationMock);
 
         $reflectionProperty2 = $reflection->getProperty('customerRepository');
-        $reflectionProperty2->setAccessible(true);
         $reflectionProperty2->setValue($this->observer, $this->customerRepositoryMock);
     }
 

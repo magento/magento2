@@ -13,6 +13,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Design\Theme\ImageFactory;
 use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Theme\Model\Config\Customization;
 use Magento\Theme\Observer\CleanThemeRelatedContentObserver;
 use Magento\Widget\Model\ResourceModel\Layout\Update\Collection;
@@ -21,6 +22,8 @@ use PHPUnit\Framework\TestCase;
 
 class CleanThemeRelatedContentObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Customization|MockObject
      */
@@ -47,11 +50,10 @@ class CleanThemeRelatedContentObserverTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->themeImageFactory = $this->getMockBuilder(ImageFactory::class)
-            ->onlyMethods(['create'])
-            ->addMethods(['removePreviewImage'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->themeImageFactory = $this->createPartialMockWithReflection(
+            ImageFactory::class,
+            ['create', 'removePreviewImage']
+        );
 
         $this->updateCollection = $this->getMockBuilder(
             Collection::class
@@ -72,9 +74,7 @@ class CleanThemeRelatedContentObserverTest extends TestCase
 
     public function testCleanThemeRelatedContent()
     {
-        $themeMock = $this->getMockBuilder(
-            ThemeInterface::class
-        )->getMockForAbstractClass();
+        $themeMock = $this->createMock(ThemeInterface::class);
 
         $eventMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
@@ -107,9 +107,7 @@ class CleanThemeRelatedContentObserverTest extends TestCase
 
     public function testCleanThemeRelatedContentException()
     {
-        $themeMock = $this->getMockBuilder(
-            ThemeInterface::class
-        )->getMockForAbstractClass();
+        $themeMock = $this->createMock(ThemeInterface::class);
 
         $eventMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()

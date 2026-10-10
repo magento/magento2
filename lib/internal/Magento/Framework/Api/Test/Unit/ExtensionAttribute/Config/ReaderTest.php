@@ -37,7 +37,7 @@ class ReaderTest extends TestCase
             ->getMock();
         $validator = $this->getMockBuilder(ValidationStateInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->_reader = new Reader(
             $fileResolver,
             $converter,

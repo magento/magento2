@@ -12,6 +12,8 @@ namespace Magento\SalesRule\Model\ResourceModel\Rule;
 class DateApplier
 {
     /**
+     * Apply from_date and to_date filters to the select.
+     *
      * @param \Magento\Framework\DB\Select $select
      * @param int|string $now
      * @return void
@@ -19,10 +21,10 @@ class DateApplier
     public function applyDate($select, $now)
     {
         $select->where(
-            'from_date is null or from_date <= ?',
+            'main_table.from_date is null or main_table.from_date <= ?',
             $now
         )->where(
-            'to_date is null or to_date >= ?',
+            'main_table.to_date is null or main_table.to_date >= ?',
             $now
         );
     }

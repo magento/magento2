@@ -19,7 +19,7 @@ class WrapperFactoryTest extends TestCase
     public function testCreate()
     {
         $expectedInstance = Observer::class;
-        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
 
         $wrapperFactory = new WrapperFactory($objectManagerMock);
         $arguments = ['argument' => 'value', 'data' => 'data'];

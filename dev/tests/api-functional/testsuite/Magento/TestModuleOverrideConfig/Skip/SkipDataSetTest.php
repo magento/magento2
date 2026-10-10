@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\TestModuleOverrideConfig\Skip;
 
 use Magento\TestModuleOverrideConfig\AbstractOverridesTest;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class checks that only specific data set can be skipped using override config
@@ -19,10 +20,9 @@ class SkipDataSetTest extends AbstractOverridesTest
     /**
      * The first_data_set should not be executed according to override config it should be mark as skipped
      *
-     * @dataProvider testDataProvider
-     *
      * @return void
      */
+    #[DataProvider('testDataProvider')]
     public function testSkipDataSet(): void
     {
         if ($this->dataName() === 'first_data_set') {
@@ -33,7 +33,7 @@ class SkipDataSetTest extends AbstractOverridesTest
     /**
      * @return array
      */
-    public function testDataProvider(): array
+    public static function testDataProvider(): array
     {
         return [
             'first_data_set' => [],

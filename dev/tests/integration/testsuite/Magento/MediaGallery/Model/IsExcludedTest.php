@@ -10,6 +10,7 @@ namespace Magento\MediaGallery\Model;
 use Magento\MediaGalleryApi\Api\IsPathExcludedInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for IsPathExcludedInterface
@@ -34,8 +35,9 @@ class IsExcludedTest extends TestCase
      *
      * @param string $path
      * @param bool $isExcluded
-     * @dataProvider pathsProvider
+     *
      */
+    #[DataProvider('pathsProvider')]
     public function testExecute(string $path, bool $isExcluded): void
     {
         $this->assertEquals($isExcluded, $this->service->execute($path));

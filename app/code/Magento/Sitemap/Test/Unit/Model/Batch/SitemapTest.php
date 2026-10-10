@@ -333,11 +333,9 @@ class SitemapTest extends TestCase
 
         $reflection = new \ReflectionClass($this->sitemap);
         $method = $reflection->getMethod('_initSitemapItems');
-        $method->setAccessible(true);
         $method->invoke($this->sitemap);
 
         $sitemapItemsProperty = $reflection->getProperty('_sitemapItems');
-        $sitemapItemsProperty->setAccessible(true);
         $sitemapItems = $sitemapItemsProperty->getValue($this->sitemap);
 
         $this->assertCount(3, $sitemapItems);
@@ -434,7 +432,6 @@ class SitemapTest extends TestCase
         $reflection = new \ReflectionClass($this->sitemap);
 
         $tagsProperty = $reflection->getProperty('_tags');
-        $tagsProperty->setAccessible(true);
         $tagsProperty->setValue($this->sitemap, [
             'url' => [
                 'open' => '<?xml version="1.0" encoding="UTF-8"?><urlset>',
@@ -447,20 +444,16 @@ class SitemapTest extends TestCase
         ]);
 
         $sitemapItemsProperty = $reflection->getProperty('_sitemapItems');
-        $sitemapItemsProperty->setAccessible(true);
         $sitemapItemsProperty->setValue($this->sitemap, [$categoryItem]);
 
         // Initialize necessary properties for XML generation
         $fileProperty = $reflection->getProperty('_fileSize');
-        $fileProperty->setAccessible(true);
         $fileProperty->setValue($this->sitemap, 0);
 
         $lineCountProperty = $reflection->getProperty('_lineCount');
-        $lineCountProperty->setAccessible(true);
         $lineCountProperty->setValue($this->sitemap, 0);
 
         $incrementProperty = $reflection->getProperty('_sitemapIncrement');
-        $incrementProperty->setAccessible(true);
         $incrementProperty->setValue($this->sitemap, 0);
 
         $result = $this->sitemap->generateXml();
@@ -550,7 +543,6 @@ class SitemapTest extends TestCase
         $reflection = new \ReflectionClass($this->sitemap);
 
         $tagsProperty = $reflection->getProperty('_tags');
-        $tagsProperty->setAccessible(true);
         $tagsProperty->setValue($this->sitemap, [
             'url' => [
                 'open' => '<?xml version="1.0" encoding="UTF-8"?><urlset>',
@@ -559,11 +551,9 @@ class SitemapTest extends TestCase
         ]);
 
         $fileProperty = $reflection->getProperty('_fileSize');
-        $fileProperty->setAccessible(true);
         $fileProperty->setValue($this->sitemap, 100);
 
         $method = $reflection->getMethod('streamProducts');
-        $method->setAccessible(true);
         $method->invoke($this->sitemap);
     }
 
@@ -588,7 +578,6 @@ class SitemapTest extends TestCase
 
         $reflection = new \ReflectionClass($this->sitemap);
         $method = $reflection->getMethod('streamProducts');
-        $method->setAccessible(true);
         $method->invoke($this->sitemap);
     }
 
@@ -604,15 +593,12 @@ class SitemapTest extends TestCase
         $reflection = new \ReflectionClass($this->sitemap);
 
         $fileProperty = $reflection->getProperty('_fileSize');
-        $fileProperty->setAccessible(true);
         $fileProperty->setValue($this->sitemap, 100);
 
         $lineCountProperty = $reflection->getProperty('_lineCount');
-        $lineCountProperty->setAccessible(true);
         $lineCountProperty->setValue($this->sitemap, 0);
 
         $method = $reflection->getMethod('processSitemapItem');
-        $method->setAccessible(true);
 
         $this->expectNotToPerformAssertions();
         $method->invoke($this->sitemap, $sitemapItem);
@@ -679,19 +665,15 @@ class SitemapTest extends TestCase
 
         $reflection = new \ReflectionClass($sitemap);
         $sitemapIncrementProperty = $reflection->getProperty('_sitemapIncrement');
-        $sitemapIncrementProperty->setAccessible(true);
         $sitemapIncrementProperty->setValue($sitemap, 1);
 
         $fileSizeProperty = $reflection->getProperty('_fileSize');
-        $fileSizeProperty->setAccessible(true);
         $fileSizeProperty->setValue($sitemap, 10000000); // Large file size to trigger split
 
         $lineCountProperty = $reflection->getProperty('_lineCount');
-        $lineCountProperty->setAccessible(true);
         $lineCountProperty->setValue($sitemap, 1);
 
         $method = $reflection->getMethod('processSitemapItem');
-        $method->setAccessible(true);
 
         $this->expectNotToPerformAssertions();
         $method->invoke($sitemap, $sitemapItem);

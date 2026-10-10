@@ -13,6 +13,7 @@ use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ConditionManagerTest extends TestCase
 {
@@ -33,10 +34,7 @@ class ConditionManagerTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['quote', 'quoteIdentifier'])
-            ->getMockForAbstractClass();
+        $this->connectionMock = $this->createMock(AdapterInterface::class);
         $this->connectionMock->expects($this->any())
             ->method('quote')
             ->willReturnCallback(
@@ -67,11 +65,10 @@ class ConditionManagerTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider wrapBracketsDataProvider
-     * @param $query
+    /**     * @param $query
      * @param $expectedResult
      */
+    #[DataProvider('wrapBracketsDataProvider')]
     public function testWrapBrackets($query, $expectedResult)
     {
         $actualResult = $this->conditionManager->wrapBrackets($query);
@@ -117,13 +114,12 @@ class ConditionManagerTest extends TestCase
         $this->assertEquals($expectedResult, $actualResult);
     }
 
-    /**
-     * @dataProvider generateConditionDataProvider
-     * @param $field
+    /**     * @param $field
      * @param $operator
      * @param $value
      * @param $expectedResult
      */
+    #[DataProvider('generateConditionDataProvider')]
     public function testGenerateCondition($field, $operator, $value, $expectedResult)
     {
         $actualResult = $this->conditionManager->generateCondition($field, $operator, $value);

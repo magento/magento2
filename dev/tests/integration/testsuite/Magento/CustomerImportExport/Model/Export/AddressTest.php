@@ -7,6 +7,7 @@
 namespace Magento\CustomerImportExport\Model\Export;
 
 use Magento\CustomerImportExport\Model\Import\Address as ImportAddress;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for customer address export model
@@ -132,16 +133,18 @@ class AddressTest extends \PHPUnit\Framework\TestCase
      */
     public static function getGenderFilterValueDataProvider()
     {
-        return ['male' => ['genderFilterValue' => 1], 'female' => ['genderFilterValue' => 2]];
+        return [
+            'male' => [1],  // $genderFilterValue
+            'female' => [2]  // $genderFilterValue
+        ];
     }
 
     /**
      * Test export method if filter was set
      *
-     * @dataProvider getGenderFilterValueDataProvider
-     *
      * @param int $genderFilterValue
      */
+    #[DataProvider('getGenderFilterValueDataProvider')]
     public function testExportWithFilter($genderFilterValue)
     {
         $entityIdCode = Address::COLUMN_ADDRESS_ID;

@@ -48,9 +48,9 @@ class ValidatorTest extends TestCase
         $scopeCode = 'not_exist_scope_code';
 
         $scopeResolver = $this->getMockBuilder(ScopeResolverInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $scopeObject = $this->getMockBuilder(ScopeInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $scopeResolver->expects($this->once())
             ->method('getScope')
             ->with($scopeCode)
@@ -125,7 +125,7 @@ class ValidatorTest extends TestCase
         $scopeCode = 'not_exist_scope_code';
 
         $scopeResolver = $this->getMockBuilder(ScopeResolverInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $scopeResolver->expects($this->once())
             ->method('getScope')
             ->with($scopeCode)

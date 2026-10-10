@@ -12,6 +12,7 @@ use Magento\Backend\Block\Template\Context;
 use Magento\GroupedProduct\Block\Product\Grouped\AssociatedProducts;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 #[CoversClass(\Magento\GroupedProduct\Block\Product\Grouped\AssociatedProducts::class)]
 class AssociatedProductsTest extends TestCase
@@ -26,10 +27,19 @@ class AssociatedProductsTest extends TestCase
      */
     protected $block;
 
+    /**
+     * @var ObjectManager
+     */
+    protected $objectManager;
+
     protected function setUp(): void
     {
+        $this->objectManager = new ObjectManager($this);
         $this->contextMock = $this->createMock(Context::class);
-        $this->block = new AssociatedProducts($this->contextMock);
+        $this->block = $this->objectManager->getObject(
+            AssociatedProducts::class,
+            ['context' => $this->contextMock]
+        );
     }
 
     /**

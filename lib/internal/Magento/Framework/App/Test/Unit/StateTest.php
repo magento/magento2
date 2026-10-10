@@ -14,6 +14,7 @@ use Magento\Framework\Config\ScopeInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class StateTest extends TestCase
@@ -36,12 +37,10 @@ class StateTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManagerHelper($this);
-        $this->scopeMock = $this->getMockForAbstractClass(
-            ScopeInterface::class,
-            ['setCurrentScope'],
-            '',
-            false
-        );
+        $this->scopeMock = $this->getMockBuilder(ScopeInterface::class)
+            ->onlyMethods(['setCurrentScope', 'getCurrentScope'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->areaListMock = $this->createMock(AreaList::class);
         $this->areaListMock->expects($this->any())
@@ -151,12 +150,12 @@ class StateTest extends TestCase
 
     /**
      * @param string $mode
-     * @dataProvider constructorDataProvider
      */
+    #[DataProvider('constructorDataProvider')]
     public function testConstructor($mode)
     {
         $model = new State(
-            $this->getMockForAbstractClass(ScopeInterface::class, [], '', false),
+            $this->getMockBuilder(ScopeInterface::class)->disableOriginalConstructor()->getMock(),
             $mode
         );
         $this->assertEquals($mode, $model->getMode());
@@ -179,7 +178,7 @@ class StateTest extends TestCase
         $this->expectException('Exception');
         $this->expectExceptionMessage('Unknown application mode: unknown mode');
         new State(
-            $this->getMockForAbstractClass(ScopeInterface::class, [], '', false),
+            $this->getMockBuilder(ScopeInterface::class)->disableOriginalConstructor()->getMock(),
             "unknown mode"
         );
     }

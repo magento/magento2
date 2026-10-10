@@ -14,10 +14,12 @@ use Magento\Quote\Model\Product\Plugin\UpdateQuoteItems;
 use Magento\Quote\Model\ResourceModel\Quote;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\Quote\Test\Unit\Helper\AbstractModelPriceTestHelper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class UpdateQuoteItemsTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var UpdateQuoteItems
      */
@@ -46,9 +48,10 @@ class UpdateQuoteItemsTest extends TestCase
     public function testAfterUpdate($originalPrice, $newPrice, $callMethod, $tierPriceChanged = false)
     {
         $productResourceMock = $this->createMock(Product::class);
-        $productMock = $this->getMockBuilder(AbstractModelPriceTestHelper::class)
-            ->onlyMethods(['getOrigData', 'getId', 'getData', 'getPrice'])
-            ->getMock();
+        $productMock = $this->createPartialMockWithReflection(
+            AbstractModel::class,
+            ['getOrigData', 'getId', 'getData', 'getPrice']
+        );
         $productId = 1;
         $productMock->expects($this->any())->method('getOrigData')->with('price')->willReturn($originalPrice);
         $productMock->method('getPrice')->willReturn($newPrice);

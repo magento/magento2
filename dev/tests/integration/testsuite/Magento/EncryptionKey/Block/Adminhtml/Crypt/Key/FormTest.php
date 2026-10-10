@@ -30,7 +30,6 @@ class FormTest extends \PHPUnit\Framework\TestCase
             \Magento\EncryptionKey\Block\Adminhtml\Crypt\Key\Form::class,
             '_prepareForm'
         );
-        $prepareFormMethod->setAccessible(true);
         $prepareFormMethod->invoke($block);
 
         $form = $block->getForm();

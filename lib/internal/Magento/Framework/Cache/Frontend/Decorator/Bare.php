@@ -3,6 +3,7 @@
  * Copyright 2014 Adobe
  * All Rights Reserved.
  */
+declare(strict_types=1);
 
 /**
  * Cache frontend decorator that attaches no additional responsibility to a decorated instance.
@@ -10,7 +11,11 @@
  */
 namespace Magento\Framework\Cache\Frontend\Decorator;
 
-class Bare implements \Magento\Framework\Cache\FrontendInterface
+use Magento\Framework\Cache\CacheConstants;
+use Magento\Framework\Cache\FrontendInterface;
+use Magento\Framework\Cache\MultiLoadInterface;
+
+class Bare implements FrontendInterface, MultiLoadInterface
 {
     /**
      * Cache frontend instance to delegate actual cache operations to
@@ -66,6 +71,30 @@ class Bare implements \Magento\Framework\Cache\FrontendInterface
     }
 
     /**
+     * Batched multi-load passthrough.
+     *
+     * Delegates when the wrapped frontend is MultiLoadInterface, else per-key (stays transparent).
+     *
+     * @param string[] $identifiers
+     * @return array<string, mixed>
+     */
+    public function loadMultiple(array $identifiers): array
+    {
+        $frontend = $this->_getFrontend();
+        if ($frontend instanceof MultiLoadInterface) {
+            return $frontend->loadMultiple($identifiers);
+        }
+        $out = [];
+        foreach ($identifiers as $id) {
+            $value = $frontend->load($id);
+            if ($value !== false) {
+                $out[$id] = $value;
+            }
+        }
+        return $out;
+    }
+
+    /**
      * @inheritDoc
      */
     public function save($data, $identifier, array $tags = [], $lifeTime = null)
@@ -84,7 +113,7 @@ class Bare implements \Magento\Framework\Cache\FrontendInterface
     /**
      * @inheritdoc
      */
-    public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL, array $tags = [])
+    public function clean($mode = CacheConstants::CLEANING_MODE_ALL, array $tags = [])
     {
         return $this->_getFrontend()->clean($mode, $tags);
     }

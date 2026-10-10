@@ -193,7 +193,6 @@ class CompositeUserContextTest extends TestCase
             CompositeUserContext::class,
             'userContexts'
         );
-        $userContext->setAccessible(true);
         $values = $userContext->getValue($model);
         $this->assertCount(1, $values, 'User context is not registered.');
         $this->assertEquals($userContextMock, $values[0], 'User context is registered incorrectly.');

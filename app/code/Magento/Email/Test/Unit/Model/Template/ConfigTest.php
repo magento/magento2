@@ -19,6 +19,7 @@ use Magento\Framework\View\FileSystem;
 use Magento\Setup\Module\I18n\Locale;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ConfigTest extends TestCase
 {
@@ -114,7 +115,7 @@ class ConfigTest extends TestCase
         $this->themePackages->expects($this->exactly(count($templates)))
             ->method('getThemes')
             ->willReturn($themes);
-        $dir = $this->getMockForAbstractClass(ReadInterface::class);
+        $dir = $this->createMock(ReadInterface::class);
         $this->readDirFactory->expects($this->any())
             ->method('create')
             ->willReturn($dir);
@@ -170,7 +171,7 @@ class ConfigTest extends TestCase
         $this->themePackages->expects($this->once())
             ->method('getThemes')
             ->willReturn([$theme]);
-        $dir = $this->getMockForAbstractClass(ReadInterface::class);
+        $dir = $this->createMock(ReadInterface::class);
         $this->readDirFactory->expects($this->once())
             ->method('create')
             ->with('/theme/path')
@@ -196,11 +197,10 @@ class ConfigTest extends TestCase
     }
 
     /**
-     * @dataProvider parseTemplateCodePartsDataProvider
-     *
      * @param string $input
      * @param array $expectedOutput
      */
+    #[DataProvider('parseTemplateCodePartsDataProvider')]
     public function testParseTemplateIdParts($input, $expectedOutput)
     {
         $this->assertEquals($this->model->parseTemplateIdParts($input), $expectedOutput);
@@ -308,8 +308,8 @@ class ConfigTest extends TestCase
     /**
      * @param string $getterMethod
      * @param $argument
-     * @dataProvider getterMethodUnknownTemplateDataProvider
      */
+    #[DataProvider('getterMethodUnknownTemplateDataProvider')]
     public function testGetterMethodUnknownTemplate($getterMethod, $argument = null)
     {
         $this->expectException('UnexpectedValueException');
@@ -339,8 +339,8 @@ class ConfigTest extends TestCase
      * @param string $expectedException
      * @param array $fixtureFields
      * @param $argument
-     * @dataProvider getterMethodUnknownFieldDataProvider
      */
+    #[DataProvider('getterMethodUnknownFieldDataProvider')]
     public function testGetterMethodUnknownField(
         $getterMethod,
         $expectedException,

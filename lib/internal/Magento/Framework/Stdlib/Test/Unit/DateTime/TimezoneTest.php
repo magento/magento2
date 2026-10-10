@@ -17,6 +17,7 @@ use Magento\Framework\Stdlib\DateTime\Timezone;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for @see Timezone
@@ -92,9 +93,8 @@ class TimezoneTest extends TestCase
      * @param string $locale
      * @param bool $includeTime
      * @param int|string $expectedTime
-     * @param string|null $timeZone
-     * @dataProvider dateIncludeTimeDataProvider
-     */
+     * @param string|null $timeZone     */
+    #[DataProvider('dateIncludeTimeDataProvider')]
     public function testDateIncludeTime($date, $locale, $includeTime, $expectedTime, $timeZone = 'America/Chicago')
     {
         if ($timeZone !== null) {
@@ -203,9 +203,8 @@ class TimezoneTest extends TestCase
     /**
      * @param string $locale
      * @param int $style
-     * @param string $expectedFormat
-     * @dataProvider getDatetimeFormatDataProvider
-     */
+     * @param string $expectedFormat     */
+    #[DataProvider('getDatetimeFormatDataProvider')]
     public function testGetDatetimeFormat(string $locale, int $style, string $expectedFormat): void
     {
         /** @var Timezone $timezone */
@@ -227,9 +226,8 @@ class TimezoneTest extends TestCase
     /**
      * @param string $locale
      * @param int $style
-     * @param string $expectedFormat
-     * @dataProvider getDateFormatWithLongYearDataProvider
-     */
+     * @param string $expectedFormat     */
+    #[DataProvider('getDateFormatWithLongYearDataProvider')]
     public function testGetDateFormatWithLongYear(string $locale, string $expectedFormat): void
     {
         /** @var Timezone $timezone */
@@ -250,9 +248,8 @@ class TimezoneTest extends TestCase
     /**
      * @param string $date
      * @param string $configuredTimezone
-     * @param string $expectedResult
-     * @dataProvider getConvertConfigTimeToUtcFixtures
-     */
+     * @param string $expectedResult     */
+    #[DataProvider('getConvertConfigTimeToUtcFixtures')]
     public function testConvertConfigTimeToUtc($date, $configuredTimezone, $expectedResult)
     {
         $this->scopeConfigWillReturnConfiguredTimezone($configuredTimezone);
@@ -287,9 +284,8 @@ class TimezoneTest extends TestCase
     }
 
     /**
-     * Test configuration of the different timezones.
-     * @dataProvider getDateFixtures
-     */
+     * Test configuration of the different timezones.     */
+    #[DataProvider('getDateFixtures')]
     public function testDate($expectedResult, $timezone, $date)
     {
         $this->localeResolver->method('getLocale')->willReturn('en_GB');
@@ -315,9 +311,8 @@ class TimezoneTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider getConvertConfigTimeToUTCDataFixtures
-     */
+    /**     */
+    #[DataProvider('getConvertConfigTimeToUTCDataFixtures')]
     public function testConvertConfigTimeToUtcException($date)
     {
         $this->expectException(LocalizedException::class);
@@ -406,13 +401,12 @@ class TimezoneTest extends TestCase
             ->willReturn($configuredTimezone);
     }
 
-    /**
-     * @dataProvider scopeDateDataProvider
-     * @param \DateTimeInterface|string|int $date
+    /**     * @param \DateTimeInterface|string|int $date
      * @param string $timezone
      * @param string $locale
      * @param string $expectedDate
      */
+    #[DataProvider('scopeDateDataProvider')]
     public function testScopeDate($date, string $timezone, string $locale, string $expectedDate)
     {
         $scopeCode = 'test';

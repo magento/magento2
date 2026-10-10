@@ -57,7 +57,7 @@ class CleanExpiredOrdersTest extends TestCase
             ['create']
         );
         $this->orderCollectionMock = $this->createMock(Collection::class);
-        $this->orderManagementMock = $this->getMockForAbstractClass(OrderManagementInterface::class);
+        $this->orderManagementMock = $this->createMock(OrderManagementInterface::class);
 
         $this->model = new CleanExpiredOrders(
             $this->storesConfigMock,

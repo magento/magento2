@@ -12,7 +12,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Bundle\Model\Option;
 use Magento\Bundle\Model\ResourceModel\Option as OptionResource;
 use Magento\Catalog\Model\Product;
-use Magento\Catalog\Test\Unit\Helper\ProductTestHelper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -20,13 +20,15 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(\Magento\Bundle\Model\Option::class)]
 class OptionTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
-     * @var ProductTestHelper
+     * @var Product|MockObject
      */
     protected $selectionFirst;
 
     /**
-     * @var ProductTestHelper
+     * @var Product|MockObject
      */
     protected $selectionSecond;
 
@@ -42,8 +44,14 @@ class OptionTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->selectionFirst = new ProductTestHelper();
-        $this->selectionSecond = new ProductTestHelper();
+        $this->selectionFirst = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getIsSaleable', 'setIsSaleable', 'getIsDefault', 'setIsDefault', 'isSaleable']
+        );
+        $this->selectionSecond = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getIsSaleable', 'setIsSaleable', 'getIsDefault', 'setIsDefault', 'isSaleable']
+        );
         $this->resource = $this->createPartialMock(
             OptionResource::class,
             ['getSearchableData', 'getConnection', 'getIdFieldName', '_construct']
@@ -63,8 +71,10 @@ class OptionTest extends TestCase
 
     public function testIsSaleablePositive()
     {
-        $this->selectionFirst->setIsSaleable(true);
-        $this->selectionSecond->setIsSaleable(false);
+        $this->selectionFirst->method('getIsSaleable')->willReturn(true);
+        $this->selectionFirst->method('isSaleable')->willReturn(true);
+        $this->selectionSecond->method('getIsSaleable')->willReturn(false);
+        $this->selectionSecond->method('isSaleable')->willReturn(false);
 
         $this->model->setSelections([$this->selectionFirst, $this->selectionSecond]);
         $this->assertTrue($this->model->isSaleable());
@@ -72,8 +82,10 @@ class OptionTest extends TestCase
 
     public function testIsSaleableNegative()
     {
-        $this->selectionFirst->setIsSaleable(false);
-        $this->selectionSecond->setIsSaleable(false);
+        $this->selectionFirst->method('getIsSaleable')->willReturn(false);
+        $this->selectionFirst->method('isSaleable')->willReturn(false);
+        $this->selectionSecond->method('getIsSaleable')->willReturn(false);
+        $this->selectionSecond->method('isSaleable')->willReturn(false);
 
         $this->model->setSelections([$this->selectionFirst, $this->selectionSecond]);
         $this->assertFalse($this->model->isSaleable());
@@ -81,8 +93,8 @@ class OptionTest extends TestCase
 
     public function testGetDefaultSelection()
     {
-        $this->selectionFirst->setIsDefault(true);
-        $this->selectionSecond->setIsDefault(false);
+        $this->selectionFirst->method('getIsDefault')->willReturn(true);
+        $this->selectionSecond->method('getIsDefault')->willReturn(false);
 
         $this->model->setSelections([$this->selectionFirst, $this->selectionSecond]);
         $this->assertEquals($this->selectionFirst, $this->model->getDefaultSelection());

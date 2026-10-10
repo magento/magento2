@@ -13,6 +13,7 @@ use Magento\Framework\View\Layout\Builder;
 use Magento\Framework\View\Layout\BuilderFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class BuilderFactoryTest extends TestCase
 {
@@ -35,7 +36,7 @@ class BuilderFactoryTest extends TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
 
         $this->buildFactory = $this->objectManagerHelper->getObject(
             BuilderFactory::class,
@@ -54,9 +55,8 @@ class BuilderFactoryTest extends TestCase
     /**
      * @param string $type
      * @param array $arguments
-     *
-     * @dataProvider createDataProvider
-     */
+     *     */
+    #[DataProvider('createDataProvider')]
     public function testCreate($type, $arguments, $layoutBuilderClass)
     {
         $layoutBuilderMock = $this->getMockBuilder(Builder::class)
