@@ -133,7 +133,7 @@ class Synchronizer
             $productsData,
             function (array $firstProduct, array $secondProduct) {
                 if (isset($firstProduct['added_at'], $secondProduct['added_at'])) {
-                    return ($firstProduct['added_at'] <=> $secondProduct['added_at']);
+                    return ($secondProduct['added_at'] <=> $firstProduct['added_at']);
                 }
                 return 0;
             }
