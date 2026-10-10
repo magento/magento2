@@ -115,7 +115,7 @@ class ValidatorTest extends TestCase
     {
         return [
             ['AD', 'AD100'],  // $countryId, $validPostcode
-            ['AM', '123456'],
+            ['AM', '0010'],
             ['AR', '1234'], ['AS', '12345'], ['AT', '1234'], ['AU', '1234'], ['AX', '22101'],
             ['AZ', '1234'], ['AZ', '123456'], ['BA', '12345'], ['BB', 'BB10900'], ['BD', '1234'],
             ['BE', '1234'], ['BG', '1234'], ['BH', '323'], ['BH', '1209'], ['BM', 'MA 02'],
@@ -216,6 +216,63 @@ class ValidatorTest extends TestCase
             'NL five digits' => ['postCode' => '12345', 'countryId' => 'NL'],
             'NL leading zero' => ['postCode' => '0234', 'countryId' => 'NL'],
             'NL letters only' => ['postCode' => 'ABCD', 'countryId' => 'NL'],
+        ];
+    }
+
+    /**
+     * Test validate returns true for valid Armenia (AM) postcodes.
+     *
+     * Armenia replaced its Soviet-era 6-digit codes with 4-digit codes in 2006.
+     *
+     * @param string $postCode
+     * @param string $countryId
+     * @return void
+     */
+    #[DataProvider('getAmValidPostcodesDataProvider')]
+    public function testValidateReturnsTrueForAmValidPostcodes(string $postCode, string $countryId): void
+    {
+        $this->assertSame(true, $this->validator->validate($postCode, $countryId));
+    }
+
+    /**
+     * Data provider for valid AM postcodes.
+     *
+     * @return array<string, array{postCode: string, countryId: string}>
+     */
+    public static function getAmValidPostcodesDataProvider(): array
+    {
+        return [
+            'AM lowest code' => ['postCode' => '0001', 'countryId' => 'AM'],
+            'AM Yerevan code' => ['postCode' => '0010', 'countryId' => 'AM'],
+            'AM highest code' => ['postCode' => '4204', 'countryId' => 'AM'],
+        ];
+    }
+
+    /**
+     * Test validate returns false for invalid Armenia (AM) postcodes.
+     *
+     * @param string $postCode
+     * @param string $countryId
+     * @return void
+     */
+    #[DataProvider('getAmInvalidPostcodesDataProvider')]
+    public function testValidateReturnsFalseForAmInvalidPostcodes(string $postCode, string $countryId): void
+    {
+        $this->assertSame(false, $this->validator->validate($postCode, $countryId));
+    }
+
+    /**
+     * Data provider for invalid AM postcodes.
+     *
+     * @return array<string, array{postCode: string, countryId: string}>
+     */
+    public static function getAmInvalidPostcodesDataProvider(): array
+    {
+        return [
+            'AM legacy six digits' => ['postCode' => '375010', 'countryId' => 'AM'],
+            'AM too few digits' => ['postCode' => '001', 'countryId' => 'AM'],
+            'AM too many digits' => ['postCode' => '00100', 'countryId' => 'AM'],
+            'AM letters' => ['postCode' => 'AM10', 'countryId' => 'AM'],
         ];
     }
 }
