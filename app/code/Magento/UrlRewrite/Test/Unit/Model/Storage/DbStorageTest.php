@@ -487,6 +487,28 @@ class DbStorageTest extends TestCase
     }
 
     /**
+     * A missing entity ID casts to a string array key, which PHP 8 misreads as
+     * a named argument when spread into array_merge().
+     *
+     * @return void
+     */
+    public function testReplaceWithoutEntityIdDoesNotThrowError(): void
+    {
+        $url = $this->createMock(UrlRewrite::class);
+        $url->method('toArray')->willReturn(['row1']);
+        $url->method('getEntityType')->willReturn('some-type');
+        $url->method('getEntityId')->willReturn(null);
+        $url->method('getStoreId')->willReturn('store_id_1');
+        $url->method('getRequestPath')->willReturn('some/request/path');
+        $this->connectionMock->method('quoteIdentifier')->willReturnArgument(0);
+        $this->select->method($this->anything())->willReturnSelf();
+        $this->resource->method('getTableName')->with(DbStorage::TABLE_NAME)->willReturn('table_name');
+        $this->connectionMock->method('fetchOne')->willReturn(false);
+
+        $this->assertEquals([$url], $this->storage->replace([$url]));
+    }
+
+    /**
      * @return void
      */
     public function testReplaceIfThrewExceptionOnDuplicateUrl(): void
