@@ -3459,6 +3459,79 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
     }
 
     /**
+     * @inheritdoc
+     */
+    public function getGroupConcatSql($expression, $separator = ',', $orderBy = null, $distinct = false)
+    {
+        $sql = 'GROUP_CONCAT(' . ($distinct ? 'DISTINCT ' : '') . $expression;
+        if ($orderBy !== null) {
+            $sql .= ' ORDER BY ' . $orderBy;
+        }
+        return new \Zend_Db_Expr($sql . ' SEPARATOR ' . $this->quote($separator) . ')');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getFieldSql($expression, array $values)
+    {
+        $parts = [];
+        foreach ($values as $value) {
+            if ($value === '') {
+                continue;
+            }
+            $parts[] = $value;
+        }
+        if (!$parts) {
+            return new \Zend_Db_Expr('0');
+        }
+        return new \Zend_Db_Expr('FIELD(' . $expression . ', ' . implode(', ', $parts) . ')');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function createTableLike($newTableName, $originTableName)
+    {
+        return $this->query(sprintf(
+            'CREATE TABLE %s LIKE %s',
+            $this->quoteIdentifier($newTableName),
+            $this->quoteIdentifier($originTableName)
+        ));
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function createTemporaryTableFromSelect($name, array $indexStatements, Select $select)
+    {
+        $sql = sprintf(
+            'CREATE TEMPORARY TABLE %s %s ENGINE=%s IGNORE (%s)',
+            $this->quoteIdentifier($name),
+            $indexStatements ? '(' . implode(',', $indexStatements) . ')' : '',
+            $this->quoteIdentifier('innodb'),
+            $select
+        );
+        return $this->query($sql, $select->getBind());
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function castToText($expression)
+    {
+        return new \Zend_Db_Expr((string) $expression);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function castToNumeric($expression)
+    {
+        return new \Zend_Db_Expr('CAST(' . $expression . ' AS DECIMAL(20,6))');
+    }
+
+    /**
      * Generates case SQL fragment
      *
      * Generate fragment of SQL, that check value against multiple condition cases
