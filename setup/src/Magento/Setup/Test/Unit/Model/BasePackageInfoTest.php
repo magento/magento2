@@ -16,12 +16,12 @@ use Magento\Setup\Model\BasePackageInfo;
 class BasePackageInfoTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\FileSystem\Directory\ReadFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Filesystem\Directory\ReadFactory
      */
     private $readFactoryMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\FileSystem\Directory\ReadInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Filesystem\Directory\ReadInterface
      */
     private $readerMock;
 
@@ -41,8 +41,8 @@ class BasePackageInfoTest extends \PHPUnit\Framework\TestCase
     // Error scenario: magento/magento2-base/composer.json not found
     public function testBaseComposerJsonFileNotFound()
     {
+        $this->readerMock->expects($this->once())->method('isReadable')->with(VENDOR_PATH)->willReturn(true);
         $this->readerMock->expects($this->once())->method('isExist')->willReturn(false);
-        $this->readerMock->expects($this->never())->method('isReadable');
         $this->readerMock->expects($this->never())->method('readFile');
         $this->expectException(\Magento\Setup\Exception::class);
         $this->expectExceptionMessage(
@@ -55,7 +55,9 @@ class BasePackageInfoTest extends \PHPUnit\Framework\TestCase
     public function testBaseComposerJsonFileNotReadable()
     {
         $this->readerMock->expects($this->once())->method('isExist')->willReturn(true);
-        $this->readerMock->expects($this->once())->method('isReadable')->willReturn(false);
+        $this->readerMock->expects($this->exactly(2))->method('isReadable')->willReturnCallback(
+            static fn (string $path): bool => $path === VENDOR_PATH
+        );
         $this->readerMock->expects($this->never())->method('readFile');
         $this->expectException(\Magento\Setup\Exception::class);
         $this->expectExceptionMessage(
@@ -68,7 +70,7 @@ class BasePackageInfoTest extends \PHPUnit\Framework\TestCase
     public function testBaseNoExtraMapSectionInComposerJsonFile()
     {
         $this->readerMock->expects($this->once())->method('isExist')->willReturn(true);
-        $this->readerMock->expects($this->once())->method('isReadable')->willReturn(true);
+        $this->readerMock->expects($this->exactly(2))->method('isReadable')->willReturn(true);
         $jsonData = json_encode(
             [
                 BasePackageInfo::COMPOSER_KEY_EXTRA => [
@@ -86,8 +88,12 @@ class BasePackageInfoTest extends \PHPUnit\Framework\TestCase
     // Success scenario
     public function testBasePackageInfo()
     {
-        $this->readerMock->expects($this->once())->method('isExist')->willReturn(true);
-        $this->readerMock->expects($this->once())->method('isReadable')->willReturn(true);
+        // phpcs:ignore Magento2.Security.IncludeFile
+        $vendorDir = require VENDOR_PATH;
+        $this->readerMock->expects($this->once())->method('isExist')
+            ->with($vendorDir . '/' . BasePackageInfo::MAGENTO_BASE_PACKAGE_COMPOSER_JSON_FILE)
+            ->willReturn(true);
+        $this->readerMock->expects($this->exactly(2))->method('isReadable')->willReturn(true);
         $jsonData = json_encode(
             [
                 BasePackageInfo::COMPOSER_KEY_EXTRA => [
@@ -106,6 +112,33 @@ class BasePackageInfoTest extends \PHPUnit\Framework\TestCase
         );
         $this->readerMock->expects($this->once())->method('readFile')->willReturn($jsonData);
         $expectedList = [__FILE__, __DIR__];
+        $actualList = $this->basePackageInfo->getPaths();
+        $this->assertEquals($expectedList, $actualList);
+    }
+
+    // Scenario: app/etc/vendor_path.php has not been generated, Composer's default vendor directory is assumed
+    public function testVendorPathFileAbsent()
+    {
+        $this->readerMock->expects($this->exactly(2))->method('isReadable')->willReturnCallback(
+            static fn (string $path): bool => $path !== VENDOR_PATH
+        );
+        $this->readerMock->expects($this->once())->method('isExist')
+            ->with('vendor/' . BasePackageInfo::MAGENTO_BASE_PACKAGE_COMPOSER_JSON_FILE)
+            ->willReturn(true);
+        $jsonData = json_encode(
+            [
+                BasePackageInfo::COMPOSER_KEY_EXTRA => [
+                    BasePackageInfo::COMPOSER_KEY_MAP => [
+                        [
+                            __FILE__,
+                            __FILE__
+                        ]
+                    ]
+                ]
+            ]
+        );
+        $this->readerMock->expects($this->once())->method('readFile')->willReturn($jsonData);
+        $expectedList = [__FILE__];
         $actualList = $this->basePackageInfo->getPaths();
         $this->assertEquals($expectedList, $actualList);
     }
