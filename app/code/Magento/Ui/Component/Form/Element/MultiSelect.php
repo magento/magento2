@@ -11,22 +11,24 @@ namespace Magento\Ui\Component\Form\Element;
  */
 class MultiSelect extends AbstractOptionsField
 {
-    const NAME = 'multiselect';
+    public const NAME = 'multiselect';
 
-    const DEFAULT_SIZE = 6;
+    public const DEFAULT_SIZE = 6;
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function prepare()
     {
-        $config['size'] = self::DEFAULT_SIZE;
-        $this->setData('config', array_replace_recursive((array)$this->getData('config'), $config));
+        $config = (array)$this->getData('config');
+        $config['size'] ??= self::DEFAULT_SIZE;
+        $this->setData('config', $config);
         parent::prepare();
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @since 100.1.0
      */
     public function getComponentName()
@@ -35,7 +37,8 @@ class MultiSelect extends AbstractOptionsField
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @since 100.1.0
      */
     public function getIsSelected($optionValue)
