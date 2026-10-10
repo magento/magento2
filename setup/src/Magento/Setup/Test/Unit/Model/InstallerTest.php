@@ -68,7 +68,7 @@ namespace Magento\Setup\Test\Unit\Model {
     use Magento\Setup\Validator\DbValidator;
     use PHPUnit\Framework\MockObject\MockObject;
     use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\Attributes\DataProvider;
+    use PHPUnit\Framework\Attributes\DataProvider;
     use ReflectionException;
 
     /**
@@ -355,7 +355,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
          * @param array $logMetaMessages
          * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
          */
-    #[DataProvider('installDataProvider')]
+        #[DataProvider('installDataProvider')]
         public function testInstall(array $request, array $logMessages, array $logMetaMessages)
         {
             $this->moduleList->method('getOne')
@@ -680,7 +680,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
          * @throws LocalizedException
          * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
          */
-    #[DataProvider('installWithOrderIncrementPrefixDataProvider')]
+        #[DataProvider('installWithOrderIncrementPrefixDataProvider')]
         public function testInstallWithOrderIncrementPrefix(array $request, array $logMessages, array $logMetaMessages)
         {
             $this->moduleList->method('getOne')
@@ -950,7 +950,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
          * @throws \Magento\Framework\Exception\RuntimeException
          * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
          */
-    #[DataProvider('installWithInvalidRemoteStorageConfigurationDataProvider')]
+        #[DataProvider('installWithInvalidRemoteStorageConfigurationDataProvider')]
         public function testInstallWithInvalidRemoteStorageConfiguration(bool $isDeploymentConfigWritable)
         {
             $request = self::$request;
@@ -1369,7 +1369,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
          * @throws \Magento\Framework\Exception\RuntimeException
          * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
          */
-    #[DataProvider('installWithInvalidRemoteStorageConfigurationWithEarlyExceptionDataProvider')]
+        #[DataProvider('installWithInvalidRemoteStorageConfigurationWithEarlyExceptionDataProvider')]
         public function testInstallWithInvalidRemoteStorageConfigurationWithEarlyException(\Exception $exception)
         {
             $request = self::$request;
@@ -1694,6 +1694,37 @@ use PHPUnit\Framework\Attributes\DataProvider;
             $installer->updateModulesSequence(true);
         }
 
+        public function testUpdateModulesSequenceSkipsConfigWriteWhenModulesUnchanged(): void
+        {
+            $this->cleanupFiles->expects($this->never())->method('clearCodeGeneratedClasses');
+            $installer = $this->prepareForUpdateModulesTestsWithCurrentModules(
+                ['Foo_One' => 1, 'Bar_Two' => 0, 'New_Module' => 1]
+            );
+            $this->configWriter->expects($this->never())->method('saveConfig');
+
+            $installer->updateModulesSequence(true);
+        }
+
+        public function testUpdateModulesSequenceWritesConfigWhenModuleOrderChanged(): void
+        {
+            $this->cleanupFiles->expects($this->never())->method('clearCodeGeneratedClasses');
+            $installer = $this->prepareForUpdateModulesTestsWithCurrentModules(
+                ['Bar_Two' => 0, 'Foo_One' => 1, 'New_Module' => 1]
+            );
+            $this->configWriter->expects($this->once())
+                ->method('saveConfig')
+                ->with(
+                    [
+                        ConfigFilePool::APP_CONFIG => [
+                            'modules' => ['Foo_One' => 1, 'Bar_Two' => 0, 'New_Module' => 1]
+                        ]
+                    ],
+                    true
+                );
+
+            $installer->updateModulesSequence(true);
+        }
+
         /**
          * @return void
          * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -1851,6 +1882,34 @@ use PHPUnit\Framework\Attributes\DataProvider;
             $this->configWriter->expects($this->once())->method('saveConfig')->with($expectedModules);
 
             return $newObject;
+        }
+
+        /**
+         * Prepare mocks for update modules tests with the given `modules` section already present in config.php
+         *
+         * @param array $currentModules
+         * @return Installer
+         */
+        private function prepareForUpdateModulesTestsWithCurrentModules(array $currentModules): Installer
+        {
+            $cacheManager = $this->createMock(Manager::class);
+            $cacheManager->expects($this->once())->method('getAvailableTypes')->willReturn(['foo', 'bar']);
+            $cacheManager->expects($this->once())->method('clean');
+            $this->objectManager->expects($this->any())
+                ->method('get')
+                ->willReturnMap([[Manager::class, $cacheManager]]);
+            $this->moduleLoader->expects($this->once())
+                ->method('load')
+                ->willReturn(['Foo_One' => [], 'Bar_Two' => [], 'New_Module' => []]);
+            $this->config->expects($this->atLeastOnce())
+                ->method('get')
+                ->with(ConfigOptionsListConstants::KEY_MODULES)
+                ->willReturn(true);
+            $this->configReader->expects($this->once())
+                ->method('load')
+                ->willReturn(['modules' => $currentModules]);
+
+            return $this->createObject(false, false);
         }
 
         /**

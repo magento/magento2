@@ -503,7 +503,7 @@ class Installer
                 $result[$module] = 1;
             }
         }
-        if (!$dryRun) {
+        if (!$dryRun && $result !== $currentModules) {
             $this->deploymentConfigWriter->saveConfig([ConfigFilePool::APP_CONFIG => ['modules' => $result]], true);
         }
         return $result;
