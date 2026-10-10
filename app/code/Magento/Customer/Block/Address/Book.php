@@ -84,7 +84,10 @@ class Book extends \Magento\Framework\View\Element\Template
      */
     protected function _prepareLayout()
     {
-        $this->pageConfig->getTitle()->set(__('Address Book'));
+        $title = $this->pageConfig->getTitle();
+        if (!$title->getShortHeading()) {
+            $title->set(__('Address Book'));
+        }
         return parent::_prepareLayout();
     }
 
