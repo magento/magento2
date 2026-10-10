@@ -1965,6 +1965,13 @@ class Product extends AbstractEntity
          * Note: to avoid problems with undefined sorting, the value of media gallery items positions
          * must be unique in scope of one product.
          */
+        $this->collectLabelsForAssignedImages(
+            $rowData,
+            $storeId,
+            $rowExistingImages,
+            $rowStoreMediaGalleryValues,
+            $labelsForUpdate
+        );
         $position = 0;
         $imagesByHash = [];
         foreach ($rowImages as $column => $columnImages) {
@@ -2059,6 +2066,56 @@ class Product extends AbstractEntity
                     }
                 }
             }
+        }
+    }
+
+    /**
+     * Collect image label updates from rows that give a label for an image role without naming the image file
+     *
+     * @param array $rowData
+     * @param int $storeId
+     * @param array $rowExistingImages
+     * @param array $rowStoreMediaGalleryValues
+     * @param array $labelsForUpdate
+     * @return void
+     */
+    private function collectLabelsForAssignedImages(
+        array $rowData,
+        int $storeId,
+        array $rowExistingImages,
+        array $rowStoreMediaGalleryValues,
+        array &$labelsForUpdate
+    ): void {
+        if (!$rowExistingImages) {
+            return;
+        }
+        $labelOnlyColumns = array_filter(
+            $this->_imagesArrayKeys,
+            fn ($column) => $column !== self::COL_MEDIA_IMAGE
+                && empty($rowData[$column])
+                && !empty($rowData[$column . '_label'])
+        );
+        if (!$labelOnlyColumns) {
+            return;
+        }
+        $assignedImages = $this->mediaProcessor->getImageRoleValues(
+            $rowData[self::COL_SKU],
+            $storeId,
+            array_values($labelOnlyColumns)
+        );
+        foreach ($assignedImages as $column => $assignedImage) {
+            $file = ltrim($assignedImage, '/\\');
+            $label = $this->parseMultipleValues($rowData[$column . '_label'])[0] ?? null;
+            if ($label === null || ($rowExistingImages[$file]['label'] ?? $label) === $label) {
+                continue;
+            }
+            $imageData = $rowExistingImages[$file];
+            $imageData['store_id'] = $storeId;
+            $labelsForUpdate[] = [
+                'label' => $label,
+                'imageData' => $imageData,
+                'exists' => isset($rowStoreMediaGalleryValues[$file]),
+            ];
         }
     }
 
