@@ -415,4 +415,25 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(77.5, (float)$item->getPrice());
         $this->assertEqualsWithDelta(9.99, (float)$item->getData($attributeCode), 0.0001);
     }
+
+    #[
+        DbIsolation(false),
+        DataFixture(ProductFixture::class, ['sku' => 'having-count-1'], 'p1'),
+        DataFixture(ProductFixture::class, ['sku' => 'having-count-2'], 'p2'),
+    ]
+    public function testGetSizeWithHavingOnAggregateAlias(): void
+    {
+        $collection = Bootstrap::getObjectManager()->create(Collection::class);
+        $collection->addFieldToFilter('sku', ['like' => 'having-count-%']);
+        $collection->getSelect()
+            ->join(
+                ['cisi' => $collection->getTable('cataloginventory_stock_item')],
+                'cisi.product_id = e.entity_id',
+                ['aggregate_qty' => 'SUM(cisi.qty)']
+            )
+            ->group('e.entity_id')
+            ->having('aggregate_qty >= ?', 0);
+
+        $this->assertSame(2, $collection->getSize());
+    }
 }
