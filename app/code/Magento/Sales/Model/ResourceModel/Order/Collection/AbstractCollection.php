@@ -67,6 +67,9 @@ abstract class AbstractCollection extends \Magento\Sales\Model\ResourceModel\Col
             if ($orderId) {
                 $this->addFieldToFilter($this->_orderField, $orderId);
             } else {
+                // An order without an ID has no related entities. Filter on an ID that can never match, so that
+                // resetting the loaded state (clear(), _reset()) cannot turn this into an unfiltered table scan.
+                $this->addFieldToFilter($this->_orderField, 0);
                 $this->_totalRecords = 0;
                 $this->_setIsLoaded(true);
             }
