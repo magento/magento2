@@ -650,7 +650,10 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                 $optionIds = array_keys($options);
 
                 if (empty($optionIds) && $isStrictProcessMode) {
-                    throw new \Magento\Framework\Exception\LocalizedException(__('Please specify product option(s).'));
+                    $hasRequiredOptions = $this->bundleHasRequiredOptions($product);
+                    if ($hasRequiredOptions) {
+                        throw new \Magento\Framework\Exception\LocalizedException(__('Please specify product option(s).'));
+                    }
                 }
 
                 $product->getTypeInstance()
@@ -708,7 +711,10 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 
                 $selections = $this->mergeSelectionsWithOptions($options, $selections);
             }
-            if ((is_array($selections) && count($selections) > 0) || !$isStrictProcessMode) {
+            $canSkipSelection = is_array($selections)
+                && count($selections) === 0
+                && !$this->bundleHasRequiredOptions($product);
+            if ((is_array($selections) && count($selections) > 0) || !$isStrictProcessMode || $canSkipSelection) {
                 $uniqueKey = [$product->getId()];
                 $selectionIds = [];
                 if ($buyRequest->getBundleOptionsData()) {
@@ -790,6 +796,23 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         }
 
         return $this->getSpecifyOptionMessage();
+    }
+
+    /**
+     * Check whether the bundle product has at least one required option.
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     * @return bool
+     */
+    private function bundleHasRequiredOptions(\Magento\Catalog\Model\Product $product): bool
+    {
+        foreach ($this->getOptionsCollection($product)->getItems() as $option) {
+            if ($option->getRequired()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
