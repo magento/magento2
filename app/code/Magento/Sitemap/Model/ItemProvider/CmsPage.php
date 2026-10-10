@@ -54,17 +54,25 @@ class CmsPage implements ItemProviderInterface
      */
     public function getItems($storeId)
     {
-        $collection = $this->cmsPageFactory->create()->getCollection($storeId);
-        $items = array_map(function ($item) use ($storeId) {
-            return $this->itemFactory->create([
-                'url' => $item->getUrl(),
-                'updatedAt' => $item->getUpdatedAt(),
-                'images' => $item->getImages(),
-                'priority' => $this->configReader->getPriority($storeId),
-                'changeFrequency' => $this->configReader->getChangeFrequency($storeId),
-            ]);
-        }, $collection);
+        $collection = $this->cmsPageFactory->create()
+            ->getCollection($storeId);
 
-        return $items;
+        return array_map(function ($item) use ($storeId) {
+            return $this->itemFactory->create($this->prepareParams($item, $storeId));
+        }, $collection);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function prepareParams($item, $storeId)
+    {
+        return [
+            'url' => $item->getUrl(),
+            'updatedAt' => $item->getUpdatedAt(),
+            'images' => $item->getImages(),
+            'priority' => $this->configReader->getPriority($storeId),
+            'changeFrequency' => $this->configReader->getChangeFrequency($storeId),
+        ];
     }
 }
