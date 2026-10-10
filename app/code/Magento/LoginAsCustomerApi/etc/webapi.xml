@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+    <route url="/V1/integration/customer/login-as-customer" method="POST">
+        <service class="Magento\LoginAsCustomerApi\Api\GenerateLoginCustomerTokenInterface"
+                 method="createCustomerAccessToken"/>
+        <resources>
+            <resource ref="Magento_LoginAsCustomerApi::token"/>
+        </resources>
+    </route>
+    <route url="/V1/login-as-customer/authentication/:secret" method="DELETE">
+        <service class="Magento\LoginAsCustomerApi\Api\DeleteAuthenticationDataForCustomerInterface"
+                 method="execute"/>
+        <resources>
+            <resource ref="Magento_LoginAsCustomerApi::delete"/>
+        </resources>
+    </route>
+</routes>
