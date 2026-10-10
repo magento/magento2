@@ -246,7 +246,7 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper implements Re
     public function getFlatColumns()
     {
         if ($this->_columns === null) {
-            $this->_columns = $this->getFlatColumnsDdlDefinition();
+            $columnsPerAttribute = [$this->getFlatColumnsDdlDefinition()];
             foreach ($this->getAttributes() as $attribute) {
                 /** @var $attribute \Magento\Eav\Model\Entity\Attribute\AbstractAttribute */
                 $columns = $attribute->setFlatAddFilterableAttributes(
@@ -255,10 +255,10 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper implements Re
                     $this->isAddChildData()
                 )->getFlatColumns();
                 if ($columns !== null) {
-                    // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                    $this->_columns = array_merge($this->_columns, $columns);
+                    $columnsPerAttribute[] = $columns;
                 }
             }
+            $this->_columns = array_merge(...$columnsPerAttribute);
         }
         return $this->_columns;
     }
@@ -409,6 +409,7 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper implements Re
                 'fields' => ['attribute_set_id'],
             ];
 
+            $indexesPerAttribute = [$this->_indexes];
             foreach ($this->getAttributes() as $attribute) {
                 /** @var $attribute \Magento\Eav\Model\Entity\Attribute */
                 $indexes = $attribute->setFlatAddFilterableAttributes(
@@ -417,10 +418,10 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper implements Re
                     $this->isAddChildData()
                 )->getFlatIndexes();
                 if ($indexes !== null) {
-                    // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                    $this->_indexes = array_merge($this->_indexes, $indexes);
+                    $indexesPerAttribute[] = $indexes;
                 }
             }
+            $this->_indexes = array_merge(...$indexesPerAttribute);
         }
         return $this->_indexes;
     }
