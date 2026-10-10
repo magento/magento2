@@ -243,8 +243,10 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
             $orderItem = $orderItem->getOrderItem();
         }
 
-        $qty = $orderItem->getQtyOrdered();
-        $basePriceExclTax = $orderItem->getBaseRowTotal() / $qty;
+        $qty = (float)$orderItem->getQtyOrdered();
+        $basePriceExclTax = $qty > 0
+            ? $orderItem->getBaseRowTotal() / $qty
+            : (float)$orderItem->getBaseRowTotal();
 
         if (!$this->weeeHelper->isEnabled($this->getStoreId())) {
             return $basePriceExclTax;
@@ -464,8 +466,10 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
             $orderItem = $orderItem->getOrderItem();
         }
 
-        $qty = $orderItem->getQtyOrdered();
-        $basePriceExclTax = $orderItem->getBaseRowTotal() / $qty;
+        $qty = (float)$orderItem->getQtyOrdered();
+        $basePriceExclTax = $qty > 0
+            ? $orderItem->getBaseRowTotal() / $qty
+            : (float)$orderItem->getBaseRowTotal();
 
         if (!$this->weeeHelper->isEnabled($this->getStoreId())) {
             return $basePriceExclTax;
