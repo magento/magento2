@@ -1,3 +1,4 @@
+app/design/adminhtml/Magento/backend/Magento_AdminNotification/web/css/source/_module.less
 app/design/adminhtml/Magento/backend/Magento_Backend/web/css/source/_module-old.less
 app/design/adminhtml/Magento/backend/Magento_Backend/web/css/source/module/_header.less
 app/design/adminhtml/Magento/backend/Magento_Backend/web/css/source/module/_menu.less
