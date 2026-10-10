@@ -133,6 +133,36 @@ class NewActionTest extends ProductTestCase
     }
 
     /**
+     * Test execute method when the type parameter is absent from the request.
+     */
+    public function testExecuteWithoutTypeParam(): void
+    {
+        $this->action->getRequest()->method('getParam')->willReturn(null);
+        $this->resultForwardFactory->method('create')->willReturn($this->resultForward);
+        $this->resultForward->expects($this->once())
+            ->method('forward')
+            ->with('noroute')
+            ->willReturn(true);
+
+        $this->assertTrue($this->action->execute());
+    }
+
+    /**
+     * Test execute method when the type parameter is not a string.
+     */
+    public function testExecuteWithNonStringTypeParam(): void
+    {
+        $this->action->getRequest()->method('getParam')->willReturn(['simple']);
+        $this->resultForwardFactory->method('create')->willReturn($this->resultForward);
+        $this->resultForward->expects($this->once())
+            ->method('forward')
+            ->with('noroute')
+            ->willReturn(true);
+
+        $this->assertTrue($this->action->execute());
+    }
+
+    /**
      * Validation cases.
      *
      * @return array

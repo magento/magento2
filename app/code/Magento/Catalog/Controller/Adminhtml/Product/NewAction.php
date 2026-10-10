@@ -68,7 +68,7 @@ class NewAction extends \Magento\Catalog\Controller\Adminhtml\Product implements
     public function execute()
     {
         $typeId = $this->getRequest()->getParam('type');
-        if (!$this->regexValidator->validateParamRegex($typeId)) {
+        if ($typeId !== null && (!is_string($typeId) || !$this->regexValidator->validateParamRegex($typeId))) {
             return $this->resultForwardFactory->create()->forward('noroute');
         }
 
