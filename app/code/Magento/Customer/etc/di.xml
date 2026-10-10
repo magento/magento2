@@ -65,6 +65,10 @@
     <preference for="Magento\Customer\Api\SessionCleanerInterface" type="Magento\Customer\Model\Session\SessionCleaner"/>
     <preference for="Magento\Customer\Api\GroupExcludedWebsiteRepositoryInterface"
                 type="Magento\Customer\Model\ResourceModel\GroupExcludedWebsiteRepository" />
+    <preference for="Magento\Customer\Api\Data\ConfirmationLogInterface"
+                type="Magento\Customer\Model\ConfirmationLog" />
+    <preference for="Magento\Customer\Api\ConfirmationEmailLogManagementInterface"
+                type="Magento\Customer\Model\ConfirmationEmailLogManagement" />
     <virtualType name="SessionValidator" type="Magento\Framework\Session\CompositeValidator">
         <arguments>
             <argument name="validators" xsi:type="array">
