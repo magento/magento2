@@ -24,7 +24,6 @@ use Magento\Quote\Model\Quote\Item\RelatedProducts;
  * Cart crosssell list
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -133,9 +132,7 @@ class Crosssell extends AbstractProduct
                 if ($lastAddedProduct) {
                     $collection = $this->_getCollection()
                         ->addProductFilter($lastAddedProduct->getData($this->getProductLinkField()));
-                    if (!empty($ninProductIds)) {
-                        $collection->addExcludeProductFilter($ninProductIds);
-                    }
+                    $collection->addExcludeProductFilter($ninProductIds);
                     $collection->setPositionOrder()->load();
 
                     foreach ($collection as $item) {

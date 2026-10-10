@@ -7,8 +7,6 @@ namespace Magento\Checkout\Model\ResourceModel;
 
 /**
  * Resource model for Checkout Cart
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Cart extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

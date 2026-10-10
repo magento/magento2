@@ -11,7 +11,6 @@ use Magento\Framework\App\ObjectManager;
 /**
  * Catalog Product Eav Attributes abstract indexer resource model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\AbstractIndexer
