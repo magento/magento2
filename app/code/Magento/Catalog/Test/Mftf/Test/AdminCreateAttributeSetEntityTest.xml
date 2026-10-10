@@ -34,8 +34,8 @@
             </actionGroup>
         </after>
 
-        <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="goToAttributeSets"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <actionGroup ref="AdminOpenAttributeSetGridPageActionGroup" stepKey="goToAttributeSets"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageLoad"/>
         <actionGroup ref="GoToAttributeSetByNameActionGroup" stepKey="filterProductAttributeSetGridByLabel">
             <argument name="name" value="$$createAttributeSet.attribute_set_name$$"/>
         </actionGroup>
@@ -50,8 +50,8 @@
         </actionGroup>
         <see userInput="$$createProductAttribute.attribute_code$$" selector="{{AdminProductAttributeSetEditSection.groupTree}}" stepKey="seeAttributeInGroup"/>
         <actionGroup ref="SaveAttributeSetActionGroup" stepKey="SaveAttributeSet"/>
-        <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="goToAttributeSets2"/>
-        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <actionGroup ref="AdminOpenAttributeSetGridPageActionGroup" stepKey="goToAttributeSets2"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageLoad2"/>
 
         <!-- Assert an attribute in the group-->
         <actionGroup ref="GoToAttributeSetByNameActionGroup" stepKey="filterProductAttributeSetGridByLabel2">

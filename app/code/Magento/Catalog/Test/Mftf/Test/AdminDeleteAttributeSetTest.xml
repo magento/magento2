@@ -31,7 +31,7 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-        <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="goToAttributeSetsPage"/>
+        <actionGroup ref="AdminOpenAttributeSetGridPageActionGroup" stepKey="goToAttributeSetsPage"/>
         <fillField selector="{{AdminProductAttributeSetGridSection.filter}}" userInput="$$createAttributeSet.attribute_set_name$$" stepKey="filterByAttributeName"/>
         <!-- Filter the grid to find created below attribute set -->
         <click selector="{{AdminProductAttributeSetGridSection.searchBtn}}" stepKey="clickSearch"/>

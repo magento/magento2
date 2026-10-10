@@ -37,8 +37,8 @@
             </actionGroup>
         </after>
         <!-- Open Product Attribute Set Page -->
-        <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="goToAttributeSets"/>
-        <waitForPageLoad stepKey="waitForProductAttributeSetPageToLoad"/>
+        <actionGroup ref="AdminOpenAttributeSetGridPageActionGroup" stepKey="goToAttributeSets"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForProductAttributeSetPageToLoad"/>
         <click selector="{{AdminProductAttributeSetGridSection.resetFilter}}" stepKey="clickOnResetFilter"/>
         <!-- Filter created Product Attribute Set -->
         <fillField selector="{{AdminProductAttributeSetGridSection.filter}}" userInput="$$createAttributeSet.attribute_set_name$$" stepKey="fillAttributeSetName"/>
@@ -68,8 +68,8 @@
         </actionGroup>
         <see selector="{{AdminProductAttributeGridSection.FirstRow}}" userInput="We couldn't find any records." stepKey="seeEmptyRow"/>
         <!-- Verify Attribute is not present in Product Attribute Set Page  -->
-        <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="goToAttributeSets1"/>
-        <waitForPageLoad stepKey="waitForProductAttributeSetPageToLoad1"/>
+        <actionGroup ref="AdminOpenAttributeSetGridPageActionGroup" stepKey="goToAttributeSets1"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForProductAttributeSetPageToLoad1"/>
         <click selector="{{AdminProductAttributeSetGridSection.resetFilter}}" stepKey="clickOnResetFilter1"/>
         <fillField selector="{{AdminProductAttributeSetGridSection.filter}}" userInput="$$createAttributeSet.attribute_set_name$$" stepKey="fillAttributeSetName1"/>
         <click selector="{{AdminProductAttributeSetGridSection.searchBtn}}" stepKey="clickOnSearchButton1"/>
