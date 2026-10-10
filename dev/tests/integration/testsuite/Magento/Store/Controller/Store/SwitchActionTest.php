@@ -13,6 +13,7 @@ use Magento\Framework\App\Http\Context;
 use Magento\Framework\App\Response\RedirectInterface;
 use Magento\Framework\Encryption\UrlCoder;
 use Magento\Framework\Interception\InterceptorInterface;
+use Magento\Framework\Message\MessageInterface;
 use Magento\Store\Api\StoreResolverInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
@@ -258,5 +259,32 @@ class SwitchActionTest extends AbstractController
         $this->dispatch('stores/store/switch');
         $categorySecond = $this->categoryRepository->get($id, $targetStore->getId());
         $this->assertRedirect($this->stringContains($categorySecond->getUrlKey()));
+    }
+
+    /**
+     * Switching with a valid target store but no ___from_store and no store cookie must not
+     * raise a bogus "store wasn't found" error.
+     *
+     * Reproduces the admin CMS "View Page" preview of a page assigned to the default store
+     * view: the generated switch URL omits ___from_store, and a visitor without a store cookie
+     * previously triggered StoreRepository::get(null). The current store is now used as the
+     * origin store instead.
+     *
+     * @magentoDbIsolation enabled
+     * @return void
+     */
+    public function testSwitchWithoutFromStoreDoesNotError(): void
+    {
+        $targetStore = $this->storeManager->getStore('default');
+        $this->getRequest()->setParams(
+            [
+                StoreManagerInterface::PARAM_NAME => $targetStore->getCode(),
+                ActionInterface::PARAM_NAME_URL_ENCODED => $this->urlEncoder->encode('/'),
+            ]
+        );
+
+        $this->dispatch('stores/store/switch');
+
+        $this->assertSessionMessages($this->isEmpty(), MessageInterface::TYPE_ERROR);
     }
 }
