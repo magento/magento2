@@ -598,7 +598,7 @@ interface AdapterInterface
      *
      * @param string|\Magento\Framework\DB\Select $sql An SQL SELECT statement.
      * @param mixed $bind Data to bind into SELECT placeholders.
-     * @return string
+     * @return string|bool
      */
     public function fetchOne($sql, $bind = []);
 
