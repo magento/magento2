@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="vendor/squizlabs/php_codesniffer/phpcs.xsd">
+
+    <file>app</file>
+    <file>bin</file>
+    <file>dev</file>
+    <file>lib</file>
+    <file>phpserver</file>
+    <file>pub</file>
+    <file>setup</file>
+
+    <exclude-pattern>pub/media/*</exclude-pattern>
+    <exclude-pattern>pub/opt/*</exclude-pattern>
+    <exclude-pattern>pub/static/*</exclude-pattern>
+
+    <arg name="basepath" value="."/>
+    <arg name="colors"/>
+    <arg value="sp"/>
+
+    <rule ref="Magento2Framework" />
+</ruleset>
