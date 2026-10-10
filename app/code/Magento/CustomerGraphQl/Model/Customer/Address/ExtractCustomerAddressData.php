@@ -159,10 +159,16 @@ class ExtractCustomerAddressData
 
         $customAttributes['custom_attributesV2'] = array_map(
             function (array $customAttribute) {
+                $value = $customAttribute['value'] ?? '';
+                if (is_array($value)) {
+                    $value = (count($value) !== count($value, COUNT_RECURSIVE))
+                        ? $this->jsonSerializer->serialize($value)
+                        : implode(',', $value);
+                }
                 return $this->getAttributeValue->execute(
                     AddressMetadataInterface::ENTITY_TYPE_ADDRESS,
                     $customAttribute['attribute_code'],
-                    $customAttribute['value']
+                    (string)$value
                 );
             },
             $attributes
