@@ -75,7 +75,7 @@ class Block extends AbstractBlock implements \Magento\Framework\DataObject\Ident
             /** @var \Magento\Cms\Model\Block $block */
             $block = $this->_blockFactory->create();
             $block->setStoreId($storeId)->load($blockId);
-            if ($block->isActive()) {
+            if ($block->isActive() && $block->getContent() !== null) {
                 $html = $this->_filterProvider->getBlockFilter()->setStoreId($storeId)->filter($block->getContent());
             }
         }
