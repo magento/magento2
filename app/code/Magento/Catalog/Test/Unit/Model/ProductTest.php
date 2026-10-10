@@ -285,6 +285,11 @@ class ProductTest extends TestCase
     private $storeManager;
 
     /**
+     * @var ProductLink|MockObject
+     */
+    private $productLinkInstanceMock;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @inheritDoc
      */
@@ -413,6 +418,8 @@ class ProductTest extends TestCase
                 return $attributes;
             });
 
+        $this->productLinkInstanceMock = $this->createMock(ProductLink::class);
+
         $this->model = new Product(
             $contextMock,
             $this->registry,
@@ -421,7 +428,7 @@ class ProductTest extends TestCase
             $this->storeManager,
             $this->metadataServiceMock,
             $this->createMock(ProductUrl::class),
-            $this->createMock(ProductLink::class),
+            $this->productLinkInstanceMock,
             $this->createMock(ItemOptionFactory::class),
             $this->stockItemFactoryMock,
             $optionFactory,
@@ -1235,6 +1242,36 @@ class ProductTest extends TestCase
         $this->model->afterSave();
         $this->assertTrue($this->model->getHasOptions());
         $this->assertTrue($this->model->getRequiredOptions());
+    }
+
+    /**
+     * Product relations should be persisted on afterSave when the ignore_links_flag is not set.
+     *
+     * @return void
+     */
+    public function testAfterSaveProcessesLinksByDefault(): void
+    {
+        $this->productLinkInstanceMock->expects($this->once())
+            ->method('saveProductRelations')
+            ->with($this->model);
+        $this->configureSaveTest();
+        $this->model->beforeSave();
+        $this->model->afterSave();
+    }
+
+    /**
+     * Product relations should be skipped on afterSave when the ignore_links_flag is strictly true.
+     *
+     * @return void
+     */
+    public function testAfterSaveSkipsLinksWhenIgnoreLinksFlagIsTrue(): void
+    {
+        $this->model->setData('ignore_links_flag', true);
+        $this->productLinkInstanceMock->expects($this->never())
+            ->method('saveProductRelations');
+        $this->configureSaveTest();
+        $this->model->beforeSave();
+        $this->model->afterSave();
     }
 
     /**
