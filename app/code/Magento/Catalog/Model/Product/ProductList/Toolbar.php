@@ -61,7 +61,8 @@ class Toolbar
      */
     public function getOrder()
     {
-        return $this->request->getParam(self::ORDER_PARAM_NAME);
+        $order = $this->request->getParam(self::ORDER_PARAM_NAME);
+        return is_string($order) || is_bool($order) ? $order : false;
     }
 
     /**
