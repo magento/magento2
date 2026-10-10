@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2014 Adobe
+ * Copyright 2011 Adobe
  * All Rights Reserved.
  */
 
@@ -15,6 +15,7 @@ use Magento\Store\Model\Information as StoreInformation;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 use Magento\MediaStorage\Helper\File\Storage\Database;
+use Magento\Framework\Validation\ValidationException;
 
 /**
  * Template model class.
@@ -758,5 +759,48 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
             $params['_scope_to_url'] = true;
         }
         return $url->getUrl($route, $params);
+    }
+
+    /**
+     * Validate template code
+     *
+     * @throws ValidationException
+     * @return $this
+     */
+    public function beforeSave()
+    {
+        $templateText = $this->getTemplateText();
+        if ($templateText) {
+            try {
+                $this->validateTemplateText($templateText);
+            } catch (ValidationException $exception) {
+                throw new ValidationException(
+                    __('Content field contains restricted HTML elements. %1', $exception->getMessage()),
+                    $exception
+                );
+            }
+        }
+        parent::beforeSave();
+        return $this;
+    }
+
+    /**
+     * Validate template text
+     *
+     * @param string $content
+     * @throws ValidationException
+     */
+    private function validateTemplateText(string $content): void
+    {
+        $expression = '/\b(?:src|href|action)\s*=\s*([\'"])(?:[^\'"]*?)https?:\/\/[^\/\s]+\/' .
+            '(?:[^\'"]*?)\{\{\s*[^}]+\s*\}\}(?:[^\'"]*?)\1/iu';
+
+        if (preg_match($expression, $content)) {
+            throw new ValidationException(
+                __(
+                    'Template directives are not allowed in external URLs.'
+                )
+            );
+        }
     }
 }

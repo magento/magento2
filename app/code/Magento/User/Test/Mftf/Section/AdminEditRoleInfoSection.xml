@@ -18,5 +18,6 @@
         <element name="cancel" type="button" selector=".modal-popup.confirm button.action-dismiss"/>
         <element name="ok" type="button" selector=".modal-popup.confirm button.action-accept" timeout="60"/>
         <element name="blockName" type="checkbox" selector="//li//a[text()='{{var}}']/i[contains(@class, 'jstree-checkbox')]" parameterized="true"/>
+        <element name="checkboxByRole" type="checkbox" selector="//li[@data-id='{{var}}']/a/i[contains(@class, 'jstree-checkbox')]" parameterized="true"/>
     </section>
 </sections>

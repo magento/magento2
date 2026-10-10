@@ -115,7 +115,7 @@ class ConfigProviderPluginTest extends TestCase
         $result = $this->configProvider->getConfig();
         $this->assertEquals(
             $this->quoteIdMask->load($quote->getId(), 'quote_id')->getMaskedId(),
-            $result['quoteData']['entity_id']
+            $this->quoteIdMask->load($result['quoteData']['entity_id'], 'quote_id')->getMaskedId()
         );
     }
 
@@ -155,7 +155,7 @@ class ConfigProviderPluginTest extends TestCase
         $quote = $this->getQuoteByReservedOrderId->execute('test_order_with_customer_without_address');
         $this->checkoutSession->setQuoteId($quote->getId());
         $result = $this->configProvider->getConfig();
-        $this->assertNull($result['quoteData']['entity_id']);
+        $this->assertEquals($quote->getEntityId(), $result['quoteData']['entity_id']);
     }
 
     /**
@@ -177,6 +177,6 @@ class ConfigProviderPluginTest extends TestCase
         $quote = $this->getQuoteByReservedOrderId->execute('test_order_with_customer_without_address');
         $this->checkoutSession->setQuoteId($quote->getId());
         $result = $this->configProvider->getConfig();
-        $this->assertNull($result['quoteData']['entity_id']);
+        $this->assertEquals($quote->getEntityId(), $result['quoteData']['entity_id']);
     }
 }

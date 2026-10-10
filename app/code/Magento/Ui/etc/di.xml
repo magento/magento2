@@ -17,6 +17,7 @@
     <preference for="Magento\Ui\Api\Data\BookmarkSearchResultsInterface" type="Magento\Ui\Model\BookmarkSearchResults" />
     <preference for="Magento\Ui\Api\BookmarkRepositoryInterface" type="Magento\Ui\Model\ResourceModel\BookmarkRepository"/>
     <preference for="Magento\Ui\Api\Data\BookmarkInterface" type="Magento\Ui\Model\Bookmark"/>
+    <preference for="Magento\Ui\Model\ResourceModel\Utf8mb4SupportInterface" type="Magento\Ui\Model\ResourceModel\Utf8mb4Support"/>
     <preference for="Magento\Ui\Component\Wysiwyg\ConfigInterface" type="Magento\Ui\Component\Wysiwyg\Config"/>
     <preference for="Magento\Ui\Api\BookmarkManagementInterface" type="Magento\Ui\Model\BookmarkManagement"/>
     <preference for="Magento\Framework\View\TemplateEngine\Xhtml\ResultInterface" type="Magento\Ui\TemplateEngine\Xhtml\Result"/>

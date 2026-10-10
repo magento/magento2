@@ -18,12 +18,12 @@
             <argument name="firstImage" type="string" />
         </arguments>
         <waitForElementVisible selector="{{StorefrontProductMediaSection.productImageFullscreen(currentImage)}}" stepKey="seeFullscreenImage"/>
-        <seeElement selector="{{StorefrontProductMediaSection.productImageInFotorama(firstImage)}}" stepKey="seeFirstImageInRibbon"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.productImageInFotorama(firstImage)}}" stepKey="seeFirstImageInRibbon"/>
         <dragAndDrop selector1="{{StorefrontProductMediaSection.productImageInFotorama(dragPointImage)}}" selector2="{{StorefrontProductMediaSection.productImageInFotorama(dragPointImage)}}" x="-300" y="0" stepKey="dragRibbon"/>
-        <seeElement selector="{{StorefrontProductMediaSection.productImageFullscreen(currentImage)}}" stepKey="seeFullscreenImageAfterDrag"/>
-        <dontSeeElement selector="{{StorefrontProductMediaSection.productImageInFotorama(firstImage)}}" stepKey="dontSeeFirstImageInRibbonAfterDrag"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.productImageFullscreen(currentImage)}}" stepKey="seeFullscreenImageAfterDrag"/>
+        <waitForElementNotVisible selector="{{StorefrontProductMediaSection.productImageInFotorama(firstImage)}}" stepKey="dontSeeFirstImageInRibbonAfterDrag"/>
         <dragAndDrop selector1="{{StorefrontProductMediaSection.productImageInFotorama(dragPointImage)}}" selector2="{{StorefrontProductMediaSection.productImageInFotorama(dragPointImage)}}" x="300" y="0" stepKey="dragBackRibbon"/>
-        <seeElement selector="{{StorefrontProductMediaSection.productImageFullscreen(currentImage)}}" stepKey="seeMainImageAfterBackDrag"/>
-        <seeElement selector="{{StorefrontProductMediaSection.productImageInFotorama(firstImage)}}" stepKey="seeFirstImageInRibbonAfterBackDrag"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.productImageFullscreen(currentImage)}}" stepKey="seeMainImageAfterBackDrag"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.productImageInFotorama(firstImage)}}" stepKey="seeFirstImageInRibbonAfterBackDrag"/>
     </actionGroup>
 </actionGroups>

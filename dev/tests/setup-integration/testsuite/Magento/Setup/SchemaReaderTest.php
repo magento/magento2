@@ -6,6 +6,7 @@
 
 namespace Magento\Setup;
 
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Setup\Declaration\Schema\Declaration\ReaderComposite;
 use Magento\TestFramework\Deploy\TestModuleManager;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -26,11 +27,17 @@ class SchemaReaderTest extends SetupTestCase
      */
     private $moduleManager;
 
+    /**
+     * @var DeploymentConfig
+     */
+    private $deploymentConfig;
+
     protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->reader = $objectManager->get(ReaderComposite::class);
         $this->moduleManager = $objectManager->get(TestModuleManager::class);
+        $this->deploymentConfig = $objectManager->get(DeploymentConfig::class);
     }
 
     /**
@@ -39,7 +46,7 @@ class SchemaReaderTest extends SetupTestCase
      */
     public function testSuccessfullRead()
     {
-        $schema = $this->reader->read('all');
+        $schema = $this->readSchema();
         unset($schema['table']['patch_list']);
         self::assertEquals($this->getData(), $schema);
     }
@@ -69,7 +76,7 @@ class SchemaReaderTest extends SetupTestCase
         $this->expectExceptionMessageMatches('/The attribute \'scale\' is not allowed./');
 
         $this->updateRevisionTo('fail_on_column_declaration');
-        $this->reader->read('all');
+        $this->readSchema();
     }
 
     /**
@@ -79,8 +86,16 @@ class SchemaReaderTest extends SetupTestCase
     public function testForeignKeyInterpreter()
     {
         $this->updateRevisionTo('foreign_key_interpreter');
-        $schema = $this->reader->read('all');
+        $schema = $this->readSchema();
         unset($schema['table']['patch_list']);
         self::assertEquals($this->getData(), $schema);
+    }
+
+    private function readSchema(): array
+    {
+        $this->deploymentConfig->resetData(); // data are already loaded when fixture is applied
+        $schema = $this->reader->read('all');
+
+        return $schema;
     }
 }

@@ -70,7 +70,16 @@ class RuleRepositoryTest extends WebapiAbstract
                         'operator' => '==',
                         'attribute_name' => 'attribute_set_id',
                         'value' => '4',
-                    ]
+                    ],
+                    [
+                        'condition_type' => \Magento\SalesRule\Model\Rule\Condition\Product::class,
+                        'operator' => '==',
+                        'attribute_name' => 'category_ids',
+                        'value' => '3',
+                        'extension_attributes' => [
+                            'attribute_scope' => 'parent',
+                        ],
+                    ],
                 ],
                 'aggregator_type' => 'all',
                 'operator' => null,
@@ -120,6 +129,7 @@ class RuleRepositoryTest extends WebapiAbstract
         $inputData['times_used'] = 2;
         $inputData['customer_group_ids'] = [0, 1, 3];
         $inputData['discount_amount'] = 30;
+        $inputData['action_condition']['conditions'][1]['extension_attributes']['attribute_scope'] = 'children';
         $result = $this->updateRule($ruleId, $inputData);
         unset($result['rule_id']);
         unset($result['extension_attributes']);
@@ -133,6 +143,33 @@ class RuleRepositoryTest extends WebapiAbstract
 
         //test delete
         $this->assertTrue($this->deleteRule($ruleId));
+    }
+
+    public function testValidation(): void
+    {
+        $this->_markTestAsRestOnly('Skip SOAP due to the error response format');
+        $inputData = $this->getSalesRuleData();
+        $inputData['website_ids'] = [];
+        $inputData['customer_group_ids'] = [];
+        $inputData['action_condition']['conditions'][1]['extension_attributes']['attribute_scope'] = 'invalid_value';
+        try {
+            $this->createRule($inputData);
+            $this->fail('Validation error is expected');
+        } catch (\Exception $e) {
+            $error = json_decode($e->getMessage(), true);
+            $this->assertEquals('One or more input exceptions have occurred.', $error['message']);
+            $this->assertCount(3, $error['errors']);
+            $this->assertEquals('Please specify a website.', $error['errors'][0]['message']);
+            $this->assertEquals('Please specify Customer Groups.', $error['errors'][1]['message']);
+            $this->assertEquals(
+                'Invalid value of "%value" provided for the %fieldName field.',
+                $error['errors'][2]['message']
+            );
+            $this->assertEquals(
+                ['fieldName' => 'attribute_scope',  'value' => 'invalid_value'],
+                $error['errors'][2]['parameters']
+            );
+        }
     }
 
     public function verifyGetList($ruleId)

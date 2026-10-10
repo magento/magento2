@@ -1613,4 +1613,9 @@
         <requiredEntity type="product_option">ProductOptionFileUpload</requiredEntity>
         <requiredEntity type="product_option">ProductOptionRadiobutton</requiredEntity>
     </entity>
+    <entity name="SimpleProductWithTransliteratedUrlKey" type="product" extends="SimpleProduct2">
+        <data key="name">Anémonas do Japão</data>
+        <data key="sku" unique="suffix">anemonas-do-japao-</data>
+        <data key="urlKey">anemonas-do-japao</data>
+    </entity>
 </entities>

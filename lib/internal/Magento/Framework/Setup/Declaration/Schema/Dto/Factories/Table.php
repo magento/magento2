@@ -8,6 +8,7 @@ namespace Magento\Framework\Setup\Declaration\Schema\Dto\Factories;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\SqlVersionProvider;
+use Magento\Framework\DB\Charset\DefaultCharsetCollationMap;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
@@ -43,30 +44,6 @@ class Table implements FactoryInterface
      * @var string|null
      */
     private ?string $sqlVersion = null;
-
-    /**
-     * @var array|string[]
-     */
-    private static array $defaultCharset = [
-        '10.4.' => 'utf8mb4',
-        '10.6.' => 'utf8mb4',
-        '10.11.' => 'utf8mb4',
-        '11.4.' => 'utf8mb4',
-        'mysql_8_29' => 'utf8mb4',
-        'default' => 'utf8'
-    ];
-
-    /**
-     * @var array|string[]
-     */
-    private static array $defaultCollation = [
-        '10.4.' => 'utf8mb4_general_ci',
-        '10.6.' => 'utf8mb4_general_ci',
-        '10.11.' => 'utf8mb4_general_ci',
-        '11.4.' => 'utf8mb4_general_ci',
-        'mysql_8_29' => 'utf8mb4_general_ci',
-        'default' => 'utf8_general_ci'
-    ];
 
     /**
      * Constructor.
@@ -122,33 +99,25 @@ class Table implements FactoryInterface
     }
 
     /**
-     * Get default charset based on sql version
+     * Get default charset based on sql version (uses DefaultCharsetCollationMap).
      *
      * @return string
      */
     public function getDefaultCharset(): string
     {
-        if ($this->sqlVersionProvider->isMysqlGte8029()) {
-            return self::$defaultCharset['mysql_8_29'];
-        }
-
-        return self::$defaultCharset[$this->getSqlVersion()] ??
-            self::$defaultCharset['default'];
+        $versionKey = $this->sqlVersionProvider->isMysqlGte8029() ? 'mysql_8_29' : $this->getSqlVersion();
+        return DefaultCharsetCollationMap::getCharset($versionKey);
     }
 
     /**
-     * Get default collation based on sql version
+     * Get default collation based on sql version (uses DefaultCharsetCollationMap).
      *
      * @return string
      */
     public function getDefaultCollation(): string
     {
-        if ($this->sqlVersionProvider->isMysqlGte8029()) {
-            return self::$defaultCollation['mysql_8_29'];
-        }
-
-        return self::$defaultCollation[$this->getSqlVersion()] ??
-            self::$defaultCollation['default'];
+        $versionKey = $this->sqlVersionProvider->isMysqlGte8029() ? 'mysql_8_29' : $this->getSqlVersion();
+        return DefaultCharsetCollationMap::getCollation($versionKey);
     }
 
     /**

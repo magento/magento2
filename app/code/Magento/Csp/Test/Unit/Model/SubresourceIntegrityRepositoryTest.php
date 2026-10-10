@@ -15,6 +15,7 @@ use Magento\Csp\Model\SubresourceIntegrity;
 use Magento\Csp\Model\SubresourceIntegrityRepository;
 use Magento\Csp\Model\SubresourceIntegrityFactory;
 use Magento\Csp\Model\SubresourceIntegrity\StorageInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Unit Test for Class @see Magento\Csp\Model\SubresourceIntegrityRepository
@@ -48,6 +49,11 @@ class SubresourceIntegrityRepositoryTest extends TestCase
     private MockObject $integrityFactoryMock;
 
     /**
+     * @var MockObject
+     */
+    private MockObject $loggerMock;
+
+    /**
      * @var SubresourceIntegrityRepository|null
      */
     private ?SubresourceIntegrityRepository $subresourceIntegrityRepository = null;
@@ -64,13 +70,15 @@ class SubresourceIntegrityRepositoryTest extends TestCase
         $this->serializerMock = $this->createMock(SerializerInterface::class);
         $this->integrityFactoryMock = $this->createMock(SubresourceIntegrityFactory::class);
         $this->storage = $this->createMock(StorageInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
 
         $this->subresourceIntegrityRepository = new SubresourceIntegrityRepository(
             $this->cacheMock,
             $this->serializerMock,
             $this->integrityFactoryMock,
             $this->context,
-            $this->storage
+            $this->storage,
+            $this->loggerMock
         );
     }
 

@@ -135,8 +135,8 @@ class AbstractProductTest extends TestCase
     /**
      * Run test getMinimalQty method
      *
-     * @param int $minSale
-     * @param int|null $result
+     * @param float|int $minSale
+     * @param float|int|null $result
      * @return void
      */
     #[DataProvider('dataProviderGetMinimalQty')]
@@ -181,6 +181,10 @@ class AbstractProductTest extends TestCase
             [
                 'minSale' => 10,
                 'result' => 10,
+            ],
+            [
+                'minSale' => 2.5,
+                'result' => 2.5,
             ],
             [
                 'minSale' => 0,

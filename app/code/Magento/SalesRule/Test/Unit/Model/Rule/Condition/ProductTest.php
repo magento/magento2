@@ -677,7 +677,6 @@ class ProductTest extends TestCase
             ->getMock();
         $layout->method('getBlockSingleton')->willReturn($editable);
         $ref = new ReflectionProperty(AbstractCondition::class, '_layout');
-        $ref->setAccessible(true);
         $ref->setValue($this->model, $layout);
         $html = $this->model->getAttributeElementHtml();
 

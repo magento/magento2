@@ -7,8 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Stomp;
 
-use Psr\Log\LoggerInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+use Magento\Framework\Stomp\Exception\ClientException;
 use Stomp\Client;
+use Stomp\Exception\ConnectionException;
+use Stomp\Exception\ErrorFrameException;
 use Stomp\Exception\StompException;
 use Stomp\Network\Observer\HeartbeatEmitter;
 use Stomp\StatefulStomp;
@@ -18,7 +21,7 @@ use Stomp\Transport\Message;
 /**
  * Wrapper StompClient class for stomp connection
  */
-class StompClient implements StompClientInterface
+class StompClient implements StompClientInterface, ResetAfterRequestInterface
 {
     /**
      * ACK type to communicate with stomp queue
@@ -56,183 +59,77 @@ class StompClient implements StompClientInterface
     public const READ_TIME_OUT = 250000;
 
     /**
+     * AMQ229014: Did not receive data from X.X.X.X:X within the Xms connection TTL. The connection will now be closed.
+     */
+    private const string CONNECTION_CLOSED_ERROR_CODE = 'AMQ229014';
+
+    /**
      * @var Config
      */
     private $stompConfig;
 
     /**
-     * @var Client
+     * @var string|null
      */
-    private $client;
+    private ?string $brokerName = null;
 
     /**
-     * @var StatefulStomp
+     * @var StatefulStomp|null
      */
-    private $stompProducer;
+    private ?StatefulStomp $producer = null;
 
     /**
-     * @var StatefulStomp
+     * @var StatefulStomp[]
      */
-    private $stompConsumer;
-
-    /**
-     * @var Frame
-     */
-    private $lastFrame;
-
-    /**
-     * @var LoggerInterface
-     */
-    private LoggerInterface $logger;
-
-    /**
-     * @var array
-     */
-    protected array $acknowledged;
-
-    /**
-     * @var array
-     */
-    public static $persistentclient;
-
-    /**
-     * @var string
-     */
-    private string $clientId;
+    private array $consumers = [];
 
     /**
      * @param Config $stompConfig
-     * @param LoggerInterface $logger
-     * @param string $clientId
-     * @throws StompException
+     * @param array $subscriptionHeaders
      */
     public function __construct(
         Config $stompConfig,
-        LoggerInterface $logger,
-        string $clientId
+        private readonly array $subscriptionHeaders = [],
     ) {
         $this->stompConfig = $stompConfig;
-        $this->logger = $logger;
-        $this->clientId = $clientId;
-        $this->connect();
+        try {
+            $this->brokerName = $this->getBrokerName();
+        } catch (StompException) {
+            $this->brokerName = null;
+        }
     }
 
     /**
      * @inheritdoc
-     *
-     * @throws StompException
      */
     public function send(string $queue, Message $message): void
     {
-        $maxRetries = 3;
-        $retryCount = 0;
-
-        while ($retryCount < $maxRetries) {
-            try {
-                // Ensure we have a healthy connection
-                $this->ensureHealthyConnection();
-
-                // Initialize stomp if needed
-                if (!$this->stompProducer) {
-                    $this->stompProducer = new StatefulStomp($this->client);
-                }
-
-                $this->stompProducer->send($queue, $message);
-                return; // Success, exit retry loop
-
-            } catch (\Exception $e) {
-                $retryCount++;
-                $this->handleSendError($e, $retryCount, $maxRetries, $queue, $message);
-
-                // Reset connection state for retry
-                $this->resetConnectionState();
-
-                if ($retryCount < $maxRetries) {
-                    // Progressive backoff: 100ms, 200ms, 400ms
-                    usleep(100000 * $retryCount);
-                }
-            }
-        }
-    }
-
-    /**
-     * Ensure we have a healthy connection
-     *
-     * @throws StompException
-     */
-    private function ensureHealthyConnection(): void
-    {
-        if (!$this->client || !$this->client->isConnected()) {
-            $this->logger->info('STOMP connection lost, attempting to reconnect');
-            $this->stompProducer = null;
-            $this->stompConsumer = null;
-            $this->lastFrame = null;
-            $this->connect();
-        }
-
-        // Additional health check - verify we can get the underlying connection
+        $producer = $this->getProducer();
         try {
-            $connection = $this->client->getConnection();
-            if (!$connection || !$connection->isConnected()) {
-                throw new StompException('Connection is not healthy');
-            }
-        } catch (\Exception $e) {
-            $this->logger->warning('Connection health check failed: ' . $e->getMessage());
-            $this->connect();
+            $this->safeExecute($producer, 'send', [$queue, $message], fn () => $producer->send($queue, $message));
+        } catch (StompException $e) {
+            $producer->getClient()->disconnect();
+            throw new ClientException("Failed to send message to '$queue' queue.", previous: $e);
         }
     }
 
     /**
-     * Handle send operation errors
-     *
-     * @param \Exception $e
-     * @param int $retryCount
-     * @param int $maxRetries
-     * @param string $queue
-     * @param Message $message
-     * @throws StompException
+     * @inheritdoc
      */
-    private function handleSendError(
-        \Exception $e,
-        int $retryCount,
-        int $maxRetries,
-        string $queue,
-        Message $message
-    ): void {
-        $errorMessage = $e->getMessage();
-        $isRetryableError = $this->isRetryableError($errorMessage);
-        $body = null;
-        $headers = null;
-        if ($message) {
-            $body = $message->getBody();
-            $headers = $message->getHeaders();
-        }
-        $this->logger->warning(
-            "STOMP send attempt {$retryCount}/{$maxRetries} failed: {$errorMessage}",
-            [
-                'queue' => 'current_queue-'.$queue,
-                'retryable' => $isRetryableError,
-                'exception' => $e,
-                'message' => $body,
-                'headers' => $headers,
-                'trace' => $e->getTraceAsString(),
-            ]
-        );
-
-        if ($retryCount >= $maxRetries) {
-            $this->logger->error(
-                "Failed to send STOMP message after {$maxRetries} attempts: {$errorMessage}",
-                ['exception' => $e]
-            );
-            throw new StompException(
-                "Failed to send message after {$maxRetries} attempts: {$errorMessage}",
-                $e->getCode(),
-                $e
-            );
-        }
-
-        if (!$isRetryableError && $retryCount < $maxRetries) {
-            $this->logger->info('Non-retryable error encountered, but retrying anyway due to connection issues');
+    public function sendBatch(string $queue, array $messages): void
+    {
+        $producer = $this->getProducer();
+        try {
+            $this->safeExecute($producer, 'begin', onRetry: $producer->begin(...));
+            foreach ($messages as $message) {
+                $producer->send($queue, $message);
+            }
+            $producer->commit();
+        } catch (StompException $e) {
+            $producer->getClient()->disconnect();
+            // To eliminate transaction state of producer.
+            $this->producer = null;
+            throw new ClientException("Failed to send batch of messages to '$queue' queue.", previous: $e);
         }
     }
 
@@ -244,139 +141,95 @@ class StompClient implements StompClientInterface
      */
     private function isRetryableError(string $errorMessage): bool
     {
-        $retryablePatterns = [
-            'connection',
-            'write frame',
-            'broken pipe',
-            'network',
-            'timeout',
-            'AMQ229014', // ActiveMQ specific error
-            'AMQ229031', // Connection lost
-            'disconnected',
-            'socket',
-            'not connected'
-        ];
-
-        $lowerMessage = strtolower($errorMessage);
-        foreach ($retryablePatterns as $pattern) {
-            if (strpos($lowerMessage, $pattern) !== false) {
-                return true;
-            }
-        }
-
-        return false;
+        return str_starts_with($errorMessage, self::CONNECTION_CLOSED_ERROR_CODE);
     }
 
     /**
-     * Reset connection state for retry
+     * Get subscription for the queue if exists.
+     *
+     * @param string $queue
+     * @return int|null
      */
-    private function resetConnectionState(): void
+    private function getQueueSubscriptionId(string $queue): ?int
     {
-        $this->stompProducer = null;
-        $this->stompConsumer = null;
-        $this->lastFrame = null;
-
-        // Close existing connection
-        if ($this->client && $this->client->isConnected()) {
-            try {
-                $this->client->disconnect();
-            } catch (\Exception $e) {
-                $this->logger->debug('Error disconnecting client during reset: ' . $e->getMessage());
+        $stompConsumer = $this->getConsumer($queue);
+        foreach ($stompConsumer->getSubscriptions() as $subscription) {
+            if ($subscription->getDestination() === $queue) {
+                return $subscription->getSubscriptionId();
             }
         }
-        $this->client = null;
+
+        return null;
     }
 
     /**
      * @inheritdoc
-     *
-     * @throws StompException
      */
     public function subscribeQueue(string $queue): void
     {
-        $maxRetries = 3;
-        $retryCount = 0;
+        $this->getProducer()->getClient()->disconnect();
+        $subscriptionId = $this->getQueueSubscriptionId($queue);
+        if ($subscriptionId) {
+            // Already subscribed to the requested queue.
+            return;
+        }
 
-        while ($retryCount < $maxRetries) {
-            try {
-                $this->ensureHealthyConnection();
-                $this->stompConsumer = new StatefulStomp($this->client);
-                $this->stompConsumer->subscribe($queue, null, self::ACK_TYPE);
-                return; // Success, exit retry loop
-
-            } catch (\Exception $e) {
-                $retryCount++;
-                $errorMessage = $e->getMessage();
-                $isRetryableError = $this->isRetryableError($errorMessage) ||
-                                   strpos($errorMessage, 'Missing receipt') !== false ||
-                                   strpos($errorMessage, 'receipt Frame') !== false;
-
-                $this->logger->warning(
-                    "STOMP subscribe attempt {$retryCount}/{$maxRetries} failed for queue '{$queue}': {$errorMessage}",
-                    [
-                        'queue' => $queue,
-                        'retryable' => $isRetryableError,
-                        'exception' => $e
-                    ]
-                );
-
-                if ($retryCount >= $maxRetries) {
-                    $this->logger->error(
-                        "Failed to subscribe to queue '{$queue}' after {$maxRetries} attempts: {$errorMessage}",
-                        ['exception' => $e]
-                    );
-                    throw new StompException(
-                        "Failed to subscribe to queue '{$queue}' after {$maxRetries} attempts: {$errorMessage}",
-                        $e->getCode(),
-                        $e
-                    );
-                }
-
-                // Reset connection state for retry
-                $this->resetConnectionState();
-
-                if ($retryCount < $maxRetries) {
-                    // Progressive backoff: 200ms, 400ms, 800ms
-                    usleep(200000 * $retryCount);
-                }
-            }
+        $stompConsumer = $this->getConsumer($queue);
+        try {
+            $headers = $this->subscriptionHeaders[$this->brokerName] ?? [];
+            $args = ['destination' => $queue, 'ack' => self::ACK_TYPE, 'header' => $headers];
+            $this->safeExecute(
+                $stompConsumer,
+                'subscribe',
+                $args,
+                fn () => $this->getConsumer($queue)->subscribe(...$args)
+            );
+        } catch (StompException $e) {
+            throw new ClientException("Failed to subscribe to '$queue' queue.", previous: $e);
         }
     }
 
     /**
      * @inheritdoc
-     *
-     * @throws StompException
      */
-    public function readMessage(): ?Frame
+    public function unsubscribeQueue(string $queue): void
     {
-        try {
-            $this->ensureHealthyConnection();
-
-            // Initialize stomp if not already done
-            if (!$this->stompConsumer) {
-                $this->stompConsumer = new StatefulStomp($this->client);
-            }
-
-            $this->lastFrame = $this->stompConsumer->read();
-            if ($this->lastFrame) {
-                return $this->lastFrame;
-            }
-        } catch (\Exception $e) {
-            $this->logger->error(
-                sprintf('Failed to read STOMP message: %s', $e->getMessage()),
-                ['exception' => $e,
-                 'trace' => $e->getTraceAsString()
-                ]
-            );
-
-            // For read operations, we might want to reset connection state
-            // but not throw an exception immediately as null return is valid
-            if ($this->isRetryableError($e->getMessage())) {
-                $this->resetConnectionState();
-            }
+        $subscriptionId = $this->getQueueSubscriptionId($queue);
+        if (!$subscriptionId) {
+            return;
         }
-        return null;
+
+        $stompConsumer = $this->getConsumer($queue);
+        try {
+            $stompConsumer->unsubscribe($subscriptionId);
+            // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
+        } catch (StompException) {
+        }
+        $stompConsumer->getClient()->disconnect();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function readMessage(string $queue): ?Frame
+    {
+        $stompConsumer = $this->getConsumer($queue);
+        try {
+            $frame = $this->safeExecute(
+                $stompConsumer,
+                'read',
+                onRetry: function () use ($queue) {
+                    $this->subscribeQueue($queue);
+                    $consumer = $this->getConsumer($queue);
+
+                    return $consumer->read();
+                }
+            );
+        } catch (StompException $e) {
+            throw new ClientException("Unable to read message from '$queue' queue.", previous: $e);
+        }
+
+        return $frame ?: null;
     }
 
     /**
@@ -384,304 +237,280 @@ class StompClient implements StompClientInterface
      */
     public function ackMessage(Frame $lastFrame): void
     {
+        $queue = $lastFrame['destination'];
+        $stompConsumer = $this->getConsumer($queue);
         try {
-            $properties = $lastFrame->getHeaders();
-            if (isset($properties['message-id'])) {
-                $messageId = $properties['message-id'];
-                if (!isset($this->acknowledged[$messageId])) {
-                    $this->stompConsumer->ack($lastFrame);
-                    $this->acknowledged[$properties['message-id']] = true;
-                    $this->lastFrame = null;
-                }
-            }
-        } catch (\Exception $e) {
-            $this->logger->error(
-                sprintf('Failed to acknowledge STOMP message: %s', $e->getMessage()),
-                ['exception' => $e]
-            );
+            $this->sendFrame($lastFrame, $stompConsumer->getClient()->getProtocol()->getAckFrame(...));
+        } catch (StompException $e) {
+            throw new ClientException("Unable to ACK message from '$queue' queue.", previous: $e);
         }
     }
 
     /**
      * @inheritdoc
+     *
+     * STOMP PHP client doesn't support requeue.
+     * @see https://github.com/stomp-php/stomp-php/blob/5.1.0/src/States/IStateful.php#L34
+     *
+     * Sending a NACK frame to ActiveMQ Artemis is equal to acknowledging.
+     * @see https://github.com/apache/artemis/blob/2.42.0/artemis-protocols/artemis-stomp-protocol/src/main/java/org/apache/activemq/artemis/core/protocol/stomp/v11/StompFrameHandlerV11.java#L224-L227
+     *
+     * To return the message back to the queue client should unsubscribe, considering the used acknowledgment type.
+     * @see self::ACK_TYPE
+     * @see https://stomp.github.io/stomp-specification-1.2.html#SUBSCRIBE_ack_Header
      */
-    public function nackMessage(Frame $lastFrame): void
+    public function nackMessage(Frame $lastFrame, ?bool $requeue = null): void
     {
-        $properties = $lastFrame->getHeaders();
-        if (isset($properties['message-id'])) {
-            $messageId = $properties['message-id'];
-            if (!isset($this->acknowledged[$messageId])) {
-                $this->stompConsumer->nack($lastFrame);
-                $this->acknowledged[$properties['message-id']] = true;
+        $queue = $lastFrame['destination'];
+        $stompConsumer = $this->getConsumer($queue);
+        $subscription = $stompConsumer->getSubscriptions()->getSubscription($lastFrame);
+        if ($requeue) {
+            if (!$subscription) {
+                // Already requeued.
+                return;
+            }
+
+            try {
+                $stompConsumer->unsubscribe($subscription->getSubscriptionId());
+                // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
+            } catch (StompException) {
+            }
+            $stompConsumer->getClient()->disconnect();
+        } else {
+            try {
+                $this->sendFrame($lastFrame, $stompConsumer->getClient()->getProtocol()->getNackFrame(...));
+            } catch (StompException $e) {
+                throw new ClientException("Unable to NACK message from '$queue' queue.", previous: $e);
             }
         }
     }
 
     /**
-     * @inheritdoc
-     */
-    public function readFrame(): Frame
-    {
-        return  $this->client->readFrame();
-    }
-
-    /**
-     * Clear queue using Artemis REST API (much faster than STOMP protocol)
+     * Try to re-read the same message from the queue after connection failure.
      *
-     * @param string $queueName
-     * @return int Number of messages cleared
+     * @param Frame $frame
+     * @return Frame|null
      */
-    public function clearQueue(string $queueName): int
+    private function reReadMessage(Frame $frame): ?Frame
     {
+        $messageId = $frame['message_id'] ?? null;
+        if (!$messageId) {
+            // No message identifier, can't ensure that the same message is read.
+            return null;
+        }
+
+        $queue = $frame['destination'];
         try {
-            $host = $this->stompConfig->getValue(Config::HOST);
-            $user = $this->stompConfig->getValue(Config::USERNAME);
-            $password = $this->stompConfig->getValue(Config::PASSWORD);
-
-            // First get message count
-            $messageCount = $this->getQueueMessageCount($queueName, $host, $user, $password);
-
-            if ($messageCount === 0) {
-                $this->logger->info("Queue '{$queueName}' is already empty");
-                return 0;
+            // Resubscribe and try to get the message.
+            $this->subscribeQueue($queue);
+            // Get fresh consumer instance after possible reconnect.
+            $stompConsumer = $this->getConsumer($queue);
+            $newFrame = $stompConsumer->read();
+            // Double check that the correct message is received.
+            if (!$newFrame || !isset($newFrame['message_id']) || $newFrame['message_id'] !== $messageId) {
+                // It's not the needed message.
+                $this->unsubscribeQueue($queue);
+                $newFrame = null;
             }
-
-            // Clear the queue using management API
-            $body = [
-                'type' => 'exec',
-                'mbean' => 'org.apache.activemq.artemis:broker="0.0.0.0",component=addresses,address="' .
-                    $queueName . '",subcomponent=queues,routing-type="anycast",queue="' . $queueName . '"',
-                'operation' => 'removeAllMessages()',
-                'arguments' => []
-            ];
-
-            $response = $this->executeJolokiaRequest($body, $host, $user, $password);
-
-            if (isset($response['value'])) {
-                $clearedCount = (int)$response['value'];
-                $this->logger->info("Cleared {$clearedCount} messages from queue '{$queueName}' via REST API");
-                return $clearedCount;
-            }
-
-            return 0;
-
-        } catch (\Exception $e) {
-            $this->logger->error("Failed to clear queue '{$queueName}' via REST API: " . $e->getMessage());
-            return 0;
+        } catch (StompException) {
+            $stompConsumer = $this->getConsumer($queue);
+            $stompConsumer->getClient()->disconnect();
+            $newFrame = null;
         }
+
+        return $newFrame;
     }
 
     /**
-     * Get message count for a queue using REST API
+     * Try to execute operation through active connection.
      *
-     * @param string $queueName
-     * @param string $host
-     * @param string $user
-     * @param string $password
-     * @return int
-     */
-    private function getQueueMessageCount(string $queueName, string $host, string $user, string $password): int
-    {
-        $body = [
-            'type' => 'read',
-            'mbean' => 'org.apache.activemq.artemis:broker="0.0.0.0",component=addresses,address="' .
-                $queueName . '",subcomponent=queues,routing-type="anycast",queue="' . $queueName . '"',
-            'attribute' => 'MessageCount'
-        ];
-
-        $response = $this->executeJolokiaRequest($body, $host, $user, $password);
-
-        if (isset($response['value'])) {
-            return (int)$response['value'];
-        }
-
-        return 0;
-    }
-
-    /**
-     * Execute Jolokia request to Artemis management interface
+     * In case of connection failure, it will be disconnected and onRetry callback will be executed if provided.
      *
-     * @param array $body
-     * @param string $host
-     * @param string $user
-     * @param string $password
-     * @return array
-     * @throws \Exception
-     */
-    private function executeJolokiaRequest(array $body, string $host, string $user, string $password): array
-    {
-        $url = "http://{$host}:8161/console/jolokia/";
-
-        $ch = curl_init();
-        curl_setopt_array($ch, [
-            CURLOPT_URL => $url,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_POST => true,
-            CURLOPT_POSTFIELDS => json_encode($body),
-            CURLOPT_HTTPHEADER => [
-                'Content-Type: application/json',
-                'Authorization: Basic ' . base64_encode($user . ':' . $password)
-            ],
-            CURLOPT_TIMEOUT => 5,
-            CURLOPT_CONNECTTIMEOUT => 3,
-            CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_SSL_VERIFYHOST => false
-        ]);
-
-        $response = curl_exec($ch);
-        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        $error = curl_error($ch);
-
-        if ($error) {
-            throw new \RuntimeException("CURL error: " . $error);
-        }
-
-        if ($httpCode !== 200) {
-            throw new \RuntimeException("HTTP error: " . $httpCode);
-        }
-
-        $decoded = json_decode($response, true);
-
-        if (!$decoded) {
-            throw new \RuntimeException("Invalid JSON response");
-        }
-
-        if (isset($decoded['status']) && $decoded['status'] !== 200) {
-            throw new \RuntimeException("Jolokia error: " . ($decoded['error'] ?? 'Unknown error'));
-        }
-
-        return $decoded;
-    }
-
-    /**
-     * Create connection with stomp
-     *
+     * @param StatefulStomp $clientWrapper
+     * @param string $method
+     * @param array $args
+     * @param callable|null $onRetry
+     * @return mixed
      * @throws StompException
      */
-    protected function connect(): void
-    {
+    private function safeExecute(
+        StatefulStomp $clientWrapper,
+        string $method,
+        array $args = [],
+        ?callable $onRetry = null
+    ): mixed {
         try {
-            if (!isset(self::$persistentclient[$this->clientId])) {
-                $connection = $this->stompConfig->getConnection();
-                $this->client = new Client($connection);
-                $this->client->setVersions([self::VERSION]);
-                $this->client->setLogin(
-                    $this->stompConfig->getValue(Config::USERNAME),
-                    $this->stompConfig->getValue(Config::PASSWORD)
-                );
-
-                // Read timeout configurations from env.php
-                $heartbeatSend = $this->stompConfig->getValue('heartbeat_send') ?? self::HEARTBEAT_SEND_TIME;
-                $heartbeatReceive = $this->stompConfig->getValue('heartbeat_receive') ?? self::HEARTBEAT_RECEIVE_TIME;
-                $readTimeout = $this->stompConfig->getValue('read_timeout') ?? self::READ_TIME_OUT;
-
-                $this->client->setHeartbeat($heartbeatSend, $heartbeatReceive);
-                $connection->setReadTimeout(0, $readTimeout);
-
-                $emitter = new HeartbeatEmitter($this->client->getConnection());
-                $this->client->getConnection()->getObservers()->addObserver($emitter);
-                $this->client->connect();
-                self::$persistentclient[$this->clientId] = $this->client;
-                $this->createStatefulStompInstance();
-            } else {
-                $this->client =self::$persistentclient[$this->clientId];
-                $this->createStatefulStompInstance();
-                if (!self::$persistentclient[$this->clientId]->isConnected()) {
-                    $this->retryConnection();
-                }
+            $result = $clientWrapper->$method(...$args);
+        } catch (ErrorFrameException $e) {
+            $errorFrame = $e->getFrame();
+            if (!$this->isRetryableError($errorFrame['message'])) {
+                throw $e;
             }
-        } catch (StompException $e) {
-            // Retry connection with same timeout configurations
-            $this->logger->warning('STOMP connection failed, retrying: ' . $e->getMessage());
-            $this->retryConnection();
+            $clientWrapper->getClient()->disconnect();
+            $result = $onRetry ? call_user_func($onRetry) : null;
+        } catch (ConnectionException) {
+            $clientWrapper->getClient()->disconnect();
+            $result = $onRetry ? call_user_func($onRetry) : null;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Send ACK or NACK frame with retry logic in case of connection failure.
+     *
+     * @param Frame $message
+     * @param callable $frameFactory
+     * @return void
+     * @throws StompException
+     */
+    private function sendFrame(Frame $message, callable $frameFactory): void
+    {
+        $queue = $message['destination'];
+        $stompConsumer = $this->getConsumer($queue);
+        $client = $stompConsumer->getClient();
+        if (!$client->isConnected() || !$stompConsumer->getSubscriptions()->getSubscription($message)) {
+            $newMessage = $this->reReadMessage($message);
+            if (!$newMessage) {
+                return;
+            }
+
+            $message = $newMessage;
+            $stompConsumer = $this->getConsumer($queue);
+        }
+
+        $isSuccessful = false;
+        $client = $stompConsumer->getClient();
+        $frame = $frameFactory($message);
+        try {
+            $isSuccessful = $client->sendFrame($frame, true);
+        } catch (ErrorFrameException $e) {
+            $errorFrame = $e->getFrame();
+            if (!$this->isRetryableError($errorFrame['message'])) {
+                throw $e;
+            }
+            $client->disconnect();
+        } catch (ConnectionException) {
+            $client->disconnect();
+        }
+
+        if (!$isSuccessful) {
+            $newMessage = $this->reReadMessage($message);
+            if (!$newMessage) {
+                return;
+            }
+
+            $stompConsumer = $this->getConsumer($queue);
+            $client = $stompConsumer->getClient();
+            $frame = $frameFactory($newMessage);
+            $client->sendFrame($frame, true);
         }
     }
 
     /**
-     * Retry connection with the help of Client class
+     * Create new client instance.
+     *
+     * @return Client
+     * @throws ConnectionException
      */
-    protected function retryConnection(): void
+    private function createClient(): Client
     {
-        if (!isset(self::$persistentclient[$this->clientId])) {
-            $host = $this->stompConfig->getValue(Config::HOST);
-            $port = $this->stompConfig->getValue(Config::PORT);
-            $heartbeatSend = $this->stompConfig->getValue('heartbeat_send') ?? self::HEARTBEAT_SEND_TIME;
-            $heartbeatReceive = $this->stompConfig->getValue('heartbeat_receive') ?? self::HEARTBEAT_RECEIVE_TIME;
-            $readTimeout = $this->stompConfig->getValue('read_timeout') ?? self::READ_TIME_OUT;
+        $connection = clone $this->stompConfig->getConnection();
+        $readTimeout = $this->stompConfig->getValue('read_timeout') ?? self::READ_TIME_OUT;
+        $connection->setReadTimeout(0, $readTimeout);
+        $emitter = new HeartbeatEmitter($connection);
+        $connection->getObservers()->addObserver($emitter);
 
-            $this->client = new Client('tcp://' . $host . ':' . $port);
-            $this->client->setVersions(['1.2']);
-            $this->client->setLogin(
-                $this->stompConfig->getValue(Config::USERNAME),
-                $this->stompConfig->getValue(Config::PASSWORD)
-            );
-            $this->client->setHeartbeat($heartbeatSend, $heartbeatReceive);
-            $this->client->getConnection()->setReadTimeout(0, $readTimeout);
+        $client = new Client($connection);
+        $client->setVersions([self::VERSION]);
+        $client->setLogin(
+            $this->stompConfig->getValue(Config::USERNAME),
+            $this->stompConfig->getValue(Config::USERNAME)
+        );
+        $heartbeatSend = $this->stompConfig->getValue('heartbeat_send') ?? self::HEARTBEAT_SEND_TIME;
+        $heartbeatReceive = $this->stompConfig->getValue('heartbeat_receive') ?? self::HEARTBEAT_RECEIVE_TIME;
+        $client->setHeartbeat($heartbeatSend, $heartbeatReceive);
 
-            $emitter = new HeartbeatEmitter($this->client->getConnection());
-            $this->client->getConnection()->getObservers()->addObserver($emitter);
-            $this->client->connect();
-            self::$persistentclient[$this->clientId] = $this->client;
-            $this->createStatefulStompInstance();
+        return $client;
+    }
 
-        } else {
-            $this->client =self::$persistentclient[$this->clientId];
-            $this->createStatefulStompInstance();
+    /**
+     * Get producer instance.
+     *
+     * @return StatefulStomp
+     */
+    private function getProducer(): StatefulStomp
+    {
+        $this->producer ??= new StatefulStomp($this->createClient());
+
+        return $this->producer;
+    }
+
+    /**
+     * Get consumer instance.
+     *
+     * @param string $queue
+     * @return StatefulStomp
+     */
+    private function getConsumer(string $queue): StatefulStomp
+    {
+        $consumer = $this->consumers[$queue] ?? null;
+        if (!$consumer?->getClient()->isConnected()) {
+            // Recreate object as it might have active subscription from inactive connection.
+            $consumer = $this->consumers[$queue] = new StatefulStomp($this->createClient());
+        }
+
+        return $consumer;
+    }
+
+    /**
+     * Get broker name the client is connecting to.
+     *
+     * @return string
+     * @throws StompException
+     */
+    private function getBrokerName(): string
+    {
+        $client = $this->createClient();
+        try {
+            $client->connect();
+            $server = $client->getProtocol()->getServer();
+        } finally {
+            $client->disconnect();
+        }
+
+        preg_match('~^([^/]+)/~', $server, $matches);
+        $brokerName = $matches[1] ?? $server;
+
+        return $brokerName;
+    }
+
+    /**
+     * Close all active connections.
+     *
+     * @return void
+     */
+    private function closeConnections(): void
+    {
+        $this->producer?->getClient()->disconnect();
+        foreach ($this->consumers as $consumer) {
+            $consumer->getClient()->disconnect();
         }
     }
 
     /**
-     * Create stateful stomp instance
-     *
-     * @return void
+     * @inheritdoc
      */
-    private function createStatefulStompInstance(): void
+    public function _resetState(): void
     {
-        if ($this->clientId === 'producer') {
-            $this->stompProducer = new StatefulStomp($this->client);
-        } elseif ($this->clientId === 'consumer') {
-            $this->stompConsumer = new StatefulStomp($this->client);
-        }
+        $this->closeConnections();
     }
 
     /**
-     * Stomp transaction begins
-     *
-     * @return void
+     * @inheritdoc
      */
-    public function transactionBegin(): void
+    public function __destruct()
     {
-        $this->stompProducer?->begin();
-    }
-
-    /**
-     * Stomp transaction commit
-     *
-     * @return void
-     */
-    public function transactionCommit(): void
-    {
-        $this->stompProducer?->commit();
-    }
-
-    /**
-     * Check stomp is connected
-     *
-     * @return bool
-     */
-    public function isConnected(): bool
-    {
-        return $this->client->isConnected();
-    }
-
-    /**
-     * Disconnect stomp
-     *
-     * @return void
-     */
-    public function disconnect(): void
-    {
-        $this->client->disconnect();
-        self::$persistentclient = [];
+        $this->closeConnections();
     }
 }

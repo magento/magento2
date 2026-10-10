@@ -136,21 +136,21 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
     }
 
     /**
+     * Verify POST without attribute_id resolves existing attribute by attribute_code and updates it.
+     *
      * @magentoApiDataFixture Magento/Catalog/_files/product_attribute.php
      * @return void
      */
-    public function testCreateWithExceptionIfAttributeAlreadyExists()
+    public function testCreateResolvesExistingAttributeByCodeWhenAttributeIdIsMissing(): void
     {
         $attributeCode = 'test_attribute_code_333';
-        try {
-            $this->createAttribute($attributeCode);
-            $this->fail("Expected exception");
-            // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
-        } catch (\SoapFault $e) {
-            //Expects soap exception
-        } catch (\Exception $e) {
-            $this->assertEquals(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());
-        }
+        $existingAttribute = $this->getAttribute($attributeCode);
+
+        $attribute = $this->createAttribute($attributeCode);
+
+        $this->assertEquals($existingAttribute['attribute_id'], $attribute['attribute_id']);
+        $this->assertEquals($attributeCode, $attribute['attribute_code']);
+        $this->assertEquals('default_label', $attribute['default_frontend_label']);
     }
 
     /**

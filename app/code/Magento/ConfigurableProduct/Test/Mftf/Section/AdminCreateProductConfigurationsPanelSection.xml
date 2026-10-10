@@ -5,7 +5,6 @@
  * All Rights Reserved.
  */
 -->
-
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminCreateProductConfigurationsPanel">
@@ -55,7 +54,7 @@
         <element name="applyUniqueImagesToEachSkus" type="radio" selector=".admin__field-label[for='apply-unique-images-radio']" timeout="30"/>
         <element name="applyUniquePricesToEachSkus" type="radio" selector=".admin__field-label[for='apply-unique-prices-radio']" timeout="30"/>
         <element name="selectImagesButton" type="select" selector="#apply-images-attributes" timeout="30"/>
-        <element name="uploadImagesButton" type="file" selector="//*[text()='{{option}}']/../../div[@data-role='gallery']//input[@type='file']" timeout="30" parameterized="true"/>
+        <element name="uploadImagesButton" type="file" selector="(//ul[contains(@class,'attributes-selector-list')]//li[contains(@class,'item')][.//span[normalize-space(.)='{{option}}']]//div[@data-role='gallery']//input[contains(@class,'uppy-Dashboard-input')])[1]" timeout="30" parameterized="true"/>
         <element name="uploadProgressBar" type="text" selector=".uploader .file-row"/>
         <element name="imageFile" type="text" selector="//*[@data-role='gallery']//img[contains(@src, '{{url}}')]" parameterized="true"/>
         <element name="selectPriceButton" type="select" selector="#select-each-price" timeout="30"/>

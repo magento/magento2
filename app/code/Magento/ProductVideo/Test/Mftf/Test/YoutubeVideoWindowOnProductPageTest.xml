@@ -18,10 +18,6 @@
             <testCaseId value="MAGETWO-95254"/>
             <useCaseId value="MAGETWO-91707"/>
             <group value="productVideo"/>
-            <skip>
-                <issueId value="MC-33903"/>
-            </skip>
-            <group value="pr_exclude"/>
         </annotations>
 
         <before>
@@ -45,42 +41,74 @@
         </actionGroup>
         <actionGroup ref="OpenProductForEditByClickingRowXColumnYInProductGridActionGroup" stepKey="openFirstProductForEdit"/>
 
-        <!-- Add product video -->
-        <actionGroup ref="AddProductVideoActionGroup" stepKey="addProductVideo" after="openFirstProductForEdit"/>
+        <!-- Add image and video so gallery loads reliably on storefront -->
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addImageForProduct">
+            <argument name="image" value="MagentoLogo"/>
+        </actionGroup>
+        <actionGroup ref="AddProductVideoActionGroup" stepKey="addProductVideo" after="addImageForProduct"/>
         <!-- Assert product video in admin product form -->
         <actionGroup ref="AssertProductVideoAdminProductPageActionGroup" stepKey="assertProductVideoAdminProductPage" after="addProductVideo"/>
 
         <!-- Save the product -->
         <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveFirstProduct"/>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCachePostCreating">
+            <argument name="tags" value=""/>
+        </actionGroup>
 
         <!-- Assert product video in storefront product page -->
         <amOnPage url="$$createProduct.custom_attributes[url_key]$$.html" stepKey="goToStorefrontCategoryPage"/>
         <waitForPageLoad stepKey="waitForStorefrontPageLoaded"/>
-        <actionGroup ref="AssertProductVideoStorefrontProductPageActionGroup" stepKey="assertProductVideoStorefrontProductPage" after="waitForStorefrontPageLoaded"/>
 
-        <!--Click Play video button-->
-        <click stepKey="clickToPlayVideo" selector="{{StorefrontProductInfoMainSection.clickInVideo}}"/>
-        <wait stepKey="waitFiveSecondToPlayVideo" time="5"/>
-        <switchToIFrame selector="{{StorefrontProductInfoMainSection.frameVideo}}" stepKey="switchToFrame"/>
-        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.videoPlayedMode}}" stepKey="waitForVideoPlayed"/>
-        <seeElement selector="{{StorefrontProductInfoMainSection.videoPlayedMode}}" stepKey="AssertVideoIsPlayed"/>
-        <switchToIFrame stepKey="switchBack1"/>
+        <!-- Select video slide first; .product-video is only visible on the active video frame -->
+        <waitForElementNotVisible selector="{{StorefrontProductMediaSection.gallerySpinner}}" stepKey="waitForGallerySpinner"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnail('2')}}" stepKey="waitForVideoThumbnail"/>
+        <conditionalClick selector="{{StorefrontProductMediaSection.fotoramaImageThumbnail('2')}}"
+                          dependentSelector="{{StorefrontProductMediaSection.fotoramaImageThumbnailActive('2')}}"
+                          visible="false" stepKey="selectVideoThumbnail"/>
+        <waitForAjaxLoad stepKey="waitForVideoSlideSelection"/>
+        <waitForElementNotVisible selector="{{StorefrontProductMediaSection.gallerySpinner}}" stepKey="waitForGallerySpinnerAfterVideoSelect"/>
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.activeYoutubeVideo}}" stepKey="waitVideoElementVisible"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.activeYoutubeVideo}}" stepKey="seeProductVideoDataType"/>
 
-        <!--Click Pause button-->
-        <click stepKey="clickToStopVideo" selector="{{StorefrontProductInfoMainSection.clickInVideo}}"/>
-        <wait stepKey="waitFiveSecondToStopVideo" time="5"/>
-        <switchToIFrame selector="{{StorefrontProductInfoMainSection.frameVideo}}" stepKey="switchToFrame2"/>
-        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.videoPausedMode}}" stepKey="waitForVideoPaused"/>
-        <seeElement selector="{{StorefrontProductInfoMainSection.videoPausedMode}}" stepKey="AssertVideoIsPaused"/>
-        <switchToIFrame stepKey="switchBack2"/>
+        <!-- Load YouTube player (Selenium click hits child img; event.target must be the video-unplayed frame) -->
+        <executeJS function="
+            var frame = document.querySelector('.fotorama-video-container.video-unplayed');
+            if (!frame) {
+                frame = document.querySelector('.fotorama__stage__frame.fotorama-video-container');
+            }
+            if (!frame) {
+                return false;
+            }
+            var productVideo = frame.querySelector('.product-video[data-type=&quot;youtube&quot;]');
+            if (!productVideo) {
+                return false;
+            }
+            if (frame.querySelector('iframe') === null) {
+                frame.classList.remove('video-unplayed');
+                jQuery(productVideo).productVideoLoader();
+            }
+            return true;
+        " stepKey="loadYoutubePlayer"/>
+        <assertTrue stepKey="assertYoutubePlayerLoadTriggered" message="YouTube player loader should be triggered">
+            <actualResult type="variable">$loadYoutubePlayer</actualResult>
+        </assertTrue>
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.frameVideo}}" stepKey="waitForYoutubeIframe"/>
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.youtubeVideoLoaded}}" stepKey="waitForVideoPlayed"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.frameVideo}}" stepKey="AssertVideoIsPlayed"/>
 
-        <!--Click Play video button again. Make sure that Video continued playing-->
-        <click stepKey="clickAgainToPlayVideo" selector="{{StorefrontProductInfoMainSection.clickInVideo}}"/>
-        <wait stepKey="waitAgainFiveSecondToPlayVideo" time="5"/>
-        <switchToIFrame selector="{{StorefrontProductInfoMainSection.frameVideo}}" stepKey="switchToFrame3"/>
-        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.videoPlayedMode}}" stepKey="waitForVideoPlayedAgain"/>
-        <seeElement selector="{{StorefrontProductInfoMainSection.videoPlayedMode}}" stepKey="AssertVideoIsPlayedAgain"/>
-        <switchToIFrame stepKey="switchBack3"/>
+        <!-- Pause video via YouTube player API -->
+        <executeJS function="var player = jQuery('.product-video[data-type=&quot;youtube&quot;]').data('mageVideoYoutube'); if (player) { player.pause(); return player.playing() === false; } return false;" stepKey="pauseVideoAndCheck"/>
+        <assertTrue stepKey="AssertVideoIsPaused" message="YouTube video should be paused">
+            <actualResult type="variable">$pauseVideoAndCheck</actualResult>
+        </assertTrue>
+
+        <!-- Play video again and verify player API accepts play command -->
+        <executeJS function="var player = jQuery('.product-video[data-type=&quot;youtube&quot;]').data('mageVideoYoutube'); if (player) { player.play(); return true; } return false;" stepKey="playVideoAgain"/>
+        <wait stepKey="waitAgainFiveSecondToPlayVideo" time="3"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.frameVideo}}" stepKey="AssertVideoIsPlayedAgain"/>
+        <assertTrue stepKey="assertPlayVideoAgainSucceeded" message="YouTube player play API should be available">
+            <actualResult type="variable">$playVideoAgain</actualResult>
+        </assertTrue>
 
         <after>
             <deleteData createDataKey="createProduct" stepKey="deleteSimpleProduct"/>

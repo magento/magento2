@@ -22,6 +22,10 @@ use Magento\Store\Model\StoreSwitcher;
 use Magento\Store\Model\StoreSwitcherInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Message\ManagerInterface as MessageManagerInterface;
+use Magento\Store\Controller\Store\SwitchAction\CookieManager;
+use Magento\Store\Model\StoreIsInactiveException;
 
 /**
  * Test class for \Magento\Store\Controller\Store\SwitchAction
@@ -72,6 +76,12 @@ class SwitchActionTest extends TestCase
     /** @var StoreSwitcherInterface|MockObject */
     private $storeSwitcher;
 
+    /** @var CookieManager|MockObject */
+    private $cookieManagerMock;
+
+    /** @var MessageManagerInterface|MockObject */
+    private $messageManagerMock;
+
     /**
      * @return void
      */
@@ -96,9 +106,34 @@ class SwitchActionTest extends TestCase
             ->onlyMethods(['switch'])
             ->getMock();
 
+        $this->cookieManagerMock = $this->createMock(CookieManager::class);
+        $this->messageManagerMock = $this->createMock(MessageManagerInterface::class);
+
+        $contextMock = $this->createMock(\Magento\Framework\App\Action\Context::class);
+        $contextMock->method('getMessageManager')->willReturn($this->messageManagerMock);
+        $contextMock->method('getRequest')->willReturn($this->requestMock);
+        $contextMock->method('getResponse')->willReturn($this->responseMock);
+        $contextMock->method('getRedirect')->willReturn($this->redirectMock);
+        $contextMock->method('getActionFlag')->willReturn(
+            $this->createMock(\Magento\Framework\App\ActionFlag::class)
+        );
+        $contextMock->method('getUrl')->willReturn(
+            $this->createMock(\Magento\Framework\UrlInterface::class)
+        );
+        $contextMock->method('getObjectManager')->willReturn(
+            $this->createMock(\Magento\Framework\ObjectManagerInterface::class)
+        );
+        $contextMock->method('getEventManager')->willReturn(
+            $this->createMock(\Magento\Framework\Event\ManagerInterface::class)
+        );
+        $contextMock->method('getView')->willReturn(
+            $this->createMock(\Magento\Framework\App\ViewInterface::class)
+        );
+
         $this->model = (new ObjectManager($this))->getObject(
             SwitchAction::class,
             [
+                'context' => $contextMock,
                 'storeCookieManager' => $this->storeCookieManagerMock,
                 'httpContext' => $this->httpContextMock,
                 'storeRepository' => $this->storeRepositoryMock,
@@ -106,7 +141,8 @@ class SwitchActionTest extends TestCase
                 '_request' => $this->requestMock,
                 '_response' => $this->responseMock,
                 '_redirect' => $this->redirectMock,
-                'storeSwitcher' => $this->storeSwitcher
+                'storeSwitcher' => $this->storeSwitcher,
+                'cookieManager' => $this->cookieManagerMock,
             ]
         );
     }
@@ -147,6 +183,39 @@ class SwitchActionTest extends TestCase
 
         $this->redirectMock->expects($this->once())->method('getRedirectUrl')->willReturn($expectedRedirectUrl);
         $this->responseMock->expects($this->once())->method('setRedirect')->with($expectedRedirectUrl);
+
+        $this->storeCookieManagerMock->method('getStoreCodeFromCookie')->willReturn(null);
+
+        $this->model->execute();
+    }
+
+    public function testExecuteAddsErrorAndSetsCookieForCurrentStoreWhenTargetStoreNotFound(): void
+    {
+        $storeToSwitchToCode = 'nonexistent';
+        $fromStoreCode = 'default';
+        $requestedUrl = 'https://example.test/';
+
+        // getParam('___from_store', getStoreCodeFromCookie()) — second arg must match mocked cookie value
+        $this->storeCookieManagerMock->method('getStoreCodeFromCookie')->willReturn($fromStoreCode);
+        $this->requestMock->method('getParam')->willReturnMap([
+            [StoreManagerInterface::PARAM_NAME, null, $storeToSwitchToCode],
+            ['___from_store', $fromStoreCode, $fromStoreCode],
+        ]);
+        $this->redirectMock->method('getRedirectUrl')->willReturn($requestedUrl);
+
+        $fromStoreMock = $this->createMock(StoreInterface::class);
+        $this->storeRepositoryMock->method('get')->with($fromStoreCode)->willReturn($fromStoreMock);
+        $this->storeRepositoryMock->method('getActiveStoreByCode')->with($storeToSwitchToCode)
+            ->willThrowException(new NoSuchEntityException(__('not found')));
+
+        $currentStoreMock = $this->createMock(StoreInterface::class);
+        $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($currentStoreMock);
+
+        $this->messageManagerMock->expects($this->once())->method('addErrorMessage');
+        $this->cookieManagerMock->expects($this->once())->method('setCookieForStore')->with($currentStoreMock);
+
+        $this->storeSwitcher->expects($this->never())->method('switch');
+        $this->responseMock->expects($this->once())->method('setRedirect')->with($requestedUrl);
 
         $this->model->execute();
     }

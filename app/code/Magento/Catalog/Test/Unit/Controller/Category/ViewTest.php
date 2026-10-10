@@ -20,9 +20,14 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Response\RedirectInterface;
 use Magento\Framework\App\ViewInterface;
+use Magento\Framework\Controller\Result\Forward;
+use Magento\Framework\Controller\Result\ForwardFactory;
+use Magento\Framework\Controller\Result\Redirect;
+use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\DataObject;
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
@@ -37,6 +42,9 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
+ * Unit test for Category View controller.
+ *
+ * @covers \Magento\Catalog\Controller\Category\View
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
@@ -139,6 +147,21 @@ class ViewTest extends TestCase
     protected ToolbarMemorizer $toolbarMemorizer;
 
     /**
+     * @var RedirectFactory|MockObject
+     */
+    private $resultRedirectFactory;
+
+    /**
+     * @var ForwardFactory|MockObject
+     */
+    private $resultForwardFactory;
+
+    /**
+     * @var RedirectInterface|MockObject
+     */
+    private $redirect;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
@@ -146,10 +169,12 @@ class ViewTest extends TestCase
         $this->request = $this->createMock(RequestInterface::class);
         $this->response = $this->createPartialMockWithReflection(
             ResponseInterface::class,
-            ['setRedirect', 'sendResponse']
+            ['setRedirect', 'sendResponse', 'setBody', 'isRedirect']
         );
         $this->response->method('setRedirect')->willReturnSelf();
         $this->response->method('sendResponse')->willReturn(null);
+        $this->response->method('setBody')->willReturnSelf();
+        $this->response->method('isRedirect')->willReturn(false);
 
         $this->categoryHelper = $this->createMock(Category::class);
         $this->objectManager = $this->createMock(ObjectManagerInterface::class);
@@ -177,6 +202,7 @@ class ViewTest extends TestCase
         $this->resultFactory = $this->createMock(ResultFactory::class);
         $this->resultFactory->method('create')->willReturn($this->page);
 
+        $this->redirect = $this->createMock(RedirectInterface::class);
         $this->context = $this->createMock(Context::class);
         $this->context->method('getRequest')->willReturn($this->request);
         $this->context->method('getResponse')->willReturn($this->response);
@@ -184,8 +210,12 @@ class ViewTest extends TestCase
         $this->context->method('getEventManager')->willReturn($this->eventManager);
         $this->context->method('getView')->willReturn($this->view);
         $this->context->method('getResultFactory')->willReturn($this->resultFactory);
-        $this->context->expects($this->once())->method('getRedirect')
-            ->willReturn($this->createMock(RedirectInterface::class));
+        $this->context->method('getRedirect')->willReturn($this->redirect);
+
+        $this->resultRedirectFactory = $this->createMock(RedirectFactory::class);
+        $this->context->method('getResultRedirectFactory')->willReturn($this->resultRedirectFactory);
+
+        $this->resultForwardFactory = $this->createMock(ForwardFactory::class);
 
         $this->category = $this->createMock(\Magento\Catalog\Model\Category::class);
         $this->categoryRepository = $this->createMock(CategoryRepositoryInterface::class);
@@ -197,8 +227,7 @@ class ViewTest extends TestCase
         $this->catalogDesign = $this->createMock(Design::class);
 
         $resultPageFactory = $this->createPartialMock(PageFactory::class, ['create']);
-        $resultPageFactory->expects($this->atLeastOnce())
-            ->method('create')
+        $resultPageFactory->method('create')
             ->willReturn($this->page);
 
         $this->toolbarMemorizer = $this->createMock(ToolbarMemorizer::class);
@@ -211,13 +240,20 @@ class ViewTest extends TestCase
                 'categoryRepository' => $this->categoryRepository,
                 'storeManager' => $this->storeManager,
                 'resultPageFactory' => $resultPageFactory,
+                'resultForwardFactory' => $this->resultForwardFactory,
                 'categoryHelper' => $this->categoryHelper,
                 'toolbarMemorizer' => $this->toolbarMemorizer
             ]
         );
     }
 
-    public function testRedirectOnToolbarAction()
+    /**
+     * Test execute redirects when toolbar action param is present.
+     *
+     * @covers \Magento\Catalog\Controller\Category\View::execute
+     * @return void
+     */
+    public function testRedirectOnToolbarAction(): void
     {
         $categoryId = 123;
         $this->request->method('getParams')->willReturn([Toolbar::LIMIT_PARAM_NAME => 12]);
@@ -249,10 +285,153 @@ class ViewTest extends TestCase
     }
 
     /**
+     * Test execute redirects to category first page when page param (p) is negative.
+     *
+     * Covers the fix for negative ?p= value causing Elasticsearch exception; expected 301 redirect to first page.
+     *
+     * @covers \Magento\Catalog\Controller\Category\View::execute
+     * @covers \Magento\Catalog\Controller\Category\View::handlePageRedirect
+     * @return void
+     */
+    public function testExecuteRedirectsToFirstPageWhenPageParamIsNegative(): void
+    {
+        $categoryId = 123;
+        $categoryUrl = 'http://example.com/category.html';
+
+        $this->request->method('getParams')->willReturn([]);
+        $this->request->method('getParam')->willReturnMap([
+            [Action::PARAM_NAME_URL_ENCODED, null, null],
+            ['id', false, $categoryId],
+            [Toolbar::PAGE_PARM_NAME, null, -1],
+        ]);
+
+        $this->store->method('getId')->willReturn(1);
+        $this->categoryRepository->expects($this->once())
+            ->method('get')
+            ->with($categoryId, 1)
+            ->willReturn($this->category);
+
+        $this->categoryHelper->expects($this->once())->method('canShow')->with($this->category)->willReturn(true);
+        $this->category->method('getUrl')->willReturn($categoryUrl);
+        $this->toolbarMemorizer->expects($this->once())->method('memorizeParams');
+
+        $redirect = $this->createMock(Redirect::class);
+        $redirect->expects($this->once())->method('setHttpResponseCode')->with(301)->willReturnSelf();
+        $redirect->expects($this->once())->method('setUrl')->with($categoryUrl)->willReturnSelf();
+
+        $this->resultRedirectFactory->expects($this->once())->method('create')->willReturn($redirect);
+
+        $result = $this->action->execute();
+
+        $this->assertSame($redirect, $result);
+    }
+
+    /**
+     * Test execute forwards to noroute when category is not found (e.g. NoSuchEntityException).
+     *
+     * @covers \Magento\Catalog\Controller\Category\View::execute
+     * @covers \Magento\Catalog\Controller\Category\View::handleCategoryNotFound
+     * @return void
+     */
+    public function testExecuteForwardsToNorouteWhenCategoryNotFound(): void
+    {
+        $categoryId = 123;
+
+        $this->request->method('getParams')->willReturn([]);
+        $this->request->method('getParam')->willReturnMap([
+            [Action::PARAM_NAME_URL_ENCODED, null, null],
+            ['id', false, $categoryId],
+        ]);
+
+        $this->store->method('getId')->willReturn(1);
+        $this->categoryRepository->expects($this->atLeastOnce())
+            ->method('get')
+            ->with($categoryId, 1)
+            ->willThrowException(new NoSuchEntityException(__('Category not found')));
+
+        $forward = $this->createMock(Forward::class);
+        $forward->expects($this->once())->method('forward')->with('noroute')->willReturnSelf();
+        $this->resultForwardFactory->expects($this->once())->method('create')->willReturn($forward);
+
+        $result = $this->action->execute();
+
+        $this->assertSame($forward, $result);
+    }
+
+    /**
+     * Test execute sets empty body and returns response when category not found due to B2B permission denial.
+     *
+     * @covers \Magento\Catalog\Controller\Category\View::execute
+     * @covers \Magento\Catalog\Controller\Category\View::handleCategoryNotFound
+     * @covers \Magento\Catalog\Controller\Category\View::isB2BPermissionDenial
+     * @return void
+     */
+    public function testExecuteSetsEmptyBodyWhenCategoryNotFoundDueToB2BPermissionDenial(): void
+    {
+        $categoryId = 123;
+        $existingCategory = $this->createMock(\Magento\Catalog\Model\Category::class);
+
+        $this->request->method('getParams')->willReturn([]);
+        $this->request->method('getParam')->willReturnMap([
+            [Action::PARAM_NAME_URL_ENCODED, null, null],
+            ['id', false, $categoryId],
+        ]);
+
+        $this->store->method('getId')->willReturn(1);
+        $this->categoryRepository->expects($this->exactly(2))
+            ->method('get')
+            ->with($categoryId, 1)
+            ->willReturn($existingCategory);
+
+        $this->categoryHelper->expects($this->exactly(2))
+            ->method('canShow')
+            ->with($existingCategory)
+            ->willReturn(false);
+
+        $existingCategory->method('getIsActive')->willReturn(true);
+        $existingCategory->method('isInRootCategoryList')->willReturn(true);
+
+        $this->response->expects($this->once())->method('setBody')->with('')->willReturnSelf();
+
+        $result = $this->action->execute();
+
+        $this->assertSame($this->response, $result);
+    }
+
+    /**
+     * Test execute returns redirect when URL encoded param is present.
+     *
+     * @covers \Magento\Catalog\Controller\Category\View::execute
+     * @covers \Magento\Catalog\Controller\Category\View::handleUrlEncodedRedirect
+     * @return void
+     */
+    public function testExecuteReturnsRedirectWhenUrlEncodedParamPresent(): void
+    {
+        $redirectUrl = 'http://example.com/';
+
+        $this->request->method('getParams')->willReturn([]);
+        $this->request->method('getParam')
+            ->willReturnMap([
+                [Action::PARAM_NAME_URL_ENCODED, null, '1'],
+                ['id', false, null],
+            ]);
+
+        $this->redirect->method('getRedirectUrl')->willReturn($redirectUrl);
+
+        $redirect = $this->createMock(Redirect::class);
+        $redirect->expects($this->once())->method('setUrl')->with($redirectUrl)->willReturnSelf();
+        $this->resultRedirectFactory->expects($this->once())->method('create')->willReturn($redirect);
+
+        $result = $this->action->execute();
+
+        $this->assertSame($redirect, $result);
+    }
+
+    /**
      * Apply custom layout update is correct.
      *
+     * @covers \Magento\Catalog\Controller\Category\View::execute
      * @param array $expectedData
-     *
      * @return void
      */
     #[DataProvider('getInvocationData')]
@@ -319,24 +498,29 @@ class ViewTest extends TestCase
      *
      * @return array
      */
+    /**
+     * Data provider for execute method (layout handles by display mode).
+     *
+     * @return array<string, array{expectedData: array}>
+     */
     public static function getInvocationData(): array
     {
         return [
-            [
+            'default with products display' => [
                 'expectedData' => [
                     [['type' => 'default'], null, false],
                     [['type' => 'default_without_children'], null, false],
                     [['displaymode' => 'products'], null, false]
                 ]
             ],
-            [
+            'default with page display' => [
                 'expectedData' => [
                     [['type' => 'default'], null, false],
                     [['type' => 'default_without_children'], null, false],
                     [['displaymode' => 'page'], null, false]
                 ]
             ],
-            [
+            'default with products and page display' => [
                 'expectedData' => [
                     [['type' => 'default'], null, false],
                     [['type' => 'default'], null, false],

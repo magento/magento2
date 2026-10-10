@@ -156,6 +156,9 @@ class DbSchemaWriterTest extends TestCase
         return [
             [SqlVersionProvider::MARIA_DB_10_4_VERSION, 2],
             [SqlVersionProvider::MARIA_DB_10_6_VERSION, 2],
+            [SqlVersionProvider::MARIA_DB_11_8_VERSION, 2],
+            [SqlVersionProvider::MARIA_DB_12_2_VERSION, 2],
+            [SqlVersionProvider::MARIA_DB_12_3_VERSION, 2],
             [SqlVersionProvider::MYSQL_8_0_VERSION, 1],
         ];
     }

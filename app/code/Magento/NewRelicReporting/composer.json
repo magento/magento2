@@ -7,7 +7,6 @@
     "require": {
         "php": "~8.3.0||~8.4.0||~8.5.0",
         "magento/framework": "*",
-        "magento/magento-composer-installer": "*",
         "magento/module-backend": "*",
         "magento/module-catalog": "*",
         "magento/module-config": "*",

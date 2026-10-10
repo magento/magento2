@@ -60,9 +60,7 @@ define([
             return escaper.escapeHtml(message, this.allowedTags);
         },
         purgeMessages: function () {
-            if (!_.isEmpty(this.messages().messages)) {
-                customerData.set('messages', {});
-            }
+            customerData.set('messages', {});
         }
     });
 });

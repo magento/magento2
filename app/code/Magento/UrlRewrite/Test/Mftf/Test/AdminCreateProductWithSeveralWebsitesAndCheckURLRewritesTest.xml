@@ -39,6 +39,7 @@
             </actionGroup>
             <deleteData stepKey="deleteRootCategory" createDataKey="rootCategory"/>
             <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>
+            <actionGroup ref="AdminResetFilterInUrlRewriteGridActionGroup" stepKey="resetUrlRewriteGridFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 

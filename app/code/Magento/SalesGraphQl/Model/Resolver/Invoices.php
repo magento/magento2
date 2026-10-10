@@ -73,8 +73,15 @@ class Invoices implements ResolverInterface
         foreach ($invoice->getComments() as $comment) {
             if ($comment->getIsVisibleOnFront()) {
                 $comments[] = [
-                    'timestamp' => $this->timezone->date($comment->getCreatedAt())
-                        ->format(DateTime::DATETIME_SLASH_PHP_FORMAT),
+                    'timestamp' => $this->timezone->date(
+                        $comment->getCreatedAt()
+                            ? \DateTime::createFromFormat(
+                                DateTime::DATETIME_PHP_FORMAT,
+                                $comment->getCreatedAt(),
+                                new \DateTimeZone('UTC')
+                            )
+                            : null
+                    )->format(DateTime::DATETIME_PHP_FORMAT),
                     'message' => $comment->getComment()
                 ];
             }

@@ -13,6 +13,8 @@
         </arguments>
         <!--Sort Review Column in Grid -->
         <waitForPageLoad stepKey="waitForGridToAppear"/>
+        <scrollTo selector="{{AdminCreateNewReviewSection.gridProducts_filter_review_cnt}}" stepKey="scrollToReviewCountFilter"/>
+        <waitForElementVisible selector="{{AdminCreateNewReviewSection.gridProducts_filter_review_cnt}}" stepKey="waitForReviewCountFilterVisible"/>
         <fillField userInput="{{reviewCount}}" selector="{{AdminCreateNewReviewSection.gridProducts_filter_review_cnt}}" stepKey="searchReview"/>
         <click selector="{{AdminCreateNewReviewSection.searchButton}}" stepKey="startSearch"/>
         <waitForPageLoad stepKey="waitForResults"/>

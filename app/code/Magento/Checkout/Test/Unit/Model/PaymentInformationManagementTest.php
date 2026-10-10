@@ -32,6 +32,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Magento\Quote\Model\QuoteAddressValidationService;
+use Magento\Quote\Model\QuoteAddressValidator;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -107,6 +108,7 @@ class PaymentInformationManagementTest extends TestCase
         $cartTotalsRepositoryMock = $this->createMock(CartTotalRepositoryInterface::class);
         $addressComparatorMock = $this->createMock(AddressComparatorInterface::class);
         $quoteAddressValidationServiceMock = $this->createMock(QuoteAddressValidationService::class);
+        $addressValidatorMock = $this->createMock(QuoteAddressValidator::class);
 
         $this->model = new PaymentInformationManagement(
             $this->billingAddressManagementMock,
@@ -120,7 +122,8 @@ class PaymentInformationManagementTest extends TestCase
             $this->addressRepositoryMock,
             $addressComparatorMock,
             $this->loggerMock,
-            $quoteAddressValidationServiceMock
+            $quoteAddressValidationServiceMock,
+            $addressValidatorMock
         );
 
         $this->quoteShippingAddress = $this->createMock(Address::class);

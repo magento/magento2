@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Stomp;
 
-use Closure;
 use Exception;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Communication\ConfigInterface as CommunicationConfigInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\MessageQueue\ConnectionLostException;
@@ -16,8 +16,10 @@ use Magento\Framework\MessageQueue\EnvelopeFactory;
 use Magento\Framework\MessageQueue\EnvelopeInterface;
 use Magento\Framework\MessageQueue\QueueInterface;
 use Magento\Framework\Phrase;
+use Magento\Framework\Stomp\Jolokia\ClientInterface as JolokiaClient;
 use Psr\Log\LoggerInterface;
 use Stomp\Transport\Frame;
+use Stomp\Transport\FrameFactory;
 use Stomp\Transport\Message;
 
 /**
@@ -55,29 +57,19 @@ class Queue implements QueueInterface
     private $prefetchCount;
 
     /**
-     * @var StompClient
-     */
-    private $stompProducerClient;
-
-    /**
-     * @var StompClient
-     */
-    private $stompConsumerClient;
-
-    /**
      * @var StompClientFactory
      */
     private $stompClientFactory;
 
     /**
-     * @var Frame
-     */
-    private $lastMessage;
-
-    /**
      * @var CommunicationConfigInterface
      */
     private $communicationConfig;
+
+    /**
+     * @var FrameFactory
+     */
+    private $frameFactory;
 
     /**
      * Initialize dependencies.
@@ -89,6 +81,10 @@ class Queue implements QueueInterface
      * @param CommunicationConfigInterface $communicationConfig
      * @param LoggerInterface $logger
      * @param int $prefetchCount
+     * @param StompClientInterface|null $stompClient
+     * @param JolokiaClient|null $jolokiaClient
+     * @param FrameFactory|null $frameFactory
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Config $stompConfig,
@@ -97,7 +93,10 @@ class Queue implements QueueInterface
         StompClientFactory $stompClientFactory,
         CommunicationConfigInterface $communicationConfig,
         LoggerInterface $logger,
-        $prefetchCount = 100
+        $prefetchCount = 100,
+        private ?StompClientInterface $stompClient = null,
+        private readonly ?JolokiaClient $jolokiaClient = null,
+        ?FrameFactory $frameFactory = null,
     ) {
         $this->stompConfig = $stompConfig;
         $this->queueName = $queueName;
@@ -106,6 +105,8 @@ class Queue implements QueueInterface
         $this->prefetchCount = (int)$prefetchCount;
         $this->stompClientFactory = $stompClientFactory;
         $this->communicationConfig = $communicationConfig;
+        $this->frameFactory = $frameFactory ?? ObjectManager::getInstance()
+            ->get(FrameFactory::class);
     }
 
     /**
@@ -120,12 +121,9 @@ class Queue implements QueueInterface
         // @codingStandardsIgnoreStart
         /** @var Frame $message */
         try {
-            $message = $this->readMessage();
-            $this->lastMessage = $message;
+            $stompClient->subscribeQueue($this->queueName);
+            $message = $stompClient->readMessage($this->queueName);
         } catch (Exception $exception) {
-            if ($message) {
-                $stompClient->nackMessage($message);
-            }
             throw new ConnectionLostException(
                 $exception->getMessage(),
                 $exception->getCode(),
@@ -136,9 +134,9 @@ class Queue implements QueueInterface
 
         if ($message) {
             $properties = $message->getHeaders();
+            $properties['command'] = $message->getCommand();
+            $properties['is_legacy_mode'] = $message->isLegacyMode();
             $envelope = $this->envelopeFactory->create(['body' => $message->getBody(), 'properties' => $properties]);
-            $stompClient->ackMessage($message);
-            $this->lastMessage = null;
         }
         return $envelope;
 
@@ -150,9 +148,8 @@ class Queue implements QueueInterface
     public function acknowledge(EnvelopeInterface $envelope)
     {
         $stompClient = $this->getStompConsumerClient();
-        if ($this->lastMessage) {
-            $stompClient->ackMessage($this->lastMessage);
-        }
+        $frame = $this->transformToFrame($envelope);
+        $stompClient->ackMessage($frame);
     }
 
     /**
@@ -164,20 +161,9 @@ class Queue implements QueueInterface
         $stompClient->subscribeQueue($this->queueName);
 
         while (true) {
-            $envelope = null;
-            $message = $this->readMessage();
-
-            if ($message) {
-                $properties = $message->getHeaders();
-                if($message->getBody()!=='') {
-                    $envelope = $this->envelopeFactory->create(['body' => $message->getBody(), 'properties' => $properties]);
-                    if ($callback instanceof Closure) {
-                        $callback($envelope);
-                    } else {
-                        call_user_func($callback, $envelope);
-                    }
-                }
-                $stompClient->ackMessage($message);
+            $envelope = $this->dequeue();
+            if ($envelope) {
+                call_user_func($callback, $envelope);
             }
         }
     }
@@ -188,9 +174,8 @@ class Queue implements QueueInterface
     public function reject(EnvelopeInterface $envelope, $requeue = true, $rejectionMessage = null) {
 
         $stompClient = $this->getStompConsumerClient();
-        if($this->lastMessage){
-            $stompClient->nackMessage($this->lastMessage);
-        }
+        $frame = $this->transformToFrame($envelope);
+        $stompClient->nackMessage($frame, $requeue);
 
         if ($rejectionMessage !== null) {
             $this->logger->critical(
@@ -201,8 +186,6 @@ class Queue implements QueueInterface
 
     /**
      * @inheritdoc
-     * @throws LocalizedException
-     * @throws ConnectionLostException
      */
     public function push(EnvelopeInterface $envelope)
     {
@@ -210,7 +193,6 @@ class Queue implements QueueInterface
         $message = new Message($envelope->getBody(), $envelope->getProperties());
         try{
             $stompClient->send($this->queueName, $message);
-            $stompClient->disconnect();
         }catch (\Stomp\Exception\StompException $e){
             $this->logger->info("Stomp message push failed: '{$this->queueName}' error: {$e->getMessage()}");
         }
@@ -224,6 +206,7 @@ class Queue implements QueueInterface
      * @throws ConnectionLostException
      * @throws LocalizedException
      */
+    #[\Deprecated('Method does nothing. It returns null or the same message passed to it.')]
     public function callRpc(EnvelopeInterface $envelope)
     {
         $stompClient = $this->getStompProducerClient();
@@ -235,7 +218,6 @@ class Queue implements QueueInterface
         $message = new Message($envelope->getBody(), $envelope->getProperties());
         try{
             $stompClient->send($this->queueName, $message);
-            $stompClient->disconnect();
             if ($isSync){
                 $stompConsumerClient = $this->getStompConsumerClient();
                 $stompConsumerClient->subscribeQueue($this->queueName);
@@ -253,19 +235,19 @@ class Queue implements QueueInterface
     /**
      * @return Frame|null
      * @throws ConnectionLostException
+     * @deprecated
+     * @see self::dequeue
+     * @see StompClientInterface::readMessage
      */
+    #[\Deprecated('Method returns protocol-specific data. Use dequeue() method to read messages.')]
     public function readMessage(): ?Frame
     {
         $message = null;
         $stompClient = $this->getStompConsumerClient();
         /** @var Frame $message */
         try {
-            $message = $stompClient->readMessage();
-            $this->lastMessage = $message;
+            $message = $stompClient->readMessage($this->queueName);
         } catch (Exception $exception) {
-            if ($message) {
-                $stompClient->nackMessage($message);
-            }
             throw new ConnectionLostException(
                 $exception->getMessage(),
                 $exception->getCode(),
@@ -278,6 +260,7 @@ class Queue implements QueueInterface
     /**
      * @inheritdoc
      */
+    #[\Deprecated('This is a detail of protocol implementation. It should not be used directly.')]
     public function subscribeQueue(): void
     {
         $stompClient = $this->getStompConsumerClient();
@@ -285,6 +268,8 @@ class Queue implements QueueInterface
     }
 
     /**
+     * @inheritdoc
+     *
      * Optimized queue clearing using Artemis REST API
      * Much faster than STOMP protocol and avoids TTL issues
      */
@@ -292,12 +277,13 @@ class Queue implements QueueInterface
     {
         try {
             $stompClient = $this->getStompConsumerClient();
+            $stompClient->unsubscribeQueue($this->queueName);
 
-            // Use REST API for clearing - much faster and more reliable
-            $clearedCount = $stompClient->clearQueue($this->queueName);
-
-            if ($clearedCount > 0) {
-                $this->logger->info("Successfully cleared {$clearedCount} messages from queue '{$this->queueName}' via REST API");
+            if ($this->jolokiaClient) {
+                // Use Jolokia API for clearing - much faster and more reliable.
+                $clearedCount = $this->jolokiaClient->clearQueue($this->queueName);
+            } else {
+                $clearedCount = $this->fallbackClearQueue();
             }
 
             return $clearedCount;
@@ -323,7 +309,7 @@ class Queue implements QueueInterface
 
             for ($i = 0; $i < $maxMessages; $i++) {
                 try {
-                    $message = $stompClient->readMessage();
+                    $message = $stompClient->readMessage($this->queueName);
                     if ($message === null) {
                         break; // No more messages
                     }
@@ -349,10 +335,10 @@ class Queue implements QueueInterface
      */
     private function getStompConsumerClient(): StompClient
     {
-        if($this->stompConsumerClient === null) {
-            $this->stompConsumerClient = $this->stompClientFactory->create(['clientId' => 'consumer']);
+        if ($this->stompClient === null) {
+            $this->stompClient = $this->stompClientFactory->create(['stompConfig' => $this->stompConfig]);
         }
-        return $this->stompConsumerClient;
+        return $this->stompClient;
     }
 
     /**
@@ -362,10 +348,26 @@ class Queue implements QueueInterface
      */
     private function getStompProducerClient(): StompClient
     {
-        if($this->stompProducerClient === null) {
-            $this->stompProducerClient = $this->stompClientFactory->create(['clientId' => 'producer']);
+        if ($this->stompClient === null) {
+            $this->stompClient = $this->stompClientFactory->create(['stompConfig' => $this->stompConfig]);
         }
-        return $this->stompProducerClient;
+        return $this->stompClient;
+    }
+
+    /**
+     * Transform envelope object to frame.
+     *
+     * @param EnvelopeInterface $envelope
+     * @return Frame
+     */
+    private function transformToFrame(EnvelopeInterface $envelope): Frame
+    {
+        $properties = $envelope->getProperties();
+        $command = $properties['command'];
+        $isLegacyMode = $properties['is_legacy_mode'];
+        $headers = array_diff_key($properties, array_flip(['command', 'is_legacy_mode']));
+
+        return $this->frameFactory->createFrame($command, $headers, $envelope->getBody(), $isLegacyMode);
     }
 
     /**
@@ -373,6 +375,7 @@ class Queue implements QueueInterface
      *
      * @return string
      */
+    #[\Deprecated('Connection name is just a config alias. It should not be used outside of loading config data.')]
     public function getConnectionName(): string
     {
         return $this->stompConfig->getConnectionName();

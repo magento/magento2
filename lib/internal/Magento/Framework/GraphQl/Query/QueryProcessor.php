@@ -91,6 +91,7 @@ class QueryProcessor
             $source = $this->queryParser->parse($source);
         }
         if (!$this->exceptionFormatter->shouldShowDetail()) {
+            $this->queryComplexityLimiter->validateQueryLength($source);
             $this->queryComplexityLimiter->validateAliasCount($source);
             $this->queryComplexityLimiter->validateFieldCount($source);
             $this->queryComplexityLimiter->execute();

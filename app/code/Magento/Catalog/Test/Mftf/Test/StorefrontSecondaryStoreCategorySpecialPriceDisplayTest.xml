@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontSecondaryStoreCategorySpecialPriceDisplayTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Special price display on secondary store"/>
+            <title value="Category listing shows regular and special price on second store under main website"/>
+            <description value="Verify special price on second store category both discounted and regular prices are visible."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="ACP2E-4100"/>
+            <group value="catalog"/>
+        </annotations>
+        <before>
+            <!-- Create custom store -->
+            <createData entity="customStoreGroup" stepKey="createSecondaryStoreGroup"/>
+            <!-- Create simple product and category -->
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct">
+                <field key="price">10.00</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Create custom store view -->
+            <actionGroup ref="CreateCustomStoreViewActionGroup" stepKey="createSecondaryStoreView">
+                <argument name="storeGroupName" value="$$createSecondaryStoreGroup.group[name]$$"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Delete created data -->
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="DeleteCustomStoreActionGroup" stepKey="deleteSecondaryStoreGroup">
+                <argument name="storeGroupName" value="$$createSecondaryStoreGroup.group[name]$$"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAdmin"/>
+        </after>
+        <!-- Open created simple product -->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductEditPage">
+            <argument name="productId" value="$$createSimpleProduct.id$$"/>
+        </actionGroup>
+        <!-- Add special price -->
+        <actionGroup ref="AddSpecialPriceToProductActionGroup" stepKey="setSpecialPriceViaAdvancedPricing">
+            <argument name="price" value="5.00"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductAfterSpecialPrice"/>
+        <!-- Go to storefront -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openStorefrontHomePage"/>
+        <!-- Switch to custom store -->
+        <waitForElementClickable selector="{{StorefrontFooterSection.switchStoreButton}}" stepKey="waitForStoreSwitcherTrigger"/>
+        <click selector="{{StorefrontFooterSection.switchStoreButton}}" stepKey="openStoreSwitcherDropdown"/>
+        <waitForElementClickable selector="{{StorefrontFooterSection.storeLink($$createSecondaryStoreGroup.group[name]$$)}}" stepKey="waitForSecondaryStoreLink"/>
+        <click selector="{{StorefrontFooterSection.storeLink($$createSecondaryStoreGroup.group[name]$$)}}" stepKey="switchToSecondaryStore"/>
+        <waitForPageLoad stepKey="waitAfterSwitchToSecondaryStore"/>
+        <!-- Go to created category -->
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="openCategoryOnSecondaryStore">
+            <argument name="category" value="$$createCategory$$"/>
+        </actionGroup>
+        <!-- Assert product price, special price and tag -->
+        <waitForText selector="{{StorefrontCategoryProductSection.ProductOldPriceByNumber('1')}}" userInput="$10.00" stepKey="assertRegularPriceVisibleOnSecondaryStore"/>
+        <waitForText selector="{{StorefrontCategoryProductSection.ProductSpecialPriceByNumber('1')}}" userInput="$5.00" stepKey="assertSpecialPriceVisibleOnSecondaryStore"/>
+        <waitForText selector="{{StorefrontProductInfoMainSection.oldPriceTag}}" userInput="Regular Price" stepKey="assertRegularPriceLabelOnSecondaryStore"/>
+    </test>
+</tests>

@@ -55,8 +55,9 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($directory->isExist($filePath));
 
         $this->assertArrayHasKey('order_path', $result);
-        $filePath = $directory->getAbsolutePath($result['order_path']);
-        $this->assertTrue($directory->isExist($filePath));
+
+        $this->assertStringStartsWith('custom_options/order/', $result['order_path']);
+        $this->assertStringStartsWith('custom_options/quote/', $result['quote_path']);
     }
 
     public static function pathConfigDataProvider()

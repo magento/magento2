@@ -41,4 +41,7 @@
         <plugin name="customerSessionApiPlugin"
                 type="Magento\Customer\Plugin\Model\SessionPlugin" />
     </type>
+    <type name="Magento\Customer\Model\AccountManagement">
+        <plugin name="validate_captcha_rest" type="Magento\Customer\Model\Plugin\ValidateCaptcha" sortOrder="10" />
+    </type>
 </config>

@@ -13,6 +13,10 @@
         </arguments>
         <fillField selector="{{AdminReviewGridSection.nickname}}" userInput="{{nickname}}" stepKey="fillNickname"/>
         <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickApplyFilters"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForGridLoadAfterFilter"/>
+        <waitForElementClickable selector="{{AdminReviewGridSection.firstRow}}" stepKey="waitForReviewInGrid"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfPageBeforeMassAction"/>
+        <waitForElementClickable selector="{{AdminReviewGridSection.massActions}}" stepKey="waitForMassActionsClickable"/>
         <selectOption selector="{{AdminReviewGridSection.massActions}}" userInput="selectAll" stepKey="selectAll"/>
         <selectOption selector="{{AdminReviewGridSection.massActionsSelect}}" userInput="delete" stepKey="clickDeleteActionDropdown"/>
         <click selector="{{AdminReviewGridSection.submit}}" stepKey="clickSubmit"/>

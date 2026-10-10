@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAttachImageToConfigurableMatrixRowActionGroup">
+        <annotations>
+            <description>Uploads an image file to the Current Variations matrix row (admin configurable product form).</description>
+        </annotations>
+        <arguments>
+            <argument name="row" type="string"/>
+            <argument name="image" defaultValue="MagentoLogo"/>
+        </arguments>
+        <waitForElement selector="{{AdminProductFormConfigurationsSection.variationRowImageFileInput(row)}}" time="60" stepKey="waitForVariationRowFileInput"/>
+        <attachFile selector="{{AdminProductFormConfigurationsSection.variationRowImageFileInput(row)}}" userInput="{{image.file}}" stepKey="attachVariationImage"/>
+        <waitForElementVisible selector="{{AdminProductFormConfigurationsSection.variationRowUploadedImage(row)}}" time="60" stepKey="waitForVariationRowThumbnail"/>
+    </actionGroup>
+</actionGroups>

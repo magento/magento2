@@ -51,8 +51,7 @@ class Identifier implements IdentifierInterface
     public function getValue()
     {
         $pattern = $this->getMarketingParameterPatterns();
-        $replace = array_fill(0, count($pattern), '');
-        $url = preg_replace($pattern, $replace, (string)$this->request->getUriString());
+        $url = preg_replace($pattern, "", (string)$this->request->getUriString());
         list($baseUrl, $query) = $this->reconstructUrl($url);
         $data = [
             $this->request->isSecure(),
@@ -65,33 +64,57 @@ class Identifier implements IdentifierInterface
     }
 
     /**
-     * Pattern detect marketing parameters
+     * Pattern detect marketing parameters.
+     *
+     * Keep in sync with PageCache etc/varnish*.vcl vcl_recv strip logic.
      *
      * @return array
      */
     public function getMarketingParameterPatterns(): array
     {
         return [
-            '/&?gad_source\=[^&]+/',
-            '/&?gbraid\=[^&]+/',
-            '/&?wbraid\=[^&]+/',
+            '/&?_branch_match_id\=[^&]+/',
+            '/&?_bta_[a-z]+\=[^&]+/',
+            '/&?_ga\=[^&]+/',
             '/&?_gl\=[^&]+/',
-            '/&?dclid\=[^&]+/',
-            '/&?gclsrc\=[^&]+/',
-            '/&?srsltid\=[^&]+/',
-            '/&?msclkid\=[^&]+/',
+            '/&?_ke\=[^&]+/',
             '/&?_kx\=[^&]+/',
-            '/&?gclid\=[^&]+/',
-            '/&?cx\=[^&]+/',
-            '/&?ie\=[^&]+/',
+            '/&?campid\=[^&]+/',
+            '/&?ceneo_cid\=[^&]+/',
+            '/&?clickId\=[^&]+/',
             '/&?cof\=[^&]+/',
-            '/&?siteurl\=[^&]+/',
-            '/&?zanpid\=[^&]+/',
-            '/&?origin\=[^&]+/',
+            '/&?customid\=[^&]+/',
+            '/&?cx\=[^&]+/',
+            '/&?dclid\=[^&]+/',
+            '/&?dm_i\=[^&]+/',
+            '/&?ef_id\=[^&]+/',
+            '/&?epik\=[^&]+/',
             '/&?fbclid\=[^&]+/',
-            '/&?mc_(.*?)\=[^&]+/',
-            '/&?utm_(.*?)\=[^&]+/',
-            '/&?_bta_(.*?)\=[^&]+/',
+            '/&?gad_[a-z]+\=[^&]+/',
+            '/&?gbraid\=[^&]+/',
+            '/&?gclid\=[^&]+/',
+            '/&?gclsrc\=[^&]+/',
+            '/&?gdf[a-z]+\=[^&]+/',
+            '/&?hsa_[a-z]+\=[^&]+/',
+            '/&?igshid\=[^&]+/',
+            '/&?mc_[a-z]+\=[^&]+/',
+            '/&?mk[a-z]{3}\=[^&]+/',
+            '/&?msclkid\=[^&]+/',
+            '/&?(?:mtm|matomo)_[a-z]+\=[^&]+/',
+            '/&?pcrid\=[^&]+/',
+            '/&?p(?:iwi)?k_[a-z]+\=[^&]+/',
+            '/&?redirect(?:_log)?_mongo_id\=[^&]+/',
+            '/&?s_kwcid\=[^&]+/',
+            '/&?sb_referer_host\=[^&]+/',
+            '/&?ScCid\=[^&]+/',
+            '/&?siteurl\=[^&]+/',
+            '/&?snrai_[a-z]+\=[^&]+/',
+            '/&?srsltid\=[^&]+/',
+            '/&?tduid\=[^&]+/',
+            '/&?trk_[a-z]+\=[^&]+/',
+            '/&?utm_[a-z]+\=[^&]+/',
+            '/&?wbraid\=[^&]+/',
+            '/&?zanpid\=[^&]+/',
         ];
     }
 
@@ -101,19 +124,27 @@ class Identifier implements IdentifierInterface
      * @param string $url
      * @return array
      */
-    private function reconstructUrl(string $url): array
+    public function reconstructUrl(string $url): array
     {
         if (empty($url)) {
             return [$url, ''];
         }
+
         $baseUrl = strtok($url, '?');
-        $query = $this->request->getUri()->getQueryAsArray();
-        if (!empty($query)) {
-            ksort($query);
-            $query = http_build_query($query);
+        $queryString = parse_url($url, PHP_URL_QUERY) ?: '';
+
+        $queryArray = [];
+        if ($queryString !== '') {
+            parse_str($queryString, $queryArray);
+        }
+
+        if (!empty($queryArray)) {
+            ksort($queryArray);
+            $query = http_build_query($queryArray);
         } else {
             $query = '';
         }
+
         return [$baseUrl, $query];
     }
 }

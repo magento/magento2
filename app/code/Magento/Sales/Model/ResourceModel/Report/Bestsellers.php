@@ -130,6 +130,7 @@ class Bestsellers extends AbstractReport
             'product_name' => new \Zend_Db_Expr('MIN(product_name)'),
             'product_price' => new \Zend_Db_Expr('MIN(product_price)'),
             'qty_ordered' => new \Zend_Db_Expr('SUM(qty_ordered)'),
+            'period_month' => 'period_month'
         ];
 
         $select = $connection->select();
@@ -237,6 +238,7 @@ class Bestsellers extends AbstractReport
                 '* MIN(source_table.base_to_global_rate)'
             ),
             'qty_ordered' => new \Zend_Db_Expr('SUM(order_item.qty_ordered)'),
+            'period_month' => 'DATE_SUB(' . $periodExpr . ', INTERVAL DAYOFMONTH(' . $periodExpr . ')-1 DAY)'
         ];
 
         $select->from(

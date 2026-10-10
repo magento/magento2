@@ -441,8 +441,6 @@ class DynamicStorageTest extends TestCase
             ->willReturn('.html');
 
         $method = new ReflectionMethod($this->object, 'doFindOneByData');
-        $method->setAccessible(true);
-
         $result = $method->invoke($this->object, $data);
         $this->assertNotNull($result);
         $this->assertEquals('test.html', $result['request_path']);
@@ -481,8 +479,6 @@ class DynamicStorageTest extends TestCase
             ->willReturn('.html');
 
         $method = new ReflectionMethod($this->object, 'doFindOneByData');
-        $method->setAccessible(true);
-
         $result = $method->invoke($this->object, $data);
         $this->assertNotNull($result);
         $this->assertEquals('shop/test.html', $result['request_path']);
@@ -507,8 +503,6 @@ class DynamicStorageTest extends TestCase
             ->willReturn([]);
 
         $method = new ReflectionMethod($this->object, 'doFindOneByData');
-        $method->setAccessible(true);
-
         $result = $method->invoke($this->object, $data);
         $this->assertNull($result);
     }
@@ -524,8 +518,6 @@ class DynamicStorageTest extends TestCase
             ->willReturn([]);
 
         $method = new ReflectionMethod($this->object, 'doFindOneByData');
-        $method->setAccessible(true);
-
         $result = $method->invoke($this->object, $data);
         $this->assertNull($result);
     }
@@ -554,8 +546,6 @@ class DynamicStorageTest extends TestCase
             ->willReturn([$productFromDb]);
 
         $method = new ReflectionMethod($this->object, 'doFindOneByData');
-        $method->setAccessible(true);
-
         $result = $method->invoke($this->object, $data);
         $this->assertNotNull($result);
         $this->assertEquals('1', $result['entity_id']);
@@ -597,8 +587,6 @@ class DynamicStorageTest extends TestCase
             );
 
         $method = new ReflectionMethod($this->object, 'doFindAllByData');
-        $method->setAccessible(true);
-
         $result = $method->invoke($this->object, $data);
         $this->assertCount(2, $result);
     }
@@ -636,8 +624,6 @@ class DynamicStorageTest extends TestCase
             ->willReturn('.html');
 
         $method = new ReflectionMethod($this->object, 'findProductRewriteByTargetPath');
-        $method->setAccessible(true);
-
         $result = $method->invoke($this->object, $data);
         $this->assertNotNull($result);
         $this->assertEquals('category/product.html', $result['request_path']);
@@ -655,8 +641,6 @@ class DynamicStorageTest extends TestCase
         ];
 
         $method = new ReflectionMethod($this->object, 'findProductRewriteByTargetPath');
-        $method->setAccessible(true);
-
         $result = $method->invoke($this->object, $data);
         $this->assertNull($result);
     }
@@ -676,8 +660,6 @@ class DynamicStorageTest extends TestCase
             ->willReturn(false);
 
         $method = new ReflectionMethod($this->object, 'findProductRewriteByTargetPath');
-        $method->setAccessible(true);
-
         $result = $method->invoke($this->object, $data);
         $this->assertNull($result);
     }
@@ -723,8 +705,6 @@ class DynamicStorageTest extends TestCase
             ->willReturn('.html');
 
         $method = new ReflectionMethod($this->object, 'findProductRewritesByFilter');
-        $method->setAccessible(true);
-
         $result = $method->invoke($this->object, $data);
         $this->assertCount(1, $result);
         $this->assertEquals('shop/test.html', $result[0]['request_path']);
@@ -754,8 +734,6 @@ class DynamicStorageTest extends TestCase
             ->willReturn([$productFromDb]);
 
         $method = new ReflectionMethod($this->object, 'findProductRewritesByFilter');
-        $method->setAccessible(true);
-
         $result = $method->invoke($this->object, $data);
         $this->assertCount(1, $result);
         $this->assertEquals('test.html', $result[0]['request_path']);
@@ -771,8 +749,6 @@ class DynamicStorageTest extends TestCase
         ];
 
         $method = new ReflectionMethod($this->object, 'findProductRewritesByFilter');
-        $method->setAccessible(true);
-
         $result = $method->invoke($this->object, $data);
         $this->assertEmpty($result);
     }
@@ -799,8 +775,6 @@ class DynamicStorageTest extends TestCase
             });
 
         $method = new ReflectionMethod($this->object, 'prepareSelect');
-        $method->setAccessible(true);
-
         $result = $method->invoke($this->object, $data);
         $this->assertInstanceOf(Select::class, $result);
     }
@@ -824,8 +798,6 @@ class DynamicStorageTest extends TestCase
             });
 
         $method = new ReflectionMethod($this->object, 'prepareSelect');
-        $method->setAccessible(true);
-
         $method->invoke($this->object, $data);
         $this->assertContains('relation.category_id IS NULL', $whereConditions);
     }

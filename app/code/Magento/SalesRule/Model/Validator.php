@@ -221,7 +221,8 @@ class Validator extends \Magento\Framework\Model\AbstractModel implements ResetA
     {
         $validCoupons = $this->validateCouponCode->execute(
             $quote->getCouponCode() ? [$quote->getCouponCode()] : [],
-            $quote->getCustomerIsGuest() ? null : (int) $quote->getCustomer()->getId()
+            $quote->getCustomerIsGuest() ? null : (int) $quote->getCustomer()->getId(),
+            $quote
         );
 
         if (empty($validCoupons)) {
@@ -438,7 +439,18 @@ class Validator extends \Magento\Framework\Model\AbstractModel implements ResetA
         $appliedRuleIds = [];
         foreach ($this->getRules($address) as $rule) {
             /* @var Rule $rule */
-            if (!$rule->getApplyToShipping() || !$this->validatorUtility->canProcessRule($rule, $address)) {
+            if (!$rule->getApplyToShipping()) {
+                if ($rule->getStopRulesProcessing()) {
+                    $addressAppliedRuleIds = $address->getAppliedRuleIds()
+                        ? explode(',', $address->getAppliedRuleIds()) : [];
+                    if (in_array($rule->getId(), $addressAppliedRuleIds)) {
+                        break;
+                    }
+                }
+                continue;
+            }
+            
+            if (!$this->validatorUtility->canProcessRule($rule, $address)) {
                 continue;
             }
 

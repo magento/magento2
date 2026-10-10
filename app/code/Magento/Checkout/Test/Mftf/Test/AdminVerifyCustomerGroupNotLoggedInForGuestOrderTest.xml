@@ -24,6 +24,7 @@
         </before>
         <after>
             <!-- Admin log out -->
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrdersGridFiltersAfter"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <!-- Delete created product -->
             <deleteData createDataKey="simpleProductOne" stepKey="deleteSimpleProduct"/>

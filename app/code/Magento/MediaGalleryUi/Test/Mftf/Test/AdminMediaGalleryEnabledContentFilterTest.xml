@@ -25,6 +25,8 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
+            <actionGroup ref="NavigateToMediaGalleryActionGroup" stepKey="OpenMediaGalleryForCategory"/>
+            <actionGroup ref="AdminEnhancedMediaGalleryClearGalleryFiltersForCategoryActionGroup" stepKey="clearMediaGalleryFilters"/>
             <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
             <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openMediaGallery"/>
             <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>

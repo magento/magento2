@@ -10,6 +10,8 @@ namespace Magento\Framework\Jwt;
 
 /**
  * Initiates JWKs for various encryption types.
+ *
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
 class JwkFactory
 {
@@ -24,6 +26,8 @@ class JwkFactory
      *
      * @param array $data
      * @return Jwk
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function createFromData(array $data): Jwk
     {
@@ -751,7 +755,7 @@ class JwkFactory
     }
 
     /**
-     * Create JWK with "none" algorithm (no signature/encryption).
+     * Create JWK with "none" algorithm.
      *
      * @return Jwk
      */
@@ -767,7 +771,7 @@ class JwkFactory
     }
 
     /**
-     * Create JWK with octet sequence key type.
+     * Create octet sequence JWK.
      *
      * @param string $key
      * @param string $use
@@ -796,7 +800,7 @@ class JwkFactory
     }
 
     /**
-     * Create JWK with private RSA key.
+     * Create private RSA JWK.
      *
      * @param string $key
      * @param string|null $pass
@@ -841,7 +845,7 @@ class JwkFactory
     }
 
     /**
-     * Create JWK with public RSA key.
+     * Create public RSA JWK.
      *
      * @param string $key
      * @param string $use
@@ -879,7 +883,7 @@ class JwkFactory
     }
 
     /**
-     * Create JWK with private EC (Elliptic Curve) key.
+     * Create private EC JWK.
      *
      * @param string $key
      * @param string|null $pass
@@ -928,7 +932,7 @@ class JwkFactory
     }
 
     /**
-     * Create JWK with public EC (Elliptic Curve) key.
+     * Create public EC JWK.
      *
      * @param string $key
      * @param int|null $validateCurveBits
@@ -989,6 +993,7 @@ class JwkFactory
      *
      * @param string $encoded
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
     private static function base64Decode(string $encoded): string
     {
