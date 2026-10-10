@@ -16,7 +16,7 @@ use Magento\Framework\UrlInterface;
  */
 class ConfigurableAttributeSetHandler extends AbstractModifier
 {
-    const ATTRIBUTE_SET_HANDLER_MODAL = 'configurable_attribute_set_handler_modal';
+    public const ATTRIBUTE_SET_HANDLER_MODAL = 'configurable_attribute_set_handler_modal';
 
     /**
      * @var UrlInterface
@@ -92,7 +92,7 @@ class ConfigurableAttributeSetHandler extends AbstractModifier
                                         'formElement' => Form\Element\Checkbox::NAME,
                                         'prefer' => 'radio',
                                         'description' => __(
-                                            'Add configurable attributes to the new Attribute Set based on current'
+                                            'Add configurable attributes to a new Attribute Set based on current'
                                         ),
                                         'dataScope' => 'configurableAffectedAttributeSet',
                                         'valueMap' => [
@@ -115,7 +115,7 @@ class ConfigurableAttributeSetHandler extends AbstractModifier
                                         'formElement' => Form\Element\Checkbox::NAME,
                                         'prefer' => 'radio',
                                         'description' => __(
-                                            'Add configurable attributes to the existing Attribute Set'
+                                            'Add configurable attributes to an existing Attribute Set'
                                         ),
                                         'dataScope' => 'configurableAffectedAttributeSet',
                                         'valueMap' => [
