@@ -11,7 +11,7 @@ use Magento\Quote\Api\Data\CartInterface;
 use Magento\Payment\Gateway\Data\AddressAdapterInterface;
 
 /**
- * Class QuoteAdapter
+ * Adapts quote data to the payment gateway order data contract.
  */
 class QuoteAdapter implements OrderAdapterInterface
 {
@@ -122,11 +122,11 @@ class QuoteAdapter implements OrderAdapterInterface
     /**
      * Returns order grand total amount
      *
-     * @return null
+     * @return float
      */
     public function getGrandTotalAmount()
     {
-        return null;
+        return $this->quote->getBaseGrandTotal();
     }
 
     /**
