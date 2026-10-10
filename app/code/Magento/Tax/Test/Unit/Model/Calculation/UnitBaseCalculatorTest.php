@@ -130,7 +130,7 @@ class UnitBaseCalculatorTest extends TestCase
             'config'                => $this->mockConfig,
             'storeId'               => self::STORE_ID,
             'addressRateRequest'    => $this->addressRateRequest,
-            'appliedRateDataObjectFactory'    => $this->appliedTaxRateDataObjectFactoryMock,
+            'appliedTaxRateDataObjectFactory'    => $this->appliedTaxRateDataObjectFactoryMock,
             'appliedTaxDataObjectFactory'    => $appliedTaxDataObjectFactoryMock,
         ];
         $this->model = $objectManager->getObject(UnitBaseCalculator::class, $arguments);
@@ -220,6 +220,57 @@ class UnitBaseCalculatorTest extends TestCase
         );
         $this->assertEqualsWithDelta(self::TYPE, $this->taxDetailsItem->getType(), self::EPSILON);
         $this->assertEqualsWithDelta(0.0, $this->taxDetailsItem->getRowTax(), self::EPSILON);
+    }
+
+    public function testCalculateWithTaxInPriceIncludesZeroAppliedTaxRate(): void
+    {
+        $mockItem = $this->getMockItem();
+        $mockItem->expects($this->once())
+            ->method('getIsTaxIncluded')
+            ->willReturn(true);
+
+        $this->mockConfig->expects($this->once())
+            ->method('crossBorderTradeEnabled')
+            ->willReturn(false);
+        $this->mockConfig->expects($this->once())
+            ->method('applyTaxAfterDiscount')
+            ->willReturn(true);
+
+        $this->mockCalculationTool->expects($this->once())
+            ->method('getRate')
+            ->with($this->addressRateRequest)
+            ->willReturn(0);
+        $this->mockCalculationTool->expects($this->once())
+            ->method('getStoreRate')
+            ->with($this->addressRateRequest, self::STORE_ID)
+            ->willReturn(0);
+        $this->mockCalculationTool->expects($this->once())
+            ->method('getAppliedRates')
+            ->withAnyParameters()
+            ->willReturn(
+                [
+                    [
+                        'id' => 'DE-0',
+                        'percent' => 0,
+                        'rates' => [
+                            [
+                                'code' => 'DE-0',
+                                'title' => 'Germany 0%',
+                                'percent' => 0,
+                            ],
+                        ],
+                    ],
+                ]
+            );
+
+        $this->assertSame($this->taxDetailsItem, $this->model->calculate($mockItem, self::QUANTITY));
+        $appliedTaxes = $this->taxDetailsItem->getAppliedTaxes();
+
+        $this->assertArrayHasKey('DE-0', $appliedTaxes);
+        $this->assertEqualsWithDelta(0.0, $appliedTaxes['DE-0']->getAmount(), self::EPSILON);
+        $this->assertEqualsWithDelta(0.0, $appliedTaxes['DE-0']->getPercent(), self::EPSILON);
+        $this->assertArrayHasKey('DE-0', $appliedTaxes['DE-0']->getRates());
+        $this->assertEqualsWithDelta(0.0, $appliedTaxes['DE-0']->getRates()['DE-0']->getPercent(), self::EPSILON);
     }
 
     /**
