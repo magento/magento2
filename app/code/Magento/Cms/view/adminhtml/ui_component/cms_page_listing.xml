@@ -120,6 +120,7 @@
                     <item name="saveUrl" xsi:type="url" path="cms/page/inlineEdit"/>
                     <item name="validateBeforeSave" xsi:type="boolean">false</item>
                 </param>
+                <param name="editUrl" xsi:type="url" path="cms/page/edit/page_id/:id"></param>
                 <param name="indexField" xsi:type="string">page_id</param>
                 <param name="enabled" xsi:type="boolean">true</param>
                 <param name="selectProvider" xsi:type="string">cms_page_listing.cms_page_listing.cms_page_columns.ids</param>

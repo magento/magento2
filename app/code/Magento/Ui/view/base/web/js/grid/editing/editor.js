@@ -309,6 +309,27 @@ define([
         },
 
         /**
+         * Redirect to Edit page.
+         */
+        redirectToEdit: function () {
+            var rowData = this.getData()[_.keys(this.getData())[0]],
+                indexFieldValue = (typeof rowData[this.indexField] != "undefined") ? rowData[this.indexField] : "";
+
+            if (indexFieldValue) {
+                window.location.href = decodeURIComponent(this.editUrl).replace(":id", indexFieldValue);
+            }
+        },
+
+        /**
+         * Check Edit url is defined in xml.
+         *
+         * @returns {Boolean}
+         */
+        hasEditUrl: function () {
+            return (typeof this.editUrl != "undefined") ? true : false;
+        },
+
+        /**
          * Validates all active records.
          *
          * @returns {Array} An array of records and theirs validation results.
