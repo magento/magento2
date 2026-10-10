@@ -112,7 +112,9 @@
         <seeElement selector="{{StorefrontProductRelatedProductsSection.relatedProductName($$createSecondRelatedProduct.name$$)}}" stepKey="seeSecondRelatedProductInStorefront"/>
 
         <!-- Assert product content -->
-        <see selector="{{StorefrontProductInfoMainSection.productDescription}}" userInput="{{ApiProductDescription.value}}" stepKey="seeLongDescriptionStorefront"/>
+        <actionGroup ref="AssertStorefrontProductDescriptionActionGroup" stepKey="seeLongDescriptionStorefront">
+            <argument name="productDescription" value="{{ApiProductDescription.value}}"/>
+        </actionGroup>
         <see selector="{{StorefrontProductInfoMainSection.productShortDescription}}" userInput="{{ApiProductShortDescription.value}}" stepKey="seeShortDescriptionStorefront"/>
 
         <!-- Assert product design settings "page layout 1 column" -->
