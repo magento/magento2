@@ -1,3 +1,7 @@
+############################################
+## Copyright 2026 Adobe
+## All Rights Reserved.
+
 Options -Indexes
 
 <IfModule mod_php7.c>
@@ -61,10 +65,10 @@ AddType image/svg+xml svg svgz
 
 # Fonts
 AddType application/vnd.ms-fontobject eot
-AddType application/x-font-ttf ttf
-AddType application/x-font-otf otf
-AddType application/x-font-woff woff
-AddType application/font-woff2 woff2
+AddType font/ttf ttf
+AddType font/otf otf
+AddType font/woff woff
+AddType font/woff2 woff2
 
 # Archives and exports
 AddType application/zip gzip
@@ -129,9 +133,9 @@ AddType application/xml xml
         ExpiresDefault "access plus 1 year"
     </FilesMatch>
     ExpiresByType application/vnd.ms-fontobject "access plus 1 year"
-    ExpiresByType application/x-font-ttf "access plus 1 year"
-    ExpiresByType application/x-font-otf "access plus 1 year"
-    ExpiresByType application/x-font-woff "access plus 1 year"
-    ExpiresByType application/font-woff2 "access plus 1 year"
+    ExpiresByType font/ttf "access plus 1 year"
+    ExpiresByType font/otf "access plus 1 year"
+    ExpiresByType font/woff "access plus 1 year"
+    ExpiresByType font/woff2 "access plus 1 year"
 
 </IfModule>
