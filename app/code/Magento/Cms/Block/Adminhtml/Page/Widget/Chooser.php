@@ -3,11 +3,11 @@
  * Copyright 2013 Adobe
  * All Rights Reserved.
  */
+
 namespace Magento\Cms\Block\Adminhtml\Page\Widget;
 
 /**
  * CMS page chooser for Wysiwyg CMS widget
- *
  */
 class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
 {
