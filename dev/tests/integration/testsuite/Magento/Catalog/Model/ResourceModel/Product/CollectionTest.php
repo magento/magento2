@@ -415,4 +415,21 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(77.5, (float)$item->getPrice());
         $this->assertEqualsWithDelta(9.99, (float)$item->getData($attributeCode), 0.0001);
     }
+
+    #[
+        DbIsolation(false),
+        DataFixture(ProductFixture::class, as: 'p1'),
+    ]
+    public function testLoadedItemsHaveNoDataChanges()
+    {
+        $collection = Bootstrap::getObjectManager()->create(Collection::class);
+        $collection->setStoreId(1)->addAttributeToSelect('*')->addIdFilter($this->fixtures->get('p1')->getId());
+
+        $items = $collection->getItems();
+
+        $this->assertCount(1, $items);
+        foreach ($items as $item) {
+            $this->assertFalse($item->hasDataChanges());
+        }
+    }
 }
