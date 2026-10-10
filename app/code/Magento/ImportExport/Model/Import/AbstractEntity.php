@@ -419,6 +419,9 @@ abstract class AbstractEntity implements EntityInterface
     {
         $source = $this->getSource();
         $bunchRows = [];
+        $bunchRowsSize = 2;
+        $bunchRowsKeysSize = 0;
+        $isBunchRowsList = true;
         $startNewBunch = false;
 
         $source->rewind();
@@ -438,6 +441,9 @@ abstract class AbstractEntity implements EntityInterface
                     $this->_dataSourceModel->saveBunch($this->getEntityTypeCode(), $this->getBehavior(), $bunchRows);
 
                 $bunchRows = [];
+                $bunchRowsSize = 2;
+                $bunchRowsKeysSize = 0;
+                $isBunchRowsList = true;
                 $startNewBunch = false;
             }
             if ($source->valid()) {
@@ -464,13 +470,22 @@ abstract class AbstractEntity implements EntityInterface
                     /* Add entity group that passed validation to bunch */
                     if (isset($entityGroup)) {
                         foreach ($entityGroup as $key => $value) {
+                            $isNextListKey = $isBunchRowsList && $key === count($bunchRows);
+                            $serializedKeySize = strlen($this->serializer->serialize((string)$key)) + 1;
+                            $previousKeysSize = $isBunchRowsList && !$isNextListKey ? $bunchRowsKeysSize : 0;
+                            $separatorSize = $bunchRows ? 1 : 0;
                             $bunchRows[$key] = $value;
+                            $isBunchRowsList = $isBunchRowsList && $isNextListKey;
+                            $bunchRowsKeysSize += $serializedKeySize;
+                            $bunchRowsSize += strlen($this->serializer->serialize($value))
+                                + $previousKeysSize
+                                + $separatorSize
+                                + ($isBunchRowsList ? 0 : $serializedKeySize);
                         }
-                        $productDataSize = strlen($this->serializer->serialize($bunchRows));
 
                         /* Check if the new bunch should be started */
                         $isBunchSizeExceeded = ($this->_bunchSize > 0 && count($bunchRows) >= $this->_bunchSize);
-                        $startNewBunch = $productDataSize >= $this->_maxDataSize || $isBunchSizeExceeded;
+                        $startNewBunch = $bunchRowsSize >= $this->_maxDataSize || $isBunchSizeExceeded;
                     }
 
                     /* And start a new one */
