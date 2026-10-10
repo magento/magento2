@@ -561,8 +561,8 @@ class StoreTest extends TestCase
                 ],
                 [
                     Currency::XML_PATH_CURRENCY_BASE,
-                    ScopeInterface::SCOPE_STORE,
-                    'scope_code',
+                    ScopeInterface::SCOPE_WEBSITE,
+                    2,
                     'UAH'
                 ],
             ]);
@@ -581,6 +581,7 @@ class StoreTest extends TestCase
             ['currencyFactory' => $currencyFactory, 'config' => $config, 'appState' => $appState]
         );
         $model->setCode('scope_code');
+        $model->setData('website_id', 2);
         $this->assertEquals($currency, $model->getBaseCurrency());
     }
 
