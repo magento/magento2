@@ -149,11 +149,11 @@ class Block extends AbstractModel implements BlockInterface, IdentityInterface
     /**
      * Retrieve block id
      *
-     * @return int
+     * @return int|null
      */
-    public function getId()
+    public function getId(): ?int
     {
-        return $this->getData(self::BLOCK_ID);
+        return $this->getData(self::BLOCK_ID) ? (int)$this->getData(self::BLOCK_ID) : null;
     }
 
     /**
