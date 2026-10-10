@@ -248,14 +248,22 @@ class Discount extends AbstractTotal
             }
             if ($item->getParentItem()) {
                 continue;
-            } elseif ($item->getHasChildren() && $item->isChildrenCalculated()) {
+            }
+            $childrenDiscount = 0;
+            if ($item->getHasChildren() && $item->isChildrenCalculated()) {
                 foreach ($item->getChildren() as $child) {
                     $eventArgs['item'] = $child;
                     $this->eventManager->dispatch('sales_quote_address_discount_item', $eventArgs);
                     $this->aggregateItemDiscount($child, $total);
+                    $childrenDiscount += $child->getDiscountAmount();
                 }
             }
             $this->aggregateItemDiscount($item, $total);
+            if ($childrenDiscount) {
+                $item->setRowTotalWithDiscount(
+                    max(0, $item->getRowTotal() - $item->getDiscountAmount() - $childrenDiscount)
+                );
+            }
             if ($item->getExtensionAttributes()) {
                 $this->aggregateDiscountPerRule($item, $address);
             }
@@ -284,6 +292,7 @@ class Discount extends AbstractTotal
     ) {
         $total->addTotalAmount($this->getCode(), -$item->getDiscountAmount());
         $total->addBaseTotalAmount($this->getCode(), -$item->getBaseDiscountAmount());
+        $item->setRowTotalWithDiscount(max(0, $item->getRowTotal() - $item->getDiscountAmount()));
         return $this;
     }
 
