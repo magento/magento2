@@ -20,33 +20,15 @@ use Magento\Framework\GraphQl\Query\Uid;
 abstract class AbstractEntityUrl implements ResolverInterface
 {
     /**
-     * @var UrlFinderInterface
-     */
-    private $urlFinder;
-
-    /**
-     * @var CustomUrlLocatorInterface
-     */
-    private $customUrlLocator;
-
-    /**
-     * @var Uid
-     */
-    private $idEncoder;
-
-    /**
      * @param UrlFinderInterface $urlFinder
      * @param CustomUrlLocatorInterface $customUrlLocator
      * @param Uid $idEncoder
      */
     public function __construct(
-        UrlFinderInterface $urlFinder,
-        CustomUrlLocatorInterface $customUrlLocator,
-        Uid $idEncoder
+        private readonly UrlFinderInterface $urlFinder,
+        private readonly CustomUrlLocatorInterface $customUrlLocator,
+        private readonly Uid $idEncoder
     ) {
-        $this->urlFinder = $urlFinder;
-        $this->customUrlLocator = $customUrlLocator;
-        $this->idEncoder = $idEncoder;
     }
 
     /**
