@@ -23,6 +23,11 @@ class GroupedCollection extends Collection
     /**#@-*/
 
     /**
+     * Attributes that differ per asset and must not split assets into separate groups
+     */
+    private const ASSET_ATTRIBUTES = ['integrity', 'crossorigin'];
+
+    /**
      * Factory for PropertyGroup
      *
      * @var PropertyGroupFactory
@@ -57,8 +62,8 @@ class GroupedCollection extends Collection
     public function add($identifier, AssetInterface $asset, array $properties = [])
     {
         parent::add($identifier, $asset);
-        $properties = $this->getFilteredProperties($asset, $properties);
-        $this->getGroupFor($properties)->add($identifier, $asset);
+        $this->getGroupForAsset($identifier, $this->getFilteredProperties($asset, $properties))
+            ->add($identifier, $asset);
     }
 
     /**
@@ -72,8 +77,7 @@ class GroupedCollection extends Collection
     public function insert($identifier, AssetInterface $asset, $key)
     {
         parent::insert($identifier, $asset, $key);
-        $properties = $this->getFilteredProperties($asset);
-        $group = $this->getGroupFor($properties);
+        $group = $this->getGroupForAsset($identifier, $this->getFilteredProperties($asset));
         $groupAssets = $group->getAll();
 
         if (!$groupAssets) {
@@ -97,6 +101,29 @@ class GroupedCollection extends Collection
         $properties[self::PROPERTY_CAN_MERGE] = $asset instanceof MergeableInterface;
 
         return $properties;
+    }
+
+    /**
+     * Retrieve the group for an asset, keeping its per-asset attributes out of the group key
+     *
+     * @param string $identifier
+     * @param array $properties
+     * @return PropertyGroup
+     */
+    private function getGroupForAsset($identifier, array $properties)
+    {
+        $assetAttributes = [];
+        if (isset($properties['attributes']) && is_array($properties['attributes'])) {
+            $assetAttributes = array_intersect_key($properties['attributes'], array_flip(self::ASSET_ATTRIBUTES));
+            $properties['attributes'] = array_diff_key($properties['attributes'], $assetAttributes);
+            if (!$properties['attributes']) {
+                unset($properties['attributes']);
+            }
+        }
+        $group = $this->getGroupFor($properties);
+        $group->setAssetAttributes($identifier, $assetAttributes);
+
+        return $group;
     }
 
     /**

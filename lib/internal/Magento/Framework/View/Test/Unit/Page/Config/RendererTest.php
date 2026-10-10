@@ -565,4 +565,32 @@ class RendererTest extends TestCase
             $result
         );
     }
+
+    public function testRenderAssetsKeepsOrderWhenIntegrityDiffersPerAsset(): void
+    {
+        $factory = $this->createMock(\Magento\Framework\View\Asset\PropertyGroupFactory::class);
+        $factory->method('create')->willReturnCallback(
+            static fn (array $arguments) => new PropertyGroup($arguments['properties'])
+        );
+        $collection = new GroupedCollection($factory);
+
+        $urls = ['static.js' => 'sha256-static', 'mixins.js' => null, 'config.js' => 'sha256-config'];
+        foreach ($urls as $name => $hash) {
+            $asset = $this->createMock(AssetInterface::class);
+            $asset->method('getUrl')->willReturn('https://example.com/' . $name);
+            $asset->method('getContentType')->willReturn('js');
+            $properties = $hash ? ['attributes' => ['integrity' => $hash, 'crossorigin' => 'anonymous']] : [];
+            $collection->add($name, $asset, $properties);
+        }
+        $this->pageConfigMock->method('getAssetCollection')->willReturn($collection);
+
+        $this->assertSame(
+            '<script type="text/javascript" integrity="sha256-static" crossorigin="anonymous"'
+                . ' src="https://example.com/static.js"></script>' . "\n"
+                . '<script type="text/javascript" src="https://example.com/mixins.js"></script>' . "\n"
+                . '<script type="text/javascript" integrity="sha256-config" crossorigin="anonymous"'
+                . ' src="https://example.com/config.js"></script>' . "\n",
+            $this->renderer->renderAssets($this->renderer->getAvailableResultGroups())
+        );
+    }
 }

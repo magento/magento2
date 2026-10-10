@@ -451,15 +451,20 @@ class Renderer implements RendererInterface
      */
     protected function renderAssetHtml(\Magento\Framework\View\Asset\PropertyGroup $group)
     {
-        $assets = $this->processMerge($group->getAll(), $group);
+        $groupAssets = $group->getAll();
+        $assets = $this->processMerge($groupAssets, $group);
+        $isMerged = $assets !== $groupAssets;
         $attributes = $this->getGroupAttributes($group);
 
         $result = $defaultAttributes = '';
         try {
             $deferEnabled = $this->scopeConfig->getValue('dev/js/defer_non_critical');
             /** @var $asset \Magento\Framework\View\Asset\AssetInterface */
-            foreach ($assets as $asset) {
-                $defaultAttributes = $this->addDefaultAttributes($this->getAssetContentType($asset), $attributes);
+            foreach ($assets as $identifier => $asset) {
+                $defaultAttributes = $this->addDefaultAttributes(
+                    $this->getAssetContentType($asset),
+                    $attributes . ($isMerged ? '' : $this->getAssetAttributes($group, (string)$identifier))
+                );
                 if ($deferEnabled &&
                     $this->getAssetContentType($asset) === 'js' &&
                     $this->shouldDefer(
@@ -482,6 +487,22 @@ class Renderer implements RendererInterface
                 $defaultAttributes
             );
             $result .= sprintf($template, $this->urlBuilder->getUrl('', ['_direct' => 'core/index/notFound']));
+        }
+        return $result;
+    }
+
+    /**
+     * Returns attributes that belong to a single asset of the group
+     *
+     * @param \Magento\Framework\View\Asset\PropertyGroup $group
+     * @param string $identifier
+     * @return string
+     */
+    private function getAssetAttributes($group, string $identifier): string
+    {
+        $result = '';
+        foreach ($group->getAssetAttributes($identifier) as $name => $value) {
+            $result .= ' ' . $name . '="' . $this->escaper->escapeHtml($value) . '"';
         }
         return $result;
     }
