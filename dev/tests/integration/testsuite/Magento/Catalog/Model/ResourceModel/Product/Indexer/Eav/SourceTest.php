@@ -13,6 +13,13 @@ use Magento\Catalog\_files\MultiselectSourceMock;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Api\Data\StoreInterface;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\Catalog\Test\Fixture\SelectAttribute as SelectAttributeFixture;
+use Magento\Store\Test\Fixture\Store as StoreFixture;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureBeforeTransaction;
+use Magento\TestFramework\Fixture\DbIsolation;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 
 /**
  * @magentoAppIsolation enabled
@@ -242,5 +249,66 @@ class SourceTest extends \PHPUnit\Framework\TestCase
 
         $result = $connection->fetchAll($select);
         $this->assertCount(3, $result);
+    }
+
+    #[
+        DbIsolation(false),
+        DataFixtureBeforeTransaction(StoreFixture::class, as: 'store2'),
+        DataFixtureBeforeTransaction(
+            SelectAttributeFixture::class,
+            ['is_filterable' => 1, 'scope' => 'store'],
+            'attribute'
+        ),
+        DataFixture(
+            ProductFixture::class,
+            [
+                'status' => Status::STATUS_DISABLED,
+                'custom_attributes' => [
+                    ['attribute_code' => '$attribute.attribute_code$', 'value' => '$attribute.option_1$'],
+                ],
+            ],
+            'product'
+        ),
+    ]
+    public function testStatusEnabledInOtherStoreViewDoesNotIndexProductInStoreViewWithOverride(): void
+    {
+        $objectManager = Bootstrap::getObjectManager();
+        $storage = $objectManager->get(DataFixtureStorageManager::class)->getStorage();
+        $attribute = $storage->get('attribute');
+        $product = $storage->get('product');
+        $store2 = $storage->get('store2');
+        $defaultStoreId = (int)$objectManager->get(StoreManagerInterface::class)->getStore('default')->getId();
+        $statusAttributeId = (int)$objectManager->get(\Magento\Eav\Model\Config::class)
+            ->getAttribute(ProductAttributeInterface::ENTITY_TYPE_CODE, 'status')
+            ->getId();
+        $connection = $this->productResource->getConnection();
+        $intTable = $this->productResource->getTable('catalog_product_entity_int');
+        $connection->insertOnDuplicate(
+            $intTable,
+            [
+                [
+                    'attribute_id' => $statusAttributeId,
+                    'store_id' => (int)$store2->getId(),
+                    'entity_id' => (int)$product->getId(),
+                    'value' => Status::STATUS_ENABLED,
+                ],
+                [
+                    'attribute_id' => (int)$attribute->getAttributeId(),
+                    'store_id' => $defaultStoreId,
+                    'entity_id' => (int)$product->getId(),
+                    'value' => (int)$attribute->getData('option_1'),
+                ],
+            ],
+            ['value']
+        );
+
+        $this->source->reindexEntities([(int)$product->getId()]);
+
+        $select = $connection->select()
+            ->from($this->source->getIdxTable(), 'store_id')
+            ->where('entity_id = ?', (int)$product->getId())
+            ->where('attribute_id = ?', (int)$attribute->getAttributeId())
+            ->where('store_id = ?', $defaultStoreId);
+        $this->assertSame([], $connection->fetchCol($select));
     }
 }
