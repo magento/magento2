@@ -11,7 +11,7 @@ namespace Magento\ProductAlert\Controller\Unsubscribe;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\App\Action\Context;
-use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\ResultFactory;
@@ -24,7 +24,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 /**
  * Unsubscribing from 'back in stock alert'.
  */
-class Stock extends UnsubscribeController implements HttpPostActionInterface
+class Stock extends UnsubscribeController implements HttpGetActionInterface
 {
     /**
      * @var ProductRepositoryInterface
