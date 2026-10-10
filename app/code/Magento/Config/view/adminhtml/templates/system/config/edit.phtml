@@ -75,7 +75,10 @@ require([
                         var splitIdArray = openSection.split('_');
                         section = section + '_' + splitIdArray[1];
                     }
-                    Fieldset.toggleCollapse(section + '_' + group);
+                    
+                    if (document.getElementById(section + '_' + group) !== null) {
+                        Fieldset.toggleCollapse(section + '_' + group);
+                    }
                 }
             }
         },
