@@ -58,8 +58,10 @@ class MigrateDataFromAnotherTable implements DDLTriggerInterface
             $tableName = $table->getName();
             $oldTableName = $this->resourceConnection->getTableName($matches[1]);
             $adapter = $this->resourceConnection->getConnection($table->getResource());
-            $select = $adapter->select()->from($oldTableName);
-            $adapter->query($adapter->insertFromSelect($select, $tableName));
+            if ($adapter->isTableExists($oldTableName)) {
+                $select = $adapter->select()->from($oldTableName);
+                $adapter->query($adapter->insertFromSelect($select, $tableName));
+            }
         };
     }
 }
