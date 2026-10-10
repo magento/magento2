@@ -282,7 +282,7 @@ class Product extends AbstractEntity
     /**
      * @var string
      */
-    private $hashAlgorithm = 'crc32c';
+    private $hashAlgorithm = 'xxh128';
 
     /**
      * @var array
@@ -950,7 +950,6 @@ class Product extends AbstractEntity
         $this->linkProcessor = $linkProcessor ?? ObjectManager::getInstance()
             ->get(LinkProcessor::class);
         $this->linkProcessor->addNameToIds($this->_linkNameToId);
-        $this->hashAlgorithm = 'xxh128';
         parent::__construct(
             $jsonHelper,
             $importExportData,

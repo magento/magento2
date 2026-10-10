@@ -128,6 +128,8 @@ class MassActionTest extends \Magento\TestFramework\TestCase\AbstractBackendCont
     /**
      * Retrieve cache states (enabled/disabled) information
      *
+     * Access configuration file directly
+     *
      * @return array
      */
     protected function getCacheStates()
