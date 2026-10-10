@@ -67,6 +67,7 @@ class CreditMemoItems implements ResolverInterface
         $creditMemoModel = $value['model'];
         /** @var OrderInterface $parentOrderModel */
         $parentOrderModel = $value['order'];
+        $this->orderItemProvider->addOrder($parentOrderModel);
 
         return $this->valueFactory->create(
             $this->getCreditMemoItems($parentOrderModel, $creditMemoModel->getItems())
