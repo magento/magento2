@@ -42,22 +42,22 @@
     </div>
 
     <div class="mass-select-wrap">
-        <select id="<?= $block->escapeHtmlAttr($block->getHtmlId()) ?>-mass-select" data-menu="grid-mass-select">
-            <optgroup label="<?= $block->escapeHtmlAttr(__('Mass Actions')) ?>">
+        <select id="<?= $escaper->escapeHtmlAttr($block->getHtmlId()) ?>-mass-select" data-menu="grid-mass-select">
+            <optgroup label="<?= $escaper->escapeHtmlAttr(__('Mass Actions')) ?>">
                 <option disabled selected></option>
                 <?php if ($block->getUseSelectAll()):?>
                     <option value="selectAll">
-                        <?= $block->escapeHtml(__('Select All')) ?>
+                        <?= $escaper->escapeHtml(__('Select All')) ?>
                     </option>
                     <option value="unselectAll">
-                        <?= $block->escapeHtml(__('Unselect All')) ?>
+                        <?= $escaper->escapeHtml(__('Unselect All')) ?>
                     </option>
                 <?php endif; ?>
                 <option value="selectVisible">
-                    <?= $block->escapeHtml(__('Select Visible')) ?>
+                    <?= $escaper->escapeHtml(__('Select Visible')) ?>
                 </option>
                 <option value="unselectVisible">
-                    <?= $block->escapeHtml(__('Unselect Visible')) ?>
+                    <?= $escaper->escapeHtml(__('Unselect Visible')) ?>
                 </option>
             </optgroup>
         </select>
@@ -74,20 +74,20 @@ script;
     if ($block->getUseSelectAll()):
         $scriptString .= <<<script
                 case 'selectAll':
-                    return {$block->escapeJs($block->getJsObjectName())}.selectAll();
-                    break
+                    return {$escaper->escapeJs($block->getJsObjectName())}.selectAll();
+                    break;
                 case 'unselectAll':
-                    return {$block->escapeJs($block->getJsObjectName())}.unselectAll();
-                    break
+                    return {$escaper->escapeJs($block->getJsObjectName())}.unselectAll();
+                    break;
 script;
     endif;
     $scriptString .= <<<script
                 case 'selectVisible':
-                    return {$block->escapeJs($block->getJsObjectName())}.selectVisible();
-                    break
+                    return {$escaper->escapeJs($block->getJsObjectName())}.selectVisible();
+                    break;
                 case 'unselectVisible':
-                    return {$block->escapeJs($block->getJsObjectName())}.unselectVisible();
-                    break
+                    return {$escaper->escapeJs($block->getJsObjectName())}.unselectVisible();
+                    break;
             }
             this.blur();
         });
@@ -95,7 +95,7 @@ script;
     });
 script;
     if (!$block->getParentBlock()->canDisplayContainer()):
-        $scriptString .= $block->escapeJs($block->getJsObjectName()) . ".setGridIds('" .
+        $scriptString .= $escaper->escapeJs($block->getJsObjectName()) . ".setGridIds('" .
             /* @noEscape */ $block->getGridIdsJson() . "');";
     endif;
     ?>
