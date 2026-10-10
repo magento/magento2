@@ -13,10 +13,12 @@ use Magento\Customer\Model\AttributeWebsiteRequired;
 use Magento\Customer\Model\Config\Share as ShareConfig;
 use Magento\Customer\Model\FileUploaderDataResolver;
 use Magento\Customer\Model\GroupManagement;
+use Magento\Customer\Model\Options;
 use Magento\Customer\Model\ResourceModel\Address\Attribute\Source\CountryWithWebsites;
 use Magento\Eav\Model\Entity\Type;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Ui\DataProvider\EavValidationRules;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
@@ -175,5 +177,84 @@ class AttributeMetadataResolverTest extends TestCase
         $meta = $this->model->getAttributesMeta($this->attribute, $entityType, $allowToShowHiddenAttributes);
         $this->assertArrayHasKey('default', $meta['arguments']['data']['config']);
         $this->assertEquals($defaultGroupId, $meta['arguments']['data']['config']['default']);
+    }
+
+    /**
+     * @param string $attributeCode
+     * @param string $optionsMethod
+     * @return void
+     */
+    #[DataProvider('nameOptionsAttributeProvider')]
+    public function testGetAttributesMetaRendersNameOptionsAsSelect(
+        string $attributeCode,
+        string $optionsMethod
+    ): void {
+        $options = $this->createMock(Options::class);
+        $options->method($optionsMethod)->willReturn(['Mr', 'Mrs']);
+        $model = new AttributeMetadataResolver(
+            $this->countryWithWebsiteSource,
+            $this->eavValidationRules,
+            $this->fileUploaderDataResolver,
+            $this->context,
+            $this->shareConfig,
+            $this->groupManagement, // @phpstan-ignore argument.type
+            $this->attributeWebsiteRequired,
+            $options
+        );
+        $this->attribute->method('getAttributeCode')->willReturn($attributeCode); // @phpstan-ignore method.notFound
+        $this->attribute->method('usesSource')->willReturn(false); // @phpstan-ignore method.notFound
+        $this->attribute->method('getDataUsingMethod') // @phpstan-ignore method.notFound
+            ->willReturnCallback(fn ($name) => $name === 'frontend_input' ? 'text' : null);
+        $this->eavValidationRules->method('build')->willReturn([]);
+
+        $config = $model->getAttributesMeta($this->attribute, $this->createMock(Type::class), false)
+            ['arguments']['data']['config'];
+
+        $this->assertSame('select', $config['formElement']);
+        $this->assertSame(
+            ['Mr', 'Mrs'],
+            array_column($config['options'], 'value')
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public static function nameOptionsAttributeProvider(): array
+    {
+        return [
+            'prefix' => ['prefix', 'getNamePrefixOptions'],
+            'suffix' => ['suffix', 'getNameSuffixOptions'],
+        ];
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetAttributesMetaKeepsInputWhenNoNameOptionsConfigured(): void
+    {
+        $options = $this->createMock(Options::class);
+        $options->method('getNamePrefixOptions')->willReturn(false);
+        $model = new AttributeMetadataResolver(
+            $this->countryWithWebsiteSource,
+            $this->eavValidationRules,
+            $this->fileUploaderDataResolver,
+            $this->context,
+            $this->shareConfig,
+            $this->groupManagement, // @phpstan-ignore argument.type
+            $this->attributeWebsiteRequired,
+            $options
+        );
+        $this->attribute->method('getAttributeCode')->willReturn('prefix'); // @phpstan-ignore method.notFound
+        $this->attribute->method('usesSource')->willReturn(false); // @phpstan-ignore method.notFound
+        $this->attribute->method('getDataUsingMethod') // @phpstan-ignore method.notFound
+            ->willReturnCallback(fn ($name) => $name === 'frontend_input' ? 'text' : null);
+        $this->eavValidationRules->method('build')->willReturn([]);
+
+        $config = $model->getAttributesMeta($this->attribute, $this->createMock(Type::class), false)
+            ['arguments']['data']['config'];
+
+        $this->assertSame('input', $config['formElement']);
+        $this->assertArrayNotHasKey('options', $config);
     }
 }
