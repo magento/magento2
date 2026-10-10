@@ -265,11 +265,14 @@ class EscaperTest extends TestCase
                 'expected' => '&amp;<br>&quot;&#039;&amp;&lt;&gt;&quot;&#039;&#9;',
                 'allowedTags' => ['br'],
             ],
+            'text with stray less-than and allowed tag' => [
+                'data' => 'Speed < 10m/s', 'expected' => 'Speed &lt; 10m/s', 'allowedTags' => ['b']],
+            'text with allowed tag and stray less-than' => [
+                'data' => '<b>Bold</b> Speed < 10m/s', 'expected' => '<b>Bold</b> Speed &lt; 10m/s',
+                'allowedTags' => ['b']],
             'text with multiple allowed tags, includes self closing tag' => [
-                'data' => '<span>some text in tags<br /></span>',
-                'expected' => '<span>some text in tags<br></span>',
-                'allowedTags' => ['span', 'br'],
-            ],
+                'data' => '<span>some text in tags<br /></span>', 'expected' => '<span>some text in tags<br></span>',
+                'allowedTags' => ['span', 'br']],
             'text with multiple allowed tags and allowed attribute in double quotes' => [
                 'data' => 'Only <span id="sku_max_allowed"><b>2</b></span> in stock',
                 'expected' => 'Only <span id="sku_max_allowed"><b>2</b></span> in stock',
@@ -311,34 +314,23 @@ class EscaperTest extends TestCase
             ],
             'text with html comment' => [
                 'data' => 'Only <span><b>2</b></span> in stock <!-- HTML COMMENT -->',
-                'expected' => 'Only <span><b>2</b></span> in stock ',
-                'allowedTags' => ['span', 'b'],
-            ],
+                'expected' => 'Only <span><b>2</b></span> in stock ', 'allowedTags' => ['span', 'b']],
             'text with multi-line html comment' => [
                 'data' => "Only <span><b>2</b></span> in stock <!-- --!\n\n><img src=#>-->",
-                'expected' => 'Only <span><b>2</b></span> in stock ',
-                'allowedTags' => ['span', 'b'],
-            ],
+                'expected' => 'Only <span><b>2</b></span> in stock ', 'allowedTags' => ['span', 'b']],
             'text with non ascii characters' => [
                 'data' => ['абвгд', 'مثال', '幸福'],
                 'expected' => ['абвгд', 'مثال', '幸福'],
                 'allowedTags' => [],
             ],
             'html and body tags' => [
-                'data' => '<html><body><span>String</span></body></html>',
-                'expected' => '<span>String</span>',
-                'allowedTags' => ['span'],
-            ],
+                'data' => '<html><body><span>String</span></body></html>', 'expected' => '<span>String</span>',
+                'allowedTags' => ['span']],
             'invalid tag' => [
-                'data' => '<some tag> some text',
-                'expected' => ' some text',
-                'allowedTags' => ['span'],
-            ],
+                'data' => '<some tag> some text', 'expected' => ' some text', 'allowedTags' => ['span']],
             'text with japanese lang' => [
                 'data' => '<span>だ だ だ some text in tags<br /></span>',
-                'expected' => '<span>だ だ だ some text in tags</span>',
-                'allowedTags' => ['span'],
-            ],
+                'expected' => '<span>だ だ だ some text in tags</span>', 'allowedTags' => ['span']],
         ];
     }
 
@@ -645,7 +637,7 @@ class EscaperTest extends TestCase
         $method = new \ReflectionMethod(Escaper::class, 'prepareUnescapedCharacters');
 
         $input = '& < & >';
-        $expected = '&amp; < &amp; >';
+        $expected = '&amp; &lt; &amp; >';
 
         $this->assertSame($expected, $method->invoke($this->escaper, $input));
     }
