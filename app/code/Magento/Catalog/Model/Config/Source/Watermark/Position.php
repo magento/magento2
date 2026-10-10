@@ -6,8 +6,6 @@
 
 /**
  * Watermark position config source model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Model\Config\Source\Watermark;
 

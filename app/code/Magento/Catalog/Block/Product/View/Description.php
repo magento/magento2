@@ -4,16 +4,13 @@
  * All Rights Reserved.
  */
 
-/**
- * Product description block
- *
- * @author     Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Catalog\Block\Product\View;
 
 use Magento\Catalog\Model\Product;
 
 /**
+ * Product description block
+ *
  * @api
  * @since 100.0.2
  */
@@ -25,8 +22,6 @@ class Description extends \Magento\Framework\View\Element\Template
     protected $_product = null;
 
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
@@ -46,6 +41,8 @@ class Description extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Return the product
+     *
      * @return Product
      */
     public function getProduct()

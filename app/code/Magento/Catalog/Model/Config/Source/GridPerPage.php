@@ -7,8 +7,6 @@ namespace Magento\Catalog\Model\Config\Source;
 
 /**
  * Catalog products per page on Grid mode source
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class GridPerPage implements \Magento\Framework\Option\ArrayInterface
 {
