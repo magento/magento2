@@ -21,6 +21,7 @@
                 <price_includes_tax>0</price_includes_tax>
                 <shipping_includes_tax>0</shipping_includes_tax>
                 <apply_tax_on>0</apply_tax_on>
+                <apply_tax_rounding>1</apply_tax_rounding>
             </calculation>
             <defaults>
                 <country>US</country>
