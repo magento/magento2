@@ -6,6 +6,7 @@
 namespace Magento\Downloadable\Model\Product\TypeTransitionManager\Plugin;
 
 use Closure;
+use Magento\Downloadable\Api\Data\ProductAttributeInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Catalog\Model\Product\Edit\WeightResolver;
 
@@ -58,7 +59,7 @@ class Downloadable
                 \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE
             ]
         );
-        $downloadableData = $this->request->getPost('downloadable');
+        $downloadableData = $this->getDownloadableData();
         $hasDownloadableData = false;
         if (isset($downloadableData)) {
             foreach ($downloadableData as $data) {
@@ -75,5 +76,19 @@ class Downloadable
             return;
         }
         $proceed($product);
+    }
+
+    /**
+     * Get posted downloadable rows, none when the product is explicitly not downloadable
+     *
+     * @return array|null
+     */
+    private function getDownloadableData(): ?array
+    {
+        $isDownloadable = $this->request->getParam(ProductAttributeInterface::CODE_IS_DOWNLOADABLE);
+        if ($isDownloadable !== null && !$isDownloadable) {
+            return null;
+        }
+        return $this->request->getPost('downloadable');
     }
 }

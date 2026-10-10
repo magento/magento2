@@ -132,4 +132,17 @@ class DownloadableTest extends TestCase
             [false, Type::TYPE_DOWNLOADABLE, ['link' => [['is_delete' => '1']]]]
         ];
     }
+
+    public function testAroundProcessProductIgnoresDownloadableDataWhenIsDownloadableUnchecked()
+    {
+        $this->requestMock->method('getParam')->with('is_downloadable')->willReturn('0');
+        $this->requestMock->method('getPost')
+            ->with('downloadable')
+            ->willReturn(['sample' => [['sample_id' => '1', 'is_delete' => '']]]);
+        $this->weightResolver->method('resolveProductHasWeight')->willReturn(false);
+        $this->productMock->method('getTypeId')->willReturn(Type::TYPE_DOWNLOADABLE);
+        $this->productMock->expects($this->never())->method('setTypeId');
+
+        $this->model->aroundProcessProduct($this->subjectMock, $this->closureMock, $this->productMock);
+    }
 }
