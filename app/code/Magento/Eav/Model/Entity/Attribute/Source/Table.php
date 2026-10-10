@@ -40,6 +40,13 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource im
     private $storeManager;
 
     /**
+     * Cache of specific options indexed by store, attribute and requested option ids
+     *
+     * @var array
+     */
+    private array $specificOptionsCache = [];
+
+    /**
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory $attrOptionFactory
      * @param StoreManagerInterface|null $storeManager
@@ -105,13 +112,19 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource im
      */
     public function getSpecificOptions($ids, $withEmpty = true)
     {
-        $options = $this->_attrOptionCollectionFactory->create()
-            ->setPositionOrder('asc')
-            ->setAttributeFilter($this->getAttribute()->getId())
-            ->addFieldToFilter('main_table.option_id', ['in' => $ids])
-            ->setStoreFilter($this->getAttribute()->getStoreId())
-            ->load()
-            ->toOptionArray();
+        $storeId = $this->getAttribute()->getStoreId();
+        $attributeId = $this->getAttribute()->getId();
+        $idsKey = implode(',', is_array($ids) ? $ids : [$ids]);
+        if (!isset($this->specificOptionsCache[$storeId][$attributeId][$idsKey])) {
+            $this->specificOptionsCache[$storeId][$attributeId][$idsKey] = $this->_attrOptionCollectionFactory->create()
+                ->setPositionOrder('asc')
+                ->setAttributeFilter($attributeId)
+                ->addFieldToFilter('main_table.option_id', ['in' => $ids])
+                ->setStoreFilter($storeId)
+                ->load()
+                ->toOptionArray();
+        }
+        $options = $this->specificOptionsCache[$storeId][$attributeId][$idsKey];
         if ($withEmpty) {
             $options = $this->addEmptyOption($options);
         }
@@ -291,5 +304,6 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource im
     {
         $this->_optionsDefault = [];
         $this->_options = null;
+        $this->specificOptionsCache = [];
     }
 }

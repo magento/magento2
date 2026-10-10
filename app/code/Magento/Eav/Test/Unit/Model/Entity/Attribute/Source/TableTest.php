@@ -224,6 +224,52 @@ class TableTest extends TestCase
         ];
     }
 
+    public function testGetSpecificOptionsUsesCachedOptionsForSameIds()
+    {
+        $attributeId = 1;
+        $storeId = 5;
+        $optionIds = [1, 2];
+        $options = [
+            ['label' => 'The first label', 'value' => '1'],
+            ['label' => 'The second label', 'value' => '2']
+        ];
+
+        $this->abstractAttributeMock->expects($this->exactly(2))
+            ->method('getId')
+            ->willReturn($attributeId);
+        $this->abstractAttributeMock->expects($this->exactly(2))
+            ->method('getStoreId')
+            ->willReturn($storeId);
+
+        $this->collectionFactory->expects($this->once())
+            ->method('create')
+            ->willReturnSelf();
+        $this->collectionFactory->expects($this->once())
+            ->method('setPositionOrder')
+            ->willReturnSelf();
+        $this->collectionFactory->expects($this->once())
+            ->method('setAttributeFilter')
+            ->with($attributeId)
+            ->willReturnSelf();
+        $this->collectionFactory->expects($this->once())
+            ->method('addFieldToFilter')
+            ->with('main_table.option_id', ['in' => $optionIds])
+            ->willReturnSelf();
+        $this->collectionFactory->expects($this->once())
+            ->method('setStoreFilter')
+            ->with($storeId)
+            ->willReturnSelf();
+        $this->collectionFactory->expects($this->once())
+            ->method('load')
+            ->willReturnSelf();
+        $this->collectionFactory->expects($this->once())
+            ->method('toOptionArray')
+            ->willReturn($options);
+
+        $this->assertEquals($options, $this->model->getSpecificOptions($optionIds, false));
+        $this->assertEquals($options, $this->model->getSpecificOptions($optionIds, false));
+    }
+
     /**
      * @param array $optionsIds
      * @param array|string $value
@@ -269,6 +315,49 @@ class TableTest extends TestCase
             ->willReturn($options);
 
         $this->assertEquals($expectedResult, $this->model->getOptionText($value));
+    }
+
+    public function testGetOptionTextUsesCachedSpecificOptionsForSameValue()
+    {
+        $attributeId = 1;
+        $storeId = 5;
+        $optionId = '1';
+        $options = [['label' => 'test label', 'value' => '1']];
+
+        $this->abstractAttributeMock->expects($this->exactly(2))
+            ->method('getId')
+            ->willReturn($attributeId);
+        $this->abstractAttributeMock->expects($this->exactly(2))
+            ->method('getStoreId')
+            ->willReturn($storeId);
+
+        $this->collectionFactory->expects($this->once())
+            ->method('create')
+            ->willReturnSelf();
+        $this->collectionFactory->expects($this->once())
+            ->method('setPositionOrder')
+            ->willReturnSelf();
+        $this->collectionFactory->expects($this->once())
+            ->method('setAttributeFilter')
+            ->with($attributeId)
+            ->willReturnSelf();
+        $this->collectionFactory->expects($this->once())
+            ->method('addFieldToFilter')
+            ->with('main_table.option_id', ['in' => $optionId])
+            ->willReturnSelf();
+        $this->collectionFactory->expects($this->once())
+            ->method('setStoreFilter')
+            ->with($storeId)
+            ->willReturnSelf();
+        $this->collectionFactory->expects($this->once())
+            ->method('load')
+            ->willReturnSelf();
+        $this->collectionFactory->expects($this->once())
+            ->method('toOptionArray')
+            ->willReturn($options);
+
+        $this->assertEquals('test label', $this->model->getOptionText($optionId));
+        $this->assertEquals('test label', $this->model->getOptionText($optionId));
     }
 
     /**
