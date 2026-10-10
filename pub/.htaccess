@@ -287,4 +287,7 @@ ErrorDocument 403 /errors/404.php
 
     ## Prevent clickjacking
     Header set X-Frame-Options SAMEORIGIN
+
+    ## Prevent MIME type sniffing
+    Header set X-Content-Type-Options "nosniff"
 </IfModule>
