@@ -156,6 +156,22 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
+     * Retrieve select of entity ids matching the backend search query (search by all stores)
+     *
+     * @param string $query
+     * @return \Magento\Framework\DB\Select
+     */
+    public function getBackendSearchEntityIdsSelect($query)
+    {
+        $this->_searchQuery = $query;
+
+        return $this->getConnection()->select()->distinct()->from(
+            ['search_result' => $this->_getSearchEntityIdsSql($query, false)],
+            [$this->getEntity()->getLinkField()]
+        );
+    }
+
+    /**
      * Retrieve collection of all attributes
      *
      * @return \Magento\Framework\Data\Collection\AbstractDb
