@@ -118,7 +118,11 @@ class PreProcessor implements PreProcessorInterface
      */
     protected function replaceCallback($matches)
     {
-        return '\'' . __($matches['translate']) . '\'';
+        $translation = (string)__($matches['translate']);
+        if (strpos($translation, "'") === false) {
+            return '\'' . $translation . '\'';
+        }
+        return '"' . $translation . '"';
     }
 
     /**
