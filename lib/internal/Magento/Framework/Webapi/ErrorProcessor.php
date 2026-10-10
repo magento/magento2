@@ -17,6 +17,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Message\AbstractMessage;
 use Magento\Framework\Phrase;
+use Magento\Framework\Search\Request\NonExistingRequestNameException;
 use Magento\Framework\Validator\Exception as ValidatorException;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Webapi\Exception as WebapiException;
@@ -219,6 +220,9 @@ class ErrorProcessor
      */
     private function getClientErrorHttpCode(\Exception $exception)
     {
+        if ($exception instanceof NonExistingRequestNameException) {
+            return WebapiException::HTTP_NOT_FOUND;
+        }
         // Check if this is a client error based on the exception type
         if ($exception instanceof \Zend_Db_Exception
             || $exception instanceof \Zend_Db_Adapter_Exception
@@ -227,7 +231,6 @@ class ErrorProcessor
             || $exception instanceof \InvalidArgumentException
             || $exception instanceof \BadMethodCallException
             || $exception instanceof \UnexpectedValueException
-            || $exception instanceof \Magento\Framework\Search\Request\NonExistingRequestNameException
         ) {
             return WebapiException::HTTP_BAD_REQUEST;
         }
