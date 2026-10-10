@@ -490,8 +490,6 @@ class Product extends AbstractDb
         $this->select = null;
         $this->attributesCache = [];
 
-        if (function_exists('gc_collect_cycles')) {
-            gc_collect_cycles();
-        }
+        gc_collect_cycles();
     }
 }
