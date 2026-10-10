@@ -20,15 +20,23 @@ class ChildrenCategoriesProvider implements ResetAfterRequestInterface
      *
      * @param \Magento\Catalog\Model\Category $category
      * @param boolean $recursive
+     * @param int|null $storeId
      * @return \Magento\Catalog\Model\Category[]
      */
-    public function getChildren(Category $category, $recursive = false)
+    public function getChildren(Category $category, $recursive = false, ?int $storeId = null)
     {
-        return $category->isObjectNew() ? [] : $category->getResourceCollection()
+        if ($category->isObjectNew()) {
+            return [];
+        }
+        $collection = $category->getResourceCollection()
             ->addAttributeToSelect('url_path')
             ->addAttributeToSelect('url_key')
             ->addAttributeToSelect('name')
             ->addIdFilter($this->getChildrenIds($category, $recursive));
+        if ($storeId !== null) {
+            $collection->setStoreId($storeId);
+        }
+        return $collection;
     }
 
     /**
