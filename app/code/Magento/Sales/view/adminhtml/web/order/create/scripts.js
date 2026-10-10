@@ -306,12 +306,12 @@
             if (data['reset_shipping']) {
                 this.resetShippingMethod();
             } else {
-                this.saveData(data);
 
                 if (name === 'country_id' || name === 'customer_address_id') {
                     this.loadArea(['shipping_method', 'billing_method', 'totals', 'items'], true, data);
                 }
             }
+            this.saveData(data);
         },
 
         /**
