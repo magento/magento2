@@ -135,4 +135,32 @@ class MethodListTest extends TestCase
 
         $this->assertEquals([$methodInstanceMock], $this->methodList->getAvailableMethods($quoteMock));
     }
+
+    public function testInfoInstanceIsSetBeforeAvailabilityCheck(): void
+    {
+        $quoteMock = $this->createMock(Quote::class);
+        $quoteMock->method('getStoreId')->willReturn(1);
+        $quoteMock->method('getPayment')->willReturn($this->createMock(Payment::class));
+
+        $calls = [];
+        $methodInstanceMock = $this->createMock(AbstractMethod::class);
+        $methodInstanceMock->method('setInfoInstance')->willReturnCallback(
+            function () use (&$calls) {
+                $calls[] = 'setInfoInstance';
+            }
+        );
+        $methodInstanceMock->method('isAvailable')->willReturnCallback(
+            function () use (&$calls) {
+                $calls[] = 'isAvailable';
+                return false;
+            }
+        );
+
+        $this->paymentMethodList->method('getActiveList')
+            ->willReturn([$this->createMock(PaymentMethodInterface::class)]);
+        $this->paymentMethodInstanceFactory->method('create')->willReturn($methodInstanceMock);
+
+        $this->assertSame([], $this->methodList->getAvailableMethods($quoteMock));
+        $this->assertSame(['setInfoInstance', 'isAvailable'], $calls);
+    }
 }
