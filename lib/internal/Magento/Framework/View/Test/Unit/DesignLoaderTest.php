@@ -71,4 +71,46 @@ class DesignLoaderTest extends TestCase
             );
         $this->_model->load($this->_requestMock);
     }
+
+    /**
+     * @return void
+     */
+    public function testLoadDesign(): void
+    {
+        $area = $this->createMock(Area::class);
+        $this->appState->expects($this->once())->method('getAreaCode')->willReturn('area');
+        $this->_areaListMock->expects($this->once())->method('getArea')->with('area')->willReturn($area);
+        $area->expects($this->once())->method('load')->with(Area::PART_DESIGN)->willReturnSelf();
+        $area->expects($this->never())->method('detectDesign');
+
+        $this->_model->loadDesign();
+    }
+
+    /**
+     * @return void
+     */
+    public function testLoadTranslation(): void
+    {
+        $area = $this->createMock(Area::class);
+        $this->appState->expects($this->once())->method('getAreaCode')->willReturn('area');
+        $this->_areaListMock->expects($this->once())->method('getArea')->with('area')->willReturn($area);
+        $area->expects($this->once())->method('load')->with(Area::PART_TRANSLATE)->willReturnSelf();
+        $area->expects($this->never())->method('detectDesign');
+
+        $this->_model->loadTranslation();
+    }
+
+    /**
+     * @return void
+     */
+    public function testApplyDesignChange(): void
+    {
+        $area = $this->createMock(Area::class);
+        $this->appState->expects($this->once())->method('getAreaCode')->willReturn('area');
+        $this->_areaListMock->expects($this->once())->method('getArea')->with('area')->willReturn($area);
+        $area->expects($this->never())->method('load');
+        $area->expects($this->once())->method('detectDesign')->with($this->_requestMock);
+
+        $this->_model->applyDesignChange();
+    }
 }
