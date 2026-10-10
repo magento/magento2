@@ -262,6 +262,9 @@ class Save extends Attribute implements HttpPostActionInterface
             if (!$model->getIsUserDefined() && $model->getId()) {
                 // Unset attribute field for system attributes
                 unset($data['apply_to']);
+            } elseif (!isset($data['apply_to'])) {
+                // An empty multiselect is not posted at all, so clearing the field has to be made explicit
+                $data['apply_to'] = [];
             }
 
             if ($model->getBackendType() == 'static' && !$model->getIsUserDefined()) {
