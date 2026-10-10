@@ -132,13 +132,12 @@ class ConvertToXml
         $name = md5(microtime());
         $file = 'export/'. $component->getName() . $name . '.xml';
 
-        $this->filter->prepareComponent($component);
         $this->filter->applySelectionOnTargetProvider();
 
-        $component->getContext()->getDataProvider()->setLimit(0, 0);
+        $this->filter->getDataProvider()->setLimit(0, 0);
 
         /** @var SearchResultInterface $searchResult */
-        $searchResult = $component->getContext()->getDataProvider()->getSearchResult();
+        $searchResult = $this->filter->getDataProvider()->getSearchResult();
 
         /** @var DocumentInterface[] $searchResultItems */
         $searchResultItems = $searchResult->getItems();
