@@ -6,6 +6,8 @@
 
 namespace Magento\Backend\Block\Widget\Button;
 
+use Magento\Framework\Phrase;
+
 /**
  * Button list widget
  *
@@ -81,7 +83,7 @@ class ButtonList
      *
      * @param string $buttonId
      * @param string|null $key
-     * @param string $data
+     * @param Phrase|string $data
      * @return void
      */
     public function update($buttonId, $key, $data)
