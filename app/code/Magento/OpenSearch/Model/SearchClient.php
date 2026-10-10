@@ -137,12 +137,9 @@ class SearchClient implements ClientInterface
     private function buildOSConfig(array $options = []): array
     {
         $hostname = preg_replace('/http[s]?:\/\//i', '', $options['hostname']);
-        // @codingStandardsIgnoreStart
-        $protocol = parse_url($options['hostname'], PHP_URL_SCHEME);
-        // @codingStandardsIgnoreEnd
-        if (!$protocol) {
-            $protocol = 'http';
-        }
+        $url = parse_url($options['hostname']);
+
+        $options['scheme'] = $url['scheme'] ?? 'http';
 
         $authString = '';
         if (!empty($options['enableAuth']) && (int)$options['enableAuth'] === 1) {
@@ -154,7 +151,7 @@ class SearchClient implements ClientInterface
             $portString = ':' . $options['port'];
         }
 
-        $host = $protocol . '://' . $authString . $hostname . $portString;
+        $host = ($options['scheme'] ?? 'http') . '://' . $authString . $hostname . $portString;
 
         $options['hosts'] = [$host];
 
