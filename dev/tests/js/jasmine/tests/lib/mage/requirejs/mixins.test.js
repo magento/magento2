@@ -23,11 +23,12 @@ define(['rjsResolver', 'mixins'], function (resolver, mixins) {
             unbundledContext = require.s.contexts.$;
         });
 
-        it('should copy nameToUrl from default context to unbundled context', function () {
-            expect(unbundledContext.nameToUrl).toBe(defContext.nameToUrl);
+        it('should keep a separate nameToUrl resolver in the unbundled context', function () {
+            expect(unbundledContext.nameToUrl).not.toBe(defContext.nameToUrl);
         });
 
-        it('should not forward deps and callback to unbundled context during default context configure', function () {
+        it('should not forward deps, callback and bundles to unbundled context during ' +
+            'default context configure', function () {
             var originalDeps = defContext.config.deps,
                 originalCallback = defContext.config.callback,
                 noop = function () {},
@@ -36,12 +37,18 @@ define(['rjsResolver', 'mixins'], function (resolver, mixins) {
             spyOn(unbundledContext, 'configure').and.callThrough();
 
             defContext.configure({
+                bundles: {
+                    'tests/assets/mixins/bundle': [
+                        'tests/assets/mixins/bundled-module'
+                    ]
+                },
                 deps: ['mixins'],
                 callback: noop
             });
 
             forwardedConfig = unbundledContext.configure.calls.mostRecent().args[0];
 
+            expect(forwardedConfig.bundles).toBeUndefined();
             expect(forwardedConfig.deps).toBeUndefined();
             expect(forwardedConfig.callback).toBeUndefined();
 
