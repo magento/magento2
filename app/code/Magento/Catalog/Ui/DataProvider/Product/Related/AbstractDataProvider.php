@@ -113,7 +113,9 @@ abstract class AbstractDataProvider extends ProductDataProvider
     abstract protected function getLinkType();
 
     /**
-     * {@inheritdoc}
+     * Get product collection with store and product filters applied
+     *
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @since 101.0.0
      */
     public function getCollection()
