@@ -12,7 +12,6 @@ use Magento\Framework\Backup\Filesystem\Iterator\File;
 /**
  * Class to work with database backups
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @api
  * @since 100.0.2
  */
