@@ -9,19 +9,23 @@ namespace Magento\Customer\Test\Unit\Model;
 
 use Magento\Customer\Model\ResourceModel\Visitor as VisitorResourceModel;
 use Magento\Customer\Model\Session;
-use Magento\Customer\Model\Visitor;
 use Magento\Customer\Model\Visitor as VisitorModel;
 use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\Framework\App\RequestSafetyInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Registry;
 use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Store\Api\Data\WebsiteInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * Unit Tests to cover Visitor Model
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class VisitorTest extends TestCase
 {
@@ -53,9 +57,14 @@ class VisitorTest extends TestCase
     protected $sessionMock;
 
     /**
-     * @var HttpRequest|MockObject
+     * @var RequestSafetyInterface|MockObject
      */
-    private $httpRequestMock;
+    private $requestSafetyMock;
+
+    /**
+     * @var StoreManagerInterface|MockObject
+     */
+    private $storeManagerMock;
 
     protected function setUp(): void
     {
@@ -64,7 +73,14 @@ class VisitorTest extends TestCase
             Session::class,
             ['getVisitorData', 'setVisitorData', 'getSessionId']
         );
-        $this->httpRequestMock = $this->createMock(HttpRequest::class);
+
+        $this->requestSafetyMock = $this->getMockBuilder(HttpRequest::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['isSafeMethod', 'getRouteName'])
+            ->getMock();
+        $this->requestSafetyMock->method('isSafeMethod')->willReturn(false);
+        $this->requestSafetyMock->method('getRouteName')->willReturn('');
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
@@ -90,7 +106,7 @@ class VisitorTest extends TestCase
                 'registry' => $this->registryMock,
                 'session' => $this->sessionMock,
                 'resource' => $this->visitorResourceModelMock,
-                'request' => $this->httpRequestMock,
+                'storeManager' => $this->storeManagerMock,
             ]
         );
 
@@ -116,6 +132,16 @@ class VisitorTest extends TestCase
 
     public function testIsModuleIgnored()
     {
+        // Create a fresh mock for this test to avoid conflicts with setUp defaults
+        $requestSafetyMock = $this->getMockBuilder(HttpRequest::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['isSafeMethod', 'getRouteName'])
+            ->getMock();
+        $requestSafetyMock->method('isSafeMethod')->willReturn(false);
+        $requestSafetyMock->expects($this->once())
+            ->method('getRouteName')
+            ->willReturn('test_route_name');
+        
         $this->visitor = $this->objectManagerHelper->getObject(
             VisitorModel::class,
             [
@@ -123,10 +149,9 @@ class VisitorTest extends TestCase
                 'session' => $this->sessionMock,
                 'resource' => $this->visitorResourceModelMock,
                 'ignores' => ['test_route_name' => true],
-                'requestSafety' => $this->httpRequestMock,
+                'requestSafety' => $requestSafetyMock,
             ]
         );
-        $this->httpRequestMock->method('getRouteName')->willReturn('test_route_name');
         $observer = new DataObject();
         $this->assertTrue($this->visitor->isModuleIgnored($observer));
     }
@@ -180,6 +205,39 @@ class VisitorTest extends TestCase
         ]);
         $this->visitor->bindQuoteDestroy($observer);
         $this->assertTrue($this->visitor->getDoQuoteDestroy());
+    }
+
+    public function testBeforeSaveUnsetsSessionId()
+    {
+        $this->visitor->setWebsiteId(1);
+        $this->visitor->setData('session_id', 'test_session_id');
+        $this->visitor->beforeSave();
+        $this->assertNull($this->visitor->getData('session_id'));
+    }
+
+    public function testBeforeSaveSetsWebsiteIdWhenNotSet()
+    {
+        $websiteId = 1;
+        $websiteMock = $this->createMock(WebsiteInterface::class);
+        $websiteMock->expects($this->once())
+            ->method('getId')
+            ->willReturn($websiteId);
+
+        $this->storeManagerMock->expects($this->once())
+            ->method('getWebsite')
+            ->willReturn($websiteMock);
+
+        $this->visitor->unsetData('website_id');
+        $this->visitor->beforeSave();
+        $this->assertEquals($websiteId, $this->visitor->getWebsiteId());
+    }
+
+    public function testBeforeSaveDoesNotOverrideExistingWebsiteId()
+    {
+        $websiteId = 5;
+        $this->visitor->setWebsiteId($websiteId);
+        $this->visitor->beforeSave();
+        $this->assertEquals($websiteId, $this->visitor->getWebsiteId());
     }
 
     public function testClean()
