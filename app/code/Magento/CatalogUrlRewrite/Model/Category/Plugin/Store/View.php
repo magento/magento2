@@ -11,8 +11,10 @@ use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\CategoryFactory;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductFactory;
+use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Store\Model\ResourceModel\Store;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
@@ -57,24 +59,33 @@ class View
     private $origStore;
 
     /**
+     * @var CategoryCollectionFactory
+     */
+    private $categoryCollectionFactory;
+
+    /**
      * @param UrlPersistInterface $urlPersist
      * @param CategoryFactory $categoryFactory
      * @param ProductFactory $productFactory
      * @param CategoryUrlRewriteGenerator $categoryUrlRewriteGenerator
      * @param ProductUrlRewriteGenerator $productUrlRewriteGenerator
+     * @param CategoryCollectionFactory|null $categoryCollectionFactory
      */
     public function __construct(
         UrlPersistInterface $urlPersist,
         CategoryFactory $categoryFactory,
         ProductFactory $productFactory,
         CategoryUrlRewriteGenerator $categoryUrlRewriteGenerator,
-        ProductUrlRewriteGenerator $productUrlRewriteGenerator
+        ProductUrlRewriteGenerator $productUrlRewriteGenerator,
+        ?CategoryCollectionFactory $categoryCollectionFactory = null
     ) {
         $this->categoryUrlRewriteGenerator = $categoryUrlRewriteGenerator;
         $this->productUrlRewriteGenerator = $productUrlRewriteGenerator;
         $this->urlPersist = $urlPersist;
         $this->categoryFactory = $categoryFactory;
         $this->productFactory = $productFactory;
+        $this->categoryCollectionFactory = $categoryCollectionFactory
+            ?? ObjectManager::getInstance()->get(CategoryCollectionFactory::class);
     }
 
     /**
@@ -104,8 +115,7 @@ class View
         Store $object,
         Store $store
     ): Store {
-        if (
-            $this->origStore->getData('group_id')
+        if ($this->origStore->getData('group_id')
             && ($this->origStore->isObjectNew() || $this->origStore->dataHasChangedFor('group_id'))
         ) {
             $categoryRewriteUrls = $this->generateCategoryUrls(
@@ -157,8 +167,11 @@ class View
     protected function generateCategoryUrls(int $rootCategoryId, int $storeId): array
     {
         $urls = [];
-        $categories = $this->categoryFactory->create()->getCategories($rootCategoryId, 1, false, true, false);
-        $categories->setStoreId($storeId);
+        $categories = $this->categoryCollectionFactory->create();
+        $categories->setStoreId($storeId)
+            ->addAttributeToSelect(['name', 'is_active', 'url_key', 'url_path'])
+            ->addAttributeToFilter('is_active', 1);
+        $categories->getSelect()->where('e.parent_id = ?', $rootCategoryId);
         foreach ($categories as $category) {
             /** @var Category $category */
             $category->setStoreId($storeId);
