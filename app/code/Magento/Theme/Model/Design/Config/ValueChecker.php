@@ -84,7 +84,7 @@ class ValueChecker
     protected function isEqual($value, $defaultValue)
     {
         if (is_array($value)) {
-            return $this->isEqualArrays($value, $defaultValue);
+            return $this->isEqualArrays($value, (array)$defaultValue);
         }
 
         return $value === $defaultValue;
