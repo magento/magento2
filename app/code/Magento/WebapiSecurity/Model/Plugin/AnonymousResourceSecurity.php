@@ -5,6 +5,7 @@
  */
 namespace Magento\WebapiSecurity\Model\Plugin;
 
+use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Webapi\Model\Config\Converter;
 
 class AnonymousResourceSecurity
@@ -15,25 +16,15 @@ class AnonymousResourceSecurity
     const XML_ALLOW_INSECURE = 'webapi/webapisecurity/allow_insecure';
 
     /**
-     * @var \Magento\Framework\App\Config\ReinitableConfigInterface
-     */
-    protected $config;
-
-    /**
-     * @var array
-     */
-    protected $resources;
-
-    /**
      * AnonymousResourceSecurity constructor.
      *
-     * @param \Magento\Framework\App\Config\ReinitableConfigInterface $config
+     * @param ReinitableConfigInterface $config
      * @param array $resources
      */
-    public function __construct(\Magento\Framework\App\Config\ReinitableConfigInterface $config, $resources)
-    {
-        $this->config = $config;
-        $this->resources = $resources;
+    public function __construct(
+        protected readonly ReinitableConfigInterface $config,
+        protected $resources
+    ) {
     }
 
     /**
