@@ -331,7 +331,11 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
         $storeId = $hasSingleStore
             ? $this->getDefaultStoreId()
             : (int) $this->_storeManager->getStore($object->getStoreId())->getId();
-        if ($valueId > 0 && array_key_exists('store_id', $row) && $storeId === $row['store_id']) {
+
+        $updateExistingEntry = $valueId > 0 && array_key_exists('store_id', $row) && $storeId === $row['store_id'];
+        $needToUpdateMultipleStores = !$hasSingleStore && $attribute->isScopeWebsite();
+
+        if ($updateExistingEntry && !$needToUpdateMultipleStores) {
             $table = $attribute->getBackend()->getTable();
             $connection = $this->getConnection();
             $connection->update(
