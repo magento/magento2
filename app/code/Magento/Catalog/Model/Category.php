@@ -1140,11 +1140,19 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         }
         $productIndexer = $this->indexerRegistry->get(Indexer\Category\Product::INDEXER_ID);
 
-        if (!empty($this->getAffectedProductIds())
-                || $this->dataHasChangedFor('is_anchor')
-                || $this->dataHasChangedFor('is_active')) {
+        if ($this->dataHasChangedFor('is_anchor') || $this->dataHasChangedFor('is_active')) {
             if (!$productIndexer->isScheduled()) {
                 $productIndexer->reindexList($this->getPathIds());
+            }
+        } elseif (!empty($this->getAffectedProductIds())) {
+            /**
+             * Only the product assignments have changed. Reindexing the whole category path includes the root
+             * category and therefore rebuilds the index for the entire catalog, while reindexing the affected
+             * products rebuilds exactly the index rows the changed assignments can affect.
+             */
+            $productCategoryIndexer = $this->indexerRegistry->get(Indexer\Product\Category::INDEXER_ID);
+            if (!$productCategoryIndexer->isScheduled()) {
+                $productCategoryIndexer->reindexList($this->getAffectedProductIds());
             }
         }
     }
