@@ -7,23 +7,17 @@ namespace Magento\Catalog\Model\ResourceModel\Category\Attribute\Frontend;
 
 /**
  * Category image attribute frontend
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Image extends \Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend
 {
-    const IMAGE_PATH_SEGMENT = 'catalog/category/';
+    public const IMAGE_PATH_SEGMENT = 'catalog/category/';
 
     /**
-     * Store manager
-     *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * Construct
-     *
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(\Magento\Store\Model\StoreManagerInterface $storeManager)

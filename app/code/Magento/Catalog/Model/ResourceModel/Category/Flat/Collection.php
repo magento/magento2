@@ -22,8 +22,6 @@ use Magento\Store\Model\ScopeInterface;
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
-     * Event prefix used for catalog category collection events
-     *
      * @var string
      */
     protected $_eventPrefix = 'catalog_category_collection';
@@ -36,8 +34,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected $_eventObject = 'category_collection';
 
     /**
-     * Store manager for managing store-related operations
-     *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;

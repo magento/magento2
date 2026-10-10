@@ -5,10 +5,10 @@
  */
 namespace Magento\Catalog\Model\Product\Attribute\Source;
 
+use Magento\Theme\Model\PageLayout\Config\Builder;
+
 /**
  * Catalog product landing page attribute source
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Layout extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 {
@@ -19,7 +19,8 @@ class Layout extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 
     /**
      * @inheritdoc
-     * @deprecated 103.0.1 since the cache is now handled by \Magento\Theme\Model\PageLayout\Config\Builder::$configFiles
+     * @var array
+     * @deprecated 103.0.1 since the cache is now handled by Builder::$configFiles
      */
     protected $_options = null;
 

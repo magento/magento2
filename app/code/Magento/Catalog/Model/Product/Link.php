@@ -25,9 +25,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection as Produ
 class Link extends \Magento\Framework\Model\AbstractModel
 {
     public const LINK_TYPE_RELATED = 1;
-
     public const LINK_TYPE_UPSELL = 4;
-
     public const LINK_TYPE_CROSSSELL = 5;
 
     /**
@@ -36,15 +34,11 @@ class Link extends \Magento\Framework\Model\AbstractModel
     protected $_attributes = null;
 
     /**
-     * Factory for creating product collection
-     *
      * @var \Magento\Catalog\Model\ResourceModel\Product\Link\Product\CollectionFactory
      */
     protected $_productCollectionFactory;
 
     /**
-     * Factory for product link collection
-     *
      * @var \Magento\Catalog\Model\ResourceModel\Product\Link\CollectionFactory
      */
     protected $_linkCollectionFactory;
