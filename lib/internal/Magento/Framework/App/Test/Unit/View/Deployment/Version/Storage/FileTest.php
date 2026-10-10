@@ -50,6 +50,48 @@ class FileTest extends TestCase
         $this->assertEquals('123', $this->object->load());
     }
 
+    /**
+     * Whitespace around the version in deployed_version.txt must be stripped (URLs / JSON embed this value).
+     *
+     * @param string $rawFromFile
+     * @param string $expectedVersion
+     * @dataProvider loadTrimsWhitespaceDataProvider
+     */
+    public function testLoadTrimsWhitespaceFromFileContents($rawFromFile, $expectedVersion)
+    {
+        $this->directory->expects($this->once())
+            ->method('isReadable')
+            ->with('fixture_file.txt')
+            ->willReturn(true);
+        $this->directory->expects($this->once())
+            ->method('readFile')
+            ->with('fixture_file.txt')
+            ->willReturn($rawFromFile);
+        $this->assertSame($expectedVersion, $this->object->load());
+    }
+
+    /**
+     * Cases match PHP trim(): spaces, tabs, CR/LF, NUL, vertical tab at start/end only.
+     *
+     * @return array
+     */
+    public static function loadTrimsWhitespaceDataProvider()
+    {
+        $v = '1774318753872';
+
+        return [
+            'trailing LF' => [$v . "\n", $v],
+            'trailing CRLF' => [$v . "\r\n", $v],
+            'leading LF' => ["\n" . $v, $v],
+            'leading and trailing CR' => ["\r" . $v . "\r", $v],
+            'spaces around' => ['  ' . $v . '  ', $v],
+            'tabs around' => ["\t" . $v . "\t", $v],
+            'mixed space tab newline' => [" \t\n\r" . $v . "\r\n\t ", $v],
+            'vertical tabs' => ["\x0B" . $v . "\x0B", $v],
+            'null bytes on edges' => ["\0" . $v . "\0", $v],
+        ];
+    }
+
     public function testSave()
     {
         $this->directory
