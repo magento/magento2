@@ -191,6 +191,10 @@ class CrontabManager implements CrontabManagerInterface
             return '';
         }
 
+        if ($content !== '' && !str_ends_with($content, PHP_EOL)) {
+            $content .= PHP_EOL;
+        }
+
         return $content;
     }
 
