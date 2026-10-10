@@ -11,6 +11,16 @@ namespace Magento\Theme\Model\Theme;
 class Resolver implements \Magento\Framework\View\Design\Theme\ResolverInterface
 {
     /**
+     * @var array
+     */
+    private $resolvedThemes = [];
+
+    /**
+     * @var bool[]
+     */
+    private $isThemeResolved = [];
+
+    /**
      * @var \Magento\Framework\View\DesignInterface
      */
     protected $design;
@@ -48,19 +58,31 @@ class Resolver implements \Magento\Framework\View\Design\Theme\ResolverInterface
     public function get()
     {
         $area = $this->appState->getAreaCode();
-        if ($this->design->getDesignTheme()->getArea() == $area || $this->design->getArea() == $area) {
-            return $this->design->getDesignTheme();
+        $cacheKey = (string)$area;
+        if ($this->isThemeResolved[$cacheKey] ?? false) {
+            return $this->resolvedThemes[$cacheKey];
         }
 
-        /** @var \Magento\Theme\Model\ResourceModel\Theme\Collection $themeCollection */
-        $themeCollection = $this->themeFactory->create();
-        $themeIdentifier = $this->design->getConfigurationDesignTheme($area);
-        if (is_numeric($themeIdentifier)) {
-            $result = $themeCollection->getItemById($themeIdentifier);
+        $designTheme = $this->design->getDesignTheme();
+        if (($designTheme && $designTheme->getArea() == $area) || $this->design->getArea() == $area) {
+            $result = $designTheme;
         } else {
-            $themeFullPath = $area . \Magento\Framework\View\Design\ThemeInterface::PATH_SEPARATOR . $themeIdentifier;
-            $result = $themeCollection->getThemeByFullPath($themeFullPath);
+            /** @var \Magento\Theme\Model\ResourceModel\Theme\Collection $themeCollection */
+            $themeCollection = $this->themeFactory->create();
+            $themeIdentifier = $this->design->getConfigurationDesignTheme($area);
+            if (is_numeric($themeIdentifier)) {
+                $result = $themeCollection->getItemById($themeIdentifier);
+            } else {
+                $themeFullPath = $area
+                    . \Magento\Framework\View\Design\ThemeInterface::PATH_SEPARATOR
+                    . $themeIdentifier;
+                $result = $themeCollection->getThemeByFullPath($themeFullPath);
+            }
         }
+
+        $this->resolvedThemes[$cacheKey] = $result;
+        $this->isThemeResolved[$cacheKey] = true;
+
         return $result;
     }
 }
