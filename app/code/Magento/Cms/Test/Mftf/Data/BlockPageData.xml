@@ -14,4 +14,10 @@
         <data key="content">Here is a block test. Yeah!</data>
         <data key="active">true</data>
     </entity>
+    <entity name="blockWithH6Tag" type="block">
+        <data key="title" unique="suffix">Default Block</data>
+        <data key="identifier" unique="suffix" >blockWithH6Tag</data>
+        <data key="content">&lt;h6&gt;test&lt;/h6&gt;</data>
+        <data key="active">true</data>
+    </entity>
 </entities>

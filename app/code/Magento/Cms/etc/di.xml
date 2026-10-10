@@ -270,6 +270,7 @@
                 <item name="ul" xsi:type="string">ul</item>
                 <item name="li" xsi:type="string">li</item>
                 <item name="ol" xsi:type="string">ol</item>
+                <item name="h6" xsi:type="string">h6</item>
                 <item name="h5" xsi:type="string">h5</item>
                 <item name="h4" xsi:type="string">h4</item>
                 <item name="h3" xsi:type="string">h3</item>
