@@ -7,9 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Helper\Product;
 
+use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Model\Config;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
 use Magento\Store\Model\ScopeInterface;
 
@@ -34,8 +37,16 @@ class ProductList
 
     /**
      * @var Registry
+     * @deprecated 100.0.0 Registry is no longer used. Category is resolved via CategoryRepositoryInterface.
+     * @see \Magento\Catalog\Api\CategoryRepositoryInterface
      */
     private $coreRegistry;
+
+    /** @var CategoryRepositoryInterface */
+    private CategoryRepositoryInterface $categoryRepository;
+
+    /** @var RequestInterface */
+    private RequestInterface $request;
 
     /**
      * Default limits per page
@@ -46,14 +57,22 @@ class ProductList
 
     /**
      * @param ScopeConfigInterface $scopeConfig
-     * @param Registry $coreRegistry
+     * @param Registry|null $coreRegistry @deprecated - no longer used
+     * @param CategoryRepositoryInterface|null $categoryRepository
+     * @param RequestInterface|null $request
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
-        ?Registry $coreRegistry = null
+        ?Registry $coreRegistry = null,
+        ?CategoryRepositoryInterface $categoryRepository = null,
+        ?RequestInterface $request = null
     ) {
         $this->scopeConfig = $scopeConfig;
-        $this->coreRegistry = $coreRegistry ?? ObjectManager::getInstance()->get(Registry::class);
+        $this->coreRegistry = $coreRegistry;
+        $this->categoryRepository = $categoryRepository
+            ?? ObjectManager::getInstance()->get(CategoryRepositoryInterface::class);
+        $this->request = $request
+            ?? ObjectManager::getInstance()->get(RequestInterface::class);
     }
 
     /**
@@ -100,17 +119,27 @@ class ProductList
     /**
      * Get default sort field
      *
-     * @FIXME Helper should be context-independent
      * @return null|string
      */
-    public function getDefaultSortField()
+    public function getDefaultSortField(): ?string
     {
-        $currentCategory = $this->coreRegistry->registry('current_category');
-        if ($currentCategory) {
-            return $currentCategory->getDefaultSortBy();
+        $categoryId = (int) $this->request->getParam('id');
+        if ($categoryId) {
+            try {
+                $category = $this->categoryRepository->get($categoryId);
+                $sortBy = $category->getDefaultSortBy();
+                if ($sortBy) {
+                    return $sortBy;
+                }
+            } catch (NoSuchEntityException $e) {
+                // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
+            }
         }
 
-        return $this->scopeConfig->getValue(Config::XML_PATH_LIST_DEFAULT_SORT_BY, ScopeInterface::SCOPE_STORE);
+        return $this->scopeConfig->getValue(
+            Config::XML_PATH_LIST_DEFAULT_SORT_BY,
+            ScopeInterface::SCOPE_STORE
+        );
     }
 
     /**
