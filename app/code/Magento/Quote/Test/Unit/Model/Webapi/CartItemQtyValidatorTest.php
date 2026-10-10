@@ -9,6 +9,8 @@ namespace Magento\Quote\Test\Unit\Model\Webapi;
 
 use Magento\Framework\Exception\InputException;
 use Magento\Quote\Api\Data\CartItemInterface;
+use Magento\Quote\Model\Quote\Address\Item as AddressItem;
+use Magento\Quote\Model\Quote\Item\AbstractItem;
 use Magento\Quote\Model\Webapi\CartItemQtyValidator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -33,6 +35,17 @@ class CartItemQtyValidatorTest extends TestCase
         ];
     }
 
+    #[DataProvider('invalidQtyProvider')]
+    public function testRejectsInvalidAddressItemQuantity($qty): void
+    {
+        $addressItem = $this->createStub(AddressItem::class);
+        self::assertInstanceOf(AbstractItem::class, $addressItem);
+        self::assertNotInstanceOf(CartItemInterface::class, $addressItem);
+
+        $this->expectException(InputException::class);
+        (new CartItemQtyValidator())->validateEntityValue($addressItem, 'qty', $qty);
+    }
+
     #[DataProvider('validQtyProvider')]
     public function testAcceptsPositiveCartItemQuantity($qty): void
     {
@@ -48,6 +61,14 @@ class CartItemQtyValidatorTest extends TestCase
             'integer' => [1],
             'decimal' => [2.5],
         ];
+    }
+
+    #[DataProvider('validQtyProvider')]
+    public function testAcceptsPositiveAddressItemQuantity($qty): void
+    {
+        (new CartItemQtyValidator())->validateEntityValue($this->createStub(AddressItem::class), 'qty', $qty);
+
+        $this->expectNotToPerformAssertions();
     }
 
     public function testOtherInputIsNotAffected(): void

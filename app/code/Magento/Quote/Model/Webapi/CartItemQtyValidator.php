@@ -10,6 +10,7 @@ namespace Magento\Quote\Model\Webapi;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Webapi\Validator\ServiceInputValidatorInterface;
 use Magento\Quote\Api\Data\CartItemInterface;
+use Magento\Quote\Model\Quote\Item\AbstractItem;
 
 /**
  * Validate cart item quantity before the quote item setter normalizes it.
@@ -31,7 +32,7 @@ class CartItemQtyValidator implements ServiceInputValidatorInterface
      */
     public function validateEntityValue(object $entity, string $propertyName, $value): void
     {
-        if ($entity instanceof CartItemInterface
+        if (($entity instanceof CartItemInterface || $entity instanceof AbstractItem)
             && $propertyName === 'qty'
             && (!is_numeric($value) || $value <= 0)
         ) {
