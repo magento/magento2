@@ -12,6 +12,7 @@ use Magento\Catalog\Model\Indexer\Category\Product\Processor;
 use Magento\Catalog\Model\ResourceModel\Category;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 use Magento\Catalog\Model\ResourceModel\Category\TreeFactory;
+use Magento\Catalog\Model\ResourceModel\Product\CategoryLink;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute;
 use Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend;
@@ -111,6 +112,11 @@ class CategoryTest extends TestCase
     private $indexerProcessorMock;
 
     /**
+     * @var CategoryLink|MockObject
+     */
+    private $productCategoryLinkMock;
+
+    /**
      * @inheritDoc
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -156,6 +162,7 @@ class CategoryTest extends TestCase
         $this->treeFactoryMock = $this->createMock(TreeFactory::class);
         $this->collectionFactoryMock = $this->createMock(CollectionFactory::class);
         $this->indexerProcessorMock = $this->createMock(Processor::class);
+        $this->productCategoryLinkMock = $this->createMock(CategoryLink::class);
 
         $this->serializerMock = $this->createMock(Json::class);
 
@@ -207,6 +214,7 @@ class CategoryTest extends TestCase
             '_categoryTreeFactory' => [$reflection, $this->treeFactoryMock],
             '_categoryCollectionFactory' => [$reflection, $this->collectionFactoryMock],
             'indexerProcessor' => [$reflection, $this->indexerProcessorMock],
+            'productCategoryLink' => [$reflection, $this->productCategoryLinkMock],
             'serializer' => [$reflection, $this->serializerMock],
             'metadataPool' => [$reflection, $metadataPoolMock],
             'entityManager' => [$reflection, $entityManagerMock],
@@ -643,6 +651,7 @@ class CategoryTest extends TestCase
 
         $this->connectionMock->method('delete')->willReturn(1);
         $this->connectionMock->method('insertMultiple')->willReturn(1);
+        $this->productCategoryLinkMock->expects($this->once())->method('resetCategoryLinksCache');
 
         $reflection = new \ReflectionClass(Category::class);
         $method = $reflection->getMethod('_saveCategoryProducts');
