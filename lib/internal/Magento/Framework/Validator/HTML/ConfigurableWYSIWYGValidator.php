@@ -19,7 +19,7 @@ class ConfigurableWYSIWYGValidator implements WYSIWYGValidatorInterface
      * @var string
      */
     private static string $xssFiltrationPattern =
-        '/((javascript(\\\\x3a|:|%3A))|(data(\\\\x3a|:|%3A))|(vbscript:)|(script)|(alert\())|'
+        '/((javascript(\\\\x3a|:|%3A))|(data(\\\\x3a|:|%3A))|(vbscript:)|(script\b)|(alert\())|'
         . '((\\\\x6A\\\\x61\\\\x76\\\\x61\\\\x73\\\\x63\\\\x72\\\\x69\\\\x70\\\\x74(\\\\x3a|:|%3A))|'
         . '(\\\\x64\\\\x61\\\\x74\\\\x61(\\\\x3a|:|%3A)))/i';
 

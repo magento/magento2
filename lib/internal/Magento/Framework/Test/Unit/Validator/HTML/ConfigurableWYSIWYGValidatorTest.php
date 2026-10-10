@@ -210,6 +210,15 @@ class ConfigurableWYSIWYGValidatorTest extends TestCase
                 [],
                 ['div' => ['src' => false]]
             ],
+            'valid-allowed-tag-with-script-in-class-name' => [
+                ['div'],
+                ['class', 'src'],
+                [],
+                '<div class="product-description">this is a product description</div>',
+                true,
+                [],
+                ['div' => ['src' => false]]
+            ],
             'invalid-allowed-tag-attributes' => [
                 ['a'],
                 ['href'],
