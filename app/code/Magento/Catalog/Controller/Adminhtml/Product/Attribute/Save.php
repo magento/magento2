@@ -12,6 +12,7 @@ use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Controller\Adminhtml\Product\Attribute;
 use Magento\Catalog\Helper\Product;
+use Magento\Catalog\Model\Product\Attribute\FilterableAllowedInputTypes;
 use Magento\Catalog\Model\Product\Attribute\Frontend\Inputtype\Presentation;
 use Magento\Framework\Serialize\Serializer\FormData;
 use Magento\Catalog\Model\Product\AttributeSet\BuildFactory;
@@ -39,41 +40,6 @@ use Magento\Framework\View\Result\PageFactory;
 class Save extends Attribute implements HttpPostActionInterface
 {
     /**
-     * @var BuildFactory
-     */
-    protected $buildFactory;
-
-    /**
-     * @var FilterManager
-     */
-    protected $filterManager;
-
-    /**
-     * @var Product
-     */
-    protected $productHelper;
-
-    /**
-     * @var AttributeFactory
-     */
-    protected $attributeFactory;
-
-    /**
-     * @var ValidatorFactory
-     */
-    protected $validatorFactory;
-
-    /**
-     * @var CollectionFactory
-     */
-    protected $groupCollectionFactory;
-
-    /**
-     * @var LayoutFactory
-     */
-    private $layoutFactory;
-
-    /**
      * @var Presentation
      */
     private $presentation;
@@ -82,6 +48,11 @@ class Save extends Attribute implements HttpPostActionInterface
      * @var FormData|null
      */
     private $formDataSerializer;
+
+    /**
+     * @var FilterableAllowedInputTypes
+     */
+    private $filterableAllowedInputTypes;
 
     /**
      * @param Context $context
@@ -97,6 +68,7 @@ class Save extends Attribute implements HttpPostActionInterface
      * @param LayoutFactory $layoutFactory
      * @param Presentation|null $presentation
      * @param FormData|null $formDataSerializer
+     * @param FilterableAllowedInputTypes|null $filterableAllowedInputTypes
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -104,27 +76,23 @@ class Save extends Attribute implements HttpPostActionInterface
         FrontendInterface $attributeLabelCache,
         Registry $coreRegistry,
         PageFactory $resultPageFactory,
-        BuildFactory $buildFactory,
-        AttributeFactory $attributeFactory,
-        ValidatorFactory $validatorFactory,
-        CollectionFactory $groupCollectionFactory,
-        FilterManager $filterManager,
-        Product $productHelper,
-        LayoutFactory $layoutFactory,
+        protected BuildFactory $buildFactory,
+        protected AttributeFactory $attributeFactory,
+        protected ValidatorFactory $validatorFactory,
+        protected CollectionFactory $groupCollectionFactory,
+        protected FilterManager $filterManager,
+        protected Product $productHelper,
+        private LayoutFactory $layoutFactory,
         ?Presentation $presentation = null,
-        ?FormData $formDataSerializer = null
+        ?FormData $formDataSerializer = null,
+        ?FilterableAllowedInputTypes $filterableAllowedInputTypes = null
     ) {
         parent::__construct($context, $attributeLabelCache, $coreRegistry, $resultPageFactory);
-        $this->buildFactory = $buildFactory;
-        $this->filterManager = $filterManager;
-        $this->productHelper = $productHelper;
-        $this->attributeFactory = $attributeFactory;
-        $this->validatorFactory = $validatorFactory;
-        $this->groupCollectionFactory = $groupCollectionFactory;
-        $this->layoutFactory = $layoutFactory;
         $this->presentation = $presentation ?: ObjectManager::getInstance()->get(Presentation::class);
         $this->formDataSerializer = $formDataSerializer
             ?: ObjectManager::getInstance()->get(FormData::class);
+        $this->filterableAllowedInputTypes = $filterableAllowedInputTypes
+            ?: ObjectManager::getInstance()->get(FilterableAllowedInputTypes::class);
     }
 
     /**
@@ -254,6 +222,11 @@ class Save extends Attribute implements HttpPostActionInterface
 
             $data += ['is_filterable' => 0, 'is_filterable_in_search' => 0];
 
+            $filterableValidationResult = $this->validateFilterableFlags($data, $attributeId);
+            if ($filterableValidationResult) {
+                return $filterableValidationResult;
+            }
+
             $defaultValueField = $model->getDefaultValueByInput($data['frontend_input']);
             if ($defaultValueField) {
                 $data['default_value'] = $this->getRequest()->getParam($defaultValueField);
@@ -354,6 +327,34 @@ class Save extends Attribute implements HttpPostActionInterface
             }
         }
         return $this->returnResult('catalog/*/', [], ['error' => true]);
+    }
+
+    /**
+     * Reject layered-navigation flags for input types the admin form does not allow.
+     *
+     * @param array $data
+     * @param mixed $attributeId
+     * @return Json|Redirect|null
+     */
+    private function validateFilterableFlags(array $data, $attributeId)
+    {
+        if ($this->filterableAllowedInputTypes->isAllowed($data['frontend_input'] ?? null)) {
+            return null;
+        }
+
+        if ((int)($data['is_filterable'] ?? 0) || (int)($data['is_filterable_in_search'] ?? 0)) {
+            $this->messageManager->addErrorMessage(
+                __('Can be used only with catalog input type Yes/No, Dropdown, Multiple Select and Price.')
+            );
+            $this->_session->setAttributeData($data);
+            return $this->returnResult(
+                'catalog/*/edit',
+                ['attribute_id' => $attributeId, '_current' => true],
+                ['error' => true]
+            );
+        }
+
+        return null;
     }
 
     /**
