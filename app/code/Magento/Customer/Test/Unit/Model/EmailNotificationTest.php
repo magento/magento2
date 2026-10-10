@@ -235,9 +235,6 @@ class EmailNotificationTest extends TestCase
          */
         $origCustomerMock = $this->createMock(CustomerInterface::class);
         $origCustomerMock->expects($this->any())
-            ->method('getStoreId')
-            ->willReturn($customerStoreId);
-        $origCustomerMock->expects($this->any())
             ->method('getId')
             ->willReturn(self::STUB_CUSTOMER_ID);
         $origCustomerMock->expects($this->never())
@@ -794,9 +791,6 @@ class EmailNotificationTest extends TestCase
             ->method('getWebsiteId')
             ->willReturn(self::STUB_CUSTOMER_WEBSITE_ID);
         $customerMock->expects($this->any())
-            ->method('getStoreId')
-            ->willReturn($customerStoreId);
-        $customerMock->expects($this->any())
             ->method('getId')
             ->willReturn(self::STUB_CUSTOMER_ID);
         $customerMock->expects($this->any())
@@ -902,9 +896,6 @@ class EmailNotificationTest extends TestCase
         $customer->expects($this->any())
             ->method('getWebsiteId')
             ->willReturn(self::STUB_CUSTOMER_WEBSITE_ID);
-        $customer->expects($this->any())
-            ->method('getStoreId')
-            ->willReturn($customerStoreId);
         $customer->expects($this->any())
             ->method('getId')
             ->willReturn(self::STUB_CUSTOMER_ID);
@@ -1110,10 +1101,6 @@ class EmailNotificationTest extends TestCase
 
         $customerMock->expects($this->never())
             ->method('getWebsiteId');
-
-        $customerMock->expects($this->once())
-            ->method('getStoreId')
-            ->willReturn($customerStoreId);
         $customerMock->expects($this->any())
             ->method('getId')
             ->willReturn(self::STUB_CUSTOMER_ID);
@@ -1211,9 +1198,6 @@ class EmailNotificationTest extends TestCase
         $customer = $this->createMock(CustomerInterface::class);
         $customer->expects($this->never())
             ->method('getWebsiteId');
-        $customer->expects($this->any())
-            ->method('getStoreId')
-            ->willReturn($customerStoreId);
         $customer->expects($this->any())
             ->method('getId')
             ->willReturn(self::STUB_CUSTOMER_ID);
