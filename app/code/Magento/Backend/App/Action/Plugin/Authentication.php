@@ -227,9 +227,16 @@ class Authentication
 
         // Checks, whether secret key is required for admin access or request uri is explicitly set
         if ($this->_url->useSecretKey()) {
-            // The requested URL has an invalid secret key and therefore redirecting to this URL
-            // will cause a security vulnerability.
-            $requestUri = $this->_url->getUrl($this->_url->getStartupPageUrl());
+            if ($this->_url->getAreaFrontName()) {
+                // Remove backend front name from request URI, otherwise it is duplicated by getUrl
+                $requestUriParts = explode('/', trim($request->getRequestUri(), '/'), 2);
+                $requestPath = array_pop($requestUriParts);
+            } else {
+                $requestPath = $request->getRequestUri();
+            }
+
+            // Regenerate URL with correct secret key
+            $requestUri = $this->_url->getUrl($requestPath);
         } elseif ($request) {
             $requestUri = $request->getRequestUri();
         }
