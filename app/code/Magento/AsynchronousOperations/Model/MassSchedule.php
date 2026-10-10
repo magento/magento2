@@ -68,11 +68,6 @@ class MassSchedule
     private $encryptor;
 
     /**
-     * @var SaveMultipleOperationsInterface
-     */
-    private $saveMultipleOperations;
-
-    /**
      * Initialize dependencies.
      *
      * @param IdentityGeneratorInterface $identityService
@@ -83,7 +78,8 @@ class MassSchedule
      * @param OperationRepositoryInterface $operationRepository
      * @param UserContextInterface $userContext
      * @param Encryptor $encryptor
-     * @param SaveMultipleOperationsInterface $saveMultipleOperations
+     * @param SaveMultipleOperationsInterface $saveMultipleOperations No longer used
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         IdentityGeneratorInterface $identityService,
@@ -104,7 +100,6 @@ class MassSchedule
         $this->operationRepository = $operationRepository;
         $this->userContext = $userContext;
         $this->encryptor = $encryptor;
-        $this->saveMultipleOperations = $saveMultipleOperations;
     }
 
     /**
@@ -175,7 +170,6 @@ class MassSchedule
                 );
             }
         }
-        $this->saveMultipleOperations->execute($operations);
 
         /** @var AsyncResponseInterface $asyncResponse */
         $asyncResponse = $this->asyncResponseFactory->create();
