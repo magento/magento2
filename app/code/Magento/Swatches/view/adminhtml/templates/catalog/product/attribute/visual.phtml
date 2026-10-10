@@ -27,7 +27,7 @@ $stores = $block->getStoresSortedBySortOrder();
                         <span><?= $escaper->escapeHtml($_store->getName()) ?></span>
                     </th>
                 <?php endforeach; ?>
-                <?php $colTotal = count($stores) * 2 + 3; ?>
+                <?php $colTotal = count($stores) + 4; ?>
                 <th class="col-delete">&nbsp;</th>
             </tr>
             </thead>
