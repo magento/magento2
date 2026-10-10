@@ -32,6 +32,7 @@ use Magento\TestFramework\TestCase\AbstractController;
  * @see \Magento\Catalog\Controller\Product
  *
  * @magentoDbIsolation enabled
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProductTest extends AbstractController
 {

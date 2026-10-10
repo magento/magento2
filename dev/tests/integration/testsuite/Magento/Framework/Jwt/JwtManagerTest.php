@@ -37,6 +37,14 @@ use Magento\Framework\Jwt\Unsecured\UnsecuredJwtInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Creates and reads JWTs of all supported types
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+ * @SuppressWarnings(PHPMD.NPathComplexity)
+ * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+ */
 class JwtManagerTest extends TestCase
 {
     /**
