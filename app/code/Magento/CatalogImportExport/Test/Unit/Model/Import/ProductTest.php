@@ -16,6 +16,7 @@ use Magento\CatalogInventory\Model\ResourceModel\Stock\ItemFactory;
 use Magento\CatalogImportExport\Model\Import\Product\OptionFactory;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Url;
 use Magento\CatalogImportExport\Model\Import\Product;
 use Magento\CatalogImportExport\Model\Import\Product\CategoryProcessor;
@@ -945,6 +946,86 @@ class ProductTest extends AbstractImportTestCase
         $actualResult = $this->importProduct->getProductCategories($productSku);
 
         $this->assertEquals($expectedResult, $actualResult);
+    }
+
+    /**
+     * getProductCategories() falls back to the product's existing category links (read directly
+     * from the category-product link table, not through the product repository) when the SKU was
+     * never populated into categoriesCache (i.e. its import row had no category data at all).
+     *
+     * @return void
+     */
+    public function testGetProductCategoriesFallsBackToExistingProductWhenNotInCache(): void
+    {
+        $productSku = 'productSku';
+        $this->skuProcessor->method('getNewSku')->with($productSku)->willReturn(['entity_id' => 11]);
+        $resource = $this->createMock(ResourceModel::class);
+        $resource->method('getProductCategoryTable')->willReturn('catalog_category_product');
+        $this->_resourceFactory->method('create')->willReturn($resource);
+        $this->select->method('where')->willReturnSelf();
+        $this->_connection->expects($this->once())->method('fetchCol')->willReturn(['4', '7']);
+        $this->setPropertyValue($this->importProduct, 'categoriesCache', []);
+
+        $actualResult = $this->importProduct->getProductCategories($productSku);
+
+        $this->assertEquals([4, 7], $actualResult);
+    }
+
+    /**
+     * getProductCategories() returns an empty array when the product can't be resolved either.
+     *
+     * @return void
+     */
+    public function testGetProductCategoriesReturnsEmptyWhenProductMissingAndNotInCache(): void
+    {
+        $productSku = 'productSku';
+        $this->skuProcessor->method('getNewSku')->with($productSku)->willReturn(null);
+        $this->skuStorageMock->method('get')->with($productSku)->willReturn(null);
+        $this->_connection->expects($this->never())->method('fetchCol');
+        $this->setPropertyValue($this->importProduct, 'categoriesCache', []);
+
+        $this->assertEquals([], $this->importProduct->getProductCategories($productSku));
+    }
+
+    /**
+     * saveProductCategoriesPhase() must not touch categoriesCache, and therefore must not trigger
+     * the category-resave queries in _saveProductCategories(), for a row without category data.
+     *
+     * @return void
+     */
+    public function testSaveProductCategoriesPhaseSkipsRowsWithoutCategoryColumn(): void
+    {
+        $this->categoryProcessor->expects($this->never())->method('upsertCategories');
+        $this->setPropertyValue($this->importProduct, 'categoriesCache', []);
+
+        $this->invokeMethod(
+            $this->importProduct,
+            'saveProductCategoriesPhase',
+            [1, [Product::COL_SKU => 'productSku', Product::COL_CATEGORY => '']]
+        );
+
+        $this->assertEquals([], $this->getPropertyValue($this->importProduct, 'categoriesCache'));
+    }
+
+    /**
+     * processRowCategories() no longer loads the product's existing categories - that is now
+     * getProductCategories()'s job, done lazily only when actually needed.
+     *
+     * @return void
+     */
+    public function testProcessRowCategoriesReturnsEmptyWithoutLoadingProductWhenColumnMissing(): void
+    {
+        $productRepositoryMock = $this->createMock(ProductRepositoryInterface::class);
+        $productRepositoryMock->expects($this->never())->method('get');
+        $this->setPropertyValue($this->importProduct, 'productRepository', $productRepositoryMock);
+
+        $result = $this->invokeMethod(
+            $this->importProduct,
+            'processRowCategories',
+            [[Product::COL_SKU => 'productSku', 'rowNum' => 1]]
+        );
+
+        $this->assertEquals([], $result);
     }
 
     /**
