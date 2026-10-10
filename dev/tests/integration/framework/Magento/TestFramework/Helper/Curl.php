@@ -15,16 +15,15 @@ class Curl extends CurlLibrary
     /**
      * Make DELETE request
      *
-     * String type was added to parameter $param in order to support sending JSON or XML requests.
-     * This feature was added base on Community Pull Request https://github.com/magento/magento2/pull/8373
-     *
      * @param string $uri
+     * @param array|string $params
      * @return void
      *
-     * @see \Magento\Framework\HTTP\Client#post($uri, $params)
+     * @deprecated Use \Magento\Framework\HTTP\Client\Curl::delete instead
+     * @see \Magento\Framework\HTTP\Client\Curl::delete
      */
-    public function delete($uri)
+    public function delete($uri, $params = []): void
     {
-        $this->makeRequest("DELETE", $uri);
+        $this->makeRequest("DELETE", $uri, $params);
     }
 }
