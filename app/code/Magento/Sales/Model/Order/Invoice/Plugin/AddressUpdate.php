@@ -56,34 +56,32 @@ class AddressUpdate
         \Magento\Sales\Model\ResourceModel\Order\Handler\Address $result,
         \Magento\Sales\Model\Order $order
     ) {
-        if ($order->hasInvoices()) {
-            $billingAddress = $order->getBillingAddress();
-            $shippingAddress = $order->getShippingAddress();
+        $billingAddress = $order->getBillingAddress();
+        $shippingAddress = $order->getShippingAddress();
 
-            $orderInvoiceHasChanges = false;
-            /** @var \Magento\Sales\Model\Order\Invoice $invoice */
-            foreach ($order->getInvoiceCollection()->getItems() as $invoice) {
-                $invoiceAttributesForSave = [];
+        $orderInvoiceHasChanges = false;
+        /** @var \Magento\Sales\Model\Order\Invoice $invoice */
+        foreach ($order->getInvoiceCollection() as $invoice) {
+            $invoiceAttributesForSave = [];
 
-                if (!$invoice->getBillingAddressId() && $billingAddress) {
-                    $invoice->setBillingAddressId($billingAddress->getId());
-                    $invoiceAttributesForSave[] = 'billing_address_id';
-                    $orderInvoiceHasChanges = true;
-                }
-
-                if (!$invoice->getShippingAddressId() && $shippingAddress) {
-                    $invoice->setShippingAddressId($shippingAddress->getId());
-                    $invoiceAttributesForSave[] = 'shipping_address_id';
-                    $orderInvoiceHasChanges = true;
-                }
-
-                if (!empty($invoiceAttributesForSave)) {
-                    $this->attribute->saveAttribute($invoice, $invoiceAttributesForSave);
-                }
+            if (!$invoice->getBillingAddressId() && $billingAddress) {
+                $invoice->setBillingAddressId($billingAddress->getId());
+                $invoiceAttributesForSave[] = 'billing_address_id';
+                $orderInvoiceHasChanges = true;
             }
-            if ($orderInvoiceHasChanges && !$this->globalConfig->getValue('dev/grid/async_indexing')) {
-                $this->gridPool->refreshByOrderId($order->getId());
+
+            if (!$invoice->getShippingAddressId() && $shippingAddress) {
+                $invoice->setShippingAddressId($shippingAddress->getId());
+                $invoiceAttributesForSave[] = 'shipping_address_id';
+                $orderInvoiceHasChanges = true;
             }
+
+            if (!empty($invoiceAttributesForSave)) {
+                $this->attribute->saveAttribute($invoice, $invoiceAttributesForSave);
+            }
+        }
+        if ($orderInvoiceHasChanges && !$this->globalConfig->getValue('dev/grid/async_indexing')) {
+            $this->gridPool->refreshByOrderId($order->getId());
         }
     }
 }
