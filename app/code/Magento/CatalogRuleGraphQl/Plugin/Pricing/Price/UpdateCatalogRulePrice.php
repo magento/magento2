@@ -52,7 +52,7 @@ class UpdateCatalogRulePrice
         $value
     ) {
         $product = $catalogRulePrice->getProduct();
-        if ($product && $product->getCustomerGroupId()) {
+        if ($product && $product->getCustomerGroupId() !== null) {
             $store = $product->getStore();
             $value = $this->ruleResource->getRulePrice(
                 $this->dateTime->scopeDate($store->getId()),
