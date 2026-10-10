@@ -154,4 +154,49 @@ class GroupedCollectionTest extends TestCase
 
         $this->_assertGroups($expectedGroups, $this->_object->getGroups());
     }
+
+    public function testAssetsWithDifferentIntegrityShareGroupAndKeepOrder(): void
+    {
+        $first = new Remote('http://127.0.0.1/magento/first.js', 'js');
+        $second = new Remote('http://127.0.0.1/magento/second.js', 'js');
+        $third = new Remote('http://127.0.0.1/magento/third.js', 'js');
+        $sri = static fn (string $hash): array => [
+            'attributes' => ['integrity' => $hash, 'crossorigin' => 'anonymous']
+        ];
+
+        $this->_object->add('first', $first, $sri('sha256-one'));
+        $this->_object->add('second', $second);
+        $this->_object->add('third', $third, $sri('sha256-three'));
+
+        $groups = $this->_object->getGroups();
+        $this->assertCount(2, $groups);
+        $jsGroup = $groups[1];
+        $this->assertSame(['first' => $first, 'second' => $second, 'third' => $third], $jsGroup->getAll());
+        $this->assertSame(['content_type' => 'js', 'can_merge' => false], $jsGroup->getProperties());
+        $this->assertSame(
+            ['integrity' => 'sha256-one', 'crossorigin' => 'anonymous'],
+            $jsGroup->getAssetAttributes('first')
+        );
+        $this->assertSame([], $jsGroup->getAssetAttributes('second'));
+        $this->assertSame(
+            ['integrity' => 'sha256-three', 'crossorigin' => 'anonymous'],
+            $jsGroup->getAssetAttributes('third')
+        );
+    }
+
+    public function testOtherAttributesStillSplitGroupsWhileIntegrityStaysPerAsset(): void
+    {
+        $first = new Remote('http://127.0.0.1/magento/first.js', 'js');
+        $second = new Remote('http://127.0.0.1/magento/second.js', 'js');
+
+        $this->_object->add('first', $first, ['attributes' => ['async' => 'async', 'integrity' => 'sha256-one']]);
+        $this->_object->add('second', $second, ['attributes' => ['integrity' => 'sha256-two']]);
+
+        $groups = $this->_object->getGroups();
+        $this->assertCount(3, $groups);
+        $this->assertSame(['async' => 'async'], $groups[1]->getProperty('attributes'));
+        $this->assertSame(['integrity' => 'sha256-one'], $groups[1]->getAssetAttributes('first'));
+        $this->assertNull($groups[2]->getProperty('attributes'));
+        $this->assertSame(['integrity' => 'sha256-two'], $groups[2]->getAssetAttributes('second'));
+    }
 }
