@@ -2217,7 +2217,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
 
         $errorLists = [];
         if ($type) {
-            $errorLists[] = $this->_errorInfoGroups[$type];
+            $errorLists[$type] = $this->_errorInfoGroups[$type];
         } else {
             $errorLists = $this->_errorInfoGroups;
         }
