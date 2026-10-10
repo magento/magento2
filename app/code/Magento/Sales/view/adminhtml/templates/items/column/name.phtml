@@ -47,6 +47,7 @@ $catalogHelper = $block->getData('catalogHelper');
                                 require(['prototype'], function() {
 
 script;
+                            $scriptString .= "$('" . /* @noEscape */ $id . "').up().style.width='100%'" . PHP_EOL;
                             $scriptString .= "$('" . /* @noEscape */ $id . "').hide();" . PHP_EOL;
                             $scriptString .= "$('" . /* @noEscape */ $id .
                              "').up().observe('mouseover', function(){ $('" . /* @noEscape */ $id . "').show();});" .
