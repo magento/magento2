@@ -10,7 +10,7 @@ use Magento\Framework\ObjectManagerInterface;
 class ScopeResolver implements ScopeResolverInterface
 {
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var ObjectManagerInterface
      */
     protected $objectManager;
 
