@@ -10,6 +10,7 @@
 namespace Magento\Config\Model\Config\Structure;
 
 /**
+ * @phpcs:ignore Magento2.Classes.AbstractApi.AbstractApi
  * @api
  * @since 100.0.2
  */
@@ -30,7 +31,7 @@ abstract class AbstractMapper implements MapperInterface
 
         $paths = explode('/', $key);
         foreach ($paths as $path) {
-            if (array_key_exists($path, $target)) {
+            if (is_array($target) && array_key_exists($path, $target)) {
                 $target = $target[$path];
             } else {
                 return false;
