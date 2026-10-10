@@ -222,6 +222,14 @@ class Cart extends DataObject implements CartInterface
         if (!$this->hasData('quote')) {
             $this->setData('quote', $this->_checkoutSession->getQuote());
         }
+
+        $quote = $this->_getData('quote');
+        $sessionQuoteId = $this->_checkoutSession->getQuoteId();
+        
+        if ($sessionQuoteId && $sessionQuoteId != $quote->getId()) {
+            $this->setData('quote', $this->_checkoutSession->getQuote());
+        }
+        
         return $this->_getData('quote');
     }
 
