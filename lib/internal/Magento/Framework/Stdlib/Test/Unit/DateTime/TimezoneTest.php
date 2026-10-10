@@ -21,6 +21,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for @see Timezone
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class TimezoneTest extends TestCase
 {
@@ -196,6 +197,12 @@ class TimezoneTest extends TestCase
                 'en_US',
                 false,
                 '1999-08-11'
+            ],
+            'Parse y-m-d date with time' => [
+                '2017-05-19 00:01:00', // datetime
+                'de_DE', // locale
+                false, // include time
+                1495170060 // expected timestamp
             ],
         ];
     }
