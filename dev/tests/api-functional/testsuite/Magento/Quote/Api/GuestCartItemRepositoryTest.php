@@ -153,6 +153,58 @@ class GuestCartItemRepositoryTest extends WebapiAbstract
     }
 
     /**
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_without_options.php
+     */
+    #[DataProvider('nonPositiveQtyProvider')]
+    public function testAddItemRejectsNonPositiveQty(int $qty): void
+    {
+        $this->_markTestAsRestOnly();
+        $product = $this->objectManager->create(Product::class)->load(2);
+        $quote = $this->objectManager->create(Quote::class);
+        $quote->load('test_order_1', 'reserved_order_id');
+        $quoteId = $quote->getId();
+        $mask = $this->objectManager->create(QuoteIdMaskFactory::class)->create();
+        $mask->load($quoteId, 'quote_id');
+        $cartId = $mask->getMaskedId();
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . $cartId . '/items',
+                'httpMethod' => Request::HTTP_METHOD_POST,
+            ],
+        ];
+        $requestData = [
+            'cartItem' => [
+                'sku' => $product->getSku(),
+                'qty' => $qty,
+                'quote_id' => $cartId,
+            ],
+        ];
+
+        $error = null;
+        try {
+            $this->_webApiCall($serviceInfo, $requestData);
+        } catch (\Throwable $exception) {
+            $error = $exception;
+        }
+
+        $this->assertNotNull($error, 'Non-positive quantity must return a validation error.');
+        $this->assertStringContainsString('qty', $error->getMessage());
+        $savedQuote = $this->objectManager->create(Quote::class);
+        $savedQuote->load($quoteId);
+        $this->assertFalse($savedQuote->hasProductId(2));
+    }
+
+    public static function nonPositiveQtyProvider(): array
+    {
+        return [
+            'zero' => [0],
+            'negative' => [-2],
+        ];
+    }
+
+    /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_items_saved.php
      */
     public function testRemoveItem()
@@ -251,6 +303,63 @@ class GuestCartItemRepositoryTest extends WebapiAbstract
         $item = $quote->getItemByProduct($product);
         $this->assertEquals(5, $item->getQty());
         $this->assertEquals($itemId, $item->getItemId());
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_items_saved.php
+     */
+    public function testUpdateItemRejectsZeroQtyWithoutChangingExistingItem(): void
+    {
+        $this->_markTestAsRestOnly();
+        $quote = $this->objectManager->create(Quote::class);
+        $quote->load('test_order_item_with_items', 'reserved_order_id');
+        $quoteId = $quote->getId();
+        $product = $this->objectManager->create(Product::class);
+        $product->load($product->getIdBySku('simple_one'));
+        $item = $quote->getItemByProduct($product);
+        $itemId = $item->getId();
+
+        $mask = $this->objectManager->create(QuoteIdMaskFactory::class)->create();
+        $mask->load($quoteId, 'quote_id');
+        $cartId = $mask->getMaskedId();
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . $cartId . '/items/' . $itemId,
+                'httpMethod' => Request::HTTP_METHOD_PUT,
+            ],
+        ];
+        $positiveRequestData = [
+            'cartItem' => [
+                'qty' => 3,
+                'quote_id' => $cartId,
+            ],
+        ];
+        $this->assertEquals(3, $this->_webApiCall($serviceInfo, $positiveRequestData)['qty']);
+        $updatedQuote = $this->objectManager->create(Quote::class);
+        $updatedQuote->load($quoteId);
+        $this->assertEquals(3, $updatedQuote->getItemById($itemId)->getQty());
+
+        $requestData = [
+            'cartItem' => [
+                'qty' => 0,
+                'quote_id' => $cartId,
+            ],
+        ];
+
+        $error = null;
+        try {
+            $this->_webApiCall($serviceInfo, $requestData);
+        } catch (\Throwable $exception) {
+            $error = $exception;
+        }
+
+        $this->assertNotNull($error, 'Zero quantity must return a validation error.');
+        $this->assertStringContainsString('qty', $error->getMessage());
+        $savedQuote = $this->objectManager->create(Quote::class);
+        $savedQuote->load($quoteId);
+        $savedItem = $savedQuote->getItemById($itemId);
+        $this->assertNotNull($savedItem);
+        $this->assertEquals(3, $savedItem->getQty());
     }
 
     /**
