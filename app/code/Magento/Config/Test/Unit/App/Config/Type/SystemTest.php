@@ -46,7 +46,7 @@ class SystemTest extends TestCase
         $this->assertSame(self::HOST_B, $systemOnHostB->get('websites/base2/web/unsecure/base_url'));
         $this->assertSame(self::HOST_B, $systemOnHostB->get('websites/base2/web/unsecure/base_link_url'));
         $this->assertSame(self::HOST_B, $systemOnHostB->get('websites/base2/web/secure/base_link_url'));
-        $this->assertSame(self::HOST_B . 'media/', $systemOnHostB->get('websites/base2/web/unsecure/base_media_url'));
+        $this->assertSame(self::HOST_B . 'pub/media/', $systemOnHostB->get('websites/base2/web/unsecure/base_media_url'));
         $this->assertSame(self::HOST_B, $systemOnHostB->get('default/web/unsecure/base_url'));
         $this->assertSame(
             ['base_url' => self::HOST_B, 'base_link_url' => self::HOST_B],
@@ -125,7 +125,7 @@ class SystemTest extends TestCase
                 'unsecure' => [
                     'base_url' => '{{base_url}}',
                     'base_link_url' => '{{unsecure_base_url}}',
-                    'base_media_url' => '{{unsecure_base_url}}media/',
+                    'base_media_url' => '{{unsecure_base_url}}pub/media/',
                 ],
                 'secure' => [
                     'base_url' => '{{base_url}}',

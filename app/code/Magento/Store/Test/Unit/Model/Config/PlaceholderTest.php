@@ -93,7 +93,7 @@ class PlaceholderTest extends TestCase
                 'unsecure' => [
                     'base_url' => '{{base_url}}',
                     'base_link_url' => '{{unsecure_base_url}}',
-                    'base_media_url' => '{{unsecure_base_url}}media/',
+                    'base_media_url' => '{{unsecure_base_url}}pub/media/',
                 ],
                 'secure' => [
                     'base_url' => '{{unsecure_base_url}}',
@@ -107,7 +107,7 @@ class PlaceholderTest extends TestCase
                 'unsecure' => [
                     'base_url' => '{{base_url}}',
                     'base_link_url' => '{{base_url}}',
-                    'base_media_url' => '{{base_url}}media/',
+                    'base_media_url' => '{{base_url}}pub/media/',
                 ],
                 'secure' => [
                     'base_url' => '{{base_url}}',
