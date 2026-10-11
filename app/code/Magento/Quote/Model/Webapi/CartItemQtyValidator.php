@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Quote\Model\Webapi;
 
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Phrase;
 use Magento\Framework\Webapi\Validator\ServiceInputValidatorInterface;
 use Magento\Quote\Api\Data\CartItemInterface;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
@@ -36,7 +37,12 @@ class CartItemQtyValidator implements ServiceInputValidatorInterface
             && $propertyName === 'qty'
             && (!is_numeric($value) || $value <= 0)
         ) {
-            throw InputException::invalidFieldValue('qty', $value);
+            throw new InputException(
+                new Phrase(
+                    'Invalid value of "%value" provided for the %fieldName field.',
+                    ['fieldName' => 'qty', 'value' => $value]
+                )
+            );
         }
     }
 }
