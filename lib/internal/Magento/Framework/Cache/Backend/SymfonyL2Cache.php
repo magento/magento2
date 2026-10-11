@@ -10,27 +10,26 @@ namespace Magento\Framework\Cache\Backend;
 use Magento\Framework\Cache\CacheConstants;
 use Magento\Framework\Cache\Exception\CacheException;
 use Magento\Framework\Cache\Frontend\Adapter\SymfonyAdapters\RedisTagAdapter;
+use Magento\Framework\Cache\Frontend\Adapter\SymfonyAdapters\TagAdapterInterface;
 use Magento\Framework\Cache\FrontendInterface;
+use Magento\Framework\Cache\ClearableInterface;
+use Magento\Framework\Cache\MultiLoadInterface;
+use Symfony\Component\Cache\PruneableInterface;
 
 /**
- * L2 (Two-Level) Cache Backend for Symfony Adapters
- *
- * This backend provides local + remote caching with automatic synchronization,
- * designed specifically for Symfony cache adapters (PSR-6 compliant).
- *
- * This class works directly with Symfony's FrontendInterface and does not require
- * ExtendedBackendInterface.
- *
- * Architecture:
- * - L1 (Local): Fast cache (file/APCu) - Per worker, ephemeral
- * - L2 (Remote): Persistent cache (Redis/Valkey) - Shared, persistent
- * - Sync: :hash mechanism detects stale local data
+ * Two-level Symfony cache backend with fast per-worker L1 and shared persistent L2 storage.
+ * Uses the remote :hash marker to synchronize PSR-6-compatible local and remote values.
  *
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
-class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
+class SymfonyL2Cache extends AbstractBackend implements
+    ExtendedBackendInterface,
+    MultiLoadInterface,
+    TwoTierBackendInterface
 {
+    use LockSignTrait;
+
     /**
      * Local backend cache (L1)
      *
@@ -179,12 +178,9 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
     }
 
     /**
-     * Batched multi-load from the remote (L2) tier in a single round-trip.
+     * Batch-load hot keys from the remote L2 in one round-trip for preloading.
      *
-     * Used by the preloading wrapper to warm a set of hot keys at once, mirroring the legacy Redis
-     * wrapper (which pipelines the preload from the shared/slave tier). The remote is the source of
-     * truth, so we fetch the values there in one call; per-id L1/hash validation is intentionally
-     * skipped for this warm-up path (any preloaded value is still re-validated on a normal load()).
+     * L1/hash validation is deferred to normal load(), since L2 is authoritative for warm-up data.
      *
      * @param string[] $ids
      * @return array<string, mixed>
@@ -194,17 +190,14 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
         if (empty($ids)) {
             return [];
         }
-        if (method_exists($this->remote, 'loadMultiple')) {
+        if ($this->remote instanceof MultiLoadInterface) {
             return $this->remote->loadMultiple($ids);
         }
-        $out = [];
-        foreach ($ids as $id) {
-            $value = $this->remote->load($id);
-            if ($value !== false) {
-                $out[$id] = $value;
-            }
-        }
-        return $out;
+
+        // loadMultiple() is a batch-preload optimization. When the remote cannot batch, falling back
+        // to per-key loads defeats the single-round-trip purpose and only adds latency for no gain —
+        // so skip it. The keys are simply not preloaded and load lazily on first real access.
+        return [];
     }
 
     /**
@@ -223,20 +216,27 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
 
     /**
      * @inheritDoc
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function save($data, $id, $tags = [], $specificLifetime = null)
     {
         $hashSaved = false;
 
         try {
-            if ($this->isRemoteUpToDate($data, $id)) {
-                // L2 already holds this exact value — skip the redundant data+hash write. Mirrors the
-                // legacy RemoteSynchronizedCache, which compares the stored hash (and data) before
-                // re-writing, so a repeated identical save (cache warmup, re-render of unchanged block
-                // output, config re-cache) does not hammer Redis with duplicate writes.
+            $sameRemoteData = $this->isRemoteUpToDate($data, $id);
+            // A tagged save must reach the remote adapter even when the payload is unchanged;
+            // otherwise changed tag associations would be skipped with the data deduplication.
+            if (empty($tags) && $sameRemoteData) {
+                // Skip redundant data and hash writes when L2 already contains this exact value,
+                // avoiding duplicate Redis traffic for repeated saves.
                 $remoteSaved = true;
                 $hashSaved = true;
             } else {
+                if (!empty($tags) && $sameRemoteData) {
+                    // Remove first so all previous remote tag memberships are cleared before re-save.
+                    $this->remote->remove($id);
+                }
                 // Save data first to avoid hash pointing to non-existent data
                 $remoteSaved = $this->remote->save($data, $id, $tags, $specificLifetime);
 
@@ -251,17 +251,14 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
             $hashSaved = false;
         }
 
-        // Disk-full safety valve: occasionally flush the whole L1 when its partition is nearly full,
-        // BEFORE re-saving this entry so the current value survives the flush. Mirrors legacy
-        // RemoteSynchronizedCache::save(), which probabilistically calls local->clean() when the L1
-        // filling percentage reaches cleanup_percentage. clearLocal() is used (not local->clean(),
-        // which is tag-scoped and cannot see an index_tags=false L1).
+        // If L1 disk usage is high, clear it before saving so the current value survives the flush.
+        // clearLocal() is required because tag-scoped clean() cannot clear a tag-less L1.
         if ($this->shouldCheckLocalSpace() && $this->isLocalCacheSpaceExceeded()) {
             $this->clearLocal();
         }
 
-        // Save to local cache
-        $this->local->save($data, $id, $tags, $specificLifetime);
+        // L1 mirrors data only; tags go to L2 (keeps L1 free of any tag index), like legacy RSC.
+        $this->local->save($data, $id, [], $specificLifetime);
 
         if ($remoteSaved !== false && $hashSaved !== false) {
             $this->markValid($id);
@@ -271,10 +268,8 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
             }
         }
 
-        // If this process elected itself the regenerator for $id, the fresh value is now in L2,
-        // so release the lock immediately (ownership-safe) instead of leaving it to the TTL. This
-        // lets an immediate re-invalidation elect a new regenerator right away rather than serving
-        // stale until LOCK_TTL expires.
+        // Release the regeneration lock after storing the fresh L2 value, allowing immediate
+        // re-invalidation to elect a new regenerator without waiting for the lock TTL.
         $this->releaseRegenLock($id);
 
         return $remoteSaved;
@@ -318,19 +313,14 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
     public function clean($mode = CacheConstants::CLEANING_MODE_ALL, $tags = [])
     {
         if ($mode === CacheConstants::CLEANING_MODE_ALL) {
-            // Full flush: clear the L1 pool directly. A tag-scoped clean() cannot reach the local
-            // tier when index_tags=false (it has no tag index), so cache:flush would otherwise leave
-            // stale L1 data behind. Mirrors the legacy RemoteSynchronizedCache, whose clean(ALL)
-            // clears the raw local backend.
+            // Clear L1 directly because tag-scoped clean() cannot reach a tag-less pool;
+            // otherwise cache:flush could leave stale local data behind.
             $this->clearLocal();
             return $this->remote->clean($mode, $tags);
         }
         if ($mode === CacheConstants::CLEANING_MODE_OLD) {
-            // TTL garbage collection (run by the backend_clean_cache cron). Prune expired entries from
-            // BOTH tiers, mirroring legacy clean(OLD). The L1 FilesystemAdapter physically deletes
-            // expired files here; a tag-scoped local->clean() cannot (index_tags=false), so we prune the
-            // local backend directly. The remote's clean(OLD) sweeps the Redis tag index (data keys
-            // auto-expire via native TTL).
+            // Prune expired entries from both tiers: L1 files require direct cleanup, while L2 clean(OLD)
+            // sweeps its tag index and native TTL handles remote data keys.
             $this->pruneLocal();
             return $this->remote->clean($mode, $tags);
         }
@@ -346,13 +336,20 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
     private function pruneLocal(): void
     {
         $localBackend = $this->local->getBackend();
-        if (method_exists($localBackend, 'prune')) {
+        // Only backends that advertise the pruning contract are pruned. When the L1 backend is not
+        // pruneable, doing nothing is intentional and correct: such backends reclaim expired entries
+        // through their own native TTL / lazy expiry, so an explicit prune would have no effect.
+        if ($localBackend instanceof PruneableInterface) {
             $localBackend->prune();
         }
     }
 
     /**
-     * Fully wipe both cache tiers (L1 + L2). Used by FlushAll / cache:flush via getBackend()->clear().
+     * Fully wipe both cache tiers (L1 + L2), for direct callers of getBackend()->clear().
+     *
+     * Admin "Flush Cache Storage" (FlushAll) and `bin/magento cache:flush` do not call this
+     * method; they call clean(CLEANING_MODE_ALL), which reaches the same result via a separate
+     * code path (the CLEANING_MODE_ALL branch of clean() below).
      *
      * @return bool
      */
@@ -363,16 +360,16 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
     }
 
     /**
-     * Empty the local (L1) tier completely.
-     *
-     * Bypasses the tag-scoped clean() that cannot see an index_tags=false file index.
+     * Empty the local (L1) tier completely, bypassing the tag-scoped clean() that cannot see a tag-less pool
      *
      * @return void
      */
     private function clearLocal(): void
     {
         $localBackend = $this->local->getBackend();
-        if (method_exists($localBackend, 'clear')) {
+        // Symfony/PSR-6 L1 backends can wipe the whole pool directly and cheaply via clear();
+        // legacy backends implement only the Zend clean() contract, so fall back to clean(ALL).
+        if ($localBackend instanceof ClearableInterface) {
             $localBackend->clear();
         } else {
             $this->local->clean(CacheConstants::CLEANING_MODE_ALL);
@@ -391,11 +388,9 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
     }
 
     /**
-     * Whether the remote (L2) already holds exactly this value, so a re-write would be redundant.
+     * Whether L2 already holds this exact value, allowing a redundant write to be skipped.
      *
-     * Compares the stored :hash first (cheap) and, only on a match, confirms the data itself is still
-     * present and identical — guarding against the data having been evicted while the hash lingered
-     * under a different TTL. Mirrors legacy RemoteSynchronizedCache::save()'s up-to-date check.
+     * Checks the cheap :hash first, then confirms the data still exists and matches it.
      *
      * @param string $data
      * @param string $id
@@ -461,27 +456,25 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
     /**
      * @inheritDoc
      *
-     * Real remote (L2) storage filling percentage, matching legacy RemoteSynchronizedCache semantics
-     * (delegates to the remote backend, e.g. Cm_Cache_Backend_Redis::getFillingPercentage() computing
-     * used_memory/maxmemory). Kept distinct from the local L1 disk safety valve in
-     * getLocalFillingPercentage() — the two were separate public/private checks in legacy and
-     * collapsing them here would silently swap remote memory pressure for local disk usage in any
-     * caller of this public API. Returns 0 if the remote adapter can't report it (e.g. non-Redis tag
-     * adapter, or the remote is unavailable).
+     * Return the remote L2 storage usage, kept distinct from the local disk safety check.
+     * Return 0 when the remote adapter cannot report usage or is unavailable.
      */
     public function getFillingPercentage()
     {
         try {
-            return $this->remote->getLowLevelFrontend()->getTagAdapter()->getFillingPercentage();
+            // No tag adapter (e.g. legacy Zend) => no fill metric => 0.
+            $tagAdapter = $this->remote->getLowLevelFrontend()->getTagAdapter();
+
+            return $tagAdapter instanceof TagAdapterInterface ? $tagAdapter->getFillingPercentage() : 0;
         } catch (\Throwable $e) {
             return 0;
         }
     }
 
     /**
-     * Disk-partition filling percentage of the L1 (file) cache dir, matching the legacy Zend file
-     * backend semantics (used only as a disk-full safety valve). Returns 0 when the L1 is not
-     * file-backed or the dir is unavailable, so eviction never triggers spuriously.
+     * Return the L1 file-cache directory usage for disk-full protection;
+     *
+     * Return 0 when unavailable or when L1 is not file-backed.
      *
      * @return int
      */
@@ -511,17 +504,22 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
     }
 
     /**
-     * Throttle the (syscall-bearing) disk-space check so it does not stat the disk on every save.
-     * Mirrors the legacy ~1/101 probability. Kept as a protected seam so the eviction path can be
-     * exercised deterministically in tests.
+     * Throttle disk-space checks to avoid a filesystem stat on every save;
+     *
+     * The protected seam enables deterministic eviction-path tests.
      *
      * @return bool
      */
     protected function shouldCheckLocalSpace(): bool
     {
-        // mt_rand() here is not for cryptographic use.
-        // phpcs:ignore Magento2.Security.InsecureFunction
-        return !mt_rand(0, 100);
+        try {
+            // Probabilistically throttle the disk-space check (~1 in 101 saves). random_int avoids the
+            // insecure-function static warning; a crypto-grade source is not required here but is fine.
+            return random_int(0, 100) === 0;
+        } catch (\Throwable $e) {
+            // A failing CSPRNG must never break a cache save; just skip the check this time.
+            return false;
+        }
     }
 
     /**
@@ -529,18 +527,7 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
      */
     public function getMetadatas($id)
     {
-        // Get test result (timestamp)
-        $mtime = $this->remote->test($id);
-
-        if ($mtime === false) {
-            return false;
-        }
-
-        return [
-            'expire' => null,
-            'tags' => [],
-            'mtime' => $mtime,
-        ];
+        return $this->remote->getMetadatas($id);
     }
 
     /**
@@ -548,29 +535,35 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
      */
     public function touch($id, $extraLifetime)
     {
-        // Reload and resave with extended lifetime
+        // Extend the existing remaining lifetime, matching the legacy Redis backend.
+        $metadata = $this->remote->getMetadatas($id);
+        if ($metadata === false || !isset($metadata['expire']) || $metadata['expire'] === false
+            || $metadata['expire'] === null) {
+            return false;
+        }
+
+        $remainingLifetime = max(0, (int)$metadata['expire'] - time());
+        $lifetime = $remainingLifetime + (int)$extraLifetime;
         $data = $this->remote->load($id);
 
         if ($data === false) {
             return false;
         }
 
-        // Do NOT route through save(): its isRemoteUpToDate() short-circuit skips the remote write
-        // when the data is unchanged, which is exactly the touch() case (same bytes, longer TTL) and
-        // would leave the remote lifetime untouched. Re-persist the data and its :hash to the remote
-        // directly so the L2 TTL is actually extended, then refresh the local (L1) copy to match.
+        // Write directly to L2 so touch() extends the TTL even when the data is unchanged, then
+        // refresh the matching L1 entry; save() would skip the remote write.
         try {
-            $remoteSaved = $this->remote->save($data, $id, [], $extraLifetime);
+            $remoteSaved = $this->remote->save($data, $id, [], $lifetime);
             if ($remoteSaved === false) {
                 return false;
             }
             $hash = $this->getDataHash($data);
-            $this->remote->save($hash, $id . self::HASH_SUFFIX, [], $extraLifetime);
+            $this->remote->save($hash, $id . self::HASH_SUFFIX, [], $lifetime);
         } catch (\Exception $e) {
             return false;
         }
 
-        $this->local->save($data, $id, [], $extraLifetime);
+        $this->local->save($data, $id, [], $lifetime);
         $this->markValid($id);
 
         return true;
@@ -634,22 +627,17 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
     }
 
     /**
-     * Mark a cache key as valid (synchronized with remote)
+     * Mark a cache key as synchronized with L2, removing its L1 invalid marker only when present.
      *
-     * Only removes the L1 invalid marker when one actually exists. Markers are written without
-     * tags and only when a remote write fails, so on the healthy path (e.g. post-deploy cache
-     * warmup, remote up) there is nothing to clear. Skipping avoids an L1 remove() — and the
-     * FilesystemTagAdapter::onRemove() it triggers — on every successful save.
+     * This avoids an unnecessary L1 remove and tag-adapter callback on every successful save.
      *
      * @param string $id
-     * @param bool $knownInvalid Set by callers that already confirmed the marker exists, to skip
-     *        the redundant re-check (e.g. handleInvalidKey(), which only runs after load() has
-     *        already called isInvalid() and found it true).
+     * @param bool $knownInvalid
      * @return void
      */
-    private function markValid(string $id, bool $knownInvalid = false): void
+    private function markValid(string $id, bool $knownInvalid = true): void
     {
-        if ($knownInvalid || $this->isInvalid($id)) {
+        if ($knownInvalid && $this->isInvalid($id)) {
             $this->local->remove(self::INVALID_KEY_PREFIX . $id);
         }
     }
@@ -684,8 +672,9 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
         $this->local->remove($id);
 
         if ($remoteCleanSuccess) {
-            // Caller (load()) already confirmed isInvalid($id) is true to reach this method.
-            $this->markValid($id, true);
+            // Skip markValid()'s isInvalid() guard: this method only ever runs after load() has
+            // already confirmed the marker exists, so the re-check is guaranteed true and wasted.
+            $this->local->remove(self::INVALID_KEY_PREFIX . $id);
         }
         return false;
     }
@@ -720,11 +709,9 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
     }
 
     /**
-     * Try to acquire the non-blocking regeneration lock; returns true for exactly one reader.
+     * Try to acquire the non-blocking regeneration lock; exactly one reader wins when Redis is used.
      *
-     * Uses an atomic SET NX EX on the remote Redis client when available, so exactly one caller
-     * cluster-wide wins the election. Falls back to a best-effort (non-atomic) scheme only when
-     * the remote is not Redis-backed.
+     * Uses atomic SET NX EX on Redis and a best-effort fallback for non-Redis remotes.
      *
      * @param string $id
      * @return bool
@@ -761,6 +748,10 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
         $adapter = $this->getLockAdapter();
         if ($adapter !== null) {
             $adapter->releaseLock($id, $this->lockSign);
+        } else {
+            // Fallback path stored the lock via remote->save(); remove it so the lock is
+            // released immediately instead of lingering until LOCK_TTL expires.
+            $this->remote->remove(self::LOCK_PREFIX . $id);
         }
         unset($this->heldLocks[$id]);
     }
@@ -806,38 +797,16 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
         $this->lockAdapterResolved = true;
 
         try {
-            if (method_exists($this->remote, 'getLowLevelFrontend')) {
-                $lowLevel = $this->remote->getLowLevelFrontend();
-                if (method_exists($lowLevel, 'getTagAdapter')) {
-                    $adapter = $lowLevel->getTagAdapter();
-                    if ($adapter instanceof RedisTagAdapter) {
-                        $this->lockAdapter = $adapter;
-                    }
-                }
+            $lowLevel = $this->remote->getLowLevelFrontend();
+            $adapter = $lowLevel->getTagAdapter();
+            if ($adapter instanceof RedisTagAdapter) {
+                $this->lockAdapter = $adapter;
             }
         } catch (\Throwable $e) {
             $this->lockAdapter = null;
         }
 
         return $this->lockAdapter;
-    }
-
-    /**
-     * Generate a unique per-process lock signature (pid-host-random) so lock ownership is unambiguous across servers.
-     *
-     * @return string
-     */
-    private function generateLockSign(): string
-    {
-        $sign = implode('-', [getmypid(), crc32((string)gethostname())]);
-
-        try {
-            $sign .= '-' . bin2hex(random_bytes(4));
-        } catch (\Exception $e) {
-            $sign .= '-' . uniqid('-uniqid-');
-        }
-
-        return $sign;
     }
 
     /**
