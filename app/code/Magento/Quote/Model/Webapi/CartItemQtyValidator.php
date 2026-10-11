@@ -9,6 +9,7 @@ namespace Magento\Quote\Model\Webapi;
 
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Phrase;
+use Magento\Framework\Webapi\Validator\CompositeServiceInputValidator;
 use Magento\Framework\Webapi\Validator\ServiceInputValidatorInterface;
 use Magento\Quote\Api\Data\CartItemInterface;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
@@ -18,6 +19,20 @@ use Magento\Quote\Model\Quote\Item\AbstractItem;
  */
 class CartItemQtyValidator implements ServiceInputValidatorInterface
 {
+    /**
+     * Validate REST input before the existing composite validators run.
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function beforeValidateEntityValue(
+        CompositeServiceInputValidator $subject,
+        object $entity,
+        string $propertyName,
+        $value
+    ): void {
+        $this->validateEntityValue($entity, $propertyName, $value);
+    }
+
     /**
      * @inheritdoc
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)

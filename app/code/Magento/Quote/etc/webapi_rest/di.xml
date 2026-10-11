@@ -29,11 +29,7 @@
                 sortOrder="100" />
     </type>
     <type name="Magento\Framework\Webapi\Validator\CompositeServiceInputValidator">
-        <arguments>
-            <argument name="validators" xsi:type="array">
-                <item name="cartItemQtyValidator" xsi:type="object">Magento\Quote\Model\Webapi\CartItemQtyValidator</item>
-            </argument>
-        </arguments>
+        <plugin name="cartItemQtyValidator" type="Magento\Quote\Model\Webapi\CartItemQtyValidator" />
     </type>
     <virtualType name="Magento\Quote\Model\Quote\Item\CartItemValidatorChainOnSave" type="Magento\Quote\Model\Quote\Item\CartItemValidatorChain">
         <arguments>
