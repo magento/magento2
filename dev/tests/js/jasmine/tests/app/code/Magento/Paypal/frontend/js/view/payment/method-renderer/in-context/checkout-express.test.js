@@ -14,8 +14,9 @@ define([
 
     describe('paypal/js/view/payment/method-renderer/paypal-express-in-context', function () {
         var injector = new Squire(),
+            setPaymentMethodSpy = jasmine.createSpy(),
             mocks = {
-                'Magento_Paypal/js/action/set-payment-method': jasmine.createSpy(),
+                'Magento_Paypal/js/action/set-payment-method': setPaymentMethodSpy,
                 'Magento_Paypal/js/view/payment/method-renderer/paypal-express-abstract': Component,
                 'Magento_Checkout/js/model/quote': {
                     billingAddress: ko.observable(),
@@ -72,6 +73,47 @@ define([
 
                 obj.renderPayPalButtons();
                 expect(mocks['Magento_Paypal/js/in-context/express-checkout-smart-buttons']).toHaveBeenCalled();
+            });
+        });
+
+        describe('beforePayment', function () {
+            var reject;
+
+            beforeEach(function () {
+                reject = jasmine.createSpy();
+                spyOn(obj, 'addError');
+            });
+
+            /**
+             * @param {String} responseText
+             */
+            function failWith(responseText) {
+                var deferred = $.Deferred();
+
+                setPaymentMethodSpy.and.returnValue(deferred.promise());
+                obj.beforePayment(jasmine.createSpy(), reject);
+                deferred.reject({
+                    responseText: responseText
+                });
+            }
+
+            it('adds the error message string from a JSON response', function () {
+                failWith('{"message":"Enter a valid address."}');
+
+                expect(obj.addError).toHaveBeenCalledWith('Enter a valid address.');
+                expect(reject.calls.mostRecent().args[0].message).toBe('Enter a valid address.');
+            });
+
+            it('falls back to the default message when the response is not JSON', function () {
+                failWith('<html>error</html>');
+
+                expect(obj.addError).toHaveBeenCalledWith(obj.paymentActionError);
+            });
+
+            it('falls back to the default message when the response has no message', function () {
+                failWith('{"parameters":[]}');
+
+                expect(obj.addError).toHaveBeenCalledWith(obj.paymentActionError);
             });
         });
     });
