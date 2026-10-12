@@ -156,9 +156,11 @@ define([
 
                 price.formatted = utils.formatPriceLocale(price.final, priceFormat);
 
-                $('[data-price-type="' + priceCode + '"]', this.element).html(priceTemplate({
-                    data: price
-                }));
+                $('[data-price-type="' + priceCode + '"]', this.element)
+                    .attr('data-price-amount', price.final)
+                    .html(priceTemplate({
+                        data: price
+                    }));
             }, this);
         },
 
