@@ -59,7 +59,7 @@
         <waitForPageLoad stepKey="waitForLoadingMaskAfterPaymentMethodSelection"/>
         <!--Fill Card Data  and place an order-->
         <actionGroup ref="StorefrontPaypalFillCardDataActionGroup" stepKey="fillCardDataPaypal">
-            <argument name="cardData" value="VisaDefaultCard"/>
+            <argument name="cardData" value="CancelOrderPayflowCard"/>
         </actionGroup>
         <waitForPageLoad stepKey="waitForFillCardData"/>
         <!-- Stagger the Payflow Pro charge so it doesn't land in the same submission window as other Payflow Protests running concurrently in the parallel CE/EE/B2B suites against the same shared sandbox account -->
