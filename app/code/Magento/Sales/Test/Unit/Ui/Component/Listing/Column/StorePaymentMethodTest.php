@@ -38,18 +38,24 @@ class StorePaymentMethodTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
-        $this->connection = $this->createMock(AdapterInterface::class);
-        $select = $this->createMock(Select::class);
+        $this->scopeConfig = $this->createStub(ScopeConfigInterface::class);
+        $this->connection = $this->createStub(AdapterInterface::class);
+        $this->model = $this->createModel($this->connection);
+    }
+
+    private function createModel(AdapterInterface $connection): StorePaymentMethod
+    {
+        $select = $this->createStub(Select::class);
         $select->method('from')->willReturnSelf();
         $select->method('where')->willReturnSelf();
-        $this->connection->method('select')->willReturn($select);
+        $connection->method('select')->willReturn($select);
         $resource = $this->createMock(ResourceConnection::class);
-        $resource->method('getConnection')->with('sales')->willReturn($this->connection);
+        $resource->method('getConnection')->with('sales')->willReturn($connection);
         $resource->method('getTableName')->with('sales_order_grid', 'sales')->willReturnArgument(0);
-        $this->model = new StorePaymentMethod(
-            $this->createMock(ContextInterface::class),
-            $this->createMock(UiComponentFactory::class),
+
+        return new StorePaymentMethod(
+            $this->createStub(ContextInterface::class),
+            $this->createStub(UiComponentFactory::class),
             $this->scopeConfig,
             $resource,
             [],
@@ -60,6 +66,8 @@ class StorePaymentMethodTest extends TestCase
     public function testPrepareDataSourceResolvesTitlePerRowStore(): void
     {
         $titles = [1 => 'Check One', 2 => 'Cheque Two'];
+        $this->connection = $this->createMock(AdapterInterface::class);
+        $this->model = $this->createModel($this->connection);
         $this->connection->expects($this->once())->method('fetchPairs')->willReturn([10 => '1', 11 => '2']);
         $this->scopeConfig->method('getValue')
             ->willReturnCallback(
@@ -116,6 +124,8 @@ class StorePaymentMethodTest extends TestCase
 
     public function testPrepareDataSourceSkipsLookupWithoutPaymentCodes(): void
     {
+        $this->connection = $this->createMock(AdapterInterface::class);
+        $this->model = $this->createModel($this->connection);
         $this->connection->expects($this->never())->method('fetchPairs');
 
         $result = $this->model->prepareDataSource([
