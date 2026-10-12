@@ -15,7 +15,6 @@ use Magento\Sales\Model\Order\Email\Sender\OrderCommentSender;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\RefundInvoice;
 use Magento\Sales\Model\RefundOrder;
-use Magento\Payment\Model\MethodInterface;
 use Magento\Framework\Phrase;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -72,46 +71,32 @@ class CancelOrderTest extends TestCase
      * @throws \Magento\Sales\Exception\DocumentValidationException
      * @throws \PHPUnit\Framework\MockObject\Exception
      */
-    public function testExecuteTriggersFreePaymentCheck(): void
+    public function testExecuteSkipsRefundForFreePaymentMethod(): void
     {
         $reason = '<b>Customer requested</b>';
         $escapedReason = 'Customer requested';
-        $orderId = 42;
 
         $payment = $this->createMock(Payment::class);
-        $payment->expects($this->once())->method('getAmountPaid')->willReturn(null);
         $payment->expects($this->once())->method('getMethod')->willReturn('free');
-
-        $methodInstance = $this->createMock(MethodInterface::class);
-        $methodInstance->method('isOffline')->willReturn(true);
-        $payment->method('getMethodInstance')->willReturn($methodInstance);
+        $payment->expects($this->never())->method('getAmountPaid');
+        $payment->expects($this->never())->method('getMethodInstance');
 
         $order = $this->createMock(Order::class);
         $order->method('getPayment')->willReturn($payment);
-        $order->method('getEntityId')->willReturn($orderId);
+        $order->expects(self::once())->method('cancel')->willReturnSelf();
+        $order->method('getRealOrderId')->willReturn('000000123');
+        $order->method('getStatus')->willReturn('canceled');
+        $order->expects(self::exactly(2))->method('addCommentToStatusHistory');
 
-        $this->refundOrder
-            ->expects(self::once())
-            ->method('execute')
-            ->with($orderId);
+        $this->refundOrder->expects(self::never())->method('execute');
 
-        $reloadedOrder = $this->createMock(Order::class);
-        $reloadedOrder->method('cancel')->willReturnSelf();
-        $reloadedOrder->method('getRealOrderId')->willReturn('000000123');
-        $reloadedOrder->method('getStatus')->willReturn('canceled');
-        $reloadedOrder->expects(self::exactly(2))->method('addCommentToStatusHistory');
-
-        $this->orderRepository
-            ->expects(self::once())
-            ->method('get')
-            ->with($orderId)
-            ->willReturn($reloadedOrder);
+        $this->orderRepository->expects(self::never())->method('get');
 
         $this->sender
             ->expects(self::once())
             ->method('send')
             ->with(
-                $reloadedOrder,
+                $order,
                 true,
                 self::callback(function ($phrase) {
                     return $phrase instanceof Phrase
@@ -129,11 +114,11 @@ class CancelOrderTest extends TestCase
         $this->orderRepository
             ->expects(self::once())
             ->method('save')
-            ->with($reloadedOrder)
-            ->willReturn($reloadedOrder);
+            ->with($order)
+            ->willReturn($order);
 
         $result = $this->cancelOrder->execute($order, $reason);
 
-        self::assertSame($reloadedOrder, $result);
+        self::assertSame($order, $result);
     }
 }

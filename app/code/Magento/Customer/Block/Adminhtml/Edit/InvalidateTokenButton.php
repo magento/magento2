@@ -3,17 +3,37 @@
  * Copyright 2014 Adobe
  * All Rights Reserved.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Block\Adminhtml\Edit;
 
+use Magento\Backend\Block\Widget\Context;
+use Magento\Framework\Escaper;
+use Magento\Framework\Registry;
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 
 /**
- * Class InvalidateTokenButton
- *
- * @package Magento\Customer\Block\Adminhtml\Edit
+ * Class InvalidateTokenButton for force sign button data
  */
 class InvalidateTokenButton extends GenericButton implements ButtonProviderInterface
 {
+    /**
+     * @var Escaper
+     */
+    private $escaper;
+
+    /**
+     * @param Context $context
+     * @param Registry $registry
+     */
+    public function __construct(
+        Context $context,
+        Registry $registry
+    ) {
+        parent::__construct($context, $registry);
+        $this->escaper = $context->getEscaper();
+    }
+
     /**
      * Get button data.
      *
@@ -24,7 +44,9 @@ class InvalidateTokenButton extends GenericButton implements ButtonProviderInter
         $customerId = $this->getCustomerId();
         $data = [];
         if ($customerId) {
-            $deleteConfirmMsg = __("Are you sure you want to revoke the customer's tokens?");
+            $deleteConfirmMsg = $this->escaper->escapeJs(
+                $this->escaper->escapeHtml(__("Are you sure you want to revoke the customer's tokens?"))
+            );
             $data = [
                 'label' => __('Force Sign-In'),
                 'class' => 'invalidate-token',

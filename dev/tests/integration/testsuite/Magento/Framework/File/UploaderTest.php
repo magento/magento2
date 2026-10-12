@@ -96,3 +96,16 @@ class UploaderTest extends TestCase
         ];
     }
 }
+
+/**
+ * Mocking of std function to test validation
+ *
+ * @param string $name
+ * @return bool
+ */
+if (!function_exists(__NAMESPACE__ . '\is_uploaded_file')) {
+    function is_uploaded_file($name)
+    {
+        return ($name == 'magento.jpg') ? false : true;
+    }
+}

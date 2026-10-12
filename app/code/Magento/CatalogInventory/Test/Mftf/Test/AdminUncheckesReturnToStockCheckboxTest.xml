@@ -26,6 +26,7 @@
         </before>
         <after>
             <!-- Disabling Automatically Return Credit Memo Item to Stock -->
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrdersGridFiltersAfter"/>
             <magentoCLI command="config:set {{CatalogInventoryManageStockAutoReturnDisable.path}} {{CatalogInventoryManageStockAutoReturnDisable.value}}" stepKey="manageStockDisable"/>
         </after>
         <!-- Log in as admin-->

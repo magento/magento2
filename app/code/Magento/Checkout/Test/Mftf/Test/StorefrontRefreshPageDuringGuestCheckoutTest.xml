@@ -28,6 +28,7 @@
             <createData entity="SimpleProduct2" stepKey="createProduct"/>
         </before>
         <after>
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrdersGridFiltersAfter" before="logoutAsAdmin"/>
             <!-- Delete simple product -->
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
 

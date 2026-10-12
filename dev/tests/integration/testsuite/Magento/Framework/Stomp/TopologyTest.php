@@ -70,8 +70,12 @@ class TopologyTest extends TestCase
     public function testTopologyInstallation(array $expectedConfig): void
     {
         if ($this->connectionType === 'amqp') {
-            $this->markTestSkipped('STOMP test skipped because AMQP connection is available.
-            This test is STOMP-specific.');
+            $this->assertSame(
+                'amqp',
+                $this->connectionType,
+                'This test is STOMP-only.'
+            );
+            return;
         }
 
         $name = $expectedConfig['name'];

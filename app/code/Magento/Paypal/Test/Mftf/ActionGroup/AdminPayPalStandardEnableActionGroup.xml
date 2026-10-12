@@ -18,10 +18,12 @@
         </arguments>
         <amOnPage url="{{AdminConfigPaymentMethodsPage.url}}" stepKey="navigateToPaymentConfigurationPage"/>
         <waitForPageLoad stepKey="waitForConfigPageLoad"/>
+        <resizeWindow width="1920" height="1080" stepKey="resizeWindowForPayPalStandard"/>
         <waitForElementVisible selector="{{OtherPayPalPaymentsConfigSection.expandTab(countryCode)}}" stepKey="waitForOtherPayPalPaymentsSection"/>
         <conditionalClick selector="{{OtherPayPalPaymentsConfigSection.expandTab(countryCode)}}" dependentSelector="{{OtherPayPalPaymentsConfigSection.expandedTab(countryCode)}}" visible="false" stepKey="expandOtherPaypalConfigButton"/>
-        <scrollTo selector="{{AdminPaypalStandardConfigSection.configureBtn(countryCode)}}"  x="0" y="-80"  stepKey="scrollToConfigure"/>
-        <waitForElementClickable selector="{{AdminPaypalStandardConfigSection.configureBtn(countryCode)}}" stepKey="waitForPayPalStandardConfigureBtn" />
+        <scrollTo selector="{{AdminPaypalStandardConfigSection.configureBtn(countryCode)}}" x="0" y="-150" stepKey="scrollToConfigure"/>
+        <moveMouseOver selector="{{OtherPayPalPaymentsConfigSection.expandTab(countryCode)}}" stepKey="moveMouseAwayFromToolbar"/>
+        <waitForElementClickable selector="{{AdminPaypalStandardConfigSection.configureBtn(countryCode)}}" stepKey="waitForPayPalStandardConfigureBtn"/>
         <click selector="{{AdminPaypalStandardConfigSection.configureBtn(countryCode)}}" stepKey="clickPayPalStandardConfigureBtn"/>
         <waitForElementVisible selector="{{AdminPaypalStandardConfigSection.email(countryCode)}}" stepKey="waitForEmailTab"/>
         <fillField selector ="{{AdminPaypalStandardConfigSection.email(countryCode)}}" userInput="{{credentials.paypal_express_email}}" stepKey="inputEmailAssociatedWithPayPalMerchantAccount"/>

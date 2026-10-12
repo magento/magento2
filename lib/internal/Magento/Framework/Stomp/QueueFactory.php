@@ -7,12 +7,16 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Stomp;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\MessageQueue\QueueFactoryInterface;
+use Magento\Framework\Stomp\Exception\ClientException;
+
 /**
  * Factory class for @see \Magento\Framework\Stomp\Queue
  *
  * @api
  */
-class QueueFactory implements \Magento\Framework\MessageQueue\QueueFactoryInterface
+class QueueFactory implements QueueFactoryInterface
 {
     /**
      * Object Manager instance
@@ -34,20 +38,29 @@ class QueueFactory implements \Magento\Framework\MessageQueue\QueueFactoryInterf
     private $configPool;
 
     /**
+     * @var StompClientProvider
+     */
+    private StompClientProvider $stompClientProvider;
+
+    /**
      * Initialize dependencies.
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param ConfigPool $configPool
      * @param string $instanceName
+     * @param StompClientProvider|null $stompClientProvider
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
         ConfigPool $configPool,
-        $instanceName = Queue::class
+        $instanceName = Queue::class,
+        ?StompClientProvider $stompClientProvider = null,
     ) {
         $this->objectManager = $objectManager;
         $this->configPool = $configPool;
         $this->instanceName = $instanceName;
+        $this->stompClientProvider = $stompClientProvider ?? ObjectManager::getInstance()
+            ->get(StompClientProvider::class);
     }
 
     /**
@@ -55,10 +68,13 @@ class QueueFactory implements \Magento\Framework\MessageQueue\QueueFactoryInterf
      */
     public function create($queueName, $connectionName)
     {
+        $stompClient = $this->stompClientProvider->get($connectionName);
+
         return $this->objectManager->create(
             $this->instanceName,
             [
                 'stompConfig' => $this->configPool->get($connectionName),
+                'stompClient' => $stompClient,
                 'queueName' => $queueName
             ]
         );

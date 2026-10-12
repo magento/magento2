@@ -39,6 +39,7 @@ use Magento\Store\Model\StoreRepository;
 use Magento\Store\Model\Website;
 use Magento\Store\Model\WebsiteRepository;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Helper\DownloadableDomains;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -118,7 +119,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->urlRewriteCollectionFactory = $objectManager->get(UrlRewriteCollectionFactory::class);
         /** @var DomainManagerInterface $domainManager */
         $domainManager = $objectManager->get(DomainManagerInterface::class);
-        $domainManager->addDomains(['example.com']);
+        DownloadableDomains::addDomains($domainManager, ['example.com']);
     }
 
     /**
@@ -132,7 +133,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $objectManager = Bootstrap::getObjectManager();
         /** @var DomainManagerInterface $domainManager */
         $domainManager = $objectManager->get(DomainManagerInterface::class);
-        $domainManager->removeDomains(['example.com']);
+        DownloadableDomains::removeDomains($domainManager, ['example.com']);
     }
 
     /**
@@ -176,14 +177,16 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     }
 
     /**
-     * Test get() method with invalid sku
+     * Test get() method with invalid SKUs
+     *
+     * @param string $invalidSku SKU that must not exist in the catalog
      */
-    public function testGetNoSuchEntityException()
+    #[DataProvider('getNotExistingProductSkuDataProvider')]
+    public function testGetNoSuchEntityException(string $invalidSku): void
     {
-        $invalidSku = '(nonExistingSku)';
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . '/' . $invalidSku,
+                'resourcePath' => self::RESOURCE_PATH . '/' . rawurlencode($invalidSku),
                 'httpMethod' => Request::HTTP_METHOD_GET,
             ],
             'soap' => [
@@ -208,6 +211,20 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             $this->assertEquals($expectedMessage, $errorObj['message']);
             $this->assertEquals(HTTPExceptionCodes::HTTP_NOT_FOUND, $e->getCode());
         }
+    }
+
+    /**
+     * Non-existent SKUs for {@see testGetNoSuchEntityException}
+     *
+     * @return array<string, array{string}>
+     */
+    public static function getNotExistingProductSkuDataProvider(): array
+    {
+        return [
+            'Non-existent SKU with parentheses' => ['(nonExistingSku)'],
+            'Non-existent SKU with numeric-looking token' => ['123abc'],
+            'Random missing SKU' => ['missing-product-webapi-bad-ref'],
+        ];
     }
 
     /**

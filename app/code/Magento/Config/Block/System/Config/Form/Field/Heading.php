@@ -6,8 +6,6 @@
 
 /**
  * Renderer for sub-heading in fieldset
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Config\Block\System\Config\Form\Field;
 
