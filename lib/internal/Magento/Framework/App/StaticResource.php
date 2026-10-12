@@ -152,8 +152,7 @@ class StaticResource implements \Magento\Framework\AppInterface
                 ConfigOptionsListConstants::CONFIG_PATH_SCD_ON_DEMAND_IN_PRODUCTION
             )
         ) {
-            $this->response->setHttpResponseCode(404);
-            return $this->response;
+            return $this->notFound();
         }
 
         $path = $this->request->get('resource');
@@ -161,8 +160,7 @@ class StaticResource implements \Magento\Framework\AppInterface
             $params = $this->parsePath($path);
         } catch (\InvalidArgumentException $e) {
             if ($appMode == \Magento\Framework\App\State::MODE_PRODUCTION) {
-                $this->response->setHttpResponseCode(404);
-                return $this->response;
+                return $this->notFound();
             }
             throw $e;
         }
@@ -171,8 +169,7 @@ class StaticResource implements \Magento\Framework\AppInterface
             && $this->localeValidator->isValid($params['locale']))
         ) {
             if ($appMode == \Magento\Framework\App\State::MODE_PRODUCTION) {
-                $this->response->setHttpResponseCode(404);
-                return $this->response;
+                return $this->notFound();
             }
             throw new \InvalidArgumentException('Requested path ' . $path . ' is wrong.');
         }
@@ -275,6 +272,20 @@ class StaticResource implements \Magento\Framework\AppInterface
         }
 
         return $this->logger;
+    }
+
+    /**
+     * Respond with 404 that no proxy, CDN or browser may cache
+     *
+     * The requested file can exist moments later, e.g. a merged CSS/JS file is only written when a page is rendered.
+     *
+     * @return \Magento\Framework\App\ResponseInterface
+     */
+    private function notFound()
+    {
+        $this->response->setHttpResponseCode(404);
+        $this->response->setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0', true);
+        return $this->response;
     }
 
     /**
