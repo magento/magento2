@@ -25,6 +25,7 @@ use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
  * @api
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  * phpcs:disable Magento2.Annotation.MethodAnnotationStructure
  * @since 100.0.2
  */
