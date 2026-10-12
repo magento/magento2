@@ -53,7 +53,7 @@ class AttributeMetadata implements GetAttributeDataInterface
 
         $metadata = [
             'is_comparable' => $attribute->getIsComparable() === "1",
-            'is_filterable' => $attribute->getIsFilterable() === "1",
+            'is_filterable' => (int)$attribute->getIsFilterable() > 0,
             'is_filterable_in_search' => $attribute->getIsFilterableInSearch() === "1",
             'is_searchable' => $attribute->getIsSearchable() === "1",
             'is_html_allowed_on_front' => $attribute->getIsHtmlAllowedOnFront() === "1",
