@@ -366,6 +366,127 @@ class CategoryUrlPathAutogeneratorObserverTest extends TestCase
     }
 
     /**
+     * @return void
+     * @throws LocalizedException
+     */
+    public function testShouldUpdateUrlPathForChildCategoryWhenUrlKeyIsResetToDefaultAtStoreScope(): void
+    {
+        $storeId = 2;
+        $rowId = 6;
+        $categoryData = [
+            'use_default' => ['url_key' => 1],
+            'url_key' => null,
+            'url_path' => 'one/one-point-one/one-point-one-one/one-point-one-one-onexxxx',
+            'row_id' => $rowId,
+        ];
+
+        $this->category->setData($categoryData);
+        $this->category->isObjectNew(false);
+        $this->category->method('getStoreId')->willReturn($storeId);
+        $this->category->expects($this->once())
+            ->method('hasChildren')
+            ->willReturn(false);
+        $this->metadataPool->method('getMetadata')
+            ->with(CategoryInterface::class)
+            ->willReturn($this->entityMetaDataInterface);
+        $this->entityMetaDataInterface->method('getLinkField')
+            ->willReturn('row_id');
+        $this->category->method('getUrlKey')
+            ->willReturn(false);
+        $this->category->method('getData')
+            ->willReturnMap(
+                [
+                    ['use_default', null, ['url_key' => 1]],
+                    ['row_id', null, $rowId],
+                ]
+            );
+        $this->storeViewService->expects($this->once())
+            ->method('doesEntityHaveOverriddenUrlKeyForStore')
+            ->with($storeId, $this->anything(), Category::ENTITY)
+            ->willReturn(true);
+        $this->getDefaultUrlKey->expects($this->once())
+            ->method('execute')
+            ->with($rowId)
+            ->willReturn('one-point-one-one-one');
+        $this->category->expects($this->once())
+            ->method('dataHasChangedFor')
+            ->with('url_path')
+            ->willReturn(false);
+
+        $urlKeyAttribute = $this->createMock(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class);
+        $urlKeyAttribute->method('getBackendTable')->willReturn('catalog_category_entity_varchar');
+        $urlKeyAttribute->method('getAttributeId')->willReturn(120);
+        $this->categoryResource->method('getAttribute')
+            ->with('url_key')
+            ->willReturn($urlKeyAttribute);
+        $connection = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
+        $connection->expects($this->once())
+            ->method('delete')
+            ->with('catalog_category_entity_varchar', [
+                'attribute_id = ?' => 120,
+                'row_id = ?' => $rowId,
+                'store_id = ?' => $storeId,
+            ]);
+        $this->categoryResource->method('getConnection')->willReturn($connection);
+
+        $this->compositeUrlValidator->expects($this->once())
+            ->method('validate')
+            ->with('one-point-one-one-one')
+            ->willReturn([]);
+        $this->categoryUrlPathGenerator->expects($this->once())
+            ->method('getUrlPath')
+            ->with($this->category)
+            ->willReturn('one/one-point-one/one-point-one-one/one-point-one-one-one');
+        $this->categoryResource->expects($this->once())
+            ->method('saveAttribute')
+            ->with($this->category, 'url_path');
+
+        $this->categoryUrlPathAutogeneratorObserver->execute($this->observer);
+    }
+
+    /**
+     * @return void
+     * @throws LocalizedException
+     */
+    public function testShouldNotUpdateUrlPathForChildCategoryWhenUrlKeyWasNeverOverriddenAtStoreScope(): void
+    {
+        $storeId = 2;
+        $rowId = 6;
+        $categoryData = [
+            'use_default' => ['url_key' => 1],
+            'url_key' => null,
+            'url_path' => 'one/one-point-one/one-point-one-one/one-point-one-one-one',
+            'row_id' => $rowId,
+        ];
+
+        $this->category->setData($categoryData);
+        $this->category->isObjectNew(false);
+        $this->category->method('getStoreId')->willReturn($storeId);
+        $this->category->expects($this->once())
+            ->method('hasChildren')
+            ->willReturn(false);
+        $this->category->method('getUrlKey')
+            ->willReturn(false);
+        $this->category->method('getData')
+            ->willReturnMap(
+                [
+                    ['use_default', null, ['url_key' => 1]],
+                    ['row_id', null, $rowId],
+                ]
+            );
+        $this->storeViewService->expects($this->once())
+            ->method('doesEntityHaveOverriddenUrlKeyForStore')
+            ->with($storeId, $this->anything(), Category::ENTITY)
+            ->willReturn(false);
+        $this->getDefaultUrlKey->expects($this->never())
+            ->method('execute');
+        $this->categoryResource->expects($this->never())
+            ->method('saveAttribute');
+
+        $this->categoryUrlPathAutogeneratorObserver->execute($this->observer);
+    }
+
+    /**
      * @param $useDefaultUrlKey
      * @param $isObjectNew
      * @throws LocalizedException
@@ -801,7 +922,7 @@ class CategoryUrlPathAutogeneratorObserverTest extends TestCase
         $this->categoryUrlPathGenerator->method('getUrlPath')
             ->willReturnCallback(function ($cat, $parent = null) use (&$processedIds, $directChildId, $grandChildId) {
                 if ($cat->getId() === $directChildId || $cat->getId() === $grandChildId) {
-                    $processedIds[] = ['id' => $cat->getId(), 'hasParent' => $parent !== null];
+                    $processedIds[] = ['id' => $cat->getId(), 'parentId' => $parent ? $parent->getId() : null];
                 }
                 return 'generated_url_path';
             });
@@ -809,11 +930,12 @@ class CategoryUrlPathAutogeneratorObserverTest extends TestCase
         $this->categoryUrlPathAutogeneratorObserver->execute($this->observer);
 
         // The direct child is processed first (lower level) and is linked to the store-scoped parent;
-        // the grandchild is processed after and resolves its url_path without an explicit parent.
+        // the grandchild is processed after and must be linked to the direct child's own,
+        // already-refreshed instance from this same pass, not left to resolve a parent independently.
         $this->assertSame($directChildId, $processedIds[0]['id']);
-        $this->assertTrue($processedIds[0]['hasParent']);
+        $this->assertSame($categoryId, $processedIds[0]['parentId']);
         $this->assertSame($grandChildId, $processedIds[1]['id']);
-        $this->assertFalse($processedIds[1]['hasParent']);
+        $this->assertSame($directChildId, $processedIds[1]['parentId']);
     }
 
     /**

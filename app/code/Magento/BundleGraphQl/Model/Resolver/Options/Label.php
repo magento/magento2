@@ -9,7 +9,6 @@ namespace Magento\BundleGraphQl\Model\Resolver\Options;
 
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Deferred\Product as ProductDataProvider;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Deferred\ProductFactory as ProductDataProviderFactory;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
@@ -27,24 +26,25 @@ class Label implements ResolverInterface
     private ValueFactory $valueFactory;
 
     /**
-     * @var ProductDataProviderFactory
+     * @var ProductDataProvider
      */
-    private ProductDataProviderFactory $productFactory;
+    private ProductDataProvider $productDataProvider;
 
     /**
      * @param ValueFactory $valueFactory
-     * @param ProductDataProvider $product Deprecated.  Use $productFactory
-     * @param ProductDataProviderFactory|null $productFactory
+     * @param ProductDataProvider $product
+     * @param ProductDataProviderFactory|null $productFactory @deprecated
+     * @param ProductDataProvider|null $productDataProvider
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         ValueFactory $valueFactory,
         ProductDataProvider $product,
-        ?ProductDataProviderFactory $productFactory = null
+        ?ProductDataProviderFactory $productFactory = null,
+        ?ProductDataProvider $productDataProvider = null
     ) {
         $this->valueFactory = $valueFactory;
-        $this->productFactory = $productFactory
-            ?: ObjectManager::getInstance()->get(ProductDataProviderFactory::class);
+        $this->productDataProvider = $productDataProvider ?? $product;
     }
 
     /**
@@ -60,11 +60,10 @@ class Label implements ResolverInterface
         if (!isset($value['sku'])) {
             throw new LocalizedException(__('"sku" value should be specified'));
         }
-        $product = $this->productFactory->create();
-        $product->addProductSku($value['sku']);
-        $product->addEavAttributes(['name']);
-        $result = function () use ($value, $context, $product) {
-            $productData = $product->getProductBySku($value['sku'], $context);
+        $this->productDataProvider->addProductSku($value['sku']);
+        $this->productDataProvider->addEavAttributes(['name']);
+        $result = function () use ($value, $context) {
+            $productData = $this->productDataProvider->getProductBySku($value['sku'], $context);
             /** @var \Magento\Catalog\Model\Product $productModel */
             $productModel = isset($productData['model']) ? $productData['model'] : null;
             return $productModel ? $productModel->getName() : null;
