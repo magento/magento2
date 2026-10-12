@@ -476,7 +476,13 @@ class Renderer implements RendererInterface
                 $result .= sprintf($template, $asset->getUrl());
             }
         } catch (LocalizedException $e) {
-            $this->logger->critical($e);
+            $this->logger->critical(
+                'Unable to render assets of the {contentType} content type',
+                [
+                    'contentType' => $group->getProperty(GroupedCollection::PROPERTY_CONTENT_TYPE),
+                    'exception' => $e,
+                ]
+            );
             $template = $this->getAssetTemplate(
                 $group->getProperty(GroupedCollection::PROPERTY_CONTENT_TYPE),
                 $defaultAttributes

@@ -10,9 +10,9 @@ namespace Magento\Framework\View\TemplateEngine\Xhtml;
  */
 class Template
 {
-    const XML_VERSION = '1.0';
+    public const XML_VERSION = '1.0';
 
-    const XML_ENCODING = 'UTF-8';
+    public const XML_ENCODING = 'UTF-8';
 
     /**
      * @var \Psr\Log\LoggerInterface
@@ -75,7 +75,7 @@ class Template
             $this->templateNode->ownerDocument->normalizeDocument();
             $result = $this->templateNode->ownerDocument->saveHTML();
         } catch (\Exception $e) {
-            $this->logger->critical($e->getMessage());
+            $this->logger->critical('Unable to render an XHTML template', ['exception' => $e]);
             $result = '';
         }
         return $result;
