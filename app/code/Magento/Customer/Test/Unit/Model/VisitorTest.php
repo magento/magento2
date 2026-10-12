@@ -13,9 +13,11 @@ use Magento\Customer\Model\Visitor;
 use Magento\Customer\Model\Visitor as VisitorModel;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\DataObject;
+use Magento\Framework\HTTP\Header;
 use Magento\Framework\Registry;
 use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
@@ -129,6 +131,37 @@ class VisitorTest extends TestCase
         $this->httpRequestMock->method('getRouteName')->willReturn('test_route_name');
         $observer = new DataObject();
         $this->assertTrue($this->visitor->isModuleIgnored($observer));
+    }
+
+    #[DataProvider('ignoredUserAgentDataProvider')]
+    public function testIsIgnoredUserAgent(array $ignoredUserAgents, string $userAgent, bool $expected): void
+    {
+        $httpHeaderMock = $this->createMock(Header::class);
+        $httpHeaderMock->method('getHttpUserAgent')->willReturn($userAgent);
+
+        $visitor = $this->objectManagerHelper->getObject(
+            VisitorModel::class,
+            [
+                'registry' => $this->registryMock,
+                'session' => $this->sessionMock,
+                'resource' => $this->visitorResourceModelMock,
+                'httpHeader' => $httpHeaderMock,
+                'ignoredUserAgents' => $ignoredUserAgents,
+            ]
+        );
+
+        $this->assertSame($expected, $visitor->isIgnoredUserAgent());
+    }
+
+    public static function ignoredUserAgentDataProvider(): array
+    {
+        $botAgent = 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)';
+
+        return [
+            'listed agent' => [['google' => $botAgent], $botAgent, true],
+            'other agent' => [['google' => $botAgent], 'Chrome/120.0', false],
+            'empty list' => [[], $botAgent, false],
+        ];
     }
 
     public function testBindCustomerLogin()
