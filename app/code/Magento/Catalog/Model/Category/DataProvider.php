@@ -416,7 +416,7 @@ class DataProvider extends ModifierPoolDataProvider
                     $meta[$code][$metaName] = (bool)$meta[$code][$metaName];
                 }
                 if ('frontend_input' === $origName) {
-                    $meta[$code]['formElement'] = isset($this->formElement[$value])
+                    $meta[$code]['formElement'] = $value !== null && isset($this->formElement[$value])
                         ? $this->formElement[$value]
                         : $value;
                 }
