@@ -32,6 +32,8 @@ use PHPUnit\Framework\TestCase;
  * stock_status_changed_auto = 0. ChangeParentStockStatus lets a parent go out of stock unconditionally but
  * only lets it come back when stock_status_changed_auto is set, so the parent is latched out of stock
  * permanently. Reindexing does not help: the flag is stored, not derived.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CompositeParentStockStatusTest extends TestCase
 {
