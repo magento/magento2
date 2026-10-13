@@ -9,12 +9,9 @@ namespace Magento\CatalogRule\Model\Indexer;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\CatalogRule\Model\ResourceModel\Rule as RuleResource;
 use Magento\Customer\Model\GroupManagement;
-use Magento\Eav\Model\Config as EavConfig;
-use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -53,9 +50,9 @@ class RuleProductsSelectBuilderTest extends TestCase
     private $storeManager;
 
     /**
-     * @var ResourceConnection
+     * @var ProductResource
      */
-    private $resource;
+    private $productResource;
 
     /**
      * @inheritdoc
@@ -68,7 +65,7 @@ class RuleProductsSelectBuilderTest extends TestCase
         $this->ruleResource = $objectManager->get(RuleResource::class);
         $this->productRepository = $objectManager->get(ProductRepositoryInterface::class);
         $this->storeManager = $objectManager->get(StoreManagerInterface::class);
-        $this->resource = $objectManager->get(ResourceConnection::class);
+        $this->productResource = $objectManager->get(ProductResource::class);
     }
 
     /**
@@ -140,10 +137,9 @@ class RuleProductsSelectBuilderTest extends TestCase
      */
     private function movePriceToStore(ProductInterface $product, int $storeId, float $price): void
     {
-        $objectManager = Bootstrap::getObjectManager();
-        $priceAttribute = $objectManager->get(EavConfig::class)->getAttribute(Product::ENTITY, 'price');
-        $linkField = $objectManager->get(MetadataPool::class)->getMetadata(ProductInterface::class)->getLinkField();
-        $connection = $this->resource->getConnection();
+        $priceAttribute = $this->productResource->getAttribute('price');
+        $linkField = $this->productResource->getLinkField();
+        $connection = $this->productResource->getConnection();
         $table = $priceAttribute->getBackend()->getTable();
         $linkId = (int)$product->getData($linkField);
 
