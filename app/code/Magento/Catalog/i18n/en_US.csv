@@ -869,3 +869,4 @@ Details,Details
 "Learn more","Learn more"
 "Recently Viewed","Recently Viewed"
 "Could not acquire lock for SKU %1","Could not acquire lock for SKU %1"
+"Warning: HTML entered in this attribute is output without sanitization. Users and integrations with catalog write permission will be able to embed scripts that run in customers' browsers. Enable only if all catalog editors are fully trusted.","Warning: HTML entered in this attribute is output without sanitization. Users and integrations with catalog write permission will be able to embed scripts that run in customers' browsers. Enable only if all catalog editors are fully trusted."
