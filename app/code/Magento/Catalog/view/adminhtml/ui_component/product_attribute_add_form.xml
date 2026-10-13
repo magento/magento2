@@ -647,6 +647,7 @@
             <settings>
                 <dataType>boolean</dataType>
                 <label translate="true">Allow HTML Tags on Storefront</label>
+                <notice translate="true">Warning: HTML entered in this attribute is output without sanitization. Users and integrations with catalog write permission will be able to embed scripts that run in customers' browsers. Enable only if all catalog editors are fully trusted.</notice>
                 <dataScope>is_html_allowed_on_front</dataScope>
             </settings>
             <formElements>

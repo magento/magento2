@@ -132,6 +132,11 @@ class Front extends Generic
                 'label' => __('Allow HTML Tags on Storefront'),
                 'title' => __('Allow HTML Tags on Storefront'),
                 'values' => $yesnoSource,
+                'note' => __(
+                    'Warning: HTML entered in this attribute is output without sanitization. Users and'
+                    . ' integrations with catalog write permission will be able to embed scripts that run in'
+                    . ' customers\' browsers. Enable only if all catalog editors are fully trusted.'
+                ),
             ]
         );
         if (!$attributeObject->getId() || $attributeObject->getIsWysiwygEnabled()) {
