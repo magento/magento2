@@ -274,10 +274,10 @@
         <data key="cardNumberEnding">1111</data>
         <data key="cardExpire">1/2030</data>
     </entity>
-    <!-- Payflow test Mastercard: https://developer.paypal.com/api/nvp-soap/payflow/integration-guide/test-transactions/ -->
+    <!-- Payflow test Visa (HSA/FSA): https://developer.paypal.com/api/nvp-soap/payflow/integration-guide/test-transactions/ -->
     <!-- Use this card only in AdminCancelPaypalPayflowProOrderTest; do not reuse its number in other tests or entities. -->
     <entity name="CancelOrderPayflowCard" type="data">
-        <data key="cardNumber">2223000048400011</data>
+        <data key="cardNumber">4999991111111113</data>
         <data key="month">01</data>
         <data key="year">30</data>
         <data key="cvv">123</data>
