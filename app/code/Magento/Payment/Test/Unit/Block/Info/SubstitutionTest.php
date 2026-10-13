@@ -137,7 +137,7 @@ class SubstitutionTest extends TestCase
         )->disableOriginalConstructor()->getMock();
         $methodMock = $this->getMockBuilder(
             MethodInterface::class
-        )->getMockForAbstractClass();
+        )->getMock();
         $infoMock->expects($this->once())->method('getMethodInstance')->willReturn($methodMock);
         $this->block->setInfo($infoMock);
 

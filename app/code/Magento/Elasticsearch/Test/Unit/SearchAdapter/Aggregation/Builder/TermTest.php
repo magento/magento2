@@ -44,9 +44,7 @@ class TermTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->requestBuckedInterface = $this->getMockBuilder(BucketInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->requestBuckedInterface = $this->createMock(BucketInterface::class);
 
         $this->dataProviderContainer = $this->getMockBuilder(
             DataProviderInterface::class

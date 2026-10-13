@@ -19,7 +19,7 @@ class ValidatorTest extends TestCase
     {
         $validator = new Validator();
         $productMock = $this->createMock(Product::class);
-        $requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        $requestMock = $this->createMock(RequestInterface::class);
         $responseMock = $this->createMock(DataObject::class);
         $productMock->expects($this->once())->method('validate')->willReturn(true);
         $this->assertTrue($validator->validate($productMock, $requestMock, $responseMock));

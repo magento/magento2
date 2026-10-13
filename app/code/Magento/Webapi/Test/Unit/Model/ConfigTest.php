@@ -43,7 +43,7 @@ class ConfigTest extends TestCase
 
         $this->webapiCacheMock = $this->createMock(Webapi::class);
         $this->configReaderMock = $this->createMock(Reader::class);
-        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
 
         $this->config = $objectManager->getObject(
             Config::class,

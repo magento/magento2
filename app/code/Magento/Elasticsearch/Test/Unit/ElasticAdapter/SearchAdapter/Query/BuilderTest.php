@@ -90,21 +90,9 @@ class BuilderTest extends TestCase
             ->onlyMethods(['build'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->request = $this->getMockBuilder(RequestInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->scopeResolver = $this->getMockForAbstractClass(
-            ScopeResolverInterface::class,
-            [],
-            '',
-            false
-        );
-        $this->scopeInterface = $this->getMockForAbstractClass(
-            ScopeInterface::class,
-            [],
-            '',
-            false
-        );
+        $this->request = $this->createMock(RequestInterface::class);
+        $this->scopeResolver = $this->createMock(ScopeResolverInterface::class);
+        $this->scopeInterface = $this->createMock(ScopeInterface::class);
 
         $this->model = new Builder(
             $this->clientConfig,

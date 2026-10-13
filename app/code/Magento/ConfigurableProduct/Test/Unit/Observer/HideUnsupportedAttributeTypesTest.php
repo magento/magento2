@@ -13,8 +13,8 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Data\Form;
 use Magento\Framework\Data\Form\Element\Select;
 use Magento\Framework\Event\Observer as EventObserver;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\Data\Form\Element\Test\Unit\Helper\SelectTestHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -23,6 +23,8 @@ use PHPUnit\Framework\TestCase;
  */
 class HideUnsupportedAttributeTypesTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ObjectManager
      */
@@ -163,9 +165,16 @@ class HideUnsupportedAttributeTypesTest extends TestCase
     private function createForm(array $originalValues = [], array $expectedValues = [])
     {
         $form = $this->createPartialMock(Form::class, ['getElement']);
-        $frontendInput = new SelectTestHelper();
-        $frontendInput->setOriginalValues($originalValues);
-        $frontendInput->setExpectedValues($expectedValues);
+        $frontendInput = $this->createPartialMockWithReflection(
+            Select::class,
+            ['getValues', 'setValues']
+        );
+        $frontendInput->expects($this->once())
+            ->method('getValues')
+            ->willReturn($originalValues);
+        $frontendInput->expects($this->once())
+            ->method('setValues')
+            ->with($expectedValues);
         $form->expects($this->once())
             ->method('getElement')
             ->with('frontend_input')

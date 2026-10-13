@@ -9,14 +9,13 @@ namespace Magento\Customer\Test\Unit\Model\ForgotPasswordToken;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
-use Magento\Customer\Api\Data\CustomerSearchResultsInterface;
 use Magento\Customer\Model\ForgotPasswordToken\GetCustomerByToken;
-use Magento\Framework\Api\SearchCriteria;
+use Magento\Customer\Model\ResourceModel\Customer\Collection;
+use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\State\ExpiredException;
 use Magento\Framework\Phrase;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -25,68 +24,60 @@ class GetCustomerByTokenTest extends TestCase
     private const RESET_PASSWORD = 'resetPassword';
 
     /**
-     * @var SearchCriteriaBuilder|MockObject
-     */
-    private $searchCriteriaBuilderMock;
-
-    /**
-     * @var SearchCriteria|MockObject
-     */
-    private $searchCriteriaMock;
-
-    /**
      * @var CustomerRepositoryInterface|MockObject
      */
-    private $customerRepositoryMock;
+    private CustomerRepositoryInterface|MockObject $customerRepositoryMock;
 
     /**
-     * @var CustomerSearchResultsInterface|MockObject
+     * @var SearchCriteriaBuilder|MockObject
      */
-    private $searchResultMock;
+    private SearchCriteriaBuilder|MockObject $searchCriteriaBuilderMock;
 
     /**
-     * @var CustomerInterface|MockObject
+     * @var CollectionFactory|MockObject
      */
-    private $customerMock;
+    private CollectionFactory|MockObject $collectionFactoryMock;
 
     /**
-     * @var GetCustomerByToken;
+     * @var Collection|MockObject
      */
-    private $model;
+    private Collection|MockObject $collectionMock;
 
+    /**
+     * @var GetCustomerByToken
+     */
+    private GetCustomerByToken $model;
+
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
-        $this->searchCriteriaBuilderMock = $this->createMock(SearchCriteriaBuilder::class);
-        $this->searchCriteriaMock = $this->createMock(SearchCriteria::class);
-        $this->searchResultMock = $this->createMock(CustomerSearchResultsInterface::class);
         $this->customerRepositoryMock = $this->createMock(CustomerRepositoryInterface::class);
-        $this->customerMock = $this->getMockForAbstractClass(CustomerInterface::class);
+        $this->searchCriteriaBuilderMock = $this->createMock(SearchCriteriaBuilder::class);
+        $this->collectionMock = $this->createMock(Collection::class);
+        $this->collectionFactoryMock = $this->createMock(CollectionFactory::class);
+        $this->collectionFactoryMock->method('create')->willReturn($this->collectionMock);
 
-        $objectManagerHelper = new ObjectManagerHelper($this);
-        $this->model = $objectManagerHelper->getObject(
-            GetCustomerByToken::class,
-            [
-                'searchCriteriaBuilder' => $this->searchCriteriaBuilderMock,
-                'customerRepository' => $this->customerRepositoryMock
-            ]
+        $this->model = new GetCustomerByToken(
+            $this->customerRepositoryMock,
+            $this->searchCriteriaBuilderMock,
+            $this->collectionFactoryMock
         );
-
-        $this->searchCriteriaBuilderMock->expects($this->once())
-            ->method('create')
-            ->willReturn($this->searchCriteriaMock);
-        $this->customerRepositoryMock->expects($this->once())
-            ->method('getList')
-            ->with($this->searchCriteriaMock)
-            ->willReturn($this->searchResultMock);
     }
 
+    /**
+     * Verifies that a matching customer is returned when exactly one result is found.
+     */
     public function testExecuteReturnWhenOneItemAvailable(): void
     {
-        $totalCount = 1;
-        $this->searchResultMock->method('getTotalCount')->willReturn($totalCount);
-        $this->searchResultMock->expects($this->once())
-            ->method('getItems')
-            ->willReturn([$this->customerMock]);
+        $customerMock = $this->createMock(CustomerInterface::class);
+
+        $this->collectionMock->expects($this->once())
+            ->method('addAttributeToFilter')
+            ->with('rp_token', self::RESET_PASSWORD);
+        $this->collectionMock->method('getSize')->willReturn(1);
+        $this->collectionMock->method('getFirstItem')->willReturn($customerMock);
 
         $this->assertInstanceOf(
             CustomerInterface::class,
@@ -94,10 +85,15 @@ class GetCustomerByTokenTest extends TestCase
         );
     }
 
+    /**
+     * Verifies that NoSuchEntityException is thrown when no customer matches the token.
+     */
     public function testExecuteWithNoSuchEntityException(): void
     {
-        $totalCount = 0;
-        $this->searchResultMock->method('getTotalCount')->willReturn($totalCount);
+        $this->collectionMock->method('addAttributeToFilter')
+            ->with('rp_token', self::RESET_PASSWORD);
+        $this->collectionMock->method('getSize')->willReturn(0);
+
         $this->expectExceptionObject(new NoSuchEntityException(
             new Phrase(
                 'No such entity with rp_token = %value',
@@ -108,15 +104,17 @@ class GetCustomerByTokenTest extends TestCase
         $this->model->execute(self::RESET_PASSWORD);
     }
 
+    /**
+     * Verifies that ExpiredException is thrown when more than one customer matches the token.
+     */
     public function testExecuteWithExpireException(): void
     {
-        $totalCount = 2;
-        $this->searchResultMock->method('getTotalCount')->willReturn($totalCount);
+        $this->collectionMock->method('addAttributeToFilter')
+            ->with('rp_token', self::RESET_PASSWORD);
+        $this->collectionMock->method('getSize')->willReturn(2);
 
         $this->expectExceptionObject(new ExpiredException(
-            new Phrase(
-                'Reset password token expired.'
-            )
+            new Phrase('Reset password token expired.')
         ));
 
         $this->model->execute(self::RESET_PASSWORD);

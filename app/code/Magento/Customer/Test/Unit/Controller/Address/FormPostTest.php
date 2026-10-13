@@ -42,8 +42,10 @@ use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Result\PageFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -51,6 +53,8 @@ use PHPUnit\Framework\TestCase;
  */
 class FormPostTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var FormPost
      */
@@ -198,11 +202,10 @@ class FormPostTest extends TestCase
     {
         $this->prepareContext();
 
-        $this->session = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setAddressFormData'])
-            ->onlyMethods(['getCustomerId'])
-            ->getMock();
+        $this->session = $this->createPartialMockWithReflection(
+            Session::class,
+            ['getCustomerId', 'setAddressFormData']
+        );
 
         $this->formKeyValidator = $this->getMockBuilder(\Magento\Framework\Data\Form\FormKey\Validator::class)
             ->disableOriginalConstructor()
@@ -240,8 +243,7 @@ class FormPostTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->addressMetadata = $this->getMockBuilder(AddressMetadataInterface::class)
-            ->getMockForAbstractClass();
+        $this->addressMetadata = $this->createMock(AddressMetadataInterface::class);
 
         $this->fileNameValidator = $this->getMockBuilder(FileNameValidator::class)
             ->disableOriginalConstructor()
@@ -283,17 +285,13 @@ class FormPostTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->request = $this->getMockBuilder(RequestInterface::class)
-            ->addMethods(['isPost', 'getPostValue'])
-            ->onlyMethods(['getParam'])
-            ->getMockForAbstractClass();
+        $this->request = $this->createMock(\Magento\Framework\App\Request\Http::class);
 
         $this->context->expects($this->any())
             ->method('getRequest')
             ->willReturn($this->request);
 
-        $this->redirect = $this->getMockBuilder(RedirectInterface::class)
-            ->getMockForAbstractClass();
+        $this->redirect = $this->createMock(RedirectInterface::class);
 
         $this->context->expects($this->any())
             ->method('getRedirect')
@@ -314,15 +312,13 @@ class FormPostTest extends TestCase
             ->method('getResultRedirectFactory')
             ->willReturn($this->resultRedirectFactory);
 
-        $this->objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->getMockForAbstractClass();
+        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
 
         $this->context->expects($this->any())
             ->method('getObjectManager')
             ->willReturn($this->objectManager);
 
-        $this->messageManager = $this->getMockBuilder(ManagerInterface::class)
-            ->getMockForAbstractClass();
+        $this->messageManager = $this->createMock(ManagerInterface::class);
 
         $this->context->expects($this->any())
             ->method('getMessageManager')
@@ -334,11 +330,9 @@ class FormPostTest extends TestCase
      */
     protected function prepareAddress(): void
     {
-        $this->addressRepository = $this->getMockBuilder(AddressRepositoryInterface::class)
-            ->getMockForAbstractClass();
+        $this->addressRepository = $this->createMock(AddressRepositoryInterface::class);
 
-        $this->addressData = $this->getMockBuilder(AddressInterface::class)
-            ->getMockForAbstractClass();
+        $this->addressData = $this->createMock(AddressInterface::class);
 
         $this->addressDataFactory = $this->getMockBuilder(AddressInterfaceFactory::class)
             ->disableOriginalConstructor()
@@ -356,11 +350,10 @@ class FormPostTest extends TestCase
      */
     protected function prepareRegion(): void
     {
-        $this->region = $this->getMockBuilder(Region::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getCode', 'getDefaultName'])
-            ->onlyMethods(['load'])
-            ->getMock();
+        $this->region = $this->createPartialMockWithReflection(
+            Region::class,
+            ['load', 'getCode', 'getDefaultName']
+        );
 
         $this->regionFactory = $this->getMockBuilder(RegionFactory::class)
             ->disableOriginalConstructor()
@@ -369,8 +362,7 @@ class FormPostTest extends TestCase
             ->method('create')
             ->willReturn($this->region);
 
-        $this->regionData = $this->getMockBuilder(RegionInterface::class)
-            ->getMockForAbstractClass();
+        $this->regionData = $this->createMock(RegionInterface::class);
 
         $this->regionDataFactory = $this->getMockBuilder(RegionInterfaceFactory::class)
             ->disableOriginalConstructor()
@@ -440,8 +432,7 @@ class FormPostTest extends TestCase
             ->with($postValue)
             ->willReturnSelf();
 
-        $urlBuilder = $this->getMockBuilder(UrlInterface::class)
-            ->getMockForAbstractClass();
+        $urlBuilder = $this->createMock(UrlInterface::class);
         $urlBuilder->expects($this->once())
             ->method('getUrl')
             ->with('*/*/edit', [])
@@ -477,10 +468,10 @@ class FormPostTest extends TestCase
      * @param int $newRegionId
      * @param string $newRegion
      * @param string $newRegionCode
-     * @dataProvider dataProviderTestExecute
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
+    #[DataProvider('dataProviderTestExecute')]
     public function testExecute(
         $addressId,
         $countryId,
@@ -618,8 +609,7 @@ class FormPostTest extends TestCase
             ->with(__('You saved the address.'))
             ->willReturnSelf();
 
-        $urlBuilder = $this->getMockBuilder(UrlInterface::class)
-            ->getMockForAbstractClass();
+        $urlBuilder = $this->createMock(UrlInterface::class);
         $urlBuilder->expects($this->once())
             ->method('getUrl')
             ->with('*/*/index', ['_secure' => true])
@@ -717,8 +707,7 @@ class FormPostTest extends TestCase
             ->with($postValue)
             ->willReturnSelf();
 
-        $urlBuilder = $this->getMockBuilder(UrlInterface::class)
-            ->getMockForAbstractClass();
+        $urlBuilder = $this->createMock(UrlInterface::class);
         $urlBuilder->expects($this->once())
             ->method('getUrl')
             ->with('*/*/edit', ['id' => $addressId])
@@ -783,8 +772,7 @@ class FormPostTest extends TestCase
             ->with($postValue)
             ->willReturnSelf();
 
-        $urlBuilder = $this->getMockBuilder(UrlInterface::class)
-            ->getMockForAbstractClass();
+        $urlBuilder = $this->createMock(UrlInterface::class);
         $urlBuilder->expects($this->once())
             ->method('getUrl')
             ->with('*/*/index')
@@ -826,8 +814,7 @@ class FormPostTest extends TestCase
             ->with('delete_attribute_value')
             ->willReturn($attributeCode);
 
-        $attributeMetadata = $this->getMockBuilder(AttributeMetadataInterface::class)
-            ->getMockForAbstractClass();
+        $attributeMetadata = $this->createMock(AttributeMetadataInterface::class);
         $attributeMetadata->expects($this->once())
             ->method('getFrontendInput')
             ->willReturn('file');
@@ -849,8 +836,7 @@ class FormPostTest extends TestCase
             ->with($attributeCode)
             ->willReturn($customAttribute);
 
-        $directory = $this->getMockBuilder(WriteInterface::class)
-            ->getMockForAbstractClass();
+        $directory = $this->createMock(WriteInterface::class);
 
         $directory->expects($this->any())
             ->method('getAbsolutePath')

@@ -95,9 +95,11 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
         /** @var ProcessingError $newError */
         $newError = $this->errorFactory->create();
         $newError->init($errorCode, $errorLevel, $rowNumber, $columnName, $errorMessage, $errorDescription);
+        $rowNumber = $rowNumber ?? '';
         $this->items['rows'][$rowNumber][] = $newError;
         $this->items['codes'][$errorCode][] = $newError;
         $this->items['messages'][$errorMessage][] = $newError;
+        $columnName = $columnName ?? '';
         $this->itemsByRowColumnAndCode[$rowNumber][$columnName][$errorCode] = $newError;
         return $this;
     }
@@ -271,13 +273,13 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
     /**
      * Get an error via row number
      *
-     * @param int $rowNumber
+     * @param int|null $rowNumber
      * @return ProcessingError[]
      */
     public function getErrorByRowNumber($rowNumber)
     {
         $result = [];
-        if (isset($this->items['rows'][$rowNumber])) {
+        if ($rowNumber !== null && isset($this->items['rows'][$rowNumber])) {
             $result = $this->items['rows'][$rowNumber];
         }
 
@@ -375,6 +377,8 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
      */
     protected function isErrorAlreadyAdded($rowNum, $errorCode, $columnName = null)
     {
+        $rowNum = $rowNum ?? '';
+        $columnName = $columnName ?? '';
         return isset($this->itemsByRowColumnAndCode[$rowNum][$columnName][$errorCode]);
     }
 

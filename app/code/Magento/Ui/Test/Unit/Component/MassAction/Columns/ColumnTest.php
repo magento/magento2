@@ -38,7 +38,7 @@ class ColumnTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->contextMock = $this->getMockForAbstractClass(
+        $this->contextMock = $this->createMock(
             ContextInterface::class,
             [],
             '',
@@ -91,9 +91,7 @@ class ColumnTest extends TestCase
      */
     public function testPrepare()
     {
-        $processor = $this->getMockBuilder(Processor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $processor = $this->createMock(Processor::class);
         $this->contextMock->expects($this->atLeastOnce())->method('getProcessor')->willReturn($processor);
         $this->column = $this->objectManager->getObject(
             Column::class,
@@ -122,9 +120,7 @@ class ColumnTest extends TestCase
      */
     public function testPrepareExtendsFromConfig()
     {
-        $processor = $this->getMockBuilder(Processor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $processor = $this->createMock(Processor::class);
         $this->contextMock->expects($this->atLeastOnce())->method('getProcessor')->willReturn($processor);
         $this->contextMock->expects($this->never())
             ->method('getNamespace');

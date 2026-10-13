@@ -66,8 +66,7 @@ class ColumnsTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->context = $this->getMockBuilder(ContextInterface::class)
-            ->getMockForAbstractClass();
+        $this->context = $this->createMock(ContextInterface::class);
         $processor = $this->getMockBuilder(Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -80,11 +79,8 @@ class ColumnsTest extends TestCase
             AttributeRepository::class
         );
         $this->attribute = $this->createMock(Attribute::class);
-        $this->column = $this->getMockForAbstractClass(
-            ColumnInterface::class,
-            [],
-            '',
-            false
+        $this->column = $this->createMock(
+            ColumnInterface::class
         );
 
         $this->inlineEditUpdater = $this->getMockBuilder(
@@ -92,7 +88,7 @@ class ColumnsTest extends TestCase
         )->disableOriginalConstructor()
             ->getMock();
 
-        $this->textFilterConfigProvider = $this->getMockForAbstractClass(FilterConfigProviderInterface::class);
+        $this->textFilterConfigProvider = $this->createMock(FilterConfigProviderInterface::class);
         $this->textFilterConfigProvider->method('getConfig')
             ->willReturn(
                 [

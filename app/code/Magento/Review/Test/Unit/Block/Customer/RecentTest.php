@@ -14,6 +14,7 @@ use Magento\Framework\View\Element\Template\Context;
 use Magento\Review\Block\Customer\Recent;
 use Magento\Review\Model\ResourceModel\Review\Product\Collection;
 use Magento\Review\Model\ResourceModel\Review\Product\CollectionFactory;
+use Magento\Store\Model\StoreManager;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -43,7 +44,7 @@ class RecentTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManager = $this->createPartialMock(StoreManager::class, ['getStore']);
         $this->context = $this->createMock(Context::class);
         $this->context->expects(
             $this->any()

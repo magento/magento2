@@ -51,7 +51,7 @@ class TemplateHintsDisableCommand extends Command
      *
      * @throws InvalidArgumentException
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->resourceConfig->saveConfig('dev/debug/template_hints_storefront', 0, 'default', 0);
         $output->writeln("<info>". self::SUCCESS_MESSAGE . "</info>");

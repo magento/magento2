@@ -28,9 +28,7 @@ class ConverterTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->resourceProviderMock = $this->getMockBuilder(ProviderInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->resourceProviderMock = $this->createMock(ProviderInterface::class);
         $objectManagerHelper = new ObjectManager($this);
         $this->model = $objectManagerHelper->getObject(
             Converter::class,
@@ -40,7 +38,7 @@ class ConverterTest extends TestCase
         );
     }
 
-    public function testConvert()
+    public function testConvert(): void
     {
         $aclResources = require __DIR__ . '/_files/acl.php';
         $inputData = new \DOMDocument();

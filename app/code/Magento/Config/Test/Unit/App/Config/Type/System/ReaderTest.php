@@ -38,8 +38,8 @@ class ReaderTest extends TestCase
      */
     private $postProcessor;
 
-    /*
-     * Reader
+    /**
+     * @var Reader
      */
     private $model;
 
@@ -47,18 +47,10 @@ class ReaderTest extends TestCase
     {
         $helper = new ObjectManager($this);
 
-        $this->source = $this->getMockBuilder(ConfigSourceInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->fallback = $this->getMockBuilder(Fallback::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->preProcessor = $this->getMockBuilder(PreProcessorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->postProcessor = $this->getMockBuilder(PostProcessorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->source = $this->createMock(ConfigSourceInterface::class);
+        $this->fallback = $this->createMock(Fallback::class);
+        $this->preProcessor = $this->createMock(PreProcessorInterface::class);
+        $this->postProcessor = $this->createMock(PostProcessorInterface::class);
 
         $this->model = $helper->getObject(
             Reader::class,

@@ -18,6 +18,7 @@ use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\App\RequestInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -61,56 +62,29 @@ class CustomerExtractorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->formFactory = $this->getMockForAbstractClass(
-            FormFactory::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['create']
+        $this->formFactory = $this->createMock(
+            FormFactory::class
         );
-        $this->customerFactory = $this->getMockForAbstractClass(
-            CustomerInterfaceFactory::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['create']
+        $this->customerFactory = $this->createMock(
+            CustomerInterfaceFactory::class
         );
-        $this->storeManager = $this->getMockForAbstractClass(
-            StoreManagerInterface::class,
-            [],
-            '',
-            false
+        $this->storeManager = $this->createMock(
+            StoreManagerInterface::class
         );
-        $this->customerGroupManagement = $this->getMockForAbstractClass(
-            GroupManagementInterface::class,
-            [],
-            '',
-            false
+        $this->customerGroupManagement = $this->createMock(
+            GroupManagementInterface::class
         );
         $this->dataObjectHelper = $this->createMock(DataObjectHelper::class);
-        $this->request = $this->getMockForAbstractClass(RequestInterface::class, [], '', false);
+        $this->request = $this->createMock(RequestInterface::class);
         $this->customerForm = $this->createMock(Form::class);
-        $this->customerData = $this->getMockForAbstractClass(
-            CustomerInterface::class,
-            [],
-            '',
-            false
+        $this->customerData = $this->createMock(
+            CustomerInterface::class
         );
-        $this->store = $this->getMockForAbstractClass(
-            StoreInterface::class,
-            [],
-            '',
-            false
+        $this->store = $this->createMock(
+            StoreInterface::class
         );
-        $this->customerGroup = $this->getMockForAbstractClass(
-            GroupInterface::class,
-            [],
-            '',
-            false
+        $this->customerGroup = $this->createMock(
+            GroupInterface::class
         );
         $this->customerExtractor = new CustomerExtractor(
             $this->formFactory,
@@ -125,9 +99,9 @@ class CustomerExtractorTest extends TestCase
      * @param int $storeId
      * @param int $websiteId
      * @param array $customerData
-     * @dataProvider getDataProvider
      * @return void
      */
+    #[DataProvider('getDataProvider')]
     public function testExtract(int $storeId, int $websiteId, array $customerData)
     {
         $this->initializeExpectation($storeId, $websiteId, $customerData);

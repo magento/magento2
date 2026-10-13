@@ -42,17 +42,8 @@ class DefaultLocatorTest extends TestCase
 
     protected function setUp(): void
     {
-        $backendData = $this->createMock(Data::class);
-        $this->_requestMock = $this->getMockForAbstractClass(
-            RequestInterface::class,
-            [$backendData],
-            '',
-            false,
-            false,
-            true,
-            ['getParam']
-        );
-        $this->_configMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->_requestMock = $this->createMock(RequestInterface::class);
+        $this->_configMock = $this->createMock(ScopeConfigInterface::class);
         $this->_storeManagerMock = $this->createMock(StoreManager::class);
         $this->_model = new DefaultLocator(
             $this->_configMock,

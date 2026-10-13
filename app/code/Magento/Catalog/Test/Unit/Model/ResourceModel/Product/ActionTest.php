@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Model\Factory;
 use Magento\Catalog\Model\Product;
@@ -120,36 +121,20 @@ class ActionTest extends TestCase
             ]
         ];
         $object->prepareObjectManager($objects);
-        $this->contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
-            ->getMockForAbstractClass();
-        $this->factoryMock = $this->getMockBuilder(Factory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->uniqueValidatorMock = $this->getMockBuilder(UniqueValidationInterface::class)
-            ->getMockForAbstractClass();
-        $this->productCollectionFactoryMock = $this->getMockBuilder(ProductCollectionFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->contextMock = $this->createMock(Context::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->factoryMock = $this->createMock(Factory::class);
+        $this->uniqueValidatorMock = $this->createMock(UniqueValidationInterface::class);
+        $this->productCollectionFactoryMock = $this->createMock(ProductCollectionFactory::class);
         $this->typeTransitionManagerMock = $this->createPartialMock(
             TypeTransitionManager::class,
             ['processProduct']
         );
-        $this->dateTimeMock = $this->getMockBuilder(DateTime::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->dateTimeMock = $this->createMock(DateTime::class);
 
-        $this->eavConfigMock = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->resourceMock = $this->getMockBuilder(ResourceConnection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->entityTypeMock = $this->getMockBuilder(EntityType::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->eavConfigMock = $this->createMock(Config::class);
+        $this->resourceMock = $this->createMock(ResourceConnection::class);
+        $this->entityTypeMock = $this->createMock(EntityType::class);
 
         $this->contextMock->method('getEavConfig')
             ->willReturn($this->eavConfigMock);
@@ -157,11 +142,21 @@ class ActionTest extends TestCase
             ->willReturn($this->resourceMock);
         $this->eavConfigMock->method('getEntityType')
             ->willReturn($this->entityTypeMock);
-        $updatedAtAttributeMock = $this->getMockBuilder(AbstractAttribute::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $updatedAtAttributeMock = $this->createPartialMock(AbstractAttribute::class, []);
+        $hasWeightAttributeMock = $this->createPartialMock(AbstractAttribute::class, []);
+        $hasWeightAttributeMock->setData('attribute_code', 'has_weight');
+        $hasWeightAttributeMock->setData('backend_type', 'int');
+        $hasWeightAttributeMock->setData('is_global', 1);
         $this->eavConfigMock->method('getAttribute')
-            ->willReturn($updatedAtAttributeMock);
+            ->willReturnCallback(
+                function ($entityType, $attributeCode = null) use ($updatedAtAttributeMock, $hasWeightAttributeMock) {
+                    $code = $attributeCode ?? $entityType;
+                    if ($code === 'has_weight' || $code === ProductAttributeInterface::CODE_HAS_WEIGHT) {
+                        return $hasWeightAttributeMock;
+                    }
+                    return $updatedAtAttributeMock;
+                }
+            );
 
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
@@ -184,8 +179,7 @@ class ActionTest extends TestCase
      */
     private function prepareAdapter(): void
     {
-        $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
-            ->getMockForAbstractClass();
+        $this->connectionMock = $this->createMock(AdapterInterface::class);
         $this->resourceMock->method('getConnection')
             ->willReturn($this->connectionMock);
         $this->resourceMock->method('getTableName')
@@ -199,9 +193,7 @@ class ActionTest extends TestCase
      */
     private function prepareProductCollection($items): void
     {
-        $this->productCollectionMock = $this->getMockBuilder(ProductCollection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->productCollectionMock = $this->createMock(ProductCollection::class);
         $this->productCollectionMock->method('addIdFilter')
             ->with(static::ENTITY_IDS)
             ->willReturnSelf();
@@ -222,8 +214,8 @@ class ActionTest extends TestCase
      * @param int[] $entityIds
      *
      * @return void
-     * @dataProvider updateProductHasWeightAttributesDataProvider
      */
+    #[DataProvider('updateProductHasWeightAttributesDataProvider')]
     public function testUpdateProductHasWeightAttributes($hasWeight, $typeId, $items, $entityIds): void
     {
         $items = $items($this);
@@ -292,9 +284,7 @@ class ActionTest extends TestCase
         $result = [];
 
         foreach (static::ENTITY_IDS as $entityId) {
-            $productMock = $this->getMockBuilder(Product::class)
-                ->disableOriginalConstructor()
-                ->getMock();
+            $productMock = $this->createMock(Product::class);
             $productMock->method('getId')->willReturn($entityId);
             $productMock->method('getTypeId')
                 ->willReturnOnConsecutiveCalls(
@@ -317,9 +307,7 @@ class ActionTest extends TestCase
         $result = [];
 
         foreach (static::ENTITY_IDS as $entityId) {
-            $productMock = $this->getMockBuilder(Product::class)
-                ->disableOriginalConstructor()
-                ->getMock();
+            $productMock = $this->createMock(Product::class);
             $productMock->method('getId')->willReturn($entityId);
             $productMock->method('getTypeId')
                 ->willReturnOnConsecutiveCalls(
@@ -343,9 +331,7 @@ class ActionTest extends TestCase
 
         $i = 0;
         foreach (static::ENTITY_IDS as $entityId) {
-            $productMock = $this->getMockBuilder(Product::class)
-                ->disableOriginalConstructor()
-                ->getMock();
+            $productMock = $this->createMock(Product::class);
             $productMock->method('getId')
                 ->willReturn($entityId);
 

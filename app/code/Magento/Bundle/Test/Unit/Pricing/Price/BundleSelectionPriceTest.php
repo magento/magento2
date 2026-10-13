@@ -18,6 +18,7 @@ use Magento\Framework\Event\Manager;
 use Magento\Framework\Pricing\Adjustment\CalculatorInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Pricing\PriceInfo\Base;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -26,6 +27,8 @@ use PHPUnit\Framework\TestCase;
  */
 class BundleSelectionPriceTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var BundleSelectionPrice
      */
@@ -86,13 +89,13 @@ class BundleSelectionPriceTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->productMock = $this->createPartialMock(
-            \Magento\Catalog\Test\Unit\Helper\ProductTestHelper::class,
+        $this->productMock = $this->createPartialMockWithReflection(
+            Product::class,
             ['getPriceInfo', 'getSelectionPriceType', 'getSelectionPriceValue', 'hasData', 'getData', 'getSelectionId']
         );
 
-        $this->bundleMock = $this->createPartialMock(
-            \Magento\Catalog\Test\Unit\Helper\ProductTestHelper::class,
+        $this->bundleMock = $this->createPartialMockWithReflection(
+            Product::class,
             ['getPriceType', 'getPriceInfo', 'setFinalPrice', 'getData']
         );
         $this->calculatorMock = $this->createMock(CalculatorInterface::class);

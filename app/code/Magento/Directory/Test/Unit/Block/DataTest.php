@@ -22,6 +22,8 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Escaper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -30,6 +32,8 @@ use PHPUnit\Framework\TestCase;
  */
 class DataTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var  Data */
     private $block;
 
@@ -95,7 +99,7 @@ class DataTest extends TestCase
             ]
         );
 
-        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
         $objectManagerHelper->setBackwardCompatibleProperty(
             $this->block,
             'serializer',
@@ -109,18 +113,15 @@ class DataTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->getMockForAbstractClass();
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
 
-        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
-            ->getMockForAbstractClass();
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
 
         $this->storeManagerMock->expects($this->any())
             ->method('getStore')
             ->willReturn($this->storeMock);
 
-        $this->layoutMock = $this->getMockBuilder(LayoutInterface::class)
-            ->getMockForAbstractClass();
+        $this->layoutMock = $this->createMock(LayoutInterface::class);
 
         $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
@@ -173,8 +174,8 @@ class DataTest extends TestCase
      * @param array $expectedDestinations
      * @param array $options
      * @param string $resultHtml
-     * @dataProvider dataProviderGetCountryHtmlSelect
      */
+    #[DataProvider('dataProviderGetCountryHtmlSelect')]
     public function testGetCountryHtmlSelect(
         $storeCode,
         $defaultCountry,
@@ -304,18 +305,18 @@ class DataTest extends TestCase
         $id = 'country';
         $title = 'Country';
 
-        $elementHtmlSelect = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setName', 'setValue', 'setExtraParams'])
-            ->onlyMethods(
-                [
-                    'setId',
-                    'setTitle',
-                    'setOptions',
-                    'getHtml',
-                ]
-            )
-            ->getMock();
+        $elementHtmlSelect = $this->createPartialMockWithReflection(
+            Select::class,
+            [
+                'setName',
+                'setValue',
+                'setExtraParams',
+                'setId',
+                'setTitle',
+                'setOptions',
+                'getHtml',
+            ]
+        );
 
         $elementHtmlSelect->expects($this->once())
             ->method('setName')

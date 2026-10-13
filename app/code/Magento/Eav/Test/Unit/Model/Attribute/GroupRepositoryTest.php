@@ -12,6 +12,7 @@ use Magento\Eav\Api\Data\AttributeGroupSearchResultsInterface;
 use Magento\Eav\Api\Data\AttributeGroupSearchResultsInterfaceFactory;
 use Magento\Eav\Api\Data\AttributeSetInterface;
 use Magento\Eav\Model\Attribute\GroupRepository;
+use Magento\Eav\Model\Entity\Attribute\Group as AttributeGroup;
 use Magento\Eav\Model\Entity\Attribute\GroupFactory;
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group;
@@ -25,12 +26,15 @@ use Magento\Framework\Exception\StateException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class GroupRepositoryTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var GroupRepository
      */
@@ -81,7 +85,7 @@ class GroupRepositoryTest extends TestCase
             GroupFactory::class,
             ['create']
         );
-        $this->setRepositoryMock = $this->getMockForAbstractClass(AttributeSetRepositoryInterface::class);
+        $this->setRepositoryMock = $this->createMock(AttributeSetRepositoryInterface::class);
         $this->searchResultsFactoryMock = $this->createPartialMock(
             AttributeGroupSearchResultsInterfaceFactory::class,
             ['create']
@@ -91,8 +95,7 @@ class GroupRepositoryTest extends TestCase
             ['create']
         );
 
-        $this->collectionProcessor = $this->getMockBuilder(CollectionProcessorInterface::class)
-            ->getMockForAbstractClass();
+        $this->collectionProcessor = $this->createMock(CollectionProcessorInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
@@ -118,8 +121,8 @@ class GroupRepositoryTest extends TestCase
     public function testSaveIfObjectNew()
     {
         $attributeSetId = 42;
-        $groupMock = $this->createMock(\Magento\Eav\Model\Entity\Attribute\Group::class);
-        $attributeSetMock = $this->getMockForAbstractClass(AttributeSetInterface::class);
+        $groupMock = $this->createMock(AttributeGroup::class);
+        $attributeSetMock = $this->createMock(AttributeSetInterface::class);
 
         $groupMock->expects($this->once())->method('getAttributeSetId')->willReturn($attributeSetId);
 
@@ -144,9 +147,9 @@ class GroupRepositoryTest extends TestCase
     {
         $attributeSetId = 42;
         $groupId = 20;
-        $groupMock = $this->createMock(\Magento\Eav\Model\Entity\Attribute\Group::class);
-        $existingGroupMock = $this->createMock(\Magento\Eav\Model\Entity\Attribute\Group::class);
-        $attributeSetMock = $this->getMockForAbstractClass(AttributeSetInterface::class);
+        $groupMock = $this->createMock(AttributeGroup::class);
+        $existingGroupMock = $this->createMock(AttributeGroup::class);
+        $attributeSetMock = $this->createMock(AttributeSetInterface::class);
 
         $groupMock->expects($this->exactly(2))->method('getAttributeSetId')->willReturn($attributeSetId);
         $groupMock->expects($this->exactly(2))->method('getAttributeGroupId')->willReturn($groupId);
@@ -178,7 +181,7 @@ class GroupRepositoryTest extends TestCase
         $this->expectException('Magento\Framework\Exception\NoSuchEntityException');
         $this->expectExceptionMessage('No such entity with attributeSetId = -1');
         $attributeSetId = -1;
-        $groupMock = $this->createPartialMock(\Magento\Eav\Model\Entity\Attribute\Group::class, ['getAttributeSetId']);
+        $groupMock = $this->createPartialMock(AttributeGroup::class, ['getAttributeSetId']);
         $groupMock->expects($this->exactly(2))->method('getAttributeSetId')->willReturn($attributeSetId);
         $this->setRepositoryMock->expects($this->once())
             ->method('get')
@@ -202,9 +205,9 @@ class GroupRepositoryTest extends TestCase
         $this->expectExceptionMessage('The attributeGroup can\'t be saved.');
         $attributeSetId = 42;
         $groupId = 20;
-        $groupMock = $this->createMock(\Magento\Eav\Model\Entity\Attribute\Group::class);
-        $existingGroupMock = $this->createMock(\Magento\Eav\Model\Entity\Attribute\Group::class);
-        $attributeSetMock = $this->getMockForAbstractClass(AttributeSetInterface::class);
+        $groupMock = $this->createMock(AttributeGroup::class);
+        $existingGroupMock = $this->createMock(AttributeGroup::class);
+        $attributeSetMock = $this->createMock(AttributeSetInterface::class);
         $groupMock->expects($this->any())->method('getAttributeSetId')->willReturn($attributeSetId);
         $groupMock->expects($this->any())->method('getAttributeGroupId')->willReturn($groupId);
         $attributeSetMock->expects($this->any())->method('getAttributeSetId')->willReturn(10);
@@ -233,9 +236,9 @@ class GroupRepositoryTest extends TestCase
         $this->expectExceptionMessage('The attribute group doesn\'t belong to the provided attribute set.');
         $attributeSetId = 42;
         $groupId = 20;
-        $groupMock = $this->createMock(\Magento\Eav\Model\Entity\Attribute\Group::class);
-        $existingGroupMock = $this->createMock(\Magento\Eav\Model\Entity\Attribute\Group::class);
-        $attributeSetMock = $this->getMockForAbstractClass(AttributeSetInterface::class);
+        $groupMock = $this->createMock(AttributeGroup::class);
+        $existingGroupMock = $this->createMock(AttributeGroup::class);
+        $attributeSetMock = $this->createMock(AttributeSetInterface::class);
         $groupMock->expects($this->any())->method('getAttributeSetId')->willReturn($attributeSetId);
         $groupMock->expects($this->any())->method('getAttributeGroupId')->willReturn($groupId);
         $attributeSetMock->expects($this->any())->method('getAttributeSetId')->willReturn(10);
@@ -260,9 +263,9 @@ class GroupRepositoryTest extends TestCase
         $this->expectExceptionMessage('No such entity with attributeGroupId =');
         $attributeSetId = 42;
         $groupId = 20;
-        $groupMock = $this->createMock(\Magento\Eav\Model\Entity\Attribute\Group::class);
-        $existingGroupMock = $this->createMock(\Magento\Eav\Model\Entity\Attribute\Group::class);
-        $attributeSetMock = $this->getMockForAbstractClass(AttributeSetInterface::class);
+        $groupMock = $this->createMock(AttributeGroup::class);
+        $existingGroupMock = $this->createMock(AttributeGroup::class);
+        $attributeSetMock = $this->createMock(AttributeSetInterface::class);
         $groupMock->expects($this->any())->method('getAttributeSetId')->willReturn($attributeSetId);
         $groupMock->expects($this->any())->method('getAttributeGroupId')->willReturn($groupId);
         $attributeSetMock->expects($this->any())->method('getAttributeSetId')->willReturn(10);
@@ -283,31 +286,25 @@ class GroupRepositoryTest extends TestCase
      */
     public function testGetList()
     {
-        $filterInterfaceMock = $this->getMockBuilder(FilterGroup::class)
-            ->disableOriginalConstructor()
-            ->addMethods([
-                'getField',
-                'getValue',
-            ])
-            ->getMock();
+        $filterInterfaceMock = $this->createPartialMockWithReflection(
+            FilterGroup::class,
+            ['getField', 'getValue']
+        );
 
-        $filterGroupMock = $this->getMockBuilder(FilterGroup::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $filterGroupMock = $this->createPartialMockWithReflection(
+            FilterGroup::class,
+            ['getFilters']
+        );
         $filterGroupMock->expects($this->any())
             ->method('getFilters')
             ->willReturn([$filterInterfaceMock]);
 
-        $searchCriteriaMock = $this->getMockBuilder(SearchCriteriaInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);
         $searchCriteriaMock->expects($this->any())
             ->method('getFilterGroups')
             ->willReturn([$filterGroupMock]);
 
-        $groupMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\Group::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $groupMock = $this->createMock(AttributeGroup::class);
 
         $groupCollectionMock = $this->createPartialMock(
             AbstractCollection::class,
@@ -319,7 +316,7 @@ class GroupRepositoryTest extends TestCase
 
         $groupCollectionMock->expects($this->once())->method('getSize')->willReturn(1);
 
-        $searchResultsMock = $this->getMockForAbstractClass(AttributeGroupSearchResultsInterface::class);
+        $searchResultsMock = $this->createMock(AttributeGroupSearchResultsInterface::class);
         $searchResultsMock->expects($this->once())->method('setSearchCriteria')->with($searchCriteriaMock);
         $searchResultsMock->expects($this->once())->method('setItems')->with([$groupMock]);
         $searchResultsMock->expects($this->once())->method('setTotalCount')->with(1);
@@ -342,7 +339,7 @@ class GroupRepositoryTest extends TestCase
     public function testGet()
     {
         $groupId = 42;
-        $groupMock = $this->createMock(\Magento\Eav\Model\Entity\Attribute\Group::class);
+        $groupMock = $this->createMock(AttributeGroup::class);
         $this->groupFactoryMock->expects($this->once())->method('create')->willReturn($groupMock);
         $this->groupResourceMock->expects($this->once())->method('load')->with($groupMock, $groupId);
         $groupMock->expects($this->once())->method('getId')->willReturn($groupId);
@@ -360,7 +357,7 @@ class GroupRepositoryTest extends TestCase
         $this->expectException('Magento\Framework\Exception\NoSuchEntityException');
         $this->expectExceptionMessage('The group with the "42" ID doesn\'t exist. Verify the ID and try again.');
         $groupId = 42;
-        $groupMock = $this->createMock(\Magento\Eav\Model\Entity\Attribute\Group::class);
+        $groupMock = $this->createMock(AttributeGroup::class);
         $this->groupFactoryMock->expects($this->once())->method('create')->willReturn($groupMock);
         $this->groupResourceMock->expects($this->once())->method('load')->with($groupMock, $groupId);
         $groupMock->expects($this->once())->method('getId')->willReturn(false);
@@ -375,7 +372,7 @@ class GroupRepositoryTest extends TestCase
      */
     public function testDelete()
     {
-        $groupMock = $this->createMock(\Magento\Eav\Model\Entity\Attribute\Group::class);
+        $groupMock = $this->createMock(AttributeGroup::class);
         $this->groupResourceMock->expects($this->once())->method('delete')->with($groupMock);
         $this->assertTrue($this->model->delete($groupMock));
     }
@@ -390,7 +387,7 @@ class GroupRepositoryTest extends TestCase
     {
         $this->expectException('Magento\Framework\Exception\StateException');
         $this->expectExceptionMessage('The attribute group with id "42" can\'t be deleted.');
-        $groupMock = $this->createMock(\Magento\Eav\Model\Entity\Attribute\Group::class);
+        $groupMock = $this->createMock(AttributeGroup::class);
         $this->groupResourceMock->expects($this->once())
             ->method('delete')
             ->with($groupMock)
@@ -407,12 +404,12 @@ class GroupRepositoryTest extends TestCase
     public function testDeleteById()
     {
         $groupId = 42;
-        $groupMock = $this->createMock(\Magento\Eav\Model\Entity\Attribute\Group::class);
+        $groupMock = $this->createMock(AttributeGroup::class);
         $this->groupFactoryMock->expects($this->once())->method('create')->willReturn($groupMock);
         $this->groupResourceMock->expects($this->once())->method('load')->with($groupMock, $groupId);
 
         $groupMock->expects($this->once())->method('getId')->willReturn($groupId);
-        $groupMock = $this->createMock(\Magento\Eav\Model\Entity\Attribute\Group::class);
+        $groupMock = $this->createMock(AttributeGroup::class);
 
         $this->groupResourceMock->expects($this->once())->method('delete')->with($groupMock);
         $this->assertTrue($this->model->deleteById($groupId));

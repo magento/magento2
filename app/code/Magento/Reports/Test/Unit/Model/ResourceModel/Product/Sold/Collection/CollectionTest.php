@@ -42,7 +42,7 @@ class CollectionTest extends TestCase
     protected function setUp(): void
     {
         $this->selectMock = $this->createMock(Select::class);
-        $this->adapterMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $this->adapterMock = $this->createMock(AdapterInterface::class);
         $this->collection = $this->getMockBuilder(Collection::class)
             ->onlyMethods(['getSelect', 'getConnection', 'getTable'])
             ->disableOriginalConstructor()

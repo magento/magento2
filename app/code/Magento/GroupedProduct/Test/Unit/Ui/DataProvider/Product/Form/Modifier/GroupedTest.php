@@ -20,6 +20,7 @@ use Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier\AbstractModi
 use Magento\Eav\Api\AttributeSetRepositoryInterface;
 use Magento\Eav\Api\Data\AttributeSetInterface;
 use Magento\Framework\Locale\CurrencyInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\GroupedProduct\Model\Product\Link\CollectionProvider\Grouped as GroupedProducts;
 use Magento\GroupedProduct\Model\Product\Type\Grouped as GroupedProductType;
@@ -32,6 +33,7 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 class GroupedTest extends AbstractModifierTestCase
 {
+    use MockCreationTrait;
     private const PRODUCT_ID = 1;
     private const LINKED_PRODUCT_ID = 2;
     private const LINKED_PRODUCT_SKU = 'linked';
@@ -111,8 +113,11 @@ class GroupedTest extends AbstractModifierTestCase
         $this->linkedProductMock->method('getName')->willReturn(self::LINKED_PRODUCT_NAME);
         $this->linkedProductMock->method('getPrice')->willReturn(self::LINKED_PRODUCT_PRICE);
         $this->linkMock = $this->createMock(ProductLinkInterface::class);
-        $this->linkExtensionMock = new \Magento\Catalog\Test\Unit\Helper\ProductLinkExtensionInterfaceTestHelper();
-        $this->linkExtensionMock->setQty(self::LINKED_PRODUCT_QTY);
+        $this->linkExtensionMock = $this->createPartialMockWithReflection(
+            ProductLinkExtensionInterface::class,
+            ['getQty']
+        );
+        $this->linkExtensionMock->method('getQty')->willReturn(self::LINKED_PRODUCT_QTY);
         $this->linkMock->method('getExtensionAttributes')->willReturn($this->linkExtensionMock);
         $this->linkMock->method('getPosition')->willReturn(self::LINKED_PRODUCT_POSITION);
         $this->linkMock->method('getLinkedProductSku')->willReturn(self::LINKED_PRODUCT_SKU);
@@ -137,7 +142,12 @@ class GroupedTest extends AbstractModifierTestCase
      */
     protected function createModel()
     {
-        $this->currencyMock = new \Magento\Framework\Locale\Test\Unit\Helper\CurrencyTestHelper();
+        $this->currencyMock = $this->createPartialMockWithReflection(
+            CurrencyInterface::class,
+            ['getDefaultCurrency', 'getCurrency', 'toCurrency']
+        );
+        $this->currencyMock->method('getCurrency')->willReturnSelf();
+        $this->currencyMock->method('toCurrency')->willReturn('$1.00');
         $this->imageHelperMock = $this->createPartialMock(ImageHelper::class, ['init', 'getUrl']);
 
         $this->groupedProductsMock = $this->createPartialMock(GroupedProducts::class, ['getLinkedProducts']);
@@ -200,8 +210,8 @@ class GroupedTest extends AbstractModifierTestCase
             ],
         ];
         $model = $this->getModel();
-        $linkedProductMock = $this->createPartialMock(
-            \Magento\Catalog\Test\Unit\Helper\ProductTestHelper::class,
+        $linkedProductMock = $this->createPartialMockWithReflection(
+            \Magento\Catalog\Model\Product::class,
             ['getId', 'getName', 'getPrice', 'getSku', 'getImage', 'getQty', 'getPosition']
         );
         $linkedProductMock->expects($this->once())

@@ -15,6 +15,7 @@ use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Catalog\Model\Indexer\Product\Eav\Processor;
 use Magento\Catalog\Model\ResourceModel\Category\Collection as CategoryCollection;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
@@ -235,44 +236,95 @@ class ProductsListTest extends TestCase
     /**
      * Make sure CatalogWidget would display anchor category products recursively from children categories.
      *
-     * 1. Create an anchor root category and a sub category inside it
-     * 2. Create 2 new products and assign them to the sub categories
-     * 3. Create product list widget condition to display products from the anchor root category
-     * 4. Load collection for product list widget and make sure that number of loaded products is correct
+     * @param string $operator
+     * @param string $value
+     * @param array $expectedProducts
+     * @throws LocalizedException
      */
     #[
-        DataFixture('Magento/Catalog/_files/product_in_nested_anchor_categories.php'),
+        DataProvider('createAnchorCollectionDataProvider'),
+        // level 1 categories
+        DataFixture(CategoryFixture::class, ['is_anchor' => 1], 'category1'),
+        DataFixture(CategoryFixture::class, ['is_anchor' => 1], 'category2'),
+        DataFixture(CategoryFixture::class, ['is_anchor' => 0], 'category3'),
+        // level 2 categories
+        DataFixture(CategoryFixture::class, ['parent_id' => '$category1.id$'], 'category11'),
+        DataFixture(CategoryFixture::class, ['parent_id' => '$category2.id$'], 'category21'),
+        DataFixture(CategoryFixture::class, ['parent_id' => '$category3.id$'], 'category31'),
+        // level 3 categories
+        DataFixture(CategoryFixture::class, ['parent_id' => '$category11.id$'], 'category111'),
+        // products assigned to level 1 categories
+        DataFixture(ProductFixture::class, ['category_ids' => ['$category1.id$']], as: 'product1'),
+        DataFixture(ProductFixture::class, ['category_ids' => ['$category2.id$']], as: 'product2'),
+        DataFixture(ProductFixture::class, ['category_ids' => ['$category3.id$']], as: 'product3'),
+        // unassigned product
+        DataFixture(ProductFixture::class, as: 'product4'),
+        // products assigned to level 2 categories
+        DataFixture(ProductFixture::class, ['category_ids' => ['$category11.id$']], as: 'product11'),
+        DataFixture(ProductFixture::class, ['category_ids' => ['$category21.id$']], as: 'product21'),
+        DataFixture(ProductFixture::class, ['category_ids' => ['$category31.id$']], as: 'product31'),
+        // products assigned to level 3 categories
+        DataFixture(ProductFixture::class, ['category_ids' => ['$category111.id$']], as: 'product111'),
     ]
-    public function testCreateAnchorCollection()
-    {
+    public function testCreateAnchorCollection(
+        string $operator,
+        string $value,
+        array $expectedProducts
+    ): void {
         // Reindex EAV attributes to enable products filtration by created multiselect attribute
         /** @var Processor $eavIndexerProcessor */
         $eavIndexerProcessor = $this->objectManager->get(
             Processor::class
         );
         $eavIndexerProcessor->reindexAll();
+        $fixtures = DataFixtureStorageManager::getStorage();
 
         $this->categoryCollection->addNameToResult()->load();
-        $rootCategoryId =  $this
-            ->categoryCollection
-            ->getItemByColumnValue('name', 'Default Category')
-            ->getId();
+        $value = preg_replace_callback(
+            '/(category\d+)/',
+            function ($matches) use ($fixtures) {
+                return $fixtures->get($matches[1])->getId();
+            },
+            $value
+        );
 
         $encodedConditions = '^[`1`:^[`type`:`Magento||CatalogWidget||Model||Rule||Condition||Combine`,
         `aggregator`:`all`,`value`:`1`,`new_child`:``^],
         `1--1`:^[`type`:`Magento||CatalogWidget||Model||Rule||Condition||Product`,
         `attribute`:`category_ids`,
-        `operator`:`==`,`value`:`' . $rootCategoryId . '`^]^]';
+        `operator`:`' . $operator . '`,`value`:`' . $value . '`^]^]';
 
         $this->block->setData('conditions_encoded', $encodedConditions);
 
         $productCollection = $this->block->createCollection();
         $productCollection->load();
 
-        $this->assertEquals(
-            2,
-            $productCollection->count(),
-            "Anchor root category does not contain products of it's children."
+        $allProducts = [
+            'product1',
+            'product2',
+            'product3',
+            'product4',
+            'product11',
+            'product21',
+            'product31',
+            'product111',
+        ];
+        $allProducts = array_combine(
+            array_map(fn ($productKey) => $fixtures->get($productKey)->getSku(), $allProducts),
+            $allProducts,
+        );
+
+        $actualProducts = $productCollection->getColumnValues('sku');
+
+        $this->assertEqualsCanonicalizing(
+            $expectedProducts,
+            array_map(
+                fn ($sku) => $allProducts[$sku],
+                array_intersect(
+                    $actualProducts,
+                    array_keys($allProducts)
+                )
+            )
         );
     }
 
@@ -532,6 +584,80 @@ class ProductsListTest extends TestCase
                 ],
                 ['product3', 'product5']
             ]
+        ];
+    }
+
+    /**
+     * @return array[]
+     */
+    public static function createAnchorCollectionDataProvider(): array
+    {
+        return [
+            'is - category1,category2' => [
+                '==',
+                'category1,category2',
+                ['product111', 'product21', 'product11', 'product2', 'product1']
+            ],
+            'is not - category1,category2' => [
+                '!=',
+                'category1,category2',
+                 ['product31', 'product4', 'product3']
+            ],
+            'contains - category1,category2' => [
+                '{}',
+                'category1,category2',
+               ['product111', 'product21', 'product11', 'product2', 'product1']
+            ],
+            'does not contain - category1,category2' => [
+                '!{}',
+                'category1,category2',
+                 ['product31', 'product4', 'product3']
+            ],
+            'is one of - category1,category2' => [
+                '()',
+                'category1,category2',
+                ['product111', 'product21', 'product11', 'product2', 'product1']
+            ],
+            'is not one of - category1,category2' => [
+                '!()',
+                'category1,category2',
+                ['product31', 'product4', 'product3']
+            ],
+            // single anchor category
+            'is - category1' => [
+                '==',
+                'category1',
+                ['product111', 'product11', 'product1']
+            ],
+            'is not - category1' => [
+                '!=',
+                'category1',
+                ['product31', 'product21', 'product4', 'product3', 'product2']
+            ],
+            // single non-anchor category
+            'is - category3' => [
+                '==',
+                'category3',
+                ['product3']
+            ],
+            'is not - category3' => [
+                '!=',
+                'category3',
+                ['product111', 'product31', 'product21', 'product11', 'product4', 'product2', 'product1']
+            ],
+            // anchor and non-anchor category
+            'is - category1,category3' => [
+                '==',
+                // spaces are intentional to check trimming functionality
+                'category1 , category3',
+                ['product111', 'product11', 'product3', 'product1']
+            ],
+            'is not - category1,category3' => [
+                '!=',
+                // spaces are intentional to check trimming functionality
+                'category1 , category3',
+                ['product31', 'product21', 'product4', 'product2']
+            ],
         ];
     }
 }

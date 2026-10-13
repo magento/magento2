@@ -43,8 +43,8 @@ class DeferCacheCleaningUntilImportIsCompleteTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->cacheCleaner = $this->getMockForAbstractClass(DeferredCacheCleanerInterface::class);
-        $this->cacheTypeList = $this->getMockForAbstractClass(TypeListInterface::class);
+        $this->cacheCleaner = $this->createMock(DeferredCacheCleanerInterface::class);
+        $this->cacheTypeList = $this->createMock(TypeListInterface::class);
         $this->request = $this->createMock(RequestInterface::class);
         $this->plugin = new DeferCacheCleaningUntilImportIsComplete(
             $this->cacheCleaner,

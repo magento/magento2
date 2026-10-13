@@ -19,7 +19,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Command\Command;
 
-
 /**
  * Resizes product images according to theme view definitions.
  */
@@ -28,12 +27,12 @@ class ImagesResizeCommand extends Command
     /**
      * Asynchronous image resize mode
      */
-    const ASYNC_RESIZE = 'async';
+    public const ASYNC_RESIZE = 'async';
 
     /**
      * Do not process images marked as hidden from product page
      */
-    const SKIP_HIDDEN_IMAGES = 'skip_hidden_images';
+    public const SKIP_HIDDEN_IMAGES = 'skip_hidden_images';
 
     /**
      * @var ImageResizeScheduler
@@ -118,7 +117,7 @@ class ImagesResizeCommand extends Command
      * @param InputInterface $input
      * @param OutputInterface $output
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->skipHiddenImages = $input->getOption(self::SKIP_HIDDEN_IMAGES);
         $result = $input->getOption(self::ASYNC_RESIZE) ?

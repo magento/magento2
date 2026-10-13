@@ -21,6 +21,7 @@ use Magento\Framework\App\Request\InvalidRequestException;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Message\AbstractMessage;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\Phrase;
 use Magento\Store\Model\StoreManagerInterface;
@@ -40,6 +41,7 @@ use Magento\Framework\Exception\StateException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Customer\Controller\AbstractAccount;
+use Magento\Customer\Model\ValidatorExceptionProcessor;
 
 /**
  * Post create customer action
@@ -145,6 +147,11 @@ class CreatePost extends AbstractAccount implements CsrfAwareActionInterface, Ht
     private $formKeyValidator;
 
     /**
+     * @var ValidatorExceptionProcessor
+     */
+    private $validatorExceptionProcessor;
+
+    /**
      * @var CustomerRepository
      */
     private $customerRepository;
@@ -175,6 +182,7 @@ class CreatePost extends AbstractAccount implements CsrfAwareActionInterface, Ht
      * @param AccountRedirect $accountRedirect
      * @param CustomerRepository $customerRepository
      * @param Validator $formKeyValidator
+     * @param ValidatorExceptionProcessor|null $validatorExceptionProcessor
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -198,7 +206,8 @@ class CreatePost extends AbstractAccount implements CsrfAwareActionInterface, Ht
         DataObjectHelper $dataObjectHelper,
         AccountRedirect $accountRedirect,
         CustomerRepository $customerRepository,
-        ?Validator $formKeyValidator = null
+        ?Validator $formKeyValidator = null,
+        ?ValidatorExceptionProcessor $validatorExceptionProcessor = null
     ) {
         $this->session = $customerSession;
         $this->scopeConfig = $scopeConfig;
@@ -220,6 +229,11 @@ class CreatePost extends AbstractAccount implements CsrfAwareActionInterface, Ht
         $this->formKeyValidator = $formKeyValidator ?: ObjectManager::getInstance()->get(Validator::class);
         $this->customerRepository = $customerRepository;
         parent::__construct($context);
+        $this->validatorExceptionProcessor = $validatorExceptionProcessor
+            ?? ObjectManager::getInstance()->get(ValidatorExceptionProcessor::class);
+        if ($this->validatorExceptionProcessor !== null) {
+            $this->validatorExceptionProcessor->setMessageManager($context->getMessageManager());
+        }
     }
 
     /**
@@ -423,9 +437,10 @@ class CreatePost extends AbstractAccount implements CsrfAwareActionInterface, Ht
                 ]
             );
         } catch (InputException $e) {
-            $this->messageManager->addErrorMessage($e->getMessage());
-            foreach ($e->getErrors() as $error) {
-                $this->messageManager->addErrorMessage($error->getMessage());
+            if ($this->validatorExceptionProcessor !== null) {
+                $this->validatorExceptionProcessor->processInputException($e);
+            } else {
+                $this->messageManager->addErrorMessage($e->getMessage());
             }
         } catch (LocalizedException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());

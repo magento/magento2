@@ -114,7 +114,7 @@ class UninstallLanguageCommand extends Command
     /**
      * @inheritdoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $languages = $input->getArgument(self::PACKAGE_ARGUMENT);
         $packagesToRemove = [];

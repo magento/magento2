@@ -15,10 +15,12 @@ use Magento\Framework\View\Element\RendererList;
 use Magento\Framework\View\Layout;
 use Magento\Sales\Block\Items\AbstractItems;
 use Magento\Sales\ViewModel\ItemRendererTypeResolverInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class AbstractTest extends TestCase
 {
+
     /** @var ObjectManager  */
     protected $_objectManager;
 
@@ -62,8 +64,8 @@ class AbstractTest extends TestCase
      * @param string $type
      * @param string|null $resolvedType
      * @param string $expected
-     * @dataProvider getItemHtmlDataProvider
      */
+    #[DataProvider('getItemHtmlDataProvider')]
     public function testGetItemHtml(string $type, ?string $resolvedType, string $expected): void
     {
         $renderers = [
@@ -74,7 +76,7 @@ class AbstractTest extends TestCase
         $block = $this->getBlock($rendererList);
         $item = new DataObject(['product_type' => $type]);
         $itemRendererTypeResolver = $this->getMockBuilder(ItemRendererTypeResolverInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $itemRendererTypeResolver->method('resolve')
             ->willReturn($resolvedType);
         $block->setData($type . '_renderer_type_resolver', $itemRendererTypeResolver);
@@ -119,7 +121,7 @@ class AbstractTest extends TestCase
         $renderer = $this->getMockBuilder(AbstractBlock::class)
             ->onlyMethods(['toHtml'])
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $renderer->method('toHtml')
             ->willReturn($html);

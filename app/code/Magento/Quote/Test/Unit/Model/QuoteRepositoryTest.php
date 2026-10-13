@@ -8,12 +8,16 @@ declare(strict_types=1);
 namespace Magento\Quote\Test\Unit\Model;
 
 use PHPUnit\Framework\Attributes\DataProvider;
-use Magento\Quote\Test\Unit\Helper\QuoteTestHelper;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SortOrder;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Phrase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartInterface;
@@ -39,6 +43,8 @@ use PHPUnit\Framework\TestCase;
  */
 class QuoteRepositoryTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var CartRepositoryInterface
      */
@@ -113,25 +119,23 @@ class QuoteRepositoryTest extends TestCase
 
         $this->cartFactoryMock = $this->createPartialMock(CartInterfaceFactory::class, ['create']);
         $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
-        $this->quoteMock = $this->getMockBuilder(QuoteTestHelper::class)
-            ->onlyMethods(
-                [
-                    'load',
-                    'loadByIdWithoutStore',
-                    'loadActive',
-                    'loadByCustomer',
-                    'getIsActive',
-                    'getId',
-                    'getCustomerId',
-                    'save',
-                    'delete',
-                    'getStoreId',
-                    'getData',
-                    'setSharedStoreIds'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->quoteMock = $this->createPartialMockWithReflection(
+            Quote::class,
+            [
+                'load',
+                'loadByIdWithoutStore',
+                'loadActive',
+                'loadByCustomer',
+                'getIsActive',
+                'getId',
+                'getCustomerId',
+                'save',
+                'delete',
+                'getStoreId',
+                'getData',
+                'setSharedStoreIds'
+            ]
+        );
         $this->storeMock = $this->createMock(Store::class);
         $this->searchResultsDataFactory = $this->createPartialMock(
             CartSearchResultsInterfaceFactory::class,
@@ -169,11 +173,9 @@ class QuoteRepositoryTest extends TestCase
 
         $reflection = new \ReflectionClass(get_class($this->model));
         $reflectionProperty = $reflection->getProperty('loadHandler');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->model, $this->loadHandlerMock);
 
         $reflectionProperty = $reflection->getProperty('saveHandler');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->model, $this->saveHandlerMock);
     }
 
@@ -237,25 +239,23 @@ class QuoteRepositoryTest extends TestCase
     public function testGetForCustomerAfterGet(int $quoteId, int $customerQuoteId, bool $isSame)
     {
         $customerId = 23;
-        $customerQuote = $this->getMockBuilder(QuoteTestHelper::class)
-            ->onlyMethods(
-                [
-                    'load',
-                    'loadByIdWithoutStore',
-                    'loadActive',
-                    'loadByCustomer',
-                    'getIsActive',
-                    'getId',
-                    'getCustomerId',
-                    'save',
-                    'delete',
-                    'getStoreId',
-                    'getData',
-                    'setSharedStoreIds'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $customerQuote = $this->createPartialMockWithReflection(
+            Quote::class,
+            [
+                'load',
+                'loadByIdWithoutStore',
+                'loadActive',
+                'loadByCustomer',
+                'getIsActive',
+                'getId',
+                'getCustomerId',
+                'save',
+                'delete',
+                'getStoreId',
+                'getData',
+                'setSharedStoreIds'
+            ]
+        );
 
         $this->cartFactoryMock->expects(static::exactly(2))
             ->method('create')
@@ -515,10 +515,10 @@ class QuoteRepositoryTest extends TestCase
     public function testSave()
     {
         $cartId = 100;
-        $quoteMock = $this->getMockBuilder(QuoteTestHelper::class)
-            ->onlyMethods(['getId', 'getStoreId', 'hasData', 'setData', 'getCustomerId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $quoteMock = $this->createPartialMockWithReflection(
+            Quote::class,
+            ['getId', 'getStoreId', 'hasData', 'setData', 'getCustomerId']
+        );
         $quoteMock->expects($this->exactly(3))->method('getId')->willReturn($cartId);
         $quoteMock->expects($this->once())->method('getCustomerId')->willReturn(2);
         $quoteMock->expects($this->once())->method('getStoreId')->willReturn(5);
@@ -544,6 +544,57 @@ class QuoteRepositoryTest extends TestCase
 
         $this->saveHandlerMock->expects($this->once())->method('save')->with($quoteMock)->willReturn($quoteMock);
         $this->model->save($quoteMock);
+    }
+
+    /**
+     * @param \Throwable $exception
+     * @param class-string<\Throwable> $exceptionClass
+     * @param string $exceptionMessage
+     */
+    #[DataProvider('saveExceptionsDataProvider')]
+    public function testSaveWithExceptions(
+        \Throwable $exception,
+        string $exceptionClass,
+        string $exceptionMessage
+    ): void {
+        $quoteMock = $this->createMock(CartInterface::class);
+        $quoteMock->expects(static::once())->method('getId')->willReturn(null);
+
+        $this->saveHandlerMock->expects(static::once())
+            ->method('save')
+            ->with($quoteMock)
+            ->willThrowException($exception);
+
+        $this->expectException($exceptionClass);
+        $this->expectExceptionMessage($exceptionMessage);
+
+        $this->model->save($quoteMock);
+    }
+
+    /**
+     * @return array
+     */
+    public static function saveExceptionsDataProvider(): array
+    {
+        $message = 'Unable to save cart';
+
+        return [
+            'input_exception' => [
+                new InputException(new Phrase($message)),
+                InputException::class,
+                $message,
+            ],
+            'could_not_save_exception' => [
+                new CouldNotSaveException(new Phrase($message)),
+                CouldNotSaveException::class,
+                $message,
+            ],
+            'localized_exception' => [
+                new LocalizedException(new Phrase($message)),
+                LocalizedException::class,
+                $message,
+            ],
+        ];
     }
 
     public function testDelete()

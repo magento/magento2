@@ -17,6 +17,7 @@ use Magento\Payment\Model\MethodInterface;
 use Magento\Paypal\Helper\Shortcut\Validator;
 use Magento\Paypal\Model\Config;
 use Magento\Paypal\Model\ConfigFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -40,7 +41,7 @@ class ValidatorTest extends TestCase
     protected function setUp(): void
     {
         $this->_paypalConfigFactory = $this->createPartialMock(ConfigFactory::class, ['create']);
-        $this->_productTypeConfig = $this->getMockForAbstractClass(ConfigInterface::class);
+        $this->_productTypeConfig = $this->createMock(ConfigInterface::class);
         $this->_registry = $this->createMock(Registry::class);
         $this->_paymentData = $this->createMock(Data::class);
 
@@ -57,10 +58,10 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * @dataProvider isContextAvailableDataProvider
      * @param bool $isVisible
      * @param bool $expected
      */
+    #[DataProvider('isContextAvailableDataProvider')]
     public function testIsContextAvailable($isVisible, $expected)
     {
         $paypalConfig = $this->getMockBuilder(Config::class)
@@ -90,22 +91,19 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * @dataProvider isPriceOrSetAvailableDataProvider
      * @param bool $isInCatalog
      * @param double $productPrice
      * @param bool $isProductSet
      * @param bool $expected
      */
+    #[DataProvider('isPriceOrSetAvailableDataProvider')]
     public function testIsPriceOrSetAvailable($isInCatalog, $productPrice, $isProductSet, $expected)
     {
         $currentProduct = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['__wakeup', 'getFinalPrice', 'getTypeId', 'getTypeInstance'])
             ->getMock();
-        $typeInstance = $this->getMockBuilder(AbstractType::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['canConfigure'])
-            ->getMockForAbstractClass();
+        $typeInstance = $this->createMock(AbstractType::class);
         $currentProduct->expects($this->any())->method('getFinalPrice')->willReturn($productPrice);
         $currentProduct->expects($this->any())->method('getTypeId')->willReturn('simple');
         $currentProduct->expects($this->any())->method('getTypeInstance')->willReturn($typeInstance);
@@ -142,14 +140,13 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * @dataProvider isMethodAvailableDataProvider
      * @param bool $methodIsAvailable
      * @param bool $expected
      */
+    #[DataProvider('isMethodAvailableDataProvider')]
     public function testIsMethodAvailable($methodIsAvailable, $expected)
     {
-        $methodInstance = $this->getMockBuilder(MethodInterface::class)
-            ->getMockForAbstractClass();
+        $methodInstance = $this->createMock(MethodInterface::class);
         $methodInstance->expects($this->any())
             ->method('isAvailable')
             ->willReturn($methodIsAvailable);

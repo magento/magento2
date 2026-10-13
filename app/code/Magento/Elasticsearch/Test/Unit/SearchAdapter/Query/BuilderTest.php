@@ -80,27 +80,10 @@ class BuilderTest extends TestCase
             ->onlyMethods(['build'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->request = $this->getMockBuilder(RequestInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->scopeResolver = $this->getMockForAbstractClass(
-            ScopeResolverInterface::class,
-            [],
-            '',
-            false
-        );
-        $this->scopeInterface = $this->getMockForAbstractClass(
-            ScopeInterface::class,
-            [],
-            '',
-            false
-        );
-        $sortBuilder = $this->getMockForAbstractClass(
-            Sort::class,
-            [],
-            '',
-            false
-        );
+        $this->request = $this->createMock(RequestInterface::class);
+        $this->scopeResolver = $this->createMock(ScopeResolverInterface::class);
+        $this->scopeInterface = $this->createMock(ScopeInterface::class);
+        $sortBuilder = $this->createMock(Sort::class);
 
         $this->model = new Builder(
             $this->clientConfig,

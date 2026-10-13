@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Setup\Declaration\Schema\Db\MySQL\Definition\Columns;
@@ -93,11 +93,14 @@ class Real implements DbDefinitionProcessorInterface
              */
             $data['precision'] = $matches[2];
             $data['scale'] = $matches[3];
-            $data = $this->nullable->fromDefinition($data);
-            $data = $this->unsigned->fromDefinition($data);
         } elseif (preg_match('/^decimal\s*\(\s*(\d+)\s*\)/i', $data['definition'] ?? '', $matches)) {
             $data['precision'] = $matches[1];
             $data['scale'] = 0;
+        }
+
+        if (preg_match('/^(float|decimal|double)/i', $data['definition'] ?? '')) {
+            $data = $this->nullable->fromDefinition($data);
+            $data = $this->unsigned->fromDefinition($data);
         }
 
         return $data;

@@ -17,11 +17,10 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Data\Collection;
 use Magento\Framework\DataObject;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\Catalog\Test\Unit\Helper\ProductTestHelper;
-use Magento\Framework\DataObject\Test\Unit\Helper\DataObjectTestHelper;
 
 /**
  * @SuppressWarnings(PHPMD.UnusedLocalVariable)
@@ -29,6 +28,8 @@ use Magento\Framework\DataObject\Test\Unit\Helper\DataObjectTestHelper;
  */
 class DataTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Data|MockObject
      */
@@ -150,12 +151,18 @@ class DataTest extends TestCase
         $attributesCount = 3;
         $attributes = [];
         for ($i = 1; $i < $attributesCount; $i++) {
-            $productAttribute = new DataObjectTestHelper();
-            $productAttribute->setId('attribute_id_' . $i);
-            $productAttribute->setAttributeCode('attribute_code_' . $i);
+            $productAttribute = $this->createPartialMockWithReflection(
+                DataObject::class,
+                ['getId', 'setId', 'getAttributeCode', 'setAttributeCode']
+            );
+            $productAttribute->method('getId')->willReturn('attribute_id_' . $i);
+            $productAttribute->method('getAttributeCode')->willReturn('attribute_code_' . $i);
 
-            $attribute = new DataObjectTestHelper();
-            $attribute->setProductAttribute($productAttribute);
+            $attribute = $this->createPartialMockWithReflection(
+                DataObject::class,
+                ['getProductAttribute', 'setProductAttribute']
+            );
+            $attribute->method('getProductAttribute')->willReturn($productAttribute);
             $attributes[] = $attribute;
         }
         $typeInstanceMock = $this->createMock(Configurable::class);
@@ -242,8 +249,11 @@ class DataTest extends TestCase
 
     public function testGetGalleryImages()
     {
-        $productMock = new ProductTestHelper();
-        $productMock->setMediaGalleryImages($this->getImagesCollection());
+        $productMock = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getMediaGalleryImages']
+        );
+        $productMock->method('getMediaGalleryImages')->willReturn($this->getImagesCollection());
 
         $this->imageUrlBuilder->expects($this->exactly(3))
             ->method('getUrl')

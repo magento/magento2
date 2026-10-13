@@ -28,7 +28,7 @@ class ItemsTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
         $this->model = $objectManager->getObject(
             Items::class,
             [

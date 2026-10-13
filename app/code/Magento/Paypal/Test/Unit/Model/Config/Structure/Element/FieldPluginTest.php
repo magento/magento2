@@ -10,6 +10,7 @@ namespace Magento\Paypal\Test\Unit\Model\Config\Structure\Element;
 use Magento\Config\Model\Config\Structure\Element\Field as FieldConfigStructureMock;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Paypal\Model\Config\Structure\Element\FieldPlugin as FieldConfigStructurePlugin;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -32,9 +33,7 @@ class FieldPluginTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->subjectMock = $this->getMockBuilder(FieldConfigStructureMock::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->subjectMock = $this->createMock(FieldConfigStructureMock::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->plugin = $this->objectManagerHelper->getObject(
@@ -61,9 +60,8 @@ class FieldPluginTest extends TestCase
     /**
      * @param string $subjectPath
      * @param string $expectedConfigPath
-     *
-     * @dataProvider afterGetConfigPathDataProvider
      */
+    #[DataProvider('afterGetConfigPathDataProvider')]
     public function testAroundGetConfigPath($subjectPath, $expectedConfigPath)
     {
         $this->subjectMock->expects($this->exactly(2))

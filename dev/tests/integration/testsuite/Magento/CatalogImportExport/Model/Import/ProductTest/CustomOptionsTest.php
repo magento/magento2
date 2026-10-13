@@ -14,6 +14,7 @@ use Magento\ImportExport\Model\Import;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoAppArea adminhtml
@@ -26,7 +27,6 @@ class CustomOptionsTest extends ProductTestBase
     /**
      * Test for custom options based on AC-3637
      *
-     * @dataProvider productsWithCustomOptionsDataProvider
      * @param string $filename
      * @param string $sku
      * @param int $numOfCustomOptions
@@ -35,6 +35,7 @@ class CustomOptionsTest extends ProductTestBase
      *
      * @return void
      */
+    #[DataProvider('productsWithCustomOptionsDataProvider')]
     public function testImportDifferentCustomOptions(string $filename, string $sku, int $numOfCustomOptions): void
     {
         $pathToFile = __DIR__ . '/../_files/' . $filename;

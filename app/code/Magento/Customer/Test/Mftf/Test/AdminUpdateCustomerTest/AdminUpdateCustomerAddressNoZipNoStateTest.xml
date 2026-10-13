@@ -33,7 +33,9 @@
         <remove keyForRemoval="filterByEamil"/>
         <remove keyForRemoval="checkCustomerInGrid"/>
         <remove keyForRemoval="checkCustomerAccountInformation"/>
-
+        <actionGroup ref="SelectCountriesWithRequiredRegionActionGroup" stepKey="setDefaultCountriesWithRequiredRegion" before="openCustomerEditPage">
+            <argument name="countries" value="DefaultCountriesWithRequiredRegions"/>
+        </actionGroup>
         <!--Update Customer Addresses With No Zip and No State -->
         <actionGroup stepKey="editCustomerAddress" ref="AdminEditCustomerAddressNoZipNoStateActionGroup">
             <argument name="customerAddress" value="addressNoZipNoState"/>

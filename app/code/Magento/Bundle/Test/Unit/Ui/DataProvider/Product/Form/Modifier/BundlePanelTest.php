@@ -13,8 +13,9 @@ use Magento\Bundle\Ui\DataProvider\Product\Form\Modifier\BundlePanel;
 use Magento\Bundle\Ui\DataProvider\Product\Form\Modifier\BundlePrice;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
-use Magento\Catalog\Test\Unit\Helper\ProductTestHelper;
+use Magento\Catalog\Model\Product;
 use Magento\Framework\Stdlib\ArrayManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
 use PHPUnit\Framework\MockObject\Exception;
@@ -26,6 +27,8 @@ use PHPUnit\Framework\TestCase;
  */
 class BundlePanelTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ObjectManager
      */
@@ -47,7 +50,7 @@ class BundlePanelTest extends TestCase
     private $locatorMock;
 
     /**
-     * @var ProductTestHelper
+     * @var Product|MockObject
      */
     private $productMock;
 
@@ -73,8 +76,12 @@ class BundlePanelTest extends TestCase
         $this->urlBuilder = $this->createMock(UrlInterface::class);
         $this->shipmentType = $this->createMock(ShipmentType::class);
         /** @var ProductInterface $productMock */
-        $this->productMock = new ProductTestHelper();
-        $this->productMock->setId(true)->setStoreId(0);
+        $this->productMock = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getId', 'getStoreId']
+        );
+        $this->productMock->method('getId')->willReturn(true);
+        $this->productMock->method('getStoreId')->willReturn(0);
         $this->locatorMock = $this->createMock(LocatorInterface::class);
         $this->locatorMock->method('getProduct')
             ->willReturn($this->productMock);

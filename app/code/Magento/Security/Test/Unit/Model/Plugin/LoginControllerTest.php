@@ -50,7 +50,7 @@ class LoginControllerTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->messageManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
 
         $this->adminSessionsManagerMock = $this->createPartialMock(
             AdminSessionsManager::class,

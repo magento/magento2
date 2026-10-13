@@ -78,10 +78,7 @@ class ProductBlockPrepareCollectionTest extends TestCase
         $this->backendSessionMock = $this->createMock(BackendSession::class);
 
         // Use Http request so getPost() exists
-        $this->requestMock = $this->getMockBuilder(HttpRequest::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getParam', 'getPost', 'has'])
-            ->getMock();
+        $this->requestMock = $this->createPartialMock(HttpRequest::class, ['getParam', 'getPost', 'has']);
 
         $this->collectionFactoryMock = $this->createMock(ProductCollectionFactory::class);
         $this->collectionMock = $this->createMock(ProductCollection::class);
@@ -91,10 +88,7 @@ class ProductBlockPrepareCollectionTest extends TestCase
         $this->statusMock = $this->createMock(Status::class);
 
         // mathRandom for getId() inside Grid::getParam()
-        $this->mathRandomMock = $this->getMockBuilder(Random::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getUniqueHash'])
-            ->getMock();
+        $this->mathRandomMock = $this->createPartialMock(Random::class, ['getUniqueHash']);
         $this->mathRandomMock->method('getUniqueHash')->willReturn('id_test');
 
         $this->collectionFactoryMock->method('create')->willReturn($this->collectionMock);
@@ -112,38 +106,30 @@ class ProductBlockPrepareCollectionTest extends TestCase
 
     private function buildBlock(array $methodsToMock, object $categoryStub): CategoryTabProductBlock
     {
-        $block = $this->getMockBuilder(CategoryTabProductBlock::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods($methodsToMock)
-            ->getMock();
+        $block = $this->createPartialMock(CategoryTabProductBlock::class, $methodsToMock);
 
         // private Product::$productCollectionFactory
         $declProduct = new \ReflectionClass(CategoryTabProductBlock::class);
         $propPcf = $declProduct->getProperty('productCollectionFactory');
-        $propPcf->setAccessible(true);
         $propPcf->setValue($block, $this->collectionFactoryMock);
 
         // Grid protected deps
         $declGrid = new \ReflectionClass(\Magento\Backend\Block\Widget\Grid::class);
 
         $bhProp = $declGrid->getProperty('_backendHelper');
-        $bhProp->setAccessible(true);
         $bhProp->setValue($block, $this->backendHelperMock);
 
         $bsProp = $declGrid->getProperty('_backendSession');
-        $bsProp->setAccessible(true);
         $bsProp->setValue($block, $this->backendSessionMock);
 
         // AbstractBlock::_request
         $declAbs = new \ReflectionClass(\Magento\Framework\View\Element\AbstractBlock::class);
         $reqProp = $declAbs->getProperty('_request');
-        $reqProp->setAccessible(true);
         $reqProp->setValue($block, $this->requestMock);
 
         // Backend\Block\Template::$mathRandom for getId() calls in Grid::getParam()
         $declTpl = new \ReflectionClass(\Magento\Backend\Block\Template::class);
         $mrProp = $declTpl->getProperty('mathRandom');
-        $mrProp->setAccessible(true);
         $mrProp->setValue($block, $this->mathRandomMock);
 
         // Avoid Grid column lookups
@@ -259,7 +245,6 @@ class ProductBlockPrepareCollectionTest extends TestCase
     private function invokePrepareCollection(object $block): void
     {
         $m = (new \ReflectionClass($block))->getMethod('_prepareCollection');
-        $m->setAccessible(true);
         $m->invoke($block);
     }
 }

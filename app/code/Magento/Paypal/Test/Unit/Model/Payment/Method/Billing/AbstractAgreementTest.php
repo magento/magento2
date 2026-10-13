@@ -11,6 +11,7 @@ use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Framework\DataObject;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Payment\Observer\AbstractDataAssignObserver;
 use Magento\Paypal\Model\Billing\Agreement;
@@ -27,6 +28,7 @@ use PHPUnit\Framework\TestCase;
  */
 class AbstractAgreementTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var ManagerInterface|MockObject
      */
@@ -46,14 +48,9 @@ class AbstractAgreementTest extends TestCase
     {
         $helper = new ObjectManager($this);
 
-        $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
-            ->onlyMethods(['dispatch'])
-            ->getMockForAbstractClass();
+        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
 
-        $this->agreementFactory = $this->getMockBuilder(AgreementFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
+        $this->agreementFactory = $this->createMock(AgreementFactory::class);
 
         $objects = [
             [
@@ -84,23 +81,19 @@ class AbstractAgreementTest extends TestCase
                 ]
             ]
         );
-        $paymentInfo = $this->getMockBuilder(Payment::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $quote = $this->getMockBuilder(Quote::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getCustomerId'])
-            ->onlyMethods(['__wakeup'])
-            ->getMock();
+        $paymentInfo = $this->createMock(Payment::class);
+        $quote = $this->createPartialMockWithReflection(
+            Quote::class,
+            ['getCustomerId']
+        );
 
         $this->payment->setInfoInstance($paymentInfo);
         $this->parentAssignDataExpectation($data);
 
-        $agreementModel = $this->getMockBuilder(Agreement::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getCustomerId', 'getReferenceId'])
-            ->onlyMethods(['__wakeup', 'load', 'getId'])
-            ->getMock();
+        $agreementModel = $this->createPartialMockWithReflection(
+            Agreement::class,
+            ['load', 'getId', 'getCustomerId', 'getReferenceId']
+        );
 
         $this->agreementFactory->expects(static::once())
             ->method('create')

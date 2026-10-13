@@ -8,6 +8,7 @@ namespace Magento\Cms\Model;
 use Magento\Cms\Api\PageRepositoryInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Stdlib\DateTime\DateTime;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoAppArea adminhtml
@@ -34,8 +35,8 @@ class PageTest extends \PHPUnit\Framework\TestCase
      * @param array $pageData
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @magentoDbIsolation enabled
-     * @dataProvider pageGetByIdentifierDataProvider
      */
+    #[DataProvider('pageGetByIdentifierDataProvider')]
     public function testGetByIdentifier(array $pageData)
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -62,8 +63,8 @@ class PageTest extends \PHPUnit\Framework\TestCase
      * @param array $data
      * @param string $expectedIdentifier
      * @magentoDbIsolation enabled
-     * @dataProvider generateIdentifierFromTitleDataProvider
      */
+    #[DataProvider('generateIdentifierFromTitleDataProvider')]
     public function testGenerateIdentifierFromTitle($data, $expectedIdentifier)
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();

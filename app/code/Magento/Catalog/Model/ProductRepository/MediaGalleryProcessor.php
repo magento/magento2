@@ -98,8 +98,9 @@ class MediaGalleryProcessor
                 }
             }
             foreach ($existingMediaGallery as $key => &$existingEntry) {
-                if (isset($entriesById[$existingEntry['value_id']])) {
-                    $updatedEntry = $entriesById[$existingEntry['value_id']];
+                $valueId = $existingEntry['value_id'] ?? null;
+                if ($valueId !== null && isset($entriesById[$valueId])) {
+                    $updatedEntry = $entriesById[$valueId];
                     if ($updatedEntry['file'] === null) {
                         unset($updatedEntry['file']);
                     }

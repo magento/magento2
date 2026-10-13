@@ -44,4 +44,10 @@
     <operation name="DeleteCustomer" dataType="customer" type="delete" auth="adminOauth" url="/V1/customers/{id}" method="DELETE">
         <contentType>application/json</contentType>
     </operation>
+    <!-- Customer List operation for bulk operations -->
+    <operation name="GetCustomerList" dataType="customer_list" type="get" auth="adminOauth"
+        url="/V1/customers/search?searchCriteria[pageSize]={pageSize}&amp;searchCriteria[currentPage]={currentPage}"
+        method="GET">
+        <contentType>application/json</contentType>
+    </operation>
 </operations>

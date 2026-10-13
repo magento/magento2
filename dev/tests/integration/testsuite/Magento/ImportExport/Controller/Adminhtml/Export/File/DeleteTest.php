@@ -13,6 +13,7 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\AbstractBackendController;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for \Magento\ImportExport\Controller\Adminhtml\Export\File\Delete class.
@@ -58,10 +59,10 @@ class DeleteTest extends AbstractBackendController
      * Check that file can be removed under var/export directory.
      *
      * @param string $file
-     * @dataProvider csvExecuteProvider
      * @return void
      * @magentoConfigFixture default_store admin/security/use_form_key 1
      */
+    #[DataProvider('csvExecuteProvider')]
     public function testExecute($file): void
     {
         $fullPath = 'export/' . $file;

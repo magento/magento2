@@ -14,6 +14,7 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Read;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\MediaGalleryUi\Model\UploadImage;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -66,9 +67,8 @@ class UploadImageTest extends TestCase
      * @param string $targetFolder
      * @param string|null $type
      * @param string $absolutePath
-     *
-     * @dataProvider executeDataProvider
      */
+    #[DataProvider('executeDataProvider')]
     public function testExecute(string $targetFolder, ?string $type, string $absolutePath): void
     {
         $this->fileSystemMock->expects($this->once())

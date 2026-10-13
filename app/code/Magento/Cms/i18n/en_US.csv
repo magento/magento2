@@ -160,3 +160,4 @@ Enable,Enable
 "We cannot create the folder under the selected directory.","We cannot create the folder under the selected directory."
 "We can't delete the file right now.", "We can't delete the file right now."
 "We can't upload the file to the current folder right now. Please try another folder.","We can't upload the file to the current folder right now. Please try another folder."
+"Invalid Path","Invalid Path"

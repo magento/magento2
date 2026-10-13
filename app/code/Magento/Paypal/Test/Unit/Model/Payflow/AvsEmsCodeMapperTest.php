@@ -11,6 +11,7 @@ use Magento\Paypal\Model\Config;
 use Magento\Paypal\Model\Info;
 use Magento\Paypal\Model\Payflow\AvsEmsCodeMapper;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -36,14 +37,12 @@ class AvsEmsCodeMapperTest extends TestCase
      * @param string $avsZip
      * @param string $avsStreet
      * @param string $expected
-     * @dataProvider getCodeDataProvider
      */
+    #[DataProvider('getCodeDataProvider')]
     public function testGetCode($avsZip, $avsStreet, $expected)
     {
         /** @var OrderPaymentInterface|MockObject $orderPayment */
-        $orderPayment = $this->getMockBuilder(OrderPaymentInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $orderPayment = $this->createMock(OrderPaymentInterface::class);
 
         $orderPayment->expects(self::once())
             ->method('getMethod')
@@ -69,9 +68,7 @@ class AvsEmsCodeMapperTest extends TestCase
         $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('The "some_payment" does not supported by Payflow AVS mapper.');
         /** @var OrderPaymentInterface|MockObject $orderPayment */
-        $orderPayment = $this->getMockBuilder(OrderPaymentInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $orderPayment = $this->createMock(OrderPaymentInterface::class);
 
         $orderPayment->expects(self::exactly(2))
             ->method('getMethod')

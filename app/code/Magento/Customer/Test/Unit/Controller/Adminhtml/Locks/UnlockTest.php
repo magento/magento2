@@ -18,6 +18,7 @@ use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * Test class for \Magento\Customer\Controller\Adminhtml\Locks\Unlock testing
@@ -26,6 +27,7 @@ use PHPUnit\Framework\TestCase;
  */
 class UnlockTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Context
      */
@@ -83,14 +85,10 @@ class UnlockTest extends TestCase
         $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->authenticationMock = $this->getMockBuilder(AuthenticationInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->authenticationMock = $this->createMock(AuthenticationInterface::class);
 
-        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->onlyMethods(['getParam'])
-            ->getMockForAbstractClass();
-        $this->messageManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->requestMock = $this->createPartialMock(\Magento\Framework\App\Request\Http::class, ['getParam']);
+        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
         $this->resultFactoryMock = $this->createPartialMock(
             ResultFactory::class,
             ['create']

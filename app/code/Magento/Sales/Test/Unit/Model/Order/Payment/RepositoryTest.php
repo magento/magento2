@@ -17,6 +17,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Api\Data\OrderPaymentSearchResultInterfaceFactory;
 use Magento\Sales\Model\Order\Payment\Repository;
 use Magento\Sales\Model\ResourceModel\Metadata;
+use Magento\Sales\Model\Order\Payment as OrderPayment;
 use Magento\Sales\Model\ResourceModel\Order\Payment;
 use Magento\Sales\Model\ResourceModel\Order\Payment\Collection;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -171,7 +172,7 @@ class RepositoryTest extends TestCase
      */
     protected function mockPayment($id = false)
     {
-        $payment = $this->createMock(\Magento\Sales\Model\Order\Payment::class);
+        $payment = $this->createMock(OrderPayment::class);
 
         if ($id !== false) {
             $payment->expects($this->once())->method('getId')->willReturn($id);

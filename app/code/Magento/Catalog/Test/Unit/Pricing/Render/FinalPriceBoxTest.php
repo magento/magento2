@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Pricing\Render;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Pricing\Renderer\SalableResolverInterface;
 use Magento\Catalog\Pricing\Price\FinalPrice;
@@ -14,6 +15,7 @@ use Magento\Catalog\Pricing\Price\MinimalPriceCalculatorInterface;
 use Magento\Catalog\Pricing\Price\RegularPrice;
 use Magento\Catalog\Pricing\Render\FinalPriceBox;
 use Magento\Framework\App\Cache\StateInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\State;
@@ -44,6 +46,8 @@ use Psr\Log\LoggerInterface;
  */
 class FinalPriceBoxTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var FinalPriceBox
      */
@@ -115,99 +119,57 @@ class FinalPriceBoxTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['get'])
-            ->getMockForAbstractClass();
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         \Magento\Framework\App\ObjectManager::setInstance($this->objectManagerMock);
-        $this->product = $this->getMockBuilder(Product::class)
-            ->addMethods(['getCanShowPrice'])
-            ->onlyMethods(['getPriceInfo', 'isSalable', 'getId'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->priceInfo = $this->getMockForAbstractClass(PriceInfoInterface::class);
-        $this->product->expects($this->any())
-            ->method('getPriceInfo')
-            ->willReturn($this->priceInfo);
+        
+        $this->priceInfo = $this->createMock(PriceInfoInterface::class);
+        $this->product = $this->createPartialMock(Product::class, ['getPriceInfo', 'getId']);
+        $this->product->method('getPriceInfo')->willReturn($this->priceInfo);
 
         $eventManager = $this->createMock(ManagerStub::class);
         $this->layout = $this->createMock(Layout::class);
         $this->priceBox = $this->createMock(PriceBox::class);
-        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
-        $this->layout->expects($this->any())->method('getBlock')->willReturn($this->priceBox);
+        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->layout->method('getBlock')->willReturn($this->priceBox);
 
-        $cacheState = $this->getMockBuilder(StateInterface::class)
-            ->getMockForAbstractClass();
+        $cacheState = $this->createMock(StateInterface::class);
 
-        $appState = $this->getMockBuilder(State::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $appState = $this->createMock(State::class);
 
-        $resolver = $this->getMockBuilder(Resolver::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $resolver = $this->createMock(Resolver::class);
 
-        $urlBuilder = $this->getMockBuilder(UrlInterface::class)
-            ->getMockForAbstractClass();
+        $urlBuilder = $this->createMock(UrlInterface::class);
 
-        $store = $this->getMockBuilder(StoreInterface::class)
-            ->getMockForAbstractClass();
-        $storeManager = $this->getMockBuilder(StoreManagerInterface::class)
-            ->onlyMethods(['getStore'])
-            ->addMethods(['getCode'])
-            ->getMockForAbstractClass();
-        $storeManager->expects($this->any())->method('getStore')->willReturn($store);
+        $store = $this->createMock(StoreInterface::class);
+        $storeManager = $this->createMock(StoreManagerInterface::class);
+        $storeManager->method('getStore')->willReturn($store);
 
-        $scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $context = $this->createMock(Context::class);
-        $context->expects($this->any())
-            ->method('getEventManager')
-            ->willReturn($eventManager);
-        $context->expects($this->any())
-            ->method('getLayout')
-            ->willReturn($this->layout);
-        $context->expects($this->any())
-            ->method('getLogger')
-            ->willReturn($this->logger);
-        $context->expects($this->any())
-            ->method('getScopeConfig')
-            ->willReturn($scopeConfigMock);
-        $context->expects($this->any())
-            ->method('getCacheState')
-            ->willReturn($cacheState);
-        $context->expects($this->any())
-            ->method('getStoreManager')
-            ->willReturn($storeManager);
-        $context->expects($this->any())
-            ->method('getAppState')
-            ->willReturn($appState);
-        $context->expects($this->any())
-            ->method('getResolver')
-            ->willReturn($resolver);
-        $context->expects($this->any())
-            ->method('getUrlBuilder')
-            ->willReturn($urlBuilder);
+        $context->method('getEventManager')->willReturn($eventManager);
+        $context->method('getLayout')->willReturn($this->layout);
+        $context->method('getLogger')->willReturn($this->logger);
+        $context->method('getScopeConfig')->willReturn($scopeConfigMock);
+        $context->method('getCacheState')->willReturn($cacheState);
+        $context->method('getStoreManager')->willReturn($storeManager);
+        $context->method('getAppState')->willReturn($appState);
+        $context->method('getResolver')->willReturn($resolver);
+        $context->method('getUrlBuilder')->willReturn($urlBuilder);
 
-        $this->rendererPool = $this->getMockBuilder(RendererPool::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->rendererPool = $this->createMock(RendererPool::class);
 
-        $this->price = $this->getMockForAbstractClass(PriceInterface::class);
-        $this->price->expects($this->any())
-            ->method('getPriceCode')
-            ->willReturn(FinalPrice::PRICE_CODE);
+        $this->price = $this->createMock(PriceInterface::class);
+        $this->price->method('getPriceCode')->willReturn(FinalPrice::PRICE_CODE);
 
         $objectManager = new ObjectManager($this);
-        $this->salableResolverMock = $this->getMockBuilder(SalableResolverInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->salableResolverMock = $this->createMock(SalableResolverInterface::class);
 
         $this->deploymentConfig = $this->createPartialMock(
             DeploymentConfig::class,
             ['get']
         );
 
-        $this->minimalPriceCalculator = $this->getMockForAbstractClass(MinimalPriceCalculatorInterface::class);
+        $this->minimalPriceCalculator = $this->createMock(MinimalPriceCalculatorInterface::class);
         $this->object = $objectManager->getObject(
             FinalPriceBox::class,
             [
@@ -284,9 +246,7 @@ class FinalPriceBoxTest extends TestCase
             ->with($this->product)
             ->willReturn(true);
 
-        $priceBoxRender = $this->getMockBuilder(PriceBox::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $priceBoxRender = $this->createMock(PriceBox::class);
         $priceBoxRender->expects($this->once())
             ->method('toHtml')
             ->willReturn('test');
@@ -354,7 +314,7 @@ class FinalPriceBoxTest extends TestCase
         $this->object->setData('price_id', $priceId);
         $this->product->expects($this->never())->method('getId');
 
-        $amount = $this->getMockForAbstractClass(AmountInterface::class);
+        $amount = $this->createMock(AmountInterface::class);
 
         $this->minimalPriceCalculator->expects($this->once())->method('getAmount')
             ->with($this->product)
@@ -388,14 +348,14 @@ class FinalPriceBoxTest extends TestCase
      * @param bool $expectedResult
      *
      * @return void
-     * @dataProvider hasSpecialPriceProvider
      */
+    #[DataProvider('hasSpecialPriceProvider')]
     public function testHasSpecialPrice(float $regularPrice, float $finalPrice, bool $expectedResult): void
     {
         $regularPriceType = $this->createMock(RegularPrice::class);
         $finalPriceType = $this->createMock(FinalPrice::class);
-        $regularPriceAmount = $this->getMockForAbstractClass(AmountInterface::class);
-        $finalPriceAmount = $this->getMockForAbstractClass(AmountInterface::class);
+        $regularPriceAmount = $this->createMock(AmountInterface::class);
+        $finalPriceAmount = $this->createMock(AmountInterface::class);
 
         $regularPriceAmount->expects($this->once())
             ->method('getValue')
@@ -448,7 +408,7 @@ class FinalPriceBoxTest extends TestCase
         $this->minimalPriceCalculator->expects($this->once())->method('getValue')->with($this->product)
             ->willReturn($minimalPrice);
 
-        $finalPriceAmount = $this->getMockForAbstractClass(AmountInterface::class);
+        $finalPriceAmount = $this->createMock(AmountInterface::class);
         $finalPriceAmount->expects($this->once())
             ->method('getValue')
             ->willReturn($finalPrice);
@@ -472,9 +432,7 @@ class FinalPriceBoxTest extends TestCase
      */
     public function testHidePrice(): void
     {
-        $this->product->expects($this->any())
-            ->method('getCanShowPrice')
-            ->willReturn(false);
+        $this->product->setCanShowPrice(false);
 
         $this->assertEmpty($this->object->toHtml());
     }
@@ -523,8 +481,8 @@ class FinalPriceBoxTest extends TestCase
      * @param bool $flag
      *
      * @return void
-     * @dataProvider isProductListDataProvider
      */
+    #[DataProvider('isProductListDataProvider')]
     public function testGetCacheKeyInfoContainsIsProductListFlag($flag): void
     {
         $this->object->setData('is_product_list', $flag);
@@ -549,8 +507,8 @@ class FinalPriceBoxTest extends TestCase
      * @param bool $flag
      *
      * @return void
-     * @dataProvider isProductListDataProvider
      */
+    #[DataProvider('isProductListDataProvider')]
     public function testIsProductList($flag): void
     {
         $this->object->setData('is_product_list', $flag);

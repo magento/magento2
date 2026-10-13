@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Encryption;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class EncryptorTest extends \PHPUnit\Framework\TestCase
 {
@@ -27,8 +29,8 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param string $key
-     * @dataProvider validEncryptionKeyDataProvider
      */
+    #[DataProvider('validEncryptionKeyDataProvider')]
     public function testValidateKey($key)
     {
         $this->encryptor->validateKey($key);
@@ -45,10 +47,9 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     *
      * @param string $key
-     * @dataProvider invalidEncryptionKeyDataProvider
      */
+    #[DataProvider('invalidEncryptionKeyDataProvider')]
     public function testValidateKeyInvalid($key)
     {
         $this->expectException(\Exception::class);

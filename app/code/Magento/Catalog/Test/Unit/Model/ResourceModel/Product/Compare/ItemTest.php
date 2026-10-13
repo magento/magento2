@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product\Compare;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Product\Compare\Item as CompareItemModel;
 use Magento\Catalog\Model\ResourceModel\Product\Compare\Item as CompareItemResource;
 use Magento\Customer\Model\Config\Share;
@@ -71,21 +72,15 @@ class ItemTest extends TestCase
         $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
 
         $this->contextMock = $this->createMock(Context::class);
-        $this->contextMock->expects($this->any())
-            ->method('getResources')
-            ->willReturn($this->resourceConnectionMock);
+        $this->contextMock->method('getResources')->willReturn($this->resourceConnectionMock);
 
-        $this->resourceConnectionMock->expects($this->any())
-            ->method('getConnection')
-            ->willReturn($this->connectionMock);
+        $this->resourceConnectionMock->method('getConnection')->willReturn($this->connectionMock);
 
         $this->resourceConnectionMock->expects($this->any())
             ->method('getTableName')
             ->willReturnArgument(0);
 
-        $this->connectionMock->expects($this->any())
-            ->method('select')
-            ->willReturn($this->selectMock);
+        $this->connectionMock->method('select')->willReturn($this->selectMock);
 
         $this->selectMock->expects($this->any())
             ->method('from')
@@ -113,7 +108,7 @@ class ItemTest extends TestCase
      *
      * @return array
      */
-    public function visitorIdDataProvider(): array
+    public static function visitorIdDataProvider(): array
     {
         return [
             'visitor_id_null' => [
@@ -140,13 +135,13 @@ class ItemTest extends TestCase
     /**
      * Test updateCustomerFromVisitor with different visitor ID scenarios
      *
-     * @dataProvider visitorIdDataProvider
      * @param mixed $visitorId
      * @param int $customerId
      * @param bool $shouldExecuteQueries
      * @param int $expectedQueryCount
      * @throws Exception
      */
+    #[DataProvider('visitorIdDataProvider')]
     public function testUpdateCustomerFromVisitorWithVariousVisitorIds(
         $visitorId,
         int $customerId,

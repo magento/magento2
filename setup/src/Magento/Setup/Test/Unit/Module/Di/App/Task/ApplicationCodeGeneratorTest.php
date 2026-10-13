@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Setup\Module\Di\Code\Scanner;
 use Magento\Setup\Module\Di\Code\Scanner\DirectoryScanner;
 use Magento\Setup\Module\Di\Code\Scanner\PhpScanner;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ApplicationCodeGeneratorTest extends TestCase
@@ -49,8 +50,8 @@ class ApplicationCodeGeneratorTest extends TestCase
     /**
      * @param array $data
      *
-     * @dataProvider doOperationWrongDataDataProvider
      */
+    #[DataProvider('doOperationWrongDataDataProvider')]
     public function testDoOperationWrongData($data)
     {
         $model = new ApplicationCodeGenerator(

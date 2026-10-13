@@ -13,11 +13,14 @@ use Magento\Framework\Data\FormFactory;
 use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class FormTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ObjectManager
      */
@@ -36,14 +39,13 @@ class FormTest extends TestCase
             ->getMock();
 
         /** @var Form|MockObject $customerHelper */
-        $formMock = $this->getMockBuilder(Form::class)
-            ->addMethods(['setUseContainer', 'setParent', 'setBaseUrl'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $formMock = $this->createPartialMockWithReflection(
+            Form::class,
+            ['setUseContainer', 'setParent', 'setBaseUrl']
+        );
 
         /** @var UrlInterface|MockObject $customerHelper */
-        $urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
-            ->getMockForAbstractClass();
+        $urlBuilderMock = $this->createMock(UrlInterface::class);
         $objectManager = new ObjectManager($this);
         $objects = [
             [

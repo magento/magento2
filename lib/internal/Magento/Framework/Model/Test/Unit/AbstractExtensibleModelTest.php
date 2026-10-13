@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -22,6 +22,7 @@ use Magento\Framework\Model\ActionValidator\RemoveAction;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -31,6 +32,8 @@ use Psr\Log\LoggerInterface;
  */
 class AbstractExtensibleModelTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var AbstractExtensibleModel
      */
@@ -76,9 +79,9 @@ class AbstractExtensibleModelTest extends TestCase
     {
         $this->actionValidatorMock = $this->createMock(RemoveAction::class);
         $this->contextMock = new Context(
-            $this->getMockForAbstractClass(LoggerInterface::class),
-            $this->getMockForAbstractClass(ManagerInterface::class),
-            $this->getMockForAbstractClass(CacheInterface::class),
+            $this->createMock(LoggerInterface::class),
+            $this->createMock(ManagerInterface::class),
+            $this->createMock(CacheInterface::class),
             $this->createMock(State::class),
             $this->actionValidatorMock
         );
@@ -92,9 +95,10 @@ class AbstractExtensibleModelTest extends TestCase
             'getIdFieldName',
             'rollBack'
         ]);
-        $this->resourceCollectionMock = $this->getMockBuilder(\Magento\Framework\Data\Collection\AbstractDb::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->resourceCollectionMock = $this->createPartialMock(
+            \Magento\Framework\Data\Collection\AbstractDb::class,
+            ['getResource']
+        );
         $this->metadataServiceMock = $this->getMockBuilder(MetadataServiceInterface::class)
             ->getMock();
         $this->metadataServiceMock
@@ -107,32 +111,25 @@ class AbstractExtensibleModelTest extends TestCase
                     new DataObject(['attribute_code' => 'attribute3']),
                 ]
             );
-        $extensionAttributesFactory = $this->getMockBuilder(ExtensionAttributesFactory::class)
-            ->addMethods(['extractExtensionAttributes'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $extensionAttributesFactory = $this->createPartialMockWithReflection(
+            ExtensionAttributesFactory::class,
+            ['extractExtensionAttributes']
+        );
         $extensionAttributesFactory->expects($this->any())
             ->method('extractExtensionAttributes')
             ->willReturnArgument(1);
         $this->attributeValueFactoryMock = $this->getMockBuilder(AttributeValueFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->model = $this->getMockForAbstractClass(
+        $this->model = $this->createPartialMockWithReflection(
             AbstractExtensibleModel::class,
-            [
-                $this->contextMock,
-                $this->registryMock,
-                $extensionAttributesFactory,
-                $this->attributeValueFactoryMock,
-                $this->resourceMock,
-                $this->resourceCollectionMock
-            ],
-            '',
-            true,
-            true,
-            true,
             ['getCustomAttributesCodes']
         );
+        
+        // Inject extensionAttributesFactory and attributeValueFactory into model via reflection
+        $this->setPropertyValue($this->model, 'extensionAttributesFactory', $extensionAttributesFactory);
+        $this->setPropertyValue($this->model, 'customAttributeFactory', $this->attributeValueFactoryMock);
+        
         $this->customAttribute = new AttributeValue();
     }
 

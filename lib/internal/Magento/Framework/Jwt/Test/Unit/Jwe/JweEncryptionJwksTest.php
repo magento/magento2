@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -15,6 +15,7 @@ use Magento\Framework\Jwt\Jwk;
 use Magento\Framework\Jwt\JwkSet;
 use Magento\Framework\Jwt\Jws\JwsSignatureJwks;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class JweEncryptionJwksTest extends TestCase
 {
@@ -49,9 +50,8 @@ class JweEncryptionJwksTest extends TestCase
      *
      * @param Jwk|JwkSet $jwks
      * @param bool $valid
-     * @return void
-     * @dataProvider getConstructorCases
-     */
+     * @return void     */
+    #[DataProvider('getConstructorCases')]
     public function testConstruct(array $jwkData, bool $valid): void
     {
         if (isset($jwkData[0]) && is_array($jwkData[0])) {
@@ -95,9 +95,8 @@ class JweEncryptionJwksTest extends TestCase
      *
      * @param array $jwkData
      * @param string $expectedName
-     * @return void
-     * @dataProvider getAlgorithmCases
-     */
+     * @return void     */
+    #[DataProvider('getAlgorithmCases')]
     public function testGetAlgorithmName(array $jwkData, string $expectedName): void
     {
         if (isset($jwkData['use'])) {

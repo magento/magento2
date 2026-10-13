@@ -11,6 +11,7 @@ namespace Magento\GiftMessage\Test\Unit\Observer;
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Message\MessageInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\GiftMessage\Helper\Message;
 use Magento\GiftMessage\Model\Message as MessageModel;
 use Magento\GiftMessage\Model\MessageFactory;
@@ -18,11 +19,14 @@ use Magento\GiftMessage\Observer\SalesEventOrderToQuoteObserver;
 use Magento\Quote\Model\Quote;
 use Magento\Sales\Model\Order;
 use Magento\Store\Model\Store;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class SalesEventOrderToQuoteObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var SalesEventOrderToQuoteObserver
      */
@@ -76,19 +80,18 @@ class SalesEventOrderToQuoteObserverTest extends TestCase
         $this->messageFactoryMock = $this->createMock(MessageFactory::class);
         $this->giftMessageMock = $this->createMock(Message::class);
         $this->observerMock = $this->createMock(Observer::class);
-        $this->eventMock = $this->getMockBuilder(Event::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getOrder', 'getQuote'])
-            ->getMock();
-        $this->orderMock = $this->getMockBuilder(Order::class)
-            ->addMethods(['getReordered', 'getGiftMessageId'])
-            ->onlyMethods(['getStore'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->quoteMock = $this->getMockBuilder(Quote::class)
-            ->addMethods(['setGiftMessageId'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->eventMock = $this->createPartialMockWithReflection(
+            Event::class,
+            ['getOrder', 'getQuote']
+        );
+        $this->orderMock = $this->createPartialMockWithReflection(
+            Order::class,
+            ['getReordered', 'getGiftMessageId', 'getStore']
+        );
+        $this->quoteMock = $this->createPartialMockWithReflection(
+            Quote::class,
+            ['setGiftMessageId']
+        );
         $this->storeMock = $this->createMock(Store::class);
         $this->messageMock = $this->createMock(MessageModel::class);
 
@@ -101,11 +104,10 @@ class SalesEventOrderToQuoteObserverTest extends TestCase
     /**
      * Tests duplicating gift message from order to quote
      *
-     * @dataProvider giftMessageDataProvider
-     *
      * @param bool $orderIsReordered
      * @param bool $isMessagesAllowed
      */
+    #[DataProvider('giftMessageDataProvider')]
     public function testExecute(bool $orderIsReordered, bool $isMessagesAllowed): void
     {
         $giftMessageId = 1;

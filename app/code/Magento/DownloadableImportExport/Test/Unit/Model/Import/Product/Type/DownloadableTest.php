@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\DownloadableImportExport\Test\Unit\Model\Import\Product\Type;
 
-use Magento\Framework\DB\Test\Unit\Helper\MysqlTestHelper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection as ProductAttributeCollection;
@@ -38,6 +38,8 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 class DownloadableTest extends AbstractImportTestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Mysql|MockObject
      */
@@ -122,7 +124,6 @@ class DownloadableTest extends AbstractImportTestCase
         parent::setUp();
 
         //connection and sql query results
-        $this->connectionMock = new MysqlTestHelper();
         $this->select = $this->createMock(Select::class);
         $this->select->expects($this->any())->method('from')->willReturnSelf();
         $this->select->expects($this->any())->method('where')->willReturnSelf();
@@ -130,9 +131,13 @@ class DownloadableTest extends AbstractImportTestCase
         $adapter = $this->createMock(Mysql::class);
         $adapter->method('quoteInto')->willReturn('query');
         $this->select->method('getAdapter')->willReturn($adapter);
-        // Configure MysqlTestHelper data
-        $this->connectionMock->setTestData('select', $this->select);
-        $this->connectionMock->setTestData('quote_into', '');
+        
+        $this->connectionMock = $this->createPartialMockWithReflection(
+            Mysql::class,
+            ['select', 'fetchAll', 'quoteInto', 'delete', 'insertOnDuplicate']
+        );
+        $this->connectionMock->method('select')->willReturn($this->select);
+        $this->connectionMock->method('quoteInto')->willReturn('');
 
         //constructor arguments:
         // 1. $attrSetColFac
@@ -223,8 +228,8 @@ class DownloadableTest extends AbstractImportTestCase
         $this->uploaderMock->method('setTmpDir')->willReturn(true);
         $this->uploaderMock->expects($this->any())->method('setDestDir')->with('pub/media/')->willReturn(true);
 
-        // Configure MysqlTestHelper for consecutive fetchAll calls
-        $this->connectionMock->setTestData('fetch_all_responses', [
+        // Configure connection mock for consecutive fetchAll calls
+        $this->connectionMock->method('fetchAll')->willReturnOnConsecutiveCalls(
             [
                 [
                     'attribute_set_name' => '1',
@@ -239,7 +244,7 @@ class DownloadableTest extends AbstractImportTestCase
             $fetchResult['sample'],
             $fetchResult['link'],
             $fetchResult['link']
-        ]);
+        );
 
         $downloadableModel = new Downloadable(
             $this->attrSetColFacMock,
@@ -535,8 +540,8 @@ class DownloadableTest extends AbstractImportTestCase
     #[DataProvider('isRowValidData')]
     public function testIsRowValid(array $rowData, $rowNum, $isNewProduct, $isDomainValid, $expectedResult): void
     {
-        // Configure MysqlTestHelper for fetchAll call
-        $this->connectionMock->setTestData('fetch_all', [
+        // Configure connection mock for fetchAll call
+        $this->connectionMock->method('fetchAll')->willReturn([
             [
                 'attribute_set_name' => '1',
                 'attribute_id' => '1'
@@ -704,8 +709,8 @@ class DownloadableTest extends AbstractImportTestCase
     #[DataProvider('dataForUploaderDir')]
     public function testSetUploaderDirFalse($newSku, $bunch, $allowImport, $parsedOptions): void
     {
-        // Configure MysqlTestHelper for fetchAll call
-        $this->connectionMock->setTestData('fetch_all', []);
+        // Configure connection mock for fetchAll call
+        $this->connectionMock->method('fetchAll')->willReturn([]);
         $this->downloadableHelper->expects($this->atLeastOnce())
             ->method('fillExistOptions')->willReturn($parsedOptions['link']);
         $this->uploaderHelper->method('isFileExist')->willReturn(false);
@@ -813,8 +818,8 @@ class DownloadableTest extends AbstractImportTestCase
                 . ' file=media/file_link.mp4,sortorder=1|group_title=Group Title, title=Title 2, price=10, downloads'
                 . '=unlimited, url=media/file2.mp4,sortorder=0'
         ];
-        // Configure MysqlTestHelper for fetchAll call
-        $this->connectionMock->setTestData('fetch_all', [
+        // Configure connection mock for fetchAll call
+        $this->connectionMock->method('fetchAll')->willReturn([
             [
                 'attribute_set_name' => '1',
                 'attribute_id' => '1'
@@ -884,7 +889,6 @@ class DownloadableTest extends AbstractImportTestCase
     {
         $reflection = new \ReflectionClass(get_class($object));
         $reflectionProperty = $reflection->getProperty($property);
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($object, $value);
         return $object;
     }

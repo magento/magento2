@@ -12,6 +12,7 @@ use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Framework\Data\Collection\EntityFactory;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Tax\Api\Data\TaxRateSearchResultsInterface;
 use Magento\Tax\Api\TaxRuleRepositoryInterface;
 use Magento\Tax\Model\Calculation\Rule;
@@ -21,6 +22,8 @@ use PHPUnit\Framework\TestCase;
 
 class TaxRuleCollectionTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var TaxRuleCollection
      */
@@ -73,13 +76,13 @@ class TaxRuleCollectionTest extends TestCase
         $this->searchCriteriaBuilderMock =
             $this->createMock(SearchCriteriaBuilder::class);
         $this->sortOrderBuilderMock = $this->createMock(SortOrderBuilder::class);
-        $this->ruleServiceMock = $this->getMockForAbstractClass(TaxRuleRepositoryInterface::class);
+        $this->ruleServiceMock = $this->createMock(TaxRuleRepositoryInterface::class);
         $this->searchCriteriaMock = $this->createMock(SearchCriteria::class);
-        $this->searchResultsMock = $this->getMockForAbstractClass(TaxRateSearchResultsInterface::class);
-        $this->taxRuleMock = $this->getMockBuilder(Rule::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getTaxRatesCodes'])
-            ->onlyMethods([
+        $this->searchResultsMock = $this->createMock(TaxRateSearchResultsInterface::class);
+        $this->taxRuleMock = $this->createPartialMockWithReflection(
+            Rule::class,
+            [
+                'getTaxRatesCodes',
                 'getId',
                 'getCode',
                 'getPriority',
@@ -87,9 +90,9 @@ class TaxRuleCollectionTest extends TestCase
                 'getCalculateSubtotal',
                 'getCustomerTaxClassIds',
                 'getProductTaxClassIds',
-                'getTaxRateIds',
-            ])
-            ->getMock();
+                'getTaxRateIds'
+            ]
+        );
 
         $this->searchCriteriaBuilderMock->expects($this->any())
             ->method('create')
@@ -104,7 +107,7 @@ class TaxRuleCollectionTest extends TestCase
         );
     }
 
-    public function testLoadData()
+    public function testLoadData(): void
     {
         $this->ruleServiceMock->expects($this->once())
             ->method('getList')

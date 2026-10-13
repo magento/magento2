@@ -37,7 +37,7 @@ class JsTest extends TestCase
             Js::class,
             [
                 'formFactory' => $this->createMock(FormFactory::class),
-                'objectManager' => $this->getMockForAbstractClass(ObjectManagerInterface::class),
+                'objectManager' => $this->createMock(ObjectManagerInterface::class),
                 'urlBuilder' => $this->_urlBuilder
             ]
         );
@@ -61,7 +61,6 @@ class JsTest extends TestCase
     {
         $class = new \ReflectionClass(Js::class);
         $method = $class->getMethod($name);
-        $method->setAccessible(true);
         return $method;
     }
 

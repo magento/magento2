@@ -12,6 +12,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\GiftMessage\Model\GiftMessageManager;
 use Magento\GiftMessage\Model\Type\Plugin\Multishipping;
 use Magento\Quote\Model\Quote;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -36,7 +37,7 @@ class MultishippingTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
         $this->messageMock = $this->createMock(GiftMessageManager::class);
-        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->requestMock = $this->createMock(RequestInterface::class);
 
         $this->plugin = $objectManager->getObject(
             Multishipping::class,
@@ -48,9 +49,9 @@ class MultishippingTest extends TestCase
     }
 
     /**
-     * @dataProvider beforeSetShippingMethodsDataProvider
      * @param array|null $methods
      */
+    #[DataProvider('beforeSetShippingMethodsDataProvider')]
     public function testBeforeSetShippingMethods($methods)
     {
         $this->requestMock->expects($this->once())

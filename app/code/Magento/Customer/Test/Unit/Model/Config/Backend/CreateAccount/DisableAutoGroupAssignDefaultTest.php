@@ -28,9 +28,7 @@ class DisableAutoGroupAssignDefaultTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->eavConfigMock = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->eavConfigMock = $this->createMock(Config::class);
 
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
@@ -45,10 +43,13 @@ class DisableAutoGroupAssignDefaultTest extends TestCase
     {
         $value = true;
 
-        $attributeMock = $this->getMockBuilder(AbstractAttribute::class)
-            ->onlyMethods(['save', 'setData'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $attributeMock = $this->createPartialMock(
+            AbstractAttribute::class,
+            [
+                'save',
+                'setData'
+            ]
+        );
 
         $this->eavConfigMock->expects($this->once())
             ->method('getAttribute')

@@ -233,7 +233,7 @@ class Price
                         $index++;
                     } while ($range > self::MIN_RANGE_POWER && count($items) < 2);
                 } else {
-                    $range = (double)$this->getRangeStepValue();
+                    $range = (float)$this->getRangeStepValue();
                 }
             }
 
@@ -330,7 +330,7 @@ class Price
             return false;
         }
         foreach ($filter as $v) {
-            if ($v !== '' && $v !== '0' && (!is_numeric($v) || (double)$v <= 0 || is_infinite((double)$v))) {
+            if ($v !== '' && $v !== '0' && (!is_numeric($v) || (float)$v <= 0 || is_infinite((float)$v))) {
                 return false;
             }
         }

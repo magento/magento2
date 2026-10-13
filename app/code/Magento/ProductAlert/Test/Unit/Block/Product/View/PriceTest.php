@@ -9,10 +9,12 @@ namespace Magento\ProductAlert\Test\Unit\Block\Product\View;
 
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Layout;
 use Magento\ProductAlert\Block\Product\View\Price;
 use Magento\ProductAlert\Helper\Data;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -21,6 +23,8 @@ use PHPUnit\Framework\TestCase;
  */
 class PriceTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var MockObject|Data
      */
@@ -53,18 +57,15 @@ class PriceTest extends TestCase
             Data::class,
             ['isPriceAlertAllowed', 'getSaveUrl']
         );
-        $this->_product = $this->getMockBuilder(Product::class)
-            ->addMethods(['getCanShowPrice'])
-            ->onlyMethods(['getId', '__wakeup'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->_product->expects($this->any())->method('getId')->willReturn(1);
-        $this->_registry = $this->getMockBuilder(
-            Registry::class
-        )->disableOriginalConstructor()
-            ->onlyMethods(
+        $this->_product = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getCanShowPrice', 'getId', '__wakeup']
+        );
+        $this->_product->method('getId')->willReturn(1);
+        $this->_registry = $this->createPartialMock(
+            Registry::class,
             ['registry']
-        )->getMock();
+        );
         $this->_block = $objectManager->getObject(
             Price::class,
             ['helper' => $this->_helper, 'registry' => $this->_registry]
@@ -107,9 +108,8 @@ class PriceTest extends TestCase
     /**
      * @param bool $priceAllowed
      * @param bool $showProductPrice
-     *
-     * @dataProvider setTemplatePriceAlertNotAllowedDataProvider
      */
+    #[DataProvider('setTemplatePriceAlertNotAllowedDataProvider')]
     public function testSetTemplatePriceAlertNotAllowed($priceAllowed, $showProductPrice)
     {
         $this->_helper->expects($this->once())->method('isPriceAlertAllowed')->willReturn($priceAllowed);

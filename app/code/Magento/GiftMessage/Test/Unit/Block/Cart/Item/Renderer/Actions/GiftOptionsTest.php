@@ -40,23 +40,13 @@ class GiftOptionsTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->contextMock = $this->createMock(Context::class);
 
-        $this->jsonEncoderMock = $this->getMockBuilder(Encoder::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->jsonEncoderMock = $this->createMock(Encoder::class);
 
-        $this->compositeConfigProvider = $this->getMockBuilder(CompositeConfigProvider::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->compositeConfigProvider = $this->createMock(CompositeConfigProvider::class);
 
-        $this->layoutProcessorMock = $this->getMockBuilder(
-            LayoutProcessorInterface::class
-        )
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->layoutProcessorMock = $this->createMock(LayoutProcessorInterface::class);
 
         $this->model = new GiftOptions(
             $this->contextMock,
@@ -71,9 +61,7 @@ class GiftOptionsTest extends TestCase
         /**
          * @var Item|MockObject $itemMock
          */
-        $itemMock = $this->getMockBuilder(Item::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $itemMock = $this->createMock(Item::class);
 
         $this->layoutProcessorMock->expects($this->once())
             ->method('process')

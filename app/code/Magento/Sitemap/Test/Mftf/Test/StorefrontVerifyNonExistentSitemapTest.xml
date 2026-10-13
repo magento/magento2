@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontVerifyNonExistentSitemapTest">
+        <annotations>
+            <features value="Sitemap"/>
+            <stories value="SEO - Sitemap 404 response"/>
+            <title value="Non-existent sitemap returns 404 instead of placeholder image"/>
+            <description value="Non-existent sitemap returns 404, not placeholder image"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-14295"/>
+            <group value="sitemap"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!--Navigate to Marketing->Sitemap Page -->
+            <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToMarketingSiteMapPage">
+                <argument name="menuUiId" value="{{AdminMenuMarketing.dataUiId}}"/>
+                <argument name="submenuUiId" value="{{AdminMenuSEOAndSearchSiteMap.dataUiId}}"/>
+            </actionGroup>
+            <!-- Navigate To New Sitemap Page -->
+            <actionGroup ref="AdminMarketingSiteMapNavigateNewActionGroup" stepKey="navigateToNewSitemapPage"/>
+            <!-- Create Sitemap Entity -->
+            <actionGroup ref="AdminMarketingSiteMapFillFormSaveAndGenerateActionGroup" stepKey="createAndGenerateSitemap">
+                <argument name="sitemap" value="UniqueSitemapName"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Sitemap data cleanup -->
+            <actionGroup ref="AdminMarketingSiteDeleteGeneratedSitemapByNameActionGroup" stepKey="deleteCreatedSitemap">
+                <argument name="filename" value="{{UniqueSitemapName.filename}}"/>
+            </actionGroup>
+            <actionGroup ref="AssertSiteMapDeleteSuccessActionGroup" stepKey="assertSuccessMessage"/>
+            <actionGroup ref="AdminMarketingSitemapSearchActionGroup" stepKey="searchDeletedSitemap">
+                <argument name="filename" value="{{UniqueSitemapName.filename}}"/>
+            </actionGroup>
+            <actionGroup ref="AssertAdminSitemapIsNotInGridActionGroup" stepKey="dontSeeEntity">
+                <argument name="filename" value="{{UniqueSitemapName.filename}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <!-- Step 1: Verify created sitemap exists and returns 200 OK (proves fix doesn't break existing functionality) -->
+        <helper class="\Magento\Sitemap\Test\Mftf\Helper\SitemapHelper" method="getHttpStatusCode" stepKey="getExistingSitemapStatus">
+            <argument name="url">{{_ENV.MAGENTO_BASE_URL}}pub/{{UniqueSitemapName.filename}}</argument>
+        </helper>
+        <assertEquals stepKey="assertExistingSitemapReturns200">
+            <actualResult type="variable">$getExistingSitemapStatus</actualResult>
+            <expectedResult type="int">200</expectedResult>
+        </assertEquals>
+        <helper class="\Magento\Sitemap\Test\Mftf\Helper\SitemapHelper" method="responseContains" stepKey="checkSitemapContainsXml">
+            <argument name="url">{{_ENV.MAGENTO_BASE_URL}}pub/{{UniqueSitemapName.filename}}</argument>
+            <argument name="searchText"><![CDATA[<urlset]]></argument>
+        </helper>
+        <assertTrue stepKey="assertSitemapHasXmlContent">
+            <actualResult type="variable">$checkSitemapContainsXml</actualResult>
+        </assertTrue>
+        <!-- Step 2: Verify non-existent sitemap returns 404, not placeholder image (the actual bug) -->
+        <helper class="\Magento\Sitemap\Test\Mftf\Helper\SitemapHelper" method="getHttpStatusCode" stepKey="getNonExistentSitemapStatus">
+            <argument name="url">{{_ENV.MAGENTO_BASE_URL}}pub/sitemap/foobarbaz</argument>
+        </helper>
+        <assertEquals stepKey="assertNonExistentSitemapReturns404">
+            <actualResult type="variable">$getNonExistentSitemapStatus</actualResult>
+            <expectedResult type="int">404</expectedResult>
+        </assertEquals>
+        <helper class="\Magento\Sitemap\Test\Mftf\Helper\SitemapHelper" method="isImageContentType" stepKey="checkIfResponseIsImage">
+            <argument name="url">{{_ENV.MAGENTO_BASE_URL}}pub/sitemap/foobarbaz</argument>
+        </helper>
+        <assertFalse stepKey="assertNotReturningImage">
+            <actualResult type="variable">$checkIfResponseIsImage</actualResult>
+        </assertFalse>
+    </test>
+</tests>

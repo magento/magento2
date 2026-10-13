@@ -9,6 +9,7 @@ namespace Magento\ImportExport\Test\Unit\Model;
 
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\ImportExport\Model\LocalizedFileName;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -46,8 +47,8 @@ class LocalizedFileNameTest extends TestCase
     /**
      * @param string $filename
      * @param string $displayName
-     * @dataProvider getFileDisplayNameDataProvider
      */
+    #[DataProvider('getFileDisplayNameDataProvider')]
     public function testGetFileDisplayName(string $filename, string $displayName): void
     {
         $this->timezone

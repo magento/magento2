@@ -11,6 +11,7 @@ use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\DB\Select;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Rule\Model\Condition\AbstractCondition;
 use Magento\Rule\Model\Condition\Combine;
@@ -22,6 +23,7 @@ use PHPUnit\Framework\TestCase;
 
 class BuilderTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Builder|MockObject
      */
@@ -51,23 +53,17 @@ class BuilderTest extends TestCase
      */
     public function testAttachConditionToCollection(): void
     {
-        $collection = $this->getMockBuilder(AbstractCollection::class)
-            ->addMethods(['getStoreId', 'getDefaultStoreId'])
-            ->onlyMethods(['getResource', 'getSelect'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $collection = $this->createPartialMockWithReflection(
+            AbstractCollection::class,
+            ['getResource', 'getSelect', 'getStoreId', 'getDefaultStoreId']
+        );
         $combine = $this->createPartialMock(Combine::class, ['getConditions']);
         $resource = $this->createPartialMock(Mysql::class, ['getConnection']);
         $select = $this->createPartialMock(Select::class, ['where']);
         $select->expects($this->never())
             ->method('where');
 
-        $connection = $this->getMockForAbstractClass(
-            AdapterInterface::class,
-            [],
-            '',
-            false
-        );
+        $connection = $this->createMock(AdapterInterface::class);
 
         $collection->expects($this->once())
             ->method('getResource')
@@ -94,13 +90,8 @@ class BuilderTest extends TestCase
      */
     public function testAttachConditionAsHtmlToCollection(): void
     {
-        $abstractCondition = $this->getMockForAbstractClass(
+        $abstractCondition = $this->createPartialMockWithReflection(
             AbstractCondition::class,
-            [],
-            '',
-            false,
-            false,
-            true,
             ['getOperatorForValidate', 'getMappedSqlField', 'getAttribute', 'getBindArgumentValue']
         );
 
@@ -119,22 +110,16 @@ class BuilderTest extends TestCase
                 'getSelect'
             ]
         );
-        $combine = $this->getMockBuilder(Combine::class)
-            ->addMethods(['getAggregator'])
-            ->onlyMethods(['getConditions', 'getValue'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $combine = $this->createPartialMockWithReflection(
+            Combine::class,
+            ['getConditions', 'getValue', 'getAggregator']
+        );
 
         $resource = $this->createPartialMock(Mysql::class, ['getConnection']);
         $select = $this->createPartialMock(Select::class, ['where']);
         $select->expects($this->never())->method('where');
 
-        $connection = $this->getMockForAbstractClass(
-            AdapterInterface::class,
-            ['quoteInto'],
-            '',
-            false
-        );
+        $connection = $this->createMock(AdapterInterface::class);
 
         $connection->expects($this->once())->method('quoteInto')->with(' > ?', 10)->willReturn(' > 10');
         $collection->expects($this->once())->method('getResource')->willReturn($resource);

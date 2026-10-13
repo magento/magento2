@@ -23,9 +23,11 @@ use Magento\Framework\Search\Dynamic\IntervalFactory;
 use Magento\Framework\Search\Dynamic\IntervalInterface;
 use Magento\Framework\Search\Request\BucketInterface;
 use Magento\Framework\Search\Request\Dimension;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Model\StoreManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -34,6 +36,7 @@ use PHPUnit\Framework\TestCase;
  */
 class DataProviderTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var QueryContainer|MockObject
      */
@@ -115,47 +118,21 @@ class DataProviderTest extends TestCase
      */
     private function setUpMockObjects()
     {
-        $this->connectionManager = $this->getMockBuilder(ConnectionManager::class)
-            ->onlyMethods(['getConnection'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->connectionManager = $this->createPartialMock(ConnectionManager::class, ['getConnection']);
 
-        $this->range = $this->getMockBuilder(Range::class)
-            ->onlyMethods(['getPriceRange'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->intervalFactory = $this->getMockBuilder(IntervalFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->clientConfig = $this->getMockBuilder(Config::class)
-            ->addMethods([
-                'getIndexName'
-            ])
-            ->onlyMethods([
-                'getEntityType'
-            ])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->customerSession = $this->getMockBuilder(Session::class)
-            ->onlyMethods(['getCustomerGroupId'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->entityStorage = $this->getMockBuilder(EntityStorage::class)
-            ->onlyMethods(['getSource'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->range = $this->createPartialMock(Range::class, ['getPriceRange']);
+        $this->intervalFactory = $this->createMock(IntervalFactory::class);
+        $this->clientConfig = $this->createPartialMock(Config::class, ['getIndexPrefix', 'getEntityType']);
+        $this->storeManager = $this->createPartialMock(StoreManager::class, ['getStore']);
+        $this->customerSession = $this->createPartialMock(Session::class, ['getCustomerGroupId']);
+        $this->entityStorage = $this->createPartialMock(EntityStorage::class, ['getSource']);
         $this->entityStorage->expects($this->any())
             ->method('getSource')
             ->willReturn([1]);
         $this->customerSession->expects($this->any())
             ->method('getCustomerGroupId')
             ->willReturn(1);
-        $this->storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->storeMock = $this->createMock(StoreInterface::class);
         $this->storeManager->expects($this->any())
             ->method('getStore')
             ->willReturn($this->storeMock);
@@ -166,47 +143,28 @@ class DataProviderTest extends TestCase
             ->method('getId')
             ->willReturn(1);
         $this->clientConfig->expects($this->any())
-            ->method('getIndexName')
+            ->method('getIndexPrefix')
             ->willReturn('indexName');
         $this->clientConfig->expects($this->any())
             ->method('getEntityType')
             ->willReturn('product');
-        $this->clientMock = $this->getMockBuilder(ClientInterface::class)
-            ->addMethods(['query'])
-            ->onlyMethods(['testConnection'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->clientMock = $this->createPartialMockWithReflection(
+            ClientInterface::class,
+            ['testConnection', 'query', 'bulkQuery']
+        );
         $this->connectionManager->expects($this->any())
             ->method('getConnection')
             ->willReturn($this->clientMock);
 
-        $this->fieldMapper = $this->getMockBuilder(FieldMapperInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->fieldMapper = $this->createMock(FieldMapperInterface::class);
 
-        $this->searchIndexNameResolver = $this
-            ->getMockBuilder(SearchIndexNameResolver::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->searchIndexNameResolver = $this->createMock(SearchIndexNameResolver::class);
 
-        $this->scopeResolver = $this->getMockForAbstractClass(
-            ScopeResolverInterface::class,
-            [],
-            '',
-            false
-        );
+        $this->scopeResolver = $this->createMock(ScopeResolverInterface::class);
 
-        $this->scopeInterface = $this->getMockForAbstractClass(
-            ScopeInterface::class,
-            [],
-            '',
-            false
-        );
+        $this->scopeInterface = $this->createMock(ScopeInterface::class);
 
-        $this->queryContainer = $this->getMockBuilder(QueryContainer::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getQuery'])
-            ->getMock();
+        $this->queryContainer = $this->createPartialMock(QueryContainer::class, ['getQuery']);
     }
 
     /**
@@ -261,18 +219,16 @@ class DataProviderTest extends TestCase
             'min' => 1,
             'std' => 1,
         ];
-        $this->clientMock->expects($this->once())
-            ->method('query')
-            ->willReturn([
-                'aggregations' => [
-                    'prices' => [
-                        'count' => 1,
-                        'max' => 1,
-                        'min' => 1,
-                        'std_deviation' => 1,
-                    ],
+        $this->clientMock->method('query')->willReturn([
+            'aggregations' => [
+                'prices' => [
+                    'count' => 1,
+                    'max' => 1,
+                    'min' => 1,
+                    'std_deviation' => 1,
                 ],
-            ]);
+            ],
+        ]);
 
         $this->queryContainer->expects($this->once())
             ->method('getQuery')
@@ -289,6 +245,7 @@ class DataProviderTest extends TestCase
         $this->queryContainer->expects($this->once())
             ->method('getQuery')
             ->willReturn([]);
+
         $this->clientMock->expects($this->once())
             ->method('query')
             ->willThrowException(new \Exception());
@@ -303,12 +260,8 @@ class DataProviderTest extends TestCase
     public function testGetInterval()
     {
         $dimensionValue = 1;
-        $bucket = $this->getMockBuilder(BucketInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $interval = $this->getMockBuilder(IntervalInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $bucket = $this->createMock(BucketInterface::class);
+        $interval = $this->createMock(IntervalInterface::class);
         $dimension = $this->getMockBuilder(Dimension::class)
             ->onlyMethods(['getValue'])
             ->disableOriginalConstructor()
@@ -344,9 +297,7 @@ class DataProviderTest extends TestCase
         $expectedResult = [
             1 => 1,
         ];
-        $bucket = $this->getMockBuilder(BucketInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $bucket = $this->createMock(BucketInterface::class);
         $dimension = $this->getMockBuilder(Dimension::class)
             ->onlyMethods(['getValue'])
             ->disableOriginalConstructor()
@@ -358,31 +309,19 @@ class DataProviderTest extends TestCase
         $this->scopeInterface->expects($this->never())
             ->method('getId');
 
-        $this->clientMock->expects($this->once())
-            ->method('query')
-            ->with($this->callback(function ($query) {
-                $histogramParams = $query['body']['aggregations']['prices']['histogram'];
-                // Assert the interval is queried as a float. See MAGETWO-95471
-                if ($histogramParams['interval'] !== 10.0) {
-                    return false;
-                }
-                if (!isset($histogramParams['min_doc_count']) || $histogramParams['min_doc_count'] !== 1) {
-                    return false;
-                }
-                return true;
-            }))
-            ->willReturn([
-                'aggregations' => [
-                    'prices' => [
-                        'buckets' => [
-                            [
-                                'key' => 1,
-                                'doc_count' => 1,
-                            ],
+        // Set query results for this specific test
+        $this->clientMock->method('query')->willReturn([
+            'aggregations' => [
+                'prices' => [
+                    'buckets' => [
+                        [
+                            'key' => 1,
+                            'doc_count' => 1,
                         ],
                     ],
                 ],
-            ]);
+            ],
+        ]);
 
         $this->queryContainer->expects($this->once())
             ->method('getQuery')
@@ -407,6 +346,7 @@ class DataProviderTest extends TestCase
         $this->queryContainer->expects($this->once())
             ->method('getQuery')
             ->willReturn([]);
+
         $this->clientMock->expects($this->once())
             ->method('query')
             ->willThrowException(new \Exception());

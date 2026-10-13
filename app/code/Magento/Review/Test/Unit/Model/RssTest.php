@@ -40,7 +40,7 @@ class RssTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->managerInterface = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->managerInterface = $this->createMock(ManagerInterface::class);
         $this->reviewFactory = $this->createPartialMock(ReviewFactory::class, ['create']);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);

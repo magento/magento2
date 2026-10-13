@@ -24,6 +24,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\Eav\Model\Entity\Attribute\Frontend\DefaultFrontend;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * @SuppressWarnings(PHPMD.LongVariable)
@@ -31,6 +32,7 @@ use Magento\Eav\Model\Entity\Attribute\Frontend\DefaultFrontend;
  */
 class VariationHandlerTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var VariationHandler
      */
@@ -88,7 +90,10 @@ class VariationHandlerTest extends TestCase
             Configurable::class
         );
 
-        $this->product = new \Magento\Catalog\Test\Unit\Helper\ProductTestHelper();
+        $this->product = $this->createPartialMockWithReflection(
+            Product::class,
+            ['setTypeId', 'setAttributeSetId', 'setWebsiteIds', 'setStoreId', 'setVisibility', 'setStatus']
+        );
 
         $this->model = $this->objectHelper->getObject(
             VariationHandler::class,
@@ -104,12 +109,19 @@ class VariationHandlerTest extends TestCase
 
     public function testPrepareAttributeSet()
     {
-        $productMock = new \Magento\Catalog\Test\Unit\Helper\ProductTestHelper();
-        $attributeMock = new \Magento\Eav\Test\Unit\Helper\AttributeTestHelper();
+        $productMock = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getAttributeSetId', 'setAttributeSetId', 'getNewVariationsAttributeSetId']
+        );
+        $attributeMock = $this->createPartialMockWithReflection(
+            Attribute::class,
+            ['isInSet', 'setAttributeSetId', 'setAttributeGroupId', 'save']
+        );
         $attributeSetMock = $this->createPartialMock(Set::class, ['load', 'addSetInfo', 'getDefaultGroupId']);
         $eavEntityMock = $this->createPartialMock(Entity::class, ['setType', 'getTypeId']);
 
-        // $productMock anonymous class returns 'new_attr_set_id' for getNewVariationsAttributeSetId()
+        // Configure product mock to return 'new_attr_set_id' for getNewVariationsAttributeSetId()
+        $productMock->method('getNewVariationsAttributeSetId')->willReturn('new_attr_set_id');
         $this->configurableProduct->expects($this->once())
             ->method('getUsedProductAttributes')
             ->with($productMock)
@@ -120,7 +132,10 @@ class VariationHandlerTest extends TestCase
         $eavEntityMock->expects($this->once())->method('setType')->with('catalog_product')->willReturnSelf();
         $eavEntityMock->expects($this->once())->method('getTypeId')->willReturn('type_id');
         $attributeSetMock->expects($this->once())->method('addSetInfo')->with('type_id', [$attributeMock]);
-        // Configure AttributeTestHelper with expected values
+        // Configure attribute mock with expected values
+        $attributeMock->method('isInSet')->willReturn(false);
+        $attributeMock->method('setAttributeSetId')->with('new_attr_set_id')->willReturnSelf();
+        $attributeMock->method('setAttributeGroupId')->with('default_group_id')->willReturnSelf();
         $attributeSetMock->expects($this->once())
             ->method('getDefaultGroupId')
             ->with('new_attr_set_id')
@@ -163,27 +178,53 @@ class VariationHandlerTest extends TestCase
             'is_decimal_divided' => 0
         ];
 
-        $parentProductMock = new \Magento\Catalog\Test\Unit\Helper\ProductTestHelper();
-        $newSimpleProductMock = new \Magento\Catalog\Test\Unit\Helper\ProductTestHelper();
-        $editableAttributeMock = new \Magento\Eav\Test\Unit\Helper\AttributeTestHelper();
+        $parentProductMock = $this->createPartialMockWithReflection(
+            Product::class,
+            [
+                'getStoreId', 'setStoreId', 'getWebsiteIds', 'setWebsiteIds', 'getCategoryIds', 'setCategoryIds',
+                'getTypeId', 'setTypeId', 'getNewVariationsAttributeSetId', 'getStockData',
+                'getQuantityAndStockStatus', 'getData'
+            ]
+        );
+        $newSimpleProductMock = $this->createPartialMockWithReflection(
+            Product::class,
+            [
+                'setStoreId', 'setWebsiteIds', 'setCategoryIds', 'setTypeId', 'setAttributeSetId',
+                'setVisibility', 'setStatus', 'setData', 'setId', 'save', 'getId', 'getTypeInstance', 'addData'
+            ]
+        );
+        $editableAttributeMock = $this->createPartialMockWithReflection(
+            Attribute::class,
+            ['getIsVisible', 'setIsVisible', 'getAttributeCode', 'setAttributeCode', 'getFrontend', 'setFrontend']
+        );
 
-        // Create mock for frontend attribute
         $frontendAttributeMock = $this->createMock(DefaultFrontend::class);
         $frontendAttributeMock->method('getInputType')->willReturn('input_type');
 
-        // Helper classes provide default return values
-        $this->productFactoryMock->expects($this->once())->method('create')->willReturn($newSimpleProductMock);
-        // ProductTestHelper methods return $this by default for fluent interface
-        // Anonymous class returns empty array by default for getSetAttributes
-        // Configure AttributeTestHelper with expected values
+        $typeInstanceMock = $this->createPartialMockWithReflection(
+            Type::class,
+            ['getSetAttributes']
+        );
+        $typeInstanceMock->method('getSetAttributes')->willReturn([]);
+
+        $this->productFactoryMock->method('create')->willReturn($newSimpleProductMock);
+        $newSimpleProductMock->method('setStoreId')->willReturnSelf();
+        $newSimpleProductMock->method('setTypeId')->willReturnSelf();
+        $newSimpleProductMock->method('setAttributeSetId')->willReturnSelf();
+        $newSimpleProductMock->method('setWebsiteIds')->willReturnSelf();
+        $newSimpleProductMock->method('setVisibility')->willReturnSelf();
+        $newSimpleProductMock->method('setStatus')->willReturnSelf();
+        $newSimpleProductMock->method('addData')->willReturnSelf();
+        $newSimpleProductMock->method('getTypeInstance')->willReturn($typeInstanceMock);
+        $newSimpleProductMock->method('getId')->willReturn('product_id');
+        $newSimpleProductMock->method('save')->willReturnSelf();
         $editableAttributeMock->setData('frontend', $frontendAttributeMock);
-        // Frontend mock returns 'input_type' for getInputType()
-        // Configure helper objects with expected values
-        $parentProductMock->setData('stock_data', $stockData);
-        $parentProductMock->setData('quantity_and_stock_status', ['is_in_stock' => 1]);
-        $parentProductMock->setData('website_ids', 'website_id');
-        // ProductTestHelper methods return $this by default, configure expected ID
-        $newSimpleProductMock->setId('product_id');
+        // Configure parent product mock with expected values
+        $parentProductMock->method('getNewVariationsAttributeSetId')->willReturn('attribute_set_id');
+        $parentProductMock->method('getStockData')->willReturn($stockData);
+        $parentProductMock->method('getQuantityAndStockStatus')->willReturn(['is_in_stock' => 1]);
+        $parentProductMock->method('getWebsiteIds')->willReturn(['website_id']);
+        $parentProductMock->method('getData')->willReturn(null);
 
         $this->assertEquals(['product_id'], $this->model->generateSimpleProducts($parentProductMock, $productsData));
     }
@@ -211,7 +252,6 @@ class VariationHandlerTest extends TestCase
 
     public function testProcessMediaGalleryWithImagesAndGallery()
     {
-        // $this->product anonymous class returns [] for getMediaGallery()
         $productData['image'] = 'test';
         $productData['media_gallery']['images'] = [
             [
@@ -224,7 +264,6 @@ class VariationHandlerTest extends TestCase
 
     public function testProcessMediaGalleryIfImageIsEmptyButProductMediaGalleryIsNotEmpty()
     {
-        // $this->product anonymous class returns [] for getMediaGallery()
         $productData['image'] = false;
         $productData['media_gallery']['images'] = [
             [
@@ -237,7 +276,6 @@ class VariationHandlerTest extends TestCase
 
     public function testProcessMediaGalleryIfProductDataHasNoImagesAndGallery()
     {
-        // $this->product anonymous class returns [] for getMediaGallery()
         $productData['image'] = false;
         $productData['media_gallery']['images'] = false;
         $result = $this->model->processMediaGallery($this->product, $productData);

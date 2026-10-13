@@ -59,7 +59,7 @@ class CountryInformationAcquirer implements \Magento\Directory\Api\CountryInform
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCountriesInfo()
     {
@@ -78,14 +78,16 @@ class CountryInformationAcquirer implements \Magento\Directory\Api\CountryInform
         $regions = $this->directoryHelper->getRegionData();
         foreach ($countries as $data) {
             $countryInfo = $this->setCountryInfo($data, $regions, $storeLocale);
-            $countriesInfo[] = $countryInfo;
+            if (!empty($countryInfo->getFullNameLocale())) {
+                $countriesInfo[] = $countryInfo;
+            }
         }
 
         return $countriesInfo;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCountryInfo($countryId)
     {
@@ -108,6 +110,15 @@ class CountryInformationAcquirer implements \Magento\Directory\Api\CountryInform
             );
         }
         $countryInfo = $this->setCountryInfo($country, $regions, $storeLocale);
+
+        // Add validation for obsolete countries without translations
+        if (empty($countryInfo->getFullNameLocale())) {
+            throw new NoSuchEntityException(
+                __(
+                    "The country isn't available."
+                )
+            );
+        }
 
         return $countryInfo;
     }

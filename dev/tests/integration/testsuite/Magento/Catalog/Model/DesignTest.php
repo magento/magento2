@@ -16,9 +16,12 @@ use Magento\Framework\View\Result\Page;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Theme\Model\Theme;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test class for \Magento\Catalog\Model\Design.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DesignTest extends TestCase
 {
@@ -42,10 +45,10 @@ class DesignTest extends TestCase
     }
 
     /**
-     * @dataProvider getThemeModel
      * @param Theme $theme
      * @return void
      */
+    #[DataProvider('getThemeModel')]
     public function testApplyCustomDesign(Theme $theme): void
     {
         $this->model->applyCustomDesign($theme);
@@ -62,9 +65,9 @@ class DesignTest extends TestCase
      * @magentoDataFixture Magento/Catalog/_files/simple_product_with_custom_design.php
      * @param array $designSettings
      * @param array $expectedSetting
-     * @dataProvider getDesignSettingsForProductWithScheduleDesignTest
      * @return void
      */
+    #[DataProvider('getDesignSettingsForProductWithScheduleDesignTest')]
     public function testGetDesignSettingsForProductWithScheduleDesign(
         array $designSettings,
         array $expectedSetting

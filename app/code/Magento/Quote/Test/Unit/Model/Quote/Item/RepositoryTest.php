@@ -14,10 +14,9 @@ use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartItemInterfaceFactory;
 use Magento\Quote\Model\Quote;
-use Magento\Quote\Test\Unit\Helper\QuoteTestHelper;
 use Magento\Quote\Model\Quote\Address;
-use Magento\Quote\Test\Unit\Helper\QuoteAddressTestHelper;
 use Magento\Quote\Model\Quote\Item;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Quote\Model\Quote\Item\CartItemOptionsProcessor;
 use Magento\Quote\Model\Quote\Item\Repository;
 use Magento\Quote\Model\Quote\Item\CartItemValidatorInterface;
@@ -31,6 +30,8 @@ use PHPUnit\Framework\TestCase;
  */
 class RepositoryTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Repository
      */
@@ -104,8 +105,8 @@ class RepositoryTest extends TestCase
         $this->productMock = $this->createMock(Product::class);
         $this->quoteItemMock = $this->createMock(Item::class);
         $this->customOptionProcessor = $this->createMock(CustomOptionProcessor::class);
-        $this->shippingAddressMock = $this->createPartialMock(
-            QuoteAddressTestHelper::class,
+        $this->shippingAddressMock = $this->createPartialMockWithReflection(
+            Address::class,
             ['setCollectShippingRates']
         );
         $this->optionsProcessorMock = $this->createMock(CartItemOptionsProcessor::class);
@@ -134,8 +135,8 @@ class RepositoryTest extends TestCase
         $cartId = 13;
         $itemId = 20;
 
-        $quoteMock = $this->createPartialMock(
-            QuoteTestHelper::class,
+        $quoteMock = $this->createPartialMockWithReflection(
+            Quote::class,
             ['getLastAddedItem', 'getItems', 'setItems', 'collectTotals']
         );
 
@@ -174,7 +175,6 @@ class RepositoryTest extends TestCase
     {
         $reflection = new \ReflectionClass(get_class($object));
         $method = $reflection->getMethod($methodName);
-        $method->setAccessible(true);
 
         return $method->invokeArgs($object, $parameters);
     }

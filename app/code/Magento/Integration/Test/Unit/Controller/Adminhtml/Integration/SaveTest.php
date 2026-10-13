@@ -22,6 +22,10 @@ use Magento\Integration\Model\Integration as IntegrationModel;
 use Magento\Integration\Test\Unit\Controller\Adminhtml\IntegrationTestCase;
 use Magento\Security\Model\AdminSessionsManager;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+
 class SaveTest extends IntegrationTestCase
 {
     public function testSaveAction()

@@ -28,5 +28,7 @@
         <element name="roleNameFilterTextField" type="input" selector="#permissionsUserRolesGrid_filter_role_name"/>
         <element name="searchButton" type="button" selector=".admin__data-grid-header button[title=Search]"/>
         <element name="searchResultFirstRow" type="text" selector=".data-grid>tbody>tr"/>
+        <element name="resourceTreeCollapseAll" type="button" selector="//div[@data-role='resource-tree']/button[not(preceding-sibling::button) and following-sibling::ul]"/>
+        <element name="resourceTreeExpandAll" type="button" selector="//div[@data-role='resource-tree']/button[preceding-sibling::button and following-sibling::button and following-sibling::ul]"/>
     </section>
 </sections>

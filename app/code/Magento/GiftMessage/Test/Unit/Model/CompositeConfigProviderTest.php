@@ -26,7 +26,7 @@ class CompositeConfigProviderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->configProviderMock = $this->getMockForAbstractClass(ConfigProviderInterface::class);
+        $this->configProviderMock = $this->createMock(ConfigProviderInterface::class);
         $this->model = new CompositeConfigProvider([$this->configProviderMock]);
     }
 

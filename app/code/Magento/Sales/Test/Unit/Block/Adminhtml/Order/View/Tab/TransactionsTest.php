@@ -19,6 +19,7 @@ use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Test\Unit\Block\Adminhtml\Order\View\Tab\Stub\OnlineMethod;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -92,8 +93,8 @@ class TransactionsTest extends TestCase
      * @param string $methodClass
      * @param bool $expectedResult
      * @depends testGetOrder
-     * @dataProvider canShowTabDataProvider
      */
+    #[DataProvider('canShowTabDataProvider')]
     public function testCanShowTab($methodClass, $expectedResult)
     {
         $methodInstance = $this->objectManager->getObject($methodClass);
@@ -121,8 +122,8 @@ class TransactionsTest extends TestCase
     /**
      * @param bool $isAllowed
      * @param bool $expectedResult
-     * @dataProvider isHiddenDataProvider
      */
+    #[DataProvider('isHiddenDataProvider')]
     public function testIsHidden($isAllowed, $expectedResult)
     {
         $this->authorizationMock->expects($this->any())

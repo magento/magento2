@@ -18,6 +18,7 @@ use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\UrlInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -72,14 +73,13 @@ class PostTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->mailMock = $this->getMockBuilder(MailInterface::class)
-            ->getMockForAbstractClass();
+        $this->mailMock = $this->createMock(MailInterface::class);
         $contextMock = $this->createPartialMock(
             Context::class,
             ['getRequest', 'getResponse', 'getResultRedirectFactory', 'getUrl', 'getRedirect', 'getMessageManager']
         );
-        $this->urlMock = $this->getMockForAbstractClass(UrlInterface::class);
-        $this->messageManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->urlMock = $this->createMock(UrlInterface::class);
+        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
         $this->requestStub = $this->createPartialMock(
             Http::class,
             ['getPostValue', 'getParams', 'getParam', 'isPost']
@@ -96,15 +96,14 @@ class PostTest extends TestCase
             ->method('create')
             ->willReturn($this->redirectResultMock);
 
-        $this->dataPersistorMock = $this->getMockBuilder(DataPersistorInterface::class)
-            ->getMockForAbstractClass();
+        $this->dataPersistorMock = $this->createMock(DataPersistorInterface::class);
 
         $contextMock->expects($this->any())
             ->method('getRequest')
             ->willReturn($this->requestStub);
         $contextMock->expects($this->any())
             ->method('getResponse')
-            ->willReturn($this->getMockForAbstractClass(ResponseInterface::class));
+            ->willReturn($this->createMock(ResponseInterface::class));
         $contextMock->expects($this->any())
             ->method('getMessageManager')
             ->willReturn($this->messageManagerMock);
@@ -138,8 +137,8 @@ class PostTest extends TestCase
      * Test exceute post validation
      *
      * @param array $postData
-     * @dataProvider postDataProvider
      */
+    #[DataProvider('postDataProvider')]
     public function testExecutePostValidation($postData): void
     {
         $this->stubRequestPostData($postData);

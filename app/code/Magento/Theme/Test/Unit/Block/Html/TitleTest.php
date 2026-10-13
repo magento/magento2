@@ -17,6 +17,7 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Theme\Block\Html\Title;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test class for \Magento\Theme\Block\Html\Title
@@ -67,7 +68,7 @@ class TitleTest extends TestCase
             ['pageConfig' => $this->pageConfigMock]
         );
 
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
 
         $this->htmlTitle = $this->objectManagerHelper->getObject(
             Title::class,
@@ -96,8 +97,8 @@ class TitleTest extends TestCase
      * @param bool $shouldTranslateTitle
      *
      * @return void
-     * @dataProvider dataProviderShouldTranslateTitle
      */
+    #[DataProvider('dataProviderShouldTranslateTitle')]
     public function testGetPageTitle($shouldTranslateTitle)
     {
         $this->scopeConfigMock->method('isSetFlag')
@@ -127,8 +128,8 @@ class TitleTest extends TestCase
      * @param bool $shouldTranslateTitle
      *
      * @return void
-     * @dataProvider dataProviderShouldTranslateTitle
      */
+    #[DataProvider('dataProviderShouldTranslateTitle')]
     public function testGetPageHeadingWithSetPageTitle($shouldTranslateTitle)
     {
         $this->scopeConfigMock->method('isSetFlag')
@@ -156,8 +157,8 @@ class TitleTest extends TestCase
      * @param bool $shouldTranslateTitle
      *
      * @return void
-     * @dataProvider dataProviderShouldTranslateTitle
      */
+    #[DataProvider('dataProviderShouldTranslateTitle')]
     public function testGetPageHeading($shouldTranslateTitle)
     {
         $this->scopeConfigMock->method('isSetFlag')

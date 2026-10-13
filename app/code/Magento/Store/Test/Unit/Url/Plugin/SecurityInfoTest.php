@@ -28,7 +28,7 @@ class SecurityInfoTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->_scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->_model = new SecurityInfo($this->_scopeConfigMock);
     }
 

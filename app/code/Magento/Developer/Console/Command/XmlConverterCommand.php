@@ -24,17 +24,17 @@ class XmlConverterCommand extends Command
     /**
      * XML file argument name constant
      */
-    const XML_FILE_ARGUMENT = 'xml-file';
+    public const XML_FILE_ARGUMENT = 'xml-file';
 
     /**
      * Processor argument constant
      */
-    const PROCESSOR_ARGUMENT = 'processor';
+    public const PROCESSOR_ARGUMENT = 'processor';
 
     /**
      * Overwrite option constant
      */
-    const OVERWRITE_OPTION = 'overwrite';
+    public const OVERWRITE_OPTION = 'overwrite';
 
     /**
      * @var Formatter
@@ -71,7 +71,7 @@ class XmlConverterCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -101,9 +101,9 @@ class XmlConverterCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {
             $domXml = $this->domFactory->create();
@@ -123,6 +123,7 @@ class XmlConverterCommand extends Command
             $result = $this->formatter->format($transformedDoc);
 
             if ($input->getOption(self::OVERWRITE_OPTION)) {
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 file_put_contents($input->getArgument(self::XML_FILE_ARGUMENT), $result);
                 $output->writeln("<info>You saved converted XML into $xmlFile</info>");
             } else {

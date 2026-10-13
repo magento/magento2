@@ -14,5 +14,7 @@
         <element name="shippingMethod" type="radio" selector="//div[@class='block block-shipping'][position()={{shippingBlockPosition}}]//dd[position()={{shippingMethodPosition}}]" parameterized="true" timeout="5"/>
         <element name="goToBillingInfo" type="button" selector=".action.primary.continue"/>
         <element name="productDetails" type="text" selector="//a[text()='{{var1}}']/../../..//td[@class='col qty' and text()='{{var2}}']" parameterized="true"/>
+        <element name="firstShippingMethodForCity" type="radio" selector="//form[contains(@id, 'shipping_method_form')]//address[contains(., '{{city}}')]/ancestor::div[contains(@class, 'block-content')]//div[contains(@class, 'box-shipping-method')]//input[@type='radio'][1]" parameterized="true" timeout="30"/>
+        <element name="shippingMethodBoxForCity" type="block" selector="//form[contains(@id, 'shipping_method_form')]//address[contains(., '{{city}}')]/ancestor::div[contains(@class, 'block-content')]//div[contains(@class, 'box-shipping-method')]" parameterized="true" timeout="30"/>
     </section>
 </sections>

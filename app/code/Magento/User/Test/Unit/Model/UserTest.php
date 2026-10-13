@@ -33,9 +33,7 @@ class UserTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->userDataMock = $this->getMockBuilder(UserHelper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->userDataMock = $this->createMock(UserHelper::class);
 
         $objectManagerHelper = new ObjectManager($this);
         $this->model = $objectManagerHelper->getObject(

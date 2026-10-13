@@ -33,8 +33,7 @@ class CollectorFactoryTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->getMockForAbstractClass();
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
 
         $this->model = new CollectorFactory(
             $this->objectManagerMock,
@@ -48,8 +47,7 @@ class CollectorFactoryTest extends TestCase
 
     public function testCreate()
     {
-        $collectorMock = $this->getMockBuilder(CollectorInterface::class)
-            ->getMockForAbstractClass();
+        $collectorMock = $this->createMock(CollectorInterface::class);
         $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->with(SimpleCollector::class)

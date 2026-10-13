@@ -17,12 +17,14 @@
             <argument name="expectedImage" type="string" />
         </arguments>
         <waitForElementVisible selector="{{StorefrontProductMediaSection.productImageFullscreen(startImage)}}" stepKey="seeStartFullscreenImage"/>
-        <seeElement selector="{{StorefrontProductMediaSection.imgSelectedInThumbnail(startImage)}}" stepKey="seeActiveImageInThumbnail"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.imgSelectedInThumbnail(startImage)}}" stepKey="seeActiveImageInThumbnail"/>
+        <waitForElementClickable selector="{{StorefrontProductMediaSection.productImageInFotorama(expectedImage)}}" stepKey="waitForClickOnExpectedImage"/>
         <click selector="{{StorefrontProductMediaSection.productImageInFotorama(expectedImage)}}" stepKey="clickOnExpectedImage"/>
-        <seeElement selector="{{StorefrontProductMediaSection.productImageFullscreen(expectedImage)}}" stepKey="seeExpectedImageAfterClick"/>
-        <seeElement selector="{{StorefrontProductMediaSection.imgSelectedInThumbnail(expectedImage)}}" stepKey="seeExpectedImageActiveInThumbnailAfterChange"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.productImageFullscreen(expectedImage)}}" stepKey="seeExpectedImageAfterClick"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.imgSelectedInThumbnail(expectedImage)}}" stepKey="seeExpectedImageActiveInThumbnailAfterChange"/>
+        <waitForElementClickable selector="{{StorefrontProductMediaSection.productImageInFotorama(startImage)}}" stepKey="waitForClickOnStartImageInRibbon"/>
         <click selector="{{StorefrontProductMediaSection.productImageInFotorama(startImage)}}" stepKey="clickOnStartImageInRibbon"/>
-        <seeElement selector="{{StorefrontProductMediaSection.productImageFullscreen(startImage)}}" stepKey="seeStartImageAfterSecondChange"/>
-        <seeElement selector="{{StorefrontProductMediaSection.imgSelectedInThumbnail(startImage)}}" stepKey="seeStartImageActiveInThumbnailAfterSecondChange"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.productImageFullscreen(startImage)}}" stepKey="seeStartImageAfterSecondChange"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.imgSelectedInThumbnail(startImage)}}" stepKey="seeStartImageActiveInThumbnailAfterSecondChange"/>
     </actionGroup>
 </actionGroups>

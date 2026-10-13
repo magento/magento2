@@ -16,6 +16,7 @@ use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class PaymentConfigurationProcessTest extends TestCase
 {
@@ -49,26 +50,10 @@ class PaymentConfigurationProcessTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->storeManager = $this
-            ->getMockBuilder(StoreManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getStore'])
-            ->getMockForAbstractClass();
-        $this->store = $this
-            ->getMockBuilder(StoreInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getId'])
-            ->getMockForAbstractClass();
-        $this->paymentMethodList = $this
-            ->getMockBuilder(PaymentMethodListInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getActiveList'])
-            ->getMockForAbstractClass();
-        $this->layoutProcessor =  $this
-            ->getMockBuilder(LayoutProcessor::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['process'])
-            ->getMockForAbstractClass();
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->store = $this->createMock(StoreInterface::class);
+        $this->paymentMethodList = $this->createMock(PaymentMethodListInterface::class);
+        $this->layoutProcessor = $this->createMock(LayoutProcessor::class);
 
         $objectManagerHelper = new ObjectManager($this);
         $this->plugin = $objectManagerHelper->getObject(
@@ -81,11 +66,14 @@ class PaymentConfigurationProcessTest extends TestCase
     }
 
     /**
+     * Test before process
+     *
      * @param array $jsLayout
      * @param array $activePaymentList
      * @param array $expectedResult
-     * @dataProvider beforeProcessDataProvider
+     * @return void
      */
+    #[DataProvider('beforeProcessDataProvider')]
     public function testBeforeProcess($jsLayout, $activePaymentList, $expectedResult)
     {
         if (!empty($activePaymentList)) {
@@ -103,13 +91,9 @@ class PaymentConfigurationProcessTest extends TestCase
         $this->assertEquals($result[0], $expectedResult);
     }
 
-    protected function getMockForPaymentMethod($return) {
-        $payflowproPaymentMethod = $this
-            ->getMockBuilder(PaymentMethodInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getCode'])
-            ->getMockForAbstractClass();
-
+    protected function getMockForPaymentMethod($return)
+    {
+        $payflowproPaymentMethod = $this->createMock(PaymentMethodInterface::class);
         $payflowproPaymentMethod->expects(self::any())->method('getCode')->willReturn($return);
 
         return $payflowproPaymentMethod;

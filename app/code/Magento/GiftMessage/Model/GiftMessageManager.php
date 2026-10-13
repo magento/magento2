@@ -108,6 +108,7 @@ class GiftMessageManager
      */
     public function setMessage(\Magento\Quote\Model\Quote $quote, $type, $giftMessage, $entityId = null)
     {
+        $entityId = $entityId ?? '';
         $message[$type][$entityId] = [
             'from' => $giftMessage->getSender(),
             'to' => $giftMessage->getRecipient(),

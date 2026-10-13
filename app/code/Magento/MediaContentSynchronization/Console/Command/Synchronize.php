@@ -45,7 +45,7 @@ class Synchronize extends Command
     /**
      * @inheritdoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $output->writeln('Synchronizing content with assets...');
         $this->synchronizeContent->execute();

@@ -18,6 +18,7 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Theme\Model\Design\Backend\Theme;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ThemeTest extends TestCase
 {
@@ -53,9 +54,7 @@ class ThemeTest extends TestCase
             ->getMock();
         $this->designMock = $this->getMockBuilder(DesignInterface::class)
             ->getMock();
-        $this->cacheTypeListMock = $this->getMockBuilder(TypeListInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->cacheTypeListMock = $this->createMock(TypeListInterface::class);
         $this->contextMock->expects($this->once())
             ->method('getEventDispatcher')
             ->willReturn($this->getMockBuilder(ManagerInterface::class)
@@ -92,8 +91,8 @@ class ThemeTest extends TestCase
     /**
      * @param int $callNumber
      * @param string $oldValue
-     * @dataProvider afterSaveDataProvider
      */
+    #[DataProvider('afterSaveDataProvider')]
     public function testAfterSave($callNumber, $oldValue)
     {
         $this->cacheTypeListMock->expects($this->exactly($callNumber))
@@ -125,8 +124,8 @@ class ThemeTest extends TestCase
      * @param string|null $value
      * @param string $expectedResult
      * @return void
-     * @dataProvider getValueDataProvider
      */
+    #[DataProvider('getValueDataProvider')]
     public function testGetValue($value, $expectedResult)
     {
         $this->model->setValue($value);

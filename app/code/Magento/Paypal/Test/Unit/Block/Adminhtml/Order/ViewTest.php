@@ -9,10 +9,12 @@ namespace Magento\Paypal\Test\Unit\Block\Adminhtml\Order;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use Magento\Paypal\Block\Adminhtml\Order\View;
 use Magento\Paypal\Model\Adminhtml\Express;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -45,6 +47,15 @@ class ViewTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
 
+        $secureRendererMock = $this->createMock(SecureHtmlRenderer::class);
+        $objects = [
+            [
+                SecureHtmlRenderer::class,
+                $secureRendererMock
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
+
         $this->order = $this->createPartialMock(
             Order::class,
             ['canUnhold', 'isPaymentReview', 'getState', 'isCanceled', 'getPayment']
@@ -76,8 +87,8 @@ class ViewTest extends TestCase
      * @param string $orderState
      * @param bool $canAuthorize
      * @throws LocalizedException
-     * @dataProvider orderDataProvider
      */
+    #[DataProvider('orderDataProvider')]
     public function testIsOrderAuthorizationAllowed(
         bool $canUnhold,
         bool $isPaymentReview,

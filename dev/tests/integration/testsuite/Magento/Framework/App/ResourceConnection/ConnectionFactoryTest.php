@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\App\ResourceConnection;
 
@@ -40,9 +40,7 @@ class ConnectionFactoryTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue(property_exists($connection, 'logger'));
         $object = new ReflectionClass(get_class($connection));
         $attribute = $object->getProperty('logger');
-        $attribute->setAccessible(true);
         $propertyObject = $attribute->getValue($connection);
-        $attribute->setAccessible(false);
         $this->assertInstanceOf(\Magento\Framework\DB\LoggerInterface::class, $propertyObject);
     }
 }

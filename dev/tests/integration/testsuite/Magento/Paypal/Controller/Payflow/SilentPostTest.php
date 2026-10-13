@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Paypal\Controller\Payflow;
 
@@ -17,6 +17,7 @@ use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 use Magento\TestFramework\TestCase\AbstractController;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject_MockObject as MockObject;
 use Psr\Log\LoggerInterface;
 
@@ -71,8 +72,8 @@ class SilentPostTest extends AbstractController
      * @param string $orderState
      * @param string $orderStatus
      * @magentoDataFixture Magento/Paypal/_files/order_payflow_link.php
-     * @dataProvider responseCodeDataProvider
      */
+    #[DataProvider('responseCodeDataProvider')]
     public function testSuccessfulNotification($resultCode, $orderState, $orderStatus)
     {
         $orderIncrementId = '000000045';

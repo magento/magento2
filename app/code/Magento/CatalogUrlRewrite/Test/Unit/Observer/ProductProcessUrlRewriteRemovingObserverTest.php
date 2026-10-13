@@ -13,6 +13,7 @@ use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\CatalogUrlRewrite\Observer\ProductProcessUrlRewriteRemovingObserver;
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
@@ -24,6 +25,8 @@ use PHPUnit\Framework\TestCase;
  */
 class ProductProcessUrlRewriteRemovingObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     /*
      * Stub product ID
      */
@@ -69,19 +72,17 @@ class ProductProcessUrlRewriteRemovingObserverTest extends TestCase
         $this->objectManager = new ObjectManager($this);
         $this->observerMock = $this->createMock(Observer::class);
 
-        $this->eventMock = $this->getMockBuilder(Event::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getProduct'])
-            ->getMock();
+        $this->eventMock = $this->createPartialMockWithReflection(
+            Event::class,
+            ['getProduct']
+        );
 
-        $this->productMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getId'])
-            ->getMock();
+        $this->productMock = $this->createPartialMock(
+            Product::class,
+            ['getId']
+        );
 
-        $this->urlPersistMock = $this->getMockBuilder(UrlPersistInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->urlPersistMock = $this->createMock(UrlPersistInterface::class);
 
         $this->observer = $this->objectManager->getObject(
             ProductProcessUrlRewriteRemovingObserver::class,

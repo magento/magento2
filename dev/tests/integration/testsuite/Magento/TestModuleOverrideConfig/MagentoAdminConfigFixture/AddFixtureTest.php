@@ -9,6 +9,7 @@ namespace Magento\TestModuleOverrideConfig\MagentoAdminConfigFixture;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\TestModuleOverrideConfig\AbstractOverridesTest;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class checks that magentoAdminConfigFixtures can be added via override config
@@ -44,11 +45,10 @@ class AddFixtureTest extends AbstractOverridesTest
     /**
      * Checks that fixtures added in method and data set nodes successfully applied
      *
-     * @dataProvider configDataProvider
-     *
      * @param string $expectedConfigValue
      * @return void
      */
+    #[DataProvider('configDataProvider')]
     public function testAddFixtureToMethod(string $expectedConfigValue): void
     {
         $value = $this->config->getValue('test_section/test_group/field_1', ScopeConfigInterface::SCOPE_TYPE_DEFAULT);
@@ -61,8 +61,8 @@ class AddFixtureTest extends AbstractOverridesTest
     public static function configDataProvider(): array
     {
         return [
-            'first_data_set' => ['expectedConfigValue' => 'overridden config fixture value for method'],
-            'second_data_set' => ['expectedConfigValue' => 'overridden config fixture value for data set']
+            'first_data_set' => ['overridden config fixture value for method'],
+            'second_data_set' => ['overridden config fixture value for data set']
         ];
     }
 }

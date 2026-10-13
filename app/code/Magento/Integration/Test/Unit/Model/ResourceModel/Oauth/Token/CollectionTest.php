@@ -10,6 +10,7 @@ namespace Magento\Integration\Test\Unit\Model\ResourceModel\Oauth\Token;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Integration\Model\ResourceModel\Oauth\Token\Collection;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -20,6 +21,7 @@ use PHPUnit\Framework\TestCase;
  */
 class CollectionTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Select|MockObject
      */
@@ -43,10 +45,10 @@ class CollectionTest extends TestCase
             ->method('select')
             ->willReturn($this->select);
 
-        $resource = $this->getMockBuilder(AbstractDb::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['__wakeup', 'getConnection'])
-            ->getMockForAbstractClass();
+        $resource = $this->createPartialMockWithReflection(
+            AbstractDb::class,
+            ['__wakeup', 'getConnection', '_construct']
+        );
         $resource->expects($this->any())
             ->method('getConnection')
             ->willReturn($connection);
@@ -64,14 +66,14 @@ class CollectionTest extends TestCase
             ->getMock();
     }
 
-    public function testJoinConsumerAsApplication()
+    public function testJoinConsumerAsApplication(): void
     {
         $this->select->expects($this->once())->method('joinLeft');
         $this->collection->expects($this->once())->method('getSelect')->willReturn($this->select);
         $this->collection->joinConsumerAsApplication();
     }
 
-    public function testAddFilterByCustomerId()
+    public function testAddFilterByCustomerId(): void
     {
         $id = 1;
         $this->collection->expects($this->once())
@@ -81,7 +83,7 @@ class CollectionTest extends TestCase
         $this->collection->addFilterByCustomerId($id);
     }
 
-    public function testAddFilterByConsumerId()
+    public function testAddFilterByConsumerId(): void
     {
         $id = 1;
         $this->collection->expects($this->once())
@@ -91,7 +93,7 @@ class CollectionTest extends TestCase
         $this->collection->addFilterByConsumerId($id);
     }
 
-    public function testAddFilterByType()
+    public function testAddFilterByType(): void
     {
         $type = 'type';
         $this->collection->expects($this->once())
@@ -101,7 +103,7 @@ class CollectionTest extends TestCase
         $this->collection->addFilterByType($type);
     }
 
-    public function testAddFilterById()
+    public function testAddFilterById(): void
     {
         $id = 1;
         $this->collection->expects($this->once())
@@ -111,7 +113,7 @@ class CollectionTest extends TestCase
         $this->collection->addFilterById($id);
     }
 
-    public function testAddFilterByRevoked()
+    public function testAddFilterByRevoked(): void
     {
         $this->collection->expects($this->once())
             ->method('addFilter')

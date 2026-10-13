@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\GoogleAdwords\Test\Unit\Model\Filter;
 
 use Magento\GoogleAdwords\Model\Filter\UppercaseTitle;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class UppercaseTitleTest extends TestCase
@@ -33,8 +34,8 @@ class UppercaseTitleTest extends TestCase
     /**
      * @param string $inputValue
      * @param string $returnValue
-     * @dataProvider dataProviderForFilterValues
      */
+    #[DataProvider('dataProviderForFilterValues')]
     public function testFilter($inputValue, $returnValue)
     {
         $this->assertEquals($returnValue, $this->_model->filter($inputValue));

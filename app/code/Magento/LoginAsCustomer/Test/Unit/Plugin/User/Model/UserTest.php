@@ -16,6 +16,7 @@ use Magento\LoginAsCustomer\Plugin\User\Model\User;
 use Magento\LoginAsCustomerApi\Api\DeleteAuthenticationDataForUserInterface;
 use Magento\User\Api\Data\UserInterface;
 use Magento\User\Model\User as UserModel;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -27,6 +28,8 @@ use Psr\Log\LoggerInterface;
  */
 class UserTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var User
      */
@@ -92,11 +95,10 @@ class UserTest extends TestCase
      */
     private function createUserModelMock($userId = null, $roles = null, $skipValidation = false): MockObject
     {
-        $userModelMock = $this->getMockBuilder(UserModel::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getId', 'getRoles'])
-            ->addMethods(['getSkipRoleResourceValidation'])
-            ->getMock();
+        $userModelMock = $this->createPartialMockWithReflection(
+            UserModel::class,
+            ['getId', 'getRoles', 'getSkipRoleResourceValidation']
+        );
 
         if ($userId !== null) {
             $userModelMock->expects($this->any())

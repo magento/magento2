@@ -2184,6 +2184,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         $message = null,
         $additionalData = null
     ) {
+        $type = $type ?? '';
         if (!isset($this->_errorInfoGroups[$type])) {
             $this->_errorInfoGroups[$type] = $this->_statusListFactory->create();
         }

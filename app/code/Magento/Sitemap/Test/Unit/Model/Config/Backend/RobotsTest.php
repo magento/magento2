@@ -11,6 +11,7 @@ use Magento\Framework\App\Cache\TypeListInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Robots\Model\Config\Value;
 use Magento\Sitemap\Model\Config\Backend\Robots;
@@ -21,6 +22,8 @@ use PHPUnit\Framework\TestCase;
 
 class RobotsTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Robots
      */
@@ -53,22 +56,15 @@ class RobotsTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->contextMock = $this->createMock(Context::class);
 
-        $this->registryMock = $this->getMockBuilder(Registry::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->registryMock = $this->createMock(Registry::class);
 
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->getMockForAbstractClass();
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
 
-        $this->cacheTypeListMock = $this->getMockBuilder(TypeListInterface::class)
-            ->getMockForAbstractClass();
+        $this->cacheTypeListMock = $this->createMock(TypeListInterface::class);
 
-        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
-            ->getMockForAbstractClass();
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
@@ -90,8 +86,7 @@ class RobotsTest extends TestCase
     {
         $storeId = 1;
 
-        $storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->getMock();
+        $storeMock = $this->createMock(StoreInterface::class);
 
         $this->storeManagerMock->expects($this->once())
             ->method('getStore')

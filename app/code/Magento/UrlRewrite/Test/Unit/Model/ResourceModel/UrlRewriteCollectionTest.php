@@ -11,15 +11,19 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollection;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class UrlRewriteCollectionTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var StoreManagerInterface|MockObject
      */
@@ -52,20 +56,15 @@ class UrlRewriteCollectionTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
         $this->select = $this->createPartialMock(Select::class, ['from', 'where']);
         $this->connectionMock = $this->createPartialMock(
             Mysql::class,
             ['select', 'prepareSqlCondition', 'quoteIdentifier']
         );
-        $this->resource = $this->getMockForAbstractClass(
+        $this->resource = $this->createPartialMockWithReflection(
             AbstractDb::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['getConnection', '__wakeup', 'getMainTable', 'getTable']
+            ['getConnection', '__wakeup', 'getMainTable', 'getTable', '_construct']
         );
 
         $this->select->expects($this->any())
@@ -100,9 +99,9 @@ class UrlRewriteCollectionTest extends TestCase
      * @param array $storeId
      * @param bool $withAdmin
      * @param array $condition
-     * @dataProvider dataProviderForTestAddStoreIfStoreIsArray
      * @covers \Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollection
      */
+    #[DataProvider('dataProviderForTestAddStoreIfStoreIsArray')]
     public function testAddStoreFilterIfStoreIsArray($storeId, $withAdmin, $condition)
     {
         $this->connectionMock->expects($this->once())
@@ -127,9 +126,9 @@ class UrlRewriteCollectionTest extends TestCase
      * @param int $storeId
      * @param bool $withAdmin
      * @param array $condition
-     * @dataProvider dataProviderForTestAddStoreFilterIfStoreIsInt
      * @covers \Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollection
      */
+    #[DataProvider('dataProviderForTestAddStoreFilterIfStoreIsInt')]
     public function testAddStoreFilterIfStoreIsInt($storeId, $withAdmin, $condition)
     {
         $store = $this->createMock(Store::class);

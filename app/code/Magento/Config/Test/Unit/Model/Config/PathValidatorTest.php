@@ -34,9 +34,7 @@ class PathValidatorTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->structureMock = $this->getMockBuilder(Structure::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->structureMock = $this->createMock(Structure::class);
 
         $this->model = new PathValidator(
             $this->structureMock

@@ -24,6 +24,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Rule\InvokedCount;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  *
@@ -31,6 +32,7 @@ use Psr\Log\LoggerInterface;
  */
 abstract class AbstractSenderTestCase extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Sender|MockObject
      */
@@ -100,10 +102,10 @@ abstract class AbstractSenderTestCase extends TestCase
 
     public function stepMockSetup()
     {
-        $this->senderMock = $this->getMockBuilder(Sender::class)
-            ->addMethods(['send', 'sendCopyTo'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->senderMock = $this->createPartialMockWithReflection(
+            Sender::class,
+            ['send', 'sendCopyTo']
+        );
 
         $this->senderBuilderFactoryMock = $this->createPartialMock(
             SenderBuilderFactory::class,
@@ -114,32 +116,17 @@ abstract class AbstractSenderTestCase extends TestCase
             ['setTemplateVars']
         );
 
-        $this->storeMock = $this->getMockBuilder(Store::class)
-            ->addMethods(['getStoreId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->storeMock = $this->createPartialMockWithReflection(Store::class, ['getStoreId']);
 
-        $this->orderMock = $this->getMockBuilder(Order::class)
-            ->addMethods(['setSendEmail'])
-            ->onlyMethods(
-                [
-                    'getId',
-                    'getStore',
-                    'getBillingAddress',
-                    'getPayment',
-                    'getCustomerIsGuest',
-                    'getCustomerName',
-                    'getCustomerEmail',
-                    'getShippingAddress',
-                    'setEmailSent',
-                    'getCreatedAtFormatted',
-                    'getIsNotVirtual',
-                    'getEmailCustomerNote',
-                    'getFrontendStatusLabel'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->orderMock = $this->createPartialMockWithReflection(
+            Order::class,
+            [
+                'setSendEmail', 'getId', 'getStore', 'getBillingAddress', 'getPayment',
+                'getCustomerIsGuest', 'getCustomerName', 'getCustomerEmail', 'getShippingAddress',
+                'setEmailSent', 'getCreatedAtFormatted', 'getIsNotVirtual', 'getEmailCustomerNote',
+                'getFrontendStatusLabel'
+            ]
+        );
         $this->orderMock->expects($this->any())
             ->method('getStore')
             ->willReturn($this->storeMock);
@@ -159,7 +146,7 @@ abstract class AbstractSenderTestCase extends TestCase
 
         $this->globalConfig = $this->createPartialMock(Config::class, ['getValue']);
 
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
 
         $this->appEmulator = $this->getMockBuilder(Emulation::class)
             ->disableOriginalConstructor()
@@ -220,10 +207,10 @@ abstract class AbstractSenderTestCase extends TestCase
         InvokedCount $sendExpects,
         InvokedCount $sendCopyToExpects
     ) {
-        $senderMock = $this->getMockBuilder(Sender::class)
-            ->addMethods(['send', 'sendCopyTo'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $senderMock = $this->createPartialMockWithReflection(
+            Sender::class,
+            ['send', 'sendCopyTo']
+        );
         $senderMock->expects($sendExpects)
             ->method('send');
         $senderMock->expects($sendCopyToExpects)

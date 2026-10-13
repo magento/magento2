@@ -56,7 +56,7 @@ class FactoryTest extends TestCase
             ['create']
         );
         $this->_vbMock = $this->createMock(Builder::class);
-        $this->_validatorMock = $this->getMockForAbstractClass(ValidatorInterface::class);
+        $this->_validatorMock = $this->createMock(ValidatorInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->_factory = $objectManager->getObject(

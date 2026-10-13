@@ -12,6 +12,7 @@ use Magento\Analytics\Model\System\Message\NotificationAboutFailedSubscription;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\UrlInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class NotificationAboutFailedSubscriptionTest extends TestCase
@@ -43,7 +44,7 @@ class NotificationAboutFailedSubscriptionTest extends TestCase
     {
         $this->subscriptionStatusMock = $this->createMock(SubscriptionStatusProvider::class);
         $this->urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->notification = $this->objectManagerHelper->getObject(
             NotificationAboutFailedSubscription::class,
@@ -65,10 +66,10 @@ class NotificationAboutFailedSubscriptionTest extends TestCase
     }
 
     /**
-     * @dataProvider notDisplayedNotificationStatuses
      *
      * @param $status
      */
+    #[DataProvider('notDisplayedNotificationStatuses')]
     public function testIsDisplayedWhenMessageShouldNotBeDisplayed($status)
     {
         $this->subscriptionStatusMock->expects($this->once())

@@ -11,6 +11,7 @@ use Magento\Backend\Model\Url;
 use Magento\Config\Block\System\Config\Form\Field;
 use Magento\Framework\Data\Form\Element\Text;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Store\Model\StoreManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -21,6 +22,8 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
  */
 class FieldTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Field
      */
@@ -69,6 +72,7 @@ class FieldTest extends TestCase
             'secureRenderer' => $secureRendererMock
         ];
         $helper = new ObjectManager($this);
+        $helper->prepareObjectManager();
         $this->_object = $helper->getObject(Field::class, $data);
 
         $this->_testData = [
@@ -78,8 +82,9 @@ class FieldTest extends TestCase
             'elementHTML' => 'test_html',
         ];
 
-        $this->_elementMock = $this->getMockBuilder(Text::class)
-            ->addMethods([
+        $this->_elementMock = $this->createPartialMockWithReflection(
+            Text::class,
+            [
                 'getLabel',
                 'getComment',
                 'getHint',
@@ -90,11 +95,13 @@ class FieldTest extends TestCase
                 'getCanUseWebsiteValue',
                 'getCanUseDefaultValue',
                 'setDisabled',
-                'getTooltip'
-            ])
-            ->onlyMethods(['getHtmlId', 'getName', 'getElementHtml', 'setReadonly'])
-            ->disableOriginalConstructor()
-            ->getMock();
+                'getTooltip',
+                'getHtmlId',
+                'getName',
+                'getElementHtml',
+                'setReadonly'
+            ]
+        );
 
         $this->_elementMock->expects(
             $this->any()

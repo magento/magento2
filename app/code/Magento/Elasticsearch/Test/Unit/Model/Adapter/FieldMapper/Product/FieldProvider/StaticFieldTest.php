@@ -26,6 +26,7 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\Static
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Unit tests for \Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\StaticField class.
@@ -86,12 +87,8 @@ class StaticFieldTest extends TestCase
             ->disableOriginalConstructor()
             ->onlyMethods(['getEntityAttributes'])
             ->getMock();
-        $this->fieldTypeConverter = $this->getMockBuilder(FieldTypeConverterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->indexTypeConverter = $this->getMockBuilder(IndexTypeConverterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->fieldTypeConverter = $this->createMock(FieldTypeConverterInterface::class);
+        $this->indexTypeConverter = $this->createMock(IndexTypeConverterInterface::class);
         $this->attributeAdapterProvider = $this->getMockBuilder(AttributeProvider::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['getByAttributeCode'])
@@ -145,11 +142,11 @@ class StaticFieldTest extends TestCase
      * @param array $expected
      * @param bool $isProcessed
      * @return void
-     * @dataProvider attributeProvider
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
+    #[DataProvider('attributeProvider')]
     public function testGetAllAttributesTypes(
         string $attributeCode,
         string $inputType,
@@ -200,10 +197,7 @@ class StaticFieldTest extends TestCase
                 }
             );
 
-        $productAttributeMock = $this->getMockBuilder(AbstractAttribute::class)
-            ->onlyMethods(['getAttributeCode'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $productAttributeMock = $this->createPartialMock(AbstractAttribute::class, ['getAttributeCode']);
         $productAttributeMock->expects($this->any())
             ->method('getAttributeCode')
             ->willReturn($attributeCode);

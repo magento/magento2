@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2016 Adobe
+ * Copyright 2024 Adobe
  * All Rights Reserved.
  */
 namespace Magento\Deploy\Console\Command\App;
@@ -21,7 +21,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class ApplicationDumpCommand extends Command
 {
-    const INPUT_CONFIG_TYPES = 'config-types';
+    public const INPUT_CONFIG_TYPES = 'config-types';
 
     /**
      * @var Writer
@@ -81,7 +81,7 @@ class ApplicationDumpCommand extends Command
      * @return boolean
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->groupSourcesByPool();
         $dumpedTypes = [];

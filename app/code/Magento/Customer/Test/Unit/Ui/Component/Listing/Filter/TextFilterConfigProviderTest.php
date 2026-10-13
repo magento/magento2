@@ -8,13 +8,13 @@ declare(strict_types=1);
 namespace Magento\Customer\Test\Unit\Ui\Component\Listing\Filter;
 
 use Magento\Customer\Ui\Component\Listing\Filter\TextFilterConfigProvider;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class TextFilterConfigProviderTest extends TestCase
 {
-    /**
-     * @dataProvider getConfigDataProvider
-     */
+    /** */
+    #[DataProvider('getConfigDataProvider')]
     public function testGetConfig(array $input, array $output): void
     {
         $model = new TextFilterConfigProvider();

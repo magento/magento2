@@ -12,6 +12,7 @@ use Magento\Framework\Event\ManagerInterface;
 use Magento\Payment\Model\Cart;
 use Magento\Payment\Model\Cart\SalesModel\Factory;
 use Magento\Payment\Model\Cart\SalesModel\SalesModelInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -28,8 +29,8 @@ class CartTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
-        $this->_salesModelMock = $this->getMockForAbstractClass(SalesModelInterface::class);
+        $this->_eventManagerMock = $this->createMock(ManagerInterface::class);
+        $this->_salesModelMock = $this->createMock(SalesModelInterface::class);
         $factoryMock = $this->createMock(Factory::class);
         $factoryMock->expects($this->once())->method('create')->willReturn($this->_salesModelMock);
 
@@ -73,8 +74,8 @@ class CartTest extends TestCase
      * @param array $salesModelItems
      * @param array $salesModelAmounts
      * @param array $expected
-     * @dataProvider cartDataProvider
      */
+    #[DataProvider('cartDataProvider')]
     public function testGetAmounts($transferFlags, $salesModelItems, $salesModelAmounts, $expected)
     {
         $amounts = $this->_collectItemsAndAmounts($transferFlags, $salesModelItems, $salesModelAmounts);
@@ -90,9 +91,11 @@ class CartTest extends TestCase
      * @param array $transferFlags
      * @param array $salesModelItems
      * @param array $salesModelAmounts
-     * @dataProvider cartDataProvider
+     * @param array $expected
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function testGetAllItems($transferFlags, $salesModelItems, $salesModelAmounts)
+    #[DataProvider('cartDataProvider')]
+    public function testGetAllItems($transferFlags, $salesModelItems, $salesModelAmounts, $expected = null)
     {
         $this->_collectItemsAndAmounts($transferFlags, $salesModelItems, $salesModelAmounts);
 

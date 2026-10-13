@@ -12,6 +12,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Validator\DataObject;
 use Magento\Security\Model\Plugin\UserValidationRules;
 use Magento\Security\Model\UserExpiration\Validator;
+use Magento\User\Model\UserValidationRules as UserModelValidationRules;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -27,7 +28,7 @@ class UserValidationRulesTest extends TestCase
     private $plugin;
 
     /**
-     * @var \Magento\User\Model\UserValidationRules|MockObject
+     * @var UserModelValidationRules|MockObject
      */
     private $userValidationRules;
 
@@ -37,7 +38,7 @@ class UserValidationRulesTest extends TestCase
     private $validator;
 
     /**
-     * @var \Magento\User\Model\UserValidationRules
+     * @var UserModelValidationRules
      */
     private $rules;
 
@@ -45,8 +46,8 @@ class UserValidationRulesTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
         $userExpirationValidator = $this->createMock(Validator::class);
-        $this->userValidationRules = $this->createMock(\Magento\User\Model\UserValidationRules::class);
-        $this->rules = $objectManager->getObject(\Magento\User\Model\UserValidationRules::class);
+        $this->userValidationRules = $this->createMock(UserModelValidationRules::class);
+        $this->rules = $objectManager->getObject(UserModelValidationRules::class);
         $this->validator = $this->createMock(DataObject::class);
         $this->plugin =
             $objectManager->getObject(

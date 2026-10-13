@@ -36,7 +36,7 @@ class MediaTest extends TestCase
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->getMock();
         $this->contextMock = $this->createMock(Context::class);
-        $this->contextMock->expects($this->any())->method('getScopeConfig')->willReturn($this->scopeConfigMock);
+        $this->contextMock->method('getScopeConfig')->willReturn($this->scopeConfigMock);
         $this->helper = new Media(
             $this->contextMock
         );

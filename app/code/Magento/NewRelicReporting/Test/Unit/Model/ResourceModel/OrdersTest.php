@@ -56,11 +56,9 @@ class OrdersTest extends TestCase
         $reflection = new ReflectionClass($this->resourceModel);
 
         $mainTableProperty = $reflection->getProperty('_mainTable');
-        $mainTableProperty->setAccessible(true);
         $this->assertEquals('reporting_orders', $mainTableProperty->getValue($this->resourceModel));
 
         $idFieldNameProperty = $reflection->getProperty('_idFieldName');
-        $idFieldNameProperty->setAccessible(true);
         $this->assertEquals('entity_id', $idFieldNameProperty->getValue($this->resourceModel));
     }
 }

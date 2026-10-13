@@ -47,7 +47,7 @@ class SecureTokenTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->url = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->url = $this->createMock(UrlInterface::class);
         $this->mathRandom = $this->createMock(Random::class);
         $this->transparent = $this->createMock(Transparent::class);
 
@@ -71,9 +71,7 @@ class SecureTokenTest extends TestCase
             'result_code' => '0',
         ]);
 
-        $quote = $this->getMockBuilder(Quote::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $quote = $this->createMock(Quote::class);
         $quote->expects($this->once())
             ->method('getStoreId')
             ->willReturn($storeId);

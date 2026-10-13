@@ -9,6 +9,7 @@ use Magento\Framework\Filesystem\Directory\PathValidator;
 use Magento\Framework\Filesystem\Driver\File;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class PathValidatorTest extends TestCase
 {
@@ -48,9 +49,8 @@ class PathValidatorTest extends TestCase
      * @param string $path
      * @param string $scheme
      * @param bool $absolutePath
-     * @param string $prefix
-     * @dataProvider validateDataProvider
-     */
+     * @param string $prefix     */
+    #[DataProvider('validateDataProvider')]
     public function testValidate($directoryPath, $path, $scheme, $absolutePath, $prefix)
     {
         $this->driver->expects($this->exactly(2))

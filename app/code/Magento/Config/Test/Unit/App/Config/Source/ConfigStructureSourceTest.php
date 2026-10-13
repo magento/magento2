@@ -10,6 +10,7 @@ namespace Magento\Config\Test\Unit\App\Config\Source;
 use Magento\Config\App\Config\Source\ConfigStructureSource;
 use Magento\Config\Model\Config\Structure;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ConfigStructureSourceTest extends TestCase
@@ -31,10 +32,10 @@ class ConfigStructureSourceTest extends TestCase
     }
 
     /**
-     * @dataProvider getDataProvider
      * @param array $fieldPaths
      * @param array $expectedConfig
      */
+    #[DataProvider('getDataProvider')]
     public function testGet(array $fieldPaths, array $expectedConfig)
     {
         $this->structure->expects($this->once())

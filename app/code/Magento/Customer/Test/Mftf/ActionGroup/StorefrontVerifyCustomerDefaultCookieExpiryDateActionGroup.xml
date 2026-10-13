@@ -27,21 +27,70 @@
         <grabCookieAttributes userInput="mage-cache-sessid" stepKey="grabCookieForMagentoCacheSessionId"/>
         <grabCookieAttributes userInput="mage-cache-storage" stepKey="grabCookieForMagentoCacheStorage"/>
 
-        <!--Grab expected date-->
-        <generateDate date="{{timezoneOffset}} {{timeUnit}}" format="d/m/Y" timezone="UTC" stepKey="generateExpireDate"/>
+        <!--Calculate expected expiry timestamp based on current time + offset-->
+        <executeJS function="
+            var timeUnit = '{{timeUnit}}';
+            var offsetValue = parseInt('{{timezoneOffset}}');
+            var multiplier = 1;
+            
+            if (timeUnit === 'minute') {
+                multiplier = 60;
+            } else if (timeUnit === 'hour') {
+                multiplier = 3600;
+            } else if (timeUnit === 'day') {
+                multiplier = 86400;
+            }
+            
+            var expectedTimestamp = Math.floor(Date.now() / 1000) + (offsetValue * multiplier);
+            return expectedTimestamp;
+        " stepKey="calculateExpectedTimestamp"/>
 
-        <!--Assert cookies `section_data_ids`, `mage-cache-sessid`, `mage-cache-storage` having expiry date equal to expected date-->
-        <assertEquals stepKey="validateExpiryDateForMagentoDataIds">
-            <actualResult type="string">{{$grabCookieForMagentoDataIds['expiry']}}</actualResult>
-            <expectedResult type="string">{{$generateExpireDate}}</expectedResult>
-        </assertEquals>
-        <assertEquals stepKey="validateExpiryDateForMagentoCacheSessionId">
-            <actualResult type="string">{{$grabCookieForMagentoCacheSessionId['expiry']}}</actualResult>
-            <expectedResult type="string">{{$generateExpireDate}}</expectedResult>
-        </assertEquals>
-        <assertEquals stepKey="validateExpiryDateForMagentoCacheStorage">
-            <actualResult type="string">{{$grabCookieForMagentoCacheStorage['expiry']}}</actualResult>
-            <expectedResult type="string">{{$generateExpireDate}}</expectedResult>
-        </assertEquals>
+        <!--Validate section_data_ids cookie expiry with timestamp comparison-->
+        <executeJS function="
+            var expiryDateStr = '{{$grabCookieForMagentoDataIds['expiry']}}';
+            var parts = expiryDateStr.split('/');
+            var expiryDate = new Date(Date.UTC(parseInt(parts[2]), parseInt(parts[1]) - 1, parseInt(parts[0]), 0, 0, 0));
+            var actualTimestamp = Math.floor(expiryDate.getTime() / 1000);
+            var expectedTimestamp = parseInt('{{$calculateExpectedTimestamp}}');
+            var tolerance = 300;
+            var diff = Math.abs(expectedTimestamp - actualTimestamp);
+            
+            if (diff > tolerance) {
+                throw new Error('Cookie expiry validation failed for section_data_ids. Expected timestamp: ' + expectedTimestamp + ', Actual timestamp: ' + actualTimestamp + ', Difference: ' + diff + ' seconds (tolerance: ' + tolerance + ' seconds)');
+            }
+            return true;
+        " stepKey="validateExpiryDateForMagentoDataIds"/>
+
+        <!--Validate mage-cache-sessid cookie expiry with timestamp comparison-->
+        <executeJS function="
+            var expiryDateStr = '{{$grabCookieForMagentoCacheSessionId['expiry']}}';
+            var parts = expiryDateStr.split('/');
+            var expiryDate = new Date(Date.UTC(parseInt(parts[2]), parseInt(parts[1]) - 1, parseInt(parts[0]), 0, 0, 0));
+            var actualTimestamp = Math.floor(expiryDate.getTime() / 1000);
+            var expectedTimestamp = parseInt('{{$calculateExpectedTimestamp}}');
+            var tolerance = 300;
+            var diff = Math.abs(expectedTimestamp - actualTimestamp);
+            
+            if (diff > tolerance) {
+                throw new Error('Cookie expiry validation failed for mage-cache-sessid. Expected timestamp: ' + expectedTimestamp + ', Actual timestamp: ' + actualTimestamp + ', Difference: ' + diff + ' seconds (tolerance: ' + tolerance + ' seconds)');
+            }
+            return true;
+        " stepKey="validateExpiryDateForMagentoCacheSessionId"/>
+
+        <!--Validate mage-cache-storage cookie expiry with timestamp comparison-->
+        <executeJS function="
+            var expiryDateStr = '{{$grabCookieForMagentoCacheStorage['expiry']}}';
+            var parts = expiryDateStr.split('/');
+            var expiryDate = new Date(Date.UTC(parseInt(parts[2]), parseInt(parts[1]) - 1, parseInt(parts[0]), 0, 0, 0));
+            var actualTimestamp = Math.floor(expiryDate.getTime() / 1000);
+            var expectedTimestamp = parseInt('{{$calculateExpectedTimestamp}}');
+            var tolerance = 300;
+            var diff = Math.abs(expectedTimestamp - actualTimestamp);
+            
+            if (diff > tolerance) {
+                throw new Error('Cookie expiry validation failed for mage-cache-storage. Expected timestamp: ' + expectedTimestamp + ', Actual timestamp: ' + actualTimestamp + ', Difference: ' + diff + ' seconds (tolerance: ' + tolerance + ' seconds)');
+            }
+            return true;
+        " stepKey="validateExpiryDateForMagentoCacheStorage"/>
     </actionGroup>
 </actionGroups>

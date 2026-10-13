@@ -13,24 +13,25 @@ namespace Magento\Config\Test\Unit\Block\System\Config\Form\Field;
 use Magento\Config\Block\System\Config\Form\Field\Heading;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\TestCase;
 
 class HeadingTest extends TestCase
 {
+    use MockCreationTrait;
+
     public function testRender()
     {
         $htmlId = 'test_HTML_id';
         $label  = 'test_label';
 
-        $elementMock = $this->getMockBuilder(AbstractElement::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getLabel'])
-            ->onlyMethods(['getHtmlId'])
-            ->getMock();
+        $objectManager = new ObjectManager($this);
+        $elementMock = $this->createPartialMockWithReflection(
+            AbstractElement::class,
+            ['getLabel', 'getHtmlId']
+        );
         $elementMock->expects($this->any())->method('getHtmlId')->willReturn($htmlId);
         $elementMock->expects($this->any())->method('getLabel')->willReturn($label);
-
-        $objectManager = new ObjectManager($this);
 
         $heading = $objectManager->getObject(Heading::class, []);
 

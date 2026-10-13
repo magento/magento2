@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2017 Adobe
+ * Copyright 2024 Adobe
  * All Rights Reserved.
  */
 
@@ -28,7 +28,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class ConfigImportCommand extends Command
 {
-    const COMMAND_NAME = 'app:config:import';
+    public const COMMAND_NAME = 'app:config:import';
 
     /**
      * Configuration importer.
@@ -95,7 +95,7 @@ class ConfigImportCommand extends Command
      * @return int
      * @throws \Exception
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {
             if ($this->canEmulateAdminhtmlArea()) {

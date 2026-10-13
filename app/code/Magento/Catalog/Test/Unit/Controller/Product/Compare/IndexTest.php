@@ -13,6 +13,7 @@ use Magento\Catalog\Model\Product\Compare\ItemFactory;
 use Magento\Catalog\Model\Product\Compare\ListCompare;
 use Magento\Catalog\Model\ResourceModel\Product\Compare\Item;
 use Magento\Catalog\Model\ResourceModel\Product\Compare\Item\CollectionFactory;
+use Magento\Catalog\Model\Session as CatalogSession;
 use Magento\Customer\Model\Session;
 use Magento\Customer\Model\Visitor;
 use Magento\Framework\App\Action\Context;
@@ -20,6 +21,7 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\Data\Form\FormKey\Validator;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\Url\DecoderInterface;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Store\Model\StoreManagerInterface;
@@ -33,6 +35,7 @@ use PHPUnit\Framework\TestCase;
  */
 class IndexTest extends TestCase
 {
+    use MockCreationTrait;
     /** @var Index */
     protected $index;
 
@@ -54,7 +57,7 @@ class IndexTest extends TestCase
     /** @var ListCompare|MockObject */
     protected $listCompareMock;
 
-    /** @var \Magento\Catalog\Model\Session|MockObject */
+    /** @var CatalogSession|MockObject */
     protected $catalogSession;
 
     /** @var StoreManagerInterface|MockObject */
@@ -87,17 +90,15 @@ class IndexTest extends TestCase
             Context::class,
             ['getRequest', 'getResponse', 'getResultRedirectFactory']
         );
-        $this->request = $this->getMockForAbstractClass(RequestInterface::class);
-        $this->response = $this->getMockForAbstractClass(ResponseInterface::class);
+        $this->request = $this->createMock(RequestInterface::class);
+        $this->response = $this->createMock(ResponseInterface::class);
         $this->redirectFactoryMock = $this->createPartialMock(
             RedirectFactory::class,
             ['create']
         );
-        $this->contextMock->expects($this->any())->method('getRequest')->willReturn($this->request);
-        $this->contextMock->expects($this->any())->method('getResponse')->willReturn($this->response);
-        $this->contextMock->expects($this->any())
-            ->method('getResultRedirectFactory')
-            ->willReturn($this->redirectFactoryMock);
+        $this->contextMock->method('getRequest')->willReturn($this->request);
+        $this->contextMock->method('getResponse')->willReturn($this->response);
+        $this->contextMock->method('getResultRedirectFactory')->willReturn($this->redirectFactoryMock);
 
         $this->itemFactoryMock = $this->createPartialMock(
             ItemFactory::class,
@@ -110,17 +111,16 @@ class IndexTest extends TestCase
         $this->sessionMock = $this->createMock(Session::class);
         $this->visitorMock = $this->createMock(Visitor::class);
         $this->listCompareMock = $this->createMock(ListCompare::class);
-        $this->catalogSession = $this->getMockBuilder(\Magento\Catalog\Model\Session::class)
-            ->addMethods(['setBeforeCompareUrl'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $this->formKeyValidatorMock = $this->getMockBuilder(Validator::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->catalogSession = $this->createPartialMockWithReflection(
+            CatalogSession::class,
+            ['setBeforeCompareUrl', 'getBeforeCompareUrl']
+        );
+        $this->catalogSession->method('setBeforeCompareUrl')->willReturnSelf();
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->formKeyValidatorMock = $this->createMock(Validator::class);
         $this->pageFactoryMock = $this->createMock(PageFactory::class);
-        $this->productRepositoryMock = $this->getMockForAbstractClass(ProductRepositoryInterface::class);
-        $this->decoderMock = $this->getMockForAbstractClass(DecoderInterface::class);
+        $this->productRepositoryMock = $this->createMock(ProductRepositoryInterface::class);
+        $this->decoderMock = $this->createMock(DecoderInterface::class);
 
         $this->index = new Index(
             $this->contextMock,

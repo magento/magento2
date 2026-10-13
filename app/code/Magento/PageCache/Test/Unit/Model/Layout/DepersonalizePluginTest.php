@@ -51,7 +51,7 @@ class DepersonalizePluginTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
+        $this->layoutMock = $this->createMock(LayoutInterface::class);
         $this->eventManagerMock = $this->createMock(Manager::class);
         $this->messageSessionMock = $this->createPartialMock(
             Session::class,

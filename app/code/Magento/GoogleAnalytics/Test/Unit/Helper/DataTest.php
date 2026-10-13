@@ -13,6 +13,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\GoogleAnalytics\Helper\Data as HelperData;
 use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -36,10 +37,10 @@ class DataTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->onlyMethods(['getValue', 'isSetFlag'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->scopeConfigMock = $this->createPartialMock(
+            ScopeConfigInterface::class,
+            ['getValue', 'isSetFlag']
+        );
 
         $objectManager = new ObjectManager($this);
         $this->helper = $objectManager->getObject(
@@ -57,8 +58,8 @@ class DataTest extends TestCase
      * @param bool $flag
      * @param bool $result
      * @return void
-     * @dataProvider gaDataProvider
      */
+    #[DataProvider('gaDataProvider')]
     public function testIsGoogleAnalyticsAvailable($value, $flag, $result): void
     {
         $this->scopeConfigMock->expects($this->once())
@@ -94,8 +95,8 @@ class DataTest extends TestCase
      * @param string $value
      * @param bool $result
      * @return void
-     * @dataProvider yesNoDataProvider
      */
+    #[DataProvider('yesNoDataProvider')]
     public function testIsAnonymizedIpActive($value, $result): void
     {
         $this->scopeConfigMock->expects($this->once())

@@ -33,13 +33,8 @@ class AuthorizationRoleTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->userResourceModelMock = $this->getMockBuilder(User::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->roleMock = $this->getMockBuilder(Role::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->userResourceModelMock = $this->createMock(User::class);
+        $this->roleMock = $this->createMock(Role::class);
 
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(

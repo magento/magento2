@@ -78,7 +78,6 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         $this->_model->setParameters(['behavior' => Import::BEHAVIOR_ADD_UPDATE]);
         $this->indexerProcessor = $this->objectManager->create(\Magento\Customer\Model\Indexer\Processor::class);
         $propertyAccessor = new \ReflectionProperty($this->_model, 'errorMessageTemplates');
-        $propertyAccessor->setAccessible(true);
         $propertyAccessor->setValue($this->_model, []);
         $this->_customerData = [
             'firstname' => 'Firstname',

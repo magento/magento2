@@ -13,6 +13,9 @@ use Magento\Sales\Model\ResourceModel\Order\Invoice\Item;
 use Magento\Sales\Model\ResourceModel\Order\Invoice\Relation;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Sales\Model\Order\Invoice\Item as InvoiceItemModel;
+use Magento\Sales\Model\Order\Invoice\Comment as InvoiceCommentModel;
+use Magento\Sales\Model\Order\Item as OrderItemModel;
 
 class RelationTest extends TestCase
 {
@@ -37,17 +40,17 @@ class RelationTest extends TestCase
     protected $invoiceMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Invoice\Item|MockObject
+     * @var InvoiceItemModel|MockObject
      */
     protected $invoiceItemMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Invoice\Comment|MockObject
+     * @var InvoiceCommentModel|MockObject
      */
     protected $invoiceCommentMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Item|MockObject
+     * @var OrderItemModel|MockObject
      */
     protected $orderItemMock;
 
@@ -82,15 +85,9 @@ class RelationTest extends TestCase
                 ]
             )
             ->getMock();
-        $this->invoiceItemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Invoice\Item::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->invoiceCommentMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Invoice\Comment::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->orderItemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->invoiceItemMock = $this->createMock(InvoiceItemModel::class);
+        $this->invoiceCommentMock = $this->createMock(InvoiceCommentModel::class);
+        $this->orderItemMock = $this->createMock(OrderItemModel::class);
         $this->relationProcessor = new Relation(
             $this->invoiceItemResourceMock,
             $this->invoiceCommentResourceMock

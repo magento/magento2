@@ -15,7 +15,7 @@ class KeyLengthTest extends TestCase
     /**
      * Sample length
      */
-    const KEY_LENGTH = 32;
+    private const KEY_LENGTH = 32;
 
     /**
      * @var KeyLength

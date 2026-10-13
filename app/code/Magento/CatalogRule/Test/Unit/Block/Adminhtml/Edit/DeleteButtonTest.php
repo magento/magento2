@@ -50,7 +50,7 @@ class DeleteButtonTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
         $this->registryMock = $this->createMock(Registry::class);
         $this->contextMock = $this->createMock(Context::class);
         $this->escaperMock = $this->createMock(Escaper::class);
@@ -119,7 +119,7 @@ class DeleteButtonTest extends TestCase
     public function testConstructorUsesContextEscaper()
     {
         // Create a separate context mock to test escaper usage
-        $contextMockForTest = $this->createMock(\Magento\Backend\Block\Widget\Context::class);
+        $contextMockForTest = $this->createMock(Context::class);
         $contextMockForTest->expects($this->any())->method('getUrlBuilder')->willReturn($this->urlBuilderMock);
         $contextMockForTest->expects($this->once())->method('getEscaper')->willReturn($this->escaperMock);
         

@@ -10,6 +10,7 @@
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminOrderShippingInformationSection">
         <element name="shippingMethod" type="text" selector=".order-shipping-method .admin__page-section-item-content"/>
+        <element name="shippingMethodBlock" type="block" selector=".order-shipping-method"/>
         <element name="shippingPrice" type="text" selector=".order-shipping-method .admin__page-section-item-content .price"/>
     </section>
 </sections>

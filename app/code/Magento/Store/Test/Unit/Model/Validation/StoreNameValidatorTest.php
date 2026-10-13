@@ -10,6 +10,7 @@ namespace Magento\Store\Test\Unit\Model\Validation;
 use Magento\Framework\Validator\NotEmpty;
 use Magento\Framework\Validator\NotEmptyFactory;
 use Magento\Store\Model\Validation\StoreNameValidator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -44,11 +45,11 @@ class StoreNameValidatorTest extends TestCase
     }
 
     /**
-     * @dataProvider isValidDataProvider
      * @param string $value
      * @param bool $isValid
      * @param array $messages
      */
+    #[DataProvider('isValidDataProvider')]
     public function testIsValid(string $value, bool $isValid, array $messages): void
     {
         $this->notEmptyValidatorMock->expects($this->once())

@@ -60,7 +60,6 @@ class CountsTest extends TestCase
 
         $reflection = new ReflectionClass($counts);
         $resourceNameProperty = $reflection->getProperty('_resourceName');
-        $resourceNameProperty->setAccessible(true);
         $this->assertEquals(
             CountsResource::class,
             $resourceNameProperty->getValue($counts)

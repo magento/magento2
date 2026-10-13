@@ -13,11 +13,19 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\View\LayoutInterface;
 use Magento\Weee\Model\Tax;
 use Magento\Weee\Observer\SetWeeeRendererInFormObserver;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Unit Tests to cover SetWeeeRendererInFormObserver
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class SetWeeeRendererInFormObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * Testable object
      *
@@ -40,7 +48,7 @@ class SetWeeeRendererInFormObserverTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
+        $this->layoutMock = $this->createMock(LayoutInterface::class);
         $this->taxModelMock = $this->createMock(Tax::class);
         $this->observer = new SetWeeeRendererInFormObserver(
             $this->layoutMock,
@@ -57,10 +65,7 @@ class SetWeeeRendererInFormObserverTest extends TestCase
     {
         $attributes = new \ArrayIterator(['element_code_1', 'element_code_2']);
         /** @var Event|MockObject $eventMock */
-        $eventMock = $this->getMockBuilder(Event::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getForm'])
-            ->getMock();
+        $eventMock = $this->createPartialMockWithReflection(Event::class, ['getForm']);
 
         /** @var Observer|MockObject $observerMock */
         $observerMock = $this->createMock(Observer::class);

@@ -81,18 +81,16 @@ class CatalogRulePriceTest extends TestCase
     protected function setUp(): void
     {
         $this->saleableItemMock = $this->createMock(Product::class);
-        $this->dataTimeMock = $this->getMockForAbstractClass(TimezoneInterface::class);
-        $this->coreStoreMock = $this->getMockForAbstractClass(StoreInterface::class);
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $this->storeManagerMock->expects($this->any())
-            ->method('getStore')
-            ->willReturn($this->coreStoreMock);
+        $this->dataTimeMock = $this->createMock(TimezoneInterface::class);
+        $this->coreStoreMock = $this->createMock(StoreInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeManagerMock->method('getStore')->willReturn($this->coreStoreMock);
         $this->customerSessionMock = $this->createMock(Session::class);
         $this->catalogRuleResourceMock = $this->createMock(Rule::class);
-        $this->coreWebsiteMock = $this->getMockForAbstractClass(WebsiteInterface::class);
+        $this->coreWebsiteMock = $this->createMock(WebsiteInterface::class);
         $this->calculator = $this->createMock(Calculator::class);
         $qty = 1;
-        $this->priceCurrencyMock = $this->getMockForAbstractClass(PriceCurrencyInterface::class);
+        $this->priceCurrencyMock = $this->createMock(PriceCurrencyInterface::class);
 
         $this->object = new CatalogRulePrice(
             $this->saleableItemMock,

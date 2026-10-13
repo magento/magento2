@@ -17,16 +17,16 @@ use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address\Total;
 use Magento\QuoteGraphQl\Model\Cart\TotalsCollector;
 use Magento\QuoteGraphQl\Model\Resolver\CartPrices;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Quote\Test\Unit\Helper\QuoteTestHelper;
-use Magento\Quote\Test\Unit\Helper\TotalTestHelper;
 
 /**
  * @see CartPrices
  */
 class CartPricesTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var CartPrices
      */
@@ -79,9 +79,9 @@ class CartPricesTest extends TestCase
         $this->fieldMock = $this->createMock(Field::class);
         $this->resolveInfoMock = $this->createMock(ResolveInfo::class);
         $this->contextMock = $this->createMock(Context::class);
-        $this->quoteMock = $this->createPartialMock(QuoteTestHelper::class, ['getQuoteCurrencyCode']);
-        $this->totalMock = $this->createPartialMock(
-            TotalTestHelper::class,
+        $this->quoteMock = $this->createPartialMockWithReflection(Quote::class, ['getQuoteCurrencyCode']);
+        $this->totalMock = $this->createPartialMockWithReflection(
+            Total::class,
             [
                 'getSubtotal',
                 'getSubtotalInclTax',

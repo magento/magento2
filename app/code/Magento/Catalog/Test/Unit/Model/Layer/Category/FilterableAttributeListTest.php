@@ -40,7 +40,7 @@ class FilterableAttributeListTest extends TestCase
             ['create']
         );
 
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
 
         $this->model = new FilterableAttributeList(
             $this->collectionFactoryMock,

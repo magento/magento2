@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Payment\Test\Unit\Block\Transparent;
 
 use Magento\Payment\Block\Transparent\Redirect;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 
@@ -50,8 +51,8 @@ class RedirectTest extends TestCase
     /**
      * @param array $postData
      * @param array $expected
-     * @dataProvider getPostParamsDataProvider
      */
+    #[DataProvider('getPostParamsDataProvider')]
     public function testGetPostParams(array $postData, array $expected): void
     {
         $this->request->method('getPostValue')

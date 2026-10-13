@@ -12,9 +12,11 @@ use Magento\Sales\Model\Order\Pdf\Total\DefaultTotal;
 use Magento\Sales\Model\Order\Pdf\Total\Factory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class FactoryTest extends TestCase
 {
+
     /**
      * @var MockObject|ObjectManagerInterface
      */
@@ -27,7 +29,7 @@ class FactoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->_objectManager = $this->createMock(ObjectManagerInterface::class);
         $this->_factory = new Factory($this->_objectManager);
     }
 
@@ -35,8 +37,8 @@ class FactoryTest extends TestCase
      * @param mixed $class
      * @param array $arguments
      * @param string $expectedClassName
-     * @dataProvider createDataProvider
      */
+    #[DataProvider('createDataProvider')]
     public function testCreate($class, $arguments, $expectedClassName)
     {
         $createdModel = $this->getMockBuilder(DefaultTotal::class)

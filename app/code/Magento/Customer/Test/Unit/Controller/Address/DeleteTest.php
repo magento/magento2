@@ -27,12 +27,15 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\Framework\View\Result\PageFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DeleteTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var Delete */
     protected $model;
 
@@ -74,8 +77,7 @@ class DeleteTest extends TestCase
         $formFactoryMock = $this->getMockBuilder(FormFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->addressRepositoryMock = $this->getMockBuilder(AddressRepositoryInterface::class)
-            ->getMockForAbstractClass();
+        $this->addressRepositoryMock = $this->createMock(AddressRepositoryInterface::class);
         $addressInterfaceFactoryMock = $this->getMockBuilder(AddressInterfaceFactory::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['create'])
@@ -97,12 +99,9 @@ class DeleteTest extends TestCase
         $pageFactoryMock = $this->getMockBuilder(PageFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->request = $this->getMockBuilder(RequestInterface::class)
-            ->getMockForAbstractClass();
-        $this->address = $this->getMockBuilder(AddressInterface::class)
-            ->getMockForAbstractClass();
-        $this->messageManager = $this->getMockBuilder(ManagerInterface::class)
-            ->getMockForAbstractClass();
+        $this->request = $this->createMock(\Magento\Framework\App\Request\Http::class);
+        $this->address = $this->createMock(AddressInterface::class);
+        $this->messageManager = $this->createMock(ManagerInterface::class);
         $this->resultRedirectFactory =
             $this->getMockBuilder(RedirectFactory::class)
                 ->disableOriginalConstructor()

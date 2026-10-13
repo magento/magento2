@@ -15,6 +15,7 @@ use Magento\Sales\Model\OrderIncrementIdChecker;
 use Magento\Sales\Model\ResourceModel\Order;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Unit test for \Magento\Sales\Model\OrderIncrementIdChecker.
@@ -71,8 +72,8 @@ class OrderIncrementIdCheckerTest extends TestCase
      *
      * @param string|int $value
      * @return void
-     * @dataProvider isOrderIncrementIdUsedDataProvider
      */
+    #[DataProvider('isOrderIncrementIdUsedDataProvider')]
     public function testIsIncrementIdUsed($value): void
     {
         $expectedBind = [':increment_id' => $value];

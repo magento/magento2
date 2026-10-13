@@ -16,6 +16,7 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldT
     as FieldTypeResolver;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD)
@@ -49,18 +50,9 @@ class IndexResolverTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->converter = $this->getMockBuilder(ConverterInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['convert'])
-            ->getMockForAbstractClass();
-        $this->fieldTypeConverter = $this->getMockBuilder(FieldTypeConverterInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['convert'])
-            ->getMockForAbstractClass();
-        $this->fieldTypeResolver = $this->getMockBuilder(FieldTypeResolver::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getFieldType'])
-            ->getMockForAbstractClass();
+        $this->converter = $this->createPartialMock(ConverterInterface::class, ['convert']);
+        $this->fieldTypeConverter = $this->createPartialMock(FieldTypeConverterInterface::class, ['convert']);
+        $this->fieldTypeResolver = $this->createPartialMock(FieldTypeResolver::class, ['getFieldType']);
         $objectManager = new ObjectManagerHelper($this);
 
         $this->resolver = $objectManager->getObject(
@@ -74,7 +66,6 @@ class IndexResolverTest extends TestCase
     }
 
     /**
-     * @dataProvider getFieldIndexProvider
      * @param $isSearchable
      * @param $isAlwaysIndexable
      * @param $isComplexType
@@ -86,6 +77,7 @@ class IndexResolverTest extends TestCase
      * @param $expected
      * @return void
      */
+    #[DataProvider('getFieldIndexProvider')]
     public function testGetFieldName(
         $isSearchable,
         $isAlwaysIndexable,

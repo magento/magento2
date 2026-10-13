@@ -34,7 +34,7 @@ class AttributeOptionProvider implements AttributeOptionProviderInterface
 
     /**
      * @param Attribute $attributeResource
-     * @param ScopeResolverInterface $scopeResolver,
+     * @param ScopeResolverInterface $scopeResolver
      * @param OptionSelectBuilderInterface $optionSelectBuilder
      */
     public function __construct(
@@ -48,7 +48,7 @@ class AttributeOptionProvider implements AttributeOptionProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAttributeOptions(AbstractAttribute $superAttribute, $productId)
     {
@@ -61,12 +61,16 @@ class AttributeOptionProvider implements AttributeOptionProviderInterface
 
             $optionLabels = [];
             foreach ($options as $option) {
-                $optionLabels[$option['value']] = $option['label'];
+                $optionValue = $option['value'] ?? null;
+                if ($optionValue !== null) {
+                    $optionLabels[$optionValue] = $option['label'];
+                }
             }
 
             foreach ($data as $key => $value) {
-                $optionText = isset($optionLabels[$value['value_index']])
-                    ? $optionLabels[$value['value_index']]
+                $valueIndex = $value['value_index'] ?? null;
+                $optionText = ($valueIndex !== null && isset($optionLabels[$valueIndex]))
+                    ? $optionLabels[$valueIndex]
                     : false;
                 $data[$key]['default_title'] = $optionText;
                 $data[$key]['option_title'] = $optionText;

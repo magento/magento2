@@ -45,8 +45,7 @@ class ShowUpdateResult extends \Magento\Sales\Controller\Adminhtml\Order\Create 
     }
 
     /**
-     * Show item update result from loadBlockAction
-     * to prevent popup alert with resend data question
+     * Show item update result from loadBlockAction to prevent popup alert with resend data question
      *
      * @return \Magento\Framework\Controller\Result\Raw
      */
@@ -55,9 +54,25 @@ class ShowUpdateResult extends \Magento\Sales\Controller\Adminhtml\Order\Create 
         /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */
         $resultRaw = $this->resultRawFactory->create();
         $session = $this->_objectManager->get(\Magento\Backend\Model\Session::class);
-        if ($session->hasUpdateResult() && is_scalar($session->getUpdateResult())) {
-            $resultRaw->setContents($session->getUpdateResult());
+
+        if ($session->hasUpdateResult()) {
+            $updateResult = $session->getUpdateResult();
+
+            // Handle compressed data (for JSON responses to reduce session bloat)
+            if (is_array($updateResult) && isset($updateResult['compressed']) && $updateResult['compressed']) {
+                if (isset($updateResult['data']) && function_exists('gzdecode')) {
+                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                    $decompressed = gzdecode($updateResult['data']);
+                    // gzdecode returns false on error, handle gracefully
+                    $resultRaw->setContents(is_string($decompressed) ? $decompressed : '');
+                } else {
+                    $resultRaw->setContents('');
+                }
+            } elseif (is_scalar($updateResult)) {
+                $resultRaw->setContents($updateResult);
+            }
         }
+
         $session->unsUpdateResult();
         return $resultRaw;
     }

@@ -10,16 +10,16 @@ namespace Magento\Framework\Config\Test\Unit;
 
 use Magento\Framework\Config\Dom;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class XsdTest extends TestCase
 {
     /**
      * @param string $xsdFile
      * @param string $invalidXmlFile
-     * @param int $expectedErrorsQty
-     * @dataProvider invalidXmlFileDataProvider
-     * @throws \Exception
+     * @param int $expectedErrorsQty     * @throws \Exception
      */
+    #[DataProvider('invalidXmlFileDataProvider')]
     public function testInvalidXmlFile($xsdFile, $invalidXmlFile, $expectedErrorsQty)
     {
         if (!function_exists('libxml_set_external_entity_loader')) {

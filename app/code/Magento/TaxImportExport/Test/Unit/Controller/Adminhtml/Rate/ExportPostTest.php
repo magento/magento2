@@ -48,7 +48,7 @@ class ExportPostTest extends TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->fileFactoryMock = $this->createMock(FileFactory::class);
-        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $this->controller = $this->objectManagerHelper->getObject(
             ExportPost::class,
             [

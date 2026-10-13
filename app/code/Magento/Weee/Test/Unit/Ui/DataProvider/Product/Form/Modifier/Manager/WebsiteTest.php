@@ -12,6 +12,7 @@ use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute as EavAttribute;
 use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\StoreManager;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Weee\Ui\DataProvider\Product\Form\Modifier\Manager\Website;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -57,19 +58,14 @@ class WebsiteTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->locatorMock = $this->getMockBuilder(LocatorInterface::class)
-            ->getMockForAbstractClass();
-        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
-            ->onlyMethods(['hasSingleStore'])
-            ->getMockForAbstractClass();
-        $this->directoryHelperMock = $this->getMockBuilder(DirectoryHelper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->eavAttributeMock = $this->getMockBuilder(EavAttribute::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->productMock = $this->getMockBuilder(ProductInterface::class)
-            ->getMockForAbstractClass();
+        $this->locatorMock = $this->createMock(LocatorInterface::class);
+        $this->storeManagerMock = $this->createPartialMock(
+            StoreManager::class,
+            ['hasSingleStore']
+        );
+        $this->directoryHelperMock = $this->createMock(DirectoryHelper::class);
+        $this->eavAttributeMock = $this->createMock(EavAttribute::class);
+        $this->productMock = $this->createMock(ProductInterface::class);
 
         $this->model = $this->objectManager->getObject(Website::class, [
             'locator' => $this->locatorMock,

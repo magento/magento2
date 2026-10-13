@@ -39,16 +39,20 @@ use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorI
 use Magento\ImportExport\Model\ImportFactory;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * Tests Magento\CustomerImportExport\Model\Import\Address.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @phpstan-ignore-next-line
  */
 class AddressTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * Customer address entity adapter mock
      *
@@ -156,17 +160,14 @@ class AddressTest extends TestCase
     {
         $this->_objectManagerMock = new ObjectManager($this);
         $this->_stringLib = new StringUtils();
-        $this->_storeManager = $this->getMockBuilder(StoreManager::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getWebsites'])
-            ->getMock();
+        $this->_storeManager = $this->createPartialMock(
+            StoreManager::class,
+            ['getWebsites']
+        );
         $this->_storeManager
             ->method('getWebsites')
             ->willReturnCallback([$this, 'getWebsites']);
-        $this->countryWithWebsites = $this
-            ->getMockBuilder(CountryWithWebsites::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->countryWithWebsites = $this->createMock(CountryWithWebsites::class);
         $this->countryWithWebsites
             ->method('getCountiesPerWebsite')
             ->willReturn([]);
@@ -192,13 +193,26 @@ class AddressTest extends TestCase
      */
     protected function _getModelDependencies()
     {
-        $dataSourceModel = $this->getMockBuilder(\stdClass::class)->addMethods(['getNextBunch'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        // Create mock for data source model
+        $dataSourceModel = $this->createPartialMockWithReflection(
+            \stdClass::class,
+            ['getNextBunch', 'getColNames', 'rewind', 'valid', 'current', 'key', 'next']
+        );
+        $dataSourceModel->method('getNextBunch')->willReturn([]);
+        $dataSourceModel->method('getColNames')->willReturn([]);
+
         $connection = $this->createMock(\stdClass::class);
         $attributeCollection = $this->_createAttrCollectionMock();
         $customerStorage = $this->_createCustomerStorageMock();
-        $customerEntity = $this->_createCustomerEntityMock();
+
+        // Create mock for customer entity
+        $customerEntity = $this->createPartialMockWithReflection(
+            \Magento\Framework\Model\AbstractModel::class,
+            ['filterEntityCollection', 'getEntityTable']
+        );
+        $customerEntity->method('filterEntityCollection')->willReturnArgument(0);
+        $customerEntity->method('getEntityTable')->willReturn('customer_entity');
+
         $addressCollection = new Collection(
             $this->createMock(EntityFactory::class)
         );
@@ -238,38 +252,30 @@ class AddressTest extends TestCase
      */
     protected function _createAttrCollectionMock()
     {
-        $entityFactory = $this->createMock(EntityFactory::class);
-        $attributeCollection = $this->getMockBuilder(Collection::class)
-            ->addMethods(['getEntityTypeCode'])
-            ->setConstructorArgs([$entityFactory])
-            ->getMock();
+        $attributeCollection = $this->createPartialMockWithReflection(
+            Collection::class,
+            ['setEntityTypeCode', 'addItem', 'getIterator', 'getEntityTypeCode']
+        );
+        $attributeCollection->method('setEntityTypeCode')->with('customer_address')->willReturnSelf();
+        $attributeCollection->method('getEntityTypeCode')->willReturn('customer_address');
+        $attributeCollection->method('addItem')->willReturnSelf();
+
+        $attributes = [];
         foreach ($this->_attributes as $attributeData) {
-            $arguments = $this->_objectManagerMock->getConstructArguments(
+            $attribute = $this->createPartialMock(
                 AbstractAttribute::class,
-                [
-                    $this->createMock(Context::class),
-                    $this->createMock(Registry::class),
-                    $this->createMock(Config::class),
-                    $this->createMock(TypeFactory::class),
-                    $this->createMock(StoreManager::class),
-                    $this->createMock(Helper::class),
-                    $this->createMock(UniversalFactory::class)
-                ]
+                ['_construct', 'getBackend']
             );
-            $arguments['data'] = $attributeData;
-            $attribute = $this->getMockForAbstractClass(
-                AbstractAttribute::class,
-                $arguments,
-                '',
-                true,
-                true,
-                true,
-                ['_construct', 'getBackend', 'getTable']
-            );
-            $attribute->method('getBackend')->willReturnSelf();
-            $attribute->method('getTable')->willReturn($attributeData['table']);
-            $attributeCollection->addItem($attribute);
+
+            // Create a backend mock that returns the table
+            $backend = $this->createMock(\Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend::class);
+            $backend->method('getTable')->willReturn($attributeData['table']);
+
+            $attribute->method('getBackend')->willReturn($backend);
+            $attributes[] = $attribute;
         }
+        $attributeCollection->method('getIterator')->willReturn(new \ArrayIterator($attributes));
+
         return $attributeCollection;
     }
 
@@ -300,22 +306,6 @@ class AddressTest extends TestCase
         $customerStorage->method('prepareCustomers');
 
         return $customerStorage;
-    }
-
-    /**
-     * Create simple mock of customer entity, so it can be used for tests
-     *
-     * @return MockObject
-     */
-    protected function _createCustomerEntityMock()
-    {
-        $customerEntity = $this->getMockBuilder(\stdClass::class)
-            ->addMethods(['filterEntityCollection', 'setParameters'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $customerEntity->method('filterEntityCollection')->willReturnArgument(0);
-        $customerEntity->method('setParameters')->willReturnSelf();
-        return $customerEntity;
     }
 
     /**
@@ -363,7 +353,7 @@ class AddressTest extends TestCase
      */
     protected function _getModelMock()
     {
-        $scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $scopeConfig = $this->createMock(ScopeConfigInterface::class);
         $this->_objectManagerMock->prepareObjectManager();
         $modelMock = new Address(
             $this->_stringLib,
@@ -391,7 +381,6 @@ class AddressTest extends TestCase
         );
 
         $property = new \ReflectionProperty($modelMock, '_availableBehaviors');
-        $property->setAccessible(true);
         $property->setValue($modelMock, $this->_availableBehaviors);
 
         return $modelMock;
@@ -435,13 +424,12 @@ class AddressTest extends TestCase
     }
 
     /**
-     * @dataProvider validateRowForUpdateDataProvider
-     *
      * @param array $rowData
      * @param array $errors
      * @param boolean $isValid
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[DataProvider('validateRowForUpdateDataProvider')]
     public function testValidateRowForUpdate(array $rowData, array $errors, $isValid = false)
     {
         $this->_model->setParameters(['behavior' => Import::BEHAVIOR_ADD_UPDATE]);
@@ -454,13 +442,12 @@ class AddressTest extends TestCase
     }
 
     /**
-     * @dataProvider validateRowForUpdateDataProvider
-     *
      * @param array $rowData
      * @param array $errors
      * @param boolean $isValid
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[DataProvider('validateRowForUpdateDataProvider')]
     public function testValidateRowForUpdateGlobalCustomer(array $rowData, array $errors, $isValid = false)
     {
         if ($isValid) {
@@ -516,13 +503,13 @@ class AddressTest extends TestCase
      * Test Address::validateRow() with delete action
      *
      * @covers \Magento\CustomerImportExport\Model\Import\Address::validateRow
-     * @dataProvider validateRowForDeleteDataProvider
      *
      * @param array $rowData
      * @param array $errors
      * @param boolean $isValid
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[DataProvider('validateRowForDeleteDataProvider')]
     public function testValidateRowForDelete(array $rowData, array $errors, $isValid = false)
     {
         $this->_model->setParameters(['behavior' => Import::BEHAVIOR_DELETE]);

@@ -9,6 +9,7 @@ namespace Magento\Paypal\Test\Unit\Model;
 
 use Magento\Customer\Helper\Session\CurrentCustomer;
 use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\UrlInterface;
 use Magento\Payment\Helper\Data;
 use Magento\Paypal\Model\Config;
@@ -21,9 +22,11 @@ use PHPUnit\Framework\TestCase;
 
 class ExpressConfigProviderTest extends TestCase
 {
+    use MockCreationTrait;
+
     public function testGetConfig()
     {
-        $localeResolver = $this->getMockForAbstractClass(ResolverInterface::class);
+        $localeResolver = $this->createMock(ResolverInterface::class);
         $localeResolver->expects($this->once())->method('getLocale');
 
         $configFactory = $this->createPartialMock(ConfigFactory::class, ['create']);
@@ -43,18 +46,16 @@ class ExpressConfigProviderTest extends TestCase
 
         $configFactory->expects($this->once())->method('create')->willReturn($config);
 
-        $payment = $this->getMockBuilder(Payflowpro::class)
-            ->addMethods(['getCheckoutRedirectUrl'])
-            ->onlyMethods(['isAvailable'])
-            ->setMockClassName('paymentInstance')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $payment = $this->createPartialMockWithReflection(
+            Payflowpro::class,
+            ['getCheckoutRedirectUrl', 'isAvailable']
+        );
         $payment->expects($this->atLeastOnce())->method('isAvailable')->willReturn(true);
         $payment->expects($this->atLeastOnce())->method('getCheckoutRedirectUrl')->willReturn('http://redirect.url');
         $paymentHelper->expects($this->atLeastOnce())->method('getMethodInstance')->willReturn($payment);
 
         /** @var UrlInterface|MockObject $urlBuilderMock */
-        $urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
+        $urlBuilderMock = $this->createMock(UrlInterface::class);
 
         $smartButtonConfigMock = $this->createMock(SmartButtonConfig::class);
 

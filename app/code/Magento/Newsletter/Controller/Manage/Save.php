@@ -84,7 +84,7 @@ class Save extends \Magento\Newsletter\Controller\Manage implements HttpPostActi
                 $storeId = (int)$this->storeManager->getStore()->getId();
                 $customer->setStoreId($storeId);
                 $isSubscribedState = $customer->getExtensionAttributes()->getIsSubscribed();
-                $isSubscribedParam = (boolean)$this->getRequest()->getParam('is_subscribed', false);
+                $isSubscribedParam = (bool)$this->getRequest()->getParam('is_subscribed', false);
                 if ($isSubscribedParam !== $isSubscribedState) {
                     // No need to validate customer and customer address while saving subscription preferences
                     $this->setIgnoreValidationFlag($customer);

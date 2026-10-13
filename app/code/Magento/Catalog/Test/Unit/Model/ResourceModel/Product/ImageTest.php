@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\ResourceModel\Product\Gallery;
 use Magento\Catalog\Model\ResourceModel\Product\Image;
 use Magento\Framework\App\ResourceConnection;
@@ -117,9 +118,10 @@ class ImageTest extends TestCase
 
     /**
      * @param int $imagesCount
-     * @dataProvider dataProvider
+     * @param int $batchSize
      */
-    public function testGetCountAllProductImages(int $imagesCount): void
+    #[DataProvider('dataProvider')]
+    public function testGetCountAllProductImages(int $imagesCount, int $batchSize): void
     {
         $selectMock = $this->getVisibleImagesSelectMock();
         $selectMock->expects($this->exactly(2))
@@ -154,9 +156,10 @@ class ImageTest extends TestCase
 
     /**
      * @param int $imagesCount
-     * @dataProvider dataProvider
+     * @param int $batchSize
      */
-    public function testGetCountUsedProductImages(int $imagesCount): void
+    #[DataProvider('dataProvider')]
+    public function testGetCountUsedProductImages(int $imagesCount, int $batchSize): void
     {
         $selectMock = $this->getUsedImagesSelectMock();
         $selectMock->expects($this->exactly(2))
@@ -192,8 +195,8 @@ class ImageTest extends TestCase
     /**
      * @param int $imagesCount
      * @param int $batchSize
-     * @dataProvider dataProvider
      */
+    #[DataProvider('dataProvider')]
     public function testGetAllProductImages(int $imagesCount, int $batchSize): void
     {
         $selectMock = $this->getVisibleImagesSelectMock();
@@ -230,8 +233,8 @@ class ImageTest extends TestCase
     /**
      * @param int $imagesCount
      * @param int $batchSize
-     * @dataProvider dataProvider
      */
+    #[DataProvider('dataProvider')]
     public function testGetUsedProductImages(int $imagesCount, int $batchSize): void
     {
         $selectMock = $this->getUsedImagesSelectMock();

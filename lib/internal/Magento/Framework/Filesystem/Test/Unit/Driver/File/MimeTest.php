@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Framework\Filesystem\Test\Unit\Driver\File;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\Driver\File\Mime;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @see Mime
@@ -42,9 +43,8 @@ class MimeTest extends TestCase
      * @param string $file
      * @param string $expectedType
      * @throws FileSystemException
-     *
-     * @dataProvider getMimeTypeDataProvider
-     */
+     *     */
+    #[DataProvider('getMimeTypeDataProvider')]
     public function testGetMimeType(string $file, string $expectedType): void
     {
         $actualType = $this->mime->getMimeType($file);

@@ -9,6 +9,8 @@ namespace Magento\ProductVideo\Test\Unit\Block\Product\View;
 
 use Magento\Catalog\Block\Product\Context;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Gallery\ImagesConfigFactoryInterface;
+use Magento\Catalog\Model\Product\Image\UrlBuilder;
 use Magento\Catalog\Model\Product\Type\AbstractType;
 use Magento\Framework\DataObject;
 use Magento\Framework\Json\EncoderInterface;
@@ -48,8 +50,17 @@ class GalleryTest extends TestCase
     protected $coreRegistry;
 
     /**
-     * @var ObjectManager
-     * |\Magento\ProductVideo\Block\Adminhtml\Product\Video\Gallery
+     * @var ImagesConfigFactoryInterface|MockObject
+     */
+    protected $imagesConfigFactoryMock;
+
+    /**
+     * @var UrlBuilder|MockObject
+     */
+    protected $urlBuilderMock;
+
+    /**
+     * @var Gallery
      */
     protected $gallery;
 
@@ -66,13 +77,28 @@ class GalleryTest extends TestCase
         $this->contextMock = $this->createMock(Context::class);
         $this->arrayUtilsMock = $this->createMock(ArrayUtils::class);
         $this->mediaHelperMock = $this->createMock(Media::class);
-        $this->jsonEncoderMock = $this->getMockForAbstractClass(EncoderInterface::class);
+        $this->jsonEncoderMock = $this->createMock(EncoderInterface::class);
         $this->coreRegistry = $this->createMock(Registry::class);
         $this->contextMock->expects($this->once())->method('getRegistry')->willReturn($this->coreRegistry);
+
+        $this->imagesConfigFactoryMock = $this->createMock(ImagesConfigFactoryInterface::class);
+        $this->urlBuilderMock = $this->createMock(UrlBuilder::class);
 
         $this->productModelMock = $this->createMock(Product::class);
 
         $objectManager = new ObjectManager($this);
+
+        $objects = [
+            [
+                ImagesConfigFactoryInterface::class,
+                $this->imagesConfigFactoryMock
+            ],
+            [
+                UrlBuilder::class,
+                $this->urlBuilderMock
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
 
         $this->gallery = $objectManager->getObject(
             Gallery::class,

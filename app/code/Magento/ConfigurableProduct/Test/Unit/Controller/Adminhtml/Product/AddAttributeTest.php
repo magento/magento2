@@ -12,10 +12,11 @@ use Magento\Catalog\Controller\Adminhtml\Product\Builder;
 use Magento\Catalog\Model\Product;
 use Magento\ConfigurableProduct\Controller\Adminhtml\Product\AddAttribute;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\Response\Http as ResponseHttp;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\ViewInterface;
-use Magento\Framework\App\Test\Unit\Helper\ResponseTestHelper;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\View\Result\Layout;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -23,6 +24,8 @@ use PHPUnit\Framework\TestCase;
 
 class AddAttributeTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var ResultFactory|MockObject */
     private $resultFactory;
 
@@ -64,7 +67,7 @@ class AddAttributeTest extends TestCase
         $this->context = $this->createMock(Context::class);
         $this->request = $this->createMock(RequestInterface::class);
         $this->resultFactory = $this->createMock(ResultFactory::class);
-        $this->response = new ResponseTestHelper();
+        $this->response = $this->createMock(ResponseHttp::class);
         $this->productBuilder = $this->createPartialMock(Builder::class, ['build']);
         $this->view = $this->createMock(ViewInterface::class);
 

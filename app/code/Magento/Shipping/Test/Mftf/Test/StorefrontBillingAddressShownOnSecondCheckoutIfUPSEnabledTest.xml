@@ -41,6 +41,7 @@
             </actionGroup>
         </before>
         <after>
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrdersGridFiltersAfter" before="logoutFromAdmin"/>
             <!--Reset shipping origin-->
             <actionGroup ref="AdminResetShippingOriginConfigurationActionGroup" stepKey="resetShippingOriginConfig"/>
             <!--Navigate to shipping method configuration-->

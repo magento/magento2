@@ -13,6 +13,7 @@ class SelectAttribute extends Attribute
 {
     private const DEFAULT_DATA = [
         'frontend_input' => 'select',
+        'backend_type' => 'int',
         'options' => [
             [
                 'label' => 'option_1',

@@ -43,9 +43,7 @@ class RangeTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->fieldMapper = $this->getMockBuilder(FieldMapperInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->fieldMapper = $this->createMock(FieldMapperInterface::class);
 
         $this->filterInterface = $this->getMockBuilder(RangeFilterRequest::class)
             ->disableOriginalConstructor()

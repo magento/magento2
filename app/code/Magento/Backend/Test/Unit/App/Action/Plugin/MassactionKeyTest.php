@@ -9,13 +9,18 @@ namespace Magento\Backend\Test\Unit\App\Action\Plugin;
 
 use Magento\Backend\App\AbstractAction;
 use Magento\Backend\App\Action\Plugin\MassactionKey;
+use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class MassactionKeyTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var MassactionKey
      */
@@ -36,18 +41,14 @@ class MassactionKeyTest extends TestCase
      */
     protected function setUp(): void
     {
+        $objectManager = new ObjectManager($this);
+        
         $this->subjectMock = $this->createMock(AbstractAction::class);
-        $this->requestMock = $this->getMockForAbstractClass(
-            RequestInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
+        $this->requestMock = $this->createPartialMockWithReflection(
+            Http::class,
             ['getPost', 'setPostValue']
         );
 
-        $objectManager = new ObjectManager($this);
         $this->plugin = $objectManager->getObject(
             MassactionKey::class,
             [
@@ -62,8 +63,8 @@ class MassactionKeyTest extends TestCase
      * @param array $convertedData
      *
      * @return void
-     * @dataProvider beforeDispatchDataProvider
      */
+    #[DataProvider('beforeDispatchDataProvider')]
     public function testBeforeDispatchWhenMassactionPrepareKeyRequestExists(
         $postData,
         array $convertedData

@@ -31,13 +31,8 @@ class FrontendStorageManagerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->frontendStorageConfigurationPoolMock = $this
-            ->getMockBuilder(FrontendStorageConfigurationPool::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->contextMock = $this->createMock(Context::class);
+        $this->frontendStorageConfigurationPoolMock = $this->createMock(FrontendStorageConfigurationPool::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
@@ -51,9 +46,7 @@ class FrontendStorageManagerTest extends TestCase
 
     public function testGetConfigurationJson()
     {
-        $dynamicStorage = $this->getMockBuilder(FrontendStorageConfigurationInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $dynamicStorage = $this->createMock(FrontendStorageConfigurationInterface::class);
         $configuration = [
             'first_key' => [
                 'first' => 'data_before',

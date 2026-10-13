@@ -98,7 +98,7 @@ class Collection extends \Magento\Framework\Data\Collection
     {
         $result = [];
         foreach ($this->metadataProvider->get() as $itemName => $itemData) {
-            if (isset($itemData['use_in_grid']) && (boolean)$itemData['use_in_grid']) {
+            if (isset($itemData['use_in_grid']) && (bool)$itemData['use_in_grid']) {
                 $result[$itemName] = $this->valueProcessor->process(
                     $this->appConfig->getValue($itemData['path'], $scope, $scopeId),
                     $scope,

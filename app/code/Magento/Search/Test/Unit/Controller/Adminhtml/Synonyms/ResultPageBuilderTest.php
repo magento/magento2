@@ -39,11 +39,10 @@ class ResultPageBuilderTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->engineResolverMock = $this->getMockBuilder(EngineResolverInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->searchFeatureConfigMock = $this->getMockBuilder(ConfigInterface::class)
-            ->getMockForAbstractClass();
-        $this->messageManagerMock = $this->getMockBuilder(ManagerInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
+        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
 
         $this->model = new ResultPageBuilder(
             $this->resultPageFactoryMock,

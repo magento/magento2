@@ -55,4 +55,7 @@
         <data key="frontend_input">swatch_text</data>
         <data key="attribute_code" unique="suffix">text_swatch_attribute_</data>
     </entity>
+    <entity name="VisualSwatchProductAttributeFormWithImageFallback" extends="VisualSwatchProductAttributeForm">
+        <data key="use_product_image_for_swatch">1</data>
+    </entity>
 </entities>

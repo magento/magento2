@@ -43,14 +43,9 @@ class EnvironmentPlaceholderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->placeholderFactoryMock = $this->getMockBuilder(PlaceholderFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->arrayManagerMock = $this->getMockBuilder(ArrayManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->placeholderMock = $this->getMockBuilder(PlaceholderInterface::class)
-            ->getMockForAbstractClass();
+        $this->placeholderFactoryMock = $this->createMock(PlaceholderFactory::class);
+        $this->arrayManagerMock = $this->createMock(ArrayManager::class);
+        $this->placeholderMock = $this->createMock(PlaceholderInterface::class);
         $this->env = $_ENV;
 
         $this->placeholderFactoryMock->expects($this->any())

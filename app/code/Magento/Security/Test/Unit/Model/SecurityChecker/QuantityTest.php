@@ -15,6 +15,7 @@ use Magento\Security\Model\PasswordResetRequestEvent;
 use Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\Collection;
 use Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\CollectionFactory;
 use Magento\Security\Model\SecurityChecker\Quantity;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -60,18 +61,7 @@ class QuantityTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->securityConfigMock =  $this->getMockBuilder(ConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getScopeByEventType'])
-            ->getMockForAbstractClass();
-        $this->securityConfigMock->expects($this->any())
-            ->method('getScopeByEventType')
-            ->willReturnMap(
-                [
-                    [0, 1],
-                    [1, 0]
-                ]
-            );
+        $this->securityConfigMock = $this->createMock(ConfigInterface::class);
 
         $this->collectionFactoryMock = $this->createPartialMock(
             CollectionFactory::class,
@@ -83,9 +73,7 @@ class QuantityTest extends TestCase
             ['addFieldToFilter', 'filterByLifetime', 'count']
         );
 
-        $this->remoteAddressMock =  $this->getMockBuilder(RemoteAddress::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->remoteAddressMock = $this->createMock(RemoteAddress::class);
 
         $this->model = $this->objectManager->getObject(
             Quantity::class,
@@ -100,8 +88,8 @@ class QuantityTest extends TestCase
     /**
      * @param int $securityEventType
      * @param int $requestsMethod
-     * @dataProvider dataProviderSecurityEventTypeWithRequestsMethod
      */
+    #[DataProvider('dataProviderSecurityEventTypeWithRequestsMethod')]
     public function testCheck($securityEventType, $requestsMethod)
     {
         $limitNumberPasswordResetRequests = 10;
@@ -118,8 +106,8 @@ class QuantityTest extends TestCase
     /**
      * @param int $securityEventType
      * @param int $requestsMethod
-     * @dataProvider dataProviderSecurityEventTypeWithRequestsMethod
      */
+    #[DataProvider('dataProviderSecurityEventTypeWithRequestsMethod')]
     public function testCheckException($securityEventType, $requestsMethod)
     {
         $this->expectException('Magento\Framework\Exception\SecurityViolationException');

@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Setup\Declaration\Schema\Db\MySQL;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test DB schema writer
@@ -54,8 +55,8 @@ class DbSchemaWriterTest extends \PHPUnit\Framework\TestCase
      * @param array $options
      * @param string|bool $expected
      * @throws \Zend_Db_Exception
-     * @dataProvider getAutoIncrementFieldDataProvider
      */
+    #[DataProvider('getAutoIncrementFieldDataProvider')]
     public function testResetAutoIncrement(array $options, $expected)
     {
         $adapter = $this->getDbAdapter();

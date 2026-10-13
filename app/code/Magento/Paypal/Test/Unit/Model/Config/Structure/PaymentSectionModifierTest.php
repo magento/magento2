@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Paypal\Test\Unit\Model\Config\Structure;
 
 use Magento\Paypal\Model\Config\Structure\PaymentSectionModifier;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class PaymentSectionModifierTest extends TestCase
@@ -22,8 +23,8 @@ class PaymentSectionModifierTest extends TestCase
     /**
      * @param string $case
      * @param array $structure
-     * @dataProvider caseProvider
      */
+    #[DataProvider('caseProvider')]
     public function testSpecialGroupsPresent($case, $structure)
     {
         $modifier = new PaymentSectionModifier();
@@ -43,8 +44,8 @@ class PaymentSectionModifierTest extends TestCase
     /**
      * @param string $case
      * @param array $structure
-     * @dataProvider caseProvider
      */
+    #[DataProvider('caseProvider')]
     public function testOnlySpecialGroupsPresent($case, $structure)
     {
         $modifier = new PaymentSectionModifier();
@@ -64,8 +65,8 @@ class PaymentSectionModifierTest extends TestCase
     /**
      * @param string $case
      * @param array $structure
-     * @dataProvider caseProvider
      */
+    #[DataProvider('caseProvider')]
     public function testGroupsNotRemovedAfterModification($case, $structure)
     {
         $modifier = new PaymentSectionModifier();

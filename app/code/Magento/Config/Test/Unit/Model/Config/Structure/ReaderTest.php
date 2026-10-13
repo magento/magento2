@@ -56,19 +56,13 @@ class ReaderTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->fileResolverMock = $this->getMockBuilder(FileResolverInterface::class)
-            ->getMockForAbstractClass();
-        $this->converterMock = $this->getMockBuilder(Converter::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->schemaLocatorMock = $this->getMockBuilder(SchemaLocator::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->validationStateMock = $this->getMockBuilder(ValidationStateInterface::class)
-            ->getMockForAbstractClass();
-        $this->compilerMock = $this->getMockBuilder(
+        $this->fileResolverMock = $this->createMock(FileResolverInterface::class);
+        $this->converterMock = $this->createMock(Converter::class);
+        $this->schemaLocatorMock = $this->createMock(SchemaLocator::class);
+        $this->validationStateMock = $this->createMock(ValidationStateInterface::class);
+        $this->compilerMock = $this->createMock(
             CompilerInterface::class
-        )->getMockForAbstractClass();
+        );
 
         $this->reader = new Reader(
             $this->fileResolverMock,

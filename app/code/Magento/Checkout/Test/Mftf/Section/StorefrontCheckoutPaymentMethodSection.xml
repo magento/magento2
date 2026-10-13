@@ -20,5 +20,6 @@
         <element name="checkPaypalExpress" type="radio" selector="//div/input[@id='paypal_express']"/>
         <element name="checkPaypalExpressActive" type="radio" selector="//div[@class='payment-method _active']/div/input[@id='paypal_express']"/>
         <element name="paymentMethod" type="radio" selector="//dl[@class='checkout-payment-method']//label[contains(., '{{methodName}}')]/../..//input" parameterized="true"/>
+        <element name="creditCard" type="text" selector="//span[@data-bind='text: getTitle()' and contains(text(),'{{cardName}}')]" parameterized="true"/>
     </section>
 </sections>

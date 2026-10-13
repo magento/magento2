@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class VersionTest extends TestCase
@@ -53,7 +54,7 @@ class VersionTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManagerHelper($this);
-        $this->cookieManagerMock = $this->getMockForAbstractClass(CookieManagerInterface::class);
+        $this->cookieManagerMock = $this->createMock(CookieManagerInterface::class);
         $this->requestMock = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -80,9 +81,9 @@ class VersionTest extends TestCase
      */
 
     /**
-     * @dataProvider processProvider
      * @param bool $isPost
      */
+    #[DataProvider('processProvider')]
     public function testProcess($isPost)
     {
         $this->requestMock->expects($this->once())->method('isPost')->willReturn($isPost);

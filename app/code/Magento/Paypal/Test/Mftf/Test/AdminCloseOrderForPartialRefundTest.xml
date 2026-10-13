@@ -119,6 +119,8 @@
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <!-- Delete category -->
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <!-- Clear order grid filters -->
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrdersFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Create Credit Memo-->

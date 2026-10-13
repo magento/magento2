@@ -20,6 +20,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Catalog\Helper\Data;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Validate Tier Price and check duplication
@@ -89,6 +90,11 @@ class TierPriceValidator implements ResetAfterRequestInterface
     private $scopeConfig;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private StoreManagerInterface $storeManager;
+
+    /**
      * TierPriceValidator constructor.
      *
      * @param ProductIdLocatorInterface $productIdLocator
@@ -99,6 +105,7 @@ class TierPriceValidator implements ResetAfterRequestInterface
      * @param array $allowedProductTypes [optional]
      * @param ResourceConnection|null $resourceConnection
      * @param ScopeConfigInterface|null $scopeConfig
+     * @param StoreManagerInterface|null $storeManager
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -109,7 +116,8 @@ class TierPriceValidator implements ResetAfterRequestInterface
         ProductRepositoryInterface $productRepository,
         array $allowedProductTypes = [],
         ?ResourceConnection $resourceConnection = null,
-        ?ScopeConfigInterface $scopeConfig = null
+        ?ScopeConfigInterface $scopeConfig = null,
+        ?StoreManagerInterface $storeManager = null
     ) {
         $this->productIdLocator = $productIdLocator;
         $this->websiteRepository = $websiteRepository;
@@ -119,6 +127,7 @@ class TierPriceValidator implements ResetAfterRequestInterface
         $this->allowedProductTypes = $allowedProductTypes;
         $this->resourceConnection = $resourceConnection ?: ObjectManager::getInstance()->get(ResourceConnection::class);
         $this->scopeConfig = $scopeConfig ?: ObjectManager::getInstance()->get(ScopeConfigInterface::class);
+        $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
     }
 
     /**
@@ -311,12 +320,14 @@ class TierPriceValidator implements ResetAfterRequestInterface
     private function checkQuantity(TierPriceInterface $price, $key, Result $validationResult)
     {
         $sku = $price->getSku();
-        if (isset($this->productsCacheBySku[$sku])) {
-            $product = $this->productsCacheBySku[$sku];
-        } else {
-            $product = $this->productRepository->get($price->getSku());
-            $this->productsCacheBySku[$sku] = $product;
+        if (!isset($this->productsCacheBySku[$sku])) {
+            try {
+                $this->productsCacheBySku[$sku] = $this->productRepository->get($sku);
+            } catch (NoSuchEntityException $e) {
+                return;
+            }
         }
+        $product = $this->productsCacheBySku[$sku];
 
         $canUseQtyDecimals = $product->getTypeInstance()->canUseQtyDecimals();
         if ($price->getQuantity() <= 0 || $price->getQuantity() < 1 && !$canUseQtyDecimals) {
@@ -354,12 +365,12 @@ class TierPriceValidator implements ResetAfterRequestInterface
     {
         try {
             $this->websiteRepository->getById($price->getWebsiteId());
-            $isWebsiteScope = $this->scopeConfig
-                ->isSetFlag(
-                    Data::XML_PATH_PRICE_SCOPE,
-                    ScopeInterface::SCOPE_STORE,
-                    ScopeConfigInterface::SCOPE_TYPE_DEFAULT
-                );
+            $defaultStoreView = $this->storeManager->getDefaultStoreView();
+            $isWebsiteScope = $this->scopeConfig->isSetFlag(
+                Data::XML_PATH_PRICE_SCOPE,
+                ScopeInterface::SCOPE_STORE,
+                $defaultStoreView->getCode()
+            );
             if (!$isWebsiteScope && (int) $this->allWebsitesValue !== $price->getWebsiteId()) {
                 throw NoSuchEntityException::singleField('website_id', $price->getWebsiteId());
             }

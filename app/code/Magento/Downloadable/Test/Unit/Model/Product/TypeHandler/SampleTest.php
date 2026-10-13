@@ -12,9 +12,11 @@ use Magento\Catalog\Model\Product;
 use Magento\Downloadable\Helper\Download;
 use Magento\Downloadable\Model\Product\TypeHandler\Sample;
 use Magento\Downloadable\Model\ResourceModel\Link;
+use Magento\Downloadable\Model\Sample as SampleModel;
 use Magento\Downloadable\Model\SampleFactory;
 use Magento\Framework\EntityManager\EntityMetadata;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Store\Model\Store;
 use PHPUnit\Framework\MockObject\Exception;
@@ -30,6 +32,8 @@ use Magento\Downloadable\Model\ResourceModel\Sample as ResourceSample;
  */
 class SampleTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var MockObject
      */
@@ -75,7 +79,6 @@ class SampleTest extends TestCase
         );
         $refClass = new \ReflectionClass(Sample::class);
         $refProperty = $refClass->getProperty('metadataPool');
-        $refProperty->setAccessible(true);
         $refProperty->setValue($this->target, $this->metadataPoolMock);
     }
 
@@ -187,8 +190,8 @@ class SampleTest extends TestCase
      */
     private function createSampleModel($product, array $modelData)
     {
-        $sample = $this->createPartialMock(
-            \Magento\Downloadable\Test\Unit\Helper\SampleTestHelper::class,
+        $sample = $this->createPartialMockWithReflection(
+            SampleModel::class,
             [
                 'setProductId',
                 'setStoreId',

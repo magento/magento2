@@ -197,10 +197,8 @@ class GetCartQueryForProductWithCustomOptionFile extends GraphQlAbstract
         $uploader = new Http();
         $refObject = new \ReflectionObject($uploader);
         $validators = $refObject->getProperty('validators');
-        $validators->setAccessible(true);
         $validators->setValue($uploader, []);
         $files = $refObject->getProperty('files');
-        $files->setAccessible(true);
         $filesValues = $files->getValue($uploader);
         foreach (array_keys($filesValues) as $value) {
             $filesValues[$value]['validators'] = [];

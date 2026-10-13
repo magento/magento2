@@ -1,11 +1,13 @@
 <?php
 /**
- * Copyright 2014 Adobe
+ * Copyright 2025 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Framework;
+
+use Exception;
 
 /**
  * Magento escape methods
@@ -107,11 +109,11 @@ class Escaper
                     $domDocument->loadHTML(
                         '<html><body id="' . $wrapperElementId . '">' . $string . '</body></html>'
                     );
-                } catch (\Exception $e) {
-                    restore_error_handler();
+                } catch (Exception $e) {
                     $this->getLogger()->critical($e);
+                } finally {
+                    restore_error_handler();
                 }
-                restore_error_handler();
 
                 $this->removeComments($domDocument);
                 $this->removeNotAllowedTags($domDocument, $allowedTags);
@@ -280,7 +282,7 @@ class Escaper
             $translateInline = $this->getTranslateInline();
 
             return $translateInline->isAllowed()
-                ? $this->inlineSensitiveEscapeHthmlAttr($string)
+                ? $this->inlineSensitiveEscapeHtmlAttr($string)
                 : $this->getEscaper()->escapeHtmlAttr($string);
         }
 
@@ -387,8 +389,9 @@ class Escaper
      */
     public function escapeXssInUrl($data)
     {
-        $data = html_entity_decode((string)$data);
+        $data = (string)$data;
         $this->getTranslateInline()->processResponseBody($data);
+        $data = $this->decodeHtmlEntitiesToFixedPoint($data);
 
         return htmlspecialchars(
             $this->escapeScriptIdentifiers($data),
@@ -396,6 +399,26 @@ class Escaper
             'UTF-8',
             false
         );
+    }
+
+    /**
+     * Decode HTML entities repeatedly until stable, or return empty if still decoding at the cap.
+     *
+     * @param string $data
+     * @return string
+     */
+    private function decodeHtmlEntitiesToFixedPoint(string $data): string
+    {
+        $iterationCap = 10;
+        for ($iteration = 0; $iteration < $iterationCap; $iteration++) {
+            $decoded = html_entity_decode($data);
+            if ($decoded === $data) {
+                return $data;
+            }
+            $data = $decoded;
+        }
+
+        return '';
     }
 
     /**
@@ -407,12 +430,12 @@ class Escaper
     private function escapeScriptIdentifiers(string $data): string
     {
         $filteredData = preg_replace('/[\x00-\x1F\x7F\xA0]/u', '', $data);
-        if ($filteredData === false || $filteredData === '') {
+        if ($filteredData === null || $filteredData === '') {
             return '';
         }
 
         $filteredData = preg_replace(self::$xssFiltrationPattern, ':', $filteredData);
-        if ($filteredData === false) {
+        if ($filteredData === null) {
             return '';
         }
 
@@ -518,7 +541,7 @@ class Escaper
      * @param string $text
      * @return string
      */
-    private function inlineSensitiveEscapeHthmlAttr(string $text): string
+    private function inlineSensitiveEscapeHtmlAttr(string $text): string
     {
         $escaper = $this->getEscaper();
         $textLength = strlen($text);

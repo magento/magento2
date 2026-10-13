@@ -16,16 +16,20 @@ use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Backend\Model\View\Result\RedirectFactory;
 use Magento\Framework\App\ActionFlag;
 use Magento\Framework\App\Request\Http;
+use Magento\Framework\App\Response\Http as ResponseHttp;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Layout;
+use Magento\Framework\App\View as AppView;
 use Magento\Framework\View\Page\Config;
 use Magento\Framework\View\Page\Title;
 use Magento\Framework\View\Result\PageFactory;
+use Magento\Sales\Block\Adminhtml\Order\Invoice\View as InvoiceViewBlock;
 use Magento\Sales\Api\InvoiceRepositoryInterface;
 use Magento\Sales\Controller\Adminhtml\Order\Invoice\View;
 use Magento\Sales\Model\Order\Invoice;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -34,6 +38,8 @@ use PHPUnit\Framework\TestCase;
  */
 class ViewTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var MockObject
      */
@@ -121,48 +127,33 @@ class ViewTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->requestMock = $this->getMockBuilder(Http::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->responseMock = $this->getMockBuilder(\Magento\Framework\App\Response\Http::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->viewMock = $this->getMockBuilder(\Magento\Framework\App\View::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->actionFlagMock = $this->getMockBuilder(ActionFlag::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->sessionMock = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getCommentText', 'setIsUrlNotice'])
-            ->getMock();
-        $this->resultPageMock = $this->getMockBuilder(Page::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->pageConfigMock = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->pageTitleMock = $this->getMockBuilder(Title::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->requestMock = $this->createMock(Http::class);
+        $this->responseMock = $this->createMock(ResponseHttp::class);
+        $this->viewMock = $this->createMock(AppView::class);
+        $this->actionFlagMock = $this->createMock(ActionFlag::class);
+        $this->sessionMock = $this->createPartialMockWithReflection(
+            Session::class,
+            ['getCommentText', 'setIsUrlNotice']
+        );
+        $this->resultPageMock = $this->createMock(Page::class);
+        $this->pageConfigMock = $this->createMock(Config::class);
+        $this->pageTitleMock = $this->createMock(Title::class);
 
-        $contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(
-                [
-                    'getRequest',
-                    'getResponse',
-                    'getObjectManager',
-                    'getSession',
-                    'getHelper',
-                    'getActionFlag',
-                    'getMessageManager',
-                    'getResultRedirectFactory',
-                    'getView'
-                ]
-            )->addMethods(['getTitle'])
-            ->getMock();
+        $contextMock = $this->createPartialMockWithReflection(
+            Context::class,
+            [
+                'getRequest',
+                'getResponse',
+                'getObjectManager',
+                'getSession',
+                'getHelper',
+                'getActionFlag',
+                'getMessageManager',
+                'getResultRedirectFactory',
+                'getView',
+                'getTitle'
+            ]
+        );
         $contextMock->expects($this->any())
             ->method('getRequest')
             ->willReturn($this->requestMock);
@@ -200,12 +191,8 @@ class ViewTest extends TestCase
             ->disableOriginalConstructor()
             ->onlyMethods(['create'])
             ->getMock();
-        $this->resultRedirectMock = $this->getMockBuilder(Redirect::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->invoiceRepository = $this->getMockBuilder(InvoiceRepositoryInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->resultRedirectMock = $this->createMock(Redirect::class);
+        $this->invoiceRepository = $this->createMock(InvoiceRepositoryInterface::class);
 
         $this->controller = $objectManager->getObject(
             View::class,
@@ -238,10 +225,10 @@ class ViewTest extends TestCase
                 ['come_from'] => 'anything'
             });
 
-        $menuBlockMock = $this->getMockBuilder(Menu::class)->disableOriginalConstructor()
-            ->onlyMethods(['getMenuModel'])
-            ->addMethods(['getParentItems'])
-            ->getMock();
+        $menuBlockMock = $this->createPartialMockWithReflection(
+            Menu::class,
+            ['getMenuModel', 'getParentItems']
+        );
         $menuBlockMock->expects($this->any())
             ->method('getMenuModel')->willReturnSelf();
         $menuBlockMock->expects($this->any())
@@ -249,14 +236,12 @@ class ViewTest extends TestCase
             ->with('Magento_Sales::sales_order')
             ->willReturn([]);
 
-        $invoiceViewBlockMock = $this->getMockBuilder(\Magento\Sales\Block\Adminhtml\Order\Invoice\View::class)
+        $invoiceViewBlockMock = $this->getMockBuilder(InvoiceViewBlock::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['updateBackButtonUrl'])
             ->getMock();
 
-        $layoutMock = $this->getMockBuilder(Layout::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $layoutMock = $this->createMock(Layout::class);
         $layoutMock->method('getBlock')
             ->with('sales_invoice_view')
             ->willReturn($invoiceViewBlockMock);
@@ -265,9 +250,7 @@ class ViewTest extends TestCase
             ->method('getLayout')
             ->willReturn($layoutMock);
 
-        $invoiceMock = $this->getMockBuilder(Invoice::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $invoiceMock = $this->createMock(Invoice::class);
 
         $this->invoiceRepository->expects($this->once())
             ->method('get')

@@ -542,7 +542,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     private function setAdjustmentAmount(string $amount, string $baseAdjustmentField, string $adjustmentField): self
     {
         if (substr($amount, -1) == '%') {
-            $amount = (double) substr($amount, 0, -1);
+            $amount = (float) substr($amount, 0, -1);
             $amount = $this->getOrder()->getGrandTotal() * $amount / 100;
         }
 

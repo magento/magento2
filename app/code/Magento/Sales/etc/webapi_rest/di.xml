@@ -31,4 +31,9 @@
                 type="Magento\Sales\Plugin\Model\OrderRepositoryPlugin"
                 sortOrder="10"/>
     </type>
+    <type name="Magento\Framework\Webapi\ServiceOutputProcessor">
+        <plugin name="sales_rest_add_null_state_status"
+                type="Magento\Sales\Plugin\Webapi\OrderResponseNullKeysPlugin"
+                sortOrder="10"/>
+    </type>
 </config>

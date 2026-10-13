@@ -15,10 +15,13 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Quote\Model\Quote\Item as QuoteItem;
+use Magento\Shipping\Model\Carrier\AbstractCarrier;
 use Magento\Shipping\Model\Carrier\AbstractCarrierInterface;
+use Magento\Shipping\Model\Carrier\AbstractCarrierOnline;
 use Magento\Shipping\Model\CarrierFactory;
 use Magento\Shipping\Model\Shipping;
 use Magento\Store\Model\Store;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -29,6 +32,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ShippingTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * Test identification number of product.
      *
@@ -68,7 +72,7 @@ class ShippingTest extends TestCase
     {
         $this->stockRegistry = $this->createMock(StockRegistry::class);
         $this->stockItemData = $this->createMock(StockItem::class);
-        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
 
         $this->shipping = (new ObjectManagerHelper($this))->getObject(
             Shipping::class,
@@ -88,18 +92,10 @@ class ShippingTest extends TestCase
     public function testComposePackages()
     {
         $request = new RateRequest();
-        $item = $this->getMockBuilder(QuoteItem::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getIsQtyDecimal', 'getWeight'])
-            ->onlyMethods(
-                [
-                    'getQty',
-                    'getProductType',
-                    'getProduct',
-                    '__wakeup',
-                    'getStore',
-                ]
-            )->getMock();
+        $item = $this->createPartialMockWithReflection(
+            QuoteItem::class,
+            ['getIsQtyDecimal', 'getWeight', 'getQty', 'getProductType', 'getProduct', '__wakeup', 'getStore']
+        );
         $product = $this->createMock(Product::class);
 
         $item->method('getQty')->willReturn(1);
@@ -172,16 +168,7 @@ class ShippingTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->carrier = $this->getMockBuilder(AbstractCarrierInterface::class)
-            ->addMethods(['setActiveFlag', 'processAdditionalValidation'])
-            ->onlyMethods(
-                [
-                    'checkAvailableShipCountries',
-                    'getConfigData',
-                    'collectRates',
-                ]
-            )
-            ->getMockForAbstractClass();
+        $this->carrier = $this->createMock(AbstractCarrierOnline::class);
         $carrierFactory->method('create')->willReturn($this->carrier);
 
         return $carrierFactory;

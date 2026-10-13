@@ -14,6 +14,7 @@ use Magento\Framework\View\Element\Template;
  * @var ChartsPeriod $viewModel
  */
 $viewModel = $block->getViewModel();
+$selectedPeriod = $viewModel->getSelectedPeriod($block->getRequest()->getParam('period'));
 ?>
 <div class="dashboard-diagram-switcher">
     <label for="dashboard_chart_period" class="label"><?= $escaper->escapeHtml(__('Select Range:')) ?></label>
@@ -25,7 +26,7 @@ $viewModel = $block->getViewModel();
             }
             ?>
             <option value="<?= $escaper->escapeHtmlAttr($value) ?>"
-                <?php if ($block->getRequest()->getParam('period') === $value): ?> selected="selected"<?php endif; ?>
+                <?php if ($selectedPeriod === $value): ?> selected="selected"<?php endif; ?>
             ><?= $escaper->escapeHtml($label) ?></option>
         <?php endforeach; ?>
     </select>

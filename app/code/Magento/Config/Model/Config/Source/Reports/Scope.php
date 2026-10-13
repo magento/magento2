@@ -6,8 +6,6 @@
 
 /**
  * Config source reports event store filter
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Config\Model\Config\Source\Reports;
 

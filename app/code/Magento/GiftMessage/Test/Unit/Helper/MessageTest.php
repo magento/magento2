@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\GiftMessage\Test\Unit\Helper;
 
 use Magento\Framework\DataObject;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Layout;
 use Magento\Framework\View\LayoutFactory;
@@ -18,6 +19,8 @@ use PHPUnit\Framework\TestCase;
 
 class MessageTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var MockObject
      */
@@ -50,11 +53,10 @@ class MessageTest extends TestCase
         $expectedHtml = '<a href="here">here</a>';
         $layoutMock = $this->createMock(Layout::class);
         $entityMock = $this->createMock(DataObject::class);
-        $inlineMock = $this->getMockBuilder(Inline::class)
-            ->addMethods(['setId', 'setDontDisplayContainer'])
-            ->onlyMethods(['setEntity', 'setCheckoutType', 'toHtml'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $inlineMock = $this->createPartialMockWithReflection(
+            Inline::class,
+            ['setId', 'setDontDisplayContainer', 'setEntity', 'setCheckoutType', 'toHtml']
+        );
 
         $this->layoutFactoryMock->expects($this->once())->method('create')->willReturn($layoutMock);
         $layoutMock->expects($this->once())->method('createBlock')->willReturn($inlineMock);

@@ -12,9 +12,8 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Catalog\Model\ResourceModel\Product;
-use Magento\Catalog\Test\Unit\Helper\ProductTestHelper;
-use Magento\Quote\Test\Unit\Helper\AbstractItemTestHelper;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\Catalog\Model\Product as ProductModel;
 use Magento\ConfigurableProduct\Plugin\SalesRule\Model\Rule\Condition\Product as ValidatorPlugin;
 use Magento\Directory\Model\CurrencyFactory;
 use Magento\Eav\Model\Config;
@@ -25,6 +24,7 @@ use Magento\Framework\Locale\Format;
 use Magento\Framework\Locale\FormatInterface;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
 use Magento\Rule\Model\Condition\Context;
 use Magento\SalesRule\Model\Rule\Condition\Product as SalesRuleProduct;
@@ -38,6 +38,8 @@ use Magento\Catalog\Model\ProductCategoryList;
  */
 class ProductTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ObjectManager
      */
@@ -116,15 +118,18 @@ class ProductTest extends TestCase
 
     public function configurableProductTestSetUp()
     {
-        $configurableProductMock = $this->createPartialMock(ProductTestHelper::class, ['getTypeId', 'hasData']);
+        $configurableProductMock = $this->createPartialMock(ProductModel::class, ['getTypeId', 'hasData']);
         $configurableProductMock->expects($this->any())->method('getTypeId')->willReturn(Configurable::TYPE_CODE);
         $configurableProductMock->expects($this->any())->method('hasData')->with('special_price')->willReturn(false);
 
-        /* @var AbstractItemTestHelper|MockObject $item */
-        $item = $this->createPartialMock(AbstractItemTestHelper::class, ['setProduct', 'getProduct', 'getChildren']);
+        /* @var AbstractItem|MockObject $item */
+        $item = $this->createPartialMockWithReflection(
+            AbstractItem::class,
+            ['setProduct', 'getProduct', 'getChildren', 'getQuote', 'getAddress', 'getOptionByCode']
+        );
         $item->expects($this->any())->method('getProduct')->willReturn($configurableProductMock);
 
-        $simpleProductMock = $this->createPartialMock(ProductTestHelper::class, ['getTypeId', 'hasData']);
+        $simpleProductMock = $this->createPartialMock(ProductModel::class, ['getTypeId', 'hasData']);
         $simpleProductMock->expects($this->any())->method('getTypeId')->willReturn(Type::TYPE_SIMPLE);
         $simpleProductMock->expects($this->any())->method('hasData')->with('special_price')->willReturn(true);
 
@@ -150,12 +155,15 @@ class ProductTest extends TestCase
      */
     public function testChildIsNotUsedForValidationWhenConfigurableProductIsMissingChildren()
     {
-        $configurableProductMock = $this->createPartialMock(ProductTestHelper::class, ['getTypeId', 'hasData']);
+        $configurableProductMock = $this->createPartialMock(ProductModel::class, ['getTypeId', 'hasData']);
         $configurableProductMock->expects($this->any())->method('getTypeId')->willReturn(Configurable::TYPE_CODE);
         $configurableProductMock->expects($this->any())->method('hasData')->with('special_price')->willReturn(false);
 
-        /* @var AbstractItemTestHelper|MockObject $item */
-        $item = $this->createPartialMock(AbstractItemTestHelper::class, ['setProduct', 'getProduct', 'getChildren']);
+        /* @var AbstractItem|MockObject $item */
+        $item = $this->createPartialMockWithReflection(
+            AbstractItem::class,
+            ['setProduct', 'getProduct', 'getChildren', 'getQuote', 'getAddress', 'getOptionByCode']
+        );
         $item->expects($this->any())->method('getProduct')->willReturn($configurableProductMock);
         $item->expects($this->any())->method('getChildren')->willReturn([]);
 

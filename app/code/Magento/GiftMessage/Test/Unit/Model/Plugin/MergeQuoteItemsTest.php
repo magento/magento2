@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\GiftMessage\Test\Unit\Model\Plugin;
 
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\GiftMessage\Model\Plugin\MergeQuoteItems;
 use Magento\Quote\Model\Quote\Item;
@@ -20,6 +21,8 @@ use PHPUnit\Framework\TestCase;
  */
 class MergeQuoteItemsTest extends TestCase
 {
+    use MockCreationTrait;
+
     private const STUB_GIFT_MESSAGE = 'message';
 
     /**
@@ -49,14 +52,14 @@ class MergeQuoteItemsTest extends TestCase
     {
         $this->plugin = (new ObjectManagerHelper($this))->getObject(MergeQuoteItems::class);
         $this->processorMock = $this->createMock(Processor::class);
-        $this->resultMock = $this->getMockBuilder(Item::class)
-            ->addMethods(['setGiftMessageId'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->sourceMock = $this->getMockBuilder(Item::class)
-            ->addMethods(['getGiftMessageId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resultMock = $this->createPartialMockWithReflection(
+            Item::class,
+            ['setGiftMessageId']
+        );
+        $this->sourceMock = $this->createPartialMockWithReflection(
+            Item::class,
+            ['getGiftMessageId']
+        );
     }
 
     /**

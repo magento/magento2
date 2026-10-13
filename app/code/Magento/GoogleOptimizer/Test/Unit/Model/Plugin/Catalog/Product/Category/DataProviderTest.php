@@ -34,10 +34,10 @@ class DataProviderTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->helper = $this->getMockBuilder(Data::class)
-            ->onlyMethods(['isGoogleExperimentActive'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->helper = $this->createPartialMock(
+            Data::class,
+            ['isGoogleExperimentActive']
+        );
         $this->subject = $this->createMock(
             NewCategoryDataProvider::class
         );

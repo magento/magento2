@@ -11,6 +11,7 @@ use Magento\Elasticsearch\Model\Config\Backend\MinimumShouldMatch;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Throwable;
 
 /**
@@ -36,9 +37,9 @@ class MinimumShouldMatchTest extends TestCase
     /**
      * @param string $value
      * @param bool $valid
-     * @dataProvider validateValueDataProvider
      * @throws LocalizedException
      */
+    #[DataProvider('validateValueDataProvider')]
     public function testValidateValue(string $value, bool $valid)
     {
         $this->model->setValue($value);

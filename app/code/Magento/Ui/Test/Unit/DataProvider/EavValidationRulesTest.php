@@ -8,13 +8,17 @@ declare(strict_types=1);
 namespace Magento\Ui\Test\Unit\DataProvider;
 
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Ui\DataProvider\EavValidationRules;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class EavValidationRulesTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ObjectManager
      */
@@ -36,12 +40,12 @@ class EavValidationRulesTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->attributeMock =
-            $this->getMockBuilder(AbstractAttribute::class)
-                ->addMethods(['getValidateRules'])
-                ->onlyMethods(['getFrontendInput'])
-                ->disableOriginalConstructor()
-                ->getMockForAbstractClass();
+        $this->objectManager->prepareObjectManager();
+
+        $this->attributeMock = $this->createPartialMockWithReflection(
+            AbstractAttribute::class,
+            ['getValidateRules', 'getFrontendInput']
+        );
 
         $this->subject = new EavValidationRules();
     }
@@ -51,8 +55,8 @@ class EavValidationRulesTest extends TestCase
      * @param mixed $validateRules
      * @param array $data
      * @param array $expected
-     * @dataProvider buildDataProvider
      */
+    #[DataProvider('buildDataProvider')]
     public function testBuild($attributeInputType, $validateRules, $data, $expected): void
     {
         $this->attributeMock->expects($this->once())->method('getFrontendInput')->willReturn($attributeInputType);

@@ -54,7 +54,7 @@ class ShareTest extends TestCase
 
     public function testExecute()
     {
-        $resultMock = $this->getMockForAbstractClass(ResultInterface::class);
+        $resultMock = $this->createMock(ResultInterface::class);
 
         $this->customerSessionMock->expects($this->once())->method('authenticate')
             ->willReturn(true);

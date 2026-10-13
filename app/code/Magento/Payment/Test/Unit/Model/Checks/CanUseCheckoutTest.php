@@ -10,6 +10,7 @@ namespace Magento\Payment\Test\Unit\Model\Checks;
 use Magento\Payment\Model\Checks\CanUseCheckout;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Quote\Model\Quote;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class CanUseCheckoutTest extends TestCase
@@ -25,16 +26,13 @@ class CanUseCheckoutTest extends TestCase
     }
 
     /**
-     * @dataProvider paymentMethodDataProvider
      * @param bool $expectation
      */
+    #[DataProvider('paymentMethodDataProvider')]
     public function testIsApplicable($expectation)
     {
-        $quote = $this->getMockBuilder(Quote::class)
-            ->disableOriginalConstructor()->getMock();
-        $paymentMethod = $this->getMockBuilder(
-            MethodInterface::class
-        )->disableOriginalConstructor()->getMock();
+        $quote = $this->createMock(Quote::class);
+        $paymentMethod = $this->createMock(MethodInterface::class);
         $paymentMethod->expects($this->once())->method('canUseCheckout')->willReturn(
             $expectation
         );

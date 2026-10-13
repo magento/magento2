@@ -13,6 +13,7 @@ namespace Magento\Paypal\Test\Unit\Model;
 
 use Magento\Framework\HTTP\Adapter\Curl;
 use Magento\Framework\HTTP\Adapter\CurlFactory;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Payment\Model\Info;
 use Magento\Paypal\Model\Api\Nvp;
@@ -21,6 +22,7 @@ use Magento\Paypal\Model\Config\Factory;
 use Magento\Paypal\Model\InfoFactory;
 use Magento\Paypal\Model\Pro;
 use Magento\Sales\Model\Order;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -29,6 +31,8 @@ use PHPUnit\Framework\TestCase;
  */
 class ProTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Pro
      */
@@ -65,8 +69,8 @@ class ProTest extends TestCase
      * @param bool $pendingReason
      * @param bool $isReviewRequired
      * @param bool $expected
-     * @dataProvider canReviewPaymentDataProvider
      */
+    #[DataProvider('canReviewPaymentDataProvider')]
     public function testCanReviewPayment($pendingReason, $isReviewRequired, $expected)
     {
         $this->pro->expects(
@@ -76,12 +80,7 @@ class ProTest extends TestCase
         )->willReturn(
             $isReviewRequired
         );
-        $payment = $this->getMockBuilder(
-            Info::class
-        )->disableOriginalConstructor()
-            ->onlyMethods(
-                ['getAdditionalInformation', '__wakeup']
-            )->getMock();
+        $payment = $this->createMock(Info::class);
         $payment->expects(
             $this->once()
         )->method(
@@ -150,14 +149,14 @@ class ProTest extends TestCase
      */
     protected function getInfoFactory()
     {
-        $infoFactory = $this->getMockBuilder(InfoFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
-        $infoMock = $this->getMockBuilder(\Magento\Paypal\Model\Info::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['isPaymentReviewRequired'])
-            ->getMock();
+        $infoFactory = $this->createPartialMock(
+            InfoFactory::class,
+            ['create']
+        );
+        $infoMock = $this->createPartialMock(
+            \Magento\Paypal\Model\Info::class,
+            ['isPaymentReviewRequired']
+        );
         $infoFactory->expects(static::any())->method('create')->willReturn($infoMock);
         return $infoFactory;
     }
@@ -170,13 +169,11 @@ class ProTest extends TestCase
     protected function getConfigFactory($storeId)
     {
         $configType = \Magento\Paypal\Model\Config::class;
-        $configMock = $this->getMockBuilder($configType)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $configFactory = $this->getMockBuilder(Factory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
+        $configMock = $this->createMock($configType);
+        $configFactory = $this->createPartialMock(
+            Factory::class,
+            ['create']
+        );
 
         $configFactory->expects(static::any())
             ->method('create')
@@ -195,14 +192,12 @@ class ProTest extends TestCase
      */
     protected function getApiFactory(ObjectManager $objectHelper)
     {
-        $apiFactory = $this->getMockBuilder(\Magento\Paypal\Model\Api\Type\Factory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
+        $apiFactory = $this->createPartialMock(
+            \Magento\Paypal\Model\Api\Type\Factory::class,
+            ['create']
+        );
 
-        $httpClient = $this->getMockBuilder(Curl::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $httpClient = $this->createMock(Curl::class);
 
         $httpClient->expects(static::any())
             ->method('read')
@@ -210,10 +205,10 @@ class ProTest extends TestCase
                 "\r\n" . 'ACK=Success&CORRELATIONID=32342431'
             );
 
-        $curlFactory = $this->getMockBuilder(CurlFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
+        $curlFactory = $this->createPartialMock(
+            CurlFactory::class,
+            ['create']
+        );
         $curlFactory->expects(static::any())->method('create')->willReturn($httpClient);
 
         $apiType = Nvp::class;
@@ -223,15 +218,28 @@ class ProTest extends TestCase
                 'curlFactory' => $curlFactory
             ]
         );
-        $this->apiMock = $this->getMockBuilder($apiType)
-            ->setConstructorArgs($args)
-            ->addMethods(['__wakeup', 'getTransactionId', 'setAuthorizationId', 'setIsCaptureComplete', 'setAmount'])
-            ->onlyMethods(
-                [
-                    'getDataUsingMethod',
-                ]
-            )
-            ->getMock();
+        $this->apiMock = $this->createPartialMockWithReflection(
+            $apiType,
+            [
+                '__wakeup',
+                'getTransactionId',
+                'setAuthorizationId',
+                'setIsCaptureComplete',
+                'setAmount',
+                'getDataUsingMethod',
+                'call',
+            ],
+            $args
+        );
+        
+        // Mock call() to return expected response
+        $this->apiMock->expects(static::any())
+            ->method('call')
+            ->willReturn([
+                'ACK' => 'Success',
+                'TRANSACTIONID' => '12345',
+                'CORRELATIONID' => '67890'
+            ]);
 
         $apiFactory->expects(static::any())->method('create')->with($apiType)->willReturn($this->apiMock);
         return $apiFactory;
@@ -243,12 +251,12 @@ class ProTest extends TestCase
      */
     protected function getPaymentMock()
     {
-        $paymentMock = $this->getMockBuilder(Info::class)
-            ->disableOriginalConstructor()
-            ->addMethods([
+        $paymentMock = $this->createPartialMockWithReflection(
+            Info::class,
+            [
                 'getParentTransactionId', 'getOrder', 'getShouldCloseParentTransaction', 'isCaptureFinal',
-            ])
-            ->getMock();
+            ]
+        );
         $parentTransactionId = 43;
         $paymentMock->expects(static::once())
             ->method('getParentTransactionId')
@@ -268,10 +276,10 @@ class ProTest extends TestCase
             'id' => 4,
             'increment_id' => '0000004'
         ];
-        $orderMock = $this->getMockBuilder(Order::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getBaseCurrencyCode', 'getIncrementId', 'getId', 'getBillingAddress', 'getShippingAddress'])
-            ->getMock();
+        $orderMock = $this->createPartialMock(
+            Order::class,
+            ['getBaseCurrencyCode', 'getIncrementId', 'getId', 'getBillingAddress', 'getShippingAddress']
+        );
 
         $orderMock->expects(static::once())
             ->method('getId')

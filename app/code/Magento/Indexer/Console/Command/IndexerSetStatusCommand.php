@@ -61,7 +61,7 @@ class IndexerSetStatusCommand extends AbstractIndexerManageCommand
     /**
      * @inheritdoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $errors = $this->validate($input);
         if ($errors) {

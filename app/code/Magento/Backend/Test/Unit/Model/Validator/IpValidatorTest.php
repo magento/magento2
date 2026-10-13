@@ -9,6 +9,7 @@ namespace Magento\Backend\Test\Unit\Model\Validator;
 
 use Magento\Backend\Model\Validator\IpValidator;
 use Magento\Framework\App\Utility\IPAddress;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -32,10 +33,10 @@ class IpValidatorTest extends TestCase
     }
 
     /**
-     * @dataProvider validateIpsNoneAllowedDataProvider
      * @param string[] $ips
      * @param string[] $expectedMessages
      */
+    #[DataProvider('validateIpsNoneAllowedDataProvider')]
     public function testValidateIpsNoneAllowed(array $ips, array $expectedMessages): void
     {
         self::assertEquals($expectedMessages, $this->ipValidator->validateIps($ips, true));
@@ -60,10 +61,10 @@ class IpValidatorTest extends TestCase
     }
 
     /**
-     * @dataProvider validateIpsNoneNotAllowedDataProvider
      * @param string[] $ips
      * @param string[] $expectedMessages
      */
+    #[DataProvider('validateIpsNoneNotAllowedDataProvider')]
     public function testValidateIpsNoneNotAllowed($ips, $expectedMessages): void
     {
         self::assertEquals($expectedMessages, $this->ipValidator->validateIps($ips, false));

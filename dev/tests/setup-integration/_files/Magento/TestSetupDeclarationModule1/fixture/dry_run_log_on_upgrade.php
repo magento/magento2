@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 // @codingStandardsIgnoreFile
 return ['ALTER TABLE `reference_table` MODIFY COLUMN `tinyint_without_padding` tinyint  NOT NULL   , MODIFY COLUMN `bigint_default_nullable` bigint UNSIGNED NULL DEFAULT 123  , MODIFY COLUMN `bigint_not_default_not_nullable` bigint  NOT NULL   

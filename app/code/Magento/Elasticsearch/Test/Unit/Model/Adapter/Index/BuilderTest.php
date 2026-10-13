@@ -15,6 +15,7 @@ use Magento\Search\Model\ResourceModel\SynonymReader;
 use Magento\Store\Model\Store;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class BuilderTest extends TestCase
 {
@@ -90,8 +91,8 @@ class BuilderTest extends TestCase
      * in the prefix_search and sku_prefix_search analyzers.
      *
      * @param string $locale
-     * @dataProvider buildDataProvider
      */
+    #[DataProvider('buildDataProvider')]
     public function testBuildWithoutSynonymsProvided(string $locale)
     {
         $synonymsFilterName = 'synonyms';
@@ -134,8 +135,7 @@ class BuilderTest extends TestCase
      * and referenced in the prefix_search and sku_prefix_search analyzers.
      *
      * @param string $locale
-     * @dataProvider buildDataProvider
-     */
+     #[DataProvider(\'buildDataProvider\')]
     public function testBuildWithProvidedSynonyms(string $locale)
     {
         $synonymsFilterName = 'synonyms';

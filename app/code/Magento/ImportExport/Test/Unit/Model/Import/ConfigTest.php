@@ -11,6 +11,7 @@ use Magento\Framework\Config\CacheInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\ImportExport\Model\Import\Config;
 use Magento\ImportExport\Model\Import\Config\Reader;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -44,15 +45,15 @@ class ConfigTest extends TestCase
     protected function setUp(): void
     {
         $this->readerMock = $this->createMock(Reader::class);
-        $this->cacheMock = $this->getMockForAbstractClass(CacheInterface::class);
-        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
+        $this->cacheMock = $this->createMock(CacheInterface::class);
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
     }
 
     /**
      * @param array $value
      * @param null|string $expected
-     * @dataProvider getEntitiesDataProvider
      */
+    #[DataProvider('getEntitiesDataProvider')]
     public function testGetEntities($value, $expected)
     {
         $this->cacheMock->expects(
@@ -89,8 +90,8 @@ class ConfigTest extends TestCase
      * @param array $configData
      * @param string $entity
      * @param string[] $expectedResult
-     * @dataProvider getEntityTypesDataProvider
      */
+    #[DataProvider('getEntityTypesDataProvider')]
     public function testGetEntityTypes($configData, $entity, $expectedResult)
     {
         $this->cacheMock->expects(

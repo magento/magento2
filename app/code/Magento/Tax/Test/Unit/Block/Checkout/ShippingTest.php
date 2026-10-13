@@ -8,10 +8,13 @@ declare(strict_types=1);
 namespace Magento\Tax\Test\Unit\Block\Checkout;
 
 use Magento\Checkout\Model\Session;
+use Magento\Framework\App\ObjectManager as AppObjectManager;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Tax\Block\Checkout\Shipping;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -29,6 +32,10 @@ class ShippingTest extends TestCase
 
     protected function setUp(): void
     {
+        // Mock ObjectManager to prevent initialization errors
+        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        AppObjectManager::setInstance($objectManagerMock);
+
         $objectManager = new ObjectManager($this);
         $this->quoteMock = $this->createMock(Quote::class);
         $checkoutSession = $this->createMock(Session::class);
@@ -41,11 +48,11 @@ class ShippingTest extends TestCase
     }
 
     /**
-     * @param string $shippingMethod
+     * @param string|null $shippingMethod
      * @param bool $expectedResult
-     * @dataProvider displayShippingDataProvider
      */
-    public function testDisplayShipping($shippingMethod, $expectedResult)
+    #[DataProvider('displayShippingDataProvider')]
+    public function testDisplayShipping(?string $shippingMethod, bool $expectedResult): void
     {
         $addressMock = $this->createPartialMock(Address::class, ['getShippingMethod']);
         $this->quoteMock->expects($this->once())->method('getShippingAddress')->willReturn($addressMock);
@@ -55,9 +62,9 @@ class ShippingTest extends TestCase
     }
 
     /**
-     * @return array
+     * @return array<string, array<int, string|bool|null>>
      */
-    public static function displayShippingDataProvider()
+    public static function displayShippingDataProvider(): array
     {
         return [
             ["flatrate_flatrate", true],

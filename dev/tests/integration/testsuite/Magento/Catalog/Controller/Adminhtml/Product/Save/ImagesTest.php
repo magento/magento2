@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Message\MessageInterface;
 use Magento\TestFramework\TestCase\AbstractBackendController;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Provide tests for admin product save action with images.
@@ -52,7 +53,6 @@ class ImagesTest extends AbstractBackendController
     /**
      * Test save product with default image.
      *
-     * @dataProvider simpleProductImagesDataProvider
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoDataFixture Magento/Catalog/_files/product_image.php
      * @magentoDbIsolation enabled
@@ -60,6 +60,7 @@ class ImagesTest extends AbstractBackendController
      * @param array $expectation
      * @return void
      */
+    #[DataProvider('simpleProductImagesDataProvider')]
     public function testSaveSimpleProductDefaultImage(array $postData, array $expectation): void
     {
         $product = $this->productRepository->get('simple');

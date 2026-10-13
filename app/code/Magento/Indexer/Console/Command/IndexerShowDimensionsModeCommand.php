@@ -76,7 +76,7 @@ class IndexerShowDimensionsModeCommand extends AbstractIndexerCommand
      * @param OutputInterface $output
      * @return int
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $errors = $this->validate($input);
         if ($errors) {

@@ -29,7 +29,7 @@ class IndexerShowModeCommand extends AbstractIndexerManageCommand
     /**
      * @inheritdoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $indexers = $this->getIndexers($input);
         foreach ($indexers as $indexer) {

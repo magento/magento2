@@ -10,13 +10,14 @@ namespace Magento\Backend\Test\Unit\Model\Config\SessionLifetime;
 use Magento\Backend\Model\Config\SessionLifetime\BackendModel;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class BackendModelTest extends TestCase
 {
     /**
-     * @dataProvider adminSessionLifetimeDataProvider
      */
+    #[DataProvider('adminSessionLifetimeDataProvider')]
     public function testBeforeSave($value, $errorMessage = null)
     {
         /** @var BackendModel $model */

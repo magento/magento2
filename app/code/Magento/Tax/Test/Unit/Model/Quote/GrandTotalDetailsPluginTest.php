@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Tax\Test\Unit\Model\Quote;
 
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Api\Data\TotalSegmentExtensionFactory;
 use Magento\Quote\Api\Data\TotalSegmentExtensionInterface;
@@ -28,6 +29,7 @@ use PHPUnit\Framework\TestCase;
  */
 class GrandTotalDetailsPluginTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var TotalSegmentExtensionFactory|MockObject
      */
@@ -226,14 +228,11 @@ class GrandTotalDetailsPluginTest extends TestCase
             'tax' => $taxTotalMock,
         ];
 
-        $extensionAttributeMock = $this->getMockBuilder(
-            TotalSegmentExtensionInterface::class
-        )->addMethods(
-            [
-                'setTaxGrandtotalDetails',
-
-            ]
-        )->getMockForAbstractClass();
+        // Use createPartialMockWithReflection for extension interface with custom methods - PHPUnit 12 compatible
+        $extensionAttributeMock = $this->createPartialMockWithReflection(
+            TotalSegmentExtensionInterface::class,
+            ['setTaxGrandtotalDetails', 'getTaxGrandtotalDetails']
+        );
         $extensionAttributeMock->expects($this->once())
             ->method('setTaxGrandtotalDetails')
             ->with([$taxDetailsMock])

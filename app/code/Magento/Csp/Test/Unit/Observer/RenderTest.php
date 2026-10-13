@@ -38,7 +38,7 @@ class RenderTest extends TestCase
         $eventObserverMock = $this->createMock(Observer::class);
         $eventObserverMock->expects($this->once())->method('getEvent')->willReturn($eventMock);
 
-        $cspRendererMock = $this->getMockForAbstractClass(CspRendererInterface::class);
+        $cspRendererMock = $this->createMock(CspRendererInterface::class);
         $cspRendererMock->expects($this->once())->method('render');
 
         $objectManagerHelper = new ObjectManager($this);

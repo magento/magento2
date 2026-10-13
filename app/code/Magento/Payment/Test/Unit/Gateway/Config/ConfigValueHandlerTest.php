@@ -24,8 +24,7 @@ class ConfigValueHandlerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->configMock = $this->getMockBuilder(ConfigInterface::class)
-            ->getMockForAbstractClass();
+        $this->configMock = $this->createMock(ConfigInterface::class);
         $this->model = new ConfigValueHandler($this->configMock);
     }
 

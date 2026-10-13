@@ -83,7 +83,7 @@ class ReaderTest extends TestCase
         );
         $schemaLocator = new SchemaLocator($moduleReader);
 
-        $validationStateMock = $this->getMockForAbstractClass(ValidationStateInterface::class);
+        $validationStateMock = $this->createMock(ValidationStateInterface::class);
         $validationStateMock->expects($this->any())
             ->method('isValidationRequired')
             ->willReturn(false);

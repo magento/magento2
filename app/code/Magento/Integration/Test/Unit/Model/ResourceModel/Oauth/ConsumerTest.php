@@ -7,21 +7,27 @@ declare(strict_types=1);
 
 namespace Magento\Integration\Test\Unit\Model\ResourceModel\Oauth;
 
+use \Magento\Integration\Model\ResourceModel\Oauth\Consumer as ConsumerResourceModel;
+use Magento\Framework\App\ObjectManager as AppObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Integration\Model\Oauth\Consumer;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Unit test for \Magento\Integration\Model\ResourceModel\Oauth\Consumer
+ * Unit test for ConsumerResourceModel
  */
 class ConsumerTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var AdapterInterface|MockObject
      */
@@ -38,17 +44,16 @@ class ConsumerTest extends TestCase
     protected $consumerMock;
 
     /**
-     * @var \Magento\Integration\Model\ResourceModel\Oauth\Consumer
+     * @var ConsumerResourceModel
      */
     protected $consumerResource;
 
     protected function setUp(): void
     {
-        $this->consumerMock = $this->getMockBuilder(Consumer::class)
-            ->addMethods(['setUpdatedAt'])
-            ->onlyMethods(['getId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->consumerMock = $this->createPartialMockWithReflection(
+            Consumer::class,
+            ['setUpdatedAt', 'getId']
+        );
 
         $this->connectionMock = $this->createMock(Mysql::class);
 
@@ -57,22 +62,27 @@ class ConsumerTest extends TestCase
 
         $contextMock = $this->createMock(Context::class);
         $contextMock->expects($this->once())->method('getResources')->willReturn($this->resourceMock);
-        $this->consumerResource = new \Magento\Integration\Model\ResourceModel\Oauth\Consumer(
+
+        // Mock ObjectManager to prevent "ObjectManager isn't initialized" error
+        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        AppObjectManager::setInstance($objectManagerMock);
+
+        $this->consumerResource = new ConsumerResourceModel(
             $contextMock,
             new DateTime()
         );
     }
 
-    public function testAfterDelete()
+    public function testAfterDelete(): void
     {
         $this->connectionMock->expects($this->exactly(2))->method('delete');
         $this->assertInstanceOf(
-            \Magento\Integration\Model\ResourceModel\Oauth\Consumer::class,
+            ConsumerResourceModel::class,
             $this->consumerResource->_afterDelete($this->consumerMock)
         );
     }
 
-    public function testGetTimeInSecondsSinceCreation()
+    public function testGetTimeInSecondsSinceCreation(): void
     {
         $selectMock = $this->createMock(Select::class);
         $selectMock->expects($this->any())->method('from')->willReturn($selectMock);

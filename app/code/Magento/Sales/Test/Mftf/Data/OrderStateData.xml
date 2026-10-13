@@ -17,5 +17,6 @@
         <data key="holded">On Hold</data>
         <data key="new">Pending</data>
         <data key="pending_payment">Pending Payment</data>
+        <data key="refund">Refunded</data>
     </entity>
 </entities>

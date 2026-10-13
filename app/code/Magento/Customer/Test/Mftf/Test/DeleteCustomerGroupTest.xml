@@ -31,6 +31,8 @@
         <after>
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminOpenCustomerGroupsGridPageActionGroup" stepKey="openCustomerGroupsGridAfter"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearCustomerGroupsGridFiltersAfter"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 

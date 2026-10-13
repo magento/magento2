@@ -64,7 +64,7 @@ class RowBaseCalculatorTest extends RowBaseAndTotalBaseCalculatorTestCase
 
     private function initRowBaseCalculator()
     {
-        $taxClassService = $this->getMockForAbstractClass(TaxClassManagementInterface::class);
+        $taxClassService = $this->createMock(TaxClassManagementInterface::class);
         $this->rowBaseCalculator = $this->getMockBuilder(RowBaseCalculator::class)
             ->onlyMethods(['deltaRound'])
             ->setConstructorArgs(

@@ -9,25 +9,27 @@ namespace Magento\CatalogInventory\Test\Unit\Ui\DataProvider\Product\Form\Modifi
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier\AbstractModifierTestCase;
-use Magento\CatalogInventory\Api\Data\StockItemInterface;
+use Magento\CatalogInventory\Model\Stock\Item;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
-use Magento\CatalogInventory\Test\Unit\Helper\ItemTestHelper;
 use Magento\CatalogInventory\Ui\DataProvider\Product\Form\Modifier\AdvancedInventory;
 use Magento\Framework\Serialize\JsonValidator;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Store\Model\Store;
 use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class AdvancedInventoryTest extends AbstractModifierTestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var StockRegistryInterface|MockObject
      */
     private $stockRegistryMock;
 
     /**
-     * @var ItemTestHelper
+     * @var Item|MockObject
      */
     private $stockItemMock;
 
@@ -50,14 +52,26 @@ class AdvancedInventoryTest extends AbstractModifierTestCase
     {
         parent::setUp();
         $this->stockRegistryMock = $this->createMock(StockRegistryInterface::class);
-        $this->stockItemMock = new ItemTestHelper();
-
+        $this->storeMock = $this->createMock(Store::class);
         $this->stockConfigurationMock = $this->createMock(StockConfigurationInterface::class);
-
+        $this->stockItemMock = $this->createPartialMockWithReflection(
+            Item::class,
+            [
+                'getIsInStock',
+                'setIsInStock',
+                'hasStockStatusChangedAutomaticallyFlag',
+                'setHasStockStatusChangedAutomaticallyFlag'
+            ]
+        );
+        $this->stockRegistryMock->expects($this->any())
+            ->method('getStockItem')
+            ->willReturn($this->stockItemMock);
+        $this->stockConfigurationMock = $this->createMock(StockConfigurationInterface::class);
         $this->stockRegistryMock->method('getStockItem')->willReturn($this->stockItemMock);
-        // Use setter instead of expects for the anonymous class
         $this->storeMock->setWebsiteId(1);
         $this->productMock->setStore($this->storeMock);
+        // Configure the mocked getStore() to return storeMock
+        $this->productMock->method('getStore')->willReturn($this->storeMock);
         $this->serializerMock = $this->createMock(Json::class);
         $this->jsonValidatorMock = $this->createMock(JsonValidator::class);
     }
@@ -99,6 +113,7 @@ class AdvancedInventoryTest extends AbstractModifierTestCase
         $serializeCalledNum = 0,
         $isValidCalledNum = 0
     ) {
+        $this->productMock->setProductId($modelId);
         $this->productMock->setId($modelId);
 
         $this->stockConfigurationMock->method('getDefaultConfigValue')->willReturn($defaultConfigValue);

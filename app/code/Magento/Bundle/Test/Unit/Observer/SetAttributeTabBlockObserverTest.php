@@ -14,7 +14,7 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
-use Magento\Framework\Event\Test\Unit\Helper\EventTestHelper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -26,6 +26,8 @@ use PHPUnit\Framework\TestCase;
  */
 class SetAttributeTabBlockObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var SetAttributeTabBlockObserver
      */
@@ -42,7 +44,7 @@ class SetAttributeTabBlockObserverTest extends TestCase
     private $observerMock;
 
     /**
-     * @var Event
+     * @var Event|MockObject
      */
     private $eventMock;
 
@@ -59,7 +61,10 @@ class SetAttributeTabBlockObserverTest extends TestCase
         $objectManager = new ObjectManager($this);
         $this->helperCatalogMock = $this->createMock(Catalog::class);
         $this->observerMock = $this->createMock(Observer::class);
-        $this->eventMock = new EventTestHelper();
+        $this->eventMock = $this->createPartialMockWithReflection(
+            Event::class,
+            ['getProduct', 'setProduct']
+        );
         $this->productMock = $this->createMock(Product::class);
         $this->observer = $objectManager->getObject(
             SetAttributeTabBlockObserver::class,
@@ -75,7 +80,7 @@ class SetAttributeTabBlockObserverTest extends TestCase
     public function testAddingAttributeTabForBundleProduct()
     {
         $this->productMock->method('getTypeId')->willReturn(Type::TYPE_BUNDLE);
-        $this->eventMock->setProduct($this->productMock);
+        $this->eventMock->method('getProduct')->willReturn($this->productMock);
         $this->observerMock->method('getEvent')->willReturn($this->eventMock);
         $this->helperCatalogMock->expects($this->once())
             ->method('setAttributeTabBlock')
@@ -90,7 +95,7 @@ class SetAttributeTabBlockObserverTest extends TestCase
     public function testAddingAttributeTabForNonBundleProduct()
     {
         $this->productMock->method('getTypeId')->willReturn(Type::TYPE_VIRTUAL);
-        $this->eventMock->setProduct($this->productMock);
+        $this->eventMock->method('getProduct')->willReturn($this->productMock);
         $this->observerMock->method('getEvent')->willReturn($this->eventMock);
         $this->helperCatalogMock->expects($this->never())
             ->method('setAttributeTabBlock');

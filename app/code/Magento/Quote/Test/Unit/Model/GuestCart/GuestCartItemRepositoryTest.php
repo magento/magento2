@@ -8,14 +8,18 @@ declare(strict_types=1);
 namespace Magento\Quote\Test\Unit\Model\GuestCart;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Quote\Api\CartItemRepositoryInterface;
 use Magento\Quote\Model\GuestCart\GuestCartItemRepository;
 use Magento\Quote\Model\Quote\Item;
+use Magento\Quote\Model\QuoteIdMask;
+use Magento\Quote\Model\QuoteIdMaskFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class GuestCartItemRepositoryTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var GuestCartItemRepository
      */
@@ -61,15 +65,18 @@ class GuestCartItemRepositoryTest extends TestCase
         $this->maskedCartId = 'f216207248d65c789b17be8545e0aa73';
         $this->cartId = 33;
 
-        /**
-         * @var GuestCartTestHelper
-         */
-        $guestCartTestHelper = new GuestCartTestHelper($this);
-        list($this->quoteIdMaskFactoryMock, $this->quoteIdMaskMock) =
-            $guestCartTestHelper->mockQuoteIdMask(
-                $this->maskedCartId,
-                $this->cartId
-            );
+        // Create QuoteIdMask mock
+        $this->quoteIdMaskMock = $this->createPartialMockWithReflection(
+            QuoteIdMask::class,
+            ["load", "getQuoteId", "getMaskedId"]
+        );
+        $this->quoteIdMaskMock->method('load')->with($this->maskedCartId)->willReturnSelf();
+        $this->quoteIdMaskMock->method('getQuoteId')->willReturn($this->cartId);
+        $this->quoteIdMaskMock->method('getMaskedId')->willReturn($this->maskedCartId);
+        
+        // Create QuoteIdMaskFactory mock
+        $this->quoteIdMaskFactoryMock = $this->createMock(QuoteIdMaskFactory::class);
+        $this->quoteIdMaskFactoryMock->method('create')->willReturn($this->quoteIdMaskMock);
 
         $this->quoteItemMock = $this->createMock(Item::class);
         $this->quoteItemMock->method('getItemId')->willReturn($this->maskedCartId);

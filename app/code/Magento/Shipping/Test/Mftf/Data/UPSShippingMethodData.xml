@@ -60,4 +60,24 @@
         <data key="label">No</data>
         <data key="value">0</data>
     </entity>
+    <entity name="AdminUPSOriginShipmentEUConfigData" type="ups_config">
+        <data key="path">carriers/ups/origin_shipment</data>
+        <data key="value">Shipments Originating in the European Union</data>
+    </entity>
+    <entity name="AdminUPSWeightUnitKGSConfigData" type="ups_config">
+        <data key="path">carriers/ups/unit_of_measure</data>
+        <data key="value">KGS</data>
+    </entity>
+    <entity name="AdminUPSNegotiatedActiveConfigData" type="ups_config">
+        <data key="path">carriers/ups/negotiated_active</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="AdminUPSIncludeTaxesConfigData" type="ups_config">
+        <data key="path">carriers/ups/include_taxes</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="UPSShippingMethodLabels" type="ups_method_labels">
+        <data key="carrierTitle">United Parcel Service</data>
+        <data key="expressMethodTitle">UPS Express</data>
+    </entity>
 </entities>

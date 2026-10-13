@@ -75,9 +75,7 @@ class CustomerScopeDataTest extends TestCase
     {
         $storeId = 1;
 
-        $storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->onlyMethods(['getWebsiteId'])
-            ->getMockForAbstractClass();
+        $storeMock = $this->createMock(StoreInterface::class);
 
         $storeMock->expects($this->any())
             ->method('getWebsiteId')

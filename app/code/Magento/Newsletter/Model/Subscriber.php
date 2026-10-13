@@ -353,7 +353,7 @@ class Subscriber extends AbstractModel
      */
     public function setStatusChanged($value)
     {
-        $this->_isStatusChanged = (boolean) $value;
+        $this->_isStatusChanged = (bool) $value;
         return $this;
     }
 

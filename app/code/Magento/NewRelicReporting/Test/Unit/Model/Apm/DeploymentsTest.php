@@ -17,6 +17,8 @@ use Magento\NewRelicReporting\Model\Apm\Deployments;
 use Magento\NewRelicReporting\Model\Config;
 use Magento\NewRelicReporting\Model\NerdGraph\DeploymentTracker;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
+
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
@@ -547,11 +549,11 @@ class DeploymentsTest extends TestCase
     /**
      * Tests status code boundary conditions (200-210 range)
      *
-     * @dataProvider statusCodeBoundaryProvider
      * @param int $statusCode
      * @param bool $expectedSuccess
      * @return void
      */
+    #[DataProvider('statusCodeBoundaryProvider')]
     public function testSetDeploymentStatusCodeBoundaries($statusCode, $expectedSuccess)
     {
         $data = $this->getDataVariables();
@@ -633,7 +635,7 @@ class DeploymentsTest extends TestCase
      *
      * @return array
      */
-    public function statusCodeBoundaryProvider(): array
+    public static function statusCodeBoundaryProvider(): array
     {
         return [
             'Status 199 (just below valid range)' => [199, false],

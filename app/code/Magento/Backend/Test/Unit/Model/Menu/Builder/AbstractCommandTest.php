@@ -21,26 +21,26 @@ class AbstractCommandTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_model = $this->getMockForAbstractClass(
-            AbstractCommand::class,
-            [['id' => 'item']]
-        );
+        $this->_model = $this->getMockBuilder(AbstractCommand::class)
+            ->setConstructorArgs([['id' => 'item']])
+            ->onlyMethods(['_execute'])
+            ->getMock();
     }
 
     public function testConstructorRequiresObligatoryParams()
     {
         $this->expectException('InvalidArgumentException');
-        $this->getMockForAbstractClass(AbstractCommand::class);
+        $this->getMockBuilder(AbstractCommand::class)
+            ->onlyMethods(['_execute'])
+            ->getMock();
     }
 
     public function testChainAddsNewCommandAsNextInChain()
     {
-        $command1 = $this->getMockBuilder(Update::class)
-            ->setConstructorArgs([['id' => 1]])
-            ->getMock();
-        $command2 = $this->getMockBuilder(Remove::class)
-            ->setConstructorArgs([['id' => 1]])
-            ->getMock();
+        $command1 = $this->createMock(Update::class);
+
+        $command2 = $this->createMock(Remove::class);
+
         $command1->expects($this->once())->method('chain')->with($command2);
 
         $this->_model->chain($command1);
@@ -60,9 +60,7 @@ class AbstractCommandTest extends TestCase
             $itemParams
         );
 
-        $command1 = $this->getMockBuilder(Update::class)
-            ->setConstructorArgs([['id' => 1]])
-            ->getMock();
+        $command1 = $this->createMock(Update::class);
 
         $command1->expects(
             $this->once()

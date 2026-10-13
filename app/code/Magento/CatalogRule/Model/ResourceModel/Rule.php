@@ -158,6 +158,7 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
      */
     public function getRulePrice($date, $wId, $gId, $pId)
     {
+        $pId = (string)$pId;
         $data = $this->getRulePrices($date, $wId, $gId, [$pId]);
         if (isset($data[$pId])) {
             return $data[$pId];

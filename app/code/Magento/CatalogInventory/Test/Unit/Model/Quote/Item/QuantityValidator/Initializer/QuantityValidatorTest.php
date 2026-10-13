@@ -23,11 +23,13 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Quote\Model\Quote\Item\Option as OptionItem;
 use Magento\Store\Model\Store;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -37,6 +39,7 @@ use PHPUnit\Framework\TestCase;
  */
 class QuantityValidatorTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var QuantityValidator
      */
@@ -146,47 +149,35 @@ class QuantityValidatorTest extends TestCase
             ]
         );
         $this->observerMock = $this->createMock(Observer::class);
-        $this->eventMock = $this->getMockBuilder(Event::class)
-            ->addMethods(['getItem'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->quoteMock = $this->getMockBuilder(Quote::class)
-            ->addMethods(['getHasError', 'getIsSuperMode', 'getQuote'])
-            ->onlyMethods(['getItemsCollection', 'removeErrorInfosByParams', 'addErrorInfo'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->eventMock = $this->createPartialMockWithReflection(
+            Event::class,
+            ['getItem']
+        );
+        $this->quoteMock = $this->createPartialMockWithReflection(
+            Quote::class,
+            ['getHasError', 'getIsSuperMode', 'getQuote', 'getItemsCollection',
+             'removeErrorInfosByParams', 'addErrorInfo']
+        );
         $this->storeMock = $this->createMock(Store::class);
-        $this->quoteItemMock = $this->getMockBuilder(Item::class)
-            ->addMethods(['getProductId', 'getHasError', 'getStockStateResult'])
-            ->onlyMethods(
-                [
-                    'getQuote',
-                    'getQty',
-                    'getProduct',
-                    'getParentItem',
-                    'addErrorInfo',
-                    'setData',
-                    'getQtyOptions',
-                    'getItemId'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->quoteItemMock = $this->createPartialMockWithReflection(
+            Item::class,
+            ['getProductId', 'getHasError', 'getStockStateResult', 'getQuote', 'getQty',
+             'getProduct', 'getParentItem', 'addErrorInfo', 'setData', 'getQtyOptions', 'getItemId']
+        );
         $this->parentItemMock = $this->createPartialMock(Item::class, ['getProduct', 'getId', 'getStore']);
         $this->productMock = $this->createMock(Product::class);
         $this->stockItemMock = $this->createMock(StockMock::class);
-        $this->parentStockItemMock = $this->getMockBuilder(StockMock::class)
-            ->addMethods(['getStockStatus'])
-            ->onlyMethods(['getIsInStock'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->parentStockItemMock = $this->createPartialMockWithReflection(
+            StockMock::class,
+            ['getStockStatus', 'getIsInStock']
+        );
 
         $this->typeInstanceMock = $this->createMock(Type::class);
 
-        $this->resultMock = $this->getMockBuilder(DataObject::class)
-            ->addMethods(['checkQtyIncrements', 'getMessage', 'getQuoteMessage', 'getHasError', 'getQuoteMessageIndex'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resultMock = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['checkQtyIncrements', 'getMessage', 'getQuoteMessage', 'getHasError', 'getQuoteMessageIndex']
+        );
     }
 
     /**
@@ -283,11 +274,10 @@ class QuantityValidatorTest extends TestCase
      */
     public function testValidateWithOptions(): void
     {
-        $optionMock = $this->getMockBuilder(OptionItem::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getProduct'])
-            ->addMethods(['setHasError', 'getStockStateResult'])
-            ->getMock();
+        $optionMock = $this->createPartialMockWithReflection(
+            OptionItem::class,
+            ['getProduct', 'setHasError', 'getStockStateResult']
+        );
         $optionMock->expects($this->any())
             ->method('getStockStateResult')
             ->willReturn($this->resultMock);
@@ -328,15 +318,14 @@ class QuantityValidatorTest extends TestCase
      * @param int $productStockStatus
      * @return void
      * @throws LocalizedException
-     * @dataProvider validateWithOptionsDataProvider
      */
+    #[DataProvider('validateWithOptionsDataProvider')]
     public function testValidateWithOptionsAndError(int $quantity, int $productStatus, int $productStockStatus): void
     {
-        $optionMock = $this->getMockBuilder(OptionItem::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getProduct'])
-            ->addMethods(['setHasError', 'getStockStateResult'])
-            ->getMock();
+        $optionMock = $this->createPartialMockWithReflection(
+            OptionItem::class,
+            ['getProduct', 'setHasError', 'getStockStateResult']
+        );
         $this->stockRegistryMock
             ->method('getStockItem')
             ->willReturnOnConsecutiveCalls($this->stockItemMock);
@@ -393,15 +382,14 @@ class QuantityValidatorTest extends TestCase
      */
     public function testValidateAndRemoveErrorsFromQuote(): void
     {
-        $optionMock = $this->getMockBuilder(OptionItem::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getProduct'])
-            ->addMethods(['setHasError', 'getStockStateResult'])
-            ->getMock();
-        $quoteItem = $this->getMockBuilder(Item::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getItemId', 'getErrorInfos'])
-            ->getMock();
+        $optionMock = $this->createPartialMockWithReflection(
+            OptionItem::class,
+            ['getProduct', 'setHasError', 'getStockStateResult']
+        );
+        $quoteItem = $this->createPartialMock(
+            Item::class,
+            ['getItemId', 'getErrorInfos']
+        );
         $optionMock->expects($this->any())
             ->method('getStockStateResult')
             ->willReturn($this->resultMock);
@@ -500,9 +488,10 @@ class QuantityValidatorTest extends TestCase
     public function testValidateOutStockWithAlreadyErrorInQuoteItem(): void
     {
         $this->createInitialStub(1);
-        $resultMock = $this->getMockBuilder(DataObject::class)
-            ->addMethods(['checkQtyIncrements', 'getMessage', 'getQuoteMessage', 'getHasError'])
-            ->getMock();
+        $resultMock = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['checkQtyIncrements', 'getMessage', 'getQuoteMessage', 'getHasError']
+        );
         $resultMock->method('getHasError')
             ->willReturn(true);
         $this->stockRegistryMock->method('getStockItem')

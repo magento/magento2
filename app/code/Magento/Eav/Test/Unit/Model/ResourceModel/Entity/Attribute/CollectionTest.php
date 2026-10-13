@@ -88,17 +88,11 @@ class CollectionTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
 
-        $this->fetchStrategyMock = $this->getMockBuilder(FetchStrategyInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->fetchStrategyMock = $this->createMock(FetchStrategyInterface::class);
 
-        $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
 
         $this->eavConfigMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
@@ -108,14 +102,11 @@ class CollectionTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
 
         $this->resourceMock = $this->getMockBuilder(AbstractDb::class)
-            ->onlyMethods(['__wakeup', 'getConnection', 'getMainTable', 'getTable'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->onlyMethods(['__wakeup', 'getConnection', 'getMainTable', 'getTable', '_construct'])
+            ->disableOriginalConstructor()->getMock();
 
         $this->resourceMock->expects($this->any())->method('getConnection')->willReturn($this->connectionMock);
         $this->resourceMock->expects($this->any())->method('getMainTable')->willReturn('eav_entity_attribute');

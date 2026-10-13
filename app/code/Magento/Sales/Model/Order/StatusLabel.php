@@ -75,6 +75,7 @@ class StatusLabel
      */
     public function maskStatusForArea(string $area, ?string $code): ?string
     {
+        $code = $code ?? '';
         if (isset($this->maskStatusesMapping[$area][$code])) {
             return $this->maskStatusesMapping[$area][$code];
         }

@@ -75,7 +75,7 @@ class Filter
      */
     public function getComponent()
     {
-        $namespace = $this->request->getParam('namespace');
+        $namespace = $this->request->getParam('namespace') ?? '';
         if (!isset($this->components[$namespace])) {
             $this->components[$namespace] = $this->factory->create($namespace);
         }

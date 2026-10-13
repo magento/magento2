@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2017 Adobe
+ * Copyright 2024 Adobe
  * All Rights Reserved.
  */
 namespace Magento\Config\Console\Command;
@@ -170,7 +170,7 @@ class ConfigShowCommand extends Command
      * @inheritdoc
      * @since 101.0.0
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {
             $this->scope = $input->getOption(self::INPUT_OPTION_SCOPE);

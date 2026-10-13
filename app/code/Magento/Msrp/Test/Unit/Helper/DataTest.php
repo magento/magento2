@@ -12,6 +12,7 @@ use Magento\Catalog\Pricing\Price\FinalPrice;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Pricing\PriceInfo\Base;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Msrp\Helper\Data;
 use Magento\Msrp\Pricing\MsrpPriceCalculatorInterface;
@@ -20,6 +21,8 @@ use PHPUnit\Framework\TestCase;
 
 class DataTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Data
      */
@@ -45,14 +48,12 @@ class DataTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->priceCurrencyMock = $this->getMockForAbstractClass(PriceCurrencyInterface::class);
-        $this->productMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getMsrp'])
-            ->onlyMethods(['getPriceInfo', '__wakeup'])
-            ->getMock();
-        $this->msrpPriceCalculator = $this->getMockBuilder(MsrpPriceCalculatorInterface::class)
-            ->getMockForAbstractClass();
+        $this->priceCurrencyMock = $this->createMock(PriceCurrencyInterface::class);
+        $this->productMock = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getMsrp', 'getPriceInfo', '__wakeup']
+        );
+        $this->msrpPriceCalculator = $this->createMock(MsrpPriceCalculatorInterface::class);
 
         $objectManager = new ObjectManager($this);
 
@@ -68,7 +69,7 @@ class DataTest extends TestCase
     /**
      * @throws NoSuchEntityException
      */
-    public function testIsMinimalPriceLessMsrp()
+    public function testIsMinimalPriceLessMsrp(): void
     {
         $msrp = 120.0;
         $convertedFinalPrice = 200;

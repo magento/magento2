@@ -52,11 +52,11 @@ class AnalyticsTokenTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->reinitableConfigMock = $this->getMockForAbstractClass(ReinitableConfigInterface::class);
+        $this->reinitableConfigMock = $this->createMock(ReinitableConfigInterface::class);
 
-        $this->configMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->configMock = $this->createMock(ScopeConfigInterface::class);
 
-        $this->configWriterMock = $this->getMockForAbstractClass(WriterInterface::class);
+        $this->configWriterMock = $this->createMock(WriterInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 

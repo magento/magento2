@@ -26,22 +26,18 @@ class ReaderTest extends TestCase
      */
     protected function setUp(): void
     {
-        $fileResolver = $this->getMockBuilder(
+        $fileResolver = $this->createMock(
             FileResolver::class
-        )->disableOriginalConstructor()
-            ->getMock();
-        $converter = $this->getMockBuilder(
+        );
+        $converter = $this->createMock(
             Converter::class
-        )->disableOriginalConstructor()
-            ->getMock();
-        $schema = $this->getMockBuilder(
+        );
+        $schema = $this->createMock(
             SchemaLocator::class
-        )->disableOriginalConstructor()
-            ->getMock();
-        $validator = $this->getMockBuilder(
+        );
+        $validator = $this->createMock(
             ValidationStateInterface::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        );
         $this->_reader = new Reader($fileResolver, $converter, $schema, $validator);
     }
 

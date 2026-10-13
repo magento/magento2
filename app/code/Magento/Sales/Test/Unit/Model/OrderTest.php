@@ -39,8 +39,11 @@ use Magento\Sales\Model\ResourceModel\Order\Payment\CollectionFactory as Payment
 use Magento\Sales\Model\ResourceModel\Order\Status\History\Collection as HistoryCollection;
 use Magento\Sales\Model\ResourceModel\Order\Status\History\CollectionFactory as HistoryCollectionFactory;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Config\Model\Config\Source\Nooptreq;
+use Magento\Sales\Model\Order\Payment as OrderPayment;
 
 /**
  * Test class for \Magento\Sales\Model\Order
@@ -52,6 +55,8 @@ use Magento\Config\Model\Config\Source\Nooptreq;
  */
 class OrderTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var \PHPUnit\Framework\MockObject\MockObject
      */
@@ -155,47 +160,35 @@ class OrderTest extends TestCase
             OrderCollectionFactory::class,
             ['create']
         );
-        $this->item = $this->getMockBuilder(Item::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->salesOrderCollectionMock = $this->getMockBuilder(
-            OrderCollection::class
-        )->disableOriginalConstructor()
-            ->onlyMethods(['addFieldToFilter', 'load', 'getFirstItem'])
-            ->getMock();
+        $this->item = $this->createMock(Item::class);
+        $this->salesOrderCollectionMock = $this->createPartialMock(
+            OrderCollection::class,
+            ['addFieldToFilter', 'load', 'getFirstItem']
+        );
         $collection = $this->createMock(OrderItemCollection::class);
         $collection->expects($this->any())->method('setOrderFilter')->willReturnSelf();
         $collection->expects($this->any())->method('getItems')->willReturn([$this->item]);
         $collection->expects($this->any())->method('getIterator')->willReturn(new \ArrayIterator([$this->item]));
         $this->orderItemCollectionFactoryMock->expects($this->any())->method('create')->willReturn($collection);
 
-        $this->priceCurrency = $this->getMockForAbstractClass(
-            PriceCurrencyInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['round']
+        $this->priceCurrency = $this->createMock(
+            PriceCurrencyInterface::class
         );
-        $this->localeResolver = $this->getMockForAbstractClass(ResolverInterface::class);
-        $this->timezone = $this->getMockForAbstractClass(TimezoneInterface::class);
+        $this->localeResolver = $this->createMock(ResolverInterface::class);
+        $this->timezone = $this->createMock(TimezoneInterface::class);
         $this->incrementId = '#00000001';
         $this->eventManager = $this->createMock(Manager::class);
         $context = $this->createPartialMock(Context::class, ['getEventDispatcher']);
         $context->expects($this->any())->method('getEventDispatcher')->willReturn($this->eventManager);
 
-        $this->itemRepository = $this->getMockBuilder(OrderItemRepositoryInterface::class)
-            ->onlyMethods(['getList'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->itemRepository = $this->createMock(OrderItemRepositoryInterface::class);
 
-        $this->searchCriteriaBuilder = $this->getMockBuilder(SearchCriteriaBuilder::class)
-            ->onlyMethods(['addFilter', 'create'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->searchCriteriaBuilder = $this->createPartialMock(
+            SearchCriteriaBuilder::class,
+            ['addFilter', 'create']
+        );
 
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->order = $helper->getObject(
             Order::class,
             [
@@ -230,10 +223,7 @@ class OrderTest extends TestCase
         $bundleItem->expects($this->exactly(2))->method('getQtyToShip')->willReturn(0);
         $bundleItem->expects($this->any())->method('getProductType')->willReturn(Type::TYPE_BUNDLE);
 
-        $product = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getShipmentType'])
-            ->getMock();
+        $product = $this->createPartialMockWithReflection(Product::class, ['getShipmentType']);
         $product->expects($this->any())
             ->method('getShipmentType')
             ->willReturn(Type\AbstractType::SHIPMENT_TOGETHER);
@@ -245,14 +235,9 @@ class OrderTest extends TestCase
         $orderItems = [$bundleItem, $childProduct];
         $this->searchCriteriaBuilder->expects($this->once())->method('addFilter')->willReturnSelf();
 
-        $searchCriteria = $this->getMockBuilder(SearchCriteria::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $searchCriteria = $this->createMock(SearchCriteria::class);
         $this->searchCriteriaBuilder->expects($this->once())->method('create')->willReturn($searchCriteria);
-        $itemsCollection = $this->getMockBuilder(OrderItemSearchResultInterface::class)
-            ->onlyMethods(['getItems'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $itemsCollection = $this->createMock(OrderItemSearchResultInterface::class);
         $itemsCollection->expects($this->once())->method('getItems')->willReturn($orderItems);
         $this->itemRepository->expects($this->once())->method('getList')->willReturn($itemsCollection);
 
@@ -268,15 +253,10 @@ class OrderTest extends TestCase
 
         $this->searchCriteriaBuilder->expects($this->once())->method('addFilter')->willReturnSelf();
 
-        $searchCriteria = $this->getMockBuilder(SearchCriteria::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $searchCriteria = $this->createMock(SearchCriteria::class);
         $this->searchCriteriaBuilder->expects($this->once())->method('create')->willReturn($searchCriteria);
 
-        $itemsCollection = $this->getMockBuilder(OrderItemSearchResultInterface::class)
-            ->onlyMethods(['getItems'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $itemsCollection = $this->createMock(OrderItemSearchResultInterface::class);
         $itemsCollection->expects($this->once())->method('getItems')->willReturn($orderItems);
         $this->itemRepository->expects($this->once())->method('getList')->willReturn($itemsCollection);
 
@@ -322,9 +302,9 @@ class OrderTest extends TestCase
      * @param int|null $quoteItemId
      * @param string|null $result
      *
-     * @dataProvider dataProviderGetItemByQuoteItemId
      * @return void
      */
+    #[DataProvider('dataProviderGetItemByQuoteItemId')]
     public function testGetItemByQuoteItemId($gettingQuoteItemId, $quoteItemId, $result)
     {
         $this->prepareOrderItem();
@@ -359,7 +339,9 @@ class OrderTest extends TestCase
      * @param int|null $parentItemId
      * @param array $result
      *
-     * @dataProvider dataProviderGetAllVisibleItems
+     */
+    #[DataProvider('dataProviderGetAllVisibleItems')]
+    /**
      * @return void
      */
     public function testGetAllVisibleItems($isDeleted, $parentItemId, array $result)
@@ -431,7 +413,9 @@ class OrderTest extends TestCase
     /**
      * Ensure customer name returned correctly.
      *
-     * @dataProvider customerNameProvider
+     */
+    #[DataProvider('customerNameProvider')]
+    /**
      * @param array $expectedData
      */
     public function testGetCustomerName(array $expectedData)
@@ -496,9 +480,8 @@ class OrderTest extends TestCase
 
     /**
      * @param string $status
-     *
-     * @dataProvider notInvoicingStatesProvider
      */
+    #[DataProvider('notInvoicingStatesProvider')]
     public function testCanNotInvoiceInSomeStates($status)
     {
         $this->item->expects($this->any())
@@ -610,8 +593,8 @@ class OrderTest extends TestCase
     /**
      * @param string $state
      *
-     * @dataProvider canNotCreditMemoStatesProvider
      */
+    #[DataProvider('canNotCreditMemoStatesProvider')]
     public function testCanNotCreditMemoWithSomeStates($state)
     {
         $this->order->setData('state', $state);
@@ -639,10 +622,7 @@ class OrderTest extends TestCase
 
     public function testCanEditIfHasInvoices()
     {
-        $invoiceCollection = $this->getMockBuilder(OrderInvoiceCollection::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['count'])
-            ->getMock();
+        $invoiceCollection = $this->createPartialMock(OrderInvoiceCollection::class, ['count']);
 
         $invoiceCollection->expects($this->once())
             ->method('count')
@@ -668,17 +648,15 @@ class OrderTest extends TestCase
             ->method('getProductId')
             ->willReturn($productId);
 
-        $product = $this->getMockBuilder(ProductInterface::class)
-            ->addMethods(['isSalable'])
-            ->getMockForAbstractClass();
+        $product = $this->createPartialMock(Product::class, ['isSalable']);
         $product->expects(static::once())
             ->method('isSalable')
             ->willReturn(true);
 
-        $productCollection = $this->getMockBuilder(ProductCollection::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['setStoreId', 'addIdFilter', 'load', 'getItemById', 'addAttributeToSelect'])
-            ->getMock();
+        $productCollection = $this->createPartialMock(
+            ProductCollection::class,
+            ['setStoreId', 'addIdFilter', 'load', 'getItemById', 'addAttributeToSelect']
+        );
         $productCollection->expects($this->once())
             ->method('setStoreId')
             ->willReturnSelf();
@@ -737,16 +715,14 @@ class OrderTest extends TestCase
             ->method('getProductId')
             ->willReturn($productId);
 
-        $product = $this->getMockBuilder(ProductInterface::class)
-            ->addMethods(['isSalable'])
-            ->getMockForAbstractClass();
+        $product = $this->createPartialMock(Product::class, ['isSalable']);
         $product->expects(static::never())
             ->method('isSalable');
 
-        $productCollection = $this->getMockBuilder(ProductCollection::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['setStoreId', 'addIdFilter', 'load', 'getItemById', 'addAttributeToSelect'])
-            ->getMock();
+        $productCollection = $this->createPartialMock(
+            ProductCollection::class,
+            ['setStoreId', 'addIdFilter', 'load', 'getItemById', 'addAttributeToSelect']
+        );
         $productCollection->expects($this->once())
             ->method('setStoreId')
             ->willReturnSelf();
@@ -784,17 +760,15 @@ class OrderTest extends TestCase
             ->method('getProductId')
             ->willReturn($productId);
 
-        $product = $this->getMockBuilder(ProductInterface::class)
-            ->addMethods(['isSalable'])
-            ->getMockForAbstractClass();
+        $product = $this->createPartialMock(Product::class, ['isSalable']);
         $product->expects(static::once())
             ->method('isSalable')
             ->willReturn(false);
 
-        $productCollection = $this->getMockBuilder(ProductCollection::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['setStoreId', 'addIdFilter', 'load', 'getItemById', 'addAttributeToSelect'])
-            ->getMock();
+        $productCollection = $this->createPartialMock(
+            ProductCollection::class,
+            ['setStoreId', 'addIdFilter', 'load', 'getItemById', 'addAttributeToSelect']
+        );
         $productCollection->expects($this->once())
             ->method('setStoreId')
             ->willReturnSelf();
@@ -820,10 +794,10 @@ class OrderTest extends TestCase
 
     public function testCanCancelCanReviewPayment()
     {
-        $paymentMock = $this->getMockBuilder(Payment::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['isDeleted', 'canReviewPayment', 'canFetchTransactionInfo'])
-            ->getMock();
+        $paymentMock = $this->createPartialMockWithReflection(
+            Payment::class,
+            ['isDeleted', 'canReviewPayment', 'canFetchTransactionInfo']
+        );
         $paymentMock->expects($this->any())
             ->method('canReviewPayment')
             ->willReturn(false);
@@ -845,10 +819,10 @@ class OrderTest extends TestCase
     {
         $this->prepareOrderItem();
 
-        $paymentMock = $this->getMockBuilder(Payment::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['isDeleted', 'canReviewPayment', 'canFetchTransactionInfo'])
-            ->getMock();
+        $paymentMock = $this->createPartialMockWithReflection(
+            Payment::class,
+            ['isDeleted', 'canReviewPayment', 'canFetchTransactionInfo']
+        );
         $paymentMock->expects($this->any())
             ->method('canReviewPayment')
             ->willReturn(false);
@@ -884,10 +858,10 @@ class OrderTest extends TestCase
 
     public function testCanCancelState()
     {
-        $paymentMock = $this->getMockBuilder(Payment::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['isDeleted', 'canReviewPayment', 'canFetchTransactionInfo'])
-            ->getMock();
+        $paymentMock = $this->createPartialMockWithReflection(
+            Payment::class,
+            ['isDeleted', 'canReviewPayment', 'canFetchTransactionInfo']
+        );
         $paymentMock->expects($this->any())
             ->method('canReviewPayment')
             ->willReturn(false);
@@ -907,17 +881,19 @@ class OrderTest extends TestCase
      * Test CanCancelActionFlag method.
      *
      * @param bool $cancelActionFlag
-     * @dataProvider dataProviderActionFlag
+     */
+    #[DataProvider('dataProviderActionFlag')]
+    /**
      * @return void
      */
     public function testCanCancelActionFlag($cancelActionFlag)
     {
         $this->prepareOrderItem();
 
-        $paymentMock = $this->getMockBuilder(Payment::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['isDeleted', 'canReviewPayment', 'canFetchTransactionInfo'])
-            ->getMock();
+        $paymentMock = $this->createPartialMockWithReflection(
+            Payment::class,
+            ['isDeleted', 'canReviewPayment', 'canFetchTransactionInfo']
+        );
         $paymentMock->expects($this->any())
             ->method('canReviewPayment')
             ->willReturn(false);
@@ -965,8 +941,8 @@ class OrderTest extends TestCase
     /**
      * @param array $actionFlags
      * @param string $orderState
-     * @dataProvider canVoidPaymentDataProvider
      */
+    #[DataProvider('canVoidPaymentDataProvider')]
     public function testCanVoidPayment($actionFlags, $orderState)
     {
         $helper = new ObjectManager($this);
@@ -1018,10 +994,10 @@ class OrderTest extends TestCase
     {
         $iterator = new \ArrayIterator([$paymentMock]);
 
-        $collectionMock = $this->getMockBuilder(PaymentCollection::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['setOrderFilter', 'getIterator'])
-            ->getMock();
+        $collectionMock = $this->createPartialMock(
+            PaymentCollection::class,
+            ['setOrderFilter', 'getIterator']
+        );
         $collectionMock->expects($this->any())
             ->method('getIterator')
             ->willReturn($iterator);
@@ -1042,10 +1018,9 @@ class OrderTest extends TestCase
      */
     protected function _prepareOrderPayment($order, $mockedMethods = [])
     {
-        $payment = $this->getMockBuilder(
-            \Magento\Sales\Model\Order\Payment::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        $payment = $this->createMock(
+            OrderPayment::class
+        );
         foreach ($mockedMethods as $method => $value) {
             $payment->expects($this->any())->method($method)->willReturn($value);
         }
@@ -1098,11 +1073,10 @@ class OrderTest extends TestCase
      */
     protected function prepareItemMock($qtyInvoiced)
     {
-        $itemMock = $this->getMockBuilder(Item::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['filterByTypes', 'filterByParent'])
-            ->onlyMethods(['isDeleted', 'getQtyToInvoice'])
-            ->getMock();
+        $itemMock = $this->createPartialMockWithReflection(
+            Item::class,
+            ['filterByTypes', 'filterByParent', 'isDeleted', 'getQtyToInvoice']
+        );
 
         $itemMock->expects($this->any())
             ->method('getQtyToInvoice')
@@ -1110,10 +1084,10 @@ class OrderTest extends TestCase
 
         $iterator = new \ArrayIterator([$itemMock]);
 
-        $itemCollectionMock = $this->getMockBuilder(OrderItemCollection::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['setOrderFilter', 'getIterator', 'getItems'])
-            ->getMock();
+        $itemCollectionMock = $this->createPartialMock(
+            OrderItemCollection::class,
+            ['setOrderFilter', 'getIterator', 'getItems']
+        );
         $itemCollectionMock->expects($this->any())
             ->method('getIterator')
             ->willReturn($iterator);
@@ -1170,19 +1144,10 @@ class OrderTest extends TestCase
      */
     public function testGetStatusHistories()
     {
-        $itemMock = $this->getMockForAbstractClass(
-            OrderStatusHistoryInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['setOrder']
+        $itemMock = $this->createMock(
+            OrderStatusHistoryInterface::class
         );
-        $dbMock = $this->getMockBuilder(AbstractDb::class)
-            ->onlyMethods(['setOrder'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $dbMock = $this->createPartialMock(AbstractDb::class, ['setOrder', 'getResource']);
         $collectionMock = $this->createPartialMock(
             HistoryCollection::class,
             [
@@ -1240,9 +1205,7 @@ class OrderTest extends TestCase
     public function testSetPaymentWithId()
     {
         $this->order->setId(123);
-        $payment = $this->getMockBuilder(\Magento\Sales\Model\Order\Payment::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $payment = $this->createMock(OrderPayment::class);
         $this->order->setData(OrderInterface::PAYMENT, $payment);
         $this->order->setDataChanges(false);
 
@@ -1279,9 +1242,7 @@ class OrderTest extends TestCase
         $this->order->setId(123);
         $this->order->setDataChanges(false);
 
-        $payment = $this->getMockBuilder(\Magento\Sales\Model\Order\Payment::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $payment = $this->createMock(OrderPayment::class);
 
         $payment->expects($this->once())
             ->method('setOrder')
@@ -1329,9 +1290,7 @@ class OrderTest extends TestCase
 
     public function testResetOrderWillResetPayment()
     {
-        $payment = $this->getMockBuilder(\Magento\Sales\Model\Order\Payment::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $payment = $this->createMock(OrderPayment::class);
         $this->order->setData(OrderInterface::PAYMENT, $payment);
         $this->order->reset();
         $this->assertEquals(

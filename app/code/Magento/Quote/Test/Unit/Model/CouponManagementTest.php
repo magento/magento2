@@ -14,13 +14,14 @@ use Magento\Quote\Model\CouponManagement;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Store\Model\Store;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\Quote\Test\Unit\Helper\QuoteTestHelper;
-use Magento\Quote\Test\Unit\Helper\QuoteAddressTestHelper;
 
 class CouponManagementTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var CouponManagement
      */
@@ -50,8 +51,8 @@ class CouponManagementTest extends TestCase
     {
         $this->quoteRepositoryMock = $this->createMock(CartRepositoryInterface::class);
         $this->storeMock = $this->createMock(Store::class);
-        $this->quoteMock = $this->createPartialMock(
-            QuoteTestHelper::class,
+        $this->quoteMock = $this->createPartialMockWithReflection(
+            Quote::class,
             [
                 'getItemsCount',
                 'collectTotals',
@@ -63,8 +64,8 @@ class CouponManagementTest extends TestCase
                 '__wakeup'
             ]
         );
-        $this->quoteAddressMock = $this->createPartialMock(
-            QuoteAddressTestHelper::class,
+        $this->quoteAddressMock = $this->createPartialMockWithReflection(
+            Address::class,
             ['setCollectShippingRates']
         );
         $this->couponManagement = new CouponManagement(
@@ -77,8 +78,8 @@ class CouponManagementTest extends TestCase
         $cartId = 11;
         $couponCode = 'test_coupon_code';
 
-        $quoteMock = new QuoteTestHelper();
-        $quoteMock->setCouponCode($couponCode);
+        $quoteMock = $this->createPartialMockWithReflection(Quote::class, ['getCouponCode']);
+        $quoteMock->method('getCouponCode')->willReturn($couponCode);
 
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getActive')

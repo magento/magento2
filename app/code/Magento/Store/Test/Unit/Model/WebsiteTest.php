@@ -9,6 +9,7 @@ namespace Magento\Store\Test\Unit\Model;
 
 use Magento\Framework\App\Cache\Type\Config;
 use Magento\Framework\App\Cache\TypeListInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\ResourceModel\Website\Collection;
 use Magento\Store\Model\ScopeInterface;
@@ -20,6 +21,8 @@ use PHPUnit\Framework\TestCase;
 
 class WebsiteTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Website
      */
@@ -49,14 +52,13 @@ class WebsiteTest extends TestCase
     {
         $this->objectManagerHelper = new ObjectManager($this);
 
-        $this->websiteFactory = $this->getMockBuilder(WebsiteFactory::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getCollection', '__wakeup'])
-            ->onlyMethods(['create'])
-            ->getMock();
+        $this->websiteFactory = $this->createPartialMockWithReflection(
+            WebsiteFactory::class,
+            ['getCollection', '__wakeup', 'create']
+        );
 
-        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $this->typeList = $this->getMockForAbstractClass(TypeListInterface::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->typeList = $this->createMock(TypeListInterface::class);
 
         /** @var Website $websiteModel */
         $this->model = $this->objectManagerHelper->getObject(

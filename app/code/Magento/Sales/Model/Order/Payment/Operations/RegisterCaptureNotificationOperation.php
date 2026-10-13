@@ -34,7 +34,7 @@ class RegisterCaptureNotificationOperation extends AbstractOperation
         );
 
         $order = $payment->getOrder();
-        $amount = (double)$amount;
+        $amount = (float)$amount;
         $invoice = $this->getInvoiceForTransactionId($order, $payment->getTransactionId());
 
         // register new capture

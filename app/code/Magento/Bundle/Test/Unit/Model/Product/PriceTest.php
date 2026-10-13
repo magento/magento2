@@ -26,14 +26,13 @@ use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\Store\Test\Unit\Helper\StoreTestHelper;
-use Magento\Framework\DataObject\Test\Unit\Helper\DataObjectTestHelper;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -41,6 +40,8 @@ use Magento\Framework\DataObject\Test\Unit\Helper\DataObjectTestHelper;
 #[CoversClass(Price::class)]
 class PriceTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var RuleFactory|MockObject
      */
@@ -72,7 +73,7 @@ class PriceTest extends TestCase
     private $catalogHelperMock;
 
     /**
-     * @var StoreTestHelper
+     * @var Store|MockObject
      */
     private $storeMock;
 
@@ -115,7 +116,10 @@ class PriceTest extends TestCase
         $this->customerSessionMock = $this->createMock(Session::class);
         $this->eventManagerMock = $this->createMock(ManagerInterface::class);
         $this->catalogHelperMock = $this->createMock(Data::class);
-        $this->storeMock = new StoreTestHelper();
+        $this->storeMock = $this->createPartialMockWithReflection(
+            Store::class,
+            ['setBaseCurrencyCode', 'getBaseCurrencyCode']
+        );
         $this->priceCurrency = $this->createMock(PriceCurrencyInterface::class);
         $this->groupManagement = $this->createMock(GroupManagementInterface::class);
         $tpFactory = $this->createPartialMock(
@@ -233,7 +237,7 @@ class PriceTest extends TestCase
     #[DataProvider('dataProviderWithEmptyOptions')]
     public function testGetTotalBundleItemsPriceWithEmptyOptions($value)
     {
-        $dataObjectMock = new DataObjectTestHelper();
+        $dataObjectMock = new DataObject();
 
         $productMock = $this->createMock(Product::class);
 
@@ -272,7 +276,7 @@ class PriceTest extends TestCase
     {
         $storeId = 1;
 
-        $dataObjectMock = new DataObjectTestHelper();
+        $dataObjectMock = new DataObject();
 
         $productMock = $this->createMock(Product::class);
 

@@ -85,15 +85,13 @@ class TreeTest extends TestCase
         )->willReturnArgument(
             0
         );
-        $eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
+        $eventManager = $this->createMock(ManagerInterface::class);
         $this->_attributeConfig = $this->createMock(Config::class);
         $this->_collectionFactory = $this->createMock(
             Factory::class
         );
 
-        $this->metadataPoolMock = $this->getMockBuilder(MetadataPool::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->metadataPoolMock = $this->createMock(MetadataPool::class);
 
         $this->_model = $objectHelper->getObject(
             Tree::class,
@@ -163,15 +161,15 @@ class TreeTest extends TestCase
         $select->expects($this->any())->method('joinLeft')->willReturnSelf();
         $select->expects($this->any())->method('where')->willReturnSelf();
 
-        $connection = $this->getMockForAbstractClass(AdapterInterface::class);
-        $connection->expects($this->any())->method('select')->willReturn($select);
-        $connection->expects($this->any())->method('fetchCol')->willReturn([]);
+        $connection = $this->createMock(AdapterInterface::class);
+        $connection->method('select')->willReturn($select);
+        $connection->method('fetchCol')->willReturn([]);
 
         $resource = $this->createMock(ResourceConnection::class);
-        $resource->expects($this->any())->method('getConnection')->willReturn($connection);
+        $resource->method('getConnection')->willReturn($connection);
         $resource->expects($this->any())->method('getTableName')->willReturnArgument(0);
 
-        $eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
+        $eventManager = $this->createMock(ManagerInterface::class);
         $attributeConfig = $this->createMock(Config::class);
 
         $attributes = ['attribute_one', 'attribute_two'];
@@ -187,17 +185,13 @@ class TreeTest extends TestCase
         $collectionFactory->expects($this->once())->method('create')->willReturn($collection);
 
         $store = $this->createMock(Store::class);
-        $store->expects($this->any())->method('getId')->willReturn(1);
+        $store->method('getId')->willReturn(1);
 
-        $storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $storeManager->expects($this->any())->method('getStore')->willReturn($store);
+        $storeManager = $this->createMock(StoreManagerInterface::class);
+        $storeManager->method('getStore')->willReturn($store);
 
-        $categoryMetadataMock = $this->getMockBuilder(EntityMetadata::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $categoryMetadataMock->expects($this->any())
-            ->method('getLinkField')
-            ->willReturn('id');
+        $categoryMetadataMock = $this->createMock(EntityMetadata::class);
+        $categoryMetadataMock->method('getLinkField')->willReturn('id');
         $this->metadataPoolMock
             ->expects($this->any())
             ->method('getMetadata')
@@ -217,7 +211,7 @@ class TreeTest extends TestCase
         );
 
         $nodeMock = $this->createPartialMock(Node::class, ['getId', 'getPath']);
-        $nodeMock->expects($this->any())->method('getId')->willReturn(1);
+        $nodeMock->method('getId')->willReturn(1);
         $nodeMock->expects($this->once())->method('getPath')->willReturn([]);
 
         $model->addNode($nodeMock);

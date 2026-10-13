@@ -60,15 +60,7 @@ class TemplateTest extends TestCase
             ButtonList::class,
             [ 'itemFactory' => $this->itemFactoryMock]
         );
-        $this->urlBuilderMock = $this->getMockForAbstractClass(
-            UrlInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['getUrl']
-        );
+        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
         $this->context = $this->objectManager->getObject(
             Context::class,
             [

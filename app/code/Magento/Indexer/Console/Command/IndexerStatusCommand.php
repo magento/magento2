@@ -34,7 +34,7 @@ class IndexerStatusCommand extends AbstractIndexerManageCommand
      * @param InputInterface $input
      * @param OutputInterface $output
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $table = new Table($output);
         $table->setHeaders(['ID', 'Title', 'Status', 'Update On', 'Schedule Status', 'Schedule Updated']);

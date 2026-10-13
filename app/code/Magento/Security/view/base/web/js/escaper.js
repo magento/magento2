@@ -114,7 +114,7 @@ define([], function () {
                             // SKIP instead of REJECT because REJECT also rejects child nodes
                             : NodeFilter.FILTER_SKIP;
                     },
-                false
+                    false
                 ),
                 nodesToRemove = [];
 
@@ -145,7 +145,7 @@ define([], function () {
                     function () {
                         return NodeFilter.FILTER_ACCEPT;
                     },
-                false
+                    false
                 ),
                 i,
                 attribute,
@@ -157,7 +157,7 @@ define([], function () {
                     attribute = treeWalker.currentNode.attributes[i];
                     nodeName = treeWalker.currentNode.nodeName.toLowerCase();
 
-                    if (this.generallyAllowedAttributes.indexOf(attribute.name) === -1  || // eslint-disable-line max-depth,max-len
+                    if (this.generallyAllowedAttributes.indexOf(attribute.name) === -1 || // eslint-disable-line max-depth,max-len
                         this._checkHrefValue(attribute) ||
                         this.forbiddenAttributesByElement[nodeName] &&
                         this.forbiddenAttributesByElement[nodeName].indexOf(attribute.name) !== -1
@@ -179,7 +179,8 @@ define([], function () {
          * @private
          */
         _checkHrefValue: function (attribute) {
-            return attribute.nodeName === 'href' && attribute.nodeValue.startsWith('javascript');
+            return attribute.nodeName.toLowerCase() === 'href' &&
+                attribute.nodeValue.toLowerCase().replace(/\s/g, '').startsWith('javascript');
         }
     };
 });

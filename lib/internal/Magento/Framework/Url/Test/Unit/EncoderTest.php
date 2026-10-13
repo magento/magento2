@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Framework\Url\Test\Unit;
 
 use Magento\Framework\Url\Encoder;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class EncoderTest extends TestCase
 {
@@ -44,11 +45,10 @@ class EncoderTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider rfc3986Urls
-     *
+    /**     *
      * @see          https://www.rfc-editor.org/rfc/rfc3986.html#section-2.2
      */
+    #[DataProvider('rfc3986Urls')]
     public function testEncodeNotContainingRfc3986ReservedCharacters(string $url): void
     {
         $genDelims = [':', '/', '?', '#', '[', ']', '@'];

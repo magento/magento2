@@ -6,6 +6,9 @@
 
 namespace Magento\Reports\Block\Adminhtml\Sales\Invoiced;
 
+use Magento\Reports\Block\Adminhtml\Grid\Column\Renderer\Currency;
+use Magento\Reports\Block\Adminhtml\Sales\Grid\Column\Renderer\Date;
+
 /**
  * Adminhtml invoiced report grid block
  *
@@ -52,14 +55,13 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
                 'index' => 'period',
                 'sortable' => false,
                 'period_type' => $this->getPeriodType(),
-                'renderer' => \Magento\Reports\Block\Adminhtml\Sales\Grid\Column\Renderer\Date::class,
+                'renderer' => Date::class,
                 'totals_label' => __('Total'),
                 'html_decorators' => ['nobr'],
                 'header_css_class' => 'col-period',
                 'column_css_class' => 'col-period'
             ]
         );
-
         $this->addColumn(
             'orders_count',
             [
@@ -72,7 +74,6 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
                 'column_css_class' => 'col-qty'
             ]
         );
-
         $this->addColumn(
             'orders_invoiced',
             [
@@ -85,7 +86,6 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
                 'column_css_class' => 'col-invoiced'
             ]
         );
-
         $this->setStoreIds($this->_getStoreIds());
         $currencyCode = $this->getCurrentCurrencyCode();
         $rate = $this->getRate($currencyCode);
@@ -101,10 +101,10 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
                 'sortable' => false,
                 'rate' => $rate,
                 'header_css_class' => 'col-total-invoiced',
-                'column_css_class' => 'col-total-invoiced'
+                'column_css_class' => 'col-total-invoiced',
+                'renderer' => Currency::class
             ]
         );
-
         $this->addColumn(
             'invoiced_captured',
             [
@@ -116,10 +116,10 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
                 'sortable' => false,
                 'rate' => $rate,
                 'header_css_class' => 'col-total-invoiced-paid',
-                'column_css_class' => 'col-total-invoiced-paid'
+                'column_css_class' => 'col-total-invoiced-paid',
+                'renderer' => Currency::class
             ]
         );
-
         $this->addColumn(
             'invoiced_not_captured',
             [
@@ -131,7 +131,8 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
                 'sortable' => false,
                 'rate' => $rate,
                 'header_css_class' => 'col-total-invoiced-not-paid',
-                'column_css_class' => 'col-total-invoiced-not-paid'
+                'column_css_class' => 'col-total-invoiced-not-paid',
+                'renderer' => Currency::class
             ]
         );
 

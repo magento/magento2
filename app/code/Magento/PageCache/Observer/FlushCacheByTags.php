@@ -9,11 +9,11 @@ namespace Magento\PageCache\Observer;
 
 use Magento\Framework\App\Cache\Tag\Resolver;
 use Magento\Framework\App\PageCache\Cache;
+use Magento\Framework\Cache\CacheConstants;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\PageCache\Model\Cache\Type;
 use Magento\PageCache\Model\Config;
-use Zend_Cache;
 
 /**
  * Observer used to cache by tags when using built-in full page cache
@@ -23,7 +23,8 @@ class FlushCacheByTags implements ObserverInterface
     /**
      * @var Cache
      *
-     * @deprecated 100.1.0
+     * @deprecated 100.1.0 Use $_fullPageCache instead
+     * @see $_fullPageCache
      */
     protected $_cache;
 
@@ -81,7 +82,7 @@ class FlushCacheByTags implements ObserverInterface
             $tags = $this->tagResolver->getTags($object);
 
             if (!empty($tags)) {
-                $this->fullPageCache->clean(Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, array_unique($tags));
+                $this->fullPageCache->clean(CacheConstants::CLEANING_MODE_MATCHING_ANY_TAG, array_unique($tags));
             }
         }
     }

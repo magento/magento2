@@ -16,12 +16,15 @@ use Magento\Sales\ViewModel\CreditMemo\Create\ItemsToRender;
 use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * Test creditmemo items to render
  */
 class ItemsToRenderTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ItemsToRender
      */
@@ -83,14 +86,10 @@ class ItemsToRenderTest extends TestCase
             ->onlyMethods(['getOrderItem', 'getCreditMemo'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->creditmemoItemParent = $this->getMockBuilder(CreditmemoItem::class)
-            ->onlyMethods(['setCreditmemo', 'setParentId'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->creditmemoItemParent = $this->getMockBuilder(CreditmemoItem::class)
-            ->addMethods(['getItemId', 'setStoreId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->creditmemoItemParent = $this->createPartialMockWithReflection(
+            CreditmemoItem::class,
+            ['setCreditmemo', 'setParentId', 'getItemId', 'setStoreId']
+        );
         $this->orderItem = $this->getMockBuilder(OrderItem::class)
             ->onlyMethods(['getParentItem'])
             ->disableOriginalConstructor()
@@ -131,7 +130,21 @@ class ItemsToRenderTest extends TestCase
             ->willReturn($this->orderItemParent);
         $this->orderItemParent->method('getItemId')
             ->willReturn(1);
-        $this->converter->method('itemToCreditmemoItem')
+        $this->converter->expects($this->once())
+            ->method('itemToCreditmemoItem')
+            ->with($this->orderItemParent)
+            ->willReturn($this->creditmemoItemParent);
+        $this->creditmemoItemParent->expects($this->once())
+            ->method('setCreditmemo')
+            ->with($this->creditmemo)
+            ->willReturn($this->creditmemoItemParent);
+        $this->creditmemoItemParent->expects($this->once())
+            ->method('setParentId')
+            ->with(1)
+            ->willReturn($this->creditmemoItemParent);
+        $this->creditmemoItemParent->expects($this->once())
+            ->method('setStoreId')
+            ->with(1)
             ->willReturn($this->creditmemoItemParent);
 
         $this->assertEquals(

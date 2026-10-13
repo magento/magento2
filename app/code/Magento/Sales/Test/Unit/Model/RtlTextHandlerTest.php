@@ -10,6 +10,7 @@ namespace Magento\Sales\Test\Unit\Model;
 use Magento\Framework\Stdlib\StringUtils;
 use Magento\Sales\Model\RtlTextHandler;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class RtlTextHandlerTest extends TestCase
 {
@@ -32,8 +33,8 @@ class RtlTextHandlerTest extends TestCase
     /**
      * @param string $str
      * @param bool $isRtl
-     * @dataProvider provideRtlTexts
      */
+    #[DataProvider('provideRtlTexts')]
     public function testIsRtlText(string $str, bool $isRtl): void
     {
         $this->assertEquals($isRtl, $this->rtlTextHandler->isRtlText($str));
@@ -42,8 +43,8 @@ class RtlTextHandlerTest extends TestCase
     /**
      * @param string $str
      * @param bool $isRtl
-     * @dataProvider provideRtlTexts
      */
+    #[DataProvider('provideRtlTexts')]
     public function testReverseRtlText(string $str, bool $isRtl): void
     {
         $expectedStr = $isRtl ? $this->stringUtils->strrev($str) : $str;

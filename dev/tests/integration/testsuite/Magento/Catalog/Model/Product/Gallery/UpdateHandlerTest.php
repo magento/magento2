@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -15,6 +15,7 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Media\Config;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\Catalog\Model\ResourceModel\Product\Gallery;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\ConfigurationMismatchException;
 use Magento\Framework\Exception\CouldNotSaveException;
@@ -31,7 +32,13 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Test\Fixture\Store as StoreFixture;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use Magento\TestFramework\Fixture\DbIsolation;
+use Magento\TestFramework\Fixture\ScopeFixture;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -224,12 +231,12 @@ class UpdateHandlerTest extends TestCase
      * Tests updating image roles during product save.
      *
      * @magentoDataFixture Magento/Catalog/_files/product_with_multiple_images.php
-     * @dataProvider executeWithTwoImagesAndRolesDataProvider
      * @magentoDbIsolation enabled
      * @param array $roles
      * @return void
      * @throws LocalizedException
      */
+    #[DataProvider('executeWithTwoImagesAndRolesDataProvider')]
     public function testExecuteWithTwoImagesAndDifferentRoles(array $roles): void
     {
         $imageRoles = ['image', 'small_image', 'thumbnail', 'swatch_image'];
@@ -249,7 +256,6 @@ class UpdateHandlerTest extends TestCase
      *
      * @magentoDataFixture Magento/Catalog/_files/product_with_multiple_images.php
      * @magentoDataFixture Magento/Store/_files/second_store.php
-     * @dataProvider executeWithTwoImagesAndRolesDataProvider
      * @magentoDbIsolation enabled
      * @param array $roles
      * @return void
@@ -257,6 +263,7 @@ class UpdateHandlerTest extends TestCase
      * @throws ConfigurationMismatchException
      * @throws NoSuchEntityException
      */
+    #[DataProvider('executeWithTwoImagesAndRolesDataProvider')]
     public function testExecuteWithTwoImagesAndDifferentRolesOnStoreView(array $roles): void
     {
         $secondStoreId = (int)$this->storeRepository->get('fixture_second_store')->getId();
@@ -572,7 +579,6 @@ class UpdateHandlerTest extends TestCase
      * Check that product images should be updated successfully regardless if the existing images exist or not
      *
      * @magentoDataFixture Magento/Catalog/_files/product_with_image.php
-     * @dataProvider updateImageDataProvider
      * @param string $newFile
      * @param string $expectedFile
      * @param bool $exist
@@ -581,6 +587,7 @@ class UpdateHandlerTest extends TestCase
      * @throws NoSuchEntityException
      * @throws FileSystemException
      */
+    #[DataProvider('updateImageDataProvider')]
     public function testUpdateImage(string $newFile, string $expectedFile, bool $exist): void
     {
         $product = $this->getProduct(Store::DEFAULT_STORE_ID);
@@ -662,7 +669,6 @@ class UpdateHandlerTest extends TestCase
      *
      * @magentoDataFixture Magento/Catalog/_files/product_with_image.php
      * @magentoDataFixture Magento/Store/_files/second_store.php
-     * @dataProvider addImagesDataProvider
      * @param string $addFromStore
      * @param array $newImages
      * @param string $viewFromStore
@@ -672,6 +678,7 @@ class UpdateHandlerTest extends TestCase
      * @throws LocalizedException
      * @throws NoSuchEntityException
      */
+    #[DataProvider('addImagesDataProvider')]
     public function testAddImages(
         string $addFromStore,
         array $newImages,
@@ -753,6 +760,133 @@ class UpdateHandlerTest extends TestCase
                 ]
             ]
         ];
+    }
+    
+    #[
+        DataProvider('useDefaultWithMultipleStoresDataProvider'),
+        DbIsolation(false),
+        DataFixture(ScopeFixture::class, as: 'global_scope'),
+        DataFixture(StoreFixture::class, as: 'store_view_2'),
+        DataFixture(
+            ProductFixture::class,
+            ['media_gallery_entries' => [['label' => 'test label', 'position' => 1, 'disabled' => false]]],
+            as: 'p1',
+            scope: 'global_scope'
+        ),
+    ]
+    public function testUseDefaultWithMultipleStores(array $storeImageData): void
+    {
+        $fixtures = DataFixtureStorageManager::getStorage();
+        $sku = $fixtures->get('p1')->getSku();
+        $store2 = $fixtures->get('store_view_2');
+        
+        $defaultImageData = [
+            'position' => 1,
+            'disabled' => 0,
+            'label' => 'test label'
+        ];
+        $defaultImageDataUpdated = [
+            'position' => 3,
+            'disabled' => 1,
+            'label' => 'global label updated'
+        ];
+        $storeImageDataUseDefault = [
+            'position_use_default' => 1,
+            'disabled_use_default' => 1,
+            'label_use_default' => 1
+        ];
+        
+        // Check image in store view 2
+        $product = $this->productRepository->get($sku, true, $store2->getId(), true);
+        $this->assertImage($defaultImageData, current($product->getData('media_gallery', 'images')));
+        $this->assertEquals($defaultImageData['label'], $product->getData('image_label'));
+        
+        // Update image in store view 2
+        $this->updateImage($product, $storeImageData);
+        $this->updateHandler->execute($product);
+        
+        // Check image in global scope
+        $product = $this->productRepository->get($sku, false, Store::DEFAULT_STORE_ID, true);
+        $this->assertImage($defaultImageData, current($product->getData('media_gallery', 'images')));
+        $this->assertEquals($defaultImageData['label'], $product->getData('image_label'));
+        
+        // Check image in store view 2
+        $product = $this->productRepository->get($sku, true, $store2->getId(), true);
+        $this->assertImage($storeImageData, current($product->getData('media_gallery', 'images')));
+        
+        // Use default values in store view 2
+        $this->updateImage($product, $storeImageDataUseDefault);
+        $this->updateHandler->execute($product);
+
+        // Check image in global scope
+        $product = $this->productRepository->get($sku, false, Store::DEFAULT_STORE_ID, true);
+        $this->assertImage($defaultImageData, current($product->getData('media_gallery', 'images')));
+        $this->assertEquals($defaultImageData['label'], $product->getData('image_label'));
+        
+        // Check image in store view 2
+        $product = $this->productRepository->get($sku, false, $store2->getId(), true);
+        $this->assertImage($defaultImageData, current($product->getData('media_gallery', 'images')));
+        $this->assertEquals($defaultImageData['label'], $product->getData('image_label'));
+        
+        // Update image in global scope
+        $product = $this->productRepository->get($sku, true, Store::DEFAULT_STORE_ID, true);
+        $this->updateImage($product, $defaultImageDataUpdated);
+        $this->updateHandler->execute($product);
+
+        // Check image in global scope
+        $product = $this->productRepository->get($sku, false, Store::DEFAULT_STORE_ID, true);
+        $this->assertImage($defaultImageDataUpdated, current($product->getData('media_gallery', 'images')));
+        $this->assertEquals($defaultImageDataUpdated['label'], $product->getData('image_label'));
+        
+        // Check image in store view 2
+        $product = $this->productRepository->get($sku, false, $store2->getId(), true);
+        $this->assertImage($defaultImageDataUpdated, current($product->getData('media_gallery', 'images')));
+        $this->assertEquals($defaultImageDataUpdated['label'], $product->getData('image_label'));
+    }
+
+    public static function useDefaultWithMultipleStoresDataProvider(): array
+    {
+        return [
+            'custom store label, position, disabled' => [
+                [
+                    'position' => 5,
+                    'disabled' => 1,
+                    'label' => 'etiquette de test'
+                ]
+            ],
+            'empty store label' => [
+                [
+                    'position' => 5,
+                    'disabled' => 1,
+                    'label' => ''
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * @param ProductInterface $product
+     * @param array $imageData
+     * @return void
+     */
+    private function updateImage(ProductInterface $product, array $imageData): void
+    {
+        $gallery = $product->getData('media_gallery');
+        $index = key($gallery['images']);
+        $gallery['images'][$index] = $imageData + $gallery['images'][$index];
+        $product->setData('media_gallery', $gallery);
+    }
+
+    /**
+     * @param array $expected
+     * @param array $actual
+     * @return void
+     */
+    private function assertImage(array $expected, array $actual): void
+    {
+        $this->assertEquals($expected['position'], $actual['position']);
+        $this->assertEquals($expected['disabled'], $actual['disabled']);
+        $this->assertSame($expected['label'], $actual['label']);
     }
 
     /**

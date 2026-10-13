@@ -70,14 +70,11 @@ class AutocompleteSuggestionsTest extends TestCase
         $this->dataProvider = $this->getMockBuilder(DataProvider::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->scopeConfig = $this->getMockBuilder(ScopeConfig::class)
-            ->getMockForAbstractClass();
+        $this->scopeConfig = $this->createMock(ScopeConfig::class);
         $this->query = $this->getMockBuilder(Query::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->queryFactory->expects($this->any())
-            ->method('get')
-            ->willReturn($this->query);
+        $this->queryFactory->method('get')->willReturn($this->query);
 
         $this->model = new AutocompleteSuggestions(
             $this->queryFactory,

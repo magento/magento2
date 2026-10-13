@@ -27,8 +27,7 @@ class ButtonsTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->urlConverter = $this->getMockBuilder(ConverterInterface::class)
-            ->getMockForAbstractClass();
+        $this->urlConverter = $this->createMock(ConverterInterface::class);
         $this->converter = new Buttons($this->urlConverter, new ConverterUtils());
     }
 

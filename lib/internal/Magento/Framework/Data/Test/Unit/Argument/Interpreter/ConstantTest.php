@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Framework\Data\Test\Unit\Argument\Interpreter;
 
 use Magento\Framework\Data\Argument\Interpreter\Constant;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ConstantTest extends TestCase
 {
@@ -28,9 +29,8 @@ class ConstantTest extends TestCase
         $this->assertEquals(TESTS_TEMP_DIR, $this->object->evaluate(['value' => 'TESTS_TEMP_DIR']));
     }
 
-    /**
-     * @dataProvider evaluateBadValueDataProvider
-     */
+    /**     */
+    #[DataProvider('evaluateBadValueDataProvider')]
     public function testEvaluateBadValue($value)
     {
         $this->expectException('InvalidArgumentException');

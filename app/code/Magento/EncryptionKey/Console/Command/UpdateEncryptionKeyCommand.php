@@ -83,7 +83,7 @@ class UpdateEncryptionKeyCommand extends Command
     /**
      * @inheritDoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {
             $key = $input->getOption('key');

@@ -9,18 +9,21 @@ namespace Magento\ConfigurableProduct\Test\Unit\Block\Adminhtml\Product\Steps;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Backend\Block\Widget\Button;
-use Magento\Backend\Test\Unit\Helper\ButtonTestHelper;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\SelectAttributes;
 use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\Template\Context;
+use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\View\LayoutInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class SelectAttributesTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var SelectAttributes
      */
@@ -58,7 +61,10 @@ class SelectAttributesTest extends TestCase
     {
         $this->contextMock = $this->createMock(Context::class);
         $this->registryMock = $this->createMock(Registry::class);
-        $this->buttonMock = new ButtonTestHelper();
+        $this->buttonMock = $this->createPartialMockWithReflection(
+            Button::class,
+            ['toHtml', 'getAuthorization', 'isAllowed']
+        );
         $this->layoutMock = $this->createMock(LayoutInterface::class);
         $this->urlBuilderMock = $this->createMock(UrlInterface::class);
 
@@ -87,10 +93,10 @@ class SelectAttributesTest extends TestCase
             ->with('current_product')
             ->willReturn($productMock);
         
-        // Configure the ButtonTestHelper using clean setters
-        $this->buttonMock->setHtml($result);
-        $this->buttonMock->setAuthorization($this->buttonMock);
-        $this->buttonMock->setIsAllowed($isAllowed);
+        $this->buttonMock->method('toHtml')->willReturn($result);
+        $authorizationMock = $this->createMock(AuthorizationInterface::class);
+        $authorizationMock->method('isAllowed')->willReturn($isAllowed);
+        $this->buttonMock->method('getAuthorization')->willReturn($authorizationMock);
 
         $this->layoutMock->expects($this->once())
             ->method('createBlock')

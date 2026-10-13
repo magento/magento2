@@ -53,7 +53,7 @@ class InstructionsTest extends TestCase
     {
         $methodInstance = $this->getMockBuilder(
             MethodInterface::class
-        )->getMockForAbstractClass();
+        )->getMock();
         $methodInstance->expects($this->once())
             ->method('getConfigData')
             ->with('instructions')

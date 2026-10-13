@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\ImportExport\Controller\Adminhtml;
 
 use Magento\TestFramework\Helper\Xpath;
 use Magento\TestFramework\TestCase\AbstractBackendController;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoAppArea adminhtml
@@ -47,12 +48,11 @@ class ExportTest extends AbstractBackendController
     /**
      * Test getFilter action
      *
-     * @dataProvider getEntityTypesDataProvider
-     *
      * @param string $entityType
      * @param string|null $customerEntityType
      * @param array $expectedAttributes
      */
+    #[DataProvider('getEntityTypesDataProvider')]
     public function testGetFilterAction(
         string $entityType,
         ?string $customerEntityType = null,

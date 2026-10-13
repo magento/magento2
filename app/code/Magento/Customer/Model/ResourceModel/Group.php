@@ -124,7 +124,7 @@ class Group extends \Magento\Framework\Model\ResourceModel\Db\VersionControl\Abs
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $group)
     {
         /** @var \Magento\Customer\Model\Group $group */
-        $group->setCode(substr($group->getCode(), 0, $group::GROUP_CODE_MAX_LENGTH));
+        $group->setCode(mb_substr($group->getCode(), 0, $group::GROUP_CODE_MAX_LENGTH));
         return parent::_beforeSave($group);
     }
 

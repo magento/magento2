@@ -76,6 +76,7 @@
         </actionGroup>
         <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.custom_attributes[url_key]$$)}}" stepKey="openCategoryPageAfterAddedProductToCart"/>
         <!--The Recently Viewed widget displays Simple Product 1 and Simple Product 2-->
+        <waitForElementVisible selector="{{StorefrontWidgetsSection.widgetRecentlyViewedProductsGrid}}" stepKey="waitForRecentlyViewedWidgetAfterCart"/>
         <actionGroup ref="StorefrontAssertProductInRecentlyViewedWidgetActionGroup" stepKey="seeSimpleProductInRecentlyViewedWidget">
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>
@@ -145,6 +146,7 @@
         <see userInput="Welcome, $$createCustomer.firstname$$ $$createCustomer.lastname$$!" selector="{{StorefrontPanelHeaderSection.welcomeMessage}}" stepKey="checkWelcomeMessageAfterLogoutFromCustomer"/>
         <seeElement selector="{{StorefrontPanelHeaderSection.notYouLink}}" stepKey="checkLinkNotYouAfterLogoutFromCustomer"/>
 
+        <waitForElementVisible selector="{{StorefrontWidgetsSection.widgetRecentlyViewedProductsGrid}}" stepKey="waitForRecentlyViewedWidgetAfterLogout"/>
         <actionGroup ref="StorefrontAssertProductInRecentlyViewedWidgetActionGroup" stepKey="checkSimpleProductInRecentlyViewedWidgetAfterLogout">
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>
@@ -173,6 +175,7 @@
         <actionGroup ref="StorefrontCustomerCheckProductInWishlistSidebarActionGroup" stepKey="checkSimpleProductNameInWishlistSidebarAfterLogin">
             <argument name="productVar" value="$$createSimpleProduct$$"/>
         </actionGroup>
+        <waitForElementVisible selector="{{StorefrontWidgetsSection.widgetRecentlyViewedProductsGrid}}" stepKey="waitForRecentlyViewedWidgetAfterLogin"/>
         <actionGroup ref="StorefrontAssertProductInRecentlyViewedWidgetActionGroup" stepKey="checkSimpleProductInRecentlyViewedWidgetAfterLogin">
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>

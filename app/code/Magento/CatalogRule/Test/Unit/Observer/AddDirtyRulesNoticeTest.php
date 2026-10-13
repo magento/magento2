@@ -15,6 +15,10 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+ */
 class AddDirtyRulesNoticeTest extends TestCase
 {
     /**
@@ -32,9 +36,7 @@ class AddDirtyRulesNoticeTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->messageManagerMock = $this->getMockBuilder(ManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
         $objectManagerHelper = new ObjectManager($this);
         $this->observer = $objectManagerHelper->getObject(
             AddDirtyRulesNotice::class,
@@ -50,14 +52,9 @@ class AddDirtyRulesNoticeTest extends TestCase
     public function testExecute(): void
     {
         $message = "test";
-        $flagMock = $this->getMockBuilder(Flag::class)
-            ->addMethods(['getState'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $eventObserverMock = $this->getMockBuilder(Observer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $flagMock->expects($this->once())->method('getState')->willReturn(1);
+        $flagMock = $this->createPartialMock(Flag::class, []);
+        $flagMock->setState(1);
+        $eventObserverMock = $this->createMock(Observer::class);
         $eventObserverMock
             ->method('getData')
             ->willReturnCallback(fn($param) => match ([$param]) {

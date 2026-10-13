@@ -12,6 +12,7 @@ use Magento\CatalogSearch\Model\Search\Request\ModifierInterface;
 use Magento\Framework\DataObject;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use InvalidArgumentException;
 
 /**
  * Test composite search requests modifier
@@ -39,8 +40,8 @@ class ModifierCompositeTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->modifier1 = $this->getMockForAbstractClass(ModifierInterface::class);
-        $this->modifier2 = $this->getMockForAbstractClass(ModifierInterface::class);
+        $this->modifier1 = $this->createMock(ModifierInterface::class);
+        $this->modifier2 = $this->createMock(ModifierInterface::class);
         $this->model = new ModifierComposite(
             [
                 $this->modifier1,
@@ -73,7 +74,7 @@ class ModifierCompositeTest extends TestCase
      */
     public function testInvalidModifier(): void
     {
-        $exception = new \InvalidArgumentException(
+        $exception = new InvalidArgumentException(
             'Magento\Framework\DataObject must implement Magento\CatalogSearch\Model\Search\Request\ModifierInterface'
         );
         $this->expectExceptionObject($exception);

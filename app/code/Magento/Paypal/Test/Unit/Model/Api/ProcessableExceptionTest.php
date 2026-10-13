@@ -8,11 +8,12 @@ declare(strict_types=1);
 namespace Magento\Paypal\Test\Unit\Model\Api;
 
 use Magento\Paypal\Model\Api\ProcessableException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ProcessableExceptionTest extends TestCase
 {
-    const UNKNOWN_CODE = 10411;
+    private const UNKNOWN_CODE = 10411;
 
     /**
      * @var ProcessableException
@@ -23,8 +24,8 @@ class ProcessableExceptionTest extends TestCase
      * @param int $code
      * @param string $msg
      * @return void
-     * @dataProvider getUserMessageDataProvider
      */
+    #[DataProvider('getUserMessageDataProvider')]
     public function testGetUserMessage($code, $msg)
     {
         $this->model = new ProcessableException(__($msg), null, $code);

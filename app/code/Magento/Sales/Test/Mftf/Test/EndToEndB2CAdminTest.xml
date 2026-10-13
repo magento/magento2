@@ -291,6 +291,7 @@
         <click selector="{{AdminDataGridHeaderSection.columnsToggle}}" stepKey="closeOrderGridColumnOptionsPurchasePoint" after="removePurchasePointColumnFromGrid"/>
         <dontSeeElement selector="{{AdminDataGridTableSection.columnHeader('Purchase Point')}}" stepKey="dontSeePurchasePointColumnInGrid" after="closeOrderGridColumnOptionsPurchasePoint"/>
         <!--END admin uses order grid-->
+        <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrdersGridFiltersAfterEndToEndScenario"/>
 
         <!--Delete store view created as prerequisites-->
         <comment userInput="Clean up store view" stepKey="cleanUpStoreView" before="deleteStoreView"/>
@@ -298,5 +299,7 @@
         <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex" after="deleteStoreView">
             <argument name="indices" value=""/>
         </actionGroup>
+        <!--Delete all customers via API-->
+        <helper class="Magento\Customer\Test\Mftf\Helper\CustomerApiHelper" method="deleteAllCustomersApi" stepKey="deleteAllCustomersViaApi" after="reindex"/>
     </test>
 </tests>

@@ -26,6 +26,7 @@ use Magento\Store\Model\StoreSwitcher\ContextInterface;
 use Magento\Store\Model\StoreSwitcher\ContextInterfaceFactory;
 use Magento\Store\Model\StoreSwitcher\HashGenerator;
 use Magento\Store\Model\StoreSwitcher\RedirectDataGenerator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -115,42 +116,16 @@ class RedirectTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getParam'])
-            ->getMockForAbstractClass();
-        $this->redirectMock = $this->getMockBuilder(RedirectInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['redirect'])
-            ->getMockForAbstractClass();
-        $this->storeResolverMock = $this->getMockBuilder(StoreResolverInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getCurrentStoreId'])
-            ->getMockForAbstractClass();
-        $this->storeRepositoryMock = $this->getMockBuilder(StoreRepositoryInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getById', 'get'])
-            ->getMockForAbstractClass();
-        $this->messageManagerMock = $this->getMockBuilder(ManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['addErrorMessage'])
-            ->getMockForAbstractClass();
-        $this->responseMock = $this->getMockBuilder(ResponseInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->fromStoreMock = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getCode'])
-            ->getMockForAbstractClass();
-        $this->targetStoreMock = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getCode'])
-            ->getMockForAbstractClass();
-        $this->sidResolverMock = $this->getMockBuilder(SidResolverInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getUseSessionInUrl'])
-            ->getMockForAbstractClass();
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->redirectMock = $this->createMock(RedirectInterface::class);
+        $this->storeResolverMock = $this->createMock(StoreResolverInterface::class);
+        $this->storeRepositoryMock = $this->createMock(StoreRepositoryInterface::class);
+        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
+        $this->responseMock = $this->createMock(ResponseInterface::class);
+        $this->fromStoreMock = $this->createMock(Store::class);
+        $this->targetStoreMock = $this->createMock(Store::class);
+        $this->sidResolverMock = $this->createMock(SidResolverInterface::class);
         $this->hashGeneratorMock = $this->createMock(HashGenerator::class);
 
         $this->currentStoreMock = $this->getMockBuilder(Store::class)
@@ -202,9 +177,9 @@ class RedirectTest extends TestCase
      * @param string $defaultStoreViewCode
      * @param string $storeCode
      *
-     * @dataProvider getConfigDataProvider
      * @return void
      */
+    #[DataProvider('getConfigDataProvider')]
     public function testRedirect(string $defaultStoreViewCode, string $storeCode): void
     {
         $this->requestMock
@@ -263,8 +238,8 @@ class RedirectTest extends TestCase
      * @param string $defaultStoreViewCode
      * @param string $storeCode
      * @return void
-     * @dataProvider getConfigDataProvider
      */
+    #[DataProvider('getConfigDataProvider')]
     public function testRedirectWithThrowsException(string $defaultStoreViewCode, string $storeCode): void
     {
         $this->requestMock

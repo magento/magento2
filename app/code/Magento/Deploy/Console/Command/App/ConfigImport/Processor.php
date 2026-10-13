@@ -59,8 +59,6 @@ class Processor
     private $importerFactory;
 
     /**
-     * Logger.
-     *
      * @var Logger
      */
     private $logger;
@@ -107,7 +105,7 @@ class Processor
      * @return void
      * @throws RuntimeException is thrown when import has failed
      */
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): void
     {
         try {
             $importers = $this->configImporterPool->getImporters();
@@ -133,6 +131,7 @@ class Processor
                 /** @var ImporterInterface $importer */
                 $importer = $this->importerFactory->create($importerClassName);
                 $warnings = $importer->getWarningMessages($data);
+                //phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $questions = array_merge($warnings, ['Do you want to continue [yes/no]?']);
 
                 /**

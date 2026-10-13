@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -21,6 +21,7 @@ use Magento\TestFramework\Request;
 use Magento\TestFramework\Response;
 use Magento\TestFramework\Store\ExecuteInStoreContext;
 use Magento\TestFramework\TestCase\AbstractController;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Checks category availability on storefront by url rewrite
@@ -73,11 +74,11 @@ class CategoryUrlRewriteTest extends AbstractController
     /**
      * @magentoDataFixture Magento/Catalog/_files/category_tree.php
      * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
-     * @dataProvider categoryRewriteProvider
      * @param int $categoryId
      * @param string $urlPath
      * @return void
      */
+    #[DataProvider('categoryRewriteProvider')]
     public function testCategoryUrlRewrite(int $categoryId, string $urlPath): void
     {
         $this->dispatch(sprintf($urlPath, $this->categoryUrlSuffix));

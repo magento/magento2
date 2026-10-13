@@ -12,6 +12,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class CollectionTest extends TestCase
 {
@@ -31,9 +32,9 @@ class CollectionTest extends TestCase
     /**
      * Verifies that filter condition date is being converted to config timezone before select sql query
      *
-     * @dataProvider getCollectionFiltersDataProvider
      * @return void
      */
+    #[DataProvider('getCollectionFiltersDataProvider')]
     public function testAddFieldToFilter($field): void
     {
         $filterDate = "2021-12-05 00:00:00";

@@ -54,7 +54,7 @@ class ObserverConfigTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->backendConfigMock = $this->getMockForAbstractClass(ConfigInterface::class);
+        $this->backendConfigMock = $this->createMock(ConfigInterface::class);
 
         $objectManager = new ObjectManagerHelper($this);
         $this->model = $objectManager->getObject(

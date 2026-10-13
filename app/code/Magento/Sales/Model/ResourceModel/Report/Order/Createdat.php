@@ -60,6 +60,8 @@ class Createdat extends \Magento\Sales\Model\ResourceModel\Report\AbstractReport
             } else {
                 $subSelect = null;
             }
+            $datesRange = $subSelect !== null ? $this->getRange($subSelect) : null;
+
             $this->_clearTableByDateRange($this->getMainTable(), $from, $to, $subSelect);
 
             $periodExpr = $connection->getDatePartSql(
@@ -217,8 +219,8 @@ class Createdat extends \Magento\Sales\Model\ResourceModel\Report\AbstractReport
                 [\Magento\Sales\Model\Order::STATE_PENDING_PAYMENT, \Magento\Sales\Model\Order::STATE_NEW]
             );
 
-            if ($subSelect !== null) {
-                $select->having($this->_makeConditionFromDateRangeSelect($subSelect, 'period'));
+            if ($datesRange !== null) {
+                $select->having($this->getConnection()->prepareSqlCondition('period', ['in' => $datesRange]));
             }
 
             $select->group([$periodExpr, 'o.store_id', 'o.status']);
@@ -236,8 +238,8 @@ class Createdat extends \Magento\Sales\Model\ResourceModel\Report\AbstractReport
             $select->reset();
             $select->from($this->getMainTable(), $columns)->where('store_id <> 0');
 
-            if ($subSelect !== null) {
-                $select->where($this->_makeConditionFromDateRangeSelect($subSelect, 'period'));
+            if ($datesRange !== null) {
+                $select->where($this->getConnection()->prepareSqlCondition('period', ['in' => $datesRange]));
             }
 
             $select->group(['period', 'order_status']);

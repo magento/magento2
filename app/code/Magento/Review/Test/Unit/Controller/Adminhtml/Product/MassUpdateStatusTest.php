@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Review\Test\Unit\Controller\Adminhtml\Product;
 
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Review\Controller\Adminhtml\Product\MassUpdateStatus;
@@ -28,6 +29,8 @@ use Magento\Review\Model\ResourceModel\Review as ReviewResourceModel;
  */
 class MassUpdateStatusTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var MassUpdateStatus
      */
@@ -122,11 +125,10 @@ class MassUpdateStatusTest extends TestCase
             ->method('addFieldToFilter')
             ->with('main_table.id', [1, 2])
             ->willReturnSelf();
-        $modelMock = $this->getMockBuilder(Review::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setStatusId'])
-            ->onlyMethods(['_getResource'])
-            ->getMock();
+        $modelMock = $this->createPartialMockWithReflection(
+            Review::class,
+            ['setStatusId', '_getResource']
+        );
         $modelMock->expects($this->once())
             ->method('setStatusId')
             ->with(Review::STATUS_APPROVED)

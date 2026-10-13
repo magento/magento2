@@ -50,9 +50,7 @@ class ConsolidatedConfigTest extends TestCase
         $this->configReaderMock = $this->getMockBuilder(Reader::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->serializer = $this->getMockBuilder(SerializerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->serializer = $this->createMock(SerializerInterface::class);
         $objectManagerHelper = new ObjectManager($this);
         $this->configModel = $objectManagerHelper->getObject(
             \Magento\Integration\Model\ConsolidatedConfig::class,
@@ -64,7 +62,7 @@ class ConsolidatedConfigTest extends TestCase
         );
     }
 
-    public function testGetIntegrationsFromConfigCacheType()
+    public function testGetIntegrationsFromConfigCacheType(): void
     {
         $integrations = ['foo', 'bar', 'baz'];
         $serializedIntegrations = '["foo","bar","baz"]';
@@ -80,7 +78,7 @@ class ConsolidatedConfigTest extends TestCase
         $this->assertEquals($integrations, $this->configModel->getIntegrations());
     }
 
-    public function testGetIntegrationsFromConfigReader()
+    public function testGetIntegrationsFromConfigReader(): void
     {
         $integrations = ['foo', 'bar', 'baz'];
         $serializedIntegrations = '["foo","bar","baz"]';

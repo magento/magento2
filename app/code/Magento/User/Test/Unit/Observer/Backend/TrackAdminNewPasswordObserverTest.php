@@ -13,9 +13,11 @@ use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Message\Collection;
 use Magento\Framework\Message\ManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\User\Model\Backend\Config\ObserverConfig;
 use Magento\User\Model\ResourceModel\User;
+use Magento\User\Model\User as UserModel;
 use Magento\User\Observer\Backend\TrackAdminNewPasswordObserver;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -26,6 +28,8 @@ use PHPUnit\Framework\TestCase;
  */
 class TrackAdminNewPasswordObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var ObserverConfig */
     protected $observerConfig;
 
@@ -46,35 +50,21 @@ class TrackAdminNewPasswordObserverTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->configInterfaceMock = $this->getMockBuilder(ConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-
-        $this->userMock = $this->getMockBuilder(User::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->authSessionMock = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->addMethods(
-                [
-                    'setPciAdminUserIsPasswordExpired',
-                    'unsPciAdminUserIsPasswordExpired',
-                    'getPciAdminUserIsPasswordExpired'
-                ]
-            )
-            ->onlyMethods(
-                [
-                    'isLoggedIn',
-                    'clearStorage'
-                ]
-            )->getMock();
-
-        $this->managerInterfaceMock = $this->getMockBuilder(ManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-
         $helper = new ObjectManager($this);
+
+        $this->configInterfaceMock = $this->createMock(ConfigInterface::class);
+        $this->userMock = $this->createMock(User::class);
+        $this->authSessionMock = $this->createPartialMockWithReflection(
+            Session::class,
+            [
+                'setPciAdminUserIsPasswordExpired',
+                'unsPciAdminUserIsPasswordExpired',
+                'getPciAdminUserIsPasswordExpired',
+                'isLoggedIn',
+                'clearStorage'
+            ]
+        );
+        $this->managerInterfaceMock = $this->createMock(ManagerInterface::class);
 
         $this->observerConfig = $helper->getObject(
             ObserverConfig::class,
@@ -99,22 +89,13 @@ class TrackAdminNewPasswordObserverTest extends TestCase
         $newPW = "mYn3wpassw0rd";
         $uid = 123;
         /** @var Observer|MockObject $eventObserverMock */
-        $eventObserverMock = $this->getMockBuilder(Observer::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getEvent'])
-            ->getMock();
+        $eventObserverMock = $this->createPartialMock(Observer::class, ['getEvent']);
 
         /** @var Event|MockObject */
-        $eventMock = $this->getMockBuilder(Event::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getObject'])
-            ->getMock();
+        $eventMock = $this->createPartialMockWithReflection(Event::class, ['getObject']);
 
-        /** @var \Magento\User\Model\User|MockObject $userMock */
-        $userMock = $this->getMockBuilder(\Magento\User\Model\User::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getId', 'getPassword', 'dataHasChangedFor'])
-            ->getMock();
+        /** @var UserModel|MockObject $userMock */
+        $userMock = $this->createPartialMock(UserModel::class, ['getId', 'getPassword', 'dataHasChangedFor']);
 
         $eventObserverMock->expects($this->once())->method('getEvent')->willReturn($eventMock);
         $eventMock->expects($this->once())->method('getObject')->willReturn($userMock);
@@ -126,9 +107,7 @@ class TrackAdminNewPasswordObserverTest extends TestCase
             ->willReturn(true);
 
         /** @var Collection|MockObject $collectionMock */
-        $collectionMock = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $collectionMock = $this->createMock(Collection::class);
         $this->managerInterfaceMock
             ->expects($this->once())
             ->method('getMessages')

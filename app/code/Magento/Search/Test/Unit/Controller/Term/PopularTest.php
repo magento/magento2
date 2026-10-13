@@ -53,7 +53,7 @@ class PopularTest extends TestCase
             ->getMock();
 
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $objectManager = new ObjectManager($this);
         $this->action = $objectManager->getObject(

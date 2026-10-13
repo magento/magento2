@@ -69,13 +69,9 @@ class StoreCookieTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
 
-        $this->storeCookieManagerMock = $this->getMockBuilder(StoreCookieManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->storeCookieManagerMock = $this->createMock(StoreCookieManagerInterface::class);
 
         $this->storeMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
@@ -85,13 +81,9 @@ class StoreCookieTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->requestMock = $this->createMock(RequestInterface::class);
 
-        $this->storeRepositoryMock = $this->getMockBuilder(StoreRepositoryInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->storeRepositoryMock = $this->createMock(StoreRepositoryInterface::class);
 
         $this->plugin = (new ObjectManager($this))->getObject(
             StoreCookie::class,

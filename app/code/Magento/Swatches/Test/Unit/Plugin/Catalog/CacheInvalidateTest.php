@@ -42,7 +42,7 @@ class CacheInvalidateTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->typeList = $this->getMockForAbstractClass(TypeListInterface::class);
+        $this->typeList = $this->createMock(TypeListInterface::class);
         $this->swatchHelper = $this->createMock(Data::class);
         $this->attribute = $this->createMock(Attribute::class);
 
@@ -65,7 +65,7 @@ class CacheInvalidateTest extends TestCase
             ->willReturn(true);
         $this->typeList
             ->method('invalidate')
-            ->willReturnCallback(function ($arg1) use (&$callCount) {
+            ->willReturnCallback(function ($arg1) {
                 if ($arg1 == 'block_html' || $arg1 == 'collections') {
                     return null;
                 }

@@ -44,14 +44,16 @@ use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\Framework\Escaper;
-use Magento\Checkout\Test\Unit\Helper\ShippingMethodManagementTestHelper;
-use Magento\Checkout\Test\Unit\Helper\TotalsInterfaceTestHelper;
+use Magento\Quote\Model\Cart\Totals as QuoteCartTotals;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DefaultConfigProviderTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var DefaultConfigProvider
      */
@@ -106,7 +108,10 @@ class DefaultConfigProviderTest extends TestCase
         $httpContext = $this->createMock(HttpContext::class);
         $quoteRepository = $this->createMock(CartRepositoryInterface::class);
         $quoteItemRepository = $this->createMock(QuoteItemRepository::class);
-        $this->shippingMethodManager = new ShippingMethodManagementTestHelper();
+        $this->shippingMethodManager = $this->createPartialMockWithReflection(
+            ShippingMethodManager::class,
+            ['get', 'getList', 'estimateByExtendedAddress', 'estimateByAddress', 'estimateByAddressId']
+        );
         $configurationPool = $this->createMock(ConfigurationPool::class);
         $quoteIdMaskFactory = $this->createMock(QuoteIdMaskFactory::class);
         $localeFormat = $this->createMock(LocaleFormat::class);
@@ -224,7 +229,11 @@ class DefaultConfigProviderTest extends TestCase
         $this->addressMetadata->method('getAllAttributesMetadata')
             ->willReturn([$attributeMetadata1, $attributeMetadata2]);
 
-        $totals = new TotalsInterfaceTestHelper();
+        $totals = $this->createMock(QuoteCartTotals::class);
+        $totals->method('getItems')->willReturn([]);
+        $totals->method('getTotalSegments')->willReturn([]);
+        $totals->method('getExtensionAttributes')->willReturn(null);
+        $totals->method('toArray')->willReturn([]);
         $this->cartTotalRepository->method('get')
             ->willReturn($totals);
         $this->shippingMethodConfig->method('getActiveCarriers')

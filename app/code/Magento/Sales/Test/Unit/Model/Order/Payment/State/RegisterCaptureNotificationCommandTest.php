@@ -10,16 +10,21 @@ namespace Magento\Sales\Test\Unit\Model\Order\Payment\State;
 use Magento\Directory\Model\Currency;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\Order\Payment\State\RegisterCaptureNotificationCommand;
 use Magento\Sales\Model\Order\StatusResolver;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * @see RegisterCaptureNotificationCommand
  */
 class RegisterCaptureNotificationCommandTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var float
      */
@@ -40,8 +45,8 @@ class RegisterCaptureNotificationCommandTest extends TestCase
      * @param string $expectedStatus
      * @param string $expectedMessage
      * @return void
-     * @dataProvider commandResultDataProvider
      */
+    #[DataProvider('commandResultDataProvider')]
     public function testExecute(
         bool $isTransactionPending,
         bool $isFraudDetected,
@@ -50,15 +55,15 @@ class RegisterCaptureNotificationCommandTest extends TestCase
         string $expectedStatus,
         string $expectedMessage
     ): void {
-        $order = $this->getOrder($currentState);
-        $actualReturn = (new RegisterCaptureNotificationCommand($this->getStatusResolver()))->execute(
-            $this->getPayment($isTransactionPending, $isFraudDetected),
-            $this->amount,
-            $order
-        );
+         $order = $this->getOrder($currentState);
+         $actualReturn = (new RegisterCaptureNotificationCommand($this->getStatusResolver()))->execute(
+             $this->getPayment($isTransactionPending, $isFraudDetected),
+             $this->amount,
+             $order
+         );
 
-        $this->assertOrderStateAndStatus($order, $expectedState, $expectedStatus);
-        self::assertEquals(__($expectedMessage, $this->amount), $actualReturn);
+         $this->assertOrderStateAndStatus($order, $expectedState, $expectedStatus);
+         self::assertEquals(__($expectedMessage, $this->amount), $actualReturn);
     }
 
     /**
@@ -131,9 +136,7 @@ class RegisterCaptureNotificationCommandTest extends TestCase
      */
     private function getStatusResolver()
     {
-        $statusResolver = $this->getMockBuilder(StatusResolver::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $statusResolver = $this->createMock(StatusResolver::class);
         $statusResolver->method('getOrderStatusByState')
             ->willReturn(self::$newOrderStatus);
 
@@ -147,11 +150,10 @@ class RegisterCaptureNotificationCommandTest extends TestCase
     private function getOrder($state)
     {
         /** @var Order|MockObject $order */
-        $order = $this->getMockBuilder(Order::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getOrderStatusByState'])
-            ->onlyMethods(['getBaseCurrency'])
-            ->getMock();
+        $order = $this->createPartialMockWithReflection(
+            Order::class,
+            ['getOrderStatusByState', 'getBaseCurrency']
+        );
         $order->method('getBaseCurrency')
             ->willReturn($this->getCurrency());
         $order->setState($state);
@@ -166,9 +168,10 @@ class RegisterCaptureNotificationCommandTest extends TestCase
      */
     private function getPayment($isTransactionPending, $isFraudDetected)
     {
-        $payment = $this->getMockBuilder(OrderPaymentInterface::class)
-            ->addMethods(['getIsTransactionPending', 'getIsFraudDetected'])
-            ->getMockForAbstractClass();
+        $payment = $this->createPartialMockWithReflection(
+            Payment::class,
+            ['getIsTransactionPending', 'getIsFraudDetected']
+        );
         $payment->method('getIsTransactionPending')
             ->willReturn($isTransactionPending);
         $payment->method('getIsFraudDetected')
@@ -182,9 +185,7 @@ class RegisterCaptureNotificationCommandTest extends TestCase
      */
     private function getCurrency()
     {
-        $currency = $this->getMockBuilder(Currency::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $currency = $this->createMock(Currency::class);
         $currency->method('formatTxt')
             ->willReturn($this->amount);
 

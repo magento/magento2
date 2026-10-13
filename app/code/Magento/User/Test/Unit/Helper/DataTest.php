@@ -36,13 +36,8 @@ class DataTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->mathRandomMock = $this->getMockBuilder(Random::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->configMock = $this->getMockBuilder(ConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->mathRandomMock = $this->createMock(Random::class);
+        $this->configMock = $this->createMock(ConfigInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(

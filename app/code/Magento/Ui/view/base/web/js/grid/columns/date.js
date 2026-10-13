@@ -43,7 +43,7 @@ define([
             var date;
 
             if (this.storeLocale !== undefined) {
-                moment.locale(this.storeLocale, utils.extend({}, this.calendarConfig));
+                moment.updateLocale(this.storeLocale, utils.extend({}, this.calendarConfig));
             }
 
             date = moment.utc(this._super());

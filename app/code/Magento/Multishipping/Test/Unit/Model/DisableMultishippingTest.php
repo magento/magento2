@@ -7,11 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\Multishipping\Test\Unit\Model;
 
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Multishipping\Model\DisableMultishipping;
 use Magento\Quote\Api\Data\CartExtensionInterface;
-use Magento\Quote\Api\Data\CartInterface;
+use Magento\Quote\Model\Quote;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\MockObject\RuntimeException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -19,8 +20,10 @@ use PHPUnit\Framework\TestCase;
  */
 class DisableMultishippingTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
-     * @var CartInterface|MockObject
+     * @var Quote|MockObject
      */
     private $quoteMock;
 
@@ -34,10 +37,10 @@ class DisableMultishippingTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->quoteMock = $this->getMockBuilder(CartInterface::class)
-            ->addMethods(['getIsMultiShipping', 'setIsMultiShipping'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->quoteMock = $this->createPartialMockWithReflection(
+            Quote::class,
+            ['getIsMultiShipping', 'setIsMultiShipping', 'getExtensionAttributes']
+        );
         $this->disableMultishippingModel = new DisableMultishipping();
     }
 
@@ -45,10 +48,9 @@ class DisableMultishippingTest extends TestCase
      * Test 'execute' method if 'MultiShipping' mode is enabled.
      *
      * @param bool $hasShippingAssignments
-     *
      * @return void
-     * @dataProvider executeWithMultishippingModeEnabledDataProvider
      */
+    #[DataProvider('executeWithMultishippingModeEnabledDataProvider')]
     public function testExecuteWithMultishippingModeEnabled(bool $hasShippingAssignments): void
     {
         $shippingAssignments = $hasShippingAssignments ? ['example_shipping_assigment'] : null;
@@ -119,14 +121,9 @@ class DisableMultishippingTest extends TestCase
      */
     private function getCartExtensionMock(): MockObject
     {
-        $mockBuilder = $this->getMockBuilder(CartExtensionInterface::class)
-            ->disableOriginalConstructor();
-        try {
-            $mockBuilder->addMethods(['getShippingAssignments', 'setShippingAssignments']);
-        } catch (RuntimeException $e) {
-            // CartExtension already generated.
-        }
-
-        return $mockBuilder->getMockForAbstractClass();
+        return $this->createPartialMockWithReflection(
+            CartExtensionInterface::class,
+            ['getShippingAssignments', 'setShippingAssignments']
+        );
     }
 }

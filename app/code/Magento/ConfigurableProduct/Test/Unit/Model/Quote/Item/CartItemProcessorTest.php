@@ -12,17 +12,16 @@ use Magento\Catalog\Model\Product\Configuration\Item\Option;
 use Magento\ConfigurableProduct\Api\Data\ConfigurableItemOptionValueInterface;
 use Magento\ConfigurableProduct\Model\Quote\Item\CartItemProcessor;
 use Magento\ConfigurableProduct\Model\Quote\Item\ConfigurableItemOptionValueFactory;
-use Magento\ConfigurableProduct\Test\Unit\Model\Product\ProductOptionExtensionAttributes;
 use Magento\Framework\DataObject;
 use Magento\Framework\DataObject\Factory;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Quote\Api\Data\CartItemInterface;
 use Magento\Quote\Api\Data\ProductOptionExtensionFactory;
+use Magento\Quote\Api\Data\ProductOptionExtensionInterface;
 use Magento\Quote\Api\Data\ProductOptionInterface;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Quote\Model\Quote\ProductOptionFactory;
-use Magento\Quote\Test\Unit\Helper\ProductOptionExtensionTestHelper;
-use Magento\Quote\Test\Unit\Helper\ProductOptionTestHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -32,6 +31,8 @@ use PHPUnit\Framework\TestCase;
  */
 class CartItemProcessorTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var CartItemProcessor
      */
@@ -58,7 +59,7 @@ class CartItemProcessorTest extends TestCase
     protected $optionValueFactoryMock;
 
     /**
-     * @var ProductOptionExtensionAttributes|MockObject
+     * @var MockObject
      */
     private $productOptionExtensionAttributes;
 
@@ -81,7 +82,10 @@ class CartItemProcessorTest extends TestCase
             ['create']
         );
 
-        $this->productOptionExtensionAttributes = new ProductOptionExtensionTestHelper();
+        $this->productOptionExtensionAttributes = $this->createPartialMockWithReflection(
+            ProductOptionExtensionInterface::class,
+            ['getConfigurableItemOptions', 'setConfigurableItemOptions']
+        );
 
         $this->serializer = $this->createMock(Json::class);
 
@@ -125,7 +129,10 @@ class CartItemProcessorTest extends TestCase
         $productOptionMock = $this->createMock(ProductOptionInterface::class);
         $cartItemMock = $this->createMock(CartItemInterface::class);
         $cartItemMock->expects($this->exactly(3))->method('getProductOption')->willReturn($productOptionMock);
-        $extAttributesMock = new ProductOptionTestHelper();
+        $extAttributesMock = $this->createPartialMockWithReflection(
+            ProductOptionExtensionInterface::class,
+            ['getConfigurableItemOptions', 'setConfigurableItemOptions']
+        );
         $productOptionMock
             ->expects($this->exactly(2))
             ->method('getExtensionAttributes')
@@ -134,7 +141,7 @@ class CartItemProcessorTest extends TestCase
         $optionValueMock = $this->createMock(
             ConfigurableItemOptionValueInterface::class
         );
-        $extAttributesMock->setConfigurableItemOptions([$optionValueMock]);
+        $extAttributesMock->method('getConfigurableItemOptions')->willReturn([$optionValueMock]);
 
         $optionValueMock->expects($this->once())->method('getOptionId')->willReturn($optionId);
         $optionValueMock->expects($this->once())->method('getOptionValue')->willReturn($optionValue);

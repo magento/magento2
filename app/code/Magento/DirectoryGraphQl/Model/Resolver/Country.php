@@ -64,6 +64,13 @@ class Country implements ResolverInterface
             throw new GraphQlNoSuchEntityException(__($exception->getMessage()), $exception);
         }
 
+        // Add validation for obsolete countries without translations
+        if (empty($country->getFullNameLocale())) {
+            throw new GraphQlNoSuchEntityException(
+                __("The country isn't available.")
+            );
+        }
+
         return $this->dataProcessor->buildOutputDataArray(
             $country,
             CountryInformationInterface::class

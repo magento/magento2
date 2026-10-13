@@ -1,7 +1,8 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
+ *
  *
  * LICENSE
  *
@@ -13,7 +14,6 @@
  * through the world-wide-web, please send an email to license@zend.com
  * so we can send you a copy immediately.
  *
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (https://www.zend.com/)
  * @license https://framework.zend.com/license New BSD License
  */
 declare(strict_types=1);

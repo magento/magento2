@@ -45,9 +45,6 @@ class Upload extends \Magento\Downloadable\Controller\Adminhtml\Downloadable\Fil
     private $storageDatabase;
 
     /**
-     *
-     * Copyright © Magento, Inc. All rights reserved.
-     * See COPYING.txt for license details.
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Downloadable\Model\Link $link
      * @param \Magento\Downloadable\Model\Sample $sample

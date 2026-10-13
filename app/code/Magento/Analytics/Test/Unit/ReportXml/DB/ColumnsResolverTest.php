@@ -15,6 +15,7 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Sql\ColumnValueExpression;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ColumnsResolverTest extends TestCase
@@ -48,7 +49,7 @@ class ColumnsResolverTest extends TestCase
 
         $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
 
-        $this->connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $this->connectionMock = $this->createMock(AdapterInterface::class);
 
         $objectManager = new ObjectManagerHelper($this);
         $this->columnsResolver = $objectManager->getObject(
@@ -65,9 +66,7 @@ class ColumnsResolverTest extends TestCase
         $this->assertEquals($this->columnsResolver->getColumns($this->selectBuilderMock, []), []);
     }
 
-    /**
-     * @dataProvider getColumnsDataProvider
-     */
+    #[DataProvider('getColumnsDataProvider')]
     public function testGetColumnsWithFunction($expectedColumns, $expectedGroup, $entityConfig)
     {
         $this->resourceConnectionMock

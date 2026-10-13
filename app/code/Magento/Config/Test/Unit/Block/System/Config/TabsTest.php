@@ -40,7 +40,7 @@ class TabsTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->_requestMock = $this->createMock(RequestInterface::class);
         $this->_requestMock->expects(
             $this->any()
         )->method(

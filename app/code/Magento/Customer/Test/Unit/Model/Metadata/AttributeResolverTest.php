@@ -14,9 +14,11 @@ use Magento\Customer\Model\Metadata\AttributeResolver;
 use Magento\Framework\Exception\NoSuchEntityException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class AttributeResolverTest extends TestCase
 {
+    use MockCreationTrait;
     /** @var AttributeResolver */
     protected $model;
 
@@ -25,10 +27,9 @@ class AttributeResolverTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->metadataDataProviderMock = $this->getMockBuilder(
+        $this->metadataDataProviderMock = $this->createMock(
             AttributeMetadataDataProvider::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        );
 
         $this->model = new AttributeResolver(
             $this->metadataDataProviderMock
@@ -41,17 +42,13 @@ class AttributeResolverTest extends TestCase
         $attributeCode = 'code';
 
         /** @var AttributeMetadataInterface|MockObject $attributeMock */
-        $attributeMock = $this->getMockBuilder(AttributeMetadataInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $attributeMock = $this->createMock(AttributeMetadataInterface::class);
         $attributeMock->expects($this->once())
             ->method('getAttributeCode')
             ->willReturn($attributeCode);
 
         /** @var Attribute|MockObject $modelMock */
-        $modelMock = $this->getMockBuilder(Attribute::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $modelMock = $this->createMock(Attribute::class);
 
         $this->metadataDataProviderMock->expects($this->once())
             ->method('getAttribute')
@@ -70,9 +67,7 @@ class AttributeResolverTest extends TestCase
         $attributeCode = 'code';
 
         /** @var AttributeMetadataInterface|MockObject $attributeMock */
-        $attributeMock = $this->getMockBuilder(AttributeMetadataInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $attributeMock = $this->createMock(AttributeMetadataInterface::class);
         $attributeMock->expects($this->exactly(2))
             ->method('getAttributeCode')
             ->willReturn($attributeCode);

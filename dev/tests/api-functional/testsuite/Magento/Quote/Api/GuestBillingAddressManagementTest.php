@@ -6,6 +6,7 @@
 
 namespace Magento\Quote\Api;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Framework\Webapi\Rest\Request;
 use Magento\Quote\Api\Data\AddressInterface;
@@ -17,6 +18,9 @@ use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class GuestBillingAddressManagementTest extends WebapiAbstract
 {
     public const SERVICE_VERSION = 'V1';
@@ -60,12 +64,12 @@ class GuestBillingAddressManagementTest extends WebapiAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
+     * @magentoApiDataFixture Magento/Sales/_files/guest_quote_with_addresses.php
      */
     public function testGetAddress()
     {
         $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
-        $quote->load('test_order_1', 'reserved_order_id');
+        $quote->load('guest_quote', 'reserved_order_id');
 
         /** @var \Magento\Quote\Model\Quote\Address $address */
         $address = $quote->getBillingAddress();
@@ -77,17 +81,15 @@ class GuestBillingAddressManagementTest extends WebapiAbstract
             AddressInterface::KEY_REGION_CODE => $address->getRegionCode(),
             AddressInterface::KEY_COUNTRY_ID => $address->getCountryId(),
             AddressInterface::KEY_STREET => $address->getStreet(),
-            AddressInterface::KEY_COMPANY => $address->getCompany(),
             AddressInterface::KEY_TELEPHONE => $address->getTelephone(),
             AddressInterface::KEY_POSTCODE => $address->getPostcode(),
             AddressInterface::KEY_CITY => $address->getCity(),
             AddressInterface::KEY_FIRSTNAME => $address->getFirstname(),
             AddressInterface::KEY_LASTNAME => $address->getLastname(),
-            AddressInterface::KEY_CUSTOMER_ID => $address->getCustomerId(),
             AddressInterface::KEY_EMAIL => $address->getEmail(),
-            AddressInterface::SAME_AS_BILLING => $address->getSameAsBilling(),
-            AddressInterface::CUSTOMER_ADDRESS_ID => $address->getCustomerAddressId(),
-            AddressInterface::SAVE_IN_ADDRESS_BOOK => $address->getSaveInAddressBook(),
+            AddressInterface::SAME_AS_BILLING => (int)$address->getSameAsBilling(),
+            AddressInterface::SAVE_IN_ADDRESS_BOOK => (int)$address->getSaveInAddressBook(),
+            AddressInterface::KEY_VAT_ID => $address->getVatId(),
         ];
 
         $cartId = $this->getQuoteMaskedId($quote->getId());
@@ -113,14 +115,14 @@ class GuestBillingAddressManagementTest extends WebapiAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
-     * @dataProvider setAddressDataProvider
+     * @magentoApiDataFixture Magento/Sales/_files/guest_quote_with_addresses.php
      */
+    #[DataProvider('setAddressDataProvider')]
     public function testSetAddress($useForShipping)
     {
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
-        $quote->load('test_order_1', 'reserved_order_id');
+        $quote->load('guest_quote', 'reserved_order_id');
 
         $cartId = $this->getQuoteMaskedId($quote->getId());
 
@@ -161,7 +163,7 @@ class GuestBillingAddressManagementTest extends WebapiAbstract
 
         //reset $quote to reload data
         $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
-        $quote->load('test_order_1', 'reserved_order_id');
+        $quote->load('guest_quote', 'reserved_order_id');
         $address = $quote->getBillingAddress();
         $address->getRegionCode();
         $savedData  = $address->getData();

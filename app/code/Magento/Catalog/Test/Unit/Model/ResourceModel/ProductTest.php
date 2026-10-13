@@ -14,11 +14,14 @@ use Magento\Eav\Model\Entity\Type;
 use Magento\Eav\Model\Entity\TypeFactory;
 use Magento\Framework\DataObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class ProductTest extends TestCase
 {
+    use MockCreationTrait;
+    
     /**
      * @var Product
      */
@@ -61,10 +64,10 @@ class ProductTest extends TestCase
         $productTypeId = 4;
         $expectedErrorMessage = ['attribute_set' => 'Invalid attribute set entity type'];
 
-        $productMock = $this->getMockBuilder(DataObject::class)
-            ->addMethods(['getAttributeSetId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productMock = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['getAttributeSetId']
+        );
         $attributeSetMock = $this->createPartialMock(
             Set::class,
             ['load', 'getEntityTypeId']

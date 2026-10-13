@@ -7,17 +7,17 @@ declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Test\Unit\Model;
 
-use Magento\Quote\Test\Unit\Helper\ProductOptionExtensionTestHelper;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Api\Data\ProductOptionExtensionInterface;
 use Magento\Catalog\Api\Data\ProductOptionInterface;
+use Magento\Quote\Api\Data\ProductOptionExtensionInterface as QuoteProductOptionExtensionInterface;
 use Magento\ConfigurableProduct\Api\Data\ConfigurableItemOptionValueInterface;
 use Magento\ConfigurableProduct\Model\ProductOptionProcessor;
 use Magento\ConfigurableProduct\Model\Quote\Item\ConfigurableItemOptionValue;
 use Magento\ConfigurableProduct\Model\Quote\Item\ConfigurableItemOptionValueFactory;
 use Magento\Framework\DataObject;
 use Magento\Framework\DataObject\Factory as DataObjectFactory;
-use Magento\Framework\DataObject\Test\Unit\Helper\DataObjectTestHelper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -27,6 +27,8 @@ use PHPUnit\Framework\TestCase;
  */
 class ProductOptionProcessorTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ProductOptionProcessor
      */
@@ -54,7 +56,7 @@ class ProductOptionProcessorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->dataObject = new DataObjectTestHelper();
+        $this->dataObject = new DataObject();
 
         $this->dataObjectFactory = $this->createPartialMock(DataObjectFactory::class, ['create']);
         $this->dataObjectFactory->method('create')->willReturn($this->dataObject);
@@ -88,10 +90,13 @@ class ProductOptionProcessorTest extends TestCase
         }
         $productOptionMock = $this->createMock(ProductOptionInterface::class);
 
-        $productOptionExtensionMock = new ProductOptionExtensionTestHelper();
+        $productOptionExtensionMock = $this->createPartialMockWithReflection(
+            QuoteProductOptionExtensionInterface::class,
+            ['getConfigurableItemOptions', 'setConfigurableItemOptions']
+        );
         $productOptionMock->method('getExtensionAttributes')->willReturn($productOptionExtensionMock);
 
-        $productOptionExtensionMock->setConfigurableItemOptions($options);
+        $productOptionExtensionMock->method('getConfigurableItemOptions')->willReturn($options);
 
         $this->assertEquals($this->dataObject, $this->processor->convertToBuyRequest($productOptionMock));
     }

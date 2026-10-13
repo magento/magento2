@@ -9,6 +9,7 @@ namespace Magento\Persistent\Test\Unit\Model\Plugin;
 
 use Magento\Persistent\Model\Plugin\LoginAsCustomerCleanUp;
 use Magento\Persistent\Helper\Session as PersistentSession;
+use Magento\Persistent\Model\Session as PersistentSessionModel;
 use Magento\LoginAsCustomerApi\Api\AuthenticateCustomerBySecretInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -38,7 +39,7 @@ class LoginAsCustomerCleanUpTest extends TestCase
     protected function setUp(): void
     {
         $this->persistentSessionMock = $this->createMock(PersistentSession::class);
-        $this->persistentSessionModelMock = $this->createMock(\Magento\Persistent\Model\Session::class);
+        $this->persistentSessionModelMock = $this->createMock(PersistentSessionModel::class);
         $this->persistentSessionMock->method('getSession')->willReturn($this->persistentSessionModelMock);
         $this->subjectMock = $this->createMock(AuthenticateCustomerBySecretInterface::class);
         $this->plugin = new LoginAsCustomerCleanUp($this->persistentSessionMock);

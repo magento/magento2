@@ -10,6 +10,7 @@ namespace Magento\Usps\Test\Unit\Helper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Usps\Helper\Data;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class DataTest extends TestCase
@@ -31,8 +32,8 @@ class DataTest extends TestCase
 
     /**
      * @covers \Magento\Usps\Helper\Data::displayGirthValue
-     * @dataProvider shippingMethodDataProvider
      */
+    #[DataProvider('shippingMethodDataProvider')]
     public function testDisplayGirthValue($shippingMethod)
     {
         $this->assertTrue($this->_helperData->displayGirthValue($shippingMethod));

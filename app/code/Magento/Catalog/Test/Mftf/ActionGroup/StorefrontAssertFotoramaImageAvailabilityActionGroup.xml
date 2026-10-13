@@ -12,6 +12,7 @@
         <arguments>
             <argument name="fileName" type="string" defaultValue="magento-logo"/>
         </arguments>
-        <seeElement selector="{{StorefrontProductMediaSection.productImageInFotorama(fileName)}}" stepKey="seeActiveImageDefault"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.productImageInFotorama(fileName)}}" stepKey="waitForImageInFotorama"/>
+        <seeElement selector="{{StorefrontProductMediaSection.productImageInFotorama(fileName)}}" stepKey="seeImageInFotorama"/>
     </actionGroup>
 </actionGroups>

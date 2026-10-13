@@ -12,6 +12,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregator;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -23,8 +24,9 @@ class ProcessingErrorAggregatorTest extends TestCase
     protected $processingErrorFactoryMock;
 
     /**
-     * @var ProcessingErrorAggregator
-     * |\Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * Processing error aggregator model
+     *
+     * @var ProcessingErrorAggregator|ObjectManager
      */
     protected $model;
 
@@ -122,8 +124,8 @@ class ProcessingErrorAggregatorTest extends TestCase
 
     /**
      * Test for method isRowInvalid. Expected true result.
-     * @dataProvider isRowInvalidDataProvider
      */
+    #[DataProvider('isRowInvalidDataProvider')]
     public function testIsRowInvalid($errorLevel, $rowNumber, $isValid)
     {
         $this->model->addError('systemException', $errorLevel, $rowNumber, 'Column name', 'Message', 'Description');
@@ -352,9 +354,8 @@ class ProcessingErrorAggregatorTest extends TestCase
      *
      * @param array $params
      * @param array $expectedResult
-     *
-     * @dataProvider getRowsGroupedByErrorCodeWithErrorsDataProvider
      */
+    #[DataProvider('getRowsGroupedByErrorCodeWithErrorsDataProvider')]
     public function testGetRowsGroupedByErrorCodeWithErrors(array $params = [], array $expectedResult = [])
     {
         $this->model->addError('systemException');

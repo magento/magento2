@@ -9,13 +9,16 @@ namespace Magento\Tax\Test\Unit\Model\Calculation;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Tax\Model\Calculation\Rate;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class RateTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var ObjectManager
      */
@@ -32,11 +35,10 @@ class RateTest extends TestCase
     protected function setUp(): void
     {
         $this->objectHelper = new ObjectManager($this);
-        $this->resourceMock = $this->getMockBuilder(AbstractResource::class)
-            ->addMethods(['getIdFieldName'])
-            ->onlyMethods(['getConnection', 'beginTransaction', 'rollBack'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->resourceMock = $this->createPartialMockWithReflection(
+            AbstractResource::class,
+            ['getIdFieldName', 'getConnection', 'beginTransaction', 'rollBack', '_construct']
+        );
         $this->resourceMock->expects($this->any())->method('beginTransaction')->willReturnSelf();
     }
 
@@ -45,10 +47,9 @@ class RateTest extends TestCase
      *
      * @param string $exceptionMessage
      * @param array $data
-     *
-     * @dataProvider exceptionOfValidationDataProvider
      */
-    public function testExceptionOfValidation($exceptionMessage, $data)
+    #[DataProvider('exceptionOfValidationDataProvider')]
+    public function testExceptionOfValidation(string $exceptionMessage, array $data): void
     {
         $this->expectException(LocalizedException::class);
         $this->expectExceptionMessage($exceptionMessage);

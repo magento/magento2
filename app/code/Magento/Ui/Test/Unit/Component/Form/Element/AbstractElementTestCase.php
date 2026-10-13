@@ -39,8 +39,7 @@ abstract class AbstractElementTestCase extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->contextMock = $this->getMockBuilder(ContextInterface::class)
-            ->getMockForAbstractClass();
+        $this->contextMock = $this->createMock(ContextInterface::class);
     }
 
     /**

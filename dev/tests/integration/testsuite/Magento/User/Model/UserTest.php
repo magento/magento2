@@ -18,6 +18,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Exception\State\UserLockedException;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\Stdlib\DateTime;
@@ -31,7 +32,6 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Mail\Template\TransportBuilderMock;
 use Magento\User\Model\User as UserModel;
 use Magento\User\Test\Fixture\User as UserDataFixture;
-use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -446,10 +446,10 @@ class UserTest extends TestCase
     }
 
     /**
-     * @dataProvider beforeSavePasswordInsecureDataProvider
      * @magentoDbIsolation enabled
      * @param string $password
      */
+    #[DataProvider('beforeSavePasswordInsecureDataProvider')]
     public function testBeforeSavePasswordInsecure($password)
     {
         $this->expectException(LocalizedException::class);

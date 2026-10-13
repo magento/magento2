@@ -19,6 +19,7 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Unit test for \Magento\Search\Helper\Data
@@ -66,16 +67,11 @@ class DataTest extends TestCase
     protected function setUp(): void
     {
         $this->stringMock = $this->createMock(StringUtils::class);
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->escaperMock = $this->createMock(Escaper::class);
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
-            ->onlyMethods(['getUrl'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->storeManagerMock = $this->createStub(StoreManagerInterface::class);
+        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
         $this->contextMock = $this->createMock(Context::class);
         $this->contextMock->expects($this->any())->method('getScopeConfig')->willReturn($this->scopeConfigMock);
         $this->contextMock->expects($this->any())->method('getRequest')->willReturn($this->requestMock);
@@ -117,9 +113,7 @@ class DataTest extends TestCase
         $this->assertEquals($return, $this->model->getMaxQueryLength());
     }
 
-    /**
-     * @dataProvider queryTextDataProvider
-     */
+    #[DataProvider('queryTextDataProvider')]
     public function testGetEscapedQueryText($queryText, $maxQueryLength, $expected)
     {
         $this->requestMock->expects($this->once())->method('getParam')->willReturn($queryText);
@@ -157,10 +151,10 @@ class DataTest extends TestCase
     /**
      * Test getSuggestUrl() take into consideration type of request(secure, non-secure).
      *
-     * @dataProvider getSuggestUrlDataProvider
      * @param bool $isSecure
      * @return void
      */
+    #[DataProvider('getSuggestUrlDataProvider')]
     public function testGetSuggestUrl(bool $isSecure)
     {
         $this->requestMock->expects(self::once())

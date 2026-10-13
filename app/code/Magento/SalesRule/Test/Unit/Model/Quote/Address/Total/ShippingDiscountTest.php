@@ -13,6 +13,7 @@ use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Address\Total;
 use Magento\Quote\Model\Quote\Item;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\SalesRule\Model\Quote\Address\Total\ShippingDiscount;
 use Magento\SalesRule\Model\Validator;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -20,6 +21,7 @@ use PHPUnit\Framework\TestCase;
 
 class ShippingDiscountTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var MockObject|Validator
      */
@@ -62,44 +64,42 @@ class ShippingDiscountTest extends TestCase
             )
             ->getMock();
         $this->quoteMock = $this->createMock(Quote::class);
-        $this->totalMock = $this->getMockBuilder(Total::class)
-            ->addMethods(
-                [
-                    'getDiscountAmount',
-                    'getDiscountDescription',
-                    'setShippingDiscountAmount',
-                    'setBaseShippingDiscountAmount',
-                    'getSubtotal',
-                    'setSubtotalWithDiscount',
-                    'setBaseSubtotalWithDiscount',
-                    'getBaseSubtotal',
-                    'getBaseDiscountAmount',
-                    'setDiscountDescription'
-                ]
-            )
-            ->onlyMethods(['addTotalAmount', 'addBaseTotalAmount'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->totalMock = $this->createPartialMockWithReflection(
+            Total::class,
+            [
+                'getDiscountAmount',
+                'getDiscountDescription',
+                'setShippingDiscountAmount',
+                'setBaseShippingDiscountAmount',
+                'getSubtotal',
+                'setSubtotalWithDiscount',
+                'setBaseSubtotalWithDiscount',
+                'getBaseSubtotal',
+                'getBaseDiscountAmount',
+                'setDiscountDescription',
+                'addTotalAmount',
+                'addBaseTotalAmount'
+            ]
+        );
 
-        $this->addressMock = $this->getMockBuilder(Address::class)
-            ->addMethods(
-                [
-                    'getShippingAmount',
-                    'getShippingDiscountAmount',
-                    'getBaseShippingDiscountAmount',
-                    'setShippingDiscountAmount',
-                    'setBaseShippingDiscountAmount',
-                    'getDiscountDescription',
-                    'setDiscountAmount',
-                ]
-            )
-            ->onlyMethods(['getQuote', 'setBaseDiscountAmount'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->addressMock = $this->createPartialMockWithReflection(
+            Address::class,
+            [
+                'getShippingAmount',
+                'getShippingDiscountAmount',
+                'getBaseShippingDiscountAmount',
+                'setShippingDiscountAmount',
+                'setBaseShippingDiscountAmount',
+                'getDiscountDescription',
+                'setDiscountAmount',
+                'getQuote',
+                'setBaseDiscountAmount'
+            ]
+        );
 
-        $shipping = $this->getMockForAbstractClass(ShippingInterface::class);
+        $shipping = $this->createMock(ShippingInterface::class);
         $shipping->expects($this->any())->method('getAddress')->willReturn($this->addressMock);
-        $this->shippingAssignmentMock = $this->getMockForAbstractClass(ShippingAssignmentInterface::class);
+        $this->shippingAssignmentMock = $this->createMock(ShippingAssignmentInterface::class);
         $this->shippingAssignmentMock->expects($this->any())->method('getShipping')->willReturn($shipping);
 
         $this->discount = new ShippingDiscount(

@@ -74,6 +74,9 @@
         </actionGroup>
 
         <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="openCheckoutPage"/>
+        <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="selectShippingMethodAsFlatRate">
+            <argument name="shippingMethodName" value="Flat Rate"/>
+        </actionGroup>
         <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNext"/>
         <actionGroup ref="StorefrontSelectCheckMoneyOrderActionGroup" stepKey="selectCheckmoIfNeeded" />
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="placeOrder"/>

@@ -11,6 +11,7 @@ use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CSV\ColumnReso
 use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CSV\RowException;
 use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CSV\RowParser;
 use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\LocationDirectory;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -104,8 +105,8 @@ class RowParserTest extends TestCase
      * @param array $columnValueMap
      * @param $expectedMessage
      * @throws null|RowException
-     * @dataProvider parseWithExceptionDataProvider
      */
+    #[DataProvider('parseWithExceptionDataProvider')]
     public function testParseWithException(array $rowData, $conditionFullName, array $columnValueMap, $expectedMessage)
     {
         $this->expectException('Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CSV\RowException');

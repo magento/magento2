@@ -3,14 +3,18 @@
  * Copyright 2013 Adobe
  * All Rights Reserved.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab\Newsletter\Grid\Filter;
+
+use Magento\Backend\Block\Widget\Grid\Column\Filter\Select;
 
 use Magento\Newsletter\Model\Queue;
 
 /**
  * Adminhtml newsletter subscribers grid website filter
  */
-class Status extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
+class Status extends Select
 {
     /**
      * @var array
@@ -18,12 +22,14 @@ class Status extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
     protected static $_statuses;
 
     /**
+     * Initialize available newsletter statuses.
+     *
      * @return void
      */
     protected function _construct()
     {
         self::$_statuses = [
-            null => null,
+            '' => null,
             Queue::STATUS_SENT => __('Sent'),
             Queue::STATUS_CANCEL => __('Cancel'),
             Queue::STATUS_NEVER => __('Not Sent'),
@@ -34,6 +40,8 @@ class Status extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
     }
 
     /**
+     * Build select options for newsletter statuses.
+     *
      * @return array
      */
     protected function _getOptions()
@@ -47,6 +55,8 @@ class Status extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
     }
 
     /**
+     * Get filter condition from the selected status value.
+     *
      * @return array|null
      */
     public function getCondition()

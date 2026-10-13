@@ -52,7 +52,7 @@ class PaymentDataObjectFactoryTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->orderAdapterFactoryMock =
             $this->getMockBuilder(OrderAdapterFactory::class)
@@ -66,8 +66,7 @@ class PaymentDataObjectFactoryTest extends TestCase
                 ->disableOriginalConstructor()
                 ->getMock();
 
-        $this->paymentDataObjectMock =
-            $this->getMockForAbstractClass(PaymentDataObjectInterface::class);
+        $this->paymentDataObjectMock = $this->createMock(PaymentDataObjectInterface::class);
 
         $this->model = new PaymentDataObjectFactory(
             $this->objectManagerMock,

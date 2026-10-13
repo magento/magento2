@@ -16,6 +16,7 @@ use Magento\Paypal\Model\CertFactory;
 use Magento\Paypal\Model\Config;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -53,21 +54,15 @@ class ConfigTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
 
-        $this->directoryHelper = $this->getMockBuilder(Data::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->directoryHelper = $this->createMock(Data::class);
 
-        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
 
-        $this->ccTypeFactory = $this->getMockBuilder(CctypeFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->ccTypeFactory = $this->createMock(CctypeFactory::class);
 
-        $this->certFactory = $this->getMockBuilder(CertFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->certFactory = $this->createMock(CertFactory::class);
 
         $objectManager = new ObjectManager($this);
         $objects = [
@@ -132,9 +127,7 @@ class ConfigTest extends TestCase
         $this->assertFalse($this->model->isMethodAvailable('payflow_direct'));
     }
 
-    /**
-     * @dataProvider isMethodAvailableDataProvider
-     */
+    #[DataProvider('isMethodAvailableDataProvider')]
     public function testIsMethodAvailableForIsMethodActive($methodName, $expected)
     {
         if ($methodName == Config::METHOD_WPP_BML) {
@@ -260,9 +253,8 @@ class ConfigTest extends TestCase
      * @param string $name
      * @param string $expectedValue
      * @param string|null $expectedResult
-     *
-     * @dataProvider payPalStylesDataProvider
      */
+    #[DataProvider('payPalStylesDataProvider')]
     public function testGetSpecificConfigPathPayPalStyles($name, $expectedValue, $expectedResult)
     {
         // _mapGenericStyleFieldset
@@ -284,9 +276,7 @@ class ConfigTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider skipOrderReviewStepDataProvider
-     */
+    #[DataProvider('skipOrderReviewStepDataProvider')]
     public function testGetPayPalBasicStartUrl($value, $url)
     {
         $this->scopeConfig->expects($this->once())
@@ -322,9 +312,7 @@ class ConfigTest extends TestCase
         $this->assertEquals('12345', $this->model->getBmlPublisherId());
     }
 
-    /**
-     * @dataProvider getBmlPositionDataProvider
-     */
+    #[DataProvider('getBmlPositionDataProvider')]
     public function testGetBmlPosition($section, $expected)
     {
         $this->scopeConfig->expects($this->once())
@@ -345,9 +333,7 @@ class ConfigTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider getBmlSizeDataProvider
-     */
+    #[DataProvider('getBmlSizeDataProvider')]
     public function testGetBmlSize($section, $expected)
     {
         $this->scopeConfig->expects($this->once())
@@ -368,9 +354,7 @@ class ConfigTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dataProviderGetBmlDisplay
-     */
+    #[DataProvider('dataProviderGetBmlDisplay')]
     public function testGetBmlDisplay($section, $expectedValue, $expectedFlag, $expected)
     {
         $this->model->setStoreId(1);
@@ -414,8 +398,8 @@ class ConfigTest extends TestCase
      * @param bool $sandboxFlag
      * @param string $buttonType
      * @param string $result
-     * @dataProvider dataProviderGetExpressCheckoutShortcutImageUrl
      */
+    #[DataProvider('dataProviderGetExpressCheckoutShortcutImageUrl')]
     public function testGetExpressCheckoutShortcutImageUrl(
         $localeCode,
         $orderTotal,
@@ -484,8 +468,8 @@ class ConfigTest extends TestCase
      * @param string $areButtonDynamic
      * @param bool $sandboxFlag
      * @param string $result
-     * @dataProvider dataProviderGetPaymentMarkImageUrl
      */
+    #[DataProvider('dataProviderGetPaymentMarkImageUrl')]
     public function testGetPaymentMarkImageUrl(
         $localeCode,
         $orderTotal,

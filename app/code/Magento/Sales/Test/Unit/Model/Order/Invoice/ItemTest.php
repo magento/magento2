@@ -11,6 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\Invoice\Item;
+use Magento\Sales\Model\Order\Item as OrderItem;
 use Magento\Sales\Model\Order\ItemFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -43,7 +44,7 @@ class ItemTest extends TestCase
     protected $orderMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Item|MockObject
+     * @var OrderItem|MockObject
      */
     protected $orderItemMock;
 
@@ -56,7 +57,7 @@ class ItemTest extends TestCase
         );
         $this->invoiceMock = $this->createMock(Invoice::class);
         $this->orderMock = $this->createMock(Order::class);
-        $this->orderItemMock = $this->createPartialMock(\Magento\Sales\Model\Order\Item::class, [
+        $this->orderItemMock = $this->createPartialMock(OrderItem::class, [
             'load', 'isDummy', 'getIsQtyDecimal', 'getQtyToInvoice', 'getQtyInvoiced', 'getTaxInvoiced',
             'getBaseTaxInvoiced', 'getDiscountTaxCompensationInvoiced',
             'getBaseDiscountTaxCompensationInvoiced', 'getDiscountInvoiced',

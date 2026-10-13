@@ -12,15 +12,16 @@ use Magento\Catalog\Model\ProductRepository;
 use Magento\Downloadable\Api\Data\File\ContentUploaderInterface;
 use Magento\Downloadable\Api\Data\LinkInterface;
 use Magento\Downloadable\Api\Data\LinkInterfaceFactory;
+use Magento\Downloadable\Model\Link as LinkModel;
 use Magento\Downloadable\Model\Link\ContentValidator;
 use Magento\Downloadable\Model\LinkFactory;
 use Magento\Downloadable\Model\LinkRepository;
 use Magento\Downloadable\Model\Product\Type;
 use Magento\Downloadable\Model\Product\TypeHandler\Link;
-use Magento\Downloadable\Test\Unit\Helper\LinkTestHelper;
 use Magento\Framework\EntityManager\EntityMetadataInterface;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Json\EncoderInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Store\Model\Store;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -30,6 +31,8 @@ use PHPUnit\Framework\TestCase;
  */
 class LinkRepositoryTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var MockObject
      */
@@ -103,8 +106,8 @@ class LinkRepositoryTest extends TestCase
             EncoderInterface::class
         );
         $this->linkFactoryMock = $this->createPartialMock(LinkFactory::class, ['create']);
-        $this->productMock = $this->createPartialMock(
-            \Magento\Catalog\Test\Unit\Helper\ProductTestHelper::class,
+        $this->productMock = $this->createPartialMockWithReflection(
+            Product::class,
             [
                 'setDownloadableData',
                 '__wakeup',
@@ -131,14 +134,12 @@ class LinkRepositoryTest extends TestCase
         $linkRepository = new \ReflectionClass(get_class($this->service));
         $metadataPoolProperty = $linkRepository->getProperty('metadataPool');
         $this->metadataPoolMock = $this->createMock(MetadataPool::class);
-        $metadataPoolProperty->setAccessible(true);
         $metadataPoolProperty->setValue(
             $this->service,
             $this->metadataPoolMock
         );
         $saveHandlerProperty = $linkRepository->getProperty('linkTypeHandler');
         $this->linkHandlerMock = $this->createMock(Link::class);
-        $saveHandlerProperty->setAccessible(true);
         $saveHandlerProperty->setValue(
             $this->service,
             $this->linkHandlerMock
@@ -149,12 +150,28 @@ class LinkRepositoryTest extends TestCase
 
     /**
      * @param array $linkData
-     * @return LinkTestHelper
+     * @return MockObject
      */
     protected function getLinkMock(array $linkData)
     {
-        // Create helper instance and set data directly - no mocking needed!
-        return new LinkTestHelper($linkData);
+        $linkMock = $this->createPartialMockWithReflection(
+            LinkModel::class,
+            ['getId', 'getTitle', 'getSortOrder', 'getPrice', 'getIsShareable',
+             'getNumberOfDownloads', 'getLinkType', 'getLinkFile', 'getLinkUrl', 'hasSampleType']
+        );
+
+        $linkMock->method('getId')->willReturn($linkData['id'] ?? null);
+        $linkMock->method('getTitle')->willReturn($linkData['title'] ?? null);
+        $linkMock->method('getSortOrder')->willReturn($linkData['sort_order'] ?? null);
+        $linkMock->method('getPrice')->willReturn($linkData['price'] ?? null);
+        $linkMock->method('getIsShareable')->willReturn($linkData['is_shareable'] ?? null);
+        $linkMock->method('getNumberOfDownloads')->willReturn($linkData['number_of_downloads'] ?? null);
+        $linkMock->method('getLinkType')->willReturn($linkData['link_type'] ?? null);
+        $linkMock->method('getLinkFile')->willReturn($linkData['link_file'] ?? null);
+        $linkMock->method('getLinkUrl')->willReturn($linkData['link_url'] ?? null);
+        $linkMock->method('hasSampleType')->willReturn(isset($linkData['sample_type']));
+
+        return $linkMock;
     }
 
     public function testCreate()
@@ -244,8 +261,8 @@ class LinkRepositoryTest extends TestCase
         $storeMock = $this->createMock(Store::class);
         $storeMock->method('getWebsiteId')->willReturn($websiteId);
         $this->productMock->method('getStore')->willReturn($storeMock);
-        $existingLinkMock = $this->createPartialMock(
-            LinkTestHelper::class,
+        $existingLinkMock = $this->createPartialMockWithReflection(
+            \Magento\Downloadable\Model\Link::class,
             ['getProductId', '__wakeup', 'getId', 'load']
         );
         $this->linkFactoryMock->expects($this->once())->method('create')->willReturn($existingLinkMock);
@@ -304,8 +321,8 @@ class LinkRepositoryTest extends TestCase
         $storeMock = $this->createMock(Store::class);
         $storeMock->method('getWebsiteId')->willReturn($websiteId);
         $this->productMock->method('getStore')->willReturn($storeMock);
-        $existingLinkMock = $this->createPartialMock(
-            LinkTestHelper::class,
+        $existingLinkMock = $this->createPartialMockWithReflection(
+            \Magento\Downloadable\Model\Link::class,
             ['getProductId', '__wakeup', 'getId', 'load']
         );
         $this->linkFactoryMock->expects($this->once())->method('create')->willReturn($existingLinkMock);
@@ -371,8 +388,8 @@ class LinkRepositoryTest extends TestCase
         $this->repositoryMock->expects($this->any())->method('get')->with($productSku, true)
             ->willReturn($this->productMock);
         $this->productMock->method('getData')->willReturn($productId);
-        $existingLinkMock = $this->createPartialMock(
-            LinkTestHelper::class,
+        $existingLinkMock = $this->createPartialMockWithReflection(
+            \Magento\Downloadable\Model\Link::class,
             ['getProductId', '__wakeup', 'getId', 'load', 'save']
         );
         $existingLinkMock->method('getId')->willReturn($linkId);
@@ -435,8 +452,8 @@ class LinkRepositoryTest extends TestCase
             'link_file' => null,
         ];
 
-        $linkMock = $this->createPartialMock(
-            LinkTestHelper::class,
+        $linkMock = $this->createPartialMockWithReflection(
+            \Magento\Downloadable\Model\Link::class,
             [
                 'getStoreTitle',
                 'getId',

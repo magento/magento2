@@ -51,7 +51,7 @@ class DirectorTest extends TestCase
     protected function setUp(): void
     {
         $this->builderMock = $this->createMock(Builder::class);
-        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->logger = $this->createMock(LoggerInterface::class);
         $this->commandMock = $this->createPartialMock(
             AbstractCommand::class,
             ['getId', '_execute', 'execute', 'chain']

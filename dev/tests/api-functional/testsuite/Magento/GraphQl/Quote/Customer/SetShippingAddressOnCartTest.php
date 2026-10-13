@@ -25,9 +25,12 @@ use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for set shipping addresses on cart mutation
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SetShippingAddressOnCartTest extends GraphQlAbstract
 {
@@ -518,11 +521,11 @@ QUERY;
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      *
-     * @dataProvider dataProviderUpdateWithMissedRequiredParameters
      * @param string $input
      * @param string $message
      * @throws \Exception
      */
+    #[DataProvider('dataProviderUpdateWithMissedRequiredParameters')]
     public function testSetNewShippingAddressWithMissedRequiredParameters(string $input, string $message)
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');

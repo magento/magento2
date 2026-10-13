@@ -50,16 +50,10 @@ class DumpConfigSourceAggregatedTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->sourceMock = $this->getMockBuilder(ConfigSourceInterface::class)
-            ->getMockForAbstractClass();
-        $this->sourceTwoMock = $this->getMockBuilder(ConfigSourceInterface::class)
-            ->getMockForAbstractClass();
-        $this->excludeListMock = $this->getMockBuilder(ExcludeList::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->typePoolMock = $this->getMockBuilder(TypePool::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->sourceMock = $this->createMock(ConfigSourceInterface::class);
+        $this->sourceTwoMock = $this->createMock(ConfigSourceInterface::class);
+        $this->excludeListMock = $this->createMock(ExcludeList::class);
+        $this->typePoolMock = $this->createMock(TypePool::class);
 
         $this->sourceMock->expects($this->once())
             ->method('get')

@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GiftMessage\Test\Unit\Model\Plugin;
 
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\GiftMessage\Api\Data\MessageInterface;
 use Magento\GiftMessage\Api\OrderItemRepositoryInterface;
 use Magento\GiftMessage\Api\OrderRepositoryInterface;
@@ -15,12 +16,14 @@ use Magento\Sales\Api\Data\OrderExtension;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderItemExtension;
 use Magento\Sales\Api\Data\OrderItemInterface;
+use Magento\Sales\Api\OrderRepositoryInterface as SalesOrderRepositoryInterface;
 use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\MockObject\RuntimeException;
 use PHPUnit\Framework\TestCase;
 
 class OrderSaveTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var OrderSave
      */
@@ -86,7 +89,7 @@ class OrderSaveTest extends TestCase
         );
         $this->orderItemExtensionMock = $this->getOrderItemExtensionMock();
         $this->orderRepositoryMock = $this->createMock(
-            \Magento\Sales\Api\OrderRepositoryInterface::class
+            SalesOrderRepositoryInterface::class
         );
 
         $this->plugin = new OrderSave(
@@ -197,14 +200,10 @@ class OrderSaveTest extends TestCase
      */
     private function getOrderExtensionMock(): MockObject
     {
-        $mockBuilder = $this->getMockBuilder(OrderExtension::class);
-        try {
-            $mockBuilder->addMethods(['getGiftMessage', 'setGiftMessage']);
-        } catch (RuntimeException $e) {
-            // OrderExtension already generated.
-        }
-
-        return $mockBuilder->getMock();
+        return $this->createPartialMockWithReflection(
+            OrderExtension::class,
+            ['getGiftMessage', 'setGiftMessage']
+        );
     }
 
     /**
@@ -214,13 +213,9 @@ class OrderSaveTest extends TestCase
      */
     private function getOrderItemExtensionMock(): MockObject
     {
-        $mockBuilder = $this->getMockBuilder(OrderItemExtension::class);
-        try {
-            $mockBuilder->addMethods(['getGiftMessage', 'setGiftMessage']);
-        } catch (RuntimeException $e) {
-            // OrderItemExtension already generated.
-        }
-
-        return $mockBuilder->getMock();
+        return $this->createPartialMockWithReflection(
+            OrderItemExtension::class,
+            ['getGiftMessage', 'setGiftMessage']
+        );
     }
 }

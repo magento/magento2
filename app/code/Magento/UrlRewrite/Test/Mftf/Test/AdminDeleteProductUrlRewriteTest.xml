@@ -21,6 +21,8 @@
         </before>
         <after>
             <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
+            <amOnPage url="{{AdminUrlRewriteProductPage.url}}" stepKey="openUrlRewriteProductPage"/>
+            <actionGroup ref="AdminResetFilterInUrlRewriteGridActionGroup" stepKey="resetUrlRewriteGridFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 

@@ -72,22 +72,10 @@ class MassDeleteTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->request = $this->getMockBuilder(RequestInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods([])
-            ->getMockForAbstractClass();
-        $this->objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMockForAbstractClass();
-        $this->messageManager = $this->getMockBuilder(ManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['addSuccessMessage', 'addErrorMessage'])
-            ->getMockForAbstractClass();
-        $this->pageFactory = $this->getMockBuilder(PageFactory::class)
-            ->addMethods([])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->request = $this->createMock(RequestInterface::class);
+        $this->objectManager = $this->createStub(ObjectManagerInterface::class);
+        $this->messageManager = $this->createMock(ManagerInterface::class);
+        $this->pageFactory = $this->createMock(PageFactory::class);
         $this->resultRedirectMock = $this->getMockBuilder(Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();

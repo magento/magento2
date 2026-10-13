@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -122,7 +122,6 @@ class UpdateQuoteStoreTest extends \PHPUnit\Framework\TestCase
 
         $reflection = new \ReflectionClass($storeCookieManager);
         $cookieManager = $reflection->getProperty('cookieManager');
-        $cookieManager->setAccessible(true);
         $cookieManager->setValue($storeCookieManager, $cookieManagerMock);
 
         return $storeCookieManager;

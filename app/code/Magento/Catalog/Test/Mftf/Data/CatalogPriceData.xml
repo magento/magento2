@@ -45,4 +45,8 @@
         <data key="path">tax/display/type</data>
         <data key="value">1</data>
     </entity>
+    <entity name="DisplayProductPricesInCatalogIncludingTax">
+        <data key="path">tax/display/type</data>
+        <data key="value">2</data>
+    </entity>
 </entities>

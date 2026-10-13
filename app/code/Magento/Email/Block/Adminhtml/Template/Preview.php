@@ -1,11 +1,15 @@
 <?php
 /**
- * Copyright 2013 Adobe
+ * Copyright 2011 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Email\Block\Adminhtml\Template;
+
+use Magento\Email\Model\Template\Validator as TemplateValidator;
+use Magento\Framework\Validation\ValidationException;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Email template preview block.
@@ -15,6 +19,11 @@ namespace Magento\Email\Block\Adminhtml\Template;
  */
 class Preview extends \Magento\Backend\Block\Widget
 {
+    /**
+     * @var string
+     */
+    private const ADMIN_RESOURCE = 'Magento_Email::template';
+
     /**
      * @var \Magento\Framework\Filter\Input\MaliciousCode
      */
@@ -31,19 +40,28 @@ class Preview extends \Magento\Backend\Block\Widget
     protected $profilerName = 'email_template_proccessing';
 
     /**
+     * @var TemplateValidator
+     */
+    private $templateValidator;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Filter\Input\MaliciousCode $maliciousCode
      * @param \Magento\Email\Model\TemplateFactory $emailFactory
      * @param array $data
+     * @param TemplateValidator $templateValidator
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Filter\Input\MaliciousCode $maliciousCode,
         \Magento\Email\Model\TemplateFactory $emailFactory,
-        array $data = []
+        array $data = [],
+        ?TemplateValidator $templateValidator = null
     ) {
         $this->_maliciousCode = $maliciousCode;
         $this->_emailFactory = $emailFactory;
+        $this->templateValidator = $templateValidator ?:
+            ObjectManager::getInstance()->get(TemplateValidator::class);
         parent::__construct($context, $data);
     }
 
@@ -55,6 +73,10 @@ class Preview extends \Magento\Backend\Block\Widget
      */
     protected function _toHtml()
     {
+        if (!$this->_authorization->isAllowed(self::ADMIN_RESOURCE)) {
+            return '';
+        }
+
         $request = $this->getRequest();
 
         $storeId = $this->getAnyStoreView()->getId();
@@ -64,10 +86,23 @@ class Preview extends \Magento\Backend\Block\Widget
         if ($id = (int)$request->getParam('id')) {
             $template->load($id);
         } else {
+            $rawText = $request->getParam('text');
+            $rawText = is_string($rawText) ? $rawText : '';
+            $rawStyles = $request->getParam('styles');
+            $rawStyles = is_string($rawStyles) ? $rawStyles : '';
+            try {
+                $this->templateValidator->validate($rawText);
+                if ($rawStyles !== '') {
+                    $this->templateValidator->validate($rawStyles);
+                }
+            } catch (ValidationException $e) {
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('Template content validation failed. Please review template syntax.')
+                );
+            }
             $template->setTemplateType($request->getParam('type'));
-            $template->setTemplateText($request->getParam('text'));
-            $template->setTemplateStyles($request->getParam('styles'));
-
+            $template->setTemplateText($this->_maliciousCode->filter($rawText));
+            $template->setTemplateStyles($rawStyles);
         }
 
         \Magento\Framework\Profiler::start($this->profilerName);

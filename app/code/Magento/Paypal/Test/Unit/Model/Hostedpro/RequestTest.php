@@ -16,6 +16,7 @@ use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Tax\Helper\Data;
 use Magento\Tax\Model\Config;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -45,9 +46,7 @@ class RequestTest extends TestCase
     {
         $this->helper = new ObjectManager($this);
 
-        $this->localeResolverMock = $this->getMockBuilder(Resolver::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->localeResolverMock = $this->createMock(Resolver::class);
 
         $this->taxData = $this->helper->getObject(Data::class);
 
@@ -66,18 +65,12 @@ class RequestTest extends TestCase
      * @param $billingState
      * @param $state
      * @param $countryId
-     * @dataProvider addressesDataProvider
      */
+    #[DataProvider('addressesDataProvider')]
     public function testSetOrderAddresses($billing, $shipping, $billingState, $state, $countryId)
     {
-        $payment = $this->getMockBuilder(Payment::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['__wakeup'])
-            ->getMock();
-        $order = $this->getMockBuilder(Order::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getPayment', '__wakeup', 'getBillingAddress', 'getShippingAddress'])
-            ->getMock();
+        $payment = $this->createMock(Payment::class);
+        $order = $this->createMock(Order::class);
         $order->expects(static::any())
             ->method('getPayment')
             ->willReturn($payment);
@@ -157,9 +150,7 @@ class RequestTest extends TestCase
             'showCardInfo' => 'true',
             'showHostedThankyouPage' => 'false'
         ];
-        $paymentMethodMock = $this->getMockBuilder(Hostedpro::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $paymentMethodMock = $this->createMock(Hostedpro::class);
         $paymentMethodMock->expects($this->once())
             ->method('getConfigData')->with('payment_action')->willReturn('Authorization');
         $paymentMethodMock->expects($this->once())->method('getNotifyUrl')->willReturn('https://test.com/notifyurl');
@@ -183,9 +174,7 @@ class RequestTest extends TestCase
             'buyer_email' => 'buyer@email.com',
         ];
 
-        $order = $this->getMockBuilder(Order::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $order = $this->createMock(Order::class);
 
         $order->expects(static::once())
             ->method('getIncrementId')
@@ -210,8 +199,8 @@ class RequestTest extends TestCase
      * @param $tax
      * @param $shipping
      * @param $discount
-     * @dataProvider amountWithoutTaxDataProvider
      */
+    #[DataProvider('amountWithoutTaxDataProvider')]
     public function testSetAmountWithoutTax($total, $subtotal, $tax, $shipping, $discount)
     {
         $expectation = [
@@ -224,13 +213,9 @@ class RequestTest extends TestCase
 
         static::assertFalse($this->taxData->priceIncludesTax());
 
-        $payment = $this->getMockBuilder(Payment::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $payment = $this->createMock(Payment::class);
 
-        $order = $this->getMockBuilder(Order::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $order = $this->createMock(Order::class);
 
         $payment->expects(static::once())
             ->method('getBaseAmountAuthorized')
@@ -267,8 +252,8 @@ class RequestTest extends TestCase
      * @param $tax
      * @param $shipping
      * @param $discount
-     * @dataProvider amountWithoutTaxZeroSubtotalDataProvider
      */
+    #[DataProvider('amountWithoutTaxZeroSubtotalDataProvider')]
     public function testSetAmountWithoutTaxZeroSubtotal($total, $subtotal, $tax, $shipping, $discount)
     {
         $expectation = [
@@ -281,13 +266,9 @@ class RequestTest extends TestCase
 
         static::assertFalse($this->taxData->priceIncludesTax());
 
-        $payment = $this->getMockBuilder(Payment::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $payment = $this->createMock(Payment::class);
 
-        $order = $this->getMockBuilder(Order::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $order = $this->createMock(Order::class);
 
         $payment->expects(static::exactly(2))
             ->method('getBaseAmountAuthorized')
@@ -350,13 +331,9 @@ class RequestTest extends TestCase
             'subtotal' => $amount
         ];
 
-        $payment = $this->getMockBuilder(Payment::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $payment = $this->createMock(Payment::class);
 
-        $order = $this->getMockBuilder(Order::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $order = $this->createMock(Order::class);
 
         $payment->expects(static::once())
             ->method('getBaseAmountAuthorized')

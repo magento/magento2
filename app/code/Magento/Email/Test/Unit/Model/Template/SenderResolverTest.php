@@ -14,6 +14,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\ScopeInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class SenderResolverTest extends TestCase
 {
@@ -34,7 +35,7 @@ class SenderResolverTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
 
         $this->senderResolver = $objectManager->getObject(
             SenderResolver::class,
@@ -83,11 +84,11 @@ class SenderResolverTest extends TestCase
     /**
      * Test if exception is thrown in case there is no name or email in result
      *
-     * @dataProvider dataProvidedSenderArray
      * @param array $sender
      *
      * @return void
      */
+    #[DataProvider('dataProvidedSenderArray')]
     public function testResolveThrowException(array $sender): void
     {
         $this->expectExceptionMessage('Invalid sender data');

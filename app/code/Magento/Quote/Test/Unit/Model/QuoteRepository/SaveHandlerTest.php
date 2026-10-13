@@ -8,19 +8,22 @@ declare(strict_types=1);
 namespace Magento\Quote\Test\Unit\Model\QuoteRepository;
 
 use Magento\Customer\Api\AddressRepositoryInterface;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Quote\Api\Data\ShippingAssignmentInterface;
 use Magento\Quote\Api\Data\CartExtensionInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address as QuoteAddress;
-use Magento\Quote\Test\Unit\Helper\QuoteAddressTestHelper;
 use Magento\Quote\Model\Quote\Address\BillingAddressPersister;
 use Magento\Quote\Model\Quote\Item as QuoteItem;
 use Magento\Quote\Model\Quote\Item\CartItemPersister;
 use Magento\Quote\Model\Quote\ShippingAssignment\ShippingAssignmentPersister;
 use Magento\Quote\Model\QuoteRepository\SaveHandler;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResourceModel;
-use Magento\Quote\Test\Unit\Helper\QuoteTestHelper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -29,6 +32,7 @@ use PHPUnit\Framework\TestCase;
  */
 class SaveHandlerTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var SaveHandler
      */
@@ -94,8 +98,8 @@ class SaveHandlerTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->addressRepositoryMock = $this->createMock(AddressRepositoryInterface::class);
-        $this->quoteMock = $this->createPartialMock(
-            QuoteTestHelper::class,
+        $this->quoteMock = $this->createPartialMockWithReflection(
+            Quote::class,
             [
                 'setLastAddedItem',
                 'getItems',
@@ -105,8 +109,8 @@ class SaveHandlerTest extends TestCase
                 'collectTotals'
             ]
         );
-        $this->billingAddressMock = $this->createPartialMock(
-            QuoteAddressTestHelper::class,
+        $this->billingAddressMock = $this->createPartialMockWithReflection(
+            QuoteAddress::class,
             ['getCustomerAddressId', 'setCustomerAddressId', 'getCustomerAddress']
         );
         $this->extensionAttributesMock = $this->createMock(CartExtensionInterface::class);
@@ -204,6 +208,42 @@ class SaveHandlerTest extends TestCase
             ->willReturnSelf();
 
         $this->assertSame($this->quoteMock, $this->saveHandler->save($this->quoteMock));
+    }
+    
+    public function testSaveThrowsCouldNotSaveExceptionWhenCartItemPersisterFails(): void
+    {
+        $quoteItemMock = $this->createQuoteItemMock(false);
+
+        $this->quoteMock->expects(static::atLeastOnce())
+            ->method('getItems')
+            ->willReturn([$quoteItemMock]);
+        $this->cartItemPersisterMock->expects(static::once())
+            ->method('save')
+            ->with($this->quoteMock, $quoteItemMock)
+            ->willThrowException(new CouldNotSaveException(__('The quote couldn\'t be saved.')));
+
+        $this->expectException(CouldNotSaveException::class);
+        $this->expectExceptionMessage('The quote couldn\'t be saved.');
+
+        $this->saveHandler->save($this->quoteMock);
+    }
+
+    public function testSaveThrowsLocalizedExceptionWhenCartItemPersisterFails(): void
+    {
+        $quoteItemMock = $this->createQuoteItemMock(false);
+
+        $this->quoteMock->expects(static::atLeastOnce())
+            ->method('getItems')
+            ->willReturn([$quoteItemMock]);
+        $this->cartItemPersisterMock->expects(static::once())
+            ->method('save')
+            ->with($this->quoteMock, $quoteItemMock)
+            ->willThrowException(new LocalizedException(__('Invalid cart item.')));
+
+        $this->expectException(LocalizedException::class);
+        $this->expectExceptionMessage('Invalid cart item.');
+
+        $this->saveHandler->save($this->quoteMock);
     }
 
     /**

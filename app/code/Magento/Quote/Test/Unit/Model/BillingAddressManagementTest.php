@@ -184,7 +184,6 @@ class BillingAddressManagementTest extends TestCase
             );
 
         $property = $this->reflectionClass->getMethod('assignBillingAddress');
-        $property->setAccessible(true);
         $property->invokeArgs($this->model, [$address, $quoteMock, false]);
     }
 
@@ -231,7 +230,6 @@ class BillingAddressManagementTest extends TestCase
         $this->quoteRepositoryMock->expects($this->once())->method('save')->with($quoteMock);
 
         $property = $this->reflectionClass->getMethod('assignBillingAddress');
-        $property->setAccessible(true);
 
         $this->assertEquals($addressId, $property->invokeArgs($this->model, [$address, $quoteMock, $useForShipping]));
     }

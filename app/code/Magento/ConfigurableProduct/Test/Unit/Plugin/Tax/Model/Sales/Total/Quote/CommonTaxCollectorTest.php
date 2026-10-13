@@ -8,11 +8,10 @@ declare(strict_types=1);
 namespace Magento\ConfigurableProduct\Test\Unit\Plugin\Tax\Model\Sales\Total\Quote;
 
 use Magento\Catalog\Model\Product;
-use Magento\Catalog\Test\Unit\Helper\ProductTestHelper;
-use Magento\Quote\Test\Unit\Helper\AbstractItemTestHelper;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\ConfigurableProduct\Plugin\Tax\Model\Sales\Total\Quote\CommonTaxCollector as CommonTaxCollectorPlugin;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
 use Magento\Tax\Api\Data\QuoteDetailsItemInterface;
 use Magento\Tax\Api\Data\QuoteDetailsItemInterfaceFactory;
@@ -26,6 +25,8 @@ use PHPUnit\Framework\TestCase;
  */
 class CommonTaxCollectorTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ObjectManager
      */
@@ -52,12 +53,16 @@ class CommonTaxCollectorTest extends TestCase
     {
         $childTaxClassId = 10;
 
-        /** @var ProductTestHelper $childProductMock */
-        $childProductMock = new ProductTestHelper();
-        $childProductMock->setTaxClassId($childTaxClassId);
-        /* @var AbstractItem|MockObject $quoteItemMock */
-        $childQuoteItemMock = $this->createMock(
-            AbstractItem::class
+        $childProductMock = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getTaxClassId']
+        );
+        $childProductMock->method('getTaxClassId')->willReturn($childTaxClassId);
+        
+        /* @var AbstractItem|MockObject $childQuoteItemMock */
+        $childQuoteItemMock = $this->createPartialMockWithReflection(
+            AbstractItem::class,
+            ['getProduct', 'getQuote', 'getAddress', 'getOptionByCode']
         );
         $childQuoteItemMock->method('getProduct')->willReturn($childProductMock);
 
@@ -67,16 +72,23 @@ class CommonTaxCollectorTest extends TestCase
             ['getTypeId']
         );
         $productMock->method('getTypeId')->willReturn(Configurable::TYPE_CODE);
-        /* @var AbstractItemTestHelper $quoteItemMock */
-        $quoteItemMock = new AbstractItemTestHelper($productMock, [$childQuoteItemMock]);
+        
+        /* @var AbstractItem|MockObject $quoteItemMock */
+        $quoteItemMock = $this->createPartialMockWithReflection(
+            AbstractItem::class,
+            ['getProduct', 'getHasChildren', 'getChildren', 'getQuote', 'getAddress', 'getOptionByCode']
+        );
+        $quoteItemMock->method('getProduct')->willReturn($productMock);
+        $quoteItemMock->method('getHasChildren')->willReturn(true);
+        $quoteItemMock->method('getChildren')->willReturn([$childQuoteItemMock]);
 
         /* @var TaxClassKeyInterface|MockObject $taxClassObjectMock */
         $taxClassObjectMock = $this->createMock(TaxClassKeyInterface::class);
-        $taxClassObjectMock->expects($this->once())->method('setValue')->with($childTaxClassId);
+        $taxClassObjectMock->expects($this->once())->method('setValue')->with($childTaxClassId)->willReturnSelf();
 
         /* @var QuoteDetailsItemInterface|MockObject $quoteDetailsItemMock */
         $quoteDetailsItemMock = $this->createMock(QuoteDetailsItemInterface::class);
-        $quoteDetailsItemMock->method('getTaxClassKey')->willReturn($taxClassObjectMock);
+        $quoteDetailsItemMock->expects($this->once())->method('getTaxClassKey')->willReturn($taxClassObjectMock);
 
         $this->commonTaxCollectorPlugin->afterMapItem(
             $this->createMock(CommonTaxCollector::class),

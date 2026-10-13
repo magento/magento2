@@ -15,6 +15,7 @@ use Magento\Indexer\Model\Indexer;
 use Magento\Indexer\Model\ModeSwitcherInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Console\Tester\CommandTester;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for class \Magento\Indexer\Model\ModeSwitcherInterface.
@@ -62,9 +63,8 @@ class IndexerSetDimensionsModeCommandTest extends AbstractIndexerCommandCommonSe
     {
         parent::setUp();
         $objectManagerHelper = new ObjectManagerHelper($this);
-        $this->configReaderMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
-        $this->dimensionModeSwitcherMock =
-            $this->getMockForAbstractClass(ModeSwitcherInterface::class);
+        $this->configReaderMock = $this->createMock(ScopeConfigInterface::class);
+        $this->dimensionModeSwitcherMock = $this->createMock(ModeSwitcherInterface::class);
         $this->dimensionProviders = [
             'indexer_title' => $this->dimensionModeSwitcherMock,
         ];
@@ -100,9 +100,9 @@ class IndexerSetDimensionsModeCommandTest extends AbstractIndexerCommandCommonSe
      * @param string $previousMode
      * @param array $command
      * @param string $consoleOutput
-     * @dataProvider dimensionModesDataProvider
      * @return void
      */
+    #[DataProvider('dimensionModesDataProvider')]
     public function testExecuteWithAttributes($indexerTitle, $previousMode, $command, $consoleOutput)
     {
         $this->configureAdminArea();

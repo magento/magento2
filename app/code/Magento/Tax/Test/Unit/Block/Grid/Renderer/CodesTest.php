@@ -12,6 +12,7 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Escaper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Tax\Block\Grid\Renderer\Codes;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -54,12 +55,12 @@ class CodesTest extends TestCase
     /**
      * Test rates codes grid column renderer.
      *
-     * @param array $ratesCodes
+     * @param array|null $ratesCodes
      * @param string $expected
      * @see Magento\Tax\Block\Grid\Renderer\Codes::render
-     * @dataProvider ratesCodesDataProvider
      */
-    public function testRenderCodes($ratesCodes, $expected)
+    #[DataProvider('ratesCodesDataProvider')]
+    public function testRenderCodes(?array $ratesCodes, string $expected): void
     {
         $row = new DataObject();
         $row->setTaxRatesCodes($ratesCodes);
@@ -69,9 +70,9 @@ class CodesTest extends TestCase
     /**
      * Provider of rates codes and render expectations.
      *
-     * @return array
+     * @return array<int, array<int, array<int, string>|string|null>>
      */
-    public static function ratesCodesDataProvider()
+    public static function ratesCodesDataProvider(): array
     {
         return [
             [['some_code'], 'ESCAPED:some_code'],

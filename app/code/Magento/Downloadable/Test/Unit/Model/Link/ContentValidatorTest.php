@@ -13,6 +13,7 @@ use Magento\Downloadable\Api\Data\LinkInterface;
 use Magento\Downloadable\Helper\File;
 use Magento\Downloadable\Model\Link\ContentValidator;
 use Magento\Downloadable\Model\Url\DomainValidator;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Url\Validator;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -23,6 +24,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ContentValidatorTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var ContentValidator
      */
@@ -260,28 +262,11 @@ class ContentValidatorTest extends TestCase
      */
     protected function getLinkMock(array $linkData)
     {
-        $linkMock = $this->createPartialMock(
-            \Magento\Downloadable\Test\Unit\Helper\LinkTestHelper::class,
-            [
-                'isShareable',
-                'getTitle',
-                'getPrice',
-                'getSortOrder',
-                'getNumberOfDownloads',
-                'getLinkType',
-                'getLinkFile',
-                'getLinkUrl',
-                'getLinkFileContent',
-                'getSampleType',
-                'getSampleUrl',
-                'getSampleFile',
-                'getSampleFileContent'
-            ]
-        );
+        $linkMock = $this->createMock(\Magento\Downloadable\Api\Data\LinkInterface::class);
         $linkMock->method('getTitle')->willReturn($linkData['title']);
         $linkMock->method('getPrice')->willReturn($linkData['price']);
         $linkMock->method('getSortOrder')->willReturn($linkData['sort_order']);
-        $linkMock->method('isShareable')->willReturn($linkData['shareable']);
+        $linkMock->method('getIsShareable')->willReturn($linkData['shareable']);
         $linkMock->method('getNumberOfDownloads')->willReturn(
             $linkData['number_of_downloads']
         );

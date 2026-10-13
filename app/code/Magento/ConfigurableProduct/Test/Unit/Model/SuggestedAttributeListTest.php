@@ -13,12 +13,14 @@ use Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection;
 use Magento\ConfigurableProduct\Model\ConfigurableAttributeHandler;
 use Magento\ConfigurableProduct\Model\SuggestedAttributeList;
 use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
-use Magento\Eav\Test\Unit\Helper\AttributeTestHelper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class SuggestedAttributeListTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var SuggestedAttributeList
      */
@@ -85,7 +87,10 @@ class SuggestedAttributeListTest extends TestCase
         )->willReturnMap(
             $valueMap
         );
-        $this->attributeMock = new AttributeTestHelper();
+        $this->attributeMock = $this->createPartialMockWithReflection(
+            Attribute::class,
+            ['getSource', 'getAttributeCode', 'getId', 'getFrontendLabel']
+        );
         $this->collectionMock->expects(
             $this->once()
         )->method(
@@ -103,11 +108,11 @@ class SuggestedAttributeListTest extends TestCase
     {
         $source = $this->createMock(AbstractSource::class);
         $result['id'] = ['id' => 'id', 'label' => 'label', 'code' => 'code', 'options' => 'options'];
-        // Configure anonymous class with expected values
-        $this->attributeMock->setId('id');
-        $this->attributeMock->setFrontendLabel('label');
-        $this->attributeMock->setAttributeCode('code');
-        $this->attributeMock->setSource($source);
+        // Configure mock to return expected values
+        $this->attributeMock->method('getId')->willReturn('id');
+        $this->attributeMock->method('getFrontendLabel')->willReturn('label');
+        $this->attributeMock->method('getAttributeCode')->willReturn('code');
+        $this->attributeMock->method('getSource')->willReturn($source);
         $source->expects($this->once())->method('getAllOptions')->with(false)->willReturn('options');
         $this->configurableAttributeHandler->expects($this->once())->method('isAttributeApplicable')
             ->with($this->attributeMock)->willReturn(true);

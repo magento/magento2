@@ -140,6 +140,7 @@ class AttributeMetadataResolver
                 $meta['arguments']['data']['config'][$metaName] = $value;
             }
             if ('frontend_input' === $origName) {
+                $value = $value ?? '';
                 $meta['arguments']['data']['config']['formElement'] = self::$formElement[$value] ?? $value;
             }
         }

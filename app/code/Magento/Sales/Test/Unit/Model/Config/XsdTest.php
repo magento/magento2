@@ -9,6 +9,7 @@ namespace Magento\Sales\Test\Unit\Model\Config;
 
 use Magento\Framework\Config\Dom;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class XsdTest extends TestCase
 {
@@ -27,8 +28,8 @@ class XsdTest extends TestCase
 
     /**
      * @param string $xmlFile
-     * @dataProvider validXmlFileDataProvider
      */
+    #[DataProvider('validXmlFileDataProvider')]
     public function testValidXmlFile($xmlFile)
     {
         $dom = new \DOMDocument();
@@ -50,8 +51,8 @@ class XsdTest extends TestCase
     /**
      * @param string $xmlFile
      * @param array $expectedErrors
-     * @dataProvider invalidXmlFileDataProvider
      */
+    #[DataProvider('invalidXmlFileDataProvider')]
     public function testInvalidXmlFile($xmlFile, $expectedErrors)
     {
         $dom = new \DOMDocument();

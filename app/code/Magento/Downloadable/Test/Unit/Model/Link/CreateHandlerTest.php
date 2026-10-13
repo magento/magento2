@@ -9,15 +9,19 @@ namespace Magento\Downloadable\Test\Unit\Model\Link;
 
 use Magento\Catalog\Api\Data\ProductExtensionInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Product;
 use Magento\Downloadable\Api\Data\LinkInterface;
 use Magento\Downloadable\Api\LinkRepositoryInterface;
 use Magento\Downloadable\Model\Link\CreateHandler;
 use Magento\Downloadable\Model\Product\Type;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class CreateHandlerTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var CreateHandler */
     protected $model;
 
@@ -45,8 +49,8 @@ class CreateHandlerTest extends TestCase
             ->with(null);
 
         /** @var ProductExtensionInterface|MockObject $productExtensionMock */
-        $productExtensionMock = $this->createPartialMock(
-            \Magento\Catalog\Test\Unit\Helper\ProductExtensionTestHelper::class,
+        $productExtensionMock = $this->createPartialMockWithReflection(
+            ProductExtensionInterface::class,
             ['getDownloadableProductLinks']
         );
         $productExtensionMock->expects($this->once())
@@ -54,8 +58,8 @@ class CreateHandlerTest extends TestCase
             ->willReturn([$linkMock]);
 
         /** @var ProductInterface|MockObject $entityMock */
-        $entityMock = $this->createPartialMock(
-            \Magento\Catalog\Test\Unit\Helper\ProductTestHelper::class,
+        $entityMock = $this->createPartialMockWithReflection(
+            Product::class,
             ['getStoreId', 'getTypeId', 'getExtensionAttributes', 'getSku']
         );
         $entityMock->expects($this->once())
@@ -85,8 +89,8 @@ class CreateHandlerTest extends TestCase
     public function testExecuteNonDownloadable()
     {
         /** @var ProductInterface|MockObject $entityMock */
-        $entityMock = $this->createPartialMock(
-            \Magento\Catalog\Test\Unit\Helper\ProductTestHelper::class,
+        $entityMock = $this->createPartialMockWithReflection(
+            Product::class,
             ['getStoreId', 'getTypeId', 'getExtensionAttributes', 'getSku']
         );
         $entityMock->expects($this->once())

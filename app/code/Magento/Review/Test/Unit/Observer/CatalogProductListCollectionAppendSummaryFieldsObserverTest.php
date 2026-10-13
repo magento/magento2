@@ -14,7 +14,10 @@ use Magento\Review\Model\ResourceModel\Review\Summary;
 use Magento\Review\Model\ResourceModel\Review\SummaryFactory;
 use Magento\Review\Observer\CatalogProductListCollectionAppendSummaryFieldsObserver;
 use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManager;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -23,6 +26,8 @@ use PHPUnit\Framework\TestCase;
  */
 class CatalogProductListCollectionAppendSummaryFieldsObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     private const STORE_ID = 1;
 
     /**
@@ -72,36 +77,22 @@ class CatalogProductListCollectionAppendSummaryFieldsObserverTest extends TestCa
      */
     protected function setUp(): void
     {
-        $this->eventMock = $this->getMockBuilder(Event::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getCollection'])
-            ->getMock();
+        $this->eventMock = $this->createPartialMockWithReflection(Event::class, ['getCollection']);
 
         $this->observerMock = $this->createMock(Observer::class);
 
-        $this->productCollectionMock = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->productCollectionMock = $this->createMock(Collection::class);
 
-        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getStore'])
-            ->getMockForAbstractClass();
+        $this->storeManagerMock = $this->createPartialMock(StoreManager::class, ['getStore']);
 
-        $this->storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getId'])
-            ->getMockForAbstractClass();
+        $this->storeMock = $this->createPartialMock(Store::class, ['getId']);
 
         $this->sumResourceMock = $this->createPartialMock(
             Summary::class,
             ['appendSummaryFieldsToCollection']
         );
 
-        $this->sumResourceFactoryMock = $this->getMockBuilder(SummaryFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
+        $this->sumResourceFactoryMock = $this->createPartialMock(SummaryFactory::class, ['create']);
 
         $this->observer = new CatalogProductListCollectionAppendSummaryFieldsObserver(
             $this->sumResourceFactoryMock,

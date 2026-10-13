@@ -14,9 +14,12 @@ use Magento\ConfigurableProduct\Model\AttributesList;
 use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class AttributesListTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var AttributesList
      */
@@ -45,7 +48,13 @@ class AttributesListTest extends TestCase
         );
         $collectionFactoryMock->expects($this->once())->method('create')->willReturn($this->collectionMock);
 
-        $this->attributeMock = new \Magento\Eav\Test\Unit\Helper\AttributeTestHelper();
+        $this->attributeMock = $this->createPartialMockWithReflection(
+            Attribute::class,
+            ['getId', 'getAttributeCode', 'getFrontendLabel', 'getSource']
+        );
+        $this->attributeMock->method('getId')->willReturn('id');
+        $this->attributeMock->method('getAttributeCode')->willReturn('code');
+        $this->attributeMock->method('getFrontendLabel')->willReturn('label');
         $this->collectionMock
             ->expects($this->once())
             ->method('getItems')
@@ -73,14 +82,9 @@ class AttributesListTest extends TestCase
             ->method('addFieldToFilter')
             ->with('main_table.attribute_id', $ids);
 
-        // Configure AttributeTestHelper with expected values
-        $this->attributeMock->setId('id');
-        $this->attributeMock->setFrontendLabel('label');
-        $this->attributeMock->setAttributeCode('code');
-
         $source = $this->createMock(AbstractSource::class);
         $source->expects($this->once())->method('getAllOptions')->with(false)->willReturn(['options']);
-        $this->attributeMock->setSource($source);
+        $this->attributeMock->method('getSource')->willReturn($source);
 
         $this->assertEquals($result, $this->attributeListModel->getAttributes($ids));
     }

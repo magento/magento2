@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
 
 class IgnoreTaxNotificationTest extends TestCase
 {
-    public function testExecute()
+    public function testExecute(): void
     {
         $objectManager = new ObjectManager($this);
         $cacheTypeList = $this->getMockBuilder(TypeList::class)
@@ -65,10 +65,7 @@ class IgnoreTaxNotificationTest extends TestCase
             ->with('tax/notification/ignore_tax', 1, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, 0)
             ->willReturn(null);
 
-        $manager = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['get', 'create', 'configure'])
-            ->getMockForAbstractClass();
+        $manager = $this->createMock(ObjectManagerInterface::class);
         $manager->expects($this->any())
             ->method('get')
             ->willReturn($config);

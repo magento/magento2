@@ -42,29 +42,17 @@ class LogoTest extends TestCase
     protected function setUp(): void
     {
         $helper = new ObjectManager($this);
-        $this->uploaderFactoryMock = $this->getMockBuilder(UploaderFactory::class)
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->uploaderMock = $this->getMockBuilder(Uploader::class)
-            ->onlyMethods(['setAllowedExtensions', 'save'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->uploaderFactoryMock = $this->createPartialMock(UploaderFactory::class, ['create']);
+
+        $this->uploaderMock = $this->createPartialMock(Uploader::class, ['setAllowedExtensions', 'save']);
+
         $this->uploaderFactoryMock
             ->expects($this->once())
             ->method('create')
             ->willReturn($this->uploaderMock);
-        $this->requestDataMock = $this
-            ->getMockBuilder(RequestDataInterface::class)
-            ->onlyMethods(['getTmpName'])
-            ->getMockForAbstractClass();
-        $mediaDirectoryMock = $this->getMockBuilder(WriteInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $filesystemMock = $this->getMockBuilder(Filesystem::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getDirectoryWrite'])
-            ->getMock();
+        $this->requestDataMock = $this->createPartialMock(RequestDataInterface::class, ['getTmpName', 'getName']);
+        $mediaDirectoryMock = $this->createMock(WriteInterface::class);
+        $filesystemMock = $this->createPartialMock(Filesystem::class, ['getDirectoryWrite']);
         $filesystemMock->expects($this->once())
             ->method('getDirectoryWrite')
             ->willReturn($mediaDirectoryMock);

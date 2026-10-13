@@ -10,5 +10,6 @@
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="ProductAttributeMessages">
         <data key="remove_success">You deleted the product attribute.</data>
+        <data key="special_price_date_validation_error">Make sure the To Date is later than or the same as the From Date</data>
     </entity>
 </entities>

@@ -7,20 +7,25 @@ declare(strict_types=1);
 
 namespace Magento\Review\Test\Unit\Block\Adminhtml\Rating\Edit\Tab;
 
+use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Framework\Data\Form;
 use Magento\Framework\Data\Form\Element\Text;
 use Magento\Framework\Data\FormFactory;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\Registry;
 use Magento\Framework\Session\Generic;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\View\FileSystem as FilesystemView;
+use Magento\Review\Block\Adminhtml\Rating\Edit\Tab\Form as RatingEditForm;
 use Magento\Review\Model\Rating;
 use Magento\Review\Model\Rating\Option;
 use Magento\Review\Model\Rating\OptionFactory;
 use Magento\Review\Model\ResourceModel\Rating\Option\Collection;
 use Magento\Store\Model\Store;
+use Magento\Store\Model\System\Store as SystemStore;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -29,6 +34,8 @@ use PHPUnit\Framework\TestCase;
  */
 class FormTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Rating
      */
@@ -80,7 +87,7 @@ class FormTest extends TestCase
     protected $optionFactory;
 
     /**
-     * @var \Magento\Store\Model\System\Store
+     * @var SystemStore
      */
     protected $systemStore;
 
@@ -105,7 +112,7 @@ class FormTest extends TestCase
     protected $coreRegistry;
 
     /**
-     * @var \Magento\Review\Block\Adminhtml\Rating\Edit\Tab\Form
+     * @var RatingEditForm
      */
     protected $block;
 
@@ -117,31 +124,29 @@ class FormTest extends TestCase
         $this->ratingOptionCollection = $this->createMock(
             Collection::class
         );
-        $this->element = $this->getMockBuilder(Text::class)
-            ->addMethods(['setValue', 'setIsChecked'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->session = $this->getMockBuilder(Generic::class)
-            ->addMethods(['getRatingData', 'setRatingData'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->rating = $this->getMockBuilder(Rating::class)
-            ->addMethods(['getRatingCodes'])
-            ->onlyMethods(['getId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->element = $this->createPartialMockWithReflection(
+            Text::class,
+            ['setValue', 'setIsChecked']
+        );
+        $this->session = $this->createPartialMockWithReflection(
+            Generic::class,
+            ['getRatingData', 'setRatingData']
+        );
+        $this->rating = $this->createPartialMockWithReflection(
+            Rating::class,
+            ['getRatingCodes', 'getId']
+        );
         $this->optionRating = $this->createMock(Option::class);
         $this->store = $this->createMock(Store::class);
-        $this->form = $this->getMockBuilder(Form::class)
-            ->addMethods(['setForm', 'setRenderer'])
-            ->onlyMethods(['addFieldset', 'addField', 'getElement', 'setValues'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->directoryReadInterface = $this->getMockForAbstractClass(ReadInterface::class);
+        $this->form = $this->createPartialMockWithReflection(
+            Form::class,
+            ['setForm', 'setRenderer', 'addFieldset', 'addField', 'getElement', 'setValues']
+        );
+        $this->directoryReadInterface = $this->createMock(ReadInterface::class);
         $this->registry = $this->createMock(Registry::class);
         $this->formFactory = $this->createMock(FormFactory::class);
         $this->optionFactory = $this->createPartialMock(OptionFactory::class, ['create']);
-        $this->systemStore = $this->createMock(\Magento\Store\Model\System\Store::class);
+        $this->systemStore = $this->createMock(SystemStore::class);
         $this->viewFileSystem = $this->createMock(FilesystemView::class);
         $this->fileSystem = $this->createPartialMock(Filesystem::class, ['getDirectoryRead']);
 
@@ -171,8 +176,14 @@ class FormTest extends TestCase
             ->willReturn($this->directoryReadInterface);
 
         $objectManagerHelper = new ObjectManagerHelper($this);
+        $objects = [
+            [JsonHelper::class, $this->createMock(JsonHelper::class)],
+            [DirectoryHelper::class, $this->createMock(DirectoryHelper::class)]
+        ];
+        $objectManagerHelper->prepareObjectManager($objects);
+        
         $this->block = $objectManagerHelper->getObject(
-            \Magento\Review\Block\Adminhtml\Rating\Edit\Tab\Form::class,
+            RatingEditForm::class,
             [
                 'registry' => $this->registry,
                 'formFactory' => $this->formFactory,

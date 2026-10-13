@@ -13,6 +13,7 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Driver\File;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test methods of class Storage
@@ -238,8 +239,8 @@ class StorageTest extends \PHPUnit\Framework\TestCase
      * @param string|null $storageType
      *
      * @return void
-     * @dataProvider filenameUploadFileWithWrongExtensionDataProvider
      */
+    #[DataProvider('filenameUploadFileWithWrongExtensionDataProvider')]
     public function testUploadFileWithWrongExtension(string $fileName, string $fileType, ?string $storageType): void
     {
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
@@ -316,8 +317,8 @@ class StorageTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $sizes
      * @param bool $resized
-     * @dataProvider getThumbnailsSizes
      */
+    #[DataProvider('getThumbnailsSizes')]
     public function testResizeFile(array $sizes, bool $resized): void
     {
         $root = $this->storage->getCmsWysiwygImages()->getStorageRoot();

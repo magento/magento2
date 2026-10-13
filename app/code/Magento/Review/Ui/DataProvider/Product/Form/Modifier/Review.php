@@ -126,7 +126,7 @@ class Review extends AbstractModifier
     {
         $productId = $this->locator->getProduct()->getId();
 
-        $data[$productId][self::DATA_SOURCE_DEFAULT]['current_product_id'] = $productId;
+        $data[$productId ?? ''][self::DATA_SOURCE_DEFAULT]['current_product_id'] = $productId;
 
         return $data;
     }

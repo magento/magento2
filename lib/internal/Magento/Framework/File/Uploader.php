@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\File;
 
@@ -730,6 +730,7 @@ class Uploader
      * @return void
      * @throws \InvalidArgumentException
      * @throws FileSystemException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function validateFileId(array $fileId): void
     {
@@ -737,7 +738,7 @@ class Uploader
         if (isset($fileId['tmp_name'])) {
             $tmpName = trim($fileId['tmp_name']);
 
-            if (preg_match('/\.\.(\\\|\/)/', $tmpName) !== 1) {
+            if (is_uploaded_file($tmpName) && preg_match('/\.\.(\\\|\/)/', $tmpName) !== 1) {
                 $allowedFolders = [
                     sys_get_temp_dir(),
                     $this->directoryList->getPath(DirectoryList::SYS_TMP),
@@ -806,7 +807,7 @@ class Uploader
     }
 
     /**
-     * Get new file name if the same is already exists
+     * Get new file name if the same already exists
      *
      * @param string $destinationFile
      * @return string

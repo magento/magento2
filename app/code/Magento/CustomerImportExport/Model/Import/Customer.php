@@ -15,6 +15,8 @@ use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\AbstractSource;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 use Magento\Store\Model\Store;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Customer entity import
@@ -173,6 +175,17 @@ class Customer extends AbstractCustomer
     private $indexerProcessor;
 
     /**
+     * Invalid Dob
+     */
+    private const ERROR_INVALID_DOB = 'invalidDob';
+
+    /** @var TimezoneInterface */
+    private $timezone;
+
+    /** @var \DateTimeZone[] */
+    private $dobTimezoneCache = [];
+
+    /**
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
@@ -187,6 +200,7 @@ class Customer extends AbstractCustomer
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      * @param array $data
      * @param Processor $indexerProcessor
+     * @param TimezoneInterface $timezone
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -203,7 +217,8 @@ class Customer extends AbstractCustomer
         \Magento\Customer\Model\ResourceModel\Attribute\CollectionFactory $attrCollectionFactory,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         array $data = [],
-        ?Processor $indexerProcessor = null
+        ?Processor $indexerProcessor = null,
+        ?TimezoneInterface $timezone = null
     ) {
         $this->_resourceHelper = $resourceHelper;
 
@@ -261,6 +276,13 @@ class Customer extends AbstractCustomer
         $customerResource = $this->_customerModel->getResource();
         $this->_entityTable = $customerResource->getEntityTable();
         $this->indexerProcessor = $indexerProcessor ?: ObjectManager::getInstance()->get(Processor::class);
+
+        $this->addMessageTemplate(
+            self::ERROR_INVALID_DOB,
+            __('The Date of Birth should not be greater than today.')
+        );
+
+        $this->timezone = $timezone ?: ObjectManager::getInstance()->get(TimezoneInterface::class);
     }
 
     /**
@@ -645,9 +667,51 @@ class Customer extends AbstractCustomer
                         $this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR]
                         ?? Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR
                     );
+
+                    if ($attributeCode === CustomerInterface::DOB) {
+                        $storeId = isset(
+                            $rowData[self::COLUMN_STORE],
+                            $this->_storeCodeToId[$rowData[self::COLUMN_STORE]]
+                        )
+                            ? (int)$this->_storeCodeToId[$rowData[self::COLUMN_STORE]]
+                            : 0;
+
+                        if (!$this->isDobValidForStore($rowData[$attributeCode], $storeId)) {
+                            $this->addRowError(
+                                self::ERROR_INVALID_DOB,
+                                $rowNumber,
+                                $attributeCode
+                            );
+                        }
+                    }
                 }
             }
         }
+    }
+
+    /**
+     * Validate that the given DOB is not in the future date
+     *
+     * @param string $dobValue
+     * @param int $storeId
+     * @return bool
+     * @throws \Exception
+     */
+    private function isDobValidForStore(string $dobValue, int $storeId): bool
+    {
+        if (!isset($this->dobTimezoneCache[$storeId])) {
+            $tzName = $this->timezone->getConfigTimezone(ScopeInterface::SCOPE_STORE, $storeId);
+            $this->dobTimezoneCache[$storeId] = new \DateTimeZone($tzName);
+        }
+
+        $tz = $this->dobTimezoneCache[$storeId];
+        $dobDate = new \DateTime($dobValue, $tz);
+        $dobDate->setTime(0, 0, 0);
+
+        $currentDate = new \DateTime('now', $tz);
+        $currentDate->setTime(0, 0, 0);
+
+        return $dobDate->getTimestamp() <= $currentDate->getTimestamp();
     }
 
     /**

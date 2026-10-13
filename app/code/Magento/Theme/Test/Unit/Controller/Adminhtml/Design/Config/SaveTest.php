@@ -73,15 +73,8 @@ class SaveTest extends TestCase
         $this->redirectFactory = $this->createMock(RedirectFactory::class);
         $this->redirect = $this->createMock(Redirect::class);
         $this->configFactory = $this->createMock(ConfigFactory::class);
-        $this->messageManager = $this->getMockForAbstractClass(
-            ManagerInterface::class,
-            [],
-            '',
-            false
-        );
-        $this->request = $this->getMockBuilder(Http::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->messageManager = $this->createMock(ManagerInterface::class);
+        $this->request = $this->createMock(Http::class);
 
         $this->request->expects($this->atLeastOnce())
             ->method('isPost')
@@ -95,15 +88,9 @@ class SaveTest extends TestCase
                 'resultRedirectFactory' => $this->redirectFactory
             ]
         );
-        $this->designConfig = $this->getMockForAbstractClass(
-            DesignConfigInterface::class,
-            [],
-            '',
-            false
-        );
+        $this->designConfig = $this->createMock(DesignConfigInterface::class);
         $this->fileParams = $this->createMock(Parameters::class);
-        $this->dataPersistor = $this->getMockBuilder(DataPersistorInterface::class)
-            ->getMockForAbstractClass();
+        $this->dataPersistor = $this->createMock(DataPersistorInterface::class);
         $this->controller = new Save(
             $this->context,
             $this->designConfigRepository,

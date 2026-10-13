@@ -12,6 +12,7 @@ use Magento\Framework\Filesystem\Driver\File;
 use Magento\Framework\Image as FrameworkImage;
 use Magento\Framework\Image\Factory;
 use Magento\MediaStorage\Model\File\Validator\Image;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -57,9 +58,7 @@ class ImageTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider dataProviderForIsValid
-     */
+    #[DataProvider('dataProviderForIsValid')]
     public function testIsValid($filePath, $mimeType, $result): void
     {
         $this->fileMimeMock->expects($this->once())

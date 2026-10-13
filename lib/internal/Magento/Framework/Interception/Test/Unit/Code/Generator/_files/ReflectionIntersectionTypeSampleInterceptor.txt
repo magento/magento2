@@ -16,7 +16,7 @@ class Interceptor extends \Magento\Framework\Interception\Code\Generator\Reflect
     /**
      * {@inheritdoc}
      */
-    public function getValue() : \Magento\Backend\Model\Menu&\Magento\Framework\Interception\Code\Generator\ReflectionIntersectionTypeSample
+    public function getValue(): \Magento\Backend\Model\Menu&\Magento\Framework\Interception\Code\Generator\ReflectionIntersectionTypeSample
     {
         $pluginInfo = $this->pluginList->getNext($this->subjectType, 'getValue');
         return $pluginInfo ? $this->___callPlugins('getValue', func_get_args(), $pluginInfo) : parent::getValue();

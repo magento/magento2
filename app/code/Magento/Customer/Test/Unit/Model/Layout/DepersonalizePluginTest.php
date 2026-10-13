@@ -19,6 +19,7 @@ use Magento\Framework\View\LayoutInterface;
 use Magento\PageCache\Model\DepersonalizeChecker;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * Unit tests for \Magento\Customer\Model\Layout\DepersonalizePlugin class.
@@ -27,6 +28,8 @@ use PHPUnit\Framework\TestCase;
  */
 class DepersonalizePluginTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var DepersonalizePlugin
      */
@@ -72,22 +75,27 @@ class DepersonalizePluginTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
-        $this->sessionMock = $this->getMockBuilder(GenericSession::class)
-            ->addMethods(['setData'])
-            ->onlyMethods(['clearStorage', 'getData'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->layoutMock = $this->createMock(LayoutInterface::class);
+        $this->sessionMock = $this->createPartialMockWithReflection(
+            GenericSession::class,
+            [
+                'setData',
+                'clearStorage',
+                'getData'
+            ]
+        );
         $this->customerSessionMock = $this->createPartialMock(
             CustomerSession::class,
             ['getCustomerGroupId', 'setCustomerGroupId', 'clearStorage', 'setCustomer']
         );
         $this->customerFactoryMock = $this->createPartialMock(CustomerFactory::class, ['create']);
-        $this->customerMock = $this->getMockBuilder(Customer::class)
-            ->addMethods(['setGroupId'])
-            ->onlyMethods(['__wakeup'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->customerMock = $this->createPartialMockWithReflection(
+            Customer::class,
+            [
+                'setGroupId',
+                '__wakeup'
+            ]
+        );
         $this->visitorMock = $this->createMock(VisitorModel::class);
         $this->customerFactoryMock->expects($this->any())
             ->method('create')

@@ -20,12 +20,16 @@ use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * @covers \Magento\Customer\Controller\Adminhtml\Index\Index
  */
 class IndexTest extends TestCase
 {
+
+    use MockCreationTrait;
+
     /**
      * @var Index
      */
@@ -93,21 +97,20 @@ class IndexTest extends TestCase
         $this->resultPageFactoryMock = $this->getMockBuilder(PageFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultPageMock = $this->getMockBuilder(Page::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setActiveMenu', 'addBreadcrumb'])
-            ->onlyMethods(['getConfig'])
-            ->getMock();
+        $this->resultPageMock = $this->createPartialMockWithReflection(
+            Page::class,
+            ['getConfig', 'setActiveMenu', 'addBreadcrumb']
+        );
         $this->pageConfigMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->pageTitleMock = $this->getMockBuilder(Title::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->sessionMock = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['unsCustomerData', 'unsCustomerFormData'])
-            ->getMock();
+        $this->sessionMock = $this->createPartialMockWithReflection(
+            Session::class,
+            ['unsCustomerData', 'unsCustomerFormData']
+        );
 
         $objectManager = new ObjectManager($this);
         $this->context = $objectManager->getObject(

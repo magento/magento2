@@ -23,8 +23,7 @@ class CookieSettings extends TestCase
 
     protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
-            ->getMockForAbstractClass();
+        $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
 
         $this->cookieSettings = new \Magento\Customer\ViewModel\CookieSettings(
             $this->scopeConfigMock

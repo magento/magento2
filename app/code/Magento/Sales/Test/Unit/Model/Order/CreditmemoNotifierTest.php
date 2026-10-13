@@ -19,9 +19,12 @@ use Magento\Sales\Model\ResourceModel\Order\Status\History\CollectionFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class CreditmemoNotifierTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var CollectionFactory|MockObject
      */
@@ -64,7 +67,7 @@ class CreditmemoNotifierTest extends TestCase
             CreditmemoSender::class,
             ['send']
         );
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->notifier = new CreditmemoNotifier(
             $this->historyCollectionFactory,
             $this->loggerMock,
@@ -79,11 +82,10 @@ class CreditmemoNotifierTest extends TestCase
      */
     public function testNotifySuccess(): void
     {
-        $historyCollection = $this->getMockBuilder(Collection::class)
-            ->addMethods(['setIsCustomerNotified'])
-            ->onlyMethods(['getUnnotifiedForInstance', 'save'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $historyCollection = $this->createPartialMockWithReflection(
+            Collection::class,
+            ['setIsCustomerNotified', 'getUnnotifiedForInstance', 'save']
+        );
         $historyItem = $this->createPartialMock(
             History::class,
             ['setIsCustomerNotified', 'save']

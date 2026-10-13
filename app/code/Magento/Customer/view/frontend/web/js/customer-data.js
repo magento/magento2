@@ -116,12 +116,19 @@ define([
      * @return {*}
      */
     ko.extenders.disposableCustomerData = function (target, sectionName) {
-        var sectionDataIds, newSectionDataIds = {};
-
         target.subscribe(function () {
+            var sectionDataIdsAtSchedule = $.cookieStorage.get('section_data_ids') || {},
+                dataIdAtSchedule = sectionDataIdsAtSchedule[sectionName];
+
             setTimeout(function () {
+                var sectionDataIds = $.cookieStorage.get('section_data_ids') || {},
+                    newSectionDataIds = {};
+
+                if (sectionDataIds[sectionName] !== dataIdAtSchedule) {
+                    return;
+                }
+
                 storage.remove(sectionName);
-                sectionDataIds = $.cookieStorage.get('section_data_ids') || {};
                 _.each(sectionDataIds, function (data, name) {
                     if (name !== sectionName) {
                         newSectionDataIds[name] = data;
@@ -211,21 +218,17 @@ define([
          * Customer data initialization
          */
         init: function () {
-            var expiredSectionNames = this.getExpiredSectionNames();
+            var expiredSectionNames = this.getExpiredSectionNames(),
+                sectionsToReload;
 
-            if (expiredSectionNames.length > 0) {
-                _.each(dataProvider.getFromStorage(storage.keys()), function (sectionData, sectionName) {
-                    buffer.notify(sectionName, sectionData);
-                });
-                this.reload(expiredSectionNames, false);
-            } else {
-                _.each(dataProvider.getFromStorage(storage.keys()), function (sectionData, sectionName) {
-                    buffer.notify(sectionName, sectionData);
-                });
+            _.each(dataProvider.getFromStorage(storage.keys()), function (sectionData, sectionName) {
+                buffer.notify(sectionName, sectionData);
+            });
 
-                if (!_.isEmpty(storageInvalidation.keys())) {
-                    this.reload(storageInvalidation.keys(), false);
-                }
+            sectionsToReload = _.uniq(expiredSectionNames.concat(storageInvalidation.keys()));
+
+            if (sectionsToReload.length > 0) {
+                this.reload(sectionsToReload, false);
             }
 
             if (!_.isEmpty($.cookieStorage.get('section_data_clean'))) {

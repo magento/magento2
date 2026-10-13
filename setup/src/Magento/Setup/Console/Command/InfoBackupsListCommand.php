@@ -69,7 +69,7 @@ class InfoBackupsListCommand extends Command
     /**
      * @inheritdoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $backupsDir = $this->directoryList->getPath(DirectoryList::VAR_DIR)
             . '/' . BackupRollback::DEFAULT_BACKUP_DIRECTORY;

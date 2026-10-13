@@ -126,7 +126,7 @@ class Totals extends \Magento\Framework\View\Element\Template
         /**
          * Add discount
          */
-        if ((double)$this->getSource()->getDiscountAmount() != 0) {
+        if ((float)$this->getSource()->getDiscountAmount() != 0) {
             if ($this->getSource()->getDiscountDescription()) {
                 $discountLabel = __('Discount (%1)', $source->getDiscountDescription());
             } else {
@@ -218,24 +218,24 @@ class Totals extends \Magento\Framework\View\Element\Template
                 $totals[$code] = $item;
                 if ($code == $after) {
                     $added = true;
-                    $totals[$total->getCode()] = $total;
+                    $totals[$total->getCode() ?? ''] = $total;
                 }
             }
             if (!$added) {
                 $last = array_pop($totals);
-                $totals[$total->getCode()] = $total;
-                $totals[$last->getCode()] = $last;
+                $totals[$total->getCode() ?? ''] = $total;
+                $totals[$last->getCode() ?? ''] = $last;
             }
             $this->_totals = $totals;
         } elseif ($after == 'last') {
-            $this->_totals[$total->getCode()] = $total;
+            $this->_totals[$total->getCode() ?? ''] = $total;
         } elseif ($after == 'first') {
-            $totals = [$total->getCode() => $total];
+            $totals = [$total->getCode() ?? '' => $total];
             $this->_totals = array_merge($totals, $this->_totals);
         } else {
             $last = array_pop($this->_totals);
-            $this->_totals[$total->getCode()] = $total;
-            $this->_totals[$last->getCode()] = $last;
+            $this->_totals[$total->getCode() ?? ''] = $total;
+            $this->_totals[$last->getCode() ?? ''] = $last;
         }
         return $this;
     }
@@ -258,7 +258,7 @@ class Totals extends \Magento\Framework\View\Element\Template
                     $totals = [];
                     foreach ($this->_totals as $code => $item) {
                         if ($code == $beforeTotals) {
-                            $totals[$total->getCode()] = $total;
+                            $totals[$total->getCode() ?? ''] = $total;
                         }
                         $totals[$code] = $item;
                     }
@@ -269,8 +269,8 @@ class Totals extends \Magento\Framework\View\Element\Template
         }
         $totals = [];
         $first = array_shift($this->_totals);
-        $totals[$first->getCode()] = $first;
-        $totals[$total->getCode()] = $total;
+        $totals[$first->getCode() ?? ''] = $first;
+        $totals[$total->getCode() ?? ''] = $total;
         foreach ($this->_totals as $code => $item) {
             $totals[$code] = $item;
         }

@@ -11,28 +11,21 @@ use Magento\Payment\Model\Checks\Composite;
 use Magento\Payment\Model\Checks\SpecificationInterface;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Quote\Model\Quote;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class CompositeTest extends TestCase
 {
     /**
-     * @dataProvider paymentMethodDataProvider
      * @param bool $expectation
      */
+    #[DataProvider('paymentMethodDataProvider')]
     public function testIsApplicable($expectation)
     {
-        $quote = $this->getMockBuilder(Quote::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(
-                []
-            )->getMock();
-        $paymentMethod = $this->getMockBuilder(
-            MethodInterface::class
-        )->disableOriginalConstructor()->getMock();
+        $quote = $this->createMock(Quote::class);
+        $paymentMethod = $this->createMock(MethodInterface::class);
 
-        $specification = $this->getMockBuilder(
-            SpecificationInterface::class
-        )->disableOriginalConstructor()->getMock();
+        $specification = $this->createMock(SpecificationInterface::class);
         $specification->expects($this->once())->method('isApplicable')->with($paymentMethod, $quote)->willReturn(
             $expectation
         );

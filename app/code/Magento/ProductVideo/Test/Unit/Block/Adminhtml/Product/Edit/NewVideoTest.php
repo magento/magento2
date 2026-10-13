@@ -4,10 +4,11 @@
  * All Rights Reserved.
  */
 declare(strict_types=1);
-
+ 
 namespace Magento\ProductVideo\Test\Unit\Block\Adminhtml\Product\Edit;
-
+ 
 use Magento\Backend\Block\Template\Context;
+use Magento\Framework\App\ObjectManager as AppObjectManager;
 use Magento\Framework\Data\FormFactory;
 use Magento\Framework\Json\EncoderInterface;
 use Magento\Framework\Math\Random;
@@ -18,64 +19,66 @@ use Magento\ProductVideo\Block\Adminhtml\Product\Edit\NewVideo;
 use Magento\ProductVideo\Helper\Media;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-
+ 
 class NewVideoTest extends TestCase
 {
     /**
      * @var Context|MockObject
      */
     protected $contextMock;
-
+ 
     /**
      * @var MockObject|UrlInterface
      */
     protected $urlBuilder;
-
+ 
     /**
      * @var Random|MockObject
      */
     protected $mathRandom;
-
+ 
     /**
      * @var Registry|MockObject
      */
     protected $registryMock;
-
+ 
     /**
      * @var FormFactory|MockObject
      */
     protected $formFactoryMock;
-
+ 
     /**
      * @var EncoderInterface|MockObject
      */
     protected $jsonEncoderMock;
-
+ 
     /**
      * @var Media|MockObject
      */
     protected $mediaHelper;
-
+ 
     /**
-     * @var ObjectManager
-     * |\Magento\ProductVideo\Block\Adminhtml\Product\Edit\NewVideo
+     * @var NewVideo
      */
     protected $block;
-
+ 
     protected function setUp(): void
     {
+        $objectManagerMock = $this->createMock(AppObjectManager::class);
+        AppObjectManager::setInstance($objectManagerMock);
+ 
         $this->contextMock = $this->createMock(Context::class);
         $this->mediaHelper = $this->createMock(Media::class);
         $this->mathRandom = $this->createMock(Random::class);
-        $this->urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->urlBuilder = $this->createMock(UrlInterface::class);
         $this->contextMock->expects($this->any())->method('getMathRandom')->willReturn($this->mathRandom);
         $this->contextMock->expects($this->any())->method('getUrlBuilder')->willReturn($this->urlBuilder);
         $this->registryMock = $this->createMock(Registry::class);
         $this->formFactoryMock = $this->createMock(FormFactory::class);
-        $this->jsonEncoderMock = $this->getMockForAbstractClass(EncoderInterface::class);
-
+        $this->jsonEncoderMock = $this->createMock(EncoderInterface::class);
+ 
         $objectManager = new ObjectManager($this);
-
+ 
         $this->block = $objectManager->getObject(
             NewVideo::class,
             [
@@ -88,14 +91,14 @@ class NewVideoTest extends TestCase
             ]
         );
     }
-
+ 
     public function testGetHtmlId()
     {
         $this->mathRandom->expects($this->any())->method('getUniqueHash')->with('id_')->willReturn('id_' . rand());
         $result = $this->block->getHtmlId();
         $this->assertNotNull($result);
     }
-
+ 
     public function testGetWidgetOptions()
     {
         $rand = rand();

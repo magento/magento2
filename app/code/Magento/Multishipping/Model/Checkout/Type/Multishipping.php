@@ -917,7 +917,10 @@ class Multishipping extends \Magento\Framework\DataObject
 
             $placedAddressItems = [];
             foreach ($successfulOrders as $order) {
-                $orderIds[$order->getId()] = $order->getIncrementId();
+                $orderId = $order->getId();
+                if ($orderId !== null) {
+                    $orderIds[$orderId] = $order->getIncrementId();
+                }
                 if ($order->getCanSendNewEmailFlag()) {
                     $this->orderSender->send($order);
                 }

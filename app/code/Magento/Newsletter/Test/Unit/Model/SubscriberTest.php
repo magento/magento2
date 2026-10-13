@@ -17,6 +17,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Mail\Template\TransportBuilder;
 use Magento\Framework\Mail\TransportInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Translate\Inline\StateInterface;
 use Magento\Newsletter\Helper\Data;
@@ -36,6 +37,8 @@ use PHPUnit\Framework\TestCase;
  */
 class SubscriberTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Data|MockObject
      */
@@ -107,7 +110,7 @@ class SubscriberTest extends TestCase
     protected function setUp(): void
     {
         $this->newsletterData = $this->createMock(Data::class);
-        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
         $this->transportBuilder = $this->createPartialMock(
             TransportBuilder::class,
             [
@@ -120,7 +123,7 @@ class SubscriberTest extends TestCase
                 'getTransport'
             ]
         );
-        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
         $this->customerSession = $this->createPartialMock(
             Session::class,
             [
@@ -129,27 +132,20 @@ class SubscriberTest extends TestCase
                 'getCustomerId'
             ]
         );
-        $this->customerRepository = $this->getMockForAbstractClass(CustomerRepositoryInterface::class);
-        $this->customerAccountManagement = $this->getMockForAbstractClass(AccountManagementInterface::class);
-        $this->inlineTranslation = $this->getMockForAbstractClass(StateInterface::class);
-        $this->resource = $this->getMockBuilder(SubscriberResourceModel::class)
-            ->addMethods(
-                ['loadByCustomer']
-            )
-            ->onlyMethods(
-                ['loadByEmail', 'getIdFieldName', 'save', 'received', 'loadBySubscriberEmail', 'loadByCustomerId']
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->customerRepository = $this->createMock(CustomerRepositoryInterface::class);
+        $this->customerAccountManagement = $this->createMock(AccountManagementInterface::class);
+        $this->inlineTranslation = $this->createMock(StateInterface::class);
+        $this->resource = $this->createPartialMockWithReflection(
+            SubscriberResourceModel::class,
+            [
+                'loadByEmail', 'getIdFieldName', 'save', 'received',
+                'loadBySubscriberEmail', 'loadByCustomerId', 'loadByCustomer'
+            ]
+        );
         $this->objectManager = new ObjectManager($this);
 
-        $this->customerFactory = $this->getMockBuilder(CustomerInterfaceFactory::class)
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->dataObjectHelper = $this->getMockBuilder(DataObjectHelper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->customerFactory = $this->createPartialMock(CustomerInterfaceFactory::class, ['create']);
+        $this->dataObjectHelper = $this->createMock(DataObjectHelper::class);
 
         $this->subscriber = $this->objectManager->getObject(
             Subscriber::class,
@@ -285,9 +281,7 @@ class SubscriberTest extends TestCase
      */
     public function testReceived()
     {
-        $queue = $this->getMockBuilder(Queue::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $queue = $this->createMock(Queue::class);
         $this->resource->expects($this->once())->method('received')->with($this->subscriber, $queue)->willReturnSelf();
 
         $this->assertEquals($this->subscriber, $this->subscriber->received($queue));
@@ -307,7 +301,7 @@ class SubscriberTest extends TestCase
             'email' => 'subscriber_email@example.com',
             'name' => 'Subscriber Name',
         ];
-        $store = $this->getMockForAbstractClass(StoreInterface::class);
+        $store = $this->createMock(StoreInterface::class);
         $this->storeManager->method('getStore')->with($storeId)->willReturn($store);
         $this->newsletterData->expects($this->once())
             ->method('getConfirmationUrl')
@@ -387,7 +381,7 @@ class SubscriberTest extends TestCase
             ->method('addTo')
             ->with($this->subscriber->getEmail(), $this->subscriber->getName())
             ->willReturnSelf();
-        $transport = $this->getMockForAbstractClass(TransportInterface::class);
+        $transport = $this->createMock(TransportInterface::class);
         $transport->expects($this->once())->method('sendMessage')->willReturnSelf();
         $this->transportBuilder->expects($this->once())->method('getTransport')->willReturn($transport);
         $this->inlineTranslation->expects($this->once())->method('suspend')->willReturnSelf();

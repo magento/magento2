@@ -11,6 +11,7 @@ use Magento\Catalog\Model\Product\Link;
 use Magento\Catalog\Model\ProductLink\LinkFactory;
 use Magento\Catalog\Model\ResourceModel\Product\Link as LinkResourceModel;
 use Magento\Catalog\Model\ResourceModel\Product\Relation;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\GroupedProduct\Model\ResourceModel\Product\Link\RelationPersister;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -18,6 +19,7 @@ use PHPUnit\Framework\TestCase;
 
 class RelationPersisterTest extends TestCase
 {
+    use MockCreationTrait;
     /** @var RelationPersister|MockObject */
     private $object;
 
@@ -53,7 +55,10 @@ class RelationPersisterTest extends TestCase
 
         $this->relationProcessor = $this->createMock(Relation::class);
 
-        $this->link = new \Magento\Catalog\Test\Unit\Helper\ProductLinkTestHelper();
+        $this->link = $this->createPartialMockWithReflection(
+            \Magento\Catalog\Model\Product\Link::class,
+            ['getLinkTypeId', 'getProductId', 'getLinkedProductId']
+        );
 
         $this->linkFactory->method('create')->willReturn($this->link);
 
@@ -89,9 +94,11 @@ class RelationPersisterTest extends TestCase
         $subject->method('getIdFieldName')->willReturn('id');
         $subject->expects($this->once())->method('load')->with($this->link, 155, 'id');
 
-        $this->link->setLinkTypeId(\Magento\GroupedProduct\Model\ResourceModel\Product\Link::LINK_TYPE_GROUPED);
-        $this->link->setProductId(12);
-        $this->link->setLinkedProductId(13);
+        // Configure the mock to return the expected values when getters are called
+        $this->link->method('getLinkTypeId')
+            ->willReturn(\Magento\GroupedProduct\Model\ResourceModel\Product\Link::LINK_TYPE_GROUPED);
+        $this->link->method('getProductId')->willReturn(12);
+        $this->link->method('getLinkedProductId')->willReturn(13);
 
         $this->relationProcessor->expects($this->once())->method('removeRelations')->with(12, 13);
         $this->assertEquals(

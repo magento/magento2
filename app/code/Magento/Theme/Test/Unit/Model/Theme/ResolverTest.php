@@ -49,14 +49,14 @@ class ResolverTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->designMock = $this->getMockForAbstractClass(DesignInterface::class);
+        $this->designMock = $this->createMock(DesignInterface::class);
         $this->themeCollectionFactoryMock = $this->createPartialMock(
             \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory::class,
             ['create']
         );
         $this->themeCollectionMock = $this->createMock(Collection::class);
         $this->appStateMock = $this->createMock(State::class);
-        $this->themeMock = $this->getMockForAbstractClass(ThemeInterface::class);
+        $this->themeMock = $this->createMock(ThemeInterface::class);
 
         $this->model = new Resolver(
             $this->appStateMock,

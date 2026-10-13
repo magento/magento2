@@ -17,6 +17,7 @@ use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\Stdlib\DateTime\Filter\Date;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Page\Title;
 use Magento\Reports\Controller\Adminhtml\Report\Product\Viewed;
@@ -30,6 +31,8 @@ use Psr\Log\LoggerInterface;
  */
 class ViewedTest extends AbstractControllerTestCase
 {
+    use MockCreationTrait;
+    
     /**
      * @var \Magento\Reports\Controller\Adminhtml\Report\Product\Viewed
      */
@@ -82,28 +85,23 @@ class ViewedTest extends AbstractControllerTestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $this->objectManagerMock
             ->expects($this->any())
             ->method('create')
             ->with(Flag::class)
             ->willReturn($flagMock);
 
-        $this->messageManagerMock = $this->getMockBuilder(ManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
 
         $flagMock = $this->getMockBuilder(ActionFlag::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $responseMock = $this->getMockBuilder(ResponseInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setRedirect'])
-            ->onlyMethods(['sendResponse'])
-            ->getMockForAbstractClass();
+        $responseMock = $this->createPartialMockWithReflection(
+            ResponseInterface::class,
+            ['setRedirect', 'sendResponse']
+        );
 
         $this->contextMock->expects($this->any())->method('getObjectManager')->willReturn($this->objectManagerMock);
         $this->contextMock->expects($this->any())->method('getHelper')->willReturn($this->helperMock);
@@ -189,14 +187,12 @@ class ViewedTest extends AbstractControllerTestCase
             'Please review the log and try again.'
         );
 
-        $logMock = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $logMock = $this->createMock(LoggerInterface::class);
 
-        $sessionMock = $this->getMockBuilder(Session::class)
-            ->addMethods(['setIsUrlNotice'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $sessionMock = $this->createPartialMockWithReflection(
+            Session::class,
+            ['setIsUrlNotice']
+        );
 
         $this->objectManagerMock
             ->expects($this->any())

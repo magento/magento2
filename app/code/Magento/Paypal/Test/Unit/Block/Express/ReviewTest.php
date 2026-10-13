@@ -21,6 +21,7 @@ use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Payment;
 use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -51,9 +52,9 @@ class ReviewTest extends TestCase
     {
         $helper = new ObjectManager($this);
 
-        $layout = $this->getMockForAbstractClass(LayoutInterface::class);
-        $eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
-        $scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $layout = $this->createMock(LayoutInterface::class);
+        $eventManager = $this->createMock(ManagerInterface::class);
+        $scopeConfig = $this->createMock(ScopeConfigInterface::class);
 
         $scopeConfig->expects($this->any())
             ->method('getValue')
@@ -62,7 +63,7 @@ class ReviewTest extends TestCase
                 ScopeInterface::SCOPE_STORE
             )->willReturn(false);
 
-        $urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
+        $urlBuilder = $this->createMock(UrlInterface::class);
         $urlBuilder->expects($this->any())->method('getUrl')->willReturnArgument(0);
 
         $context = $this->createPartialMock(
@@ -85,8 +86,8 @@ class ReviewTest extends TestCase
 
     /**
      * @param bool $isSecure
-     * @dataProvider getViewFileUrlDataProvider
      */
+    #[DataProvider('getViewFileUrlDataProvider')]
     public function testGetViewFileUrl($isSecure)
     {
         $this->request->expects($this->once())->method('isSecure')->willReturn($isSecure);

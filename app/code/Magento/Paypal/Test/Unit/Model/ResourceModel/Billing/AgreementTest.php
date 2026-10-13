@@ -48,17 +48,9 @@ class AgreementTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManagerHelper($this);
-        $contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->resourceConnectionMock = $this->createPartialMock(ResourceConnection::class, [
-            'getConnection',
-            'getTableName'
-        ]);
-        $this->collectionMock = $this->getMockBuilder(AbstractDb::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getSelect'])
-            ->getMockForAbstractClass();
+        $contextMock = $this->createMock(Context::class);
+        $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
+        $this->collectionMock = $this->createMock(AbstractDb::class);
         $this->connectionMock = $this->createMock(Mysql::class);
         $this->selectMock = $this->createMock(Select::class);
         $contextMock->expects($this->once())->method('getResources')->willReturn($this->resourceConnectionMock);

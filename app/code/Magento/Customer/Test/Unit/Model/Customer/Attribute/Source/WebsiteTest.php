@@ -10,6 +10,7 @@ namespace Magento\Customer\Test\Unit\Model\Customer\Attribute\Source;
 use Magento\Customer\Model\Customer\Attribute\Source\Website;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\System\Store;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -28,23 +29,20 @@ class WebsiteTest extends TestCase
     /** @var Store|MockObject */
     protected $storeMock;
 
+    /** @var StoreManagerInterface|MockObject */
+    protected $storeManagerMock;
+
     protected function setUp(): void
     {
-        $this->collectionFactoryMock =
-            $this->getMockBuilder(CollectionFactory::class)
-                ->disableOriginalConstructor()
-                ->getMock();
-        $this->optionFactoryMock =
-            $this->getMockBuilder(OptionFactory::class)
-                ->disableOriginalConstructor()
-                ->getMock();
-        $this->storeMock = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->collectionFactoryMock = $this->createMock(CollectionFactory::class);
+        $this->optionFactoryMock = $this->createMock(OptionFactory::class);
+        $this->storeMock = $this->createMock(Store::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
 
         $this->model = new Website(
             $this->collectionFactoryMock,
             $this->optionFactoryMock,
+            $this->storeManagerMock,
             $this->storeMock
         );
     }

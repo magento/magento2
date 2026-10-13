@@ -13,6 +13,7 @@ use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Unit test for SearchCriteriaResolver
@@ -38,8 +39,8 @@ class SearchCriteriaResolverTest extends TestCase
     /**
      * @param array $params
      * @param array $expected
-     * @dataProvider resolveSortOrderDataProvider
      */
+    #[DataProvider('resolveSortOrderDataProvider')]
     public function testResolve($params, $expected)
     {
         $searchRequestName = 'test';

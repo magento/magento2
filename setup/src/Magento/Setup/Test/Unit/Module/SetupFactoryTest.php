@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,12 +18,7 @@ class SetupFactoryTest extends TestCase
 {
     public function testCreate()
     {
-        $objectManager = $this->getMockForAbstractClass(
-            ObjectManagerInterface::class,
-            [],
-            '',
-            false
-        );
+        $objectManager = $this->createMock(ObjectManagerInterface::class);
         $objectManager->expects($this->once())
             ->method('get')
             ->with(ResourceConnection::class)
@@ -36,12 +31,7 @@ class SetupFactoryTest extends TestCase
 
     public function testCreateWithParam()
     {
-        $objectManager = $this->getMockForAbstractClass(
-            ObjectManagerInterface::class,
-            [],
-            '',
-            false
-        );
+        $objectManager = $this->createMock(ObjectManagerInterface::class);
         $objectManager->expects($this->never())->method('get');
         $resource = $this->createMock(ResourceConnection::class);
         $objectManagerProvider = $this->createMock(ObjectManagerProvider::class);

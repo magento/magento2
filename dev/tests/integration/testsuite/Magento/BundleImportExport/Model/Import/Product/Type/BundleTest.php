@@ -28,6 +28,7 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Fixture\Config;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -83,6 +84,38 @@ class BundleTest extends \Magento\TestFramework\Indexer\TestCase
     protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
+        $this->removeProductsWithConflictingUrlKeys();
+    }
+
+    /**
+     * Remove any pre-existing products that occupy the URL keys used by the import fixtures.
+     *
+     * @return void
+     */
+    private function removeProductsWithConflictingUrlKeys(): void
+    {
+        $urlKeys = ['simple-1', 'simple-2', 'simple-3', 'bundle-1'];
+        $searchCriteriaBuilder = $this->objectManager->create(
+            \Magento\Framework\Api\SearchCriteriaBuilder::class
+        );
+        $searchCriteria = $searchCriteriaBuilder->addFilter('url_key', $urlKeys, 'in')->create();
+        $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
+        $products = $productRepository->getList($searchCriteria)->getItems();
+        if (!$products) {
+            return;
+        }
+        $registry = $this->objectManager->get(\Magento\Framework\Registry::class);
+        $registry->unregister('isSecureArea');
+        $registry->register('isSecureArea', true);
+        foreach ($products as $product) {
+            try {
+                $productRepository->delete($product);
+            } catch (NoSuchEntityException $e) {
+                // product already deleted
+            }
+        }
+        $registry->unregister('isSecureArea');
+        $registry->register('isSecureArea', false);
     }
 
     /**
@@ -141,14 +174,13 @@ class BundleTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * Test that Bundle options are updated correctly by import
      *
-     * @dataProvider valuesDataProvider
-     *
      * @magentoAppArea adminhtml
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
      * @param array $expectedValues
      * @return void
      */
+    #[DataProvider('valuesDataProvider')]
     public function testBundleImportUpdateValues(array $expectedValues): void
     {
         // import data from CSV file
@@ -302,13 +334,13 @@ class BundleTest extends \Magento\TestFramework\Indexer\TestCase
 
     /**
      * @magentoDbIsolation enabled
-     * @dataProvider shouldUpdateBundleStockStatusIfChildProductsStockStatusChangedDataProvider
      * @param bool $isOption1Required
      * @param bool $isOption2Required
      * @param string $outOfStockImportFile
      * @param string $inStockImportFile
      * @throws NoSuchEntityException
      */
+    #[DataProvider('shouldUpdateBundleStockStatusIfChildProductsStockStatusChangedDataProvider')]
     public function testShouldUpdateBundleStockStatusIfChildProductsStockStatusChanged(
         bool $isOption1Required,
         bool $isOption2Required,

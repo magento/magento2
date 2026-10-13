@@ -13,8 +13,9 @@ use Magento\Framework\Acl\Data\CacheInterface;
 use Magento\Framework\Acl\RootResource;
 use Magento\Framework\Acl\Role\CurrentRoleContext;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -23,6 +24,8 @@ use PHPUnit\Framework\TestCase;
  */
 class RuleTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Rule
      */
@@ -54,12 +57,12 @@ class RuleTest extends TestCase
     protected function setUp(): void
     {
         $this->rootResource = new RootResource('Magento_Backend::all');
-        $this->resourceMock = $this->getMockBuilder(ResourceConnection::class)
-            ->onlyMethods(['getConnection', 'getTableName'])
-            ->addMethods(['getTable'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->aclDataCacheMock = $this->getMockForAbstractClass(CacheInterface::class);
+        
+        $this->resourceMock = $this->createPartialMockWithReflection(
+            ResourceConnection::class,
+            ['getConnection', 'getTableName', 'getTable']
+        );
+        $this->aclDataCacheMock = $this->createMock(CacheInterface::class);
         $this->serializerMock = $this->createPartialMock(
             Json::class,
             ['serialize', 'unserialize']
@@ -79,15 +82,16 @@ class RuleTest extends TestCase
                 }
             );
 
-        $objectManager = new ObjectManager($this);
-        $this->model = $objectManager->getObject(
-            Rule::class,
-            [
-                'rootResource' => $this->rootResource,
-                'resource' => $this->resourceMock,
-                'aclDataCache' => $this->aclDataCacheMock,
-                'serializer' => $this->serializerMock
-            ]
+        $roleContext = $this->createMock(CurrentRoleContext::class);
+        
+        $this->model = new Rule(
+            $this->rootResource,
+            $this->resourceMock,
+            $this->aclDataCacheMock,
+            $this->serializerMock,
+            null,
+            null,
+            $roleContext
         );
     }
 
@@ -180,14 +184,13 @@ class RuleTest extends TestCase
                 return null;
             });
 
-        $connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $connectionMock = $this->createMock(AdapterInterface::class);
         $connectionMock->method('fetchRow')->willReturn([]); // Return empty array for any DB fetchRow() call
 
-        $selectMock = $this->getMockBuilder('stdClass')
-            ->addMethods(['from', 'where', 'limit'])
-            ->getMock();
+        $selectMock = $this->createPartialMockWithReflection(
+            'stdClass',
+            ['from', 'where', 'limit']
+        );
         $selectMock->method('from')->willReturnSelf();
         $selectMock->method('where')->willReturnSelf();
         $selectMock->method('limit')->willReturnSelf();
@@ -195,16 +198,14 @@ class RuleTest extends TestCase
         $this->resourceMock->method('getConnection')->willReturn($connectionMock);
         $this->resourceMock->method('getTableName')->willReturn('authorization_role'); // Return dummy table name
 
-        $objectManager = new ObjectManager($this);
-        $model = $objectManager->getObject(
-            Rule::class,
-            [
-                'rootResource' => $this->rootResource,
-                'resource' => $this->resourceMock,
-                'aclDataCache' => $this->aclDataCacheMock,
-                'serializer' => $this->serializerMock,
-                'roleContext' => $roleContext,
-            ]
+        $model = new Rule(
+            $this->rootResource,
+            $this->resourceMock,
+            $this->aclDataCacheMock,
+            $this->serializerMock,
+            null,
+            null,
+            $roleContext
         );
 
         $model->populateAcl($aclMock);

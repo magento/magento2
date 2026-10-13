@@ -10,15 +10,19 @@ namespace Magento\ReleaseNotification\Test\Unit\Model\Condition;
 use Magento\Backend\Model\Auth\Session;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\ProductMetadataInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\ReleaseNotification\Model\Condition\CanViewNotification;
 use Magento\ReleaseNotification\Model\ResourceModel\Viewer\Logger;
 use Magento\ReleaseNotification\Model\Viewer\Log;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class CanViewNotificationTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var CanViewNotification */
     private $canViewNotification;
 
@@ -39,20 +43,14 @@ class CanViewNotificationTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->cacheStorageMock = $this->getMockBuilder(CacheInterface::class)
-            ->getMockForAbstractClass();
-        $this->logMock = $this->getMockBuilder(Log::class)
-            ->getMock();
-        $this->sessionMock = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getUser', 'getId'])
-            ->getMock();
-        $this->viewerLoggerMock = $this->getMockBuilder(Logger::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->productMetadataMock = $this->getMockBuilder(ProductMetadataInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->cacheStorageMock = $this->createMock(CacheInterface::class);
+        $this->logMock = $this->createMock(Log::class);
+        $this->sessionMock = $this->createPartialMockWithReflection(
+            Session::class,
+            ['getUser', 'getId']
+        );
+        $this->viewerLoggerMock = $this->createMock(Logger::class);
+        $this->productMetadataMock = $this->createMock(ProductMetadataInterface::class);
         $objectManager = new ObjectManager($this);
         $this->canViewNotification = $objectManager->getObject(
             CanViewNotification::class,
@@ -84,8 +82,8 @@ class CanViewNotificationTest extends TestCase
      * @param bool $expected
      * @param string $version
      * @param string|null $lastViewVersion
-     * @dataProvider isVisibleProvider
      */
+    #[DataProvider('isVisibleProvider')]
     public function testIsVisible($expected, $version, $lastViewVersion)
     {
         $this->cacheStorageMock->expects($this->once())

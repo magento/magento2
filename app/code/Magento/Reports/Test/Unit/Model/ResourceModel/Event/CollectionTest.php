@@ -14,13 +14,17 @@ use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Reports\Model\ResourceModel\Event\Collection;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 class CollectionTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Collection
      */
@@ -95,11 +99,10 @@ class CollectionTest extends TestCase
             ->method('select')
             ->willReturn($this->selectMock);
 
-        $this->resourceMock = $this->getMockBuilder(AbstractDb::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getConnection', '_construct', 'getMainTable', 'getTable'])
-            ->addMethods(['getCurrentStoreIds'])
-            ->getMock();
+        $this->resourceMock = $this->createPartialMockWithReflection(
+            AbstractDb::class,
+            ['getConnection', '_construct', 'getMainTable', 'getTable', 'getCurrentStoreIds']
+        );
         $this->resourceMock->expects($this->any())
             ->method('getConnection')
             ->willReturn($this->dbMock);
@@ -119,9 +122,9 @@ class CollectionTest extends TestCase
      * @param string $ignoreSql
      *
      * @return void
-     * @dataProvider ignoresDataProvider
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
+    #[DataProvider('ignoresDataProvider')]
     public function testAddStoreFilter($ignoreData, string $ignoreSql): void
     {
         $typeId = 1;
