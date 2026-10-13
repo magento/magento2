@@ -26,6 +26,7 @@
                 <argument name="roleName" value="{{adminNoReportRole.rolename}}"/>
                 <argument name="userPassword" value="{{_CREDS.magento/MAGENTO_ADMIN_PASSWORD}}"/>
                 <argument name="resourceAccess" value="Custom"/>
+                <argument name="storeName" value="{{_defaultWebsite.name}}"/>
             </actionGroup>
             <actionGroup ref="AdminSelectUserRoleResourceActionGroup" stepKey="dashboardAccess">
                 <argument name="resourceId" value="Magento_Backend::dashboard_anchor"/>
