@@ -6,6 +6,7 @@
 namespace Magento\TestFramework\TestCase;
 
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\TestCase\GraphQl\ResponseContainsErrorsException;
 
 /**
  * Test case for Web API functional tests for Graphql.
@@ -145,6 +146,33 @@ abstract class GraphQlAbstract extends WebapiAbstract
     protected function cleanCache()
     {
         return $this->getAppCache()->clean(\Magento\Framework\App\Config::CACHE_TAG);
+    }
+
+    /**
+     * Run a GraphQL query that depends on schema fields dynamically generated from EAV attributes
+     *
+     * @param string $query
+     * @param array $variables
+     * @param string $operationName
+     * @param array $headers
+     * @return array|int|string|float|bool GraphQL call results
+     * @throws \Exception
+     */
+    protected function graphQlQueryWithSchemaCacheRetry(
+        string $query,
+        array $variables = [],
+        string $operationName = '',
+        array $headers = []
+    ) {
+        try {
+            return $this->graphQlQuery($query, $variables, $operationName, $headers);
+        } catch (ResponseContainsErrorsException $e) {
+            $isSchemaCacheRace = preg_match('/is not defined by type|Cannot query field/', $e->getMessage());
+            if (!$isSchemaCacheRace || !$this->cleanCache()) {
+                throw $e;
+            }
+            return $this->graphQlQuery($query, $variables, $operationName, $headers);
+        }
     }
 
     /**
