@@ -317,6 +317,10 @@
         <data key="path">payment/payflowpro_cc_vault/active</data>
         <data key="value">0</data>
     </entity>
+    <entity name="DisablePayflowLinkConfigData">
+        <data key="path">payment/payflow_link/active</data>
+        <data key="value">0</data>
+    </entity>
       <entity name="StorefrontPaypalPayflowProSalePaymentActionOptionConfigData">
         <data key="path">payment/payflowpro/payment_action</data>
         <data key="scope_id">1</data>
