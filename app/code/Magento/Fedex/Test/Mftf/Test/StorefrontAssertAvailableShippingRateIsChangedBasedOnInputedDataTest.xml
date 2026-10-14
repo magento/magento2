@@ -66,6 +66,7 @@
         <actionGroup ref="CustomerCheckoutFillNewShippingAddressActionGroup" stepKey="fillShippingAddress">
             <argument name="address" value="US_Address_TX"/>
         </actionGroup>
+        <pressKey selector="{{CheckoutShippingSection.company}}" parameterArray="[\Facebook\WebDriver\WebDriverKeys::TAB]" stepKey="blurCompanyAfterFillingShippingAddress"/>
         <waitForElementNotVisible selector="{{CheckoutShippingMethodsSection.shippingMethodFreeShippingLabel}}" stepKey="againWaitForFreeShippingLabelNotVisible"/>
         <actionGroup ref="StorefrontCheckForFlatRateShippingMethodAvailabilityActionGroup" stepKey="verifyFlatRateShippingMethodAfterCountryChangeToUS"/>
         <waitForElementNotVisible selector="{{CheckoutShippingMethodsSection.shippingMethodFedexLabel}}" time="120" stepKey="waitForFedexUnavailableLabelToDisappear"/>
