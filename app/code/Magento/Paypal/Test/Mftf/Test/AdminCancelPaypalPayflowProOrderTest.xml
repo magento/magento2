@@ -71,7 +71,7 @@
         <helper class="Magento\Paypal\Test\Mftf\Helper\PayflowProRetry" method="retryPayflowProOrder" stepKey="retryPayflowProOrderIfDeclined">
             <argument name="successSelector">{{CheckoutSuccessMainSection.successTitle}}</argument>
             <argument name="modalDeclineSelector">{{PayFlowCreditCardSection.paymentDeclineModal}}</argument>
-            <argument name="inlineDeclineSelector">{{PayFlowCreditCardSection.paymentDeclineInline}}</argument>
+            <argument name="inlineDeclineSelector">{{CheckoutPaymentSection.errormessage}}</argument>
             <argument name="dismissSelector">{{CheckoutCartProductSection.modalConfirmButton}}</argument>
             <argument name="paymentMethodSelector">{{PayFlowCreditCardSection.paymentMethod}}</argument>
             <argument name="placeOrderSelector">{{CheckoutPaymentSection.placeOrder}}</argument>

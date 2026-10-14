@@ -66,10 +66,14 @@ class PayflowProRetry extends Helper
                     if ($success !== null && trim($success->getText()) === 'Thank you for your purchase!') {
                         return 'success';
                     }
-                    if ($this->visibleElement($driver, $modalDeclineSelector) !== null) {
+                    $modal = $this->visibleElement($driver, $modalDeclineSelector);
+                    if ($modal !== null
+                        && trim($modal->getText()) === 'Your payment has been declined. Please try again.'
+                    ) {
                         return 'modal-decline';
                     }
-                    if ($this->visibleElement($driver, $inlineDeclineSelector) !== null) {
+                    $inline = $this->visibleElement($driver, $inlineDeclineSelector);
+                    if ($inline !== null && str_contains($inline->getText(), 'Transaction has been declined')) {
                         return 'inline-decline';
                     }
                 } catch (StaleElementReferenceException $exception) {
