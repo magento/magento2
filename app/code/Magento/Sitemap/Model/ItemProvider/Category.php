@@ -57,16 +57,22 @@ class Category implements ItemProviderInterface
         $collection = $this->categoryFactory->create()
             ->getCollection($storeId);
 
-        $items = array_map(function ($item) use ($storeId) {
-            return $this->itemFactory->create([
-                'url' => $item->getUrl(),
-                'updatedAt' => $item->getUpdatedAt(),
-                'images' => $item->getImages(),
-                'priority' => $this->configReader->getPriority($storeId),
-                'changeFrequency' => $this->configReader->getChangeFrequency($storeId),
-            ]);
+        return array_map(function ($item) use ($storeId) {
+            return $this->itemFactory->create($this->prepareParams($item, $storeId));
         }, $collection);
+    }
 
-        return $items;
+    /**
+     * {@inheritdoc}
+     */
+    public function prepareParams($item, $storeId)
+    {
+        return [
+            'url' => $item->getUrl(),
+            'updatedAt' => $item->getUpdatedAt(),
+            'images' => $item->getImages(),
+            'priority' => $this->configReader->getPriority($storeId),
+            'changeFrequency' => $this->configReader->getChangeFrequency($storeId),
+        ];
     }
 }
