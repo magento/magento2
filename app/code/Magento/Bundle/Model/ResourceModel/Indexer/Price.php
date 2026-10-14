@@ -738,24 +738,23 @@ class Price implements DimensionalIndexerInterface
             ]
         );
         $select = $this->stockStatusQueryProcessor->execute($select);
-        $connection->query(
-            $connection->insertFromSelect(
-                $select,
-                $this->getBundleSelectionTable(),
-                [
-                    'entity_id',
-                    'customer_group_id',
-                    'website_id',
-                    'option_id',
-                    'selection_id',
-                    'group_type',
-                    'is_required',
-                    'price',
-                    'tier_price',
-                ],
-                \Magento\Framework\DB\Adapter\AdapterInterface::INSERT_ON_DUPLICATE
-            )
+        $query = $connection->insertFromSelect(
+            $select,
+            $this->getBundleSelectionTable(),
+            [
+                'entity_id',
+                'customer_group_id',
+                'website_id',
+                'option_id',
+                'selection_id',
+                'group_type',
+                'is_required',
+                'price',
+                'tier_price',
+            ],
+            \Magento\Framework\DB\Adapter\AdapterInterface::INSERT_ON_DUPLICATE
         );
+        $connection->query(str_replace('AS `idx`', 'AS `idx` USE INDEX (PRIMARY)', $query));
     }
 
     /**

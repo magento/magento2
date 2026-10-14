@@ -6,7 +6,6 @@
 declare(strict_types=1);
 namespace Magento\Customer\Setup\Patch\Data;
 
-use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Psr\Log\LoggerInterface;
@@ -66,21 +65,23 @@ class SessionIDColumnCleanUp implements DataPatchInterface
     private function cleanCustomerVisitorTable()
     {
         $tableName = $this->moduleDataSetup->getTable('customer_visitor');
-        $rawQuery = sprintf(
-            'UPDATE %s SET session_id = NULL WHERE session_id IS NOT NULL',
-            $tableName
-        );
-
         $adapter = $this->moduleDataSetup->getConnection();
-        if ($adapter instanceof Mysql) {
-            do {
-                $result = $adapter->rawQuery($rawQuery)->rowCount();
-            } while ($result > 0);
-        } else {
-            do {
-                $result = $adapter->query($rawQuery)->rowCount();
-            } while ($result > 0);
-        }
+        do {
+            $ids = $adapter->fetchCol(
+                $adapter->select()
+                    ->from($tableName, 'visitor_id')
+                    ->where('session_id IS NOT NULL')
+                    ->limit(1000)
+            );
+            if (!$ids) {
+                break;
+            }
+            $result = $adapter->update(
+                $tableName,
+                ['session_id' => new \Zend_Db_Expr('NULL')],
+                ['visitor_id IN (?)' => $ids]
+            );
+        } while ($result > 0);
     }
 
     /**

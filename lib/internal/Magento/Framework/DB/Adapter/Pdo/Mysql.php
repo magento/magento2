@@ -3477,13 +3477,13 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
     {
         $parts = [];
         foreach ($values as $value) {
-            if ($value === '') {
+            if ($value === '' || $value === null) {
                 continue;
             }
-            $parts[] = $value;
+            $parts[] = $value instanceof \Zend_Db_Expr ? (string) $value : $this->quote($value);
         }
         if (!$parts) {
-            return new \Zend_Db_Expr('0');
+            return new \Zend_Db_Expr('NULL');
         }
         return new \Zend_Db_Expr('FIELD(' . $expression . ', ' . implode(', ', $parts) . ')');
     }
@@ -3503,13 +3503,13 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
     /**
      * @inheritdoc
      */
-    public function createTemporaryTableFromSelect($name, array $indexStatements, Select $select)
+    public function createTemporaryTableFromSelect($name, array $indexStatements, Select $select, $dbEngine = 'innodb')
     {
         $sql = sprintf(
             'CREATE TEMPORARY TABLE %s %s ENGINE=%s IGNORE (%s)',
             $this->quoteIdentifier($name),
             $indexStatements ? '(' . implode(',', $indexStatements) . ')' : '',
-            $this->quoteIdentifier('innodb'),
+            $this->quoteIdentifier($dbEngine),
             $select
         );
         return $this->query($sql, $select->getBind());

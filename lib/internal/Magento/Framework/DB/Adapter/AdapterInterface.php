@@ -870,9 +870,15 @@ interface AdapterInterface
      * @param string $name
      * @param string[] $indexStatements
      * @param \Magento\Framework\DB\Select $select
+     * @param string $dbEngine
      * @return \Zend_Db_Statement_Interface
      */
-    public function createTemporaryTableFromSelect($name, array $indexStatements, \Magento\Framework\DB\Select $select);
+    public function createTemporaryTableFromSelect(
+        $name,
+        array $indexStatements,
+        \Magento\Framework\DB\Select $select,
+        $dbEngine = 'innodb'
+    );
 
     /**
      * Generate fragment of SQL, that combine together (concatenate) the results from data array

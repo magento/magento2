@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Rule\Test\Unit\Model\Condition\Sql;
 
+use Magento\Eav\Api\AttributeRepositoryInterface;
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
@@ -131,5 +132,48 @@ class BuilderTest extends TestCase
             ->willReturnOnConsecutiveCalls($conditions, $conditions, $conditions, $conditions);
 
         $this->builder->attachConditionToCollection($collection, $combine);
+    }
+
+    /**
+     * SKU pieces are passed raw. getFieldSql quotes them, including a value that contains a double quote.
+     */
+    public function testSkuSortListIsPassedRawForQuoting(): void
+    {
+        $connection = $this->createMock(Mysql::class);
+        $connection->method('quoteIdentifier')->willReturn('`e`.`sku`');
+        $connection->expects($this->once())
+            ->method('getFieldSql')
+            ->with('`e`.`sku`', ['sku1', '24"'])
+            ->willReturn(new \Zend_Db_Expr('FIELD(`e`.`sku`, 1)'));
+
+        $select = $this->createMock(Select::class);
+        $select->method('reset')->willReturnSelf();
+        $select->expects($this->once())->method('order');
+
+        $collection = $this->createMock(AbstractCollection::class);
+        $collection->method('getSelect')->willReturn($select);
+
+        $condition = $this->createMock(AbstractCondition::class);
+        $condition->method('getData')->willReturnCallback(static function ($key) {
+            $data = [
+                'attribute' => 'sku',
+                'operator' => '()',
+                'value' => 'sku1,24"',
+            ];
+            return $data[$key] ?? null;
+        });
+        $condition->method('getMappedSqlField')->willReturn('e.sku');
+
+        $combine = $this->createMock(Combine::class);
+        $combine->method('getConditions')->willReturn([$condition]);
+
+        $factory = $this->createMock(ExpressionFactory::class);
+        $factory->method('create')->willReturn($this->createMock(Expression::class));
+        $builder = new Builder($factory, $this->createMock(AttributeRepositoryInterface::class));
+
+        $property = new \ReflectionProperty(Builder::class, '_connection');
+        $property->setValue($builder, $connection);
+        $method = new \ReflectionMethod(Builder::class, 'buildConditions');
+        $method->invoke($builder, $collection, $combine);
     }
 }

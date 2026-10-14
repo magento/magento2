@@ -120,7 +120,7 @@ class TemporaryTableService
             $indexStatements[] = sprintf('%s(%s)', $indexType, $renderedColumns);
         }
 
-        $adapter->createTemporaryTableFromSelect($name, $indexStatements, $select);
+        $adapter->createTemporaryTableFromSelect($name, $indexStatements, $select, $dbEngine);
 
         $this->createdTableAdapters[$name] = $adapter;
 

@@ -111,7 +111,8 @@ class TemporaryTableServiceTest extends TestCase
                 $this->callback(static function (array $indexStatements) use ($expectedSelect) {
                     return str_contains($expectedSelect, implode(',', $indexStatements));
                 }),
-                $this->selectMock
+                $this->selectMock,
+                'INNODB'
             );
 
         $this->assertEquals(

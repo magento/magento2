@@ -282,10 +282,7 @@ class Builder
             }
 
             if (!empty($conditions) && !empty($attributeField)) {
-                $conditionValues = explode(
-                    ', ',
-                    $this->_connection->quote(array_map('trim', explode(',', $conditions)))
-                );
+                $conditionValues = array_map('trim', explode(',', (string) $conditions));
                 $collection->getSelect()->reset(Select::ORDER);
                 $collection->getSelect()->order(
                     $this->_expressionFactory->create(

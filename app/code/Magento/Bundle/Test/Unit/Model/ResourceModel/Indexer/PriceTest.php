@@ -198,7 +198,7 @@ class PriceTest extends TestCase
         $this->connectionMock->expects($this->once())->method('getIfNullSql');
         $this->connectionMock->expects($this->once())->method('getLeastSql');
         $this->connectionMock->method('select')->willReturn($select);
-        $insertSql = 'INSERT INTO catalog_product_index_price_bundle_sel_temp ... ON DUPLICATE KEY UPDATE';
+        $insertSql = 'INSERT INTO catalog_product_index_price_bundle_sel_temp SELECT 1 FROM price AS `idx`';
         $this->connectionMock->expects($this->once())
             ->method('insertFromSelect')
             ->with(
@@ -208,7 +208,9 @@ class PriceTest extends TestCase
                 AdapterInterface::INSERT_ON_DUPLICATE
             )
             ->willReturn($insertSql);
-        $this->connectionMock->expects($this->once())->method('query')->with($insertSql);
+        $this->connectionMock->expects($this->once())
+            ->method('query')
+            ->with($insertSql . ' USE INDEX (PRIMARY)');
 
         $pool = $this->createMock(EntityMetadataInterface::class);
         $pool->expects($this->once())->method('getLinkField')->willReturn($entity);

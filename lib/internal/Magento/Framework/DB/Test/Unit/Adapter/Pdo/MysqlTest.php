@@ -1147,11 +1147,15 @@ class MysqlTest extends TestCase
             "GROUP_CONCAT(DISTINCT sku ORDER BY sku SEPARATOR '|')",
             (string) $adapter->getGroupConcatSql('sku', '|', 'sku', true)
         );
-        $this->assertSame('0', (string) $adapter->getFieldSql('status', []));
-        $this->assertSame('0', (string) $adapter->getFieldSql('status', ['']));
+        $this->assertSame('NULL', (string) $adapter->getFieldSql('status', []));
+        $this->assertSame('NULL', (string) $adapter->getFieldSql('status', ['']));
         $this->assertSame(
-            'FIELD(status, 1, 2, 3)',
+            "FIELD(status, '1', '2', '3')",
             (string) $adapter->getFieldSql('status', [1, '', 2, 3])
+        );
+        $this->assertSame(
+            "FIELD(sku, 'sku1', 'hello\", \"world')",
+            (string) $adapter->getFieldSql('sku', ['sku1', 'hello", "world'])
         );
         $this->assertSame('value', (string) $adapter->castToText('value'));
         $this->assertSame('CAST(value AS DECIMAL(20,6))', (string) $adapter->castToNumeric('value'));
@@ -1175,7 +1179,7 @@ class MysqlTest extends TestCase
                     return $stmt;
                 }
                 $this->assertSame(
-                    'CREATE TEMPORARY TABLE `tmp` (PRIMARY KEY(id)) ENGINE=`innodb` IGNORE (SELECT 1)',
+                    'CREATE TEMPORARY TABLE `tmp` (PRIMARY KEY(id)) ENGINE=`memory` IGNORE (SELECT 1)',
                     $sql
                 );
                 $this->assertSame(['foo' => 'bar'], $bind);
@@ -1185,7 +1189,7 @@ class MysqlTest extends TestCase
         $this->assertSame($stmt, $adapter->createTableLike('new_table', 'origin_table'));
         $this->assertSame(
             $stmt,
-            $adapter->createTemporaryTableFromSelect('tmp', ['PRIMARY KEY(id)'], $select)
+            $adapter->createTemporaryTableFromSelect('tmp', ['PRIMARY KEY(id)'], $select, 'memory')
         );
     }
 }
