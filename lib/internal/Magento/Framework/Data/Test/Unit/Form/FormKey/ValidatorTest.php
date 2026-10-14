@@ -68,4 +68,45 @@ class ValidatorTest extends TestCase
             'formKeyNotEqualToFormKeyInSession' => ['formKeySession', false]
         ];
     }
+
+    /**
+     * @param mixed $formKey
+     */
+    #[DataProvider('rejectedWithoutComparisonDataProvider')]
+    public function testValidateRejectsNonStringOrEmptyFormKeyWithoutComparison($formKey): void
+    {
+        $this->_requestMock->expects($this->once())
+            ->method('getParam')
+            ->with('form_key', null)
+            ->willReturn($formKey);
+        $this->_formKeyMock->expects($this->never())->method('getFormKey');
+
+        $this->assertFalse($this->_model->validate($this->_requestMock));
+    }
+
+    /**
+     * @return array
+     */
+    public static function rejectedWithoutComparisonDataProvider(): array
+    {
+        return [
+            'array' => [['formKey']],
+            'emptyArray' => [[]],
+            'null' => [null],
+            'emptyString' => [''],
+            'zeroString' => ['0'],
+            'integer' => [123456],
+        ];
+    }
+
+    public function testValidateComparesIntegerLikeStringAsString(): void
+    {
+        $this->_requestMock->expects($this->once())
+            ->method('getParam')
+            ->with('form_key', null)
+            ->willReturn('123456');
+        $this->_formKeyMock->expects($this->once())->method('getFormKey')->willReturn('123456');
+
+        $this->assertTrue($this->_model->validate($this->_requestMock));
+    }
 }
