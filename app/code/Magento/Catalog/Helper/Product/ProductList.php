@@ -32,13 +32,6 @@ class ProductList
     protected $scopeConfig;
 
     /**
-     * @var Registry
-     * @deprecated 100.0.2 Registry is no longer used. The category default sort order is applied by the
-     * list block via the toolbar.
-     */
-    private $coreRegistry;
-
-    /**
      * Default limits per page
      *
      * @var array
@@ -54,7 +47,6 @@ class ProductList
         ?Registry $coreRegistry = null
     ) {
         $this->scopeConfig = $scopeConfig;
-        $this->coreRegistry = $coreRegistry;
     }
 
     /**
