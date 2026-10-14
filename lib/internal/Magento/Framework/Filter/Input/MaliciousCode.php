@@ -73,12 +73,25 @@ class MaliciousCode implements FilterInterface
      */
     public function filter($value)
     {
+        return $this->purifier->purify($this->stripMaliciousExpressions($value));
+    }
+
+    /**
+     * Remove malicious expressions without HTML purification.
+     *
+     * Use for raw content that contains template directives, which HTMLPurifier would corrupt.
+     *
+     * @param string|array $value
+     * @return string|array
+     */
+    public function stripMaliciousExpressions(string $value)
+    {
         $replaced = 0;
         do {
             $value = preg_replace($this->_expressions, '', $value ?? '', -1, $replaced);
         } while ($replaced !== 0);
 
-        return $this->purifier->purify($value);
+        return $value;
     }
 
     /**
