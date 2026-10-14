@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Paypal\Test\Mftf\Helper;
 
 use Facebook\WebDriver\Exception\StaleElementReferenceException;
+use Facebook\WebDriver\Exception\TimeoutException;
 use Facebook\WebDriver\WebDriver;
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverElement;
@@ -17,12 +18,12 @@ use Magento\FunctionalTestingFramework\Module\MagentoWebDriver;
 use RuntimeException;
 
 /**
- * Recover a confirmed Payflow Pro sandbox decline with one additional submission.
+ * Recover a declined or timed-out Payflow Pro sandbox checkout with one additional submission.
  */
 class PayflowProRetry extends Helper
 {
     /**
-     * Wait for success or a recognized decline, and retry only the latter.
+     * Retry a decline or missing success once, only while Checkout remains ready for payment.
      *
      * @param string $successSelector
      * @param string $modalDeclineSelector
@@ -59,35 +60,38 @@ class PayflowProRetry extends Helper
         /** @var MagentoWebDriver $module */
         $module = $this->getModule('\\' . MagentoWebDriver::class);
         $driver = $module->webDriver;
-        $outcome = $driver->wait(120)->until(
-            function (WebDriver $driver) use ($successSelector, $modalDeclineSelector, $inlineDeclineSelector) {
-                try {
-                    $success = $this->visibleElement($driver, $successSelector);
-                    if ($success !== null && trim($success->getText()) === 'Thank you for your purchase!') {
-                        return 'success';
+        try {
+            $outcome = $driver->wait(120)->until(
+                function (WebDriver $driver) use ($successSelector, $modalDeclineSelector, $inlineDeclineSelector) {
+                    try {
+                        $success = $this->visibleElement($driver, $successSelector);
+                        if ($success !== null && trim($success->getText()) === 'Thank you for your purchase!') {
+                            return 'success';
+                        }
+                        $modal = $this->visibleElement($driver, $modalDeclineSelector);
+                        if ($modal !== null
+                            && trim($modal->getText()) === 'Your payment has been declined. Please try again.'
+                        ) {
+                            return 'modal-decline';
+                        }
+                        $inline = $this->visibleElement($driver, $inlineDeclineSelector);
+                        if ($inline !== null && str_contains($inline->getText(), 'Transaction has been declined')) {
+                            return 'inline-decline';
+                        }
+                    } catch (StaleElementReferenceException $exception) {
+                        return false;
                     }
-                    $modal = $this->visibleElement($driver, $modalDeclineSelector);
-                    if ($modal !== null
-                        && trim($modal->getText()) === 'Your payment has been declined. Please try again.'
-                    ) {
-                        return 'modal-decline';
-                    }
-                    $inline = $this->visibleElement($driver, $inlineDeclineSelector);
-                    if ($inline !== null && str_contains($inline->getText(), 'Transaction has been declined')) {
-                        return 'inline-decline';
-                    }
-                } catch (StaleElementReferenceException $exception) {
                     return false;
-                }
-                return false;
-            },
-            'No Payflow Pro success message or recognized decline within 120 seconds; refusing a blind retry.'
-        );
+                },
+                'No Payflow Pro success message or recognized decline within 120 seconds.'
+            );
+        } catch (TimeoutException $exception) {
+            $outcome = 'missing-success';
+        }
         if ($outcome === 'success') {
             return;
         }
 
-        $this->debugSection('Payflow Pro retry', 'One additional submission after ' . $outcome);
         if ($outcome === 'modal-decline') {
             $card = $this->visibleElement($driver, $cardNumberSelector);
             if ($card === null) {
@@ -109,12 +113,34 @@ class PayflowProRetry extends Helper
             $module->selectOption($yearSelector, $year);
         }
 
+        $module->waitForLoadingMaskToDisappear(120);
+        $success = $this->visibleElement($driver, $successSelector);
+        if ($success !== null && trim($success->getText()) === 'Thank you for your purchase!') {
+            return;
+        }
         $path = parse_url($driver->getCurrentURL(), PHP_URL_PATH);
         if (!is_string($path) || !preg_match('~/checkout/?$~', $path)) {
             throw new RuntimeException('Payflow Pro retry refused: browser is no longer on Checkout.');
         }
-        $module->waitForLoadingMaskToDisappear(120);
+        if ($outcome === 'missing-success') {
+            $modal = $this->visibleElement($driver, $modalDeclineSelector);
+            $inline = $this->visibleElement($driver, $inlineDeclineSelector);
+            if ($modal !== null || ($inline !== null && trim($inline->getText()) !== '')) {
+                throw new RuntimeException('Payflow Pro timeout retry refused: an unrecognized error is displayed.');
+            }
+            $card = $this->visibleElement($driver, $cardNumberSelector);
+            if ($card === null || !$card->isEnabled() || $card->getAttribute('readonly') !== null) {
+                throw new RuntimeException('Payflow Pro timeout retry refused: card form is not editable.');
+            }
+        }
         $module->waitForElementClickable($placeOrderSelector, 30);
+        $button = $this->visibleElement($driver, $placeOrderSelector);
+        if ($button === null || !$button->isEnabled()
+            || preg_match('/(?:^|\s)disabled(?:\s|$)/', $button->getAttribute('class') ?? '')
+        ) {
+            throw new RuntimeException('Payflow Pro retry refused: Place Order is unavailable or disabled.');
+        }
+        $this->debugSection('Payflow Pro retry', 'One additional sandbox submission after ' . $outcome);
         $module->click($placeOrderSelector);
         $module->waitForPageLoad(120);
         $module->waitForLoadingMaskToDisappear(120);

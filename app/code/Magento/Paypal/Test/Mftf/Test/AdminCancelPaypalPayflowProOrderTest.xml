@@ -64,11 +64,11 @@
         <waitForPageLoad stepKey="waitForFillCardData"/>
         <!-- Stagger the Payflow Pro charge so it doesn't land in the same submission window as other Payflow Protests running concurrently in the parallel CE/EE/B2B suites against the same shared sandbox account -->
         <wait time="30" stepKey="staggerBeforePayflowSubmit"/>
-        <comment userInput="BIC workaround: inline Place Order with one retry after a confirmed Payflow Pro decline" stepKey="clickOnPlaceOrder"/>
+        <comment userInput="BIC workaround: inline Place Order with one retry after a Payflow Pro decline or missing success message" stepKey="clickOnPlaceOrder"/>
         <waitForElementClickable selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="waitForPlaceOrderButtonClickable"/>
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrderButton"/>
         <waitForPageLoad time="120" stepKey="waitForPayflowProOrderPlaced"/>
-        <helper class="Magento\Paypal\Test\Mftf\Helper\PayflowProRetry" method="retryPayflowProOrder" stepKey="retryPayflowProOrderIfDeclined">
+        <helper class="Magento\Paypal\Test\Mftf\Helper\PayflowProRetry" method="retryPayflowProOrder" stepKey="retryPayflowProOrderIfDeclinedOrSuccessMissing">
             <argument name="successSelector">{{CheckoutSuccessMainSection.successTitle}}</argument>
             <argument name="modalDeclineSelector">{{PayFlowCreditCardSection.paymentDeclineModal}}</argument>
             <argument name="inlineDeclineSelector">{{CheckoutPaymentSection.errormessage}}</argument>
