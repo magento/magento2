@@ -16,16 +16,17 @@ class Helper extends \Magento\Framework\DB\Helper
     /**
      * Constants to be used for DB
      */
-    const DB_MAX_PACKET_SIZE = 1048576;
+    public const DB_MAX_PACKET_SIZE = 1048576;
 
     // Maximal packet length by default in MySQL
-    const DB_MAX_PACKET_COEFFICIENT = 0.85;
+    public const DB_MAX_PACKET_COEFFICIENT = 0.85;
 
     // The coefficient of useful data from maximum packet length
 
     /**
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param string $modulePrefix
+     * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      */
     public function __construct(\Magento\Framework\App\ResourceConnection $resource, $modulePrefix = 'importexport')
     {
@@ -53,11 +54,15 @@ class Helper extends \Magento\Framework\DB\Helper
     public function getNextAutoincrement($tableName)
     {
         $connection = $this->getConnection();
-        $entityStatus = $connection->showTableStatus($tableName);
-
-        if (empty($entityStatus['Auto_increment'])) {
+        $sql = sprintf(
+            'SELECT AUTO_INCREMENT FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = %s AND TABLE_SCHEMA = DATABASE()',
+            $connection->quote($tableName)
+        );
+        $entityStatus = $connection->fetchRow($sql);
+        if (empty($entityStatus['AUTO_INCREMENT'])) {
             throw new \Magento\Framework\Exception\LocalizedException(__('Cannot get autoincrement value'));
         }
-        return $entityStatus['Auto_increment'];
+
+        return $entityStatus['AUTO_INCREMENT'];
     }
 }
