@@ -9,13 +9,3 @@ It enables the following payment methods:
 * PayPal Payments Pro
 * PayPal Credit
 * PayFlow Payment Gateway
-
-## MFTF sandbox retry
-
-`AdminCancelPaypalPayflowProOrderTest` preserves its dedicated test card and retries Place Order at most once
-after a recognized Payflow Pro decline. `PayflowProRetry` handles both the inline decline banner and the
-decline modal. Message containers are located by attributes, not text; the helper checks their contents to avoid
-retrying unrelated or empty errors. Dismissing the modal reloads Checkout, so it waits for the old form to detach, reselects
-Payflow Pro, and restores the same card details before resubmitting. Missing success text without a confirmed
-decline does not trigger a retry. The existing success, cancellation, authorization, and void assertions remain
-mandatory; a second decline still fails the test.
