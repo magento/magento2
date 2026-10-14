@@ -9,15 +9,19 @@ namespace Magento\Customer\Model\ForgotPasswordToken;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\State\ExpiredException;
 use Magento\Framework\Phrase;
 
 /**
  * Get Customer By reset password token
+ *
  * @SuppressWarnings(PHPMD.LongVariable)
  * @deprecated Rp Tokens cannot be looked up directly
+ * @see not used anymore
  */
 class GetCustomerByToken
 {
@@ -32,17 +36,24 @@ class GetCustomerByToken
     private $searchCriteriaBuilder;
 
     /**
-     * ForgotPassword constructor.
-     *
+     * @var CollectionFactory
+     */
+    private $collectionFactory;
+
+    /**
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param CollectionFactory|null $collectionFactory
      */
     public function __construct(
         CustomerRepositoryInterface $customerRepository,
-        SearchCriteriaBuilder $searchCriteriaBuilder
+        SearchCriteriaBuilder $searchCriteriaBuilder,
+        ?CollectionFactory $collectionFactory = null
     ) {
         $this->customerRepository = $customerRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->collectionFactory = $collectionFactory
+            ?? ObjectManager::getInstance()->get(CollectionFactory::class);
     }
 
     /**
@@ -53,38 +64,27 @@ class GetCustomerByToken
      * @return \Magento\Customer\Api\Data\CustomerInterface
      * @throws ExpiredException
      * @throws NoSuchEntityException
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function execute(string $resetPasswordToken): CustomerInterface
     {
-        $this->searchCriteriaBuilder->addFilter(
-            'rp_token',
-            $resetPasswordToken
-        );
-        $this->searchCriteriaBuilder->setPageSize(1);
-        $found = $this->customerRepository->getList(
-            $this->searchCriteriaBuilder->create()
-        );
+        $collection = $this->collectionFactory->create();
+        $collection->addAttributeToFilter('rp_token', $resetPasswordToken);
+        $size = $collection->getSize();
 
-        if ($found->getTotalCount() > 1) {
-            //Failed to generated unique RP token
+        if ($size > 1) {
             throw new ExpiredException(
                 new Phrase('Reset password token expired.')
             );
         }
-        if ($found->getTotalCount() === 0) {
-            //Customer with such token not found.
+        if ($size === 0) {
             throw new NoSuchEntityException(
                 new Phrase(
                     'No such entity with rp_token = %value',
-                    [
-                        'value' => $resetPasswordToken
-                    ]
+                    ['value' => $resetPasswordToken]
                 )
             );
         }
 
-        //Unique customer found.
-        return $found->getItems()[0];
+        return $collection->getFirstItem();
     }
 }
