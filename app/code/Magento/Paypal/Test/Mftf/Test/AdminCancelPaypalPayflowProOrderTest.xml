@@ -59,12 +59,32 @@
         <waitForPageLoad stepKey="waitForLoadingMaskAfterPaymentMethodSelection"/>
         <!--Fill Card Data  and place an order-->
         <actionGroup ref="StorefrontPaypalFillCardDataActionGroup" stepKey="fillCardDataPaypal">
-            <argument name="cardData" value="VisaDefaultCard"/>
+            <argument name="cardData" value="CancelOrderPayflowCard"/>
         </actionGroup>
         <waitForPageLoad stepKey="waitForFillCardData"/>
         <!-- Stagger the Payflow Pro charge so it doesn't land in the same submission window as other Payflow Protests running concurrently in the parallel CE/EE/B2B suites against the same shared sandbox account -->
         <wait time="30" stepKey="staggerBeforePayflowSubmit"/>
-        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickOnPlaceOrder"/>
+        <comment userInput="BIC workaround: inline Place Order with one retry after a Payflow Pro decline or missing success message" stepKey="clickOnPlaceOrder"/>
+        <waitForElementClickable selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="waitForPlaceOrderButtonClickable"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrderButton"/>
+        <waitForPageLoad time="120" stepKey="waitForPayflowProOrderPlaced"/>
+        <helper class="Magento\Paypal\Test\Mftf\Helper\PayflowProRetry" method="retryPayflowProOrder" stepKey="retryPayflowProOrderIfDeclinedOrSuccessMissing">
+            <argument name="successSelector">{{CheckoutSuccessMainSection.successTitle}}</argument>
+            <argument name="modalDeclineSelector">{{PayFlowCreditCardSection.paymentDeclineModal}}</argument>
+            <argument name="inlineDeclineSelector">{{CheckoutPaymentSection.errormessage}}</argument>
+            <argument name="dismissSelector">{{CheckoutCartProductSection.modalConfirmButton}}</argument>
+            <argument name="paymentMethodSelector">{{PayFlowCreditCardSection.paymentMethod}}</argument>
+            <argument name="placeOrderSelector">{{CheckoutPaymentSection.placeOrder}}</argument>
+            <argument name="cardNumberSelector">{{StorefrontPaypalCheckoutSection.cardNumber}}</argument>
+            <argument name="cvvSelector">{{StorefrontPaypalCheckoutSection.verificationNumber}}</argument>
+            <argument name="monthSelector">{{StorefrontPaypalCheckoutSection.expirationMonth}}</argument>
+            <argument name="yearSelector">{{StorefrontPaypalCheckoutSection.expirationYear}}</argument>
+            <argument name="cardNumber">{{CancelOrderPayflowCard.cardNumber}}</argument>
+            <argument name="cvv">{{CancelOrderPayflowCard.cvv}}</argument>
+            <argument name="month">{{CancelOrderPayflowCard.month}}</argument>
+            <argument name="year">{{CancelOrderPayflowCard.year}}</argument>
+        </helper>
+        <waitForText selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" time="120" stepKey="waitForLoadSuccessPage"/>
         <!-- Grab order number-->
         <waitForElementVisible selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="waitForOrderNumberToBeGrabbed"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
