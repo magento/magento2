@@ -84,7 +84,7 @@ class MaliciousCode implements FilterInterface
      * @param string|array $value
      * @return string|array
      */
-    public function stripMaliciousExpressions(string $value)
+    public function stripMaliciousExpressions($value)
     {
         $replaced = 0;
         do {
