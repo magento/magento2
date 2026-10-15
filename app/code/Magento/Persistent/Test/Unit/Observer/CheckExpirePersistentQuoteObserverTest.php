@@ -18,6 +18,8 @@ use Magento\Persistent\Observer\CheckExpirePersistentQuoteObserver;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Quote\Model\Quote;
+use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Framework\Exception\LocalizedException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Rule\InvokedCount;
 use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
@@ -83,6 +85,11 @@ class CheckExpirePersistentQuoteObserverTest extends TestCase
     private $quoteResourceWrapperMock;
 
     /**
+     * @var MockObject|CartRepositoryInterface
+     */
+    private $quoteRepositoryMock;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -102,6 +109,7 @@ class CheckExpirePersistentQuoteObserverTest extends TestCase
             ->addMethods(['getRequestUri', 'getServer'])
             ->getMockForAbstractClass();
         $this->quoteResourceWrapperMock = $this->createMock(QuoteResourceWrapper::class);
+        $this->quoteRepositoryMock = $this->createMock(CartRepositoryInterface::class);
 
         $this->model = new CheckExpirePersistentQuoteObserver(
             $this->sessionMock,
@@ -111,6 +119,7 @@ class CheckExpirePersistentQuoteObserverTest extends TestCase
             $this->customerSessionMock,
             $this->checkoutSessionMock,
             $this->requestMock,
+            $this->quoteRepositoryMock,
             $this->quoteResourceWrapperMock
         );
     }
@@ -139,13 +148,9 @@ class CheckExpirePersistentQuoteObserverTest extends TestCase
         $this->checkoutSessionMock->expects($this->any())->method('getQuoteId')->willReturn($quoteId);
 
         $this->quoteResourceWrapperMock->expects($this->once())
-            ->method('isActive')
+            ->method('getFlags')
             ->with($quoteId)
-            ->willReturn(true);
-        $this->quoteResourceWrapperMock->expects($this->once())
-            ->method('isPersistent')
-            ->with($quoteId)
-            ->willReturn(true);
+            ->willReturn(['is_active' => true, 'is_persistent' => true]);
 
         $this->eventManagerMock->expects($this->once())->method('dispatch');
         $this->quoteManagerMock->expects($this->once())->method('expire');
@@ -177,8 +182,7 @@ class CheckExpirePersistentQuoteObserverTest extends TestCase
         $this->checkoutSessionMock->expects($this->any())->method('getQuote')->willReturn($quoteMock);
 
         // Loaded quote is used, DB wrapper is never queried
-        $this->quoteResourceWrapperMock->expects($this->never())->method('isActive');
-        $this->quoteResourceWrapperMock->expects($this->never())->method('isPersistent');
+        $this->quoteResourceWrapperMock->expects($this->never())->method('getFlags');
 
         $this->eventManagerMock->expects($this->once())->method('dispatch');
         $this->quoteManagerMock->expects($this->once())->method('expire');
@@ -203,17 +207,13 @@ class CheckExpirePersistentQuoteObserverTest extends TestCase
         $this->checkoutSessionMock->expects($this->any())->method('hasQuote')->willReturn(true);
         $this->checkoutSessionMock->expects($this->any())
             ->method('getQuote')
-            ->willThrowException(new \Exception('Unable to load quote'));
+            ->willThrowException(new LocalizedException(__('Unable to load quote')));
 
         // On failure to read the loaded quote, fall back to the DB wrapper
         $this->quoteResourceWrapperMock->expects($this->once())
-            ->method('isActive')
+            ->method('getFlags')
             ->with($quoteId)
-            ->willReturn(true);
-        $this->quoteResourceWrapperMock->expects($this->once())
-            ->method('isPersistent')
-            ->with($quoteId)
-            ->willReturn(true);
+            ->willReturn(['is_active' => true, 'is_persistent' => true]);
 
         $this->eventManagerMock->expects($this->once())->method('dispatch');
         $this->quoteManagerMock->expects($this->once())->method('expire');
@@ -266,9 +266,9 @@ class CheckExpirePersistentQuoteObserverTest extends TestCase
 
         // Mock the QuoteResourceWrapper calls
         $this->quoteResourceWrapperMock->expects($this->any())
-            ->method('isPersistent')
+            ->method('getFlags')
             ->with($quoteId)
-            ->willReturn(true);
+            ->willReturn(['is_active' => true, 'is_persistent' => true]);
 
         $this->eventManagerMock->expects($this->{$dispatchCounter}())->method('dispatch');
         $this->quoteManagerMock->expects($this->{$expireCounter}())->method('expire');

@@ -14,6 +14,8 @@ use Magento\Persistent\Helper\Session;
 use Magento\Persistent\Model\QuoteManager;
 use Magento\Persistent\Model\QuoteResourceWrapper;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Quote\Api\CartRepositoryInterface;
 
 /**
  * Observer of expired session
@@ -84,6 +86,13 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
     private ?QuoteResourceWrapper $quoteResourceWrapper;
 
     /**
+     * Quote repository kept for backward compatibility of the constructor signature
+     *
+     * @var CartRepositoryInterface
+     */
+    private CartRepositoryInterface $quoteRepository;
+
+    /**
      * Constructor
      *
      * @param Session $persistentSession
@@ -93,6 +102,7 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param RequestInterface $request
+     * @param CartRepositoryInterface $quoteRepository
      * @param QuoteResourceWrapper|null $quoteResourceWrapper
      */
     public function __construct(
@@ -103,6 +113,7 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Checkout\Model\Session $checkoutSession,
         RequestInterface                $request,
+        CartRepositoryInterface         $quoteRepository,
         ?QuoteResourceWrapper           $quoteResourceWrapper = null
     ) {
         $this->_persistentSession = $persistentSession;
@@ -112,6 +123,7 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
         $this->_eventManager = $eventManager;
         $this->_persistentData = $persistentData;
         $this->request = $request;
+        $this->quoteRepository = $quoteRepository;
         $this->quoteResourceWrapper = $quoteResourceWrapper ?: ObjectManager::getInstance()
             ->get(QuoteResourceWrapper::class);
     }
@@ -143,7 +155,7 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
             $this->_checkoutSession->getQuoteId() &&
             // persistent session does not expire on onepage checkout page
             !$this->isRequestFromCheckoutPage($this->request) &&
-            $this->isQuotePersistent()
+            $this->getQuoteFlags()['is_persistent']
         ) {
             $this->_eventManager->dispatch('persistent_session_expired');
             $this->quoteManager->expire();
@@ -161,47 +173,33 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
         if (!($this->_persistentData->isEnabled() && $this->_persistentData->isShoppingCartPersist())
             && !$this->_customerSession->isLoggedIn()
             && $this->_checkoutSession->getQuoteId()
-            && $this->isQuoteActive()
         ) {
-            return $this->isQuotePersistent();
+            $flags = $this->getQuoteFlags();
+            return $flags['is_active'] && $flags['is_persistent'];
         }
         return false;
     }
 
     /**
-     * Check whether the current checkout quote is persistent, using the loaded quote when available.
+     * Resolve the is_active and is_persistent flags, preferring the loaded quote and reading both in one DB call.
      *
-     * @return bool
+     * @return array{is_active: bool, is_persistent: bool}
      */
-    private function isQuotePersistent(): bool
+    private function getQuoteFlags(): array
     {
         if ($this->_checkoutSession->hasQuote()) {
             try {
-                return (bool)$this->_checkoutSession->getQuote()->getIsPersistent();
-            } catch (\Exception $e) {
-                return $this->quoteResourceWrapper->isPersistent($this->_checkoutSession->getQuoteId());
+                $quote = $this->_checkoutSession->getQuote();
+                return [
+                    'is_active' => (bool)$quote->getIsActive(),
+                    'is_persistent' => (bool)$quote->getIsPersistent(),
+                ];
+            } catch (LocalizedException $e) {
+                return $this->quoteResourceWrapper->getFlags($this->_checkoutSession->getQuoteId());
             }
         }
 
-        return $this->quoteResourceWrapper->isPersistent($this->_checkoutSession->getQuoteId());
-    }
-
-    /**
-     * Check whether the current checkout quote is active, using the loaded quote when available.
-     *
-     * @return bool
-     */
-    private function isQuoteActive(): bool
-    {
-        if ($this->_checkoutSession->hasQuote()) {
-            try {
-                return (bool)$this->_checkoutSession->getQuote()->getIsActive();
-            } catch (\Exception $e) {
-                return $this->quoteResourceWrapper->isActive($this->_checkoutSession->getQuoteId());
-            }
-        }
-
-        return $this->quoteResourceWrapper->isActive($this->_checkoutSession->getQuoteId());
+        return $this->quoteResourceWrapper->getFlags($this->_checkoutSession->getQuoteId());
     }
 
     /**

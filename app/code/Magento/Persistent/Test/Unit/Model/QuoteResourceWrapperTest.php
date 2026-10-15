@@ -54,17 +54,22 @@ class QuoteResourceWrapperTest extends TestCase
     }
 
     /**
-     * Test isActive with null quote ID
+     * Null quote id short-circuits without any DB access.
      */
-    public function testIsActiveWithNullQuoteId(): void
+    public function testGetFlagsWithNullQuoteId(): void
     {
-        $this->assertFalse($this->model->isActive(null));
+        $this->connectionMock->expects($this->never())->method('fetchRow');
+
+        $this->assertSame(
+            ['is_active' => false, 'is_persistent' => false],
+            $this->model->getFlags(null)
+        );
     }
 
     /**
-     * Test isActive with active quote
+     * Both flags are read in a single row fetch.
      */
-    public function testIsActiveWithActiveQuote(): void
+    public function testGetFlagsReadsBothColumnsInOneQuery(): void
     {
         $quoteId = 123;
         $tableName = 'quote';
@@ -76,7 +81,7 @@ class QuoteResourceWrapperTest extends TestCase
 
         $this->selectMock->expects($this->once())
             ->method('from')
-            ->with($tableName, 'is_active')
+            ->with($tableName, ['is_active', 'is_persistent'])
             ->willReturnSelf();
 
         $this->selectMock->expects($this->once())
@@ -85,138 +90,57 @@ class QuoteResourceWrapperTest extends TestCase
             ->willReturnSelf();
 
         $this->connectionMock->expects($this->once())
-            ->method('fetchOne')
+            ->method('fetchRow')
             ->with($this->selectMock)
-            ->willReturn('1');
+            ->willReturn(['is_active' => '1', 'is_persistent' => '0']);
 
-        $this->assertTrue($this->model->isActive($quoteId));
+        $this->assertSame(
+            ['is_active' => true, 'is_persistent' => false],
+            $this->model->getFlags($quoteId)
+        );
     }
 
     /**
-     * Test isActive with inactive quote
+     * A missing quote row yields false for both flags.
      */
-    public function testIsActiveWithInactiveQuote(): void
+    public function testGetFlagsWithMissingRow(): void
     {
         $quoteId = 123;
-        $tableName = 'quote';
 
         $this->resourceConnectionMock->expects($this->once())
             ->method('getTableName')
-            ->with('quote')
-            ->willReturn($tableName);
-
-        $this->selectMock->expects($this->once())
-            ->method('from')
-            ->with($tableName, 'is_active')
-            ->willReturnSelf();
-
-        $this->selectMock->expects($this->once())
-            ->method('where')
-            ->with('entity_id = ?', $quoteId)
-            ->willReturnSelf();
-
+            ->willReturn('quote');
+        $this->selectMock->expects($this->once())->method('from')->willReturnSelf();
+        $this->selectMock->expects($this->once())->method('where')->willReturnSelf();
         $this->connectionMock->expects($this->once())
-            ->method('fetchOne')
-            ->with($this->selectMock)
-            ->willReturn('0');
+            ->method('fetchRow')
+            ->willReturn(false);
 
-        $this->assertFalse($this->model->isActive($quoteId));
+        $this->assertSame(
+            ['is_active' => false, 'is_persistent' => false],
+            $this->model->getFlags($quoteId)
+        );
     }
 
     /**
-     * Test isPersistent with null quote ID
+     * Values coming back from the database are cast to boolean.
      */
-    public function testIsPersistentWithNullQuoteId(): void
-    {
-        $this->assertFalse($this->model->isPersistent(null));
-    }
-
-    /**
-     * Test isPersistent with persistent quote
-     */
-    public function testIsPersistentWithPersistentQuote(): void
+    public function testGetFlagsTypeCasting(): void
     {
         $quoteId = 123;
-        $tableName = 'quote';
 
         $this->resourceConnectionMock->expects($this->once())
             ->method('getTableName')
-            ->with('quote')
-            ->willReturn($tableName);
-
-        $this->selectMock->expects($this->once())
-            ->method('from')
-            ->with($tableName, 'is_persistent')
-            ->willReturnSelf();
-
-        $this->selectMock->expects($this->once())
-            ->method('where')
-            ->with('entity_id = ?', $quoteId)
-            ->willReturnSelf();
-
+            ->willReturn('quote');
+        $this->selectMock->expects($this->once())->method('from')->willReturnSelf();
+        $this->selectMock->expects($this->once())->method('where')->willReturnSelf();
         $this->connectionMock->expects($this->once())
-            ->method('fetchOne')
-            ->with($this->selectMock)
-            ->willReturn('1');
+            ->method('fetchRow')
+            ->willReturn(['is_active' => '', 'is_persistent' => '1']);
 
-        $this->assertTrue($this->model->isPersistent($quoteId));
-    }
-
-    /**
-     * Test isPersistent with non-persistent quote
-     */
-    public function testIsPersistentWithNonPersistentQuote(): void
-    {
-        $quoteId = 123;
-        $tableName = 'quote';
-
-        $this->resourceConnectionMock->expects($this->once())
-            ->method('getTableName')
-            ->with('quote')
-            ->willReturn($tableName);
-
-        $this->selectMock->expects($this->once())
-            ->method('from')
-            ->with($tableName, 'is_persistent')
-            ->willReturnSelf();
-
-        $this->selectMock->expects($this->once())
-            ->method('where')
-            ->with('entity_id = ?', $quoteId)
-            ->willReturnSelf();
-
-        $this->connectionMock->expects($this->once())
-            ->method('fetchOne')
-            ->with($this->selectMock)
-            ->willReturn('0');
-
-        $this->assertFalse($this->model->isPersistent($quoteId));
-    }
-
-    /**
-     * Test type casting from database on isPersistent
-     */
-    public function testIsPersistentTypeCasting(): void
-    {
-        $quoteId = 123;
-        $tableName = 'quote';
-
-        $this->resourceConnectionMock->expects($this->once())
-            ->method('getTableName')
-            ->willReturn($tableName);
-
-        $this->selectMock->expects($this->once())
-            ->method('from')
-            ->willReturnSelf();
-
-        $this->selectMock->expects($this->once())
-            ->method('where')
-            ->willReturnSelf();
-
-        $this->connectionMock->expects($this->once())
-            ->method('fetchOne')
-            ->willReturn('');
-
-        $this->assertFalse($this->model->isPersistent($quoteId));
+        $this->assertSame(
+            ['is_active' => false, 'is_persistent' => true],
+            $this->model->getFlags($quoteId)
+        );
     }
 }

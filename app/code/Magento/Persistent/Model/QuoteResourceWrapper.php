@@ -22,42 +22,26 @@ class QuoteResourceWrapper
     }
 
     /**
-     * Check if quote is active.
+     * Fetch the is_active and is_persistent flags for a quote in a single query.
      *
      * @param int|null $quoteId
-     * @return bool
+     * @return array{is_active: bool, is_persistent: bool}
      */
-    public function isActive(?int $quoteId): bool
+    public function getFlags(?int $quoteId): array
     {
         if (empty($quoteId)) {
-            return false;
+            return ['is_active' => false, 'is_persistent' => false];
         }
         $table = $this->resourceConnection->getTableName('quote');
         $connection = $this->resourceConnection->getConnection();
         $select = $connection->select()
-            ->from($table, 'is_active')
+            ->from($table, ['is_active', 'is_persistent'])
             ->where('entity_id = ?', $quoteId);
+        $row = $connection->fetchRow($select) ?: [];
 
-        return (bool)$connection->fetchOne($select);
-    }
-
-    /**
-     * Check if quote is persistent.
-     *
-     * @param int|null $quoteId
-     * @return bool
-     */
-    public function isPersistent(?int $quoteId): bool
-    {
-        if (empty($quoteId)) {
-            return false;
-        }
-        $table = $this->resourceConnection->getTableName('quote');
-        $connection = $this->resourceConnection->getConnection();
-        $select = $connection->select()
-            ->from($table, 'is_persistent')
-            ->where('entity_id = ?', $quoteId);
-
-        return (bool)$connection->fetchOne($select);
+        return [
+            'is_active' => (bool)($row['is_active'] ?? false),
+            'is_persistent' => (bool)($row['is_persistent'] ?? false),
+        ];
     }
 }
