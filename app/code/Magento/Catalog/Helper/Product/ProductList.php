@@ -41,6 +41,7 @@ class ProductList
     /**
      * @param ScopeConfigInterface $scopeConfig
      * @param Registry|null $coreRegistry @deprecated - no longer used
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
