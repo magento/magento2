@@ -80,10 +80,12 @@
             </actionGroup>
             <waitForPageLoad stepKey="waitForFillCardData"/>
             <checkOption selector="{{StorefrontOnePageCheckoutPaymentSection.saveForLaterUse}}" stepKey="checkSaveForLaterUse"/>
-            <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="clickOnPlaceOrder">
-                <argument name="orderNumberMessage" value="CONST.successCheckoutOrderNumberMessage"/>
-                <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage"/>
-            </actionGroup>
+            <waitForElementClickable selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="waitForPlaceOrderButton"/>
+            <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
+            <waitForPageLoad time="120" stepKey="waitForPayflowProOrderPlaced"/>
+            <waitForText selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" time="120" stepKey="waitForLoadSuccessPage"/>
+            <waitForText selector="{{CheckoutSuccessMainSection.success}}" userInput="{{CONST.successCheckoutOrderNumberMessage}}" time="30" stepKey="seeOrderNumber"/>
+            <waitForText selector="{{CheckoutSuccessMainSection.success}}" userInput="{{CONST.successCheckoutEmailYouMessage}}" time="30" stepKey="seeEmailYou"/>
         </before>
         <after>
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
