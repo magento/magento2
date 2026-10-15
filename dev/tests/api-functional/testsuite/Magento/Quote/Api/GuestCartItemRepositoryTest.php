@@ -10,12 +10,15 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\CatalogInventory\Model\Stock;
+use Magento\Checkout\Test\Fixture\SetBillingAddress as SetBillingAddressFixture;
+use Magento\Checkout\Test\Fixture\SetShippingAddress as SetShippingAddressFixture;
 use Magento\Framework\Phrase;
 use Magento\Framework\Webapi\Rest\Request;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\QuoteIdMask;
 use Magento\Quote\Model\QuoteIdMaskFactory;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
+use Magento\Quote\Test\Fixture\AddProductToCart as AddProductToCartFixture;
 use Magento\Quote\Test\Fixture\GuestCart as GuestCartFixture;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Fixture\DataFixture;
@@ -51,14 +54,22 @@ class GuestCartItemRepositoryTest extends WebapiAbstract
 
     /**
      * Test quote items
-     *
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_items_saved.php
      */
+    #[
+        DataFixture(ProductFixture::class, ['sku' => 'simple'], 'product'),
+        DataFixture(GuestCartFixture::class, ['reserved_order_id' => 'guest_order_item_with_items'], 'cart'),
+        DataFixture(
+            AddProductToCartFixture::class,
+            ['cart_id' => '$cart.id$', 'product_id' => '$product.id$', 'qty' => 1]
+        ),
+        DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart.id$']),
+    ]
     public function testGetList()
     {
         /** @var Quote $quote */
         $quote = $this->objectManager->create(Quote::class);
-        $quote->load('test_order_item_with_items', 'reserved_order_id');
+        $quote->load('guest_order_item_with_items', 'reserved_order_id');
         $cartId = $quote->getId();
 
         /** @var QuoteIdMask $quoteIdMask */
@@ -103,17 +114,21 @@ class GuestCartItemRepositoryTest extends WebapiAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
-     * @magentoApiDataFixture Magento/Catalog/_files/product_without_options.php
+     * Test adding an item to a guest cart via API.
      */
+    #[
+        DataFixture(ProductFixture::class, ['sku' => 'simple-add-item-%uniqid%', 'price' => 10], 'product'),
+        DataFixture(GuestCartFixture::class, ['reserved_order_id' => 'test_order_1'], 'cart'),
+        DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart.id$']),
+    ]
     public function testAddItem()
     {
-        /** @var Product $product */
-        $product = $this->objectManager->create(Product::class)->load(2);
+        $fixtures = DataFixtureStorageManager::getStorage();
+        $product = $fixtures->get('product');
+        $quote = $fixtures->get('cart');
         $productSku = $product->getSku();
-        /** @var Quote $quote */
-        $quote = $this->objectManager->create(Quote::class);
-        $quote->load('test_order_1', 'reserved_order_id');
+        $productId = $product->getId();
         $cartId = $quote->getId();
 
         /** @var QuoteIdMask $quoteIdMask */
@@ -121,7 +136,6 @@ class GuestCartItemRepositoryTest extends WebapiAbstract
             ->create(QuoteIdMaskFactory::class)
             ->create();
         $quoteIdMask->load($cartId, 'quote_id');
-        //Use masked cart Id
         $cartId = $quoteIdMask->getMaskedId();
 
         $serviceInfo = [
@@ -148,7 +162,9 @@ class GuestCartItemRepositoryTest extends WebapiAbstract
         }
 
         $this->_webApiCall($serviceInfo, $requestData);
-        $this->assertTrue($quote->hasProductId(2));
+        $quoteId = $quote->getId();
+        $quote = $this->getQuoteFreshFromDb($quoteId);
+        $this->assertTrue($quote->hasProductId($productId));
         $this->assertEquals(7, $quote->getItemByProduct($product)->getQty());
     }
 
@@ -205,26 +221,33 @@ class GuestCartItemRepositoryTest extends WebapiAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_items_saved.php
+     * Test remove item from guest cart
      */
+    #[
+        DataFixture(ProductFixture::class, ['sku' => 'simple-remove-%uniqid%', 'price' => 10], 'product'),
+        DataFixture(GuestCartFixture::class, ['reserved_order_id' => 'guest_order_item_with_items'], 'cart'),
+        DataFixture(
+            AddProductToCartFixture::class,
+            ['cart_id' => '$cart.id$', 'product_id' => '$product.id$', 'qty' => 1]
+        ),
+        DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart.id$']),
+    ]
     public function testRemoveItem()
     {
-        /** @var Quote $quote */
-        $quote = $this->objectManager->create(Quote::class);
-        $quote->load('test_order_item_with_items', 'reserved_order_id');
-        $cartId = $quote->getId();
+        $fixtures = DataFixtureStorageManager::getStorage();
+        $cartId = $fixtures->get('cart')->getId();
+        $quote = $this->objectManager->get(\Magento\Quote\Api\CartRepositoryInterface::class)->get($cartId);
+        $product = $fixtures->get('product');
+        $productId = $product->getId();
 
         /** @var QuoteIdMask $quoteIdMask */
         $quoteIdMask = Bootstrap::getObjectManager()
             ->create(QuoteIdMaskFactory::class)
             ->create();
         $quoteIdMask->load($cartId, 'quote_id');
-        //Use masked cart Id
         $cartId = $quoteIdMask->getMaskedId();
 
-        $product = $this->objectManager->create(Product::class);
-        $productId = $product->getIdBySku('simple_one');
-        $product->load($productId);
         $itemId = $quote->getItemByProduct($product)->getId();
         $serviceInfo = [
             'rest' => [
@@ -243,36 +266,40 @@ class GuestCartItemRepositoryTest extends WebapiAbstract
             "itemId" => $itemId,
         ];
         $this->assertTrue($this->_webApiCall($serviceInfo, $requestData));
-        $quote = $this->objectManager->create(Quote::class);
-        $quote->load('test_order_item_with_items', 'reserved_order_id');
+        $quote = $this->getQuoteFreshFromDb($fixtures->get('cart')->getId());
         $this->assertFalse($quote->hasProductId($productId));
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_items_saved.php
      * @param array $stockData
      * @param string|null $errorMessage
      */
-    #[DataProvider('updateItemDataProvider')]
+    #[
+        DataFixture(ProductFixture::class, ['sku' => 'simple-update-%uniqid%', 'price' => 10], 'product'),
+        DataFixture(GuestCartFixture::class, ['reserved_order_id' => 'guest_order_item_with_items'], 'cart'),
+        DataFixture(
+            AddProductToCartFixture::class,
+            ['cart_id' => '$cart.id$', 'product_id' => '$product.id$', 'qty' => 1]
+        ),
+        DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataProvider('updateItemDataProvider')
+    ]
     public function testUpdateItem(array $stockData, ?string $errorMessage = null)
     {
-        $this->updateStockData('simple_one', $stockData);
-        /** @var Quote $quote */
-        $quote = $this->objectManager->create(Quote::class);
-        $quote->load('test_order_item_with_items', 'reserved_order_id');
-        $cartId = $quote->getId();
+        $fixtures = DataFixtureStorageManager::getStorage();
+        $product = $fixtures->get('product');
+        $cartId = $fixtures->get('cart')->getId();
+        $quote = $this->objectManager->get(\Magento\Quote\Api\CartRepositoryInterface::class)->get($cartId);
+        $this->updateStockData($product->getSku(), $stockData);
 
         /** @var QuoteIdMask $quoteIdMask */
         $quoteIdMask = Bootstrap::getObjectManager()
             ->create(QuoteIdMaskFactory::class)
             ->create();
         $quoteIdMask->load($cartId, 'quote_id');
-        //Use masked cart Id
         $cartId = $quoteIdMask->getMaskedId();
 
-        $product = $this->objectManager->create(Product::class);
-        $productId = $product->getIdBySku('simple_one');
-        $product->load($productId);
         $itemId = $quote->getItemByProduct($product)->getId();
         $serviceInfo = [
             'rest' => [
@@ -297,25 +324,33 @@ class GuestCartItemRepositoryTest extends WebapiAbstract
             $this->expectExceptionMessage($errorMessage);
         }
         $this->_webApiCall($serviceInfo, $requestData);
-        $quote = $this->objectManager->create(Quote::class);
-        $quote->load('test_order_item_with_items', 'reserved_order_id');
-        $this->assertTrue($quote->hasProductId(1));
+        $quote = $this->getQuoteFreshFromDb($fixtures->get('cart')->getId());
+        $this->assertTrue($quote->hasProductId($product->getId()));
         $item = $quote->getItemByProduct($product);
         $this->assertEquals(5, $item->getQty());
         $this->assertEquals($itemId, $item->getItemId());
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_items_saved.php
+     * Verify a rejected quantity does not change an existing guest cart item.
      */
+    #[
+        DataFixture(ProductFixture::class, ['sku' => 'simple-update-zero-%uniqid%', 'price' => 10], 'product'),
+        DataFixture(GuestCartFixture::class, ['reserved_order_id' => 'guest_order_item_with_items'], 'cart'),
+        DataFixture(
+            AddProductToCartFixture::class,
+            ['cart_id' => '$cart.id$', 'product_id' => '$product.id$', 'qty' => 1]
+        ),
+        DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart.id$']),
+    ]
     public function testUpdateItemRejectsZeroQtyWithoutChangingExistingItem(): void
     {
         $this->_markTestAsRestOnly();
-        $quote = $this->objectManager->create(Quote::class);
-        $quote->load('test_order_item_with_items', 'reserved_order_id');
-        $quoteId = $quote->getId();
-        $product = $this->objectManager->create(Product::class);
-        $product->load($product->getIdBySku('simple_one'));
+        $fixtures = DataFixtureStorageManager::getStorage();
+        $quoteId = $fixtures->get('cart')->getId();
+        $quote = $this->objectManager->get(\Magento\Quote\Api\CartRepositoryInterface::class)->get($quoteId);
+        $product = $fixtures->get('product');
         $item = $quote->getItemByProduct($product);
         $itemId = $item->getId();
 
@@ -365,15 +400,24 @@ class GuestCartItemRepositoryTest extends WebapiAbstract
     /**
      * Verifies that store id for quote and quote item is being changed accordingly to the requested store code
      *
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_items_saved.php
      * @magentoApiDataFixture Magento/Store/_files/second_store.php
      */
+    #[
+        DataFixture(ProductFixture::class, ['sku' => 'simple-store-%uniqid%', 'price' => 10], 'product'),
+        DataFixture(GuestCartFixture::class, ['reserved_order_id' => 'guest_order_item_with_items'], 'cart'),
+        DataFixture(
+            AddProductToCartFixture::class,
+            ['cart_id' => '$cart.id$', 'product_id' => '$product.id$', 'qty' => 1]
+        ),
+        DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart.id$']),
+    ]
     public function testUpdateItemWithChangingStoreId()
     {
-        /** @var Quote $quote */
-        $quote = $this->objectManager->create(Quote::class);
-        $quote->load('test_order_item_with_items', 'reserved_order_id');
-        $cartId = $quote->getId();
+        $fixtures = DataFixtureStorageManager::getStorage();
+        $cartId = $fixtures->get('cart')->getId();
+        $quote = $this->objectManager->get(\Magento\Quote\Api\CartRepositoryInterface::class)->get($cartId);
+        $product = $fixtures->get('product');
 
         /** @var QuoteIdMask $quoteIdMask */
         $quoteIdMask = Bootstrap::getObjectManager()
@@ -382,9 +426,6 @@ class GuestCartItemRepositoryTest extends WebapiAbstract
         $quoteIdMask->load($cartId, 'quote_id');
         $cartId = $quoteIdMask->getMaskedId();
 
-        $product = $this->objectManager->create(Product::class);
-        $productId = $product->getIdBySku('simple');
-        $product->load($productId);
         $itemId = $quote->getItemByProduct($product)->getId();
         $serviceInfo = [
             'rest' => [
@@ -406,9 +447,8 @@ class GuestCartItemRepositoryTest extends WebapiAbstract
             ];
         }
         $this->_webApiCall($serviceInfo, $requestData, null, 'fixture_second_store');
-        $quote = $this->objectManager->create(Quote::class);
-        $quote->load('test_order_item_with_items', 'reserved_order_id');
-        $this->assertTrue($quote->hasProductId(1));
+        $quote = $this->getQuoteFreshFromDb($fixtures->get('cart')->getId());
+        $this->assertTrue($quote->hasProductId($product->getId()));
         $item = $quote->getItemByProduct($product);
         /** @var StoreManagerInterface $storeManager */
         $storeManager = $this->objectManager->get(StoreManagerInterface::class);
@@ -828,6 +868,18 @@ class GuestCartItemRepositoryTest extends WebapiAbstract
             $result[] = $customOption;
         }
         return $result;
+    }
+
+    /**
+     * Clears QuoteRepository in-memory cache so get() performs a fresh DB load.
+     *
+     * @param int $quoteId
+     * @return Quote
+     */
+    private function getQuoteFreshFromDb(int $quoteId): Quote
+    {
+        $this->objectManager->get(\Magento\Quote\Model\QuoteRepository::class)->_resetState();
+        return $this->objectManager->get(\Magento\Quote\Api\CartRepositoryInterface::class)->get($quoteId);
     }
 
     /**
