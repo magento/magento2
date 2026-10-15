@@ -217,6 +217,11 @@ class Elasticsearch implements ClientInterface
 
         $options['hosts'] = [$host];
 
+        // Apply the configured server timeout to every request, not only to ping
+        if (!empty($options['timeout'])) {
+            $options['httpClientOptions']['timeout'] = (int)$options['timeout'];
+        }
+
         return $options;
     }
 

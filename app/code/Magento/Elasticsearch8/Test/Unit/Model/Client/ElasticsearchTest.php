@@ -168,6 +168,7 @@ class ElasticsearchTest extends TestCase
         $config = $this->getPrivateMethod();
         $result = $config->invoke($buildConfig, $options);
         $this->assertEquals($expectedResult, $result['hosts'][0]);
+        $this->assertSame(['timeout' => 15], $result['httpClientOptions']);
     }
 
     /**
