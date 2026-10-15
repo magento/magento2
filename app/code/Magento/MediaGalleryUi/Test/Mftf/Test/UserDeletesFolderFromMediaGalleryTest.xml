@@ -55,6 +55,14 @@
         <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="openNewPageForWysiwyg"/>
         <actionGroup ref="AdminOpenMediaGalleryFromPageNoEditorActionGroup" stepKey="openMediaGalleryForPageFromWysiwyg"/>
 
+        <!-- Step4 Explicitly re-expand 'wysiwyg' and re-select the child folder to avoid a racy app auto-restore. -->
+        <actionGroup ref="AdminMediaGalleryExpandFolderActionGroup" stepKey="expandWysiwygFolderForStep4">
+            <argument name="fieldId" value="wysiwyg"/>
+        </actionGroup>
+        <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectCreatedFolderForStep4">
+            <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
+        </actionGroup>
+
         <!-- Step4.1 Delete Folder is diabled by default for no selected folder -->
         <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="unselectFoldersToVerifyDeleteFolderButtonStatus">
             <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
@@ -75,7 +83,17 @@
             <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
         </actionGroup>
         <conditionalClick selector="{{AdminMediaGalleryFolderSection.clearFilterFolderName}}" dependentSelector="{{AdminMediaGalleryFolderSection.clearFilterFolderName}}" visible="true" stepKey="clearAllFiltersIfAny2"/>
-        <seeElement selector="{{AdminMediaGalleryFolderSection.disabledDeleteFolderButton}}" stepKey="DeleteFolderButtonIsNowDisabledAgain"/>
+        <!-- Retry: the app's directoryTree.js lazily resolves its filterChips uiRegistry component (ACP2E-4605);
+             if that component isn't ready yet when the deselect click fires, the deselect handler throws and
+             the button never disables. Re-clicking the same folder node is a no-op once the deselect already
+             succeeded (button stays disabled) and only re-attempts the deselect when it's still needed.
+             Gated on disabledDeleteFolderButton being NOT visible (not activeDeleteFolderButton being visible -
+             that selector matches the button element regardless of its disabled state, so it is always visible
+             and would have made this retry fire unconditionally, re-selecting an already-successfully-deselected
+             folder instead of skipping). -->
+        <conditionalClick selector="{{AdminMediaGalleryFolderSection.folderInTree(AdminMediaGalleryFolderData.name)}}" dependentSelector="{{AdminMediaGalleryFolderSection.disabledDeleteFolderButton}}" visible="false" stepKey="retryDeselectIfDeleteButtonStillActive"/>
+        <waitForPageLoad stepKey="waitForRetryDeselect"/>
+        <waitForElementVisible selector="{{AdminMediaGalleryFolderSection.disabledDeleteFolderButton}}" time="30" stepKey="DeleteFolderButtonIsNowDisabledAgain"/>
 
         <!-- Step5 Select folder to delete -->
         <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectWysiwygFolderAgain">
