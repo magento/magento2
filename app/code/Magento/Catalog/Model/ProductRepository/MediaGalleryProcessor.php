@@ -15,10 +15,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Gallery;
 use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\Api\Data\ImageContentInterfaceFactory;
 use Magento\Framework\Api\ImageProcessorInterface;
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\StateException;
@@ -54,38 +51,30 @@ class MediaGalleryProcessor
     private $deleteValidator;
 
     /**
-     * @var Config
+     * @var ImageContentHashProvider
      */
-    private $mediaConfig;
-
-    /**
-     * @var WriteInterface
-     */
-    private $mediaDirectory;
+    private $imageContentHashProvider;
 
     /**
      * @param Processor $processor
      * @param ImageContentInterfaceFactory $contentFactory
      * @param ImageProcessorInterface $imageProcessor
      * @param DeleteValidator|null $deleteValidator
-     * @param Config|null $mediaConfig
-     * @param Filesystem|null $filesystem
+     * @param ImageContentHashProvider|null $imageContentHashProvider
      */
     public function __construct(
         Processor $processor,
         ImageContentInterfaceFactory $contentFactory,
         ImageProcessorInterface $imageProcessor,
         ?DeleteValidator $deleteValidator = null,
-        ?Config $mediaConfig = null,
-        ?Filesystem $filesystem = null
+        ?ImageContentHashProvider $imageContentHashProvider = null
     ) {
         $this->processor = $processor;
         $this->contentFactory = $contentFactory;
         $this->imageProcessor = $imageProcessor;
         $this->deleteValidator = $deleteValidator ?? ObjectManager::getInstance()->get(DeleteValidator::class);
-        $this->mediaConfig = $mediaConfig ?? ObjectManager::getInstance()->get(Config::class);
-        $filesystem = $filesystem ?? ObjectManager::getInstance()->get(Filesystem::class);
-        $this->mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+        $this->imageContentHashProvider = $imageContentHashProvider
+            ?? ObjectManager::getInstance()->get(ImageContentHashProvider::class);
     }
 
     /**
@@ -111,10 +100,12 @@ class MediaGalleryProcessor
         $entriesById = [];
         $this->validateProvidedValueIds($mediaGalleryEntries, (array)$existingMediaGallery);
         if (!empty($existingMediaGallery)) {
-            $existingIdByHash = $this->getExistingValueIdsByContentHash($existingMediaGallery);
+            $existingIdByHash = $this->imageContentHashProvider
+                ->getExistingValueIdsByContentHash($existingMediaGallery);
             foreach ($mediaGalleryEntries as $entry) {
                 if (isset($entry['value_id'])) {
                     $entriesById[$entry['value_id']] = $entry;
+                    $this->removeMatchedValueId($existingIdByHash, (int)$entry['value_id']);
                 } else {
                     $matchedValueId = $this->matchExistingImageByContent($entry, $existingIdByHash);
                     if ($matchedValueId !== null) {
@@ -195,46 +186,24 @@ class MediaGalleryProcessor
     }
 
     /**
-     * Build a map of existing image content hashes to their value_id.
+     * Remove an already consumed value_id from every content-hash queue.
      *
-     * The stored file name cannot be used for matching because Magento disambiguates
-     * colliding names (image.png, image_1.png, ...), so the content hash is used instead.
+     * Ensures a value_id referenced explicitly by an incoming entry is not also handed
+     * out to a content-matched entry, which would collapse two entries onto one id.
      *
-     * @param array $existingMediaGallery
-     * @return array
+     * @param array $existingIdByHash
+     * @param int $valueId
+     * @return void
      */
-    private function getExistingValueIdsByContentHash(array $existingMediaGallery): array
+    private function removeMatchedValueId(array &$existingIdByHash, int $valueId): void
     {
-        $map = [];
-        foreach ($existingMediaGallery as $existingEntry) {
-            if (!isset($existingEntry['file'], $existingEntry['value_id'])) {
-                continue;
+        foreach ($existingIdByHash as $hash => $valueIds) {
+            $filtered = array_values(array_filter($valueIds, static fn ($id) => $id !== $valueId));
+            if ($filtered === []) {
+                unset($existingIdByHash[$hash]);
+            } else {
+                $existingIdByHash[$hash] = $filtered;
             }
-            $hash = $this->getStoredImageHash((string)$existingEntry['file']);
-            if ($hash !== null && !isset($map[$hash])) {
-                $map[$hash] = $existingEntry['value_id'];
-            }
-        }
-        return $map;
-    }
-
-    /**
-     * Calculate the content hash of an existing media gallery file.
-     *
-     * @param string $file
-     * @return string|null
-     */
-    private function getStoredImageHash(string $file): ?string
-    {
-        try {
-            $path = $this->mediaConfig->getMediaPath($file);
-            if (!$this->mediaDirectory->isExist($path)) {
-                return null;
-            }
-
-            return sha1((string)$this->mediaDirectory->readFile($path));
-        } catch (\Exception) {
-            return null;
         }
     }
 
@@ -242,13 +211,14 @@ class MediaGalleryProcessor
      * Match a new base64 media entry to an existing image by its content hash.
      *
      * Returns the value_id of the existing image so the entry updates it in place
-     * instead of being added as a duplicate.
+     * instead of being added as a duplicate. The matched value_id is consumed from the
+     * queue so each existing image is matched at most once.
      *
      * @param array $entry
      * @param array $existingIdByHash
      * @return int|null
      */
-    private function matchExistingImageByContent(array $entry, array $existingIdByHash): ?int
+    private function matchExistingImageByContent(array $entry, array &$existingIdByHash): ?int
     {
         $encoded = $entry['content']['data'][ImageContentInterface::BASE64_ENCODED_DATA] ?? null;
         if ($encoded === null) {
@@ -260,8 +230,15 @@ class MediaGalleryProcessor
             return null;
         }
         $hash = sha1($decoded);
+        if (empty($existingIdByHash[$hash])) {
+            return null;
+        }
+        $matchedValueId = (int)array_shift($existingIdByHash[$hash]);
+        if ($existingIdByHash[$hash] === []) {
+            unset($existingIdByHash[$hash]);
+        }
 
-        return isset($existingIdByHash[$hash]) ? (int)$existingIdByHash[$hash] : null;
+        return $matchedValueId;
     }
 
     /**

@@ -11,14 +11,13 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Gallery\DeleteValidator;
 use Magento\Catalog\Model\Product\Gallery\Processor;
 use Magento\Catalog\Model\Product\Media\Config;
+use Magento\Catalog\Model\ProductRepository\ImageContentHashProvider;
 use Magento\Catalog\Model\ProductRepository\MediaGalleryProcessor;
 use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\Api\Data\ImageContentInterfaceFactory;
 use Magento\Framework\Api\ImageContent;
 use Magento\Framework\Api\ImageProcessorInterface;
 use Magento\Framework\Exception\InputException;
-use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\Directory\WriteInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -55,14 +54,9 @@ class MediaGalleryProcessorTest extends TestCase
     private $productMock;
 
     /**
-     * @var Config|MockObject
+     * @var ImageContentHashProvider|MockObject
      */
-    private $mediaConfigMock;
-
-    /**
-     * @var WriteInterface|MockObject
-     */
-    private $mediaDirectoryMock;
+    private $imageContentHashProviderMock;
 
     protected function setUp(): void
     {
@@ -72,18 +66,15 @@ class MediaGalleryProcessorTest extends TestCase
         $this->deleteValidatorMock = $this->createMock(DeleteValidator::class);
         $this->productMock = $this->createPartialMock(Product::class, ['getMediaConfig', 'hasGalleryAttribute']);
 
-        $this->mediaConfigMock = $this->createMock(Config::class);
-        $this->mediaDirectoryMock = $this->createMock(WriteInterface::class);
-        $filesystemMock = $this->createMock(Filesystem::class);
-        $filesystemMock->method('getDirectoryWrite')->willReturn($this->mediaDirectoryMock);
+        $this->imageContentHashProviderMock = $this->createMock(ImageContentHashProvider::class);
+        $this->imageContentHashProviderMock->method('getExistingValueIdsByContentHash')->willReturn([]);
 
         $this->galleryProcessor = new MediaGalleryProcessor(
             $this->processorMock,
             $this->contentFactoryMock,
             $this->imageProcessorMock,
             $this->deleteValidatorMock,
-            $this->mediaConfigMock,
-            $filesystemMock
+            $this->imageContentHashProviderMock
         );
     }
 
