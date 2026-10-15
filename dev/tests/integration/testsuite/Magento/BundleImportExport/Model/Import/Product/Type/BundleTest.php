@@ -84,6 +84,38 @@ class BundleTest extends \Magento\TestFramework\Indexer\TestCase
     protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
+        $this->removeProductsWithConflictingUrlKeys();
+    }
+
+    /**
+     * Remove any pre-existing products that occupy the URL keys used by the import fixtures.
+     *
+     * @return void
+     */
+    private function removeProductsWithConflictingUrlKeys(): void
+    {
+        $urlKeys = ['simple-1', 'simple-2', 'simple-3', 'bundle-1'];
+        $searchCriteriaBuilder = $this->objectManager->create(
+            \Magento\Framework\Api\SearchCriteriaBuilder::class
+        );
+        $searchCriteria = $searchCriteriaBuilder->addFilter('url_key', $urlKeys, 'in')->create();
+        $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
+        $products = $productRepository->getList($searchCriteria)->getItems();
+        if (!$products) {
+            return;
+        }
+        $registry = $this->objectManager->get(\Magento\Framework\Registry::class);
+        $registry->unregister('isSecureArea');
+        $registry->register('isSecureArea', true);
+        foreach ($products as $product) {
+            try {
+                $productRepository->delete($product);
+            } catch (NoSuchEntityException $e) {
+                // product already deleted
+            }
+        }
+        $registry->unregister('isSecureArea');
+        $registry->register('isSecureArea', false);
     }
 
     /**

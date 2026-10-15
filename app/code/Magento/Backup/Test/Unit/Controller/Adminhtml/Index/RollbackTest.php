@@ -167,39 +167,13 @@ class RollbackTest extends TestCase
     /**
      * @return void
      */
-    public function testExecuteRollbackDisabled(): void
-    {
-        $rollbackAllowed = false;
-
-        $this->dataHelperMock->expects($this->once())
-            ->method('isRollbackAllowed')
-            ->willReturn($rollbackAllowed);
-        $this->objectManagerMock->expects($this->once())
-            ->method('get')
-            ->with(Data::class)
-            ->willReturn($this->dataHelperMock);
-
-        $this->assertSame($this->responseMock, $this->rollbackController->execute());
-    }
-
-    /**
-     * @return void
-     */
     public function testExecuteBackupNotFound(): void
     {
-        $rollbackAllowed = true;
         $isAjax = true;
         $time = 0;
         $type = 'db';
         $exists = false;
 
-        $this->dataHelperMock->expects($this->once())
-            ->method('isRollbackAllowed')
-            ->willReturn($rollbackAllowed);
-        $this->objectManagerMock->expects($this->atLeastOnce())
-            ->method('get')
-            ->with(Data::class)
-            ->willReturn($this->dataHelperMock);
         $this->requestMock->expects($this->once())
             ->method('isAjax')
             ->willReturn($isAjax);
@@ -230,16 +204,12 @@ class RollbackTest extends TestCase
      */
     public function testExecute(): void
     {
-        $rollbackAllowed = true;
         $isAjax = true;
         $time = 1;
         $type = 'db';
         $exists = true;
         $passwordValid = true;
 
-        $this->dataHelperMock->expects($this->once())
-            ->method('isRollbackAllowed')
-            ->willReturn($rollbackAllowed);
         $this->objectManagerMock->expects($this->any())
             ->method('get')
             ->with(Data::class)

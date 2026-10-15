@@ -108,7 +108,11 @@
         <see userInput="{{ImportProduct_Downloadable_FileLinks.importSummary}}" selector="{{AdminDataGridTableSection.firstRow}}" stepKey="seeSummary"/>
 
         <!-- Admin: Verify Downloadable Product on Edit Product Page -->
-        <actionGroup ref="NavigateToCreatedProductEditPageActionGroup" stepKey="goToDownloadableProductEditPage">
+        <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="openProductCatalogPageForImportedProduct"/>
+        <actionGroup ref="SearchProductGridByKeywordActionGroup" stepKey="searchImportedDownloadableProductByKeyword">
+            <argument name="keyword" value="ImportProduct_Downloadable_FileLinks.sku"/>
+        </actionGroup>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="goToDownloadableProductEditPage">
             <argument name="product" value="ImportProduct_Downloadable_FileLinks"/>
         </actionGroup>
         <actionGroup ref="AdminAssertProductInfoOnEditPageActionGroup" stepKey="assertDownloadableProductOnEditPage">

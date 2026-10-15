@@ -129,12 +129,15 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $data = parent::_prepareDataForTable($object, $table);
         $ifNullSql = $this->getConnection()->getIfNullSql('qty');
         if (!$object->isObjectNew() && $object->getQtyCorrection()) {
+            $rawQty  = (float) $object->getQtyCorrection();
+            $safeQty = is_finite($rawQty) ? $rawQty : 0.0;
+
             if ($object->getQty() === null) {
                 $data['qty'] = null;
-            } elseif ($object->getQtyCorrection() < 0) {
-                $data['qty'] = new \Zend_Db_Expr($ifNullSql . '-' . abs((float) $object->getQtyCorrection()));
+            } elseif ($safeQty < 0) {
+                $data['qty'] = new \Zend_Db_Expr($ifNullSql . '-' . abs($safeQty));
             } else {
-                $data['qty'] = new \Zend_Db_Expr($ifNullSql . '+' . $object->getQtyCorrection());
+                $data['qty'] = new \Zend_Db_Expr($ifNullSql . '+' . $safeQty);
             }
         }
         return $data;

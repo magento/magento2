@@ -17,6 +17,7 @@ use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\QuoteAddressValidationService;
 use Psr\Log\LoggerInterface as Logger;
+use Magento\Quote\Model\GuestCart\GetGuestCart;
 
 /**
  * Guest payment information management model.
@@ -88,6 +89,11 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
     private $quoteAddressValidationService;
 
     /**
+     * @var GetGuestCart|null
+     */
+    private $getGuestCart;
+
+    /**
      * @param \Magento\Quote\Api\GuestBillingAddressManagementInterface $billingAddressManagement
      * @param \Magento\Quote\Api\GuestPaymentMethodManagementInterface $paymentMethodManagement
      * @param \Magento\Quote\Api\GuestCartManagementInterface $cartManagement
@@ -99,6 +105,7 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
      * @param PaymentSavingRateLimiterInterface|null $savingRateLimiter
      * @param AddressComparatorInterface|null $addressComparator
      * @param QuoteAddressValidationService|null $quoteAddressValidationService
+     * @param GetGuestCart|null $getGuestCart
      * @codeCoverageIgnore
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -113,7 +120,8 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
         ?PaymentProcessingRateLimiterInterface $paymentsRateLimiter = null,
         ?PaymentSavingRateLimiterInterface $savingRateLimiter = null,
         ?AddressComparatorInterface $addressComparator = null,
-        ?QuoteAddressValidationService $quoteAddressValidationService = null
+        ?QuoteAddressValidationService $quoteAddressValidationService = null,
+        ?GetGuestCart $getGuestCart = null
     ) {
         $this->billingAddressManagement = $billingAddressManagement;
         $this->paymentMethodManagement = $paymentMethodManagement;
@@ -130,6 +138,7 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
         $this->quoteAddressValidationService = $quoteAddressValidationService
             ?? ObjectManager::getInstance()->get(QuoteAddressValidationService::class);
         $this->logger = $logger;
+        $this->getGuestCart = $getGuestCart ?? ObjectManager::getInstance()->get(GetGuestCart::class);
     }
 
     /**
@@ -196,6 +205,7 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
         /** @var Quote $quote */
         $quote = $this->cartRepository->getActive($quoteIdMask->getQuoteId());
+        $this->getGuestCart->checkIsGuestCart((int)$quote->getCustomerId(), $cartId);
 
         $this->quoteAddressValidationService->validateAddressesWithRules($quote, null, $billingAddress);
 
@@ -227,6 +237,7 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
     public function getPaymentInformation($cartId)
     {
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
+        $this->getGuestCart->execute($cartId, (int) $quoteIdMask->getQuoteId());
         return $this->paymentInformationManagement->getPaymentInformation($quoteIdMask->getQuoteId());
     }
 

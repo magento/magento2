@@ -7,8 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\Translation\Model\Inline;
 
+use DOMDocument;
+use Normalizer;
 use Laminas\Filter\FilterInterface;
 use Magento\Backend\App\Area\FrontNameResolver;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Translate\Inline\ParserInterface;
 use Magento\Translation\Model\ResourceModel\StringFactory;
 use Magento\Translation\Model\ResourceModel\StringUtils;
@@ -116,6 +119,9 @@ class Parser implements ParserInterface
      * @var array
      */
     private $filterTagsExpression = [
+        '/&lt;\/?(script|meta|link|frame|iframe|object|embed|form|input|style)[^&]*&gt;/i',
+        '/&lt;[^&]*(ondblclick|onclick|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove|' .
+            'onmouseout|onmouseover|onmouseup|onload|onunload|onerror)[^&]*&gt;/i',
         '/\b(alert|eval|setTimeout|setInterval|Function|setImmediate|requestAnimationFrame|document\.(write' .
             '|writeln)|innerHTML|outerHTML|insertAdjacentHTML|console\.(log|error|warn|info|debug))\s*[=(]/i',
         '/\b(window|this|self)\s*\[\s*[\'"]?(alert|eval)[\'"]?\s*\]/i',
@@ -169,6 +175,11 @@ class Parser implements ParserInterface
     private $relatedCacheTypes;
 
     /**
+     * @var Normalizer
+     */
+    private $normalizer;
+
+    /**
      * Initialize base inline translation model
      *
      * @param StringUtilsFactory $resource
@@ -180,6 +191,8 @@ class Parser implements ParserInterface
      * @param Escaper $escaper
      * @param CacheManager $cacheManager
      * @param array $relatedCacheTypes
+     * @param Normalizer|null $normalizer
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         StringUtilsFactory $resource,
@@ -190,7 +203,8 @@ class Parser implements ParserInterface
         InlineInterface $translateInline,
         Escaper $escaper,
         CacheManager $cacheManager,
-        array $relatedCacheTypes = []
+        array $relatedCacheTypes = [],
+        ?Normalizer $normalizer = null
     ) {
         $this->_resourceFactory = $resource;
         $this->_storeManager = $storeManager;
@@ -201,6 +215,8 @@ class Parser implements ParserInterface
         $this->escaper = $escaper;
         $this->cacheManager = $cacheManager;
         $this->relatedCacheTypes = $relatedCacheTypes;
+        $this->normalizer = $normalizer
+            ?? ObjectManager::getInstance()->get(Normalizer::class);
     }
 
     /**
@@ -222,6 +238,7 @@ class Parser implements ParserInterface
 
         $this->_validateTranslationParams($translateParams);
         $this->_filterTranslationParams($translateParams, ['custom']);
+        $this->filterExternalLinks($translateParams);
 
         /** @var $validStoreId int */
         $validStoreId = $this->_storeManager->getStore()->getId();
@@ -286,11 +303,102 @@ class Parser implements ParserInterface
     }
 
     /**
+     * Sanitize external links in translations
+     *
+     * @param array $translateParams
+     * @return void
+     */
+    private function filterExternalLinks(array &$translateParams): void
+    {
+        foreach ($translateParams as &$param) {
+            if (isset($param['custom']) && is_string($param['custom'])) {
+                $param['custom'] = $this->removeExternalLinks($param['custom']);
+            }
+        }
+    }
+
+    /**
+     * Remove external links from HTML content, converting them to plain text
+     *
+     * @param string $content
+     * @return string
+     */
+    private function removeExternalLinks(string $content): string
+    {
+        $content = trim($content);
+        if ($content === '') {
+            return $content;
+        }
+        $dom = new DOMDocument('1.0', 'UTF-8');
+        libxml_use_internal_errors(true);
+        $wrapper = '<div>' . $content . '</div>';
+        $dom->loadHTML(
+            '<?xml encoding="UTF-8"?>' . $wrapper,
+            LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD
+        );
+        libxml_clear_errors();
+        $xpath = new \DOMXPath($dom);
+        foreach ($xpath->query('//a[@href]') as $anchor) {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            $href = trim(html_entity_decode($anchor->getAttribute('href'), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+            if ($this->isExternal($href)) {
+                $anchor->parentNode->replaceChild($dom->createTextNode($anchor->textContent), $anchor);
+            }
+        }
+        $wrapper = $dom->getElementsByTagName('div')->item(0);
+        $result = '';
+        foreach ($wrapper->childNodes as $child) {
+            $result .= $dom->saveHTML($child);
+        }
+        return $result;
+    }
+
+    /**
+     * Method to verify if the href is external
+     *
+     * @param string $href
+     * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    private function isExternal(string $href): bool
+    {
+        $href = preg_replace('/[\x00-\x1F\x7F]+/u', '', $href);
+        $href = trim($href);
+
+        if ($href === '' || $href[0] === '#') {
+            return false;
+        }
+
+        if (class_exists(Normalizer::class) && $this->normalizer !== null) {
+            $normalized = $this->normalizer->normalize($href, Normalizer::FORM_KC);
+            if ($normalized !== false) {
+                $href = $normalized;
+            }
+        }
+
+        if (strncmp($href, '//', 2) === 0 || strncasecmp($href, 'www.', 4) === 0) {
+            return true;
+        }
+
+        if (preg_match('/^[a-z0-9.-]+\.[a-z]{2,}/i', $href)) {
+            return true;
+        }
+
+        $colonPos = strpos($href, ':');
+        if ($colonPos === false) {
+            return false;
+        }
+
+        $scheme = preg_replace('/\s+/', '', substr($href, 0, $colonPos));
+        return $scheme !== '' && preg_match('/^[a-z][a-z0-9+\-.]*$/i', $scheme);
+    }
+
+    /**
      * Add additional filters to translation strings
      *
      * @return void
      */
-    private function addTranslationFilterExpression()
+    private function addTranslationFilterExpression(): void
     {
         if ($this->filterExpressionsAdded) {
             return;
