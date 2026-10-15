@@ -20,6 +20,8 @@
             <group value="pr_exclude"/>
         </annotations>
         <before>
+            <!-- Ensure PayPal Express review step is not skipped, regardless of state left by a prior test -->
+            <magentoCLI command="config:set {{StorefrontPaypalDisableSkipOrderReviewStepConfigData.path}} {{StorefrontPaypalDisableSkipOrderReviewStepConfigData.value}}" stepKey="disableSkipOrderReview"/>
             <!-- US Customer is created -->
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
