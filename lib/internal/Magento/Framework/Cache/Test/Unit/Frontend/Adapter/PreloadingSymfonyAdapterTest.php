@@ -9,6 +9,7 @@ namespace Magento\Framework\Cache\Test\Unit\Frontend\Adapter;
 
 use Magento\Framework\Cache\Frontend\Adapter\PreloadingSymfonyAdapter;
 use Magento\Framework\Cache\FrontendInterface;
+use Magento\Framework\Cache\MultiLoadInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -18,13 +19,18 @@ use PHPUnit\Framework\TestCase;
 class PreloadingSymfonyAdapterTest extends TestCase
 {
     /**
-     * @var FrontendInterface&MockObject
+     * The wrapped adapter is a batch-capable frontend (Symfony/Compression both implement
+     * MultiLoadInterface), so preloading uses one loadMultiple() round-trip.
+     *
+     * @var FrontendInterface&MultiLoadInterface&MockObject
      */
     private $adapter;
 
     protected function setUp(): void
     {
-        $this->adapter = $this->createMock(FrontendInterface::class);
+        $this->adapter = $this->createMockForIntersectionOfInterfaces(
+            [FrontendInterface::class, MultiLoadInterface::class]
+        );
     }
 
     /**
@@ -41,12 +47,10 @@ class PreloadingSymfonyAdapterTest extends TestCase
      */
     public function testPrefixedPreloadKeysAreLoadedWithLogicalIdentifier(): void
     {
-        $this->adapter->expects($this->exactly(2))
-            ->method('load')
-            ->willReturnMap([
-                ['EAV_ENTITY_TYPES', 'eav'],
-                ['SYSTEM_DEFAULT', 'system'],
-            ]);
+        $this->adapter->expects($this->once())
+            ->method('loadMultiple')
+            ->with(['EAV_ENTITY_TYPES', 'SYSTEM_DEFAULT'])
+            ->willReturn(['EAV_ENTITY_TYPES' => 'eav', 'SYSTEM_DEFAULT' => 'system']);
 
         $adapter = new PreloadingSymfonyAdapter(
             $this->adapter,
@@ -67,9 +71,12 @@ class PreloadingSymfonyAdapterTest extends TestCase
     public function testLoadServesPreloadedValueFromLocalCache(): void
     {
         $this->adapter->expects($this->once())
-            ->method('load')
-            ->with('EAV_ENTITY_TYPES')
-            ->willReturn('eav');
+            ->method('loadMultiple')
+            ->with(['EAV_ENTITY_TYPES'])
+            ->willReturn(['EAV_ENTITY_TYPES' => 'eav']);
+        // Served from the in-memory preload cache, so the underlying adapter's load() is never hit.
+        $this->adapter->expects($this->never())
+            ->method('load');
 
         $adapter = new PreloadingSymfonyAdapter($this->adapter, ['061_EAV_ENTITY_TYPES'], '061_');
 
@@ -82,9 +89,9 @@ class PreloadingSymfonyAdapterTest extends TestCase
     public function testUnprefixedPreloadKeysAreLoadedUnchanged(): void
     {
         $this->adapter->expects($this->once())
-            ->method('load')
-            ->with('EAV_ENTITY_TYPES')
-            ->willReturn('eav');
+            ->method('loadMultiple')
+            ->with(['EAV_ENTITY_TYPES'])
+            ->willReturn(['EAV_ENTITY_TYPES' => 'eav']);
 
         $adapter = new PreloadingSymfonyAdapter($this->adapter, ['EAV_ENTITY_TYPES'], '061_');
         $this->triggerPreload($adapter);
@@ -97,10 +104,11 @@ class PreloadingSymfonyAdapterTest extends TestCase
      */
     public function testMissingKeysAreNotCachedLocally(): void
     {
+        // A missing key is simply absent from the loadMultiple() result.
         $this->adapter->expects($this->once())
-            ->method('load')
-            ->with('EAV_ENTITY_TYPES')
-            ->willReturn(false);
+            ->method('loadMultiple')
+            ->with(['EAV_ENTITY_TYPES'])
+            ->willReturn([]);
 
         $adapter = new PreloadingSymfonyAdapter($this->adapter, ['061_EAV_ENTITY_TYPES'], '061_');
         $this->triggerPreload($adapter);
@@ -116,13 +124,16 @@ class PreloadingSymfonyAdapterTest extends TestCase
     public function testSaveUpdatesLocalCacheForNormalizedPreloadKey(): void
     {
         $this->adapter->expects($this->once())
-            ->method('load')
-            ->with('EAV_ENTITY_TYPES')
-            ->willReturn('old');
+            ->method('loadMultiple')
+            ->with(['EAV_ENTITY_TYPES'])
+            ->willReturn(['EAV_ENTITY_TYPES' => 'old']);
         $this->adapter->expects($this->once())
             ->method('save')
             ->with('new', 'EAV_ENTITY_TYPES', [], null)
             ->willReturn(true);
+        // Both loads are served from the local preload cache; the underlying load() is never reached.
+        $this->adapter->expects($this->never())
+            ->method('load');
 
         $adapter = new PreloadingSymfonyAdapter($this->adapter, ['061_EAV_ENTITY_TYPES'], '061_');
         $this->assertSame('old', $adapter->load('EAV_ENTITY_TYPES'));
