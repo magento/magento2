@@ -70,7 +70,7 @@ class FileLockTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->model->lock($name));
         $this->assertTrue($this->model->unlock($name));
 
-        touch(sprintf('%s/%s', $this->lockPath, $name), strtotime('30 hours ago'));
+        touch($this->getLockFilePath($name), strtotime('30 hours ago'));
 
         $this->assertEquals(1, $this->model->cleanupOldLocks());
     }
@@ -82,8 +82,21 @@ class FileLockTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->model->lock($name));
         $this->assertTrue($this->model->unlock($name));
 
-        touch(sprintf('%s/%s', $this->lockPath, $name), strtotime('1 hour ago'));
+        touch($this->getLockFilePath($name), strtotime('1 hour ago'));
 
         $this->assertEquals(0, $this->model->cleanupOldLocks());
+    }
+
+    /**
+     * Resolves the on-disk lock file path for a given lock name.
+     *
+     * @param string $name
+     * @return string
+     */
+    private function getLockFilePath(string $name): string
+    {
+        $reflection = new \ReflectionMethod($this->model, 'getLockPath');
+
+        return $reflection->invoke($this->model, $name);
     }
 }
