@@ -143,9 +143,6 @@ class Router implements RouterInterface
         if ($rewrite->getEntityType() !== Rewrite::ENTITY_TYPE_CUSTOM
             || ($prefix = substr((string)$target, 0, 6)) !== 'http:/' && $prefix !== 'https:'
         ) {
-            // If target is '/', then we make it an empty string to avoid double slashes in the URL also
-            // the double slash isn't limited to a bare /. Url::getRouteUrl() returns getBaseUrl() . $_direct, and the base URL always ends with /.
-            // So a custom redirect with target /customer/account/ still goes to http://host//customer/account/
             $target = $this->url->getUrl(
                 '',
                 [
