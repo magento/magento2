@@ -109,7 +109,7 @@ class GuestCartRepositoryTest extends WebapiAbstract
     public function testGetCartThrowsExceptionIfThereIsNoCartWithProvidedId()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('No such entity with');
+        $this->expectExceptionMessageMatches('/No such entity with|Could not find a cart with ID/');
 
         $cartId = 9999;
 
