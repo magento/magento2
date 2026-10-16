@@ -41,6 +41,11 @@ class LayoutPlugin
     private $maintenanceMode;
 
     /**
+     * @var bool
+     */
+    private bool $isPublicHeadersSet = false;
+
+    /**
      * @param ResponseInterface $response
      * @param Config $config
      * @param MaintenanceMode $maintenanceMode
@@ -71,6 +76,7 @@ class LayoutPlugin
     {
         if ($subject->isCacheable() && !$this->maintenanceMode->isOn() && $this->config->isEnabled()) {
             $this->response->setPublicHeaders($this->config->getTtl());
+            $this->isPublicHeadersSet = true;
         }
     }
 
@@ -99,6 +105,8 @@ class LayoutPlugin
             $tags = array_unique(array_merge([], ...$tags));
             $tags = $this->pageCacheTagsPreprocessor->process($tags);
             $this->response->setHeader('X-Magento-Tags', implode(',', $tags));
+        } elseif ($this->isPublicHeadersSet) {
+            $this->response->setNoCacheHeaders();
         }
 
         return $result;
