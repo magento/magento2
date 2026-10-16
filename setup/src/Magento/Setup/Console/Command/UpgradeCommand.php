@@ -13,6 +13,7 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\State as AppState;
 use Magento\Framework\Config\CacheInterface;
+use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\Setup\ConsoleLogger;
@@ -160,9 +161,14 @@ class UpgradeCommand extends AbstractSetupCommand
 
             $installer = $this->installerFactory->create(new ConsoleLogger($output));
             $installer->updateModulesSequence($keepGenerated);
-            $searchConfig = $this->searchConfigFactory->create();
+            $isSearchModuleEnabled = $this->isSearchModuleEnabled();
+            if ($isSearchModuleEnabled) {
+                $searchConfig = $this->searchConfigFactory->create();
+            }
             $this->cache->clean();
-            $searchConfig->validateSearchEngine();
+            if ($isSearchModuleEnabled) {
+                $searchConfig->validateSearchEngine();
+            }
             $amqpVersionError = $this->validateAmqpVersion();
             if ($amqpVersionError !== null) {
                 $output->writeln(
@@ -214,6 +220,17 @@ class UpgradeCommand extends AbstractSetupCommand
         }
 
         return Cli::RETURN_SUCCESS;
+    }
+
+    /**
+     * Check whether the Magento_Search module is enabled in the deployment configuration.
+     *
+     * @return bool
+     */
+    private function isSearchModuleEnabled(): bool
+    {
+        $modules = $this->deploymentConfig->get(ConfigOptionsListConstants::KEY_MODULES) ?? [];
+        return ($modules['Magento_Search'] ?? 0) == 1;
     }
 
     /**
