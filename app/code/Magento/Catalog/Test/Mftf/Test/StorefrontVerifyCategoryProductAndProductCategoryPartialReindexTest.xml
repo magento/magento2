@@ -82,27 +82,47 @@
 
         <!-- Open categories K, L, M, N on Storefront -->
         <!-- Category K contains only Products B & C -->
-        <amOnPage url="{{StorefrontCategoryPage.url($categoryK.custom_attributes[url_key]$)}}" stepKey="onCategoryK"/>
-        <see userInput="$productB.name$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeProductBOnCategoryK"/>
-        <see userInput="$productC.name$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeProductCOnCategoryK"/>
-        <dontSee userInput="$productA.name$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontSeeProductAOnCategoryK"/>
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="onCategoryK">
+            <argument name="category" value="$$categoryK$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeProductBOnCategoryK">
+            <argument name="productName" value="$productB.name$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeProductCOnCategoryK">
+            <argument name="productName" value="$productC.name$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductNameIsNotOnProductMainPageActionGroup" stepKey="dontSeeProductAOnCategoryK">
+            <argument name="productName" value="$productA.name$"/>
+        </actionGroup>
 
         <!-- Category L contains no Products -->
         <amOnPage url="{{StorefrontCategoryPage.url($categoryK.custom_attributes[url_key]$/$categoryL.custom_attributes[url_key]$)}}" stepKey="onCategoryL"/>
-        <see userInput="We can't find products matching the selection." selector="{{StorefrontCategoryMainSection.emptyProductMessage}}" stepKey="seeMessage"/>
+        <actionGroup ref="AssertStorefrontNoProductsFoundActionGroup" stepKey="seeMessage"/>
         <dontSeeElement selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontseeProducts"/>
 
         <!-- Category M contains only Products B & C -->
         <amOnPage url="{{StorefrontCategoryPage.url($categoryK.custom_attributes[url_key]$/$categoryL.custom_attributes[url_key]$/$categoryM.custom_attributes[url_key]$)}}" stepKey="onCategoryM"/>
-        <see userInput="$productB.name$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeProductBOnCategoryM"/>
-        <see userInput="$productC.name$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeProductCOnCategoryM"/>
-        <dontSee userInput="$productA.name$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontSeeProductAOnCategoryM"/>
+        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeProductBOnCategoryM">
+            <argument name="productName" value="$productB.name$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeProductCOnCategoryM">
+            <argument name="productName" value="$productC.name$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductNameIsNotOnProductMainPageActionGroup" stepKey="dontSeeProductAOnCategoryM">
+            <argument name="productName" value="$productA.name$"/>
+        </actionGroup>
 
         <!-- Category N contains only Product C -->
         <amOnPage url="{{StorefrontCategoryPage.url($categoryK.custom_attributes[url_key]$/$categoryN.custom_attributes[url_key]$)}}" stepKey="onCategoryN"/>
-        <see userInput="$productC.name$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeProductCOnCategoryN"/>
-        <dontSee userInput="$productA.name$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontSeeProductAOnCategoryN"/>
-        <dontSee userInput="$productB.name$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontSeeProductBOnCategoryN"/>
+        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeProductCOnCategoryN">
+            <argument name="productName" value="$productC.name$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductNameIsNotOnProductMainPageActionGroup" stepKey="dontSeeProductAOnCategoryN">
+            <argument name="productName" value="$productA.name$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductNameIsNotOnProductMainPageActionGroup" stepKey="dontSeeProductBOnCategoryN">
+            <argument name="productName" value="$productB.name$"/>
+        </actionGroup>
 
         <!--  Assign category K to Product A -->
         <createData entity="AssignProductToCategory" stepKey="assignCategoryKToProductA">
@@ -121,27 +141,48 @@
 
         <!-- Open categories K, L, M, N on Storefront in order to make sure that new assignments are not applied yet -->
         <!-- Category K contains only Products B & C -->
-        <amOnPage url="{{StorefrontCategoryPage.url($categoryK.custom_attributes[url_key]$)}}" stepKey="amOnCategoryK"/>
-        <see userInput="$productB.name$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeProductBCategoryK"/>
-        <see userInput="$productC.name$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeProductCCategoryK"/>
-        <dontSee userInput="$productA.name$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontSeeProductACategoryN"/>
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="amOnCategoryK">
+            <argument name="category" value="$$categoryK$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeProductBCategoryK">
+            <argument name="productName" value="$productB.name$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeProductCCategoryK">
+            <argument name="productName" value="$productC.name$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductNameIsNotOnProductMainPageActionGroup" stepKey="dontSeeProductACategoryN">
+            <argument name="productName" value="$productA.name$"/>
+        </actionGroup>
 
         <!-- Category L contains no Products -->
         <amOnPage url="{{StorefrontCategoryPage.url($categoryK.custom_attributes[url_key]$/$categoryL.custom_attributes[url_key]$)}}" stepKey="amOnCategoryL"/>
-        <see userInput="We can't find products matching the selection." selector="{{StorefrontCategoryMainSection.emptyProductMessage}}" stepKey="seeEmptyMessage"/>
+        <!--<see userInput="We can't find products matching the selection." selector="{{StorefrontCategoryMainSection.emptyProductMessage}}" stepKey="seeEmptyMessage"/>-->
+        <actionGroup ref="AssertStorefrontNoProductsFoundActionGroup" stepKey="seeEmptyMessage"/>
         <dontSeeElement selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontseeProduct"/>
 
         <!-- Category M contains only Products B & C -->
         <amOnPage url="{{StorefrontCategoryPage.url($categoryK.custom_attributes[url_key]$/$categoryL.custom_attributes[url_key]$/$categoryM.custom_attributes[url_key]$)}}" stepKey="amOnCategoryM"/>
-        <see userInput="$productB.name$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeProductBCategoryM"/>
-        <see userInput="$productC.name$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeProductCCategoryM"/>
-        <dontSee userInput="$productA.name$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontSeeProductAInCategoryM"/>
+        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeProductBCategoryM">
+            <argument name="productName" value="$productB.name$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeProductCCategoryM">
+            <argument name="productName" value="$productC.name$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductNameIsNotOnProductMainPageActionGroup" stepKey="dontSeeProductAInCategoryM">
+            <argument name="productName" value="$productA.name$"/>
+        </actionGroup>
 
         <!-- Category N contains only Product C -->
         <amOnPage url="{{StorefrontCategoryPage.url($categoryK.custom_attributes[url_key]$/$categoryN.custom_attributes[url_key]$)}}" stepKey="amOnCategoryN"/>
-        <see userInput="$productC.name$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeProductInCategoryN"/>
-        <dontSee userInput="$productA.name$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontSeeProductAInCategoryN"/>
-        <dontSee userInput="$productB.name$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontSeeProductBInCategoryN"/>
+        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeProductInCategoryN">
+            <argument name="productName" value="$productC.name$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductNameIsNotOnProductMainPageActionGroup" stepKey="dontSeeProductAInCategoryN">
+            <argument name="productName" value="$productA.name$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductNameIsNotOnProductMainPageActionGroup" stepKey="dontSeeProductBInCategoryN">
+            <argument name="productName" value="$productB.name$"/>
+        </actionGroup>
 
         <!-- Run cron -->
         <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndex">
@@ -150,29 +191,55 @@
 
         <!-- Open categories K, L, M, N on Storefront in order to make sure that new assignments are applied -->
         <!-- Category K contains only Products A, C -->
-        <amOnPage url="{{StorefrontCategoryPage.url($categoryK.custom_attributes[url_key]$)}}" stepKey="storefrontCategoryK"/>
-        <see userInput="$productA.name$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeProductAOnCategoryK"/>
-        <see userInput="$productC.name$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeCategoryKWithProductC"/>
-        <dontSee userInput="$productB.name$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontSeeCategoryKWithProductB"/>
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="storefrontCategoryK">
+            <argument name="category" value="$$categoryK$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeProductAOnCategoryK">
+            <argument name="productName" value="$productA.name$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeCategoryKWithProductC">
+            <argument name="productName" value="$productC.name$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductNameIsNotOnProductMainPageActionGroup" stepKey="dontSeeCategoryKWithProductB">
+            <argument name="productName" value="$productB.name$"/>
+        </actionGroup>
 
         <!-- Category L contains only Product C -->
         <amOnPage url="{{StorefrontCategoryPage.url($categoryK.custom_attributes[url_key]$/$categoryL.custom_attributes[url_key]$)}}" stepKey="storefrontCategoryL"/>
-        <see userInput="$productC.name$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeCategoryLWithProductC"/>
-        <dontSee userInput="$productA.name$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontSeeCategoryLWithProductA"/>
-        <dontSee userInput="$productB.name$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontSeeCategoryLWithProductB"/>
+        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeCategoryLWithProductC">
+            <argument name="productName" value="$productC.name$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductNameIsNotOnProductMainPageActionGroup" stepKey="dontSeeCategoryLWithProductA">
+            <argument name="productName" value="$productA.name$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductNameIsNotOnProductMainPageActionGroup" stepKey="dontSeeCategoryLWithProductB">
+            <argument name="productName" value="$productB.name$"/>
+        </actionGroup>
 
         <!-- Category M contains only Product C -->
         <amOnPage url="{{StorefrontCategoryPage.url($categoryK.custom_attributes[url_key]$/$categoryL.custom_attributes[url_key]$/$categoryM.custom_attributes[url_key]$)}}" stepKey="storefrontCategoryM"/>
         <waitForPageLoad stepKey="waitForStorefrontCategoryM"/>
-        <see userInput="$productC.name$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeCategoryMAndProductC"/>
-        <dontSee userInput="$productA.name$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontSeeCategoryMAndProductA"/>
-        <dontSee userInput="$productB.name$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontSeeCategoryMAndProductB"/>
+        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeCategoryMAndProductC">
+            <argument name="productName" value="$productC.name$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductNameIsNotOnProductMainPageActionGroup" stepKey="dontSeeCategoryMAndProductA">
+            <argument name="productName" value="$productA.name$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductNameIsNotOnProductMainPageActionGroup" stepKey="dontSeeCategoryMAndProductB">
+            <argument name="productName" value="$productB.name$"/>
+        </actionGroup>
 
         <!-- Category N contains only Product C -->
         <amOnPage url="{{StorefrontCategoryPage.url($categoryK.custom_attributes[url_key]$/$categoryN.custom_attributes[url_key]$)}}" stepKey="storefrontCategoryN"/>
-        <see userInput="$productC.name$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeProductCAndCategoryN"/>
-        <dontSee userInput="$productA.name$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontSeeProductAAndCategoryN"/>
-        <dontSee userInput="$productB.name$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontSeeProductBAndCategoryN"/>
+        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeProductCAndCategoryN">
+            <argument name="productName" value="$productC.name$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductNameIsNotOnProductMainPageActionGroup" stepKey="dontSeeProductAAndCategoryN">
+            <argument name="productName" value="$productA.name$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductNameIsNotOnProductMainPageActionGroup" stepKey="dontSeeProductBAndCategoryN">
+            <argument name="productName" value="$productB.name$"/>
+        </actionGroup>
 
         <!-- Remove Product A assignment for category K -->
         <deleteData url="/V1/categories/$categoryK.id$/products/$productA.sku$" stepKey="unassignCategoryKFromProductA"/>
@@ -188,28 +255,54 @@
 
         <!-- Open categories K, L, M, N on Storefront in order to make sure that new assignments are not applied yet -->
         <!-- Category K contains only Products A, C -->
-        <amOnPage url="{{StorefrontCategoryPage.url($categoryK.custom_attributes[url_key]$)}}" stepKey="onStorefrontCategoryK"/>
-        <see userInput="$productA.name$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeProductAWithCategoryK"/>
-        <see userInput="$productC.name$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeProductC"/>
-        <dontSee userInput="$productB.name$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontSeeProductB"/>
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="onStorefrontCategoryK">
+            <argument name="category" value="$$categoryK$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeProductAWithCategoryK">
+            <argument name="productName" value="$productA.name$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeProductC">
+            <argument name="productName" value="$productC.name$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductNameIsNotOnProductMainPageActionGroup" stepKey="dontSeeProductB">
+            <argument name="productName" value="$productB.name$"/>
+        </actionGroup>
 
         <!-- Category L contains only Product C -->
         <amOnPage url="{{StorefrontCategoryPage.url($categoryK.custom_attributes[url_key]$/$categoryL.custom_attributes[url_key]$)}}" stepKey="onStorefrontCategoryL"/>
-        <see userInput="$productC.name$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeCategoryLAndProductC"/>
-        <dontSee userInput="$productA.name$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontSeeCategoryLAndProductA"/>
-        <dontSee userInput="$productB.name$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontSeeCategoryLAndProductB"/>
+        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeCategoryLAndProductC">
+            <argument name="productName" value="$productC.name$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductNameIsNotOnProductMainPageActionGroup" stepKey="dontSeeCategoryLAndProductA">
+            <argument name="productName" value="$productA.name$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductNameIsNotOnProductMainPageActionGroup" stepKey="dontSeeCategoryLAndProductB">
+            <argument name="productName" value="$productB.name$"/>
+        </actionGroup>
 
         <!-- Category M contains only Product C -->
         <amOnPage url="{{StorefrontCategoryPage.url($categoryK.custom_attributes[url_key]$/$categoryL.custom_attributes[url_key]$/$categoryM.custom_attributes[url_key]$)}}" stepKey="onStorefrontCategoryM"/>
-        <see userInput="$productC.name$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeCategoryMWithProductC"/>
-        <dontSee userInput="$productA.name$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontSeeCategoryMWithProductA"/>
-        <dontSee userInput="$productB.name$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontSeeCategoryMWithProductB"/>
+        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeCategoryMWithProductC">
+            <argument name="productName" value="$productC.name$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductNameIsNotOnProductMainPageActionGroup" stepKey="dontSeeCategoryMWithProductA">
+            <argument name="productName" value="$productA.name$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductNameIsNotOnProductMainPageActionGroup" stepKey="dontSeeCategoryMWithProductB">
+            <argument name="productName" value="$productB.name$"/>
+        </actionGroup>
 
         <!-- Category N contains only Product C -->
         <amOnPage url="{{StorefrontCategoryPage.url($categoryK.custom_attributes[url_key]$/$categoryN.custom_attributes[url_key]$)}}" stepKey="onStorefrontCategoryN"/>
-        <see userInput="$productC.name$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="productCOnCategoryN"/>
-        <dontSee userInput="$productA.name$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontSeeProductAOnTheCategoryN"/>
-        <dontSee userInput="$productB.name$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontSeeProductBOnTheCategoryN"/>
+        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="productCOnCategoryN">
+            <argument name="productName" value="$productC.name$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductNameIsNotOnProductMainPageActionGroup" stepKey="dontSeeProductAOnTheCategoryN">
+            <argument name="productName" value="$productA.name$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductNameIsNotOnProductMainPageActionGroup" stepKey="dontSeeProductBOnTheCategoryN">
+            <argument name="productName" value="$productB.name$"/>
+        </actionGroup>
 
         <!-- Reindex product changes -->
         <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndex2">
@@ -219,26 +312,47 @@
         <!-- Open categories K, L, M, N on Storefront in order to make sure that new assignments are applied -->
 
         <!-- Category K contains only Products B & C -->
-        <amOnPage url="{{StorefrontCategoryPage.url($categoryK.custom_attributes[url_key]$)}}" stepKey="onFrontendCategoryK"/>
-        <see userInput="$productB.name$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="productBOnCategoryK"/>
-        <see userInput="$productC.name$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="productCOnCategoryK"/>
-        <dontSee userInput="$productA.name$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontSeeProductAOnTheCategoryK"/>
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="onFrontendCategoryK">
+            <argument name="category" value="$$categoryK$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="productBOnCategoryK">
+            <argument name="productName" value="$productB.name$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="productCOnCategoryK">
+            <argument name="productName" value="$productC.name$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductNameIsNotOnProductMainPageActionGroup" stepKey="dontSeeProductAOnTheCategoryK">
+            <argument name="productName" value="$productA.name$"/>
+        </actionGroup>
+
 
         <!-- Category L contains no Products -->
         <amOnPage url="{{StorefrontCategoryPage.url($categoryK.custom_attributes[url_key]$/$categoryL.custom_attributes[url_key]$)}}" stepKey="onFrontendCategoryL"/>
-        <see userInput="We can't find products matching the selection." selector="{{StorefrontCategoryMainSection.emptyProductMessage}}" stepKey="noProductsMessage"/>
+        <actionGroup ref="AssertStorefrontNoProductsFoundActionGroup" stepKey="noProductsMessage"/>
         <dontSeeElement selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontSeeProductsOnCategoryL"/>
 
         <!-- Category M contains only Product C -->
         <amOnPage url="{{StorefrontCategoryPage.url($categoryK.custom_attributes[url_key]$/$categoryL.custom_attributes[url_key]$/$categoryM.custom_attributes[url_key]$)}}" stepKey="onFrontendCategoryM"/>
-        <see userInput="$productC.name$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeCategoryMPageAndProductC"/>
-        <dontSee userInput="$productA.name$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontSeeCategoryMPageAndProductA"/>
-        <dontSee userInput="$productB.name$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontSeeCategoryMPageAndProductB"/>
+        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeCategoryMPageAndProductC">
+            <argument name="productName" value="$productC.name$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductNameIsNotOnProductMainPageActionGroup" stepKey="dontSeeCategoryMPageAndProductA">
+            <argument name="productName" value="$productA.name$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductNameIsNotOnProductMainPageActionGroup" stepKey="dontSeeCategoryMPageAndProductB">
+            <argument name="productName" value="$productB.name$"/>
+        </actionGroup>
 
         <!-- Category N contains only Products B and C -->
         <amOnPage url="{{StorefrontCategoryPage.url($categoryK.custom_attributes[url_key]$/$categoryN.custom_attributes[url_key]$)}}" stepKey="onFrontendCategoryN"/>
-        <see userInput="$productB.name$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeProductBAndCategoryN"/>
-        <see userInput="$productC.name$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeProductCCategoryN"/>
-        <dontSee userInput="$productA.name$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontSeeProductAWithCategoryN"/>
+        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeProductBAndCategoryN">
+            <argument name="productName" value="$productB.name$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeProductCCategoryN">
+            <argument name="productName" value="$productC.name$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductNameIsNotOnProductMainPageActionGroup" stepKey="dontSeeProductAWithCategoryN">
+            <argument name="productName" value="$productA.name$"/>
+        </actionGroup>
     </test>
 </tests>
