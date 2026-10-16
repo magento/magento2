@@ -875,7 +875,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         $this->getTypeInstance()->beforeSave($this);
 
         $hasOptions = $this->getData('has_options') === "1" && $this->isProductHasOptions();
-        $hasRequiredOptions = $this->getData('required_options') === "1" && $this->isProductHasOptions();
+        $hasRequiredOptions = false;
 
         /**
          * $this->_canAffectOptions - set by type instance only
