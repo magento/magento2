@@ -21,7 +21,6 @@
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-            <actionGroup ref="AdminOpenCreateRolePageActionGroup" stepKey="openCreateRolePage"/>
             <actionGroup ref="AdminStartCreateUserRoleActionGroup" stepKey="startCreateUserRole">
                 <argument name="roleName" value="{{adminNoReportRole.rolename}}"/>
                 <argument name="userPassword" value="{{_CREDS.magento/MAGENTO_ADMIN_PASSWORD}}"/>
@@ -90,11 +89,11 @@
         <after>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdminForCleanup"/>
-            <actionGroup ref="AdminDeleteCustomUserActionGroup" stepKey="deleteNoReportUser">
-                <argument name="user" value="NewAdminUser"/>
-            </actionGroup>
             <actionGroup ref="AdminDeleteUserRoleActionGroup" stepKey="deleteNoReportRole">
                 <argument name="roleName" value="{{adminNoReportRole.rolename}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteCustomUserActionGroup" stepKey="deleteNoReportUser">
+                <argument name="user" value="NewAdminUser"/>
             </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAfterCleanup"/>
         </after>
@@ -108,7 +107,7 @@
         <seeElementInDOM selector="{{AdminConfigAdvancedReportingSection.advancedReportingMenuItem}}" stepKey="seeAdvancedReportingConfigMenuItem"/>
         <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAdmin"/>
 
-        <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsUser">
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsUser">
             <argument name="username" value="{{NewAdminUser.username}}"/>
             <argument name="password" value="{{NewAdminUser.password}}"/>
         </actionGroup>
