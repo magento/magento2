@@ -9,6 +9,7 @@ namespace Magento\Elasticsearch\Model\Adapter\BatchDataMapper;
 use Magento\CatalogSearch\Model\Indexer\Fulltext\Action\DataProvider;
 use Magento\Eav\Model\Entity\Attribute;
 use Magento\Elasticsearch\Model\Adapter\Document\Builder;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\OwnValueSortField;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 use Magento\Elasticsearch\Model\Adapter\BatchDataMapperInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldType\Date as DateFieldType;
@@ -158,7 +159,9 @@ class ProductDataMapper implements BatchDataMapperInterface
             $productIndexData = $this->convertToProductData($productId, $indexData, $storeId);
             foreach ($productIndexData as $attributeCode => $value) {
                 // Prepare processing attribute info
-                if (strpos($attributeCode, '_value') !== false) {
+                if (strpos($attributeCode, '_value') !== false
+                    || strpos($attributeCode, OwnValueSortField::PREFIX) === 0
+                ) {
                     $this->builder->addField($attributeCode, $value);
                     continue;
                 }
@@ -213,8 +216,19 @@ class ProductDataMapper implements BatchDataMapperInterface
             if (!\is_array($attributeValues)) {
                 $attributeValues = [$productId => $attributeValues];
             }
+            $ownValues = null;
+            if ($attribute->getUsedForSortBy() && $this->isSourceAttribute($attribute)) {
+                $ownValues = isset($attributeValues[$productId])
+                    ? $this->prepareAttributeValues(
+                        $productId,
+                        $attribute,
+                        [$productId => $attributeValues[$productId]],
+                        $storeId
+                    )
+                    : [];
+            }
             $attributeValues = $this->prepareAttributeValues($productId, $attribute, $attributeValues, $storeId);
-            $productAttributes += $this->convertAttribute($attribute, $attributeValues, $storeId);
+            $productAttributes += $this->convertAttribute($attribute, $attributeValues, $storeId, $ownValues);
         }
 
         return $productAttributes;
@@ -226,10 +240,15 @@ class ProductDataMapper implements BatchDataMapperInterface
      * @param Attribute $attribute
      * @param array $attributeValues
      * @param int $storeId
+     * @param array|null $ownValues values of the product itself, set only for sortable source attributes
      * @return array
      */
-    private function convertAttribute(Attribute $attribute, array $attributeValues, int $storeId): array
-    {
+    private function convertAttribute(
+        Attribute $attribute,
+        array $attributeValues,
+        int $storeId,
+        ?array $ownValues = null
+    ): array {
         $productAttributes = [];
 
         $retrievedValue = $this->retrieveFieldValue($attributeValues);
@@ -241,6 +260,12 @@ class ProductDataMapper implements BatchDataMapperInterface
                 $retrievedLabel = $this->retrieveFieldValue($attributeLabels);
                 if ($retrievedLabel) {
                     $productAttributes[$attribute->getAttributeCode() . '_value'] = $retrievedLabel;
+                    if ($ownValues !== null) {
+                        $ownLabels = $ownValues ? $this->getValuesLabels($attribute, $ownValues, $storeId) : [];
+                        $productAttributes[OwnValueSortField::PREFIX . $attribute->getAttributeCode()] = $ownLabels
+                            ? $this->retrieveFieldValue($ownLabels)
+                            : $retrievedLabel;
+                    }
                 }
             }
         }
@@ -347,6 +372,18 @@ class ProductDataMapper implements BatchDataMapperInterface
                 $values
             )
         );
+    }
+
+    /**
+     * Check if the attribute is sorted by its option labels, matching AttributeAdapter::isComplexType().
+     *
+     * @param Attribute $attribute
+     * @return bool
+     */
+    private function isSourceAttribute(Attribute $attribute): bool
+    {
+        return in_array($attribute->getFrontendInput(), ['select', 'multiselect'], true)
+            || ($attribute->usesSource() && $attribute->getFrontendInput() !== 'boolean');
     }
 
     /**
