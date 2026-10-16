@@ -43,6 +43,40 @@ define([
             expect($(modal).length).toEqual(1);
         });
 
+        it('Closing a modal that was never opened does not throw', function () {
+            // Magento_Checkout/js/model/sidebar hide() closes the order-summary modal even
+            // on viewports where it was never opened, so overlay is still undefined.
+            expect(modal.overlay).toBeUndefined();
+            expect(function () {
+                modal._destroyOverlay();
+            }).not.toThrow();
+        });
+
+        it('Closing an already closed modal does not throw', function () {
+            modal.openModal();
+            modal.closeModal();
+
+            // closeModal() defers _close() to the transitionEvent, and every call queues
+            // another handler, so a close that races the closing animation - a double
+            // click on the close button, for instance - runs _close() twice.
+            modal._close();
+            expect(modal.overlay).toBeNull();
+
+            expect(function () {
+                modal._close();
+            }).not.toThrow();
+        });
+
+        it('Closing twice tears the overlay down exactly once', function () {
+            modal.openModal();
+            modal.closeModal();
+            modal._close();
+            modal._close();
+
+            expect(modal.overlay).toBeNull();
+            expect($('.' + modal.options.overlayClass).length).toBe(0);
+        });
+
         it('Verify set title', function () {
             var newTitle = 'New modal title';
 
