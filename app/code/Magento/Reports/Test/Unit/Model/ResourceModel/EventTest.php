@@ -289,4 +289,48 @@ class EventTest extends TestCase
 
         $this->event->clean($eventMock);
     }
+
+    /**
+     * Verify that clean() terminates after the maximum batch iteration limit
+     * even when orphaned events keep being found (prevents infinite loop).
+     *
+     * @return void
+     */
+    public function testCleanTerminatesAfterBatchLimit(): void
+    {
+        $eventMock = $this->getMockBuilder(\Magento\Reports\Model\Event::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $selectMock = $this->createPartialMockWithReflection(
+            Select::class,
+            ['where', 'limit', 'from', 'joinLeft']
+        );
+
+        // Always return event IDs — simulating new events being inserted continuously
+        $deleteCount = 0;
+        $this->connectionMock
+            ->method('fetchCol')
+            ->willReturn([1, 2, 3]);
+
+        $this->connectionMock
+            ->method('delete')
+            ->willReturnCallback(function () use (&$deleteCount) {
+                $deleteCount++;
+                return 3;
+            });
+        $this->connectionMock
+            ->expects($this->any())
+            ->method('select')
+            ->willReturn($selectMock);
+
+        $selectMock->method('from')->willReturnSelf();
+        $selectMock->method('joinLeft')->willReturnSelf();
+        $selectMock->method('where')->willReturnSelf();
+        $selectMock->method('limit')->willReturnSelf();
+
+        $this->event->clean($eventMock);
+
+        $this->assertSame(100, $deleteCount, 'Clean must stop after 100 batch iterations to prevent infinite loop');
+    }
 }
