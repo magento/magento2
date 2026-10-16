@@ -9,6 +9,7 @@ namespace Magento\Backend\Block\Widget;
 use Magento\Backend\Block\Template;
 use Magento\Backend\Block\Widget\Button\ButtonList;
 use Magento\Backend\Block\Widget\Button\Item as ButtonItem;
+use Magento\Framework\Phrase;
 
 /**
  * Backend container block
@@ -105,7 +106,7 @@ class Container extends Template implements ContainerInterface
      *
      * @param string $buttonId
      * @param string|null $key
-     * @param string $data
+     * @param Phrase|string $data
      * @return $this
      */
     public function updateButton($buttonId, $key, $data)
