@@ -22,6 +22,8 @@ use Magento\Framework\HTTP\AsyncClient\HttpResponseDeferredInterface;
 
 class UspsAuthTest extends TestCase
 {
+    private const OAUTH_SCOPE = 'prices shipments tracking labels payments international-labels';
+
     /**
      * @var Cache|MockObject
      */
@@ -70,14 +72,49 @@ class UspsAuthTest extends TestCase
         string $clientUrl
     ): void {
         $expectedCachedToken = 'cached-access-token';
+        $expectedCacheKey = $this->getExpectedCacheKey($clientId, $clientUrl);
         $this->cacheMock->expects($this->once())
             ->method('load')
-            ->with(UspsAuth::CACHE_KEY_PREFIX)
+            ->with($expectedCacheKey)
             ->willReturn($expectedCachedToken);
 
         $this->asyncHttpClientMock->expects($this->never())->method('request');
         $result = $this->uspsAuth->getAccessToken($clientId, $clientSecret, $clientUrl);
         $this->assertEquals($expectedCachedToken, $result);
+    }
+
+    /**
+     * @return void
+     * @throws LocalizedException
+     * @throws \Throwable
+     */
+    public function testGetAccessTokenUsesClientSpecificCacheKeys(): void
+    {
+        $firstClientId = 'first-client-id';
+        $secondClientId = 'second-client-id';
+        $clientUrl = 'https://apis.usps.com/oauth2/v3/token';
+        $firstCacheKey = $this->getExpectedCacheKey($firstClientId, $clientUrl);
+        $secondCacheKey = $this->getExpectedCacheKey($secondClientId, $clientUrl);
+
+        $this->assertNotSame($firstCacheKey, $secondCacheKey);
+
+        $this->cacheMock->expects($this->exactly(2))
+            ->method('load')
+            ->willReturnMap([
+                [$firstCacheKey, 'first-client-token'],
+                [$secondCacheKey, 'second-client-token'],
+            ]);
+
+        $this->asyncHttpClientMock->expects($this->never())->method('request');
+
+        $this->assertSame(
+            'first-client-token',
+            $this->uspsAuth->getAccessToken($firstClientId, 'first-client-secret', $clientUrl)
+        );
+        $this->assertSame(
+            'second-client-token',
+            $this->uspsAuth->getAccessToken($secondClientId, 'second-client-secret', $clientUrl)
+        );
     }
 
     /**
@@ -93,7 +130,7 @@ class UspsAuthTest extends TestCase
     ): void {
         $this->cacheMock->expects($this->once())
             ->method('load')
-            ->with(UspsAuth::CACHE_KEY_PREFIX)
+            ->with($this->getExpectedCacheKey($clientId, $clientUrl))
             ->willReturn(false);
 
         $this->asyncHttpClientMock->expects($this->once())
@@ -118,7 +155,7 @@ class UspsAuthTest extends TestCase
     ): void {
         $this->cacheMock->expects($this->once())
             ->method('load')
-            ->with(UspsAuth::CACHE_KEY_PREFIX)
+            ->with($this->getExpectedCacheKey($clientId, $clientUrl))
             ->willReturn(false);
 
         $asyncResponseMock = $this->createMock(HttpResponseDeferredInterface::class);
@@ -154,7 +191,7 @@ class UspsAuthTest extends TestCase
         // Simulate cache miss
         $this->cacheMock->expects($this->once())
             ->method('load')
-            ->with(UspsAuth::CACHE_KEY_PREFIX)
+            ->with($this->getExpectedCacheKey($clientId, $clientUrl))
             ->willReturn(false);
 
         // Simulate request payload
@@ -162,7 +199,7 @@ class UspsAuthTest extends TestCase
             'grant_type' => 'client_credentials',
             'client_id' => $clientId,
             'client_secret' => $clientSecret,
-            'scope' => 'prices shipments tracking labels payments international-labels',
+            'scope' => self::OAUTH_SCOPE,
         ]);
 
         // Mock async response
@@ -191,7 +228,7 @@ class UspsAuthTest extends TestCase
         // Assert cache save
         $this->cacheMock->expects($this->once())
             ->method('save')
-            ->with('new-access-token', UspsAuth::CACHE_KEY_PREFIX, [], 3600);
+            ->with('new-access-token', $this->getExpectedCacheKey($clientId, $clientUrl), [], 3600);
 
         $result = $this->uspsAuth->getAccessToken($clientId, $clientSecret, $clientUrl);
         $this->assertEquals('new-access-token', $result);
@@ -223,5 +260,19 @@ class UspsAuthTest extends TestCase
     private function getErrorResponse(): string
     {
         return json_encode(['errors' => ['message' => 'Invalid credentials']]);
+    }
+
+    /**
+     * @param string $clientId
+     * @param string $clientUrl
+     * @return string
+     */
+    private function getExpectedCacheKey(string $clientId, string $clientUrl): string
+    {
+        return UspsAuth::CACHE_KEY_PREFIX . hash('sha256', implode('|', [
+            $clientUrl,
+            $clientId,
+            self::OAUTH_SCOPE
+        ]));
     }
 }
