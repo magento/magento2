@@ -52,8 +52,10 @@ class ProductFieldsSelector
             if ($node->name->value !== $productNodeName) {
                 continue;
             }
-                $queryFields = $this->attributesJoiner->getQueryFields($node, $info);
-                $fieldNames[] = $queryFields;
+            $queryFields = array_map(function (string $fieldName): string {
+                return $this->fieldTranslator->translate($fieldName);
+            }, $this->attributesJoiner->getQueryFields($node, $info));
+            $fieldNames[] = $queryFields;
         }
 
         return array_merge(...$fieldNames);
