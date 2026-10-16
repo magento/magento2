@@ -276,6 +276,92 @@ class CartFixedDiscount
     }
 
     /**
+     * Initial cart-fixed balance for shipping discount processing.
+     * Single: remaining after item allocation on quote.
+     * Multi: full rule amount (legacy).
+     *
+     * @param Quote $quote
+     * @param Rule $rule
+     * @param string|int $ruleId
+     * @param bool $isMultiShipping
+     * @return float
+     */
+    public function getCartFixedShippingRuleBalance(
+        Quote $quote,
+        Rule $rule,
+        $ruleId,
+        bool $isMultiShipping
+    ): float {
+        if ($isMultiShipping) {
+            return (float) $rule->getDiscountAmount();
+        }
+        $quoteCartRules = $quote->getCartFixedRules();
+        if (is_array($quoteCartRules) && array_key_exists($ruleId, $quoteCartRules)) {
+            return (float) $quoteCartRules[$ruleId];
+        }
+        return (float) $rule->getDiscountAmount();
+    }
+
+    /**
+     * Single-shipping only: remaining balance capped by shipping discount tax basis.
+     *
+     * @param Quote $quote
+     * @param float $availableRuleBalance
+     * @param float $shippingAmountForDiscount
+     * @param float $baseShippingAmountForDiscount
+     * @param float $appliedShippingDiscount
+     * @param float $baseAppliedShippingDiscount
+     * @return array{0: float, 1: float} [quote currency, base currency]
+     */
+    public function calculateSingleShippingCartFixedDiscount(
+        Quote $quote,
+        float $availableRuleBalance,
+        float $shippingAmountForDiscount,
+        float $baseShippingAmountForDiscount,
+        float $appliedShippingDiscount,
+        float $baseAppliedShippingDiscount
+    ): array {
+        if ($availableRuleBalance <= 0.0) {
+            return [0.0, 0.0];
+        }
+
+        $baseDiscountAmount = max(
+            0.0,
+            min(
+                $availableRuleBalance,
+                $baseShippingAmountForDiscount - $baseAppliedShippingDiscount
+            )
+        );
+        $discountAmount = max(
+            0.0,
+            min(
+                (float) $this->priceCurrency->convert($baseDiscountAmount, $quote->getStore()),
+                $shippingAmountForDiscount - $appliedShippingDiscount
+            )
+        );
+
+        return [$discountAmount, $baseDiscountAmount];
+    }
+
+    /**
+     * Sync remaining cart-fixed balance back onto the quote (single shipping only).
+     *
+     * @param Quote $quote
+     * @param string|int $ruleId
+     * @param float $remaining
+     * @return void
+     */
+    public function syncQuoteCartFixedRuleBalance(Quote $quote, $ruleId, float $remaining): void
+    {
+        $quoteCartRules = $quote->getCartFixedRules();
+        if (!is_array($quoteCartRules)) {
+            $quoteCartRules = [];
+        }
+        $quoteCartRules[$ruleId] = $remaining;
+        $quote->setCartFixedRules($quoteCartRules);
+    }
+
+    /**
      * Get configuration setting "Apply Discount On Prices Including Tax" value
      *
      * @return bool
