@@ -132,6 +132,7 @@
 "Failed to validate ftp account","Failed to validate ftp account"
 "Field title can't be empty","Field title can't be empty"
 "File '%system' cannot be found","File '%system' cannot be found"
+"File '%system' cannot be openend","File '%system' cannot be openend"
 "File ""%1"" cannot be opened %2","File ""%1"" cannot be opened %2"
 "File ""%1"" does not exist.","File ""%1"" does not exist."
 "File already exists","File already exists"
