@@ -41,6 +41,7 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\DB\Adapter\ConnectionException;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Lock\LockManagerInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Api\Data\StoreInterface;
@@ -177,6 +178,32 @@ class ProductRepositoryTest extends TestCase
      * @var CollectionProcessorInterface|MockObject
      */
     private $collectionProcessor;
+
+    /**
+     * @var LockManagerInterface|MockObject
+     */
+    private $lockManager;
+
+    /**
+     * Lock names passed to LockManagerInterface::lock(), in call order.
+     *
+     * @var string[]
+     */
+    private $acquiredLocks = [];
+
+    /**
+     * Lock names passed to LockManagerInterface::unlock(), in call order.
+     *
+     * @var string[]
+     */
+    private $releasedLocks = [];
+
+    /**
+     * What the stubbed LockManagerInterface::lock() returns.
+     *
+     * @var bool
+     */
+    private $lockAcquisitionSucceeds = true;
 
     /**
      * @var ProductExtensionInterface|MockObject
@@ -325,6 +352,24 @@ class ProductRepositoryTest extends TestCase
         $this->processor = $this->createMock(Processor::class);
 
         $this->collectionProcessor = $this->createMock(CollectionProcessorInterface::class);
+        $this->acquiredLocks = [];
+        $this->releasedLocks = [];
+        $this->lockAcquisitionSucceeds = true;
+        $this->lockManager = $this->createMock(LockManagerInterface::class);
+        $this->lockManager->method('lock')->willReturnCallback(
+            function (string $name, int $timeout = -1): bool {
+                $this->acquiredLocks[] = $name;
+
+                return $this->lockAcquisitionSucceeds;
+            }
+        );
+        $this->lockManager->method('unlock')->willReturnCallback(
+            function (string $name): bool {
+                $this->releasedLocks[] = $name;
+
+                return true;
+            }
+        );
 
         $this->serializerMock = $this->createMock(Json::class);
         $this->serializerMock->expects($this->any())
@@ -362,6 +407,7 @@ class ProductRepositoryTest extends TestCase
                 'storeManager' => $this->storeManager,
                 'mediaGalleryProcessor' => $this->processor,
                 'collectionProcessor' => $this->collectionProcessor,
+                'lockManager' => $this->lockManager,
                 'serializer' => $this->serializerMock,
                 'cacheLimit' => $this->cacheLimit
             ]
@@ -767,6 +813,154 @@ class ProductRepositoryTest extends TestCase
         $this->product->method('getSku')->willReturn('simple');
 
         $this->assertEquals($this->product, $this->model->save($this->product));
+    }
+
+    /**
+     * A save takes exactly one lock and gives it back.
+     *
+     * @return void
+     */
+    public function testSaveAcquiresAndReleasesOneLockPerSave(): void
+    {
+        $this->stubSuccessfulSave();
+        $this->product->method('getSku')->willReturn('ERP-1001');
+
+        $this->model->save($this->product);
+
+        $this->assertCount(1, $this->acquiredLocks);
+        $this->assertSame($this->acquiredLocks, $this->releasedLocks);
+    }
+
+    /**
+     * Spellings the catalog resolves to one product must contend for one lock.
+     *
+     * `catalog_product_entity.sku` is case-insensitive under the default
+     * collation and getIdBySku() compares with `=`, so these pairs address the
+     * same product and must never be saved concurrently.
+     *
+     * @param string $firstSku
+     * @param string $secondSku
+     * @return void
+     */
+    #[DataProvider('skuSpellingsThatResolveToOneProductDataProvider')]
+    public function testSaveTakesOneLockForSkuSpellingsThatResolveToOneProduct(
+        string $firstSku,
+        string $secondSku
+    ): void {
+        $this->stubSuccessfulSave();
+        $sku = $firstSku;
+        $this->product->method('getSku')->willReturnCallback(
+            function () use (&$sku): string {
+                return $sku;
+            }
+        );
+
+        $this->model->save($this->product);
+        $sku = $secondSku;
+        $this->model->save($this->product);
+
+        $this->assertCount(2, $this->acquiredLocks);
+        $this->assertSame(
+            $this->acquiredLocks[0],
+            $this->acquiredLocks[1],
+            sprintf('"%s" and "%s" are one product and must take one lock.', $firstSku, $secondSku)
+        );
+    }
+
+    /**
+     * @return array<string, string[]>
+     */
+    public static function skuSpellingsThatResolveToOneProductDataProvider(): array
+    {
+        return [
+            'identical' => ['ERP-1001', 'ERP-1001'],
+            'different case' => ['ERP-1001', 'erp-1001'],
+            'mixed case' => ['ERP-1001', 'Erp-1001'],
+            'surrounding whitespace' => ['ERP-1001', '  ERP-1001  '],
+            'both at once' => ['ERP-1001', "\terp-1001 "],
+        ];
+    }
+
+    /**
+     * Two genuinely different SKUs must not wait on each other.
+     *
+     * @return void
+     */
+    public function testSaveTakesDifferentLocksForDifferentSkus(): void
+    {
+        $this->stubSuccessfulSave();
+        $sku = 'ERP-1001';
+        $this->product->method('getSku')->willReturnCallback(
+            function () use (&$sku): string {
+                return $sku;
+            }
+        );
+
+        $this->model->save($this->product);
+        $sku = 'ERP-1002';
+        $this->model->save($this->product);
+
+        $this->assertCount(2, $this->acquiredLocks);
+        $this->assertNotSame($this->acquiredLocks[0], $this->acquiredLocks[1]);
+    }
+
+    /**
+     * A SKU held by another writer fails as a retryable save error naming the SKU.
+     *
+     * @return void
+     */
+    public function testSaveThrowsWhenTheSkuLockCannotBeAcquired(): void
+    {
+        $this->lockAcquisitionSucceeds = false;
+        $this->product->method('getSku')->willReturn('ERP-1001');
+        $this->resourceModel->expects($this->never())->method('save');
+
+        $this->expectException(CouldNotSaveException::class);
+        $this->expectExceptionMessage('Could not acquire the write lock for SKU "ERP-1001"');
+
+        try {
+            $this->model->save($this->product);
+        } finally {
+            $this->assertSame([], $this->releasedLocks, 'A lock that was never taken must not be released.');
+        }
+    }
+
+    /**
+     * A save that blows up must still hand the lock back.
+     *
+     * @return void
+     */
+    public function testSaveReleasesTheLockWhenTheSaveFails(): void
+    {
+        $this->resourceModel->method('getIdBySku')->willReturn(100);
+        $this->productFactory->method('create')->willReturn($this->product);
+        $this->resourceModel->method('validate')->with($this->product)->willReturn(true);
+        $this->resourceModel->method('save')->with($this->product)
+            ->willThrowException(new \Exception('boom'));
+        $this->extensibleDataObjectConverter->method('toNestedArray')->willReturn($this->productData);
+        $this->product->method('getSku')->willReturn('ERP-1001');
+
+        try {
+            $this->model->save($this->product);
+            $this->fail('The save was expected to throw.');
+        } catch (CouldNotSaveException $e) {
+            $this->assertCount(1, $this->acquiredLocks);
+            $this->assertSame($this->acquiredLocks, $this->releasedLocks);
+        }
+    }
+
+    /**
+     * Minimal stubbing for a save of an already existing product.
+     *
+     * @return void
+     */
+    private function stubSuccessfulSave(): void
+    {
+        $this->resourceModel->method('getIdBySku')->willReturn(100);
+        $this->productFactory->method('create')->willReturn($this->product);
+        $this->resourceModel->method('validate')->with($this->product)->willReturn(true);
+        $this->resourceModel->method('save')->with($this->product)->willReturn(true);
+        $this->extensibleDataObjectConverter->method('toNestedArray')->willReturn($this->productData);
     }
 
     /**
