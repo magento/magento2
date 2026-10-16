@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontCustomerProductAlertsSection">
+        <element name="pageTitle" type="text" selector=".page-title"/>
+        <element name="priceAlertsTable" type="block" selector="#my-price-alerts-table"/>
+        <element name="stockAlertsTable" type="block" selector="#my-stock-alerts-table"/>
+        <element name="priceSection" type="block" selector="#product-alert-price-section"/>
+        <element name="stockSection" type="block" selector="#product-alert-stock-section"/>
+        <element name="productNameInPriceTable" type="text" selector="#my-price-alerts-table .product-name"/>
+        <element name="productNameInStockTable" type="text" selector="#my-stock-alerts-table .product-name"/>
+        <element name="priceUnsubscribeButton" type="button" selector="#my-price-alerts-table .action.delete"/>
+        <element name="stockUnsubscribeButton" type="button" selector="#my-stock-alerts-table .action.delete"/>
+        <element name="priceUnsubscribeAllLink" type="button" selector="#product-alert-price-section a.action.unsubscribe-all"/>
+        <element name="stockUnsubscribeAllLink" type="button" selector="#product-alert-stock-section a.action.unsubscribe-all"/>
+        <element name="emptyMessage" type="text" selector=".message.info.empty"/>
+        <element name="backLink" type="button" selector=".actions-toolbar .action.back"/>
+    </section>
+</sections>

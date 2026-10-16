@@ -7,21 +7,25 @@ declare(strict_types=1);
 
 namespace Magento\ProductAlert\Test\Unit\Controller\Unsubscribe;
 
-use Magento\Backend\App\Action\Context;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Customer\Model\Session;
+use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Message\Manager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\ProductAlert\Controller\Unsubscribe\Price;
+use Magento\ProductAlert\Model\Price as PriceModel;
+use Magento\ProductAlert\Model\PriceFactory;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test class for \Magento\ProductAlert\Controller\Unsubscribe\Price
+ * @covers \Magento\ProductAlert\Controller\Unsubscribe\Price
  */
 class PriceTest extends TestCase
 {
@@ -29,11 +33,6 @@ class PriceTest extends TestCase
      * @var Price
      */
     private $priceController;
-
-    /**
-     * @var ObjectManager
-     */
-    private $objectManager;
 
     /**
      * @var Http|MockObject
@@ -46,11 +45,6 @@ class PriceTest extends TestCase
     private $resultRedirectMock;
 
     /**
-     * @var ResultFactory|MockObject
-     */
-    private $resultFactoryMock;
-
-    /**
      * @var Manager|MockObject
      */
     private $messageManagerMock;
@@ -61,69 +55,77 @@ class PriceTest extends TestCase
     private $productMock;
 
     /**
-     * @var Session|MockObject
-     */
-    private $customerSessionMock;
-
-    /**
-     * @var Context|MockObject
-     */
-    private $contextMock;
-
-    /**
      * @var ProductRepositoryInterface|MockObject
      */
     private $productRepositoryMock;
 
     /**
-     * @inheritdoc
+     * @var PriceModel|MockObject
      */
+    private $priceModelMock;
+
     protected function setUp(): void
     {
-        $this->objectManager = new ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->requestMock = $this->createMock(Http::class);
-        $this->resultFactoryMock = $this->createMock(ResultFactory::class);
+        $resultFactoryMock = $this->createMock(ResultFactory::class);
         $this->resultRedirectMock = $this->createMock(Redirect::class);
         $this->messageManagerMock = $this->createMock(Manager::class);
         $this->productMock = $this->createMock(Product::class);
-        $this->contextMock = $this->createMock(Context::class);
-        $this->customerSessionMock = $this->createMock(Session::class);
+        $contextMock = $this->createMock(Context::class);
+        $customerSessionMock = $this->createMock(Session::class);
         $this->productRepositoryMock = $this->createMock(ProductRepositoryInterface::class);
-        $this->resultFactoryMock->expects($this->any())
-            ->method('create')
+        $storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $priceFactoryMock = $this->createMock(PriceFactory::class);
+
+        $resultFactoryMock->method('create')
             ->with(ResultFactory::TYPE_REDIRECT)
             ->willReturn($this->resultRedirectMock);
-        $this->contextMock->method('getRequest')->willReturn($this->requestMock);
-        $this->contextMock->method('getResultFactory')->willReturn($this->resultFactoryMock);
-        $this->contextMock->method('getMessageManager')->willReturn($this->messageManagerMock);
+        $contextMock->method('getRequest')->willReturn($this->requestMock);
+        $contextMock->method('getResultFactory')->willReturn($resultFactoryMock);
+        $contextMock->method('getMessageManager')->willReturn($this->messageManagerMock);
 
-        $this->priceController = $this->objectManager->getObject(
+        $storeMock = $this->createMock(StoreInterface::class);
+        $storeMock->method('getWebsiteId')->willReturn(1);
+        $storeMock->method('getId')->willReturn(1);
+        $storeManagerMock->method('getStore')->willReturn($storeMock);
+        $customerSessionMock->method('getCustomerId')->willReturn(1);
+
+        $this->priceModelMock = $this->getMockBuilder(PriceModel::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['loadByParam', 'getId', 'delete'])
+            ->getMock();
+        $this->priceModelMock->method('loadByParam')->willReturnSelf();
+        $this->priceModelMock->method('getId')->willReturn(5);
+        $this->priceModelMock->method('delete')->willReturnSelf();
+        $priceFactoryMock->method('create')->willReturn($this->priceModelMock);
+
+        $this->priceController = $objectManager->getObject(
             Price::class,
             [
-                'context' => $this->contextMock,
-                'customerSession' => $this->customerSessionMock,
+                'context' => $contextMock,
+                'customerSession' => $customerSessionMock,
                 'productRepository' => $this->productRepositoryMock,
+                'storeManager' => $storeManagerMock,
+                'priceFactory' => $priceFactoryMock,
             ]
         );
     }
 
-    public function testProductIsNotVisibleInCatalog()
+    public function testExecuteLoadsAlertWithStoreIdAndDeletes(): void
     {
-        $productId = 123;
-        $this->requestMock->expects($this->any())->method('getParam')->with('product')->willReturn($productId);
-        $this->productRepositoryMock->expects($this->any())
-            ->method('getById')
-            ->with($productId)
-            ->willReturn($this->productMock);
-        $this->productMock->method('isVisibleInCatalog')->willReturn(false);
-        $this->messageManagerMock->expects($this->once())
-            ->method('addErrorMessage')
-            ->with(__("The product wasn't found. Verify the product and try again."));
-        $this->resultRedirectMock->expects($this->once())->method('setPath')->with('customer/account/');
+        $productId = 9;
+        $this->requestMock->method('getParam')->with('product')->willReturn($productId);
+        $this->productRepositoryMock->method('getById')->with($productId)->willReturn($this->productMock);
+        $this->productMock->method('isVisibleInCatalog')->willReturn(true);
+        $this->productMock->method('getId')->willReturn($productId);
 
-        $this->assertEquals(
-            $this->resultRedirectMock,
-            $this->priceController->execute()
-        );
+        $this->priceModelMock->expects($this->once())->method('delete');
+        $this->messageManagerMock->expects($this->once())
+            ->method('addSuccessMessage')
+            ->with(__('You deleted the alert subscription.'));
+        $this->resultRedirectMock->expects($this->once())->method('setPath')->with('productalert/customer/index');
+
+        $this->assertSame($this->resultRedirectMock, $this->priceController->execute());
     }
 }
