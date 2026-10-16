@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\BundleGraphQl\Model\Wishlist;
 
-use Magento\Bundle\Model\Product\BundleOptionDataProvider;
+use Magento\BundleGraphQl\Model\Product\BundleOptionDataProvider;
 use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;

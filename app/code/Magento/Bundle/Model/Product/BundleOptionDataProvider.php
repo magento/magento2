@@ -17,6 +17,9 @@ use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Data provider for bundled product options
+ *
+ * @deprecated GraphQL-specific data provider; it belongs to Magento_BundleGraphQl
+ * @see \Magento\BundleGraphQl\Model\Product\BundleOptionDataProvider
  */
 class BundleOptionDataProvider
 {
