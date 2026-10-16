@@ -90,8 +90,8 @@ class SenderTest extends TestCase
             ],
             [
                 [
-                    'sender' => "<br>'Sender'</br>",
-                    'sender_email' => "<br>'email@example.com'</br>",
+                  'sender' => "'Sender'<br>",
+                    'sender_email' => "'email@example.com'<br>",
                 ],
                 [
                     'sender' => "&lt;br&gt;&#039;Sender&#039;&lt;/br&gt;",
