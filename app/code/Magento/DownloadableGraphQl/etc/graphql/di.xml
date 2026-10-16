@@ -74,4 +74,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Quote\Model\Cart\BuyRequest\BuyRequestBuilder">
+        <arguments>
+            <argument name="providers" xsi:type="array">
+                <item name="downloadable" xsi:type="object">Magento\QuoteDownloadableLinks\Model\Cart\BuyRequest\DownloadableLinkDataProvider</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
