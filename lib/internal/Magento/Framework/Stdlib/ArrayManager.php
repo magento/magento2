@@ -112,7 +112,7 @@ class ArrayManager
     {
         if ($this->find($path, $data, $delimiter)) {
             $parentNode = &$this->parentNode;
-            $nodeIndex = &$this->nodeIndex;
+            $nodeIndex = $this->nodeIndex;
 
             if ((!$this->find($targetPath, $data, $delimiter) || $overwrite)
                 && $this->find($targetPath, $data, $delimiter, true)
