@@ -9,6 +9,7 @@ namespace Magento\MessageQueue\Test\Unit\Model\Cron;
 
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Lock\LockManagerInterface;
+use Magento\Framework\MessageQueue\ConnectionLostException;
 use Magento\Framework\MessageQueue\ConnectionTypeResolver;
 use Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItemInterface;
 use Magento\Framework\MessageQueue\Consumer\ConfigInterface as ConsumerConfigInterface;
@@ -514,5 +515,60 @@ class ConsumersRunnerTest extends TestCase
                 'isMassagesAvailableInTheQueueCallCount' => 0
             ],
         ];
+    }
+
+    public function testRunSkipsConsumerWhoseQueueCheckLosesConnection(): void
+    {
+        $this->deploymentConfigMock->method('get')
+            ->willReturnMap(
+                [
+                    ['cron_consumers_runner/cron_run', true, true],
+                    ['cron_consumers_runner/max_messages', 10000, 0],
+                    ['cron_consumers_runner/consumers', [], []],
+                    ['queue/only_spawn_when_message_available', true, true],
+                    ['cron_consumers_runner/multiple_processes', [], []]
+                ]
+            );
+
+        $brokenConsumer = $this->createStub(ConsumerConfigItemInterface::class);
+        $brokenConsumer->method('getName')->willReturn('brokenConsumer');
+        $brokenConsumer->method('getConnection')->willReturn('amqp');
+        $brokenConsumer->method('getQueue')->willReturn('missingQueue');
+        $brokenConsumer->method('getOnlySpawnWhenMessageAvailable')->willReturn(null);
+
+        $healthyConsumer = $this->createStub(ConsumerConfigItemInterface::class);
+        $healthyConsumer->method('getName')->willReturn('healthyConsumer');
+        $healthyConsumer->method('getConnection')->willReturn('amqp');
+        $healthyConsumer->method('getQueue')->willReturn('existingQueue');
+        $healthyConsumer->method('getOnlySpawnWhenMessageAvailable')->willReturn(null);
+
+        $this->consumerConfigMock->method('getConsumers')->willReturn([$brokenConsumer, $healthyConsumer]);
+        $this->phpExecutableFinderMock->method('find')->willReturn('');
+        $this->lockManagerMock->method('isLocked')->willReturn(false);
+
+        $this->checkIsAvailableMessagesMock->expects($this->exactly(2))
+            ->method('execute')
+            ->willReturnCallback(
+                function (string $connectionName, string $queueName): bool {
+                    $this->assertSame('amqp', $connectionName);
+                    if ($queueName === 'missingQueue') {
+                        throw new ConnectionLostException("NOT_FOUND - no queue 'missingQueue' in vhost '/'");
+                    }
+                    return true;
+                }
+            );
+
+        $this->loggerMock->expects($this->once())
+            ->method('info')
+            ->with($this->stringContains('Consumer "brokenConsumer" skipped'));
+
+        $this->shellBackgroundMock->expects($this->once())
+            ->method('execute')
+            ->with(
+                'php ' . BP . '/bin/magento queue:consumers:start %s %s',
+                ['healthyConsumer', '--single-thread']
+            );
+
+        $this->consumersRunner->run();
     }
 }
