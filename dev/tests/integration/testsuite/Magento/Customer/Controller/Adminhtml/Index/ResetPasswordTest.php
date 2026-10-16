@@ -15,7 +15,7 @@ use Magento\Framework\App\Request\Http as HttpRequest;
 class ResetPasswordTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
-     * Base controller URL
+     * URL prefix shared by the controller actions under test.
      *
      * @var string
      */
@@ -57,7 +57,8 @@ class ResetPasswordTest extends \Magento\TestFramework\TestCase\AbstractBackendC
         );
         $this->getRequest()->setPostValue(['customer_id' => '1'])->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('backend/customer/index/resetPassword');
-        $this->assertEquals('noroute', $this->getRequest()->getControllerName());
+        $this->assertEquals(405, $this->getResponse()->getHttpResponseCode());
+        $this->assertEquals('GET, HEAD', $this->getResponse()->getHeader('Allow')->getFieldValue());
     }
 
     /**
