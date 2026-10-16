@@ -136,7 +136,7 @@ class Utility
          * only, so that excluded items do not count toward the condition threshold.
          */
         $savedTotals = null;
-        if ($this->ruleHasItemRestrictions($rule) && $this->hasEligibleLineItemsForRule($rule, $address)) {
+        if ($this->ruleHasItemRestrictions($rule) && $this->ruleHasAddressConditions($rule)) {
             $savedTotals = $this->setEligibleItemsTotalsOnAddress($rule, $address);
         }
         try {
@@ -169,30 +169,35 @@ class Utility
         } catch (\Throwable $e) {
             return false;
         }
-        if (!$actions instanceof \Magento\Rule\Model\Condition\Combine) {
-            return false;
-        }
-        $conditions = $actions->getConditions();
 
-        return !empty($conditions) && is_array($conditions);
+        return $this->combineHasConditions($actions);
     }
 
     /**
-     * Whether at least one cart line item matches the rule's actions (eligible for the discount on items)
+     * Check if the rule has address-level conditions to evaluate
      *
      * @param Rule $rule
-     * @param Address $address
      * @return bool
      */
-    private function hasEligibleLineItemsForRule(Rule $rule, Address $address): bool
+    private function ruleHasAddressConditions(Rule $rule): bool
     {
-        foreach ($address->getAllItems() as $item) {
-            if ($this->isItemEligibleForRuleTotals($item, $rule)) {
-                return true;
-            }
-        }
+        return $this->combineHasConditions($rule->getConditions());
+    }
 
-        return false;
+    /**
+     * Whether a condition combine instance carries at least one child condition
+     *
+     * @param mixed $combine
+     * @return bool
+     */
+    private function combineHasConditions($combine): bool
+    {
+        if (!$combine instanceof \Magento\Rule\Model\Condition\Combine) {
+            return false;
+        }
+        $conditions = $combine->getConditions();
+
+        return is_array($conditions) && $conditions !== [];
     }
 
     /**
@@ -200,20 +205,26 @@ class Utility
      *
      * @param Rule $rule
      * @param Address $address
-     * @return array Saved address totals to restore after validation
+     * @return array|null Saved address totals to restore after validation, null when no item is eligible
      */
-    private function setEligibleItemsTotalsOnAddress(Rule $rule, Address $address): array
+    private function setEligibleItemsTotalsOnAddress(Rule $rule, Address $address): ?array
     {
         $baseSubtotal = $baseSubtotalInclTax = $totalQty = $weight = 0;
+        $hasEligibleItem = false;
 
         foreach ($address->getAllItems() as $item) {
             if (!$this->isItemEligibleForRuleTotals($item, $rule)) {
                 continue;
             }
+            $hasEligibleItem = true;
             $baseSubtotal += (float) $item->getBaseRowTotal();
             $baseSubtotalInclTax += (float) $item->getBaseRowTotalInclTax();
             $totalQty += (float) $item->getQty();
             $weight += (float) $item->getRowWeight();
+        }
+
+        if (!$hasEligibleItem) {
+            return null;
         }
 
         $saved = [
