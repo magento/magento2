@@ -332,12 +332,14 @@
         "column": {
             "visitor_id": true,
             "customer_id": true,
+            "website_id": true,
             "session_id": true,
             "created_at": true,
             "last_visit_at": true
         },
         "index": {
             "CUSTOMER_VISITOR_CUSTOMER_ID": true,
+            "CUSTOMER_VISITOR_WEBSITE_ID": true,
             "CUSTOMER_VISITOR_LAST_VISIT_AT": true
         },
         "constraint": {
