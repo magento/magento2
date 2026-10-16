@@ -1,9 +1,6 @@
 {
     "name": "magento/module-mysql-mq",
     "description": "N/A",
-    "config": {
-        "sort-packages": true
-    },
     "require": {
         "magento/framework": "*",
         "magento/framework-message-queue": "*",

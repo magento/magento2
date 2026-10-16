@@ -1,9 +1,6 @@
 {
     "name": "magento/framework-bulk",
     "description": "N/A",
-    "config": {
-        "sort-packages": true
-    },
     "type": "magento2-library",
     "license": [
         "OSL-3.0",
