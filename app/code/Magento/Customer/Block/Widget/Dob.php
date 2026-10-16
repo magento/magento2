@@ -3,6 +3,8 @@
  * Copyright 2013 Adobe
  * All Rights Reserved.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Block\Widget;
 
 use Magento\Customer\Api\CustomerMetadataInterface;
@@ -250,8 +252,8 @@ class Dob extends AbstractWidget
         $this->dateElement->setData(
             [
                 'extra_params' => $this->getHtmlExtraParams(),
-                'name' => $this->getHtmlId(),
-                'id' => $this->getHtmlId(),
+                'name' => $this->getFieldName($this->getHtmlId()),
+                'id' => $this->getFieldId($this->getHtmlId()),
                 'class' => $this->getHtmlClass(),
                 'value' => $this->getValue(),
                 'date_format' => $this->getDateFormat(),
