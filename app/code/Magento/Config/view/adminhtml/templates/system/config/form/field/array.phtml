@@ -8,7 +8,8 @@
 ?>
 
 <?php
-$_htmlId = $block->getHtmlId() ? $block->getHtmlId() : '_' . uniqid();
+$_htmlId = $block->getHtmlId() ? $block->getHtmlId() : uniqid();
+$_htmlId = 'table_' . $_htmlId . '_' . $block->getIncrementId();
 $_colspan = $block->isAddAfter() ? 2 : 1;
 ?>
 
@@ -108,8 +109,15 @@ script;
     endforeach;
     $scriptString .= <<<script
 
-                        _id: '_' + d.getTime() + '_' + d.getMilliseconds()
+                        _id: '{$_htmlId}_' + d.getTime() + '_' + d.getMilliseconds()
                 };
+            }
+
+            // If row data in the core_config_data-table is an array,
+            // the _id will be an array index number which won't be unique
+            // and will break the form. This makes each id unique.
+            if (Number.isInteger(templateValues['_id'])) {
+                templateValues['_id'] = '{$_htmlId}_' + templateValues['_id'];
             }
 
             // Insert new row after specified row or at the bottom
