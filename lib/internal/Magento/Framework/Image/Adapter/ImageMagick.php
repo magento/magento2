@@ -576,7 +576,7 @@ class ImageMagick extends AbstractAdapter
      * @param int $positionX
      * @param int $positionY
      * @param \Imagick $watermark
-     * @param bool $compositeChannels
+     * @param int $compositeChannels
      */
     private function addTiledWatermark($positionX, $positionY, \Imagick $watermark, $compositeChannels): void
     {
@@ -604,9 +604,9 @@ class ImageMagick extends AbstractAdapter
      * @param int $positionX
      * @param int $positionY
      * @param \Imagick $watermark
-     * @param bool $compositeChannels
+     * @param int $compositeChannels
      */
-    private function addSingleWatermark($positionX, int $positionY, \Imagick $watermark, bool $compositeChannels): void
+    private function addSingleWatermark($positionX, int $positionY, \Imagick $watermark, int $compositeChannels): void
     {
         $this->_imageHandler->compositeImage(
             $watermark,
