@@ -15,16 +15,11 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 class EntityDataProviderComposite implements EntityDataProviderInterface
 {
     /**
-     * @var EntityDataProviderInterface[]
-     */
-    private $dataProviders;
-
-    /**
      * @param EntityDataProviderInterface[] $dataProviders
      */
-    public function __construct(array $dataProviders = [])
-    {
-        $this->dataProviders = $dataProviders;
+    public function __construct(
+        private readonly array $dataProviders = []
+    ) {
     }
 
     /**
