@@ -81,6 +81,79 @@ class EncryptedTest extends TestCase
         $this->assertEquals($result, $this->_model->processValue($value));
     }
 
+    #[DataProvider('environmentPlaintextDataProvider')]
+    public function testProcessEnvironmentValuePreservesPlaintext(string $value): void
+    {
+        $this->_encryptorMock->expects($this->never())->method('decrypt');
+
+        $this->assertSame($value, $this->_model->processEnvironmentValue($value));
+    }
+
+    public static function environmentPlaintextDataProvider(): array
+    {
+        return [
+            'plaintext' => ['plain secret'],
+            'spaces' => [' spaced '],
+            'empty' => [''],
+            'zero' => ['0'],
+            'placeholder' => ['{{secure_base_url}}'],
+            'colon-separated plaintext' => ['abc:def:ghi'],
+            'invalid base64' => ['0:3:not base64!'],
+            'trailing newline' => ["0:3:QUJD\n"],
+            'one-part legacy format' => ['QUJD'],
+            'two-part legacy format' => ['0:QUJD'],
+        ];
+    }
+
+    public function testProcessEnvironmentValueDecryptsCurrentFormat(): void
+    {
+        $value = '0:3:QUJD';
+        $this->_encryptorMock->expects($this->once())
+            ->method('decrypt')
+            ->with($value)
+            ->willReturn('decrypted secret');
+
+        $this->assertSame('decrypted secret', $this->_model->processEnvironmentValue($value));
+    }
+
+    #[DataProvider('emptyDecryptionResultDataProvider')]
+    public function testProcessEnvironmentValuePreservesValueOnEmptyDecryption(?string $result): void
+    {
+        $value = '12:34:abcd';
+        $this->_encryptorMock->expects($this->once())
+            ->method('decrypt')
+            ->with($value)
+            ->willReturn($result);
+
+        $this->assertSame($value, $this->_model->processEnvironmentValue($value));
+    }
+
+    public static function emptyDecryptionResultDataProvider(): array
+    {
+        return [
+            'empty string' => [''],
+            'null' => [null],
+        ];
+    }
+
+    public function testProcessEnvironmentValuePreservesValueOnDecryptionException(): void
+    {
+        $value = '0:99:AAAA';
+        $this->_encryptorMock->expects($this->once())
+            ->method('decrypt')
+            ->with($value)
+            ->willThrowException(new \Exception('Unsupported cipher version'));
+
+        $this->assertSame($value, $this->_model->processEnvironmentValue($value));
+    }
+
+    public function testProcessEnvironmentValuePreservesNull(): void
+    {
+        $this->_encryptorMock->expects($this->never())->method('decrypt');
+
+        $this->assertNull($this->_model->processEnvironmentValue(null));
+    }
+
     /**
      * @covers \Magento\Config\Model\Config\Backend\Encrypted::beforeSave
      *
