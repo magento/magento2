@@ -109,6 +109,42 @@ class LoginTest extends TestCase
     }
 
     /**
+     * Autocomplete is enabled by default, so password managers can fill in the credentials
+     *
+     * @return void
+     */
+    public function testAutocompletePasswordEnabledByDefault(): void
+    {
+        $this->assertFalse($this->block->isAutocompleteDisabled());
+    }
+
+    /**
+     * @magentoConfigFixture current_store customer/password/autocomplete_on_storefront 1
+     *
+     * @return void
+     */
+    public function testAutocompleteTokensRenderedWhenEnabled(): void
+    {
+        $result = $this->block->toHtml();
+        $this->assertEquals(
+            1,
+            Xpath::getElementsCountForXpath(
+                "//input[@name='login[username]' and @autocomplete='username']",
+                $result
+            ),
+            'Email input does not have autocomplete="username"'
+        );
+        $this->assertEquals(
+            1,
+            Xpath::getElementsCountForXpath(
+                "//input[@name='login[password]' and @autocomplete='current-password']",
+                $result
+            ),
+            'Password input does not have autocomplete="current-password"'
+        );
+    }
+
+    /**
      * @magentoConfigFixture current_store customer/password/autocomplete_on_storefront 1
      *
      * @return void

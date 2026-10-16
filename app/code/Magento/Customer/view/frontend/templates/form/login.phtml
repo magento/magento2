@@ -28,7 +28,7 @@ $buttonLockManager = $block->getData('button_lock_manager');
                     <label class="label" for="email"><span><?= $escaper->escapeHtml(__('Email')) ?></span></label>
                     <div class="control">
                         <input name="login[username]" value="<?= $escaper->escapeHtmlAttr($block->getUsername()) ?>"
-                            <?php if ($block->isAutocompleteDisabled()): ?> autocomplete="off"<?php endif; ?>
+                            autocomplete="<?= $block->isAutocompleteDisabled() ? 'off' : 'username' ?>"
                                id="email" type="email" class="input-text"
                                title="<?= $escaper->escapeHtmlAttr(__('Email')) ?>"
                                data-validate="{required:true, 'validate-email':true}">
@@ -38,7 +38,7 @@ $buttonLockManager = $block->getData('button_lock_manager');
                     <label for="password" class="label"><span><?= $escaper->escapeHtml(__('Password')) ?></span></label>
                     <div class="control">
                         <input name="login[password]" type="password"
-                            <?php if ($block->isAutocompleteDisabled()): ?> autocomplete="off"<?php endif; ?>
+                            autocomplete="<?= $block->isAutocompleteDisabled() ? 'off' : 'current-password' ?>"
                                class="input-text" id="password"
                                title="<?= $escaper->escapeHtmlAttr(__('Password')) ?>"
                                data-validate="{required:true}">
