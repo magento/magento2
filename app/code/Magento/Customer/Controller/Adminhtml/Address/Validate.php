@@ -1,4 +1,8 @@
 <?php
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
 declare(strict_types=1);
 /**
  * Copyright 2018 Adobe
@@ -109,7 +113,12 @@ class Validate extends Action implements HttpPostActionInterface, HttpGetActionI
      */
     private function validateCustomerAddress(DataObject $response): DataObject
     {
-        $addressForm = $this->formFactory->create('customer_address', 'adminhtml_customer_address');
+        $addressForm = $this->formFactory->create(
+            'customer_address',
+            'adminhtml_customer_address',
+            [],
+            true
+        );
         $formData = $addressForm->extractData($this->getRequest());
 
         $errors = $addressForm->validateData($formData);
