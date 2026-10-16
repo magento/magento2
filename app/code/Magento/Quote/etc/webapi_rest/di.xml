@@ -27,9 +27,6 @@
                 type="Magento\Quote\Plugin\Webapi\ValidateProductWebsiteAssignment"
                 sortOrder="100" />
     </type>
-    <type name="Magento\Framework\Webapi\Validator\CompositeServiceInputValidator">
-        <plugin name="cartItemQtyValidator" type="Magento\Quote\Model\Webapi\CartItemQtyValidator" />
-    </type>
     <virtualType name="Magento\Quote\Model\Quote\Item\CartItemValidatorChainOnSave" type="Magento\Quote\Model\Quote\Item\CartItemValidatorChain">
         <arguments>
             <argument name="breakChainOnFailure" xsi:type="boolean">true</argument>
