@@ -409,20 +409,20 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     public function getResultingIds()
     {
         $idsSelect = clone $this->getSelect();
-        $data = $this->getConnection()
-            ->fetchAll(
-                $idsSelect
-                    ->reset(Select::LIMIT_COUNT)
-                    ->reset(Select::LIMIT_OFFSET)
-                    ->columns('rt.review_id')
-            );
+        $idsSelect->reset(Select::LIMIT_COUNT);
+        $idsSelect->reset(Select::LIMIT_OFFSET);
+        $columns = $idsSelect->getPart(Select::COLUMNS);
+        $hasHaving = (bool)$idsSelect->getPart(Select::HAVING);
+        $idsSelect->reset(Select::COLUMNS);
+        $idsSelect->columns('rt.review_id');
+        // ORDER BY can reference selected aliases; HAVING can also reference unaliased columns.
+        foreach ($columns as [$table, $column, $alias]) {
+            if (($hasHaving || $alias !== null) && [$table, $column, $alias] !== ['rt', 'review_id', null]) {
+                $idsSelect->columns($alias === null ? $column : [$alias => $column], $table);
+            }
+        }
 
-        return array_map(
-            function ($value) {
-                return $value['review_id'];
-            },
-            $data
-        );
+        return $this->getConnection()->fetchCol($idsSelect);
     }
 
     /**
