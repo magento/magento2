@@ -370,6 +370,7 @@ class Installer
     {
         $script[] = ['File permissions check...', 'checkInstallationFilePermissions', []];
         $script[] = ['Required extensions check...', 'checkExtensions', []];
+        $script[] = ['Reset installation date...', 'resetInstallationDate', []];
         $script[] = ['Enabling Maintenance Mode...', 'setMaintenanceMode', [1]];
         $script[] = ['Installing deployment configuration...', 'installDeploymentConfig', [$request]];
         if (!empty($request[InstallCommand::INPUT_KEY_CLEANUP_DB])) {
@@ -454,6 +455,27 @@ class Installer
             );
         }
         return $this->declarationInstaller;
+    }
+
+    /**
+     * Reset installation date from the configuration
+     *
+     * Ensures that DeploymentConfig::isAvailable() returns false during installation,
+     * preventing store scope resolution from querying an empty database.
+     *
+     * @return void
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod) Called by install() via callback.
+     * @throws FileSystemException
+     * @throws RuntimeException
+     */
+    public function resetInstallationDate()
+    {
+        $configData = $this->deploymentConfigReader->load(ConfigFilePool::APP_ENV);
+        if (isset($configData[ConfigOptionsListConstants::CONFIG_PATH_INSTALL]['date'])) {
+            unset($configData[ConfigOptionsListConstants::CONFIG_PATH_INSTALL]['date']);
+            $this->deploymentConfigWriter->saveConfig([ConfigFilePool::APP_ENV => $configData], true);
+        }
+        $this->deploymentConfig->resetData();
     }
 
     /**
