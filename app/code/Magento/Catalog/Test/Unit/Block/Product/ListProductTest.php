@@ -143,6 +143,7 @@ class ListProductTest extends TestCase
         $this->context->expects($this->any())->method('getEventManager')->willReturn($eventManager);
         $storeManager = $this->createMock(StoreManagerInterface::class);
         $store = $this->createMock(StoreInterface::class);
+        $store->method('getId')->willReturn(1);
         $storeManager->expects($this->any())->method('getStore')->willReturn($store);
         $this->context->expects($this->any())->method('getStoreManager')->willReturn($storeManager);
         $scopeConfig = $this->createMock(ScopeConfigInterface::class);
@@ -300,5 +301,78 @@ class ListProductTest extends TestCase
             ->willReturn($this->renderer);
         $this->block->setCollection($this->prodCollectionMock);
         $this->block->getProductPrice($this->productMock);
+    }
+
+    /**
+     * A loaded listing gets its tier prices and catalog rule prices in one pass, not per product.
+     *
+     * @return void
+     */
+    public function testBeforeToHtmlPreparesListingPricesInBulk(): void
+    {
+        $this->prodCollectionMock->method('isLoaded')->willReturn(true);
+        $this->prodCollectionMock->method('count')->willReturn(2);
+        $this->prodCollectionMock->expects($this->once())->method('addTierPriceData');
+        $this->mockListingLayer();
+
+        $dispatchedEvents = [];
+        $this->recordDispatchedEvents($dispatchedEvents);
+        $this->block->toHtml();
+
+        $this->assertSame(
+            [['collection' => $this->prodCollectionMock, 'store_id' => 1]],
+            $dispatchedEvents['prepare_catalog_product_collection_prices'] ?? []
+        );
+    }
+
+    /**
+     * An empty listing has no prices to prepare.
+     *
+     * @return void
+     */
+    public function testBeforeToHtmlSkipsPricePreparationForEmptyListing(): void
+    {
+        $this->prodCollectionMock->method('isLoaded')->willReturn(true);
+        $this->prodCollectionMock->method('count')->willReturn(0);
+        $this->prodCollectionMock->expects($this->never())->method('addTierPriceData');
+        $this->mockListingLayer();
+
+        $dispatchedEvents = [];
+        $this->recordDispatchedEvents($dispatchedEvents);
+        $this->block->toHtml();
+
+        $this->assertArrayNotHasKey('prepare_catalog_product_collection_prices', $dispatchedEvents);
+    }
+
+    /**
+     * Serve the product collection mock as the current category's listing.
+     *
+     * @return void
+     */
+    private function mockListingLayer(): void
+    {
+        $currentCategory = $this->createMock(\Magento\Catalog\Model\Category::class);
+        $currentCategory->method('getId')->willReturn('1');
+        $this->layerMock->method('getCurrentCategory')->willReturn($currentCategory);
+        $this->layerMock->expects($this->once())
+            ->method('getProductCollection')
+            ->willReturn($this->prodCollectionMock);
+    }
+
+    /**
+     * Record the data of every event the block dispatches, by event name.
+     *
+     * @param array $dispatchedEvents
+     * @return void
+     */
+    private function recordDispatchedEvents(array &$dispatchedEvents): void
+    {
+        /** @var ManagerInterface|MockObject $eventManager */
+        $eventManager = $this->context->getEventManager();
+        $eventManager->method('dispatch')->willReturnCallback(
+            function (string $eventName, array $data = []) use (&$dispatchedEvents): void {
+                $dispatchedEvents[$eventName][] = $data;
+            }
+        );
     }
 }
