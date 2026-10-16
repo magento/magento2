@@ -659,6 +659,7 @@ class Checkout
         if ($isButton && !$requireBillingAddress && !$quote->isVirtual()) {
             $billingAddress = clone $shippingAddress; /** @phpstan-ignore-line */
             $billingAddress->unsAddressId()->unsAddressType()->setCustomerAddressId(null);
+            $billingAddress->unsetData('cached_items_all');
             $data = $billingAddress->getData();
             $data['save_in_address_book'] = 0;
             $quote->getBillingAddress()->addData($data);
