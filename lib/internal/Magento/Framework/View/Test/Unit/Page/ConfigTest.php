@@ -11,11 +11,13 @@ declare(strict_types=1);
 namespace Magento\Framework\View\Test\Unit\Page;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager as AppObjectManager;
 use Magento\Framework\App\State;
 use Magento\Framework\Escaper;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Locale\Resolver;
 use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Asset\File;
 use Magento\Framework\View\Asset\GroupedCollection;
@@ -121,6 +123,7 @@ class ConfigTest extends TestCase
         $escaper = $this->objectManager->getObject(
             Escaper::class
         );
+        $this->areaResolverMock = $this->createMock(State::class);
         $this->model = (new ObjectManager($this))
             ->getObject(
                 Config::class,
@@ -130,13 +133,10 @@ class ConfigTest extends TestCase
                     'scopeConfig' => $this->scopeConfig,
                     'favicon' => $this->favicon,
                     'localeResolver' => $this->localeMock,
-                    'escaper' => $escaper
+                    'escaper' => $escaper,
+                    'appState' => $this->areaResolverMock
                 ]
             );
-
-        $this->areaResolverMock = $this->createMock(State::class);
-        $areaResolverReflection = (new \ReflectionClass(get_class($this->model)))->getProperty('areaResolver');
-        $areaResolverReflection->setValue($this->model, $this->areaResolverMock);
     }
 
     /**
@@ -353,6 +353,39 @@ class ConfigTest extends TestCase
         $robots = 'test_robots';
         $this->model->setRobots($robots);
         $this->assertEquals('NOINDEX,NOFOLLOW', $this->model->getRobots());
+    }
+
+    /**
+     * @return void
+     */
+    public function testRobotsWithAppStateFromObjectManager(): void
+    {
+        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $objectManagerMock->expects($this->once())
+            ->method('get')
+            ->with(State::class)
+            ->willReturn($this->areaResolverMock);
+        $instanceProperty = new \ReflectionProperty(AppObjectManager::class, '_instance');
+        $originalObjectManager = $instanceProperty->getValue();
+        AppObjectManager::setInstance($objectManagerMock);
+
+        try {
+            $model = new Config(
+                $this->assetRepo,
+                $this->pageAssets,
+                $this->scopeConfig,
+                $this->favicon,
+                $this->title,
+                $this->localeMock,
+                true,
+                $this->createMock(Escaper::class)
+            );
+        } finally {
+            $instanceProperty->setValue(null, $originalObjectManager);
+        }
+
+        $this->areaResolverMock->expects($this->once())->method('getAreaCode')->willReturn('adminhtml');
+        $this->assertEquals('NOINDEX,NOFOLLOW', $model->getRobots());
     }
 
     /**
