@@ -12,6 +12,8 @@ use Magento\Eav\Model\Entity\Attribute\FrontendLabel;
 use Magento\Eav\Model\Entity\Attribute\FrontendLabelFactory;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute as AttributeResource;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -41,6 +43,139 @@ class AttributeTest extends TestCase
     protected function tearDown(): void
     {
         $this->_model = null;
+    }
+
+    public function testGetStoreLabelIgnoresPresetLabelForDifferentStore(): void
+    {
+        $this->_model->setData([
+            'store_label' => 'Store A label',
+            'store_labels' => [1 => 'Store A label', 2 => 'Store B label'],
+            'frontend_label' => 'Default label',
+        ]);
+        $store = $this->createMock(Store::class);
+        $store->expects($this->exactly(5))->method('getId')->willReturn(1);
+        $storeManager = $this->createMock(StoreManagerInterface::class);
+        $storeManager->expects($this->exactly(5))->method('getStore')->with()->willReturn($store);
+        (new ObjectManager($this))->setBackwardCompatibleProperty($this->_model, '_storeManager', $storeManager);
+
+        $this->assertSame('Store B label', $this->_model->getStoreLabel(2));
+        $this->assertSame('Store B label', $this->_model->getStoreLabel('2'));
+        $this->assertSame('Store A label', $this->_model->getStoreLabel(1));
+        $this->assertSame('Default label', $this->_model->getStoreLabel(0));
+        $this->assertSame('Default label', $this->_model->getStoreLabel(3));
+        $this->assertSame('Store A label', $this->_model->getStoreLabel());
+    }
+
+    #[DataProvider('storeIdentifierDataProvider')]
+    public function testGetStoreLabelResolvesCurrentStoreAndStoreCode(?string $storeId): void
+    {
+        $store = $this->createMock(Store::class);
+        $store->method('getId')->willReturn(2);
+        $storeManager = $this->createMock(StoreManagerInterface::class);
+        $storeManager->expects($this->once())->method('getStore')->with($storeId)->willReturn($store);
+        (new ObjectManager($this))->setBackwardCompatibleProperty($this->_model, '_storeManager', $storeManager);
+        $this->_model->setData('store_labels', [2 => 'Store B label']);
+
+        $this->assertSame('Store B label', $this->_model->getStoreLabel($storeId));
+    }
+
+    public static function storeIdentifierDataProvider(): array
+    {
+        return [
+            'current store' => [null],
+            'store code' => ['store_b'],
+        ];
+    }
+
+    public function testGetStoreLabelPreservesPresetLabelWithoutLoadingStoresOrLabels(): void
+    {
+        $storeManager = $this->createMock(StoreManagerInterface::class);
+        $storeManager->expects($this->never())->method('getStore');
+        $resource = $this->createMock(AttributeResource::class);
+        $resource->expects($this->never())->method('getStoreLabelsByAttributeId');
+        $model = $this->_model;
+        $objectManager = new ObjectManager($this);
+        $objectManager->setBackwardCompatibleProperty($model, '_storeManager', $storeManager);
+        $objectManager->setBackwardCompatibleProperty($model, '_resource', $resource);
+        $model->setData('store_label', 'Store A label');
+
+        $this->assertSame('Store A label', $model->getStoreLabel());
+        $model->setData('store_label', '');
+        $this->assertSame('', $model->getStoreLabel());
+    }
+
+    #[DataProvider('storeLabelsDataProvider')]
+    public function testGetStoreLabelsLoadsOnce(array $labels): void
+    {
+        $resource = $this->createMock(AttributeResource::class);
+        $resource->expects($this->once())->method('getStoreLabelsByAttributeId')->with(42)->willReturn($labels);
+        $model = $this->_model;
+        $objectManager = new ObjectManager($this);
+        $objectManager->setBackwardCompatibleProperty($model, '_resource', $resource);
+        $model->setIdFieldName('attribute_id');
+        $model->setId(42);
+
+        $this->assertSame($labels, $model->getStoreLabels());
+        $this->assertSame($labels, $model->getStoreLabels());
+    }
+
+    #[DataProvider('currentStoreIdDataProvider')]
+    public function testGetStoreLabelPreservesPresetLabelForCurrentStore(
+        int|string $storeId,
+        int|string $currentStoreId
+    ): void {
+        $store = $this->createMock(Store::class);
+        $store->expects($this->exactly(2))->method('getId')->willReturn($currentStoreId);
+        $storeManager = $this->createMock(StoreManagerInterface::class);
+        $storeManager->expects($this->exactly(2))->method('getStore')->with()->willReturn($store);
+        $resource = $this->createMock(AttributeResource::class);
+        $resource->expects($this->never())->method('getStoreLabelsByAttributeId');
+        $objectManager = new ObjectManager($this);
+        $objectManager->setBackwardCompatibleProperty($this->_model, '_storeManager', $storeManager);
+        $objectManager->setBackwardCompatibleProperty($this->_model, '_resource', $resource);
+        $this->_model->setData('store_label', 'Store A label');
+
+        $this->assertSame('Store A label', $this->_model->getStoreLabel($storeId));
+        $this->_model->setData('store_label', '');
+        $this->assertSame('', $this->_model->getStoreLabel($storeId));
+    }
+
+    public static function currentStoreIdDataProvider(): array
+    {
+        return [
+            'integer IDs' => [1, 1],
+            'string request' => ['1', 1],
+            'string current ID' => [1, '1'],
+            'string IDs' => ['1', '1'],
+        ];
+    }
+
+    public function testGetStoreLabelLoadsDifferentStoreLabelsOnce(): void
+    {
+        $store = $this->createMock(Store::class);
+        $store->expects($this->exactly(2))->method('getId')->willReturn(1);
+        $storeManager = $this->createMock(StoreManagerInterface::class);
+        $storeManager->expects($this->exactly(2))->method('getStore')->with()->willReturn($store);
+        $resource = $this->createMock(AttributeResource::class);
+        $resource->expects($this->once())->method('getStoreLabelsByAttributeId')->with(42)
+            ->willReturn([1 => 'Store A label', 2 => 'Store B label']);
+        $objectManager = new ObjectManager($this);
+        $objectManager->setBackwardCompatibleProperty($this->_model, '_storeManager', $storeManager);
+        $objectManager->setBackwardCompatibleProperty($this->_model, '_resource', $resource);
+        $this->_model->setIdFieldName('attribute_id');
+        $this->_model->setId(42);
+        $this->_model->setData('store_label', 'Store A label');
+
+        $this->assertSame('Store B label', $this->_model->getStoreLabel(2));
+        $this->assertSame('Store B label', $this->_model->getStoreLabel('2'));
+    }
+
+    public static function storeLabelsDataProvider(): array
+    {
+        return [
+            'store labels' => [[1 => 'Store A label', 2 => 'Store B label']],
+            'no store labels' => [[]],
+        ];
     }
 
     /**
@@ -151,12 +286,14 @@ class AttributeTest extends TestCase
             AttributeResource::class,
             ['getStoreLabelsByAttributeId']
         );
-        $arguments = [
-            '_resource' => $resource,
-            'frontendLabelFactory' => $frontendLabelFactory,
-        ];
         $objectManager = new ObjectManager($this);
-        $this->_model = $objectManager->getObject(Attribute::class, $arguments);
+        $objectManager->setBackwardCompatibleProperty($this->_model, '_resource', $resource);
+        $objectManager->setBackwardCompatibleProperty(
+            $this->_model,
+            'frontendLabelFactory',
+            $frontendLabelFactory,
+            \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class
+        );
         $this->_model->setAttributeId($attributeId);
 
         $resource->expects($this->once())
