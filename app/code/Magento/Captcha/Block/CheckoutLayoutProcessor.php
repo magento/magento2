@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2025 Adobe.
+ * Copyright 2025 Adobe
  * All Rights Reserved.
  */
 
@@ -38,6 +38,9 @@ class CheckoutLayoutProcessor implements LayoutProcessorInterface
             $jsLayout['components']['checkout']['children']['authentication']['children']['captcha'] = $captcha;
             $jsLayout['components']['checkout']['children']['steps']['children']['shipping-step']['children']
             ['shippingAddress']['children']['customer-email']['children']['additional-login-form-fields']
+            ['children']['captcha'] = $captcha;
+            $jsLayout['components']['checkout']['children']['steps']['children']['billing-step']['children']
+            ['payment']['children']['customer-email']['children']['additional-login-form-fields']
             ['children']['captcha'] = $captcha;
         }
         return $jsLayout;
