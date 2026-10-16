@@ -232,19 +232,36 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     /**
      * Add rate votes
      *
+     * Votes for all reviews in the collection are loaded with a single query
+     * and distributed between the review items afterwards.
+     *
      * @return $this
      */
     public function addRateVotes()
     {
+        $reviewIds = [];
         foreach ($this->getItems() as $item) {
-            $votesCollection = $this->_voteFactory->create()->getResourceCollection()->setReviewFilter(
-                $item->getId()
-            )->setStoreFilter(
-                $this->_storeManager->getStore()->getId()
-            )->addRatingInfo(
-                $this->_storeManager->getStore()->getId()
-            )->load();
-            $item->setRatingVotes($votesCollection);
+            $reviewIds[] = (int)$item->getId();
+        }
+        if (!$reviewIds) {
+            return $this;
+        }
+
+        $storeId = $this->_storeManager->getStore()->getId();
+        $votesCollection = $this->_voteFactory->create()->getResourceCollection()
+            ->setReviewsFilter($reviewIds)
+            ->setStoreFilter($storeId)
+            ->addRatingInfo($storeId)
+            ->load();
+
+        $votesByReview = [];
+        foreach ($votesCollection as $vote) {
+            $votesByReview[(int)$vote->getReviewId()][] = $vote;
+        }
+        foreach ($this->getItems() as $item) {
+            $itemVotes = $this->_voteFactory->create()->getResourceCollection()
+                ->setLoadedVotes($votesByReview[(int)$item->getId()] ?? []);
+            $item->setRatingVotes($itemVotes);
         }
 
         return $this;
