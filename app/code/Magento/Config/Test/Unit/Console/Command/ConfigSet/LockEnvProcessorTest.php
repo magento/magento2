@@ -162,6 +162,59 @@ class LockEnvProcessorTest extends TestCase
         ];
     }
 
+    /**
+     * Tests that the value is captured before beforeSave() to prevent backend models
+     * from transforming the value for database storage (e.g. converting string to array)
+     * being saved to env.php instead of the original scalar value.
+     */
+    public function testProcessUsesValueBeforeBeforeSaveTransformation(): void
+    {
+        $path = 'test/test/test';
+        $originalValue = 'google';
+        $callOrder = [];
+
+        $this->preparedValueFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($this->valueMock);
+        $this->configPathResolver->expects($this->once())
+            ->method('resolve')
+            ->willReturn('system/default/test/test/test');
+
+        $this->valueMock->method('validateBeforeSave')
+            ->willReturnCallback(function () use (&$callOrder) {
+                $callOrder[] = 'validateBeforeSave';
+            });
+        $this->valueMock->method('getValue')
+            ->willReturnCallback(function () use (&$callOrder, $originalValue) {
+                $callOrder[] = 'getValue';
+                return $originalValue;
+            });
+        $this->valueMock->method('beforeSave')
+            ->willReturnCallback(function () use (&$callOrder) {
+                $callOrder[] = 'beforeSave';
+            });
+        $this->valueMock->method('afterSave')
+            ->willReturnCallback(function () use (&$callOrder) {
+                $callOrder[] = 'afterSave';
+            });
+
+        $this->arrayManagerMock->method('set')->willReturn([]);
+        $this->deploymentConfigWriterMock->method('saveConfig');
+
+        $this->model->process($path, $originalValue, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null);
+
+        $getValueIndex = array_search('getValue', $callOrder);
+        $beforeSaveIndex = array_search('beforeSave', $callOrder);
+
+        $this->assertNotFalse($getValueIndex, 'getValue() should be called');
+        $this->assertNotFalse($beforeSaveIndex, 'beforeSave() should be called');
+        $this->assertLessThan(
+            $beforeSaveIndex,
+            $getValueIndex,
+            'getValue() must be called before beforeSave() to capture the value before DB serialization'
+        );
+    }
+
     public function testProcessNotReadableFs()
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');
