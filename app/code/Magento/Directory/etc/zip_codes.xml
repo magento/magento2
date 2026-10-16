@@ -13,7 +13,7 @@
     </zip>
     <zip countryCode="AM">
         <codes>
-            <code id="pattern_1" active="true" example="123456">^[0-9]{6}$</code>
+            <code id="pattern_1" active="true" example="0010">^[0-9]{4}$</code>
         </codes>
     </zip>
     <zip countryCode="AR">
