@@ -6,6 +6,7 @@
 namespace Magento\Framework\App;
 
 use Magento\Framework\App\Action\AbstractAction;
+use Magento\Framework\App\Action\Forward;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\App\Request\InvalidRequestException;
 use Magento\Framework\App\Request\ValidatorInterface as RequestValidator;
@@ -90,6 +91,7 @@ class FrontController implements FrontControllerInterface
      * @param ActionFlag|null $actionFlag
      * @param EventManagerInterface|null $eventManager
      * @param RequestInterface|null $request
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         RouterListInterface $routerList,
@@ -208,17 +210,35 @@ class FrontController implements FrontControllerInterface
 
         // Validation did not produce a result to replace the action's.
         if (!$result) {
-            $this->dispatchPreDispatchEvents($actionInstance, $request);
-            $result = $this->getActionResponse($actionInstance, $request);
-            if (!$this->isSetActionNoPostDispatchFlag()) {
-                $this->dispatchPostDispatchEvents($actionInstance, $request);
-            }
+            $result = $this->dispatchAction($actionInstance, $request);
         }
 
         //handling redirect to 404
         if ($result instanceof NotFoundException) {
             throw $result;
         }
+        return $result;
+    }
+
+    /**
+     * Dispatch the action, skipping pre/post-dispatch events for internal forwards.
+     *
+     * @param ActionInterface $actionInstance
+     * @param RequestInterface $request
+     * @return ResponseInterface|ResultInterface
+     * @throws NotFoundException
+     */
+    private function dispatchAction(ActionInterface $actionInstance, RequestInterface $request)
+    {
+        $isForwardAction = $actionInstance instanceof Forward;
+        if (!$isForwardAction) {
+            $this->dispatchPreDispatchEvents($actionInstance, $request);
+        }
+        $result = $this->getActionResponse($actionInstance, $request);
+        if (!$isForwardAction && !$this->isSetActionNoPostDispatchFlag()) {
+            $this->dispatchPostDispatchEvents($actionInstance, $request);
+        }
+
         return $result;
     }
 
