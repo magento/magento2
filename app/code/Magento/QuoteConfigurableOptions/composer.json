@@ -4,6 +4,8 @@
     "require": {
         "php": "~8.3.0||~8.4.0||~8.5.0",
         "magento/framework": "*",
+        "magento/module-catalog": "*",
+        "magento/module-configurable-product-graph-ql": "*",
         "magento/module-quote": "*"
     },
     "type": "magento2-module",
