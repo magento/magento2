@@ -153,4 +153,18 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
         $this->assertStringNotContainsString('version2/magento2', $this->processor->getViewFileUrl());
         $this->assertStringContainsString('errors/', $this->processor->getViewFileUrl());
     }
+
+    /**
+     * A 404 page must not be cached by a proxy, CDN or browser, the requested file can exist moments later
+     *
+     * @return void
+     */
+    public function testProcess404IsNotCacheable(): void
+    {
+        $response = $this->processor->process404();
+        $cacheControl = $response->getHeader('Cache-Control');
+
+        $this->assertSame(404, $response->getHttpResponseCode());
+        $this->assertStringContainsString('no-store', $cacheControl ? $cacheControl->getFieldValue() : '');
+    }
 }
