@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminDeleteDownloadableProductSampleTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Delete Downloadable Product"/>
+            <title value="Delete Downloadable Product Samples"/>
+            <description value="Admin should be able to delete downloadable product samples"/>
+            <severity value="MAJOR"/>
+            <group value="Downloadable"/>
+        </annotations>
+        <before>
+            <magentoCLI command="downloadable:domains:add static.magento.com" stepKey="addDownloadableDomain"/>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
+                <argument name="product" value="DownloadableProduct"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <magentoCLI command="downloadable:domains:remove static.magento.com" stepKey="removeDownloadableDomain"/>
+        </after>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductGridPage"/>
+        <actionGroup ref="GoToSpecifiedCreateProductPageActionGroup" stepKey="createProduct">
+            <argument name="productType" value="downloadable"/>
+        </actionGroup>
+        <actionGroup ref="FillMainProductFormNoWeightActionGroup" stepKey="fillDownloadableProductForm">
+            <argument name="product" value="DownloadableProduct"/>
+        </actionGroup>
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}"
+                                    parameterArray="[$$createCategory.name$$]" stepKey="fillCategory"/>
+        <actionGroup ref="AdminAddDownloadableLinkInformationActionGroup" stepKey="addDownloadableLinkInformation"/>
+        <checkOption selector="{{AdminProductDownloadableSection.isLinksPurchasedSeparately}}"
+                     stepKey="checkOptionPurchaseSeparately"/>
+        <actionGroup ref="AddDownloadableProductLinkWithMaxDownloadsActionGroup" stepKey="addDownloadableProductLink">
+            <argument name="link" value="downloadableLinkWithMaxDownloads"/>
+        </actionGroup>
+        <actionGroup ref="AddDownloadableSampleFileActionGroup" stepKey="addDownloadSampleFile">
+            <argument name="sample" value="downloadableSampleFile"/>
+        </actionGroup>
+        <actionGroup ref="AddDownloadableSampleUrlActionGroup" stepKey="addDownloadableSampleUrl">
+            <argument name="sample" value="downloadableSampleUrl"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+        <actionGroup ref="VerifySamplePresentActionGroup" stepKey="verifySampleFilePresent">
+            <argument name="index" value="0"/>
+        </actionGroup>
+        <actionGroup ref="VerifySamplePresentActionGroup" stepKey="verifySampleUrlPresent">
+            <argument name="index" value="1"/>
+        </actionGroup>
+        <actionGroup ref="RemoveSampleActionGroup" stepKey="removeSampleUrl">
+            <argument name="index" value="1"/>
+        </actionGroup>
+        <actionGroup ref="RemoveSampleActionGroup" stepKey="removeSampleFile">
+            <argument name="index" value="0"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductAfterSamplesRemoved"/>
+        <actionGroup ref="VerifySampleAbsentActionGroup" stepKey="verifySamplesAbsent">
+            <argument name="index" value="0"/>
+        </actionGroup>
+    </test>
+</tests>
