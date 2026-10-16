@@ -212,6 +212,48 @@ class RequestTest extends TestCase
         $this->assertEmpty($this->model->getBaseUrl());
     }
 
+    public function testGetBaseUrlWhenDocumentRootIsMagentoRootAndUriStartsWithPubLetters()
+    {
+        $_SERVER = [
+            'SCRIPT_FILENAME' => '/var/www/html/pub/index.php',
+            'SCRIPT_NAME' => '/pub/index.php',
+            'PHP_SELF' => '/pub/index.php',
+            'REQUEST_URI' => '/public-facing-url',
+        ];
+        $this->model = $this->getModel();
+
+        $this->assertEquals('', $this->model->getBaseUrl());
+        $this->assertEquals('/public-facing-url', $this->model->getPathInfo());
+    }
+
+    public function testGetBaseUrlWhenDocumentRootIsMagentoRootAndUriIsInsidePub()
+    {
+        $_SERVER = [
+            'SCRIPT_FILENAME' => '/var/www/html/pub/index.php',
+            'SCRIPT_NAME' => '/pub/index.php',
+            'PHP_SELF' => '/pub/index.php',
+            'REQUEST_URI' => '/pub/media/logo.png',
+        ];
+        $this->model = $this->getModel();
+
+        $this->assertEquals('/pub', $this->model->getBaseUrl());
+        $this->assertEquals('/media/logo.png', $this->model->getPathInfo());
+    }
+
+    public function testGetBaseUrlWhenDocumentRootIsPub()
+    {
+        $_SERVER = [
+            'SCRIPT_FILENAME' => '/var/www/html/pub/index.php',
+            'SCRIPT_NAME' => '/index.php',
+            'PHP_SELF' => '/index.php',
+            'REQUEST_URI' => '/pub-crawl.html',
+        ];
+        $this->model = $this->getModel();
+
+        $this->assertEquals('', $this->model->getBaseUrl());
+        $this->assertEquals('/pub-crawl.html', $this->model->getPathInfo());
+    }
+
     public function testGetAliasWhenAliasSet()
     {
         $this->model = $this->getModel();
