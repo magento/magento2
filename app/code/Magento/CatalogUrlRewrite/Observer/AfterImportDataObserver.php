@@ -446,6 +446,7 @@ class AfterImportDataObserver implements ObserverInterface
         }
         $mergeDataProvider->merge($this->currentUrlRewritesRegenerate($products));
         $this->productCategories = null;
+        $this->cachedValues = null;
         return $mergeDataProvider->getData();
     }
 

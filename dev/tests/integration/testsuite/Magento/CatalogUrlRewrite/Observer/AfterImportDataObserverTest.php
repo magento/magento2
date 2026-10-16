@@ -1,0 +1,109 @@
+<?php
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+declare(strict_types=1);
+
+namespace Magento\CatalogUrlRewrite\Observer;
+
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
+use Magento\ImportExport\Helper\Data as ImportExportData;
+use Magento\ImportExport\Model\Import;
+use Magento\ImportExport\Model\Import\Source\Csv;
+use Magento\ImportExport\Model\ResourceModel\Import\Data;
+use Magento\Indexer\Test\Fixture\ScheduleMode;
+use Magento\Store\Test\Fixture\Store as StoreFixture;
+use Magento\TestFramework\Fixture\AppArea;
+use Magento\TestFramework\Fixture\AppIsolation;
+use Magento\TestFramework\Fixture\Config;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureBeforeTransaction;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use Magento\TestFramework\Fixture\DbIsolation;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\UrlRewrite\Model\UrlFinderInterface;
+use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
+use PHPUnit\Framework\TestCase;
+
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+#[AppArea('adminhtml')]
+#[AppIsolation(true)]
+#[DbIsolation(true)]
+class AfterImportDataObserverTest extends TestCase
+{
+    #[Config('catalog/seo/product_url_suffix', '.html')]
+    #[DataFixtureBeforeTransaction(ScheduleMode::class, ['indexer' => 'catalogsearch_fulltext'])]
+    #[DataFixtureBeforeTransaction(ScheduleMode::class, ['indexer' => 'catalog_category_product'])]
+    #[DataFixtureBeforeTransaction(ScheduleMode::class, ['indexer' => 'catalog_product_category'])]
+    #[DataFixtureBeforeTransaction(StoreFixture::class, ['code' => 'url_bunch_one'], as: 'store1')]
+    #[DataFixtureBeforeTransaction(StoreFixture::class, ['code' => 'url_bunch_two'], as: 'store2')]
+    #[DataFixture(ProductFixture::class, ['sku' => 'url-bunch-first', 'url_key' => 'first-default'], as: 'first')]
+    #[DataFixture(ProductFixture::class, ['sku' => 'url-bunch-second', 'url_key' => 'second-default'], as: 'second')]
+    public function testImportPreservesStoreUrlKeysInSecondBunch(): void
+    {
+        $objectManager = Bootstrap::getObjectManager();
+        $fixtures = DataFixtureStorageManager::getStorage();
+        $repository = $objectManager->get(ProductRepositoryInterface::class);
+        foreach (['first', 'second'] as $productName) {
+            foreach (['store1', 'store2'] as $storeName) {
+                $storeId = (int)$fixtures->get($storeName)->getId();
+                $product = $repository->get($fixtures->get($productName)->getSku(), false, $storeId, true);
+                $product->setUrlKey($productName . '-' . $storeName);
+                $product->setUrlPath(null);
+                $repository->save($product);
+            }
+        }
+
+        $dataSource = $objectManager->create(Data::class);
+        $importExportData = $this->createPartialMock(ImportExportData::class, ['getBunchSize']);
+        $importExportData->expects($this->atLeastOnce())->method('getBunchSize')->willReturn(1);
+        $import = $objectManager->create(
+            ImportProduct::class,
+            ['importData' => $dataSource, 'importExportData' => $importExportData]
+        );
+        $source = $objectManager->create(Csv::class, [
+            'file' => __DIR__ . '/../Fixtures/products_with_store_url_keys.csv',
+            'directory' => $objectManager->get(Filesystem::class)->getDirectoryRead(DirectoryList::ROOT),
+        ]);
+        $import->setParameters(['behavior' => Import::BEHAVIOR_APPEND, 'entity' => 'catalog_product']);
+        $import->setSource($source);
+        $errors = $import->validateData();
+        $this->assertSame(0, $errors->getErrorsCount(), 'Import validation must succeed.');
+
+        $bunchSkus = [];
+        while ($bunch = $dataSource->getNextUniqueBunch($import->getIds())) {
+            $bunchSkus[] = array_column($bunch, 'sku');
+        }
+        $this->assertSame([['url-bunch-first'], ['url-bunch-second']], $bunchSkus);
+        $this->assertTrue($import->importData());
+
+        $urlFinder = $objectManager->get(UrlFinderInterface::class);
+        foreach (['first', 'second'] as $productName) {
+            foreach (['store1', 'store2'] as $storeName) {
+                $storeId = (int)$fixtures->get($storeName)->getId();
+                $product = $repository->get($fixtures->get($productName)->getSku(), false, $storeId, true);
+                $this->assertSame($productName . '-' . $storeName, $product->getUrlKey());
+                $rewrites = $urlFinder->findAllByData([
+                    UrlRewrite::ENTITY_TYPE => 'product',
+                    UrlRewrite::ENTITY_ID => $product->getId(),
+                    UrlRewrite::STORE_ID => $storeId,
+                    UrlRewrite::REDIRECT_TYPE => 0,
+                    UrlRewrite::IS_AUTOGENERATED => 1,
+                ]);
+                $this->assertCount(1, $rewrites);
+                $this->assertSame(
+                    $productName . '-' . $storeName . '.html',
+                    reset($rewrites)->getRequestPath(),
+                    $productName . ' in ' . $storeName
+                );
+            }
+        }
+    }
+}
