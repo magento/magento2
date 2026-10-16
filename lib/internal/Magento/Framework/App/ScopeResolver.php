@@ -10,7 +10,7 @@ use Magento\Framework\ObjectManagerInterface;
 class ScopeResolver implements ScopeResolverInterface
 {
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var ObjectManagerInterface
      */
     protected $objectManager;
 
@@ -30,8 +30,7 @@ class ScopeResolver implements ScopeResolverInterface
     }
 
     /**
-     * {@inheritdoc}
-     * @return ScopeDefault
+     * @inheritdoc
      */
     public function getScope($scopeId = null)
     {
