@@ -79,6 +79,22 @@ class ClassReaderTest extends TestCase
         $this->model->getConstructor($className);
     }
 
+    public function testGetConstructorWithClassWithParameterTypeParent(): void
+    {
+        $this->assertEquals(
+            [
+                [
+                    'parentObject',
+                    \ClassWithoutConstruct::class,
+                    true,
+                    null,
+                    false,
+                ]
+            ],
+            $this->model->getConstructor(\ClassWithParameterTypeParent::class)
+        );
+    }
+
     /**
      * Data provider
      *
