@@ -1,0 +1,23 @@
+{
+    "name": "artbambou/magento2-module-weee-configurable-products",
+    "description": "N/A",
+    "type": "magento2-module",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "require": {
+        "php": "~7.4.0||~8.1.0",
+        "magento/framework": "*",
+        "magento/module-configurable-product": "*",
+        "magento/module-weee": "*"
+	},
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Magento\\WeeeConfigurableProducts\\": ""
+        }
+    }
+}
