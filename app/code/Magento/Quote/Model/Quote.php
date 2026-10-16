@@ -1831,6 +1831,9 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         $buyRequest = $this->_catalogProduct->addParamsToBuyRequest($buyRequest, $params);
 
         $buyRequest->setResetCount(true);
+        if ($buyRequest->getId() === null) {
+            $buyRequest->setId($itemId);
+        }
         $resultItem = $this->addProduct($product, $buyRequest);
 
         if (is_string($resultItem)) {
@@ -1861,7 +1864,17 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         } else {
             $resultItem->setQty($buyRequest->getQty());
         }
-
+        $childItemsByProductId = [];
+        foreach ($resultItem->getChildren() as $childItem) {
+            $childProductId = $childItem->getProductId();
+            if (isset($childItemsByProductId[$childProductId])) {
+                $existingChild = $childItemsByProductId[$childProductId];
+                $existingChild->setQty($existingChild->getQty() + $childItem->getQty());
+                $this->removeItem($childItem->getId());
+            } else {
+                $childItemsByProductId[$childProductId] = $childItem;
+            }
+        }
         return $resultItem;
     }
 
