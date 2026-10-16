@@ -406,9 +406,31 @@ class AfterImportDataObserver implements ObserverInterface
     private function addProductToImport(Product $product, string $storeId, array &$products) : void
     {
         if ($product->getVisibility() == (string)Visibility::getOptionArray()[Visibility::VISIBILITY_NOT_VISIBLE]) {
+            $this->deleteUrlRewrites($product, (int)$storeId);
             return;
         }
         $products[$product->getId()][$storeId] = $product;
+    }
+
+    /**
+     * Delete URL rewrites for a product in a given store.
+     *
+     * Called when product visibility changes to "Not Visible Individually" during import,
+     * to ensure stale URL rewrite records are removed.
+     *
+     * @param Product $product
+     * @param int $storeId
+     * @return void
+     */
+    private function deleteUrlRewrites(Product $product, int $storeId): void
+    {
+        $this->urlPersist->deleteByData(
+            [
+                UrlRewrite::ENTITY_ID => $product->getId(),
+                UrlRewrite::ENTITY_TYPE => ProductUrlRewriteGenerator::ENTITY_TYPE,
+                UrlRewrite::STORE_ID => $storeId,
+            ]
+        );
     }
 
     /**
