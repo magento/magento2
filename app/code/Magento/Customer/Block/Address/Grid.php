@@ -246,6 +246,7 @@ class Grid extends \Magento\Framework\View\Element\Template
             }
             /** @var \Magento\Customer\Model\ResourceModel\Address\Collection $collection */
             $collection = $this->addressCollectionFactory->create();
+            $collection->addAttributeToSelect('*');
             $collection->setOrder('entity_id', 'desc');
             $collection->addFieldToFilter(
                 'entity_id',

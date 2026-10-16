@@ -6,7 +6,12 @@
 
 namespace Magento\Customer\Block\Address;
 
+use Magento\Customer\Api\AddressMetadataInterface;
+use Magento\Customer\Api\AddressRepositoryInterface;
+use Magento\Customer\Test\Fixture\CustomerAttribute;
 use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use Magento\TestFramework\Fixture\AppIsolation;
+use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\Attributes\DataProvider;
 
@@ -79,6 +84,40 @@ class GridTest extends \PHPUnit\Framework\TestCase
             $gridBlock->getAdditionalAddresses()[0]
         );
         $this->assertEquals(2, $gridBlock->getAdditionalAddresses()[0]->getId());
+    }
+
+    #[
+        AppIsolation(true),
+        DataFixture(
+            CustomerAttribute::class,
+            [
+                'entity_type_id' => AddressMetadataInterface::ATTRIBUTE_SET_ID_ADDRESS,
+                'attribute_set_id' => AddressMetadataInterface::ATTRIBUTE_SET_ID_ADDRESS,
+                'attribute_group_id' => 1,
+                'attribute_code' => 'grid_custom_text',
+                'frontend_input' => 'text',
+                'backend_type' => 'varchar',
+                'is_visible' => 1,
+                'used_in_forms' => ['adminhtml_customer_address', 'customer_address_edit']
+            ]
+        ),
+        DataFixture('Magento/Customer/_files/customer.php'),
+        DataFixture('Magento/Customer/_files/customer_two_addresses.php'),
+    ]
+    public function testGetAdditionalAddressesLoadsCustomAttributes()
+    {
+        $addressRepository = Bootstrap::getObjectManager()->get(AddressRepositoryInterface::class);
+        $address = $addressRepository->getById(2);
+        $address->setCustomAttribute('grid_custom_text', 'custom value');
+        $addressRepository->save($address);
+
+        $addresses = $this->createBlockForCustomer(1)->getAdditionalAddresses();
+
+        $this->assertCount(1, $addresses);
+        $this->assertSame(
+            'custom value',
+            $addresses[0]->getCustomAttribute('grid_custom_text')?->getValue()
+        );
     }
 
     /**
