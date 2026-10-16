@@ -109,7 +109,7 @@ interface CustomerInterface extends \Magento\Framework\Api\CustomAttributesDataI
     /**
      * Set confirmation
      *
-     * @param string $confirmation
+     * @param string|null $confirmation
      * @return $this
      */
     public function setConfirmation($confirmation);
