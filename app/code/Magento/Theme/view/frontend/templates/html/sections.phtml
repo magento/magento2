@@ -38,9 +38,7 @@ $groupCss = $block->getGroupCss();
                 </div>
                 <div class="section-item-content <?= $escaper->escapeHtmlAttr($groupCss) ?>-item-content"
                      id="<?= $escaper->escapeHtmlAttr($alias) ?>"
-                     role="tabpanel"
-                     aria-hidden="true"
-                     style="display: none;">
+                     role="tabpanel">
                     <?= /* @noEscape */ $html ?>
                 </div>
             <?php endforeach;?>
