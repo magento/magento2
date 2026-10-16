@@ -11,20 +11,16 @@ use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Directory\Model\RegionFactory;
 use Magento\Framework\HTTP\Client\Curl;
 use Magento\Framework\HTTP\Client\CurlFactory;
-use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Quote\Api\Data\AddressInterfaceFactory;
-use Magento\Quote\Api\Data\ShippingMethodInterface;
 use Magento\Quote\Api\GuestShipmentEstimationInterface;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 use Magento\Quote\Test\Fixture\AddProductToCart;
 use Magento\Quote\Test\Fixture\GuestCart;
 use Magento\TestFramework\Fixture\Config;
 use Magento\TestFramework\Fixture\DataFixture;
-use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
-use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -32,6 +28,8 @@ use PHPUnit\Framework\TestCase;
  *
  * Integration replacement for MFTF test StorefrontVerifyFedExInternationalPriorityShippingMethodIsAvailableTest
  * (ACP2E-3667). The FedEx REST API is mocked so the result no longer depends on the live FedEx sandbox.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class InternationalPriorityShippingMethodIsAvailableTest extends TestCase
 {
@@ -46,11 +44,6 @@ class InternationalPriorityShippingMethodIsAvailableTest extends TestCase
     private ObjectManager $objectManager;
 
     /**
-     * @var DataFixtureStorage
-     */
-    private DataFixtureStorage $fixtures;
-
-    /**
      * @var string[]
      */
     private array $rateRequests = [];
@@ -61,7 +54,6 @@ class InternationalPriorityShippingMethodIsAvailableTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->fixtures = DataFixtureStorageManager::getStorage();
         $this->objectManager->addSharedInstance($this->createFedexCurlFactoryMock(), CurlFactory::class);
     }
 
@@ -95,42 +87,13 @@ class InternationalPriorityShippingMethodIsAvailableTest extends TestCase
     ]
     public function testInternationalPriorityShippingMethodIsAvailableForCanadaAddress(): void
     {
-        $cartId = (int)$this->fixtures->get('cart')->getId();
+        $cartId = (int)DataFixtureStorageManager::getStorage()->get('cart')->getId();
         $maskedCartId = $this->objectManager->get(QuoteIdToMaskedQuoteIdInterface::class)->execute($cartId);
 
-        $methods = $this->objectManager->get(GuestShipmentEstimationInterface::class)
-            ->estimateByExtendedAddress($maskedCartId, $this->createCanadaShippingAddress());
-
-        $this->assertCount(1, $this->rateRequests, 'FedEx rate request was not sent.');
-        $rateRequest = json_decode($this->rateRequests[0], true);
-        $this->assertSame(
-            'CA',
-            $rateRequest['requestedShipment']['recipient']['address']['countryCode'] ?? null,
-            'FedEx rate request was not sent for the Canada shipping address.'
-        );
-
-        $fedexMethod = $this->findShippingMethod($methods, self::CARRIER_CODE, self::METHOD_CODE);
-        $this->assertNotNull(
-            $fedexMethod,
-            'FedEx International Priority shipping method is not displayed for the non-US shipping address.'
-        );
-        $this->assertTrue($fedexMethod->getAvailable(), 'FedEx International Priority shipping method is unavailable.');
-        $this->assertEmpty((string)$fedexMethod->getErrorMessage());
-        $this->assertSame('International Priority', (string)$fedexMethod->getMethodTitle());
-    }
-
-    /**
-     * Build the guest shipping address the MFTF test fills in (Simple_US_Customer + Canada_Address).
-     *
-     * @return AddressInterface
-     */
-    private function createCanadaShippingAddress(): AddressInterface
-    {
+        // Guest shipping address the MFTF test fills in (Simple_US_Customer + Canada_Address).
         $region = $this->objectManager->get(RegionFactory::class)->create()->loadByName('Saskatchewan', 'CA');
-
-        /** @var AddressInterface $address */
-        $address = $this->objectManager->get(AddressInterfaceFactory::class)->create();
-        $address->setEmail('John.Doe@example.com')
+        $address = $this->objectManager->get(AddressInterfaceFactory::class)->create()
+            ->setEmail('John.Doe@example.com')
             ->setFirstname('John')
             ->setLastname('Doe')
             ->setStreet(['4423  St. John Street'])
@@ -141,35 +104,36 @@ class InternationalPriorityShippingMethodIsAvailableTest extends TestCase
             ->setPostcode('S4P3Y2')
             ->setTelephone('613-582-4782');
 
-        return $address;
-    }
+        $methods = $this->objectManager->get(GuestShipmentEstimationInterface::class)
+            ->estimateByExtendedAddress($maskedCartId, $address);
 
-    /**
-     * Find a shipping method by carrier and method code.
-     *
-     * @param ShippingMethodInterface[] $methods
-     * @param string $carrierCode
-     * @param string $methodCode
-     * @return ShippingMethodInterface|null
-     */
-    private function findShippingMethod(
-        array $methods,
-        string $carrierCode,
-        string $methodCode
-    ): ?ShippingMethodInterface {
+        $this->assertCount(1, $this->rateRequests, 'FedEx rate request was not sent.');
+        $rateRequest = json_decode($this->rateRequests[0], true);
+        $this->assertSame(
+            'CA',
+            $rateRequest['requestedShipment']['recipient']['address']['countryCode'] ?? null,
+            'FedEx rate request was not sent for the Canada shipping address.'
+        );
+
+        $fedexMethod = null;
         foreach ($methods as $method) {
-            if ($method->getCarrierCode() === $carrierCode && $method->getMethodCode() === $methodCode) {
-                return $method;
+            if ($method->getCarrierCode() === self::CARRIER_CODE && $method->getMethodCode() === self::METHOD_CODE) {
+                $fedexMethod = $method;
             }
         }
-
-        return null;
+        $this->assertNotNull(
+            $fedexMethod,
+            'FedEx International Priority shipping method is not displayed for the non-US shipping address.'
+        );
+        $this->assertTrue($fedexMethod->getAvailable(), 'FedEx International Priority shipping method is unavailable.');
+        $this->assertEmpty((string)$fedexMethod->getErrorMessage());
+        $this->assertSame('International Priority', (string)$fedexMethod->getMethodTitle());
     }
 
     /**
      * Create a CurlFactory stub that answers FedEx OAuth and rate requests with recorded API responses.
      *
-     * @return CurlFactory|Stub
+     * @return CurlFactory
      */
     private function createFedexCurlFactoryMock(): CurlFactory
     {
