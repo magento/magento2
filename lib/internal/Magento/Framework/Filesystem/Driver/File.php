@@ -682,15 +682,8 @@ class File implements DriverInterface
     public function fileReadLine($resource, $length, $ending = null)
     {
         // phpcs:disable
-        $result = @stream_get_line($resource, $length, $ending);
+        return @stream_get_line($resource, $length, $ending);
         // phpcs:enable
-        if (false === $result) {
-            throw new FileSystemException(
-                new Phrase('File cannot be read %1', [$this->getWarningMessage()])
-            );
-        }
-
-        return $result;
     }
 
     /**
