@@ -3,7 +3,6 @@
  * Copyright 2013 Adobe
  * All Rights Reserved.
  */
-
 declare(strict_types=1);
 
 namespace Magento\Cms\Block\Widget;
@@ -15,8 +14,6 @@ use Magento\Widget\Block\BlockInterface;
 
 /**
  * Cms Static Block Widget
- *
- * @author Magento Core Team <core@magentocommerce.com>
  */
 class Block extends \Magento\Framework\View\Element\Template implements BlockInterface, IdentityInterface
 {
@@ -33,8 +30,6 @@ class Block extends \Magento\Framework\View\Element\Template implements BlockInt
     protected static $_widgetUsageMap = [];
 
     /**
-     * Block factory
-     *
      * @var \Magento\Cms\Model\BlockFactory
      */
     protected $_blockFactory;
@@ -77,6 +72,7 @@ class Block extends \Magento\Framework\View\Element\Template implements BlockInt
         if (isset(self::$_widgetUsageMap[$blockHash])) {
             return $this;
         }
+
         self::$_widgetUsageMap[$blockHash] = true;
 
         $block = $this->getBlock();
@@ -87,9 +83,10 @@ class Block extends \Magento\Framework\View\Element\Template implements BlockInt
                 $this->setText(
                     $this->_filterProvider->getBlockFilter()->setStoreId($storeId)->filter($block->getContent())
                 );
-            } catch (NoSuchEntityException $e) {
+            } catch (NoSuchEntityException $e) { // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
             }
         }
+
         unset(self::$_widgetUsageMap[$blockHash]);
         return $this;
     }
@@ -132,7 +129,7 @@ class Block extends \Magento\Framework\View\Element\Template implements BlockInt
                 $this->block = $block;
 
                 return $block;
-            } catch (NoSuchEntityException $e) {
+            } catch (NoSuchEntityException $e) { // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
             }
         }
 

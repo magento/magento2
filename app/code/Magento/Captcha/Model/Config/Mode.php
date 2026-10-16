@@ -6,8 +6,6 @@
 
 /**
  * Captcha image model
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Captcha\Model\Config;
 
