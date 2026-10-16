@@ -12,6 +12,7 @@ use Magento\Eav\Api\AttributeManagementInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
 use Magento\Catalog\Model\Product as ProductEntity;
+use Magento\Catalog\Model\Product\Type as ProductType;
 use Magento\Eav\Model\Entity\Attribute\UniqueValidationInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\EntityManager\EntityManager;
@@ -24,6 +25,7 @@ use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
  * @api
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  * phpcs:disable Magento2.Annotation.MethodAnnotationStructure
  * @since 100.0.2
  */
@@ -111,6 +113,11 @@ class Product extends AbstractResource implements ResetAfterRequestInterface
     private $scopeOverriddenValue;
 
     /**
+     * @var ProductType
+     */
+    private $productType;
+
+    /**
      * @param \Magento\Eav\Model\Entity\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Factory $modelFactory
@@ -126,6 +133,7 @@ class Product extends AbstractResource implements ResetAfterRequestInterface
      * @param AttributeManagementInterface|null $eavAttributeManagement
      * @param MediaImageDeleteProcessor|null $mediaImageDeleteProcessor
      * @param ScopeOverriddenValue|null $scopeOverriddenValue
+     * @param ProductType|null $productType
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -143,7 +151,8 @@ class Product extends AbstractResource implements ResetAfterRequestInterface
         ?UniqueValidationInterface $uniqueValidator = null,
         ?AttributeManagementInterface $eavAttributeManagement = null,
         ?MediaImageDeleteProcessor $mediaImageDeleteProcessor = null,
-        ?ScopeOverriddenValue $scopeOverriddenValue = null
+        ?ScopeOverriddenValue $scopeOverriddenValue = null,
+        ?ProductType $productType = null
     ) {
         $this->_categoryCollectionFactory = $categoryCollectionFactory;
         $this->_catalogCategory = $catalogCategory;
@@ -166,6 +175,7 @@ class Product extends AbstractResource implements ResetAfterRequestInterface
             ?? ObjectManager::getInstance()->get(MediaImageDeleteProcessor::class);
         $this->scopeOverriddenValue = $scopeOverriddenValue
             ?? ObjectManager::getInstance()->get(ScopeOverriddenValue::class);
+        $this->productType = $productType ?? ObjectManager::getInstance()->get(ProductType::class);
     }
 
     /**
@@ -708,6 +718,16 @@ class Product extends AbstractResource implements ResetAfterRequestInterface
         $attributeSet = $this->setFactory->create()->load($object->getAttributeSetId());
         if ($attributeSet->getEntityTypeId() != $entityType->getId()) {
             return ['attribute_set' => 'Invalid attribute set entity type'];
+        }
+
+        // An undeclared type would be stored as sent and handled as "simple" at runtime. Only a new or changed type
+        // is checked, so products whose type module was disabled stay editable.
+        $typeId = (string)$object->getTypeId();
+        if ($typeId !== ''
+            && $typeId !== (string)$object->getOrigData('type_id')
+            && !isset($this->productType->getTypes()[$typeId])
+        ) {
+            return ['type_id' => sprintf('Invalid product type "%s"', $typeId)];
         }
 
         return parent::validate($object);
