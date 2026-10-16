@@ -597,7 +597,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
         if ($height) {
             $this->setWatermarkHeight($height);
         }
-        if ($opacity) {
+        if (!in_array($opacity, [null, ''], true)) {
             $this->setWatermarkImageOpacity($opacity);
         }
         $filePath = $this->_getWatermarkFilePath();
