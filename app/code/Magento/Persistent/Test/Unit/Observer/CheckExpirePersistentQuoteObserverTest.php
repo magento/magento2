@@ -10,15 +10,16 @@ namespace Magento\Persistent\Test\Unit\Observer;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Event\Observer;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Persistent\Helper\Data;
 use Magento\Persistent\Helper\Session;
 use Magento\Persistent\Model\QuoteManager;
+use Magento\Persistent\Model\QuoteResourceWrapper;
 use Magento\Persistent\Observer\CheckExpirePersistentQuoteObserver;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Checkout\Model\Session as CheckoutSession;
-use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\Quote;
+use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Framework\Exception\LocalizedException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Rule\InvokedCount;
 use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
@@ -79,9 +80,9 @@ class CheckExpirePersistentQuoteObserverTest extends TestCase
     private $requestMock;
 
     /**
-     * @var MockObject|Quote
+     * @var MockObject|QuoteResourceWrapper
      */
-    private $quoteMock;
+    private $quoteResourceWrapperMock;
 
     /**
      * @var MockObject|CartRepositoryInterface
@@ -103,14 +104,11 @@ class CheckExpirePersistentQuoteObserverTest extends TestCase
         $this->quoteManagerMock = $this->createMock(QuoteManager::class);
         $this->eventManagerMock = $this->createMock(ManagerInterface::class);
         $this->checkoutSessionMock = $this->createMock(CheckoutSession::class);
-        $this->requestMock = $this->createPartialMockWithReflection(
-            RequestInterface::class,
-            [
-                'getModuleName', 'setModuleName', 'getActionName', 'setActionName',
-                'getParam', 'setParams', 'getParams', 'getCookie', 'isSecure',
-                'getRequestUri', 'getServer'  // Custom methods
-            ]
-        );
+        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
+            ->disableOriginalConstructor()
+            ->addMethods(['getRequestUri', 'getServer'])
+            ->getMockForAbstractClass();
+        $this->quoteResourceWrapperMock = $this->createMock(QuoteResourceWrapper::class);
         $this->quoteRepositoryMock = $this->createMock(CartRepositoryInterface::class);
 
         $this->model = new CheckExpirePersistentQuoteObserver(
@@ -121,11 +119,8 @@ class CheckExpirePersistentQuoteObserverTest extends TestCase
             $this->customerSessionMock,
             $this->checkoutSessionMock,
             $this->requestMock,
-            $this->quoteRepositoryMock
-        );
-        $this->quoteMock = $this->createPartialMockWithReflection(
-            Quote::class,
-            ['getIsPersistent', 'getCustomerIsGuest']
+            $this->quoteRepositoryMock,
+            $this->quoteResourceWrapperMock
         );
     }
 
@@ -142,20 +137,89 @@ class CheckExpirePersistentQuoteObserverTest extends TestCase
 
     public function testExecuteWhenPersistentIsNotEnabled()
     {
-        $quoteId = 'quote_id_1';
+        $quoteId = 10;
 
         $this->persistentHelperMock
             ->expects($this->once())
             ->method('canProcess')
             ->with($this->observerMock)
             ->willReturn(true);
-        $this->persistentHelperMock->expects($this->exactly(2))->method('isEnabled')->willReturn(false);
-        $this->checkoutSessionMock->expects($this->exactly(2))->method('getQuoteId')->willReturn($quoteId);
-        $this->quoteRepositoryMock->expects($this->once())
-            ->method('getActive')
+        $this->persistentHelperMock->expects($this->once())->method('isEnabled')->willReturn(false);
+        $this->checkoutSessionMock->expects($this->any())->method('getQuoteId')->willReturn($quoteId);
+
+        $this->quoteResourceWrapperMock->expects($this->once())
+            ->method('getFlags')
             ->with($quoteId)
-            ->willThrowException(new NoSuchEntityException());
-        $this->eventManagerMock->expects($this->never())->method('dispatch');
+            ->willReturn(['is_active' => true, 'is_persistent' => true]);
+
+        $this->eventManagerMock->expects($this->once())->method('dispatch');
+        $this->quoteManagerMock->expects($this->once())->method('expire');
+        $this->checkoutSessionMock->expects($this->once())->method('clearQuote');
+        $this->customerSessionMock->expects($this->once())->method('setCustomerId')->with(null)->willReturnSelf();
+
+        $this->model->execute($this->observerMock);
+    }
+
+    public function testExecuteUsesLoadedQuoteWhenAvailable()
+    {
+        $this->persistentHelperMock
+            ->expects($this->once())
+            ->method('canProcess')
+            ->with($this->observerMock)
+            ->willReturn(true);
+        $this->persistentHelperMock->expects($this->once())->method('isEnabled')->willReturn(false);
+        $this->checkoutSessionMock->expects($this->any())->method('getQuoteId')->willReturn(10);
+
+        $quoteMock = $this->getMockBuilder(Quote::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getIsActive'])
+            ->addMethods(['getIsPersistent'])
+            ->getMock();
+        $quoteMock->expects($this->once())->method('getIsActive')->willReturn(true);
+        $quoteMock->expects($this->once())->method('getIsPersistent')->willReturn(true);
+
+        $this->checkoutSessionMock->expects($this->any())->method('hasQuote')->willReturn(true);
+        $this->checkoutSessionMock->expects($this->any())->method('getQuote')->willReturn($quoteMock);
+
+        // Loaded quote is used, DB wrapper is never queried
+        $this->quoteResourceWrapperMock->expects($this->never())->method('getFlags');
+
+        $this->eventManagerMock->expects($this->once())->method('dispatch');
+        $this->quoteManagerMock->expects($this->once())->method('expire');
+        $this->checkoutSessionMock->expects($this->once())->method('clearQuote');
+        $this->customerSessionMock->expects($this->once())->method('setCustomerId')->with(null)->willReturnSelf();
+
+        $this->model->execute($this->observerMock);
+    }
+
+    public function testExecuteFallsBackToWrapperWhenLoadedQuoteFails()
+    {
+        $quoteId = 10;
+
+        $this->persistentHelperMock
+            ->expects($this->once())
+            ->method('canProcess')
+            ->with($this->observerMock)
+            ->willReturn(true);
+        $this->persistentHelperMock->expects($this->once())->method('isEnabled')->willReturn(false);
+        $this->checkoutSessionMock->expects($this->any())->method('getQuoteId')->willReturn($quoteId);
+
+        $this->checkoutSessionMock->expects($this->any())->method('hasQuote')->willReturn(true);
+        $this->checkoutSessionMock->expects($this->any())
+            ->method('getQuote')
+            ->willThrowException(new LocalizedException(__('Unable to load quote')));
+
+        // On failure to read the loaded quote, fall back to the DB wrapper
+        $this->quoteResourceWrapperMock->expects($this->once())
+            ->method('getFlags')
+            ->with($quoteId)
+            ->willReturn(['is_active' => true, 'is_persistent' => true]);
+
+        $this->eventManagerMock->expects($this->once())->method('dispatch');
+        $this->quoteManagerMock->expects($this->once())->method('expire');
+        $this->checkoutSessionMock->expects($this->once())->method('clearQuote');
+        $this->customerSessionMock->expects($this->once())->method('setCustomerId')->with(null)->willReturnSelf();
+
         $this->model->execute($this->observerMock);
     }
 
@@ -177,6 +241,8 @@ class CheckExpirePersistentQuoteObserverTest extends TestCase
         string $dispatchCounter,
         string $setCustomerIdCounter
     ): void {
+        $quoteId = 10;
+
         $this->persistentHelperMock
             ->expects($this->once())
             ->method('canProcess')
@@ -189,19 +255,21 @@ class CheckExpirePersistentQuoteObserverTest extends TestCase
             ->method('isShoppingCartPersist')
             ->willReturn(true);
         $this->sessionMock->expects($this->atLeastOnce())->method('isPersistent')->willReturn(false);
-        $this->checkoutSessionMock
-            ->method('getQuote')
-            ->willReturn($this->quoteMock);
-        $this->quoteMock->method('getCustomerIsGuest')->willReturn(true);
-        $this->quoteMock->method('getIsPersistent')->willReturn(true);
         $this->customerSessionMock
             ->expects($this->atLeastOnce())
             ->method('isLoggedIn')
             ->willReturn(false);
         $this->checkoutSessionMock
-            ->expects($this->atLeastOnce())
+            ->expects($this->any())
             ->method('getQuoteId')
-            ->willReturn(10);
+            ->willReturn($quoteId);
+
+        // Mock the QuoteResourceWrapper calls
+        $this->quoteResourceWrapperMock->expects($this->any())
+            ->method('getFlags')
+            ->with($quoteId)
+            ->willReturn(['is_active' => true, 'is_persistent' => true]);
+
         $this->eventManagerMock->expects($this->{$dispatchCounter}())->method('dispatch');
         $this->quoteManagerMock->expects($this->{$expireCounter}())->method('expire');
         $this->customerSessionMock
