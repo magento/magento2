@@ -8,7 +8,7 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="adminhtml.newsletter.subscriber.container">
-            <block class="Magento\Newsletter\Block\Adminhtml\Subscriber\Grid" name="adminhtml.newslettrer.subscriber.grid" as="grid">
+            <block class="Magento\Newsletter\Block\Adminhtml\Subscriber\Grid" name="adminhtml.newsletter.subscriber.grid" as="grid">
                 <arguments>
                     <argument name="id" xsi:type="string">subscriberGrid</argument>
                     <argument name="dataSource" xsi:type="object" shared="false">Magento\Newsletter\Model\ResourceModel\Subscriber\Grid\Collection</argument>
@@ -16,7 +16,7 @@
                     <argument name="default_dir" xsi:type="string">desc</argument>
                     <argument name="use_ajax" xsi:type="string">1</argument>
                 </arguments>
-                <block class="Magento\Backend\Block\Widget\Grid\Massaction" name="adminhtml.newslettrer.subscriber.grid.massaction" as="grid.massaction">
+                <block class="Magento\Backend\Block\Widget\Grid\Massaction" name="adminhtml.newsletter.subscriber.grid.massaction" as="grid.massaction">
                     <arguments>
                         <argument name="massaction_id_field" xsi:type="string">subscriber_id</argument>
                         <argument name="form_field_name" xsi:type="string">subscriber</argument>
@@ -34,7 +34,7 @@
                         </argument>
                     </arguments>
                 </block>
-                <block class="Magento\Backend\Block\Widget\Grid\Export" name="adminhtml.newslettrer.subscriber.grid.export" as="grid.export">
+                <block class="Magento\Backend\Block\Widget\Grid\Export" name="adminhtml.newsletter.subscriber.grid.export" as="grid.export">
                     <arguments>
                         <argument name="exportTypes" xsi:type="array">
                             <item name="csv" xsi:type="array">
@@ -48,11 +48,11 @@
                         </argument>
                     </arguments>
                 </block>
-                <block class="Magento\Backend\Block\Widget\Grid\ColumnSet" name="adminhtml.newslettrer.subscriber.grid.columnSet" as="grid.columnSet">
+                <block class="Magento\Backend\Block\Widget\Grid\ColumnSet" name="adminhtml.newsletter.subscriber.grid.columnSet" as="grid.columnSet">
                     <arguments>
                         <argument name="id" xsi:type="string">problemGrid</argument>
                     </arguments>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.newslettrer.subscriber.grid.columnSet.subscriber_id" as="subscriber_id">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.newsletter.subscriber.grid.columnSet.subscriber_id" as="subscriber_id">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">ID</argument>
                             <argument name="index" xsi:type="string">subscriber_id</argument>
@@ -60,7 +60,7 @@
                             <argument name="column_css_class" xsi:type="string">col-id</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.newslettrer.subscriber.grid.columnSet.email" as="email">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.newsletter.subscriber.grid.columnSet.email" as="email">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Email</argument>
                             <argument name="index" xsi:type="string">subscriber_email</argument>
@@ -68,7 +68,7 @@
                             <argument name="column_css_class" xsi:type="string">ccol-email</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.newslettrer.subscriber.grid.columnSet.type" as="type">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.newsletter.subscriber.grid.columnSet.type" as="type">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Type</argument>
                             <argument name="index" xsi:type="string">type</argument>
@@ -87,7 +87,7 @@
                             <argument name="column_css_class" xsi:type="string">col-type</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.newslettrer.subscriber.grid.columnSet.firstname" as="firstname">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.newsletter.subscriber.grid.columnSet.firstname" as="firstname">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Customer First Name</argument>
                             <argument name="index" xsi:type="string">firstname</argument>
@@ -95,7 +95,7 @@
                             <argument name="column_css_class" xsi:type="string">col-first-name</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.newslettrer.subscriber.grid.columnSet.lastname" as="lastname">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.newsletter.subscriber.grid.columnSet.lastname" as="lastname">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Customer Last Name</argument>
                             <argument name="index" xsi:type="string">lastname</argument>
@@ -103,7 +103,7 @@
                             <argument name="column_css_class" xsi:type="string">col-last-name</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.newslettrer.subscriber.grid.columnSet.status" as="status">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.newsletter.subscriber.grid.columnSet.status" as="status">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Status</argument>
                             <argument name="index" xsi:type="string">subscriber_status</argument>
@@ -130,7 +130,7 @@
                             <argument name="column_css_class" xsi:type="string">col-status</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column\Multistore" name="adminhtml.newslettrer.subscriber.grid.columnSet.website" as="website">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column\Multistore" name="adminhtml.newsletter.subscriber.grid.columnSet.website" as="website">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Web Site</argument>
                             <argument name="index" xsi:type="string">website_id</argument>
@@ -140,7 +140,7 @@
                             <argument name="column_css_class" xsi:type="string">col-website</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column\Multistore" name="adminhtml.newslettrer.subscriber.grid.columnSet.group" as="group">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column\Multistore" name="adminhtml.newsletter.subscriber.grid.columnSet.group" as="group">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Store</argument>
                             <argument name="index" xsi:type="string">group_id</argument>
@@ -150,7 +150,7 @@
                             <argument name="column_css_class" xsi:type="string">col-store</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column\Multistore" name="adminhtml.newslettrer.subscriber.grid.columnSet.store" as="store">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column\Multistore" name="adminhtml.newsletter.subscriber.grid.columnSet.store" as="store">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Store View</argument>
                             <argument name="index" xsi:type="string">store_id</argument>
