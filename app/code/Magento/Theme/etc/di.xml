@@ -5,21 +5,31 @@
  * All Rights Reserved.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Framework\View\Design\Theme\ThemeInterface" type="Magento\Theme\Model\Theme" />
     <preference for="Magento\Framework\View\Design\Theme\FileInterface" type="Magento\Theme\Model\Theme\File" />
-    <preference for="Magento\Framework\View\Design\Theme\ThemeProviderInterface" type="Magento\Theme\Model\Theme\ThemeProvider" />
-    <preference for="Magento\Framework\View\Design\Theme\FileProviderInterface" type="Magento\Theme\Model\Theme\FileProvider" />
-    <preference for="Magento\Framework\View\Design\Theme\Customization\ConfigInterface" type="Magento\Theme\Model\Theme\Customization\Config" />
+    <preference for="Magento\Framework\View\Design\Theme\ThemeProviderInterface"
+                type="Magento\Theme\Model\Theme\ThemeProvider" />
+    <preference for="Magento\Framework\View\Design\Theme\FileProviderInterface"
+                type="Magento\Theme\Model\Theme\FileProvider" />
+    <preference for="Magento\Framework\View\Design\Theme\Customization\ConfigInterface"
+                type="Magento\Theme\Model\Theme\Customization\Config" />
     <preference for="Magento\Framework\App\DesignInterface" type="Magento\Theme\Model\Design" />
     <preference for="Magento\Framework\View\Design\Theme\ListInterface" type="Magento\Theme\Model\Theme\Collection" />
     <preference for="Magento\Theme\Api\Data\DesignConfigInterface" type="Magento\Theme\Model\Data\Design\Config"/>
-    <preference for="Magento\Theme\Api\Data\DesignConfigDataInterface" type="Magento\Theme\Model\Data\Design\Config\Data"/>
-    <preference for="Magento\Theme\Api\DesignConfigRepositoryInterface" type="Magento\Theme\Model\DesignConfigRepository"/>
-    <preference for="Magento\Framework\View\Model\PageLayout\Config\BuilderInterface" type="Magento\Theme\Model\PageLayout\Config\Builder"/>
-    <preference for="Magento\Theme\Model\Design\Config\MetadataProviderInterface" type="Magento\Theme\Model\Design\Config\MetadataProvider"/>
-    <preference for="Magento\Theme\Model\Theme\StoreThemesResolverInterface" type="Magento\Theme\Model\Theme\StoreThemesResolver"/>
-    <preference for="Magento\Theme\CustomerData\MessagesProviderInterface" type="Magento\Theme\CustomerData\MessagesProvider"/>
+    <preference for="Magento\Theme\Api\Data\DesignConfigDataInterface"
+                type="Magento\Theme\Model\Data\Design\Config\Data"/>
+    <preference for="Magento\Theme\Api\DesignConfigRepositoryInterface"
+                type="Magento\Theme\Model\DesignConfigRepository"/>
+    <preference for="Magento\Framework\View\Model\PageLayout\Config\BuilderInterface"
+                type="Magento\Theme\Model\PageLayout\Config\Builder"/>
+    <preference for="Magento\Theme\Model\Design\Config\MetadataProviderInterface"
+                type="Magento\Theme\Model\Design\Config\MetadataProvider"/>
+    <preference for="Magento\Theme\Model\Theme\StoreThemesResolverInterface"
+                type="Magento\Theme\Model\Theme\StoreThemesResolver"/>
+    <preference for="Magento\Theme\CustomerData\MessagesProviderInterface"
+                type="Magento\Theme\CustomerData\MessagesProvider"/>
     <type name="Magento\Theme\Model\Config">
         <arguments>
             <argument name="configCache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
@@ -78,14 +88,16 @@
     <type name="Magento\Framework\Console\CommandListInterface">
         <arguments>
             <argument name="commands" xsi:type="array">
-                <item name="theme_uninstall" xsi:type="object">Magento\Theme\Console\Command\ThemeUninstallCommand</item>
+                <item name="theme_uninstall"
+                      xsi:type="object">Magento\Theme\Console\Command\ThemeUninstallCommand</item>
             </argument>
         </arguments>
     </type>
     <type name="Magento\Theme\Model\DesignConfigRepository">
         <plugin name="save_design_settings_event_dispatching" type="Magento\Theme\Model\Design\Config\Plugin"/>
     </type>
-    <virtualType name="Magento\Theme\Model\ResourceModel\Design\Config\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+    <virtualType name="Magento\Theme\Model\ResourceModel\Design\Config\Grid\Collection"
+                 type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
         <arguments>
             <argument name="mainTable" xsi:type="string">design_config_grid_flat</argument>
             <argument name="resourceModel" xsi:type="string">Magento\Theme\Model\ResourceModel\Design\Config</argument>
@@ -109,8 +121,10 @@
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
         <arguments>
              <argument name="collections" xsi:type="array">
-                 <item name="design_config_listing_data_source" xsi:type="string">Magento\Theme\Model\ResourceModel\Design\Config\Grid\Collection</item>
-                 <item name="design_theme_listing_data_source" xsi:type="string">Magento\Theme\Ui\Component\Theme\DataProvider\SearchResult</item>
+                 <item name="design_config_listing_data_source"
+                       xsi:type="string">Magento\Theme\Model\ResourceModel\Design\Config\Grid\Collection</item>
+                 <item name="design_theme_listing_data_source"
+                       xsi:type="string">Magento\Theme\Ui\Component\Theme\DataProvider\SearchResult</item>
              </argument>
          </arguments>
      </type>
@@ -236,13 +250,15 @@
         </arguments>
     </type>
     <type name="Magento\Store\Model\Website">
-        <plugin name="themeDesignConfigGridIndexerWebsite" type="Magento\Theme\Model\Indexer\Design\Config\Plugin\Website"/>
+        <plugin name="themeDesignConfigGridIndexerWebsite"
+                type="Magento\Theme\Model\Indexer\Design\Config\Plugin\Website"/>
     </type>
     <type name="Magento\Store\Model\Store">
         <plugin name="themeDesignConfigGridIndexerStore" type="Magento\Theme\Model\Indexer\Design\Config\Plugin\Store"/>
     </type>
     <type name="Magento\Store\Model\Group">
-        <plugin name="themeDesignConfigGridIndexerStoreGroup" type="Magento\Theme\Model\Indexer\Design\Config\Plugin\StoreGroup"/>
+        <plugin name="themeDesignConfigGridIndexerStoreGroup"
+                type="Magento\Theme\Model\Indexer\Design\Config\Plugin\StoreGroup"/>
     </type>
     <type name="Magento\Deploy\Console\Command\App\ApplicationDumpCommand">
         <arguments>
@@ -267,13 +283,15 @@
     <type name="Magento\Framework\App\Config\PreProcessorComposite">
         <arguments>
             <argument name="processors" xsi:type="array">
-                <item name="designConfigTheme" xsi:type="object">Magento\Theme\Model\Config\Processor\DesignTheme\Proxy</item>
+                <item name="designConfigTheme"
+                      xsi:type="object">Magento\Theme\Model\Config\Processor\DesignTheme\Proxy</item>
             </argument>
         </arguments>
     </type>
     <type name="Magento\Theme\Model\Config\Processor\DesignTheme">
         <arguments>
-            <argument name="themeList" xsi:type="object">Magento\Theme\Model\ResourceModel\Theme\Collection\Proxy</argument>
+            <argument name="themeList"
+                      xsi:type="object">Magento\Theme\Model\ResourceModel\Theme\Collection\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Config\App\Config\Source\DumpConfigSourceAggregated">
@@ -315,8 +333,10 @@
     <type name="Magento\Theme\Model\Theme\StoreThemesResolver">
         <arguments>
             <argument name="resolvers" xsi:type="array">
-                <item name="storeDefaultTheme" xsi:type="object">Magento\Theme\Model\Theme\StoreDefaultThemeResolver</item>
-                <item name="storeUserAgentTheme" xsi:type="object">Magento\Theme\Model\Theme\StoreUserAgentThemeResolver</item>
+                <item name="storeDefaultTheme"
+                      xsi:type="object">Magento\Theme\Model\Theme\StoreDefaultThemeResolver</item>
+                <item name="storeUserAgentTheme"
+                      xsi:type="object">Magento\Theme\Model\Theme\StoreUserAgentThemeResolver</item>
             </argument>
         </arguments>
     </type>
@@ -324,9 +344,6 @@
         <arguments>
             <argument name="filesystemDriver" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
         </arguments>
-    </type>
-    <type name="Magento\Framework\Data\Collection">
-        <plugin name="currentPageDetection" type="Magento\Theme\Plugin\Data\Collection" />
     </type>
     <type name="Magento\Config\Console\Command\LocaleEmulator">
         <plugin name="themeForLocaleEmulator" type="Magento\Theme\Plugin\LocaleEmulator"/>
