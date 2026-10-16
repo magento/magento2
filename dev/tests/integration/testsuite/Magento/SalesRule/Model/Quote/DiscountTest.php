@@ -1247,4 +1247,28 @@ class DiscountTest extends TestCase
         $this->assertEquals(465.0, $discounts['operator']);
         $this->assertEquals(0.0, $discounts['cover']);
     }
+
+    #[
+        DataFixture(ProductFixture::class, ['price' => 100], 'p1'),
+        DataFixture(
+            RuleFixture::class,
+            ['discount_amount' => 10, 'simple_action' => Rule::BY_PERCENT_ACTION],
+            'rule1'
+        ),
+        DataFixture(GuestCartFixture::class, as: 'cart1'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart1.id$', 'product_id' => '$p1.id$']),
+        DataFixture(SetShippingAddress::class, ['cart_id' => '$cart1.id$']),
+        DataFixture(SetDeliveryMethod::class, ['cart_id' => '$cart1.id$']),
+    ]
+    public function testRowTotalWithDiscountIsCalculatedAndPersisted(): void
+    {
+        $cartId = (int)$this->fixtures->get('cart1')->getId();
+        $quote = $this->quoteRepository->get($cartId);
+        $quote->collectTotals();
+        $this->quoteRepository->save($quote);
+
+        $item = current($this->quoteRepository->get($cartId)->getAllVisibleItems());
+        $this->assertEquals(10, $item->getDiscountAmount());
+        $this->assertEquals(90, $item->getRowTotalWithDiscount());
+    }
 }
