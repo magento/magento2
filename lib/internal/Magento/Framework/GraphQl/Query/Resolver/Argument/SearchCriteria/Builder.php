@@ -45,6 +45,9 @@ class Builder
     {
         $searchCriteria = $this->searchCriteriaFactory->create();
         foreach ($arguments as $argumentName => $argument) {
+            if ($argument === null) {
+                continue;
+            }
             if ($this->argumentApplierPool->hasApplier($argumentName)) {
                 $argumentApplier = $this->argumentApplierPool->getApplier($argumentName);
                 $argumentApplier->applyArgument($searchCriteria, $fieldName, $argumentName, $argument);
