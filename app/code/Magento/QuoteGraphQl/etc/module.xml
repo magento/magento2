@@ -9,6 +9,7 @@
     <module name="Magento_QuoteGraphQl">
         <sequence>
             <module name="Magento_CatalogGraphQl"/>
+            <module name="Magento_Quote"/>
         </sequence>
     </module>
 </config>
