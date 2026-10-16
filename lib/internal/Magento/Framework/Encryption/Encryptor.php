@@ -260,7 +260,7 @@ class Encryptor implements EncryptorInterface
     public function hash($data, $version = self::HASH_VERSION_SHA256)
     {
         if (empty($this->keys[$this->keyVersion])) {
-            throw new \RuntimeException('No key available');
+            throw new \RuntimeException('No Encryption key available');
         }
         if (!array_key_exists($version, $this->hashVersionMap)) {
             throw new \InvalidArgumentException('Unknown hashing algorithm');
