@@ -17,6 +17,7 @@ use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Catalog\Helper\Output as OutputHelper;
 use Magento\Catalog\Pricing\Price\SpecialPriceBulkResolverInterface;
 use Magento\Directory\Helper\Data as DirectoryHelper;
+use Magento\Framework\App\Response\Http as ResponseHttp;
 use Magento\Framework\Data\Helper\PostHelper;
 use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -95,6 +96,10 @@ class PromotionTest extends TestCase
             [
                 CollectionFactory::class,
                 $this->createMock(CollectionFactory::class)
+            ],
+            [
+                ResponseHttp::class,
+                $this->createMock(ResponseHttp::class)
             ]
         ];
         $this->objectManager->prepareObjectManager($objects);
