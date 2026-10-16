@@ -28,6 +28,7 @@ define([
                 keyEventHandlers: {}
             },
             valid: true,
+            visible: true,
             links: {
                 title: 'options.title',
                 subTitle: 'options.subTitle'
@@ -121,7 +122,7 @@ define([
          */
         initObservable: function () {
             this._super();
-            this.observe(['state', 'focused']);
+            this.observe(['state', 'focused', 'visible']);
 
             return this;
         },
