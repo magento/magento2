@@ -9,6 +9,7 @@ namespace Magento\Customer\Model;
 
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\AddressRepositoryInterface;
+use Magento\Customer\Api\ConfirmationEmailLogManagementInterface;
 use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\AddressInterface;
@@ -407,6 +408,11 @@ class AccountManagement implements AccountManagementInterface
     private Authenticate $authenticate;
 
     /**
+     * @var ConfirmationEmailLogManagementInterface
+     */
+    private ConfirmationEmailLogManagementInterface $confirmationEmailLogManagement;
+
+    /**
      * @param CustomerFactory $customerFactory
      * @param ManagerInterface $eventManager
      * @param StoreManagerInterface $storeManager
@@ -446,6 +452,7 @@ class AccountManagement implements AccountManagementInterface
      * @param Backend|null $eavValidator
      * @param CustomerLogger|null $customerLogger
      * @param Authenticate|null $authenticate
+     * @param ConfirmationEmailLogManagementInterface|null $confirmationEmailLogManagement
      * @param AddressFactory|null $addressFactory
      * @param ValidatorFactory|null $validatorFactory
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -494,6 +501,7 @@ class AccountManagement implements AccountManagementInterface
         ?Backend $eavValidator = null,
         ?CustomerLogger $customerLogger = null,
         ?Authenticate $authenticate = null,
+        ?ConfirmationEmailLogManagementInterface $confirmationEmailLogManagement = null,
         private ?AddressFactory $addressFactory = null,
         private ?ValidatorFactory $validatorFactory = null,
     ) {
@@ -542,6 +550,9 @@ class AccountManagement implements AccountManagementInterface
         $this->authenticate = $authenticate ?? $objectManager->get(Authenticate::class);
         $this->addressFactory = $addressFactory ?? $objectManager->get(AddressFactory::class);
         $this->validatorFactory = $validatorFactory ?? $objectManager->get(ValidatorFactory::class);
+        $this->confirmationEmailLogManagement = $confirmationEmailLogManagement ?? $objectManager->get(
+            ConfirmationEmailLogManagementInterface::class
+        );
     }
 
     /**
@@ -552,6 +563,9 @@ class AccountManagement implements AccountManagementInterface
         $customer = $this->customerRepository->get($email, $websiteId);
         if (!$customer->getConfirmation()) {
             throw new InvalidTransitionException(__("Confirmation isn't needed."));
+        }
+        if (!$this->confirmationEmailLogManagement->canSend((int) $customer->getId())) {
+            throw new LocalizedException(__("You have reached the limit for confirmation emails."));
         }
 
         try {
@@ -626,6 +640,8 @@ class AccountManagement implements AccountManagementInterface
                 $this->storeManager->getStore()->getId()
             );
         }
+
+        $this->confirmationEmailLogManagement->deleteByCustomerId((int) $customer->getId());
 
         return $customer;
     }
