@@ -235,7 +235,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         );
         if (!$this->_customerSession->hasWishlistItemCount() ||
             $currentDisplayType != $storedDisplayType ||
-            $this->_customerSession->hasDisplayOutOfStockProducts() ||
             $currentDisplayOutOfStockProducts != $storedDisplayOutOfStockProducts
         ) {
             $this->calculate();
