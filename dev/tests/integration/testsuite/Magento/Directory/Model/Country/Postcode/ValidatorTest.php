@@ -218,4 +218,63 @@ class ValidatorTest extends TestCase
             'NL letters only' => ['postCode' => 'ABCD', 'countryId' => 'NL'],
         ];
     }
+
+    /**
+     * Test validate returns true for valid Nigeria (NG) postcodes.
+     *
+     * Uses real zip_codes.xml config: NG pattern_1 (6 digits) and pattern_2 (11-character digital postcode).
+     *
+     * @param string $postCode
+     * @param string $countryId
+     * @return void
+     */
+    #[DataProvider('getNgValidPostcodesDataProvider')]
+    public function testValidateReturnsTrueForNgValidPostcodes(string $postCode, string $countryId): void
+    {
+        $this->assertSame(true, $this->validator->validate($postCode, $countryId));
+    }
+
+    /**
+     * Data provider for valid NG postcodes.
+     *
+     * @return array<string, array{postCode: string, countryId: string}>
+     */
+    public static function getNgValidPostcodesDataProvider(): array
+    {
+        return [
+            'NG 6-digit' => ['postCode' => '930283', 'countryId' => 'NG'],
+            'NG digital with hyphens' => ['postCode' => 'EK-01-A03-FK-01', 'countryId' => 'NG'],
+            'NG digital with spaces' => ['postCode' => 'EK 01 A03 FK 01', 'countryId' => 'NG'],
+            'NG digital compact lower case' => ['postCode' => 'ek01a03fk01', 'countryId' => 'NG'],
+        ];
+    }
+
+    /**
+     * Test validate returns false for invalid Nigeria (NG) postcodes.
+     *
+     * @param string $postCode
+     * @param string $countryId
+     * @return void
+     */
+    #[DataProvider('getNgInvalidPostcodesDataProvider')]
+    public function testValidateReturnsFalseForNgInvalidPostcodes(string $postCode, string $countryId): void
+    {
+        $this->assertSame(false, $this->validator->validate($postCode, $countryId));
+    }
+
+    /**
+     * Data provider for invalid NG postcodes.
+     *
+     * @return array<string, array{postCode: string, countryId: string}>
+     */
+    public static function getNgInvalidPostcodesDataProvider(): array
+    {
+        return [
+            'NG five digits' => ['postCode' => '93028', 'countryId' => 'NG'],
+            'NG LGA of 00' => ['postCode' => 'EK-00-A03-FK-01', 'countryId' => 'NG'],
+            'NG unit of 00' => ['postCode' => 'EK-01-A03-FK-00', 'countryId' => 'NG'],
+            'NG one-digit unit' => ['postCode' => 'EK-01-A03-FK-1', 'countryId' => 'NG'],
+            'NG three-digit unit' => ['postCode' => 'EK-01-A03-FK-011', 'countryId' => 'NG'],
+        ];
+    }
 }
