@@ -449,7 +449,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     private function processLinks(ProductInterface $product, $newLinks)
     {
         if ($newLinks === null) {
-            // If product links were not specified, don't do anything
+            // If product links were not specified, set the product links as null to prevent post-processing of links
+            $product->setProductLinks($newLinks);
             return $this;
         }
 
