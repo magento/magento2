@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\Config;
 
+use Magento\Framework\Cache\LockGuardedCacheLoader;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\App\ObjectManager;
 
@@ -71,6 +72,13 @@ class Data implements \Magento\Framework\Config\DataInterface
     private $serializer;
 
     /**
+     * Optional mutex to prevent a cache stampede when regenerating expensive config data.
+     *
+     * @var LockGuardedCacheLoader|null
+     */
+    private $lockGuardedCacheLoader;
+
+    /**
      * Constructor
      *
      * @param ReaderInterface $reader
@@ -78,6 +86,7 @@ class Data implements \Magento\Framework\Config\DataInterface
      * @param string $cacheId
      * @param SerializerInterface|null $serializer
      * @param array|null $cacheTags
+     * @param LockGuardedCacheLoader|null $lockGuardedCacheLoader
      */
     public function __construct(
         ReaderInterface $reader,
@@ -85,6 +94,7 @@ class Data implements \Magento\Framework\Config\DataInterface
         $cacheId,
         ?SerializerInterface $serializer = null,
         ?array $cacheTags = null,
+        ?LockGuardedCacheLoader $lockGuardedCacheLoader = null,
     ) {
         $this->reader = $reader;
         $this->cache = $cache;
@@ -93,6 +103,9 @@ class Data implements \Magento\Framework\Config\DataInterface
         if ($cacheTags) {
             $this->cacheTags = $cacheTags;
         }
+        // Intentionally no ObjectManager fallback: null keeps the original unguarded behavior, so the
+        // mutex is only engaged for cache ids that explicitly opt in via DI.
+        $this->lockGuardedCacheLoader = $lockGuardedCacheLoader;
         $this->initData();
     }
 
@@ -103,15 +116,44 @@ class Data implements \Magento\Framework\Config\DataInterface
      */
     protected function initData()
     {
-        $data = $this->cache->load($this->cacheId);
-        if (false === $data) {
-            $data = $this->reader->read();
-            $this->cache->save($this->serializer->serialize($data), $this->cacheId, $this->cacheTags);
+        if ($this->lockGuardedCacheLoader === null) {
+            $data = $this->cache->load($this->cacheId);
+            if (false === $data) {
+                $data = $this->reader->read();
+                $this->cache->save($this->serializer->serialize($data), $this->cacheId, $this->cacheTags);
+            } else {
+                $data = $this->serializer->unserialize($data);
+            }
         } else {
-            $data = $this->serializer->unserialize($data);
+            $data = $this->loadWithLock();
         }
 
         $this->merge($data);
+    }
+
+    /**
+     * Load config data through the mutex so concurrent cold reads regenerate it once, not once per request
+     *
+     * @return array
+     */
+    private function loadWithLock(): array
+    {
+        $loadAction = function () {
+            $cachedData = $this->cache->load($this->cacheId);
+            // The loader treats only strict false as a miss; an empty serialized array is a valid hit.
+            return $cachedData === false ? false : $this->serializer->unserialize($cachedData);
+        };
+
+        $data = $this->lockGuardedCacheLoader->lockedLoadData(
+            $this->cacheId,
+            $loadAction,
+            fn () => $this->reader->read(),
+            function ($data) {
+                $this->cache->save($this->serializer->serialize($data), $this->cacheId, $this->cacheTags);
+            }
+        );
+
+        return (array)$data;
     }
 
     /**
