@@ -43,9 +43,18 @@ define([
                         template: 'ui/form/element/date',
                         dateFormat: 'MMM d, y h:mm:ss a'
                     },
+                    textarea: {
+                        component: 'Magento_Ui/js/form/element/textarea',
+                        template: 'ui/form/element/textarea'
+                    },
                     select: {
                         component: 'Magento_Ui/js/form/element/select',
                         template: 'ui/form/element/select',
+                        options: '${ JSON.stringify($.$data.column.options) }'
+                    },
+                    multiselect: {
+                        component: 'Magento_Ui/js/form/element/multiselect',
+                        template: 'ui/form/element/multiselect',
                         options: '${ JSON.stringify($.$data.column.options) }'
                     }
                 }
