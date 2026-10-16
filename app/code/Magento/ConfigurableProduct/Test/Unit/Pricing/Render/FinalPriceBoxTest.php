@@ -152,6 +152,59 @@ class FinalPriceBoxTest extends TestCase
     }
 
     /**
+     * @return void
+     * @throws \Exception
+     */
+    public function testHasSpecialPriceReturnsFalseWhenSpecialPriceMapIsNotSet(): void
+    {
+        $this->model->setData('is_product_list', true);
+        $this->saleableItem->expects($this->never())->method('getId');
+        $this->configurableOptionsProvider->expects($this->never())->method('getProducts');
+
+        $this->assertFalse($this->model->hasSpecialPrice());
+    }
+
+    /**
+     * @return void
+     * @throws \Exception
+     */
+    public function testHasSpecialPriceFallsBackWhenProductIsMissingFromSpecialPriceMap(): void
+    {
+        $priceMockOne = $this->createMock(PriceInterface::class);
+        $priceMockOne->expects($this->once())
+            ->method('getValue')
+            ->willReturn(20.);
+        $priceMockTwo = $this->createMock(PriceInterface::class);
+        $priceMockTwo->expects($this->once())
+            ->method('getValue')
+            ->willReturn(10.);
+        $priceInfoMock = $this->createMock(PriceInfoInterface::class);
+        $priceInfoMock->expects($this->exactly(2))
+            ->method('getPrice')
+            ->willReturnMap(
+                [
+                    [RegularPrice::PRICE_CODE, $priceMockOne],
+                    [FinalPrice::PRICE_CODE, $priceMockTwo],
+                ]
+            );
+
+        $productMock = $this->createMock(Product::class);
+        $productMock->expects($this->exactly(2))
+            ->method('getPriceInfo')
+            ->willReturn($priceInfoMock);
+        $this->configurableOptionsProvider->expects($this->once())
+            ->method('getProducts')
+            ->with($this->saleableItem)
+            ->willReturn([$productMock]);
+
+        $this->model->setData('is_product_list', true);
+        $this->model->setData('special_price_map', [7 => false]);
+        $this->saleableItem->expects($this->once())->method('getId')->willReturn(42);
+
+        $this->assertTrue($this->model->hasSpecialPrice());
+    }
+
+    /**
      * @return array
      */
     public static function hasSpecialPriceDataProvider(): array
