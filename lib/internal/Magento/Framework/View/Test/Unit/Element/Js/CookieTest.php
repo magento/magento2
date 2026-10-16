@@ -82,17 +82,13 @@ class CookieTest extends TestCase
 
     /**     */
     #[DataProvider('domainDataProvider')]
-    public function testGetDomain($domain, $isIp, $expectedResult)
+    public function testGetDomain($domain, $expectedResult)
     {
         $this->sessionConfigMock->expects($this->once())
             ->method('getCookieDomain')
             ->willReturn($domain);
-        $this->ipValidatorMock->expects($this->once())
-            ->method('isValid')
-            ->with($domain)
-            ->willReturn($isIp);
 
-        $result = $this->model->getDomain($domain);
+        $result = $this->model->getDomain();
         $this->assertEquals($expectedResult, $result);
     }
 
@@ -102,9 +98,10 @@ class CookieTest extends TestCase
     public static function domainDataProvider()
     {
         return [
-            ['127.0.0.1', true, '127.0.0.1'],
-            ['example.com', false, '.example.com'],
-            ['.example.com', false, '.example.com'],
+            ['127.0.0.1', '127.0.0.1'],
+            ['example.com', 'example.com'],
+            ['.example.com', '.example.com'],
+            ['sub.example.com', 'sub.example.com'],
         ];
     }
 
