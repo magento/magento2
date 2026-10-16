@@ -35,6 +35,23 @@ define([
                 this._bindSubmit();
             }
             $(this.options.addToCartButtonSelector).prop('disabled', false);
+            this._on(window, {
+
+                /**
+                 * Reset button text and disabled state when the page is restored from the BFCache,
+                 * as the button may be frozen mid-AJAX ("Adding...") or in the post-success state ("Added").
+                 */
+                'pageshow': function (event) {
+                    if (event.originalEvent.persisted) {
+                        var addToCartButtonTextDefault = this.options.addToCartButtonTextDefault || $t('Add to Cart'),
+                            addToCartButton = $(this.options.addToCartButtonSelector);
+
+                        addToCartButton.removeClass(this.options.addToCartButtonDisabledClass);
+                        addToCartButton.find('span').text(addToCartButtonTextDefault);
+                        addToCartButton.prop('title', addToCartButtonTextDefault);
+                    }
+                }
+            });
         },
 
         /**

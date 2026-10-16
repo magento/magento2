@@ -28,6 +28,8 @@ define([
          * Extends Component object by storage observable messages.
          */
         initialize: function () {
+            var self = this;
+
             this._super().observe(
                 [
                     'cookieMessagesObservable'
@@ -47,6 +49,13 @@ define([
             $.mage.cookies.set('mage-messages', '', {
                 samesite: 'strict',
                 domain: ''
+            });
+
+            $(window).on('pageshow', function (event) {
+                if (event.originalEvent.persisted) {
+                    self.cookieMessagesObservable([]);
+                    self.purgeMessages();
+                }
             });
         },
 

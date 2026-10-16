@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+
+    <!--
+        Verify that the Cache-Control response header on storefront pages does not contain
+        the no-store directive. Pages with no-store are ineligible for the browser
+        Back/Forward Cache (BFCache), so removing it is a prerequisite for BFCache support.
+    -->
+    <test name="StorefrontBFCacheNoCacheControlNoStoreHeaderTest">
+        <annotations>
+            <features value="PageCache"/>
+            <stories value="BFCache Compatibility"/>
+            <title value="Storefront page Cache-Control header must not contain no-store"/>
+            <description value="Verifies that the Cache-Control response header on a storefront page does not include no-store, which would prevent the browser from storing the page in the Back/Forward Cache."/>
+            <severity value="CRITICAL"/>
+            <group value="bfcache"/>
+        </annotations>
+
+        <amOnPage url="/" stepKey="goToStorefront"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <executeJS function="return (function() {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', window.location.href, false);
+            xhr.send(null);
+            return xhr.getResponseHeader('Cache-Control') || '';
+        })()" stepKey="cacheControlHeader"/>
+        <assertStringNotContainsString stepKey="assertNoStoreAbsent">
+            <expectedResult type="string">no-store</expectedResult>
+            <actualResult type="variable">cacheControlHeader</actualResult>
+        </assertStringNotContainsString>
+    </test>
+
+    <!--
+        Verify that the add-to-cart button is reset to its default enabled state when a
+        page is restored from the BFCache. The button can be frozen in a disabled
+        "Adding..." state if the browser caches the page during an in-flight AJAX request.
+    -->
+    <test name="StorefrontBFCacheAddToCartButtonResetOnPageShowTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="BFCache Compatibility"/>
+            <title value="Add-to-cart button is reset to default state on BFCache page restore"/>
+            <description value="Simulates a product page being frozen in the BFCache while the add-to-cart button was disabled mid-AJAX. Verifies the button is re-enabled and shows the default label after a simulated BFCache restore."/>
+            <severity value="MAJOR"/>
+            <group value="bfcache"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleProduct2" stepKey="createProduct"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+        </after>
+
+        <amOnPage url="$createProduct.custom_attributes[url_key]$.html" stepKey="goToProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <waitForElementVisible selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="waitForAddToCartButton"/>
+
+        <!-- Simulate the button state frozen mid-AJAX as if cached by BFCache while adding -->
+        <executeJS function="
+            var btn = document.querySelector('{{StorefrontProductPageSection.addToCartBtn}}');
+            if (btn) {
+                btn.classList.add('disabled');
+                var span = btn.querySelector('span');
+                if (span) { span.textContent = 'Adding...'; }
+            }
+        " stepKey="freezeButtonState"/>
+        <seeElement selector="{{StorefrontProductPageSection.addToCartBtn}}.disabled" stepKey="assertButtonDisabledBeforeRestore"/>
+
+        <!-- Simulate a BFCache page restore by dispatching a persisted pageshow event -->
+        <executeJS function="window.dispatchEvent(new PageTransitionEvent('pageshow', {persisted: true, bubbles: false}))" stepKey="simulateBFCacheRestore"/>
+        <wait time="1" stepKey="waitForPageShowHandlers"/>
+
+        <dontSeeElement selector="{{StorefrontProductPageSection.addToCartBtn}}.disabled" stepKey="assertButtonEnabledAfterRestore"/>
+        <see userInput="Add to Cart" selector="{{StorefrontProductPageSection.addToCartBtn}} span" stepKey="assertButtonLabelReset"/>
+    </test>
+
+    <!--
+        Verify that the minicart dropdown is closed when a page is restored from the BFCache.
+        If the user had the minicart open before navigating away, the BFCache snapshot
+        preserves that open state; the pageshow handler must close it.
+    -->
+    <test name="StorefrontBFCacheMinicartClosedOnPageShowTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="BFCache Compatibility"/>
+            <title value="Minicart dropdown is closed on BFCache page restore"/>
+            <description value="Opens the minicart dropdown then simulates a BFCache page restore. Verifies the dropdown is automatically closed so users do not see a stale open cart."/>
+            <severity value="MAJOR"/>
+            <group value="bfcache"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleProduct2" stepKey="createProduct"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+        </after>
+
+        <amOnPage url="$createProduct.custom_attributes[url_key]$.html" stepKey="goToProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+
+        <!-- Add a product to cart so the minicart has content and can be opened -->
+        <actionGroup ref="StorefrontProductPageAddSimpleProductToCartActionGroup" stepKey="addProductToCart"/>
+
+        <!-- Open the minicart dropdown -->
+        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="openMinicart"/>
+        <waitForElementVisible selector="{{StorefrontMinicartSection.blockMiniCart}}" stepKey="waitForMinicartOpen"/>
+        <seeElement selector="{{StorefrontMinicartSection.blockMiniCart}}" stepKey="assertMinicartOpenBeforeRestore"/>
+
+        <!-- Simulate a BFCache page restore -->
+        <executeJS function="window.dispatchEvent(new PageTransitionEvent('pageshow', {persisted: true, bubbles: false}))" stepKey="simulateBFCacheRestore"/>
+        <wait time="1" stepKey="waitForPageShowHandlers"/>
+
+        <waitForElementNotVisible selector="{{StorefrontMinicartSection.blockMiniCart}}" stepKey="assertMinicartClosedAfterRestore"/>
+    </test>
+
+    <!--
+        Verify that flash messages shown before a navigation are cleared when the page is
+        restored from the BFCache. Without this, a success or error message triggered by a
+        previous action would be re-displayed every time the user navigates back.
+    -->
+    <test name="StorefrontBFCacheFlashMessagesClearedOnPageShowTest">
+        <annotations>
+            <features value="Theme"/>
+            <stories value="BFCache Compatibility"/>
+            <title value="Flash messages are cleared on BFCache page restore"/>
+            <description value="Adds a product to cart to produce a success message, then simulates a BFCache page restore. Verifies the message is not shown again after the restore."/>
+            <severity value="MAJOR"/>
+            <group value="bfcache"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleProduct2" stepKey="createProduct"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+        </after>
+
+        <amOnPage url="$createProduct.custom_attributes[url_key]$.html" stepKey="goToProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+
+        <!-- Add the product to cart to trigger a success flash message -->
+        <actionGroup ref="StorefrontProductPageAddSimpleProductToCartActionGroup" stepKey="addProductToCart"/>
+        <waitForElementVisible selector="div.message-success" stepKey="waitForSuccessMessage"/>
+        <seeElement selector="div.message-success" stepKey="assertMessageVisibleBeforeRestore"/>
+
+        <!-- Simulate a BFCache page restore -->
+        <executeJS function="window.dispatchEvent(new PageTransitionEvent('pageshow', {persisted: true, bubbles: false}))" stepKey="simulateBFCacheRestore"/>
+        <wait time="1" stepKey="waitForPageShowHandlers"/>
+
+        <dontSeeElement selector="div.message-success" stepKey="assertMessageClearedAfterRestore"/>
+    </test>
+
+</tests>
