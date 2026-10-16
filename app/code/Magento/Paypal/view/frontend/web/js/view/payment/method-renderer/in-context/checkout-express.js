@@ -53,10 +53,12 @@ define([
                 var error;
 
                 try {
-                    error = JSON.parse(response.responseText);
+                    error = JSON.parse(response.responseText).message;
                 } catch (exception) {
-                    error = this.paymentActionError;
+                    error = null;
                 }
+
+                error = typeof error === 'string' && error ? error : this.paymentActionError;
 
                 this.addError(error);
 
