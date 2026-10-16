@@ -10,7 +10,10 @@
          colors="true"
          columns="max"
          beStrictAboutTestsThatDoNotTestAnything="false"
-         bootstrap="./framework/bootstrap.php">
+         bootstrap="./framework/bootstrap.php"
+         executionOrder="depends,duration"
+         controlGarbageCollector="true"
+         numberOfTestsBeforeGarbageCollection="200">
     <source>
         <include>
             <directory suffix=".php">../../../app/code/*</directory>
