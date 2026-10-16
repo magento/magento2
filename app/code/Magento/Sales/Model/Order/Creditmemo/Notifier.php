@@ -14,12 +14,12 @@ namespace Magento\Sales\Model\Order\Creditmemo;
 class Notifier implements \Magento\Sales\Model\Order\Creditmemo\NotifierInterface
 {
     /**
-     * @var \Magento\Sales\Model\Order\CreditMemo\SenderInterface[]
+     * @var \Magento\Sales\Model\Order\Creditmemo\SenderInterface[]
      */
     private $senders;
 
     /**
-     * @param \Magento\Sales\Model\Order\CreditMemo\SenderInterface[] $senders
+     * @param \Magento\Sales\Model\Order\Creditmemo\SenderInterface[] $senders
      */
     public function __construct(array $senders = [])
     {
@@ -27,7 +27,7 @@ class Notifier implements \Magento\Sales\Model\Order\Creditmemo\NotifierInterfac
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 100.1.3
      */
     public function notify(
