@@ -274,8 +274,8 @@ class Config implements \Magento\Framework\Locale\ConfigInterface
         'UYU', /*Uruguay Peso Uruguayo*/
         'UZS', /*Uzbekistan Sum*/
         'VUV', /*Vanuatu Vatu*/
-        'VEB', /*Venezuelan Bolivar*/
-        'VEF', /*Venezuelan bolívar fuerte*/
+        'VEB', /*Venezuelan Bolívar (obsolete, pre-2008)*/
+        'VED', /*Venezuelan Bolívar Digital (current ISO 4217, since Oct 2021)*/
         'VND', /*Vietnamese Dong*/
         'CHE', /*WIR Euro*/
         'CHW', /*WIR Franc*/
