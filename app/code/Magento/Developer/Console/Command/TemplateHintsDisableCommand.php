@@ -7,7 +7,11 @@
 namespace Magento\Developer\Console\Command;
 
 use InvalidArgumentException;
+use Magento\Config\App\Config\Type\System;
 use Magento\Framework\App\Config\ConfigResource\ConfigInterface;
+use Magento\Framework\App\Config\ConfigPathResolver;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Console\Cli;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -19,20 +23,37 @@ class TemplateHintsDisableCommand extends Command
 
     public const SUCCESS_MESSAGE = "Template hints disabled. Refresh cache types";
 
+    private const CONFIG_PATH = 'dev/debug/template_hints_storefront';
+
     /**
      * @var ConfigInterface
      */
     private $resourceConfig;
 
     /**
-     * Initialize dependencies.
-     *
-     * @param ConfigInterface $resourceConfig
+     * @var DeploymentConfig
      */
-    public function __construct(ConfigInterface $resourceConfig)
-    {
+    private $deploymentConfig;
+
+    /**
+     * @var ConfigPathResolver
+     */
+    private $configPathResolver;
+
+    /**
+     * @param ConfigInterface $resourceConfig
+     * @param DeploymentConfig|null $deploymentConfig
+     * @param ConfigPathResolver|null $configPathResolver
+     */
+    public function __construct(
+        ConfigInterface $resourceConfig,
+        ?DeploymentConfig $deploymentConfig = null,
+        ?ConfigPathResolver $configPathResolver = null
+    ) {
         parent::__construct();
         $this->resourceConfig = $resourceConfig;
+        $this->deploymentConfig = $deploymentConfig ?: ObjectManager::getInstance()->get(DeploymentConfig::class);
+        $this->configPathResolver = $configPathResolver ?: ObjectManager::getInstance()->get(ConfigPathResolver::class);
     }
 
     /**
@@ -53,9 +74,28 @@ class TemplateHintsDisableCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->resourceConfig->saveConfig('dev/debug/template_hints_storefront', 0, 'default', 0);
-        $output->writeln("<info>". self::SUCCESS_MESSAGE . "</info>");
+        if ($this->isConfigLocked()) {
+            $output->writeln('<error>The value you set has already been locked.'
+                . ' To change the value, modify app/etc/env.php or app/etc/config.php directly.</error>');
+
+            return Cli::RETURN_FAILURE;
+        }
+
+        $this->resourceConfig->saveConfig(self::CONFIG_PATH, 0, 'default', 0);
+        $output->writeln("<info>" . self::SUCCESS_MESSAGE . "</info>");
 
         return Cli::RETURN_SUCCESS;
+    }
+
+    /**
+     * Check if the configuration path is locked in deployment config.
+     *
+     * @return bool
+     */
+    private function isConfigLocked(): bool
+    {
+        $scopePath = $this->configPathResolver->resolve(self::CONFIG_PATH, 'default', null, System::CONFIG_TYPE);
+
+        return $this->deploymentConfig->get($scopePath) !== null;
     }
 }
