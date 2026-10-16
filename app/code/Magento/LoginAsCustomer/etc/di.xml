@@ -19,6 +19,10 @@
                 type="Magento\LoginAsCustomer\Model\AuthenticateCustomerBySecret"/>
     <preference for="Magento\LoginAsCustomerApi\Api\DeleteAuthenticationDataForUserInterface"
                 type="Magento\LoginAsCustomer\Model\ResourceModel\DeleteAuthenticationDataForUser"/>
+    <preference for="Magento\LoginAsCustomerApi\Api\DeleteAuthenticationDataForCustomerInterface"
+                type="Magento\LoginAsCustomer\Model\ResourceModel\DeleteAuthenticationDataForCustomer"/>
+    <preference for="Magento\LoginAsCustomerApi\Api\GenerateLoginCustomerTokenInterface"
+                type="Magento\LoginAsCustomer\Model\GenerateLoginCustomerToken"/>
     <preference for="Magento\LoginAsCustomerApi\Api\DeleteAuthenticationDataForListOfUserInterface"
                 type="Magento\LoginAsCustomer\Model\ResourceModel\DeleteAuthenticationDataForListOfUser"/>
     <preference for="Magento\LoginAsCustomerApi\Api\ConfigInterface" type="Magento\LoginAsCustomer\Model\Config"/>
