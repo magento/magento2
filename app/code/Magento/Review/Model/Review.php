@@ -334,11 +334,14 @@ class Review extends \Magento\Framework\Model\AbstractModel implements IdentityI
             ->addStoreFilter($this->_storeManager->getStore()->getId())
             ->load();
 
+        $summariesByEntityId = [];
+        foreach ($summaryData as $summary) {
+            $summariesByEntityId[$summary->getEntityPkValue()] = $summary;
+        }
+
         foreach ($collection->getItems() as $item) {
-            foreach ($summaryData as $summary) {
-                if ($summary->getEntityPkValue() == $item->getEntityId()) {
-                    $item->setRatingSummary($summary);
-                }
+            if (isset($summariesByEntityId[$item->getEntityId()])) {
+                $item->setRatingSummary($summariesByEntityId[$item->getEntityId()]);
             }
             if (!$item->getRatingSummary()) {
                 $item->setRatingSummary(new DataObject());
