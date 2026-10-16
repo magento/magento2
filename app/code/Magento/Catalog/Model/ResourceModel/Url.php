@@ -676,12 +676,11 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implement
             )->joinLeft(
                 ['u' => $this->getMainTable()],
                 'i.product_id = u.entity_id AND i.store_id = u.store_id'
-                . ' AND u.entity_type = "' . ProductUrlRewriteGenerator::ENTITY_TYPE . '"',
+                . ' AND u.entity_type = "' . ProductUrlRewriteGenerator::ENTITY_TYPE . '"'
+                . ' AND u.redirect_type = 0'
+                . ' AND NOT EXISTS (SELECT 1 FROM ' . $this->getTable('catalog_url_rewrite_product_category')
+                . ' AS r WHERE r.url_rewrite_id = u.url_rewrite_id)',
                 ['request_path']
-            )->joinLeft(
-                ['r' => $this->getTable('catalog_url_rewrite_product_category')],
-                'u.url_rewrite_id = r.url_rewrite_id AND r.category_id is NULL',
-                []
             );
 
             $bind = [];
