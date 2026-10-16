@@ -56,7 +56,7 @@ class Authorization
      */
     protected function isAllowed(Order $order)
     {
-        return $this->userContext->getUserType() == UserContextInterface::USER_TYPE_CUSTOMER
+        return $this->userContext->getUserType() == UserContextInterface::USER_TYPE_CUSTOMER && $order->getId()
             ? $order->getCustomerId() == $this->userContext->getUserId()
             : true;
     }
