@@ -1005,7 +1005,7 @@ class Storage extends \Magento\Framework\DataObject
             $or = '';
             foreach ($mediaGalleryImageFolders as $folder) {
                 $folderPattern = str_replace('/', '[\/]+', $folder ?? '');
-                $regExp .= $or . $folderPattern . '\b(?!-)(?:\/?[a-zA-Z0-9\-\_]+)*\/?$';
+                $regExp .= $or . $folderPattern . '(?=\/|$)(?:\/?[a-zA-Z0-9\-\_]+)*\/?$';
                 $or = '|';
             }
             $regExp .= ')/';
