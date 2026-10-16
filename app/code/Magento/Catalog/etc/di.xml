@@ -1404,4 +1404,12 @@
             <argument name="productRepository" xsi:type="object">Magento\Catalog\Api\ProductRepositoryInterface\Proxy</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\MessageQueue\MessageStateResetter">
+        <arguments>
+            <argument name="services" xsi:type="array">
+                <item name="productRepository" xsi:type="object">Magento\Catalog\Api\ProductRepositoryInterface</item>
+                <item name="categoryRepository" xsi:type="object">Magento\Catalog\Api\CategoryRepositoryInterface</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

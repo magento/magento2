@@ -81,6 +81,11 @@ class Consumer implements ConsumerInterface
     private $logger;
 
     /**
+     * @var MessageStateResetter
+     */
+    private $messageStateResetter;
+
+    /**
      * Initialize dependencies.
      *
      * @param CallbackInvokerInterface $invoker
@@ -94,7 +99,9 @@ class Consumer implements ConsumerInterface
      * @param MessageController|null $messageController
      * @param MessageValidator|null $messageValidator
      * @param EnvelopeFactory|null $envelopeFactory
+     * @param MessageStateResetter|null $messageStateResetter
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function __construct(
         CallbackInvokerInterface $invoker,
@@ -107,7 +114,8 @@ class Consumer implements ConsumerInterface
         ?QueueRepository $queueRepository = null,
         ?MessageController $messageController = null,
         ?MessageValidator $messageValidator = null,
-        ?EnvelopeFactory $envelopeFactory = null
+        ?EnvelopeFactory $envelopeFactory = null,
+        ?MessageStateResetter $messageStateResetter = null
     ) {
         $this->invoker = $invoker;
         $this->messageEncoder = $messageEncoder;
@@ -121,6 +129,8 @@ class Consumer implements ConsumerInterface
         $this->messageController = $messageController ?: ObjectManager::getInstance()->get(MessageController::class);
         $this->messageValidator = $messageValidator ?: ObjectManager::getInstance()->get(MessageValidator::class);
         $this->envelopeFactory = $envelopeFactory ?: ObjectManager::getInstance()->get(EnvelopeFactory::class);
+        $this->messageStateResetter = $messageStateResetter
+            ?: ObjectManager::getInstance()->get(MessageStateResetter::class);
     }
 
     /**
@@ -131,13 +141,21 @@ class Consumer implements ConsumerInterface
         $queue = $this->configuration->getQueue();
         $maxIdleTime = $this->configuration->getMaxIdleTime();
         $sleep = $this->configuration->getSleep();
+        $transactionCallback = $this->getTransactionCallback($queue);
+        $callback = function (EnvelopeInterface $message) use ($transactionCallback) {
+            try {
+                $transactionCallback($message);
+            } finally {
+                $this->messageStateResetter->resetState($this->configuration);
+            }
+        };
         if (!isset($maxNumberOfMessages)) {
-            $queue->subscribe($this->getTransactionCallback($queue));
+            $queue->subscribe($callback);
         } else {
             $this->invoker->invoke(
                 $queue,
                 $maxNumberOfMessages,
-                $this->getTransactionCallback($queue),
+                $callback,
                 $maxIdleTime,
                 $sleep
             );
