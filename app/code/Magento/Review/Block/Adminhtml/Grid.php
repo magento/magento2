@@ -18,23 +18,19 @@ namespace Magento\Review\Block\Adminhtml;
  */
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
+    private const PAGER_ITEMS_LIMIT = 1000;
+
     /**
-     * Review action pager
-     *
      * @var \Magento\Review\Helper\Action\Pager
      */
     protected $_reviewActionPager = null;
 
     /**
-     * Review data
-     *
      * @var \Magento\Review\Helper\Data
      */
     protected $_reviewData = null;
 
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
@@ -103,7 +99,11 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         /** @var $actionPager \Magento\Review\Helper\Action\Pager */
         $actionPager = $this->_reviewActionPager;
         $actionPager->setStorageId('reviews');
-        $actionPager->setItems($this->getCollection()->getResultingIds());
+        $collection = $this->getCollection();
+        // Each stored id costs ~18 bytes of admin session; above the limit an empty list hides previous/next.
+        $actionPager->setItems(
+            $collection->getSize() <= self::PAGER_ITEMS_LIMIT ? $collection->getResultingIds() : []
+        );
 
         return parent::_afterLoadCollection();
     }
