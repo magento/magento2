@@ -2885,10 +2885,11 @@ class Carrier extends AbstractDhl implements CarrierInterface
     private function addExportDeclaration(Element $xml, ShipmentRequest $rawRequest): void
     {
         $nodeExportDeclaration = $xml->addChild('ExportDeclaration', '', '');
+        $invoiceNumbers = $this->getInvoiceNumbers($rawRequest);
         $nodeExportDeclaration->addChild(
             'InvoiceNumber',
-            $rawRequest->getOrderShipment()->getOrder()->hasInvoices()
-                ? $this->getInvoiceNumbers($rawRequest)
+            $invoiceNumbers !== ''
+                ? $invoiceNumbers
                 : $rawRequest->getOrderShipment()->getOrder()->getIncrementId()
         );
         $nodeExportDeclaration->addChild(

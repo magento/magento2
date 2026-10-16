@@ -65,6 +65,7 @@ class AddressUpdateTest extends TestCase
             Order::class,
             ['hasInvoices', 'getBillingAddress', 'getShippingAddress', 'getInvoiceCollection', 'getId']
         );
+        $orderMock->expects($this->never())->method('hasInvoices');
 
         $shippingMock = $this->createMock(Address::class);
         $shippingMock->expects($this->once())->method('getId')->willReturn($shippingId);
@@ -74,9 +75,11 @@ class AddressUpdateTest extends TestCase
 
         $invoiceCollectionMock = $this->createMock(Collection::class);
         $invoiceMock = $this->createMock(Invoice::class);
-        $invoiceCollectionMock->expects($this->once())->method('getItems')->willReturn([$invoiceMock]);
+        $invoiceCollectionMock->expects($this->once())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator([$invoiceMock]));
+        $invoiceCollectionMock->expects($this->never())->method('getSize');
 
-        $orderMock->expects($this->once())->method('hasInvoices')->willReturn(true);
         $orderMock->expects($this->once())->method('getBillingAddress')->willReturn($billingMock);
         $orderMock->expects($this->once())->method('getShippingAddress')->willReturn($shippingMock);
         $orderMock->expects($this->once())->method('getInvoiceCollection')->willReturn($invoiceCollectionMock);
