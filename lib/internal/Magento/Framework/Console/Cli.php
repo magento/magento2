@@ -51,7 +51,7 @@ class Cli extends Console\Application
     /**#@-*/
 
     /**
-     * @var ServiceManager
+     * @var ServiceManager|null
      */
     private $serviceManager;
 
@@ -93,12 +93,7 @@ class Cli extends Console\Application
     public function __construct($name = 'UNKNOWN', $version = 'UNKNOWN')
     {
         try {
-            // phpcs:ignore Magento2.Security.IncludeFile
-            $configuration = require BP . '/setup/config/application.config.php';
-            $bootstrapApplication = new Application();
-            $application = $bootstrapApplication->bootstrap($configuration);
-            $this->serviceManager = $application->getServiceManager();
-
+            $this->initServiceManager();
             $this->assertCompilerPreparation();
             $this->initObjectManager();
         } catch (\Exception $exception) {
@@ -120,7 +115,9 @@ class Cli extends Console\Application
         }
 
         parent::__construct($name, $version);
-        $this->serviceManager->setService(\Symfony\Component\Console\Application::class, $this);
+        if ($this->serviceManager) {
+            $this->serviceManager->setService(\Symfony\Component\Console\Application::class, $this);
+        }
         $this->logger = $this->objectManager->get(LoggerInterface::class);
         $this->setCommandLoader($this->getCommandLoader());
     }
@@ -275,6 +272,30 @@ class Cli extends Console\Application
     }
 
     /**
+     * Initialize the Laminas ServiceManager from setup application config, if available.
+     *
+     * When setup/ directory is not present (e.g., production deployments that exclude it),
+     * the CLI will still function for non-setup commands (cache, indexer, cron, etc.).
+     *
+     * @return void
+     */
+    private function initServiceManager(): void
+    {
+        $setupConfigPath = BP . '/setup/config/application.config.php';
+
+        if (!file_exists($setupConfigPath)) {
+            $this->serviceManager = null;
+            return;
+        }
+
+        // phpcs:ignore Magento2.Security.IncludeFile
+        $configuration = require $setupConfigPath;
+        $bootstrapApplication = new Application();
+        $application = $bootstrapApplication->bootstrap($configuration);
+        $this->serviceManager = $application->getServiceManager();
+    }
+
+    /**
      * Object Manager initialization.
      *
      * @return void
@@ -283,7 +304,20 @@ class Cli extends Console\Application
     {
         $params = (new ComplexParameter(self::INPUT_KEY_BOOTSTRAP))->mergeFromArgv($_SERVER, $_SERVER);
         $params[Bootstrap::PARAM_REQUIRE_MAINTENANCE] = null;
-        $requestParams = $this->serviceManager->get('magento-init-params');
+
+        if ($this->serviceManager) {
+            $requestParams = $this->serviceManager->get('magento-init-params');
+        } else {
+            $requestParams = array_merge(
+                $_SERVER,
+                [
+                    \Magento\Framework\App\Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS => [
+                        DirectoryList::ROOT => [DirectoryList::PATH => BP]
+                    ]
+                ]
+            );
+        }
+
         $appBootstrapKeys = [
             Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS,
             AppState::PARAM_MODE,
@@ -297,9 +331,11 @@ class Cli extends Console\Application
 
         $this->objectManager = Bootstrap::create(BP, $params)->getObjectManager();
 
-        /** @var ObjectManagerProvider $omProvider */
-        $omProvider = $this->serviceManager->get(ObjectManagerProvider::class);
-        $omProvider->setObjectManager($this->objectManager);
+        if ($this->serviceManager) {
+            /** @var ObjectManagerProvider $omProvider */
+            $omProvider = $this->serviceManager->get(ObjectManagerProvider::class);
+            $omProvider->setObjectManager($this->objectManager);
+        }
     }
 
     /**
@@ -310,6 +346,10 @@ class Cli extends Console\Application
      */
     private function assertCompilerPreparation()
     {
+        if (!$this->serviceManager) {
+            return;
+        }
+
         /**
          * Temporary workaround until the compiler is able to clear the generation directory
          * @todo remove after MAGETWO-44493 resolved
@@ -391,7 +431,7 @@ class Cli extends Console\Application
     private function getCommandLoader(): Console\CommandLoader\CommandLoaderInterface
     {
         $commandLoaders = [];
-        if (class_exists(SetupCommandLoader::class)) {
+        if ($this->serviceManager && class_exists(SetupCommandLoader::class)) {
             $commandLoaders[] = new SetupCommandLoader($this->serviceManager);
         }
         $commandLoaders[] = $this->objectManager->create(CommandLoader::class);
