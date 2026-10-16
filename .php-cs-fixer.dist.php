@@ -23,6 +23,7 @@ $finder = PhpCsFixer\Finder::create()
 
 $config = new PhpCsFixer\Config();
 $config->setFinder($finder)
+    ->setRiskyAllowed(true)
     ->setRules([
         '@PSR2' => true,
         'array_syntax' => ['syntax' => 'short'],
@@ -43,5 +44,9 @@ $config->setFinder($finder)
         'ordered_imports' => true,
         'standardize_not_equals' => true,
         'ternary_operator_spaces' => true,
+        'native_function_invocation' => [
+            'include' => ['@compiler_optimized'],
+            'scope' => 'namespaced',
+        ],
     ]);
 return $config;
