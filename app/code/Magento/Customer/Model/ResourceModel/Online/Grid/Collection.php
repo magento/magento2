@@ -73,7 +73,7 @@ class Collection extends SearchResult
         $this->getSelect()->joinLeft(
             ['customer' => $this->getTable('customer_entity')],
             'customer.entity_id = main_table.customer_id',
-            ['email', 'firstname', 'lastname']
+            ['email', 'firstname', 'lastname', 'website_id']
         )->where(
             'main_table.last_visit_at >= ?',
             $connection->formatDate($lastDate)
