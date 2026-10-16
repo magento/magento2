@@ -31,6 +31,11 @@ interface FieldInterface extends ConfigElementInterface
     public function isList(): bool;
 
     /**
+     * @return bool
+     */
+    public function areItemsRequired() : bool;
+
+    /**
      * Return true if argument is required when invoking the query where the argument is specified. False otherwise.
      *
      * @return bool
