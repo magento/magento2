@@ -25,6 +25,7 @@ define([
             allSelected: false,
             indetermine: false,
             preserveSelectionsOnFilter: false,
+            lastSelectedId: null,
             disabled: [],
             selected: [],
             excluded: [],
@@ -158,6 +159,59 @@ define([
             }
 
             return this;
+        },
+
+        /**
+         * Selects or deselects all records between two records on the current page, inclusive.
+         * Disabled records are never touched.
+         *
+         * @param {*} fromId - Id of the first record of the range.
+         * @param {*} toId - Id of the last record of the range.
+         * @param {Boolean} select - Whether to select/deselect records.
+         * @returns {Multiselect} Chainable.
+         */
+        selectRange: function (fromId, toId, select) {
+            var ids = this.getIds(),
+                from = ids.indexOf(fromId),
+                to = ids.indexOf(toId),
+                rangeIds;
+
+            if (from === -1 || to === -1) {
+                return this;
+            }
+
+            rangeIds = _.difference(ids.slice(Math.min(from, to), Math.max(from, to) + 1), this.disabled());
+
+            if (select) {
+                this.selected(_.union(this.selected(), rangeIds));
+            } else {
+                this.selected.remove(function (value) {
+                    return !!~rangeIds.indexOf(value);
+                });
+            }
+
+            return this;
+        },
+
+        /**
+         * Handles click on a row checkbox. With the SHIFT key pressed applies the new state
+         * of the checkbox to all records between the previously clicked record and this one.
+         *
+         * @param {*} id - Id of the clicked record.
+         * @param {Event} event - Click event.
+         * @returns {Boolean} True, to keep the default action of the checkbox.
+         */
+        onRowCheckboxClick: function (id, event) {
+            var anchor = this.lastSelectedId;
+
+            if (event && event.shiftKey && anchor !== null && anchor !== id &&
+                _.contains(this.getIds(), anchor)) {
+                this.selectRange(anchor, id, !!event.target.checked);
+            }
+
+            this.lastSelectedId = id;
+
+            return true;
         },
 
         /**
@@ -482,6 +536,8 @@ define([
          */
         onRowsChange: function () {
             var newSelections;
+
+            this.lastSelectedId = null;
 
             if (this.excludeMode()) {
                 newSelections = _.union(this.getIds(true), this.selected());
