@@ -11,7 +11,9 @@ use Magento\Framework\Cache\Backend\SymfonyL2Cache;
 use Magento\Framework\Cache\CacheConstants;
 use Magento\Framework\Cache\Exception\CacheException;
 use Magento\Framework\Cache\Frontend\Adapter\Symfony\BackendWrapper;
+use Magento\Framework\Cache\Frontend\Adapter\SymfonyAdapters\RedisTagAdapter;
 use Magento\Framework\Cache\FrontendInterface;
+use Magento\Framework\Cache\LowLevelFrontendInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -239,6 +241,53 @@ class SymfonyL2CacheTest extends TestCase
     }
 
     /**
+     * Save guards the L2 data/hash pair and L1 update with a Redis-backed per-id lock.
+     *
+     * @return void
+     */
+    public function testSaveUsesPairLockWhenRedisAdapterAvailable(): void
+    {
+        $this->cache = new SymfonyL2Cache(
+            $this->remoteCacheMock,
+            $this->localCacheMock
+        );
+
+        $cacheId = 'test_id';
+        $cacheData = 'test_data';
+        $lockAdapter = $this->createMock(RedisTagAdapter::class);
+        $lowLevelFrontend = $this->createMock(LowLevelFrontendInterface::class);
+
+        $this->remoteCacheMock->method('getLowLevelFrontend')
+            ->willReturn($lowLevelFrontend);
+        $lowLevelFrontend->method('getTagAdapter')
+            ->willReturn($lockAdapter);
+
+        $lockAdapter->expects($this->once())
+            ->method('acquireLock')
+            ->with('pair::' . $cacheId, $this->isType('string'), 10)
+            ->willReturn(true);
+        $lockAdapter->expects($this->once())
+            ->method('releaseLock')
+            ->with('pair::' . $cacheId, $this->isType('string'))
+            ->willReturn(true);
+
+        $this->remoteCacheMock->method('load')
+            ->with($cacheId . ':hash')
+            ->willReturn(false);
+        $this->remoteCacheMock->expects($this->exactly(2))
+            ->method('save')
+            ->willReturnMap([
+                [$cacheData, $cacheId, [], null, true],
+                [hash('sha256', $cacheData), $cacheId . ':hash', [], null, true]
+            ]);
+        $this->localCacheMock->expects($this->once())
+            ->method('save')
+            ->with($cacheData, $cacheId, [], null);
+
+        $this->assertTrue($this->cache->save($cacheData, $cacheId));
+    }
+
+    /**
      * Test save when remote is unavailable and stale cache is enabled
      *
      * @return void
@@ -392,6 +441,47 @@ class SymfonyL2CacheTest extends TestCase
         $result = $this->cache->remove($cacheId);
 
         $this->assertFalse($result);
+    }
+
+    /**
+     * Remove guards the L2 data/hash pair and L1 update with a Redis-backed per-id lock.
+     *
+     * @return void
+     */
+    public function testRemoveUsesPairLockWhenRedisAdapterAvailable(): void
+    {
+        $this->cache = new SymfonyL2Cache(
+            $this->remoteCacheMock,
+            $this->localCacheMock,
+            ['use_stale_cache' => false]
+        );
+
+        $cacheId = 'test_id';
+        $lockAdapter = $this->createMock(RedisTagAdapter::class);
+        $lowLevelFrontend = $this->createMock(LowLevelFrontendInterface::class);
+
+        $this->remoteCacheMock->method('getLowLevelFrontend')
+            ->willReturn($lowLevelFrontend);
+        $lowLevelFrontend->method('getTagAdapter')
+            ->willReturn($lockAdapter);
+
+        $lockAdapter->expects($this->once())
+            ->method('acquireLock')
+            ->with('pair::' . $cacheId, $this->isType('string'), 10)
+            ->willReturn(true);
+        $lockAdapter->expects($this->once())
+            ->method('releaseLock')
+            ->with('pair::' . $cacheId, $this->isType('string'))
+            ->willReturn(true);
+
+        $this->remoteCacheMock->expects($this->exactly(2))
+            ->method('remove')
+            ->willReturn(true);
+        $this->localCacheMock->expects($this->exactly(2))
+            ->method('remove')
+            ->willReturn(true);
+
+        $this->assertTrue($this->cache->remove($cacheId));
     }
 
     /**

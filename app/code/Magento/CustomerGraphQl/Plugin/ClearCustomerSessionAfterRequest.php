@@ -13,8 +13,6 @@ use Magento\Customer\Model\Session as CustomerSession;
 use Magento\CustomerGraphQl\Model\Context\AddUserInfoToContext;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResponseInterface;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\GraphQl\Controller\GraphQl as GraphQlController;
 
 /**
@@ -74,6 +72,12 @@ class ClearCustomerSessionAfterRequest
      */
     public function afterDispatch(GraphQlController $controller, ResponseInterface $response): ResponseInterface
     {
+        if ($this->userContext->getUserType() !== UserContextInterface::USER_TYPE_CUSTOMER
+            || !$this->userContext->getUserId()
+        ) {
+            return $response;
+        }
+
         $loggedInCustomerData = $this->addUserInfoToContext->getLoggedInCustomerData();
         $this->customerSession->setCustomerId($loggedInCustomerData ? $loggedInCustomerData->getId() : null);
         $this->customerSession->setCustomerGroupId($loggedInCustomerData ? $loggedInCustomerData->getGroupId() : null);
