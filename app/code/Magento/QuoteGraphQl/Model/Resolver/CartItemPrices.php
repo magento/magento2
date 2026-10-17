@@ -31,11 +31,54 @@ class CartItemPrices implements ResolverInterface, ResetAfterRequestInterface
     private $totals;
 
     /**
-     * Fields that require totals to be collected.
+     * Fields that require totals collection.
+     *
+     * This optimisation applies ONLY to the QuoteGraphQl request pathway.
+     * It has no effect on REST, SOAP, or any other request type.
+     *
+     * A GraphQL selection set explicitly declares every field the client needs.
+     * This lets us inspect the request before any processing begins and
+     * determine whether totals collection is necessary at all. If none of
+     * the fields below are present in the selection set, totals collection
+     * is skipped entirely with no impact on the response.
+     *
+     * -------------------------------------------------------------------------
+     * TRADE-OFF: Auto-applied (no coupon) rules on passive cart reads
+     * -------------------------------------------------------------------------
+     * Skipping totals collection means the entire rule evaluation engine is
+     * also skipped. This includes automatic cart price rules — rules that apply
+     * a discount without requiring a coupon code.
+     *
+     * Rule evaluation itself is O(R × I) where R is the number of active
+     * no-coupon rules and I is the number of items in the cart. On stores
+     * with many active promotions and large carts this is a significant cost —
+     * and exactly why skipping it on a passive read is worthwhile.
+     *
+     * The practical consequence is: auto-applied discounts will NOT appear in
+     * the response on a bare cart read unless one of the fields below is
+     * explicitly queried. They will appear correctly as soon as any cart
+     * mutation (add, update, coupon, address, shipping, payment) or placeOrder
+     * forces a full totals collection.
+     *
+     * -------------------------------------------------------------------------
+     * ADDING NEW FIELDS:
+     * -------------------------------------------------------------------------
+     * If a new QuoteGraphQl field is added whose value depends on totals
+     * collection, add its GraphQL field name here. The check performs a simple
+     * array_intersect against the flattened selection set of the incoming query.
+     *
      * @var array
      */
-    private const FIELDS_REQUIRE_TOTALS_COLLECTION = ['discounts', 'original_item_price',
-        'original_row_total', 'catalog_discount', 'row_catalog_discount'];
+    private const FIELDS_REQUIRE_TOTALS_COLLECTION = [
+        'discounts',
+        'original_item_price',
+        'original_row_total',
+        'catalog_discount',
+        'row_catalog_discount',
+        'price_including_tax',
+        'row_total_including_tax',
+        'total_item_discount'
+    ];
 
     /**
      * CartItemPrices constructor.
