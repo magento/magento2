@@ -6,7 +6,6 @@
 
 namespace Magento\Downloadable\Helper;
 
-use Laminas\Uri\Http;
 use Laminas\Uri\Uri;
 use Magento\Downloadable\Model\Url\DomainValidator;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -245,8 +244,6 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
      * Return name of the file
      *
      * @return string
-     * phpcs:disable Magento2.Functions.DiscouragedFunction
-     * phpcs:disable Generic.PHP.NoSilencedErrors
      */
     public function getFilename()
     {
@@ -256,6 +253,7 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
             $this->_getHandle();
         }
         if ($this->_linkType == self::LINK_TYPE_FILE) {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             return pathinfo($this->_resourceFile, PATHINFO_BASENAME);
         } elseif ($this->_linkType == self::LINK_TYPE_URL) {
             if (isset($this->_urlHeaders['content-disposition'])) {
@@ -269,7 +267,8 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
                     return $matches[1];
                 }
             }
-            $fileName = @pathinfo($this->_resourceFile, PATHINFO_BASENAME);
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            $fileName = pathinfo((string) parse_url($this->_resourceFile, PHP_URL_PATH), PATHINFO_BASENAME);
             if ($fileName) {
                 return $fileName;
             }
@@ -325,17 +324,17 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
         $url = (string) $this->_resourceFile;
         try {
             for ($redirects = 0; $redirects <= self::MAX_REDIRECTS; $redirects++) {
-                $uri = $this->validateUrl($url);
+                $this->validateUrl($url);
                 $response = $this->probeUrl($url);
                 $headers = $response['headers'];
                 $status = $response['status'];
-                if ($this->isSuccessfulStatus($status)) {
+                if ($status === 200) {
                     $this->_urlHeaders = $headers;
                     $this->_resourceFile = $url;
                     $this->urlMetadataLoaded = true;
                     return;
                 }
-                $url = $this->resolveRedirect($status, $headers, $uri);
+                $url = $this->resolveRedirect($status, $headers, $url);
             }
             throw new \RuntimeException('Too many download redirects.');
         } catch (\Exception $exception) {
@@ -348,17 +347,16 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
      * Validate a URL before connecting to its host.
      *
      * @param string $url
-     * @return Http
+     * @return void
      */
-    private function validateUrl(string $url): Http
+    private function validateUrl(string $url): void
     {
-        $uri = new Http($url);
+        $uri = new Uri($url);
         if (!in_array(strtolower((string) $uri->getScheme()), ['http', 'https'], true)
             || !$this->domainValidator->isValid($url)
         ) {
             throw new \RuntimeException('Invalid download URL.');
         }
-        return $uri;
     }
 
     /**
@@ -376,9 +374,7 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
         $client->setOptions([
             CURLOPT_FOLLOWLOCATION => false,
             CURLOPT_SUPPRESS_CONNECT_HEADERS => true,
-            CURLOPT_CONNECTTIMEOUT => self::CONNECT_TIMEOUT,
-            CURLOPT_LOW_SPEED_LIMIT => self::LOW_SPEED_LIMIT,
-            CURLOPT_LOW_SPEED_TIME => self::LOW_SPEED_TIME
+            CURLOPT_CONNECTTIMEOUT => self::CONNECT_TIMEOUT
         ]);
         $client->setOption(CURLOPT_HEADERFUNCTION, function ($curl, string $line) use (&$response): int {
             return $this->parseResponseHeader($line, $response);
@@ -419,6 +415,8 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
         $response = [];
         $client = $this->createHttpClient($response);
         $client->setOption(CURLOPT_TIMEOUT, self::PROBE_TIMEOUT);
+        $client->setOption(CURLOPT_LOW_SPEED_LIMIT, self::LOW_SPEED_LIMIT);
+        $client->setOption(CURLOPT_LOW_SPEED_TIME, self::LOW_SPEED_TIME);
         $bodyStarted = false;
         $client->setOption(CURLOPT_WRITEFUNCTION, static function () use (&$bodyStarted): int {
             $bodyStarted = true;
@@ -439,41 +437,16 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param int $status
      * @param array $headers
-     * @param Http $uri
+     * @param string $current
      * @return string
      */
-    private function resolveRedirect(int $status, array $headers, Http $uri): string
+    private function resolveRedirect(int $status, array $headers, string $current): string
     {
-        if (!in_array($status, [301, 302, 303, 307, 308], true) || !isset($headers['location'])) {
+        $location = trim($headers['location'] ?? '');
+        if (!in_array($status, [301, 302, 303, 307, 308], true) || $location === '') {
             throw new \RuntimeException('Invalid download response.');
         }
-        $location = trim($headers['location']);
-        $target = new Http($location);
-        if ($target->getScheme() !== null) {
-            return $location;
-        }
-        if (str_starts_with($location, '?')) {
-            $target->setPath($uri->getPath());
-        }
-        $target->resolve($uri);
-        // The generic URI exposes only an explicitly specified port.
-        $base = new Uri($uri->toString());
-        $defaultPort = strtolower((string) $target->getScheme()) === 'https' ? 443 : 80;
-        if ($base->getPort() === null && $target->getPort() === $defaultPort) {
-            $target->setPort(null);
-        }
-        return $target->toString();
-    }
-
-    /**
-     * Check that the server returned a successful response.
-     *
-     * @param int $status
-     * @return bool
-     */
-    private function isSuccessfulStatus(int $status): bool
-    {
-        return $status >= 200 && $status < 300;
+        return (new Uri($location))->resolve(new Uri($current))->toString();
     }
 
     /**
@@ -488,7 +461,6 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
         $response = [];
         $transfer = [
             'disconnected' => false,
-            'badStatus' => false,
             'failure' => null,
             'checked' => false,
             'length' => null,
@@ -504,9 +476,6 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
                 $client->get($this->_resourceFile);
             } catch (\Exception $exception) {
                 if (!$transfer['disconnected']) {
-                    if ($transfer['badStatus']) {
-                        throw new \RuntimeException('Invalid download response.', 0, $exception);
-                    }
                     throw $transfer['failure'] ?? $exception;
                 }
             }
@@ -534,11 +503,10 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
             $transfer['disconnected'] = true;
             return 0;
         }
-        if (!$this->isSuccessfulStatus($response['status'])) {
-            $transfer['badStatus'] = true;
-            return 0;
-        }
         try {
+            if ($response['status'] !== 200) {
+                throw new \RuntimeException('Invalid download response.');
+            }
             $this->validateStreamLength($response['headers'], $transfer);
             if ($transfer['length'] !== null && strlen($chunk) > $transfer['length'] - $transfer['bytes']) {
                 throw new \RuntimeException('Download size changed.');
@@ -569,7 +537,7 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
             ? (int) $this->_urlHeaders['content-length']
             : null;
         $streamLength = isset($headers['content-length']) ? (int) $headers['content-length'] : null;
-        if ($metadataLength !== null && $metadataLength !== $streamLength) {
+        if ($metadataLength !== null && $streamLength !== null && $metadataLength !== $streamLength) {
             throw new \RuntimeException('Download size changed.');
         }
         $transfer['length'] = $metadataLength ?? $streamLength;
@@ -585,7 +553,7 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
      */
     private function validateCompletedTransfer(array $response, array &$transfer): void
     {
-        if (!$this->isSuccessfulStatus($response['status'])) {
+        if ($response['status'] !== 200) {
             throw new \RuntimeException('Invalid download response.');
         }
         $this->validateStreamLength($response['headers'], $transfer);
@@ -604,7 +572,7 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
     private function logUrlError(string $url, \Exception $exception): void
     {
         try {
-            $host = (new Http($url))->getHost();
+            $host = (new Uri($url))->getHost();
         } catch (\Exception $invalidUrl) {
             $host = '';
         }
