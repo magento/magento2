@@ -312,6 +312,7 @@ class PageTest extends TestCase
             PageInterface::META_KEYWORDS => 'Meta Keywords',
             PageInterface::PAGE_ID => 1,
             PageInterface::IDENTIFIER => 'page-identifier',
+            'redirect_code' => 0,
         ];
 
         if ($content !== null) {
