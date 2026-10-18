@@ -9,14 +9,29 @@ namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Model\Plugin;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\CategoryFactory;
+use Magento\Catalog\Model\Indexer\Category\Product as CategoryProductIndexer;
+use Magento\Catalog\Model\Layer\Category as CategoryLayer;
+use Magento\Catalog\Model\ResourceModel\Category as CategoryResource;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
+use Magento\Catalog\Test\Fixture\Category as CategoryFixture;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\CatalogSearch\Model\Indexer\Fulltext\Processor;
+use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Indexer\StateInterface;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Test for category repository plugin
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CategoryTest extends TestCase
 {
@@ -63,6 +78,161 @@ class CategoryTest extends TestCase
 
         $this->assertTrue($isIndexerValid);
         $this->assertEquals(StateInterface::STATUS_INVALID, $status);
+    }
+
+    /**
+     * Anchor categories disabled globally and enabled on a store view must list products of their children
+     *
+     * @param string[] $saveOrder
+     */
+    #[
+        DbIsolation(false),
+        DataProvider('enableOrderDataProvider'),
+        DataFixture(CategoryFixture::class, ['is_active' => false, 'is_anchor' => 1], 'parent'),
+        DataFixture(
+            CategoryFixture::class,
+            ['parent_id' => '$parent.id$', 'is_active' => false, 'is_anchor' => 1],
+            'child'
+        ),
+        DataFixture(ProductFixture::class, ['category_ids' => ['$child.id$']], 'product'),
+    ]
+    public function testProductIsFoundInAnchorCategoriesEnabledOnStoreView(array $saveOrder): void
+    {
+        $fixtures = DataFixtureStorageManager::getStorage();
+        $parentId = (int)$fixtures->get('parent')->getId();
+        $productId = (int)$fixtures->get('product')->getId();
+        $storeId = $this->getDefaultStoreId();
+        $this->reindexAll();
+        $this->assertNotContains($productId, $this->getProductIdsFoundInCategory($parentId, $storeId));
+
+        foreach ($saveOrder as $categoryAlias) {
+            $this->saveCategory((int)$fixtures->get($categoryAlias)->getId(), $storeId, ['is_active' => 1]);
+        }
+
+        $this->assertContains($productId, $this->getProductIdsFoundInCategory($parentId, $storeId));
+    }
+
+    /**
+     * @return array
+     */
+    public static function enableOrderDataProvider(): array
+    {
+        return [
+            'parent first' => [['parent', 'child']],
+            'child first' => [['child', 'parent']],
+        ];
+    }
+
+    /**
+     * A product removed from a category in the same save that changes is_anchor must leave the category
+     */
+    #[
+        DbIsolation(false),
+        DataFixture(CategoryFixture::class, ['is_anchor' => 0], 'category'),
+        DataFixture(ProductFixture::class, ['category_ids' => ['$category.id$']], 'removed'),
+        DataFixture(ProductFixture::class, ['category_ids' => ['$category.id$']], 'kept'),
+    ]
+    public function testProductRemovedTogetherWithAnchorChangeIsNotFoundInCategory(): void
+    {
+        $fixtures = DataFixtureStorageManager::getStorage();
+        $categoryId = (int)$fixtures->get('category')->getId();
+        $removedId = (int)$fixtures->get('removed')->getId();
+        $keptId = (int)$fixtures->get('kept')->getId();
+        $storeId = $this->getDefaultStoreId();
+        $this->reindexAll();
+        $this->assertContains($removedId, $this->getProductIdsFoundInCategory($categoryId, $storeId));
+
+        $this->saveCategory(
+            $categoryId,
+            Store::DEFAULT_STORE_ID,
+            ['is_anchor' => 1, 'posted_products' => [$keptId => 0]]
+        );
+
+        $foundIds = $this->getProductIdsFoundInCategory($categoryId, $storeId);
+        $this->assertNotContains($removedId, $foundIds);
+        $this->assertContains($keptId, $foundIds);
+    }
+
+    /**
+     * Products of a category disabled on a store view must not be found in it any more
+     */
+    #[
+        DbIsolation(false),
+        DataFixture(CategoryFixture::class, as: 'category'),
+        DataFixture(ProductFixture::class, ['category_ids' => ['$category.id$']], 'product'),
+    ]
+    public function testProductIsNotFoundInCategoryDisabledOnStoreView(): void
+    {
+        $fixtures = DataFixtureStorageManager::getStorage();
+        $categoryId = (int)$fixtures->get('category')->getId();
+        $productId = (int)$fixtures->get('product')->getId();
+        $storeId = $this->getDefaultStoreId();
+        $this->reindexAll();
+        $this->assertContains($productId, $this->getProductIdsFoundInCategory($categoryId, $storeId));
+
+        $this->saveCategory($categoryId, $storeId, ['is_active' => 0]);
+
+        $this->assertNotContains($productId, $this->getProductIdsFoundInCategory($categoryId, $storeId));
+    }
+
+    /**
+     * Rebuild the category products and catalog search indexes
+     *
+     * @return void
+     */
+    private function reindexAll(): void
+    {
+        $indexerRegistry = Bootstrap::getObjectManager()->get(IndexerRegistry::class);
+        $indexerRegistry->get(CategoryProductIndexer::INDEXER_ID)->reindexAll();
+        $this->indexerProcessor->reindexAll();
+    }
+
+    /**
+     * Save category data on the given scope through the category resource model
+     *
+     * @param int $categoryId
+     * @param int $storeId
+     * @param array $data
+     * @return void
+     */
+    private function saveCategory(int $categoryId, int $storeId, array $data): void
+    {
+        $objectManager = Bootstrap::getObjectManager();
+        $category = $objectManager->create(CategoryFactory::class)->create();
+        $category->setStoreId($storeId);
+        $categoryResource = $objectManager->get(CategoryResource::class);
+        $categoryResource->load($category, $categoryId);
+        $category->addData($data);
+        $categoryResource->save($category);
+    }
+
+    /**
+     * Get IDs of the products the storefront finds in the category through the search engine
+     *
+     * @param int $categoryId
+     * @param int $storeId
+     * @return int[]
+     */
+    private function getProductIdsFoundInCategory(int $categoryId, int $storeId): array
+    {
+        $objectManager = Bootstrap::getObjectManager();
+        $objectManager->get(StoreManagerInterface::class)->setCurrentStore($storeId);
+        $category = $objectManager->create(CategoryFactory::class)->create();
+        $category->setStoreId($storeId);
+        $objectManager->get(CategoryResource::class)->load($category, $categoryId);
+        $layer = $objectManager->create(CategoryLayer::class);
+        $layer->setCurrentCategory($category);
+
+        // getAllIds() would skip the search request, so take the IDs of the loaded search results
+        return array_map('intval', array_keys($layer->getProductCollection()->getItems()));
+    }
+
+    /**
+     * @return int
+     */
+    private function getDefaultStoreId(): int
+    {
+        return (int)Bootstrap::getObjectManager()->get(StoreManagerInterface::class)->getStore('default')->getId();
     }
 
     /**
