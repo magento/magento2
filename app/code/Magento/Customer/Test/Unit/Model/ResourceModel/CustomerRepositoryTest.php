@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\Customer\Test\Unit\Model\ResourceModel;
 
 use Magento\Customer\Api\CustomerMetadataInterface;
+use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\AddressSearchResultsInterface;
 use Magento\Customer\Api\Data\AttributeMetadataInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
@@ -32,6 +33,7 @@ use Magento\Framework\Api\ImageProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -533,6 +535,54 @@ class CustomerRepositoryTest extends TestCase
             );
 
         $this->model->save($this->customer, $passwordHash);
+    }
+
+    /**
+     * Saving a customer must not take over an address that belongs to another customer.
+     *
+     * @return void
+     */
+    public function testSaveWithAddressOfAnotherCustomer(): void
+    {
+        $customerId = 1;
+        $foreignAddressId = 99;
+
+        $customerModel = $this->createPartialMockWithReflection(
+            \Magento\Customer\Model\Customer::class,
+            ['getId', 'setId', 'getStoreId', 'getAttributeSetId', 'getDataModel', 'save', 'setOrigData']
+        );
+        $customerModel->method('getId')->willReturn($customerId);
+        $customerModel->method('getStoreId')->willReturn(1);
+        $customerModel->method('getAttributeSetId')->willReturn(1);
+        $customerModel->method('getDataModel')->willReturn($this->customer);
+        $this->customer->method('getId')->willReturn($customerId);
+        $this->customer->method('__toArray')->willReturn([]);
+        $this->customer->method('getAddresses')->willReturn([]);
+
+        $foreignAddress = $this->createMock(AddressInterface::class);
+        $foreignAddress->method('getId')->willReturn($foreignAddressId);
+        $foreignAddress->method('setCustomerId')->willReturnSelf();
+        $foreignAddress->method('setRegion')->willReturnSelf();
+        $customerData = $this->createPartialMockWithReflection(
+            \Magento\Customer\Model\Data\Customer::class,
+            ['getId', '__toArray', 'getAddresses', 'setAddresses']
+        );
+        $customerData->method('getId')->willReturn($customerId);
+        $customerData->method('__toArray')->willReturn(['addresses' => [['id' => $foreignAddressId]]]);
+        $customerData->method('getAddresses')->willReturn([$foreignAddress]);
+
+        $this->imageProcessor->method('save')->willReturn($customerData);
+        $this->extensibleDataObjectConverter->method('toNestedArray')->willReturn([]);
+        $this->customerFactory->method('create')->willReturn($customerModel);
+        $this->customerRegistry->method('retrieve')->with($customerId)->willReturn($customerModel);
+        $this->customerRegistry->method('retrieveSecureData')
+            ->willReturn($this->createMock(CustomerSecure::class));
+
+        $this->addressRepository->expects($this->never())->method('save');
+        $this->addressRepository->expects($this->never())->method('deleteById');
+        $this->expectException(NoSuchEntityException::class);
+
+        $this->model->save($customerData);
     }
 
     /**
