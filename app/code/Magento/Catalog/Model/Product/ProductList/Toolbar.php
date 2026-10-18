@@ -6,7 +6,7 @@
 namespace Magento\Catalog\Model\Product\ProductList;
 
 /**
- * Class Toolbar
+ * Reads product list toolbar parameters from the request
  *
  * @api
  * @since 100.0.2
@@ -16,31 +16,29 @@ class Toolbar
     /**
      * GET parameter page variable name
      */
-    const PAGE_PARM_NAME = 'p';
+    public const PAGE_PARM_NAME = 'p';
 
     /**
      * Sort order cookie name
      */
-    const ORDER_PARAM_NAME = 'product_list_order';
+    public const ORDER_PARAM_NAME = 'product_list_order';
 
     /**
      * Sort direction cookie name
      */
-    const DIRECTION_PARAM_NAME = 'product_list_dir';
+    public const DIRECTION_PARAM_NAME = 'product_list_dir';
 
     /**
      * Sort mode cookie name
      */
-    const MODE_PARAM_NAME = 'product_list_mode';
+    public const MODE_PARAM_NAME = 'product_list_mode';
 
     /**
      * Products per page limit order cookie name
      */
-    const LIMIT_PARAM_NAME = 'product_list_limit';
+    public const LIMIT_PARAM_NAME = 'product_list_limit';
 
     /**
-     * Request
-     *
      * @var \Magento\Framework\App\Request\Http
      */
     protected $request;
@@ -71,7 +69,8 @@ class Toolbar
      */
     public function getDirection()
     {
-        return $this->request->getParam(self::DIRECTION_PARAM_NAME);
+        $direction = $this->request->getParam(self::DIRECTION_PARAM_NAME);
+        return is_array($direction) ? null : $direction;
     }
 
     /**
@@ -81,7 +80,8 @@ class Toolbar
      */
     public function getMode()
     {
-        return $this->request->getParam(self::MODE_PARAM_NAME);
+        $mode = $this->request->getParam(self::MODE_PARAM_NAME);
+        return is_array($mode) ? null : $mode;
     }
 
     /**
@@ -91,7 +91,8 @@ class Toolbar
      */
     public function getLimit()
     {
-        return $this->request->getParam(self::LIMIT_PARAM_NAME);
+        $limit = $this->request->getParam(self::LIMIT_PARAM_NAME);
+        return is_array($limit) ? null : $limit;
     }
 
     /**

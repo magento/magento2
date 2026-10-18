@@ -93,6 +93,25 @@ class ToolbarTest extends TestCase
         $this->assertEquals($param, $this->toolbarModel->getLimit());
     }
 
+    #[DataProvider('arrayParamGetterProvider')]
+    public function testGetterIgnoresArrayParam(string $getter, string $paramName): void
+    {
+        $this->requestMock->expects($this->once())
+            ->method('getParam')
+            ->with($paramName)
+            ->willReturn(['12']);
+        $this->assertNull($this->toolbarModel->$getter());
+    }
+
+    public static function arrayParamGetterProvider(): array
+    {
+        return [
+            'direction' => ['getDirection', Toolbar::DIRECTION_PARAM_NAME],
+            'mode' => ['getMode', Toolbar::MODE_PARAM_NAME],
+            'limit' => ['getLimit', Toolbar::LIMIT_PARAM_NAME],
+        ];
+    }
+
     /**
      * @param $param
      */
