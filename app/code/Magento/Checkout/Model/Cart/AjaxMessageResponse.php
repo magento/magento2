@@ -39,18 +39,54 @@ class AjaxMessageResponse
      */
     public function getInlineErrorMessages(bool $clearMessages): ?array
     {
-        $messages = $this->messageManager->getMessages($clearMessages);
-        $errorMessages = $this->getErrorMessages($messages);
+        $messages = $this->messageManager->getMessages(false);
+        $errorMessages = $this->getRelevantMessages($messages);
         if (!$errorMessages->getCount()) {
             return null;
+        }
+
+        if ($clearMessages) {
+            $this->messageManager->getMessages(true);
         }
 
         $block = $this->layoutFactory->create()->createBlock(Messages::class);
         $block->setMessages($errorMessages);
 
         return [
-            'html' => $block->getGroupedHtml(),
+            'html' => $this->addAlertAttributes($block->getGroupedHtml()),
         ];
+    }
+
+    /**
+     * Add the role="alert" wrapper the storefront Knockout messages component renders
+     *
+     * @param string $html
+     * @return string
+     */
+    private function addAlertAttributes(string $html): string
+    {
+        if ($html === '') {
+            return $html;
+        }
+
+        $document = new \DOMDocument();
+        $useInternalErrors = libxml_use_internal_errors(true);
+        $document->loadHTML(
+            '<?xml encoding="UTF-8">' . $html,
+            LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD
+        );
+        libxml_clear_errors();
+        libxml_use_internal_errors($useInternalErrors);
+
+        $wrapper = $document->documentElement;
+        if (!$wrapper instanceof \DOMElement) {
+            return $html;
+        }
+
+        $wrapper->setAttribute('role', 'alert');
+        $wrapper->setAttribute('aria-atomic', 'true');
+
+        return $document->saveHTML($wrapper);
     }
 
     /**
@@ -59,13 +95,13 @@ class AjaxMessageResponse
      * @param Collection $messages
      * @return Collection
      */
-    private function getErrorMessages(Collection $messages): Collection
+    private function getRelevantMessages(Collection $messages): Collection
     {
-        $errorMessages = $this->messageCollectionFactory->create();
+        $relevantMessages = $this->messageCollectionFactory->create();
         foreach ($messages->getItemsByType(MessageInterface::TYPE_ERROR) as $message) {
-            $errorMessages->addMessage($message);
+            $relevantMessages->addMessage($message);
         }
 
-        return $errorMessages;
+        return $relevantMessages;
     }
 }

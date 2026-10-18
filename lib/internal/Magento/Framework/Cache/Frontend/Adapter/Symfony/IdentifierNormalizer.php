@@ -10,10 +10,7 @@ namespace Magento\Framework\Cache\Frontend\Adapter\Symfony;
 /**
  * Canonicalizes a cache identifier to the single form used for Symfony cache keys.
  *
- * Single source of truth shared by the Symfony frontend adapter (Symfony::cleanIdentifier) and the
- * PreloadingSymfonyAdapter fast-path lookup, so the two cannot drift: a preload key configured in any
- * case/separator (e.g. "SYSTEM_DEFAULT:hash") resolves to the same slot as the runtime id the app
- * loads (e.g. "system_default:hash") — both become "SYSTEM_DEFAULT_HASH".
+ * Shared by frontend and preload lookup to ensure consistent key resolution.
  */
 class IdentifierNormalizer
 {

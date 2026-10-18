@@ -85,12 +85,8 @@ interface TagAdapterInterface
     public function clearAllIndices(): void;
 
     /**
-     * Sweep tag-index members whose data entry has expired (CLEANING_MODE_OLD).
-     *
-     * Redis/Valkey auto-expire the data key by TTL but leave the id in its tag SETs; this prunes
-     * those orphaned members so the tag index does not grow unbounded. Mirrors legacy Cm Redis
-     * _collectGarbage(), run by the backend_clean_cache cron. Adapters with no such index (file)
-     * return 0.
+     * Sweeps expired cache entries from the tag index to remove orphaned members
+     * , mirroring legacy Cm Redis garbage collection.
      *
      * @param int $batchSize Number of ids to process per iteration
      * @return int Number of orphaned index entries removed
@@ -98,10 +94,8 @@ interface TagAdapterInterface
     public function garbageCollect(int $batchSize = 1000): int;
 
     /**
-     * Return the filling percentage of the underlying storage server, if the backend can report one.
-     *
-     * Mirrors legacy Cm_Cache_Backend_Redis::getFillingPercentage() (used_memory / maxmemory). Adapters
-     * with no such server-level memory concept (filesystem, generic fallback) return 0.
+     * Returns the underlying storage server’s memory usage percentage when supported
+     * , otherwise 0, mirroring legacy Redis behavior.
      *
      * @return int Integer between 0 and 100
      */

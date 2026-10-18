@@ -16,6 +16,7 @@ use Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator;
 use Magento\CatalogUrlRewrite\Model\ResourceModel\Category\GetDefaultUrlKey;
 use Magento\CatalogUrlRewrite\Observer\CategoryUrlPathAutogeneratorObserver;
 use Magento\CatalogUrlRewrite\Service\V1\StoreViewService;
+use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\EntityMetadataInterface;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Event\Observer;
@@ -277,6 +278,38 @@ class CategoryUrlPathAutogeneratorObserverTest extends TestCase
     }
 
     /**
+     * Mock url_key/url_path attribute lookups plus a connection with a chainable select() for the
+     * batched "which children have their own url_key override" query used by the revert cascade.
+     *
+     * @param int[] $overriddenChildRowIds Row ids the override query should report as already overridden
+     * @return MockObject
+     */
+    private function mockCategoryResourceConnectionForOverrideQuery(array $overriddenChildRowIds = []): MockObject
+    {
+        $urlKeyAttribute = $this->createMock(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class);
+        $urlKeyAttribute->method('getBackendTable')->willReturn('catalog_category_entity_varchar');
+        $urlKeyAttribute->method('getAttributeId')->willReturn(120);
+        $urlPathAttribute = $this->createMock(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class);
+        $urlPathAttribute->method('getBackendTable')->willReturn('catalog_category_entity_varchar');
+        $urlPathAttribute->method('getAttributeId')->willReturn(121);
+        $this->categoryResource->method('getAttribute')
+            ->willReturnMap([
+                ['url_key', $urlKeyAttribute],
+                ['url_path', $urlPathAttribute],
+            ]);
+
+        $connection = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
+        $select = $this->createMock(Select::class);
+        $select->method('from')->willReturnSelf();
+        $select->method('where')->willReturnSelf();
+        $connection->method('select')->willReturn($select);
+        $connection->method('fetchCol')->with($select)->willReturn($overriddenChildRowIds);
+        $this->categoryResource->method('getConnection')->willReturn($connection);
+
+        return $connection;
+    }
+
+    /**
      * @return void
      * @throws LocalizedException
      */
@@ -322,6 +355,108 @@ class CategoryUrlPathAutogeneratorObserverTest extends TestCase
             ->with('url_path')
             ->willReturn(true);
 
+        $childRowId = 5;
+
+        // No child carries its own url_key override, so all of them are orphaned url_path duplicates.
+        $connection = $this->mockCategoryResourceConnectionForOverrideQuery();
+        $deleteCalls = [];
+        $connection->expects($this->exactly(2))
+            ->method('delete')
+            ->willReturnCallback(function ($table, $where) use (&$deleteCalls) {
+                $deleteCalls[] = [$table, $where];
+            });
+
+        $childCategory = $this->createPartialMockWithReflection(
+            Category::class,
+            [
+                'getResource',
+                'getStore',
+                'getStoreId',
+                'setStoreId',
+                'getUrlPath',
+                'setUrlPath',
+            ]
+        );
+        $childCategory->setData(['id' => $childRowId, 'row_id' => $childRowId]);
+        $childCategory->method('getResource')
+            ->willReturn($this->categoryResource);
+        $childCategory->expects($this->once())
+            ->method('setStoreId')
+            ->with($storeId)
+            ->willReturnSelf();
+
+        $this->childrenCategoriesProvider->expects($this->once())
+            ->method('getChildren')
+            ->willReturn([$childCategory]);
+
+        $this->categoryUrlPathAutogeneratorObserver->execute($this->observer);
+        $this->assertFalse($this->category->getUrlKey());
+        $this->assertNull($this->category->getUrlPath());
+        $this->assertSame(
+            [
+                ['catalog_category_entity_varchar', [
+                    'attribute_id = ?' => 120,
+                    'row_id = ?' => $rowId,
+                    'store_id = ?' => $storeId,
+                ]],
+                ['catalog_category_entity_varchar', [
+                    'attribute_id = ?' => 121,
+                    'store_id = ?' => $storeId,
+                    'row_id IN (?)' => [$childRowId],
+                ]],
+            ],
+            $deleteCalls
+        );
+    }
+
+    /**
+     * @return void
+     * @throws LocalizedException
+     */
+    public function testShouldUpdateUrlPathForChildCategoryWhenUrlKeyIsResetToDefaultAtStoreScope(): void
+    {
+        $storeId = 2;
+        $rowId = 6;
+        $categoryData = [
+            'use_default' => ['url_key' => 1],
+            'url_key' => null,
+            'url_path' => 'one/one-point-one/one-point-one-one/one-point-one-one-onexxxx',
+            'row_id' => $rowId,
+        ];
+
+        $this->category->setData($categoryData);
+        $this->category->isObjectNew(false);
+        $this->category->method('getStoreId')->willReturn($storeId);
+        $this->category->expects($this->once())
+            ->method('hasChildren')
+            ->willReturn(false);
+        $this->metadataPool->method('getMetadata')
+            ->with(CategoryInterface::class)
+            ->willReturn($this->entityMetaDataInterface);
+        $this->entityMetaDataInterface->method('getLinkField')
+            ->willReturn('row_id');
+        $this->category->method('getUrlKey')
+            ->willReturn(false);
+        $this->category->method('getData')
+            ->willReturnMap(
+                [
+                    ['use_default', null, ['url_key' => 1]],
+                    ['row_id', null, $rowId],
+                ]
+            );
+        $this->storeViewService->expects($this->once())
+            ->method('doesEntityHaveOverriddenUrlKeyForStore')
+            ->with($storeId, $this->anything(), Category::ENTITY)
+            ->willReturn(true);
+        $this->getDefaultUrlKey->expects($this->once())
+            ->method('execute')
+            ->with($rowId)
+            ->willReturn('one-point-one-one-one');
+        $this->category->expects($this->once())
+            ->method('dataHasChangedFor')
+            ->with('url_path')
+            ->willReturn(false);
+
         $urlKeyAttribute = $this->createMock(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class);
         $urlKeyAttribute->method('getBackendTable')->willReturn('catalog_category_entity_varchar');
         $urlKeyAttribute->method('getAttributeId')->willReturn(120);
@@ -338,31 +473,61 @@ class CategoryUrlPathAutogeneratorObserverTest extends TestCase
             ]);
         $this->categoryResource->method('getConnection')->willReturn($connection);
 
-        $childCategory = $this->createPartialMockWithReflection(
-            Category::class,
-            [
-                'getResource',
-                'getStore',
-                'getStoreId',
-                'setStoreId',
-                'getUrlPath',
-                'setUrlPath',
-            ]
-        );
-        $childCategory->method('getResource')
-            ->willReturn($this->categoryResource);
-        $childCategory->expects($this->once())
-            ->method('setStoreId')
-            ->with($storeId)
-            ->willReturnSelf();
-
-        $this->childrenCategoriesProvider->expects($this->once())
-            ->method('getChildren')
-            ->willReturn([$childCategory]);
+        $this->compositeUrlValidator->expects($this->once())
+            ->method('validate')
+            ->with('one-point-one-one-one')
+            ->willReturn([]);
+        $this->categoryUrlPathGenerator->expects($this->once())
+            ->method('getUrlPath')
+            ->with($this->category)
+            ->willReturn('one/one-point-one/one-point-one-one/one-point-one-one-one');
+        $this->categoryResource->expects($this->once())
+            ->method('saveAttribute')
+            ->with($this->category, 'url_path');
 
         $this->categoryUrlPathAutogeneratorObserver->execute($this->observer);
-        $this->assertFalse($this->category->getUrlKey());
-        $this->assertNull($this->category->getUrlPath());
+    }
+
+    /**
+     * @return void
+     * @throws LocalizedException
+     */
+    public function testShouldNotUpdateUrlPathForChildCategoryWhenUrlKeyWasNeverOverriddenAtStoreScope(): void
+    {
+        $storeId = 2;
+        $rowId = 6;
+        $categoryData = [
+            'use_default' => ['url_key' => 1],
+            'url_key' => null,
+            'url_path' => 'one/one-point-one/one-point-one-one/one-point-one-one-one',
+            'row_id' => $rowId,
+        ];
+
+        $this->category->setData($categoryData);
+        $this->category->isObjectNew(false);
+        $this->category->method('getStoreId')->willReturn($storeId);
+        $this->category->expects($this->once())
+            ->method('hasChildren')
+            ->willReturn(false);
+        $this->category->method('getUrlKey')
+            ->willReturn(false);
+        $this->category->method('getData')
+            ->willReturnMap(
+                [
+                    ['use_default', null, ['url_key' => 1]],
+                    ['row_id', null, $rowId],
+                ]
+            );
+        $this->storeViewService->expects($this->once())
+            ->method('doesEntityHaveOverriddenUrlKeyForStore')
+            ->with($storeId, $this->anything(), Category::ENTITY)
+            ->willReturn(false);
+        $this->getDefaultUrlKey->expects($this->never())
+            ->method('execute');
+        $this->categoryResource->expects($this->never())
+            ->method('saveAttribute');
+
+        $this->categoryUrlPathAutogeneratorObserver->execute($this->observer);
     }
 
     /**
@@ -801,7 +966,7 @@ class CategoryUrlPathAutogeneratorObserverTest extends TestCase
         $this->categoryUrlPathGenerator->method('getUrlPath')
             ->willReturnCallback(function ($cat, $parent = null) use (&$processedIds, $directChildId, $grandChildId) {
                 if ($cat->getId() === $directChildId || $cat->getId() === $grandChildId) {
-                    $processedIds[] = ['id' => $cat->getId(), 'hasParent' => $parent !== null];
+                    $processedIds[] = ['id' => $cat->getId(), 'parentId' => $parent ? $parent->getId() : null];
                 }
                 return 'generated_url_path';
             });
@@ -809,11 +974,12 @@ class CategoryUrlPathAutogeneratorObserverTest extends TestCase
         $this->categoryUrlPathAutogeneratorObserver->execute($this->observer);
 
         // The direct child is processed first (lower level) and is linked to the store-scoped parent;
-        // the grandchild is processed after and resolves its url_path without an explicit parent.
+        // the grandchild is processed after and must be linked to the direct child's own,
+        // already-refreshed instance from this same pass, not left to resolve a parent independently.
         $this->assertSame($directChildId, $processedIds[0]['id']);
-        $this->assertTrue($processedIds[0]['hasParent']);
+        $this->assertSame($categoryId, $processedIds[0]['parentId']);
         $this->assertSame($grandChildId, $processedIds[1]['id']);
-        $this->assertFalse($processedIds[1]['hasParent']);
+        $this->assertSame($directChildId, $processedIds[1]['parentId']);
     }
 
     /**
@@ -856,34 +1022,24 @@ class CategoryUrlPathAutogeneratorObserverTest extends TestCase
         $this->getDefaultUrlKey->method('execute')->with($categoryId)->willReturn('one');
         $this->compositeUrlValidator->method('validate')->willReturn([]);
 
-        $urlKeyAttribute = $this->createMock(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class);
-        $urlKeyAttribute->method('getBackendTable')->willReturn('catalog_category_entity_varchar');
-        $urlKeyAttribute->method('getAttributeId')->willReturn(120);
-        $this->categoryResource->method('getAttribute')
-            ->with('url_key')
-            ->willReturn($urlKeyAttribute);
-        $connection = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
-        $connection->expects($this->once())
-            ->method('delete')
-            ->with('catalog_category_entity_varchar', [
-                'attribute_id = ?' => 120,
-                'row_id = ?' => $categoryId,
-                'store_id = ?' => $storeId,
-            ]);
-        $this->categoryResource->method('getConnection')->willReturn($connection);
+        // Neither descendant carries its own url_key override in this scenario.
+        $connection = $this->mockCategoryResourceConnectionForOverrideQuery();
+        $connection->expects($this->exactly(2))->method('delete');
 
         $directChild = $this->createPartialMockWithReflection(
             Category::class,
             ['getResource', 'getStore', 'getStoreId', 'setStoreId', 'getUrlPath', 'setUrlPath']
         );
-        $directChild->setData(['id' => $directChildId, 'parent_id' => $categoryId, 'level' => 3]);
+        $directChild->setData(['id' => $directChildId, 'parent_id' => $categoryId,
+            'level' => 3, 'row_id' => $directChildId]);
         $directChild->method('getResource')->willReturn($this->createMock(CategoryResource::class));
 
         $grandChild = $this->createPartialMockWithReflection(
             Category::class,
             ['getResource', 'getStore', 'getStoreId', 'setStoreId', 'getUrlPath', 'setUrlPath']
         );
-        $grandChild->setData(['id' => $grandChildId, 'parent_id' => $directChildId, 'level' => 4]);
+        $grandChild->setData(['id' => $grandChildId, 'parent_id' => $directChildId,
+            'level' => 4, 'row_id' => $grandChildId]);
         $grandChild->method('getResource')->willReturn($this->createMock(CategoryResource::class));
 
         // Discovery order is reversed (grandchild before direct child) to prove level-based sorting.
