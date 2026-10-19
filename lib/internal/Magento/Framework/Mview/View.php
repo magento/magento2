@@ -13,6 +13,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 use Magento\Framework\Mview\View\ChangelogBatchWalkerFactory;
 use Magento\Framework\Mview\View\ChangelogBatchWalkerInterface;
+use Magento\Framework\Mview\View\CursorAwareChangelogBatchWalkerInterface;
 use Magento\Framework\Mview\View\ChangelogTableNotExistsException;
 use Magento\Framework\Mview\View\SubscriptionFactory;
 use Exception;
@@ -316,7 +317,29 @@ class View extends DataObject implements ViewInterface, ViewSubscriptionInterfac
             ? (int) $this->changelogBatchSize[$this->getChangelog()->getViewId()]
             : self::DEFAULT_BATCH_SIZE;
 
-        $batches = $this->getWalker()->walk($this->getChangelog(), $lastVersionId, $currentVersionId, $batchSize);
+        $walker = $this->getWalker();
+
+        if ($walker instanceof CursorAwareChangelogBatchWalkerInterface) {
+            $batches = $walker->walkWithCursor(
+                $this->getChangelog(),
+                $lastVersionId,
+                $currentVersionId,
+                $batchSize
+            );
+
+            foreach ($batches as $batch) {
+                $action->execute($batch['ids']);
+
+                $state = $this->getState()->loadByView($this->getId());
+                if ($state->getStatus() !== View\StateInterface::STATUS_SUSPENDED) {
+                    $state->setVersionId($batch['version_id'])->save();
+                }
+            }
+
+            return;
+        }
+
+        $batches = $walker->walk($this->getChangelog(), $lastVersionId, $currentVersionId, $batchSize);
 
         foreach ($batches as $ids) {
             $action->execute($ids);
