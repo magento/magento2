@@ -81,6 +81,9 @@
                 <argument name="shippingMethodName" value="Flat Rate"/>
             </actionGroup>
             <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNext"/>
+            <waitForElementClickable selector="{{CheckoutPaymentSection.checkMoneyOrderPayment}}" stepKey="waitForCheckMoneyOrderPayment"/>
+            <click selector="{{CheckoutPaymentSection.checkMoneyOrderPayment}}" stepKey="selectCheckMoneyOrderPayment"/>
+            <waitForElementVisible selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="waitForCheckMoneyOrderActive"/>
             <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickOnPlaceOrder"/>
             <!-- I see order successful Page -->
             <actionGroup ref="AssertStorefrontCheckoutSuccessActionGroup" stepKey="assertOrderSuccess"/>
@@ -144,4 +147,3 @@
         </actionGroup>
     </test>
 </tests>
-
