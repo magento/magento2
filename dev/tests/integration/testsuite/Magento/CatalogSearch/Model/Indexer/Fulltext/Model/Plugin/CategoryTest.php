@@ -11,17 +11,21 @@ use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\CategoryFactory;
 use Magento\Catalog\Model\Indexer\Category\Product as CategoryProductIndexer;
+use Magento\Catalog\Model\Indexer\Product\Category as ProductCategoryIndexer;
 use Magento\Catalog\Model\Layer\Category as CategoryLayer;
 use Magento\Catalog\Model\ResourceModel\Category as CategoryResource;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
 use Magento\Catalog\Test\Fixture\Category as CategoryFixture;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\CatalogSearch\Model\Indexer\Fulltext\Processor;
-use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Indexer\StateInterface;
+use Magento\Indexer\Model\Processor as IndexerProcessor;
+use Magento\Indexer\Test\Fixture\ScheduleMode;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\TestFramework\Fixture\AppIsolation;
 use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureBeforeTransaction;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -86,8 +90,12 @@ class CategoryTest extends TestCase
      * @param string[] $saveOrder
      */
     #[
+        AppIsolation(true),
         DbIsolation(false),
         DataProvider('enableOrderDataProvider'),
+        DataFixtureBeforeTransaction(ScheduleMode::class, ['indexer' => CategoryProductIndexer::INDEXER_ID]),
+        DataFixtureBeforeTransaction(ScheduleMode::class, ['indexer' => ProductCategoryIndexer::INDEXER_ID]),
+        DataFixtureBeforeTransaction(ScheduleMode::class, ['indexer' => Processor::INDEXER_ID]),
         DataFixture(CategoryFixture::class, ['is_active' => false, 'is_anchor' => 1], 'parent'),
         DataFixture(
             CategoryFixture::class,
@@ -102,12 +110,13 @@ class CategoryTest extends TestCase
         $parentId = (int)$fixtures->get('parent')->getId();
         $productId = (int)$fixtures->get('product')->getId();
         $storeId = $this->getDefaultStoreId();
-        $this->reindexAll();
+        $this->updateMview();
         $this->assertNotContains($productId, $this->getProductIdsFoundInCategory($parentId, $storeId));
 
         foreach ($saveOrder as $categoryAlias) {
             $this->saveCategory((int)$fixtures->get($categoryAlias)->getId(), $storeId, ['is_active' => 1]);
         }
+        $this->updateMview();
 
         $this->assertContains($productId, $this->getProductIdsFoundInCategory($parentId, $storeId));
     }
@@ -127,7 +136,11 @@ class CategoryTest extends TestCase
      * A product removed from a category in the same save that changes is_anchor must leave the category
      */
     #[
+        AppIsolation(true),
         DbIsolation(false),
+        DataFixtureBeforeTransaction(ScheduleMode::class, ['indexer' => CategoryProductIndexer::INDEXER_ID]),
+        DataFixtureBeforeTransaction(ScheduleMode::class, ['indexer' => ProductCategoryIndexer::INDEXER_ID]),
+        DataFixtureBeforeTransaction(ScheduleMode::class, ['indexer' => Processor::INDEXER_ID]),
         DataFixture(CategoryFixture::class, ['is_anchor' => 0], 'category'),
         DataFixture(ProductFixture::class, ['category_ids' => ['$category.id$']], 'removed'),
         DataFixture(ProductFixture::class, ['category_ids' => ['$category.id$']], 'kept'),
@@ -139,7 +152,7 @@ class CategoryTest extends TestCase
         $removedId = (int)$fixtures->get('removed')->getId();
         $keptId = (int)$fixtures->get('kept')->getId();
         $storeId = $this->getDefaultStoreId();
-        $this->reindexAll();
+        $this->updateMview();
         $this->assertContains($removedId, $this->getProductIdsFoundInCategory($categoryId, $storeId));
 
         $this->saveCategory(
@@ -147,6 +160,7 @@ class CategoryTest extends TestCase
             Store::DEFAULT_STORE_ID,
             ['is_anchor' => 1, 'posted_products' => [$keptId => 0]]
         );
+        $this->updateMview();
 
         $foundIds = $this->getProductIdsFoundInCategory($categoryId, $storeId);
         $this->assertNotContains($removedId, $foundIds);
@@ -157,7 +171,11 @@ class CategoryTest extends TestCase
      * Products of a category disabled on a store view must not be found in it any more
      */
     #[
+        AppIsolation(true),
         DbIsolation(false),
+        DataFixtureBeforeTransaction(ScheduleMode::class, ['indexer' => CategoryProductIndexer::INDEXER_ID]),
+        DataFixtureBeforeTransaction(ScheduleMode::class, ['indexer' => ProductCategoryIndexer::INDEXER_ID]),
+        DataFixtureBeforeTransaction(ScheduleMode::class, ['indexer' => Processor::INDEXER_ID]),
         DataFixture(CategoryFixture::class, as: 'category'),
         DataFixture(ProductFixture::class, ['category_ids' => ['$category.id$']], 'product'),
     ]
@@ -167,24 +185,56 @@ class CategoryTest extends TestCase
         $categoryId = (int)$fixtures->get('category')->getId();
         $productId = (int)$fixtures->get('product')->getId();
         $storeId = $this->getDefaultStoreId();
-        $this->reindexAll();
+        $this->updateMview();
         $this->assertContains($productId, $this->getProductIdsFoundInCategory($categoryId, $storeId));
 
         $this->saveCategory($categoryId, $storeId, ['is_active' => 0]);
+        $this->updateMview();
 
         $this->assertNotContains($productId, $this->getProductIdsFoundInCategory($categoryId, $storeId));
     }
 
     /**
-     * Rebuild the category products and catalog search indexes
+     * Products of child categories must not be found in an anchor category disabled on a store view
+     */
+    #[
+        AppIsolation(true),
+        DbIsolation(false),
+        DataFixtureBeforeTransaction(ScheduleMode::class, ['indexer' => CategoryProductIndexer::INDEXER_ID]),
+        DataFixtureBeforeTransaction(ScheduleMode::class, ['indexer' => ProductCategoryIndexer::INDEXER_ID]),
+        DataFixtureBeforeTransaction(ScheduleMode::class, ['indexer' => Processor::INDEXER_ID]),
+        DataFixture(CategoryFixture::class, ['is_anchor' => 1], 'parent'),
+        DataFixture(CategoryFixture::class, ['parent_id' => '$parent.id$', 'is_anchor' => 1], 'child'),
+        DataFixture(ProductFixture::class, ['category_ids' => ['$child.id$']], 'product'),
+    ]
+    public function testChildProductIsNotFoundInAnchorCategoryDisabledOnStoreView(): void
+    {
+        $fixtures = DataFixtureStorageManager::getStorage();
+        $parentId = (int)$fixtures->get('parent')->getId();
+        $productId = (int)$fixtures->get('product')->getId();
+        $storeId = $this->getDefaultStoreId();
+        $this->updateMview();
+        $this->assertContains($productId, $this->getProductIdsFoundInCategory($parentId, $storeId));
+
+        $this->saveCategory($parentId, $storeId, ['is_active' => 0]);
+        $this->updateMview();
+
+        $this->assertNotContains($productId, $this->getProductIdsFoundInCategory($parentId, $storeId));
+    }
+
+    /**
+     * Process the indexer changelogs the same way the indexer_update_all_views cron job does
+     *
+     * The category products view queues products for the catalog search view, which may already be processed
+     * in the same run, so the changelogs are processed twice, as two consecutive cron runs would do.
      *
      * @return void
      */
-    private function reindexAll(): void
+    private function updateMview(): void
     {
-        $indexerRegistry = Bootstrap::getObjectManager()->get(IndexerRegistry::class);
-        $indexerRegistry->get(CategoryProductIndexer::INDEXER_ID)->reindexAll();
-        $this->indexerProcessor->reindexAll();
+        $indexerProcessor = Bootstrap::getObjectManager()->create(IndexerProcessor::class);
+        $indexerProcessor->updateMview();
+        $indexerProcessor->updateMview();
     }
 
     /**
