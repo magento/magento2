@@ -28,6 +28,8 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
  * Test same_as_billing field in customerCart.shipping_addresses
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ShippingAddressSameAsBillingTest extends GraphQlAbstract
 {
