@@ -12,17 +12,12 @@ use Magento\Catalog\Model\ResourceModel\Category as CategoryResourceModel;
 use Magento\CatalogSearch\Model\Indexer\Fulltext;
 use Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Category as CategoryPlugin;
 use Magento\Framework\DB\Adapter\AdapterInterface;
-use Magento\Framework\DB\Select;
 use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- */
 class CategoryTest extends TestCase
 {
     /**
@@ -55,19 +50,14 @@ class CategoryTest extends TestCase
      */
     protected $model;
 
-    /**
-     * @var AdapterInterface|MockObject
-     */
-    private $connectionMock;
-
     protected function setUp(): void
     {
         $this->categoryMock = $this->createMock(CategoryModel::class);
 
         $this->categoryResourceMock = $this->createMock(CategoryResourceModel::class);
 
-        $this->connectionMock = $this->createMock(AdapterInterface::class);
-        $this->categoryResourceMock->method('getConnection')->willReturn($this->connectionMock);
+        $connection = $this->createMock(AdapterInterface::class);
+        $this->categoryResourceMock->method('getConnection')->willReturn($connection);
 
         $this->indexerMock = $this->createStub(IndexerInterface::class);
 
@@ -102,95 +92,6 @@ class CategoryTest extends TestCase
             $this->categoryResourceMock,
             $this->model->aroundSave($this->categoryResourceMock, $this->proceed, $this->categoryMock)
         );
-    }
-
-    /**
-     * @param string $changedField
-     */
-    #[DataProvider('changedFieldDataProvider')]
-    public function testReindexesCategoryTreeProductsWhenFlagChanged(string $changedField): void
-    {
-        $category = $this->createPartialMock(CategoryModel::class, ['dataHasChangedFor']);
-        $category->setData('affected_product_ids', [5, 2]);
-        $category->method('dataHasChangedFor')
-            ->willReturnCallback(fn (string $field): bool => $field === $changedField);
-
-        $this->categoryResourceMock->method('getAllChildren')->with($category)->willReturn([10, 11]);
-        $this->categoryResourceMock->method('getCategoryProductTable')->willReturn('catalog_category_product');
-        $select = $this->createMock(Select::class);
-        $select->method('distinct')->willReturnSelf();
-        $select->method('from')->willReturnSelf();
-        $select->expects($this->once())
-            ->method('where')
-            ->with('category_id IN (?)', [10, 11], \Zend_Db::INT_TYPE)
-            ->willReturnSelf();
-        $this->connectionMock->method('select')->willReturn($select);
-        $this->connectionMock->method('fetchCol')->with($select)->willReturn(['1', '2', '3']);
-
-        $indexer = $this->createMock(IndexerInterface::class);
-        $indexer->method('isScheduled')->willReturn(false);
-        $indexer->expects($this->once())->method('reindexList')->with([5, 2, 1, 3]);
-        $this->indexerRegistryMock->method('get')->with(Fulltext::INDEXER_ID)->willReturn($indexer);
-
-        $this->saveAndRunCommitCallback($category);
-    }
-
-    /**
-     * @return array
-     */
-    public static function changedFieldDataProvider(): array
-    {
-        return [
-            'is_active changed' => ['is_active'],
-            'is_anchor changed' => ['is_anchor'],
-        ];
-    }
-
-    public function testReindexesAffectedProductsWhenFlagsNotChanged(): void
-    {
-        $category = $this->createPartialMock(CategoryModel::class, ['dataHasChangedFor']);
-        $category->setData('affected_product_ids', [5]);
-        $category->method('dataHasChangedFor')->willReturn(false);
-        $this->categoryResourceMock->expects($this->never())->method('getAllChildren');
-
-        $indexer = $this->createMock(IndexerInterface::class);
-        $indexer->method('isScheduled')->willReturn(false);
-        $indexer->expects($this->once())->method('reindexList')->with([5]);
-        $this->indexerRegistryMock->method('get')->with(Fulltext::INDEXER_ID)->willReturn($indexer);
-
-        $this->saveAndRunCommitCallback($category);
-    }
-
-    public function testDoesNotReindexWithoutAffectedProducts(): void
-    {
-        $category = $this->createPartialMock(CategoryModel::class, ['dataHasChangedFor']);
-        $category->method('dataHasChangedFor')->willReturn(false);
-
-        $this->indexerRegistryMock->expects($this->never())->method('get');
-
-        $this->saveAndRunCommitCallback($category);
-    }
-
-    /**
-     * Save the category through the plugin and run the registered commit callback
-     *
-     * @param CategoryModel $category
-     * @return void
-     */
-    private function saveAndRunCommitCallback(CategoryModel $category): void
-    {
-        $commitCallback = null;
-        $this->categoryResourceMock->expects($this->once())
-            ->method('addCommitCallback')
-            ->willReturnCallback(function (callable $callback) use (&$commitCallback) {
-                $commitCallback = $callback;
-                return $this->categoryResourceMock;
-            });
-
-        $this->model->aroundSave($this->categoryResourceMock, $this->proceed, $category);
-
-        $this->assertIsCallable($commitCallback);
-        $commitCallback();
     }
 
     protected function prepareIndexer()

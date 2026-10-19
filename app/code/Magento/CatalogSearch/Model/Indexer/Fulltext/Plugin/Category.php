@@ -41,25 +41,13 @@ class Category extends AbstractPlugin
     {
         try {
             $resourceCategory->beginTransaction();
-            $isVisibilityChanged = $category->dataHasChangedFor('is_anchor')
-                || $category->dataHasChangedFor('is_active');
             $result = $proceed($category);
-            $resourceCategory->addCommitCallback(
-                function () use ($resourceCategory, $category, $isVisibilityChanged) {
-                    $productIds = $category->getAffectedProductIds() ?? [];
-                    if ($isVisibilityChanged) {
-                        $productIds = array_merge(
-                            $productIds,
-                            $this->getCategoryTreeProductIds($resourceCategory, $category)
-                        );
-                    }
-                    $productIds = array_values(array_unique(array_map('intval', $productIds)));
-
-                    if (!empty($productIds)) {
-                        $this->reindexList($productIds);
-                    }
+            $resourceCategory->addCommitCallback(function () use ($category) {
+                $affectedProducts = $category->getAffectedProductIds();
+                if (is_array($affectedProducts)) {
+                    $this->reindexList($affectedProducts);
                 }
-            );
+            });
             $resourceCategory->commit();
         } catch (\Exception $e) {
             $resourceCategory->rollBack();
@@ -67,26 +55,5 @@ class Category extends AbstractPlugin
         }
 
         return $result;
-    }
-
-    /**
-     * Get IDs of products assigned to the category or to any of its children
-     *
-     * A change of is_active or is_anchor can change the category membership of exactly these products:
-     * products of child categories are listed in an anchor parent.
-     *
-     * @param ResourceCategory $resourceCategory
-     * @param AbstractModel $category
-     * @return array
-     */
-    private function getCategoryTreeProductIds(ResourceCategory $resourceCategory, AbstractModel $category): array
-    {
-        $connection = $resourceCategory->getConnection();
-        $select = $connection->select()
-            ->distinct()
-            ->from($resourceCategory->getCategoryProductTable(), ['product_id'])
-            ->where('category_id IN (?)', $resourceCategory->getAllChildren($category), \Zend_Db::INT_TYPE);
-
-        return $connection->fetchCol($select);
     }
 }
