@@ -291,4 +291,8 @@
     <type name="Magento\CatalogGraphQl\Model\Resolver\Category\Products">
         <plugin name="originalCategoryProductSortOrder" type="Magento\CatalogGraphQl\Plugin\ProductAttributeSortInput" />
     </type>
+    <type name="Magento\CatalogGraphQl\DataProvider\Product\SearchCriteriaBuilder">
+        <plugin name="adjust_price_filter_for_tax"
+                type="Magento\CatalogGraphQl\Plugin\DataProvider\Product\SearchCriteriaBuilderPlugin"/>
+    </type>
 </config>

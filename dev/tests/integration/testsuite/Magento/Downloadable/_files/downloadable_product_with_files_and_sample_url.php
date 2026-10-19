@@ -5,12 +5,13 @@
  */
 
 use Magento\Downloadable\Api\DomainManagerInterface;
+use Magento\TestFramework\Helper\DownloadableDomains;
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
 /** @var DomainManagerInterface $domainManager */
 $domainManager = $objectManager->get(DomainManagerInterface::class);
-$domainManager->addDomains(['example.com', 'sampleurl.com']);
+DownloadableDomains::addDomains($domainManager, ['example.com', 'sampleurl.com']);
 
 /**
  * @var \Magento\Catalog\Model\Product $product

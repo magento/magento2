@@ -240,9 +240,40 @@ class DeploymentConfigTest extends TestCase
      */
     public function testIsDbAvailable(): void
     {
-        $this->readerMock->expects($this->exactly(2))->method('load')->willReturnOnConsecutiveCalls([], ['db' => []]);
+        $this->readerMock->expects(self::once())->method('load')->willReturn([]);
         $this->assertFalse($this->deploymentConfig->isDbAvailable());
-        $this->assertTrue($this->deploymentConfig->isDbAvailable());
+    }
+
+    public function testGetLoadsConfigOnceWhenKeyIsMissing(): void
+    {
+        $this->readerMock->expects(self::once())->method('load')->willReturn(['a' => 'a']);
+        putenv('MAGENTO_DC_B=b');
+        self::assertNull($this->deploymentConfig->get('c/d'));
+        self::assertNull($this->deploymentConfig->get('c/d'));
+    }
+
+    public function testGetConfigDataLoadsConfigOnceWhenKeyIsMissing(): void
+    {
+        $this->readerMock->expects(self::once())->method('load')->willReturn(['a' => 'a']);
+        putenv('MAGENTO_DC_B=b');
+        self::assertNull($this->deploymentConfig->getConfigData('c'));
+        self::assertNull($this->deploymentConfig->getConfigData('c'));
+    }
+
+    public function testGetLoadsConfigOnceWhenConfigIsEmpty(): void
+    {
+        $this->readerMock->expects(self::once())->method('load')->willReturn([]);
+        putenv('MAGENTO_DC_B=b');
+        self::assertNull($this->deploymentConfig->get('c/d'));
+        self::assertNull($this->deploymentConfig->get('c/d'));
+    }
+
+    public function testGetConfigDataLoadsConfigOnceWhenConfigIsEmpty(): void
+    {
+        $this->readerMock->expects(self::once())->method('load')->willReturn([]);
+        putenv('MAGENTO_DC_B=b');
+        self::assertNull($this->deploymentConfig->getConfigData('c'));
+        self::assertNull($this->deploymentConfig->getConfigData('c'));
     }
 
     /**
