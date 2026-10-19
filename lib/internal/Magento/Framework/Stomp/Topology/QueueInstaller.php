@@ -8,10 +8,8 @@ declare(strict_types=1);
 namespace Magento\Framework\Stomp\Topology;
 
 use Magento\Framework\MessageQueue\Topology\Config\QueueConfigItemInterface;
-use Magento\Framework\Stomp\StompClient;
-use Magento\Framework\Stomp\StompClientFactory;
+use Magento\Framework\Stomp\StompClientProvider;
 use Psr\Log\LoggerInterface;
-use Stomp\Transport\Message;
 
 /**
  * Queue installer to install queues in ActiveMq.
@@ -24,9 +22,9 @@ class QueueInstaller
     public const DESTINATION_TYPE = 'ANYCAST';
 
     /**
-     * @var StompClientFactory
+     * @var StompClientProvider
      */
-    private StompClientFactory $stompClientFactory;
+    private StompClientProvider $stompClientProvider;
 
     /**
      * @var LoggerInterface
@@ -34,21 +32,16 @@ class QueueInstaller
     private LoggerInterface $logger;
 
     /**
-     * @var StompClient
-     */
-    private ?StompClient $stompClient = null;
-
-    /**
      * Initialize dependencies.
      *
-     * @param StompClientFactory $stompClient
+     * @param StompClientProvider $stompClientProvider
      * @param LoggerInterface $logger
      */
     public function __construct(
-        StompClientFactory $stompClient,
+        StompClientProvider $stompClientProvider,
         LoggerInterface $logger
     ) {
-        $this->stompClientFactory = $stompClient;
+        $this->stompClientProvider = $stompClientProvider;
         $this->logger = $logger;
     }
 
@@ -61,50 +54,12 @@ class QueueInstaller
     public function install(QueueConfigItemInterface $queue): void
     {
         try {
-            // Queue creation with blank message.
-            $properties = [
-                'destination-type' => self::DESTINATION_TYPE,
-                'expires' => (string)((int)(microtime(true) * 100))
-            ];
-            $message = new Message('queue-created', $properties);
-            $stompProducerClient = $this->getStompProducerClient();
-            $stompProducerClient->send($queue->getName(), $message);
-
-            // Read and acknowledge the blank message to delete
-            $stompConsumerClient = $this->getStompConsumerClient();
-            $stompConsumerClient->subscribeQueue($queue->getName());
-            $stompConsumerClient->readMessage($queue->getName());
+            $this->stompClientProvider->get($queue->getConnection())->createQueue($queue->getName());
         } catch (\Exception $e) {
             $this->logger->error(
                 sprintf('Queue installation failed for "%s": %s', $queue->getName(), $e->getMessage()),
                 ['exception' => $e]
             );
         }
-    }
-
-    /**
-     * Create object of stomp client as producer
-     *
-     * @return StompClient
-     */
-    private function getStompProducerClient(): StompClient
-    {
-        if ($this->stompClient === null) {
-            $this->stompClient = $this->stompClientFactory->create();
-        }
-        return $this->stompClient;
-    }
-
-    /**
-     * Create object of stomp client as consumer
-     *
-     * @return StompClient
-     */
-    private function getStompConsumerClient(): StompClient
-    {
-        if ($this->stompClient === null) {
-            $this->stompClient = $this->stompClientFactory->create();
-        }
-        return $this->stompClient;
     }
 }

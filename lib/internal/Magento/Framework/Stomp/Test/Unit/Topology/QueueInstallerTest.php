@@ -8,25 +8,24 @@ declare(strict_types=1);
 namespace Magento\Framework\Stomp\Test\Unit\Topology;
 
 use Magento\Framework\MessageQueue\Topology\Config\QueueConfigItemInterface;
-use Magento\Framework\Stomp\StompClient;
-use Magento\Framework\Stomp\StompClientFactory;
+use Magento\Framework\Stomp\StompClientInterface;
+use Magento\Framework\Stomp\StompClientProvider;
 use Magento\Framework\Stomp\Topology\QueueInstaller;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use Stomp\Transport\Message;
 
 class QueueInstallerTest extends TestCase
 {
-    /** @var MockObject| StompClientFactory */
-    private StompClientFactory|MockObject $stompClientFactory;
+    /** @var MockObject| StompClientProvider */
+    private StompClientProvider|MockObject $stompClientProvider;
 
     /** @var MockObject| LoggerInterface */
     private LoggerInterface|MockObject $logger;
 
-    /** @var MockObject| StompClient */
-    private StompClient|MockObject $stompClient;
+    /** @var MockObject| StompClientInterface */
+    private StompClientInterface|MockObject $stompClient;
 
     /** @var MockObject| QueueConfigItemInterface */
     private QueueConfigItemInterface|MockObject $queueConfig;
@@ -37,13 +36,13 @@ class QueueInstallerTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->stompClientFactory = $this->createMock(StompClientFactory::class);
+        $this->stompClientProvider = $this->createMock(StompClientProvider::class);
         $this->logger = $this->createMock(LoggerInterface::class);
-        $this->stompClient = $this->createMock(StompClient::class);
+        $this->stompClient = $this->createMock(StompClientInterface::class);
         $this->queueConfig = $this->createMock(QueueConfigItemInterface::class);
 
-        $this->stompClientFactory
-            ->method('create')
+        $this->stompClientProvider
+            ->method('get')
             ->willReturn($this->stompClient);
     }
 
@@ -59,28 +58,24 @@ class QueueInstallerTest extends TestCase
             ->method('getName')
             ->willReturn($queueName);
 
+        $this->queueConfig->method('getConnection')->willReturn('custom-stomp');
+        $this->stompClientProvider->expects($this->once())->method('get')->with('custom-stomp');
+        $this->logger->expects($this->never())->method('error');
         $this->stompClient
             ->expects($this->once())
-            ->method('send')
-            ->with(
-                $queueName,
-                $this->callback(function (Message $message) {
-                    return $message->getBody() === 'queue-created' &&
-                        $message->getHeaders()['destination-type'] === QueueInstaller::DESTINATION_TYPE &&
-                        isset($message->getHeaders()['expires']);
-                })
-            );
-
-        $this->stompClient
-            ->expects($this->once())
-            ->method('subscribeQueue')
+            ->method('createQueue')
             ->with($queueName);
 
+        $this->stompClient->expects($this->never())->method('send');
         $this->stompClient
-            ->expects($this->once())
+            ->expects($this->never())
+            ->method('subscribeQueue');
+
+        $this->stompClient
+            ->expects($this->never())
             ->method('readMessage');
 
-        $installer = new QueueInstaller($this->stompClientFactory, $this->logger);
+        $installer = new QueueInstaller($this->stompClientProvider, $this->logger);
         $installer->install($this->queueConfig);
     }
 
@@ -96,8 +91,9 @@ class QueueInstallerTest extends TestCase
             ->method('getName')
             ->willReturn($queueName);
 
-        $this->stompClientFactory
-            ->method('create')
+        $this->queueConfig->method('getConnection')->willReturn('stomp');
+        $this->stompClientProvider
+            ->method('get')
             ->willThrowException($exception);
 
         $this->logger
@@ -108,7 +104,22 @@ class QueueInstallerTest extends TestCase
                 ['exception' => $exception]
             );
 
-        $installer = new QueueInstaller($this->stompClientFactory, $this->logger);
+        $installer = new QueueInstaller($this->stompClientProvider, $this->logger);
+        $installer->install($this->queueConfig);
+    }
+
+    public function testQueueDeclarationFailureLogsException(): void
+    {
+        $exception = new \Magento\Framework\Stomp\Exception\ClientException('Declaration failed');
+        $this->queueConfig->method('getName')->willReturn('queue.failure');
+        $this->queueConfig->method('getConnection')->willReturn('stomp');
+        $this->stompClient->method('createQueue')->willThrowException($exception);
+        $this->logger->expects($this->once())->method('error')->with(
+            'Queue installation failed for "queue.failure": Declaration failed',
+            ['exception' => $exception]
+        );
+
+        $installer = new QueueInstaller($this->stompClientProvider, $this->logger);
         $installer->install($this->queueConfig);
     }
 }

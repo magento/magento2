@@ -7,13 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Stomp;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+use Magento\Framework\Stomp\Connection\ClientFactory;
 use Magento\Framework\Stomp\Exception\ClientException;
-use Stomp\Client;
 use Stomp\Exception\ConnectionException;
 use Stomp\Exception\ErrorFrameException;
 use Stomp\Exception\StompException;
-use Stomp\Network\Observer\HeartbeatEmitter;
 use Stomp\StatefulStomp;
 use Stomp\Transport\Frame;
 use Stomp\Transport\Message;
@@ -84,18 +84,50 @@ class StompClient implements StompClientInterface, ResetAfterRequestInterface
     private array $consumers = [];
 
     /**
+     * @var ClientFactory
+     */
+    private readonly ClientFactory $clientFactory;
+
+    /**
      * @param Config $stompConfig
      * @param array $subscriptionHeaders
+     * @param ClientFactory|null $clientFactory
      */
     public function __construct(
         Config $stompConfig,
         private readonly array $subscriptionHeaders = [],
+        ?ClientFactory $clientFactory = null,
     ) {
         $this->stompConfig = $stompConfig;
+        $this->clientFactory = $clientFactory ?? ObjectManager::getInstance()->get(ClientFactory::class);
         try {
             $this->brokerName = $this->getBrokerName();
         } catch (StompException) {
             $this->brokerName = null;
+        }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function createQueue(string $queue): void
+    {
+        $client = null;
+        try {
+            $client = $this->clientFactory->create($this->stompConfig, true);
+            // An isolated, non-matching subscription declares the queue without receiving business messages.
+            $client->sendFrame(new Frame('SUBSCRIBE', [
+                'id' => 'queue-installer',
+                'destination' => $queue,
+                'subscription-type' => 'ANYCAST',
+                'ack' => self::ACK_TYPE,
+                'selector' => '1 = 0',
+            ]), true);
+            $client->sendFrame(new Frame('UNSUBSCRIBE', ['id' => 'queue-installer']), true);
+        } catch (StompException $e) {
+            throw new ClientException("Failed to create '$queue' queue.", previous: $e);
+        } finally {
+            $client?->disconnect();
         }
     }
 
@@ -408,40 +440,13 @@ class StompClient implements StompClientInterface, ResetAfterRequestInterface
     }
 
     /**
-     * Create new client instance.
-     *
-     * @return Client
-     * @throws ConnectionException
-     */
-    private function createClient(): Client
-    {
-        $connection = clone $this->stompConfig->getConnection();
-        $readTimeout = $this->stompConfig->getValue('read_timeout') ?? self::READ_TIME_OUT;
-        $connection->setReadTimeout(0, $readTimeout);
-        $emitter = new HeartbeatEmitter($connection);
-        $connection->getObservers()->addObserver($emitter);
-
-        $client = new Client($connection);
-        $client->setVersions([self::VERSION]);
-        $client->setLogin(
-            $this->stompConfig->getValue(Config::USERNAME),
-            $this->stompConfig->getValue(Config::PASSWORD)
-        );
-        $heartbeatSend = $this->stompConfig->getValue('heartbeat_send') ?? self::HEARTBEAT_SEND_TIME;
-        $heartbeatReceive = $this->stompConfig->getValue('heartbeat_receive') ?? self::HEARTBEAT_RECEIVE_TIME;
-        $client->setHeartbeat($heartbeatSend, $heartbeatReceive);
-
-        return $client;
-    }
-
-    /**
      * Get producer instance.
      *
      * @return StatefulStomp
      */
     private function getProducer(): StatefulStomp
     {
-        $this->producer ??= new StatefulStomp($this->createClient());
+        $this->producer ??= new StatefulStomp($this->clientFactory->create($this->stompConfig));
 
         return $this->producer;
     }
@@ -457,7 +462,9 @@ class StompClient implements StompClientInterface, ResetAfterRequestInterface
         $consumer = $this->consumers[$queue] ?? null;
         if (!$consumer?->getClient()->isConnected()) {
             // Recreate object as it might have active subscription from inactive connection.
-            $consumer = $this->consumers[$queue] = new StatefulStomp($this->createClient());
+            $consumer = $this->consumers[$queue] = new StatefulStomp(
+                $this->clientFactory->create($this->stompConfig)
+            );
         }
 
         return $consumer;
@@ -471,7 +478,7 @@ class StompClient implements StompClientInterface, ResetAfterRequestInterface
      */
     private function getBrokerName(): string
     {
-        $client = $this->createClient();
+        $client = $this->clientFactory->create($this->stompConfig);
         try {
             $client->connect();
             $server = $client->getProtocol()->getServer();
