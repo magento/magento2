@@ -13,14 +13,13 @@
             <argument name="termCheckboxText" type="string"/>
         </arguments>
         <!--Check if agreement is present on checkout and select it-->
+        <waitForElementClickable selector="{{CheckoutPaymentSection.checkMoneyOrderPayment}}" stepKey="waitForCheckMoneyOrderPayment"/>
+        <click selector="{{CheckoutPaymentSection.checkMoneyOrderPayment}}" stepKey="selectCheckMoneyOrderPayment"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="waitForCheckMoneyOrderActive"/>
         <see selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementButton}}" userInput="{{termCheckboxText}}" stepKey="seeTermInCheckout"/>
         <selectOption selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementCheckbox}}" userInput="{{termCheckboxText}}" stepKey="checkAgreement"/>
 
         <!--Checkout select Check/Money Order payment-->
-        <waitForPageLoad stepKey="waitForPaymentPageRendering"/>
-        <waitForPageLoad stepKey="waitForPaymentRendering"/>
-        <conditionalClick selector="{{StorefrontCheckoutPaymentMethodSection.checkPaymentMethodByName('Check / Money order')}}" dependentSelector="{{StorefrontCheckoutPaymentMethodSection.checkPaymentMethodByName('Check / Money order')}}" visible="true" stepKey="selectCheckmoPaymentMethod"/>
-        <waitForPageLoad stepKey="waitForLoadingMaskAfterPaymentMethodSelection"/>
 
         <!--Click Place Order button-->
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
