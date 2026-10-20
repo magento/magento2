@@ -356,7 +356,7 @@ define([
 
             _currentVideoUrl: null,
 
-            _shouldCancelVideoRequest: false,
+            _requestId: 0,
 
             /**
              * @private
@@ -372,7 +372,8 @@ define([
                 this.element.on(this._VIDEO_URL_VALIDATE_TRIGGER, $.proxy(this._onUrlValidateHandler, this));
                 this.element.on(this._CANCEL_VIDEO_INFORMATION_TRIGGER, $.proxy(
                     function () {
-                        this._shouldCancelVideoRequest = true;
+                        this._requestId++;
+                        this._currentVideoUrl = null;
                     }, this
                 ));
             },
@@ -402,15 +403,15 @@ define([
                     videoInfo,
                     type,
                     id,
-                    googleapisUrl;
-
-                this._shouldCancelVideoRequest = false;
+                    googleapisUrl,
+                    requestId;
 
                 if (this._currentVideoUrl === url) {
                     return;
                 }
 
                 this._currentVideoUrl = url;
+                requestId = ++this._requestId;
 
                 this.element.trigger(this._REQUEST_VIDEO_INFORMATION_TRIGGER, {
                     url: url
@@ -438,6 +439,10 @@ define([
                         uploadedFormatted,
                         respData,
                         createErrorMessage;
+
+                    if (requestId !== this._requestId) {
+                        return;
+                    }
 
                     /**
                      * Create errors message
@@ -482,10 +487,6 @@ define([
                         return;
                     }
 
-                    if (this._shouldCancelVideoRequest) {
-                        return;
-                    }
-
                     tmp = data.items[0];
                     uploadedFormatted = tmp.snippet.publishedAt.replace('T', ' ').replace(/\..+/g, '');
                     respData = {
@@ -513,16 +514,15 @@ define([
                         respData,
                         videoDescription = '';
 
+                    if (requestId !== this._requestId) {
+                        return null;
+                    }
+
                     if (!data) {
                         this._onRequestError($.mage.__('Video not found'));
 
                         return null;
                     }
-
-                    if (this._shouldCancelVideoRequest) {
-                        return;
-                    }
-
                     tmp = data;
 
                     if (tmp.description !== null) {
@@ -566,7 +566,9 @@ define([
                         $.proxy(_onYouTubeLoaded, self)
                     ).fail(
                         function () {
-                            self._onRequestError('Video not found');
+                            if (requestId === self._requestId) {
+                                self._onRequestError('Video not found');
+                            }
                         }
                     );
                 } else if (type === 'vimeo') {
@@ -584,7 +586,9 @@ define([
                          * @private
                          */
                         error: function () {
-                            self._onRequestError($.mage.__('Video not found'));
+                            if (requestId === self._requestId) {
+                                self._onRequestError($.mage.__('Video not found'));
+                            }
                         }
                     });
                 }
