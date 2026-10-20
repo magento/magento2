@@ -109,6 +109,11 @@ class ResumeTest extends TestCase
         }
     }
 
+    /**
+     * @given Two pages complete before the third page fails.
+     * @when The view update is retried after the worker lock is released.
+     * @then Processing resumes at the failed page with completed checkpoints retained.
+     */
     public function testUpdateResumesFromLastSuccessfullyProcessedBatch(): void
     {
         $calls = [];
@@ -168,6 +173,11 @@ class ResumeTest extends TestCase
         $this->assertSame(1000, (int)$this->state->getVersionId());
     }
 
+    /**
+     * @given Repeated changelog entries cover multiple pages of entity IDs.
+     * @when The walker reads the complete version range.
+     * @then Cursor batch objects cover every entity ID.
+     */
     public function testWalkerYieldsCursorBatches(): void
     {
         $walker = Bootstrap::getObjectManager()->create(ChangelogBatchWalker::class);
@@ -181,6 +191,11 @@ class ResumeTest extends TestCase
         $this->assertSame(range(1, self::ENTITY_COUNT), array_map('intval', $ids));
     }
 
+    /**
+     * @given The walker receives only its original three constructor arguments.
+     * @when It reads the changelog.
+     * @then The fallback factory produces a batch with its maximum version.
+     */
     public function testWalkerAcceptsOriginalConstructorArguments(): void
     {
         $objectManager = Bootstrap::getObjectManager();
@@ -195,6 +210,11 @@ class ResumeTest extends TestCase
         $this->assertSame(100, $batches[0]->getMaxVersionId());
     }
 
+    /**
+     * @given A customized batch builder returns legacy ID arrays.
+     * @when The view updates all pages.
+     * @then Every page executes before the final cursor is saved.
+     */
     public function testLegacyArrayBatchBuilderProcessesEveryPageWithoutCheckpointing(): void
     {
         $objectManager = Bootstrap::getObjectManager();
@@ -236,6 +256,11 @@ class ResumeTest extends TestCase
         $this->assertSame(StateInterface::STATUS_IDLE, $this->state->getStatus());
     }
 
+    /**
+     * @given Grouped entities have interleaved attributes and optional repeated changes.
+     * @when A later group fails and the update is retried.
+     * @then Retry retains earlier attributes and the complete input window.
+     */
     #[DataProvider('groupedPayloadProvider')]
     public function testGroupedPayloadRetainsEarlierAttributesAfterFailure(bool $repeatChanges): void
     {
@@ -317,6 +342,11 @@ class ResumeTest extends TestCase
         ];
     }
 
+    /**
+     * @given A view is processing its first batch.
+     * @when Another state instance advances the cursor and suspends the view.
+     * @then The suspended status and external cursor are preserved.
+     */
     public function testBatchCheckpointDoesNotOverwriteSuspendedViewCursor(): void
     {
         $action = $this->createMock(ActionInterface::class);

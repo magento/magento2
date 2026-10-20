@@ -104,6 +104,11 @@ class ChangelogBatchWalkerTest extends TestCase
         );
     }
 
+    /**
+     * @given Changelog entries span several pages within a version range.
+     * @when The walker reads those pages.
+     * @then Batches expose IDs and maximum versions without staging tables.
+     */
     public function testWalkReportsMaxVersionWithoutCreatingTemporaryTables(): void
     {
         $this->connection->expects($this->once())
@@ -145,6 +150,11 @@ class ChangelogBatchWalkerTest extends TestCase
         $this->assertSame([], $this->havingCalls);
     }
 
+    /**
+     * @given A custom selector groups entities with attribute and store columns.
+     * @when The walker pages through the grouped results.
+     * @then Batches retain grouped fields and the input window without early checkpoints.
+     */
     public function testWalkPreservesAdditionalColumnsFromCustomSelectBuilder(): void
     {
         $this->groupedColumns = ['entity_id', 'store_id'];
@@ -185,6 +195,11 @@ class ChangelogBatchWalkerTest extends TestCase
         );
     }
 
+    /**
+     * @given The injected factory supplies a customized batch instance.
+     * @when The walker builds a page.
+     * @then It yields that same extensible and iterable instance.
+     */
     public function testWalkYieldsTheCustomizedFactoryInstance(): void
     {
         $this->connection->method('isTableExists')->willReturn(true);
@@ -208,6 +223,11 @@ class ChangelogBatchWalkerTest extends TestCase
         $this->assertSame([9], $batch['ids']);
     }
 
+    /**
+     * @given A customized batch builder returns objects or legacy arrays.
+     * @when The walker requests a page.
+     * @then The hook receives the select and its result is yielded unchanged.
+     */
     #[DataProvider('batchGroupingProvider')]
     public function testWalkPassesSelectToPublicBatchBuilder(bool $hasCustomGrouping, bool $legacyArray): void
     {
@@ -246,6 +266,11 @@ class ChangelogBatchWalkerTest extends TestCase
         $this->assertSame($legacyArray ? [[2, 0], [2, 2]] : [[2, 0]], $this->limitCalls);
     }
 
+    /**
+     * @given The select has no remaining rows.
+     * @when The batch builder fetches the page.
+     * @then It returns an empty array without calling the factory.
+     */
     public function testBuildBatchReturnsEmptyIterableWhenNoRowsRemain(): void
     {
         $this->connection->expects($this->once())->method('fetchAll')->with($this->select)->willReturn([]);
@@ -254,6 +279,11 @@ class ChangelogBatchWalkerTest extends TestCase
         $this->assertSame([], $this->walker->buildBatch($this->select, 'entity_id', false));
     }
 
+    /**
+     * @given An array page is followed by batches with cursor metadata.
+     * @when The walker advances through these mixed results.
+     * @then The offset resets when a batch advances the version cursor.
+     */
     public function testWalkResetsLegacyOffsetAfterCursorBatch(): void
     {
         $second = new ChangelogBatch(['ids' => ['9'], 'max_version_id' => 20]);
@@ -279,6 +309,11 @@ class ChangelogBatchWalkerTest extends TestCase
         $this->assertSame([[2, 0], [2, 2], [2, 0]], $this->limitCalls);
     }
 
+    /**
+     * @given Rows contain duplicate IDs and additional metadata.
+     * @when The builder extracts the configured ID column.
+     * @then The payload contains only those IDs with duplicates preserved.
+     */
     public function testBuildBatchExtractsConfiguredIdColumnWithoutDeduplication(): void
     {
         $rows = [

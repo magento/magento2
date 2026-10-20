@@ -182,6 +182,10 @@ class ViewTest extends TestCase
 
     /**
      * Test to Materialize view by IDs in changelog
+     *
+     * @given An enabled idle view receives array or object batches.
+     * @when Its action processes the IDs successfully.
+     * @then Eligible batches checkpoint after execution and the view completes.
      */
     #[DataProvider('updateBatchProvider')]
     public function testUpdate(bool $cursorAware, bool $customState, bool $canCheckpoint): void
@@ -278,6 +282,11 @@ class ViewTest extends TestCase
         ];
     }
 
+    /**
+     * @given Two cursor batches are available and the first checkpoint is rejected.
+     * @when The action finishes the first batch.
+     * @then The next batch and final cursor advance are skipped.
+     */
     public function testRejectedCheckpointStopsBeforeExecutingAnotherBatch(): void
     {
         $this->stateMock->method('getViewId')->willReturn('view_test');
@@ -384,6 +393,10 @@ class ViewTest extends TestCase
 
     /**
      * Test to Materialize view by IDs in changelog
+     *
+     * @given An enabled view receives an array or cursor batch.
+     * @when The action throws while processing its IDs.
+     * @then The exception propagates without advancing the cursor.
      */
     #[DataProvider('batchTypeProvider')]
     public function testUpdateWithException(bool $cursorAware): void

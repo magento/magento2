@@ -89,6 +89,11 @@ class StateTest extends TestCase
         $this->assertNotNull($this->model->getUpdated());
     }
 
+    /**
+     * @given The resource accepts or rejects a newer checkpoint.
+     * @when The state model requests that checkpoint.
+     * @then The runtime version changes only when the checkpoint is persisted.
+     */
     #[DataProvider('checkpointProvider')]
     public function testCheckpointUpdatesRuntimeVersionOnlyWhenPersisted(int $updatedRows, int $expectedVersion): void
     {

@@ -85,6 +85,11 @@ class ForkTest extends TestCase
         }
     }
 
+    /**
+     * @given The walker has yielded its first page.
+     * @when The consumer forks before requesting another page.
+     * @then Only the parent walks the remaining pages.
+     */
     public function testForkedWalkerKeepsPagingInParent(): void
     {
         $walker = Bootstrap::getObjectManager()->create(ChangelogBatchWalker::class);
@@ -129,6 +134,11 @@ class ForkTest extends TestCase
         $this->assertSame($tablesBefore, $this->resource->getConnection()->listTables());
     }
 
+    /**
+     * @given A partial reindex action delegates work to ProcessManager children.
+     * @when The view processes every changelog page.
+     * @then Workers process every ID once and the parent finalizes the view.
+     */
     public function testPartialUpdateWithProcessManagerIndexesEveryIdOnce(): void
     {
         $processManager = Bootstrap::getObjectManager()->create(ProcessManager::class, ['threadsCount' => 2]);
@@ -159,6 +169,11 @@ class ForkTest extends TestCase
         $this->assertSame(StateInterface::STATUS_IDLE, $this->state->getStatus());
     }
 
+    /**
+     * @given A partial reindex action forks during its first batch.
+     * @when The child returns or throws from that action.
+     * @then Only the parent checkpoints and finalizes the view.
+     */
     #[DataProvider('childOutcomeProvider')]
     public function testForkedActionCannotCheckpointOrFinalizeView(bool $throwInChild): void
     {
@@ -221,6 +236,11 @@ class ForkTest extends TestCase
         $this->assertSame(StateInterface::STATUS_IDLE, $this->state->getStatus());
     }
 
+    /**
+     * @given The first page completes before a worker fails on the second page.
+     * @when The view retries with a fresh ProcessManager.
+     * @then Retry starts at the failed page without repeating the completed page.
+     */
     public function testParallelWorkerFailureResumesAfterCompletedPage(): void
     {
         $objectManager = Bootstrap::getObjectManager();

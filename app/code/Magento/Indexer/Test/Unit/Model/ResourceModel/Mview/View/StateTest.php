@@ -39,6 +39,11 @@ class StateTest extends TestCase
         );
     }
 
+    /**
+     * @given A checkpoint targets a specific view and version.
+     * @when The resource builds the cursor update.
+     * @then The update requires that view to be working with an older version.
+     */
     public function testUpdateVersionIdIfWorkingUpdatesOnlyTheForwardCursor(): void
     {
         $viewId = 'catalog_product_attribute';
