@@ -9,16 +9,28 @@ namespace Magento\CatalogInventory\Model\ResourceModel\Stock;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Indexer\Product\Price\Processor as PriceProcessor;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\CatalogInventory\Model\Configuration;
 use Magento\CatalogInventory\Model\Indexer\Stock\Processor as StockProcessor;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\Item as ItemResource;
 use Magento\CatalogInventory\Model\Stock;
 use Magento\CatalogInventory\Model\StockRegistryStorage;
+use Magento\ConfigurableProduct\Test\Fixture\Attribute as ConfigurableAttributeFixture;
+use Magento\ConfigurableProduct\Test\Fixture\Product as ConfigurableProductFixture;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\App\Config\MutableScopeConfigInterface;
 use Magento\Framework\Indexer\StateInterface;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Indexer\Model\Processor as IndexerProcessor;
+use Magento\Indexer\Test\Fixture\ScheduleMode;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\TestFramework\Fixture\AppIsolation;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureBeforeTransaction;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -27,6 +39,7 @@ use PHPUnit\Framework\TestCase;
  * Tests for stock item resource model
  *
  * @see \Magento\CatalogInventory\Model\ResourceModel\Stock\Item
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ItemTest extends TestCase
 {
@@ -279,7 +292,10 @@ class ItemTest extends TestCase
         foreach ($expectedStockItems as $sku => $expectedData) {
             $product = $this->productRepository->get($sku, false, null, true);
             $stockItem = $product->getExtensionAttributes()->getStockItem();
-            $this->assertEmpty(array_diff_assoc($expectedData, $stockItem->getData()), 'Actual stock item data not equals expected data.');
+            $this->assertEmpty(
+                array_diff_assoc($expectedData, $stockItem->getData()),
+                'Actual stock item data not equals expected data.'
+            );
         }
     }
 
@@ -301,5 +317,87 @@ class ItemTest extends TestCase
                 $this->assertNotNull($stockItem->getLowStockDate());
             }
         }
+    }
+
+    /**
+     * A stock status change saved through the stock item API must reach the price index in the scheduled mode
+     */
+    #[
+        AppIsolation(true),
+        DbIsolation(false),
+        DataFixtureBeforeTransaction(ScheduleMode::class, ['indexer' => PriceProcessor::INDEXER_ID]),
+        DataFixtureBeforeTransaction(ScheduleMode::class, ['indexer' => StockProcessor::INDEXER_ID]),
+        DataFixture(ConfigurableAttributeFixture::class, as: 'attribute'),
+        DataFixture(ProductFixture::class, ['price' => 500], 'expensive'),
+        DataFixture(ProductFixture::class, ['price' => 100], 'cheap'),
+        DataFixture(
+            ConfigurableProductFixture::class,
+            ['_options' => ['$attribute$'], '_links' => ['$expensive$', '$cheap$']],
+            'configurable'
+        ),
+    ]
+    public function testConfigurablePriceFollowsVariantStockChangedInScheduledMode(): void
+    {
+        $fixtures = DataFixtureStorageManager::getStorage();
+        $configurableId = (int)$fixtures->get('configurable')->getId();
+        $cheapSku = $fixtures->get('cheap')->getSku();
+        $this->updateMview();
+        $this->assertEquals(100, $this->getIndexedMinPrice($configurableId));
+
+        $this->updateStockStatusBySku($cheapSku, false);
+        $this->updateMview();
+        $this->assertEquals(500, $this->getIndexedMinPrice($configurableId));
+
+        $this->updateStockStatusBySku($cheapSku, true);
+        $this->updateMview();
+        $this->assertEquals(100, $this->getIndexedMinPrice($configurableId));
+    }
+
+    /**
+     * Change the stock status the same way PUT /V1/products/:productSku/stockItems/:itemId does
+     *
+     * @param string $sku
+     * @param bool $isInStock
+     * @return void
+     */
+    private function updateStockStatusBySku(string $sku, bool $isInStock): void
+    {
+        $stockRegistry = $this->objectManager->get(StockRegistryInterface::class);
+        $stockItem = $stockRegistry->getStockItemBySku($sku);
+        $stockItem->setIsInStock($isInStock);
+        $stockItem->setQty($isInStock ? 10 : 0);
+        $stockRegistry->updateStockItemBySku($sku, $stockItem);
+    }
+
+    /**
+     * Process the indexer changelogs the same way the indexer_update_all_views cron job does
+     *
+     * @return void
+     */
+    private function updateMview(): void
+    {
+        $indexerProcessor = $this->objectManager->create(IndexerProcessor::class);
+        $indexerProcessor->updateMview();
+        $indexerProcessor->updateMview();
+    }
+
+    /**
+     * Get the indexed minimal price of the product for the main website and the NOT LOGGED IN group
+     *
+     * @param int $productId
+     * @return float|null
+     */
+    private function getIndexedMinPrice(int $productId): ?float
+    {
+        $connection = $this->objectManager->get(ResourceConnection::class)->getConnection();
+        $minPrice = $connection->fetchOne(
+            $connection->select()
+                ->from($connection->getTableName('catalog_product_index_price'), ['min_price'])
+                ->where('entity_id = ?', $productId)
+                ->where('website_id = ?', 1)
+                ->where('customer_group_id = ?', 0)
+        );
+
+        return $minPrice === false ? null : (float)$minPrice;
     }
 }
