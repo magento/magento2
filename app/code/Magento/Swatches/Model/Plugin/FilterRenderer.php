@@ -3,80 +3,75 @@
  * Copyright 2015 Adobe
  * All Rights Reserved.
  */
-declare(strict_types=1);
-
 namespace Magento\Swatches\Model\Plugin;
 
-use Closure;
-use Magento\Catalog\Model\Layer\Filter\FilterInterface;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\View\LayoutInterface;
-use Magento\LayeredNavigation\Block\Navigation\FilterRenderer as Subject;
-use Magento\Swatches\Block\LayeredNavigation\RenderLayered;
-use Magento\Swatches\Helper\Data;
+use Magento\Framework\App\ObjectManager;
 use Magento\Swatches\ViewModel\Product\Renderer\Configurable as ConfigurableViewModel;
 
 class FilterRenderer
 {
     /**
-     * @var LayoutInterface
+     * @var \Magento\Framework\View\LayoutInterface
      */
-    private $layout;
+    protected $layout;
 
     /**
-     * @var Data
+     * Path to RenderLayered Block
+     *
+     * @var string
      */
-    private $swatchHelper;
+    protected $block = \Magento\Swatches\Block\LayeredNavigation\RenderLayered::class;
 
     /**
-     * @var ConfigurableViewModel|null
+     * @var \Magento\Swatches\Helper\Data
+     */
+    protected $swatchHelper;
+
+    /**
+     * @var ConfigurableViewModel
      */
     private $configurableViewModel;
 
     /**
-     * @var string
-     */
-    private $block = RenderLayered::class;
-
-    /**
-     * @param LayoutInterface $layout
-     * @param Data $swatchHelper
-     * @param ConfigurableViewModel $configurableViewModel
+     * @param \Magento\Framework\View\LayoutInterface $layout
+     * @param \Magento\Swatches\Helper\Data $swatchHelper
+     * @param ConfigurableViewModel|null $configurableViewModel
      */
     public function __construct(
-        LayoutInterface $layout,
-        Data $swatchHelper,
-        ConfigurableViewModel $configurableViewModel
+        \Magento\Framework\View\LayoutInterface $layout,
+        \Magento\Swatches\Helper\Data $swatchHelper,
+        ?ConfigurableViewModel $configurableViewModel = null
     ) {
         $this->layout = $layout;
         $this->swatchHelper = $swatchHelper;
-        $this->configurableViewModel = $configurableViewModel;
+        $this->configurableViewModel = $configurableViewModel
+            ?? ObjectManager::getInstance()->get(ConfigurableViewModel::class);
     }
 
     /**
-     * Override block rendered for swatch attribute in layered navigation
+     * Render swatch filters with the swatch block
      *
-     * @param Subject $subject
-     * @param Closure $proceed
-     * @param FilterInterface $filter
-     *
-     * @return mixed
-     * @throws LocalizedException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @param \Magento\LayeredNavigation\Block\Navigation\FilterRenderer $subject
+     * @param \Closure $proceed
+     * @param \Magento\Catalog\Model\Layer\Filter\FilterInterface $filter
+     * @return mixed
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function aroundRender(
-        Subject $subject,
-        Closure $proceed,
-        FilterInterface $filter
+        \Magento\LayeredNavigation\Block\Navigation\FilterRenderer $subject,
+        \Closure $proceed,
+        \Magento\Catalog\Model\Layer\Filter\FilterInterface $filter
     ) {
-        if ($filter->hasAttributeModel() && $this->swatchHelper->isSwatchAttribute($filter->getAttributeModel())) {
-            return $this->layout
-                ->createBlock($this->block)
-                ->setSwatchFilter($filter)
-                ->setData('configurable_view_model', $this->configurableViewModel)
-                ->toHtml();
+        if ($filter->hasAttributeModel()) {
+            if ($this->swatchHelper->isSwatchAttribute($filter->getAttributeModel())) {
+                return $this->layout
+                    ->createBlock($this->block)
+                    ->setSwatchFilter($filter)
+                    ->setData('configurable_view_model', $this->configurableViewModel)
+                    ->toHtml();
+            }
         }
-
         return $proceed($filter);
     }
 }

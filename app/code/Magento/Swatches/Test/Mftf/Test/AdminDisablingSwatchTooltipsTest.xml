@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2018 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -28,6 +28,11 @@
             <createData entity="SwatchProductAttributeOption1" stepKey="swatchAttributeFirstOption">
                 <requiredEntity createDataKey="createVisualSwatchAttribute"/>
             </createData>
+
+            <magentoCLI command="config:set catalog/frontend/show_swatch_tooltip 1" stepKey="initEnableTooltips"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheBeforeTest">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
 
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
