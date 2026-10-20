@@ -12,6 +12,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Registry;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Returns data for toolbars of Sorting and Pagination
@@ -45,15 +46,23 @@ class ProductList
     protected $_defaultAvailableLimit = [10 => 10, 20 => 20, 50 => 50];
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @param ScopeConfigInterface $scopeConfig
      * @param Registry $coreRegistry
+     * @param StoreManagerInterface|null $storeManager
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
-        ?Registry $coreRegistry = null
+        ?Registry $coreRegistry = null,
+        ?StoreManagerInterface $storeManager = null
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->coreRegistry = $coreRegistry ?? ObjectManager::getInstance()->get(Registry::class);
+        $this->storeManager = $storeManager ?? ObjectManager::getInstance()->get(StoreManagerInterface::class);
     }
 
     /**
@@ -126,10 +135,8 @@ class ProductList
         if (!isset($availableViewModes[$viewMode])) {
             return $this->_defaultAvailableLimit;
         }
-        $scope=ScopeInterface::SCOPE_STORE;
-        if($this->scopeConfig->getValue('general/single_store_mode/enabled', ScopeConfigInterface::SCOPE_TYPE_DEFAULT)) {
-            $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT;
-        }
+
+        $scope = $this->getPaginationScope();
         $perPageConfigPath = 'catalog/frontend/' . $viewMode . '_per_page_values';
         $perPageValues = (string)$this->scopeConfig->getValue($perPageConfigPath, $scope);
         $perPageValues = explode(',', $perPageValues);
@@ -150,7 +157,7 @@ class ProductList
     public function getDefaultLimitPerPageValue($viewMode): int
     {
         $xmlConfigPath = sprintf('catalog/frontend/%s_per_page', $viewMode);
-        $defaultLimit = $this->scopeConfig->getValue($xmlConfigPath, ScopeInterface::SCOPE_STORE);
+        $defaultLimit = $this->scopeConfig->getValue($xmlConfigPath, $this->getPaginationScope());
 
         $availableLimits = $this->getAvailableLimit($viewMode);
         
@@ -159,5 +166,17 @@ class ProductList
         }
         
         return (int)current($availableLimits);
+    }
+
+    /**
+     * Pagination settings are only editable in default scope while single store mode is active
+     *
+     * @return string
+     */
+    private function getPaginationScope(): string
+    {
+        return $this->storeManager->isSingleStoreMode()
+            ? ScopeConfigInterface::SCOPE_TYPE_DEFAULT
+            : ScopeInterface::SCOPE_STORE;
     }
 }
