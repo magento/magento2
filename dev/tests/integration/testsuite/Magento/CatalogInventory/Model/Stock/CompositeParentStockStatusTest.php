@@ -172,7 +172,7 @@ class CompositeParentStockStatusTest extends TestCase
             $after['stock_status_changed_auto'],
             sprintf(
                 'An ordinary save of the parent must not be mistaken for a merchant taking it off sale. '
-                . 'The parent was (is_in_stock=%d, auto=%d) and is now (is_in_stock=%d, auto=%d): the '
+                . 'The parent was (is_in_stock=%d, auto=%d) and afterwards is (is_in_stock=%d, auto=%d): the '
                 . 'automatic marker was cleared, which latches the parent out of stock permanently.',
                 $born['is_in_stock'],
                 $born['stock_status_changed_auto'],
