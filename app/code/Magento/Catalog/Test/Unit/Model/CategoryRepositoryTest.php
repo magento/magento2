@@ -260,6 +260,100 @@ class CategoryRepositoryTest extends TestCase
         $this->assertEquals($categoryMock, $this->model->save($categoryMock));
     }
 
+    public static function saveStoreScopeDataProvider(): array
+    {
+        return [
+            'explicit store differs from current' => [1, ['store_id' => 3], 3],
+            'explicit store with current store 0' => [0, ['store_id' => 3], 3],
+            'explicit store 0 with current store' => [1, ['store_id' => 0], 0],
+            'no explicit store uses current' => [2, [], 2],
+            'no explicit store with current store 0' => [0, [], 0],
+        ];
+    }
+
+    #[DataProvider('saveStoreScopeDataProvider')]
+    public function testSaveExistingCategoryUsesExpectedStore(
+        int $currentStoreId,
+        array $data,
+        int $expectedStoreId
+    ): void {
+        $categoryId = 10;
+        $this->storeMock->method('getId')->willReturn($currentStoreId);
+        $this->extensibleDataObjectConverterMock
+            ->expects($this->once())
+            ->method('toNestedArray')
+            ->willReturn(['name' => 'category']);
+        $categoryMock = $this->createMock(CategoryModel::class);
+        $categoryMock->method('getId')->willReturn($categoryId);
+        $categoryMock->method('hasData')->willReturnCallback(fn ($key) => array_key_exists($key, $data));
+        $categoryMock->method('getData')->willReturnCallback(fn ($key) => $data[$key] ?? null);
+        $loadedMock = $this->createMock(CategoryModel::class);
+        $loadedMock->method('getId')->willReturn($categoryId);
+        $loadedMock->expects($this->once())->method('setStoreId')->with($expectedStoreId);
+        $loadedMock->expects($this->once())->method('load')->with($categoryId);
+        $loadedMock->expects($this->once())->method('validate')->willReturn(true);
+        $reloadedMock = $this->createMock(CategoryModel::class);
+        $reloadedMock->method('getId')->willReturn($categoryId);
+        $reloadedMock->expects($this->once())->method('setStoreId')->with($expectedStoreId);
+        $reloadedMock->expects($this->once())->method('load')->with($categoryId);
+        $this->categoryFactoryMock->expects($this->exactly(2))
+            ->method('create')
+            ->willReturnOnConsecutiveCalls($loadedMock, $reloadedMock);
+        $this->populateWithValuesMock->expects($this->once())
+            ->method('execute')
+            ->with($loadedMock, ['name' => 'category', 'store_id' => $expectedStoreId, 'entity_id' => null]);
+        $this->categoryResourceMock->expects($this->once())->method('save')->with($loadedMock);
+
+        $this->assertSame($reloadedMock, $this->model->save($categoryMock));
+    }
+
+    public function testCreateNewCategoryInExplicitStore(): void
+    {
+        $parentCategoryId = 15;
+        $newCategoryId = 25;
+        $explicitStoreId = 3;
+        $this->storeMock->method('getId')->willReturn(1);
+        $this->extensibleDataObjectConverterMock
+            ->expects($this->once())
+            ->method('toNestedArray')
+            ->willReturn(['name' => 'category', 'level' => '1', 'path' => '1/2', 'parent_id' => 1]);
+        $categoryMock = $this->createMock(CategoryModel::class);
+        $categoryMock->method('hasData')->willReturnCallback(fn ($key) => $key === 'store_id');
+        $categoryMock->method('getData')
+            ->willReturnCallback(fn ($key) => $key === 'store_id' ? $explicitStoreId : null);
+        $categoryMock->method('getParentId')->willReturn($parentCategoryId);
+        $categoryMock->expects($this->once())->method('validate')->willReturn(true);
+        $savedCount = 0;
+        $this->categoryResourceMock->expects($this->once())
+            ->method('save')
+            ->with($categoryMock)
+            ->willReturnCallback(function () use (&$savedCount) {
+                $savedCount++;
+                return DataObject::class;
+            });
+        $categoryMock->method('getId')
+            ->willReturnCallback(fn () => $savedCount > 0 ? $newCategoryId : null);
+        $parentMock = $this->createMock(CategoryModel::class);
+        $parentMock->method('getId')->willReturn($parentCategoryId);
+        $parentMock->method('getPath')->willReturn('path');
+        $parentMock->expects($this->once())->method('setStoreId')->with($explicitStoreId);
+        $reloadedMock = $this->createMock(CategoryModel::class);
+        $reloadedMock->method('getId')->willReturn($newCategoryId);
+        $reloadedMock->expects($this->once())->method('setStoreId')->with($explicitStoreId);
+        $this->categoryFactoryMock->expects($this->exactly(2))
+            ->method('create')
+            ->willReturnOnConsecutiveCalls($parentMock, $reloadedMock);
+        $this->populateWithValuesMock->expects($this->once())
+            ->method('execute')
+            ->with(
+                $categoryMock,
+                ['name' => 'category', 'store_id' => $explicitStoreId, 'path' => 'path',
+                    'parent_id' => $parentCategoryId, 'level' => null]
+            );
+
+        $this->assertSame($reloadedMock, $this->model->save($categoryMock));
+    }
+
     public function testSaveWithException()
     {
         $this->expectException('Magento\Framework\Exception\CouldNotSaveException');

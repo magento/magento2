@@ -12,6 +12,7 @@ use Magento\Catalog\Model\CategoryRepository\PopulateWithValues;
 use Magento\Catalog\Model\ResourceModel\Category as CategoryResource;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DataObject;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -266,17 +267,16 @@ class CategoryRepository implements CategoryRepositoryInterface, ResetAfterReque
     }
 
     /**
-     * Get store id for category
+     * Get the scope to save the category in: its own store when explicitly set, the current store otherwise
      *
      * @param CategoryInterface $category
      * @return int
      */
-    private function getCategoryStoreId($category)
+    private function getCategoryStoreId(CategoryInterface $category): int
     {
-        $storeId = (int)$this->storeManager->getStore()->getId();
-        if ($storeId > 0 && $category->hasData('store_id')) {
-            $storeId = (int)$category->getStoreId();
+        if ($category instanceof DataObject && $category->hasData('store_id')) {
+            return (int)$category->getData('store_id');
         }
-        return $storeId;
+        return (int)$this->storeManager->getStore()->getId();
     }
 }
