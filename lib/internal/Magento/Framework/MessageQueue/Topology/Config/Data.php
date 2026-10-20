@@ -13,7 +13,11 @@ use Magento\Framework\Serialize\SerializerInterface;
 class Data extends \Magento\Framework\Config\Data
 {
     /**
-     * {@inheritdoc}
+     * @param ReaderInterface $reader
+     * @param \Magento\Framework\Config\CacheInterface $cache
+     * @param string $cacheId
+     * @param SerializerInterface|null $serializer
+     * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod.Found
      */
     public function __construct(
         ReaderInterface $reader,
@@ -24,19 +28,29 @@ class Data extends \Magento\Framework\Config\Data
         parent::__construct($reader, $cache, $cacheId, $serializer);
     }
 
-    public function getQueues(): array {
-        return array_filter($this->get(),function($item){
-            if($item['type'] == 'queue'){
-                return $item;
-            }
-        });
+    /**
+     * Get queues declared explicitly in topology config.
+     *
+     * @return array
+     */
+    public function getQueues(): array
+    {
+        return array_filter(
+            $this->get(),
+            static fn (array $item): bool => ($item['type'] ?? null) === 'queue'
+        );
     }
 
-    public function getExchanges(): array {
-        return array_filter($this->get(),function($item){
-            if($item['type'] != 'queue'){
-                return $item;
-            }
-        });
+    /**
+     * Get exchanges declared in topology config.
+     *
+     * @return array
+     */
+    public function getExchanges(): array
+    {
+        return array_filter(
+            $this->get(),
+            static fn (array $item): bool => ($item['type'] ?? null) !== 'queue'
+        );
     }
 }

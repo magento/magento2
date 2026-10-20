@@ -81,7 +81,7 @@ class Iterator implements \Iterator, \ArrayAccess
     #[\ReturnTypeWillChange]
     public function key()
     {
-        key($this->data);
+        return key($this->data);
     }
 
     /**

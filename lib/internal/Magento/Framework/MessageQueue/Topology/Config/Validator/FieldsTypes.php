@@ -13,13 +13,16 @@ use Magento\Framework\MessageQueue\Topology\Config\ValidatorInterface;
 class FieldsTypes implements ValidatorInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function validate($configData)
     {
-        foreach ($configData as $exchangeName => $exchangeConfig) {
-            $exchangeConfig['type'] != 'queue' ? 
-            $this->validateFieldsTypes($exchangeName, $exchangeConfig) : $this->validateQueueTypes($exchangeName, $exchangeConfig);
+        foreach ($configData as $name => $config) {
+            if ($config['type'] === 'queue') {
+                $this->validateQueueFieldsTypes($name, $config);
+                continue;
+            }
+            $this->validateFieldsTypes($name, $config);
         }
     }
 
@@ -53,34 +56,7 @@ class FieldsTypes implements ValidatorInterface
             'arguments' => ['type' => 'array', 'value' => null],
         ];
 
-        foreach ($fields as $fieldName => $expectedType) {
-            $actualType = gettype($exchangeConfig[$fieldName]);
-            if ($actualType !== $expectedType['type']) {
-                throw new \LogicException(
-                    sprintf(
-                        "Type of '%s' field specified in configuration of '%s' exchange is invalid. "
-                        . "Given '%s', '%s' was expected.",
-                        $fieldName,
-                        $exchangeName,
-                        $actualType,
-                        $expectedType['type']
-                    )
-                );
-            }
-
-            if ($expectedType['value'] && !in_array($exchangeConfig[$fieldName], $expectedType['value'])) {
-                throw new \LogicException(
-                    sprintf(
-                        "Value of '%s' field specified in configuration of '%s' exchange is invalid. "
-                        . "Given '%s', '%s' was expected.",
-                        $fieldName,
-                        $exchangeName,
-                        $exchangeConfig[$fieldName],
-                        implode(' or ', $expectedType['value'])
-                    )
-                );
-            }
-        }
+        $this->validateFields('exchange', $exchangeName, $exchangeConfig, $fields);
 
         $this->validateBindings($exchangeName, $exchangeConfig, $bindingFields);
     }
@@ -131,14 +107,68 @@ class FieldsTypes implements ValidatorInterface
     }
 
     /**
-     * Make sure types of all fields in the queue item config are correct.
+     * Make sure types of all fields in the queue declaration are correct.
      *
      * @param string $queueName
      * @param array $queueConfig
      * @return void
      * @throws \LogicException
      */
-    private function validateQueueTypes($queueName, $queueConfig)
+    private function validateQueueFieldsTypes($queueName, $queueConfig)
     {
+        $fields = [
+            'name' => ['type' => 'string', 'value' => null],
+            'type' => ['type' => 'string', 'value' => ['queue']],
+            'connection' => ['type' => 'string', 'value' => null],
+            'durable' => ['type' => 'boolean', 'value' => null],
+            'autoDelete' => ['type' => 'boolean', 'value' => null],
+            'arguments' => ['type' => 'array', 'value' => null],
+        ];
+
+        $this->validateFields('queue', $queueName, $queueConfig, $fields);
+    }
+
+    /**
+     * Make sure configured fields match their expected types and allowed values.
+     *
+     * @param string $entityType
+     * @param string $name
+     * @param array $config
+     * @param array $fields
+     * @return void
+     * @throws \LogicException
+     */
+    private function validateFields($entityType, $name, $config, $fields)
+    {
+        foreach ($fields as $fieldName => $expectedType) {
+            $actualType = gettype($config[$fieldName]);
+            if ($actualType !== $expectedType['type']) {
+                throw new \LogicException(
+                    sprintf(
+                        "Type of '%s' field specified in configuration of '%s' %s is invalid. "
+                        . "Given '%s', '%s' was expected.",
+                        $fieldName,
+                        $name,
+                        $entityType,
+                        $actualType,
+                        $expectedType['type']
+                    )
+                );
+            }
+
+            if ($expectedType['value'] && !in_array($config[$fieldName], $expectedType['value'])) {
+                throw new \LogicException(
+                    sprintf(
+                        "Value of '%s' field specified in configuration of '%s' %s is invalid. "
+                        . "Given '%s', '%s' was expected.",
+                        $fieldName,
+                        $name,
+                        $entityType,
+                        $config[$fieldName],
+                        implode(' or ', $expectedType['value'])
+                    )
+                );
+            }
+        }
     }
 }

@@ -138,4 +138,83 @@ class XsdTest extends TestCase
         ];
         // @codingStandardsIgnoreEnd
     }
+
+    /**
+     * @param string $fixtureXml
+     * @param string|null $expectedError
+     */
+    #[DataProvider('queueXmlDataProvider')]
+    public function testQueueXml(string $fixtureXml, ?string $expectedError): void
+    {
+        $validationState = $this->createMock(ValidationStateInterface::class);
+        $validationState->method('isValidationRequired')->willReturn(true);
+        $urnResolver = new UrnResolver();
+        $schemas = [
+            $this->schemaFile,
+            $urnResolver->getRealPath('urn:magento:framework-message-queue:etc/topology_merged.xsd'),
+        ];
+        foreach ($schemas as $schema) {
+            $dom = new Dom($fixtureXml, $validationState, [], null, null, '%message%');
+            $actualErrors = [];
+            $isValid = $dom->validate($schema, $actualErrors);
+            $this->assertSame($expectedError === null, $isValid, implode(PHP_EOL, $actualErrors));
+            if ($expectedError !== null) {
+                $this->assertStringContainsString($expectedError, implode(PHP_EOL, $actualErrors));
+            }
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public static function queueXmlDataProvider(): array
+    {
+        $header = '<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">';
+        return [
+            'queues-mixed-with-exchanges' => [
+                $header . '
+                    <queue name="queue01" connection="amqp" durable="false" autoDelete="true">
+                        <arguments>
+                            <argument name="x-message-ttl" xsi:type="number">1000</argument>
+                            <argument name="x-dead-letter-exchange" xsi:type="string">magento</argument>
+                        </arguments>
+                    </queue>
+                    <exchange name="queue01" connection="amqp">
+                        <binding id="bind01" destinationType="queue" destination="queue01" topic="top01"/>
+                    </exchange>
+                    <queue name="queue01" connection="db"/>
+                    <queue name="queue02"/>
+                </config>',
+                null,
+            ],
+            'non-unique-queue' => [
+                $header . '
+                    <queue name="queue01" connection="amqp"/>
+                    <queue name="queue01" connection="amqp"/>
+                </config>',
+                "Duplicate key-sequence ['queue01', 'amqp'] in unique identity-constraint "
+                . "'unique-queue-name-connection'",
+            ],
+            'queue-without-name' => [
+                $header . '<queue connection="amqp"/></config>',
+                "Element 'queue': The attribute 'name' is required but missing.",
+            ],
+            'queue-with-binding' => [
+                $header . '
+                    <queue name="queue01">
+                        <binding id="bind01" destinationType="queue" destination="queue01" topic="top01"/>
+                    </queue>
+                </config>',
+                "Element 'binding': This element is not expected.",
+            ],
+            'queue-with-unsupported-attribute' => [
+                $header . '<queue name="queue01" internal="true"/></config>',
+                "Element 'queue', attribute 'internal': The attribute 'internal' is not allowed.",
+            ],
+            'queue-with-invalid-durable' => [
+                $header . '<queue name="queue01" durable="maybe"/></config>',
+                "Element 'queue', attribute 'durable': 'maybe' is not a valid value of the atomic type 'xs:boolean'.",
+            ],
+        ];
+    }
 }

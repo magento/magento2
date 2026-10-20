@@ -13,7 +13,7 @@ use \Magento\Framework\MessageQueue\Topology\Config\ReaderInterface;
 class Reader extends \Magento\Framework\Config\Reader\Filesystem implements ReaderInterface
 {
     /**
-     * {@inheritdoc}
+     * @var array
      */
     protected $_idAttributes = [
         '/config/exchange' => ['name', 'connection'],
@@ -24,11 +24,19 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem implements Read
         '/config/exchange/binding/arguments/argument(/item)+' => 'name',
         '/config/queue' => ['name', 'connection'],
         '/config/queue/arguments/argument' => 'name',
-        '/config/queue/arguments/argument(/item)+' => 'name'
+        '/config/queue/arguments/argument(/item)+' => 'name',
     ];
 
     /**
-     * {@inheritdoc}
+     * @param \Magento\Framework\Config\FileResolverInterface $fileResolver
+     * @param Converter $converter
+     * @param SchemaLocator $schemaLocator
+     * @param \Magento\Framework\Config\ValidationStateInterface $validationState
+     * @param string $fileName
+     * @param array $idAttributes
+     * @param string $domDocumentClass
+     * @param string $defaultScope
+     * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod.Found
      */
     public function __construct(
         \Magento\Framework\Config\FileResolverInterface $fileResolver,

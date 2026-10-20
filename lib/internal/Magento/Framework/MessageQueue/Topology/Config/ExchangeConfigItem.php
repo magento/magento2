@@ -7,8 +7,6 @@ namespace Magento\Framework\MessageQueue\Topology\Config;
 
 use Magento\Framework\MessageQueue\Topology\Config\ExchangeConfigItem\BindingInterface;
 use Magento\Framework\MessageQueue\Topology\Config\ExchangeConfigItem\Binding\IteratorFactory;
-use Magento\Framework\MessageQueue\Topology\Config\ExchangeConfigItem\Binding\Iterator;
-use Magento\Framework\MessageQueue\Topology\Config\ExchangeConfigItem\BindingFactory;
 
 /**
  * {@inheritdoc}
@@ -39,7 +37,7 @@ class ExchangeConfigItem implements ExchangeConfigItemInterface
     /**
      * Exchange bindings.
      *
-     * @var Iterator
+     * @var BindingInterface[]
      */
     private $bindings;
 
@@ -70,11 +68,6 @@ class ExchangeConfigItem implements ExchangeConfigItemInterface
      * @var bool
      */
     private $isInternal;
-
-    /**
-     * @var BindingFactory
-     */
-    public $bindingFactory;
 
     /**
      * Initialize dependencies.
@@ -165,11 +158,6 @@ class ExchangeConfigItem implements ExchangeConfigItemInterface
         $this->isDurable = $data['durable'];
         $this->isAutoDelete = $data['autoDelete'];
         $this->arguments = $data['arguments'];
-        if( $this->type != 'queue'){
-            $this->bindings->setData($data['bindings']);
-        }
-        else{
-            $this->bindings->setData([]);
-        }
+        $this->bindings->setData($data['bindings']);
     }
 }

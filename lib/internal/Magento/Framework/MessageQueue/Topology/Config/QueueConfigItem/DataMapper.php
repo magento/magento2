@@ -68,13 +68,11 @@ class DataMapper
     public function getMappedData(): array
     {
         if (null === $this->mappedData) {
-            $mappedData = [$this->createQueueItemsFromQueues($this->configData->getQueues())];
+            $mappedData = [];
             foreach ($this->configData->getExchanges() as $exchange) {
                 $connection = $exchange['connection'];
                 foreach ($exchange['bindings'] as $binding) {
-                    if ($binding['destinationType'] === 'queue'
-                        && !isset($mappedData[0][$binding['destination'] . '--' . $connection])
-                    ) {
+                    if ($binding['destinationType'] === 'queue') {
                         $queueItems = $this->createQueueItems(
                             (string)$binding['destination'],
                             (string)$binding['topic'],
@@ -85,37 +83,11 @@ class DataMapper
                     }
                 }
             }
+            $mappedData[] = $this->createDeclaredQueueItems();
             $this->mappedData = array_merge([], ...$mappedData);
         }
 
         return $this->mappedData;
-    }
-
-    private function createQueueItemsFromQueues(array $queues)
-    {
-        $output = [];
-        foreach ($queues as $queue) {
-            $output[$queue['name'] . '--' . $queue['connection']] =
-                $this->createQueue(
-                    $queue['name'],
-                    $queue['connection'],
-                    $queue['arguments'],
-                    $queue['durable'],
-                    $queue['autoDelete']
-                );
-        }
-        return $output;
-    }
-
-    private function createQueue($name, $connection, $arguments = [], $durable = true, $autoDelete = false)
-    {
-        return [
-            'name' => $name,
-            'connection' => $connection,
-            'durable' => isset($durable) ? $durable : true,
-            'autoDelete' => isset($autoDelete) ? $autoDelete : false,
-            'arguments' => isset($arguments) ? $arguments : [],
-        ];
     }
 
     /**
@@ -157,6 +129,27 @@ class DataMapper
             'autoDelete' => false,
             'arguments' => $arguments,
         ];
+
+        return $output;
+    }
+
+    /**
+     * Create queue config items for queues declared explicitly in topology config.
+     *
+     * @return array
+     */
+    private function createDeclaredQueueItems(): array
+    {
+        $output = [];
+        foreach ($this->configData->getQueues() as $queue) {
+            $output[$queue['name'] . '--' . $queue['connection']] = [
+                'name' => $queue['name'],
+                'connection' => $queue['connection'],
+                'durable' => $queue['durable'],
+                'autoDelete' => $queue['autoDelete'],
+                'arguments' => $queue['arguments'],
+            ];
+        }
 
         return $output;
     }
