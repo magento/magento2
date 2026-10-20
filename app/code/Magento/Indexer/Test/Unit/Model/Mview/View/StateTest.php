@@ -89,6 +89,28 @@ class StateTest extends TestCase
         $this->assertNotNull($this->model->getUpdated());
     }
 
+    #[DataProvider('checkpointProvider')]
+    public function testCheckpointUpdatesRuntimeVersionOnlyWhenPersisted(int $updatedRows, int $expectedVersion): void
+    {
+        $this->model->setViewId('test_view')->setVersionId(10);
+        $this->_resourceMock->expects($this->once())
+            ->method('updateVersionIdIfWorking')
+            ->with('test_view', 20)
+            ->willReturn($updatedRows);
+        $this->_resourceMock->expects($this->never())->method('save');
+
+        $this->assertSame($updatedRows > 0, $this->model->updateVersionIdIfWorking(20));
+        $this->assertSame($expectedVersion, $this->model->getVersionId());
+    }
+
+    public static function checkpointProvider(): array
+    {
+        return [
+            'checkpoint advanced' => [1, 20],
+            'checkpoint rejected' => [0, 10],
+        ];
+    }
+
     public function testSetterAndGetterWithoutApplicationLock()
     {
         $this->configReaderMock->expects($this->any())->method('get')->willReturn(false);

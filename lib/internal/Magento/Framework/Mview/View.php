@@ -11,13 +11,13 @@ namespace Magento\Framework\Mview;
 use InvalidArgumentException;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
+use Magento\Framework\Mview\View\ChangelogBatch;
 use Magento\Framework\Mview\View\ChangelogBatchWalkerFactory;
 use Magento\Framework\Mview\View\ChangelogBatchWalkerInterface;
-use Magento\Framework\Mview\View\CursorAwareChangelogBatchWalkerInterface;
 use Magento\Framework\Mview\View\ChangelogTableNotExistsException;
 use Magento\Framework\Mview\View\SubscriptionFactory;
-use Exception;
 use Magento\Framework\Mview\View\SubscriptionInterface;
+use Exception;
 
 /**
  * Mview
@@ -275,22 +275,13 @@ class View extends DataObject implements ViewInterface, ViewSubscriptionInterfac
         }
 
         $action = $this->actionFactory->get($this->getActionClass());
+        $processId = getmypid();
+        $completed = false;
         try {
             $this->getState()->setStatus(View\StateInterface::STATUS_WORKING)->save();
 
-            $this->executeAction($action, $lastVersionId, $currentVersionId);
-
-            $this->getState()->loadByView($this->getId());
-            $statusToRestore = $this->getState()->getStatus() === View\StateInterface::STATUS_SUSPENDED
-                ? View\StateInterface::STATUS_SUSPENDED
-                : View\StateInterface::STATUS_IDLE;
-            $this->getState()->setVersionId($currentVersionId)->setStatus($statusToRestore)->save();
+            $completed = $this->executeAction($action, $lastVersionId, $currentVersionId);
         } catch (\Throwable $exception) {
-            $this->getState()->loadByView($this->getId());
-            $statusToRestore = $this->getState()->getStatus() === View\StateInterface::STATUS_SUSPENDED
-                ? View\StateInterface::STATUS_SUSPENDED
-                : View\StateInterface::STATUS_IDLE;
-            $this->getState()->setStatus($statusToRestore)->save();
             if (!$exception instanceof \Exception) {
                 $exception = new \RuntimeException(
                     'Error when updating an mview',
@@ -299,7 +290,31 @@ class View extends DataObject implements ViewInterface, ViewSubscriptionInterfac
                 );
             }
             throw $exception;
+        } finally {
+            // Only the process that started this update may finalize its state.
+            if ($processId === getmypid()) {
+                $this->restoreState($completed ? $currentVersionId : null);
+            }
         }
+    }
+
+    /**
+     * Restore status and advance to the snapshot only after a completed walk.
+     *
+     * @param int|null $completedVersionId
+     * @return void
+     */
+    private function restoreState(?int $completedVersionId): void
+    {
+        $state = $this->getState();
+        $state->loadByView($this->getId());
+        $statusToRestore = $state->getStatus() === View\StateInterface::STATUS_SUSPENDED
+            ? View\StateInterface::STATUS_SUSPENDED
+            : View\StateInterface::STATUS_IDLE;
+        if ($completedVersionId !== null && $statusToRestore !== View\StateInterface::STATUS_SUSPENDED) {
+            $state->setVersionId($completedVersionId);
+        }
+        $state->setStatus($statusToRestore)->save();
     }
 
     /**
@@ -308,42 +323,38 @@ class View extends DataObject implements ViewInterface, ViewSubscriptionInterfac
      * @param ActionInterface $action
      * @param int $lastVersionId
      * @param int $currentVersionId
-     * @return void
+     * @return bool Whether all batches completed before a checkpoint was rejected.
      * @throws \Exception
      */
-    private function executeAction(ActionInterface $action, int $lastVersionId, int $currentVersionId)
+    private function executeAction(ActionInterface $action, int $lastVersionId, int $currentVersionId): bool
     {
         $batchSize = isset($this->changelogBatchSize[$this->getChangelog()->getViewId()])
             ? (int) $this->changelogBatchSize[$this->getChangelog()->getViewId()]
             : self::DEFAULT_BATCH_SIZE;
 
+        $processId = getmypid();
         $walker = $this->getWalker();
-
-        if ($walker instanceof CursorAwareChangelogBatchWalkerInterface) {
-            $batches = $walker->walkWithCursor(
-                $this->getChangelog(),
-                $lastVersionId,
-                $currentVersionId,
-                $batchSize
-            );
-
-            foreach ($batches as $batch) {
-                $action->execute($batch['ids']);
-
-                $state = $this->getState()->loadByView($this->getId());
-                if ($state->getStatus() !== View\StateInterface::STATUS_SUSPENDED) {
-                    $state->setVersionId($batch['version_id'])->save();
-                }
-            }
-
-            return;
-        }
-
         $batches = $walker->walk($this->getChangelog(), $lastVersionId, $currentVersionId, $batchSize);
+        $state = $this->getState();
 
         foreach ($batches as $ids) {
-            $action->execute($ids);
+            $isChangelogBatch = $ids instanceof ChangelogBatch;
+            $action->execute($isChangelogBatch ? $ids->getIds() : $ids);
+
+            $isChildProcess = $processId !== getmypid();
+            if ($isChildProcess) {
+                return false;
+            }
+
+            $canCheckpoint = $isChangelogBatch && $ids->canCheckpoint();
+            $checkpointRejected = $canCheckpoint
+                && !$state->updateVersionIdIfWorking($ids->getMaxVersionId());
+            if ($checkpointRejected) {
+                return false;
+            }
         }
+
+        return true;
     }
 
     /**

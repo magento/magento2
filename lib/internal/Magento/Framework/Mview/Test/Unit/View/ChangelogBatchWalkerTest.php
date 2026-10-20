@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2023 Adobe
+ * Copyright 2026 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);
@@ -11,10 +11,13 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Query\Generator;
 use Magento\Framework\DB\Select;
+use Magento\Framework\Mview\View\ChangelogBatch;
+use Magento\Framework\Mview\View\ChangelogBatchFactory;
 use Magento\Framework\Mview\View\ChangelogBatchWalker;
 use Magento\Framework\Mview\View\ChangelogBatchWalker\IdsContext;
 use Magento\Framework\Mview\View\ChangelogBatchWalker\IdsSelectBuilderInterface;
 use Magento\Framework\Mview\View\ChangelogInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -41,6 +44,9 @@ class ChangelogBatchWalkerTest extends TestCase
     /** @var Select|MockObject */
     private $select;
 
+    /** @var ChangelogBatchFactory|MockObject */
+    private $batchFactory;
+
     /** @var ChangelogBatchWalker */
     private ChangelogBatchWalker $walker;
 
@@ -53,6 +59,9 @@ class ChangelogBatchWalkerTest extends TestCase
     /** @var array */
     private array $groupedColumns = [];
 
+    /** @var array */
+    private array $limitCalls = [];
+
     protected function setUp(): void
     {
         $this->resourceConnection = $this->createStub(ResourceConnection::class);
@@ -61,6 +70,7 @@ class ChangelogBatchWalkerTest extends TestCase
         $this->idsSelectBuilder = $this->createStub(IdsSelectBuilderInterface::class);
         $this->changelog = $this->createStub(ChangelogInterface::class);
         $this->select = $this->createStub(Select::class);
+        $this->batchFactory = $this->createMock(ChangelogBatchFactory::class);
 
         $this->resourceConnection->method('getConnection')->willReturn($this->connection);
         $this->resourceConnection->method('getTableName')->willReturn('mview_cl');
@@ -69,9 +79,13 @@ class ChangelogBatchWalkerTest extends TestCase
         $this->idsContext->method('getSelectBuilder')->willReturn($this->idsSelectBuilder);
 
         $this->select->method('getPart')->willReturnCallback(fn (): array => $this->groupedColumns);
-        foreach (['columns', 'group', 'order', 'reset', 'limit'] as $method) {
+        foreach (['columns', 'group', 'order', 'reset'] as $method) {
             $this->select->method($method)->willReturnSelf();
         }
+        $this->select->method('limit')->willReturnCallback(function (...$arguments) {
+            $this->limitCalls[] = $arguments;
+            return $this->select;
+        });
         $this->select->method('where')->willReturnCallback(function (...$arguments) {
             $this->whereCalls[] = array_slice($arguments, 0, 2);
             return $this->select;
@@ -85,7 +99,8 @@ class ChangelogBatchWalkerTest extends TestCase
         $this->walker = new ChangelogBatchWalker(
             $this->resourceConnection,
             $this->createStub(Generator::class),
-            $this->idsContext
+            $this->idsContext,
+            $this->batchFactory
         );
     }
 
@@ -95,6 +110,9 @@ class ChangelogBatchWalkerTest extends TestCase
             ->method('isTableExists')
             ->with('mview_cl')
             ->willReturn(true);
+        $this->batchFactory->expects($this->exactly(2))->method('create')->willReturnCallback(
+            static fn (array $arguments): ChangelogBatch => new ChangelogBatch($arguments['data'])
+        );
         $this->connection->expects($this->never())->method('createTable');
         $this->connection->expects($this->never())->method('dropTable');
         $this->connection->expects($this->exactly(3))
@@ -108,20 +126,19 @@ class ChangelogBatchWalkerTest extends TestCase
                 []
             );
 
-        $batches = iterator_to_array($this->walker->walkWithCursor($this->changelog, 0, 40, 2), false);
+        $batches = iterator_to_array($this->walker->walk($this->changelog, 0, 40, 2), false);
 
+        $this->assertCount(2, $batches);
+        $this->assertInstanceOf(ChangelogBatch::class, $batches[0]);
+        $this->assertSame(['4', '9'], $batches[0]->getIds());
+        $this->assertSame(['4', '9'], iterator_to_array($batches[0]));
+        $this->assertSame(22, $batches[0]->getMaxVersionId());
+        $this->assertSame(['3'], $batches[1]->getIds());
+        $this->assertSame(35, $batches[1]->getMaxVersionId());
         $this->assertSame(
             [
-                ['ids' => ['4', '9'], 'version_id' => 22],
-                ['ids' => ['3'], 'version_id' => 35],
-            ],
-            $batches
-        );
-        $this->assertSame(
-            [
-                ['version_id > ?', 0], ['version_id <= ?', 40],
-                ['version_id > ?', 22], ['version_id <= ?', 40],
-                ['version_id > ?', 35], ['version_id <= ?', 40],
+                ['version_id <= ?', 40],
+                ['version_id > ?', 0], ['version_id > ?', 22], ['version_id > ?', 35],
             ],
             $this->whereCalls
         );
@@ -131,6 +148,9 @@ class ChangelogBatchWalkerTest extends TestCase
     public function testWalkPreservesAdditionalColumnsFromCustomSelectBuilder(): void
     {
         $this->groupedColumns = ['entity_id', 'store_id'];
+        $this->batchFactory->expects($this->once())->method('create')->willReturnCallback(
+            static fn (array $arguments): ChangelogBatch => new ChangelogBatch($arguments['data'])
+        );
         $this->connection->method('isTableExists')->willReturn(true);
         $this->connection->expects($this->exactly(2))
             ->method('fetchAll')
@@ -146,14 +166,16 @@ class ChangelogBatchWalkerTest extends TestCase
 
         $batches = iterator_to_array($this->walker->walk($this->changelog, 0, 40, 10), false);
 
+        $this->assertCount(1, $batches);
+        $this->assertInstanceOf(ChangelogBatch::class, $batches[0]);
+        $this->assertFalse($batches[0]->canCheckpoint());
         $this->assertSame(
-            [[['entity_id' => '4', 'attribute_ids' => '1,2', 'store_id' => '0']],],
-            $batches
+            [['entity_id' => '4', 'attribute_ids' => '1,2', 'store_id' => '0']],
+            $batches[0]->getIds()
         );
         $this->assertSame(
             [
-                ['version_id > ?', 0], ['version_id <= ?', 40],
-                ['version_id > ?', 0], ['version_id <= ?', 40],
+                ['version_id <= ?', 40], ['version_id > ?', 0],
             ],
             $this->whereCalls
         );
@@ -161,5 +183,131 @@ class ChangelogBatchWalkerTest extends TestCase
             [['MAX(version_id) > ?', 0], ['MAX(version_id) > ?', 12]],
             $this->havingCalls
         );
+    }
+
+    public function testWalkYieldsTheCustomizedFactoryInstance(): void
+    {
+        $this->connection->method('isTableExists')->willReturn(true);
+        $this->connection->expects($this->once())->method('fetchAll')->willReturn([
+            ['entity_id' => '4', 'max_version_id' => '40'],
+        ]);
+        $batch = new ChangelogBatch(['ids' => ['4'], 'max_version_id' => 40, 'custom' => true]);
+        $this->batchFactory->expects($this->once())->method('create')->with([
+            'data' => ['ids' => ['4'], 'max_version_id' => 40, 'can_checkpoint' => true],
+        ])->willReturn($batch);
+
+        $batches = iterator_to_array($this->walker->walk($this->changelog, 0, 40, 2), false);
+
+        $this->assertSame($batch, $batches[0]);
+        $this->assertTrue($batches[0]->getData('custom'));
+        $this->assertTrue($batch->canCheckpoint());
+        $batch->setData('can_checkpoint', false);
+        $this->assertFalse($batch->canCheckpoint());
+        $batch->setData('ids', [9]);
+        $this->assertSame([9], iterator_to_array($batch));
+        $this->assertSame([9], $batch['ids']);
+    }
+
+    #[DataProvider('batchGroupingProvider')]
+    public function testWalkPassesSelectToPublicBatchBuilder(bool $hasCustomGrouping, bool $legacyArray): void
+    {
+        $this->groupedColumns = $hasCustomGrouping ? ['entity_id', 'store_id'] : [];
+        $ids = $hasCustomGrouping
+            ? [['entity_id' => '4', 'custom_metadata' => 'customized']]
+            : ['4'];
+        $batch = $legacyArray
+            ? $ids
+            : new ChangelogBatch([
+                'ids' => $ids,
+                'max_version_id' => 40,
+                'custom_metadata' => 'customized',
+                'can_checkpoint' => !$hasCustomGrouping,
+            ]);
+        $walker = $this->getMockBuilder(ChangelogBatchWalker::class)
+            ->setConstructorArgs([
+                $this->resourceConnection,
+                $this->createStub(Generator::class),
+                $this->idsContext,
+                $this->batchFactory,
+            ])
+            ->onlyMethods(['buildBatch'])
+            ->getMock();
+        $walker->expects($this->exactly($legacyArray ? 2 : 1))->method('buildBatch')
+            ->with($this->isInstanceOf(Select::class), 'entity_id', $hasCustomGrouping)
+            ->willReturnOnConsecutiveCalls($batch, []);
+        $this->batchFactory->expects($this->never())->method('create');
+        $this->connection->method('isTableExists')->willReturn(true);
+        $this->connection->expects($this->never())->method('fetchAll');
+
+        $this->assertSame(
+            [$batch],
+            iterator_to_array($walker->walk($this->changelog, 0, 40, 2), false)
+        );
+        $this->assertSame($legacyArray ? [[2, 0], [2, 2]] : [[2, 0]], $this->limitCalls);
+    }
+
+    public function testBuildBatchReturnsEmptyIterableWhenNoRowsRemain(): void
+    {
+        $this->connection->expects($this->once())->method('fetchAll')->with($this->select)->willReturn([]);
+        $this->batchFactory->expects($this->never())->method('create');
+
+        $this->assertSame([], $this->walker->buildBatch($this->select, 'entity_id', false));
+    }
+
+    public function testWalkResetsLegacyOffsetAfterCursorBatch(): void
+    {
+        $second = new ChangelogBatch(['ids' => ['9'], 'max_version_id' => 20]);
+        $third = new ChangelogBatch(['ids' => ['3'], 'max_version_id' => 40]);
+        $walker = $this->getMockBuilder(ChangelogBatchWalker::class)
+            ->setConstructorArgs([
+                $this->resourceConnection,
+                $this->createStub(Generator::class),
+                $this->idsContext,
+                $this->batchFactory,
+            ])
+            ->onlyMethods(['buildBatch'])
+            ->getMock();
+        $walker->expects($this->exactly(3))->method('buildBatch')
+            ->willReturnOnConsecutiveCalls(['4'], $second, $third);
+        $this->connection->method('isTableExists')->willReturn(true);
+        $this->connection->expects($this->never())->method('fetchAll');
+
+        $this->assertSame(
+            [['4'], $second, $third],
+            iterator_to_array($walker->walk($this->changelog, 0, 40, 2), false)
+        );
+        $this->assertSame([[2, 0], [2, 2], [2, 0]], $this->limitCalls);
+    }
+
+    public function testBuildBatchExtractsConfiguredIdColumnWithoutDeduplication(): void
+    {
+        $rows = [
+            ['product_id' => '4', 'custom_metadata' => 'first', 'max_version_id' => '12'],
+            ['product_id' => '4', 'custom_metadata' => 'second', 'max_version_id' => '22'],
+            ['product_id' => '9', 'custom_metadata' => 'third', 'max_version_id' => '40'],
+        ];
+        $this->connection->expects($this->once())->method('fetchAll')->with($this->select)->willReturn($rows);
+        $this->batchFactory->expects($this->once())->method('create')->with([
+            'data' => ['ids' => ['4', '4', '9'], 'max_version_id' => 40, 'can_checkpoint' => true],
+        ])->willReturnCallback(static fn (array $arguments): ChangelogBatch => new ChangelogBatch($arguments['data']));
+
+        $batch = $this->walker->buildBatch($this->select, 'product_id', false);
+
+        $this->assertInstanceOf(ChangelogBatch::class, $batch);
+        $this->assertSame(['4', '4', '9'], $batch->getIds());
+        $this->assertSame(40, $batch->getMaxVersionId());
+    }
+
+    /**
+     * @return array
+     */
+    public static function batchGroupingProvider(): array
+    {
+        return [
+            'ordinary ID batches' => [false, false],
+            'custom grouped payloads' => [true, false],
+            'legacy ID arrays' => [false, true],
+            'legacy grouped arrays' => [true, true],
+        ];
     }
 }

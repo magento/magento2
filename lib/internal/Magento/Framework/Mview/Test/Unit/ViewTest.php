@@ -13,6 +13,7 @@ use Magento\Framework\Mview\ActionInterface;
 use Magento\Framework\Mview\ConfigInterface;
 use Magento\Framework\Mview\View;
 use Magento\Framework\Mview\View\Changelog;
+use Magento\Framework\Mview\View\ChangelogBatch;
 use Magento\Framework\Mview\View\ChangelogBatchWalkerFactory;
 use Magento\Framework\Mview\View\ChangelogBatchWalkerInterface;
 use Magento\Framework\Mview\View\StateInterface;
@@ -69,15 +70,7 @@ class ViewTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->configMock = $this->createMock(
-            ConfigInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['getView']
-        );
+        $this->configMock = $this->createMock(ConfigInterface::class);
         $this->iteratorMock = $this->createMock(ChangelogBatchWalkerInterface::class);
         $changeLogBatchWalkerFactory = $this->getMockBuilder(ChangelogBatchWalkerFactory::class)
             ->disableOriginalConstructor()
@@ -92,6 +85,7 @@ class ViewTest extends TestCase
                 'loadByView',
                 'getVersionId',
                 'setVersionId',
+                'updateVersionIdIfWorking',
                 'getUpdated',
                 'getStatus',
                 'setStatus',
@@ -189,29 +183,43 @@ class ViewTest extends TestCase
     /**
      * Test to Materialize view by IDs in changelog
      */
-    public function testUpdate()
+    #[DataProvider('updateBatchProvider')]
+    public function testUpdate(bool $cursorAware, bool $customState, bool $canCheckpoint): void
     {
         $currentVersionId = 3;
         $lastVersionId = 1;
         $listId = [2, 3];
+        $state = $customState ? $this->createMock(StateInterface::class) : $this->stateMock;
+        $this->model->setState($state);
+        $executed = false;
 
-        $this->stateMock->expects($this->any())
+        if (!$customState) {
+            $state->expects($cursorAware && $canCheckpoint ? $this->once() : $this->never())
+                ->method('updateVersionIdIfWorking')
+                ->with($currentVersionId)
+                ->willReturnCallback(function () use (&$executed): bool {
+                    $this->assertTrue($executed, 'Checkpoint must follow successful execution.');
+                    return true;
+                });
+        }
+
+        $state->expects($this->any())
             ->method('getViewId')
             ->willReturn(1);
-        $this->stateMock->expects($this->once())
+        $state->expects($this->once())
             ->method('getVersionId')
             ->willReturn($lastVersionId);
-        $this->stateMock->expects($this->once())
+        $state->expects($this->once())
             ->method('setVersionId')->willReturnSelf();
-        $this->stateMock->expects($this->atLeastOnce())
+        $state->expects($this->atLeastOnce())
             ->method('getMode')
             ->willReturn(StateInterface::MODE_ENABLED);
-        $this->stateMock->expects($this->exactly(2))
+        $state->expects($this->exactly(2))
             ->method('getStatus')
             ->willReturn(StateInterface::STATUS_IDLE);
-        $this->stateMock->expects($this->exactly(2))
+        $state->expects($this->exactly(2))
             ->method('setStatus')->willReturnSelf();
-        $this->stateMock->expects($this->exactly(2))
+        $state->expects($this->exactly(2))
             ->method('save')->willReturnSelf();
 
         $this->changelogMock->expects(
@@ -233,8 +241,18 @@ class ViewTest extends TestCase
         );
 
         $actionMock = $this->createMock(ActionInterface::class);
-        $this->iteratorMock->expects($this->once())->method('walk')->willReturn([$listId]);
-        $actionMock->expects($this->once())->method('execute')->with($listId)->willReturnSelf();
+        $this->iteratorMock->expects($this->once())->method('walk')->willReturn([
+            $cursorAware ? new ChangelogBatch([
+                'ids' => $listId,
+                'max_version_id' => $currentVersionId,
+                'can_checkpoint' => $canCheckpoint,
+            ]) : $listId,
+        ]);
+        $actionMock->expects($this->once())->method('execute')->with($listId)->willReturnCallback(
+            static function () use (&$executed): void {
+                $executed = true;
+            }
+        );
         $this->actionFactoryMock->expects(
             $this->once()
         )->method(
@@ -244,6 +262,43 @@ class ViewTest extends TestCase
         )->willReturn(
             $actionMock
         );
+
+        $this->loadView();
+        $this->model->update();
+    }
+
+    public static function updateBatchProvider(): array
+    {
+        return [
+            'legacy arrays' => [false, false, false],
+            'cursor batches' => [true, false, true],
+            'legacy arrays with custom state' => [false, true, false],
+            'non-checkpointing batch' => [true, false, false],
+            'non-checkpointing batch with custom state' => [true, true, false],
+        ];
+    }
+
+    public function testRejectedCheckpointStopsBeforeExecutingAnotherBatch(): void
+    {
+        $this->stateMock->method('getViewId')->willReturn('view_test');
+        $this->stateMock->method('getVersionId')->willReturn(0);
+        $this->stateMock->method('getMode')->willReturn(StateInterface::MODE_ENABLED);
+        $this->stateMock->method('getStatus')->willReturn(StateInterface::STATUS_IDLE);
+        $this->stateMock->method('setStatus')->willReturnSelf();
+        $this->stateMock->expects($this->exactly(2))->method('save')->willReturnSelf();
+        $this->stateMock->expects($this->never())->method('setVersionId');
+        $this->stateMock->expects($this->once())
+            ->method('updateVersionIdIfWorking')
+            ->with(10)
+            ->willReturn(false);
+        $this->changelogMock->method('getVersion')->willReturn(20);
+        $this->iteratorMock->method('walk')->willReturn([
+            new ChangelogBatch(['ids' => [1], 'max_version_id' => 10]),
+            new ChangelogBatch(['ids' => [2], 'max_version_id' => 20]),
+        ]);
+        $action = $this->createMock(ActionInterface::class);
+        $action->expects($this->once())->method('execute')->with([1]);
+        $this->actionFactoryMock->method('get')->willReturn($action);
 
         $this->loadView();
         $this->model->update();
@@ -330,7 +385,8 @@ class ViewTest extends TestCase
     /**
      * Test to Materialize view by IDs in changelog
      */
-    public function testUpdateWithException()
+    #[DataProvider('batchTypeProvider')]
+    public function testUpdateWithException(bool $cursorAware): void
     {
         $this->expectException('Exception');
         $this->expectExceptionMessage('Test exception');
@@ -346,6 +402,8 @@ class ViewTest extends TestCase
             ->willReturn($lastVersionId);
         $this->stateMock->expects($this->never())
             ->method('setVersionId');
+        $this->stateMock->expects($this->never())
+            ->method('updateVersionIdIfWorking');
         $this->stateMock->expects($this->atLeastOnce())
             ->method('getMode')
             ->willReturn(StateInterface::MODE_ENABLED);
@@ -366,7 +424,9 @@ class ViewTest extends TestCase
         );
         $this->iteratorMock->expects($this->any())
             ->method('walk')
-            ->willReturn([[2, 3]]);
+            ->willReturn([
+                $cursorAware ? new ChangelogBatch(['ids' => $listId, 'max_version_id' => $currentVersionId]) : $listId,
+            ]);
 
         $actionMock = $this->createMock(ActionInterface::class);
         $actionMock->expects($this->once())->method('execute')->with($listId)->willReturnCallback(
@@ -386,6 +446,14 @@ class ViewTest extends TestCase
 
         $this->loadView();
         $this->model->update();
+    }
+
+    public static function batchTypeProvider(): array
+    {
+        return [
+            'legacy array' => [false],
+            'cursor batch' => [true],
+        ];
     }
 
     /**
