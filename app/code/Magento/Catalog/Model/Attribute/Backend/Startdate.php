@@ -11,7 +11,6 @@ namespace Magento\Catalog\Model\Attribute\Backend;
  *
  * @api
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Startdate extends \Magento\Eav\Model\Entity\Attribute\Backend\Datetime
@@ -53,6 +52,7 @@ class Startdate extends \Magento\Eav\Model\Entity\Attribute\Backend\Datetime
 
     /**
      * Before save hook.
+     *
      * Prepare attribute value for save
      *
      * @param \Magento\Framework\DataObject $object
@@ -72,6 +72,7 @@ class Startdate extends \Magento\Eav\Model\Entity\Attribute\Backend\Datetime
 
     /**
      * Product from date attribute validate function.
+     *
      * In case invalid data throws exception.
      *
      * @param \Magento\Framework\DataObject $object

@@ -69,11 +69,11 @@ class StartdateWindowTest extends TestCase
     public function testInvertedWindowAgainstStoredToDateIsRejected(): void
     {
         $product = $this->loadProduct();
-        $product->setData('special_to_date', '2026-06-01');
+        $product->setData('special_to_date', '2028-06-01');
         $this->productRepository->save($product);
 
         $product = $this->loadProduct();
-        $product->setData('special_from_date', '2027-06-01');
+        $product->setData('special_from_date', '2029-06-01');
 
         $this->expectException(LocalizedException::class);
         $this->expectExceptionMessage('Make sure the To Date is later than or the same as the From Date.');
