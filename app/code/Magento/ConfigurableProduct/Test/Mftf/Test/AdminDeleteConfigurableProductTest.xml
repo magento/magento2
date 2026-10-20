@@ -56,7 +56,7 @@
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="onCategoryPage"/>
         <!-- Should not see the product -->
         <actionGroup ref="AssertStorefrontProductAbsentOnCategoryPageActionGroup" stepKey="dontSeeProductInCategory">
-            <argument name="categoryUrlKey" value="$$createCategory.name$$"/>
+            <argument name="categoryUrlKey" value="$$createCategory.custom_attributes[url_key]$$"/>
             <argument name="productName" value="$$createConfigurableProduct.name$$"/>
         </actionGroup>
         <actionGroup ref="AssertStorefrontNoProductsFoundActionGroup" stepKey="seeEmptyProductMessage"/>
