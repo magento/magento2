@@ -119,6 +119,7 @@
                         <label>Report URI</label>
                         <comment>If empty, Default Report URI for storefront will be used.</comment>
                         <validate>validate-url</validate>
+                        <backend_model>Magento\Csp\Model\Config\Backend\ReportUri</backend_model>
                     </field>
                 </group>
             </group>

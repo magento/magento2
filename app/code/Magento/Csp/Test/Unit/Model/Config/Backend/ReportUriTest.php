@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Csp\Test\Unit\Model\Config\Backend;
 
 use Magento\Csp\Model\Config\Backend\ReportUri;
+use Magento\Csp\Model\Mode\ReportUriValidator;
 use Magento\Framework\App\Cache\TypeListInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\LocalizedException;
@@ -36,7 +37,7 @@ class ReportUriTest extends TestCase
                 'registry' => $this->createMock(Registry::class),
                 'config' => $this->createMock(ScopeConfigInterface::class),
                 'cacheTypeList' => $this->createMock(TypeListInterface::class),
-                'urlValidator' => new UrlValidator(),
+                'reportUriValidator' => new ReportUriValidator(new UrlValidator()),
             ]
         );
     }
@@ -55,6 +56,7 @@ class ReportUriTest extends TestCase
         return [
             'https url' => ['https://example.com/csp-report'],
             'http url' => ['http://example.com/csp-report'],
+            'root-relative path' => ['/csp-reports/'],
         ];
     }
 

@@ -15,7 +15,6 @@ use Magento\Csp\Model\Mode\Data\ModeConfiguredFactory;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\State;
-use Magento\Framework\Validator\Url as UrlValidator;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 
@@ -50,9 +49,9 @@ class ConfigManager implements ModeConfigManagerInterface
     private $modeConfiguredFactory;
 
     /**
-     * @var UrlValidator
+     * @var ReportUriValidator
      */
-    private UrlValidator $urlValidator;
+    private ReportUriValidator $reportUriValidator;
 
     /**
      * @param ScopeConfigInterface $config
@@ -60,7 +59,7 @@ class ConfigManager implements ModeConfigManagerInterface
      * @param State $state
      * @param Http|null $request
      * @param ModeConfiguredFactory|null $modeConfiguredFactory
-     * @param UrlValidator|null $urlValidator
+     * @param ReportUriValidator|null $reportUriValidator
      */
     public function __construct(
         ScopeConfigInterface $config,
@@ -68,7 +67,7 @@ class ConfigManager implements ModeConfigManagerInterface
         State $state,
         ?Http $request = null,
         ?ModeConfiguredFactory $modeConfiguredFactory = null,
-        ?UrlValidator $urlValidator = null
+        ?ReportUriValidator $reportUriValidator = null
     ) {
         $this->config = $config;
         $this->storeModel = $store;
@@ -78,8 +77,8 @@ class ConfigManager implements ModeConfigManagerInterface
             ?? ObjectManager::getInstance()->get(Http::class);
         $this->modeConfiguredFactory = $modeConfiguredFactory
             ?? ObjectManager::getInstance()->get(ModeConfiguredFactory::class);
-        $this->urlValidator = $urlValidator
-            ?? ObjectManager::getInstance()->get(UrlValidator::class);
+        $this->reportUriValidator = $reportUriValidator
+            ?? ObjectManager::getInstance()->get(ReportUriValidator::class);
     }
 
     /**
@@ -118,7 +117,7 @@ class ConfigManager implements ModeConfigManagerInterface
             );
         }
 
-        $reportUri = $this->config->getValue(
+        $reportUri = (string)$this->config->getValue(
             sprintf(
                 'csp/mode/%s_%s/report_uri',
                 $configArea,
@@ -128,22 +127,18 @@ class ConfigManager implements ModeConfigManagerInterface
             $this->storeModel->getStore()
         );
 
-        if (empty($reportUri)) {
+        if (!$this->reportUriValidator->isValid($reportUri)) {
             // Fallback to default configuration.
-            $reportUri = $this->config->getValue(
+            $reportUri = (string)$this->config->getValue(
                 'csp/mode/' . $configArea .'/report_uri',
                 ScopeInterface::SCOPE_STORE,
                 $this->storeModel->getStore()
             );
         }
 
-        if (!empty($reportUri) && !$this->urlValidator->isValid((string)$reportUri, ['http', 'https'])) {
-            $reportUri = null;
-        }
-
         return $this->modeConfiguredFactory->create([
             'reportOnly' => (bool) $reportOnly,
-            'reportUri' => !empty($reportUri) ? (string)$reportUri : null
+            'reportUri' => $this->reportUriValidator->isValid($reportUri) ? $reportUri : null
         ]);
     }
 }
