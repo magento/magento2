@@ -165,13 +165,33 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         foreach ($fields as $field) {
             if ($object->dataHasChangedFor($field)) {
                 $this->addCommitCallback(function () use ($productId) {
-                    $this->priceIndexProcessor->reindexRow($productId);
+                    $this->reindexPrice((int)$productId);
                 });
                 break;
             }
         }
 
         return $this;
+    }
+
+    /**
+     * Reindex the product price, or queue it when the price indexer is scheduled
+     *
+     * The price indexer is not subscribed to the stock item table, so without queueing
+     * a stock status change saved without a product save would not reach the price index
+     * in the "Update by Schedule" mode.
+     *
+     * @param int $productId
+     * @return void
+     */
+    private function reindexPrice(int $productId): void
+    {
+        if ($this->priceIndexProcessor->isIndexerScheduled()) {
+            $this->priceIndexProcessor->getIndexer()->getView()->getChangelog()->addList([$productId]);
+            return;
+        }
+
+        $this->priceIndexProcessor->reindexRow($productId);
     }
 
     /**
