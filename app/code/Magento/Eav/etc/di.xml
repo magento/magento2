@@ -157,7 +157,7 @@
     <virtualType name="Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor\AttributeSetSortingProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor\SortingProcessor">
         <arguments>
             <argument name="defaultOrders" xsi:type="array">
-                <item name="attribute_set_id" xsi:type="string">ASC</item>
+                <item name="main_table.attribute_set_id" xsi:type="string">ASC</item>
             </argument>
         </arguments>
     </virtualType>

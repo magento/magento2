@@ -217,4 +217,40 @@ class AttributeSetRepositoryTest extends WebapiAbstract
         }
         return $attributeSet;
     }
+
+    /**
+     * Without sort orders, product attribute sets are returned ordered by attribute_set_id.
+     *
+     * @magentoApiDataFixture Magento/Eav/_files/attribute_set_for_search.php
+     * @return void
+     */
+    public function testGetListWithoutSortOrderIsOrderedById(): void
+    {
+        $searchCriteria = [
+            'searchCriteria' => [
+                'current_page' => 1,
+                'page_size' => 100,
+            ],
+        ];
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => '/V1/products/attribute-sets/sets/list' . '?' . http_build_query($searchCriteria),
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+            ],
+            'soap' => [
+                'service' => 'catalogAttributeSetRepositoryV1',
+                'serviceVersion' => 'V1',
+                'operation' => 'catalogAttributeSetRepositoryV1GetList',
+            ],
+        ];
+
+        $response = $this->_webApiCall($serviceInfo, $searchCriteria);
+
+        $ids = array_map('intval', array_column($response['items'], 'attribute_set_id'));
+        $this->assertGreaterThan(1, count($ids));
+        $sortedIds = $ids;
+        sort($sortedIds);
+        $this->assertSame($sortedIds, $ids, 'Items are not sorted by attribute_set_id ASC');
+    }
 }
