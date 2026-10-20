@@ -5,8 +5,7 @@
  * All Rights Reserved.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <type name="Magento\Authorization\Model\Role" shared="false" />
     <type name="Magento\Authorization\Model\ResourceModel\Rules">
         <arguments>
@@ -30,7 +29,8 @@
     <type name="Magento\Framework\Console\CommandListInterface">
         <arguments>
             <argument name="commands" xsi:type="array">
-                <item name="adminRolesListCommand" xsi:type="object">Magento\Authorization\Command\AdminRolesListCommand</item>
+                <item name="adminRolesListCommand"
+                      xsi:type="object">Magento\Authorization\Command\AdminRolesListCommand</item>
             </argument>
         </arguments>
     </type>

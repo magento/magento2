@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\User\Console;
 
 use InvalidArgumentException;
 use Magento\Authorization\Model\GetAdminRolesList;
+use Magento\Framework\Console\Cli;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\User\Model\AssignUserToRole;
 use Magento\User\Model\GetAdminUserList;
@@ -21,7 +22,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 
 /**
- * Class AssignAdminToRoleCommand assigns role to user
+ * CLI command assigning an admin user to an admin role
  */
 class AssignAdminToRoleCommand extends Command
 {
@@ -53,7 +54,7 @@ class AssignAdminToRoleCommand extends Command
         AssignUserToRole $assignUserToRoleService,
         GetAdminRolesList $getAdminRolesListService,
         GetAdminUserList $getAdminUserListService,
-        string $name = null
+        ?string $name = null
     ) {
         parent::__construct($name);
         $this->assignUserToRoleService = $assignUserToRoleService;
@@ -78,23 +79,58 @@ class AssignAdminToRoleCommand extends Command
      *
      * @param InputInterface $input
      * @param OutputInterface $output
-     *
-     * @return void
+     * @return int
+     * @throws InvalidArgumentException
      * @throws AlreadyExistsException
      */
-    protected function execute(InputInterface $input, OutputInterface $output): void
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->assignUserToRoleService->execute(
-            $input->getOption(self::USER_NAME_OPTION),
-            (int)$input->getOption(self::ROLE_ID_OPTION)
-        );
-        $output->writeln("User assigned to the role.");
+        $this->assignUserToRoleService->execute($this->getUserName($input), $this->getRoleId($input));
+        $output->writeln('<info>User assigned to the role.</info>');
+
+        return Cli::RETURN_SUCCESS;
+    }
+
+    /**
+     * Get the validated username option
+     *
+     * @param InputInterface $input
+     * @return string
+     * @throws InvalidArgumentException
+     */
+    private function getUserName(InputInterface $input): string
+    {
+        $userName = $input->getOption(self::USER_NAME_OPTION);
+        if (!is_string($userName) || trim($userName) === '') {
+            throw new InvalidArgumentException(sprintf('The "--%s" option is required.', self::USER_NAME_OPTION));
+        }
+
+        return $userName;
+    }
+
+    /**
+     * Get the validated role ID option
+     *
+     * @param InputInterface $input
+     * @return int
+     * @throws InvalidArgumentException
+     */
+    private function getRoleId(InputInterface $input): int
+    {
+        $roleId = trim((string)$input->getOption(self::ROLE_ID_OPTION));
+        if (!ctype_digit($roleId) || (int)$roleId === 0) {
+            throw new InvalidArgumentException(
+                sprintf('The "--%s" option must be a positive integer.', self::ROLE_ID_OPTION)
+            );
+        }
+
+        return (int)$roleId;
     }
 
     /**
      * @inheritDoc
      */
-    protected function interact(InputInterface $input, OutputInterface $output)
+    protected function interact(InputInterface $input, OutputInterface $output): void
     {
         /** @var QuestionHelper $questionHelper */
         $questionHelper = $this->getHelper('question');
@@ -122,9 +158,10 @@ class AssignAdminToRoleCommand extends Command
             $question = new Question('<question>Role ID:</question> ', '');
             $rolesList = $this->getAdminRolesListService->execute();
             $question->setValidator(function ($value) use ($rolesList) {
+                $roleId = trim((string)$value);
                 foreach ($rolesList as $role) {
-                    if ($role['role_id'] === $value) {
-                        return $value;
+                    if ((string)$role['role_id'] === $roleId) {
+                        return $roleId;
                     }
                 }
                 throw new InvalidArgumentException(sprintf(AssignUserToRole::ROLE_DOES_NOT_EXISTS_ERROR_MSG, $value));
