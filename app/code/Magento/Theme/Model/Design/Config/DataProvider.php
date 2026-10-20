@@ -86,7 +86,7 @@ class DataProvider extends AbstractDataProvider
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getData()
     {
@@ -99,7 +99,7 @@ class DataProvider extends AbstractDataProvider
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getMeta()
     {
@@ -185,8 +185,11 @@ class DataProvider extends AbstractDataProvider
     }
 
     /**
-     * @deprecated 100.1.3
+     * Get scope code resolver
+     *
      * @return ScopeCodeResolver
+     * @deprecated 100.1.3 The dependency is loaded lazily to keep the constructor signature backward compatible.
+     * @see \Magento\Theme\Model\Design\Config\DataProvider::__construct()
      */
     private function getScopeCodeResolver()
     {
@@ -197,8 +200,11 @@ class DataProvider extends AbstractDataProvider
     }
 
     /**
-     * @deprecated 100.1.3
+     * Get deployment config setting checker
+     *
      * @return SettingChecker
+     * @deprecated 100.1.3 The dependency is loaded lazily to keep the constructor signature backward compatible.
+     * @see \Magento\Theme\Model\Design\Config\DataProvider::__construct()
      */
     private function getSettingChecker()
     {
@@ -209,8 +215,11 @@ class DataProvider extends AbstractDataProvider
     }
 
     /**
-     * @deprecated 100.1.3
+     * Get request
+     *
      * @return RequestInterface
+     * @deprecated 100.1.3 The dependency is loaded lazily to keep the constructor signature backward compatible.
+     * @see \Magento\Theme\Model\Design\Config\DataProvider::__construct()
      */
     private function getRequest()
     {
