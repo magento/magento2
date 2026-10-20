@@ -154,16 +154,12 @@ class DataProviderTest extends TestCase
             ->willReturn('default');
         $this->settingCheckerMock->expects($this->any())
             ->method('isReadOnly')
-            ->willReturnCallback(
-                function ($arg1, $arg2, $arg3) {
-                    if ($arg1 == 'design/head/welcome' && $arg2 == 'stores' && $arg3 == 'default') {
-                        return true;
-                    } elseif ($arg1 == 'design/head/logo' && $arg2 == 'stores' && $arg3 == 'default') {
-                        return false;
-                    } elseif ($arg1 == 'design/head/head' && $arg2 == 'stores' && $arg3 == 'default') {
-                        return true;
-                    }
-                }
+            ->willReturnMap(
+                [
+                    ['design/head/welcome', 'stores', 'default', true],
+                    ['design/head/logo', 'stores', 'default', false],
+                    ['design/head/head', 'stores', 'default', true],
+                ]
             );
 
         $this->objectManager->setBackwardCompatibleProperty(
@@ -250,6 +246,98 @@ class DataProviderTest extends TestCase
                     'scope_id' => 1
                 ]
             ]
+        ];
+    }
+
+    #[DataProviderAttribute('getSearchEngineRobotsMetaDataProvider')]
+    public function testGetMetaSearchEngineRobots(string $scope, array $readOnlyPaths, array $expected): void
+    {
+        $this->requestMock->method('getParams')
+            ->willReturn(['scope' => $scope, 'scope_id' => 1]);
+        $this->scopeCodeResolverMock->method('resolve')
+            ->willReturn('code');
+        $this->settingCheckerMock->method('isReadOnly')
+            ->willReturnCallback(
+                static fn (string $path): bool => in_array($path, $readOnlyPaths, true)
+            );
+        $this->objectManager->setBackwardCompatibleProperty(
+            $this->model,
+            'meta',
+            [
+                'other_settings' => [
+                    'children' => [
+                        'search_engine_robots' => [
+                            'children' => [
+                                'default_robots' => [],
+                                'custom_instructions' => [],
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        );
+
+        $children = $this->model->getMeta()['other_settings']['children']['search_engine_robots']['children'];
+        $actual = [];
+        foreach ($children as $name => $field) {
+            $config = $field['arguments']['data']['config'] ?? [];
+            $actual[$name] = [
+                'disabled' => $config['disabled'] ?? false,
+                'is_disable_inheritance' => $config['is_disable_inheritance'] ?? false,
+            ];
+        }
+
+        $this->assertSame($expected, $actual);
+    }
+
+    public static function getSearchEngineRobotsMetaDataProvider(): array
+    {
+        $enabled = ['disabled' => false, 'is_disable_inheritance' => false];
+        $disabled = ['disabled' => true, 'is_disable_inheritance' => true];
+
+        return [
+            'store view keeps default robots editable' => [
+                'stores',
+                [],
+                [
+                    'default_robots' => $enabled,
+                    'custom_instructions' => $disabled,
+                    'reset_to_defaults' => $disabled,
+                ],
+            ],
+            'store view with deployed default robots stays read-only' => [
+                'stores',
+                ['design/search_engine_robots/default_robots'],
+                [
+                    'default_robots' => $disabled,
+                    'custom_instructions' => $disabled,
+                    'reset_to_defaults' => $disabled,
+                ],
+            ],
+            'website scope leaves all fields editable' => [
+                'websites',
+                [],
+                [
+                    'default_robots' => $enabled,
+                    'custom_instructions' => $enabled,
+                ],
+            ],
+            'default scope leaves all fields editable' => [
+                'default',
+                [],
+                [
+                    'default_robots' => $enabled,
+                    'custom_instructions' => $enabled,
+                ],
+            ],
+            'website scope with deployed custom instructions' => [
+                'websites',
+                ['design/search_engine_robots/custom_instructions'],
+                [
+                    'default_robots' => $enabled,
+                    'custom_instructions' => $disabled,
+                ],
+            ],
         ];
     }
 }
