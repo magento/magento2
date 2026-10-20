@@ -29,7 +29,6 @@ use PHPUnit\Framework\TestCase;
  * @magentoDbIsolation disabled
  */
 #[RequiresFunction('pcntl_fork')]
-#[RequiresFunction('posix_kill')]
 class ForkTest extends TestCase
 {
     private const ENTITY_COUNT = 8;
@@ -49,6 +48,10 @@ class ForkTest extends TestCase
 
     protected function setUp(): void
     {
+        if (!function_exists('posix_kill')) {
+            $this->markTestSkipped('The posix_kill function is required for this test.');
+        }
+
         $objectManager = Bootstrap::getObjectManager();
         $this->resource = $objectManager->get(ResourceConnection::class);
         $this->changelog = $objectManager->create(Changelog::class);
