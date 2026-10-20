@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2026 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminOrderViewLongCustomOptionValueHoverTest">
+        <annotations>
+            <title value="Long custom option value expands and collapses on hover in admin order view"/>
+            <stories value="Order view custom option display"/>
+            <description value="Long text custom option value is truncated in the admin order view and expands to full text while hovering the option, without resizing the product column."/>
+            <features value="Sales"/>
+            <severity value="MINOR"/>
+            <group value="Sales"/>
+        </annotations>
+        <before>
+            <createData entity="FlatRateShippingMethodDefault" stepKey="setDefaultFlatRateShippingMethod"/>
+            <createData entity="CashOnDeliveryPaymentMethodDefault" stepKey="cashOnDeliveryPaymentMethod"/>
+            <createData entity="Simple_US_Customer_CA" stepKey="simpleCustomer"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <updateData createDataKey="createProduct" entity="ProductWithTextFieldAndAreaOptions" stepKey="updateProductWithCustomOptions"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set {{DisableCashOnDeliveryPaymentMethod.path}} {{DisableCashOnDeliveryPaymentMethod.value}}" stepKey="disableCashOnDeliveryMethod"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="simpleCustomer" stepKey="deleteSimpleCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
+            <argument name="customer" value="$$simpleCustomer$$"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="waitForAddProductsButton"/>
+        <click selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="clickAddProducts"/>
+        <fillField selector="{{AdminOrderFormItemsSection.skuFilter}}" userInput="$$createProduct.sku$$" stepKey="fillSkuFilter"/>
+        <click selector="{{AdminOrderFormItemsSection.search}}" stepKey="clickSearch"/>
+        <scrollTo selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" x="0" y="-100" stepKey="scrollToCheckColumn"/>
+        <checkOption selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" stepKey="selectProduct"/>
+        <waitForElementVisible selector="{{AdminOrderFormCustomOptionsSection.optionsContainer}}" stepKey="waitForOptionsContainer"/>
+        <fillField selector="//*[@id='product_composite_configure_fields_options']//input[@type='text'][contains(@class, 'product-custom-option')]" userInput="Long custom option value that must exceed the truncation limit so the order view renders the hover remainder after the dots" stepKey="fillFieldOption"/>
+        <fillField selector="//*[@id='product_composite_configure_fields_options']//textarea[contains(@class, 'product-custom-option')]" userInput="Long custom option value that must exceed the truncation limit so the order view renders the hover remainder after the dots" stepKey="fillAreaOption"/>
+        <click selector="{{AdminOrderFormCustomOptionsSection.buttonOk}}" stepKey="clickSaveOptionButton"/>
+        <waitForPageLoad stepKey="waitForSavedConfigure"/>
+        <scrollTo selector="{{AdminOrderFormItemsSection.addSelected}}" x="0" y="-100" stepKey="scrollToAddSelectedButton"/>
+        <click selector="{{AdminOrderFormItemsSection.addSelected}}" stepKey="clickAddSelectedProducts"/>
+        <actionGroup ref="SelectCashOnDeliveryPaymentMethodActionGroup" stepKey="selectPaymentMethod"/>
+        <actionGroup ref="OrderSelectFlatRateShippingActionGroup" stepKey="orderSelectFlatRateShippingMethod"/>
+        <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
+
+        <seeElement selector="{{AdminOrderItemsOrderedSection.customOptionDots(ProductOptionField.title)}}" stepKey="seeDotsBeforeHover"/>
+        <dontSeeElement selector="{{AdminOrderItemsOrderedSection.customOptionRemainder(ProductOptionField.title)}}" stepKey="dontSeeRemainderBeforeHover"/>
+        <moveMouseOver selector="{{AdminOrderItemsOrderedSection.customOptionDefinition(ProductOptionField.title)}}" stepKey="hoverOption"/>
+        <seeElement selector="{{AdminOrderItemsOrderedSection.customOptionRemainder(ProductOptionField.title)}}" stepKey="seeRemainderOnHover"/>
+        <dontSeeElement selector="{{AdminOrderItemsOrderedSection.customOptionDots(ProductOptionField.title)}}" stepKey="dontSeeDotsOnHover"/>
+        <moveMouseOver selector="{{AdminOrderItemsOrderedSection.statusColumn}}" stepKey="moveMouseAway"/>
+        <dontSeeElement selector="{{AdminOrderItemsOrderedSection.customOptionRemainder(ProductOptionField.title)}}" stepKey="dontSeeRemainderAfterHover"/>
+        <seeElement selector="{{AdminOrderItemsOrderedSection.customOptionDots(ProductOptionField.title)}}" stepKey="seeDotsAfterHover"/>
+    </test>
+</tests>

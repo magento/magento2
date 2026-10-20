@@ -38,6 +38,9 @@
         <element name="discountAmountColumn" type="text" selector=".edit-order-table .col-discont .price"/>
         <element name="totalColumn" type="text" selector=".edit-order-table .col-total .price"/>
         <element name="customOption" type="text" selector=". //dl[@class='item-options']/dt[text()='{{optionValue1}}']/../dd[{{optionValue2}}]" parameterized="true"/>
+        <element name="customOptionDefinition" type="text" selector="//dl[@class='item-options']/dt[normalize-space(text())='{{optionTitle}}:']/following-sibling::dd[1]" parameterized="true"/>
+        <element name="customOptionRemainder" type="text" selector="//dl[@class='item-options']/dt[normalize-space(text())='{{optionTitle}}:']/following-sibling::dd[1]/span[starts-with(@id, 'id')]" parameterized="true"/>
+        <element name="customOptionDots" type="text" selector="//dl[@class='item-options']/dt[normalize-space(text())='{{optionTitle}}:']/following-sibling::dd[1]/span[starts-with(@id, 'dots')]" parameterized="true"/>
         <element name="nameOfProduct" type="text" selector="//div[@class='product-title' and contains(text(), '{{productName}}')]" parameterized="true"/>
         <element name="itemsOrderedStatus" type="text" selector="//table[contains(@class, 'edit-order-table')]//tr[td[contains(@class, 'col-product') and contains(., '{{productSku}}')]]/td[contains(@class, 'col-status')]" parameterized="true"/>
         <element name="backOrdered" type="text" selector="//table[contains(@class, 'edit-order-table')]//tr[td[contains(@class, 'col-product') and contains(., '{{productSku}}')] ]//td[contains(@class, 'col-ordered-qty')]//tr[th[contains(., 'Backordered')]]/td" parameterized="true"/>
