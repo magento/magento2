@@ -19,7 +19,7 @@ class AbstractItems extends \Magento\Backend\Block\Template
     /**
      * Block alias fallback
      */
-    const DEFAULT_TYPE = 'default';
+    public const DEFAULT_TYPE = 'default';
 
     /**
      * Renderers for other column with column name key
@@ -39,7 +39,7 @@ class AbstractItems extends \Magento\Backend\Block\Template
     protected $_canEditQty;
 
     /**
-     * Core registry
+     * Registry holding the current order, invoice and credit memo
      *
      * @var \Magento\Framework\Registry
      */
@@ -255,7 +255,7 @@ class AbstractItems extends \Magento\Backend\Block\Template
      * @param string $separator
      * @return string
      */
-  public function displayPriceAttribute($code, $strong = false, $separator = '<br/>')
+    public function displayPriceAttribute($code, $strong = false, $separator = '<br>')
     {
         if ($code == 'tax_amount' && $this->getOrder()->getRowTaxDisplayPrecision()) {
             return $this->displayRoundedPrices(
@@ -284,7 +284,7 @@ class AbstractItems extends \Magento\Backend\Block\Template
      * @param string $separator
      * @return string
      */
-  public function displayPrices($basePrice, $price, $strong = false, $separator = '<br/>')
+    public function displayPrices($basePrice, $price, $strong = false, $separator = '<br>')
     {
         return $this->displayRoundedPrices($basePrice, $price, 2, $strong, $separator);
     }
@@ -299,7 +299,7 @@ class AbstractItems extends \Magento\Backend\Block\Template
      * @param string $separator
      * @return string
      */
-     public function displayRoundedPrices($basePrice, $price, $precision = 2, $strong = false, $separator = '<br/>')
+    public function displayRoundedPrices($basePrice, $price, $precision = 2, $strong = false, $separator = '<br>')
     {
         if ($this->getOrder()->isCurrencyDifferent()) {
             $res = '';
@@ -459,6 +459,8 @@ class AbstractItems extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Check whether returned items can be put back to stock
+     *
      * @param \Magento\Store\Model\Store $store
      * @return bool
      */

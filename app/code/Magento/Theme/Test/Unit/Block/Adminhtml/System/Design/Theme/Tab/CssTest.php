@@ -88,8 +88,8 @@ class CssTest extends TestCase
         );
 
         $result = $method->invokeArgs($this->_model, []);
-        $expectedResult = 'Allowed file types *.css.<br />';
-        $expectedResult .= 'This file will replace the current custom.css file and can\'t be more than 2 MB.<br />';
+        $expectedResult = 'Allowed file types *.css.<br>';
+        $expectedResult .= 'This file will replace the current custom.css file and can\'t be more than 2 MB.<br>';
         $expectedResult .= sprintf('Max file size to upload %sM', $sizeModel->getMaxFileSizeInMb());
         $this->assertEquals($expectedResult, $result);
     }

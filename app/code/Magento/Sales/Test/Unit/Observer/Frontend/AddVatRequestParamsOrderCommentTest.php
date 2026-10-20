@@ -105,7 +105,7 @@ class AddVatRequestParamsOrderCommentTest extends TestCase
                 AbstractAddress::TYPE_SHIPPING,
                 'vatRequestId',
                 'vatRequestDate',
-                'VAT Request Identifier: vatRequestId<br />VAT Request Date: vatRequestDate',
+                'VAT Request Identifier: vatRequestId<br>VAT Request Date: vatRequestDate',
             ],
             [
                 AbstractAddress::TYPE_SHIPPING,

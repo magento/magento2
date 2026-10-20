@@ -16,6 +16,8 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Class for upload customer file attribute
+ *
+ * @SuppressWarnings(PHPMD.AllPurposeAction)
  */
 class Upload extends Action
 {
@@ -24,7 +26,7 @@ class Upload extends Action
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Customer::manage';
+    public const ADMIN_RESOURCE = 'Magento_Customer::manage';
 
     /**
      * @var FileUploaderFactory
@@ -40,11 +42,6 @@ class Upload extends Action
      * @var LoggerInterface
      */
     private $logger;
-
-    /**
-     * @var string
-     */
-    private $scope;
 
     /**
      * @param Context $context
@@ -69,6 +66,7 @@ class Upload extends Action
      */
     public function execute()
     {
+        // phpcs:disable Magento2.Security.Superglobal,Magento2.Exceptions.DirectThrow,Magento2.Exceptions.ThrowCatch
         try {
             if (empty($_FILES)) {
                 throw new \Exception('$_FILES array is empty.');
@@ -86,7 +84,7 @@ class Upload extends Action
 
             $errors = $fileUploader->validate();
             if (true !== $errors) {
-                     $errorMessage = implode('<br>', $errors);
+                $errorMessage = implode('<br>', $errors);
                 throw new LocalizedException(__($errorMessage));
             }
 
@@ -103,6 +101,7 @@ class Upload extends Action
                 'errorcode' => $e->getCode(),
             ];
         }
+        // phpcs:enable Magento2.Security.Superglobal,Magento2.Exceptions.DirectThrow,Magento2.Exceptions.ThrowCatch
 
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);

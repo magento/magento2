@@ -13,7 +13,7 @@ use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Address;
 
 /**
- * Class AddVatRequestParamsOrderComment
+ * Adds the VAT validation request identifier and date to the order comment
  */
 class AddVatRequestParamsOrderComment implements ObserverInterface
 {
@@ -56,7 +56,7 @@ class AddVatRequestParamsOrderComment implements ObserverInterface
             && !empty($vatRequestDate)
         ) {
             $orderHistoryComment = __('VAT Request Identifier')
-                    . ': ' . $vatRequestId . '<br/>'
+                . ': ' . $vatRequestId . '<br>'
                 . __('VAT Request Date') . ': ' . $vatRequestDate;
             $orderInstance->addStatusHistoryComment($orderHistoryComment, false);
         }

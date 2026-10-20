@@ -26,7 +26,7 @@ class Upload extends Action implements HttpGetActionInterface, HttpPostActionInt
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Customer::manage';
+    public const ADMIN_RESOURCE = 'Magento_Customer::manage';
 
     /**
      * @var FileUploaderFactory
@@ -74,6 +74,7 @@ class Upload extends Action implements HttpGetActionInterface, HttpPostActionInt
      */
     public function execute()
     {
+        // phpcs:disable Magento2.Security.Superglobal,Magento2.Exceptions.DirectThrow,Magento2.Exceptions.ThrowCatch
         try {
             if (empty($_FILES)) {
                 throw new \Exception('$_FILES array is empty.');
@@ -94,7 +95,7 @@ class Upload extends Action implements HttpGetActionInterface, HttpPostActionInt
 
             $errors = $fileUploader->validate();
             if (true !== $errors) {
-              $errorMessage = implode('<br>', $errors);
+                $errorMessage = implode('<br>', $errors);
                 throw new LocalizedException(__($errorMessage));
             }
 
@@ -111,6 +112,7 @@ class Upload extends Action implements HttpGetActionInterface, HttpPostActionInt
                 'errorcode' => $e->getCode(),
             ];
         }
+        // phpcs:enable Magento2.Security.Superglobal,Magento2.Exceptions.DirectThrow,Magento2.Exceptions.ThrowCatch
 
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
@@ -127,11 +129,13 @@ class Upload extends Action implements HttpGetActionInterface, HttpPostActionInt
      */
     private function convertFilesArray()
     {
+        // phpcs:disable Magento2.Security.Superglobal
         foreach ($_FILES as $itemKey => $item) {
             foreach ($item as $fieldName => $value) {
                     $_FILES[$this->scope][$fieldName] = [$itemKey => $value];
             }
             unset($_FILES[$itemKey]);
         }
+        // phpcs:enable Magento2.Security.Superglobal
     }
 }
