@@ -283,25 +283,20 @@ class TemporaryRowStorage
      * Reject incomplete frames instead of passing partial products to row enrichment.
      *
      * @param ReadInterface $stream
-     * @param int|null $endOffset
+     * @param int $endOffset
      * @return array|null
      * @throws \RuntimeException
      */
-    private function readRecord(ReadInterface $stream, ?int $endOffset = null): ?array
+    private function readRecord(ReadInterface $stream, int $endOffset): ?array
     {
-        if ($endOffset !== null) {
-            $remaining = $endOffset - $stream->tell();
-            if ($remaining === 0) {
-                return null;
-            }
-            if ($remaining < 8) {
-                throw new \RuntimeException('Incomplete temporary export record header.');
-            }
-        }
-        $header = $stream->read(8);
-        if ($endOffset === null && $header === '' && $stream->eof()) {
+        $remaining = $endOffset - $stream->tell();
+        if ($remaining === 0) {
             return null;
         }
+        if ($remaining < 8) {
+            throw new \RuntimeException('Incomplete temporary export record header.');
+        }
+        $header = $stream->read(8);
         if (strlen($header) !== 8) {
             throw new \RuntimeException('Incomplete temporary export record header.');
         }
@@ -310,7 +305,7 @@ class TemporaryRowStorage
         if ($length < 1) {
             throw new \RuntimeException('Invalid temporary export record length.');
         }
-        if ($endOffset !== null && $length > $endOffset - $stream->tell()) {
+        if ($length > $endOffset - $stream->tell()) {
             throw new \RuntimeException('Incomplete temporary export record.');
         }
         $payload = '';
