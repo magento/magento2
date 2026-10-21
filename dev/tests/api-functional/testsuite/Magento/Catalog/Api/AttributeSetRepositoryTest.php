@@ -228,6 +228,7 @@ class AttributeSetRepositoryTest extends WebapiAbstract
     {
         $searchCriteria = [
             'searchCriteria' => [
+                'filter_groups' => [],
                 'current_page' => 1,
                 'page_size' => 100,
             ],
