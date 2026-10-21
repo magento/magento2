@@ -35,9 +35,19 @@ class TemporaryRowStorage
     private int $writeBufferSize;
 
     /**
-     * @var FileWriteInterface[]
+     * @var FileWriteInterface|null
      */
-    private array $streams = [];
+    private ?FileWriteInterface $stream = null;
+
+    /**
+     * @var array<int, array{startOffset: int, endOffset: int, readOffset: int}>
+     */
+    private array $sections = [];
+
+    /**
+     * @var int
+     */
+    private int $appendOffset = 0;
 
     /**
      * @var int[]
@@ -45,9 +55,9 @@ class TemporaryRowStorage
     private array $defaultOffsets = [];
 
     /**
-     * @var int
+     * @var int|null
      */
-    private int $bufferedStoreId = Store::DEFAULT_STORE_ID;
+    private ?int $bufferedStoreId = null;
 
     /**
      * @var string
@@ -81,12 +91,20 @@ class TemporaryRowStorage
             }
         });
         if ($this->bufferedStoreId !== $storeId) {
+            if (isset($this->sections[$storeId])) {
+                throw new \LogicException('Temporary export stores must be staged sequentially.');
+            }
             $this->flushWriteBuffer();
             $this->bufferedStoreId = $storeId;
+            $this->sections[$storeId] = [
+                'startOffset' => $this->appendOffset,
+                'endOffset' => $this->appendOffset,
+                'readOffset' => $this->appendOffset,
+            ];
         }
-        $stream = $this->streams[$storeId] ??= $this->openStream();
+        $this->stream ??= $this->openStream();
         if ($storeId === Store::DEFAULT_STORE_ID) {
-            $this->defaultOffsets[$record['row']['product_id']] = $stream->tell() + strlen($this->writeBuffer);
+            $this->defaultOffsets[$record['row']['product_id']] = $this->appendOffset + strlen($this->writeBuffer);
         }
         $payload = $this->serializer->serialize($record);
         $this->writeBuffer .= pack('J', strlen($payload)) . $payload;
@@ -104,13 +122,20 @@ class TemporaryRowStorage
     {
         $offset = 0;
         $length = strlen($this->writeBuffer);
+        if ($length === 0) {
+            return;
+        }
+        // Default-row lookups and merge reads move the shared file position.
+        $this->stream->seek($this->appendOffset);
         while ($offset < $length) {
-            $written = $this->streams[$this->bufferedStoreId]->write(substr($this->writeBuffer, $offset));
+            $written = $this->stream->write(substr($this->writeBuffer, $offset));
             if ($written < 1) {
                 throw new \RuntimeException('Unable to write a temporary export record.');
             }
             $offset += $written;
         }
+        $this->appendOffset += $length;
+        $this->sections[$this->bufferedStoreId]['endOffset'] = $this->appendOffset;
         $this->writeBuffer = '';
     }
 
@@ -128,11 +153,8 @@ class TemporaryRowStorage
         if ($this->bufferedStoreId === Store::DEFAULT_STORE_ID) {
             $this->flushWriteBuffer();
         }
-        $stream = $this->streams[Store::DEFAULT_STORE_ID];
-        if ($stream->tell() !== $this->defaultOffsets[$productId]) {
-            $stream->seek($this->defaultOffsets[$productId]);
-        }
-        return $this->readRecord($stream);
+        $this->stream->seek($this->defaultOffsets[$productId]);
+        return $this->readRecord($this->stream, $this->sections[Store::DEFAULT_STORE_ID]['endOffset']);
     }
 
     /**
@@ -144,10 +166,13 @@ class TemporaryRowStorage
     {
         $this->flushWriteBuffer();
         $heads = [];
-        foreach ($this->streams as $storeId => $stream) {
-            $stream->flush();
-            $stream->seek(0);
-            $record = $this->readRecord($stream);
+        if ($this->stream === null) {
+            return;
+        }
+        $this->stream->flush();
+        foreach ($this->sections as $storeId => $section) {
+            $this->sections[$storeId]['readOffset'] = $section['startOffset'];
+            $record = $this->readStoreRecord($storeId);
             if ($record !== null) {
                 $heads[$storeId] = $record;
             }
@@ -163,7 +188,7 @@ class TemporaryRowStorage
                     continue;
                 }
                 $product[$storeId] = $record;
-                $next = $this->readRecord($this->streams[$storeId]);
+                $next = $this->readStoreRecord($storeId);
                 if ($next === null) {
                     unset($heads[$storeId]);
                 } else {
@@ -175,6 +200,21 @@ class TemporaryRowStorage
     }
 
     /**
+     * Read only within the selected store's section of the shared stream.
+     *
+     * @param int $storeId
+     * @return array|null
+     */
+    private function readStoreRecord(int $storeId): ?array
+    {
+        $section = $this->sections[$storeId];
+        $this->stream->seek($section['readOffset']);
+        $record = $this->readRecord($this->stream, $section['endOffset']);
+        $this->sections[$storeId]['readOffset'] = $this->stream->tell();
+        return $record;
+    }
+
+    /**
      * Release staging without flushing records that will no longer be consumed.
      *
      * @return void
@@ -182,11 +222,12 @@ class TemporaryRowStorage
     public function close(): void
     {
         try {
-            foreach ($this->streams as $stream) {
-                $stream->close();
-            }
+            $this->stream?->close();
         } finally {
-            $this->streams = [];
+            $this->stream = null;
+            $this->sections = [];
+            $this->appendOffset = 0;
+            $this->bufferedStoreId = null;
             $this->defaultOffsets = [];
             $this->writeBuffer = '';
         }
@@ -242,13 +283,23 @@ class TemporaryRowStorage
      * Reject incomplete frames instead of passing partial products to row enrichment.
      *
      * @param ReadInterface $stream
+     * @param int|null $endOffset
      * @return array|null
      * @throws \RuntimeException
      */
-    private function readRecord(ReadInterface $stream): ?array
+    private function readRecord(ReadInterface $stream, ?int $endOffset = null): ?array
     {
+        if ($endOffset !== null) {
+            $remaining = $endOffset - $stream->tell();
+            if ($remaining === 0) {
+                return null;
+            }
+            if ($remaining < 8) {
+                throw new \RuntimeException('Incomplete temporary export record header.');
+            }
+        }
         $header = $stream->read(8);
-        if ($header === '' && $stream->eof()) {
+        if ($endOffset === null && $header === '' && $stream->eof()) {
             return null;
         }
         if (strlen($header) !== 8) {
@@ -258,6 +309,9 @@ class TemporaryRowStorage
         $length = unpack('Jlength', $header)['length'];
         if ($length < 1) {
             throw new \RuntimeException('Invalid temporary export record length.');
+        }
+        if ($endOffset !== null && $length > $endOffset - $stream->tell()) {
+            throw new \RuntimeException('Incomplete temporary export record.');
         }
         $payload = '';
         while (strlen($payload) < $length) {

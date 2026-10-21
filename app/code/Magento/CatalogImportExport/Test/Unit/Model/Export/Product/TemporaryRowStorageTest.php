@@ -44,11 +44,7 @@ class TemporaryRowStorageTest extends TestCase
 
     public function testLosslessRecordsMergeByLinkIdWithDefaultStoreFirst(): void
     {
-        $storage = $this->createStorage([
-            $this->createMemoryStream(),
-            $this->createMemoryStream(),
-            $this->createMemoryStream()
-        ]);
+        $storage = $this->createStorage([$this->createMemoryStream()]);
         $first = $this->record(202, 900, [
             'binary' => "\0\xff\n,\"",
             'null' => null,
@@ -129,6 +125,92 @@ class TemporaryRowStorageTest extends TestCase
         ];
     }
 
+    #[DataProvider('seekBufferSizeProvider')]
+    public function testDefaultReadsDoNotChangeAppendOrStoreReadOffsets(int $writeBufferSize): void
+    {
+        $storage = $this->createStorage([$this->createMemoryStream(17)], [], $writeBufferSize);
+        $first = $this->record(11, 101, ['value' => "\0first\xff"]);
+        $second = $this->record(22, 202, ['value' => 'second']);
+        $localized = $this->record(11, 101, ['value' => 'localized']);
+        $storeOnly = $this->record(33, 303, ['value' => 'store-only']);
+        $lastStore = $this->record(22, 202, ['value' => 'last-store']);
+
+        $storage->append(0, $first);
+        self::assertSame($first, $storage->getDefaultRecord(11));
+        $storage->append(0, $second);
+        self::assertSame($first, $storage->getDefaultRecord(11));
+        $storage->append(1, $localized);
+        self::assertSame($second, $storage->getDefaultRecord(22));
+        $storage->append(1, $storeOnly);
+        self::assertSame($first, $storage->getDefaultRecord(11));
+        $storage->append(3, $lastStore);
+
+        $expected = [
+            [0 => $first, 1 => $localized],
+            [0 => $second, 3 => $lastStore],
+            [1 => $storeOnly]
+        ];
+        self::assertSame($expected, iterator_to_array($storage->getProducts(), false));
+        self::assertSame($first, $storage->getDefaultRecord(11));
+        self::assertSame($expected, iterator_to_array($storage->getProducts(), false));
+    }
+
+    public static function seekBufferSizeProvider(): array
+    {
+        return [
+            'flush before every lookup' => [1],
+            'flush across records and seeks' => [200],
+            'buffered store tail' => [65536]
+        ];
+    }
+
+    public function testManyStoresShareOneStream(): void
+    {
+        $storage = $this->createStorage([$this->createMemoryStream()]);
+        $expected = [];
+        for ($storeId = 0; $storeId < 160; ++$storeId) {
+            $expected[$storeId] = $this->record(11, 101, ['value' => $storeId]);
+            $storage->append($storeId, $expected[$storeId]);
+        }
+
+        self::assertSame([$expected], iterator_to_array($storage->getProducts(), false));
+    }
+
+    public function testEmptyStorageDoesNotOpenAStream(): void
+    {
+        $storage = $this->createStorage([]);
+        $this->directory->expects(self::never())->method('openFile');
+
+        self::assertSame([], iterator_to_array($storage->getProducts(), false));
+        self::assertNull($storage->getDefaultRecord(11));
+        $storage->close();
+    }
+
+    public function testFrameCannotReadIntoTheNextStoreSection(): void
+    {
+        $stream = $this->createMemoryStream();
+        $storage = $this->createStorage([$stream], [], 1);
+        $storage->append(0, $this->record(11, 101));
+        $storage->append(1, $this->record(11, 101, ['value' => str_repeat('a', 1000)]));
+        $stream->seek(0);
+        $stream->write(pack('J', 1000));
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Incomplete temporary export record.');
+
+        iterator_to_array($storage->getProducts(), false);
+    }
+
+    public function testReturningToACompletedStoreIsRejected(): void
+    {
+        $storage = $this->createStorage([$this->createMemoryStream()]);
+        $storage->append(0, $this->record(11, 101));
+        $storage->append(1, $this->record(11, 101));
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Temporary export stores must be staged sequentially.');
+
+        $storage->append(0, $this->record(22, 202));
+    }
+
     public function testRejectsObjectValuesBeforeOpeningAStream(): void
     {
         $storage = $this->createStorage([]);
@@ -144,12 +226,17 @@ class TemporaryRowStorageTest extends TestCase
     {
         $stream = $this->createMock(FileWriteInterface::class);
         $stream->expects(self::once())->method('write')->willReturn($written);
+        $stream->expects(self::once())->method('close');
         $storage = $this->createStorage([$stream]);
         $storage->append(0, $this->record(1, 10));
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Unable to write a temporary export record.');
 
-        iterator_to_array($storage->getProducts());
+        try {
+            iterator_to_array($storage->getProducts());
+        } finally {
+            $storage->close();
+        }
     }
 
     public static function failedWriteProvider(): array
@@ -223,9 +310,8 @@ class TemporaryRowStorageTest extends TestCase
                 return true;
             }
         );
-        $storage = $this->createStorage([$stream], [$empty, $nonempty, $directory, $unrelated]);
+        $storage = $this->createStorage([$stream], [$empty, $nonempty, $directory, $unrelated], 1);
         $storage->append(0, $this->record(1, 10));
-        iterator_to_array($storage->getProducts());
         $storage->close();
         $storage->close();
         self::assertNull($storage->getDefaultRecord(1));
