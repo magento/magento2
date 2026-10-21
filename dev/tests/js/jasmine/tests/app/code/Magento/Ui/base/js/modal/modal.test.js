@@ -47,9 +47,7 @@ define([
             // Magento_Checkout/js/model/sidebar hide() closes the order-summary modal even
             // on viewports where it was never opened, so overlay is still undefined.
             expect(modal.overlay).toBeUndefined();
-            expect(function () {
-                modal._destroyOverlay();
-            }).not.toThrow();
+            expect(modal._destroyOverlay.bind(modal)).not.toThrow();
         });
 
         it('Closing an already closed modal does not throw', function () {
@@ -62,9 +60,7 @@ define([
             modal._close();
             expect(modal.overlay).toBeNull();
 
-            expect(function () {
-                modal._close();
-            }).not.toThrow();
+            expect(modal._close.bind(modal)).not.toThrow();
         });
 
         it('Closing twice tears the overlay down exactly once', function () {
