@@ -10,7 +10,6 @@ namespace Magento\Framework\Mview\View;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Ddl\Table;
-use Magento\Framework\DB\Select;
 use Magento\Framework\Lock\LockManagerInterface;
 use Magento\Framework\Mview\ActionFactory;
 use Magento\Framework\Mview\ActionInterface;
@@ -211,26 +210,25 @@ class ResumeTest extends TestCase
     }
 
     /**
-     * @given A customized batch builder returns legacy ID arrays.
+     * @given A customized walker returns legacy ID arrays.
      * @when The view updates all pages.
      * @then Every page executes before the final cursor is saved.
      */
-    public function testLegacyArrayBatchBuilderProcessesEveryPageWithoutCheckpointing(): void
+    public function testLegacyArrayWalkerProcessesEveryPageWithoutCheckpointing(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $baseWalker = $objectManager->create(ChangelogBatchWalker::class);
-        $walker = $this->getMockBuilder(ChangelogBatchWalker::class)
-            ->setConstructorArgs([
-                $this->resource,
-                $objectManager->get(\Magento\Framework\DB\Query\Generator::class),
-                $objectManager->get(ChangelogBatchWalker\IdsContext::class),
-            ])
-            ->onlyMethods(['buildBatch'])
-            ->getMock();
-        $walker->method('buildBatch')->willReturnCallback(
-            static function (Select $select, string $columnName, bool $hasCustomGrouping) use ($baseWalker): iterable {
-                $batch = $baseWalker->buildBatch($select, $columnName, $hasCustomGrouping);
-                return $batch instanceof ChangelogBatch ? $batch->getIds() : $batch;
+        $walker = $this->createStub(ChangelogBatchWalkerInterface::class);
+        $walker->method('walk')->willReturnCallback(
+            static function (
+                ChangelogInterface $changelog,
+                int $fromVersionId,
+                int $lastVersionId,
+                int $batchSize
+            ) use ($baseWalker): iterable {
+                foreach ($baseWalker->walk($changelog, $fromVersionId, $lastVersionId, $batchSize) as $batch) {
+                    yield $batch->getIds();
+                }
             }
         );
         $processed = [];

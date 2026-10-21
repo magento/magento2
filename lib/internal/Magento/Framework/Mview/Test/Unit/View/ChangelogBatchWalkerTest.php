@@ -224,25 +224,23 @@ class ChangelogBatchWalkerTest extends TestCase
     }
 
     /**
-     * @given A customized batch builder returns objects or legacy arrays.
+     * @given A customized batch builder returns a cursor-aware batch.
      * @when The walker requests a page.
      * @then The hook receives the select and its result is yielded unchanged.
      */
     #[DataProvider('batchGroupingProvider')]
-    public function testWalkPassesSelectToPublicBatchBuilder(bool $hasCustomGrouping, bool $legacyArray): void
+    public function testWalkPassesSelectToPublicBatchBuilder(bool $hasCustomGrouping): void
     {
         $this->groupedColumns = $hasCustomGrouping ? ['entity_id', 'store_id'] : [];
         $ids = $hasCustomGrouping
             ? [['entity_id' => '4', 'custom_metadata' => 'customized']]
             : ['4'];
-        $batch = $legacyArray
-            ? $ids
-            : new ChangelogBatch([
-                'ids' => $ids,
-                'max_version_id' => 40,
-                'custom_metadata' => 'customized',
-                'can_checkpoint' => !$hasCustomGrouping,
-            ]);
+        $batch = new ChangelogBatch([
+            'ids' => $ids,
+            'max_version_id' => 40,
+            'custom_metadata' => 'customized',
+            'can_checkpoint' => !$hasCustomGrouping,
+        ]);
         $walker = $this->getMockBuilder(ChangelogBatchWalker::class)
             ->setConstructorArgs([
                 $this->resourceConnection,
@@ -252,9 +250,9 @@ class ChangelogBatchWalkerTest extends TestCase
             ])
             ->onlyMethods(['buildBatch'])
             ->getMock();
-        $walker->expects($this->exactly($legacyArray ? 2 : 1))->method('buildBatch')
+        $walker->expects($this->once())->method('buildBatch')
             ->with($this->isInstanceOf(Select::class), 'entity_id', $hasCustomGrouping)
-            ->willReturnOnConsecutiveCalls($batch, []);
+            ->willReturn($batch);
         $this->batchFactory->expects($this->never())->method('create');
         $this->connection->method('isTableExists')->willReturn(true);
         $this->connection->expects($this->never())->method('fetchAll');
@@ -263,7 +261,7 @@ class ChangelogBatchWalkerTest extends TestCase
             [$batch],
             iterator_to_array($walker->walk($this->changelog, 0, 40, 2), false)
         );
-        $this->assertSame($legacyArray ? [[2, 0], [2, 2]] : [[2, 0]], $this->limitCalls);
+        $this->assertSame([[2, null]], $this->limitCalls);
     }
 
     /**
@@ -280,14 +278,12 @@ class ChangelogBatchWalkerTest extends TestCase
     }
 
     /**
-     * @given An array page is followed by batches with cursor metadata.
-     * @when The walker advances through these mixed results.
-     * @then The offset resets when a batch advances the version cursor.
+     * @given A customized batch builder returns IDs without cursor metadata.
+     * @when The walker requests its first page.
+     * @then It rejects the result rather than paging without a version cursor.
      */
-    public function testWalkResetsLegacyOffsetAfterCursorBatch(): void
+    public function testWalkRejectsBatchesWithoutCursorMetadata(): void
     {
-        $second = new ChangelogBatch(['ids' => ['9'], 'max_version_id' => 20]);
-        $third = new ChangelogBatch(['ids' => ['3'], 'max_version_id' => 40]);
         $walker = $this->getMockBuilder(ChangelogBatchWalker::class)
             ->setConstructorArgs([
                 $this->resourceConnection,
@@ -297,16 +293,14 @@ class ChangelogBatchWalkerTest extends TestCase
             ])
             ->onlyMethods(['buildBatch'])
             ->getMock();
-        $walker->expects($this->exactly(3))->method('buildBatch')
-            ->willReturnOnConsecutiveCalls(['4'], $second, $third);
+        $walker->expects($this->once())->method('buildBatch')->willReturn(['4']);
         $this->connection->method('isTableExists')->willReturn(true);
         $this->connection->expects($this->never())->method('fetchAll');
 
-        $this->assertSame(
-            [['4'], $second, $third],
-            iterator_to_array($walker->walk($this->changelog, 0, 40, 2), false)
-        );
-        $this->assertSame([[2, 0], [2, 2], [2, 0]], $this->limitCalls);
+        $this->expectException(\Error::class);
+        $this->expectExceptionMessage('getMaxVersionId');
+
+        iterator_to_array($walker->walk($this->changelog, 0, 40, 2), false);
     }
 
     /**
@@ -339,10 +333,8 @@ class ChangelogBatchWalkerTest extends TestCase
     public static function batchGroupingProvider(): array
     {
         return [
-            'ordinary ID batches' => [false, false],
-            'custom grouped payloads' => [true, false],
-            'legacy ID arrays' => [false, true],
-            'legacy grouped arrays' => [true, true],
+            'ordinary ID batches' => [false],
+            'custom grouped payloads' => [true],
         ];
     }
 }

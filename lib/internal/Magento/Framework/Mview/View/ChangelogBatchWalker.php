@@ -91,7 +91,6 @@ class ChangelogBatchWalker implements ChangelogBatchWalkerInterface
             ->order(self::CURSOR_COLUMN . ' ASC');
 
         $cursorVersionId = $fromVersionId;
-        $batchOffset = 0;
         $processId = \getmypid();
 
         while ($cursorVersionId < $lastVersionId && !$this->isChildProcess($processId)) {
@@ -101,25 +100,20 @@ class ChangelogBatchWalker implements ChangelogBatchWalkerInterface
             } else {
                 $select->where('version_id > ?', $cursorVersionId);
             }
-            $select->limit($batchSize, $batchOffset);
+            $select->limit($batchSize);
 
-            $batch = $this->buildBatch($select, $columnName, $hasCustomGrouping);
-            if (!$batch) {
+            $nextBatch = $this->buildBatch($select, $columnName, $hasCustomGrouping);
+            if (!$nextBatch) {
                 return;
             }
+            $cursorVersionId = $nextBatch->getMaxVersionId();
 
-            // Without cursor metadata, page through the same window by offset.
-            $batchOffset += $batchSize;
-            if ($batch instanceof ChangelogBatch) {
-                $cursorVersionId = $batch->getMaxVersionId();
-                $batchOffset = 0;
-            }
-            yield $batch;
+            yield $nextBatch;
         }
     }
 
     /**
-     * Build one page from the select; an empty array terminates the walk.
+     * Build a cursor-aware batch from the select
      *
      * @param Select $select
      * @param string $columnName
