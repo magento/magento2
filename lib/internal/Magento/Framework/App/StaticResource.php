@@ -248,7 +248,9 @@ class StaticResource implements \Magento\Framework\AppInterface
     /**
      * Lazyload filesystem driver
      *
-     * @deprecated 100.1.0
+     * @deprecated 100.1.0 Loaded through the object manager to keep the constructor backward compatible;
+     *             inject the filesystem through the constructor instead
+     * @see \Magento\Framework\Filesystem
      * @return Filesystem
      */
     private function getFilesystem()
@@ -263,7 +265,9 @@ class StaticResource implements \Magento\Framework\AppInterface
      * Retrieves LoggerInterface instance
      *
      * @return LoggerInterface
-     * @deprecated 101.0.0
+     * @deprecated 101.0.0 Loaded through the object manager to keep the constructor backward compatible;
+     *             inject the logger through the constructor instead
+     * @see \Psr\Log\LoggerInterface
      */
     private function getLogger()
     {
