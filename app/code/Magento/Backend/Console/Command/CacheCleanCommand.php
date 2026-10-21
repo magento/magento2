@@ -6,6 +6,12 @@
 
 namespace Magento\Backend\Console\Command;
 
+use Magento\Framework\App\Cache\Manager;
+use Magento\Framework\App\Cache\Frontend\Pool as FrontendPool;
+use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+
 /**
  * Command for cleaning cache
  *
@@ -14,6 +20,48 @@ namespace Magento\Backend\Console\Command;
  */
 class CacheCleanCommand extends AbstractCacheTypeManageCommand
 {
+    /**
+     * @var FrontendPool
+     */
+    private $frontendPool;
+
+    /**
+     * @param Manager $cacheManager
+     * @param EventManagerInterface $eventManager
+     * @param FrontendPool $frontendPool
+     */
+    public function __construct(
+        Manager $cacheManager,
+        EventManagerInterface $eventManager,
+        FrontendPool $frontendPool
+    ) {
+        $this->frontendPool = $frontendPool;
+        parent::__construct($cacheManager, $eventManager);
+    }
+
+    /**
+     * Clean Magento-owned entries from every frontend when no cache types are specified.
+     * A type-specific clean must not invalidate unrelated cache types.
+     *
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int
+     */
+    protected function execute(InputInterface $input, OutputInterface $output): int
+    {
+        $cleanAllTypes = !$input->getArgument(self::INPUT_KEY_TYPES);
+        $result = parent::execute($input, $output);
+
+        if ($cleanAllTypes) {
+            // Frontends are MAGE-tag-scoped; clean() avoids flushing shared storage.
+            foreach ($this->frontendPool as $cacheFrontend) {
+                $cacheFrontend->clean();
+            }
+        }
+
+        return $result;
+    }
+
     /**
      * @inheritdoc
      */
