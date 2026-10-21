@@ -55,14 +55,14 @@ class CategoryRepository implements CategoryRepositoryInterface, ResetAfterReque
      * @var ExtensibleDataObjectConverter
      */
     private $extensibleDataObjectConverter;
-
+    // @codingStandardsIgnoreStart
     /**
-     * List of fields that can used config values in case when value does not defined directly
+     * List of fields that can use config values in case when value does not defined directly
      *
      * @var array
      */
     protected $useConfigFields = ['available_sort_by', 'default_sort_by', 'filter_price_range'];
-
+    // @codingStandardsIgnoreEnd
     /**
      * @var PopulateWithValues
      */
