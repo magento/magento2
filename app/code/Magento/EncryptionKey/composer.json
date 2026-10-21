@@ -8,8 +8,7 @@
         "php": "~8.3.0||~8.4.0||~8.5.0",
         "magento/framework": "*",
         "magento/module-backend": "*",
-        "magento/module-config": "*",
-        "magento/module-indexer": "*"
+        "magento/module-config": "*"
     },
     "type": "magento2-module",
     "license": [

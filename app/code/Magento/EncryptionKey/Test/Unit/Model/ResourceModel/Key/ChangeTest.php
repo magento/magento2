@@ -1,10 +1,8 @@
 <?php
-
 /**
  * Copyright 2015 Adobe
  * All Rights Reserved.
  */
-
 declare(strict_types=1);
 
 namespace Magento\EncryptionKey\Test\Unit\Model\ResourceModel\Key;
@@ -25,11 +23,6 @@ use Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\Framework\Indexer\ConfigInterface;
-use Magento\Framework\Json\EncoderInterface;
-use Magento\Indexer\Model\ResourceModel\Indexer\State\Collection as StateCollection;
-use Magento\Indexer\Model\ResourceModel\Indexer\State\CollectionFactory;
-use Magento\Indexer\Model\Indexer\State;
 
 /**
  * Test Class For Magento\EncryptionKey\Model\ResourceModel\Key\Change
@@ -73,15 +66,6 @@ class ChangeTest extends TestCase
     /** @var Change */
     protected $model;
 
-    /** @var ConfigInterface|MockObject */
-    protected $indexerConfigMock;
-
-    /** @var EncoderInterface|MockObject */
-    protected $encoderMock;
-
-    /** @var CollectionFactory|MockObject */
-    protected $indexerStateCollectionMock;
-
     protected function setUp(): void
     {
         $this->encryptMock = $this->createPartialMockWithReflection(
@@ -111,17 +95,6 @@ class ChangeTest extends TestCase
         $this->transactionMock = $this->createMock(TransactionManagerInterface::class);
         $this->objRelationMock = $this->createMock(ObjectRelationProcessor::class);
         $this->randomMock = $this->createMock(Random::class);
-        $this->indexerConfigMock = $this->getMockBuilder(ConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->encoderMock = $this->getMockBuilder(EncoderInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->indexerStateCollectionMock = $this->getMockBuilder(CollectionFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->addMethods(['getItems'])
-            ->getMock();
 
         $contextMock = $this->createPartialMock(
             Context::class,
@@ -139,11 +112,7 @@ class ChangeTest extends TestCase
         );
     }
 
-    /**
-     * @param array $indexersData
-     * @param array $states
-     */
-    private function setUpChangeEncryptionKey(array $indexersData, array $states)
+    private function setUpChangeEncryptionKey()
     {
         $paths = ['path1', 'path2'];
         $table = ['item1', 'item2'];
@@ -164,50 +133,19 @@ class ChangeTest extends TestCase
         $this->selectMock->expects($this->any())->method('update')->willReturnSelf();
         $this->writerMock->expects($this->once())->method('saveConfig');
         $this->adapterMock->expects($this->once())->method('getTransactionLevel')->willReturn(1);
-
-        $indexerStateCollection = $this->getMockBuilder(StateCollection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->indexerStateCollectionMock->expects($this->once())
-            ->method('create')->willReturn($indexerStateCollection);
-
-        $finalStates = [];
-
-        foreach ($states as $key => $state) {
-            if (is_callable($state)) {
-                $finalStates[$key] = $state($this);
-            }
-        }
-
-        $indexerStateCollection->method('getItems')
-            ->willReturn($finalStates);
-
-        $this->indexerConfigMock->expects($this->any())->method('getIndexers')->willReturn($indexersData);
     }
 
-    /**
-     * @param array $indexersData
-     * @param array $states
-     * @dataProvider loadDataDataProvider
-     */
-    public function testChangeEncryptionKey(array $indexersData, array $states)
+    public function testChangeEncryptionKey()
     {
-
-        $this->setUpChangeEncryptionKey($indexersData, $states);
+        $this->setUpChangeEncryptionKey();
         $this->randomMock->expects($this->never())->method('getRandomBytes');
         $key = 'key';
         $this->assertEquals($key, $this->model->changeEncryptionKey($key));
     }
 
-    /**
-     * @param array $indexersData
-     * @param array $states
-     * @dataProvider loadDataDataProvider
-     */
-    public function testChangeEncryptionKeyAutogenerate(array $indexersData, array $states)
+    public function testChangeEncryptionKeyAutogenerate()
     {
-        $this->setUpChangeEncryptionKey($indexersData, $states);
+        $this->setUpChangeEncryptionKey();
         $this->randomMock->expects($this->once())->method('getRandomBytes')->willReturn('abc');
         $this->assertEquals(
             ConfigOptionsListConstants::STORE_KEY_ENCODED_RANDOM_STRING_PREFIX . 'abc',
@@ -227,49 +165,5 @@ class ChangeTest extends TestCase
         }
 
         $this->fail('An expected exception was not signaled.');
-    }
-
-    /**
-     * @param array $data
-     * @return MockObject|State
-     */
-    private function getStateMock(array $data = [])
-    {
-        /** @var MockObject|State $state */
-        $state = $this->getMockBuilder(State::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        if (isset($data['indexer_id'])) {
-            $state->method('getIndexerId')
-                ->willReturn($data['indexer_id']);
-        }
-
-        return $state;
-    }
-
-    /**
-     * @return array
-     */
-    public static function loadDataDataProvider()
-    {
-        return [
-            [
-                'indexersData' => [
-                    'indexer_2' => [
-                        'indexer_id' => 'indexer_2',
-                    ],
-                    'indexer_3' => [
-                        'indexer_id' => 'indexer_3',
-                    ],
-                    'indexer_1' => [
-                        'indexer_id' => 'indexer_1',
-                    ],
-                ],
-                'states' => [
-                    'indexer_2' => static fn (self $testCase) => $testCase->getStateMock(['indexer_id' => 'indexer_2']),
-                    'indexer_3' => static fn (self $testCase) => $testCase->getStateMock(['indexer_id' => 'indexer_3']),
-                ],
-            ]
-        ];
     }
 }
