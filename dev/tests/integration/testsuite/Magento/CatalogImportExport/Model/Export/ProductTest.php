@@ -18,6 +18,7 @@ use Magento\Catalog\Test\Fixture\Attribute as AttributeFixture;
 use Magento\Catalog\Test\Fixture\Category as CategoryFixture;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\CatalogImportExport\Model\Export\Product\Type\Simple as SimpleProductType;
+use Magento\CatalogImportExport\Model\Export\Stub\ProductWithSingleItemPages;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
 use Magento\CatalogInventory\Model\Stock\Item;
@@ -36,6 +37,7 @@ use Magento\Store\Test\Fixture\Store as StoreFixture;
 use Magento\TestFramework\Fixture\AppArea;
 use Magento\TestFramework\Fixture\Config;
 use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureBeforeTransaction;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Fixture\DbIsolation;
@@ -799,6 +801,47 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->assertStringNotContainsString($product->getName(), $exportData);
     }
 
+    #[
+        AppArea(Area::AREA_ADMINHTML),
+        DataFixtureBeforeTransaction(StoreFixture::class, as: 'first_store'),
+        DataFixtureBeforeTransaction(StoreFixture::class, as: 'later_store'),
+        DataFixture(ProductFixture::class, as: 'first_product'),
+        DataFixture(ProductFixture::class, as: 'second_product'),
+        DataFixture(ProductFixture::class, as: 'third_product'),
+    ]
+    public function testCandidatePagesIncludeDisjointStoreMatches(): void
+    {
+        $firstStore = $this->fixtures->get('first_store');
+        $laterStore = $this->fixtures->get('later_store');
+        $firstProduct = $this->fixtures->get('first_product');
+        $secondProduct = $this->fixtures->get('second_product');
+        $thirdProduct = $this->fixtures->get('third_product');
+        $action = $this->objectManager->get(ProductAction::class);
+        $action->updateAttributes(
+            [(int)$firstProduct->getId(), (int)$thirdProduct->getId()],
+            ['name' => 'Selected'],
+            (int)$laterStore->getId()
+        );
+        $action->updateAttributes(
+            [(int)$secondProduct->getId()],
+            ['name' => 'Selected'],
+            (int)$firstStore->getId()
+        );
+        $this->model = $this->objectManager->create(ProductWithSingleItemPages::class);
+
+        $rows = $this->csvToArray($this->doExport(['name' => 'Selected']));
+
+        self::assertSame(
+            [$firstProduct->getSku(), $secondProduct->getSku(), $thirdProduct->getSku()],
+            array_column($rows, 'sku')
+        );
+        self::assertSame(
+            [$laterStore->getCode(), $firstStore->getCode(), $laterStore->getCode()],
+            array_column($rows, 'store_view_code')
+        );
+        self::assertSame(['Selected', 'Selected', 'Selected'], array_column($rows, 'name'));
+    }
+
     /**
      * Verify that "stock status" filter correctly applies to export result
      *
@@ -819,6 +862,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         foreach ($productsIncluded as $productName) {
             $this->assertStringContainsString($productName, $exportData);
         }
+
         foreach ($productsNotIncluded as $productName) {
             $this->assertStringNotContainsString($productName, $exportData);
         }

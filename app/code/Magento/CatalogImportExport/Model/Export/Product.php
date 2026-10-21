@@ -9,6 +9,7 @@ use Magento\Catalog\Model\Product as ProductEntity;
 use Magento\Catalog\Model\ResourceModel\Product\Option\Collection;
 use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
 use Magento\CatalogImportExport\Model\Import\Product\CategoryProcessor;
+use Magento\CatalogImportExport\Model\ResourceModel\Product\ExportCollection;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;
@@ -498,6 +499,11 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * @var array|null
      */
     private ?array $nonDefaultStoreExportAttrCodes = null;
+
+    /**
+     * @var array<int, ExportCollection>
+     */
+    private array $currentStoreCollections = [];
 
     /**
      * Product constructor.
@@ -1320,8 +1326,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             $this->currentIterationItemsPerPage = $this->getItemsPerPage();
             $this->memoryAtStartOfIteration = 0;
             $this->currentPageEntityIds = [];
-            $writtenRows = $this->writeCurrentPageData($writer, $writeHeader);
-            if ($writtenRows === 0) {
+            $this->writeCurrentPageData($writer, $writeHeader);
+            if (empty($this->currentPageEntityIds)) {
                 break;
             }
             $this->resetSourceAttributeOptionCache();
@@ -1360,15 +1366,184 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         AbstractAdapter $writer,
         bool &$writeHeader
     ): int {
-        return $this->processExportData(
-            function (array $dataRow) use ($writer, &$writeHeader): void {
-                if ($writeHeader) {
-                    $writer->setHeaderCols($this->_getHeaderColumns());
-                    $writeHeader = false;
-                }
-                $writer->writeRow($this->_customFieldsMapping($dataRow));
+        $rowProcessor = function (array $dataRow) use ($writer, &$writeHeader): void {
+            if ($writeHeader) {
+                $writer->setHeaderCols($this->_getHeaderColumns());
+                $writeHeader = false;
             }
+            $writer->writeRow($this->_customFieldsMapping($dataRow));
+        };
+        return $this->canLoadIncrementally()
+            ? $this->processIncrementalExportData($rowProcessor)
+            : $this->processExportData($rowProcessor);
+    }
+
+    /**
+     * Keep overridden loading contracts on the buffered path.
+     *
+     * @return bool
+     */
+    private function canLoadIncrementally(): bool
+    {
+        foreach ([
+            'loadCollection',
+            'collectRawData',
+            'collectMultirawData',
+            '_getEntityCollection',
+            '_prepareEntityCollection',
+            'paginateCollection'
+        ] as $method) {
+            if ((new \ReflectionMethod($this, $method))->getDeclaringClass()->getName() !== self::class) {
+                return false;
+            }
+        }
+        return $this->_getEntityCollection() instanceof ExportCollection;
+    }
+
+    /**
+     * Select link-to-entity identities across stores without hydrating Product models.
+     *
+     * @return array<int, int>
+     */
+    private function selectCandidateIdentities(): array
+    {
+        $identities = [];
+        $queriedSelectors = [];
+        $this->currentStoreCollections = [];
+        $itemsPerPage = $this->currentIterationItemsPerPage ?? $this->getItemsPerPage();
+        foreach (array_keys($this->_storeIdToCode) as $storeId) {
+            $collection = $this->_getEntityCollection(true);
+            $collection->setStoreId($storeId);
+            $this->_prepareEntityCollection($collection);
+            $identities += $collection->getExportCandidateIdentities($itemsPerPage, $queriedSelectors);
+            ksort($identities, SORT_NUMERIC);
+            $identities = array_slice($identities, 0, $itemsPerPage, true);
+            $this->currentStoreCollections[$storeId] = $collection;
+        }
+        $this->currentPageEntityIds = array_map('intval', array_keys($identities));
+        $this->currentBatchLinkIds = $this->currentPageEntityIds;
+        $this->pendingLastProcessedLinkFieldValue = $this->currentPageEntityIds
+            ? max($this->currentPageEntityIds)
+            : null;
+        return $identities;
+    }
+
+    /**
+     * Release each store's models and multiselect state before loading the next store.
+     *
+     * @param Product\TemporaryRowStorage $storage
+     * @return void
+     */
+    private function stageProductRows(Product\TemporaryRowStorage $storage): void
+    {
+        $linkField = $this->getProductEntityLinkField();
+        foreach ($this->_storeIdToCode as $storeId => $storeCode) {
+            $collection = $this->currentStoreCollections[$storeId];
+            unset($this->currentStoreCollections[$storeId]);
+            $this->_entityCollection = $collection;
+            $collection->setOrder($linkField, 'asc');
+            try {
+                $collection->getSelect()->where(
+                    $collection->getConnection()->quoteIdentifier('e.' . $linkField) . ' IN (?)',
+                    $this->currentPageEntityIds
+                );
+                $collection->load();
+                foreach ($collection as $itemId => $item) {
+                    $default = $storeId == Store::DEFAULT_STORE_ID ? null : $storage->getDefaultRecord((int)$itemId);
+                    $this->collectedMultiselectsData = [];
+                    if ($default !== null) {
+                        $this->collectedMultiselectsData[Store::DEFAULT_STORE_ID][$item->getData($linkField)] =
+                            $default['multiselects'];
+                    }
+                    $row = $this->convertProductStoreData(
+                        $item,
+                        (int)$itemId,
+                        (int)$storeId,
+                        $storeCode,
+                        $default['row'] ?? []
+                    );
+                    $storage->append((int)$storeId, [
+                        'row' => $row,
+                        'multiselects' => $this->collectedMultiselectsData[$storeId][$item->getData($linkField)] ?? []
+                    ]);
+                }
+            } finally {
+                $collection->clear();
+                unset($item);
+                $this->collectedMultiselectsData = [];
+            }
+        }
+        $this->_entityCollection = $this->getCandidateCollection();
+    }
+
+    /**
+     * Enrich candidates without excluding products that matched only another store's filters.
+     *
+     * @return AbstractCollection
+     */
+    private function getCandidateCollection(): AbstractCollection
+    {
+        $collection = $this->_entityCollectionFactory->create();
+        $collection->setStoreId(Store::DEFAULT_STORE_ID);
+        $collection->getSelect()->where(
+            $collection->getConnection()->quoteIdentifier('e.' . $this->getProductEntityLinkField()) . ' IN (?)',
+            $this->currentBatchLinkIds
         );
+        return $collection;
+    }
+
+    /**
+     * Keep staging failures inside the existing batch-level logging boundary.
+     *
+     * @param callable $rowProcessor
+     * @return int
+     */
+    private function processIncrementalExportData(callable $rowProcessor): int
+    {
+        $processedRows = 0;
+        try {
+            $identities = $this->selectCandidateIdentities();
+            if (!$identities) {
+                return 0;
+            }
+            $storage = ObjectManager::getInstance()->create(Product\TemporaryRowStorage::class);
+            try {
+                $this->stageProductRows($storage);
+                $multirawData = $this->collectMultirawData();
+                $stockItemRows = $this->prepareCatalogInventory(array_values($identities));
+                $this->rowCustomizer->prepareData(
+                    $this->getCandidateCollection()->addAttributeToSelect($this->_getExportAttrCodes()),
+                    array_values($identities)
+                );
+                $this->setHeaderColumns($multirawData['customOptionsData'], $stockItemRows);
+                foreach ($storage->getProducts() as $records) {
+                    $productData = [];
+                    $this->collectedMultiselectsData = [];
+                    foreach ($records as $storeId => $record) {
+                        $productData[$storeId] = $record['row'];
+                        $this->collectedMultiselectsData[$storeId][$record['row']['product_link_id']] =
+                            $record['multiselects'];
+                    }
+                    $productId = (int)reset($productData)['product_id'];
+                    $processedRows += $this->processProductRows(
+                        $productId,
+                        $productData,
+                        $multirawData,
+                        $stockItemRows,
+                        $rowProcessor
+                    );
+                }
+                $this->commitPendingLastProcessedLinkFieldValue();
+            } finally {
+                $storage->close();
+                $this->collectedMultiselectsData = [];
+            }
+        } catch (\Exception $exception) {
+            $this->_logger->critical($exception);
+        } finally {
+            $this->currentStoreCollections = [];
+        }
+        return $processedRows;
     }
 
     /**
@@ -1497,30 +1672,57 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             $this->setHeaderColumns($multirawData['customOptionsData'], $stockItemRows);
 
             foreach ($rawData as $productId => $productData) {
-                try {
-                    foreach ($productData as $storeId => $dataRow) {
-                        if ($storeId == Store::DEFAULT_STORE_ID && isset($stockItemRows[$productId])) {
-                            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                            $dataRow = array_merge($dataRow, $stockItemRows[$productId]);
-                        }
-                        $this->updateGalleryImageData($dataRow, $rawData);
-                        $this->appendMultirowData($dataRow, $multirawData);
-                        if ($dataRow) {
-                            $rowProcessor($dataRow);
-                            ++$processedRows;
-                        }
-                    }
-                } catch (\Exception $e) {
-                    // Isolate per-product failures so a single malformed product cannot
-                    // silently truncate the remainder of the export.
-                    $this->_logger->critical($e);
-                }
+                $processedRows += $this->processProductRows(
+                    (int)$productId,
+                    $productData,
+                    $multirawData,
+                    $stockItemRows,
+                    $rowProcessor
+                );
             }
             $this->commitPendingLastProcessedLinkFieldValue();
         } catch (\Exception $e) {
             $this->_logger->critical($e);
         }
 
+        return $processedRows;
+    }
+
+    /**
+     * Share per-product error isolation between buffered and incremental processing.
+     *
+     * @param int $productId
+     * @param array $productData
+     * @param array $multirawData
+     * @param array $stockItemRows
+     * @param callable $rowProcessor
+     * @return int
+     */
+    private function processProductRows(
+        int $productId,
+        array $productData,
+        array $multirawData,
+        array $stockItemRows,
+        callable $rowProcessor
+    ): int {
+        $processedRows = 0;
+        $rawData = [$productId => $productData];
+        try {
+            foreach ($productData as $storeId => $dataRow) {
+                if ($storeId == Store::DEFAULT_STORE_ID && isset($stockItemRows[$productId])) {
+                    // phpcs:ignore Magento2.Performance.ForeachArrayMerge
+                    $dataRow = array_merge($dataRow, $stockItemRows[$productId]);
+                }
+                $this->updateGalleryImageData($dataRow, $rawData);
+                $this->appendMultirowData($dataRow, $multirawData);
+                if ($dataRow) {
+                    $rowProcessor($dataRow);
+                    ++$processedRows;
+                }
+            }
+        } catch (\Exception $exception) {
+            $this->_logger->critical($exception);
+        }
         return $processedRows;
     }
 
@@ -1571,10 +1773,6 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * Collect export data for all products
      *
      * @return array
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * phpcs:disable Generic.Metrics.NestingLevel
      */
     protected function collectRawData()
     {
@@ -1592,88 +1790,17 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 if (!key_exists($storeId, $itemByStore)) {
                     continue;
                 }
-                $item = $itemByStore[$storeId];
-                $additionalAttributes = [];
-                $productLinkId = $item->getData($this->getProductEntityLinkField());
-                foreach ($this->_getExportAttrCodes() as $code) {
-                    $attrValue = $item->getData($code);
-                    if (!$this->isValidAttributeValue($code, $attrValue)) {
-                        continue;
-                    }
-
-                    $this->ensureAttributeOptionsLoaded($code);
-                    if (isset($this->_attributeValues[$code][$attrValue]) && !empty($this->_attributeValues[$code])) {
-                        $attrValue = $this->_attributeValues[$code][$attrValue];
-                    }
-                    $fieldName = isset($this->_fieldsMap[$code]) ? $this->_fieldsMap[$code] : $code;
-
-                    if ($this->_attributeTypes[$code] == 'datetime') {
-                        if (in_array($code, $this->dateAttrCodes)
-                            || $this->attributeFrontendTypes[$code] === 'date'
-                        ) {
-                            $attrValue = $this->_localeDate->formatDateTime(
-                                new \DateTime($attrValue),
-                                \IntlDateFormatter::SHORT,
-                                \IntlDateFormatter::NONE,
-                                null,
-                                date_default_timezone_get()
-                            );
-                        } else {
-                            $attrValue = $this->_localeDate->formatDateTime(
-                                new \DateTime($attrValue),
-                                \IntlDateFormatter::SHORT,
-                                \IntlDateFormatter::SHORT
-                            );
-                        }
-                    }
-
-                    if ($storeId != Store::DEFAULT_STORE_ID
-                        && isset($data[$itemId][Store::DEFAULT_STORE_ID][$fieldName])
-                        && $data[$itemId][Store::DEFAULT_STORE_ID][$fieldName] == $attrValue
-                    ) {
-                        continue;
-                    }
-
-                    if ($this->_attributeTypes[$code] !== 'multiselect') {
-                        if (is_scalar($attrValue)) {
-                            if (!in_array($fieldName, $this->_getExportMainAttrCodes())) {
-                                $additionalAttributes[$fieldName] = $fieldName .
-                                    ImportProduct::PAIR_NAME_VALUE_SEPARATOR . $this->wrapValue($attrValue);
-                            }
-                            $data[$itemId][$storeId][$fieldName] = $attrValue;
-                        }
-                    } else {
-                        $this->collectMultiselectValues($item, $code, $storeId);
-                        if (!empty($this->collectedMultiselectsData[$storeId][$productLinkId][$code])) {
-                            $additionalAttributes[$code] = $fieldName .
-                                ImportProduct::PAIR_NAME_VALUE_SEPARATOR . implode(
-                                    ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR,
-                                    $this->wrapValue($this->collectedMultiselectsData[$storeId][$productLinkId][$code])
-                                );
-                        }
-                    }
-                }
-
-                if (!empty($additionalAttributes)) {
-                    $data[$itemId][$storeId][self::COL_ADDITIONAL_ATTRIBUTES] =
-                        implode(Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $additionalAttributes);
-                } else {
-                    unset($data[$itemId][$storeId][self::COL_ADDITIONAL_ATTRIBUTES]);
-                }
-
-                $attrSetId = $item->getAttributeSetId();
-                $data[$itemId][$storeId][self::COL_STORE] = $storeCode;
-                $data[$itemId][$storeId][self::COL_ATTR_SET] = $this->_attrSetIdToName[$attrSetId];
-                $data[$itemId][$storeId][self::COL_TYPE] = $item->getTypeId();
-                $data[$itemId][$storeId][self::COL_SKU] = $item->getSku();
-                $data[$itemId][$storeId]['store_id'] = $storeId;
-                $data[$itemId][$storeId]['product_id'] = $itemId;
-                $data[$itemId][$storeId]['product_link_id'] = $productLinkId;
+                $data[$itemId][$storeId] = $this->convertProductStoreData(
+                    $itemByStore[$storeId],
+                    (int)$itemId,
+                    (int)$storeId,
+                    $storeCode,
+                    $data[$itemId][Store::DEFAULT_STORE_ID] ?? []
+                );
             }
         }
         return $data;
     }
-    //phpcs:enable Generic.Metrics.NestingLevel
 
     /**
      * Initialize keyset cursor candidate and link IDs for the current batch
@@ -1802,6 +1929,96 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
 
         $data['customOptionsData'] = $this->getCustomOptionsData($productLinkIds);
         return $data;
+    }
+
+    /**
+     * Preserve the shared conversion rules against this product's eligible default-store row.
+     *
+     * @param ProductEntity $item
+     * @param int $itemId
+     * @param int $storeId
+     * @param string $storeCode
+     * @param array $defaultData
+     * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     */
+    private function convertProductStoreData(
+        ProductEntity $item,
+        int $itemId,
+        int $storeId,
+        string $storeCode,
+        array $defaultData
+    ): array {
+        $dataRow = [];
+        $additionalAttributes = [];
+        $productLinkId = $item->getData($this->getProductEntityLinkField());
+        foreach ($this->_getExportAttrCodes() as $code) {
+            $attrValue = $item->getData($code);
+            if (!$this->isValidAttributeValue($code, $attrValue)) {
+                continue;
+            }
+            $this->ensureAttributeOptionsLoaded($code);
+            if (isset($this->_attributeValues[$code][$attrValue]) && !empty($this->_attributeValues[$code])) {
+                $attrValue = $this->_attributeValues[$code][$attrValue];
+            }
+            $fieldName = isset($this->_fieldsMap[$code]) ? $this->_fieldsMap[$code] : $code;
+            if ($this->_attributeTypes[$code] == 'datetime') {
+                if (in_array($code, $this->dateAttrCodes)
+                    || $this->attributeFrontendTypes[$code] === 'date'
+                ) {
+                    $attrValue = $this->_localeDate->formatDateTime(
+                        new \DateTime($attrValue),
+                        \IntlDateFormatter::SHORT,
+                        \IntlDateFormatter::NONE,
+                        null,
+                        date_default_timezone_get()
+                    );
+                } else {
+                    $attrValue = $this->_localeDate->formatDateTime(
+                        new \DateTime($attrValue),
+                        \IntlDateFormatter::SHORT,
+                        \IntlDateFormatter::SHORT
+                    );
+                }
+            }
+            if ($storeId != Store::DEFAULT_STORE_ID
+                && isset($defaultData[$fieldName])
+                && $defaultData[$fieldName] == $attrValue
+            ) {
+                continue;
+            }
+            if ($this->_attributeTypes[$code] !== 'multiselect') {
+                if (is_scalar($attrValue)) {
+                    if (!in_array($fieldName, $this->_getExportMainAttrCodes())) {
+                        $additionalAttributes[$fieldName] = $fieldName .
+                            ImportProduct::PAIR_NAME_VALUE_SEPARATOR . $this->wrapValue($attrValue);
+                    }
+                    $dataRow[$fieldName] = $attrValue;
+                }
+            } else {
+                $this->collectMultiselectValues($item, $code, $storeId);
+                if (!empty($this->collectedMultiselectsData[$storeId][$productLinkId][$code])) {
+                    $additionalAttributes[$code] = $fieldName .
+                        ImportProduct::PAIR_NAME_VALUE_SEPARATOR . implode(
+                            ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR,
+                            $this->wrapValue($this->collectedMultiselectsData[$storeId][$productLinkId][$code])
+                        );
+                }
+            }
+        }
+        if (!empty($additionalAttributes)) {
+            $dataRow[self::COL_ADDITIONAL_ATTRIBUTES] =
+                implode(Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $additionalAttributes);
+        }
+        $dataRow[self::COL_STORE] = $storeCode;
+        $dataRow[self::COL_ATTR_SET] = $this->_attrSetIdToName[$item->getAttributeSetId()];
+        $dataRow[self::COL_TYPE] = $item->getTypeId();
+        $dataRow[self::COL_SKU] = $item->getSku();
+        $dataRow['store_id'] = $storeId;
+        $dataRow['product_id'] = $itemId;
+        $dataRow['product_link_id'] = $productLinkId;
+        return $dataRow;
     }
 
     /**

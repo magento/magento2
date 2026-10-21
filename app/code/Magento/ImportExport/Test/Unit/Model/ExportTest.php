@@ -216,11 +216,30 @@ class ExportTest extends TestCase
             ->method('create')
             ->with(
                 'csvFormatClass',
-                ['destination' => $this->fileInfo->getInProgressFilePath($fileName)]
+                ['destination' => $this->fileInfo->getInProgressFilePath($fileName), 'fileExport' => true]
             )
             ->willReturn($this->exportAdapterMock);
 
         self::assertSame('__RESULT_WRITTEN_TO_FILE__', $this->model->export());
+    }
+
+    public function testOrdinaryFlowDoesNotEnableFileOnlyCompletion(): void
+    {
+        $this->model->setData([
+            'entity' => 'entityA',
+            'file_format' => 'csv',
+            Export::FILTER_ELEMENT_GROUP => []
+        ]);
+        $this->localeEmulator->method('emulate')
+            ->willReturnCallback(fn (callable $callback) => $callback());
+        $this->exportAbstractEntityMock->method('getEntityTypeCode')->willReturn('entityA');
+        $this->exportAbstractEntityMock->method('export')->willReturn("sku\nprobe\n");
+        $this->exportAdapterFactoryMock->expects(self::once())->method('create')
+            ->with('csvFormatClass', [])
+            ->willReturn($this->exportAdapterMock);
+        $this->model->getContentType();
+
+        self::assertSame("sku\nprobe\n", $this->model->export());
     }
 
     /**

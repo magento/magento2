@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\CatalogImportExport\Test\Unit\Model\Export;
 
 use Magento\Catalog\Model\ResourceModel\ProductFactory;
+use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\ItemFactory;
 use Magento\Catalog\Model\Product\LinkTypeProvider;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
@@ -15,14 +16,19 @@ use Magento\CatalogImportExport\Model\Export\Product;
 use Magento\CatalogImportExport\Model\Export\Product\Type\Factory;
 use Magento\CatalogImportExport\Model\Export\ProductFilterInterface;
 use Magento\CatalogImportExport\Model\Export\RowCustomizer\Composite;
+use Magento\CatalogImportExport\Model\ResourceModel\Product\ExportCollection;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection as AttributeSetCollection;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 use Magento\Eav\Model\Entity\Type;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection as AttributeCollection;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory as AttributeSetCollectionFactory;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DataObject;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Logger\Monolog;
@@ -34,6 +40,9 @@ use Magento\Store\Model\StoreManager;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\PreserveGlobalState;
+use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
@@ -334,6 +343,185 @@ class ProductTest extends TestCase
         );
     }
 
+    public function testExportContinuesAfterEveryProductInBatchFailsConversion(): void
+    {
+        $product = $this->createBatchExportProduct([
+            [1 => [0 => $this->createExportRow(1)], 2 => [0 => $this->createExportRow(2)]],
+            [3 => [0 => $this->createExportRow(3)]],
+            [],
+        ]);
+        $this->rowCustomizer->method('addData')->willReturnCallback(
+            static function (array $data, $productId): array {
+                if ($productId < 3) {
+                    throw new \RuntimeException('Malformed product data');
+                }
+                return $data;
+            }
+        );
+        $this->logger->expects($this->exactly(2))->method('critical');
+        $this->writer->expects($this->once())->method('writeRow')
+            ->with($this->callback(static fn (array $row): bool => $row['sku'] === 'sku-3'));
+        $this->writer->expects($this->once())->method('getContents')->willReturn('completed');
+
+        $this->assertSame('completed', $product->export());
+    }
+
+    public function testExportLogsWhenPopulatedBatchDoesNotAdvanceCursor(): void
+    {
+        $product = $this->createBatchExportProduct([[1 => [0 => $this->createExportRow(1)]]], true);
+        $this->rowCustomizer->method('addData')->willReturnArgument(0);
+        $this->writer->expects($this->once())->method('writeRow');
+        $this->writer->expects($this->once())->method('getContents')->willReturn('partial');
+        $this->logger->expects($this->once())->method('critical')->with(
+            'Product export pagination did not advance. Last processed entity_id: 0'
+        );
+
+        $this->assertSame('partial', $product->export());
+    }
+
+    public function testExportLogsWriterFailureAndReturnsContents(): void
+    {
+        $product = $this->createBatchExportProduct([[1 => [0 => $this->createExportRow(1)]], []]);
+        $this->rowCustomizer->method('addData')->willReturnArgument(0);
+        $failure = new \RuntimeException('Cannot write export row');
+        $this->writer->expects($this->once())->method('writeRow')->willThrowException($failure);
+        $this->writer->expects($this->once())->method('getContents')->willReturn('partial');
+        $this->logger->expects($this->once())->method('critical')->with($failure);
+
+        $this->assertSame('partial', $product->export());
+    }
+
+    public function testExportLogsBatchPreparationFailureAndReturnsContents(): void
+    {
+        $product = $this->createBatchExportProduct([[1 => [0 => $this->createExportRow(1)]]]);
+        $failure = new \RuntimeException('Cannot prepare export rows');
+        $this->rowCustomizer->method('prepareData')->willThrowException($failure);
+        $this->writer->expects($this->never())->method('writeRow');
+        $this->writer->expects($this->once())->method('getContents')->willReturn('partial');
+        $messages = [];
+        $this->logger->expects($this->exactly(2))->method('critical')
+            ->willReturnCallback(static function ($message) use (&$messages): void {
+                $messages[] = $message;
+            });
+
+        $this->assertSame('partial', $product->export());
+        $this->assertSame($failure, $messages[0]);
+        $this->assertSame(
+            'Product export pagination did not advance. Last processed entity_id: 0',
+            $messages[1]
+        );
+    }
+
+    public function testExportRetainsEarlierStoreRowWhenLaterStoreConversionFails(): void
+    {
+        $invalidOption = new class {
+            public function __toString(): string
+            {
+                throw new \RuntimeException('Malformed store option');
+            }
+        };
+        $product = $this->createBatchExportProduct(
+            [
+                [1 => [0 => $this->createExportRow(1), 1 => $this->createExportRow(1, 1)],
+                    2 => [0 => $this->createExportRow(2)]],
+                [],
+            ],
+            false,
+            ['customOptionsData' => [1 => [1 => [$invalidOption]]]]
+        );
+        $this->rowCustomizer->method('addData')->willReturnArgument(0);
+        $this->logger->expects($this->once())->method('critical')
+            ->with($this->isInstanceOf(\RuntimeException::class));
+        $rows = [];
+        $this->writer->expects($this->exactly(2))->method('writeRow')
+            ->willReturnCallback(static function (array $row) use (&$rows): void {
+                $rows[] = $row;
+            });
+        $this->writer->expects($this->once())->method('getContents')->willReturn('completed');
+
+        $this->assertSame('completed', $product->export());
+        $this->assertSame(['sku-1', 'sku-2'], array_column($rows, 'sku'));
+    }
+
+    private function createExportRow(int $productId, int $storeId = Store::DEFAULT_STORE_ID): array
+    {
+        return [
+            'product_id' => $productId,
+            'product_link_id' => $productId,
+            'store_id' => $storeId,
+            Product::COL_SKU => 'sku-' . $productId,
+            Product::COL_TYPE => 'simple',
+            Product::COL_ATTR_SET => 'Default',
+            'name' => 'Product ' . $productId,
+        ];
+    }
+
+    private function createBatchExportProduct(
+        array $batches,
+        bool $stallCursor = false,
+        array $multiRawData = []
+    ): Product {
+        $product = $this->createPartialMock(Product::class, [
+            'getWriter', 'getItemsPerPage', 'getProductEntityLinkField',
+            'collectRawData', 'collectMultirawData', 'prepareCatalogInventory', 'setHeaderColumns',
+            '_getExportAttrCodes', 'getAttributeCollection', 'filterAttributeCollection', '_getHeaderColumns',
+        ]);
+        $product->method('getWriter')->willReturn($this->writer);
+        $product->method('getItemsPerPage')->willReturn(2);
+        $product->method('getProductEntityLinkField')->willReturn('entity_id');
+        $product->method('_getHeaderColumns')->willReturn(['sku', 'name']);
+        $product->method('_getExportAttrCodes')->willReturn([]);
+        $product->method('prepareCatalogInventory')->willReturn([]);
+        $product->method('collectMultirawData')->willReturn(array_replace(
+            ['customOptionsData' => [], 'rowCategories' => [], 'rowWebsites' => []],
+            $multiRawData
+        ));
+        $attributes = $this->createMock(AttributeCollection::class);
+        $attributes->method('getIterator')->willReturn(new \ArrayIterator([]));
+        $product->method('getAttributeCollection')->willReturn($attributes);
+        $product->method('filterAttributeCollection')->willReturn($attributes);
+        $batchIndex = 0;
+        $product->expects($this->exactly(count($batches)))->method('collectRawData')->willReturnCallback(
+            function () use ($product, $batches, &$batchIndex, $stallCursor): array {
+                $batch = $batches[$batchIndex++];
+                $ids = array_keys($batch);
+                $this->setPropertyValue($product, 'currentPageEntityIds', $ids);
+                $items = [];
+                foreach ($ids as $id) {
+                    $items[$id] = [new DataObject(['entity_id' => $id])];
+                }
+                // Exercise the real cursor initialization and commit around isolated row fixtures.
+                (new \ReflectionMethod(Product::class, 'initializeBatchState'))->invoke($product, $items);
+                if ($stallCursor && $batch) {
+                    $this->setPropertyValue($product, 'pendingLastProcessedLinkFieldValue', 0);
+                }
+                return $batch;
+            }
+        );
+        $select = $this->createMock(Select::class);
+        $select->method('where')->willReturnSelf();
+        $connection = $this->createMock(AdapterInterface::class);
+        $connection->method('quoteIdentifier')->willReturnArgument(0);
+        $collection = $this->createMock(ProductCollection::class);
+        $collection->method('getSelect')->willReturn($select);
+        $collection->method('getConnection')->willReturn($connection);
+        $this->collection->method('create')->willReturn($collection);
+        $this->filter->method('filter')->willReturn($collection);
+        $this->linkTypeProvider->method('getLinkTypes')->willReturn([]);
+        foreach ([
+            'rowCustomizer' => $this->rowCustomizer,
+            '_logger' => $this->logger,
+            '_linkTypeProvider' => $this->linkTypeProvider,
+            '_entityCollectionFactory' => $this->collection,
+            'filter' => $this->filter,
+            '_storeIdToCode' => [0 => 'admin', 1 => 'store'],
+        ] as $name => $value) {
+            $this->setPropertyValue($product, $name, $value);
+        }
+
+        return $product;
+    }
+
     protected function tearDown(): void
     {
         unset($this->object);
@@ -403,39 +591,151 @@ class ProductTest extends TestCase
         $this->assertGreaterThanOrEqual($withManyOptions, $withMediumOptions);
     }
 
-    public function testGetItemsPerPageIncreasesWithMoreMemoryForHeavyAttributes(): void
+    public function testGetItemsPerPageDoesNotDecreaseWithinSameMemoryBand(): void
     {
         $options = $this->buildOptions(5001);
-        $this->assertMemoryLimitCanRunScenario('4G');
+        $this->assertMemoryLimitCanRunScenario('1G');
 
-        $result2g = $this->invokeGetItemsPerPage('2G', $options);
-        $result3g = $this->invokeGetItemsPerPage('3G', $options);
-        $result4g = $this->invokeGetItemsPerPage('4G', $options);
+        $result512m = $this->invokeGetItemsPerPage('512M', $options);
+        $result768m = $this->invokeGetItemsPerPage('768M', $options);
+        $result1g = $this->invokeGetItemsPerPage('1G', $options);
 
-        $this->assertGreaterThanOrEqual($result2g, $result3g);
-        $this->assertGreaterThanOrEqual($result3g, $result4g);
+        $this->assertGreaterThanOrEqual($result512m, $result768m);
+        $this->assertGreaterThanOrEqual($result768m, $result1g);
+    }
+
+    public function testUnlimitedPaginationIsIndependentOfStoreCount(): void
+    {
+        $singleStore = $this->invokeGetItemsPerPage('-1', [], 1);
+        $multipleStores = $this->invokeGetItemsPerPage('-1', [], 9);
+
+        $this->assertGreaterThan(0, $singleStore);
+        $this->assertSame($singleStore, $multipleStores);
+    }
+
+    #[DataProvider('candidateIdentitiesProvider')]
+    public function testCandidatePageIncludesEveryStoreWithoutHydration(array $matches, array $expected): void
+    {
+        $collections = [];
+        foreach ($matches as $storeId => $identities) {
+            $collection = $this->createMock(ExportCollection::class);
+            $collection->expects($this->once())->method('setStoreId')->with($storeId)->willReturnSelf();
+            $collection->expects($this->once())->method('getExportCandidateIdentities')
+                ->with(2, $this->anything())->willReturn($identities);
+            $collection->expects($this->never())->method('load');
+            $collections[] = $collection;
+        }
+        $this->product->method('_getEntityCollection')->willReturnOnConsecutiveCalls(...$collections);
+        $this->setPropertyValue($this->product, '_storeIdToCode', [0 => 'admin', 1 => 'first', 2 => 'later']);
+        $this->setPropertyValue($this->product, 'currentIterationItemsPerPage', 2);
+
+        $method = new \ReflectionMethod(Product::class, 'selectCandidateIdentities');
+        $this->assertSame($expected, $method->invoke($this->product));
+        $this->assertSame(
+            array_keys($expected),
+            $this->getReflectionProperty($this->product, 'currentPageEntityIds')->getValue($this->product)
+        );
+        $this->assertSame(
+            $collections,
+            $this->getReflectionProperty($this->product, 'currentStoreCollections')->getValue($this->product)
+        );
     }
 
     /**
+     * @return array<string, array{array<int, array<int, int>>, array<int, int>}>
+     */
+    public static function candidateIdentitiesProvider(): array
+    {
+        return [
+            'later-store-only candidates precede default matches' => [
+                [[800 => 8, 900 => 9], [200 => 2], [100 => 1, 500 => 5]],
+                [100 => 1, 200 => 2],
+            ],
+            'default store excludes every candidate' => [
+                [[], [200 => 2], [100 => 1]],
+                [100 => 1, 200 => 2],
+            ],
+            'overlapping candidates are deduplicated across identifier gaps' => [
+                [[100 => 1], [100 => 1, 500 => 5], [300 => 3]],
+                [100 => 1, 300 => 3],
+            ],
+            'all stores exhausted' => [
+                [[], [], []],
+                [],
+            ],
+        ];
+    }
+
+    public function testCoreLoaderUsesIncrementalPathAndLoadingOverridesUseBufferedPath(): void
+    {
+        $method = new \ReflectionMethod(Product::class, 'canLoadIncrementally');
+        $product = (new \ReflectionClass(Product::class))->newInstanceWithoutConstructor();
+        $this->setPropertyValue($product, '_entityCollection', $this->createMock(ExportCollection::class));
+        $this->assertTrue($method->invoke($product));
+
+        foreach (['loadCollection', 'collectRawData', 'collectMultirawData'] as $hook) {
+            $override = $this->createPartialMock(Product::class, [$hook]);
+            $this->assertFalse($method->invoke($override), $hook);
+        }
+    }
+
+    public function testUnlimitedPaginationStillAccountsForAttributeOptions(): void
+    {
+        $withoutOptions = $this->invokeGetItemsPerPage('-1', [], 9);
+        $withManyOptions = $this->invokeGetItemsPerPage('-1', $this->buildOptions(5001), 9);
+
+        $this->assertGreaterThan(0, $withManyOptions);
+        $this->assertLessThan($withoutOptions, $withManyOptions);
+    }
+
+    #[RunInSeparateProcess]
+    #[PreserveGlobalState(false)]
+    public function testGetItemsPerPagePreservesFiniteMemorySizing(): void
+    {
+        $this->assertMemoryLimitCanRunScenario('8G');
+        $this->setPropertyValue($this->product, 'estimatedMemoryPerProduct', 3000000.0);
+
+        foreach (['256M', '512M', '1G', '2G', '3G', '4G', '8G'] as $memoryLimit) {
+            $singleStore = $this->invokeGetItemsPerPage($memoryLimit, [], 1);
+
+            foreach ([9, 60] as $storeCount) {
+                $this->assertSame($singleStore, $this->invokeGetItemsPerPage($memoryLimit, [], $storeCount));
+            }
+        }
+    }
+
+    /**
+     * Calculate pagination with independent memory and attribute-option inputs.
+     *
      * @param string $memoryLimit
      * @param array $options
+     * @param int $storeCount
      * @return int
      * @throws \ReflectionException
      */
-    private function invokeGetItemsPerPage(string $memoryLimit, array $options): int
+    private function invokeGetItemsPerPage(string $memoryLimit, array $options, int $storeCount = 1): int
     {
         $reflection = new \ReflectionClass(get_class($this->object));
         $method = $reflection->getMethod('getItemsPerPage');
         $currentMemoryLimit = ini_get('memory_limit');
         ini_set('memory_limit', $memoryLimit);
-        $this->setPropertyValue($this->product, '_itemsPerPage', null);
-        $this->setPropertyValue($this->product, 'itemsPerPageCalculationIteration', 0);
-        $this->setPropertyValue($this->product, 'currentMemoryUsage', 0);
-        $this->setPropertyValue($this->product, 'currentMaxAllowedMemoryUsage', 0);
-        $this->setPropertyValue($this->product, '_attributeValues', ['test_attribute' => $options]);
-        $result = (int)$method->invoke($this->product);
-        ini_set('memory_limit', $currentMemoryLimit);
-        return $result;
+        try {
+            $this->setPropertyValue($this->product, '_itemsPerPage', null);
+            $this->setPropertyValue($this->product, 'cachedMemoryLimitForPagination', null);
+            $this->setPropertyValue($this->product, 'cachedMaxAttributeValues', count($options));
+            $this->setPropertyValue($this->product, 'itemsPerPageCalculationIteration', 0);
+            $this->setPropertyValue($this->product, 'currentMemoryUsage', 0);
+            $this->setPropertyValue($this->product, 'currentMaxAllowedMemoryUsage', 0);
+            $this->setPropertyValue($this->product, '_attributeValues', ['test_attribute' => $options]);
+            $this->setPropertyValue(
+                $this->product,
+                '_storeIdToCode',
+                array_map(static fn(int $storeId): string => 'store_' . $storeId, range(0, $storeCount - 1))
+            );
+            return (int)$method->invoke($this->product);
+        } finally {
+            ini_set('memory_limit', $currentMemoryLimit);
+        }
     }
 
     /**

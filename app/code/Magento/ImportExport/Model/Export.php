@@ -194,6 +194,7 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
                     if ($fileName !== '') {
                         // Queue export flow: write to a temporary destination and publish atomically on success.
                         $arguments['destination'] = $this->fileInfo->getInProgressFilePath($fileName);
+                        $arguments['fileExport'] = true;
                     }
                     $this->_writer = $this->_exportAdapterFac->create(
                         $fileFormats[$this->getFileFormat()]['model'],
