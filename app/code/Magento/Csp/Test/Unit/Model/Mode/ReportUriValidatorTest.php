@@ -58,6 +58,7 @@ class ReportUriValidatorTest extends TestCase
             'not a url' => ['not-a-url'],
             'javascript scheme' => ['javascript:alert(1)'],
             'ftp scheme' => ['ftp://example.com/report'],
+            'non-ascii byte' => ["/csp-reports/\xFF"],
         ];
     }
 }

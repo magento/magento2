@@ -35,8 +35,8 @@ class ReportUriValidator
      */
     public function isValid(string $reportUri): bool
     {
-        // Whitespace, control characters, ";" and "," would end the directive or the policy inside the header.
-        if ($reportUri === '' || preg_match('/[\x00-\x20\x7F;,]/', $reportUri)) {
+        // Only visible ASCII is allowed: ";" and "," would end the directive or the policy inside the header.
+        if ($reportUri === '' || preg_match('/[^\x21-\x7E]|[;,]/', $reportUri)) {
             return false;
         }
 
