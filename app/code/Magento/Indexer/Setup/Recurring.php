@@ -121,14 +121,18 @@ class Recurring implements InstallSchemaInterface
 
         foreach ($this->config->getIndexers() as $indexerId => $indexerConfig) {
             $indexerConfig = $this->sortConfig($indexerConfig);
+            $encodedConfig = $this->encoder->encode($indexerConfig);
             $expectedHashConfig = $this->encryptor->hash(
-                $this->encoder->encode($indexerConfig),
+                $encodedConfig,
                 Encryptor::HASH_VERSION_MD5
             );
 
             if (isset($stateIndexers[$indexerId])) {
-                if ($stateIndexers[$indexerId]->getHashConfig() != $expectedHashConfig) {
-                    $stateIndexers[$indexerId]->setStatus(StateInterface::STATUS_INVALID);
+                $storedHashConfig = (string)$stateIndexers[$indexerId]->getHashConfig();
+                if ($storedHashConfig != $expectedHashConfig) {
+                    if (!$this->isHashedWithPreviousKey($encodedConfig, $storedHashConfig)) {
+                        $stateIndexers[$indexerId]->setStatus(StateInterface::STATUS_INVALID);
+                    }
                     $stateIndexers[$indexerId]->setHashConfig($expectedHashConfig);
                     $stateIndexers[$indexerId]->save();
                 }
@@ -153,6 +157,39 @@ class Recurring implements InstallSchemaInterface
         // instead of unconditionally dropping and recreating all triggers for every indexer.
         // This avoids acquiring exclusive table locks when no trigger changes are needed.
         $this->triggerCleaner->removeTriggers();
+    }
+
+    /**
+     * Check whether the stored hash was computed for the same config with an older key of the key chain
+     *
+     * The config hash is keyed, so rotating the encryption key alone changes it.
+     *
+     * @param string $encodedConfig
+     * @param string $storedHashConfig
+     * @return bool
+     */
+    private function isHashedWithPreviousKey(string $encodedConfig, string $storedHashConfig): bool
+    {
+        if ($storedHashConfig === '' || !$this->encryptor instanceof Encryptor) {
+            return false;
+        }
+
+        $previousKeys = preg_split('/\s+/s', trim($this->encryptor->exportKeys()));
+        array_pop($previousKeys);
+        foreach ($previousKeys as $previousKey) {
+            $previousKeyEncryptor = clone $this->encryptor;
+            try {
+                $previousKeyEncryptor->setNewKey($previousKey);
+            } catch (\Exception) {
+                continue;
+            }
+            $previousHashConfig = $previousKeyEncryptor->hash($encodedConfig, Encryptor::HASH_VERSION_MD5);
+            if (hash_equals($previousHashConfig, $storedHashConfig)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
