@@ -51,6 +51,8 @@ define([
         });
 
         it('Closing an already closed modal does not throw', function () {
+            // Other specs share this page and leave their modals open, which would keep the overlay alive.
+            spyOn(modal, '_getVisibleCount').and.returnValue(0);
             modal.openModal();
             modal.closeModal();
 
@@ -64,6 +66,7 @@ define([
         });
 
         it('Closing twice tears the overlay down exactly once', function () {
+            spyOn(modal, '_getVisibleCount').and.returnValue(0);
             modal.openModal();
             modal.closeModal();
             modal._close();
