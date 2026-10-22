@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="prepare_catalog_product_collection_prices">
+        <observer name="catalogrule_configurable_child_prices"
+                  instance="Magento\CatalogRuleConfigurable\Observer\PrefetchChildRulePricesObserver"/>
+    </event>
+</config>
