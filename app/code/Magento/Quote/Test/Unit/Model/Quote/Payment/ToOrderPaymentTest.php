@@ -9,6 +9,7 @@ namespace Magento\Quote\Test\Unit\Model\Quote\Payment;
 
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\DataObject\Copy;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Payment\Model\Method\Substitution;
 use Magento\Payment\Model\MethodInterface;
@@ -62,7 +63,8 @@ class ToOrderPaymentTest extends TestCase
             [
                 'orderPaymentRepository' => $this->orderPaymentRepositoryMock,
                 'objectCopyService' => $this->objectCopyMock,
-                'dataObjectHelper' => $this->dataObjectHelper
+                'dataObjectHelper' => $this->dataObjectHelper,
+                'serializer' => new Json()
             ]
         );
     }
@@ -117,5 +119,27 @@ class ToOrderPaymentTest extends TestCase
             ->willReturnSelf();
 
         $this->assertSame($orderPayment, $this->converter->convert($this->paymentMock, $data));
+    }
+
+    public function testConvertSerializesArrayAdditionalData()
+    {
+        $additionalData = ['token' => 'TOKEN-123'];
+        $methodInterface = $this->createMock(MethodInterface::class);
+        $methodInterface->method('getTitle')->willReturn('TestTitle');
+        $this->paymentMock->method('getMethodInstance')->willReturn($methodInterface);
+        $this->paymentMock->method('getAdditionalInformation')->willReturn([]);
+        $this->objectCopyMock->method('getDataFromFieldset')->willReturn(['additional_data' => $additionalData]);
+
+        $orderPayment = $this->getMockBuilder(SalesOrderPayment::class)
+            ->onlyMethods(['setAdditionalInformation'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->orderPaymentRepositoryMock->method('create')->willReturn($orderPayment);
+        $this->dataObjectHelper->expects($this->once())
+            ->method('populateWithArray')
+            ->with($orderPayment, ['additional_data' => json_encode($additionalData)], OrderPaymentInterface::class)
+            ->willReturnSelf();
+
+        $this->converter->convert($this->paymentMock);
     }
 }
