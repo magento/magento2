@@ -115,6 +115,7 @@ define([
 
             expect(chartWidget.period).toBe(period);
             expect(chartWidget.chart).toBeDefined();
+            expect(chartWidget.chart.options.transitions.resize.animation.duration).toBe(0);
             expect(chartWidget.chart.data.datasets[0].label).toBe(dataProvider[period].label);
             expect(chartWidget.chart.data.datasets[0].data).toBe(dataProvider[period].data);
             expect(canvas.parent().is(':visible')).toBeTrue();
