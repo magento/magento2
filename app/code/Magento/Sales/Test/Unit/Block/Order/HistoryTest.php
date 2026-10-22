@@ -161,4 +161,33 @@ class HistoryTest extends TestCase
         );
         $this->assertEquals($orderCollection, $this->model->getOrders());
     }
+
+    public function testConstructSetsDefaultTitleWhenNoneIsSet(): void
+    {
+        $this->pageTitleMock->method('getShortHeading')->willReturn(null);
+        $this->pageTitleMock->expects($this->once())->method('set')->with('My Orders');
+
+        $this->createBlock();
+    }
+
+    public function testConstructKeepsTitleSetByLayout(): void
+    {
+        $this->pageTitleMock->method('getShortHeading')->willReturn('New Orders Title');
+        $this->pageTitleMock->expects($this->never())->method('set');
+
+        $this->createBlock();
+    }
+
+    private function createBlock(): History
+    {
+        $this->pageConfig->method('getTitle')->willReturn($this->pageTitleMock);
+        $this->context->method('getPageConfig')->willReturn($this->pageConfig);
+
+        return new History(
+            $this->context,
+            $this->orderCollectionFactory,
+            $this->customerSession,
+            $this->orderConfig
+        );
+    }
 }
