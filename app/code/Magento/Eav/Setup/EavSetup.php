@@ -935,30 +935,23 @@ class EavSetup
             );
         }
 
-        $attributeFields = $this->_getAttributeTableFields();
-        if (is_array($field)) {
-            $bind = [];
-            foreach ($field as $k => $v) {
-                if (isset($attributeFields[$k])) {
-                    $bind[$k] = $this->setup->getConnection()->prepareColumnValue(
-                        $attributeFields[$k],
-                        $v
-                    );
-                }
-            }
-            if (!$bind) {
-                return $this;
-            }
-            $field = $bind;
-        } else {
-            if (!isset($attributeFields[$field])) {
-                return $this;
-            }
+        $field = $this->prepareAttributeDataField($field);
+        if ($field === null) {
+            return $this;
         }
+
         $attributeId = $this->getAttributeId($entityTypeId, $id);
         if (false === $attributeId) {
             throw new LocalizedException(__('Attribute with ID: "%1" does not exist', $id));
         }
+
+        $resolvedEntityTypeId = $this->getEntityTypeId($entityTypeId);
+        $mainTable = $this->setup->getTable('eav_attribute');
+        $setupCache = $this->setup->getSetupCache();
+        $cachedRow = $setupCache->has($mainTable, $resolvedEntityTypeId, $attributeId)
+            ? $setupCache->get($mainTable, $resolvedEntityTypeId, $attributeId)
+            : [];
+        $cachedCode = $cachedRow['attribute_code'] ?? null;
 
         $this->setup->updateTableRow(
             'eav_attribute',
@@ -967,10 +960,45 @@ class EavSetup
             $field,
             $value,
             'entity_type_id',
-            $this->getEntityTypeId($entityTypeId)
+            $resolvedEntityTypeId
         );
 
+        // updateTableRow() only refreshes the attribute_id-keyed cache entry; purge
+        // the attribute_code-keyed entries so an attribute_code change is not masked
+        // by stale cache data on a subsequent getAttribute()/addAttribute() call.
+        $setupCache->remove($mainTable, $resolvedEntityTypeId, $attributeId);
+        $setupCache->remove($mainTable, $resolvedEntityTypeId, $id);
+        if ($cachedCode !== null) {
+            $setupCache->remove($mainTable, $resolvedEntityTypeId, $cachedCode);
+        }
+
         return $this;
+    }
+
+    /**
+     * Prepare attribute data field for update
+     *
+     * @param string|array $field
+     * @return string|array|null
+     */
+    private function prepareAttributeDataField($field)
+    {
+        $attributeFields = $this->_getAttributeTableFields();
+        if (!is_array($field)) {
+            return isset($attributeFields[$field]) ? $field : null;
+        }
+
+        $bind = [];
+        foreach ($field as $k => $v) {
+            if (isset($attributeFields[$k])) {
+                $bind[$k] = $this->setup->getConnection()->prepareColumnValue(
+                    $attributeFields[$k],
+                    $v
+                );
+            }
+        }
+
+        return $bind ?: null;
     }
 
     /**
