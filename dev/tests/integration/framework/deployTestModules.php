@@ -79,9 +79,14 @@ if ((int)$settings->get('TESTS_PARALLEL_RUN') !== 1) {
     // Only delete modules if we are not using parallel executions
     // phpcs:ignore Magento2.Functions.DiscouragedFunction
     register_shutdown_function(
-        'deleteTestModules',
+        static function (array $moduleNames, string $modulesPath, int $processId): void {
+            if ($processId === getmypid()) {
+                deleteTestModules($moduleNames, $modulesPath);
+            }
+        },
         array_keys($deployedTestModuleRootNames),
-        $pathToInstalledMagentoInstanceModules
+        $pathToInstalledMagentoInstanceModules,
+        getmypid()
     );
 }
 
