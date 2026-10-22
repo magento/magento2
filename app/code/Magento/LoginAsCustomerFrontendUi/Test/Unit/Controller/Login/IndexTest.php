@@ -21,6 +21,7 @@ use Magento\LoginAsCustomerApi\Api\AuthenticateCustomerBySecretInterface;
 use Magento\LoginAsCustomerFrontendUi\Controller\Login\Index;
 use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -217,6 +218,39 @@ class IndexTest extends TestCase
         $this->redirectMock->expects($this->once())->method('setPath')->with('/');
         $result = $this->controller->execute();
         $this->assertInstanceOf(ResultInterface::class, $result);
+    }
+
+    /**
+     * Missing or non-string secret must reach authentication as an empty string and end in a redirect
+     */
+    #[DataProvider('invalidSecretDataProvider')]
+    public function testExecuteWithInvalidSecretParam(mixed $secretParam): void
+    {
+        $this->requestMock->expects($this->once())
+            ->method('getParam')
+            ->with('secret')
+            ->willReturn($secretParam);
+        $this->checkoutSessionMock->expects($this->once())->method('getQuoteId')->willReturn(null);
+        $this->authenticateCustomerBySecretMock->expects($this->once())
+            ->method('execute')
+            ->with('')
+            ->willThrowException(new LocalizedException(__('Login was not successful.')));
+        $this->messageManagerMock->expects($this->once())
+            ->method('addErrorMessage')
+            ->with('Login was not successful.');
+        $this->loggerMock->expects($this->never())->method('error');
+        $this->customerSessionMock->expects($this->never())->method('getCustomer');
+        $this->resultFactoryMock->expects($this->once())->method('create')->willReturn($this->redirectMock);
+        $this->redirectMock->expects($this->once())->method('setPath')->with('/');
+        $this->assertSame($this->redirectMock, $this->controller->execute());
+    }
+
+    public static function invalidSecretDataProvider(): array
+    {
+        return [
+            'missing' => [null],
+            'array' => [['x']],
+        ];
     }
 
     /**
