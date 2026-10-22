@@ -489,6 +489,10 @@ class Eav extends AbstractModifier
      */
     private function getProductType()
     {
+        if ($this->isProductExists()) {
+            return (string)$this->locator->getProduct()->getTypeId();
+        }
+
         return (string)$this->request->getParam('type', $this->locator->getProduct()->getTypeId());
     }
 
