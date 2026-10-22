@@ -53,12 +53,17 @@ class ErrorHandler implements ErrorHandlerInterface
         }
 
         foreach ($errors as $error) {
-            $this->log($error);
+            $isClientInputError = $this->isClientInputError($error);
+            if (!$isClientInputError) {
+                $this->logger->error($error);
+            }
             $previousError = $error->getPrevious();
             if ($previousError instanceof AggregateExceptionInterface && !empty($previousError->getErrors())) {
                 $aggregatedErrors = $previousError->getErrors();
                 foreach ($aggregatedErrors as $aggregatedError) {
-                    $this->logger->error($aggregatedError);
+                    if (!$isClientInputError) {
+                        $this->logger->error($aggregatedError);
+                    }
                     $formattedErrors[] = $formatter($aggregatedError);
                 }
             } else {
@@ -69,19 +74,15 @@ class ErrorHandler implements ErrorHandlerInterface
     }
 
     /**
-     * Log error.
+     * Check whether the error was caused by invalid client input and therefore must not be logged.
      *
      * @param Error $error
-     * @return void
+     * @return bool
      */
-    private function log(Error $error): void
+    private function isClientInputError(Error $error): bool
     {
         $extensions = $error->getExtensions();
-        $category = $extensions['category'] ?? null;
-        if (GraphQlInputException::EXCEPTION_CATEGORY === $category) {
-            return;
-        }
 
-        $this->logger->error($error);
+        return GraphQlInputException::EXCEPTION_CATEGORY === ($extensions['category'] ?? null);
     }
 }
