@@ -1976,16 +1976,6 @@
         </arguments>
     </type>
     <preference for="Magento\Framework\Webapi\Validator\ServiceInputValidatorInterface" type="Magento\Framework\Webapi\Validator\CompositeServiceInputValidator"/>
-    <type name="Magento\Framework\Webapi\Validator\CompositeServiceInputValidator">
-        <arguments>
-            <argument name="validators" xsi:type="array">
-                <item name="entityArrayValidator" xsi:type="object">Magento\Framework\Webapi\Validator\EntityArrayValidator</item>
-                <item name="searchCriteriaValidator" xsi:type="object">Magento\Framework\Webapi\Validator\SearchCriteriaValidator</item>
-            </argument>
-        </arguments>
-    </type>
-
-
     <type name="Magento\Framework\Webapi\Validator\EntityArrayValidator">
         <arguments>
             <argument name="complexArrayItemLimit" xsi:type="number">999999</argument>
