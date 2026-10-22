@@ -30,11 +30,12 @@ class ProductMutex implements ProductMutexInterface
      */
     public function execute(string $sku, callable $callable, ...$args): mixed
     {
-        if ($this->lockManager->lock(self::LOCK_PREFIX . $sku, $this->lockWaitTimeout)) {
+        $lockName = $this->getLockName($sku);
+        if ($this->lockManager->lock($lockName, $this->lockWaitTimeout)) {
             try {
                 $result = $callable(...$args);
             } finally {
-                $this->lockManager->unlock(self::LOCK_PREFIX . $sku);
+                $this->lockManager->unlock($lockName);
             }
         } else {
             throw new ProductMutexException(
@@ -42,5 +43,19 @@ class ProductMutex implements ProductMutexInterface
             );
         }
         return $result;
+    }
+
+    /**
+     * Get one lock name for every spelling of a SKU that resolves to the same product
+     *
+     * The SKU is normalised the way ProductRepository looks it up, since the sku column is case-insensitive
+     * while lock names are not. Hashing keeps the name within the 64 characters MySQL allows for a lock.
+     *
+     * @param string $sku
+     * @return string
+     */
+    private function getLockName(string $sku): string
+    {
+        return self::LOCK_PREFIX . hash('xxh128', mb_strtolower(trim($sku)));
     }
 }
