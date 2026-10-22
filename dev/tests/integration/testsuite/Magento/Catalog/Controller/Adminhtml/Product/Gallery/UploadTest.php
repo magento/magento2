@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Controller\Adminhtml\Product\Gallery;
 
+use Laminas\Stdlib\Parameters;
 use Magento\Catalog\Model\Product\Media\Config;
 use Magento\Framework\App\Filesystem\DirectoryList as AppDirectoryList;
 use Magento\Framework\App\Request\Http as HttpRequest;
@@ -14,6 +15,9 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Filesystem\DirectoryList;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\UrlInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\TestFramework\Fixture\Config as ConfigFixture;
 use Magento\TestFramework\TestCase\AbstractBackendController;
 use PHPUnit\Framework\Attributes\DataProvider;
 
@@ -175,6 +179,85 @@ class UploadTest extends AbstractBackendController
     }
 
     /**
+     * The preview of a freshly uploaded image must not point at a remote media host that does not have it yet.
+     *
+     * @return void
+     */
+    #[
+        ConfigFixture('web/unsecure/base_media_url', 'https://cdn.example.com/media/'),
+        ConfigFixture('web/secure/base_media_url', 'https://cdn.example.com/media/'),
+    ]
+    public function testUploadActionPreviewUrlIgnoresRemoteMediaBaseUrl(): void
+    {
+        $store = $this->_objectManager->get(StoreManagerInterface::class)->getStore();
+        $store->_resetState();
+        $this->assertEquals('https://cdn.example.com/media/', $store->getBaseUrl(UrlInterface::URL_TYPE_MEDIA));
+
+        $this->copyFileToSysTmpDir(
+            [
+                'name' => 'magento_image.jpg',
+                'type' => 'image/jpeg',
+                'current_path' => '/../../../../_files',
+            ]
+        );
+        $this->getRequest()->setMethod($this->httpMethod);
+        $this->dispatch($this->uri);
+        $jsonBody = $this->serializer->unserialize($this->getResponse()->getBody());
+
+        $this->assertArrayNotHasKey('error', $jsonBody);
+        $this->assertEquals('http://localhost/media/tmp/catalog/product/m/a/magento_image.jpg', $jsonBody['url']);
+        $this->assertTrue($this->mediaDirectory->isExist($this->getFileAbsolutePath('/m/a/magento_image.jpg')));
+    }
+
+    /**
+     * An HTTPS admin on its own host previews from that host and scheme, whatever the admin base URL settings say.
+     *
+     * The custom admin URL is set in config only (no admin store base_url copy), and it must match the request
+     * host, otherwise the backend front name is not resolved and the request falls through to the storefront.
+     *
+     * @return void
+     */
+    #[
+        ConfigFixture('web/unsecure/base_media_url', 'https://cdn.example.com/media/'),
+        ConfigFixture('web/secure/base_media_url', 'https://cdn.example.com/media/'),
+        ConfigFixture('web/secure/use_in_adminhtml', '0'),
+        ConfigFixture('admin/url/use_custom', '1'),
+        ConfigFixture('admin/url/custom', 'https://admin.example.com/'),
+    ]
+    public function testUploadActionPreviewUrlUsesHostAndSchemeOfUploadRequest(): void
+    {
+        $this->_objectManager->get(StoreManagerInterface::class)->getStore()->_resetState();
+        $this->copyFileToSysTmpDir(
+            [
+                'name' => 'magento_image.jpg',
+                'type' => 'image/jpeg',
+                'current_path' => '/../../../../_files',
+            ]
+        );
+        $request = $this->getRequest();
+        $server = $request->getServer();
+        $request->setServer(
+            new Parameters(
+                array_merge(
+                    $server ? $server->toArray() : [],
+                    ['HTTPS' => 'on', 'HTTP_HOST' => 'admin.example.com', 'SCRIPT_NAME' => '/index.php']
+                )
+            )
+        );
+        $request->setMethod($this->httpMethod);
+        $this->dispatch($this->uri);
+        $body = (string)$this->getResponse()->getBody();
+        $jsonBody = json_decode($body, true);
+
+        $this->assertIsArray($jsonBody, 'Upload response is not JSON: ' . substr($body, 0, 500));
+        $this->assertArrayNotHasKey('error', $jsonBody);
+        $this->assertEquals(
+            'https://admin.example.com/media/tmp/catalog/product/m/a/magento_image.jpg',
+            $jsonBody['url']
+        );
+    }
+
+    /**
      * @return array
      */
     public static function uploadActionWithErrorsDataProvider(): array
@@ -234,6 +317,7 @@ class UploadTest extends AbstractBackendController
     {
         $_FILES = [];
         $this->mediaDirectory->delete('tmp');
+        $this->_objectManager->get(StoreManagerInterface::class)->getStore()->_resetState();
         parent::tearDown();
     }
 
