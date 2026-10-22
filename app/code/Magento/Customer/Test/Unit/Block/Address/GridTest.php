@@ -111,7 +111,7 @@ class GridTest extends TestCase
         /** @var MockObject */
         $addressCollection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['setOrder', 'setCustomerFilter', 'load','addFieldToFilter'])
+            ->onlyMethods(['setOrder', 'setCustomerFilter', 'load', 'addFieldToFilter', 'addAttributeToSelect'])
             ->getMock();
 
         $layout->expects($this->atLeastOnce())->method('getChildName')->with('NameInLayout', 'pager')
@@ -127,6 +127,7 @@ class GridTest extends TestCase
         $addressCollection->expects($this->atLeastOnce())->method('setCustomerFilter')->with([$customerId])
             ->willReturnSelf();
         $addressCollection->expects(static::any())->method('addFieldToFilter')->willReturnSelf();
+        $addressCollection->expects($this->once())->method('addAttributeToSelect')->with('*')->willReturnSelf();
         $this->addressCollectionFactory->expects($this->atLeastOnce())->method('create')
             ->willReturn($addressCollection);
         $block->expects($this->atLeastOnce())->method('setCollection')->with($addressCollection)->willReturnSelf();
@@ -156,7 +157,14 @@ class GridTest extends TestCase
         /** @var MockObject */
         $addressCollection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['setOrder', 'setCustomerFilter', 'load', 'getIterator','addFieldToFilter'])
+            ->onlyMethods([
+                'setOrder',
+                'setCustomerFilter',
+                'load',
+                'getIterator',
+                'addFieldToFilter',
+                'addAttributeToSelect'
+            ])
             ->getMock();
         $addressDataModel = $this->createMock(AddressInterface::class);
         $address = $this->getMockBuilder(Address::class)
@@ -177,6 +185,7 @@ class GridTest extends TestCase
         $addressCollection->expects($this->atLeastOnce())->method('setCustomerFilter')->with([$customerId])
             ->willReturnSelf();
         $addressCollection->expects(static::any())->method('addFieldToFilter')->willReturnSelf();
+        $addressCollection->expects($this->once())->method('addAttributeToSelect')->with('*')->willReturnSelf();
         $addressCollection->expects($this->atLeastOnce())->method('getIterator')
             ->willReturn(new \ArrayIterator($collection));
         $this->addressCollectionFactory->expects($this->atLeastOnce())->method('create')
