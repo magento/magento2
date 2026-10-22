@@ -25,7 +25,9 @@ class Lock extends AbstractDb implements ReaderInterface, WriterInterface
     public const QUEUE_LOCK_TABLE = 'queue_lock';
     /**#@-*/
 
-    /**#@-*/
+    /**
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     */
     private $dateTime;
 
     /**
@@ -99,7 +101,7 @@ class Lock extends AbstractDb implements ReaderInterface, WriterInterface
     public function releaseOutdatedLocks()
     {
         $date = (new DateTime())->setTimestamp($this->dateTime->gmtTimestamp());
-        $date->add(new DateInterval('PT' . $this->interval . 'S'));
+        $date->sub(new DateInterval('PT' . $this->interval . 'S'));
         $this->getConnection()->delete($this->getTable(self::QUEUE_LOCK_TABLE), ['created_at <= ?' => $date]);
     }
 }
