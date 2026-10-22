@@ -117,6 +117,7 @@ class CliCommand
      * @return void
      * @throws LocalizedException
      * @deprecated split database solution is deprecated and will be removed
+     * @see Nothing
      */
     public function splitQuote()
     {
@@ -141,6 +142,7 @@ class CliCommand
      * @return void
      * @throws LocalizedException
      * @deprecated split database solution is deprecated and will be removed
+     * @see Nothing
      */
     public function splitSales()
     {
@@ -199,7 +201,9 @@ class CliCommand
         $result = [];
 
         foreach ($params as $key => $value) {
-            if (!empty($value)) {
+            if ($value === $key) {
+                $result["--{$key}"] = null;
+            } elseif (!empty($value)) {
                 $result["--{$key}=%s"] = $value;
             }
         }
