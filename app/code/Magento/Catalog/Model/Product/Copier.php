@@ -10,9 +10,11 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\Catalog\Model\Product\Copier\UrlKeyAvailability;
 use Magento\Catalog\Model\Product\Option\Repository as OptionRepository;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Catalog\Model\ResourceModel\DuplicatedProductAttributesCopier;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Store\Model\Store;
 use Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException;
@@ -62,6 +64,11 @@ class Copier
     private $attributeCopier;
 
     /**
+     * @var UrlKeyAvailability
+     */
+    private $urlKeyAvailability;
+
+    /**
      * @param CopyConstructorInterface $copyConstructor
      * @param ProductFactory $productFactory
      * @param ScopeOverriddenValue $scopeOverriddenValue
@@ -69,6 +76,7 @@ class Copier
      * @param MetadataPool|null $metadataPool
      * @param ProductRepositoryInterface $productRepository
      * @param DuplicatedProductAttributesCopier $attributeCopier
+     * @param UrlKeyAvailability|null $urlKeyAvailability
      */
     public function __construct(
         CopyConstructorInterface $copyConstructor,
@@ -77,7 +85,8 @@ class Copier
         OptionRepository $optionRepository,
         MetadataPool $metadataPool,
         ProductRepositoryInterface $productRepository,
-        DuplicatedProductAttributesCopier $attributeCopier
+        DuplicatedProductAttributesCopier $attributeCopier,
+        ?UrlKeyAvailability $urlKeyAvailability = null
     ) {
         $this->productFactory = $productFactory;
         $this->copyConstructor = $copyConstructor;
@@ -86,6 +95,8 @@ class Copier
         $this->metadataPool = $metadataPool;
         $this->productRepository = $productRepository;
         $this->attributeCopier = $attributeCopier;
+        $this->urlKeyAvailability = $urlKeyAvailability
+            ?? ObjectManager::getInstance()->get(UrlKeyAvailability::class);
     }
 
     /**
@@ -138,15 +149,14 @@ class Copier
     private function setDefaultUrl(Product $product, Product $duplicate) : void
     {
         $duplicate->setStoreId(Store::DEFAULT_STORE_ID);
+        $duplicate->setData('url_path', null);
         $resource = $product->getResource();
-        $attribute = $resource->getAttribute('url_key');
         $productId = $product->getId();
         $urlKey = $resource->getAttributeRawValue($productId, 'url_key', Store::DEFAULT_STORE_ID);
         do {
             $urlKey = $this->modifyUrl($urlKey);
             $duplicate->setUrlKey($urlKey);
-        } while (!$attribute->getEntity()->checkAttributeUniqueValue($attribute, $duplicate));
-        $duplicate->setData('url_path', null);
+        } while (!$this->urlKeyAvailability->isAvailable($duplicate));
         $duplicate->save();
     }
 
@@ -164,7 +174,6 @@ class Copier
         $storeIds = $duplicate->getStoreIds();
         $productId = $product->getId();
         $productResource = $product->getResource();
-        $attribute = $productResource->getAttribute('url_key');
         $duplicate->setData('save_rewrites_history', false);
         foreach ($storeIds as $storeId) {
             $useDefault = !$this->scopeOverriddenValue->containsValue(
@@ -178,6 +187,7 @@ class Copier
             }
 
             $duplicate->setStoreId($storeId);
+            $duplicate->setData('url_path', null);
             $urlKey = $productResource->getAttributeRawValue($productId, 'url_key', $storeId);
             $iteration = 0;
 
@@ -189,8 +199,7 @@ class Copier
                 $urlKey = $this->modifyUrl($urlKey);
                 $duplicate->setUrlKey($urlKey);
                 $iteration++;
-            } while (!$attribute->getEntity()->checkAttributeUniqueValue($attribute, $duplicate));
-            $duplicate->setData('url_path', null);
+            } while (!$this->urlKeyAvailability->isAvailable($duplicate));
             $productResource->saveAttribute($duplicate, 'url_path');
             $productResource->saveAttribute($duplicate, 'url_key');
         }

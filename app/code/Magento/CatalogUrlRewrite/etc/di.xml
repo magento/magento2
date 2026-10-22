@@ -30,6 +30,9 @@
     <type name="Magento\Catalog\Model\Product\Action">
         <plugin name="update_url_rewrites_after_websites_update_plugin" type="Magento\CatalogUrlRewrite\Plugin\Catalog\Model\Product\UpdateProductWebsiteUrlRewrites"/>
     </type>
+    <type name="Magento\Catalog\Model\Product\Copier\UrlKeyAvailability">
+        <plugin name="check_url_rewrites_for_duplicate_url_key" type="Magento\CatalogUrlRewrite\Plugin\Catalog\Model\Product\Copier\CheckUrlRewritesForUrlKey"/>
+    </type>
     <type name="Magento\CatalogUrlRewrite\Model\Map\UrlRewriteFinder">
         <arguments>
             <argument name="urlRewriteClassNames" xsi:type="array">
