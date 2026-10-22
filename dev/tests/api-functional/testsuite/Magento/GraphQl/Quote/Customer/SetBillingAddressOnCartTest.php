@@ -11,6 +11,8 @@ use Magento\Catalog\Test\Fixture\Product;
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Test\Fixture\Customer;
+use Magento\Eav\Api\AttributeRepositoryInterface;
+use Magento\Eav\Model\Config as EavConfig;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
@@ -2078,5 +2080,101 @@ QUERY;
 
         $this->expectExceptionMessage('"postcode" is required. Enter and try again.');
         $this->graphQlMutation($query, [], '', $this->getHeaderMap($customerData->getEmail()));
+    }
+
+    #[
+        DataFixture(GuestCart::class, as: 'cart'),
+        DataProvider('telephoneInputDataProvider')
+    ]
+    public function testSetBillingAddressWithOptionalTelephone(string $telephoneInput): void
+    {
+        $objectManager = Bootstrap::getObjectManager();
+        $eavConfig = $objectManager->get(EavConfig::class);
+        $attributeRepository = $objectManager->get(AttributeRepositoryInterface::class);
+        $attribute = $eavConfig->getAttribute('customer_address', 'telephone');
+        $isRequired = $attribute->getIsRequired();
+
+        try {
+            $attribute->setIsRequired(false);
+            $attributeRepository->save($attribute);
+            $eavConfig->clear();
+
+            $response = $this->graphQlMutation($this->getBillingAddressTelephoneMutation($telephoneInput));
+
+            self::assertArrayHasKey('billing_address', $response['setBillingAddressOnCart']['cart']);
+            self::assertEmpty($response['setBillingAddressOnCart']['cart']['billing_address']['telephone']);
+        } finally {
+            $attribute->setIsRequired($isRequired);
+            $attributeRepository->save($attribute);
+            $eavConfig->clear();
+        }
+    }
+
+    #[
+        DataFixture(GuestCart::class, as: 'cart'),
+        DataProvider('telephoneInputDataProvider')
+    ]
+    public function testSetBillingAddressWithRequiredTelephone(string $telephoneInput): void
+    {
+        $objectManager = Bootstrap::getObjectManager();
+        $eavConfig = $objectManager->get(EavConfig::class);
+        $attributeRepository = $objectManager->get(AttributeRepositoryInterface::class);
+        $attribute = $eavConfig->getAttribute('customer_address', 'telephone');
+        $isRequired = $attribute->getIsRequired();
+
+        try {
+            $attribute->setIsRequired(true);
+            $attributeRepository->save($attribute);
+            $eavConfig->clear();
+
+            $query = $this->getBillingAddressTelephoneMutation($telephoneInput);
+            $this->expectExceptionMessage('"telephone" is required. Enter and try again.');
+            $this->graphQlMutation($query);
+        } finally {
+            $attribute->setIsRequired($isRequired);
+            $attributeRepository->save($attribute);
+            $eavConfig->clear();
+        }
+    }
+
+    public static function telephoneInputDataProvider(): array
+    {
+        return [
+            'omitted' => [''],
+            'null' => ['telephone: null'],
+            'empty' => ['telephone: ""']
+        ];
+    }
+
+    private function getBillingAddressTelephoneMutation(string $telephoneInput): string
+    {
+        $cart = $this->fixtures->get('cart');
+        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$cart->getId());
+
+        return <<<QUERY
+mutation {
+  setBillingAddressOnCart(input: {
+    cart_id: "$maskedQuoteId"
+    billing_address: {
+      address: {
+        firstname: "John"
+        lastname: "Doe"
+        street: ["Main Street 1"]
+        city: "Hamburg"
+        postcode: "20095"
+        country_code: "DE"
+        save_in_address_book: false
+        $telephoneInput
+      }
+    }
+  }) {
+    cart {
+      billing_address {
+        telephone
+      }
+    }
+  }
+}
+QUERY;
     }
 }
