@@ -1,0 +1,113 @@
+# Example configuration (FrankenPHP / Caddy port of nginx.conf.sample):
+# {
+#     frankenphp
+#     auto_https off
+# }
+# {$SERVER_NAME::80} {
+#     import /var/www/magento2/Caddyfile.sample
+# }
+#
+# Like nginx.conf.sample, this file is a fragment imported from a site block, the
+# same way nginx.conf.sample is pulled in with `include` inside `server { }`.
+# Requires a Caddy build with the FrankenPHP module (the php_server directive).
+#
+## Optional override of deployment mode. We recommend you use the
+## command 'bin/magento deploy:mode:set' to switch modes instead.
+##
+## env MAGE_MODE default; # or production or developer
+#
+# Parametrized through environment variables, like nginx `set $MAGE_ROOT ...;`:
+# SERVER_NAME, MAGE_ROOT (default /app), MAGE_MODE, MAGE_RUN_CODE, MAGE_RUN_TYPE.
+
+root * {$MAGE_ROOT:/app}/pub
+encode zstd br gzip
+
+# route preserves the order below (Caddy sorts directives by its own precedence otherwise).
+route {
+	# Deny access to sensitive files
+	@deny_files path_regexp (?i)(^|/)\.(user\.ini|htaccess|htpasswd)(/|$)
+	respond @deny_files 403
+
+	@deny_git path_regexp (^|/)\.git(/|$)
+	respond @deny_git 403
+
+	@deny_media path /media/customer/* /media/downloadable/* /media/import/* /media/custom_options/*
+	respond @deny_media 403
+
+	@deny_xml path_regexp ^/(media/theme_customization/.*|errors/.*)\.xml$
+	respond @deny_xml 403
+
+	# PHP entry point for setup application
+	# PHP entry point for update application
+	# (both denied by default; they live outside pub/ and are deprecated)
+	@setup path /setup /setup/* /update /update/*
+	respond @setup 403
+
+	# Banned locations (only reached if the earlier PHP entry point regexes don't match)
+	@php_denied {
+		path *.php *.phtml
+		not path /index.php /index.php/*
+		not path /get.php /static.php /health_check.php
+		not path /errors/report.php /errors/404.php /errors/503.php
+	}
+	respond @php_denied 403
+
+	@assets path_regexp \.(ico|jpg|jpeg|png|gif|svg|svgz|webp|avif|avifs|js|css|eot|ttf|otf|woff|woff2|html|json|webmanifest)$
+	header @assets Cache-Control "public, max-age=31536000, immutable"
+	@nostore path_regexp \.(zip|gz|gzip|bz2|csv|xml)$
+	header @nostore Cache-Control "no-store"
+	@assetdirs path /static/* /media/*
+	header @assetdirs X-Frame-Options "SAMEORIGIN"
+
+	# Remove signature of the static files that is used to overcome the browser cache
+	@static_versioned path_regexp staticver ^/static/version\d+/(.+)$
+	rewrite @static_versioned /static/{re.staticver.1}
+
+	@static_missing {
+		path /static/*
+		not file
+		path_regexp staticres ^/static/(?:version\d+/)?(.+)$
+	}
+	rewrite @static_missing /static.php?resource={re.staticres.1}
+
+	## The following section allows to offload image resizing from Magento instance to Caddy.
+	## Catalog image URL format should be set accordingly.
+	## See https://experienceleague.adobe.com/docs/commerce-admin/config/general/web.html
+	## See https://experienceleague.adobe.com/en/docs/commerce-operations/configuration-guide/storage/remote-storage/remote-storage-image-resize
+	## Needs a Caddy/FrankenPHP build with an image module (e.g. quix-labs/caddy-image-processor,
+	## built via `CGO_ENABLED=1 xcaddy build --with github.com/quix-labs/caddy-image-processor`),
+	## just as nginx needs the ngx_http_image_filter_module loaded in the main config.
+	#   @catalogImages path_regexp ^/media/catalog/.*\.(jpg|jpeg|png|gif|webp)$
+	#   handle @catalogImages {
+	#
+	#       # Replace placeholders and uncomment the line below to serve product images from public S3
+	#       # reverse_proxy https://<bucket-name>.<region-name>.amazonaws.com
+	#
+	#       # image_processor resizes from ?w= and ?h=. Remap Magento's width/height
+	#       # query params to them here, so no change to Magento's URL generation is needed:
+	#       rewrite * {path}?w={query.width}&h={query.height}
+	#       image_processor
+	#   }
+
+	# Serve media files, regenerating missing ones through get.php
+	@media_missing {
+		path /media/*
+		not file
+	}
+	rewrite @media_missing /get.php
+
+	# PHP entry point for main application
+	# php_server's default try_files maps to nginx `try_files $uri $uri/ /index.php`.
+	php_server {
+		# Quoted so an empty default still passes as a valid argument.
+		env MAGE_MODE "{$MAGE_MODE:production}"
+		env MAGE_RUN_CODE "{$MAGE_RUN_CODE:}"
+		env MAGE_RUN_TYPE "{$MAGE_RUN_TYPE:store}"
+	}
+}
+
+# error_page 404 403 = /errors/404.php
+handle_errors {
+	rewrite * /errors/404.php
+	php_server
+}
