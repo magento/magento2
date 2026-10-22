@@ -144,6 +144,56 @@ class DeployStaticFile
     }
 
     /**
+     * Check if a resolved file exists in pub static directory
+     *
+     * @param string $fileName
+     * @param string $filePath
+     * @return bool
+     */
+    public function fileExists(string $fileName, string $filePath): bool
+    {
+        $fileName = $this->minification->addMinifiedSign($fileName);
+        $relativePath = $filePath . DIRECTORY_SEPARATOR . $this->resolveFile($fileName);
+        return $this->pubStaticDir->isFile($relativePath);
+    }
+
+    /**
+     * Recursively copy all files from source path to target path.
+     *
+     * @param string $sourcePath Relative path within pub/static
+     * @param string $targetPath Relative path within pub/static
+     * @return int Number of files copied
+     */
+    public function copyTree(string $sourcePath, string $targetPath): int
+    {
+        if (!$this->pubStaticDir->isExist($sourcePath)) {
+            return 0;
+        }
+
+        $sourceAbsPath = $this->pubStaticDir->getAbsolutePath($sourcePath);
+        $iterator = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($sourceAbsPath, \RecursiveDirectoryIterator::SKIP_DOTS),
+            \RecursiveIteratorIterator::SELF_FIRST
+        );
+
+        $count = 0;
+        foreach ($iterator as $item) {
+            $relSubPath = $iterator->getSubPathName();
+            if ($item->isDir()) {
+                $this->pubStaticDir->create($targetPath . DIRECTORY_SEPARATOR . $relSubPath);
+            } else {
+                $this->pubStaticDir->copyFile(
+                    $sourcePath . DIRECTORY_SEPARATOR . $relSubPath,
+                    $targetPath . DIRECTORY_SEPARATOR . $relSubPath
+                );
+                $count++;
+            }
+        }
+
+        return $count;
+    }
+
+    /**
      * Open static file
      *
      * @param string $fileName

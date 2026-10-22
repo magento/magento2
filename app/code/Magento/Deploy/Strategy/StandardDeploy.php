@@ -61,14 +61,35 @@ class StandardDeploy implements StrategyInterface
             $deployedPackages[] = $package;
         }
 
+        // For each area/theme, the first locale becomes the base. Subsequent locales are set as
+        // children of the base so DeployPackage can bulk-copy the already-deployed output rather
+        // than re-running LESS compilation for every locale variant independently.
+        $baseLocalePackages = [];
+        foreach ($deployedPackages as $package) {
+            $packageId = $package->getArea() . '/' . $package->getTheme();
+            if (!isset($baseLocalePackages[$packageId])) {
+                $baseLocalePackages[$packageId] = $package;
+            } else {
+                $package->setParent($baseLocalePackages[$packageId]);
+            }
+        }
+
         $parentCompilationRequested = $options[Options::NO_PARENT] !== true;
         $includeThemesMap = array_flip($options[Options::THEME] ?? []);
         $excludeThemesMap = array_flip($options[Options::EXCLUDE_THEME] ?? []);
 
+        // Sort so base packages (no locale parent) come before their variants.
+        // This guarantees the source directory exists when copyTree runs for each variant.
+        usort($deployedPackages, fn($a, $b) => ($a->getParent() !== null) <=> ($b->getParent() !== null));
+
         foreach ($deployedPackages as $package) {
             if ($parentCompilationRequested
                 || $this->canDeployTheme($package->getTheme(), $includeThemesMap, $excludeThemesMap)) {
-                $this->queue->add($package);
+                $parentPackage = $package->getParent();
+                $this->queue->add(
+                    $package,
+                    $parentPackage ? [$parentPackage->getPath() => $parentPackage] : []
+                );
             }
         }
 
