@@ -53,10 +53,10 @@ class DuplicatedProductAttributesCopier
     }
 
     /**
-     * Copy non-global Product Attributes form source to target
+     * Copy non-global attributes from source to target.
      *
-     * @param $source Product
-     * @param $target Product
+     * @param Product $source
+     * @param Product $target
      * @return void
      */
     public function copyProductAttributes(Product $source, Product $target): void
@@ -69,10 +69,16 @@ class DuplicatedProductAttributesCopier
             ->addFieldToFilter('is_global', 0);
 
         $eavTableNames = [];
+        $mediaAttributeIds = [];
         foreach ($attributeCollection->getItems() as $item) {
             /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $item */
             $eavTableNames[] = $item->getBackendTable();
+            if ($item->getFrontendInput() === 'media_image') {
+                $mediaAttributeIds[(int) $item->getAttributeId()] = true;
+            }
         }
+
+        $mediaFileMap = $this->getMediaFileMap($target);
 
         $connection = $this->resource->getConnection();
         foreach (array_unique($eavTableNames) as $eavTable) {
@@ -89,11 +95,37 @@ class DuplicatedProductAttributesCopier
             }
 
             foreach ($records as $index => $bind) {
+                if (isset($mediaAttributeIds[(int) $bind['attribute_id']])
+                    && $bind['value'] !== null
+                    && isset($mediaFileMap[$bind['value']])
+                ) {
+                    $bind['value'] = $mediaFileMap[$bind['value']];
+                }
                 $bind[$linkField] = $target->getData($linkField);
                 $records[$index] = $bind;
             }
 
             $connection->insertMultiple($this->resource->getTableName($eavTable), $records);
         }
+    }
+
+    /**
+     * Map media attribute values to the duplicate's new file names.
+     *
+     * @param Product $target
+     * @return array
+     */
+    private function getMediaFileMap(Product $target): array
+    {
+        $mediaGallery = $target->getData('media_gallery');
+        $fileMap = [];
+        if (is_array($mediaGallery) && isset($mediaGallery['images']) && is_array($mediaGallery['images'])) {
+            foreach ($mediaGallery['images'] as $image) {
+                if (isset($image['file'], $image['new_file'])) {
+                    $fileMap[$image['file']] = $image['new_file'];
+                }
+            }
+        }
+        return $fileMap;
     }
 }
