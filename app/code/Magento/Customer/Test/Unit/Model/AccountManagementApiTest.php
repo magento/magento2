@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Customer\Test\Unit\Model;
 
 use Magento\Customer\Api\AddressRepositoryInterface;
+use Magento\Customer\Api\ConfirmationEmailLogManagementInterface;
 use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
@@ -257,6 +258,11 @@ class AccountManagementApiTest extends TestCase
     private $storeMock;
 
     /**
+     * @var ConfirmationEmailLogManagementInterface|MockObject
+     */
+    private $confirmationLogManagement;
+
+    /**
      * @inheritDoc
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -312,6 +318,7 @@ class AccountManagementApiTest extends TestCase
         $this->sessionManager = $this->createMock(SessionManagerInterface::class);
         $this->saveHandler = $this->createMock(SaveHandlerInterface::class);
         $this->authorizationMock = $this->createMock(Authorization::class);
+        $this->confirmationLogManagement = $this->createMock(ConfirmationEmailLogManagementInterface::class);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $objects = [
             [
@@ -371,6 +378,10 @@ class AccountManagementApiTest extends TestCase
                 $this->createMock(EmailNotificationInterface::class)
             ],
             [
+                ConfirmationEmailLogManagementInterface::class,
+                $this->createMock(ConfirmationEmailLogManagementInterface::class)
+            ],
+            [
                 AddressFactory::class,
                 $this->createMock(AddressFactory::class)
             ],
@@ -414,7 +425,8 @@ class AccountManagementApiTest extends TestCase
                 'searchCriteriaBuilder' => $this->searchCriteriaBuilderMock,
                 'addressRegistry' => $this->addressRegistryMock,
                 'allowedCountriesReader' => $this->allowedCountriesReader,
-                'authorization' => $this->authorizationMock
+                'authorization' => $this->authorizationMock,
+                'confirmationEmailLogManagement' => $this->confirmationLogManagement,
             ]
         );
         $this->accountManagementMock = $this->createMock(AccountManagement::class);
