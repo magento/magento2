@@ -20,6 +20,15 @@ use Magento\Framework\Stdlib\DateTime\DateTime;
 class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
+     * Stock item fields whose change requires a price reindex
+     */
+    private const PRICE_AFFECTING_FIELDS = [
+        'is_in_stock',
+        'use_config_manage_stock',
+        'manage_stock',
+    ];
+
+    /**
      * Whether index events should be processed immediately
      *
      * @var bool
@@ -144,6 +153,34 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
+     * Load the stored stock status so that only its real change triggers a price reindex
+     *
+     * Stock items from the stock item repository list have no original data, and the cached ones
+     * keep the original data of their first load, so it cannot be trusted here.
+     *
+     * @param AbstractModel $object
+     * @return $this
+     */
+    protected function _beforeSave(AbstractModel $object)
+    {
+        parent::_beforeSave($object);
+
+        if ($object->getId()) {
+            $connection = $this->getConnection();
+            $origData = $connection->fetchRow(
+                $connection->select()
+                    ->from($this->getMainTable(), self::PRICE_AFFECTING_FIELDS)
+                    ->where($this->getIdFieldName() . ' = ?', $object->getId())
+            );
+            foreach ($origData ?: [] as $field => $value) {
+                $object->setOrigData($field, $value);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
      * Reindex CatalogInventory save event
      *
      * @param AbstractModel $object
@@ -157,12 +194,7 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         if ($this->processIndexEvents) {
             $this->stockIndexerProcessor->reindexRow($productId);
         }
-        $fields = [
-            'is_in_stock',
-            'use_config_manage_stock',
-            'manage_stock',
-        ];
-        foreach ($fields as $field) {
+        foreach (self::PRICE_AFFECTING_FIELDS as $field) {
             if ($object->dataHasChangedFor($field)) {
                 $this->addCommitCallback(function () use ($productId) {
                     $this->reindexPrice((int)$productId);

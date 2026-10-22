@@ -354,6 +354,57 @@ class ItemTest extends TestCase
     }
 
     /**
+     * An out of stock simple product must leave the price index in the scheduled mode and come back when in stock
+     */
+    #[
+        AppIsolation(true),
+        DbIsolation(false),
+        DataFixtureBeforeTransaction(ScheduleMode::class, ['indexer' => PriceProcessor::INDEXER_ID]),
+        DataFixtureBeforeTransaction(ScheduleMode::class, ['indexer' => StockProcessor::INDEXER_ID]),
+        DataFixture(ProductFixture::class, ['price' => 100], 'simple'),
+    ]
+    public function testSimplePriceFollowsStockChangedInScheduledMode(): void
+    {
+        $product = DataFixtureStorageManager::getStorage()->get('simple');
+        $productId = (int)$product->getId();
+        $this->updateMview();
+        $this->assertEquals(100, $this->getIndexedMinPrice($productId));
+
+        $this->updateStockStatusBySku($product->getSku(), false);
+        $this->updateMview();
+        $this->assertNull($this->getIndexedMinPrice($productId));
+
+        $this->updateStockStatusBySku($product->getSku(), true);
+        $this->updateMview();
+        $this->assertEquals(100, $this->getIndexedMinPrice($productId));
+    }
+
+    /**
+     * A quantity change that keeps the stock status must not queue a price reindex
+     */
+    #[
+        AppIsolation(true),
+        DbIsolation(false),
+        DataFixtureBeforeTransaction(ScheduleMode::class, ['indexer' => PriceProcessor::INDEXER_ID]),
+        DataFixtureBeforeTransaction(ScheduleMode::class, ['indexer' => StockProcessor::INDEXER_ID]),
+        DataFixture(ProductFixture::class, ['price' => 100], 'simple'),
+    ]
+    public function testQtyChangeDoesNotQueuePriceReindexInScheduledMode(): void
+    {
+        $sku = DataFixtureStorageManager::getStorage()->get('simple')->getSku();
+        $this->updateMview();
+        $changelog = $this->objectManager->get(PriceProcessor::class)->getIndexer()->getView()->getChangelog();
+        $versionBefore = $changelog->getVersion();
+
+        $stockRegistry = $this->objectManager->get(StockRegistryInterface::class);
+        $stockItem = $stockRegistry->getStockItemBySku($sku);
+        $stockItem->setQty((float)$stockItem->getQty() + 5);
+        $stockRegistry->updateStockItemBySku($sku, $stockItem);
+
+        $this->assertEquals($versionBefore, $changelog->getVersion());
+    }
+
+    /**
      * Change the stock status the same way PUT /V1/products/:productSku/stockItems/:itemId does
      *
      * @param string $sku
