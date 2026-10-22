@@ -135,8 +135,37 @@ abstract class AbstractCreate extends \Magento\Backend\Block\Widget
      */
     public function getItemPrice(Product $product)
     {
+        return $this->convertPrice($this->getPriceWithCustomOptions($product));
+    }
+
+    /**
+     * Get final price of the product including the price of its selected customizable options
+     *
+     * @param Product $product
+     * @return float
+     */
+    protected function getPriceWithCustomOptions(Product $product)
+    {
         $price = $product->getPriceInfo()->getPrice(FinalPrice::PRICE_CODE)->getValue();
-        return $this->convertPrice($price);
+        $optionIds = $product->getCustomOption('option_ids');
+        if (!$optionIds) {
+            return $price;
+        }
+
+        $optionsPrice = 0;
+        foreach (explode(',', $optionIds->getValue() ?? '') as $optionId) {
+            $option = $product->getOptionById($optionId);
+            if (!$option) {
+                continue;
+            }
+            $configurationItemOption = $product->getCustomOption('option_' . $option->getId());
+            $optionsPrice += $option->groupFactory($option->getType())
+                ->setOption($option)
+                ->setConfigurationItemOption($configurationItemOption)
+                ->getOptionPrice($configurationItemOption->getValue(), $price);
+        }
+
+        return $price + $optionsPrice;
     }
 
     /**
