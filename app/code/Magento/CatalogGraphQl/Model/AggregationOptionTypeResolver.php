@@ -22,7 +22,6 @@ class AggregationOptionTypeResolver implements TypeResolverInterface
         return isset($data['value'])
             && isset($data['label'])
             && isset($data['count'])
-            && count($data) == 3
                 ? 'AggregationOption'
                 : '';
     }
