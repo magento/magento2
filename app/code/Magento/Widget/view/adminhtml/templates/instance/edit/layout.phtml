@@ -130,7 +130,7 @@ script;
                     )}" '+
                     'alt="{$escaper->escapeJs(__('Open Chooser'))}" />' +
                 '</a>&nbsp;' +
-                '<a id="widget-apply-<%- data.id %>" href="#" '+
+                '<a id="{$escaper->escapeJs($container['name'])}-widget-apply-<%- data.id %>" href="#" '+
                 'title="{$escaper->escapeJs(__('Apply'))}">' +
                     '<img src="{$escaper->escapeJs(
                         $escaper->escapeUrl($block->getViewFileUrl('images/rule_component_apply.gif'))
@@ -156,7 +156,7 @@ script;
         'onclick',
         "event.preventDefault();
         WidgetInstance.hideEntityChooser('" . $escaper->escapeJs($container['name']) . "_ids_<%- data.id %>')",
-        "a#widget-apply-<%- data.id %>"
+        "a#" . $escaper->escapeJs($container['name']) . "-widget-apply-<%- data.id %>"
     );
     $scriptString .= "'" . $escaper->escapeJs($scriptString1) . "'+" . PHP_EOL;
     $scriptString .= <<<script

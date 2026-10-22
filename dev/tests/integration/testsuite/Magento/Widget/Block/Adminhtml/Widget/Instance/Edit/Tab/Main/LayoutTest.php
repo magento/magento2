@@ -13,6 +13,7 @@ use Magento\Framework\Escaper;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\View\DesignInterface;
 use Magento\Framework\View\LayoutInterface;
+use Magento\TestFramework\Fixture\AppIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Widget\Model\Widget\Instance;
 use PHPUnit\Framework\TestCase;
@@ -69,6 +70,21 @@ class LayoutTest extends TestCase
         $optionCount = substr_count($actualHtml, '<option ');
         $this->assertGreaterThan(1, $optionCount, 'HTML select tag must provide options to choose from.');
         $this->assertEquals($optionCount, substr_count($actualHtml, '</option>'));
+    }
+
+    #[AppIsolation(true)]
+    public function testApplyButtonIdIsUniquePerChooserContainer(): void
+    {
+        $html = $this->block->toHtml();
+
+        preg_match_all('/<a id="([^"]*widget-apply-[^"]*)"/', $html, $matches);
+
+        $this->assertGreaterThan(1, count($matches[1]));
+        $this->assertSame(
+            $matches[1],
+            array_values(array_unique($matches[1])),
+            'Every chooser container must render its own Apply button id.'
+        );
     }
 
     /**
