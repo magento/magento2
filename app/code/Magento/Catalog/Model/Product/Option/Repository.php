@@ -7,11 +7,11 @@
 namespace Magento\Catalog\Model\Product\Option;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\EntityManager\HydratorPool;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Framework\EntityManager\HydratorPool;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Product custom options repository
@@ -172,6 +172,10 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
 
             if (!$persistedOption) {
                 throw new NoSuchEntityException();
+            }
+            // Option::beforeSave() removes data of the old type group only when it knows the old type
+            if (!$option->getData('previous_type')) {
+                $option->setData('previous_type', $persistedOption->getType());
             }
             $originalValues = $persistedOption->getValues();
             $newValues = $option->getData('values');
