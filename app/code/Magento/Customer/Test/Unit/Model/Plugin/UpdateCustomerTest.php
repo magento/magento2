@@ -106,31 +106,58 @@ class UpdateCustomerTest extends TestCase
      * but must be passed through when the payload explicitly contains addresses.
      */
     #[DataProvider('addressPayloadDataProvider')]
-    public function testBeforeSaveHandlesAddresses(array $incomingData, ?array $expectedAddresses): void
+    public function testBeforeSaveHandlesAddresses(int $userType, string $addressPayload): void
     {
+        $originalAddresses = [$this->createStub(AddressInterface::class)];
         $originCustomer = $this->createCustomerData([
-            CustomerInterface::KEY_ADDRESSES => [$this->createStub(AddressInterface::class)],
+            CustomerInterface::KEY_ADDRESSES => $originalAddresses,
+            CustomerInterface::DEFAULT_BILLING => '10',
+            CustomerInterface::DEFAULT_SHIPPING => '11',
         ]);
-        $incomingCustomer = $this->createCustomerData($incomingData + [CustomerInterface::FIRSTNAME => 'Test']);
+        $incomingCustomer = $this->createCustomerData([CustomerInterface::FIRSTNAME => 'Test']);
+        $expectedAddresses = match ($addressPayload) {
+            'non-empty' => [$this->createStub(AddressInterface::class)],
+            'empty' => [],
+            default => null,
+        };
+        if ($addressPayload !== 'omitted') {
+            $incomingCustomer->setAddresses($expectedAddresses);
+        }
 
-        $this->userContext->method('getUserType')->willReturn(UserContextInterface::USER_TYPE_ADMIN);
-        $this->userContext->method('getUserId')->willReturn(0);
+        $this->userContext->method('getUserType')->willReturn($userType);
+        $this->userContext->method('getUserId')->willReturn(self::CUSTOMER_ID);
         $this->request->method('getParam')->willReturn((string)self::CUSTOMER_ID);
         $this->request->method('getBodyParams')->willReturn([]);
-        $this->customerRepository->method('getById')->willReturn($originCustomer);
+        $this->customerRepository->expects($this->once())
+            ->method('getById')
+            ->with(self::CUSTOMER_ID)
+            ->willReturn($originCustomer);
 
         [$result] = $this->updateCustomerPlugin->beforeSave($this->customerRepository, $incomingCustomer, null);
 
         $this->assertSame($expectedAddresses, $result->getAddresses());
         $this->assertSame('Test', $result->getFirstname());
+        $this->assertSame('10', $result->getDefaultBilling());
+        $this->assertSame('11', $result->getDefaultShipping());
+        $this->assertSame($originalAddresses, $originCustomer->getAddresses());
+        $this->assertSame($expectedAddresses, $incomingCustomer->getAddresses());
+        $this->assertNotSame($originCustomer, $result);
     }
 
     public static function addressPayloadDataProvider(): array
     {
-        return [
-            'no addresses in payload' => [[], null],
-            'empty addresses in payload' => [[CustomerInterface::KEY_ADDRESSES => []], []],
-        ];
+        $cases = [];
+        foreach ([
+            'admin' => UserContextInterface::USER_TYPE_ADMIN,
+            'integration' => UserContextInterface::USER_TYPE_INTEGRATION,
+            'customer' => UserContextInterface::USER_TYPE_CUSTOMER,
+        ] as $role => $userType) {
+            foreach (['omitted', 'null', 'empty', 'non-empty'] as $addressPayload) {
+                $cases[$role . ' with ' . $addressPayload . ' addresses'] = [$userType, $addressPayload];
+            }
+        }
+
+        return $cases;
     }
 
     public static function privilegedUserTypeDataProvider(): array
