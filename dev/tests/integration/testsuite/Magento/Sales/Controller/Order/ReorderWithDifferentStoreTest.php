@@ -82,7 +82,7 @@ class ReorderWithDifferentStoreTest extends AbstractController
     /**
      * Test when reorder from different store and global customer account
      *
-     * @magentoConfßigFixture web/url/use_store 1
+     * @magentoConfigFixture web/url/use_store 1
      * @magentoConfigFixture customer/account_share/scope 0
      * @magentoDataFixture Magento/Sales/_files/customer_order_with_simple_product.php
      * @magentoDataFixture Magento/Store/_files/second_store.php
