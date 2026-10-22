@@ -79,9 +79,14 @@ class RequestPreprocessor
                 // phpcs:disable Magento2.Functions.DiscouragedFunction
                 $uri = parse_url($baseUrl);
                 if (!$this->getBaseUrlChecker()->execute($uri, $request)) {
-                    $redirectUrl = $this->_url->getRedirectUrl(
-                        $this->_url->getDirectUrl(ltrim($request->getPathInfo(), '/'), ['_nosid' => true])
+                    $directUrl = $this->_url->getDirectUrl(
+                        ltrim($request->getPathInfo(), '/'),
+                        ['_nosid' => true]
                     );
+                    if (!$request->isPost()) {
+                        $directUrl = $this->appendQueryParams($directUrl, $request);
+                    }
+                    $redirectUrl = $this->_url->getRedirectUrl($directUrl);
                     $redirectCode = (int)$this->_scopeConfig->getValue(
                         'web/url/redirect_to_base',
                         \Magento\Store\Model\ScopeInterface::SCOPE_STORE
@@ -97,6 +102,24 @@ class RequestPreprocessor
         $request->setDispatched(false);
 
         return $proceed($request);
+    }
+
+    private function appendQueryParams(string $url, \Magento\Framework\App\RequestInterface $request): string
+    {
+        $queryParams = $request->getQueryValue();
+        if (empty($queryParams)) {
+            return $url;
+        }
+
+        // phpcs:disable Magento2.Functions.DiscouragedFunction
+        $existingQuery = parse_url($url, PHP_URL_QUERY);
+        if ($existingQuery) {
+            parse_str($existingQuery, $existingParams);
+            $queryParams = array_merge($existingParams, $queryParams);
+            $url = strtok($url, '?');
+        }
+
+        return $url . '?' . http_build_query($queryParams);
     }
 
     /**
