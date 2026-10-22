@@ -377,7 +377,7 @@ class ProductDataMapperTest extends TestCase
                     ],
                 ],
                 [10 => '44', 11 => '45'],
-                ['color' => [44, 45], 'color_value' => ['red', 'black']],
+                ['color' => [44, 45], 'color_value' => ['red', 'black'], '_sort_color' => 'red'],
             ],
             'unsearchable select with options with sort by and filterable' => [
                 10,
@@ -411,7 +411,86 @@ class ProductDataMapperTest extends TestCase
                     ],
                 ],
                 [10 => '44', 11 => '45'],
-                ['color' => [44, 45], 'color_value' => ['red', 'black']],
+                ['color' => [44, 45], 'color_value' => ['red', 'black'], '_sort_color' => 'red'],
+            ],
+            'sortable select of a single product' => [
+                10,
+                [
+                    'attribute_code' => 'color',
+                    'backend_type' => 'int',
+                    'frontend_input' => 'select',
+                    'is_searchable' => false,
+                    'used_for_sort_by' => true,
+                    'options' => [
+                        ['value' => '44', 'label' => 'red'],
+                        ['value' => '45', 'label' => 'black'],
+                    ],
+                ],
+                '45',
+                ['color' => 45, 'color_value' => 'black', '_sort_color' => 'black'],
+            ],
+            'sortable select: sort field holds own label, not child labels sorting before or after it' => [
+                10,
+                [
+                    'attribute_code' => 'custom_sort_order',
+                    'backend_type' => 'int',
+                    'frontend_input' => 'select',
+                    'is_searchable' => true,
+                    'used_for_sort_by' => true,
+                    'options' => [
+                        ['value' => '101', 'label' => '1'],
+                        ['value' => '103', 'label' => '3'],
+                        ['value' => '105', 'label' => '5'],
+                    ],
+                ],
+                [10 => '103', 11 => '101', 12 => '105'],
+                [
+                    'custom_sort_order' => [103, 101, 105],
+                    'custom_sort_order_value' => ['1', '3', '5'],
+                    '_sort_custom_sort_order' => '3',
+                ],
+            ],
+            'sortable select without own value: sort field holds child labels' => [
+                10,
+                [
+                    'attribute_code' => 'custom_sort_order',
+                    'backend_type' => 'int',
+                    'frontend_input' => 'select',
+                    'is_searchable' => false,
+                    'used_for_sort_by' => true,
+                    'options' => [
+                        ['value' => '101', 'label' => '1'],
+                        ['value' => '103', 'label' => '3'],
+                        ['value' => '105', 'label' => '5'],
+                    ],
+                ],
+                [11 => '101', 12 => '105'],
+                [
+                    'custom_sort_order' => [101, 105],
+                    'custom_sort_order_value' => ['1', '5'],
+                    '_sort_custom_sort_order' => ['1', '5'],
+                ],
+            ],
+            'sortable multiselect: sort field holds own labels only' => [
+                10,
+                [
+                    'attribute_code' => 'multicolor',
+                    'backend_type' => 'varchar',
+                    'frontend_input' => 'multiselect',
+                    'is_searchable' => true,
+                    'used_for_sort_by' => true,
+                    'options' => [
+                        ['value' => '44', 'label' => 'red'],
+                        ['value' => '45', 'label' => 'black'],
+                        ['value' => '46', 'label' => 'green'],
+                    ],
+                ],
+                [10 => '45,46', 11 => '44,45'],
+                [
+                    'multicolor' => [45, 46, 44],
+                    'multicolor_value' => ['red', 'black', 'green'],
+                    '_sort_multicolor' => ['black', 'green'],
+                ],
             ],
             'multiselect without options' => [
                 10,
