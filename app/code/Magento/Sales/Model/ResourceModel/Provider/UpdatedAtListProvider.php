@@ -5,6 +5,8 @@
  */
 namespace Magento\Sales\Model\ResourceModel\Provider;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Sales\Model\Grid\LastUpdateTimeCache;
@@ -16,6 +18,8 @@ use Magento\Sales\Model\Grid\LastUpdateTimeCache;
  */
 class UpdatedAtListProvider implements NotSyncedDataProviderInterface, NotSyncedDataProviderWithCutoffInterface
 {
+    private const XML_PATH_LOOKBACK = 'dev/grid/async_indexing_lookback';
+
     /**
      * @var ResourceConnection
      */
@@ -32,16 +36,24 @@ class UpdatedAtListProvider implements NotSyncedDataProviderInterface, NotSynced
     private $lastUpdateTimeCache;
 
     /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
      * @param ResourceConnection $resourceConnection
      * @param LastUpdateTimeCache $lastUpdateTimeCache
+     * @param ScopeConfigInterface|null $scopeConfig
      */
     public function __construct(
         ResourceConnection $resourceConnection,
-        LastUpdateTimeCache $lastUpdateTimeCache
+        LastUpdateTimeCache $lastUpdateTimeCache,
+        ?ScopeConfigInterface $scopeConfig = null
     ) {
         $this->connection = $resourceConnection->getConnection('sales');
         $this->resourceConnection = $resourceConnection;
         $this->lastUpdateTimeCache = $lastUpdateTimeCache;
+        $this->scopeConfig = $scopeConfig ?? ObjectManager::getInstance()->get(ScopeConfigInterface::class);
     }
 
     /**
@@ -70,9 +82,33 @@ class UpdatedAtListProvider implements NotSyncedDataProviderInterface, NotSynced
 
         $lastUpdatedAt = $this->lastUpdateTimeCache->get($gridTableName);
         if ($lastUpdatedAt) {
-            $select->where('main_table.updated_at >= ?', $lastUpdatedAt);
+            $select->where('main_table.updated_at >= ?', $this->applyLookback($lastUpdatedAt));
         }
 
         return $this->connection->fetchAll($select, [], \Zend_Db::FETCH_COLUMN);
+    }
+
+    /**
+     * Move the watermark back so rows committed after the previous run's read are still found.
+     *
+     * The `updated_at` value is set when the UPDATE statement runs, not when its transaction commits,
+     * so a row can become visible with a timestamp that is already below the stored watermark.
+     *
+     * @param string $lastUpdatedAt
+     * @return string
+     */
+    private function applyLookback(string $lastUpdatedAt): string
+    {
+        $lookback = (int)$this->scopeConfig->getValue(self::XML_PATH_LOOKBACK);
+        $watermark = \DateTimeImmutable::createFromFormat(
+            'Y-m-d H:i:s',
+            $lastUpdatedAt,
+            new \DateTimeZone('UTC')
+        );
+        if ($lookback <= 0 || $watermark === false) {
+            return $lastUpdatedAt;
+        }
+
+        return $watermark->sub(new \DateInterval('PT' . $lookback . 'S'))->format('Y-m-d H:i:s');
     }
 }
