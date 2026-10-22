@@ -59,6 +59,46 @@ define([
             expect(model.sort).toHaveBeenCalledWith(0, elem);
         });
 
+        it('Keeps position 0 of a record in "_updateData".', function () {
+            model.recordData([]);
+            model.startIndex = 0;
+            model.pageSize = 20;
+            model.maxPosition = 3;
+            model.dataScope = 'data';
+            model.index = 'links';
+            model.source = {
+                set: jasmine.createSpy()
+            };
+
+            model._updateData([
+                {
+                    id: 1,
+                    position: 0
+                },
+                {
+                    id: 2,
+                    position: 2
+                },
+                {
+                    id: 3
+                }
+            ]);
+
+            expect(model.source.set).toHaveBeenCalledWith('data.links.0', {
+                id: 1,
+                position: 0
+            });
+            expect(model.source.set).toHaveBeenCalledWith('data.links.1', {
+                id: 2,
+                position: 2
+            });
+            expect(model.source.set).toHaveBeenCalledWith('data.links.2', {
+                id: 3,
+                position: 3
+            });
+            expect(model.maxPosition).toEqual(4);
+        });
+
         it('changePage without Records', function () {
             /**
              * Mock function which return length of record data
