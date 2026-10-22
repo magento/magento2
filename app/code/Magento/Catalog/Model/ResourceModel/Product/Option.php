@@ -80,7 +80,11 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected function _afterSave(AbstractModel $object)
     {
-        $this->_saveValuePrices($object);
+        if ($this->isStorePriceReset($object)) {
+            $this->deleteWebsiteStorePrices($object);
+        } else {
+            $this->_saveValuePrices($object);
+        }
         $this->_saveValueTitles($object);
 
         return parent::_afterSave($object);
@@ -127,6 +131,40 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         }
 
         return $this;
+    }
+
+    /**
+     * Check if the store view price of the option has to fall back to the default one
+     *
+     * @param AbstractModel $object
+     * @return bool
+     */
+    private function isStorePriceReset(AbstractModel $object): bool
+    {
+        return (bool)$object->getData('is_use_default_price')
+            && (int)$object->getStoreId() !== Store::DEFAULT_STORE_ID
+            && (int)$this->_config->getValue(
+                Store::XML_PATH_PRICE_SCOPE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ) === Store::PRICE_SCOPE_WEBSITE;
+    }
+
+    /**
+     * Remove option prices of all store views in the website of the option store view
+     *
+     * @param AbstractModel $object
+     * @return void
+     */
+    private function deleteWebsiteStorePrices(AbstractModel $object): void
+    {
+        $storeIds = $this->_storeManager->getStore($object->getStoreId())->getWebsite()->getStoreIds();
+        if (empty($storeIds)) {
+            return;
+        }
+        $this->getConnection()->delete(
+            $this->getTable('catalog_product_option_price'),
+            ['option_id = ?' => $object->getId(), 'store_id IN (?)' => array_map('intval', $storeIds)]
+        );
     }
 
     /**
