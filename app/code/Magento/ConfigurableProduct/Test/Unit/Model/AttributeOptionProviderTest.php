@@ -13,6 +13,7 @@ use Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionSelectBuilde
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
+use Magento\Eav\Model\Entity\Attribute\Source\Table;
 use Magento\Framework\App\ScopeInterface;
 use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
@@ -166,6 +167,109 @@ class AttributeOptionProviderTest extends TestCase
             $options,
             $this->model->getAttributeOptions($this->abstractAttribute, 1)
         );
+    }
+
+    /**
+     * Options are loaded for the used value indexes only when the source supports it.
+     *
+     * @param array $options
+     */
+    #[DataProvider('optionsWithBackendModelDataProvider')]
+    public function testGetAttributeOptionsLoadsUsedOptionsOnly(array $options)
+    {
+        $this->scopeResolver->method('getScope')->willReturn($this->scope);
+
+        $source = $this->createMock(Table::class);
+        $source->expects($this->once())
+            ->method('getSpecificOptions')
+            ->with(['13', '14', '15'], false)
+            ->willReturn([
+                ['value' => 13, 'label' => 'Option Value for index 13'],
+                ['value' => 14, 'label' => 'Option Value for index 14'],
+                ['value' => 15, 'label' => 'Option Value for index 15']
+            ]);
+        $source->expects($this->never())
+            ->method('getAllOptions');
+
+        $this->abstractAttribute->method('getSource')->willReturn($source);
+        $this->abstractAttribute->expects($this->atLeastOnce())
+            ->method('getSourceModel')
+            ->willReturn(Table::class);
+
+        $this->optionSelectBuilder->expects($this->any())
+            ->method('getSelect')
+            ->with($this->abstractAttribute, 1, $this->scope)
+            ->willReturn($this->select);
+
+        $this->attributeResource->expects($this->once())
+            ->method('getConnection')
+            ->willReturn($this->connectionMock);
+
+        $this->connectionMock->expects($this->once())
+            ->method('fetchAll')
+            ->with($this->select)
+            ->willReturn($options);
+
+        $this->assertEquals(
+            $options,
+            $this->model->getAttributeOptions($this->abstractAttribute, 1)
+        );
+    }
+
+    /**
+     * Duplicated value indexes are requested from the source only once.
+     */
+    public function testGetAttributeOptionsRequestsDistinctValueIndexes()
+    {
+        $this->scopeResolver->method('getScope')->willReturn($this->scope);
+
+        $source = $this->createMock(Table::class);
+        $source->expects($this->once())
+            ->method('getSpecificOptions')
+            ->with(['13'], false)
+            ->willReturn([['value' => 13, 'label' => 'Black']]);
+
+        $this->abstractAttribute->method('getSource')->willReturn($source);
+        $this->abstractAttribute->expects($this->atLeastOnce())
+            ->method('getSourceModel')
+            ->willReturn(Table::class);
+
+        $this->optionSelectBuilder->method('getSelect')->willReturn($this->select);
+        $this->attributeResource->method('getConnection')->willReturn($this->connectionMock);
+        $this->connectionMock->method('fetchAll')->willReturn([
+            ['sku' => 'Configurable1-Black', 'value_index' => '13'],
+            ['sku' => 'Configurable2-Black', 'value_index' => '13'],
+        ]);
+
+        $result = $this->model->getAttributeOptions($this->abstractAttribute, 1);
+
+        $this->assertSame('Black', $result[0]['option_title']);
+        $this->assertSame('Black', $result[1]['option_title']);
+    }
+
+    /**
+     * No option is loaded when the product has no configurable values.
+     */
+    public function testGetAttributeOptionsWithoutValueIndexes()
+    {
+        $this->scopeResolver->method('getScope')->willReturn($this->scope);
+
+        $source = $this->createMock(Table::class);
+        $source->expects($this->never())
+            ->method('getSpecificOptions');
+        $source->expects($this->never())
+            ->method('getAllOptions');
+
+        $this->abstractAttribute->method('getSource')->willReturn($source);
+        $this->abstractAttribute->expects($this->atLeastOnce())
+            ->method('getSourceModel')
+            ->willReturn(Table::class);
+
+        $this->optionSelectBuilder->method('getSelect')->willReturn($this->select);
+        $this->attributeResource->method('getConnection')->willReturn($this->connectionMock);
+        $this->connectionMock->method('fetchAll')->willReturn([]);
+
+        $this->assertEquals([], $this->model->getAttributeOptions($this->abstractAttribute, 1));
     }
 
     /**
