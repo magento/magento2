@@ -93,7 +93,7 @@ class CliCommand
         $installParams = $this->toCliArguments($installParams);
         $upgradeCommand .= ' ' . implode(" ", array_keys($installParams));
 
-        return $this->shell->execute($upgradeCommand, array_values($installParams));
+        return $this->shell->execute($upgradeCommand, $this->toCliValues($installParams));
     }
 
     /**
@@ -117,6 +117,7 @@ class CliCommand
      * @return void
      * @throws LocalizedException
      * @deprecated split database solution is deprecated and will be removed
+     * @see Nothing
      */
     public function splitQuote()
     {
@@ -141,6 +142,7 @@ class CliCommand
      * @return void
      * @throws LocalizedException
      * @deprecated split database solution is deprecated and will be removed
+     * @see Nothing
      */
     public function splitSales()
     {
@@ -191,6 +193,8 @@ class CliCommand
     /**
      * Convert from raw params to CLI arguments, like --admin-username.
      *
+     * A list entry, like ['dry-run'], becomes a flag without a value.
+     *
      * @param  array $params
      * @return array
      */
@@ -199,12 +203,25 @@ class CliCommand
         $result = [];
 
         foreach ($params as $key => $value) {
-            if (!empty($value)) {
+            if (is_int($key)) {
+                $result["--{$value}"] = null;
+            } elseif (!empty($value)) {
                 $result["--{$key}=%s"] = $value;
             }
         }
 
         return $result;
+    }
+
+    /**
+     * Get the values to substitute into the placeholders of the CLI arguments.
+     *
+     * @param array $cliArguments
+     * @return array
+     */
+    private function toCliValues(array $cliArguments): array
+    {
+        return array_values(array_filter($cliArguments, static fn ($value) => $value !== null));
     }
 
     /**
@@ -236,7 +253,7 @@ class CliCommand
         // run install script
         $exitCode = $this->shell->execute(
             PHP_BINARY . ' -f %s setup:install -vvv ' . implode(' ', array_keys($installParams)),
-            array_merge([BP . '/bin/magento'], array_values($installParams))
+            array_merge([BP . '/bin/magento'], $this->toCliValues($installParams))
         );
         $this->afterInstall();
         return $exitCode;
@@ -264,9 +281,12 @@ class CliCommand
     private function getCliScriptCommandWithDI(): string
     {
         $params['MAGE_DIRS']['base']['path'] = BP;
+        // @phpstan-ignore-next-line
         $params['INTEGRATION_TESTS_CLI_AUTOLOADER'] = TESTS_BASE_DIR . '/framework/autoload.php';
+        // @phpstan-ignore-next-line
         $params['TESTS_BASE_DIR'] = TESTS_BASE_DIR;
         return 'INTEGRATION_TEST_PARAMS="' . urldecode(http_build_query($params)) . '"'
+        // @phpstan-ignore-next-line
         . ' ' . PHP_BINARY . ' -f ' . INTEGRATION_TESTS_BASE_DIR
         . '/bin/magento ';
     }

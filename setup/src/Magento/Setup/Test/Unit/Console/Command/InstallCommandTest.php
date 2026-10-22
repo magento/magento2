@@ -197,6 +197,37 @@ class InstallCommandTest extends TestCase
         $commandTester->execute($this->input);
     }
 
+    #[DataProvider('dryRunOptionDataProvider')]
+    public function testDryRunOption(array $dryRunOption, mixed $expectedDryRun): void
+    {
+        $this->adminUserMock->expects($this->never())->method('validate');
+        $this->installerFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($this->installer);
+        $this->installer->expects($this->once())
+            ->method('install')
+            ->with($this->callback(
+                static fn (array $request): bool => $request['dry-run'] === $expectedDryRun
+            ));
+        $this->configImportMock->expects($this->once())
+            ->method('run')
+            ->willReturn(Cli::RETURN_SUCCESS);
+
+        $commandTester = new CommandTester($this->command);
+
+        $this->assertSame(Cli::RETURN_SUCCESS, $commandTester->execute($this->input + $dryRunOption));
+    }
+
+    public static function dryRunOptionDataProvider(): array
+    {
+        return [
+            'absent' => [[], false],
+            'bare flag' => [['--dry-run' => null], true],
+            'explicit value' => [['--dry-run' => '1'], '1'],
+            'explicit zero' => [['--dry-run' => '0'], '0'],
+        ];
+    }
+
     public function testInteractiveExecute(): void
     {
         $this->installerFactory
