@@ -280,7 +280,9 @@ class Session extends \Magento\Framework\Session\SessionManager
                      * store switcher.
                      */
                     if ($quote->getQuoteCurrencyCode() != $this->_storeManager->getStore()->getCurrentCurrencyCode()) {
-                        $quote->setStore($this->_storeManager->getStore());
+                        $store = $this->_storeManager->getStore();
+                        $quote->setStore($store);
+                        $quote->setQuoteCurrencyCode($store->getCurrentCurrency()->getCode());
                         $this->quoteRepository->save($quote->collectTotals());
                         /*
                          * We mast to create new quote object, because collectTotals()
