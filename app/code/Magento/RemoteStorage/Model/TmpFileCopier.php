@@ -45,6 +45,11 @@ class TmpFileCopier
     private $logger;
 
     /**
+     * @var string
+     */
+    private $tmpFilePrefix;
+
+    /**
      * @param Filesystem $filesystem
      * @param TargetDirectory $targetDirectory
      * @param Config $config
@@ -62,6 +67,7 @@ class TmpFileCopier
         $this->remoteDirectoryWrite = $targetDirectory->getDirectoryWrite(DirectoryList::ROOT);
         $this->isEnabled = $config->isEnabled();
         $this->logger = $logger;
+        $this->tmpFilePrefix = bin2hex(random_bytes(8));
     }
 
     /**
@@ -92,7 +98,7 @@ class TmpFileCopier
             return $filePath;
         }
 
-        if (isset($this->tmpFiles[$filePath])) {
+        if (isset($this->tmpFiles[$filePath]) && $this->tmpDirectoryWrite->isFile($this->tmpFiles[$filePath])) {
             return $this->tmpFiles[$filePath];
         }
 
@@ -100,11 +106,13 @@ class TmpFileCopier
         if ($this->remoteDirectoryWrite->isFile($absolutePath)) {
             $this->tmpDirectoryWrite->create();
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
-            $tmpPath = $this->tmpDirectoryWrite->getAbsolutePath() . basename($filePath);
+            $extension = strrchr(basename($filePath), '.');
+            $tmpPath = $this->tmpDirectoryWrite->getAbsolutePath()
+                . $this->tmpFilePrefix . '_' . hash('sha256', $filePath) . ($extension === false ? '' : $extension);
             $content = $this->remoteDirectoryWrite->getDriver()->fileGetContents($filePath);
             if ($this->tmpDirectoryWrite->getDriver()->filePutContents($tmpPath, $content) >= 0) {
+                $this->tmpFiles[$filePath] = $tmpPath;
                 $filePath = $tmpPath;
-                $this->tmpFiles[$tmpPath] = $tmpPath;
             }
         }
 

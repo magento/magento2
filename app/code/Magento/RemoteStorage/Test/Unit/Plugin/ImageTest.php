@@ -43,6 +43,11 @@ class ImageTest extends TestCase
     private $targetDirectoryWrite;
 
     /**
+     * @var string[]
+     */
+    private $tmpFileContents = [];
+
+    /**
      * @return void
      * @throws \Magento\Framework\Exception\FileSystemException
      */
@@ -146,15 +151,16 @@ class ImageTest extends TestCase
         $subject = $this->createMock(AbstractAdapter::class);
         $filename = '/path/file_name.file';
         $absolutePath = 'absolute' . $filename;
-        $tmpAbsolutePath = '/var/www/magento2/tmp';
-        $tmpFilePath = $tmpAbsolutePath . 'file_name.file';
+        $tmpAbsolutePath = '/var/www/magento2/tmp/';
+        $tmpFilePathPattern = '#^/var/www/magento2/tmp/[0-9a-f]{16}_[0-9a-f]{64}\.file$#';
         $content = 'Just a test';
 
         $targetDriver = $this->createMock(DriverInterface::class);
         $targetDriver->expects(self::atLeastOnce())->method('fileGetContents')->with($filename)
             ->willReturn($content);
         $tmpDriver = $this->createMock(DriverInterface::class);
-        $tmpDriver->expects(self::atLeastOnce())->method('filePutContents')->with($tmpFilePath, $content)
+        $tmpDriver->expects(self::atLeastOnce())->method('filePutContents')
+            ->with(self::matchesRegularExpression($tmpFilePathPattern), $content)
             ->willReturn(true);
         $this->targetDirectoryWrite->expects(self::atLeastOnce())->method('getAbsolutePath')->with($filename)
             ->willReturn($absolutePath);
@@ -168,6 +174,105 @@ class ImageTest extends TestCase
         $this->tmpDirectoryWrite->expects(self::atLeastOnce())->method('getAbsolutePath')
             ->willReturn($tmpAbsolutePath);
 
-        self::assertEquals([$tmpFilePath], $this->plugin->beforeOpen($subject, $filename));
+        $result = $this->plugin->beforeOpen($subject, $filename);
+
+        self::assertCount(1, $result);
+        self::assertMatchesRegularExpression($tmpFilePathPattern, $result[0]);
+    }
+
+    /**
+     * @return void
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
+    public function testBeforeOpenUsesDistinctTmpFilesForSameBasename(): void
+    {
+        /** @var AbstractAdapter $subject */
+        $subject = $this->createStub(AbstractAdapter::class);
+        $this->mockRemoteCopy();
+
+        [$first] = $this->plugin->beforeOpen($subject, 'catalog/product/a/b/image.jpg');
+        [$second] = $this->plugin->beforeOpen($subject, 'catalog/product/c/d/image.jpg');
+        [$firstAgain] = $this->plugin->beforeOpen($subject, 'catalog/product/a/b/image.jpg');
+
+        self::assertNotSame($first, $second);
+        self::assertStringEndsWith('.jpg', $first);
+        self::assertStringEndsWith('.jpg', $second);
+        self::assertSame($first, $firstAgain);
+        self::assertSame('content of catalog/product/a/b/image.jpg', $this->tmpFileContents[$first]);
+        self::assertSame('content of catalog/product/c/d/image.jpg', $this->tmpFileContents[$second]);
+    }
+
+    /**
+     * @return void
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
+    public function testBeforeOpenUsesDistinctTmpFilesPerInstance(): void
+    {
+        /** @var AbstractAdapter $subject */
+        $subject = $this->createStub(AbstractAdapter::class);
+        $this->mockRemoteCopy();
+        $filesystem = $this->createStub(Filesystem::class);
+        $filesystem->method('getDirectoryWrite')->willReturn($this->tmpDirectoryWrite);
+        $targetDirectory = $this->createStub(TargetDirectory::class);
+        $targetDirectory->method('getDirectoryWrite')->willReturn($this->targetDirectoryWrite);
+        $config = $this->createStub(Config::class);
+        $config->method('isEnabled')->willReturn(true);
+        $otherPlugin = new Image(
+            $filesystem,
+            $this->ioFile,
+            $targetDirectory,
+            $config,
+            $this->createStub(LoggerInterface::class)
+        );
+
+        [$first] = $this->plugin->beforeOpen($subject, 'catalog/product/a/b/image.jpg');
+        [$second] = $otherPlugin->beforeOpen($subject, 'catalog/product/a/b/image.jpg');
+
+        self::assertNotSame($first, $second);
+    }
+
+    /**
+     * @return void
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
+    public function testBeforeOpenCopiesAgainWhenCachedTmpFileIsGone(): void
+    {
+        /** @var AbstractAdapter $subject */
+        $subject = $this->createStub(AbstractAdapter::class);
+        $this->mockRemoteCopy();
+        $filename = 'catalog/product/a/b/image.jpg';
+
+        [$tmpFile] = $this->plugin->beforeOpen($subject, $filename);
+        unset($this->tmpFileContents[$tmpFile]);
+        [$tmpFileAgain] = $this->plugin->beforeOpen($subject, $filename);
+
+        self::assertArrayHasKey($tmpFileAgain, $this->tmpFileContents);
+        self::assertSame('content of ' . $filename, $this->tmpFileContents[$tmpFileAgain]);
+    }
+
+    /**
+     * Wire the directory mocks to copy "content of <path>" into an in-memory tmp directory
+     *
+     * @return void
+     */
+    private function mockRemoteCopy(): void
+    {
+        $targetDriver = $this->createStub(DriverInterface::class);
+        $targetDriver->method('fileGetContents')
+            ->willReturnCallback(static fn (string $path): string => 'content of ' . $path);
+        $tmpDriver = $this->createStub(DriverInterface::class);
+        $tmpDriver->method('filePutContents')
+            ->willReturnCallback(function (string $path, string $content): int {
+                $this->tmpFileContents[$path] = $content;
+                return strlen($content);
+            });
+        $this->targetDirectoryWrite->method('getAbsolutePath')
+            ->willReturnCallback(static fn (string $path): string => '/remote/' . $path);
+        $this->targetDirectoryWrite->method('isFile')->willReturn(true);
+        $this->targetDirectoryWrite->method('getDriver')->willReturn($targetDriver);
+        $this->tmpDirectoryWrite->method('getAbsolutePath')->willReturn('/var/tmp/');
+        $this->tmpDirectoryWrite->method('getDriver')->willReturn($tmpDriver);
+        $this->tmpDirectoryWrite->method('isFile')
+            ->willReturnCallback(fn (string $path): bool => isset($this->tmpFileContents[$path]));
     }
 }
