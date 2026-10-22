@@ -261,7 +261,10 @@ class Url
     private function getRequestReferrer()
     {
         $referer = $this->request->getParam(self::REFERER_QUERY_PARAM_NAME);
-        if ($referer && $this->hostChecker->isOwnOrigin($this->urlDecoder->decode($referer))) {
+        if (is_string($referer)
+            && preg_match('/^[A-Za-z0-9\-_~]+$/', $referer)
+            && $this->hostChecker->isOwnOrigin($this->urlDecoder->decode($referer))
+        ) {
             return $referer;
         }
         return null;
