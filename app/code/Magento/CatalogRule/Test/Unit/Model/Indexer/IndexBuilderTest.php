@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogRule\Test\Unit\Model\Indexer;
 
+use Magento\Catalog\Model\Indexer\Product\Price\Processor;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
@@ -32,6 +33,7 @@ use Magento\Customer\Api\GroupExcludedWebsiteRepositoryInterface;
 use Magento\Eav\Model\Config;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
 use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
@@ -44,8 +46,6 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 /**
- * Test for Magento\CatalogRule\Model\Indexer\IndexBuilder class.
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class IndexBuilderTest extends TestCase
@@ -181,7 +181,7 @@ class IndexBuilderTest extends TestCase
             });
 
         $connection = $this->resource->getConnection();
-        $select = $this->createMock(\Magento\Framework\DB\Select::class);
+        $select = $this->createMock(Select::class);
         $select->method('from')->willReturnSelf();
         $select->method('where')->willReturnSelf();
         $connection->method('select')->willReturn($select);
@@ -195,7 +195,7 @@ class IndexBuilderTest extends TestCase
         $priceIndexer->method('isScheduled')->willReturn(true);
         $this->indexerRegistry->method('get')->willReturnMap([
             [RuleProductProcessor::INDEXER_ID, $ruleIndexer],
-            [\Magento\Catalog\Model\Indexer\Product\Price\Processor::INDEXER_ID, $priceIndexer],
+            [Processor::INDEXER_ID, $priceIndexer],
         ]);
 
         $this->reindexRuleProductsPrice->expects($this->once())->method('execute')->with(2000, $ids);
