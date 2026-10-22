@@ -5,7 +5,8 @@
  * All Rights Reserved.
  */
 -->
-<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
             <item name="provider" xsi:type="string">sales_order_grid.sales_order_grid_data_source</item>
@@ -122,7 +123,8 @@
         <settings>
             <childDefaults>
                 <param name="fieldAction" xsi:type="array">
-                    <item name="provider" xsi:type="string">sales_order_grid.sales_order_grid.sales_order_columns.actions</item>
+                    <item name="provider"
+                          xsi:type="string">sales_order_grid.sales_order_grid.sales_order_columns.actions</item>
                     <item name="target" xsi:type="string">applyAction</item>
                     <item name="params" xsi:type="array">
                         <item name="0" xsi:type="string">view</item>
@@ -149,7 +151,8 @@
                 <sortable>false</sortable>
             </settings>
         </column>
-        <column name="created_at" class="Magento\Ui\Component\Listing\Columns\Date" component="Magento_Ui/js/grid/columns/date">
+        <column name="created_at" class="Magento\Ui\Component\Listing\Columns\Date"
+                component="Magento_Ui/js/grid/columns/date">
             <settings>
                 <filter>dateRange</filter>
                 <dataType>date</dataType>
@@ -249,7 +252,7 @@
                 <visible>false</visible>
             </settings>
         </column>
-        <column name="payment_method" component="Magento_Ui/js/grid/columns/select">
+        <column name="payment_method" class="Magento\Sales\Ui\Component\Listing\Column\StorePaymentMethod">
             <settings>
                 <filter>select</filter>
                 <options class="Magento\Payment\Ui\Component\Listing\Column\Method\Options"/>
