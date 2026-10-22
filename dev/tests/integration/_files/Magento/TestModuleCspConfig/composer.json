@@ -1,9 +1,6 @@
 {
     "name": "magento/module-csp-config",
     "description": "test csp module",
-    "config": {
-        "sort-packages": true
-    },
     "require": {
         "php": "~7.4.0||~8.0.0",
         "magento/framework": "*",
