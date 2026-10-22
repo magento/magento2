@@ -35,7 +35,10 @@ try {
     setCustomErrorHandler();
 
     /* Bootstrap the application */
-    $settings = new \Magento\TestFramework\Bootstrap\Settings($testsBaseDir, get_defined_constants());
+    $settings = new \Magento\TestFramework\Bootstrap\Settings($testsBaseDir, array_replace(
+        get_defined_constants(),
+        getenv()
+    ));
 
     $testFrameworkDir = __DIR__;
     require_once 'deployTestModules.php';
