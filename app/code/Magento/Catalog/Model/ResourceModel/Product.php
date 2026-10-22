@@ -389,6 +389,21 @@ class Product extends AbstractResource implements ResetAfterRequestInterface
     /**
      * @inheritdoc
      */
+    public function saveAttribute(DataObject $object, $attributeCode)
+    {
+        parent::saveAttribute($object, $attributeCode);
+        $this->getConnection()->update(
+            $this->getEntityTable(),
+            [ProductInterface::UPDATED_AT => new \Zend_Db_Expr('CURRENT_TIMESTAMP')],
+            [$this->getLinkField() . ' = ?' => $object->getData($this->getLinkField())]
+        );
+
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function delete($object)
     {
         $this->getEntityManager()->delete($object);
