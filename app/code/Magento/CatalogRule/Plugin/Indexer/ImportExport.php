@@ -5,6 +5,7 @@
  */
 namespace Magento\CatalogRule\Plugin\Indexer;
 
+use Magento\Catalog\Model\Product;
 use Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor;
 use Magento\ImportExport\Model\Import;
 
@@ -34,7 +35,9 @@ class ImportExport
      */
     public function afterImportSource(Import $subject, $result)
     {
-        if (!$this->ruleProductProcessor->isIndexerScheduled()) {
+        if ($subject->getEntity() === Product::ENTITY
+            && !$this->ruleProductProcessor->isIndexerScheduled()
+        ) {
             $this->ruleProductProcessor->markIndexerAsInvalid();
         }
         return $result;
