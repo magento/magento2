@@ -6,6 +6,8 @@
 
 namespace Magento\Catalog\Model\Product\Price\Validation;
 
+use Magento\Framework\Exception\NoSuchEntityException;
+
 /**
  * Class is responsible to detect list of invalid SKU values from list of provided skus and allowed product types.
  */
@@ -57,9 +59,18 @@ class InvalidSkuProcessor
 
                 if ($allowedPriceTypeValue
                     && $type == \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE
-                    && $this->productRepository->get($sku)->getPriceType() != $allowedPriceTypeValue
                 ) {
-                    $valueTypeIsAllowed = true;
+                    try {
+                        $product = $this->productRepository->get($sku);
+                        if ($product->getPriceType() != $allowedPriceTypeValue) {
+                            $valueTypeIsAllowed = true;
+                        }
+                    } catch (NoSuchEntityException $e) {
+                        // Product was deleted between the ID lookup and repository fetch.
+                        // Treat as invalid SKU so the rest of the batch continues.
+                        $skuDiff[] = $sku;
+                        break;
+                    }
                 }
 
                 if (!in_array($type, $allowedProductTypes) || $valueTypeIsAllowed) {
