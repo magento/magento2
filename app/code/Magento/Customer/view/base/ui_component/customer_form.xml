@@ -171,7 +171,6 @@
                     </item>
                 </argument>
                 <settings>
-                    <required>true</required>
                     <dataType>number</dataType>
                 </settings>
             </field>
