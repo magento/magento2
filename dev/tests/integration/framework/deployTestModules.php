@@ -15,6 +15,36 @@
 $pathToCommittedTestModules = $testFrameworkDir . '/../_files/Magento';
 $pathToInstalledMagentoInstanceModules = $testFrameworkDir . '/../../../../app/code/Magento';
 $deployedTestModuleRootNames = [];
+$testModuleLockDir = $testFrameworkDir . '/../tmp';
+if (!is_dir($testModuleLockDir)) {
+    // phpcs:ignore Magento2.Functions.DiscouragedFunction
+    mkdir($testModuleLockDir, 0755, true);
+}
+// Keep the lock file in place so all processes lock the same inode.
+$testModuleLock = fopen($testModuleLockDir . '/test-modules.lock', 'c');
+if ($testModuleLock === false) {
+    throw new \RuntimeException('Cannot open the test module deployment lock.');
+}
+if (!flock($testModuleLock, LOCK_EX | LOCK_NB) && !flock($testModuleLock, LOCK_SH)) {
+    fclose($testModuleLock);
+    throw new \RuntimeException('Cannot lock test module deployment.');
+}
+$keepTestModules = (int)$settings->get('TESTS_PARALLEL_RUN') === 1;
+register_shutdown_function(
+    static function () use (
+        &$deployedTestModuleRootNames,
+        $pathToInstalledMagentoInstanceModules,
+        $testModuleLock,
+        $keepTestModules
+    ): void {
+        releaseTestModuleLock(
+            $testModuleLock,
+            array_keys($deployedTestModuleRootNames),
+            $pathToInstalledMagentoInstanceModules,
+            $keepTestModules
+        );
+    }
+);
 
 // Ensure app/code/Magento/ exists before vendor-scanning: in Composer builds the directory
 // is absent until the committed-modules loop below creates it, causing is_dir() to bail early.
@@ -23,8 +53,16 @@ if (!is_dir($pathToInstalledMagentoInstanceModules)) {
 }
 
 $appCodeDir = dirname($pathToInstalledMagentoInstanceModules);
-foreach (findModuleLevelTestModuleFixtureDirectories($appCodeDir) as $testModuleSourceDir) {
-    copyTestModuleTreeIntoMagentoCode($testModuleSourceDir, $pathToInstalledMagentoInstanceModules);
+$testModuleSourceDirs = findModuleLevelTestModuleFixtureDirectories($appCodeDir);
+$testModuleSourceRoots = array_fill_keys($testModuleSourceDirs, $pathToInstalledMagentoInstanceModules);
+if (is_dir($pathToCommittedTestModules)) {
+    $testModuleSourceRoots[$pathToCommittedTestModules] = $appCodeDir;
+}
+$testModuleDeploymentRequired = lockTestModuleDeploymentForWriting($testModuleSourceRoots, $testModuleLock);
+foreach ($testModuleSourceDirs as $testModuleSourceDir) {
+    if ($testModuleDeploymentRequired) {
+        copyTestModuleTreeIntoMagentoCode($testModuleSourceDir, $pathToInstalledMagentoInstanceModules);
+    }
     $deployedTestModuleRootNames[basename($testModuleSourceDir)] = true;
 }
 
@@ -41,15 +79,9 @@ if (is_dir($pathToCommittedTestModules)) {
             $source = $file->getPathname();
             $relativePath = substr($source, strlen($pathToCommittedTestModules));
             $destination = $pathToInstalledMagentoInstanceModules . $relativePath;
-            // phpcs:ignore Magento2.Functions.DiscouragedFunction
-            $targetDir = dirname($destination);
-            // phpcs:ignore Magento2.Functions.DiscouragedFunction
-            if (!is_dir($targetDir)) {
-                // phpcs:ignore Magento2.Functions.DiscouragedFunction
-                mkdir($targetDir, 0755, true);
+            if ($testModuleDeploymentRequired) {
+                copyTestModuleFile($source, $destination);
             }
-            // phpcs:ignore Magento2.Functions.DiscouragedFunction
-            copy($source, $destination);
             $trimmedRelative = ltrim(str_replace('\\', '/', $relativePath), '/');
             $firstSlashPos = strpos($trimmedRelative, '/');
             $firstSegment = $firstSlashPos === false
@@ -63,6 +95,18 @@ if (is_dir($pathToCommittedTestModules)) {
     unset($iterator, $file);
 }
 
+if (!flock($testModuleLock, LOCK_SH)) {
+    throw new \RuntimeException('Cannot retain the test module deployment lock.');
+}
+unset(
+    $testModuleLock,
+    $testModuleLockDir,
+    $keepTestModules,
+    $testModuleSourceDirs,
+    $testModuleSourceRoots,
+    $testModuleDeploymentRequired
+);
+
 // Register the modules under '_files/'
 $pathPattern = $pathToInstalledMagentoInstanceModules . '/TestModule*/registration.php';
 // phpcs:ignore Magento2.Functions.DiscouragedFunction
@@ -73,16 +117,6 @@ if ($files === false) {
 foreach ($files as $file) {
     // phpcs:ignore Magento2.Security.IncludeFile
     include $file;
-}
-
-if ((int)$settings->get('TESTS_PARALLEL_RUN') !== 1) {
-    // Only delete modules if we are not using parallel executions
-    // phpcs:ignore Magento2.Functions.DiscouragedFunction
-    register_shutdown_function(
-        'deleteTestModules',
-        array_keys($deployedTestModuleRootNames),
-        $pathToInstalledMagentoInstanceModules
-    );
 }
 
 /**
@@ -148,18 +182,118 @@ function copyTestModuleTreeIntoMagentoCode(
             $source = $file->getPathname();
             $relativePath = substr($source, strlen($committedBase));
             $destination = $pathToInstalledMagentoInstanceModules . $relativePath;
-            // phpcs:ignore Magento2.Functions.DiscouragedFunction
-            $targetDir = dirname($destination);
-            // phpcs:ignore Magento2.Functions.DiscouragedFunction
-            if (!is_dir($targetDir)) {
-                // phpcs:ignore Magento2.Functions.DiscouragedFunction
-                mkdir($targetDir, 0755, true);
-            }
-            // phpcs:ignore Magento2.Functions.DiscouragedFunction
-            copy($source, $destination);
+            copyTestModuleFile($source, $destination);
         }
     }
     unset($iterator, $file);
+}
+
+/**
+ * Acquire exclusive access before copying if any deployed file differs.
+ *
+ * @param array $sourceRoots Source directories mapped to destination parent directories
+ * @param resource $testModuleLock Deployment lock handle
+ * @return bool
+ */
+function lockTestModuleDeploymentForWriting(array $sourceRoots, $testModuleLock): bool
+{
+    foreach ($sourceRoots as $sourceRoot => $destinationRoot) {
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($sourceRoot, RecursiveDirectoryIterator::FOLLOW_SYMLINKS)
+        );
+        foreach ($iterator as $file) {
+            if ($file->isDir()) {
+                continue;
+            }
+            $source = $file->getPathname();
+            $destination = $destinationRoot . substr($source, strlen(dirname($sourceRoot)));
+            if (!is_file($destination) || hash_file('sha256', $source) !== hash_file('sha256', $destination)) {
+                // Check before copying: upgrading may release the shared lock and allow cleanup by another process.
+                if (!flock($testModuleLock, LOCK_EX)) {
+                    throw new \RuntimeException('Cannot lock test module deployment for writing.');
+                }
+                clearstatcache();
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+/**
+ * Publish changed files atomically while holding the deployment lock exclusively.
+ *
+ * @param string $source
+ * @param string $destination
+ */
+function copyTestModuleFile(string $source, string $destination): void
+{
+    if (is_file($destination) && hash_file('sha256', $source) === hash_file('sha256', $destination)) {
+        return;
+    }
+    // phpcs:ignore Magento2.Functions.DiscouragedFunction
+    $targetDir = dirname($destination);
+    // phpcs:ignore Magento2.Functions.DiscouragedFunction
+    if (!is_dir($targetDir)) {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+        mkdir($targetDir, 0755, true);
+    }
+    $permissions = is_file($destination) ? fileperms($destination) & 0777 : 0666 & ~umask();
+    $temporaryFile = tempnam($targetDir, '.test-module-');
+    if ($temporaryFile === false) {
+        throw new \RuntimeException('Cannot create a temporary test module file.');
+    }
+    publishTestModuleFile($source, $temporaryFile, $destination, $permissions);
+}
+
+/**
+ * Copy, set permissions and atomically publish a temporary test module file.
+ *
+ * @param string $source Source test module file
+ * @param string $temporaryFile Temporary file in the destination directory
+ * @param string $destination Destination test module file
+ * @param int $permissions File permissions to preserve
+ * @return void
+ */
+function publishTestModuleFile(string $source, string $temporaryFile, string $destination, int $permissions): void
+{
+    try {
+        if (!copy($source, $temporaryFile)
+            || !chmod($temporaryFile, $permissions)
+            || !rename($temporaryFile, $destination)
+        ) {
+            throw new \RuntimeException('Cannot deploy test module file: ' . $destination);
+        }
+    } finally {
+        if (is_file($temporaryFile)) {
+            unlink($temporaryFile);
+        }
+    }
+}
+
+/**
+ * Remove deployed modules only after the last reader releases its lock.
+ *
+ * @param resource $testModuleLock
+ * @param array $rootDirNames Top-level directory names under app/code/Magento to remove
+ * @param string $pathToInstalledMagentoInstanceModules Absolute path to app/code/Magento
+ * @param bool $keepTestModules
+ * @return void
+ */
+function releaseTestModuleLock(
+    $testModuleLock,
+    array $rootDirNames,
+    string $pathToInstalledMagentoInstanceModules,
+    bool $keepTestModules
+): void {
+    try {
+        flock($testModuleLock, LOCK_UN);
+        if (!$keepTestModules && flock($testModuleLock, LOCK_EX | LOCK_NB)) {
+            deleteTestModules($rootDirNames, $pathToInstalledMagentoInstanceModules);
+        }
+    } finally {
+        fclose($testModuleLock);
+    }
 }
 
 /**
