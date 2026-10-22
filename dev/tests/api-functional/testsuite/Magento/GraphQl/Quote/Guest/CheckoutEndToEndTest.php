@@ -70,6 +70,7 @@ class CheckoutEndToEndTest extends GraphQlAbstract
 
     /**
      * @magentoConfigFixture default_store checkout/options/guest_checkout 1
+     * @magentoConfigFixture default_store carriers/tablerate/active 0
      * @magentoApiDataFixture Magento/Catalog/_files/products_with_layered_navigation_attribute.php
      */
     public function testCheckoutWorkflow()
