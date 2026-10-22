@@ -6,8 +6,6 @@
 
 /**
  * Interface for work with archives
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Framework\Archive;
 
