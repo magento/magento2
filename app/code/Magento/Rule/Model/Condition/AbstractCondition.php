@@ -837,11 +837,10 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
                         }
                     }
                 } elseif (is_array($value)) {
-                    if (!is_array($validatedValue) || empty($validatedValue)) {
-                        return false;
+                    // An empty or missing value contains nothing, so "does not contain" must still be negated below
+                    if (is_array($validatedValue)) {
+                        $result = !empty(array_intersect($value, $validatedValue));
                     }
-                    $result = array_intersect($value, $validatedValue);
-                    $result = !empty($result);
                 } else {
                     if (is_array($validatedValue)) {
                         $result = in_array($value, $validatedValue);
