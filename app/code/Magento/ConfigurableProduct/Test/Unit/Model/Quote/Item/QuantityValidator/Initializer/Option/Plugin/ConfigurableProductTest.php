@@ -12,8 +12,10 @@ use Magento\CatalogInventory\Model\Stock\Item as StockItem;
 use Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\Option;
 use Magento\ConfigurableProduct\Model\Quote\Item\QuantityValidator\Initializer\Option\Plugin\ConfigurableProduct
     as InitializerOptionPlugin;
+use Magento\Framework\DataObject;
 use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Quote\Model\Quote\Item;
+use Magento\Quote\Model\Quote\Item\Option as QuoteItemOption;
 use PHPUnit\Framework\TestCase;
 
 class ConfigurableProductTest extends TestCase
@@ -47,6 +49,43 @@ class ConfigurableProductTest extends TestCase
 
         $model = new InitializerOptionPlugin();
         $model->afterGetStockItem($subjectMock, $stockItemMock, $optionMock, $quoteItemMock, 0);
+    }
+
+    /**
+     * @param string $productType
+     * @param float|null $backorders
+     * @param float|null $expectedBackorders
+     */
+    #[DataProvider('afterInitializeDataProvider')]
+    public function testAfterInitialize(string $productType, ?float $backorders, ?float $expectedBackorders): void
+    {
+        $quoteItem = $this->createPartialMock(Item::class, ['getProductType']);
+        $quoteItem->expects($this->once())->method('getProductType')->willReturn($productType);
+        $result = new DataObject(['item_backorders' => $backorders]);
+
+        $model = new InitializerOptionPlugin();
+        $this->assertSame(
+            $result,
+            $model->afterInitialize(
+                $this->createStub(Option::class),
+                $result,
+                $this->createStub(QuoteItemOption::class),
+                $quoteItem
+            )
+        );
+        $this->assertSame($expectedBackorders, $quoteItem->getBackorders());
+    }
+
+    /**
+     * @return array
+     */
+    public static function afterInitializeDataProvider(): array
+    {
+        return [
+            'configurable with backorders' => ['configurable', 2.0, 2.0],
+            'configurable without backorders' => ['configurable', null, null],
+            'not configurable' => ['bundle', 2.0, null],
+        ];
     }
 
     /**
