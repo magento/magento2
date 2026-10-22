@@ -8,7 +8,9 @@ declare(strict_types=1);
 namespace Magento\CustomerGraphQl\CacheIdFactorProviders;
 
 use Magento\Customer\Api\Data\GroupInterface;
+use Magento\Customer\Model\GroupRegistry;
 use Magento\Customer\Model\ResourceModel\GroupRepository as CustomerGroupRepository;
+use Magento\Framework\App\ObjectManager;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\GraphQlCache\Model\CacheId\CacheIdFactorProviderInterface;
 use Magento\Tax\Model\Calculation as CalculationModel;
@@ -19,7 +21,7 @@ use Magento\Tax\Model\ResourceModel\Calculation as CalculationResource;
  */
 class CustomerTaxRateProvider implements CacheIdFactorProviderInterface
 {
-    const NAME = 'CUSTOMER_TAX_RATE';
+    public const NAME = 'CUSTOMER_TAX_RATE';
 
     /**
      * @var CustomerGroupRepository
@@ -37,18 +39,26 @@ class CustomerTaxRateProvider implements CacheIdFactorProviderInterface
     private $calculationResource;
 
     /**
+     * @var GroupRegistry
+     */
+    private $groupRegistry;
+
+    /**
      * @param CustomerGroupRepository $groupRepository
      * @param CalculationModel $calculationModel
      * @param CalculationResource $calculationResource
+     * @param GroupRegistry|null $groupRegistry
      */
     public function __construct(
         CustomerGroupRepository $groupRepository,
         CalculationModel $calculationModel,
-        CalculationResource $calculationResource
+        CalculationResource $calculationResource,
+        ?GroupRegistry $groupRegistry = null
     ) {
         $this->groupRepository = $groupRepository;
         $this->calculationModel = $calculationModel;
         $this->calculationResource = $calculationResource;
+        $this->groupRegistry = $groupRegistry ?? ObjectManager::getInstance()->get(GroupRegistry::class);
     }
 
     /**
@@ -67,7 +77,7 @@ class CustomerTaxRateProvider implements CacheIdFactorProviderInterface
         $loggedIn = $context->getExtensionAttributes()->getIsCustomer();
         $customerId = $loggedIn ? (int)$context->getUserId() : 0;
         $customerGroupId = $context->getExtensionAttributes()->getCustomerGroupId() ?? GroupInterface::NOT_LOGGED_IN_ID;
-        $customerTaxClassId = $this->groupRepository->getById((int)$customerGroupId)->getTaxClassId();
+        $customerTaxClassId = $this->groupRegistry->retrieve((int)$customerGroupId)->getTaxClassId();
         $store = $context->getExtensionAttributes()->getStore();
         $rateRequest = $this->calculationModel->getRateRequest(null, null, $customerTaxClassId, $store, $customerId);
         $rateInfo = $this->calculationResource->getRateInfo($rateRequest);
