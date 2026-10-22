@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Directory\Test\Unit\Model;
 
 use Magento\Directory\Model\Country;
+use Magento\Directory\Model\Country\FormatFactory;
 use Magento\Framework\Locale\ListsInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -56,5 +57,22 @@ class CountryTest extends TestCase
 
         $this->country->setId(1);
         $this->assertEquals('Vereinigte Staaten', $this->country->getName('de_DE'));
+    }
+
+    public function testGetFormatsWithoutIdReturnsNullWithoutLoadingCollection()
+    {
+        $formatFactoryMock = $this->createMock(FormatFactory::class);
+        $formatFactoryMock->expects($this->never())
+            ->method('create');
+
+        $country = (new ObjectManager($this))->getObject(
+            Country::class,
+            [
+                'localeLists' => $this->localeListsMock,
+                'formatFactory' => $formatFactoryMock,
+            ]
+        );
+
+        $this->assertNull($country->getFormats());
     }
 }
