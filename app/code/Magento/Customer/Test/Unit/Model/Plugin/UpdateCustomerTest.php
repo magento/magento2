@@ -11,6 +11,7 @@ namespace Magento\Customer\Test\Unit\Model\Plugin;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\Data\Customer as CustomerData;
 use Magento\Customer\Model\Plugin\UpdateCustomer;
@@ -98,6 +99,38 @@ class UpdateCustomerTest extends TestCase
         $this->assertSame('1', $result->getCustomAttribute('cus_attr1')->getValue());
         $this->assertSame('0', $result->getCustomAttribute('cust_attr2')->getValue());
         $this->assertSame('password-hash', $passwordHash);
+    }
+
+    /**
+     * Addresses of the stored customer must not be re-saved when the payload carries no address data,
+     * but must be passed through when the payload explicitly contains addresses.
+     */
+    #[DataProvider('addressPayloadDataProvider')]
+    public function testBeforeSaveHandlesAddresses(array $incomingData, ?array $expectedAddresses): void
+    {
+        $originCustomer = $this->createCustomerData([
+            CustomerInterface::KEY_ADDRESSES => [$this->createStub(AddressInterface::class)],
+        ]);
+        $incomingCustomer = $this->createCustomerData($incomingData + [CustomerInterface::FIRSTNAME => 'Test']);
+
+        $this->userContext->method('getUserType')->willReturn(UserContextInterface::USER_TYPE_ADMIN);
+        $this->userContext->method('getUserId')->willReturn(0);
+        $this->request->method('getParam')->willReturn((string)self::CUSTOMER_ID);
+        $this->request->method('getBodyParams')->willReturn([]);
+        $this->customerRepository->method('getById')->willReturn($originCustomer);
+
+        [$result] = $this->updateCustomerPlugin->beforeSave($this->customerRepository, $incomingCustomer, null);
+
+        $this->assertSame($expectedAddresses, $result->getAddresses());
+        $this->assertSame('Test', $result->getFirstname());
+    }
+
+    public static function addressPayloadDataProvider(): array
+    {
+        return [
+            'no addresses in payload' => [[], null],
+            'empty addresses in payload' => [[CustomerInterface::KEY_ADDRESSES => []], []],
+        ];
     }
 
     public static function privilegedUserTypeDataProvider(): array
