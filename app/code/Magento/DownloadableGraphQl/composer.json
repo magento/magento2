@@ -14,7 +14,8 @@
     },
     "suggest": {
         "magento/module-catalog-graph-ql": "*",
-        "magento/module-sales-graph-ql": "*"
+        "magento/module-sales-graph-ql": "*",
+        "magento/module-quote-downloadable-links": "*"
     },
     "license": [
         "OSL-3.0",
