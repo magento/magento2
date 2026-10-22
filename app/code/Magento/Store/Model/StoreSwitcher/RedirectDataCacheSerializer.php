@@ -82,7 +82,7 @@ class RedirectDataCacheSerializer implements RedirectDataSerializerInterface
         $cacheKey = self::CACHE_KEY_PREFIX . $data;
         $json = $this->cache->load($cacheKey);
         if (!$json) {
-            throw new InvalidArgumentException('Couldn\'t retrieve data from cache.');
+            throw new RedirectDataNotFoundException('Couldn\'t retrieve data from cache.');
         }
         $result = $this->json->unserialize($json);
         try {
