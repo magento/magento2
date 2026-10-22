@@ -238,7 +238,7 @@ class Shipping implements RateCollectorInterface
                 'carriers',
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $storeId
-            );
+            ) ?: [];
 
             foreach ($carriers as $carrierCode => $carrierConfig) {
                 $this->collectCarrierRates($carrierCode, $request);
