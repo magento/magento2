@@ -26,8 +26,9 @@
 
     <?php $scriptString = <<<script
 require([
+    "jquery",
     "Magento_Catalog/catalog/product/composite/configure"
-], function(){
+], function(jQuery){
     BundleControl = Class.create();
 
     BundleControl.prototype = {
@@ -78,6 +79,12 @@ script;
     $scriptString .= 'ProductConfigure.bundleControl = new BundleControl(' . /* @noEscape */ $block->getJsonConfig() .
      ');';
     $scriptString .= <<<script
+
+    jQuery(document)
+        .off('change.bundleControl')
+        .on('change.bundleControl', '[data-role="bundle-option-selection"]', function () {
+            ProductConfigure.bundleControl.changeSelection(this);
+        });
 });
 script;
     ?>

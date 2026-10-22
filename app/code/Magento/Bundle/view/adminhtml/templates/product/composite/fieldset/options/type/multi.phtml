@@ -21,7 +21,7 @@
             <select multiple="multiple" size="5" id="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>"
                     name="bundle_option[<?= $block->escapeHtmlAttr($_option->getId()) ?>][]"
                     class="admin__control-multiselect bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?><?php if ($_option->getRequired()) { echo ' required-entry'; } ?> multiselect change-container-classname"
-                    onchange="ProductConfigure.bundleControl.changeSelection(this)">
+                    data-role="bundle-option-selection">
             <?php if (!$_option->getRequired()) : ?>
                 <option value=""><?= $block->escapeHtml(__('None')) ?></option>
             <?php endif; ?>

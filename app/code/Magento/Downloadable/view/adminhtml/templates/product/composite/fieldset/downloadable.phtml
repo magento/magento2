@@ -7,6 +7,7 @@
 // @deprecated
 ?>
 <?php /* @var $block \Magento\Downloadable\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Downloadable */ ?>
+<?php /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */ ?>
 <?php $_linksPurchasedSeparately = $block->getLinksPurchasedSeparately(); ?>
 <?php $_skipSaleableCheck = $this->helper(Magento\Catalog\Helper\Product::class)->getSkipSaleableCheck(); ?>
 <?php if (($block->getProduct()->isSaleable() || $_skipSaleableCheck) && $block->hasLinks()) :?>
@@ -35,7 +36,7 @@
                         <?= $block->escapeHtml($_link->getTitle()) ?>
                         <?php if ($_link->getSampleFile() || $_link->getSampleUrl()) : ?>
                             &nbsp;(<a href="<?= $block->escapeUrl($block->getLinkSampleUrl($_link)) ?>"
-                                <?= /* @noEscape */ $block->getIsOpenInNewWindow() ? 'onclick="this.target=\'_blank\'"' : '' ?>>
+                                <?= /* @noEscape */ $block->getIsOpenInNewWindow() ? 'target="_blank"' : '' ?>>
                                 <?= $block->escapeHtml(__('sample')) ?>
                             </a>)
                         <?php endif; ?>
@@ -46,16 +47,15 @@
                         <?php endif; ?>
                     </label>
                 <?php if ($_isRequired) : ?>
-                    <script>
+                    <?php $linkElementId = 'links_' . $block->escapeJs($_link->getId()); ?>
+                    <?php $scriptString = <<<script
                         require(['prototype'], function(){
-
-                            //<![CDATA[
-                            $('links_<?= $block->escapeJs($_link->getId()) ?>').advaiceContainer = 'links-advice-container';
-                            $('links_<?= $block->escapeJs($_link->getId()) ?>').callbackFunction = 'validateDownloadableCallback';
-                            //]]>
-
+                            $('{$linkElementId}').advaiceContainer = 'links-advice-container';
+                            $('{$linkElementId}').callbackFunction = 'validateDownloadableCallback';
                         });
-                    </script>
+script;
+                    ?>
+                    <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
                 <?php endif; ?>
             </div>
             <?php endforeach; ?>
@@ -66,10 +66,8 @@
     </div>
 </fieldset>
 
-    <script>
+    <?php $scriptString = <<<script
 require(['prototype'], function(){
-
-//<![CDATA[
     validateDownloadableCallback = function (elmId, result) {
         var container = $('downloadable-links-list');
         if (result == 'failed') {
@@ -80,8 +78,8 @@ require(['prototype'], function(){
             container.addClassName('validation-passed');
         }
     }
-//]]>
-
 });
-</script>
+script;
+    ?>
+    <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
 <?php endif;?>

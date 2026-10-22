@@ -20,6 +20,7 @@ use Magento\Catalog\Ui\DataProvider\Product\ProductCollection;
 
 /**
  * @var \Magento\Backend\Block\Widget\Grid\Extended $block
+ * @var \Magento\Framework\Escaper $escaper
  * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  * @var \Magento\Backend\ViewModel\LimitTotalNumberOfProductsInGrid $viewModel
  */
@@ -93,7 +94,6 @@ $viewModel = $block->getViewModel();
                 <div class="admin__data-grid-pager-wrap">
                     <select name="<?= $block->escapeHtmlAttr($block->getVarNameLimit()) ?>"
                             id="<?= $block->escapeHtml($block->getHtmlId()) ?>_page-limit"
-                            onchange="<?= /* @noEscape */ $block->getJsObjectName() ?>.loadByElement(this)"
                             class="admin__control-select">
                         <option value="20"<?php if ($block->getCollection()->getPageSize() == 20): ?>
                             selected="selected"<?php endif; ?>>20
@@ -111,6 +111,11 @@ $viewModel = $block->getViewModel();
                             selected="selected"<?php endif; ?>>200
                         </option>
                     </select>
+                    <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+                        'onchange',
+                        $block->getJsObjectName() . '.loadByElement(this)',
+                        'select#' . $escaper->escapeJs($block->getHtmlId()) . '_page-limit'
+                    ) ?>
                     <label for="<?= $block->escapeHtml($block->getHtmlId()) ?>_page-limit"
                         class="admin__control-support-text"><?= $block->escapeHtml(__('per page')) ?></label>
 

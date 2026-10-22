@@ -40,7 +40,7 @@
                                 <?= ' disabled="disabled"' ?>
                             <?php endif;?>
                             value="<?= $block->escapeHtmlAttr($_selection->getSelectionId()) ?>"
-                            onclick="ProductConfigure.bundleControl.changeSelection(this)"
+                            data-role="bundle-option-selection"
                             price="<?= $block->escapeHtmlAttr($block->getSelectionPrice($_selection)) ?>" />
 
                         <label class="admin__field-label"
