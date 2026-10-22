@@ -42,7 +42,8 @@ class RegisterCaptureNotificationCommand implements CommandInterface
     public function execute(OrderPaymentInterface $payment, $amount, OrderInterface $order)
     {
         $state = $order->getState();
-        if (!$state || $state === Order::STATE_NEW || $state === Order::STATE_PENDING_PAYMENT) {
+        if (!$state || $state === Order::STATE_NEW || $state === Order::STATE_PENDING_PAYMENT
+            || $state === Order::STATE_PAYMENT_REVIEW) {
             $state = Order::STATE_PROCESSING;
         }
 
@@ -74,6 +75,7 @@ class RegisterCaptureNotificationCommand implements CommandInterface
      * Sets the state and status of the order
      *
      * @deprecated 100.1.9 Replaced by a StatusResolver class call.
+     * @see \Magento\Sales\Model\Order\StatusResolver::getOrderStatusByState()
      *
      * @param Order $order
      * @param string $status
