@@ -12,6 +12,8 @@ use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\Directory\TargetDirectory;
 use Magento\Framework\Filesystem\Driver\File;
+use Magento\Framework\HTTP\ClientFactory;
+use Magento\Framework\HTTP\ClientInterface;
 use Magento\Downloadable\Model\Url\DomainValidator;
 
 /**
@@ -40,9 +42,9 @@ class UploaderTest extends \Magento\TestFramework\Indexer\TestCase
      */
     private $uploader;
     /**
-     * @var \Magento\Framework\Filesystem\File\ReadInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ClientInterface|\PHPUnit\Framework\MockObject\MockObject
      */
-    private $fileReader;
+    private $httpClient;
 
     /**
      * @inheritdoc
@@ -50,9 +52,9 @@ class UploaderTest extends \Magento\TestFramework\Indexer\TestCase
     protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->fileReader = $this->createMock(\Magento\Framework\Filesystem\File\ReadInterface::class);
-        $fileReadFactory = $this->createMock(\Magento\Framework\Filesystem\File\ReadFactory::class);
-        $fileReadFactory->method('create')->willReturn($this->fileReader);
+        $this->httpClient = $this->createMock(ClientInterface::class);
+        $httpClientFactory = $this->createMock(ClientFactory::class);
+        $httpClientFactory->method('create')->willReturn($this->httpClient);
         $random = $this->createMock(\Magento\Framework\Math\Random::class);
         $random->method('getRandomString')->willReturn(self::RANDOM_STRING);
         $domainValidator = $this->createMock(DomainValidator::class);
@@ -61,7 +63,7 @@ class UploaderTest extends \Magento\TestFramework\Indexer\TestCase
             \Magento\CatalogImportExport\Model\Import\Uploader::class,
             [
                 'random' => $random,
-                'readFactory' => $fileReadFactory,
+                'httpClientFactory' => $httpClientFactory,
                 'domainValidator' => $domainValidator
             ]
         );
@@ -99,7 +101,16 @@ class UploaderTest extends \Magento\TestFramework\Indexer\TestCase
     public function testMoveWithExternalURL(): void
     {
         $fileName = 'http://magento.com/static/images/random_image.jpg';
-        $this->fileReader->method('readAll')->willReturn(file_get_contents($this->getTestImagePath()));
+        $this->httpClient->expects($this->once())->method('setTimeout')->with(0);
+        $this->httpClient->expects($this->once())->method('setOptions')->with([
+            CURLOPT_FOLLOWLOCATION => false,
+            CURLOPT_CONNECTTIMEOUT => 10,
+            CURLOPT_LOW_SPEED_LIMIT => 1,
+            CURLOPT_LOW_SPEED_TIME => 60
+        ]);
+        $this->httpClient->expects($this->once())->method('get')->with($fileName);
+        $this->httpClient->method('getStatus')->willReturn(200);
+        $this->httpClient->method('getBody')->willReturn(file_get_contents($this->getTestImagePath()));
         $this->uploader->move($fileName);
         $destFilePath = $this->uploader->getTmpDir() . '/' . 'random_image_' . self::RANDOM_STRING . '.jpg';
         $this->assertTrue($this->directory->isExist($destFilePath));
