@@ -76,6 +76,36 @@ class LocalizedToNormalizedTest extends TestCase
                     "month" => "03",
                     "day" => "30",
                 ]
+            ],
+            '5' => [
+                "1:2",
+                [
+                    'locale' => 'en_US',
+                    'date_format' => null,
+                    'precision' => null,
+                    'decimal_style' => null
+                ],
+                "1:2"
+            ],
+            '6' => [
+                "10:30",
+                [
+                    'locale' => 'en_US',
+                    'date_format' => null,
+                    'precision' => null,
+                    'decimal_style' => null
+                ],
+                "10:30"
+            ],
+            '7' => [
+                "abc",
+                [
+                    'locale' => 'en_US',
+                    'date_format' => null,
+                    'precision' => null,
+                    'decimal_style' => null
+                ],
+                "abc"
             ]
         ];
     }
