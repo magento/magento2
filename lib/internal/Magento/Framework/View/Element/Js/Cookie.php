@@ -18,8 +18,6 @@ use Magento\Framework\View\Element\Template\Context;
 class Cookie extends Template
 {
     /**
-     * Session config
-     *
      * @var ConfigInterface
      */
     protected $sessionConfig;
@@ -55,16 +53,7 @@ class Cookie extends Template
      */
     public function getDomain()
     {
-        $domain = $this->sessionConfig->getCookieDomain();
-
-        if ($this->ipValidator->isValid($domain)) {
-            return $domain;
-        }
-
-        if (!empty($domain[0]) && $domain[0] !== '.') {
-            $domain = '.' . $domain;
-        }
-        return $domain;
+        return $this->sessionConfig->getCookieDomain();
     }
 
     /**
