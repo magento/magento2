@@ -384,6 +384,7 @@ abstract class AbstractType
      * @param  string $processMode
      * @return array|string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _prepareProduct(\Magento\Framework\DataObject $buyRequest, $product, $processMode)
     {
@@ -424,7 +425,12 @@ abstract class AbstractType
         $product->prepareCustomOptions();
         $buyRequest->unsetData('_processing_params');
         // One-time params only
-        $product->addCustomOption('info_buyRequest', $this->serializer->serialize($buyRequest->getData()));
+        try {
+            $serializedBuyRequest = $this->serializer->serialize($buyRequest->getData());
+        } catch (\InvalidArgumentException $e) {
+            return __('The request contains invalid characters.')->render();
+        }
+        $product->addCustomOption('info_buyRequest', $serializedBuyRequest);
         if ($options) {
             $optionIds = array_keys($options);
             $product->addCustomOption('option_ids', implode(',', $optionIds));
