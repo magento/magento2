@@ -18,7 +18,7 @@ use Psr\Log\LoggerInterface;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SaveHandler implements SaveHandlerInterface, ResetAfterRequestInterface
+class SaveHandler implements SaveHandlerInterface, SessionAccessModeAwareInterface, ResetAfterRequestInterface
 {
     /**
      * @var LoggerInterface
@@ -63,6 +63,11 @@ class SaveHandler implements SaveHandlerInterface, ResetAfterRequestInterface
     private $appState;
 
     /**
+     * Whether the session must initially be opened without a write lock.
+     */
+    private bool $readOnly = false;
+
+    /**
      * @param SaveHandlerFactory $saveHandlerFactory
      * @param ConfigInterface $sessionConfig
      * @param LoggerInterface $logger
@@ -87,6 +92,17 @@ class SaveHandler implements SaveHandlerInterface, ResetAfterRequestInterface
         $this->sessionMaxSizeConfig = $sessionMaxSizeConfigs;
         $this->messageManager = $messageManager ?: ObjectManager::getInstance()->get(ManagerInterface::class);
         $this->appState = $appState ?: ObjectManager::getInstance()->get(State::class);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setReadOnly(bool $readOnly): void
+    {
+        $this->readOnly = $readOnly;
+        if ($this->saveHandlerAdapter instanceof SessionAccessModeAwareInterface) {
+            $this->saveHandlerAdapter->setReadOnly($readOnly);
+        }
     }
 
     /**
@@ -209,11 +225,25 @@ class SaveHandler implements SaveHandlerInterface, ResetAfterRequestInterface
             if ($this->saveHandlerAdapter === null) {
                 $saveMethod = $this->sessionConfig->getOption('session.save_handler') ?: $this->defaultHandler;
                 $this->saveHandlerAdapter = $this->saveHandlerFactory->create($saveMethod);
+                $this->configureAccessMode();
             }
             return $this->saveHandlerAdapter->{$method}(...$arguments);
         } catch (SessionException $exception) {
             $this->saveHandlerAdapter = $this->saveHandlerFactory->create($this->defaultHandler);
+            $this->configureAccessMode();
             return $this->saveHandlerAdapter->{$method}(...$arguments);
+        }
+    }
+
+    /**
+     * Configures the underlying handler when it supports session access modes.
+     *
+     * @return void
+     */
+    private function configureAccessMode(): void
+    {
+        if ($this->saveHandlerAdapter instanceof SessionAccessModeAwareInterface) {
+            $this->saveHandlerAdapter->setReadOnly($this->readOnly);
         }
     }
 
