@@ -14,6 +14,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Catalog\Helper\Output;
 use Magento\Catalog\Pricing\Price\SpecialPriceBulkResolverInterface;
+use Magento\Framework\App\Response\Http as ResponseHttp;
 use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -76,6 +77,7 @@ class RandomTest extends TestCase
             [SpecialPriceBulkResolverInterface::class, $this->createMock(SpecialPriceBulkResolverInterface::class)],
             [Output::class, $this->createMock(Output::class)],
             [CollectionFactory::class, $this->productCollectionFactoryMock],
+            [ResponseHttp::class, $this->createMock(ResponseHttp::class)],
         ]);
 
         $this->layerResolverMock = $this->createMock(Resolver::class);
