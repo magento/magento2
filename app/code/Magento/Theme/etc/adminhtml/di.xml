@@ -38,6 +38,8 @@
                 type="Magento\Theme\Plugin\DesignProcessorFacade"/>
     </type>
     <type name="Magento\Framework\App\ActionInterface">
-        <plugin name="designLoader" type="Magento\Theme\Plugin\LoadDesignPlugin"/>
+        <plugin name="designLoader" type="Magento\Theme\Plugin\LoadDesignPlugin" sortOrder="10"/>
+        <plugin name="translationLoader" type="Magento\Theme\Plugin\LoadTranslationPlugin" sortOrder="20"/>
+        <plugin name="designChangeLoader" type="Magento\Theme\Plugin\ApplyDesignChangePlugin" sortOrder="30"/>
     </type>
 </config>
