@@ -992,7 +992,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType impl
                 if (isset($usedAttributes[$attributeId])) {
                     /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
                     $attribute = $usedAttributes[$attributeId]->getProductAttribute();
-                    $label = $attribute->getStoreLabel();
+                    $label = $attribute->getStoreLabel($product->getStoreId());
                     $value = $attribute;
                     if ($value->getSourceModel()) {
                         $value = $value->getSource()->getOptionText($attributeValue);
