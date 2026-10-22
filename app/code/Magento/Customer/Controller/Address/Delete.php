@@ -7,6 +7,7 @@ namespace Magento\Customer\Controller\Address;
 
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Delete customer address controller action.
@@ -30,6 +31,8 @@ class Delete extends \Magento\Customer\Controller\Address implements HttpPostAct
                 } else {
                     $this->messageManager->addErrorMessage(__('We can\'t delete the address right now.'));
                 }
+            } catch (NoSuchEntityException $e) {
+                $this->messageManager->addErrorMessage(__('We can\'t delete the address right now.'));
             } catch (\Exception $other) {
                 $this->messageManager->addException($other, __('We can\'t delete the address right now.'));
             }

@@ -151,7 +151,7 @@ class DeleteAddressTest extends AbstractController
         $customer = $this->customerRepository->get('customer@example.com');
         $this->customerSession->setCustomerId($customer->getId());
         $this->performAddressDeleteRequest(999);
-        $this->checkRequestPerformedWithError();
+        $this->checkRequestPerformedWithError(true);
     }
 
     /**
