@@ -8,15 +8,17 @@ declare(strict_types=1);
 namespace Magento\Store\Test\Unit\Model\Config;
 
 use Magento\Framework\App\Request\Http;
-use Magento\Store\Model\Config\Processor\Placeholder as PlaceholderProcessor;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Store\Model\Config\Placeholder;
 use Magento\Store\Model\Store;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class PlaceholderTest extends TestCase
 {
     /**
-     * @var PlaceholderProcessor
+     * @var Placeholder
      */
     protected $_model;
 
@@ -35,7 +37,7 @@ class PlaceholderTest extends TestCase
         )->willReturn(
             'http://localhost/'
         );
-        $this->_model = new \Magento\Store\Model\Config\Placeholder(
+        $this->_model = new Placeholder(
             $this->_requestMock,
             [
                 'unsecureBaseUrl' => Store::XML_PATH_UNSECURE_BASE_URL,
@@ -82,5 +84,94 @@ class PlaceholderTest extends TestCase
         $data = [];
         $expectedResult = [];
         $this->assertEquals($expectedResult, $this->_model->process($data));
+    }
+
+    /**
+     * @param mixed $secureBaseUrl
+     */
+    #[DataProvider('emptySecureBaseUrlDataProvider')]
+    public function testProcessThrowsWhenSecureBaseUrlIsEmpty($secureBaseUrl): void
+    {
+        $this->expectException(LocalizedException::class);
+        $this->expectExceptionMessage(
+            'Cannot resolve "{{secure_base_url}}" because "web/secure/base_url" is empty.'
+        );
+
+        $this->_model->process([
+            'web' => [
+                'unsecure' => [
+                    'base_url' => 'http://localhost/',
+                ],
+                'secure' => [
+                    'base_url' => $secureBaseUrl,
+                    'base_link_url' => '{{secure_base_url}}website/de',
+                ],
+            ],
+        ]);
+    }
+
+    /**
+     * @return array
+     */
+    public static function emptySecureBaseUrlDataProvider(): array
+    {
+        return [
+            'null' => [null],
+            'empty string' => [''],
+        ];
+    }
+
+    /**
+     * @param mixed $unsecureBaseUrl
+     */
+    #[DataProvider('emptyUnsecureBaseUrlDataProvider')]
+    public function testProcessThrowsWhenUnsecureBaseUrlIsEmpty($unsecureBaseUrl): void
+    {
+        $this->expectException(LocalizedException::class);
+        $this->expectExceptionMessage(
+            'Cannot resolve "{{unsecure_base_url}}" because "web/unsecure/base_url" is empty.'
+        );
+
+        $this->_model->process([
+            'web' => [
+                'unsecure' => [
+                    'base_url' => $unsecureBaseUrl,
+                    'base_link_url' => '{{unsecure_base_url}}website/de',
+                ],
+                'secure' => [
+                    'base_url' => 'https://localhost/',
+                ],
+            ],
+        ]);
+    }
+
+    /**
+     * @return array
+     */
+    public static function emptyUnsecureBaseUrlDataProvider(): array
+    {
+        return [
+            'null' => [null],
+            'empty string' => [''],
+        ];
+    }
+
+    public function testProcessThrowsWhenSecureBaseUrlPathIsMissing(): void
+    {
+        $this->expectException(LocalizedException::class);
+        $this->expectExceptionMessage(
+            'Cannot resolve "{{secure_base_url}}" because "web/secure/base_url" is empty.'
+        );
+
+        $this->_model->process([
+            'web' => [
+                'unsecure' => [
+                    'base_url' => 'http://localhost/',
+                ],
+                'secure' => [
+                    'base_link_url' => '{{secure_base_url}}website/de',
+                ],
+            ],
+        ]);
     }
 }
