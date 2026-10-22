@@ -7,6 +7,13 @@
 namespace Magento\Sales\Controller\Adminhtml\Order\Create;
 
 use Magento\Backend\Model\Session\Quote;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\Checkout\Test\Fixture\PlaceOrder as PlaceOrderFixture;
+use Magento\Checkout\Test\Fixture\SetBillingAddress as SetBillingAddressFixture;
+use Magento\Checkout\Test\Fixture\SetDeliveryMethod as SetDeliveryMethodFixture;
+use Magento\Checkout\Test\Fixture\SetGuestEmail as SetGuestEmailFixture;
+use Magento\Checkout\Test\Fixture\SetPaymentMethod as SetPaymentMethodFixture;
+use Magento\Checkout\Test\Fixture\SetShippingAddress as SetShippingAddressFixture;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Request\Http;
@@ -14,9 +21,15 @@ use Magento\Framework\Data\Form\FormKey;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Test\Fixture\AddProductToCart as AddProductToCartFixture;
+use Magento\Quote\Test\Fixture\GuestCart as GuestCartFixture;
 use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Model\Order;
 use Magento\Sales\Model\OrderRepository;
 use Magento\Sales\Model\Service\OrderService;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Mail\Template\TransportBuilderMock;
 use Magento\TestFramework\TestCase\AbstractBackendController;
 use PHPUnit\Framework\Constraint\StringContains;
@@ -169,6 +182,70 @@ class SaveTest extends AbstractBackendController
         }
 
         $this->assertNull($this->transportBuilder->getSentMessage());
+    }
+
+    /**
+     * A form rendered for a new order must not cancel the order another tab opened for editing
+     */
+    #[
+        DbIsolation(true),
+        DataFixture(ProductFixture::class, as: 'product'),
+        DataFixture(GuestCartFixture::class, as: 'cart'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$product.id$']),
+        DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetGuestEmailFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetDeliveryMethodFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetPaymentMethodFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(PlaceOrderFixture::class, ['cart_id' => '$cart.id$'], 'order'),
+    ]
+    public function testSubmitOfFormRenderedForAnotherOrderIsRejected(): void
+    {
+        $order = DataFixtureStorageManager::getStorage()->get('order');
+        $session = $this->_objectManager->get(Quote::class);
+        $session->setOrderId($order->getEntityId());
+
+        $this->getRequest()
+            ->setMethod(Http::METHOD_POST)
+            ->setParams(['form_key' => $this->formKey->getFormKey()])
+            ->setPostValue(['edited_order_id' => '']);
+        $this->dispatch('backend/sales/order_create/save');
+
+        $this->assertSessionMessages(
+            $this->equalTo([
+                (string)__(
+                    'The order form is outdated because another order was opened for editing in a different tab. '
+                    . 'Please reload the page.'
+                )
+            ]),
+            MessageInterface::TYPE_ERROR
+        );
+        $this->assertRedirect($this->stringContains('sales/order_create/'));
+        $this->assertEquals($order->getEntityId(), $session->getOrderId());
+
+        $editedOrder = $this->getOrder((int)$order->getEntityId());
+        $this->assertNotEquals(Order::STATE_CANCELED, $editedOrder->getState());
+        $this->assertEmpty($editedOrder->getRelationChildId());
+    }
+
+    /**
+     * A form rendered for the order held in the session is saved as before
+     */
+    #[
+        DbIsolation(true),
+        DataFixture('Magento/Sales/_files/guest_quote_with_addresses.php'),
+    ]
+    public function testSubmitOfFormRenderedForCurrentSessionOrderIsAccepted(): void
+    {
+        $this->prepareRequest();
+        $this->getRequest()->setPostValue('edited_order_id', '');
+        $this->dispatch('backend/sales/order_create/save');
+
+        $this->assertSessionMessages(
+            $this->equalTo([(string)__('You created the order.')]),
+            MessageInterface::TYPE_SUCCESS
+        );
+        $this->assertRedirect($this->stringContains('sales/order/view/'));
     }
 
     /**
