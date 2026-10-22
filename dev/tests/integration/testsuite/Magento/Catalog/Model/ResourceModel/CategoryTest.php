@@ -17,6 +17,8 @@ use Magento\Catalog\Model\ResourceModel\Category\Collection as CategoryCollectio
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
+use Magento\Catalog\Test\Fixture\Category as CategoryFixture;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
@@ -26,6 +28,8 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Indexer\Cron\UpdateMview;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -327,5 +331,28 @@ class CategoryTest extends TestCase
             $childrenCountAfterUpdate,
             'Children count should NOT increment when updating EXISTING category'
         );
+    }
+
+    #[
+        DataFixture(ProductFixture::class, as: 'product'),
+        DataFixture(CategoryFixture::class, as: 'category'),
+    ]
+    public function testSaveCategoryProductsTreatsEmptyPositionAsZero(): void
+    {
+        $storage = DataFixtureStorageManager::getStorage();
+        $productId = (int)$storage->get('product')->getId();
+        $category = $this->categoryRepository->get($storage->get('category')->getId());
+
+        $category->setPostedProducts([$productId => '1']);
+        $this->categoryResource->save($category);
+
+        $category = $this->categoryRepository->get($category->getId());
+        $this->assertSame([$productId => 1], array_map('intval', $category->getProductsPosition()));
+
+        $category->setPostedProducts([$productId => '']);
+        $this->categoryResource->save($category);
+
+        $category = $this->categoryRepository->get($category->getId());
+        $this->assertSame([$productId => 0], array_map('intval', $category->getProductsPosition()));
     }
 }
