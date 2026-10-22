@@ -36,63 +36,63 @@ use Magento\Framework\Phrase;
 class TransportBuilder
 {
     /**
-     * Template Identifier
+     * Identifier of the template to render
      *
      * @var string
      */
     protected $templateIdentifier;
 
     /**
-     * Template Model
+     * Class of the template model
      *
      * @var string
      */
     protected $templateModel;
 
     /**
-     * Template Variables
+     * Variables passed to the template
      *
      * @var array
      */
     protected $templateVars;
 
     /**
-     * Template Options
+     * Options passed to the template, such as area and store
      *
      * @var array
      */
     protected $templateOptions;
 
     /**
-     * Mail Transport
+     * Transport the message is sent with
      *
      * @var TransportInterface
      */
     protected $transport;
 
     /**
-     * Template Factory
+     * Factory creating template instances
      *
      * @var FactoryInterface
      */
     protected $templateFactory;
 
     /**
-     * Object Manager
+     * Object manager used for lazy dependencies
      *
      * @var ObjectManagerInterface
      */
     protected $objectManager;
 
     /**
-     * Message
+     * Message being built
      *
      * @var MessageInterface
      */
     protected $message;
 
     /**
-     * Sender resolver
+     * Resolver of sender identities
      *
      * @var SenderResolverInterface
      */
@@ -334,7 +334,12 @@ class TransportBuilder
     {
         try {
             $this->prepareMessage();
-            $mailTransport = $this->mailTransportFactory->create(['message' => clone $this->message]);
+            $arguments = ['message' => clone $this->message];
+            $storeId = $this->templateOptions['store'] ?? null;
+            if (is_int($storeId) || is_string($storeId)) {
+                $arguments['storeId'] = $storeId;
+            }
+            $mailTransport = $this->mailTransportFactory->create($arguments);
         } finally {
             $this->reset();
         }
