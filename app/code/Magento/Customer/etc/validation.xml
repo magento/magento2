@@ -28,6 +28,11 @@
                     <constraint alias="dob_validator" class="Magento\Customer\Model\Validator\Dob" />
                 </entity_constraints>
             </rule>
+            <rule name="check_email">
+                <entity_constraints>
+                    <constraint alias="email_validator" class="Magento\Customer\Model\Validator\Email" />
+                </entity_constraints>
+            </rule>
         </rules>
         <groups>
             <group name="save">
@@ -35,6 +40,7 @@
                     <use rule="check_eav"/>
                     <use rule="check_name"/>
                     <use rule="check_dob"/>
+                    <use rule="check_email"/>
                 </uses>
             </group>
             <group name="form">
