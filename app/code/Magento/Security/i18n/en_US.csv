@@ -5,7 +5,7 @@
 "Your current session is terminated by another user of this account.","Your current session is terminated by another user of this account."
 "Your account is temporarily disabled.","Your account is temporarily disabled."
 "Your current session has been expired.","Your current session has been expired."
-"By IP and Email","By IP and Email"
+"By IP or Email","By IP or Email"
 "By IP","By IP"
 "By Email","By Email"
 None,None
