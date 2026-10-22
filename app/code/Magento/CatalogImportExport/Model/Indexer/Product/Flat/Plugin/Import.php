@@ -6,6 +6,7 @@
 namespace Magento\CatalogImportExport\Model\Indexer\Product\Flat\Plugin;
 
 use Magento\Catalog\Model\Indexer\Product\Flat\State as FlatState;
+use Magento\Catalog\Model\Product;
 
 class Import
 {
@@ -42,7 +43,10 @@ class Import
      */
     public function afterImportSource(\Magento\ImportExport\Model\Import $subject, $import)
     {
-        if ($this->flatState->isFlatEnabled() && !$this->_productFlatIndexerProcessor->isIndexerScheduled()) {
+        if ($subject->getEntity() === Product::ENTITY
+            && $this->flatState->isFlatEnabled()
+            && !$this->_productFlatIndexerProcessor->isIndexerScheduled()
+        ) {
             $this->_productFlatIndexerProcessor->markIndexerAsInvalid();
         }
 
