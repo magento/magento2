@@ -6,6 +6,8 @@
 
 namespace Magento\CatalogRule\Model\Rule\Condition;
 
+use Magento\Catalog\Model\Product\Attribute\Backend\Stock;
+
 /**
  * Catalog Rule Product Condition data model
  *
@@ -30,6 +32,11 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
 
         $this->_setAttributeValue($model);
 
+        $stockStatus = $this->getStockStatus($model);
+        if ($stockStatus !== null) {
+            $model->setData($attrCode, $stockStatus);
+        }
+
         $attrValue = $model->getData($attrCode);
         if ($attrValue === null) {
             if ($this->getOperator() === '<=>') {
@@ -44,6 +51,27 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
         $this->_restoreOldAttrValue($model, $oldAttrValue);
 
         return (bool)$result;
+    }
+
+    /**
+     * Get stock status of the product when the condition attribute is backed by the stock item
+     *
+     * @param \Magento\Catalog\Model\Product|\Magento\Framework\Model\AbstractModel $model
+     * @return int|null
+     */
+    private function getStockStatus(\Magento\Framework\Model\AbstractModel $model): ?int
+    {
+        $attrCode = $this->getAttribute();
+        $attribute = $model->getResource() ? $model->getResource()->getAttribute($attrCode) : null;
+        if (!$attribute || !is_a((string)$attribute->getBackendModel(), Stock::class, true)) {
+            return null;
+        }
+
+        $stockModel = clone $model;
+        $attribute->getBackend()->afterLoad($stockModel);
+        $value = $stockModel->getData($attrCode);
+
+        return is_array($value) && isset($value['is_in_stock']) ? (int)$value['is_in_stock'] : null;
     }
 
     /**

@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogRule\Model\Rule\Condition;
 
+use Magento\Catalog\Model\Product\Attribute\Backend\Stock as StockBackend;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\CustomConditionProviderInterface;
 use Magento\CatalogRule\Model\Rule\Condition\Combine as CombinedCondition;
@@ -131,6 +132,11 @@ class MappableConditionsProcessor
 
         // Also we can map field to search criteria if it is an EAV attribute
         $attribute = $this->eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $fieldName);
+
+        // The stock status is read from the stock item, the EAV table does not reliably hold it
+        if ($attribute && is_a((string)$attribute->getBackendModel(), StockBackend::class, true)) {
+            return false;
+        }
 
         // We have this weird check for getBackendType() to verify that attribute really exists
         // because due to eavConfig behavior even if pass non existing attribute code we still receive AbstractAttribute

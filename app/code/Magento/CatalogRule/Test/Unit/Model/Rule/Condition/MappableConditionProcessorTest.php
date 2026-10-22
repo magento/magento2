@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\CatalogRule\Test\Unit\Model\Rule\Condition;
 
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Attribute\Backend\Stock;
 use Magento\CatalogRule\Model\Rule\Condition\Combine as CombinedCondition;
 use Magento\CatalogRule\Model\Rule\Condition\MappableConditionsProcessor;
 use Magento\CatalogRule\Model\Rule\Condition\Product as SimpleCondition;
@@ -1135,5 +1136,25 @@ class MappableConditionProcessorTest extends TestCase
         
         // Should have 1 valid condition
         $this->assertCount(1, $result->getConditions());
+    }
+
+    public function testConditionOnStockStatusAttributeIsNotMapped()
+    {
+        $simpleCondition = $this->getMockForSimpleCondition('quantity_and_stock_status');
+        $inputCondition = $this->getMockForCombinedCondition([$simpleCondition], 'all');
+
+        $this->customConditionProcessorBuilderMock->method('hasProcessorForField')->willReturn(false);
+
+        $attributeMock = $this->createPartialMockWithReflection(
+            AbstractAttribute::class,
+            ['getBackendType', 'getBackendModel']
+        );
+        $attributeMock->method('getBackendType')->willReturn('int');
+        $attributeMock->method('getBackendModel')->willReturn(Stock::class);
+        $this->eavConfigMock->method('getAttribute')->willReturn($attributeMock);
+
+        $result = $this->mappableConditionProcessor->rebuildConditionsTree($inputCondition);
+
+        $this->assertEquals($this->getMockForCombinedCondition([], 'all'), $result);
     }
 }
