@@ -14,6 +14,7 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Filesystem;
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\Source\Csv;
+use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap as BootstrapHelper;
 
 /**
@@ -250,6 +251,27 @@ class ProductImagesTest extends ProductTestBase
         $imageItem = array_shift($imageItems);
         $this->assertEquals($expectedImageFile, $imageItem->getFile());
         $this->assertEquals($expectedLabelForSecondStoreView, $imageItem->getLabel());
+    }
+
+    #[DbIsolation(true)]
+    public function testChangeImageLabelForStoreViewWithoutImageColumn(): void
+    {
+        $productSku = 'image_label_product';
+        self::mediaImportImageFixture();
+        try {
+            $this->importDataForMediaTest('import_image_label_default_scope.csv');
+            $this->importDataForMediaTest('import_image_label_for_storeview_without_image.csv');
+        } finally {
+            self::mediaImportImageFixtureRollback();
+        }
+
+        $imageItems = $this->getProductBySku($productSku, 'admin')->getMediaGalleryImages()->getItems();
+        $this->assertCount(1, $imageItems);
+        $this->assertEquals('Default Label', array_shift($imageItems)->getLabel());
+
+        $imageItems = $this->getProductBySku($productSku, 'default')->getMediaGalleryImages()->getItems();
+        $this->assertCount(1, $imageItems);
+        $this->assertEquals('Store View Label', array_shift($imageItems)->getLabel());
     }
 
     /**
