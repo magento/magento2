@@ -1,6 +1,9 @@
 {
   "name": "magento/module-application-performance-monitor-new-relic",
-  "license": "OSL-3.0",
+  "license": [
+    "OSL-3.0",
+    "AFL-3.0"
+  ],
   "type": "magento2-module",
   "description": "Performance data about Application into New Relic",
   "autoload": {
