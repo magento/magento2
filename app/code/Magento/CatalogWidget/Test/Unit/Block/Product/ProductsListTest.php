@@ -523,6 +523,37 @@ class ProductsListTest extends TestCase
         $this->assertEquals(ProductsList::DEFAULT_PRODUCTS_PER_PAGE, $this->productsList->getProductsPerPage());
     }
 
+    #[DataProvider('nonNumericValuesDataProvider')]
+    public function testGetProductsCountFallsBackToDefaultForNonNumericValue($value)
+    {
+        $this->productsList->setData('products_count', $value);
+        $this->assertSame(ProductsList::DEFAULT_PRODUCTS_COUNT, $this->productsList->getProductsCount());
+    }
+
+    #[DataProvider('nonNumericValuesDataProvider')]
+    public function testGetProductsPerPageFallsBackToDefaultForNonNumericValue($value)
+    {
+        $this->productsList->setData('products_per_page', $value);
+        $this->assertSame(ProductsList::DEFAULT_PRODUCTS_PER_PAGE, $this->productsList->getProductsPerPage());
+    }
+
+    public function testNumericStringValuesAreReturnedAsIntegers()
+    {
+        $this->productsList->setData('products_count', '12');
+        $this->productsList->setData('products_per_page', '4');
+        $this->assertSame(12, $this->productsList->getProductsCount());
+        $this->assertSame(4, $this->productsList->getProductsPerPage());
+    }
+
+    public static function nonNumericValuesDataProvider(): array
+    {
+        return [
+            'letters' => ['abc'],
+            'empty string' => [''],
+            'null' => [null],
+        ];
+    }
+
     public function testShowPager()
     {
         $this->assertFalse($this->productsList->showPager());
