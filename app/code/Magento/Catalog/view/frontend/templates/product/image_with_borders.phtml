@@ -11,6 +11,18 @@
 $width = (int)$block->getWidth();
 $height = (int)$block->getHeight();
 $paddingBottom = $block->getRatio() * 100;
+
+$globalBlock = $block->getLayout()->getBlock('header');
+if ($globalBlock) {
+    $catImage = $globalBlock->getData('cat_image_counter') ?? 0;
+    $catImage++;
+    $globalBlock->setData('cat_image_counter', $catImage);
+} else {
+    $catImage = 10;
+}
+
+$isProductPage = ($block->getRequest()->getFullActionName() === 'catalog_product_view');
+$isHomePage = ($block->getFullActionName() === 'cms_index_index');
 ?>
 <span class="product-image-container product-image-container-<?= /* @noEscape */ $block->getProductId() ?>">
     <span class="product-image-wrapper">
@@ -18,8 +30,14 @@ $paddingBottom = $block->getRatio() * 100;
             <?php foreach ($block->getCustomAttributes() as $name => $value): ?>
                 <?= $escaper->escapeHtmlAttr($name) ?>="<?= $escaper->escapeHtml($value) ?>"
             <?php endforeach; ?>
-            src="<?= $escaper->escapeUrl($block->getImageUrl()) ?>"
+             src="<?=$escaper->escapeUrl($block->getImageUrl())?>"
+            <?php if ($catImage > 1 || $isProductPage || $isHomePage) { ?>
             loading="lazy"
+            fetchpriority="low"
+            <?php } else { ?>
+            loading="eager"
+            fetchpriority="high"
+            <?php } ?>
             width="<?= $escaper->escapeHtmlAttr($block->getWidth()) ?>"
             height="<?= $escaper->escapeHtmlAttr($block->getHeight()) ?>"
             alt="<?= $escaper->escapeHtmlAttr($block->getLabel()) ?>"/></span>
