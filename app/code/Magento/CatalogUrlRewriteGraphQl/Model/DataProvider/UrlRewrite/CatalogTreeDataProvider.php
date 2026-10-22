@@ -10,6 +10,7 @@ namespace Magento\CatalogUrlRewriteGraphQl\Model\DataProvider\UrlRewrite;
 use Magento\Catalog\Model\CategoryRepository;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\CategoryTree as CategoryTreeDataProvider;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\ExtractDataFromCategoryTree;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\UrlRewriteGraphQl\Model\DataProvider\EntityDataProviderInterface;
@@ -55,6 +56,7 @@ class CatalogTreeDataProvider implements EntityDataProviderInterface
      * @param int|null $storeId
      * @return array
      * @throws GraphQlNoSuchEntityException
+     * @throws NoSuchEntityException
      */
     public function getData(
         string $entity_type,
@@ -63,6 +65,10 @@ class CatalogTreeDataProvider implements EntityDataProviderInterface
         ?int $storeId = null
     ): array {
         $categoryId = (int)$id;
+        $category = $this->categoryRepository->get($categoryId, $storeId);
+        if (!$category->getIsActive()) {
+            throw new GraphQlNoSuchEntityException(__('Category doesn\'t exist'));
+        }
         $categoriesTree = $this->categoryTree->getTreeCollection($info, $categoryId, $storeId);
         if ($categoriesTree->count() == 0) {
             throw new GraphQlNoSuchEntityException(__('Category doesn\'t exist'));
