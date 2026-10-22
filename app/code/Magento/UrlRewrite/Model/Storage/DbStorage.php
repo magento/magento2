@@ -140,21 +140,23 @@ class DbStorage extends AbstractStorage
     private function extractMostRelevantUrlRewrite(string $requestPath, array $urlRewrites): ?array
     {
         $prioritizedUrlRewrites = [];
+        $normalizedRequestPath = $this->normalizePercentEncoding($requestPath);
         foreach ($urlRewrites as $urlRewrite) {
             $urlRewriteRequestPath = $urlRewrite[UrlRewrite::REQUEST_PATH];
             $urlRewriteTargetPath = $urlRewrite[UrlRewrite::TARGET_PATH] ?? '';
             $trimmedUrlRewriteRequestPath = rtrim($urlRewriteRequestPath ?? '', '/');
+            $normalizedUrlRewriteRequestPath = $this->normalizePercentEncoding($urlRewriteRequestPath ?? '');
             switch (true) {
                 case $trimmedUrlRewriteRequestPath === rtrim($urlRewriteTargetPath, '/'):
                     $priority = 99;
                     break;
-                case $urlRewriteRequestPath === $requestPath:
+                case $normalizedUrlRewriteRequestPath === $normalizedRequestPath:
                     $priority = 1;
                     break;
                 case $urlRewriteRequestPath === urldecode($requestPath):
                     $priority = 2;
                     break;
-                case $trimmedUrlRewriteRequestPath === rtrim($requestPath, '/'):
+                case rtrim($normalizedUrlRewriteRequestPath, '/') === rtrim($normalizedRequestPath, '/'):
                     $priority = 3;
                     break;
                 case $trimmedUrlRewriteRequestPath === rtrim(urldecode($requestPath), '/'):
@@ -184,8 +186,11 @@ class DbStorage extends AbstractStorage
     private function prepareUrlRewrite(string $requestPath, array $urlRewrite): array
     {
         $redirectTypes = [OptionProvider::TEMPORARY, OptionProvider::PERMANENT];
+        $urlRewriteRequestPath = $urlRewrite[UrlRewrite::REQUEST_PATH];
         $canReturnResultFromDb = (
-            in_array($urlRewrite[UrlRewrite::REQUEST_PATH], [$requestPath, urldecode($requestPath)], true)
+            $urlRewriteRequestPath === urldecode($requestPath)
+            || $this->normalizePercentEncoding((string) $urlRewriteRequestPath)
+                === $this->normalizePercentEncoding($requestPath)
             || in_array((int) $urlRewrite[UrlRewrite::REDIRECT_TYPE], $redirectTypes, true)
         );
         if (!$canReturnResultFromDb) {
@@ -203,6 +208,21 @@ class DbStorage extends AbstractStorage
         }
 
         return $urlRewrite;
+    }
+
+    /**
+     * Uppercase the hex digits of percent-encoded octets, as RFC 3986 section 6.2.2.1 treats both cases as equal
+     *
+     * @param string $path
+     * @return string
+     */
+    private function normalizePercentEncoding(string $path): string
+    {
+        return preg_replace_callback(
+            '/%[0-9a-f]{2}/i',
+            static fn (array $match): string => strtoupper($match[0]),
+            $path
+        );
     }
 
     /**
