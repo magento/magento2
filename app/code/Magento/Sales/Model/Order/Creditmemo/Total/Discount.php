@@ -118,20 +118,31 @@ class Discount extends AbstractTotal
     }
 
     /**
-     * Get base shipping amount
+     * Get the base shipping amount the credit memo refunds
+     *
+     * Mirrors the shipping total, which runs after this one: a requested amount is refunded as is, even 0, and
+     * without one all the shipping not refunded yet is. The credit memo's shipping tax fields can't be used to
+     * work it out, because until the shipping and tax totals have run they still hold the order's values.
      *
      * @param \Magento\Sales\Model\Order\Creditmemo $creditmemo
+     * @param \Magento\Sales\Model\Order $order
      * @return float
      */
-    private function getBaseShippingAmount(\Magento\Sales\Model\Order\Creditmemo $creditmemo): float
-    {
-        $baseShippingAmount = (float)$creditmemo->getBaseShippingAmount();
-        if (!$baseShippingAmount) {
-            $baseShippingInclTax = (float)$creditmemo->getBaseShippingInclTax();
-            $baseShippingTaxAmount = (float)$creditmemo->getBaseShippingTaxAmount();
-            $baseShippingAmount = $this->isShippingInclTax((int)$creditmemo->getStoreId()) ?
-                $baseShippingInclTax : $baseShippingInclTax - $baseShippingTaxAmount;
+    private function getBaseShippingAmount(
+        \Magento\Sales\Model\Order\Creditmemo $creditmemo,
+        \Magento\Sales\Model\Order $order
+    ): float {
+        if ($creditmemo->hasBaseShippingAmount()) {
+            return (float)$creditmemo->getBaseShippingAmount();
         }
+
+        $orderBaseShippingAmount = (float)$order->getBaseShippingAmount();
+        $baseShippingAmount = max($orderBaseShippingAmount - (float)$order->getBaseShippingRefunded(), 0.0);
+        if ($this->isShippingInclTax((int)$order->getStoreId()) && $orderBaseShippingAmount > 0) {
+            // collect() relates the amount to the order's shipping including tax in this case
+            $baseShippingAmount *= (float)$order->getBaseShippingInclTax() / $orderBaseShippingAmount;
+        }
+
         return $baseShippingAmount;
     }
 
