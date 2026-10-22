@@ -85,14 +85,14 @@ abstract class Sender
         try {
             $sender->send();
         } catch (\Exception $e) {
-            $this->logger->error($e->getMessage());
+            $this->logger->error("Failed to send email for order {order_id}:  " . $e->getMessage(), ['order_id' => $order->getId()]);
             return false;
         }
         if ($this->identityContainer->getCopyMethod() == 'copy') {
             try {
                 $sender->sendCopyTo();
             } catch (\Exception $e) {
-                $this->logger->error($e->getMessage());
+                $this->logger->error("Failed to send email copy for order {order_id}:  " . $e->getMessage(), ['order_id' => $order->getId()]);
             }
         }
         return true;
