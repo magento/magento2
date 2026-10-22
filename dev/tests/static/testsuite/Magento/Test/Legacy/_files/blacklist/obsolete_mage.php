@@ -12,6 +12,7 @@ return [
     'dev/tests/integration/testsuite/Magento/Indexer/Model/Config/_files/result.php',
     'lib/internal/Magento/Framework/Encryption/Test/Unit/EncryptorTest.php',
     'lib/internal/Magento/Framework/Encryption/Test/Unit/CryptTest.php',
+    'lib/internal/Magento/Framework/Setup/ModuleDataSetup.php',
     'setup/src/Zend/Mvc/Controller/LazyControllerAbstractFactory.php',
     'app/code/Magento/CatalogInventory/Block/Adminhtml/Form/Field/Stock.php',
 ];
