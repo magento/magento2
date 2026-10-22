@@ -56,21 +56,21 @@ class TopologyInstallerTest extends TestCase
     }
 
     /**
-     * Make sure that topology creation errors in log contain actual error message.
+     * Make sure that topology creation errors are reported with the exception in the log context.
      */
     public function testInstallException()
     {
-        $exceptionMessage = "Exception message";
+        $exception = new AMQPLogicException('Exception message');
 
         $this->topologyConfigMock
             ->expects($this->once())
             ->method('getQueues')
-            ->willThrowException(new AMQPLogicException($exceptionMessage));
+            ->willThrowException($exception);
 
         $this->loggerMock
             ->expects($this->once())
             ->method('error')
-            ->with($this->stringContains("AMQP topology installation failed: {$exceptionMessage}"));
+            ->with('AMQP topology installation failed', ['exception' => $exception]);
 
         $this->topologyInstaller->install();
     }

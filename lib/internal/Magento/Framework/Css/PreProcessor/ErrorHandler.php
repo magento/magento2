@@ -24,10 +24,13 @@ class ErrorHandler implements ErrorHandlerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
+     * @param \Exception $e
+     * @return void
      */
     public function processException(\Exception $e)
     {
-        $this->logger->critical($e);
+        $this->logger->critical('Error while pre-processing CSS', ['exception' => $e]);
     }
 }

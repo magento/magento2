@@ -60,17 +60,17 @@ class TopologyInstallerTest extends TestCase
      */
     public function testInstallException()
     {
-        $exceptionMessage = "Exception message";
+        $exception = new StompException('Exception message');
 
         $this->topologyConfigMock
             ->expects($this->once())
             ->method('getQueues')
-            ->willThrowException(new StompException($exceptionMessage));
+            ->willThrowException($exception);
 
         $this->loggerMock
             ->expects($this->once())
             ->method('error')
-            ->with($this->stringContains("STOMP topology installation failed: {$exceptionMessage}"));
+            ->with('STOMP topology installation failed', ['exception' => $exception]);
 
         $this->topologyInstaller->install();
     }

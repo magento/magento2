@@ -96,7 +96,11 @@ class ImageMagickTest extends TestCase
             new Phrase('Unable to write file into directory product/cache. Access forbidden.')
         );
         $this->writeMock->method('create')->willThrowException($exception);
-        $this->loggerMock->expects($this->once())->method('critical')->with($exception);
+        $this->loggerMock->expects($this->once())->method('critical')
+            ->with(
+                'Unable to create the {destination} image directory',
+                ['destination' => 'product/cache', 'exception' => $exception]
+            );
         $this->imageMagic->save('product/cache', 'sample.jpg');
     }
 
