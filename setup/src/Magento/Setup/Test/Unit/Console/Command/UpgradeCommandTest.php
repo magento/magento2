@@ -10,6 +10,7 @@ namespace Magento\Setup\Test\Unit\Console\Command;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\State as AppState;
 use Magento\Framework\Config\CacheInterface;
+use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Setup\Console\Command\UpgradeCommand;
@@ -54,6 +55,11 @@ class UpgradeCommandTest extends TestCase
     private $searchConfigMock;
 
     /**
+     * @var SearchConfigFactory|MockObject
+     */
+    private $searchConfigFactoryMock;
+
+    /**
      * @var DbInitStatementsCleanup|MockObject
      */
     private $dbInitStatementsCleanupMock;
@@ -83,6 +89,10 @@ class UpgradeCommandTest extends TestCase
         $this->deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->deploymentConfigMock->method('get')
+            ->willReturnCallback(function ($key = null) {
+                return $key === ConfigOptionsListConstants::KEY_MODULES ? ['Magento_Search' => 1] : null;
+            });
         $this->installerFactoryMock = $this->getMockBuilder(InstallerFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -98,11 +108,10 @@ class UpgradeCommandTest extends TestCase
         $this->searchConfigMock = $this->getMockBuilder(SearchConfig::class)
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var MockObject|SearchConfigFactory $searchConfigFactoryMock */
-        $searchConfigFactoryMock = $this->getMockBuilder(SearchConfigFactory::class)
+        $this->searchConfigFactoryMock = $this->getMockBuilder(SearchConfigFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $searchConfigFactoryMock->expects($this->once())->method('create')->willReturn($this->searchConfigMock);
+        $this->searchConfigFactoryMock->method('create')->willReturn($this->searchConfigMock);
 
         $this->dbInitStatementsCleanupMock = $this->getMockBuilder(DbInitStatementsCleanup::class)
             ->disableOriginalConstructor()
@@ -110,7 +119,7 @@ class UpgradeCommandTest extends TestCase
 
         $this->upgradeCommand = new UpgradeCommand(
             $this->installerFactoryMock,
-            $searchConfigFactoryMock,
+            $this->searchConfigFactoryMock,
             $this->deploymentConfigMock,
             $this->appStateMock,
             null,
@@ -222,5 +231,65 @@ class UpgradeCommandTest extends TestCase
                 ]
             ]
         ];
+    }
+
+    /**
+     * @return void
+     */
+    public function testExecuteValidatesSearchEngineWhenSearchModuleEnabled(): void
+    {
+        $this->appStateMock->method('getMode')->willReturn(AppState::MODE_DEFAULT);
+        $this->deploymentConfigMock->method('isAvailable')->willReturn(false);
+        $this->dbInitStatementsCleanupMock->method('execute')->willReturn(false);
+        $this->installerMock->method('updateModulesSequence');
+        $this->installerMock->method('installSchema');
+        $this->installerMock->method('installDataFixtures');
+        $this->searchConfigMock->expects($this->once())->method('validateSearchEngine');
+
+        $this->assertSame(
+            Cli::RETURN_SUCCESS,
+            $this->commandTester->execute(['--magento-init-params' => '', '--convert-old-scripts' => false])
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testExecuteSkipsSearchEngineValidationWhenSearchModuleDisabled(): void
+    {
+        $this->appStateMock->method('getMode')->willReturn(AppState::MODE_DEFAULT);
+        $this->dbInitStatementsCleanupMock->method('execute')->willReturn(false);
+        $this->installerMock->method('updateModulesSequence');
+        $this->installerMock->method('installSchema');
+        $this->installerMock->method('installDataFixtures');
+
+        $deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $deploymentConfigMock->method('get')
+            ->willReturnCallback(function ($key = null) {
+                return $key === ConfigOptionsListConstants::KEY_MODULES ? ['Magento_Search' => 0] : null;
+            });
+        $deploymentConfigMock->method('isAvailable')->willReturn(false);
+
+        $searchConfigFactoryMock = $this->getMockBuilder(SearchConfigFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $searchConfigFactoryMock->expects($this->never())->method('create');
+
+        $upgradeCommand = new UpgradeCommand(
+            $this->installerFactoryMock,
+            $searchConfigFactoryMock,
+            $deploymentConfigMock,
+            $this->appStateMock,
+            null,
+            $this->dbInitStatementsCleanupMock
+        );
+        $commandTester = new CommandTester($upgradeCommand);
+
+        $this->assertSame(
+            Cli::RETURN_SUCCESS,
+            $commandTester->execute(['--magento-init-params' => '', '--convert-old-scripts' => false])
+        );
     }
 }
