@@ -49,6 +49,14 @@ define([
                 customerData.reload(['cart'], false);
             }
 
+            $(window).on('pageshow', function (event) {
+                if (event.originalEvent.persisted) {
+                    addToCartCalls = 0;
+                    self.isLoading(false);
+                    self.closeMinicart();
+                }
+            });
+          
             $(this.minicartSelector).on('dropdowndialogopen', function () {
                 self.initSidebar();
             });

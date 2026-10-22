@@ -167,7 +167,14 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
     public function setNoCacheHeaders()
     {
         $this->setHeader('pragma', 'no-cache', true);
-        $this->setHeader('cache-control', 'no-store, no-cache, must-revalidate, max-age=0', true);
+        $cacheControlHeader = $this->getHeader('Cache-Control');
+        $existingValue = $cacheControlHeader ? $cacheControlHeader->getFieldValue() : '';
+        // Pages without public s-maxage (uncacheable layout) must retain no-store
+        // to prevent bfcache from restoring stale private content
+        $cacheControl = preg_match('/public.*s-maxage=\d+/', $existingValue)
+            ? 'no-cache, must-revalidate, max-age=0'
+            : 'no-store, no-cache, must-revalidate, max-age=0';
+        $this->setHeader('cache-control', $cacheControl, true);
         $this->setHeader('expires', $this->getExpirationHeader('-1 year'), true);
     }
 

@@ -24,6 +24,14 @@ define([
          */
         _create: function () {
             this.element.on('submit', $.proxy(this._showLoader, this));
+            this._on(window, {
+                'pageshow': function (event) {
+                    if (event.originalEvent.persisted) {
+                        this.element.find(this.options.pleaseWaitLoader).hide().end()
+                            .find(this.options.placeOrderSubmit).prop('disabled', false).css('opacity', 1);
+                    }
+                }
+            });
         },
 
         /**
