@@ -217,5 +217,105 @@ define([
             expect(group.is(':mage-collapsible')).toBeFalsy();
             group.remove();
         });
+
+        describe('Test URL anchor handling', function () {
+            var originalUrl = window.location.href,
+                group,
+                content;
+
+            function setHash(hash) {
+                window.history.replaceState(null, '', window.location.pathname + window.location.search + hash);
+            }
+
+            beforeEach(function () {
+                jasmine.clock().install();
+                group = $('<div id="anchor-group"></div>');
+                $('<div data-role="title"></div>').appendTo(group);
+                content = $('<div data-role="content" id="anchor-content" style="display: none;">' +
+                    '<p id="anchor-nested">nested</p></div>').appendTo(group);
+                group.appendTo('body');
+                spyOn(content[0], 'scrollIntoView');
+                spyOn(content.find('#anchor-nested')[0], 'scrollIntoView');
+            });
+
+            afterEach(function () {
+                group.collapsible('destroy');
+                group.remove();
+                window.history.replaceState(null, '', originalUrl);
+                jasmine.clock().uninstall();
+            });
+
+            it('shows and scrolls to the content targeted by the anchor when scrollToAnchor is enabled', function () {
+                setHash('#anchor-content');
+                group.collapsible({
+                    scrollToAnchor: true
+                });
+                jasmine.clock().tick(1);
+
+                expect(group.collapsible('option', 'active')).toBe(true);
+                expect(content.is(':visible')).toBe(true);
+                expect(content[0].scrollIntoView).toHaveBeenCalled();
+            });
+
+            it('scrolls to an element nested in the content targeted by the anchor', function () {
+                var nested = content.find('#anchor-nested');
+
+                setHash('#anchor-nested');
+                group.collapsible({
+                    scrollToAnchor: true
+                });
+                jasmine.clock().tick(1);
+
+                expect(content.is(':visible')).toBe(true);
+                expect(nested[0].scrollIntoView).toHaveBeenCalled();
+                expect(content[0].scrollIntoView).not.toHaveBeenCalled();
+            });
+
+            it('shows the content targeted by the anchor without scrolling by default', function () {
+                setHash('#anchor-content');
+                group.collapsible();
+                jasmine.clock().tick(1);
+
+                expect(content.is(':visible')).toBe(true);
+                expect(content[0].scrollIntoView).not.toHaveBeenCalled();
+            });
+
+            it('does nothing when the anchor is absent from the content', function () {
+                setHash('#missing-anchor');
+                group.collapsible({
+                    scrollToAnchor: true
+                });
+                jasmine.clock().tick(1);
+
+                expect(group.collapsible('option', 'active')).toBe(false);
+                expect(content.is(':hidden')).toBe(true);
+                expect(content[0].scrollIntoView).not.toHaveBeenCalled();
+            });
+
+            it('ignores an anchor that is not a valid selector', function () {
+                setHash('#anchor-content[');
+
+                expect(function () {
+                    group.collapsible({
+                        scrollToAnchor: true
+                    });
+                    jasmine.clock().tick(1);
+                }).not.toThrow();
+                expect(content.is(':hidden')).toBe(true);
+                expect(content[0].scrollIntoView).not.toHaveBeenCalled();
+            });
+
+            it('does not open or scroll a disabled widget targeted by the anchor', function () {
+                setHash('#anchor-content');
+                group.collapsible({
+                    disabled: true,
+                    scrollToAnchor: true
+                });
+                jasmine.clock().tick(1);
+
+                expect(content.is(':hidden')).toBe(true);
+                expect(content[0].scrollIntoView).not.toHaveBeenCalled();
+            });
+        });
     });
 });

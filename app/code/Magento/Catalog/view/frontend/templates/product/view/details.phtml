@@ -6,11 +6,12 @@
 
 /** @var \Magento\Catalog\Block\Product\View\Details $block */
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+/** @var \Magento\Framework\Escaper $escaper */
 ?>
 <?php if ($detailedInfoGroup = $block->getGroupSortedChildNames('detailed_info', 'getChildHtml')):?>
     <div class="product info detailed">
         <?php $layout = $block->getLayout(); ?>
-        <div class="product data items" data-mage-init='{"tabs":{"openedState":"active"}}'>
+        <div class="product data items" data-mage-init='{"tabs":{"openedState":"active","scrollToAnchor":true}}'>
             <?php $hideTabContent = false; ?>
             <?php foreach ($detailedInfoGroup as $name):?>
                 <?php
@@ -22,24 +23,24 @@
                 $label = $block->getChildData($alias, 'title');
                 ?>
                 <div class="data item title <?= !$hideTabContent ? 'active' : ''?>"
-                     data-role="collapsible" id="tab-label-<?= $block->escapeHtmlAttr($alias) ?>">
+                     data-role="collapsible" id="tab-label-<?= $escaper->escapeHtmlAttr($alias) ?>">
                     <a class="data switch"
                        tabindex="-1"
                        data-toggle="trigger"
-                       href="#<?= $block->escapeUrl($alias) ?>"
-                       id="tab-label-<?= $block->escapeHtmlAttr($alias) ?>-title">
+                       href="#<?= $escaper->escapeUrl($alias) ?>"
+                       id="tab-label-<?= $escaper->escapeHtmlAttr($alias) ?>-title">
                         <?= /* @noEscape */ $label ?>
                     </a>
                 </div>
                 <div class="data item content"
-                     aria-labelledby="tab-label-<?= $block->escapeHtmlAttr($alias) ?>-title"
-                     id="<?= $block->escapeHtmlAttr($alias) ?>" data-role="content">
+                     aria-labelledby="tab-label-<?= $escaper->escapeHtmlAttr($alias) ?>-title"
+                     id="<?= $escaper->escapeHtmlAttr($alias) ?>" data-role="content">
                     <?= /* @noEscape */ $html ?>
                 </div>
                 <?= $hideTabContent
                     ? /* @noEscape */ $secureRenderer->renderStyleAsTag(
                         'display: none;',
-                        '#' . $block->escapeHtmlAttr($alias)
+                        '#' . $escaper->escapeHtmlAttr($alias)
                     )
                     : '' ?>
                 <?php $hideTabContent = true; ?>
