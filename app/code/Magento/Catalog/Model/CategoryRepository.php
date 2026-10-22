@@ -7,15 +7,16 @@
 namespace Magento\Catalog\Model;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Model\CategoryRepository\PopulateWithValues;
 use Magento\Catalog\Model\ResourceModel\Category as CategoryResource;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DataObject;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
-use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -92,7 +93,7 @@ class CategoryRepository implements CategoryRepositoryInterface, ResetAfterReque
      */
     public function save(CategoryInterface $category)
     {
-        $storeId = (int)$this->storeManager->getStore()->getId();
+        $storeId = $this->getCategoryStoreId($category);
         $existingData = $this->getExtensibleDataObjectConverter()
             ->toNestedArray($category, [], CategoryInterface::class);
         $existingData = array_diff_key($existingData, array_flip(['path', 'level', 'parent_id']));
@@ -263,5 +264,19 @@ class CategoryRepository implements CategoryRepositoryInterface, ResetAfterReque
     public function _resetState(): void
     {
         $this->instances = [];
+    }
+
+    /**
+     * Get the scope to save the category in: its own store when explicitly set, the current store otherwise
+     *
+     * @param CategoryInterface $category
+     * @return int
+     */
+    private function getCategoryStoreId(CategoryInterface $category): int
+    {
+        if ($category instanceof DataObject && $category->hasData('store_id')) {
+            return (int)$category->getData('store_id');
+        }
+        return (int)$this->storeManager->getStore()->getId();
     }
 }
