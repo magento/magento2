@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminApplyCatalogRuleNegativeCategoryConditionTest">
+        <annotations>
+            <features value="CatalogRule"/>
+            <stories value="Apply catalog price rule with negative condition"/>
+            <title value="Catalog rule Category is not must discount products outside the excluded category"/>
+            <description value="Products not assigned to the excluded category must receive the catalog rule discount."/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="AC-12547"/>
+            <group value="CatalogRule"/>
+        </annotations>
+        <before>
+            <createData entity="ApiCategory" stepKey="createExcludedCategory"/>
+            <createData entity="ApiSimpleProduct" stepKey="createProductInExcludedCategory">
+                <requiredEntity createDataKey="createExcludedCategory"/>
+            </createData>
+            <createData entity="ApiCategory" stepKey="createOtherCategory"/>
+            <createData entity="ApiSimpleProduct" stepKey="createProductInOtherCategory">
+                <requiredEntity createDataKey="createOtherCategory"/>
+            </createData>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexBefore">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createExcludedCategory" stepKey="deleteExcludedCategory"/>
+            <deleteData createDataKey="createProductInExcludedCategory" stepKey="deleteProductInExcludedCategory"/>
+            <deleteData createDataKey="createOtherCategory" stepKey="deleteOtherCategory"/>
+            <deleteData createDataKey="createProductInOtherCategory" stepKey="deleteProductInOtherCategory"/>
+
+            <!-- Best-effort cleanup; rule may not exist if the test failed mid-create -->
+            <actionGroup ref="AdminOpenCatalogPriceRulePageActionGroup" stepKey="goToPriceRulePage"/>
+            <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllRules"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexAfter">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- Create catalog price rule with Category is not excludedCategory -->
+        <actionGroup ref="AdminOpenCatalogPriceRulePageActionGroup" stepKey="openCatalogRulePage"/>
+        <click selector="{{AdminGridMainControls.add}}" stepKey="addNewRule"/>
+        <waitForPageLoad stepKey="waitForRulePage"/>
+        <fillField selector="{{AdminNewCatalogPriceRule.ruleName}}" userInput="{{_defaultCatalogRule.name}}" stepKey="fillName"/>
+        <fillField selector="{{AdminNewCatalogPriceRule.description}}" userInput="{{_defaultCatalogRule.description}}" stepKey="fillDescription"/>
+        <click stepKey="selectActive" selector="{{AdminCategoryBasicFieldSection.enableCategoryLabel}}"/>
+        <selectOption selector="{{AdminNewCatalogPriceRule.websites}}" userInput="{{_defaultCatalogRule.website_ids[0]}}" stepKey="selectSite"/>
+        <click selector="{{AdminNewCatalogPriceRule.fromDateButton}}" stepKey="clickFromCalender"/>
+        <click selector="{{AdminNewCatalogPriceRule.todayDate}}" stepKey="clickFromToday"/>
+        <click selector="{{AdminNewCatalogPriceRule.toDateButton}}" stepKey="clickToCalender"/>
+        <click selector="{{AdminNewCatalogPriceRule.todayDate}}" stepKey="clickToToday"/>
+
+        <click selector="{{AdminNewCatalogPriceRule.conditionsTab}}" stepKey="openConditions"/>
+        <waitForPageLoad stepKey="waitForConditionsTab"/>
+        <waitForElementVisible selector="{{AdminNewCatalogPriceRuleConditions.newCondition}}" stepKey="waitForAddConditionButton"/>
+        <click selector="{{AdminNewCatalogPriceRuleConditions.newCondition}}" stepKey="clickNewRule"/>
+        <waitForElementVisible selector="{{AdminNewCatalogPriceRuleConditions.conditionSelect('1')}}" stepKey="waitForConditionSelect"/>
+        <selectOption selector="{{AdminNewCatalogPriceRuleConditions.conditionSelect('1')}}" userInput="Category" stepKey="selectCategory"/>
+        <waitForPageLoad stepKey="waitForOperator"/>
+
+        <!-- Change operator from default "is" to "is not" -->
+        <waitForElementVisible selector="{{AdminNewCatalogPriceRuleConditions.condition('is')}}" stepKey="waitForIsOperator"/>
+        <click selector="{{AdminNewCatalogPriceRuleConditions.condition('is')}}" stepKey="clickOperatorIs"/>
+        <waitForElementVisible selector="{{AdminNewCatalogPriceRuleConditions.activeOperatorSelect}}" stepKey="waitForOperatorSelect"/>
+        <selectOption selector="{{AdminNewCatalogPriceRuleConditions.activeOperatorSelect}}" userInput="is not" stepKey="selectIsNotOperator"/>
+        <conditionalClick selector="{{AdminNewCatalogPriceRuleConditions.condition('...')}}" dependentSelector="{{AdminNewCatalogPriceRuleConditions.activeOperatorSelect}}" visible="true" stepKey="closeOperatorSelect"/>
+
+        <waitForElementVisible selector="{{AdminNewCatalogPriceRuleConditions.targetEllipsis('1')}}" stepKey="waitForEllipsis"/>
+        <click selector="{{AdminNewCatalogPriceRuleConditions.targetEllipsis('1')}}" stepKey="clickEllipsis"/>
+        <waitForElementVisible selector="{{AdminNewCatalogPriceRuleConditions.targetInput('1', '1')}}" stepKey="waitForInput"/>
+        <fillField selector="{{AdminNewCatalogPriceRuleConditions.targetInput('1', '1')}}" userInput="$$createExcludedCategory.id$$" stepKey="fillExcludedCategoryId"/>
+        <click selector="{{AdminNewCatalogPriceRuleConditions.applyButton('1', '1')}}" stepKey="clickApplyCondition"/>
+        <waitForPageLoad stepKey="waitAfterConditionApply"/>
+
+        <click selector="{{AdminNewCatalogPriceRule.actionsTabTitle}}" stepKey="openActions"/>
+        <waitForElementVisible selector="{{AdminNewCatalogPriceRuleActions.discountAmount}}" stepKey="waitForActionsFields"/>
+        <selectOption selector="{{AdminNewCatalogPriceRuleActions.apply}}" userInput="{{_defaultCatalogRule.simple_action}}" stepKey="discountType"/>
+        <fillField selector="{{AdminNewCatalogPriceRuleActions.discountAmount}}" userInput="50" stepKey="fillDiscountValue"/>
+        <selectOption selector="{{AdminNewCatalogPriceRuleActions.disregardRules}}" userInput="Yes" stepKey="discardSubsequentRules"/>
+        <scrollToTopOfPage stepKey="scrollToTop"/>
+        <waitForPageLoad stepKey="waitForActions"/>
+        <actionGroup ref="SelectNotLoggedInCustomerGroupActionGroup" stepKey="selectNotLoggedInCustomerGroup"/>
+
+        <click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="saveAndApply"/>
+        <waitForPageLoad stepKey="waitAfterSaveAndApply"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexRules">
+            <argument name="indices" value="catalogrule_rule catalogrule_product catalog_product_price"/>
+        </actionGroup>
+        <comment userInput="Cache flush replaced with comment for BC with core CatalogRule MFTF patterns" stepKey="flushCache"/>
+
+        <!-- Product outside excluded category must be discounted -->
+        <amOnPage url="$$createOtherCategory.custom_attributes[url_key]$$.html" stepKey="openOtherCategory"/>
+        <see selector="{{StorefrontCategoryProductSection.ProductInfoByNumber('1')}}" userInput="$$createProductInOtherCategory.name$$" stepKey="seeOtherProduct"/>
+        <see selector="{{StorefrontCategoryProductSection.ProductInfoByNumber('1')}}" userInput="$61.50" stepKey="seeOtherProductDiscountedPrice"/>
+        <see selector="{{StorefrontCategoryProductSection.ProductInfoByNumber('1')}}" userInput="Regular Price $123.00" stepKey="seeOtherProductRegularPrice"/>
+
+        <!-- Product in excluded category must not be discounted -->
+        <amOnPage url="$$createExcludedCategory.custom_attributes[url_key]$$.html" stepKey="openExcludedCategory"/>
+        <see selector="{{StorefrontCategoryProductSection.ProductInfoByNumber('1')}}" userInput="$$createProductInExcludedCategory.name$$" stepKey="seeExcludedProduct"/>
+        <see selector="{{StorefrontCategoryProductSection.ProductInfoByNumber('1')}}" userInput="$123.00" stepKey="seeExcludedProductFullPrice"/>
+        <dontSee selector="{{StorefrontCategoryProductSection.ProductInfoByNumber('1')}}" userInput="$61.50" stepKey="dontSeeExcludedProductDiscount"/>
+    </test>
+</tests>
