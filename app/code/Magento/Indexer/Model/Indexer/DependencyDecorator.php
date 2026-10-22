@@ -273,15 +273,18 @@ class DependencyDecorator implements IndexerInterface
     public function reindexRow($id)
     {
         $this->cacheCleaner->start();
-        $this->indexer->reindexRow($id);
-        $dependentIndexerIds = $this->dependencyInfoProvider->getIndexerIdsToRunAfter($this->indexer->getId());
-        foreach ($dependentIndexerIds as $indexerId) {
-            $dependentIndexer = $this->indexerRegistry->get($indexerId);
-            if (!$dependentIndexer->isScheduled()) {
-                $dependentIndexer->reindexRow($id);
+        try {
+            $this->indexer->reindexRow($id);
+            $dependentIndexerIds = $this->dependencyInfoProvider->getIndexerIdsToRunAfter($this->indexer->getId());
+            foreach ($dependentIndexerIds as $indexerId) {
+                $dependentIndexer = $this->indexerRegistry->get($indexerId);
+                if (!$dependentIndexer->isScheduled()) {
+                    $dependentIndexer->reindexRow($id);
+                }
             }
+        } finally {
+            $this->cacheCleaner->flush();
         }
-        $this->cacheCleaner->flush();
     }
 
     /**
@@ -290,14 +293,17 @@ class DependencyDecorator implements IndexerInterface
     public function reindexList($ids)
     {
         $this->cacheCleaner->start();
-        $this->indexer->reindexList($ids);
-        $dependentIndexerIds = $this->dependencyInfoProvider->getIndexerIdsToRunAfter($this->indexer->getId());
-        foreach ($dependentIndexerIds as $indexerId) {
-            $dependentIndexer = $this->indexerRegistry->get($indexerId);
-            if (!$dependentIndexer->isScheduled()) {
-                $dependentIndexer->reindexList($ids);
+        try {
+            $this->indexer->reindexList($ids);
+            $dependentIndexerIds = $this->dependencyInfoProvider->getIndexerIdsToRunAfter($this->indexer->getId());
+            foreach ($dependentIndexerIds as $indexerId) {
+                $dependentIndexer = $this->indexerRegistry->get($indexerId);
+                if (!$dependentIndexer->isScheduled()) {
+                    $dependentIndexer->reindexList($ids);
+                }
             }
+        } finally {
+            $this->cacheCleaner->flush();
         }
-        $this->cacheCleaner->flush();
     }
 }

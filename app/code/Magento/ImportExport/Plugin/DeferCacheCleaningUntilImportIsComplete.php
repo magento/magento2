@@ -80,4 +80,23 @@ class DeferCacheCleaningUntilImportIsComplete
         $this->cacheCleaner->flush();
         return $result;
     }
+
+    /**
+     * Flush deferred cache when import fails, as the after plugin is skipped then
+     *
+     * @param Import $subject
+     * @param callable $proceed
+     * @return bool
+     * @throws \Throwable
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function aroundImportSource(Import $subject, callable $proceed): bool
+    {
+        try {
+            return $proceed();
+        } catch (\Throwable $exception) {
+            $this->cacheCleaner->flush();
+            throw $exception;
+        }
+    }
 }
