@@ -6,6 +6,7 @@
 namespace Magento\Downloadable\Controller\Adminhtml\Product\Initialization\Helper\Plugin;
 
 use Magento\Downloadable\Api\Data\LinkInterfaceFactory;
+use Magento\Downloadable\Api\Data\ProductAttributeInterface;
 use Magento\Downloadable\Api\Data\SampleInterfaceFactory;
 use Magento\Downloadable\Helper\Download;
 use Magento\Downloadable\Model\Link\Builder as LinkBuilder;
@@ -79,7 +80,11 @@ class Downloadable
         \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper $subject,
         \Magento\Catalog\Model\Product $product
     ) {
-        if ($downloadable = $this->request->getPost('downloadable')) {
+        $isDownloadable = $this->request->getParam(ProductAttributeInterface::CODE_IS_DOWNLOADABLE);
+        $downloadable = $isDownloadable !== null && !$isDownloadable
+            ? null
+            : $this->request->getPost('downloadable');
+        if ($downloadable) {
             $product->setTypeId(Type::TYPE_DOWNLOADABLE);
             $product->setDownloadableData($downloadable);
             $extension = $product->getExtensionAttributes();
