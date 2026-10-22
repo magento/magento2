@@ -106,6 +106,39 @@ class RowsTest extends TestCase
     }
 
     /**
+     * Products that leave the categories during the reindex must be queued as well.
+     *
+     * @return void
+     */
+    public function testProductsRemovedFromCategoriesAreQueued(): void
+    {
+        $storeId = 1;
+        $categoryIds = [4];
+        $actionMock = $this->createMock(ActionRows::class);
+        $storeMock = $this->createMock(Store::class);
+        $storeMock->method('getId')->willReturn($storeId);
+        $this->storeManagerMock->method('getStores')->willReturn([$storeMock]);
+        $this->tableMaintainerMock->expects($this->once())
+            ->method('getMainTable')
+            ->with($storeId)
+            ->willReturn('main_table');
+        $this->tableMaintainerMock->expects($this->once())
+            ->method('getMainReplicaTable')
+            ->with($storeId)
+            ->willReturn('replica_table');
+        $this->selectMock->method('from')->willReturnSelf();
+        $this->selectMock->method('where')->willReturnSelf();
+        $this->selectMock->method('distinct')->willReturnSelf();
+        $this->connectionMock->expects($this->exactly(2))
+            ->method('fetchCol')
+            ->willReturnOnConsecutiveCalls(['1', '2'], ['2', '3']);
+        $this->createIndexerMock(['1', '2', '3']);
+
+        $this->plugin->beforeExecute($actionMock, $categoryIds, true);
+        $this->plugin->afterExecute($actionMock, $actionMock, $categoryIds, true);
+    }
+
+    /**
      * Creates a mock for the indexer registry to add given ids to changelog.
      *
      * @param array $ids
