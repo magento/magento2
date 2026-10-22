@@ -345,14 +345,17 @@ class CategoryTest extends TestCase
 
         $category->setPostedProducts([$productId => '1']);
         $this->categoryResource->save($category);
+        $this->assertSame(
+            [$productId => 1],
+            array_map('intval', $this->categoryResource->getProductsPosition($category))
+        );
 
-        $category = $this->categoryRepository->get($category->getId());
-        $this->assertSame([$productId => 1], array_map('intval', $category->getProductsPosition()));
-
+        $category = $this->objectManager->create(CategoryModel::class)->setStoreId(0)->load($category->getId());
         $category->setPostedProducts([$productId => '']);
         $this->categoryResource->save($category);
-
-        $category = $this->categoryRepository->get($category->getId());
-        $this->assertSame([$productId => 0], array_map('intval', $category->getProductsPosition()));
+        $this->assertSame(
+            [$productId => 0],
+            array_map('intval', $this->categoryResource->getProductsPosition($category))
+        );
     }
 }
