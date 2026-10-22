@@ -256,6 +256,14 @@ class ConfigurableTest extends TestCase
     }
 
     /**
+     * Test that getAdditionalConfig() returns result of _getAdditionalConfig() and is extensible via plugins
+     */
+    public function testGetAdditionalConfigReturnsEmptyArrayByDefault(): void
+    {
+        $this->assertSame([], $this->block->getAdditionalConfig());
+    }
+
+    /**
      * Check that getJsonConfig() method returns expected value
      */
     public function testGetJsonConfig(): void
