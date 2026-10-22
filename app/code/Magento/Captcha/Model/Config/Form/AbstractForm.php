@@ -6,8 +6,6 @@
 
 /**
  * Data source to fill "Forms" field
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Captcha\Model\Config\Form;
 
