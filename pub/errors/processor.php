@@ -29,6 +29,11 @@ class Processor
     public const NUMBER_SYMBOLS_IN_SUBDIR_NAME = 2;
 
     /**
+     * @var string
+     */
+    private const REPORT_EXECUTION_GUARD = '<?php exit; ?>';
+
+    /**
      * Page title
      *
      * @var string
@@ -530,7 +535,11 @@ class Processor
         }
         $this->_setReportData($reportData);
 
-        @file_put_contents($this->_reportFile, $this->serializer->serialize($reportData). PHP_EOL);
+        $reportData = $this->sanitizeReportData($reportData);
+        @file_put_contents(
+            $this->_reportFile,
+            self::REPORT_EXECUTION_GUARD . PHP_EOL . $this->serializer->serialize($reportData) . PHP_EOL
+        );
 
         if (isset($reportData['skin']) && self::DEFAULT_SKIN != $reportData['skin']) {
             $this->_setSkin($reportData['skin']);
@@ -538,6 +547,38 @@ class Processor
         $this->_setReportUrl();
 
         return $this->reportUrl;
+    }
+
+    /**
+     * Neutralize PHP open tags inside report values.
+     *
+     * @param array $data
+     * @return array
+     */
+    private function sanitizeReportData(array $data): array
+    {
+        array_walk_recursive($data, static function (&$value) {
+            if (is_string($value)) {
+                $value = str_replace('<?', '< ?', $value);
+            }
+        });
+        return $data;
+    }
+
+    /**
+     * Read a report file, stripping the execution-guard prefix when present.
+     *
+     * @param string $reportFile
+     * @return string
+     */
+    private function readReportFile(string $reportFile): string
+    {
+        $contents = (string)file_get_contents($reportFile);
+        $guard = self::REPORT_EXECUTION_GUARD;
+        if (strncmp($contents, $guard, strlen($guard)) === 0) {
+            $contents = ltrim(substr($contents, strlen($guard)), "\r\n");
+        }
+        return $contents;
     }
 
     /**
@@ -558,7 +599,9 @@ class Processor
             }
             $this->reportId = $reportId;
             $this->_reportFile = $reportFile;
-            $this->_setReportData($this->serializer->unserialize(file_get_contents($this->_reportFile)));
+            $this->_setReportData(
+                $this->serializer->unserialize($this->readReportFile($this->_reportFile))
+            );
         } catch (\RuntimeException $e) {
             $this->redirectToBaseUrl();
         }

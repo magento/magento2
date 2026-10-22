@@ -39,4 +39,8 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\UrlRewriteGraphQl\Model\Resolver\EntityUrl">
+        <plugin name="validateProductStatusUrlResolverPlugin"
+                type="Magento\CatalogUrlRewriteGraphQl\Plugin\Model\Resolver\EntityUrlExcludeDisabledProductPlugin"/>
+    </type>
 </config>

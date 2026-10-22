@@ -14,6 +14,7 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Tax\Helper\Data as TaxHelper;
 use Magento\Weee\Helper\Data;
 use Magento\Weee\Observer\GetPriceConfigurationObserver;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -115,6 +116,53 @@ class GetPriceConfigurationObserverTest extends TestCase
         $weeeObserverObject->execute($observerObject);
 
         $this->assertEquals($expectedArray, $configObj->getData('config'));
+    }
+
+    public function testBasePriceIncludesFptWhenCatalogDisplaysBothPrices()
+    {
+        $configObj = new DataObject([
+            'config' => [
+                [
+                    'optionId' => 1,
+                    'prices' => [
+                        'finalPrice' => ['amount' => 18],
+                        'basePrice' => ['amount' => 7],
+                    ],
+                ],
+            ],
+        ]);
+        $fpt = new DataObject([
+            'code' => 'fpt',
+            'amount' => 10.83,
+            'amount_excl_tax' => 10,
+        ]);
+        $weeeHelper = $this->createMock(Data::class);
+        $weeeHelper->method('isEnabled')->willReturn(true);
+        $weeeHelper->method('getWeeeAttributesForBundle')->willReturn([1 => [$fpt]]);
+        $weeeHelper->method('isDisplayExcl')->willReturn(false);
+        $weeeHelper->method('isDisplayExclDescIncl')->willReturn(false);
+        $weeeHelper->method('isDisplayIncl')->willReturn(true);
+
+        $taxHelper = $this->createMock(TaxHelper::class);
+        $taxHelper->method('priceIncludesTax')->willReturn(false);
+        $taxHelper->method('displayBothPrices')->with(1)->willReturn(true);
+
+        $product = $this->createPartialMockWithReflection(
+            Type::class,
+            ['getTypeInstance', 'getTypeId', 'getStoreId']
+        );
+        $product->method('getStoreId')->willReturn(1);
+        $registry = $this->createMock(Registry::class);
+        $registry->method('registry')->with('current_product')->willReturn($product);
+
+        $event = $this->createMock(Observer::class);
+        $event->method('getData')->with('configObj')->willReturn($configObj);
+
+        $observer = new GetPriceConfigurationObserver($registry, $weeeHelper, $taxHelper);
+        $observer->execute($event);
+
+        $updatedConfig = $configObj->getData('config');
+        $this->assertSame(17.0, $updatedConfig[0]['prices']['basePrice']['amount']);
     }
 
     /**

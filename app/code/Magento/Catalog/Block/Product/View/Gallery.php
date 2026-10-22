@@ -148,6 +148,7 @@ class Gallery extends AbstractView
                     'isMain' => $this->isMainImage($image),
                     'type' => $mediaType !== null ? str_replace('external-', '', $mediaType) : '',
                     'videoUrl' => $image->getVideoUrl(),
+                    '__disableTmpl' => true,
                 ]
             );
             foreach ($this->getGalleryImagesConfig()->getItems() as $imageConfig) {
@@ -168,6 +169,7 @@ class Gallery extends AbstractView
                 'isMain' => true,
                 'type' => 'image',
                 'videoUrl' => null,
+                '__disableTmpl' => true,
             ];
         }
         return json_encode($imagesItems);

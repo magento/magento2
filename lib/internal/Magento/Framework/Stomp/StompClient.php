@@ -425,7 +425,7 @@ class StompClient implements StompClientInterface, ResetAfterRequestInterface
         $client->setVersions([self::VERSION]);
         $client->setLogin(
             $this->stompConfig->getValue(Config::USERNAME),
-            $this->stompConfig->getValue(Config::USERNAME)
+            $this->stompConfig->getValue(Config::PASSWORD)
         );
         $heartbeatSend = $this->stompConfig->getValue('heartbeat_send') ?? self::HEARTBEAT_SEND_TIME;
         $heartbeatReceive = $this->stompConfig->getValue('heartbeat_receive') ?? self::HEARTBEAT_RECEIVE_TIME;

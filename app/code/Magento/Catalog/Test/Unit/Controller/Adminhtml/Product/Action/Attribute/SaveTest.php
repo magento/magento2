@@ -391,7 +391,7 @@ class SaveTest extends TestCase
         $fromAttrBackend = $this->createBackendMock(true);
         $toAttrBackend = $this->createBackendMock(false);
         $fromAttribute = $this->createDatetimeAttributeMockForExecute($fromAttrBackend);
-        $toAttribute = $this->createDatetimeAttributeMockForExecute($toAttrBackend);
+        $toAttribute = $this->createDatetimeAttributeMockForExecute($toAttrBackend, 'special_to_date');
 
         $eavConfig = $this->createMock(EavConfig::class);
         $eavConfig->expects($this->atLeastOnce())->method('getAttribute')->willReturnCallback(
@@ -441,7 +441,7 @@ class SaveTest extends TestCase
         );
         $okBackend = $this->createBackendMock(false);
         $fromAttribute = $this->createDatetimeAttributeMockForExecute($okBackend);
-        $toAttribute = $this->createDatetimeAttributeMockForExecute($okBackend);
+        $toAttribute = $this->createDatetimeAttributeMockForExecute($okBackend, 'special_to_date');
         $eavConfig = $this->createMock(EavConfig::class);
         $eavConfig->expects($this->atLeastOnce())->method('getAttribute')->willReturnCallback(
             function ($entity, $code) use ($fromAttribute, $toAttribute) {
@@ -567,7 +567,7 @@ class SaveTest extends TestCase
 
         $okBackend = $this->createBackendMock(false);
         $fromAttribute = $this->createDatetimeAttributeMockForExecute($failingBackend);
-        $toAttribute = $this->createDatetimeAttributeMockForExecute($okBackend);
+        $toAttribute = $this->createDatetimeAttributeMockForExecute($okBackend, 'special_to_date');
 
         $eavConfig = $this->createMock(EavConfig::class);
         $eavConfig->expects($this->atLeastOnce())->method('getAttribute')->willReturnCallback(
@@ -666,7 +666,7 @@ class SaveTest extends TestCase
 
         $okBackend = $this->createBackendMock(false);
         $fromAttribute = $this->createDatetimeAttributeMockForExecute($okBackend);
-        $toAttribute = $this->createDatetimeAttributeMockForExecute($okBackend);
+        $toAttribute = $this->createDatetimeAttributeMockForExecute($okBackend, 'special_to_date');
 
         $eavConfig = $this->createMock(EavConfig::class);
         $eavConfig->expects($this->atLeastOnce())->method('getAttribute')->willReturnCallback(
@@ -736,7 +736,7 @@ class SaveTest extends TestCase
 
         $okBackend = $this->createBackendMock(false);
         $fromAttribute = $this->createDatetimeAttributeMockForExecute($okBackend);
-        $toAttribute = $this->createDatetimeAttributeMockForExecute($okBackend);
+        $toAttribute = $this->createDatetimeAttributeMockForExecute($okBackend, 'special_to_date');
 
         $eavConfig = $this->createMock(EavConfig::class);
         $eavConfig->expects($this->atLeastOnce())->method('getAttribute')->willReturnCallback(
@@ -786,7 +786,7 @@ class SaveTest extends TestCase
         );
         $okBackend = $this->createBackendMock(false);
         $fromAttribute = $this->createDatetimeAttributeMockForExecute($okBackend);
-        $toAttribute = $this->createDatetimeAttributeMockForExecute($okBackend);
+        $toAttribute = $this->createDatetimeAttributeMockForExecute($okBackend, 'special_to_date');
         $attrNoId = $this->createPartialMock(AbstractAttribute::class, ['getAttributeId']);
         $attrNoId->expects($this->any())->method('getAttributeId')->willReturn(0);
         $hasWeightAttr = $this->createPartialMock(
@@ -914,20 +914,23 @@ class SaveTest extends TestCase
         $okBackend = $this->createBackendMock(false);
         $multiselectAttr = $this->createPartialMock(
             AbstractAttribute::class,
-            ['getAttributeId', 'getBackendType', 'getFrontendInput', 'getBackend']
+            ['getAttributeId', 'getBackendType', 'getFrontendInput', 'getBackend', 'getAttributeCode']
         );
         $multiselectAttr->expects($this->any())->method('getAttributeId')->willReturn(1);
         $multiselectAttr->expects($this->any())->method('getBackendType')->willReturn('varchar');
         $multiselectAttr->expects($this->any())->method('getFrontendInput')->willReturn('multiselect');
         $multiselectAttr->expects($this->any())->method('getBackend')->willReturn($okBackend);
+        $multiselectAttr->expects($this->any())->method('getAttributeCode')->willReturn($multiselectCode);
         $multiselectAttrUnchecked = $this->createPartialMock(
             AbstractAttribute::class,
-            ['getAttributeId', 'getBackendType', 'getFrontendInput', 'getBackend']
+            ['getAttributeId', 'getBackendType', 'getFrontendInput', 'getBackend', 'getAttributeCode']
         );
         $multiselectAttrUnchecked->expects($this->any())->method('getAttributeId')->willReturn(1);
         $multiselectAttrUnchecked->expects($this->any())->method('getBackendType')->willReturn('varchar');
         $multiselectAttrUnchecked->expects($this->any())->method('getFrontendInput')->willReturn('multiselect');
         $multiselectAttrUnchecked->expects($this->any())->method('getBackend')->willReturn($okBackend);
+        $multiselectAttrUnchecked->expects($this->any())->method('getAttributeCode')
+            ->willReturn('multiselect_attr_unchecked');
         $eavConfig = $this->createMock(EavConfig::class);
         $eavConfig->expects($this->atLeastOnce())->method('getAttribute')->willReturnCallback(
             function ($entity, $code) use ($multiselectAttr, $multiselectAttrUnchecked) {
@@ -1014,7 +1017,7 @@ class SaveTest extends TestCase
 
         $okBackend = $this->createBackendMock(false);
         $fromAttribute = $this->createDatetimeAttributeMockForExecute($okBackend);
-        $toAttribute = $this->createDatetimeAttributeMockForExecute($okBackend);
+        $toAttribute = $this->createDatetimeAttributeMockForExecute($okBackend, 'special_to_date');
 
         $eavConfig = $this->createMock(EavConfig::class);
         $eavConfig->expects($this->atLeastOnce())->method('getAttribute')->willReturnCallback(
@@ -1115,7 +1118,11 @@ class SaveTest extends TestCase
         $productFactory->expects($this->atLeastOnce())->method('create')->willReturn($product);
 
         $okBackend = $this->createBackendMock(false);
-        $newsFromAttribute = $this->createDatetimeAttributeMockForExecuteWithFrontendInput($okBackend, 'datetime');
+        $newsFromAttribute = $this->createDatetimeAttributeMockForExecuteWithFrontendInput(
+            $okBackend,
+            'datetime',
+            'news_from_date'
+        );
 
         $eavConfig = $this->createMock(EavConfig::class);
         $eavConfig->expects($this->atLeastOnce())->method('getAttribute')->willReturn($newsFromAttribute);
@@ -1148,17 +1155,19 @@ class SaveTest extends TestCase
      */
     private function createDatetimeAttributeMockForExecuteWithFrontendInput(
         AbstractBackend $backend,
-        string $frontendInput = 'date'
+        string $frontendInput = 'date',
+        string $code = 'special_from_date'
     ): AbstractAttribute {
         $attribute = $this->createPartialMockWithReflection(
             AbstractAttribute::class,
-            ['getAttributeId', 'getBackendType', 'getFrontendInput', 'setMaxValue', 'getBackend']
+            ['getAttributeId', 'getBackendType', 'getFrontendInput', 'setMaxValue', 'getBackend', 'getAttributeCode']
         );
         $attribute->expects($this->any())->method('getAttributeId')->willReturn(1);
         $attribute->expects($this->any())->method('getBackendType')->willReturn('datetime');
         $attribute->expects($this->any())->method('getFrontendInput')->willReturn($frontendInput);
         $attribute->expects($this->any())->method('setMaxValue')->willReturnSelf();
         $attribute->expects($this->any())->method('getBackend')->willReturn($backend);
+        $attribute->expects($this->any())->method('getAttributeCode')->willReturn($code);
         return $attribute;
     }
 
@@ -1166,19 +1175,23 @@ class SaveTest extends TestCase
      * Create attribute mock for execute flow (sanitize + validate): datetime type with backend.
      *
      * @param AbstractBackend $backend Backend instance returned by getBackend().
+     * @param string $code Attribute code returned by getAttributeCode().
      * @return AbstractAttribute
      */
-    private function createDatetimeAttributeMockForExecute(AbstractBackend $backend): AbstractAttribute
-    {
+    private function createDatetimeAttributeMockForExecute(
+        AbstractBackend $backend,
+        string $code = 'special_from_date'
+    ): AbstractAttribute {
         $attribute = $this->createPartialMockWithReflection(
             AbstractAttribute::class,
-            ['getAttributeId', 'getBackendType', 'getFrontendInput', 'setMaxValue', 'getBackend']
+            ['getAttributeId', 'getBackendType', 'getFrontendInput', 'setMaxValue', 'getBackend', 'getAttributeCode']
         );
         $attribute->expects($this->any())->method('getAttributeId')->willReturn(1);
         $attribute->expects($this->any())->method('getBackendType')->willReturn('datetime');
         $attribute->expects($this->any())->method('getFrontendInput')->willReturn('date');
         $attribute->expects($this->any())->method('setMaxValue')->willReturnSelf();
         $attribute->expects($this->any())->method('getBackend')->willReturn($backend);
+        $attribute->expects($this->any())->method('getAttributeCode')->willReturn($code);
         return $attribute;
     }
 
