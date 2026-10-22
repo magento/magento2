@@ -61,8 +61,6 @@ script;
         ?>
         <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false); ?>
     <?php endif ?>
-    <?= /* @noEscape */ $secureRenderer->renderTag('script', [], 'window.checkout = ' .
-     /* @noEscape */ $block->getSerializedConfig(), false); ?>
     <script type="text/x-magento-init">
     {
         "[data-block='<?= $escaper->escapeJs($dataBlockName) ?>']": {
