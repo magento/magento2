@@ -9,6 +9,7 @@ namespace Magento\Customer\Model\Session\Validators;
 use Magento\Customer\Model\ResourceModel\Customer as ResourceCustomer;
 use Magento\Customer\Model\ResourceModel\Visitor as ResourceVisitor;
 use Magento\Framework\Exception\SessionException;
+use Magento\Framework\Exception\SessionExpiredException;
 use Magento\Framework\Phrase;
 use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Framework\Session\ValidatorInterface;
@@ -58,7 +59,7 @@ class CutoffValidator implements ValidatorInterface
      *
      * @param SessionManagerInterface $session
      * @return void
-     * @throws SessionException
+     * @throws SessionExpiredException
      */
     public function validate(SessionManagerInterface $session): void
     {
@@ -71,7 +72,7 @@ class CutoffValidator implements ValidatorInterface
                 $cutoff = $this->customerResource->findSessionCutOff((int) $visitor['customer_id']);
                 $sessionCreationTime = $this->visitorResource->fetchCreatedAt((int) $visitor['visitor_id']);
                 if (isset($cutoff, $sessionCreationTime) && $cutoff > $sessionCreationTime) {
-                    throw new SessionException(
+                    throw new SessionExpiredException(
                         new Phrase('The session has expired, please login again.')
                     );
                 }
