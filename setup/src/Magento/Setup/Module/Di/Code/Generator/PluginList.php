@@ -30,6 +30,21 @@ class PluginList extends Interception\PluginList\PluginList
     }
 
     /**
+     * Returns raw merged plugin declarations for the loaded scopes.
+     *
+     * Unlike getPluginsConfig(), this includes plugins declared on types that
+     * do not exist and have not been inherited/filtered.
+     *
+     * @return array
+     */
+    public function getConfiguredPluginData(): array
+    {
+        $this->_loadScopedData();
+
+        return $this->_data;
+    }
+
+    /**
      * Sets scope priority scheme
      *
      * @param array $areaCodes
@@ -54,6 +69,8 @@ class PluginList extends Interception\PluginList\PluginList
     }
 
     /**
+     * Sets intercepted classes used when inheriting plugin configuration.
+     *
      * @param array $interceptedClasses
      * @return void
      */
