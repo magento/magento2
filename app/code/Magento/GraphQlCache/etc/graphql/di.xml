@@ -32,4 +32,7 @@
     <type name="Magento\Framework\View\LayoutInterface">
         <plugin name="add_block_cache_tags_to_query_cache" type="Magento\GraphQlCache\Model\Plugin\View\Layout"/>
     </type>
+    <type name="Magento\Framework\App\FrontControllerInterface">
+        <plugin name="page_cache_form_key_from_cookie" disabled="true" />
+    </type>
 </config>
