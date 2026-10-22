@@ -210,6 +210,28 @@ class ArrayUtilsTest extends TestCase
                 [
                     'test' => ['test2' => ['test3' => 3, 'test4' => 4]]
                 ]
+            ],
+            [
+                [
+                    'test' => ['test2' => 2]
+                ],
+                [
+                    'test' => 'serialized_value'
+                ],
+                [
+                    'test' => ['test2' => 2]
+                ]
+            ],
+            [
+                [
+                    'test' => 'serialized_value'
+                ],
+                [
+                    'test' => ['test2' => 2]
+                ],
+                [
+                    'test' => 'serialized_value'
+                ]
             ]
         ];
     }
