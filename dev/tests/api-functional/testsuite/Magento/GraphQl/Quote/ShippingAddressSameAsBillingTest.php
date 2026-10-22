@@ -28,6 +28,8 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
  * Test same_as_billing field in customerCart.shipping_addresses
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ShippingAddressSameAsBillingTest extends GraphQlAbstract
 {
@@ -149,7 +151,13 @@ class ShippingAddressSameAsBillingTest extends GraphQlAbstract
         $orderNumber = $orderResponse['placeOrder']['order']['order_number'];
         $order = $this->orderModel->loadByIncrementId($orderNumber);
 
-        self::assertNotNull($order->getShippingAddress()->getCustomerAddressId());
+        $customerAddressId = $order->getShippingAddress()->getCustomerAddressId();
+        self::assertNotNull($customerAddressId);
+        self::assertEquals($customerAddressId, $order->getBillingAddress()->getCustomerAddressId());
+
+        $customer = $this->graphQlQuery($this->getCustomerDefaultAddressesQuery(), [], '', $customerAuthHeaders);
+        self::assertEquals($customerAddressId, $customer['customer']['default_shipping']);
+        self::assertEquals($customerAddressId, $customer['customer']['default_billing']);
 
         //Revert order as it is created through mutations and not fixtures
         $this->revertOrder($orderNumber);
@@ -430,6 +438,21 @@ class ShippingAddressSameAsBillingTest extends GraphQlAbstract
                 shipping_addresses {
                   same_as_billing
                 }
+              }
+            }
+        QUERY;
+    }
+
+    /**
+     * @return string
+     */
+    private function getCustomerDefaultAddressesQuery(): string
+    {
+        return <<<QUERY
+            {
+              customer {
+                default_shipping
+                default_billing
               }
             }
         QUERY;
