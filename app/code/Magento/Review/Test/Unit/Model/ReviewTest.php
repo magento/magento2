@@ -26,9 +26,9 @@ use Magento\Review\Model\Review\SummaryFactory;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManager;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -217,6 +217,126 @@ class ReviewTest extends TestCase
     public function testGetPendingStatus()
     {
         $this->assertSame(Review::STATUS_PENDING, $this->review->getPendingStatus());
+    }
+
+    /**
+     * @param array<int, array{entity_id:int}> $productData
+     * @param array<int, array{entity_pk_value:int, value?:string}> $summaryData
+     * @param array<int, string> $expectedSummaryValues
+     */
+    #[DataProvider('appendSummaryDataProvider')]
+    public function testAppendSummary(array $productData, array $summaryData, array $expectedSummaryValues): void
+    {
+        $storeId = 4;
+        $storeMock = $this->createConfiguredMock(Store::class, ['getId' => $storeId]);
+        $collectionMock = $this->createMock(Collection::class);
+
+        $products = array_map(
+            static fn (array $data): DataObject => new DataObject($data),
+            $productData
+        );
+        $summaries = array_map(
+            static fn (array $data): DataObject => new DataObject($data),
+            $summaryData
+        );
+
+        $entityIds = array_column($productData, 'entity_id');
+        $summaryCollection = new class ($summaries) implements \IteratorAggregate {
+            /** @var array<int, int> */
+            public array $entityIds = [];
+
+            /** @var int */
+            public int $storeId = 0;
+
+            /**
+             * @param array<int, DataObject> $summaries
+             */
+            public function __construct(private readonly array $summaries)
+            {
+            }
+
+            public function addEntityFilter(array $entityIds): self
+            {
+                $this->entityIds = $entityIds;
+                return $this;
+            }
+
+            public function addStoreFilter(int $storeId): self
+            {
+                $this->storeId = $storeId;
+                return $this;
+            }
+
+            public function load(): self
+            {
+                return $this;
+            }
+
+            public function getIterator(): \ArrayIterator
+            {
+                return new \ArrayIterator($this->summaries);
+            }
+        };
+
+        $this->reviewSummaryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($summaryCollection);
+
+        $collectionMock->expects($this->exactly(2))
+            ->method('getItems')
+            ->willReturn($products);
+
+        $this->storeManagerMock->expects($this->once())
+            ->method('getStore')
+            ->willReturn($storeMock);
+
+        $this->assertSame($this->review, $this->review->appendSummary($collectionMock));
+        $this->assertSame($entityIds, $summaryCollection->entityIds);
+        $this->assertSame($storeId, $summaryCollection->storeId);
+
+        foreach ($products as $index => $product) {
+            $ratingSummary = $product->getRatingSummary();
+            $this->assertInstanceOf(DataObject::class, $ratingSummary);
+            if ($expectedSummaryValues[$index] === '') {
+                $this->assertSame([], $ratingSummary->getData());
+                continue;
+            }
+
+            $this->assertSame($expectedSummaryValues[$index], $ratingSummary->getData('value'));
+        }
+    }
+
+    /**
+     * @return array<string, array{
+     *     0: array<int, array{entity_id:int}>,
+     *     1: array<int, array{entity_pk_value:int, value?:string}>,
+     *     2: array<int, string>
+     * }>
+     */
+    public static function appendSummaryDataProvider(): array
+    {
+        return [
+            'products with matching and missing summaries' => [
+                [
+                    ['entity_id' => 10],
+                    ['entity_id' => 20],
+                    ['entity_id' => 30],
+                ],
+                [
+                    ['entity_pk_value' => 10, 'value' => 'first'],
+                    ['entity_pk_value' => 30, 'value' => 'third'],
+                ],
+                ['first', '', 'third'],
+            ],
+            'empty summary collection' => [
+                [
+                    ['entity_id' => 10],
+                    ['entity_id' => 20],
+                ],
+                [],
+                ['', ''],
+            ],
+        ];
     }
 
     public function testGetReviewUrl()
