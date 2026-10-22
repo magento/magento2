@@ -79,14 +79,15 @@ class Tax extends AbstractTotal
                     - $orderItem->getBaseDiscountTaxCompensationRefunded();
                 if (!$item->isLast()) {
                     $availableQty = $orderItemQty - $orderItem->getQtyRefunded();
-                    $tax = $creditmemo->roundPrice($tax / $availableQty * $item->getQty());
-                    $baseTax = $creditmemo->roundPrice(($baseTax / $availableQty * $item->getQty()), 'base');
+                    $tax = $creditmemo->roundPrice($tax / $availableQty * $item->getQty(), 'tax');
+                    $baseTax = $creditmemo->roundPrice(($baseTax / $availableQty * $item->getQty()), 'base_tax');
                     $discountTaxCompensation = $creditmemo->roundPrice(
-                        $discountTaxCompensation / $availableQty * $item->getQty()
+                        $discountTaxCompensation / $availableQty * $item->getQty(),
+                        'discount_tax_compensation'
                     );
                     $baseDiscountTaxCompensation = $creditmemo->roundPrice(
                         $baseDiscountTaxCompensation / $availableQty * $item->getQty(),
-                        'base'
+                        'base_discount_tax_compensation'
                     );
                 }
 
@@ -113,10 +114,16 @@ class Tax extends AbstractTotal
                 $totalDiscountTaxCompensation += $invoice->getShippingDiscountTaxCompensationAmount() * $taxFactor;
                 $baseTotalDiscountTaxCompensation += $invoice->getBaseShippingDiscountTaxCompensationAmnt()
                     * $taxFactor;
-                $shippingTaxAmount = $creditmemo->roundPrice($shippingTaxAmount);
-                $baseShippingTaxAmount = $creditmemo->roundPrice($baseShippingTaxAmount, 'base');
-                $totalDiscountTaxCompensation = $creditmemo->roundPrice($totalDiscountTaxCompensation);
-                $baseTotalDiscountTaxCompensation = $creditmemo->roundPrice($baseTotalDiscountTaxCompensation, 'base');
+                $shippingTaxAmount = $creditmemo->roundPrice($shippingTaxAmount, 'tax');
+                $baseShippingTaxAmount = $creditmemo->roundPrice($baseShippingTaxAmount, 'base_tax');
+                $totalDiscountTaxCompensation = $creditmemo->roundPrice(
+                    $totalDiscountTaxCompensation,
+                    'discount_tax_compensation'
+                );
+                $baseTotalDiscountTaxCompensation = $creditmemo->roundPrice(
+                    $baseTotalDiscountTaxCompensation,
+                    'base_discount_tax_compensation'
+                );
                 if ($taxFactor < 1 && $invoice->getShippingTaxAmount() > 0 ||
                     ($order->getShippingDiscountAmount() >= $order->getShippingAmount())
                 ) {
@@ -143,14 +150,15 @@ class Tax extends AbstractTotal
                 $shippingDiscountTaxCompensationAmount = $order->getShippingDiscountTaxCompensationAmount() * $part;
                 $baseShippingDiscountTaxCompensationAmount = $order->getBaseShippingDiscountTaxCompensationAmnt()
                     * $basePart;
-                $shippingTaxAmount = $creditmemo->roundPrice($shippingTaxAmount);
-                $baseShippingTaxAmount = $creditmemo->roundPrice($baseShippingTaxAmount, 'base');
+                $shippingTaxAmount = $creditmemo->roundPrice($shippingTaxAmount, 'tax');
+                $baseShippingTaxAmount = $creditmemo->roundPrice($baseShippingTaxAmount, 'base_tax');
                 $shippingDiscountTaxCompensationAmount = $creditmemo->roundPrice(
-                    $shippingDiscountTaxCompensationAmount
+                    $shippingDiscountTaxCompensationAmount,
+                    'discount_tax_compensation'
                 );
                 $baseShippingDiscountTaxCompensationAmount = $creditmemo->roundPrice(
                     $baseShippingDiscountTaxCompensationAmount,
-                    'base'
+                    'base_discount_tax_compensation'
                 );
                 if ($part < 1 && ($order->getShippingTaxAmount() > 0 ||
                         ($order->getShippingDiscountAmount() >= $order->getShippingAmount()))
