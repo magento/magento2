@@ -14,8 +14,6 @@ use Magento\Framework\View\Asset\PreProcessor\AlternativeSource\AssetBuilder;
 use Magento\Framework\View\Asset\Source;
 
 /**
- * Class FrontendCompilation
- *
  * @api
  * @since 100.0.2
  */
@@ -84,8 +82,10 @@ class FrontendCompilation implements PreProcessorInterface
             $path = $chain->getAsset()->getFilePath();
             $module = $chain->getAsset()->getModule();
 
-            /** @var FallbackContext $context */
             $context = $chain->getAsset()->getContext();
+            if (!$context instanceof FallbackContext) {
+                return;
+            }
 
             $result = $this->processContent($path, $chain->getContent(), $module, $context);
             $chain->setContent($result['content']);
@@ -106,7 +106,9 @@ class FrontendCompilation implements PreProcessorInterface
      */
     private function processContent($path, $content, $module, FallbackContext $context)
     {
-        $sourceTypePattern = '#\.' . preg_quote(pathinfo($path, PATHINFO_EXTENSION), '#') . '$#';
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+        $extension = pathinfo($path, PATHINFO_EXTENSION);
+        $sourceTypePattern = '#\.' . preg_quote($extension, '#') . '$#';
 
         foreach ($this->alternativeSource->getAlternativesExtensionsNames() as $name) {
             $asset = $this->assetBuilder->setArea($context->getAreaCode())
@@ -128,7 +130,7 @@ class FrontendCompilation implements PreProcessorInterface
 
         return [
             'content' => $content,
-            'sourceType' => pathinfo($path, PATHINFO_EXTENSION)
+            'sourceType' => $extension
         ];
     }
 }
