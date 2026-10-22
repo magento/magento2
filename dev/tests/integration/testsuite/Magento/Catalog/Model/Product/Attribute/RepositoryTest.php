@@ -12,6 +12,7 @@ use Magento\Catalog\Api\Data\ProductAttributeInterfaceFactory;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Catalog\Setup\CategorySetup;
 use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
+use Magento\Eav\Model\Validator\Attribute\Code;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -49,6 +50,17 @@ class RepositoryTest extends TestCase
         $this->objectManager = Bootstrap::getObjectManager();
         $this->repository = $this->objectManager->get(ProductAttributeRepositoryInterface::class);
         $this->attributeFactory = $this->objectManager->get(ProductAttributeInterfaceFactory::class);
+        $this->clearAttributeCodeValidatorMessages();
+    }
+
+    /**
+     * Shared attribute-code validator keeps messages between calls.
+     */
+    private function clearAttributeCodeValidatorMessages(): void
+    {
+        $validator = $this->objectManager->get(Code::class);
+        $method = new \ReflectionMethod($validator, '_clearMessages');
+        $method->invoke($validator);
     }
 
     /**
@@ -110,6 +122,88 @@ class RepositoryTest extends TestCase
                 'fieldValue' => 'invalid_input',
             ],
         ];
+    }
+
+    /**
+     * @param string $frontendInput
+     * @param string $field
+     * @param int $value
+     * @return void
+     */
+    #[DataProvider('invalidFilterableInputTypeProvider')]
+    public function testSaveRejectsFilterableForUnsupportedInputType(
+        string $frontendInput,
+        string $field,
+        int $value
+    ): void {
+        $this->expectExceptionObject(InputException::invalidFieldValue($field, $value));
+        $this->createdAttribute = $this->saveAttributeWithData(
+            $this->hydrateData(
+                [
+                    'attribute_code' => 'rej_' . $frontendInput . '_' . $field,
+                    'frontend_input' => $frontendInput,
+                    'frontend_label' => 'Rejected ' . $frontendInput,
+                    $field => $value,
+                ]
+            )
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public static function invalidFilterableInputTypeProvider(): array
+    {
+        return [
+            'text_is_filterable' => ['text', ProductAttributeInterface::IS_FILTERABLE, 1],
+            'textarea_is_filterable' => ['textarea', ProductAttributeInterface::IS_FILTERABLE, 1],
+            'date_is_filterable' => ['date', ProductAttributeInterface::IS_FILTERABLE, 1],
+            'datetime_is_filterable' => ['datetime', ProductAttributeInterface::IS_FILTERABLE, 1],
+            'media_image_is_filterable' => ['media_image', ProductAttributeInterface::IS_FILTERABLE, 1],
+            'text_is_filterable_in_search' => ['text', ProductAttributeInterface::IS_FILTERABLE_IN_SEARCH, 1],
+        ];
+    }
+
+    /**
+     * @return void
+     */
+    public function testSaveAllowsFilterableForSupportedInputType(): void
+    {
+        $this->createdAttribute = $this->saveAttributeWithData(
+            $this->hydrateData(
+                [
+                    'attribute_code' => 'repo_filt_bool',
+                    'frontend_input' => 'boolean',
+                    'frontend_label' => 'Allowed Filterable Boolean',
+                    ProductAttributeInterface::IS_FILTERABLE => 1,
+                ]
+            )
+        );
+
+        $this->assertSame(1, (int)$this->createdAttribute->getIsFilterable());
+    }
+
+    /**
+     * @return void
+     */
+    public function testSaveRejectsEnablingFilterableOnExistingTextAttribute(): void
+    {
+        $this->createdAttribute = $this->saveAttributeWithData(
+            $this->hydrateData(
+                [
+                    'attribute_code' => 'repo_txt_then_filt',
+                    'frontend_input' => 'text',
+                    'frontend_label' => 'Text Then Filterable',
+                    ProductAttributeInterface::IS_FILTERABLE => 0,
+                ]
+            )
+        );
+        $this->createdAttribute->setIsFilterable(1);
+
+        $this->expectExceptionObject(
+            InputException::invalidFieldValue(ProductAttributeInterface::IS_FILTERABLE, 1)
+        );
+        $this->repository->save($this->createdAttribute);
     }
 
     /**
