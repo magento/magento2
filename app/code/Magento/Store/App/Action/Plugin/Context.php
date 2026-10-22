@@ -6,8 +6,9 @@
 
 namespace Magento\Store\App\Action\Plugin;
 
-use Magento\Framework\App\Action\AbstractAction;
+use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\Http\Context as HttpContext;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\NotFoundException;
@@ -19,7 +20,11 @@ use Magento\Store\Model\StoreManager;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
- * Class ContextPlugin
+ * Sets store and current currency in the HTTP context for all frontend actions.
+ *
+ * Operates on ActionInterface so it fires for controllers implementing
+ * ActionInterface directly (HttpGetActionInterface and friends) in addition
+ * to legacy AbstractAction descendants.
  */
 class Context
 {
@@ -44,35 +49,40 @@ class Context
     protected $storeCookieManager;
 
     /**
+     * @var RequestInterface
+     */
+    private $request;
+
+    /**
      * @param SessionManagerInterface $session
      * @param HttpContext $httpContext
      * @param StoreManagerInterface $storeManager
      * @param StoreCookieManagerInterface $storeCookieManager
+     * @param RequestInterface|null $request
      */
     public function __construct(
         SessionManagerInterface $session,
         HttpContext $httpContext,
         StoreManagerInterface $storeManager,
-        StoreCookieManagerInterface $storeCookieManager
+        StoreCookieManagerInterface $storeCookieManager,
+        ?RequestInterface $request = null
     ) {
         $this->session      = $session;
         $this->httpContext  = $httpContext;
         $this->storeManager = $storeManager;
         $this->storeCookieManager = $storeCookieManager;
+        $this->request = $request ?: ObjectManager::getInstance()->get(RequestInterface::class);
     }
 
     /**
-     * Set store and currency to http context.
+     * Set store and currency to http context before the action executes.
      *
-     * @param AbstractAction $subject
-     * @param RequestInterface $request
+     * @param ActionInterface $subject
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeDispatch(
-        AbstractAction $subject,
-        RequestInterface $request
-    ) {
+    public function beforeExecute(ActionInterface $subject)
+    {
         if ($this->isAlreadySet()) {
             //If required store related value were already set for
             //HTTP processors then just continuing as we were.
@@ -80,43 +90,41 @@ class Context
         }
 
         /** @var string|array|null $storeCode */
-        $storeCode = $request->getParam(
+        $storeCode = $this->request->getParam(
             StoreManagerInterface::PARAM_NAME,
             $this->storeCookieManager->getStoreCodeFromCookie()
         );
         if (is_array($storeCode)) {
             if (!isset($storeCode['_data']['code'])) {
-                $this->processInvalidStoreRequested($request);
+                $this->processInvalidStoreRequested();
             }
             $storeCode = $storeCode['_data']['code'];
         }
         if ($storeCode === '') {
             //Empty code - is an invalid code and it was given explicitly
             //(the value would be null if the code wasn't found).
-            $this->processInvalidStoreRequested($request);
+            $this->processInvalidStoreRequested();
         }
         try {
             $currentStore = $this->storeManager->getStore($storeCode);
-            $this->updateContext($request, $currentStore);
+            $this->updateContext($currentStore);
         } catch (NoSuchEntityException $exception) {
-            $this->processInvalidStoreRequested($request, $exception);
+            $this->processInvalidStoreRequested($exception);
         }
     }
 
     /**
      * Take action in case of invalid store requested.
      *
-     * @param RequestInterface $request
      * @param NoSuchEntityException|null $previousException
      * @return void
      * @throws NotFoundException
      */
     private function processInvalidStoreRequested(
-        RequestInterface $request,
         ?NoSuchEntityException $previousException = null
     ) {
         $store = $this->storeManager->getStore();
-        $this->updateContext($request, $store);
+        $this->updateContext($store);
 
         throw new NotFoundException(
             $previousException
@@ -129,19 +137,18 @@ class Context
     /**
      * Update context accordingly to the store found.
      *
-     * @param RequestInterface $request
      * @param StoreInterface $store
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    private function updateContext(RequestInterface $request, StoreInterface $store)
+    private function updateContext(StoreInterface $store)
     {
         switch (true) {
             case $store->isUseStoreInUrl():
                 $defaultStore = $store;
                 break;
-            case ScopeInterface::SCOPE_STORE == $request->getServerValue(StoreManager::PARAM_RUN_TYPE):
-                $defaultStoreCode = $request->getServerValue(StoreManager::PARAM_RUN_CODE);
+            case ScopeInterface::SCOPE_STORE == $this->request->getServerValue(StoreManager::PARAM_RUN_TYPE):
+                $defaultStoreCode = $this->request->getServerValue(StoreManager::PARAM_RUN_CODE);
                 $defaultStore = $this->storeManager->getStore($defaultStoreCode);
                 break;
             default:
