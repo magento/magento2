@@ -12,6 +12,7 @@ use Magento\Catalog\Model\Product\Copier\UrlKeyAvailability;
 use Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreResolver\GetStoresListByWebsiteIds;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
@@ -23,10 +24,12 @@ class CheckUrlRewritesForUrlKey
     /**
      * @param ProductUrlPathGenerator $productUrlPathGenerator
      * @param UrlFinderInterface $urlFinder
+     * @param GetStoresListByWebsiteIds $getStoresList
      */
     public function __construct(
         private readonly ProductUrlPathGenerator $productUrlPathGenerator,
-        private readonly UrlFinderInterface $urlFinder
+        private readonly UrlFinderInterface $urlFinder,
+        private readonly GetStoresListByWebsiteIds $getStoresList
     ) {
     }
 
@@ -76,15 +79,35 @@ class CheckUrlRewritesForUrlKey
     private function getRequestPaths(Product $duplicate): array
     {
         $storeId = (int)$duplicate->getStoreId();
-        $storeIds = $storeId === Store::DEFAULT_STORE_ID
-            ? array_map('intval', (array)$duplicate->getStoreIds())
-            : [$storeId];
+        $storeIds = $storeId === Store::DEFAULT_STORE_ID ? $this->getStoreIds($duplicate) : [$storeId];
         $requestPaths = [];
         foreach ($storeIds as $id) {
             $requestPaths[$id] = $this->productUrlPathGenerator->getUrlPathWithSuffix($duplicate, $id);
         }
 
         return $requestPaths;
+    }
+
+    /**
+     * Get store IDs of the duplicate's websites
+     *
+     * Product::getStoreIds() and Product::getWebsiteIds() cache an empty list on a product that is not saved yet,
+     * which would leave the duplicate without URL rewrites, so website IDs of an unsaved duplicate are read from
+     * its extension attributes.
+     *
+     * @param Product $duplicate
+     * @return int[]
+     */
+    private function getStoreIds(Product $duplicate): array
+    {
+        if ($duplicate->getId() || $duplicate->hasData('store_ids') || $duplicate->hasData('website_ids')) {
+            $storeIds = (array)$duplicate->getStoreIds();
+        } else {
+            $websiteIds = $duplicate->getExtensionAttributes()->getWebsiteIds() ?? [];
+            $storeIds = $this->getStoresList->execute(array_map('intval', $websiteIds));
+        }
+
+        return array_map('intval', $storeIds);
     }
 
     /**

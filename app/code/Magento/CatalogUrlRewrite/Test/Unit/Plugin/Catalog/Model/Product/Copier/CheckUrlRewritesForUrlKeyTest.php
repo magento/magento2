@@ -7,11 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\CatalogUrlRewrite\Test\Unit\Plugin\Catalog\Model\Product\Copier;
 
+use Magento\Catalog\Api\Data\ProductExtensionInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Copier\UrlKeyAvailability;
 use Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator;
 use Magento\CatalogUrlRewrite\Plugin\Catalog\Model\Product\Copier\CheckUrlRewritesForUrlKey;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use Magento\Store\Model\StoreResolver\GetStoresListByWebsiteIds;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -21,6 +24,8 @@ use PHPUnit\Framework\TestCase;
 
 class CheckUrlRewritesForUrlKeyTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ProductUrlPathGenerator|Stub
      */
@@ -43,7 +48,13 @@ class CheckUrlRewritesForUrlKeyTest extends TestCase
             ->willReturnCallback(static fn (...$arguments): string => 'key-1'
                 . ($arguments[1] === 2 ? '.htm' : '.html'));
         $this->urlFinder = $this->createMock(UrlFinderInterface::class);
-        $this->plugin = new CheckUrlRewritesForUrlKey($this->productUrlPathGenerator, $this->urlFinder);
+        $getStoresList = $this->createStub(GetStoresListByWebsiteIds::class);
+        $getStoresList->method('execute')->willReturnMap([[[1], ['1', '2']]]);
+        $this->plugin = new CheckUrlRewritesForUrlKey(
+            $this->productUrlPathGenerator,
+            $this->urlFinder,
+            $getStoresList
+        );
     }
 
     public function testKeepsUnavailableResultWithoutLookup(): void
@@ -169,6 +180,24 @@ class CheckUrlRewritesForUrlKeyTest extends TestCase
         ];
     }
 
+    public function testUsesStoreIdsOfDuplicateWithWebsiteData(): void
+    {
+        $duplicate = $this->createMock(Product::class);
+        $duplicate->method('getStoreId')->willReturn(0);
+        $duplicate->method('getId')->willReturn(null);
+        $duplicate->method('hasData')->willReturnMap([['store_ids', false], ['website_ids', true]]);
+        $duplicate->expects($this->once())->method('getStoreIds')->willReturn(['2']);
+        $duplicate->expects($this->never())->method('getExtensionAttributes');
+        $this->urlFinder->expects($this->once())
+            ->method('findAllByData')
+            ->with([UrlRewrite::REQUEST_PATH => ['key-1.htm'], UrlRewrite::STORE_ID => [2]])
+            ->willReturn([]);
+
+        $this->assertTrue(
+            $this->plugin->afterIsAvailable($this->createStub(UrlKeyAvailability::class), true, $duplicate)
+        );
+    }
+
     /**
      * @param int $storeId
      * @param int|null $id
@@ -176,10 +205,18 @@ class CheckUrlRewritesForUrlKeyTest extends TestCase
      */
     private function createDuplicate(int $storeId, ?int $id): Product
     {
-        $duplicate = $this->createStub(Product::class);
+        $extensionAttributes = $this->createPartialMockWithReflection(
+            ProductExtensionInterface::class,
+            ['getWebsiteIds']
+        );
+        $extensionAttributes->expects($this->atMost(1))->method('getWebsiteIds')->willReturn(['1']);
+        $duplicate = $this->createMock(Product::class);
         $duplicate->method('getStoreId')->willReturn($storeId);
-        $duplicate->method('getStoreIds')->willReturn(['1', '2']);
         $duplicate->method('getId')->willReturn($id);
+        $duplicate->method('hasData')->willReturn(false);
+        $duplicate->method('getExtensionAttributes')->willReturn($extensionAttributes);
+        $duplicate->expects($this->never())->method('getStoreIds');
+        $duplicate->expects($this->never())->method('getWebsiteIds');
 
         return $duplicate;
     }

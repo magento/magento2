@@ -12,8 +12,11 @@ use Magento\Catalog\Model\ProductRepository;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Store\Model\Store;
+use Magento\Store\Test\Fixture\Store as StoreFixture;
 use Magento\TestFramework\Fixture\AppArea;
+use Magento\TestFramework\Fixture\AppIsolation;
 use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureBeforeTransaction;
 use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\UrlRewrite\Test\Fixture\UrlRewrite as UrlRewriteFixture;
@@ -22,6 +25,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Tests product copier.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CopierTest extends TestCase
 {
@@ -115,7 +120,9 @@ class CopierTest extends TestCase
      */
     #[
         AppArea('adminhtml'),
+        AppIsolation(true),
         DbIsolation(true),
+        DataFixtureBeforeTransaction(StoreFixture::class, ['store_group_id' => 1, 'website_id' => 1]),
         DataFixture(ProductFixture::class, ['sku' => 'copier-store-src', 'url_key' => 'copier-store-src']),
         DataFixture(
             UrlRewriteFixture::class,
@@ -137,6 +144,7 @@ class CopierTest extends TestCase
         $storeSource->setUrlKey('copier-store-view');
         $productResource->saveAttribute($storeSource, 'url_key');
         $source = $productRepository->get('copier-store-src', true, Store::DEFAULT_STORE_ID, true);
+        $this->assertSame('copier-store-src', $source->getUrlKey());
 
         $duplicate = $objectManager->get(Copier::class)->copy($source);
 
