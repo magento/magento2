@@ -46,6 +46,14 @@ define([
             $.mage.translate.add('Hello World!', 'Bonjour tout le monde!');
             expect('Bonjour tout le monde!').toEqual($.mage.translate.translate('Hello World!'));
         });
+        it('does not treat inherited prototype members as translations', function () {
+            // When the dictionary is empty it is an array, so keys such as
+            // 'filter' or 'map' would otherwise resolve to Array.prototype
+            // members (functions) instead of returning the untranslated text.
+            $.each(['filter', 'map', 'forEach', 'constructor', 'hasOwnProperty'], function (i, key) {
+                expect(key).toEqual($.mage.translate.translate(key));
+            });
+        });
     });
 
 });
