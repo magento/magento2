@@ -564,9 +564,9 @@ class Generator extends AbstractSchemaGenerator
                             'type' => 'string',
                             'description' => 'Missing or invalid field name'
                         ],
-                        'fieldValue' => [
+                        'value' => [
                             'type' => 'string',
-                            'description' => 'Incorrect field value'
+                            'description' => 'Incorrect value'
                         ],
                     ],
                 ],
