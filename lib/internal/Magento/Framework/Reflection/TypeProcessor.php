@@ -309,6 +309,9 @@ class TypeProcessor
         }
 
         $nullable = in_array('null', $types);
+        if ($returnType !== null) {
+            $returnType = $this->resolveFullyQualifiedClassName($methodReflection->getDeclaringClass(), $returnType);
+        }
 
         return [
             'type' => $returnType,
