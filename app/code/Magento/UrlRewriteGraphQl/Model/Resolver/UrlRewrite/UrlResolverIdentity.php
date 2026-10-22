@@ -15,17 +15,11 @@ use Magento\Framework\GraphQl\Query\Resolver\IdentityInterface;
 class UrlResolverIdentity implements IdentityInterface
 {
     /**
-     * @var IdentityInterface[]
-     */
-    private $urlResolverIdentities = [];
-
-    /**
      * @param IdentityInterface[] $urlResolverIdentities
      */
     public function __construct(
-        array $urlResolverIdentities
+        private readonly array $urlResolverIdentities = []
     ) {
-        $this->urlResolverIdentities = $urlResolverIdentities;
     }
 
     /**
