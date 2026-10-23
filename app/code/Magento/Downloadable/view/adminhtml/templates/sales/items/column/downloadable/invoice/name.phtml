@@ -36,6 +36,7 @@ if ($_item = $block->getItem()): ?>
                     <?php $escapedId = /* @noEscape */ $escaper->escapeJs($_id);
                     $scriptString = <<<script
                         require(['prototype'], function(){
+                            $('{$escapedId}').up().style.width = '100%';
                             $('{$escapedId}').hide();
                             $('{$escapedId}').up().observe('mouseover', function(){ $('{$escapedId}').show();});
                             $('{$escapedId}').up().observe('mouseout',  function(){ $('{$escapedId}').hide();});

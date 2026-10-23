@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2026 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminOrderViewDownloadableLongCustomOptionValueHoverTest" extends="AdminOrderViewLongCustomOptionValueHoverTest">
+        <annotations>
+            <title value="Long custom option value of a downloadable item expands on hover in admin order view"/>
+            <stories value="Order view custom option display"/>
+            <description value="Long text custom option value of a downloadable product is truncated in the admin order view and expands to full text while hovering the option."/>
+            <features value="Downloadable"/>
+            <severity value="MINOR"/>
+            <group value="Downloadable"/>
+        </annotations>
+        <before>
+            <magentoCLI command="downloadable:domains:add static.magento.com" stepKey="addDownloadableDomain" before="createProduct"/>
+            <createData entity="ApiDownloadableProduct" stepKey="createProduct"/>
+            <createData entity="ApiDownloadableLink" stepKey="addDownloadableLink" after="updateProductWithCustomOptions">
+                <requiredEntity createDataKey="createProduct"/>
+            </createData>
+        </before>
+        <after>
+            <magentoCLI command="downloadable:domains:remove static.magento.com" stepKey="removeDownloadableDomain" after="deleteProduct"/>
+        </after>
+
+        <remove keyForRemoval="orderSelectFlatRateShippingMethod"/>
+        <remove keyForRemoval="seeDotsBeforeHover"/>
+        <remove keyForRemoval="dontSeeDotsOnHover"/>
+        <remove keyForRemoval="seeDotsAfterHover"/>
+    </test>
+</tests>
