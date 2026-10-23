@@ -37,6 +37,11 @@
         <actionGroup ref="StorefrontDeleteCustomerAddressActionGroup" stepKey="deleteCustomerAddress">
             <argument name="addressIndex" value="1"/>
         </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="deleteAdditionalAddress"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitFortheConfirmationModal"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeAddressDeleteConfirmationMessage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="confirmDelete"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForDeleteToFinish"/>
         <see userInput="You deleted the address." stepKey="verifyDeleteAddress"/>
     </test>
 </tests>

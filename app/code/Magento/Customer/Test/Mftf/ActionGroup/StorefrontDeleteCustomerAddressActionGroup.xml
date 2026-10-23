@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
  */
 -->
 
@@ -16,10 +16,23 @@
             <argument name="addressIndex" type="string" defaultValue="1"/>
         </arguments>
 
-        <click selector="{{StorefrontCustomerAddressesSection.deleteAdditionalAddress(addressIndex)}}" stepKey="deleteAdditionalAddress"/>
-        <waitForElementVisible selector="{{ModalConfirmationSection.modalContent}}" stepKey="waitFortheConfirmationModal"/>
-        <see selector="{{ModalConfirmationSection.modalContent}}" userInput="Are you sure you want to delete this address?" stepKey="seeAddressDeleteConfirmationMessage"/>
-        <click selector="{{ModalConfirmationSection.OkButton}}" stepKey="confirmDelete"/>
-        <waitForPageLoad stepKey="waitForDeleteToFinish"/>
+        <waitForElementClickable
+                selector="{{StorefrontCustomerAddressesSection.deleteAdditionalAddress(addressIndex)}}"
+                stepKey="waitForDeleteAddressButton"/>
+        <click
+                selector="{{StorefrontCustomerAddressesSection.deleteAdditionalAddress(addressIndex)}}"
+                stepKey="clickDeleteAddress"/>
+        <waitForElementVisible
+                selector="{{ModalConfirmationSection.modalContent}}"
+                stepKey="waitForDeleteConfirmationModal"/>
+        <see
+                selector="{{ModalConfirmationSection.modalContent}}"
+                userInput="Are you sure you want to delete this address?"
+                stepKey="seeDeleteConfirmationMessage"/>
+        <waitForElementClickable
+                selector="{{ModalConfirmationSection.OkButton}}"
+                stepKey="waitForConfirmDeleteButton"/>
+        <click selector="{{ModalConfirmationSection.OkButton}}" stepKey="clickConfirmDelete"/>
+        <waitForPageLoad stepKey="waitForDeleteToComplete"/>
     </actionGroup>
 </actionGroups>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontUpdateCustomerOrderGridPaginationActionGroup">
+        <annotations>
+            <description>Change page and page size on the storefront customer order history grid.</description>
+        </annotations>
+        <arguments>
+            <argument name="pageNumber" type="string" defaultValue="2"/>
+            <argument name="perPage" type="string" defaultValue="20"/>
+        </arguments>
+
+        <seeElement
+                selector="{{StorefrontCustomerOrderSection.isMyOrdersSection}}"
+                stepKey="seeMyOrdersSectionBeforePaging"/>
+        <scrollTo
+                selector="{{StorefrontCustomerOrderSection.currentPage}}"
+                stepKey="scrollToOrderGridPager"/>
+        <click
+                selector="{{StorefrontCustomerOrderSection.pageNumber(pageNumber)}}"
+                stepKey="clickOrderGridPage"/>
+        <scrollTo
+                selector="{{StorefrontCustomerOrderSection.perPage}}"
+                stepKey="scrollToOrderGridPerPage"/>
+        <selectOption
+                userInput="{{perPage}}"
+                selector="{{StorefrontCustomerOrderSection.perPage}}"
+                stepKey="selectOrderGridPerPage"/>
+        <waitForPageLoad stepKey="waitForOrderGridPageLoad"/>
+    </actionGroup>
+</actionGroups>

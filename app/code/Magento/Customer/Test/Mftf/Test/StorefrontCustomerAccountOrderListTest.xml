@@ -121,9 +121,11 @@
             <argument name="menu" value="My Orders"/>
         </actionGroup>
 
-        <actionGroup ref="StorefrontVerifyOrderGridListActionGroup" stepKey="verifyOrderGridList">
+        <actionGroup ref="StorefrontUpdateCustomerOrderGridPaginationActionGroup" stepKey="updateOrderGridPagination">
             <argument name="pageNumber" value="2"/>
             <argument name="perPage" value="20"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontCustomerOrderGridListActionGroup" stepKey="assertOrderGridList">
             <argument name="expectedRowCount" value="15"/>
         </actionGroup>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitOrderHistoryPage"/>
