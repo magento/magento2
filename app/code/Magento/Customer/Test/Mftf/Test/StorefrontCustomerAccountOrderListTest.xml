@@ -121,26 +121,20 @@
             <argument name="menu" value="My Orders"/>
         </actionGroup>
 
-        <seeElement selector="{{StorefrontCustomerOrderSection.isMyOrdersSection}}" stepKey="waitOrderHistoryPage"/>
-
-        <scrollTo selector="{{StorefrontCustomerOrderSection.currentPage}}" stepKey="scrollToBottomToolbarSection"/>
-
-        <click selector="{{StorefrontCustomerOrderSection.pageNumber('2')}}" stepKey="clickOnPage2"/>
-
-        <scrollTo selector="{{StorefrontCustomerOrderSection.perPage}}" stepKey="scrollToLimiter"/>
-
-        <selectOption userInput="20" selector="{{StorefrontCustomerOrderSection.perPage}}" stepKey="selectLimitOnPage"/>
-
-        <waitForPageLoad stepKey="waitForLoadPage"/>
-
-        <seeElement selector="{{StorefrontCustomerOrderSection.isMyOrdersSection}}"
-                    stepKey="seeElementOrderHistoryPage"/>
-
-        <dontSee selector="{{StorefrontOrderInformationMainSection.emptyMessage}}"
-                 userInput="You have placed no orders." stepKey="dontSeeEmptyMessage"/>
-
-        <seeNumberOfElements selector="{{StorefrontCustomerOrderSection.rowsInColumn('id')}}" userInput="15"
-                             stepKey="seeRowsCount"/>
+        <actionGroup ref="StorefrontVerifyOrderGridListActionGroup" stepKey="verifyOrderGridList">
+            <argument name="pageNumber" value="2"/>
+            <argument name="perPage" value="20"/>
+            <argument name="expectedRowCount" value="15"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitOrderHistoryPage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="scrollToBottomToolbarSection"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickOnPage2"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="scrollToLimiter"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectLimitOnPage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForLoadPage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeElementOrderHistoryPage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="dontSeeEmptyMessage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeRowsCount"/>
 
     </test>
 </tests>
