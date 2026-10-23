@@ -85,7 +85,7 @@ class DynamicStorage extends BaseDbStorage
             $select->where('relation.category_id IS NULL');
         } else {
             $select->where(
-                'relation.category_id in ( ? )',
+                'relation.category_id IN (?)',
                 $metadata['category_id']
             );
         }

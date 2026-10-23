@@ -12,7 +12,7 @@ use Magento\UrlRewrite\Model\Storage\DbStorage as BaseDbStorage;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
 /**
- * Class DbStorage
+ * URL rewrite storage that joins product rewrites with their category relation
  */
 class DbStorage extends BaseDbStorage
 {
@@ -46,7 +46,7 @@ class DbStorage extends BaseDbStorage
             $select->where('relation.category_id IS NULL');
         } else {
             $select->where(
-                'relation.category_id in ( ? )',
+                'relation.category_id IN (?)',
                 $metadata['category_id']
             );
         }
