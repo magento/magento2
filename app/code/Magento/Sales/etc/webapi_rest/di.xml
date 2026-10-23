@@ -36,4 +36,12 @@
                 type="Magento\Sales\Plugin\Webapi\OrderResponseNullKeysPlugin"
                 sortOrder="10"/>
     </type>
+    <type name="Magento\Sales\Api\OrderRepositoryInterface">
+        <plugin name="add_parent_sku_to_order_items"
+                type="Magento\Sales\Plugin\Model\Order\AddParentSkuToOrderItems"/>
+    </type>
+    <type name="Magento\Sales\Api\OrderItemRepositoryInterface">
+        <plugin name="add_parent_sku_to_order_item"
+                type="Magento\Sales\Plugin\Model\Order\Item\AddParentSku"/>
+    </type>
 </config>
