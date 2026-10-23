@@ -363,6 +363,10 @@ class RendererTest extends TestCase
             ->onlyMethods(['getPrice', '__wakeup'])
             ->getMock();
 
+        $this->priceCurrency->expects($this->once())
+            ->method('convertAndRound')
+            ->willReturn($price);
+
         $quoteItemMock->expects($this->once())
             ->method('getPrice')
             ->willReturn($price);
@@ -380,6 +384,10 @@ class RendererTest extends TestCase
             ->disableOriginalConstructor()
             ->onlyMethods(['getPrice', '__wakeup'])
             ->getMock();
+
+        $this->priceCurrency->expects($this->once())
+            ->method('convertAndRound')
+            ->willReturn($price);
 
         $orderItemMock->expects($this->once())
             ->method('getPrice')

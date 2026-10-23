@@ -281,7 +281,7 @@ class WysiwygTest extends TestCase
             ->method('renderTag')
             ->with(
                 'script',
-                $this->isType('array'),
+                $this->isArray(),
                 $this->stringContains('mage/adminhtml/wysiwyg/tiny_mce/setup'),
                 false
             )
@@ -424,7 +424,6 @@ class WysiwygTest extends TestCase
     {
         $ref = new ReflectionClass($declaringClass);
         $prop = $ref->getProperty($property);
-        $prop->setAccessible(true);
         $prop->setValue($object, $value);
     }
 }

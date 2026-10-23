@@ -50,11 +50,6 @@ class CartTest extends TestCase
      */
     private $cart;
 
-    /**
-     * @var PriceCurrencyInterface|MockObject
-     */
-    private $priceCurrency;
-
     protected function setUp(): void
     {
         $this->checkoutSession = $this->createMock(Session::class);
@@ -62,7 +57,6 @@ class CartTest extends TestCase
         $this->itemPriceRenderer = $this->createMock(Renderer::class);
         $this->checkoutCart = $this->createMock(CheckoutCart::class);
         $this->quote = $this->createMock(Quote::class);
-        $this->priceCurrency = $this->createMock(PriceCurrencyInterface::class);
 
         $this->checkoutSession->method('getQuote')
             ->willReturn($this->quote);
@@ -70,8 +64,7 @@ class CartTest extends TestCase
         $this->cart = new Cart(
             $this->checkoutSession,
             $this->checkoutHelper,
-            $this->itemPriceRenderer,
-            $this->priceCurrency
+            $this->itemPriceRenderer
         );
     }
 
@@ -108,7 +101,6 @@ class CartTest extends TestCase
 
         $this->itemPriceRenderer->method('toHtml')
             ->willReturn(1);
-        $this->priceCurrency->expects($this->exactly(2))->method('convertAndRound');
 
         $result = $this->cart->afterGetSectionData($this->checkoutCart, $input);
 

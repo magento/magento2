@@ -155,6 +155,9 @@
             <argument name="websiteName" value="{{NewWebSiteData.name}}"/>
         </actionGroup>
         <magentoCron groups="index" stepKey="reindex"/>
+            <!--Clear filter product listing grid-->
+            <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToProductCatalogPageBeforeClearFilters"/>
+            <actionGroup ref="ClearFiltersAdminProductGridActionGroup" stepKey="clearProductGridFilters"/>
         <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
     </after>
         <!-- Click Edit option for Simple2 -->

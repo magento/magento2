@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2025 Adobe
+ * Copyright 2026 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);
@@ -10,8 +10,8 @@ namespace Magento\Csp\Plugin;
 use Magento\Deploy\Service\DeployStaticContent;
 use Magento\Csp\Model\SubresourceIntegrityCollector;
 use Magento\Csp\Model\SubresourceIntegrityRepositoryPool;
-use Psr\Log\LoggerInterface;
 use Magento\Framework\App\ObjectManager;
+use Psr\Log\LoggerInterface;
 
 /**
  * Plugin that stores generated integrity hashes for all assets.
@@ -69,15 +69,30 @@ class StoreAssetIntegrityHashes
         $integrityHashes = $this->integrityCollector->release();
 
         foreach ($integrityHashes as $integrity) {
-            $area = explode("/", $integrity->getPath())[0];
-            $bunches[$area][] = $integrity;
+            $path = $integrity->getPath();
+
+            if (empty($path)) {
+                $this->logger->debug('SRI: Skipping empty path');
+                continue;
+            }
+
+            $pathParts = explode("/", $path);
+
+            // Ensure we have at least 4 segments: area/vendor/theme/locale
+            if (count($pathParts) < 4) {
+                $this->logger->debug('SRI: Skipping invalid path (< 4 segments)', ['path' => $path]);
+                continue;
+            }
+
+            $context = implode('/', array_slice($pathParts, 0, 4));
+            $bunches[$context][] = $integrity;
         }
 
-        foreach ($bunches as $area => $bunch) {
+        foreach ($bunches as $context => $bunch) {
             try {
-                $this->integrityRepositoryPool->get($area)->saveBunch($bunch);
+                $this->integrityRepositoryPool->get($context)->saveBunch($bunch);
             } catch (\Exception $e) {
-                $this->logger->error('SRI Store: Failed saving ' . $area . ': ' . $e->getMessage());
+                $this->logger->error('SRI Store: Failed saving ' . $context . ': ' . $e->getMessage());
             }
         }
     }

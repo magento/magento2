@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Bundle\Test\Unit\Model\ResourceModel\Indexer;
 
+use Magento\Bundle\Model\ResourceModel\Indexer\SelectionPriceModifierInterface;
 use Magento\Bundle\Model\ResourceModel\Indexer\StockStatusQueryProcessorInterface;
 use Magento\Framework\DB\Select;
 use Magento\Bundle\Model\ResourceModel\Indexer\Price;
@@ -104,7 +105,8 @@ class PriceTest extends TestCase
             $moduleManager,
             $this->stockStatusQueryProcessor,
             $fullReindexAction,
-            $this->connectionName
+            $this->connectionName,
+            $this->createMock(SelectionPriceModifierInterface::class)
         );
     }
 

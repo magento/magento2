@@ -6,7 +6,7 @@
 namespace Magento\Store\Model\Config\Processor;
 
 use Magento\Framework\App\Config\Spi\PostProcessorInterface;
-use Magento\Store\Model\Config\Placeholder as ConfigPlaceholder;
+use Magento\Store\Model\Config\PlaceholderInterface as ConfigPlaceholderInterface;
 
 /**
  * Placeholder configuration values processor. Replace placeholders in configuration with config values
@@ -14,15 +14,15 @@ use Magento\Store\Model\Config\Placeholder as ConfigPlaceholder;
 class Placeholder implements PostProcessorInterface
 {
     /**
-     * @var ConfigPlaceholder
+     * @var ConfigPlaceholderInterface
      */
     private $configPlaceholder;
 
     /**
      * Placeholder constructor.
-     * @param ConfigPlaceholder $configPlaceholder
+     * @param ConfigPlaceholderInterface $configPlaceholder
      */
-    public function __construct(ConfigPlaceholder $configPlaceholder)
+    public function __construct(ConfigPlaceholderInterface $configPlaceholder)
     {
         $this->configPlaceholder = $configPlaceholder;
     }

@@ -7,14 +7,18 @@ namespace Magento\Sales\Test\Unit\Model\Order\Pdf;
 
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager as AppObjectManager;
+use Magento\Framework\File\Pdf\Image;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Write as DirectoryWrite;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Stdlib\StringUtils;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\Template;
 use Magento\MediaStorage\Helper\File\Storage\Database;
 use Magento\Payment\Helper\Data as PaymentData;
 use Magento\Payment\Model\InfoInterface;
+use Magento\Sales\Model\RtlTextHandler;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Address;
 use Magento\Sales\Model\Order\Address\Renderer;
@@ -23,6 +27,7 @@ use Magento\Sales\Model\Order\Pdf\Config as PdfConfig;
 use Magento\Sales\Model\Order\Pdf\Creditmemo as CreditmemoPdf;
 use Magento\Store\Model\App\Emulation;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Tax\Helper\Data as TaxHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
@@ -103,6 +108,16 @@ class CreditmemoTest extends TestCase
         $this->addressRendererMock = $this->createMock(Renderer::class);
         $this->paymentDataMock = $this->createMock(PaymentData::class);
         $this->appEmulation = $this->createMock(Emulation::class);
+        $rtlTextHandler = $this->createMock(RtlTextHandler::class);
+        $image = $this->createMock(Image::class);
+        $taxHelper = $this->createMock(TaxHelper::class);
+        $globalObjectManager = $this->createMock(ObjectManagerInterface::class);
+        $globalObjectManager->method('get')->willReturnMap([
+            [RtlTextHandler::class, $rtlTextHandler],
+            [Image::class, $image],
+            [TaxHelper::class, $taxHelper],
+        ]);
+        AppObjectManager::setInstance($globalObjectManager);
 
         $helper = new ObjectManager($this);
         $this->model = $helper->getObject(
@@ -115,7 +130,10 @@ class CreditmemoTest extends TestCase
                 'addressRenderer' => $this->addressRendererMock,
                 'string' => new StringUtils(),
                 'paymentData' => $this->paymentDataMock,
-                'appEmulation' => $this->appEmulation
+                'appEmulation' => $this->appEmulation,
+                'rtlTextHandler' => $rtlTextHandler,
+                'image' => $image,
+                'taxHelper' => $taxHelper
             ]
         );
     }

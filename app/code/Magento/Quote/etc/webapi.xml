@@ -1,9 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright 2025 Adobe
- * All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 -->
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -67,6 +66,7 @@
         </resources>
         <data>
             <parameter name="quote.id" force="true">%cart_id%</parameter>
+            <parameter name="quote.customer.id" force="true">%customer_id%</parameter>
         </data>
     </route>
     <route url="/V1/carts/mine/order" method="PUT">

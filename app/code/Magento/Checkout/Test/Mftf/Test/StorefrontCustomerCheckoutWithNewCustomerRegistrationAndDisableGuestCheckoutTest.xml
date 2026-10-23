@@ -26,6 +26,7 @@
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
         </before>
         <after>
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrdersGridFiltersAfter" before="logout"/>
             <magentoCLI command="config:set {{EnableGuestCheckoutConfigData.path}} {{EnableGuestCheckoutConfigData.value}}" stepKey="enableGuestCheckout"/>
             <magentoCLI command="config:set {{EnableCustomerRedirectToDashboardConfigData.path}} {{EnableCustomerRedirectToDashboardConfigData.value}}" stepKey="enableCustomerRedirect"/>
             <!-- Sign out Customer from storefront -->

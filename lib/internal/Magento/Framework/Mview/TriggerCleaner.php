@@ -8,10 +8,10 @@ declare(strict_types=1);
 namespace Magento\Framework\Mview;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Ddl\Trigger;
 use Magento\Framework\Mview\View\CollectionFactory;
 use Magento\Framework\Mview\View\StateInterface;
 use Magento\Framework\Mview\View\Subscription;
-use Magento\Framework\DB\Ddl\Trigger;
 
 /**
  * Class for removing old triggers that were created by mview
@@ -106,20 +106,33 @@ class TriggerCleaner
     private function processViewTriggers(array $viewTriggers, Subscription $subscription): void
     {
         foreach ($viewTriggers as $viewTrigger) {
-            if (array_key_exists($viewTrigger->getName(), $this->DbTriggers)) {
-                foreach ($this->getStatementsFromViewTrigger($viewTrigger) as $statement) {
-                    if (!empty($statement) &&
-                        !str_contains($this->DbTriggers[$viewTrigger->getName()]['ACTION_STATEMENT'], $statement)
-                    ) {
-                        $subscription->saveTrigger($viewTrigger);
-                        break;
-                    }
-                }
-            } else {
+            if ($this->shouldUpdateTrigger($viewTrigger)) {
                 $subscription->saveTrigger($viewTrigger);
             }
             $this->processedTriggers[$viewTrigger->getName()] = true;
         }
+    }
+
+    /**
+     * Determine whether an existing DB trigger needs to be recreated.
+     *
+     * @param Trigger $viewTrigger
+     * @return bool
+     */
+    private function shouldUpdateTrigger(Trigger $viewTrigger): bool
+    {
+        if (!array_key_exists($viewTrigger->getName(), $this->DbTriggers)) {
+            return true;
+        }
+
+        $expectedStatement = $this->normalizeTriggerStatement(
+            implode(PHP_EOL, $this->getStatementsFromViewTrigger($viewTrigger))
+        );
+        $dbStatement = $this->normalizeTriggerStatement(
+            $this->DbTriggers[$viewTrigger->getName()]['ACTION_STATEMENT']
+        );
+
+        return $expectedStatement !== $dbStatement;
     }
 
     /**
@@ -187,5 +200,24 @@ class TriggerCleaner
         }
 
         return $statements;
+    }
+
+    /**
+     * Normalize trigger statements so equivalent SQL can be compared reliably.
+     *
+     * @param string $statement
+     * @return string
+     */
+    private function normalizeTriggerStatement(string $statement): string
+    {
+        $statement = trim($statement);
+
+        if (preg_match('/^BEGIN\s+(.*)\s+END;?$/is', $statement, $matches)) {
+            $statement = $matches[1];
+        }
+
+        $statement = preg_replace('/\s*;\s*/', ';', $statement);
+
+        return trim((string)preg_replace('/\s+/', ' ', $statement));
     }
 }

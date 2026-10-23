@@ -10,10 +10,10 @@
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontProductInfoMainSection">
         <element name="productVideo" type="text" selector="//*[@class='product-video' and @data-type='{{videoType}}']" parameterized="true"/>
-        <element name="clickInVideo" type="button" selector="//*[@class='fotorama__stage__shaft']"/>
-        <element name="videoPausedMode" type="button" selector="//*[contains(@class, 'paused-mode')]"/>
-        <element name="videoPlayedMode" type="button" selector="//*[contains(@class,'playing-mode')]"/>
-        <element name="frameVideo" type="button" selector="widget2"/>
+        <element name="activeYoutubeVideo" type="block" selector=".fotorama__stage__frame.fotorama-video-container .product-video[data-type='youtube']" timeout="30"/>
+        <element name="clickInVideo" type="button" selector=".fotorama-video-container.video-unplayed"/>
+        <element name="frameVideo" type="iframe" selector=".fotorama__stage .product-video[data-type='youtube'] iframe" timeout="90"/>
+        <element name="youtubeVideoLoaded" type="block" selector=".fotorama__stage__frame.fotorama__product-video--loaded" timeout="90"/>
         <element name="clickPlayVideo" type="block" selector="//*[contains(@class,'fotorama__stage__shaft')]"/>
         <element name="clickCloseVideo" type="block" selector="//*[@class='fotorama__video-close fotorama-show-control']"/>
     </section>

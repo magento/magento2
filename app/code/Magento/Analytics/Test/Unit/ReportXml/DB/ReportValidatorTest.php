@@ -95,7 +95,7 @@ class ReportValidatorTest extends TestCase
             ->with($connectionName)
             ->willReturn($this->connectionMock);
         $this->queryMock->expects($this->atLeastOnce())->method('getSelect')->willReturn($this->selectMock);
-        $this->selectMock->expects($this->once())->method('limit')->with(0);
+        $this->selectMock->expects($this->once())->method('limit')->with(1);
         
         // Configure query mock based on stub type
         if ($stubType === 'returnValue') {

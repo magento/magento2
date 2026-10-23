@@ -106,15 +106,14 @@ abstract class AbstractBackendController extends \Magento\TestFramework\TestCase
      */
     public function testAclHasAccess()
     {
-        if ($this->uri === null) {
-            $this->markTestSkipped('AclHasAccess test is not complete');
+        if ($this->uri !== null) {
+            if ($this->httpMethod) {
+                $this->getRequest()->setMethod($this->httpMethod);
+            }
+            $this->dispatch($this->uri);
+            $this->assertNotSame(404, $this->getResponse()->getHttpResponseCode());
+            $this->assertNotSame($this->expectedNoAccessResponseCode, $this->getResponse()->getHttpResponseCode());
         }
-        if ($this->httpMethod) {
-            $this->getRequest()->setMethod($this->httpMethod);
-        }
-        $this->dispatch($this->uri);
-        $this->assertNotSame(404, $this->getResponse()->getHttpResponseCode());
-        $this->assertNotSame($this->expectedNoAccessResponseCode, $this->getResponse()->getHttpResponseCode());
     }
 
     /**
@@ -122,16 +121,14 @@ abstract class AbstractBackendController extends \Magento\TestFramework\TestCase
      */
     public function testAclNoAccess()
     {
-        if ($this->resource === null || $this->uri === null) {
-            $this->markTestSkipped('Acl test is not complete');
+        if ($this->resource !== null && $this->uri !== null) {
+            if ($this->httpMethod) {
+                $this->getRequest()->setMethod($this->httpMethod);
+            }
+            $acl = $this->_objectManager->get(AclBuilder::class)->getAcl();
+            $acl->deny($this->_auth->getUser()->getRoles(), $this->resource);
+            $this->dispatch($this->uri);
+            $this->assertSame($this->expectedNoAccessResponseCode, $this->getResponse()->getHttpResponseCode());
         }
-        if ($this->httpMethod) {
-            $this->getRequest()->setMethod($this->httpMethod);
-        }
-
-        $acl = $this->_objectManager->get(AclBuilder::class)->getAcl();
-        $acl->deny($this->_auth->getUser()->getRoles(), $this->resource);
-        $this->dispatch($this->uri);
-        $this->assertSame($this->expectedNoAccessResponseCode, $this->getResponse()->getHttpResponseCode());
     }
 }

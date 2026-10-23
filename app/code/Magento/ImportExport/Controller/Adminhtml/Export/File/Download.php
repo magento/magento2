@@ -15,6 +15,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\ImportExport\Controller\Adminhtml\Export as ExportController;
 use Magento\Framework\Filesystem;
 use Magento\ImportExport\Model\LocalizedFileName;
+use Magento\ImportExport\Model\Export\FileInfo;
 use Throwable;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\App\ResponseInterface;
@@ -45,22 +46,30 @@ class Download extends ExportController implements HttpGetActionInterface
     private $localizedFileName;
 
     /**
+     * @var FileInfo
+     */
+    private $fileInfo;
+
+    /**
      * DownloadFile constructor.
      * @param Action\Context $context
      * @param FileFactory $fileFactory
      * @param Filesystem $filesystem
      * @param LocalizedFileName|null $localizedFileName
+     * @param FileInfo|null $fileInfo
      */
     public function __construct(
         Action\Context $context,
         FileFactory $fileFactory,
         Filesystem $filesystem,
-        ?LocalizedFileName $localizedFileName = null
+        ?LocalizedFileName $localizedFileName = null,
+        ?FileInfo $fileInfo = null
     ) {
         $this->fileFactory = $fileFactory;
         $this->filesystem = $filesystem;
         parent::__construct($context);
         $this->localizedFileName = $localizedFileName ?? ObjectManager::getInstance()->get(LocalizedFileName::class);
+        $this->fileInfo = $fileInfo ?? ObjectManager::getInstance()->get(FileInfo::class);
     }
 
     /**
@@ -90,7 +99,7 @@ class Download extends ExportController implements HttpGetActionInterface
             $fileExist = false;
         }
 
-        if (empty($fileName) || !$fileExist) {
+        if (empty($fileName) || !$fileExist || !$this->isAllowedExportFile($fileName)) {
             $this->messageManager->addErrorMessage(__('Please provide valid export file name'));
 
             return $resultRedirect;
@@ -112,5 +121,16 @@ class Download extends ExportController implements HttpGetActionInterface
         }
 
         return $resultRedirect;
+    }
+
+    /**
+     * Check whether requested file is a completed export file.
+     *
+     * @param string $fileName
+     * @return bool
+     */
+    private function isAllowedExportFile(string $fileName): bool
+    {
+        return $this->fileInfo->isExportFile($fileName);
     }
 }

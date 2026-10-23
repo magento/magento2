@@ -21,6 +21,7 @@
     </type>
     <type name="Magento\Customer\Api\CustomerRepositoryInterface">
         <plugin name="updateCustomerByIdFromRequest" type="Magento\Customer\Model\Plugin\UpdateCustomer" />
+        <plugin name="restrictedSearchFields" type="Magento\Customer\Model\Plugin\CustomerRepository\RestrictedFieldsPlugin" sortOrder="1"/>
     </type>
     <type name="Magento\Customer\Model\Customer\AuthorizationComposite">
         <arguments>
@@ -40,5 +41,8 @@
     <type name="Magento\Customer\Model\Session">
         <plugin name="customerSessionApiPlugin"
                 type="Magento\Customer\Plugin\Model\SessionPlugin" />
+    </type>
+    <type name="Magento\Customer\Model\AccountManagement">
+        <plugin name="validate_captcha_rest" type="Magento\Customer\Model\Plugin\ValidateCaptcha" sortOrder="10" />
     </type>
 </config>

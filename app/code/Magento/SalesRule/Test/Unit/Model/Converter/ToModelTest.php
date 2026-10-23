@@ -9,10 +9,11 @@ namespace Magento\SalesRule\Test\Unit\Model\Converter;
 
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\SalesRule\Api\Data\ConditionExtensionInterface;
 use Magento\SalesRule\Model\Converter\ToModel;
 use Magento\SalesRule\Model\Data\Condition;
 use Magento\SalesRule\Model\Data\Rule;
+use Magento\SalesRule\Model\Data\Validator;
 use Magento\SalesRule\Model\Rule as SalesRule;
 use Magento\SalesRule\Model\RuleFactory;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -37,6 +38,11 @@ class ToModelTest extends TestCase
      */
     protected $model;
 
+    /**
+     * @var Validator|MockObject
+     */
+    private $validator;
+
     protected function setUp(): void
     {
         $this->ruleFactory = $this->getMockBuilder(RuleFactory::class)
@@ -49,14 +55,8 @@ class ToModelTest extends TestCase
             ->onlyMethods(['buildOutputDataArray'])
             ->getMock();
 
-        $helper = new ObjectManager($this);
-        $this->model = $helper->getObject(
-            ToModel::class,
-            [
-                'ruleFactory' =>  $this->ruleFactory,
-                'dataObjectProcessor' => $this->dataObjectProcessor,
-            ]
-        );
+        $this->validator = $this->createMock(Validator::class);
+        $this->model = new ToModel($this->ruleFactory, $this->dataObjectProcessor, $this->validator);
     }
 
     /**
@@ -99,7 +99,8 @@ class ToModelTest extends TestCase
                 'getAttributeName',
                 'getOperator',
                 'getAggregatorType',
-                'getConditions'
+                'getConditions',
+                'getExtensionAttributes'
             ]
         );
 
@@ -138,7 +139,8 @@ class ToModelTest extends TestCase
                 'getAttributeName',
                 'getOperator',
                 'getAggregatorType',
-                'getConditions'
+                'getConditions',
+                'getExtensionAttributes'
             ]
         );
 
@@ -152,7 +154,8 @@ class ToModelTest extends TestCase
                 'getAttributeName',
                 'getOperator',
                 'getAggregatorType',
-                'getConditions'
+                'getConditions',
+                'getExtensionAttributes'
             ]
         );
 
@@ -160,6 +163,19 @@ class ToModelTest extends TestCase
             ->expects($this->atLeastOnce())
             ->method('getConditions')
             ->willReturn([$dataCondition1, $dataCondition2]);
+
+        $extensionAttributes = $this->createPartialMockWithReflection(
+            ConditionExtensionInterface::class,
+            [
+                'getAttributeScope'
+            ]
+        );
+        $dataCondition->expects($this->once())->method('getExtensionAttributes')
+            ->willReturn($extensionAttributes);
+        $dataCondition1->expects($this->once())->method('getExtensionAttributes')
+            ->willReturn($extensionAttributes);
+        $dataCondition2->expects($this->once())->method('getExtensionAttributes')
+            ->willReturn($extensionAttributes);
 
         $result = $this->model->dataModelToArray($dataCondition);
 
@@ -231,6 +247,9 @@ class ToModelTest extends TestCase
             ->expects($this->any())
             ->method('create')
             ->willReturn($ruleModel);
+
+        $this->validator->method('isValid')->willReturn(true);
+        $this->validator->method('getMessages')->willReturn([]);
 
         $result = $this->model->toModel($dataModel);
         $this->assertEquals($ruleModel, $result);
@@ -315,6 +334,8 @@ class ToModelTest extends TestCase
             ->method('setToDate')
             ->with($data['expected_to_date']);
 
+        $this->validator->method('isValid')->willReturn(true);
+        $this->validator->method('getMessages')->willReturn([]);
         $this->model->toModel($dataModel);
     }
 

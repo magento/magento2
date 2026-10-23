@@ -61,10 +61,19 @@ class ByPercent extends AbstractDiscount
 
         $_rulePct = $rulePercent / 100;
 
-        $amount = ($qty * $itemPrice - $item->getDiscountAmount()) * $_rulePct;
-        $baseAmount = ($qty * $baseItemPrice - $item->getBaseDiscountAmount()) * $_rulePct;
-        $originalAmount = ($qty * $itemOriginalPrice - $item->getDiscountAmount()) * $_rulePct;
-        $baseOriginalAmount = ($qty * $baseItemOriginalPrice - $item->getBaseDiscountAmount()) * $_rulePct;
+        $itemQtyTotal = (float) $item->getQty();
+        if ($itemQtyTotal > 0 && $qty < $itemQtyTotal) {
+            $itemDiscountAmount = (float) $item->getDiscountAmount() / $itemQtyTotal * $qty;
+            $itemBaseDiscountAmount = (float) $item->getBaseDiscountAmount() / $itemQtyTotal * $qty;
+        } else {
+            $itemDiscountAmount = (float) $item->getDiscountAmount();
+            $itemBaseDiscountAmount = (float) $item->getBaseDiscountAmount();
+        }
+
+        $amount = ($qty * $itemPrice - $itemDiscountAmount) * $_rulePct;
+        $baseAmount = ($qty * $baseItemPrice - $itemBaseDiscountAmount) * $_rulePct;
+        $originalAmount = ($qty * $itemOriginalPrice - $itemDiscountAmount) * $_rulePct;
+        $baseOriginalAmount = ($qty * $baseItemOriginalPrice - $itemBaseDiscountAmount) * $_rulePct;
 
         $discountData->setAmount(round(floatval((string) $amount), 2));
         $discountData->setBaseAmount(round(floatval((string) $baseAmount), 2));
