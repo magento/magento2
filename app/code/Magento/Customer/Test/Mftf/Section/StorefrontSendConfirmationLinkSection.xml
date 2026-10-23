@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontSendConfirmationLinkSection">
-        <element name="emailField" type="input" selector="#email_address.input-text"/>
-        <element name="sendConfirmationLink" type="button" selector=".action.send.primary"/>
+        <element name="emailField" type="input" selector="form.send.confirmation #email_address"/>
+        <element name="sendConfirmationLink" type="button" selector="form.send.confirmation .action.send.primary"/>
     </section>
 </sections>

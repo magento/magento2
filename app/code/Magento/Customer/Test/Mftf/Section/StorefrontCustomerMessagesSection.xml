@@ -12,6 +12,6 @@
         <element name="successMessage" type="text" selector=".message-success"/>
         <element name="errorMessage" type="text" selector=".message-error"/>
         <element name="assertErrorMessage" type="text" selector="#region-error"/>
-        <element name="confirmLink" type="button" selector="//*[contains(@class,'message-success success message')]//*[text()='click here']"/>
+        <element name="confirmLink" type="button" selector=".message-success a[href*='customer/account/confirmation']"/>
     </section>
 </sections>

@@ -1,14 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="StorefrontCustomerClickAccountConfirmationSendingLinkActionGroup">
+        <annotations>
+            <description>Clicks 'click here' in the account confirmation message, waits for the page.</description>
+        </annotations>
+        <waitForElementClickable selector="{{StorefrontCustomerMessagesSection.confirmLink}}"
+                                 stepKey="waitForConfirmLink"/>
         <click selector="{{StorefrontCustomerMessagesSection.confirmLink}}" stepKey="clickHereLink"/>
+        <waitForPageLoad stepKey="waitForConfirmationPageLoad"/>
+        <seeInCurrentUrl url="{{StorefrontCustomerAccountConfirmationPage.url}}" stepKey="seeConfirmationPageUrl"/>
+        <waitForElementVisible selector="{{StorefrontSendConfirmationLinkSection.emailField}}"
+                               stepKey="waitForEmailField"/>
     </actionGroup>
 </actionGroups>

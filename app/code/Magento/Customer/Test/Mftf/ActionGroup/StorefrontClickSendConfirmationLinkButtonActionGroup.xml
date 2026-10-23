@@ -1,15 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="StorefrontClickSendConfirmationLinkButtonActionGroup">
-        <click selector="{{StorefrontSendConfirmationLinkSection.sendConfirmationLink}}" stepKey="clickSendConfirmationLinkBtn"/>
+        <annotations>
+            <description>Clicks 'Send confirmation link' on the Storefront account confirmation page.</description>
+        </annotations>
+        <waitForElementClickable selector="{{StorefrontSendConfirmationLinkSection.sendConfirmationLink}}"
+                                 stepKey="waitForSendConfirmationLinkBtn"/>
+        <click selector="{{StorefrontSendConfirmationLinkSection.sendConfirmationLink}}"
+               stepKey="clickSendConfirmationLinkBtn"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>
 </actionGroups>
