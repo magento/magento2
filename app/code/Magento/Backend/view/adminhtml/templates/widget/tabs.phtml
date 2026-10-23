@@ -31,7 +31,7 @@
             <?php $_tabHref = $block->getTabUrl($_tab) == '#' ? '#' . $block->getTabId($_tab) . '_content' :
                 $block->getTabUrl($_tab) ?>
 
-            <li class="admin__page-nav-item no-display" id="<?= $block->escapeHtmlAttr($block->getTabId($_tab)) ?>"
+            <li class="admin__page-nav-item no-display"
                 <?= /* @noEscape */ $block->getUiId('tab', 'item', $_tab->getId()) ?>>
                 <a href="<?=  $block->escapeUrl($_tabHref) ?>"
                    id="<?=  $block->escapeHtmlAttr($block->getTabId($_tab)) ?>"
@@ -83,12 +83,12 @@
 script;
             if ($block->getTabIsHidden($_tab)):
                 $scriptString .= <<<script
-        $('li.admin__page-nav-item#{$block->escapeJs($block->getTabId($_tab))}').css('display', 'none');
+        $('a#{$block->escapeJs($block->getTabId($_tab))}').closest('li.admin__page-nav-item').css('display', 'none');
 script;
             endif;
 
             $scriptString .= <<<script
-        $('li.admin__page-nav-item#{$block->escapeJs($block->getTabId($_tab))}').removeClass('no-display');
+        $('a#{$block->escapeJs($block->getTabId($_tab))}').closest('li.admin__page-nav-item').removeClass('no-display');
     })
 script;
             ?>
