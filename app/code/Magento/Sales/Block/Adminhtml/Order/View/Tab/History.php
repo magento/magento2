@@ -23,14 +23,14 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
     private const HISTORY_TYPE_TRACKING_NUM = 8;
 
     /**
-     * Template
+     * History template
      *
      * @var string
      */
     protected $_template = 'Magento_Sales::order/view/tab/history.phtml';
 
     /**
-     * Core registry
+     * Core registry instance
      *
      * @var \Magento\Framework\Registry
      */
@@ -355,6 +355,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
      * @param mixed $b
      * @return int
      */
+    // phpcs:ignore Magento2.Functions.StaticFunction
     public static function sortHistoryByTimestamp($a, $b)
     {
         $createdAtA = $a['created_at'];
