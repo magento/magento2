@@ -30,7 +30,6 @@ class IndexTest extends AbstractController
             $this->_objectManager->get(LayoutInterface::class)->getBlock('google.maps.api')
         );
         self::assertStringContainsString('id="swagger-ui"', $this->getResponse()->getBody());
-
     }
 
     #[Config('cms/pagebuilder/enabled', '1')]
