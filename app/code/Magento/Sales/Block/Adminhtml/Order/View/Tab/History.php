@@ -82,106 +82,13 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
     {
         $order = $this->getOrder();
 
-        $history = [];
-        foreach ($order->getAllStatusHistory() as $orderComment) {
-            $history[] = $this->addSortKeys(
-                $this->_prepareHistoryItem(
-                    $orderComment->getStatusLabel(),
-                    $orderComment->getIsCustomerNotified(),
-                    $this->getOrderAdminDate($orderComment->getCreatedAt()),
-                    $orderComment->getComment()
-                ),
-                self::HISTORY_TYPE_ORDER,
-                $orderComment->getId()
-            );
-        }
-
-        foreach ($order->getCreditmemosCollection() as $_memo) {
-            $history[] = $this->addSortKeys(
-                $this->_prepareHistoryItem(
-                    __('Credit memo #%1 created', $_memo->getIncrementId()),
-                    $_memo->getEmailSent(),
-                    $this->getOrderAdminDate($_memo->getCreatedAt())
-                ),
-                self::HISTORY_TYPE_CREDIT_MEMO,
-                $_memo->getId()
-            );
-
-            foreach ($_memo->getCommentsCollection() as $_comment) {
-                $history[] = $this->addSortKeys(
-                    $this->_prepareHistoryItem(
-                        __('Credit memo #%1 comment added', $_memo->getIncrementId()),
-                        $_comment->getIsCustomerNotified(),
-                        $this->getOrderAdminDate($_comment->getCreatedAt()),
-                        $_comment->getComment()
-                    ),
-                    self::HISTORY_TYPE_CREDIT_MEMO_COMMENT,
-                    $_comment->getId()
-                );
-            }
-        }
-
-        foreach ($order->getShipmentsCollection() as $_shipment) {
-            $history[] = $this->addSortKeys(
-                $this->_prepareHistoryItem(
-                    __('Shipment #%1 created', $_shipment->getIncrementId()),
-                    $_shipment->getEmailSent(),
-                    $this->getOrderAdminDate($_shipment->getCreatedAt())
-                ),
-                self::HISTORY_TYPE_SHIPMENT,
-                $_shipment->getId()
-            );
-
-            foreach ($_shipment->getCommentsCollection() as $_comment) {
-                $history[] = $this->addSortKeys(
-                    $this->_prepareHistoryItem(
-                        __('Shipment #%1 comment added', $_shipment->getIncrementId()),
-                        $_comment->getIsCustomerNotified(),
-                        $this->getOrderAdminDate($_comment->getCreatedAt()),
-                        $_comment->getComment()
-                    ),
-                    self::HISTORY_TYPE_SHIPMENT_COMMENT,
-                    $_comment->getId()
-                );
-            }
-        }
-
-        foreach ($order->getInvoiceCollection() as $_invoice) {
-            $history[] = $this->addSortKeys(
-                $this->_prepareHistoryItem(
-                    __('Invoice #%1 created', $_invoice->getIncrementId()),
-                    $_invoice->getEmailSent(),
-                    $this->getOrderAdminDate($_invoice->getCreatedAt())
-                ),
-                self::HISTORY_TYPE_INVOICE,
-                $_invoice->getId()
-            );
-
-            foreach ($_invoice->getCommentsCollection() as $_comment) {
-                $history[] = $this->addSortKeys(
-                    $this->_prepareHistoryItem(
-                        __('Invoice #%1 comment added', $_invoice->getIncrementId()),
-                        $_comment->getIsCustomerNotified(),
-                        $this->getOrderAdminDate($_comment->getCreatedAt()),
-                        $_comment->getComment()
-                    ),
-                    self::HISTORY_TYPE_INVOICE_COMMENT,
-                    $_comment->getId()
-                );
-            }
-        }
-
-        foreach ($order->getTracksCollection() as $_track) {
-            $history[] = $this->addSortKeys(
-                $this->_prepareHistoryItem(
-                    __('Tracking number %1 for %2 assigned', $_track->getNumber(), $_track->getTitle()),
-                    false,
-                    $this->getOrderAdminDate($_track->getCreatedAt())
-                ),
-                self::HISTORY_TYPE_TRACKING_NUM,
-                $_track->getId()
-            );
-        }
+        $history = array_merge(
+            $this->getStatusHistoryItems($order),
+            $this->getCreditMemoHistoryItems($order),
+            $this->getShipmentHistoryItems($order),
+            $this->getInvoiceHistoryItems($order),
+            $this->getTrackHistoryItems($order)
+        );
 
         usort($history, function (array $a, array $b): int {
             return $this->sortHistory($a, $b);
@@ -259,6 +166,166 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
     protected function _prepareHistoryItem($label, $notified, $created, $comment = '')
     {
         return ['title' => $label, 'notified' => $notified, 'comment' => $comment, 'created_at' => $created];
+    }
+
+    /**
+     * Get history items of the order status history
+     *
+     * @param \Magento\Sales\Model\Order $order
+     * @return array
+     */
+    private function getStatusHistoryItems(\Magento\Sales\Model\Order $order): array
+    {
+        $history = [];
+        foreach ($order->getAllStatusHistory() as $orderComment) {
+            $history[] = $this->addSortKeys(
+                $this->_prepareHistoryItem(
+                    $orderComment->getStatusLabel(),
+                    $orderComment->getIsCustomerNotified(),
+                    $this->getOrderAdminDate($orderComment->getCreatedAt()),
+                    $orderComment->getComment()
+                ),
+                self::HISTORY_TYPE_ORDER,
+                $orderComment->getId()
+            );
+        }
+
+        return $history;
+    }
+
+    /**
+     * Get history items of credit memos and their comments
+     *
+     * @param \Magento\Sales\Model\Order $order
+     * @return array
+     */
+    private function getCreditMemoHistoryItems(\Magento\Sales\Model\Order $order): array
+    {
+        $history = [];
+        foreach ($order->getCreditmemosCollection() as $_memo) {
+            $history[] = $this->addSortKeys(
+                $this->_prepareHistoryItem(
+                    __('Credit memo #%1 created', $_memo->getIncrementId()),
+                    $_memo->getEmailSent(),
+                    $this->getOrderAdminDate($_memo->getCreatedAt())
+                ),
+                self::HISTORY_TYPE_CREDIT_MEMO,
+                $_memo->getId()
+            );
+
+            foreach ($_memo->getCommentsCollection() as $_comment) {
+                $history[] = $this->addSortKeys(
+                    $this->_prepareHistoryItem(
+                        __('Credit memo #%1 comment added', $_memo->getIncrementId()),
+                        $_comment->getIsCustomerNotified(),
+                        $this->getOrderAdminDate($_comment->getCreatedAt()),
+                        $_comment->getComment()
+                    ),
+                    self::HISTORY_TYPE_CREDIT_MEMO_COMMENT,
+                    $_comment->getId()
+                );
+            }
+        }
+
+        return $history;
+    }
+
+    /**
+     * Get history items of shipments and their comments
+     *
+     * @param \Magento\Sales\Model\Order $order
+     * @return array
+     */
+    private function getShipmentHistoryItems(\Magento\Sales\Model\Order $order): array
+    {
+        $history = [];
+        foreach ($order->getShipmentsCollection() as $_shipment) {
+            $history[] = $this->addSortKeys(
+                $this->_prepareHistoryItem(
+                    __('Shipment #%1 created', $_shipment->getIncrementId()),
+                    $_shipment->getEmailSent(),
+                    $this->getOrderAdminDate($_shipment->getCreatedAt())
+                ),
+                self::HISTORY_TYPE_SHIPMENT,
+                $_shipment->getId()
+            );
+
+            foreach ($_shipment->getCommentsCollection() as $_comment) {
+                $history[] = $this->addSortKeys(
+                    $this->_prepareHistoryItem(
+                        __('Shipment #%1 comment added', $_shipment->getIncrementId()),
+                        $_comment->getIsCustomerNotified(),
+                        $this->getOrderAdminDate($_comment->getCreatedAt()),
+                        $_comment->getComment()
+                    ),
+                    self::HISTORY_TYPE_SHIPMENT_COMMENT,
+                    $_comment->getId()
+                );
+            }
+        }
+
+        return $history;
+    }
+
+    /**
+     * Get history items of invoices and their comments
+     *
+     * @param \Magento\Sales\Model\Order $order
+     * @return array
+     */
+    private function getInvoiceHistoryItems(\Magento\Sales\Model\Order $order): array
+    {
+        $history = [];
+        foreach ($order->getInvoiceCollection() as $_invoice) {
+            $history[] = $this->addSortKeys(
+                $this->_prepareHistoryItem(
+                    __('Invoice #%1 created', $_invoice->getIncrementId()),
+                    $_invoice->getEmailSent(),
+                    $this->getOrderAdminDate($_invoice->getCreatedAt())
+                ),
+                self::HISTORY_TYPE_INVOICE,
+                $_invoice->getId()
+            );
+
+            foreach ($_invoice->getCommentsCollection() as $_comment) {
+                $history[] = $this->addSortKeys(
+                    $this->_prepareHistoryItem(
+                        __('Invoice #%1 comment added', $_invoice->getIncrementId()),
+                        $_comment->getIsCustomerNotified(),
+                        $this->getOrderAdminDate($_comment->getCreatedAt()),
+                        $_comment->getComment()
+                    ),
+                    self::HISTORY_TYPE_INVOICE_COMMENT,
+                    $_comment->getId()
+                );
+            }
+        }
+
+        return $history;
+    }
+
+    /**
+     * Get history items of assigned tracking numbers
+     *
+     * @param \Magento\Sales\Model\Order $order
+     * @return array
+     */
+    private function getTrackHistoryItems(\Magento\Sales\Model\Order $order): array
+    {
+        $history = [];
+        foreach ($order->getTracksCollection() as $_track) {
+            $history[] = $this->addSortKeys(
+                $this->_prepareHistoryItem(
+                    __('Tracking number %1 for %2 assigned', $_track->getNumber(), $_track->getTitle()),
+                    false,
+                    $this->getOrderAdminDate($_track->getCreatedAt())
+                ),
+                self::HISTORY_TYPE_TRACKING_NUM,
+                $_track->getId()
+            );
+        }
+
+        return $history;
     }
 
     /**
