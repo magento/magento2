@@ -65,6 +65,13 @@
         <data key="label">Forgot password</data>
         <data key="value">user_forgotpassword</data>
     </entity>
+    <entity name="StorefrontCaptchaDefaultFormsConfigData">
+        <!-- Magento default value -->
+        <data key="path">customer/captcha/forms</data>
+        <data key="scope_id">0</data>
+        <data key="label">Forgot password, Login</data>
+        <data key="value">user_forgotpassword,user_login</data>
+    </entity>
     <entity name="StorefrontCustomerCaptchaModeAlwaysConfigData">
         <data key="path">customer/captcha/mode</data>
         <data key="scope_id">0</data>
