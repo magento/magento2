@@ -77,6 +77,7 @@ class ProductListStockItemTest extends TestCase
     public function testAfterGetListSkipsLoadForEmptyResult(): void
     {
         $this->preloader->expects($this->never())->method('preloadStockItems');
+        $this->stockItemFactory->expects($this->never())->method('create');
         $result = $this->createStub(ProductSearchResultsInterface::class);
         $result->method('getItems')->willReturn([]);
 
