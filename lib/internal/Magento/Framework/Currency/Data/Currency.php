@@ -49,48 +49,6 @@ class Currency
     ];
 
     /**
-     * @var array
-     */
-    private $displayLocale = [
-        'AED' => 'ar_AE', 'AFN' => 'fa_AF', 'ALL' => 'sq_AL', 'AMD' => 'hy_AM',
-        'AOA' => 'pt_AO', 'ARS' => 'es_AR', 'AUD' => 'en_AU', 'AWG' => 'nl_AW',
-        'AZN' => 'az_Latn_AZ', 'BAM' => 'bs_BA', 'BBD' => 'en_BB', 'BDT' => 'bn_BD',
-        'BGN' => 'bg_BG', 'BHD' => 'ar_BH', 'BIF' => 'rn_BI', 'BMD' => 'en_BM',
-        'BND' => 'ms_BN', 'BOB' => 'es_BO', 'BRL' => 'pt_BR', 'BSD' => 'en_BS',
-        'BTN' => 'dz_BT', 'BWP' => 'en_BW', 'BYN' => 'be_BY', 'BZD' => 'en_BZ',
-        'CAD' => 'en_CA', 'CDF' => 'sw_CD', 'CLP' => 'es_CL', 'COP' => 'es_CO',
-        'CRC' => 'es_CR', 'CUP' => 'es_CU', 'CVE' => 'kea_CV', 'CZK' => 'cs_CZ',
-        'DJF' => 'aa_DJ', 'DKK' => 'da_DK', 'DOP' => 'es_DO', 'DZD' => 'ar_DZ',
-        'EGP' => 'ar_EG', 'ERN' => 'ti_ER', 'ETB' => 'en_ET', 'FJD' => 'hi_FJ',
-        'FKP' => 'en_FK', 'GEL' => 'ka_GE', 'GHS' => 'ak_GH', 'GIP' => 'en_GI',
-        'GMD' => 'en_GM', 'GNF' => 'fr_GN', 'GTQ' => 'es_GT', 'GYD' => 'en_GY',
-        'HKD' => 'zh_Hant_HK', 'HNL' => 'es_HN', 'HRK' => 'hr_HR', 'HTG' => 'ht_HT',
-        'HUF' => 'hu_HU', 'IDR' => 'id_ID', 'ILS' => 'he_IL', 'INR' => 'hi_IN',
-        'IQD' => 'ar_IQ', 'IRR' => 'fa_IR', 'ISK' => 'is_IS', 'JMD' => 'en_JM',
-        'JOD' => 'ar_JO', 'JPY' => 'ja_JP', 'KES' => 'en_KE', 'KGS' => 'ky_Cyrl_KG',
-        'KHR' => 'km_KH', 'KMF' => 'ar_KM', 'KPW' => 'ko_KP', 'KRW' => 'ko_KR',
-        'KWD' => 'ar_KW', 'KYD' => 'en_KY', 'KZT' => 'ru_KZ', 'LAK' => 'lo_LA',
-        'LBP' => 'ar_LB', 'LKR' => 'si_LK', 'LRD' => 'en_LR', 'LYD' => 'ar_LY',
-        'MAD' => 'ar_EH', 'MDL' => 'ro_MD', 'MGA' => 'mg_MG', 'MKD' => 'mk_MK',
-        'MMK' => 'my_MM', 'MNT' => 'mn_Cyrl_MN', 'MOP' => 'zh_Hant_MO', 'MRU' => 'ar_MR',
-        'MUR' => 'mfe_MU', 'MVR' => 'dv_MV', 'MWK' => 'ny_MW', 'MXN' => 'es_MX',
-        'MYR' => 'ms_MY', 'MZN' => 'pt_MZ', 'NAD' => 'kj_NA', 'NGN' => 'en_NG',
-        'NIO' => 'es_NI', 'NPR' => 'ne_NP', 'OMR' => 'ar_OM', 'PAB' => 'es_PA',
-        'PEN' => 'es_PE', 'PGK' => 'tpi_PG', 'PHP' => 'fil_PH', 'PKR' => 'ur_PK',
-        'PLN' => 'pl_PL', 'PYG' => 'gn_PY', 'QAR' => 'ar_QA', 'RON' => 'ro_RO',
-        'RSD' => 'sr_Cyrl_RS', 'RUB' => 'ru_RU', 'RWF' => 'rw_RW', 'SAR' => 'ar_SA',
-        'SBD' => 'en_SB', 'SCR' => 'crs_SC', 'SDG' => 'ar_SD', 'SEK' => 'sv_SE',
-        'SGD' => 'en_SG', 'SHP' => 'en_SH', 'SLL' => 'kri_SL', 'SOS' => 'sw_SO',
-        'SRD' => 'srn_SR', 'STN' => 'pt_ST', 'SYP' => 'ar_SY', 'SZL' => 'en_SZ',
-        'THB' => 'th_TH', 'TJS' => 'tg_Cyrl_TJ', 'TMT' => 'tk_TM', 'TND' => 'ar_TN',
-        'TOP' => 'to_TO', 'TRY' => 'tr_TR', 'TTD' => 'en_TT', 'TWD' => 'zh_Hant_TW',
-        'TZS' => 'sw_TZ', 'UAH' => 'uk_UA', 'UGX' => 'sw_UG', 'USD' => 'en_GU',
-        'UYU' => 'es_UY', 'UZS' => 'uz_Cyrl_UZ', 'VES' => 'es_VE', 'VND' => 'vi_VN',
-        'VUV' => 'bi_VU', 'WST' => 'sm_WS', 'XCD' => 'en_AI', 'YER' => 'ar_YE',
-        'ZAR' => 'en_ZA', 'ZMW' => 'en_ZM'
-    ];
-
-    /**
      * @param array|string|null $options
      * @param string|null $locale
      * @throws CurrencyException
@@ -276,8 +234,7 @@ class Currency
         $params = $this->checkParams($currency, $locale);
 
         if (!empty($params['currency'])) {
-            $locale = $this->displayLocale[$params['currency']] ?? $params['locale'];
-            $symbol = Currencies::getSymbol($params['currency'], $locale);
+            $symbol = Currencies::getSymbol($params['currency'], $params['locale']);
         } else {
             $symbol = Currencies::getSymbol($params['name'], $params['locale']);
         }

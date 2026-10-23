@@ -122,4 +122,59 @@ class CurrencyTest extends TestCase
             ],
         ];
     }
+
+    /**
+     * @param string $currencyCode
+     * @param string $locale
+     * @param string $expectedSymbol
+     * @return void
+     * @throws \Magento\Framework\Currency\Exception\CurrencyException
+     */
+    #[DataProvider('symbolLocaleDataProvider')]
+    public function testGetSymbolUsesGivenLocale(string $currencyCode, string $locale, string $expectedSymbol): void
+    {
+        $this->assertSame($expectedSymbol, (new Currency())->getSymbol($currencyCode, $locale));
+    }
+
+    /**
+     * @param string $currencyCode
+     * @param string $locale
+     * @param string $expectedSymbol
+     * @return void
+     * @throws \Magento\Framework\Currency\Exception\CurrencyException
+     */
+    #[DataProvider('symbolLocaleDataProvider')]
+    public function testConstructorSymbolUsesGivenLocale(
+        string $currencyCode,
+        string $locale,
+        string $expectedSymbol
+    ): void {
+        $this->assertSame($expectedSymbol, (new Currency($currencyCode, $locale))->getSymbol());
+    }
+
+    /**
+     * @return void
+     * @throws \Magento\Framework\Currency\Exception\CurrencyException
+     */
+    public function testToCurrencyUsesSymbolOfGivenLocale(): void
+    {
+        $result = (new Currency())->toCurrency(5, ['locale' => 'en_US', 'currency' => 'MXN']);
+
+        $this->assertSame('MX$5.00', $result);
+    }
+
+    /**
+     * @return array[]
+     */
+    public static function symbolLocaleDataProvider(): array
+    {
+        return [
+            'MXN_de_DE' => ['MXN', 'de_DE', 'MX$'],
+            'MXN_es_MX' => ['MXN', 'es_MX', '$'],
+            'AUD_en_US' => ['AUD', 'en_US', 'A$'],
+            'AUD_en_AU' => ['AUD', 'en_AU', '$'],
+            'USD_en_US' => ['USD', 'en_US', '$'],
+            'EUR_de_DE' => ['EUR', 'de_DE', '€'],
+        ];
+    }
 }
