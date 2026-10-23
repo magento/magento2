@@ -36,7 +36,7 @@ class Iterator implements \Iterator, \ArrayAccess
      */
     public function __construct(Data $configData, ExchangeConfigItemFactory $itemFactory)
     {
-        $this->data = $configData->get();
+        $this->data = $configData->getExchanges();
         $this->object = $itemFactory->create();
         $this->rewind();
     }
@@ -81,7 +81,7 @@ class Iterator implements \Iterator, \ArrayAccess
     #[\ReturnTypeWillChange]
     public function key()
     {
-        key($this->data);
+        return key($this->data);
     }
 
     /**

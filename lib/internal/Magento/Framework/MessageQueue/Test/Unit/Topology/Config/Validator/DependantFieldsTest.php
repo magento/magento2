@@ -93,4 +93,20 @@ class DependantFieldsTest extends TestCase
         ];
         $this->model->validate($configData);
     }
+
+    public function testValidateSkipsQueueDeclarations(): void
+    {
+        $configData = [
+            'queue--queue01--amqp' => [
+                'name' => 'queue01',
+                'type' => 'queue',
+                'connection' => 'amqp',
+                'durable' => true,
+                'autoDelete' => false,
+                'arguments' => [],
+            ],
+        ];
+        $this->model->validate($configData);
+        $this->addToAssertionCount(1);
+    }
 }

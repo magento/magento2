@@ -56,8 +56,8 @@
 
     <xs:element name="config">
         <xs:complexType>
-            <xs:sequence>
-                <xs:element type="exchangeConfigType" name="exchange" maxOccurs="unbounded" minOccurs="0">
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element type="exchangeConfigType" name="exchange">
                     <xs:unique name="unique-binding-id">
                         <xs:annotation>
                             <xs:documentation>
@@ -68,7 +68,8 @@
                         <xs:field xpath="@id"/>
                     </xs:unique>
                 </xs:element>
-            </xs:sequence>
+                <xs:element type="queueConfigType" name="queue"/>
+            </xs:choice>
         </xs:complexType>
         <xs:unique name="unique-exchange-name-connection">
             <xs:annotation>
@@ -77,6 +78,16 @@
                 </xs:documentation>
             </xs:annotation>
             <xs:selector xpath="exchange"/>
+            <xs:field xpath="@name"/>
+            <xs:field xpath="@connection"/>
+        </xs:unique>
+        <xs:unique name="unique-queue-name-connection">
+            <xs:annotation>
+                <xs:documentation>
+                    Queue name must be unique
+                </xs:documentation>
+            </xs:annotation>
+            <xs:selector xpath="queue"/>
             <xs:field xpath="@name"/>
             <xs:field xpath="@connection"/>
         </xs:unique>
@@ -104,6 +115,16 @@
         <xs:attribute type="xs:boolean" name="durable" use="optional"/>
         <xs:attribute type="xs:boolean" name="autoDelete" use="optional"/>
         <xs:attribute type="xs:boolean" name="internal" use="optional"/>
+    </xs:complexType>
+
+    <xs:complexType name="queueConfigType">
+        <xs:sequence>
+            <xs:element type="argumentsType" name="arguments" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute type="xs:string" name="name" use="required"/>
+        <xs:attribute type="xs:string" name="connection" use="optional"/>
+        <xs:attribute type="xs:boolean" name="durable" use="optional"/>
+        <xs:attribute type="xs:boolean" name="autoDelete" use="optional"/>
     </xs:complexType>
 
     <xs:simpleType name="exchangeType">
