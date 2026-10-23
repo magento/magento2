@@ -3,6 +3,7 @@
  * Copyright 2014 Adobe
  * All Rights Reserved.
  */
+use Magento\Framework\App\Action\Action;
 ?>
 <?php
 
@@ -78,14 +79,33 @@ if ($exist = ($block->getProductCollection() && $block->getProductCollection()->
                                                             </button>
                                                         <?php else :?>
                                                             <?php
-                                                                $postDataHelper = $this->helper(Magento\Framework\Data\Helper\PostHelper::class);
-                                                                $postData = $postDataHelper->getPostData($block->getAddToCartUrl($_item), ['product' => $_item->getEntityId()])
+                                                                $postDataHelper = $this->helper(
+                                                                    Magento\Framework\Data\Helper\PostHelper::class
+                                                                );
+                                                                $postData = $postDataHelper->getPostData(
+                                                                    $block->escapeUrl($block->getAddToCartUrl($_item)),
+                                                                    ['product' => (int) $_item->getEntityId()]
+                                                                );
+                                                                $postParams = json_decode($postData, true);
                                                             ?>
-                                                            <button class="action tocart primary"
-                                                                    data-post='<?= /* @noEscape */ $postData ?>'
-                                                                    type="button" title="<?= $block->escapeHtmlAttr(__('Add to Cart')) ?>">
-                                                                <span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
-                                                            </button>
+                                                            <form data-role="tocart-form"
+                                                                  data-product-sku="<?= $block->escapeHtmlAttr($_item->getSku()) ?>"
+                                                                  action="<?= $block->escapeUrl($postParams['action']) ?>"
+                                                                  method="post"
+                                                                  data-mage-init='{"catalogAddToCart": {}}'>
+                                                                <input type="hidden"
+                                                                       name="product"
+                                                                       value="<?= /* @noEscape */ (int) $postParams['data']['product'] ?>">
+                                                                <input type="hidden"
+                                                                       name="<?= /* @noEscape */ Action::PARAM_NAME_URL_ENCODED ?>"
+                                                                       value="<?= /* @noEscape */ $postParams['data'][Action::PARAM_NAME_URL_ENCODED] ?>">
+                                                                <?= $block->getBlockHtml('formkey') ?>
+                                                                <button type="submit"
+                                                                        title="<?= $block->escapeHtmlAttr(__('Add to Cart')) ?>"
+                                                                        class="action tocart primary">
+                                                                    <span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
+                                                                </button>
+                                                            </form>
                                                         <?php endif; ?>
                                                     <?php else :?>
                                                         <?php if ($_item->isAvailable()) :?>
