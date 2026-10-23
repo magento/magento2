@@ -148,6 +148,10 @@ class CategoryRepository implements CategoryRepositoryInterface, ResetAfterReque
      */
     public function get($categoryId, $storeId = null)
     {
+        if ($categoryId === null || $categoryId === '') {
+            throw NoSuchEntityException::singleField('id', $categoryId);
+        }
+
         $cacheKey = (string) ($storeId ?? $this->storeManager->getStore()->getId());
 
         if (!isset($this->instances[$categoryId][$cacheKey])) {

@@ -148,6 +148,33 @@ class CategoryRepositoryTest extends TestCase
         $this->assertEquals($categoryMock, $this->model->get($categoryId));
     }
 
+    /**
+     * Empty category id must fail fast without touching the instance cache (PHP 8.5 null array offset).
+     *
+     * @param mixed $categoryId
+     * @return void
+     */
+    #[DataProvider('emptyCategoryIdDataProvider')]
+    public function testGetWithEmptyCategoryIdThrowsNoSuchEntity($categoryId): void
+    {
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+        $this->categoryFactoryMock->expects($this->never())->method('create');
+        $this->storeManagerMock->expects($this->never())->method('getStore');
+
+        $this->model->get($categoryId);
+    }
+
+    /**
+     * @return array
+     */
+    public static function emptyCategoryIdDataProvider(): array
+    {
+        return [
+            'null id' => [null],
+            'empty string id' => [''],
+        ];
+    }
+
     public function testGetWhenCategoryDoesNotExist()
     {
         $this->expectException('Magento\Framework\Exception\NoSuchEntityException');
