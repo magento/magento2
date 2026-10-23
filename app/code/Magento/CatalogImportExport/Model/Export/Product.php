@@ -1493,7 +1493,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     }
 
     /**
-     * Keep staging failures inside the existing batch-level logging boundary.
+     * Keep batch failures out of successful export completion.
      *
      * @param callable $rowProcessor
      * @return int
@@ -1540,6 +1540,10 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             }
         } catch (\Exception $exception) {
             $this->_logger->critical($exception);
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Error during export process occurred. Please check logs for detail'),
+                $exception
+            );
         } finally {
             $this->currentStoreCollections = [];
         }
@@ -1683,6 +1687,10 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             $this->commitPendingLastProcessedLinkFieldValue();
         } catch (\Exception $e) {
             $this->_logger->critical($e);
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Error during export process occurred. Please check logs for detail'),
+                $e
+            );
         }
 
         return $processedRows;

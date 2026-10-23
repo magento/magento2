@@ -329,18 +329,47 @@ class ProductTest extends TestCase
         $this->assertEquals($expectedResult, $result);
     }
 
-    public function testExportCountZeroBreakInternalCalls()
+    public function testExportStopsWhenFirstPageIsEmpty(): void
     {
-        $this->markTestSkipped(
-            'Legacy buffered-path unit test is not applicable after export switched to streamed-only flow.'
-        );
+        $product = $this->createBatchExportProduct([[]]);
+        $this->rowCustomizer->expects($this->once())->method('prepareData')
+            ->with($this->isInstanceOf(ProductCollection::class), []);
+        $this->rowCustomizer->expects($this->never())->method('addData');
+        $this->writer->expects($this->never())->method('setHeaderCols');
+        $this->writer->expects($this->never())->method('writeRow');
+        $this->writer->expects($this->once())->method('getContents')->willReturn('');
+        $this->logger->expects($this->never())->method('critical');
+
+        self::assertSame('', $product->export());
     }
 
-    public function testExportCurPageEqualToLastBreakInternalCalls()
+    public function testExportStopsAfterLastCandidatePage(): void
     {
-        $this->markTestSkipped(
-            'Legacy buffered-path unit test is not applicable after export switched to streamed-only flow.'
+        $product = $this->createBatchExportProduct([
+            [1 => [0 => $this->createExportRow(1)], 2 => [0 => $this->createExportRow(2)]],
+            [],
+        ]);
+        $preparedProductIds = [];
+        $this->rowCustomizer->expects($this->exactly(2))->method('prepareData')->willReturnCallback(
+            static function ($collection, array $productIds) use (&$preparedProductIds): void {
+                $preparedProductIds[] = $productIds;
+            }
         );
+        $this->rowCustomizer->method('addData')->willReturnArgument(0);
+        $this->writer->expects($this->once())->method('setHeaderCols')->with(['sku', 'name']);
+        $writtenSkus = [];
+        $this->writer->expects($this->exactly(2))->method('writeRow')->willReturnCallback(
+            static function (array $row) use (&$writtenSkus): void {
+                $writtenSkus[] = $row['sku'];
+            }
+        );
+        $this->writer->expects($this->once())->method('getContents')->willReturn('completed');
+        $this->logger->expects($this->never())->method('critical');
+
+        self::assertSame('completed', $product->export());
+        self::assertSame([[1, 2], []], $preparedProductIds);
+        self::assertSame(['sku-1', 'sku-2'], $writtenSkus);
+        self::assertSame(2, $this->getPropertyValue($product, 'lastProcessedLinkFieldValue'));
     }
 
     public function testExportContinuesAfterEveryProductInBatchFailsConversion(): void
@@ -391,25 +420,42 @@ class ProductTest extends TestCase
         $this->assertSame('partial', $product->export());
     }
 
-    public function testExportLogsBatchPreparationFailureAndReturnsContents(): void
+    #[DataProvider('batchPreparationFailureDataProvider')]
+    public function testExportPropagatesBatchPreparationFailure(int $failurePage): void
     {
-        $product = $this->createBatchExportProduct([[1 => [0 => $this->createExportRow(1)]]]);
+        $batches = [];
+        foreach (range(1, $failurePage) as $productId) {
+            $batches[] = [$productId => [0 => $this->createExportRow($productId)]];
+        }
+        $product = $this->createBatchExportProduct($batches);
         $failure = new \RuntimeException('Cannot prepare export rows');
-        $this->rowCustomizer->method('prepareData')->willThrowException($failure);
-        $this->writer->expects($this->never())->method('writeRow');
-        $this->writer->expects($this->once())->method('getContents')->willReturn('partial');
-        $messages = [];
-        $this->logger->expects($this->exactly(2))->method('critical')
-            ->willReturnCallback(static function ($message) use (&$messages): void {
-                $messages[] = $message;
-            });
-
-        $this->assertSame('partial', $product->export());
-        $this->assertSame($failure, $messages[0]);
-        $this->assertSame(
-            'Product export pagination did not advance. Last processed entity_id: 0',
-            $messages[1]
+        $preparedPages = 0;
+        $this->rowCustomizer->method('prepareData')->willReturnCallback(
+            static function () use (&$preparedPages, $failurePage, $failure): void {
+                if (++$preparedPages === $failurePage) {
+                    throw $failure;
+                }
+            }
         );
+        $this->rowCustomizer->method('addData')->willReturnArgument(0);
+        $this->writer->expects($this->exactly($failurePage - 1))->method('writeRow');
+        $this->writer->expects($this->never())->method('getContents');
+        $this->logger->expects($this->once())->method('critical')->with($failure);
+
+        try {
+            $product->export();
+            self::fail('A batch preparation failure must not complete the export.');
+        } catch (LocalizedException $exception) {
+            self::assertSame($failure, $exception->getPrevious());
+        }
+    }
+
+    public static function batchPreparationFailureDataProvider(): array
+    {
+        return [
+            'before any output' => [1],
+            'after a completed page' => [2]
+        ];
     }
 
     public function testExportRetainsEarlierStoreRowWhenLaterStoreConversionFails(): void
