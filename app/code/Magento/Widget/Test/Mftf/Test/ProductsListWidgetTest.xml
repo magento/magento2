@@ -35,7 +35,7 @@
         <!-- Create a CMS page containing the Products List widget -->
         <actionGroup ref="AdminOpenCMSPagesGridActionGroup" stepKey="amOnCmsList"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForCmsList"/>
-        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clickClearFilters"/>
         <actionGroup ref="AdminClickAddNewPageOnPagesGridActionGroup" stepKey="clickAddNewPageButton"/>
         <actionGroup ref="AdminCmsPageSetTitleActionGroup" stepKey="fillPageTitle">
             <argument name="newTitle" value="{{_newDefaultCmsPage.title}}"/>
@@ -63,7 +63,7 @@
         <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeSuccessMessage">
             <argument name="message" value="You saved the page."/>
         </actionGroup>
-        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearGridFilters"/>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilters"/>
         <!-- Verify CMS page on storefront -->
         <waitForElementVisible selector="{{CmsPagesPageActionsSection.select(_newDefaultCmsPage.title)}}" stepKey="waitForCMSPageListItem" />
         <click selector="{{CmsPagesPageActionsSection.select(_newDefaultCmsPage.title)}}" stepKey="clickSelect" />
