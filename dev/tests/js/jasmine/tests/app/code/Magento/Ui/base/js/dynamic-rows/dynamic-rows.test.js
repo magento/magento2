@@ -3,7 +3,6 @@
  * All Rights Reserved.
  */
 
-/* eslint-disable max-nested-callbacks */
 define([
     'underscore',
     'Magento_Ui/js/dynamic-rows/dynamic-rows',
