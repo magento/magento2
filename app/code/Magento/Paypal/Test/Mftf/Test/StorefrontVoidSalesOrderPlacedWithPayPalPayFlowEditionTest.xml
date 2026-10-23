@@ -24,6 +24,7 @@
         <remove keyForRemoval="checkGrandTotal"/>
         <remove keyForRemoval="clickOnCommentsHistory"/>
         <remove keyForRemoval="seeOrderHistoryNotes"/>
+        <waitForElementVisible selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="waitForOrderNumberToBeVisible" after="waitForLoadSuccessPageTitle"/>
         <!--Void created order -->
         <actionGroup ref="AdminVoidPendingOrderActionGroup" stepKey="voidPendingOrder"/>
         <actionGroup ref="AdminOrderViewCheckStatusActionGroup" stepKey="checkOrderStatus">

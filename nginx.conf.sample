@@ -189,6 +189,10 @@ location /media/customer/ {
     deny all;
 }
 
+location /media/customer_address/ {
+    deny all;
+}
+
 location /media/downloadable/ {
     deny all;
 }
