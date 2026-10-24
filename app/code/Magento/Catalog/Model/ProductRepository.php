@@ -12,6 +12,7 @@ use Magento\Catalog\Api\Data\ProductExtension;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
 use Magento\Catalog\Model\Product\Gallery\MimeTypeExtensionMap;
+use Magento\Catalog\Model\ProductRepository\ListItemsPreloader;
 use Magento\Catalog\Model\ProductRepository\MediaGalleryProcessor;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Eav\Model\Entity\Attribute\Exception as AttributeException;
@@ -188,6 +189,11 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     private $scopeOverriddenValue;
 
     /**
+     * @var ListItemsPreloader
+     */
+    private $listItemsPreloader;
+
+    /**
      * ProductRepository constructor.
      * @param ProductFactory $productFactory
      * @param \Magento\Catalog\Api\Data\ProductSearchResultsInterfaceFactory $searchResultsFactory
@@ -214,6 +220,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @param ReadExtensions $readExtensions
      * @param CategoryLinkManagementInterface $linkManagement
      * @param ScopeOverriddenValue|null $scopeOverriddenValue
+     * @param ListItemsPreloader|null $listItemsPreloader
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -242,7 +249,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $cacheLimit = 1000,
         ?ReadExtensions $readExtensions = null,
         ?CategoryLinkManagementInterface $linkManagement = null,
-        ?ScopeOverriddenValue $scopeOverriddenValue = null
+        ?ScopeOverriddenValue $scopeOverriddenValue = null,
+        ?ListItemsPreloader $listItemsPreloader = null
     ) {
         $this->productFactory = $productFactory;
         $this->collectionFactory = $collectionFactory;
@@ -270,6 +278,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             ->get(CategoryLinkManagementInterface::class);
         $this->scopeOverriddenValue = $scopeOverriddenValue ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(ScopeOverriddenValue::class);
+        $this->listItemsPreloader = $listItemsPreloader ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(ListItemsPreloader::class);
     }
 
     /**
@@ -748,8 +758,9 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      */
     private function addExtensionAttributes(Collection $collection) : Collection
     {
+        $arguments = $this->listItemsPreloader->execute($collection->getItems());
         foreach ($collection->getItems() as $item) {
-            $this->readExtensions->execute($item);
+            $this->readExtensions->execute($item, $arguments[$item->getId()] ?? []);
         }
         return $collection;
     }
