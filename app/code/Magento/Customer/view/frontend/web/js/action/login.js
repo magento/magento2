@@ -24,8 +24,6 @@ define([
             messageContainer = messageContainer || globalMessageList;
             let customerLoginUrl = 'customer/ajax/login';
 
-            $('input:focus').blur();
-
             if (loginData.customerLoginUrl) {
                 customerLoginUrl = loginData.customerLoginUrl;
                 delete loginData.customerLoginUrl;
