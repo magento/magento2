@@ -7,12 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Model;
 
+use Magento\Customer\Model\Config\Share;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\MailException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Mail\Template\SenderResolverInterface;
 use Magento\Store\Model\App\Emulation;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Mail\Template\TransportBuilder;
 use Magento\Customer\Helper\View as CustomerViewHelper;
@@ -119,6 +121,11 @@ class EmailNotification implements EmailNotificationInterface
     private AccountConfirmation $accountConfirmation;
 
     /**
+     * @var Share
+     */
+    private Share $shareConfig;
+
+    /**
      * @param CustomerRegistry $customerRegistry
      * @param StoreManagerInterface $storeManager
      * @param TransportBuilder $transportBuilder
@@ -128,6 +135,7 @@ class EmailNotification implements EmailNotificationInterface
      * @param SenderResolverInterface|null $senderResolver
      * @param Emulation|null $emulation
      * @param AccountConfirmation|null $accountConfirmation
+     * @param Share|null $shareConfig
      */
     public function __construct(
         CustomerRegistry $customerRegistry,
@@ -138,7 +146,8 @@ class EmailNotification implements EmailNotificationInterface
         ScopeConfigInterface $scopeConfig,
         ?SenderResolverInterface $senderResolver = null,
         ?Emulation $emulation = null,
-        ?AccountConfirmation $accountConfirmation = null
+        ?AccountConfirmation $accountConfirmation = null,
+        ?Share $shareConfig = null
     ) {
         $this->customerRegistry = $customerRegistry;
         $this->storeManager = $storeManager;
@@ -150,6 +159,7 @@ class EmailNotification implements EmailNotificationInterface
         $this->emulation = $emulation ?? ObjectManager::getInstance()->get(Emulation::class);
         $this->accountConfirmation = $accountConfirmation ?? ObjectManager::getInstance()
                 ->get(AccountConfirmation::class);
+        $this->shareConfig = $shareConfig ?? ObjectManager::getInstance()->get(Share::class);
     }
 
     /**
@@ -195,7 +205,7 @@ class EmailNotification implements EmailNotificationInterface
      */
     private function emailAndPasswordChanged(CustomerInterface $customer, $email): void
     {
-        $storeId = $this->storeManager->getStore()->getId();
+        $storeId = $customer->getStoreId();
         if ($storeId === null) {
             $storeId = $this->getWebsiteStoreId($customer);
         }
@@ -223,7 +233,7 @@ class EmailNotification implements EmailNotificationInterface
      */
     private function emailChanged(CustomerInterface $customer, $email): void
     {
-        $storeId = $this->storeManager->getStore()->getId();
+        $storeId = $customer->getStoreId();
         if ($storeId === null) {
             $storeId = $this->getWebsiteStoreId($customer);
         }
@@ -250,7 +260,7 @@ class EmailNotification implements EmailNotificationInterface
      */
     private function passwordReset(CustomerInterface $customer): void
     {
-        $storeId = $this->storeManager->getStore()->getId();
+        $storeId = $customer->getStoreId();
         if ($storeId === null) {
             $storeId = $this->getWebsiteStoreId($customer);
         }
@@ -346,6 +356,36 @@ class EmailNotification implements EmailNotificationInterface
     }
 
     /**
+     * Get the storefront the request was initiated from, if the customer can use it
+     *
+     * Falls back to the customer's store, then to the customer's website default store,
+     * when called from the admin area or from a store the customer account doesn't belong to.
+     *
+     * @param CustomerInterface $customer
+     * @return int
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
+     */
+    private function getInitiatingStoreId(CustomerInterface $customer): int
+    {
+        $currentStore = $this->storeManager->getStore();
+        $currentStoreId = (int)$currentStore->getId();
+        if ($currentStoreId !== Store::DEFAULT_STORE_ID
+            && ($this->shareConfig->isGlobalScope()
+                || (int)$currentStore->getWebsiteId() === (int)$customer->getWebsiteId())
+        ) {
+            return $currentStoreId;
+        }
+
+        $storeId = $customer->getStoreId();
+        if ($storeId === null) {
+            return $this->getWebsiteStoreId($customer);
+        }
+
+        return (int)$storeId;
+    }
+
+    /**
      * Send email with new customer password
      *
      * @param CustomerInterface $customer
@@ -356,10 +396,7 @@ class EmailNotification implements EmailNotificationInterface
      */
     public function passwordReminder(CustomerInterface $customer): void
     {
-        $storeId = $this->storeManager->getStore()->getId();
-        if ($storeId === null) {
-            $storeId = $this->getWebsiteStoreId($customer);
-        }
+        $storeId = $this->getInitiatingStoreId($customer);
 
         $customerEmailData = $this->getFullCustomerObject($customer);
 
@@ -383,10 +420,7 @@ class EmailNotification implements EmailNotificationInterface
      */
     public function passwordResetConfirmation(CustomerInterface $customer): void
     {
-        $storeId = $this->storeManager->getStore()->getId();
-        if ($storeId === null) {
-            $storeId = $this->getWebsiteStoreId($customer);
-        }
+        $storeId = $this->getInitiatingStoreId($customer);
 
         $customerEmailData = $this->getFullCustomerObject($customer);
 

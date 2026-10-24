@@ -10,6 +10,7 @@ namespace Magento\Customer\Test\Unit\Model;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Helper\View;
 use Magento\Customer\Model\AccountConfirmation;
+use Magento\Customer\Model\Config\Share;
 use Magento\Customer\Model\CustomerRegistry;
 use Magento\Customer\Model\Data\CustomerSecure;
 use Magento\Customer\Model\EmailNotification;
@@ -128,6 +129,11 @@ class EmailNotificationTest extends TestCase
     private $accountConfirmationMock;
 
     /**
+     * @var Share|MockObject
+     */
+    private $shareConfigMock;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -166,6 +172,8 @@ class EmailNotificationTest extends TestCase
             ->method('isCustomerEmailChangedConfirmRequired')
             ->willReturn(false);
 
+        $this->shareConfigMock = $this->createMock(Share::class);
+
         $objectManager = new ObjectManagerHelper($this);
 
         $this->model = $objectManager->getObject(
@@ -179,7 +187,8 @@ class EmailNotificationTest extends TestCase
                 'scopeConfig' => $this->scopeConfigMock,
                 'senderResolver' => $this->senderResolverMock,
                 'emulation' => $this->emulation,
-                'accountConfirmation' => $this->accountConfirmationMock
+                'accountConfirmation' => $this->accountConfirmationMock,
+                'shareConfig' => $this->shareConfigMock
             ]
         );
     }
@@ -234,6 +243,9 @@ class EmailNotificationTest extends TestCase
          * @var MockObject $origCustomerMock
          */
         $origCustomerMock = $this->createMock(CustomerInterface::class);
+        $origCustomerMock->expects($this->any())
+            ->method('getStoreId')
+            ->willReturn($customerStoreId);
         $origCustomerMock->expects($this->any())
             ->method('getId')
             ->willReturn(self::STUB_CUSTOMER_ID);
@@ -791,6 +803,9 @@ class EmailNotificationTest extends TestCase
             ->method('getWebsiteId')
             ->willReturn(self::STUB_CUSTOMER_WEBSITE_ID);
         $customerMock->expects($this->any())
+            ->method('getStoreId')
+            ->willReturn($customerStoreId);
+        $customerMock->expects($this->any())
             ->method('getId')
             ->willReturn(self::STUB_CUSTOMER_ID);
         $customerMock->expects($this->any())
@@ -801,9 +816,7 @@ class EmailNotificationTest extends TestCase
             ->method('getId')
             ->willReturn($customerStoreId);
 
-        $this->storeManagerMock
-            ->method('getStore')
-            ->willReturn($this->storeMock);
+        $this->mockAdminAsCurrentStore();
 
         $websiteMock = $this->createPartialMock(Website::class, ['getStoreIds']);
         $websiteMock->expects($this->any())
@@ -897,6 +910,9 @@ class EmailNotificationTest extends TestCase
             ->method('getWebsiteId')
             ->willReturn(self::STUB_CUSTOMER_WEBSITE_ID);
         $customer->expects($this->any())
+            ->method('getStoreId')
+            ->willReturn($customerStoreId);
+        $customer->expects($this->any())
             ->method('getId')
             ->willReturn(self::STUB_CUSTOMER_ID);
         $customer->expects($this->any())
@@ -905,10 +921,7 @@ class EmailNotificationTest extends TestCase
         $this->storeMock->expects($this->any())
             ->method('getId')
             ->willReturn($defaultStoreId);
-        $this->storeManagerMock
-            ->method('getStore')
-            ->with($defaultStoreId)
-            ->willReturnOnConsecutiveCalls($this->storeMock, $this->storeMock);
+        $this->mockAdminAsCurrentStore();
         $websiteMock = $this->createPartialMock(Website::class, ['getStoreIds']);
         $websiteMock->expects($this->any())
             ->method('getStoreIds')
@@ -1017,10 +1030,7 @@ class EmailNotificationTest extends TestCase
             ->method('getWebsite')
             ->with(self::STUB_CUSTOMER_WEBSITE_ID)
             ->willReturn($websiteMock);
-        $this->storeManagerMock->expects($this->once())
-            ->method('getStore')
-            ->with($defaultStoreId)
-            ->willReturn($this->storeMock);
+        $this->mockAdminAsCurrentStore();
 
         $this->customerRegistryMock->expects($this->once())
             ->method('retrieveSecureData')
@@ -1101,6 +1111,10 @@ class EmailNotificationTest extends TestCase
 
         $customerMock->expects($this->never())
             ->method('getWebsiteId');
+
+        $customerMock->expects($this->once())
+            ->method('getStoreId')
+            ->willReturn($customerStoreId);
         $customerMock->expects($this->any())
             ->method('getId')
             ->willReturn(self::STUB_CUSTOMER_ID);
@@ -1112,9 +1126,7 @@ class EmailNotificationTest extends TestCase
             ->method('getId')
             ->willReturn($customerStoreId);
 
-        $this->storeManagerMock
-            ->method('getStore')
-            ->willReturn($this->storeMock);
+        $this->mockAdminAsCurrentStore();
 
         $this->customerRegistryMock->expects($this->once())
             ->method('retrieveSecureData')
@@ -1198,6 +1210,9 @@ class EmailNotificationTest extends TestCase
         $customer = $this->createMock(CustomerInterface::class);
         $customer->expects($this->never())
             ->method('getWebsiteId');
+        $customer->expects($this->any())
+            ->method('getStoreId')
+            ->willReturn($customerStoreId);
         $customer->expects($this->any())
             ->method('getId')
             ->willReturn(self::STUB_CUSTOMER_ID);
@@ -1510,6 +1525,132 @@ class EmailNotificationTest extends TestCase
             null,
             $customer->getStoreId()
         );
+    }
+
+    /**
+     * Test password reset emails are sent from the store the request was initiated from
+     *
+     * @param string $method
+     * @param string $templatePath
+     * @param int $currentStoreId
+     * @param int $currentWebsiteId
+     * @param bool $isGlobalScope
+     * @param int $expectedStoreId
+     *
+     * @return void
+     */
+    #[DataProvider('initiatingStoreDataProvider')]
+    public function testPasswordResetEmailsUseInitiatingStore(
+        string $method,
+        string $templatePath,
+        int $currentStoreId,
+        int $currentWebsiteId,
+        bool $isGlobalScope,
+        int $expectedStoreId
+    ): void {
+        $customerData = ['key' => 'value'];
+        $senderValues = ['name' => self::STUB_SENDER, 'email' => self::STUB_SENDER];
+
+        $customerMock = $this->createMock(CustomerInterface::class);
+        $customerMock->method('getWebsiteId')->willReturn(self::STUB_CUSTOMER_WEBSITE_ID);
+        $customerMock->method('getStoreId')->willReturn(1);
+        $customerMock->method('getId')->willReturn(self::STUB_CUSTOMER_ID);
+        $customerMock->method('getEmail')->willReturn(self::STUB_CUSTOMER_EMAIL);
+
+        $currentStoreMock = $this->createMock(Store::class);
+        $currentStoreMock->method('getId')->willReturn($currentStoreId);
+        $currentStoreMock->method('getWebsiteId')->willReturn($currentWebsiteId);
+        $this->storeManagerMock
+            ->method('getStore')
+            ->willReturnCallback(function ($storeId = null) use ($currentStoreMock, $expectedStoreId) {
+                if ($storeId === null) {
+                    return $currentStoreMock;
+                }
+                $this->assertSame($expectedStoreId, $storeId);
+                return $this->storeMock;
+            });
+        $this->storeManagerMock->expects($this->never())
+            ->method('getWebsite');
+        $this->shareConfigMock->method('isGlobalScope')->willReturn($isGlobalScope);
+
+        $this->customerRegistryMock->method('retrieveSecureData')->willReturn($this->customerSecureMock);
+        $this->dataProcessorMock->method('buildOutputDataArray')->willReturn($customerData);
+        $this->customerViewHelperMock->method('getCustomerName')->willReturn(self::STUB_CUSTOMER_NAME);
+
+        $this->scopeConfigMock->expects($this->exactly(2))
+            ->method('getValue')
+            ->willReturnMap([
+                [$templatePath, ScopeInterface::SCOPE_STORE, $expectedStoreId, self::STUB_EMAIL_IDENTIFIER],
+                [
+                    EmailNotification::XML_PATH_FORGOT_EMAIL_IDENTITY,
+                    ScopeInterface::SCOPE_STORE,
+                    $expectedStoreId,
+                    self::STUB_SENDER
+                ]
+            ]);
+        $this->senderResolverMock->expects($this->once())
+            ->method('resolve')
+            ->with(self::STUB_SENDER, $expectedStoreId)
+            ->willReturn($senderValues);
+        $this->emulation->expects($this->once())
+            ->method('startEnvironmentEmulation')
+            ->with($expectedStoreId, Area::AREA_FRONTEND);
+
+        $this->mockDefaultTransportBuilder(
+            self::STUB_EMAIL_IDENTIFIER,
+            $expectedStoreId,
+            $senderValues,
+            self::STUB_CUSTOMER_EMAIL,
+            self::STUB_CUSTOMER_NAME,
+            ['customer' => $this->customerSecureMock, 'store' => $this->storeMock]
+        );
+
+        $this->model->$method($customerMock);
+    }
+
+    /**
+     * Customer belongs to website 1 and was registered in store 1
+     *
+     * @return array
+     */
+    public static function initiatingStoreDataProvider(): array
+    {
+        $methods = [
+            'passwordResetConfirmation' => EmailNotification::XML_PATH_FORGOT_EMAIL_TEMPLATE,
+            'passwordReminder' => EmailNotification::XML_PATH_REMIND_EMAIL_TEMPLATE,
+        ];
+        $cases = [
+            'storefront of customer website' => [2, 1, false, 2],
+            'admin area' => [Store::DEFAULT_STORE_ID, 0, false, 1],
+            'storefront of other website' => [3, 2, false, 1],
+            'storefront of other website, global account sharing' => [3, 2, true, 3],
+        ];
+
+        $data = [];
+        foreach ($methods as $method => $templatePath) {
+            foreach ($cases as $name => $case) {
+                $data[$method . ' from ' . $name] = [$method, $templatePath, ...$case];
+            }
+        }
+
+        return $data;
+    }
+
+    /**
+     * Make the admin store the current store, any other store resolves to $this->storeMock
+     *
+     * @return void
+     */
+    private function mockAdminAsCurrentStore(): void
+    {
+        $adminStoreMock = $this->createMock(Store::class);
+        $adminStoreMock->method('getId')->willReturn(Store::DEFAULT_STORE_ID);
+
+        $this->storeManagerMock
+            ->method('getStore')
+            ->willReturnCallback(function ($storeId = null) use ($adminStoreMock) {
+                return $storeId === null ? $adminStoreMock : $this->storeMock;
+            });
     }
 
     /**
