@@ -8,22 +8,22 @@ namespace Magento\Framework\Locale;
 class Currency implements \Magento\Framework\Locale\CurrencyInterface
 {
     /**
-     * Default currency
+     * Currency code used when the requested currency cannot be created
      */
-    const DEFAULT_CURRENCY = 'USD';
+    public const DEFAULT_CURRENCY = 'USD';
 
     /**#@+
      * Currency Options
      */
-    const CURRENCY_OPTION_SYMBOL = 'symbol';
+    public const CURRENCY_OPTION_SYMBOL = 'symbol';
 
-    const CURRENCY_OPTION_CURRENCY = 'currency';
+    public const CURRENCY_OPTION_CURRENCY = 'currency';
 
-    const CURRENCY_OPTION_NAME = 'name';
+    public const CURRENCY_OPTION_NAME = 'name';
 
-    const CURRENCY_OPTION_DISPLAY = 'display';
-    
-    const CURRENCY_OPTION_PRECISION = 'precision';
+    public const CURRENCY_OPTION_DISPLAY = 'display';
+
+    public const CURRENCY_OPTION_PRECISION = 'precision';
 
     /**
      * @var array
@@ -79,9 +79,14 @@ class Currency implements \Magento\Framework\Locale\CurrencyInterface
         if (!isset(self::$_currencyCache[$this->_localeResolver->getLocale() ?? ''][$currency])) {
             $options = [];
             try {
+                $locale = $this->_localeResolver->getLocale() ?? '';
                 $currencyObject = $this->_currencyFactory->create(
-                    ['options' => $currency, 'locale' => $this->_localeResolver->getLocale() ?? '']
+                    ['options' => $currency, 'locale' => $locale]
                 );
+                $precision = $this->getPrecision($locale, $currency);
+                if ($precision !== null) {
+                    $options[self::CURRENCY_OPTION_PRECISION] = $precision;
+                }
             } catch (\Exception $e) {
                 $currencyObject = $this->_currencyFactory->create(
                     ['options' => $this->getDefaultCurrency(), 'locale' => $this->_localeResolver->getLocale() ?? '']
@@ -90,9 +95,6 @@ class Currency implements \Magento\Framework\Locale\CurrencyInterface
                 $options[self::CURRENCY_OPTION_CURRENCY] = $currency;
                 $options[self::CURRENCY_OPTION_SYMBOL] = $currency;
             }
-            
-            $numberFormatter = new NumberFormatter('@currency=' . $currency, NumberFormatter::CURRENCY);
-            $options[self::CURRENCY_OPTION_PRECISION] = $numberFormatter->getAttribute(NumberFormatter::MAX_FRACTION_DIGITS);
 
             $options = new \Magento\Framework\DataObject($options);
             $this->_eventManager->dispatch(
@@ -105,5 +107,26 @@ class Currency implements \Magento\Framework\Locale\CurrencyInterface
         }
         \Magento\Framework\Profiler::stop('locale/currency');
         return self::$_currencyCache[$this->_localeResolver->getLocale() ?? ''][$currency];
+    }
+
+    /**
+     * Read ICU currency precision without preventing currency fallback or observer overrides.
+     *
+     * @param string $locale
+     * @param string $currency
+     * @return int|null
+     */
+    private function getPrecision(string $locale, string $currency): ?int
+    {
+        try {
+            $formatter = new \NumberFormatter($locale ?: 'en_US', \NumberFormatter::CURRENCY);
+            if (!$formatter->setTextAttribute(\NumberFormatter::CURRENCY_CODE, $currency)) {
+                return null;
+            }
+            $precision = $formatter->getAttribute(\NumberFormatter::MAX_FRACTION_DIGITS);
+            return $precision === false ? null : (int) $precision;
+        } catch (\Throwable $e) {
+            return null;
+        }
     }
 }
