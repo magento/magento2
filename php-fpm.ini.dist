@@ -1,0 +1,59 @@
+; Copyright 2026 Adobe
+; All Rights Reserved.
+
+; Recommended memory limit for Magento web requests.
+memory_limit = 756M
+; Fallback limit for runaway requests; nginx.conf.sample and .user.ini raise it to 18000 for long admin imports.
+max_execution_time = 600
+; Limits the time spent receiving and parsing request input.
+max_input_time = 60
+; Admin forms such as Stores > Configuration can post more fields than PHP's default of 1000.
+max_input_vars = 10000
+; Largest accepted POST body, uploads included.
+post_max_size = 32M
+; Largest single uploaded file; stays below post_max_size to leave room for the other form fields.
+upload_max_filesize = 16M
+; Fills $_ENV, which Magento reads for CONFIG__ configuration overrides.
+variables_order = "EGPCS"
+
+; Removes the X-Powered-By response header, which reveals the PHP version.
+expose_php = Off
+; Keeps PHP errors out of HTTP responses.
+display_errors = Off
+; Keeps PHP startup errors out of HTTP responses.
+display_startup_errors = Off
+; Writes PHP errors to the error log.
+log_errors = On
+; Leaves function arguments, which can hold credentials, out of stack traces; also disables MAGE_DEBUG_SHOW_ARGS.
+zend.exception_ignore_args = On
+; Compiles assert() calls out of production code.
+zend.assertions = -1
+; Forbids include and require of remote URLs.
+allow_url_include = Off
+; Shell functions Magento does not call during web requests; exec and proc_open stay for Shell and sendmail.
+disable_functions = passthru,shell_exec,system,popen,pcntl_exec
+; Stops PHP-FPM from running a different script than the requested one when the path does not exist.
+cgi.fix_pathinfo = 0
+; Stops PHP from building $argv from the query string; deprecated for web requests since PHP 8.5.
+register_argc_argv = Off
+; Lets Magento start the session after its autoloader and session handler are ready.
+session.auto_start = Off
+; Magento does not use upload progress; disabling it stops requests from writing session data before Magento runs.
+session.upload_progress.enabled = Off
+
+; Cache for resolved file paths; Magento resolves thousands of them per request.
+realpath_cache_size = 10M
+; Keeps resolved file paths for two hours.
+realpath_cache_ttl = 7200
+; Enables the opcode cache.
+opcache.enable = 1
+; Shared memory for compiled scripts, sized for Magento with generated code.
+opcache.memory_consumption = 512
+; Shared memory for interned strings such as class and method names.
+opcache.interned_strings_buffer = 32
+; Number of cacheable scripts; Magento with its dependencies has more than 40000 PHP files.
+opcache.max_accelerated_files = 130987
+; Keeps docblocks, which the Magento Web API reads to resolve parameter and return types.
+opcache.save_comments = 1
+; Skips file modification checks; reload PHP-FPM after each deployment and after bin/magento commands that change app/etc/*.php.
+opcache.validate_timestamps = 0

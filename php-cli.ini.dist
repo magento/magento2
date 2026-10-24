@@ -1,0 +1,21 @@
+; Copyright 2026 Adobe
+; All Rights Reserved.
+
+; Memory for code compilation, static content deployment, indexers and cron.
+memory_limit = 2G
+; Fills $_ENV, which Magento reads for CONFIG__ configuration overrides.
+variables_order = "EGPCS"
+
+; Sends errors to stderr so they do not mix with command output.
+display_errors = stderr
+; Prints each error once, since display_errors already writes it to stderr.
+log_errors = Off
+; Leaves function arguments, which can hold credentials, out of stack traces; also disables MAGE_DEBUG_SHOW_ARGS.
+zend.exception_ignore_args = On
+; Forbids include and require of remote URLs.
+allow_url_include = Off
+
+; Cache for resolved file paths; Magento resolves thousands of them per command.
+realpath_cache_size = 10M
+; Keeps resolved file paths for two hours.
+realpath_cache_ttl = 7200
