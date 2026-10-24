@@ -67,6 +67,9 @@ class TranslitUrlTest extends TestCase
             ['Anémonas do Japão', 'anemonas-do-japao', 'anemonas-do-japao', $isIconv],
             ['Pão de Açúcar', 'pao-de-acucar', 'pao-de-acucar', $isIconv],
             ['Êxito', 'exito', 'exito', $isIconv],
+            ['Път към дома', 'pat-kam-doma', 'pat-kam-doma', $isIconv],
+            ['ПЪТ КЪМ ДОМА', 'pat-kam-doma', 'pat-kam-doma', $isIconv],
+            ['Шофьор', 'shofyor', 'shofyor', $isIconv],
         ];
     }
 }
