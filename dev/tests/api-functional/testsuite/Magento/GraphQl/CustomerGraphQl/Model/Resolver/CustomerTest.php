@@ -453,6 +453,7 @@ class CustomerTest extends ResolverCacheAbstract
 
     /**
      * @magentoConfigFixture default/system/full_page_cache/caching_application 2
+     * @magentoConfigFixture default/customer/account_share/scope 1
      * @return void
      */
     #[
@@ -502,6 +503,7 @@ class CustomerTest extends ResolverCacheAbstract
 
         $customer1CacheKey = $this->getCacheKeyForCustomerResolver();
         $customer1CacheEntry = $this->graphQlResolverCache->load($customer1CacheKey);
+        $this->assertIsString($customer1CacheEntry, 'Customer1 resolver cache entry should exist');
         $customer1CacheEntryDecoded = json_decode($customer1CacheEntry, true);
         $this->assertEquals(
             $customer1->getFirstname(),
@@ -509,6 +511,11 @@ class CustomerTest extends ResolverCacheAbstract
         );
 
         // query customer2
+        /** @var StoreManagerInterface $storeManager */
+        $storeManager = $this->objectManager->get(StoreManagerInterface::class);
+        $previousStoreCode = $storeManager->getStore()->getCode();
+        $storeManager->setCurrentStore('store2');
+
         $this->mockCustomerUserInfoContext($customer2);
         $customer2Token = $this->generateCustomerToken(
             $customer2->getEmail(),
@@ -527,8 +534,10 @@ class CustomerTest extends ResolverCacheAbstract
         );
 
         $customer2CacheKey = $this->getCacheKeyForCustomerResolver();
+        $storeManager->setCurrentStore($previousStoreCode);
 
         $customer2CacheEntry = $this->graphQlResolverCache->load($customer2CacheKey);
+        $this->assertIsString($customer2CacheEntry, 'Customer2 resolver cache entry should exist');
         $customer2CacheEntryDecoded = json_decode($customer2CacheEntry, true);
         $this->assertEquals(
             $customer2->getFirstname(),
@@ -545,6 +554,79 @@ class CustomerTest extends ResolverCacheAbstract
 
         $this->assertIsNumeric(
             $this->graphQlResolverCache->test($customer2CacheKey)
+        );
+    }
+
+    /**
+     * Test that a single customer token cached on website A does not leak
+     * when the same token is re-queried with the website-B Store header.
+     *
+     * @magentoConfigFixture default/system/full_page_cache/caching_application 2
+     * @return void
+     */
+    #[
+        DataFixture(WebsiteFixture::class, ['code' => 'website2'], 'website2'),
+        DataFixture(StoreGroupFixture::class, ['website_id' => '$website2.id$'], 'store_group2'),
+        DataFixture(StoreFixture::class, ['store_group_id' => '$store_group2.id$', 'code' => 'store2'], 'store2'),
+        DataFixture(
+            CustomerFixture::class,
+            [
+                'firstname' => 'WebsiteACustomer',
+                'email' => 'cross_website@example.com',
+                'store_id' => '1' // default store (website A)
+            ]
+        )
+    ]
+    #[AllowMockObjectsWithoutExpectations]
+    public function testSameTokenOnDifferentWebsiteDoesNotReturnCachedData()
+    {
+        $customer = $this->customerRepository->get('cross_website@example.com');
+        $query = $this->getCustomerQuery();
+
+        // Generate token on website A (default)
+        $token = $this->generateCustomerToken(
+            $customer->getEmail(),
+            'password'
+        );
+
+        // Warm cache on website A
+        $this->mockCustomerUserInfoContext($customer);
+        $responseA = $this->graphQlQueryWithResponseHeaders(
+            $query,
+            [],
+            '',
+            ['Authorization' => 'Bearer ' . $token]
+        );
+
+        $this->assertEquals(
+            'WebsiteACustomer',
+            $responseA['body']['customer']['firstname']
+        );
+
+        // Assert cache is populated for website A
+        $websiteACacheKey = $this->getCacheKeyForCustomerResolver();
+        $this->assertIsNumeric(
+            $this->graphQlResolverCache->test($websiteACacheKey)
+        );
+
+        // Re-query the same token with website B's Store header
+        $storeManager = $this->objectManager->get(StoreManagerInterface::class);
+        $storeManager->setCurrentStore('store2');
+        $this->mockCustomerUserInfoContext($customer);
+        $websiteBCacheKey = $this->getCacheKeyForCustomerResolver();
+        $storeManager->setCurrentStore('default');
+
+        // Cache keys must differ due to CURRENT_WEBSITE_ID factor
+        $this->assertNotEquals(
+            $websiteACacheKey,
+            $websiteBCacheKey,
+            'Cache keys for different websites must not be identical'
+        );
+
+        // Website B cache entry must not exist (no cross-website leak)
+        $this->assertFalse(
+            $this->graphQlResolverCache->test($websiteBCacheKey),
+            'Website B must not have a cached entry from website A'
         );
     }
 

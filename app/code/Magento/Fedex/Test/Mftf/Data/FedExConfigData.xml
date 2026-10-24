@@ -58,4 +58,12 @@
     <entity name="AdminFedexSecretKey" type="fedex_config">
         <data key="path">carriers/fedex/secret_key</data>
     </entity>
+    <entity name="AdminFedexInternationalPriorityOnlyAllowedMethodsConfigData" type="fedex_config">
+        <data key="path">carriers/fedex/allowed_methods</data>
+        <data key="value">FEDEX_INTERNATIONAL_PRIORITY</data>
+    </entity>
+    <entity name="AdminFedexRestoreDefaultAllowedMethodsConfigData" type="fedex_config">
+        <data key="path">carriers/fedex/allowed_methods</data>
+        <data key="value">EUROPE_FIRST_INTERNATIONAL_PRIORITY,FEDEX_1_DAY_FREIGHT,FEDEX_2_DAY_FREIGHT,FEDEX_2_DAY,FEDEX_2_DAY_AM,FEDEX_3_DAY_FREIGHT,FEDEX_EXPRESS_SAVER,FEDEX_GROUND,FIRST_OVERNIGHT,GROUND_HOME_DELIVERY,INTERNATIONAL_ECONOMY,INTERNATIONAL_ECONOMY_FREIGHT,INTERNATIONAL_FIRST,INTERNATIONAL_GROUND,FEDEX_INTERNATIONAL_PRIORITY,FEDEX_INTERNATIONAL_PRIORITY_EXPRESS,FEDEX_FIRST,FEDEX_PRIORITY,FEDEX_PRIORITY_EXPRESS,FEDEX_PRIORITY_EXPRESS_FREIGHT,FEDEX_PRIORITY_FREIGHT,FEDEX_ECONOMY_SELECT,INTERNATIONAL_PRIORITY_FREIGHT,PRIORITY_OVERNIGHT,SMART_POST,STANDARD_OVERNIGHT,FEDEX_FREIGHT,FEDEX_NATIONAL_FREIGHT</data>
+    </entity>
 </entities>

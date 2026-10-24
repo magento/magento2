@@ -9,8 +9,8 @@ namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order\Create;
 
 use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\Session\Quote;
-use Magento\Backend\Model\View\Result\Forward;
-use Magento\Backend\Model\View\Result\ForwardFactory;
+use Magento\Backend\Model\View\Result\Redirect;
+use Magento\Backend\Model\View\Result\RedirectFactory;
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\Request\Http;
@@ -75,14 +75,14 @@ class ProcessDataTest extends TestCase
     protected $escaper;
 
     /**
-     * @var Forward|MockObject
+     * @var Redirect|MockObject
      */
-    protected $resultForward;
+    protected $resultRedirect;
 
     /**
-     * @var ForwardFactory|MockObject
+     * @var RedirectFactory|MockObject
      */
-    protected $resultForwardFactory;
+    protected $resultRedirectFactory;
 
     /**
      * Test setup
@@ -106,26 +106,31 @@ class ProcessDataTest extends TestCase
         $this->objectManager = $this->createMock(ObjectManagerInterface::class);
         $context->expects($this->any())->method('getObjectManager')->willReturn($this->objectManager);
 
-        $this->session = $this->createMock(Quote::class);
+        $this->session = $this->createPartialMockWithReflection(
+            Quote::class,
+            ['getQuote']
+        );
         $context->expects($this->any())->method('getSession')->willReturn($this->session);
         $this->escaper = $this->createPartialMock(Escaper::class, ['escapeHtml']);
 
-        $this->resultForward = $this->createMock(Forward::class);
-        $this->resultForwardFactory = $this->getMockBuilder(ForwardFactory::class)
+        $this->resultRedirect = $this->createMock(Redirect::class);
+        $this->resultRedirectFactory = $this->getMockBuilder(RedirectFactory::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['create'])
             ->getMock();
 
-        $this->resultForwardFactory->expects($this->once())
+        $this->resultRedirectFactory->expects($this->once())
             ->method('create')
-            ->willReturn($this->resultForward);
+            ->willReturn($this->resultRedirect);
+        $context->expects($this->once())
+            ->method('getResultRedirectFactory')
+            ->willReturn($this->resultRedirectFactory);
 
         $this->processData = $objectManagerHelper->getObject(
             ProcessData::class,
             [
                 'context' => $context,
                 'escaper' => $this->escaper,
-                'resultForwardFactory' => $this->resultForwardFactory,
             ]
         );
     }
@@ -200,11 +205,11 @@ class ProcessDataTest extends TestCase
         );
         $quote->expects($this->any())->method('getAllItems')->willReturn([$item]);
         $item->expects($this->any())->method('getNoDiscount')->willReturn($noDiscount);
-        $this->resultForward->expects($this->once())
-            ->method('forward')
-            ->with('index')
+        $this->resultRedirect->expects($this->once())
+            ->method('setPath')
+            ->with('sales/*')
             ->willReturnSelf();
-        $this->assertInstanceOf(Forward::class, $this->processData->execute());
+        $this->assertInstanceOf(Redirect::class, $this->processData->execute());
     }
 
     /**

@@ -4,11 +4,6 @@
  * All Rights Reserved.
  */
 
-/**
- * Product description block
- *
- * @author     Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Catalog\Block\Product\View;
 
 use Magento\Catalog\Model\Product;
@@ -18,8 +13,6 @@ use Magento\Framework\Phrase;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
- * Attributes attributes block
- *
  * @api
  * @since 100.0.2
  */

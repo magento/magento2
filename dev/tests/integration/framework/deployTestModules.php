@@ -16,6 +16,12 @@ $pathToCommittedTestModules = $testFrameworkDir . '/../_files/Magento';
 $pathToInstalledMagentoInstanceModules = $testFrameworkDir . '/../../../../app/code/Magento';
 $deployedTestModuleRootNames = [];
 
+// Ensure app/code/Magento/ exists before vendor-scanning: in Composer builds the directory
+// is absent until the committed-modules loop below creates it, causing is_dir() to bail early.
+if (!is_dir($pathToInstalledMagentoInstanceModules)) {
+    mkdir($pathToInstalledMagentoInstanceModules, 0755, true);
+}
+
 $appCodeDir = dirname($pathToInstalledMagentoInstanceModules);
 foreach (findModuleLevelTestModuleFixtureDirectories($appCodeDir) as $testModuleSourceDir) {
     copyTestModuleTreeIntoMagentoCode($testModuleSourceDir, $pathToInstalledMagentoInstanceModules);
@@ -100,7 +106,7 @@ function findModuleLevelTestModuleFixtureDirectories(string $appCodeDir): array
         $appCodeDir . '/Magento/*/Test/_files/Magento/*',
         $appCodeDir . '/*/*/Test/_files/Magento/*',
     ];
-    $vendorMagentoDir = dirname($appCodeDir) . '/vendor/magento';
+    $vendorMagentoDir = dirname($appCodeDir, 2) . '/vendor/magento';
     if (is_dir($vendorMagentoDir)) {
         $patterns[] = $vendorMagentoDir . '/module-*/Test/_files/Magento/*';
     }

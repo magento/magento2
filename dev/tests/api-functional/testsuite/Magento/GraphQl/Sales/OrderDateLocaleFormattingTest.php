@@ -26,7 +26,14 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
- * Test GraphQL CustomerOrder order_date field formatting and date integrity
+ * Test GraphQL CustomerOrder order_date field calendar-value correctness under non-en_US locales
+ *
+ * Regression coverage for AC-18084: Timezone::date() misparses machine-generated
+ * DB timestamps via IntlDateFormatter::parse() under non-en_US locales (e.g. fr_FR)
+ * on PHP 8.4+/ICU 78.x, silently returning the wrong calendar date. This test
+ * asserts the actual calendar value, not just the output string's shape - a
+ * format-only check (as this test previously did) does not catch that bug.
+ *
  * @see \Magento\SalesGraphQl\Model\Formatter\Order::format()
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -39,10 +46,10 @@ class OrderDateLocaleFormattingTest extends GraphQlAbstract
     private const CUSTOMER_PASSWORD = 'password';
 
     /**
-     * Regular expression pattern for order_date format (d/m/Y H:i:s)
+     * Regular expression pattern for order_date format (Y-m-d H:i:s)
      *
      */
-    private const ORDER_DATE_REGEX_PATTERN = '/^\d{2}\/\d{2}\/\d{4} \d{2}:\d{2}:\d{2}$/';
+    private const ORDER_DATE_REGEX_PATTERN = '/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/';
 
     /**
      * Regular expression pattern for created_at format (Y-m-d H:i:s)
@@ -51,9 +58,14 @@ class OrderDateLocaleFormattingTest extends GraphQlAbstract
     private const CREATED_AT_REGEX_PATTERN = '/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/';
 
     /**
-     * PHP date format for order_date parsing
+     * PHP date format for order_date / created_at parsing
      */
-    private const ORDER_DATE_FORMAT = 'd/m/Y H:i:s';
+    private const ORDER_DATE_FORMAT = 'Y-m-d H:i:s';
+
+    /**
+     * Store timezone used by this test's locale fixture
+     */
+    private const STORE_TIMEZONE = 'Europe/Paris';
 
     /**
      * @var DataFixtureStorage
@@ -77,14 +89,14 @@ class OrderDateLocaleFormattingTest extends GraphQlAbstract
     }
 
     /**
-     * Verify order_date field formatting with French locale
+     * Verify order_date returns the correct calendar date/time under the French locale
      *
      * @return void
      * @throws AuthenticationException
      */
     #[
         Config('general/locale/code', 'fr_FR'),
-        Config('general/locale/timezone', 'Europe/Paris'),
+        Config('general/locale/timezone', self::STORE_TIMEZONE),
         DataFixture(ProductFixture::class, as: 'product'),
         DataFixture(CustomerFixture::class, as: 'customer'),
         DataFixture(CustomerCartFixture::class, ['customer_id' => '$customer.id$'], as: 'quote'),
@@ -98,11 +110,10 @@ class OrderDateLocaleFormattingTest extends GraphQlAbstract
         DataFixture(SetPaymentMethodFixture::class, ['cart_id' => '$quote.id$']),
         DataFixture(PlaceOrderFixture::class, ['cart_id' => '$quote.id$'], 'order')
     ]
-    public function testOrderDateFormatWithFrenchLocale(): void
+    public function testOrderDateCalendarValueIsCorrectUnderFrenchLocale(): void
     {
         $customerEmail = $this->fixtures->get('customer')->getEmail();
 
-        // Use same GraphQL query structure as manual test
         $query = $this->getCustomerOrdersQuery();
         $response = $this->graphQlQuery(
             $query,
@@ -118,43 +129,43 @@ class OrderDateLocaleFormattingTest extends GraphQlAbstract
 
         $orderData = $response['customer']['orders']['items'][0];
 
-        // Verify both aliased fields exist (matching manual test scenario)
-        $this->assertArrayHasKey('orderDateOK', $orderData, 'orderDateOK (created_at alias) should exist');
-        $this->assertArrayHasKey('orderDateFAIL', $orderData, 'orderDateFAIL (order_date alias) should exist');
+        $this->assertArrayHasKey('createdAtRaw', $orderData, 'createdAtRaw (created_at alias) should exist');
+        $this->assertArrayHasKey('orderDate', $orderData, 'orderDate (order_date alias) should exist');
 
-        $orderDateOK = $orderData['orderDateOK'];
-        $orderDateFAIL = $orderData['orderDateFAIL'];
+        $createdAtUtc = $orderData['createdAtRaw'];
+        $orderDate = $orderData['orderDate'];
 
-        // BEFORE FIX: orderDateFAIL was in Y-m-d format (yyyy-mm-dd)
-        // AFTER FIX: orderDateFAIL should be in d/m/Y H:i:s format (dd/mm/yyyy HH:ii:ss)
-
-        // Verify orderDateFAIL is in correct format: d/m/Y H:i:s (e.g., "02/04/2025 13:35:00")
+        // Verify order_date is in the unambiguous ISO format (Y-m-d H:i:s)
         $this->assertMatchesRegularExpression(
             self::ORDER_DATE_REGEX_PATTERN,
-            $orderDateFAIL,
-            sprintf(
-                'orderDateFAIL should be in d/m/Y H:i:s format (dd/mm/yyyy HH:ii:ss). '
-                . 'Got: %s. orderDateOK for reference: %s',
-                $orderDateFAIL,
-                $orderDateOK
-            )
+            $orderDate,
+            sprintf('order_date should be in Y-m-d H:i:s format. Got: %s', $orderDate)
         );
 
-        // Verify it's parseable in the expected format
-        $parsedDateFAIL = \DateTime::createFromFormat(self::ORDER_DATE_FORMAT, $orderDateFAIL);
-        $this->assertNotFalse(
-            $parsedDateFAIL,
-            sprintf(
-                'orderDateFAIL "%s" should be parseable as d/m/Y H:i:s format',
-                $orderDateFAIL
-            )
-        );
-
-        // Verify orderDateOK remains in standard format (Y-m-d H:i:s)
+        // Verify created_at remains in the standard format (Y-m-d H:i:s)
         $this->assertMatchesRegularExpression(
             self::CREATED_AT_REGEX_PATTERN,
-            $orderDateOK,
-            'orderDateOK (created_at) should remain in Y-m-d H:i:s format'
+            $createdAtUtc,
+            'created_at should remain in Y-m-d H:i:s format'
+        );
+
+        // Independently derive the expected value - deliberately does NOT go
+        // through Timezone::date()/IntlDateFormatter, so it can detect a wrong
+        // calendar value rather than re-deriving the same bug.
+        $expectedOrderDate = (new \DateTime($createdAtUtc, new \DateTimeZone('UTC')))
+            ->setTimezone(new \DateTimeZone(self::STORE_TIMEZONE))
+            ->format(self::ORDER_DATE_FORMAT);
+
+        $this->assertSame(
+            $expectedOrderDate,
+            $orderDate,
+            sprintf(
+                'order_date should equal created_at (%s, UTC) converted to the %s store timezone '
+                . 'under the fr_FR locale - a mismatch indicates Timezone::date() mis-parsed the '
+                . 'raw DB timestamp (AC-18084 regression).',
+                $createdAtUtc,
+                self::STORE_TIMEZONE
+            )
         );
     }
 
@@ -170,8 +181,8 @@ class OrderDateLocaleFormattingTest extends GraphQlAbstract
     customer {
         orders {
             items {
-                orderDateOK: created_at
-                orderDateFAIL: order_date
+                createdAtRaw: created_at
+                orderDate: order_date
             }
         }
     }

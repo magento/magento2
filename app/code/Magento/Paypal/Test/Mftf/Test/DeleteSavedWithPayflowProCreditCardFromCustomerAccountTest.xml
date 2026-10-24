@@ -18,6 +18,9 @@
             <group value="paypal"/>
             <group value="3rd_party_integration" />
             <group value="pr_exclude" />
+            <skip>
+                <issueId value="AC-17981">Order placement fails after entering card details for PayPal Payflow Pro or Payments Pro because the success page never loads, confirmed as an application bug rather than a test defect that will be enabled again once fixed</issueId>
+            </skip>
         </annotations>
         <before>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
