@@ -16,9 +16,6 @@ use Magento\Framework\View\Element\BlockInterface;
 use Magento\Framework\View\Layout;
 use Magento\PageCache\Model\Config;
 use Magento\PageCache\Model\Spi\PageCacheTagsPreprocessorInterface;
-use function array_merge;
-use function array_unique;
-use function implode;
 
 /**
  * Append cacheable pages response headers.
@@ -72,7 +69,7 @@ class LayoutPlugin
      * @param Layout $subject
      * @return void
      */
-    public function afterGenerateElements(Layout $subject): void
+    public function afterGenerateElements(Layout $subject)
     {
         if ($subject->isCacheable() && !$this->maintenanceMode->isOn() && $this->config->isEnabled()) {
             $this->response->setPublicHeaders($this->config->getTtl());
@@ -83,23 +80,17 @@ class LayoutPlugin
      * Retrieve all identities from blocks for further cache invalidation.
      *
      * @param Layout $subject
-     * @param string $result
-     * @return string
+     * @param mixed $result
+     * @return mixed
      */
-    public function afterGetOutput(Layout $subject, string $result): string
+    public function afterGetOutput(Layout $subject, $result)
     {
         if ($subject->isCacheable() && $this->config->isEnabled()) {
             $tags = [];
             $isVarnish = $this->config->getType() === Config::VARNISH;
 
-            /** @var BlockInterface[] $block */
             foreach ($subject->getAllBlocks() as $block) {
-                if (!$isVarnish || ($block instanceof DataObject && !$block->getData('ttl'))) {
-                    $tags[] = (array) $block->getData('cache_tags');
-                    if ($block instanceof IdentityInterface) {
-                        $tags[] = $block->getIdentities();
-                    }
-                }
+                $tags[] = $this->getBlockTags($block, $isVarnish);
             }
             $tags = array_unique(array_merge([], ...$tags));
             $tags = $this->pageCacheTagsPreprocessor->process($tags);
@@ -107,5 +98,28 @@ class LayoutPlugin
         }
 
         return $result;
+    }
+
+    /**
+     * Collect explicit cache tags and identities of a block rendered into the page.
+     *
+     * @param BlockInterface $block
+     * @param bool $isVarnish
+     * @return array
+     */
+    private function getBlockTags(BlockInterface $block, bool $isVarnish): array
+    {
+        if (!$block instanceof DataObject && !$block instanceof IdentityInterface) {
+            return [];
+        }
+        if ($isVarnish && $block->getTtl() > 0) {
+            return [];
+        }
+        $tags = $block instanceof DataObject ? (array) $block->getData('cache_tags') : [];
+        if ($block instanceof IdentityInterface) {
+            $tags = array_merge($tags, $block->getIdentities());
+        }
+
+        return $tags;
     }
 }
