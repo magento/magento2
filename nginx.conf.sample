@@ -39,7 +39,7 @@ error_page 404 403 = /errors/404.php;
 
 
 # Deny access to sensitive files
-location /.user.ini {
+location ~* /\.user\.ini {
     deny all;
 }
 
