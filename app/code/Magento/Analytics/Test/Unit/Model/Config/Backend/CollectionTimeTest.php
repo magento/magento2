@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -42,9 +42,9 @@ class CollectionTimeTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->configWriterMock = $this->getMockForAbstractClass(WriterInterface::class);
+        $this->configWriterMock = $this->createMock(WriterInterface::class);
 
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 

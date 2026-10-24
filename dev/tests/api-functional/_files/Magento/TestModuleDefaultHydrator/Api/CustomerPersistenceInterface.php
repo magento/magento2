@@ -1,19 +1,20 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\TestModuleDefaultHydrator\Api;
 
 /**
  * Customer CRUD interface
+ *
+ * @api
  */
 interface CustomerPersistenceInterface
 {
     /**
      * Create customer
      *
-     * @api
      * @param \Magento\Customer\Api\Data\CustomerInterface $customer
      * @param string $passwordHash
      * @return \Magento\Customer\Api\Data\CustomerInterface
@@ -26,7 +27,6 @@ interface CustomerPersistenceInterface
     /**
      * Retrieve customer by email
      *
-     * @api
      * @param string $email
      * @param int|null $websiteId
      * @return \Magento\Customer\Api\Data\CustomerInterface
@@ -38,7 +38,6 @@ interface CustomerPersistenceInterface
     /**
      * Retrieve customer by id
      *
-     * @api
      * @param int $id
      * @param int|null $websiteId
      * @return \Magento\Customer\Api\Data\CustomerInterface
@@ -50,7 +49,6 @@ interface CustomerPersistenceInterface
     /**
      * Delete customer by id
      *
-     * @api
      * @param int $id
      * @return bool
      * @throws \Magento\Framework\Exception\NoSuchEntityException

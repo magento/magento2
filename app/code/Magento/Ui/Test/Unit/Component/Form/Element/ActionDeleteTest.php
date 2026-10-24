@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,7 +9,7 @@ namespace Magento\Ui\Test\Unit\Component\Form\Element;
 
 use Magento\Ui\Component\Form\Element\ActionDelete;
 
-class ActionDeleteTest extends AbstractElementTest
+class ActionDeleteTest extends AbstractElementTestCase
 {
     /**
      * @inheritdoc

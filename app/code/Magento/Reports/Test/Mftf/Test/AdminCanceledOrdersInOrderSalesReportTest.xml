@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -18,9 +18,12 @@
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-95960"/>
             <useCaseId value="MAGETWO-95823"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
+            <!--Enable flat rate shipping-->
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
             <createData entity="_defaultCategory" stepKey="createCategory"/>
@@ -68,10 +71,13 @@
         </before>
 
         <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <!-- Disable shipping method for customer with default address -->
+            <comment userInput="config:set DisableFlatRateConfigData.path DisableFlatRateConfigData.value" stepKey="disableFlatRate"/>
         </after>
 
         <actionGroup ref="AdminGoToOrdersReportPageActionGroup" stepKey="goToOrdersReportPage1"/>

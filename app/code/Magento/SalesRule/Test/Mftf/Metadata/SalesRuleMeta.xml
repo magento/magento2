@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 <operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataOperation.xsd">
@@ -90,6 +90,11 @@
     </operation>
 
     <operation name="DeleteSalesRule" dataType="SalesRule" type="delete" auth="adminOauth" url="/V1/salesRules/{rule_id}" method="DELETE">
+        <contentType>application/json</contentType>
+    </operation>
+    <operation name="GetSalesRuleList" dataType="salesrule_list" type="get" auth="adminOauth"
+        url="/V1/salesRules/search?searchCriteria[pageSize]={pageSize}&amp;searchCriteria[currentPage]={currentPage}&amp;fields={fields}"
+        method="GET">
         <contentType>application/json</contentType>
     </operation>
 </operations>

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -24,6 +24,7 @@
         <selectOption selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="{{estimateAddress.state}}" stepKey="selectStateProvince"/>
         <waitForLoadingMaskToDisappear stepKey="waitForStateLoadingMaskDisappear"/>
         <fillField selector="{{CheckoutCartSummarySection.postcode}}" userInput="{{estimateAddress.zipCode}}" stepKey="fillZipPostalCodeField"/>
+        <click selector="{{CheckoutCartSummarySection.cartTotalsBlock}}" stepKey="moveFocusOutOfPostcode" />
         <waitForLoadingMaskToDisappear stepKey="waitForZipLoadingMaskDisappear"/>
     </actionGroup>
 </actionGroups>

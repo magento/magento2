@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -122,15 +122,13 @@ class SimpleDirective implements DirectiveProcessorInterface
         $tokenizer->setString($construction['parameters']);
         $parameters = $tokenizer->tokenize();
 
-        if (!$filter->isStrictMode()) {
-            foreach ($parameters as $key => $value) {
-                if (substr($value, 0, 1) === '$') {
-                    $parameters[$key] = $this->variableResolver->resolve(
-                        substr($value, 1),
-                        $filter,
-                        $templateVariables
-                    );
-                }
+        foreach ($parameters as $key => $value) {
+            if (substr($value, 0, 1) === '$') {
+                $parameters[$key] = $this->variableResolver->resolve(
+                    substr($value, 1),
+                    $filter,
+                    $templateVariables
+                );
             }
         }
 

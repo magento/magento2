@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminMarketingSiteDeleteGeneratedSitemapByNameActionGroup" extends="AdminMarketingSiteDeleteByNameActionGroup">
+        <annotations>
+            <description>Go to the Site map page. Delete a generated site map based on the provided Name.</description>
+        </annotations>
+        <arguments>
+            <argument name="filename" type="string"/>
+        </arguments>
+        <remove keyForRemoval="clickEditExistingRow"/>
+        <click selector="{{AdminMarketingSiteMapGridSection.firstSearchResultFilename}}" stepKey="clickEditGeneratedSitemapFirstRow" after="verifyThatCorrectStoreGroupFound"/>
+    </actionGroup>
+</actionGroups>

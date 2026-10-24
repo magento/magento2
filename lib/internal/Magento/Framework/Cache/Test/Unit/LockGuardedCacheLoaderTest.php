@@ -1,15 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Framework\Cache\Test\Unit;
 
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Cache\LockGuardedCacheLoader;
 use Magento\Framework\Lock\LockManagerInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -21,24 +21,26 @@ class LockGuardedCacheLoaderTest extends TestCase
     private $lockManagerInterfaceMock;
 
     /**
+     * @var DeploymentConfig|MockObject
+     */
+    private $deploymentConfigMock;
+
+    /**
      * @var LockGuardedCacheLoader
      */
-    private $LockGuardedCacheLoader;
+    private $lockGuardedCacheLoader;
 
     /**
      * @inheritDoc
      */
     protected function setUp(): void
     {
-        $this->lockManagerInterfaceMock = $this->getMockForAbstractClass(LockManagerInterface::class);
+        $this->lockManagerInterfaceMock = $this->createMock(LockManagerInterface::class);
+        $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);
 
-        $objectManager = new ObjectManagerHelper($this);
-
-        $this->LockGuardedCacheLoader = $objectManager->getObject(
-            LockGuardedCacheLoader::class,
-            [
-                'locker' => $this->lockManagerInterfaceMock
-            ]
+        $this->lockGuardedCacheLoader = new LockGuardedCacheLoader(
+            $this->lockManagerInterfaceMock,
+            deploymentConfig: $this->deploymentConfigMock
         );
     }
 
@@ -63,12 +65,16 @@ class LockGuardedCacheLoaderTest extends TestCase
             return true;
         };
 
+        $this->deploymentConfigMock->expects($this->once())
+            ->method('get')
+            ->with('cache/allow_parallel_generation')
+            ->willReturn(false);
         $this->lockManagerInterfaceMock->expects($this->never())->method('lock');
         $this->lockManagerInterfaceMock->expects($this->never())->method('unlock');
 
         $this->assertEquals(
             'loaded_data',
-            $this->LockGuardedCacheLoader->lockedLoadData($lockName, $dataLoader, $dataCollector, $dataSaver)
+            $this->lockGuardedCacheLoader->lockedLoadData($lockName, $dataLoader, $dataCollector, $dataSaver)
         );
     }
 
@@ -93,16 +99,19 @@ class LockGuardedCacheLoaderTest extends TestCase
             return true;
         };
 
+        $this->deploymentConfigMock->expects($this->once())
+            ->method('get')
+            ->with('cache/allow_parallel_generation')
+            ->willReturn(false);
         $this->lockManagerInterfaceMock
             ->expects($this->atLeastOnce())->method('lock')
             ->with($lockName, 0)
             ->willReturn(false);
-
         $this->lockManagerInterfaceMock->expects($this->never())->method('unlock');
 
         $this->assertEquals(
             'collected_data',
-            $this->LockGuardedCacheLoader->lockedLoadData($lockName, $dataLoader, $dataCollector, $dataSaver)
+            $this->lockGuardedCacheLoader->lockedLoadData($lockName, $dataLoader, $dataCollector, $dataSaver)
         );
     }
 
@@ -127,16 +136,19 @@ class LockGuardedCacheLoaderTest extends TestCase
             return true;
         };
 
+        $this->deploymentConfigMock->expects($this->once())
+            ->method('get')
+            ->with('cache/allow_parallel_generation')
+            ->willReturn(false);
         $this->lockManagerInterfaceMock
             ->expects($this->once())->method('lock')
             ->with($lockName, 0)
             ->willReturn(true);
-
         $this->lockManagerInterfaceMock->expects($this->once())->method('unlock');
 
         $this->assertEquals(
             'collected_data',
-            $this->LockGuardedCacheLoader->lockedLoadData($lockName, $dataLoader, $dataCollector, $dataSaver)
+            $this->lockGuardedCacheLoader->lockedLoadData($lockName, $dataLoader, $dataCollector, $dataSaver)
         );
     }
 
@@ -161,21 +173,19 @@ class LockGuardedCacheLoaderTest extends TestCase
             return true;
         };
 
-        $closure = \Closure::bind(function ($cacheLoader) {
-            return $cacheLoader->allowParallelGenerationConfigValue = true;
-        }, null, $this->LockGuardedCacheLoader);
-        $closure($this->LockGuardedCacheLoader);
-
+        $this->deploymentConfigMock->expects($this->once())
+            ->method('get')
+            ->with('cache/allow_parallel_generation')
+            ->willReturn(true);
         $this->lockManagerInterfaceMock
             ->expects($this->once())->method('lock')
             ->with($lockName, 0)
             ->willReturn(false);
-
         $this->lockManagerInterfaceMock->expects($this->never())->method('unlock');
 
         $this->assertEquals(
             'collected_data',
-            $this->LockGuardedCacheLoader->lockedLoadData($lockName, $dataLoader, $dataCollector, $dataSaver)
+            $this->lockGuardedCacheLoader->lockedLoadData($lockName, $dataLoader, $dataCollector, $dataSaver)
         );
     }
 }

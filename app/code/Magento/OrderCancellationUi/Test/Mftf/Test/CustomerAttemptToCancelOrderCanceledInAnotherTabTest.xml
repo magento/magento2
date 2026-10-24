@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="CustomerAttemptToCancelOrderCanceledInAnotherTabTest">
+        <annotations>
+            <features value="Attempt to cancel an order previously canceled in another tab."/>
+            <stories value="Attempt to cancel an order previously canceled in another tab."/>
+            <title value="Attempt to cancel an order previously canceled in another tab."/>
+            <description value="Customer attempts to cancel an order previously canceled in another tab."/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="LYNX-180"/>
+        </annotations>
+        <before>
+            <!-- Enable configuration -->
+            <magentoCLI command="config:set sales/cancellation/enabled 1" stepKey="EnablingSalesCancellation"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <createData entity="CustomerCart" stepKey="createCustomerCart">
+                <requiredEntity createDataKey="createCustomer"/>
+            </createData>
+            <createData entity="CustomerCartItem" stepKey="addCartItemOne">
+                <requiredEntity createDataKey="createCustomerCart"/>
+                <requiredEntity createDataKey="createSimpleProduct"/>
+            </createData>
+            <createData entity="CustomerAddressInformation" stepKey="addCustomerOrderAddress">
+                <requiredEntity createDataKey="createCustomerCart"/>
+            </createData>
+            <updateData createDataKey="createCustomerCart" entity="CustomerOrderPaymentMethod" stepKey="sendCustomerPaymentInformationOne">
+                <requiredEntity createDataKey="createCustomerCart"/>
+            </updateData>
+        </before>
+        <after>
+            <!-- Disable configuration -->
+            <magentoCLI command="config:set sales/cancellation/enabled 0" stepKey="DisablingSalesCancellation"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutStorefront"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!--Login to storefront from customer-->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginCustomer">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+
+        <!--Go to Recent Orders page-->
+        <amOnPage url="{{CustomerOrderCancellationFromRecentOrdersPage.url}}" stepKey="navigateToRecentOrdersPage"/>
+        <waitForPageLoad stepKey="waitForRecentOrdersPageLoad"/>
+
+        <!--Cancel Order from another tab-->
+        <openNewTab stepKey="openNewTab"/>
+
+            <!--Go to Order History page-->
+            <amOnPage url="{{CustomerOrderCancellationFromOrderHistoryPage.url}}" stepKey="navigateToOrderHistoryPage"/>
+            <waitForPageLoad stepKey="waitForOrderHistoryPageLoad"/>
+
+            <!--Cancel order -->
+            <click selector="{{CustomerOrderCancellationSection.linkToOpenModal}}" stepKey="clickOnLinkToOpenModalInTab"/>
+            <waitForElementVisible selector="{{CustomerOrderCancellationSection.valueForOrderCancellationReason}}" stepKey="waitForSelectVisibleInTab"/>
+            <selectOption selector="{{CustomerOrderCancellationSection.valueForOrderCancellationReason}}" userInput="Other" stepKey="valueForSalesCancellationInTab"/>
+            <click selector="{{CustomerOrderCancellationSection.confirmOrderCancellation}}" stepKey="clickOnConfirmButtonInTab"/>
+
+            <waitForPageLoad stepKey="waitForOrderHistoryPageReload"/>
+        <closeTab stepKey="closeTab"/>
+
+        <!--Attempt to Cancel order -->
+        <click selector="{{CustomerOrderCancellationSection.linkToOpenModal}}" stepKey="clickOnLinkToOpenModal"/>
+        <waitForElementVisible selector="{{CustomerOrderCancellationSection.valueForOrderCancellationReason}}" stepKey="waitForSelectVisible"/>
+        <selectOption selector="{{CustomerOrderCancellationSection.valueForOrderCancellationReason}}" userInput="Other" stepKey="valueForSalesCancellation"/>
+        <click selector="{{CustomerOrderCancellationSection.confirmOrderCancellation}}" stepKey="clickOnConfirmButton"/>
+
+        <!--Confirm order was previously cancelled-->
+        <waitForElementNotVisible selector="{{CustomerOrderCancellationSection.loadingMask}}" stepKey="waitForLoadingMaskToDisappear"/>
+        <waitForElementVisible selector="{{CustomerOrderCancellationSection.messageAtTheTop}}" stepKey="waitForMessageAtTheTop"/>
+        <grabTextFrom selector="{{CustomerOrderCancellationSection.messageAtTheTop}}" stepKey="grabMessageAtTheTop" after="waitForMessageAtTheTop"/>
+        <assertEquals message="Order was previously cancelled" stepKey="assertErrorMessageIsShown" after="grabMessageAtTheTop">
+            <expectedResult type="string">Order already closed, complete, cancelled or on hold</expectedResult>
+            <actualResult type="variable">$grabMessageAtTheTop</actualResult>
+        </assertEquals>
+    </test>
+</tests>

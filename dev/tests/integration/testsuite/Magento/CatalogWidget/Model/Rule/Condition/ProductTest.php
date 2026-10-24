@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\CatalogWidget\Model\Rule\Condition;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 
 class ProductTest extends \PHPUnit\Framework\TestCase
 {
@@ -43,10 +44,34 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->assertArrayHasKey(ProductInterface::SKU, $options);
         $this->assertArrayHasKey(ProductInterface::ATTRIBUTE_SET_ID, $options);
         $this->assertArrayHasKey('category_ids', $options);
-        $this->assertArrayNotHasKey(ProductInterface::STATUS, $options);
+        $this->assertArrayHasKey(ProductInterface::STATUS, $options);
         foreach ($options as $code => $label) {
             $this->assertNotEmpty($label);
             $this->assertNotEmpty($code);
+        }
+    }
+
+    /**
+     * @return void
+     */
+    public function testLoadAttributeOptionsContainsTextAttributes()
+    {
+        $this->conditionProduct->loadAttributeOptions();
+        $options = $this->conditionProduct->getAttributeOption();
+
+        /** @var ProductResource $productResource */
+        $productResource = $this->objectManager->create(ProductResource::class);
+        $attributes = $productResource->loadAllAttributes()->getAttributesByCode();
+        foreach ($attributes as $key => $attribute) {
+            if (!$attribute->getFrontendLabel() || $attribute->getFrontendInput() !== 'text') {
+                unset($attributes[$key]);
+            }
+        }
+
+        $textAttributeCodes = array_keys($attributes);
+        foreach ($textAttributeCodes as $textAttributeCode) {
+            $this->assertArrayHasKey($textAttributeCode, $options);
+            $this->assertNotEmpty($options[$textAttributeCode]);
         }
     }
 
@@ -77,11 +102,11 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->conditionProduct->addToCollection($collection);
         $collectedAttributes = $this->conditionProduct->getRule()->getCollectedAttributes();
         $this->assertArrayHasKey('visibility', $collectedAttributes);
-        $query = (string)$collection->getSelect();
-        $this->assertStringNotContainsString('visibility', $query);
-        $this->assertEquals('', $this->conditionProduct->getMappedSqlField());
+        $this->assertEquals(0, $collection->getSize());
+        $this->assertStringContainsString('visibility', (string)$this->conditionProduct->getMappedSqlField());
         $this->assertFalse($this->conditionProduct->hasValueParsed());
-        $this->assertFalse($this->conditionProduct->hasValue());
+        $this->assertTrue($this->conditionProduct->hasValue());
+        $this->assertEquals('4', $this->conditionProduct->getValue());
     }
 
     /**
@@ -96,9 +121,11 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->conditionProduct->addToCollection($collection);
         $collectedAttributes = $this->conditionProduct->getRule()->getCollectedAttributes();
         $this->assertArrayHasKey('visibility', $collectedAttributes);
-        $query = (string)$collection->getSelect();
-        $this->assertStringNotContainsString('visibility', $query);
-        $this->assertEquals('e.entity_id', $this->conditionProduct->getMappedSqlField());
+        $this->assertEquals(1, $collection->getSize());
+        $this->assertStringContainsString('visibility', (string)$this->conditionProduct->getMappedSqlField());
+        $this->assertFalse($this->conditionProduct->hasValueParsed());
+        $this->assertTrue($this->conditionProduct->hasValue());
+        $this->assertEquals('4', $this->conditionProduct->getValue());
     }
 
     /**
@@ -107,6 +134,46 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     public function testGetMappedSqlFieldCategoryIdsAttribute()
     {
         $this->conditionProduct->setAttribute('category_ids');
+        $this->assertEquals('e.entity_id', $this->conditionProduct->getMappedSqlField());
+    }
+
+    /**
+     * @return void
+     */
+    public function testAddToCollectionCategoryIdsUsesJoinInsteadOfSubquery(): void
+    {
+        $collection = $this->objectManager->create(\Magento\Catalog\Model\ResourceModel\Product\Collection::class);
+        $this->conditionProduct->setAttribute('category_ids');
+        $this->conditionProduct->setOperator('()');
+        $this->conditionProduct->setValue('5,6,7');
+        $this->conditionProduct->addToCollection($collection);
+
+        $sql = (string)$collection->getSelect();
+        $this->assertStringContainsString('catalog_category_product_widget', $sql);
+        $this->assertStringNotContainsString('IN (SELECT', $sql);
+        $this->assertEquals(
+            'catalog_category_product_widget.category_id',
+            $this->conditionProduct->getMappedSqlField()
+        );
+        $this->assertEquals(['5', '6', '7'], $this->conditionProduct->getBindArgumentValue());
+    }
+
+    /**
+     * @return void
+     */
+    public function testResetStateClearsJoinedCategoryAttribute(): void
+    {
+        $collection = $this->objectManager->create(\Magento\Catalog\Model\ResourceModel\Product\Collection::class);
+        $this->conditionProduct->setAttribute('category_ids');
+        $this->conditionProduct->setOperator('()');
+        $this->conditionProduct->addToCollection($collection);
+        $this->assertEquals(
+            'catalog_category_product_widget.category_id',
+            $this->conditionProduct->getMappedSqlField()
+        );
+
+        $this->conditionProduct->_resetState();
+
         $this->assertEquals('e.entity_id', $this->conditionProduct->getMappedSqlField());
     }
 

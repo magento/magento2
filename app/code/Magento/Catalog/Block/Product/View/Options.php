@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Block\Product\View;
@@ -12,7 +12,6 @@ use Magento\Catalog\Model\Product\Option\Value;
 /**
  * Product options block
  *
- * @author Magento Core Team <core@magentocommerce.com>
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
@@ -39,7 +38,7 @@ class Options extends \Magento\Framework\View\Element\Template
     protected $_registry = null;
 
     /**
-     * Catalog product
+     * Product
      *
      * @var Product
      */
@@ -118,7 +117,7 @@ class Options extends \Magento\Framework\View\Element\Template
      * @param Product $product
      * @return \Magento\Catalog\Block\Product\View\Options
      */
-    public function setProduct(Product $product = null)
+    public function setProduct(?Product $product = null)
     {
         $this->_product = $product;
         return $this;
@@ -169,13 +168,25 @@ class Options extends \Magento\Framework\View\Element\Template
     protected function _getPriceConfiguration($option)
     {
         $optionPrice = $option->getPrice(true);
+        $optionOldPrice = $option->getRegularPrice();
         if ($option->getPriceType() !== Value::TYPE_PERCENT) {
             $optionPrice = $this->pricingHelper->currency($optionPrice, false, false);
+            $optionOldPrice = $this->pricingHelper->currency($optionOldPrice, false, false);
         }
         $data = [
             'prices' => [
                 'oldPrice' => [
-                    'amount' => $this->pricingHelper->currency($option->getRegularPrice(), false, false),
+                    'amount' => $this->_catalogData->getTaxPrice(
+                        $option->getProduct(),
+                        $optionOldPrice,
+                        true,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        false
+                    ),
                     'adjustments' => [],
                 ],
                 'basePrice' => [

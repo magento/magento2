@@ -1,25 +1,23 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\Order\Invoice\Total;
 
 /**
  * Order invoice shipping total calculation model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Shipping extends AbstractTotal
 {
     /**
+     * Collect shipping total
+     *
      * @param \Magento\Sales\Model\Order\Invoice $invoice
      * @return $this
      */
     public function collect(\Magento\Sales\Model\Order\Invoice $invoice)
     {
-        $invoice->setShippingAmount(0);
-        $invoice->setBaseShippingAmount(0);
         $orderShippingAmount = $invoice->getOrder()->getShippingAmount();
         $baseOrderShippingAmount = $invoice->getOrder()->getBaseShippingAmount();
         $shippingInclTax = $invoice->getOrder()->getShippingInclTax();
@@ -29,7 +27,7 @@ class Shipping extends AbstractTotal
              * Check shipping amount in previous invoices
              */
             foreach ($invoice->getOrder()->getInvoiceCollection() as $previousInvoice) {
-                if ((double)$previousInvoice->getShippingAmount() && !$previousInvoice->isCanceled()) {
+                if ($previousInvoice->getShippingAmount() !== null && !$previousInvoice->isCanceled()) {
                     return $this;
                 }
             }

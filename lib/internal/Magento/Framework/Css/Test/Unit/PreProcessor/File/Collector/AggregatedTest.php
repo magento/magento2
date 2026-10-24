@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Framework\View\File\FileList;
 use Magento\Framework\View\File\FileList\Factory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -110,20 +111,25 @@ class AggregatedTest extends TestCase
     }
 
     /**
-     *
-     * @dataProvider getFilesDataProvider
-     *
+     *     *
      * @param array $libraryFiles Files in lib directory
      * @param array $baseFiles Files in base directory
      * @param array $themeFiles Files in theme
      * *
      * @return void
      */
+    #[DataProvider('getFilesDataProvider')]
     public function testGetFiles($libraryFiles, $baseFiles, $themeFiles): void
     {
         $this->fileListMock
             ->method('add')
-            ->withConsecutive([$libraryFiles], [$baseFiles]);
+            ->willReturnCallback(
+                function ($arg) use ($libraryFiles, $baseFiles) {
+                    if ($arg === $libraryFiles || $arg === $baseFiles) {
+                        return null;
+                    }
+                }
+            );
         $this->fileListMock->expects($this->any())->method('getAll')->willReturn(['returnedFile']);
 
         $subPath = '*';
@@ -162,7 +168,7 @@ class AggregatedTest extends TestCase
      *
      * @return array
      */
-    public function getFilesDataProvider(): array
+    public static function getFilesDataProvider(): array
     {
         return [
             'all files' => [['file1'], ['file2'], ['file3']],

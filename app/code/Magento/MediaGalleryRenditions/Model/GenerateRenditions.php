@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -19,6 +19,9 @@ use Magento\MediaGalleryRenditionsApi\Api\GenerateRenditionsInterface;
 use Magento\MediaGalleryRenditionsApi\Api\GetRenditionPathInterface;
 use Psr\Log\LoggerInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class GenerateRenditions implements GenerateRenditionsInterface
 {
     private const IMAGE_FILE_NAME_PATTERN = '#\.(jpg|jpeg|gif|png)$# i';
@@ -159,7 +162,7 @@ class GenerateRenditions implements GenerateRenditionsInterface
             );
         }
 
-        if (!preg_match(self::IMAGE_FILE_NAME_PATTERN, $path)) {
+        if (!preg_match($this->getImageFileNamePattern(), $path)) {
             throw new LocalizedException(
                 __('Could not create rendition for image, unsupported file type: %path.', ['path' => $path])
             );
@@ -205,7 +208,7 @@ class GenerateRenditions implements GenerateRenditionsInterface
      */
     private function shouldFileBeResized(string $absolutePath): bool
     {
-        [$width, $height] = getimagesize($absolutePath);
+        [$width, $height] = getimagesizefromstring($this->getMediaDirectory()->readFile($absolutePath));
         return $width > $this->config->getWidth() || $height > $this->config->getHeight();
     }
 
@@ -218,5 +221,15 @@ class GenerateRenditions implements GenerateRenditionsInterface
     private function getMediaDirectory(): WriteInterface
     {
         return $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+    }
+
+    /**
+     * Get image file name pattern for validation
+     *
+     * @return string
+     */
+    public function getImageFileNamePattern(): string
+    {
+        return self::IMAGE_FILE_NAME_PATTERN;
     }
 }

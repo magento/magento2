@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\TestFramework\Bootstrap;
 
@@ -55,6 +55,7 @@ class DocBlock
             new \Magento\TestFramework\Workaround\Segfault(),
             new \Magento\TestFramework\Workaround\Cleanup\TestCaseProperties(),
             new \Magento\TestFramework\Workaround\Cleanup\StaticProperties(),
+            new \Magento\TestFramework\Isolation\FlushDataFixtureStorage(),
             new \Magento\TestFramework\Isolation\WorkingDirectory(),
             new \Magento\TestFramework\Isolation\DeploymentConfig(),
             new \Magento\TestFramework\Workaround\Override\Fixture\Resolver\TestSetter(),

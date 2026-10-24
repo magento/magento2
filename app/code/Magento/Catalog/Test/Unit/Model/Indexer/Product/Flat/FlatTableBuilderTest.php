@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -79,33 +79,15 @@ class FlatTableBuilderTest extends TestCase
     protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManager($this);
-        $this->flatIndexerMock = $this->getMockBuilder(Indexer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->resourceMock = $this->getMockBuilder(ResourceConnection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->tableDataMock = $this->getMockBuilder(
-            TableDataInterface::class
-        )->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->metadataPoolMock = $this->getMockBuilder(MetadataPool::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->metadataMock = $this->getMockBuilder(
-            EntityMetadataInterface::class
-        )->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->metadataMock->expects($this->any())->method('getLinkField')->willReturn('entity_id');
+        $this->flatIndexerMock = $this->createMock(Indexer::class);
+        $this->resourceMock = $this->createMock(ResourceConnection::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->tableDataMock = $this->createMock(TableDataInterface::class);
+        $this->connectionMock = $this->createMock(AdapterInterface::class);
+        $this->metadataPoolMock = $this->createMock(MetadataPool::class);
+        $this->metadataMock = $this->createMock(EntityMetadataInterface::class);
+        $this->metadataMock->method('getLinkField')->willReturn('entity_id');
 
         $this->flatTableBuilder = $objectManagerHelper->getObject(
             FlatTableBuilder::class,
@@ -125,6 +107,11 @@ class FlatTableBuilderTest extends TestCase
         );
     }
 
+    /**
+     * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testBuild()
     {
         $storeId = 1;
@@ -144,12 +131,8 @@ class FlatTableBuilderTest extends TestCase
         $this->flatIndexerMock->expects($this->exactly(3))->method('getFlatColumns')
             ->willReturnOnConsecutiveCalls([], [$eavCustomValueField => []], [$eavCustomValueField => []]);
         $this->flatIndexerMock->expects($this->once())->method('getFlatIndexes')->willReturn([]);
-        $statusAttributeMock = $this->getMockBuilder(Attribute::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $eavCustomAttributeMock = $this->getMockBuilder(Attribute::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $statusAttributeMock = $this->createMock(Attribute::class);
+        $eavCustomAttributeMock = $this->createMock(Attribute::class);
         $this->flatIndexerMock->expects($this->once())->method('getTablesStructure')
             ->willReturn(
                 [
@@ -161,14 +144,19 @@ class FlatTableBuilderTest extends TestCase
                 ]
             );
         $this->flatIndexerMock->expects($this->atLeastOnce())->method('getTable')
-            ->withConsecutive([$tableName], ['catalog_product_website'])
-            ->willReturnOnConsecutiveCalls($tableName, 'catalog_product_website');
+                ->willReturnCallback(
+                    function ($arg) use ($tableName) {
+                        if ($arg == $tableName) {
+                            return $tableName;
+                        } elseif ($arg == 'catalog_product_website') {
+                            return 'catalog_product_website';
+                        }
+                    }
+                );
         $this->flatIndexerMock->expects($this->once())->method('getAttribute')
             ->with('status')
             ->willReturn($statusAttributeMock);
-        $backendMock = $this->getMockBuilder(AbstractBackend::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $backendMock = $this->createMock(AbstractBackend::class);
         $backendMock->expects($this->atLeastOnce())->method('getTable')->willReturn($attributeTable);
         $statusAttributeMock->expects($this->atLeastOnce())->method('getBackend')->willReturn(
             $backendMock
@@ -177,13 +165,9 @@ class FlatTableBuilderTest extends TestCase
             $backendMock
         );
         $statusAttributeMock->expects($this->atLeastOnce())->method('getId')->willReturn($statusId);
-        $tableMock = $this->getMockBuilder(Table::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->connectionMock->expects($this->any())->method('newTable')->willReturn($tableMock);
-        $selectMock = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $tableMock = $this->createMock(Table::class);
+        $this->connectionMock->method('newTable')->willReturn($tableMock);
+        $selectMock = $this->createMock(Select::class);
         $this->connectionMock->expects($this->atLeastOnce())->method('select')->willReturn($selectMock);
         $selectMock->expects($this->once())->method('from')->with(
             ['et' => 'catalog_product_entity_tmp_indexer'],
@@ -191,34 +175,49 @@ class FlatTableBuilderTest extends TestCase
         )->willReturnSelf();
         $selectMock->expects($this->atLeastOnce())->method('joinInner')->willReturnSelf();
         $selectMock->expects($this->exactly(3))->method('joinLeft')
-            ->withConsecutive(
-                [
-                    ['dstatus' => $attributeTable],
-                    sprintf(
-                        'e.%s = dstatus.%s AND dstatus.store_id = %s AND dstatus.attribute_id = %s',
-                        $linkField,
-                        $linkField,
-                        $storeId,
-                        $statusId
-                    ),
-                    []
-                ],
-                [
+            ->willReturnCallback(
+                function (
+                    $arg1,
+                    $arg2,
+                    $arg3
+                ) use (
+                    $selectMock,
+                    $attributeTable,
+                    $linkField,
+                    $storeId,
+                    $statusId,
                     $temporaryTableName,
-                    "e.{$linkField} = {$temporaryTableName}.{$linkField}",
-                    [$linkField, $eavCustomField]
-                ],
-                [
+                    $eavCustomField,
                     $temporaryValueTableName,
-                    "e.{$linkField} = {$temporaryValueTableName}.{$linkField}",
-                    [$eavCustomValueField]
-                ]
-            )->willReturnSelf();
+                    $eavCustomValueField
+                ) {
+                    if ($arg1 === ['dstatus' => $attributeTable] &&
+                        $arg2 ===
+                        sprintf(
+                            'e.%s = dstatus.%s AND dstatus.store_id = %s AND dstatus.attribute_id = %s',
+                            $linkField,
+                            $linkField,
+                            $storeId,
+                            $statusId
+                        )
+                        && empty($arg3)) {
+                            return $selectMock;
+
+                    } elseif ($arg1 === $temporaryTableName &&
+                        $arg2 === "e.{$linkField} = {$temporaryTableName}.{$linkField}" &&
+                        $arg3 === [$linkField, $eavCustomField]) {
+                            return $selectMock;
+
+                    } elseif ($arg1 === $temporaryValueTableName &&
+                        $arg2 === "e.{$linkField} = {$temporaryValueTableName}.{$linkField}" &&
+                        $arg3 === [$eavCustomValueField]) {
+                            return $selectMock;
+                    }
+                }
+            );
         $this->metadataPoolMock->expects($this->atLeastOnce())->method('getMetadata')->with(ProductInterface::class)
             ->willReturn($this->metadataMock);
-        $storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $storeMock = $this->createMock(StoreInterface::class);
         $this->storeManagerMock->expects($this->once())->method('getStore')->with($storeId)->willReturn($storeMock);
         $this->flatTableBuilder->build($storeId, $changedIds, $valueFieldSuffix, $tableDropSuffix, $fillTmpTables);
     }

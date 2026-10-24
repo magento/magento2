@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -35,12 +35,12 @@
             </createData>
 
             <!-- Add downloadable link -->
-            <createData entity="downloadableLink1" stepKey="addDownloadableLink">
+            <createData entity="downloadableLink3" stepKey="addDownloadableLink">
                 <requiredEntity createDataKey="createProduct"/>
             </createData>
 
             <!-- Add downloadable sample -->
-            <createData entity="DownloadableSample" stepKey="addDownloadableSample">
+            <createData entity="DownloadableSampleWithStaticDomain" stepKey="addDownloadableSample">
                 <requiredEntity createDataKey="createProduct"/>
             </createData>
         </before>
@@ -68,9 +68,9 @@
 
         <!-- Sample url is accessible -->
         <actionGroup ref="AssertStorefrontSeeElementActionGroup" stepKey="seeDownloadableSample">
-            <argument name="selector" value="{{StorefrontDownloadableProductSection.downloadableSampleLabel(DownloadableSample.title)}}"/>
+            <argument name="selector" value="{{StorefrontDownloadableProductSection.downloadableSampleLabel(DownloadableSampleWithStaticDomain.title)}}"/>
         </actionGroup>
-        <click selector="{{StorefrontDownloadableProductSection.downloadableSampleLabel(DownloadableSample.title)}}" stepKey="clickDownloadableSample"/>
+        <click selector="{{StorefrontDownloadableProductSection.downloadableSampleLabel(DownloadableSampleWithStaticDomain.title)}}" stepKey="clickDownloadableSample"/>
         <switchToNextTab stepKey="switchToSampleTab"/>
         <wait time="2" stepKey="waitToMakeSureThereWillBeNoRedirectToHomePage"/>
         <seeInCurrentUrl url="downloadable/download/sample/sample_id/" stepKey="amOnSampleDownloadPage"/>

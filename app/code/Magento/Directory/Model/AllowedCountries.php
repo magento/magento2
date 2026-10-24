@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Directory\Model;
@@ -18,7 +18,7 @@ use Magento\Store\Model\StoreManagerInterface;
  */
 class AllowedCountries
 {
-    const ALLOWED_COUNTRIES_PATH = 'general/country/allow';
+    public const ALLOWED_COUNTRIES_PATH = 'general/country/allow';
 
     /**
      * @var ScopeConfigInterface
@@ -47,7 +47,7 @@ class AllowedCountries
      * Retrieve all allowed countries for scope or scopes
      *
      * @param string $scope
-     * @param string|null $scopeCode
+     * @param string|null|array $scopeCode
      * @return array
      * @since 100.1.2
      */

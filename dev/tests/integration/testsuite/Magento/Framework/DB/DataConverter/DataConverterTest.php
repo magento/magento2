@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\DB\DataConverter;
@@ -72,16 +72,13 @@ class DataConverterTest extends TestCase
         $this->objectManager = Bootstrap::getObjectManager();
 
         /** @var InQueryModifier $queryModifier */
-        $this->queryModifierMock = $this->getMockBuilder(QueryModifierInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['modify'])
-            ->getMockForAbstractClass();
+        $this->queryModifierMock = $this->createMock(QueryModifierInterface::class);
 
         $this->dataConverter = $this->objectManager->get(SerializedToJson::class);
 
         $this->iteratorMock = $this->getMockBuilder(BatchIterator::class)
             ->disableOriginalConstructor()
-            ->setMethods(['current', 'valid', 'next'])
+            ->onlyMethods(['current', 'valid', 'next'])
             ->getMock();
 
         $iterationComplete = false;
@@ -102,12 +99,12 @@ class DataConverterTest extends TestCase
 
         $this->queryGeneratorMock = $this->getMockBuilder(Generator::class)
             ->disableOriginalConstructor()
-            ->setMethods(['generate'])
+            ->onlyMethods(['generate'])
             ->getMock();
 
         $this->selectByRangeMock = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMock();
 
         $this->queryGeneratorMock->expects($this->any())
@@ -121,7 +118,7 @@ class DataConverterTest extends TestCase
 
         $this->adapterMock = $this->getMockBuilder(Mysql::class)
             ->disableOriginalConstructor()
-            ->setMethods(['fetchPairs', 'fetchAll', 'quoteInto', 'update', 'prepareSqlCondition'])
+            ->onlyMethods(['fetchPairs', 'fetchAll', 'quoteInto', 'update', 'prepareSqlCondition'])
             ->getMock();
 
         $this->adapterMock->expects($this->any())

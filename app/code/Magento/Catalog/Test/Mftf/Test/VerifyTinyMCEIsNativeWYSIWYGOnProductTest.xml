@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
+ */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
@@ -22,22 +22,26 @@
             <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
             <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="enableTinyMCE" />
         </before>
-        <amOnPage url="{{AdminProductCreatePage.url(AddToDefaultSet.attributeSetId, 'simple')}}" stepKey="navigateToNewProduct"/>
-        <waitForPageLoad stepKey="wait1"/>
+        <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="navigateToNewProduct">
+            <argument name="attributeSetId" value="{{AddToDefaultSet.attributeSetId}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="wait1"/>
         <fillField userInput="{{_defaultProduct.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="fillName"/>
         <fillField userInput="{{_defaultProduct.price}}" selector="{{AdminProductFormSection.productPrice}}" stepKey="fillPrice"/>
         <fillField userInput="{{_defaultProduct.sku}}" selector="{{AdminProductFormSection.productSku}}" stepKey="fillSKU"/>
-        <fillField userInput="{{_defaultProduct.quantity}}" selector="{{AdminProductFormSection.productQuantity}}" stepKey="fillQuantity"/>
+        <actionGroup ref="AdminFillProductQtyOnProductFormActionGroup" stepKey="fillQuantity">
+            <argument name="productQty" value="{{_defaultProduct.quantity}}"/>
+        </actionGroup>
         <scrollTo selector="{{AdminProductFormSection.productQuantity}}" stepKey="scrollToQty" />
         <click selector="{{AdminProductFormSection.contentTab}}" stepKey="clickContentTab" />
         <waitForElementVisible selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.TinyMCE}}" stepKey="waitForDescription" />
         <seeElement selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.TinyMCE}}" stepKey="TinyMCEDescription" />
         <click selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.EditArea}}" stepKey="focusProductDescriptionWysiwyg"/>
-        <executeJS function="tinyMCE.get('product_form_description').setContent('Hello World!');" stepKey="executeJSFillContent1"/>
+        <executeJS function="hugerte.get('product_form_description').setContent('Hello World!');" stepKey="executeJSFillContent1"/>
         <waitForElementVisible selector="{{ProductShortDescriptionWysiwygSection.form}} {{TinyMCESection.TinyMCE}}" stepKey="waitForShortDescription" />
         <seeElement selector="{{ProductShortDescriptionWysiwygSection.form}} {{TinyMCESection.TinyMCE}}" stepKey="TinyMCEShortDescription" />
         <click selector="{{ProductShortDescriptionWysiwygSection.form}} {{TinyMCESection.EditArea}}" stepKey="focusProductShortDescriptionWysiwyg"/>
-        <executeJS function="tinyMCE.get('product_form_short_description').setContent('Hello World! Short Content');" stepKey="executeJSFillContent2"/>
+        <executeJS function="hugerte.get('product_form_short_description').setContent('Hello World! Short Content');" stepKey="executeJSFillContent2"/>
         <scrollTo selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.ShowHideBtn}}" y="-150" x="0" stepKey="scrollToDesShowHideBtn1" />
         <click selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.ShowHideBtn}}" stepKey="clickShowHideBtn1" />
         <waitForElementVisible selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.InsertImageBtn}}" stepKey="waitForInsertImage1" />
@@ -58,6 +62,8 @@
         <see userInput="Hello World!" selector="{{StorefrontProductInfoMainSection.productDescription}}" stepKey="assertProductDescription"/>
         <see userInput="Hello World! Short Content" selector="{{StorefrontProductInfoMainSection.productShortDescription}}" stepKey="assertProductShortDescription"/>
         <after>
+            <!-- Delete all products via API using ProductApiHelper -->
+            <helper class="Magento\Catalog\Test\Mftf\Helper\ProductApiHelper" method="deleteAllProductsApi" stepKey="deleteAllProductsViaApi"/>
             <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>

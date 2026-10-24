@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -67,19 +67,13 @@ class ViewTest extends TestCase
     {
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->getMock();
-        $this->guestHelperMock = $this->getMockBuilder(Guest::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->resultRedirectMock = $this->getMockBuilder(Redirect::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->guestHelperMock = $this->createMock(Guest::class);
+        $this->resultRedirectMock = $this->createMock(Redirect::class);
         $this->resultPageFactoryMock = $this->getMockBuilder(PageFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
-        $this->resultPageMock = $this->getMockBuilder(Page::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resultPageMock = $this->createMock(Page::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->context = $this->objectManagerHelper->getObject(

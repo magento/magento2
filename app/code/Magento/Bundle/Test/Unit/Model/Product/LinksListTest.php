@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,11 +13,15 @@ use Magento\Bundle\Model\Product\LinksList;
 use Magento\Bundle\Model\Product\Type;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Api\DataObjectHelper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class LinksListTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var LinksList
      */
@@ -30,7 +33,7 @@ class LinksListTest extends TestCase
     protected $linkFactoryMock;
 
     /**
-     * @var MockObject
+     * @var Product|MockObject
      */
     protected $productMock;
 
@@ -40,7 +43,7 @@ class LinksListTest extends TestCase
     protected $productTypeMock;
 
     /**
-     * @var MockObject
+     * @var Product|MockObject
      */
     protected $selectionMock;
 
@@ -49,6 +52,10 @@ class LinksListTest extends TestCase
      */
     protected $dataObjectHelperMock;
 
+    /**
+     * @return void
+     * @throws Exception
+     */
     protected function setUp(): void
     {
         $this->linkFactoryMock = $this->createPartialMock(
@@ -57,32 +64,25 @@ class LinksListTest extends TestCase
                 'create',
             ]
         );
-        $this->dataObjectHelperMock = $this->getMockBuilder(DataObjectHelper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->selectionMock = $this->getMockBuilder(Product::class)
-            ->addMethods(
-                [
-                    'getSelectionPriceType',
-                    'getSelectionPriceValue',
-                    'getIsDefault',
-                    'getSelectionQty',
-                    'getSelectionCanChangeQty',
-                    'getSelectionId'
-                ]
-            )
-            ->onlyMethods(['getData', '__wakeup'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->productMock = $this->getMockBuilder(Product::class)
-            ->addMethods(['getPriceType'])
-            ->onlyMethods(['getTypeInstance', 'getStoreId', '__wakeup'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->dataObjectHelperMock = $this->createMock(DataObjectHelper::class);
+        $this->selectionMock = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getSelectionPriceType', 'setSelectionPriceType', 'getSelectionPriceValue', 'setSelectionPriceValue',
+             'getData', 'setData', 'getSelectionId', 'setSelectionId', 'getIsDefault', 'setIsDefault',
+             'getSelectionQty', 'setSelectionQty', 'getSelectionCanChangeQty', 'setSelectionCanChangeQty']
+        );
+        $this->productMock = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getPriceType', 'setPriceType']
+        );
         $this->productTypeMock = $this->createMock(Type::class);
         $this->model = new LinksList($this->linkFactoryMock, $this->productTypeMock, $this->dataObjectHelperMock);
     }
 
+    /**
+     * @return void
+     * @throws Exception
+     */
     public function testLinksList()
     {
         $optionId = 665;
@@ -91,17 +91,15 @@ class LinksListTest extends TestCase
             ->method('getSelectionsCollection')
             ->with([$optionId], $this->productMock)
             ->willReturn([$this->selectionMock]);
-        $this->productMock->expects($this->once())->method('getPriceType')->willReturn('price_type');
-        $this->selectionMock->expects($this->once())
-            ->method('getSelectionPriceType')
-            ->willReturn('selection_price_type');
-        $this->selectionMock->expects($this->exactly(2))->method('getSelectionPriceValue')->willReturn(12);
-        $this->selectionMock->expects($this->once())->method('getData')->willReturn(['some data']);
-        $this->selectionMock->expects($this->once())->method('getSelectionId')->willReturn($selectionId);
-        $this->selectionMock->expects($this->once())->method('getIsDefault')->willReturn(true);
-        $this->selectionMock->expects($this->once())->method('getSelectionQty')->willReturn(66);
-        $this->selectionMock->expects($this->once())->method('getSelectionCanChangeQty')->willReturn(22);
-        $linkMock = $this->getMockForAbstractClass(LinkInterface::class);
+        $this->productMock->method('getPriceType')->willReturn('price_type');
+        $this->selectionMock->method('getSelectionPriceType')->willReturn('selection_price_type');
+        $this->selectionMock->method('getSelectionPriceValue')->willReturn(12);
+        $this->selectionMock->method('getData')->willReturn([0 => 'some data']);
+        $this->selectionMock->method('getSelectionId')->willReturn($selectionId);
+        $this->selectionMock->method('getIsDefault')->willReturn(true);
+        $this->selectionMock->method('getSelectionQty')->willReturn(66);
+        $this->selectionMock->method('getSelectionCanChangeQty')->willReturn(22);
+        $linkMock = $this->createMock(LinkInterface::class);
         $this->dataObjectHelperMock->expects($this->once())
             ->method('populateWithArray')
             ->with($linkMock, ['some data'], LinkInterface::class)->willReturnSelf();

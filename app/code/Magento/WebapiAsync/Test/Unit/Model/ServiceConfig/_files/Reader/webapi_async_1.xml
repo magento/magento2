@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 -->
 <services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -16,6 +16,8 @@
     </service>
 
     <route url="async/V1/products" method="POST" alias="asyncProducts"/>
-    <route url="async/bulk/V1/cmsPage" method="POST" alias="asyncBulkCmsPages"/>
+    <route url="async/bulk/V1/cmsPage" method="POST" alias="asyncBulkCmsPages">
+        <data input-array-size-limit="50"/>
+    </route>
     <route url="async/V1/customers" method="POST" alias="/asyncCustomers"/>
 </services>

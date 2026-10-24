@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -53,7 +53,7 @@ class ResponseFactoryTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $objectManagerHelper->getObject(
@@ -72,8 +72,32 @@ class ResponseFactoryTest extends TestCase
     public function testCreate(): void
     {
         $documents = [
-            ['title' => 'oneTitle', 'description' => 'oneDescription'],
-            ['title' => 'twoTitle', 'description' => 'twoDescription']
+            [
+                'title' => 'oneTitle',
+                'description' => 'oneDescription',
+                'fields' => [
+                    '_id' => ['1']
+                ]
+            ],
+            [
+                'title' => 'twoTitle',
+                'description' => 'twoDescription',
+                'fields' => [
+                    '_id' => ['2']
+                ]
+            ]
+        ];
+        $modifiedDocuments = [
+            [
+                'title' => 'oneTitle',
+                'description' => 'oneDescription',
+                '_id' => '1'
+            ],
+            [
+                'title' => 'twoTitle',
+                'description' => 'twoDescription',
+                '_id' => '2'
+            ]
         ];
         $aggregations = [
             'aggregation1' => [
@@ -113,8 +137,10 @@ class ResponseFactoryTest extends TestCase
 
         $this->documentFactory
             ->method('create')
-            ->withConsecutive([$documents[0]], [$documents[1]])
-            ->willReturnOnConsecutiveCalls('document1', 'document2');
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$modifiedDocuments[0]] => 'document1',
+                [$modifiedDocuments[1]] => 'document2',
+            });
 
         $this->aggregationFactory
             ->method('create')

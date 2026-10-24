@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -88,7 +88,7 @@ class CollectionProvider
                 $posA = (int)$itemA['position'];
                 $posB = (int)$itemB['position'];
 
-                return $posA <=> $posB;
+                return (($posA - $posB) > 0) ? 1 : -1;  // for PHP 7 and 8 consistency
             }
         );
 

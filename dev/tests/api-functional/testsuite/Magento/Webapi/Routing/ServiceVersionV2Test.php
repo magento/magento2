@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Webapi\Routing;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ServiceVersionV2Test extends \Magento\Webapi\Routing\BaseService
 {
@@ -75,9 +77,8 @@ class ServiceVersionV2Test extends \Magento\Webapi\Routing\BaseService
      * Test fetching items when filters are applied
      *
      * @param string[] $filters
-     * @param array $expectedResult
-     * @dataProvider itemsWithFiltersDataProvider
-     */
+     * @param array $expectedResult */
+    #[DataProvider('itemsWithFiltersDataProvider')]
     public function testItemsWithFilters($filters, $expectedResult)
     {
         $restFilter = '';
@@ -105,7 +106,7 @@ class ServiceVersionV2Test extends \Magento\Webapi\Routing\BaseService
         $this->assertEquals($expectedResult, $item, 'Filtration does not seem to work correctly.');
     }
 
-    public function itemsWithFiltersDataProvider()
+    public static function itemsWithFiltersDataProvider()
     {
         $firstItem = ['id' => 1, 'name' => 'testProduct1', 'price' => 1];
         $secondItem = ['id' => 2, 'name' => 'testProduct2', 'price' => 2];

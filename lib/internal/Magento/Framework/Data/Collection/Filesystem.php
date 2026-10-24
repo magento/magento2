@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -141,8 +141,8 @@ class Filesystem extends \Magento\Framework\Data\Collection
      * @param \Magento\Framework\Filesystem $filesystem
      */
     public function __construct(
-        EntityFactoryInterface $_entityFactory = null,
-        \Magento\Framework\Filesystem $filesystem = null
+        ?EntityFactoryInterface $_entityFactory = null,
+        ?\Magento\Framework\Filesystem $filesystem = null
     ) {
         $this->_entityFactory = $_entityFactory ?? ObjectManager::getInstance()->get(EntityFactoryInterface::class);
 

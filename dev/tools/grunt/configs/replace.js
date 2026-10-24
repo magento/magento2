@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 'use strict';
@@ -9,10 +9,11 @@ var nlWin = '\r\n',
     nlUnix = '\n';
 
 function findCopyright(lang, nlSys) {
-    var copyrightText = {
-        firstLine: 'Copyright © Magento, Inc. All rights reserved.',
-        secondLine: 'See COPYING.txt for license details.'
-    };
+    var currentYear = new Date().getFullYear(),
+        copyrightText = {
+            firstLine: 'Copyright ' + currentYear + ' Adobe',
+            secondLine: 'All Rights Reserved.'
+        };
     switch (lang) {
         case 'less':
             return new RegExp(

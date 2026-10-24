@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
@@ -11,6 +11,7 @@
             <block class="Magento\Framework\View\Element\Template" name="top.search" as="topSearch" template="Magento_Search::form.mini.phtml">
                 <arguments>
                     <argument name="configProvider" xsi:type="object">Magento\Search\ViewModel\ConfigProvider</argument>
+                    <argument name="additionalSearchFormData" xsi:type="object">Magento\Search\ViewModel\AdditionalSearchFormData</argument>
                 </arguments>
             </block>
         </referenceContainer>

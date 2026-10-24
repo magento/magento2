@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -36,7 +36,7 @@ class WriterTest extends TestCase
         $this->objectManager = new ObjectManager($this);
         $this->resource = $this->getMockBuilder(ConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->model = $this->objectManager->getObject(
             Writer::class,
             ['resource' => $this->resource]

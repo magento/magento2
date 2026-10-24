@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Paypal\Model\Payflow\Service\Response\Validator\ResponseValidator;
 use Magento\Paypal\Model\Payflow\Service\Response\ValidatorInterface;
 use Magento\Paypal\Model\Payflow\Transparent;
 use Magento\Paypal\Model\Payflowpro;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -39,15 +40,8 @@ class ResponseValidatorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->validatorMock = $this->getMockBuilder(
-            ValidatorInterface::class
-        )
-            ->setMethods(['validate'])
-            ->getMockForAbstractClass();
-        $this->payflowFacade = $this->getMockBuilder(Transparent::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
+        $this->validatorMock = $this->createMock(ValidatorInterface::class);
+        $this->payflowFacade = $this->createMock(Transparent::class);
 
         $this->responseValidator = new ResponseValidator([$this->validatorMock]);
     }
@@ -55,9 +49,8 @@ class ResponseValidatorTest extends TestCase
     /**
      * @param Object $response
      * @param int $exactlyCount
-     *
-     * @dataProvider dataProviderForTestValidate
      */
+    #[DataProvider('dataProviderForTestValidate')]
     public function testValidate(DataObject $response, $exactlyCount)
     {
         $this->validatorMock->expects($this->exactly($exactlyCount))
@@ -70,7 +63,7 @@ class ResponseValidatorTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForTestValidate()
+    public static function dataProviderForTestValidate()
     {
         return [
             [

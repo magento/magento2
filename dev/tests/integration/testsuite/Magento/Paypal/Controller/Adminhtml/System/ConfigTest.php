@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Paypal\Controller\Adminhtml\System;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoAppArea adminhtml
@@ -20,12 +21,11 @@ class ConfigTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
      * @magentoAppIsolation enabled
      * @magentoDbIsolation enabled
      *
-     * @dataProvider saveMerchantCountryDataProvider
-     *
      * @param string $section
      * @param array $groups
      * @return void
      */
+    #[DataProvider('saveMerchantCountryDataProvider')]
     public function testSaveMerchantCountry(string $section, array $groups): void
     {
         /** @var ScopeConfigInterface $scopeConfig */
@@ -49,7 +49,7 @@ class ConfigTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
     /**
      * @return array
      */
-    public function saveMerchantCountryDataProvider(): array
+    public static function saveMerchantCountryDataProvider(): array
     {
         return [
             [

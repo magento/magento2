@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -91,7 +91,7 @@ class FormTest extends AbstractController
     private function prepareRequestData($invalidData = false)
     {
         $orderId = 100000001;
-        $email = $invalidData ? 'wrong@example.com' : 'customer@null.com';
+        $email = $invalidData ? 'wrong@example.com' : 'customer@example.com';
 
         /** @var FormKey $formKey */
         $formKey = $this->_objectManager->get(FormKey::class);

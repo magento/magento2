@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Marketplace\Helper;
@@ -39,7 +39,7 @@ class Cache extends \Magento\Framework\App\Helper\AbstractHelper
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Framework\Config\CacheInterface $cache,
-        SerializerInterface $serializer = null
+        ?SerializerInterface $serializer = null
     ) {
         $this->cache = $cache;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);

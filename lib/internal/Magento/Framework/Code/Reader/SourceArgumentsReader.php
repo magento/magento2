@@ -1,16 +1,16 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Code\Reader;
 
-use ReflectionClass;
-use ReflectionException;
-use ReflectionParameter;
+use Magento\Framework\GetParameterClassTrait;
 
 class SourceArgumentsReader
 {
+    use GetParameterClassTrait;
+
     /**
      * Namespace separator
      * @deprecated
@@ -26,7 +26,7 @@ class SourceArgumentsReader
     /**
      * @param NamespaceResolver|null $namespaceResolver
      */
-    public function __construct(NamespaceResolver $namespaceResolver = null)
+    public function __construct(?NamespaceResolver $namespaceResolver = null)
     {
         $this->namespaceResolver = $namespaceResolver ?: new NamespaceResolver();
     }
@@ -84,22 +84,6 @@ class SourceArgumentsReader
         }
 
         return $types;
-    }
-
-    /**
-     * Get class by reflection parameter
-     *
-     * @param ReflectionParameter $reflectionParameter
-     * @return ReflectionClass|null
-     * @throws ReflectionException
-     */
-    private function getParameterClass(ReflectionParameter $reflectionParameter): ?ReflectionClass
-    {
-        $parameterType = $reflectionParameter->getType();
-
-        return $parameterType && !$parameterType->isBuiltin()
-            ? new ReflectionClass($parameterType->getName())
-            : null;
     }
 
     /**

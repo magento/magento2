@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminVerifyWYSIWYGEditorAndTinyMCEButtonsAcrossBrowserTabsTest">
+        <annotations>
+            <features value="Cms"/>
+            <stories value="404 Not Found Page"/>
+            <title value="WYSIWYG is presented for content if page for edit is opened in new browser tab"/>
+            <description value="Testcase verifie WYSIWYG editor and tiny mce buttons for 404 not found page on browser tabs"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4119" />
+        </annotations>
+        <before>
+            <!-- Enable WYSIWYG editor -->
+            <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
+            <!-- Enable TinyMCE  -->
+            <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="enableTinyMCE" />
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminDisableWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <actionGroup ref="AdminOpenCMSPagesGridActionGroup" stepKey="navigateToCmsPageGrid"/>
+        <actionGroup ref="AdminVerifyCmsPageSelectMenuActionGroup" stepKey="verify404NotFoundPageSelectMenu"/>
+        <click selector="{{CmsPagesPageActionsSection.edit('404 Not Found')}}" stepKey="clickEdit" />
+        <openNewTab stepKey="openNewTab"/>
+        <!--Open created cms page-->
+        <actionGroup ref="AdminOpenCmsPageActionGroup" stepKey="openEditPage">
+            <argument name="page_id" value="1"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForCMSPage"/>
+        <switchToPreviousTab stepKey="switchToPreviousTab"/>
+        <waitForPageLoad stepKey="waitForCMSPageToLoad"/>
+        <conditionalClick selector="{{CmsNewPagePageContentSection.header}}" dependentSelector="{{CmsNewPagePageContentSection.contentHeading}}" visible="false" stepKey="expandContentTabIfCollapsed"/>
+        <actionGroup ref="AdminVerifyWYSIWYGEditorAndTinyMCEButtonsActionGroup" stepKey="verifyWYSIWYGEditorAndButtonsPresentInCurrentTab"/>
+        <switchToNextTab stepKey="switchToNextTab"/>
+        <conditionalClick selector="{{CmsNewPagePageContentSection.header}}" dependentSelector="{{CmsNewPagePageContentSection.contentHeading}}" visible="false" stepKey="againExpandContentTabIfCollapsed"/>
+        <actionGroup ref="AdminVerifyWYSIWYGEditorAndTinyMCEButtonsActionGroup" stepKey="verifyWYSIWYGEditorAndButtonsPresentInAnotherTab"/>
+    </test>
+</tests>

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Paypal\Controller\Transparent;
 
@@ -66,7 +66,7 @@ class RequestSecureToken extends \Magento\Framework\App\Action\Action implements
         SecureToken $secureTokenService,
         SessionManager $sessionManager,
         Transparent $transparent,
-        SessionManagerInterface $sessionInterface = null
+        ?SessionManagerInterface $sessionInterface = null
     ) {
         $this->resultJsonFactory = $resultJsonFactory;
         $this->sessionTransparent = $sessionTransparent;

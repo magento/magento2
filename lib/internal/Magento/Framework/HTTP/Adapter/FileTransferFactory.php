@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\HTTP\Adapter;
+
+use Magento\Framework\File\Http;
 
 class FileTransferFactory
 {
@@ -11,10 +13,10 @@ class FileTransferFactory
      * Create HTTP adapter
      *
      * @param array $options
-     * @return \Zend_File_Transfer_Adapter_Http
+     * @return Http
      */
     public function create(array $options = [])
     {
-        return new \Zend_File_Transfer_Adapter_Http($options);
+        return new Http($options);
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Setup\Declaration\Schema\Db\MySQL\Definition\Columns;
@@ -107,7 +107,7 @@ class Integer implements DbDefinitionProcessorInterface
         $matches = [];
         if (preg_match(
             '/^(?<type>(?:big|small|tiny|medium)?int)(?:\((?<padding>\d+)\))?/',
-            $data['definition'],
+            $data['definition'] ?? '',
             $matches
         )) {
             // we have an agreement that tinyint(1) is Boolean

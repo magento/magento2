@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,7 +10,7 @@ namespace Magento\Security\Test\Unit\Model;
 use Magento\Backend\Model\Auth\Session;
 use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 use Magento\Framework\Stdlib\DateTime\DateTime;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Security\Model\AdminSessionInfo;
 use Magento\Security\Model\AdminSessionInfoFactory;
 use Magento\Security\Model\AdminSessionsManager;
@@ -18,6 +18,7 @@ use Magento\Security\Model\ConfigInterface;
 use Magento\Security\Model\ResourceModel\AdminSessionInfo\Collection;
 use Magento\Security\Model\ResourceModel\AdminSessionInfo\CollectionFactory;
 use Magento\User\Model\User;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -26,6 +27,8 @@ use PHPUnit\Framework\TestCase;
  */
 class AdminSessionsManagerTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var  AdminSessionsManager */
     protected $model;
 
@@ -55,12 +58,7 @@ class AdminSessionsManagerTest extends TestCase
      */
     protected $dateTimeMock;
 
-    /** @var  ObjectManager */
-    protected $objectManager;
-
-    /*
-     * @var RemoteAddress
-     */
+    /** @var RemoteAddress */
     protected $remoteAddressMock;
 
     /**
@@ -69,12 +67,18 @@ class AdminSessionsManagerTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->objectManager = new ObjectManager($this);
-
-        $this->authSessionMock = $this->getMockBuilder(Session::class)
-            ->addMethods(['isActive', 'getStatus', 'getUser', 'getId', 'getUpdatedAt', 'getAdminSessionInfoId', 'setAdminSessionInfoId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->authSessionMock = $this->createPartialMockWithReflection(
+            Session::class,
+            [
+                'isActive',
+                'getStatus',
+                'getUser',
+                'getId',
+                'getUpdatedAt',
+                'getAdminSessionInfoId',
+                'setAdminSessionInfoId'
+            ]
+        );
 
         $this->adminSessionInfoCollectionFactoryMock = $this->createPartialMock(
             CollectionFactory::class,
@@ -99,36 +103,36 @@ class AdminSessionsManagerTest extends TestCase
             ['create']
         );
 
-        $this->currentSessionMock = $this->getMockBuilder(AdminSessionInfo::class)
-            ->addMethods(['isActive', 'getStatus', 'getUserId', 'getUpdatedAt'])
-            ->onlyMethods(['load', 'setData', 'setIsOtherSessionsTerminated', 'save', 'getId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->currentSessionMock = $this->createPartialMockWithReflection(
+            AdminSessionInfo::class,
+            [
+                'isActive',
+                'getStatus',
+                'getUserId',
+                'getUpdatedAt',
+                'load',
+                'setData',
+                'setIsOtherSessionsTerminated',
+                'save',
+                'getId'
+            ]
+        );
 
-        $this->securityConfigMock = $this->getMockBuilder(ConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->securityConfigMock = $this->createMock(ConfigInterface::class);
 
         $this->userMock = $this->createPartialMock(User::class, ['getId']);
 
-        $this->dateTimeMock =  $this->getMockBuilder(DateTime::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->dateTimeMock = $this->createMock(DateTime::class);
 
-        $this->remoteAddressMock =  $this->getMockBuilder(RemoteAddress::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->remoteAddressMock = $this->createMock(RemoteAddress::class);
 
-        $this->model = $this->objectManager->getObject(
-            AdminSessionsManager::class,
-            [
-                'securityConfig' => $this->securityConfigMock,
-                'authSession' => $this->authSessionMock,
-                'adminSessionInfoFactory' => $this->adminSessionInfoFactoryMock,
-                'adminSessionInfoCollectionFactory' => $this->adminSessionInfoCollectionFactoryMock,
-                'dateTime' => $this->dateTimeMock,
-                'remoteAddress' => $this->remoteAddressMock
-            ]
+        $this->model = new AdminSessionsManager(
+            $this->securityConfigMock,
+            $this->authSessionMock,
+            $this->adminSessionInfoFactoryMock,
+            $this->adminSessionInfoCollectionFactoryMock,
+            $this->dateTimeMock,
+            $this->remoteAddressMock
         );
     }
 
@@ -258,6 +262,48 @@ class AdminSessionsManagerTest extends TestCase
     /**
      * @return void
      */
+    public function testUpdatedAtIsNull()
+    {
+        $newUpdatedAt = '2016-01-01 00:00:30';
+        $adminSessionInfoId = 50;
+        $this->authSessionMock->expects($this->any())
+            ->method('getAdminSessionInfoId')
+            ->willReturn($adminSessionInfoId);
+
+        $this->adminSessionInfoFactoryMock->expects($this->any())
+            ->method('create')
+            ->willReturn($this->currentSessionMock);
+
+        $this->currentSessionMock->expects($this->once())
+            ->method('load')
+            ->willReturnSelf();
+
+        $this->currentSessionMock->expects($this->once())
+            ->method('getUpdatedAt')
+            ->willReturn(null);
+
+        $this->authSessionMock->expects($this->once())
+            ->method('getUpdatedAt')
+            ->willReturn(strtotime($newUpdatedAt));
+
+        $this->securityConfigMock->expects($this->once())
+            ->method('getAdminSessionLifetime')
+            ->willReturn(100);
+
+        $this->currentSessionMock->expects($this->never())
+            ->method('setData')
+            ->willReturnSelf();
+
+        $this->currentSessionMock->expects($this->never())
+            ->method('save')
+            ->willReturnSelf();
+
+        $this->model->processProlong();
+    }
+
+    /**
+     * @return void
+     */
     public function testProcessLogout()
     {
         $adminSessionInfoId = 50;
@@ -331,8 +377,8 @@ class AdminSessionsManagerTest extends TestCase
     /**
      * @param string $expectedResult
      * @param int $sessionStatus
-     * @dataProvider dataProviderLogoutReasonMessage
      */
+    #[DataProvider('dataProviderLogoutReasonMessage')]
     public function testGetLogoutReasonMessage($expectedResult, $sessionStatus)
     {
         $this->adminSessionInfoFactoryMock->expects($this->exactly(2))
@@ -371,7 +417,7 @@ class AdminSessionsManagerTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderLogoutReasonMessage()
+    public static function dataProviderLogoutReasonMessage()
     {
         return [
             [

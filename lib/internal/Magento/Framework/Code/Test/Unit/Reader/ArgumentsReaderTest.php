@@ -1,12 +1,12 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Code\Test\Unit\Reader;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Framework\Code\Reader\ArgumentsReader;
 
 require_once __DIR__ . '/_files/ClassesForArgumentsReader.php';
@@ -46,33 +46,61 @@ class ArgumentsReaderTest extends TestCase
                 'isOptional' => false,
                 'default' => null,
             ],
+            'noType' => [
+                'name' => 'noType',
+                'position' => 3,
+                'type' => '\\\\noType',
+                'isOptional' => false,
+                'default' => null,
+            ],
             'const' => [
                 'name' => 'const',
-                'position' => 3,
+                'position' => 4,
                 'type' => 'string',
                 'isOptional' => true,
                 'default' => 'Const Value',
             ],
             'optionalNumValue' => [
                 'name' => 'optionalNumValue',
-                'position' => 4,
+                'position' => 5,
                 'type' => 'int',
                 'isOptional' => true,
                 'default' => 9807,
             ],
             'optionalStringValue' => [
                 'name' => 'optionalStringValue',
-                'position' => 5,
+                'position' => 6,
                 'type' => 'string',
                 'isOptional' => true,
                 'default' => 'optional string',
             ],
             'optionalArrayValue' => [
                 'name' => 'optionalArrayValue',
-                'position' => 6,
+                'position' => 7,
                 'type' => 'array',
                 'isOptional' => true,
                 'default' => "array('optionalKey' => 'optionalValue')",
+            ],
+            'optNullValue' => [
+                'name' => 'optNullValue',
+                'position' => 8,
+                'type' => null,
+                'isOptional' => true,
+                'default' => null,
+            ],
+            'optNullIntValue' => [
+                'name' => 'optNullIntValue',
+                'position' => 9,
+                'type' => null,
+                'isOptional' => true,
+                'default' => 1,
+            ],
+            'optNoTypeValue' => [
+                'name' => 'optNoTypeValue',
+                'position' => 10,
+                'type' => '\\\\optNoTypeValue',
+                'isOptional' => true,
+                'default' => null,
             ],
         ];
         $class = new \ReflectionClass('ClassWithAllArgumentTypes');
@@ -113,33 +141,61 @@ class ArgumentsReaderTest extends TestCase
                 'isOptional' => false,
                 'default' => null,
             ],
+            'noType' => [
+                'name' => 'noType',
+                'position' => 3,
+                'type' => '\\\\noType',
+                'isOptional' => false,
+                'default' => null,
+            ],
             'const' => [
                 'name' => 'const',
-                'position' => 3,
+                'position' => 4,
                 'type' => 'string',
                 'isOptional' => true,
                 'default' => 'Const Value',
             ],
             'optionalNumValue' => [
                 'name' => 'optionalNumValue',
-                'position' => 4,
+                'position' => 5,
                 'type' => 'int',
                 'isOptional' => true,
                 'default' => 9807,
             ],
             'optionalStringValue' => [
                 'name' => 'optionalStringValue',
-                'position' => 5,
+                'position' => 6,
                 'type' => 'string',
                 'isOptional' => true,
                 'default' => 'optional string',
             ],
             'optionalArrayValue' => [
                 'name' => 'optionalArrayValue',
-                'position' => 6,
+                'position' => 7,
                 'type' => 'array',
                 'isOptional' => true,
                 'default' => "array('optionalKey' => 'optionalValue')",
+            ],
+            'optNullValue' => [
+                'name' => 'optNullValue',
+                'position' => 8,
+                'type' => null,
+                'isOptional' => true,
+                'default' => null,
+            ],
+            'optNullIntValue' => [
+                'name' => 'optNullIntValue',
+                'position' => 9,
+                'type' => null,
+                'isOptional' => true,
+                'default' => 1,
+            ],
+            'optNoTypeValue' => [
+                'name' => 'optNoTypeValue',
+                'position' => 10,
+                'type' => '\\\\optNoTypeValue',
+                'isOptional' => true,
+                'default' => null,
             ],
         ];
         $class = new \ReflectionClass('ClassWithoutOwnConstruct');
@@ -214,8 +270,18 @@ class ArgumentsReaderTest extends TestCase
             ]
         );
         $expectedResult = [
-            ['name' => 'stdClassObject', 'position' => 0, 'type' => '\stdClass'],
-            ['name' => 'secondClass', 'position' => 1, 'type' => '\ClassExtendsDefaultPhpType'],
+            [
+                'name' => 'stdClassObject',
+                'position' => 0,
+                'type' => '\stdClass',
+                'isNamedArgument' => false
+            ],
+            [
+                'name' => 'secondClass',
+                'position' => 1,
+                'type' => '\ClassExtendsDefaultPhpType',
+                'isNamedArgument' => false
+            ],
         ];
         $this->assertEquals($expectedResult, $actualResult);
     }
@@ -231,8 +297,17 @@ class ArgumentsReaderTest extends TestCase
             ]
         );
         $expectedResult = [
-            ['name' => 'secondClass', 'position' => 0, 'type' => '\ClassExtendsDefaultPhpType'],
-            ['name' => 'stdClassObject', 'position' => 1, 'type' => '\stdClass'],
+            [
+                'name' => 'secondClass',
+                'position' => 0,
+                'type' => '\ClassExtendsDefaultPhpType',
+                'isNamedArgument' => false],
+            [
+                'name' => 'stdClassObject',
+                'position' => 1,
+                'type' => '\stdClass',
+                'isNamedArgument' => false
+            ],
         ];
         $this->assertEquals($expectedResult, $actualResult);
     }
@@ -248,8 +323,72 @@ class ArgumentsReaderTest extends TestCase
             ]
         );
         $expectedResult = [
-            ['name' => 'stdClassObject', 'position' => 0, 'type' => '\stdClass'],
-            ['name' => 'secondClass', 'position' => 1, 'type' => '\ClassExtendsDefaultPhpType'],
+            [
+                'name' => 'stdClassObject',
+                'position' => 0,
+                'type' => '\stdClass',
+                'isNamedArgument' => false
+            ],
+            [
+                'name' => 'secondClass',
+                'position' => 1,
+                'type' => '\ClassExtendsDefaultPhpType',
+                'isNamedArgument' => false
+            ],
+        ];
+        $this->assertEquals($expectedResult, $actualResult);
+    }
+
+    public function testGetParentCallWithNamedArguments()
+    {
+        $class = new \ReflectionClass('ClassWithNamedArgumentsForParentCall');
+        $actualResult = $this->_model->getParentCall(
+            $class,
+            [
+                'stdClassObject' => ['type' => '\stdClass'],
+                'runeTimeException' => ['type' => '\ClassExtendsDefaultPhpType']
+            ]
+        );
+        $expectedResult = [
+            [
+                'name' => 'stdClassObject',
+                'position' => 0,
+                'type' => '\stdClass',
+                'isNamedArgument' => true
+            ],
+            [
+                'name' => 'runeTimeException',
+                'position' => 1,
+                'type' => '\ClassExtendsDefaultPhpType',
+                'isNamedArgument' => true
+            ],
+        ];
+        $this->assertEquals($expectedResult, $actualResult);
+    }
+
+    public function testGetParentCallWithMixedArguments()
+    {
+        $class = new \ReflectionClass('ClassWithMixedArgumentsForParentCall');
+        $actualResult = $this->_model->getParentCall(
+            $class,
+            [
+                'stdClassObject' => ['type' => '\stdClass'],
+                'runeTimeException' => ['type' => '\ClassExtendsDefaultPhpType']
+            ]
+        );
+        $expectedResult = [
+            [
+                'name' => 'stdClassObject',
+                'position' => 0,
+                'type' => '\stdClass',
+                'isNamedArgument' => false
+            ],
+            [
+                'name' => 'runeTimeException',
+                'position' => 1,
+                'type' => '\ClassExtendsDefaultPhpType',
+                'isNamedArgument' => true
+            ],
         ];
         $this->assertEquals($expectedResult, $actualResult);
     }
@@ -257,9 +396,8 @@ class ArgumentsReaderTest extends TestCase
     /**
      * @param string $requiredType
      * @param string $actualType
-     * @param bool $expectedResult
-     * @dataProvider testIsCompatibleTypeDataProvider
-     */
+     * @param bool $expectedResult     */
+    #[DataProvider('isCompatibleTypeDataProvider')]
     public function testIsCompatibleType($requiredType, $actualType, $expectedResult)
     {
         $actualResult = $this->_model->isCompatibleType($requiredType, $actualType);
@@ -269,7 +407,7 @@ class ArgumentsReaderTest extends TestCase
     /**
      * @return array
      */
-    public function testIsCompatibleTypeDataProvider()
+    public static function isCompatibleTypeDataProvider()
     {
         return [
             ['array', 10, false],

@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 define([
@@ -12,7 +12,6 @@ define([
         return $.ajax({
             url: urlBuilder.build(refreshUrl),
             type: 'POST',
-            async: false,
             data: JSON.stringify({
                 'formId': formId
             }),

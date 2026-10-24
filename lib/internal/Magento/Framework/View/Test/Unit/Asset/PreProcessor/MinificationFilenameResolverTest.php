@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Framework\View\Asset\Minification;
 use Magento\Framework\View\Asset\PreProcessor\MinificationConfigProvider;
 use Magento\Framework\View\Asset\PreProcessor\MinificationFilenameResolver;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  *
@@ -24,9 +25,8 @@ class MinificationFilenameResolverTest extends TestCase
      * @param bool $isMin
      * @param string $input
      * @param string $expected
-     *
-     * @dataProvider dataProviderForTestResolve
-     */
+     *     */
+    #[DataProvider('dataProviderForTestResolve')]
     public function testResolve($isMin, $input, $expected)
     {
         $minificationMock = $this->getMockBuilder(Minification::class)
@@ -48,7 +48,7 @@ class MinificationFilenameResolverTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForTestResolve()
+    public static function dataProviderForTestResolve()
     {
         return [
             [

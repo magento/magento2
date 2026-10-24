@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,10 +12,12 @@ use Magento\CatalogInventory\Model\Configuration;
 use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager as AppObjectManager;
 use Magento\Framework\Math\Random;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -23,9 +25,6 @@ class MinsaleqtyTest extends TestCase
 {
     /** @var Minsaleqty */
     protected $minsaleqty;
-
-    /** @var ObjectManagerHelper */
-    protected $objectManagerHelper;
 
     /** @var ScopeConfigInterface|MockObject */
     protected $scopeConfigMock;
@@ -38,40 +37,28 @@ class MinsaleqtyTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->randomMock = $this->createMock(Random::class);
         $this->randomMock->expects($this->any())
             ->method('getUniqueHash')
             ->with('_')
             ->willReturn('unique_hash');
 
-        $groupManagement = $this->getMockBuilder(GroupManagementInterface::class)
-            ->setMethods(['getAllCustomersGroup'])
-            ->getMockForAbstractClass();
+        $groupManagement = $this->createMock(GroupManagementInterface::class);
 
-        $allGroup = $this->getMockBuilder(GroupInterface::class)
-            ->setMethods(['getId'])
-            ->getMockForAbstractClass();
+        $allGroup = $this->createMock(GroupInterface::class);
 
-        $allGroup->expects($this->any())
-            ->method('getId')
-            ->willReturn(32000);
+        $allGroup->method('getId')->willReturn(32000);
 
-        $groupManagement->expects($this->any())
-            ->method('getAllCustomersGroup')
-            ->willReturn($allGroup);
+        $groupManagement->method('getAllCustomersGroup')->willReturn($allGroup);
 
         $this->serializerMock = $this->createMock(Json::class);
 
-        $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->minsaleqty = $this->objectManagerHelper->getObject(
-            Minsaleqty::class,
-            [
-                'scopeConfig' => $this->scopeConfigMock,
-                'mathRandom' => $this->randomMock,
-                'groupManagement' => $groupManagement,
-                'serializer' => $this->serializerMock
-            ]
+        $this->minsaleqty = new Minsaleqty(
+            $this->scopeConfigMock,
+            $this->randomMock,
+            $groupManagement,
+            $this->serializerMock
         );
     }
 
@@ -80,8 +67,8 @@ class MinsaleqtyTest extends TestCase
      * @param int|null $store
      * @param float $minSaleQty
      * @param float|null $result
-     * @dataProvider getConfigValueDataProvider
      */
+    #[DataProvider('getConfigValueDataProvider')]
     public function testGetConfigValue($customerGroupId, $store, $minSaleQty, $result, $minSaleQtyDecoded = null)
     {
         $this->scopeConfigMock->expects($this->once())
@@ -104,7 +91,7 @@ class MinsaleqtyTest extends TestCase
     /**
      * @return array
      */
-    public function getConfigValueDataProvider()
+    public static function getConfigValueDataProvider()
     {
         return [
             'valid numeric' => [1, 2, '20', 20.],
@@ -164,8 +151,8 @@ class MinsaleqtyTest extends TestCase
      * @param string|array $value
      * @param array $result
      * @param int $serializeCallCount
-     * @dataProvider makeArrayFieldValueDataProvider
      */
+    #[DataProvider('makeArrayFieldValueDataProvider')]
     public function testMakeArrayFieldValue($value, $result, $serializeCallCount = 0)
     {
         $this->serializerMock->expects($this->exactly($serializeCallCount))
@@ -179,7 +166,7 @@ class MinsaleqtyTest extends TestCase
     /**
      * @return array
      */
-    public function makeArrayFieldValueDataProvider()
+    public static function makeArrayFieldValueDataProvider()
     {
         return [
             'empty string' => ['', []],
@@ -206,8 +193,8 @@ class MinsaleqtyTest extends TestCase
      * @param string $result
      * @param int $serializeCallCount
      * @param null|array $decodedValue
-     * @dataProvider makeStorableArrayFieldValueDataProvider
      */
+    #[DataProvider('makeStorableArrayFieldValueDataProvider')]
     public function testMakeStorableArrayFieldValue($value, $result, $serializeCallCount = 0, $decodedValue = null)
     {
         $this->serializerMock->expects($this->exactly($serializeCallCount))
@@ -221,7 +208,7 @@ class MinsaleqtyTest extends TestCase
     /**
      * @return array
      */
-    public function makeStorableArrayFieldValueDataProvider()
+    public static function makeStorableArrayFieldValueDataProvider()
     {
         return [
             'invalid bool' => [false, false],

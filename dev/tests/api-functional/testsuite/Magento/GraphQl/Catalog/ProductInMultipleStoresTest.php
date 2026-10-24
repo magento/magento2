@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -25,31 +25,7 @@ class ProductInMultipleStoresTest extends GraphQlAbstract
     public function testProductFromSpecificAndDefaultStore()
     {
         $productSku = 'simple';
-
-        $query = <<<QUERY
-{
-    products(filter: {sku: {eq: "{$productSku}"}})
-    {
-        items {
-            id
-            name
-            price {
-                minimalPrice {
-                    amount {
-                        value
-                        currency
-                    }
-                }
-            }
-            sku
-            type_id
-            ... on PhysicalProductInterface {
-                weight
-            }
-        }
-    }
-}
-QUERY;
+        $query = $this->getQuery($productSku);
 
         /** @var \Magento\Store\Model\Store $store */
         $store =  ObjectManager::getInstance()->get(\Magento\Store\Model\Store::class);
@@ -89,12 +65,53 @@ QUERY;
             $response['products']['items'][0]['name'],
             'Product in the default store should be returned'
         );
+    }
 
-        // use case for invalid storeCode
+    /**
+     * Test a product from a non existing store
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     */
+    public function testProductFromNonExistingStore()
+    {
         $nonExistingStoreCode = "non_existent_store";
         $headerMapInvalidStoreCode = ['Store' => $nonExistingStoreCode];
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Requested store is not found');
-        $this->graphQlQuery($query, [], '', $headerMapInvalidStoreCode);
+        $this->graphQlQuery($this->getQuery('simple'), [], '', $headerMapInvalidStoreCode);
+    }
+
+    /**
+     * Return GraphQL query string by productSku
+     *
+     * @param string $productSku
+     * @return string
+     */
+    private function getQuery(string $productSku): string
+    {
+        return <<<QUERY
+        {
+            products(filter: {sku: {eq: "{$productSku}"}})
+            {
+                items {
+                    id
+                    name
+                    price {
+                        minimalPrice {
+                            amount {
+                                value
+                                currency
+                            }
+                        }
+                    }
+                    sku
+                    type_id
+                    ... on PhysicalProductInterface {
+                        weight
+                    }
+                }
+            }
+        }
+        QUERY;
     }
 }

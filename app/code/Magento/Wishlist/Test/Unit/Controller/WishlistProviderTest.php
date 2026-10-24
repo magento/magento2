@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -52,13 +52,13 @@ class WishlistProviderTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->request = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->request = $this->createMock(RequestInterface::class);
 
         $this->wishlistFactory = $this->createPartialMock(WishlistFactory::class, ['create']);
 
         $this->customerSession = $this->createPartialMock(Session::class, ['getCustomerId']);
 
-        $this->messageManager = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->messageManager = $this->createStub(ManagerInterface::class);
 
         $this->wishlistProvider = $objectManager->getObject(
             WishlistProvider::class,

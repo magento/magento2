@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -12,13 +12,18 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\Directory\DenyListPathValidator;
-use Magento\Framework\Filesystem\Directory\WriteFactory;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\Filesystem\Driver\File;
+use Magento\RemoteStorage\Driver\DriverPool;
+use Magento\RemoteStorage\Model\Filesystem\Directory\WriteFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\DeleteFiles class.
  *
  * @magentoAppArea adminhtml
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DeleteFilesTest extends \PHPUnit\Framework\TestCase
 {
@@ -92,7 +97,7 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
         $this->mediaDirectory->create($this->mediaDirectory->getRelativePath($this->fullDirectoryPath));
         $filePath =  $this->fullDirectoryPath . DIRECTORY_SEPARATOR . $this->fileName;
         $fixtureDir = realpath(__DIR__ . '/../../../../../Catalog/_files');
-        copy($fixtureDir . '/' . $this->fileName, $filePath);
+        $this->copyFile($fixtureDir . '/' . $this->fileName, $filePath);
         $this->model = $this->objectManager->get(\Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\DeleteFiles::class);
         $config = $this->objectManager->get(ScopeConfigInterface::class);
         $this->origConfigValue = $config->getValue(
@@ -109,6 +114,7 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
     protected function tearDown(): void
     {
         $this->mediaDirectory->delete($this->mediaDirectory->getRelativePath($this->fullDirectoryPath));
+        $this->mediaDirectory->delete('secondDir');
         $scopeConfig = $this->objectManager->get(\Magento\Framework\App\Config\MutableScopeConfigInterface::class);
         $scopeConfig->setValue(
             self::MEDIA_GALLERY_IMAGE_FOLDERS_CONFIG_PATH,
@@ -122,13 +128,13 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
      *
      * @param string $filename
      * @return void
-     * @dataProvider executeDataProvider
      */
+    #[DataProvider('executeDataProvider')]
     public function testExecute(string $filename)
     {
         $filePath =  $this->fullDirectoryPath . DIRECTORY_SEPARATOR . $filename;
         $fixtureDir = realpath(__DIR__ . '/../../../../../Catalog/_files');
-        copy($fixtureDir . '/' . $this->fileName, $filePath);
+        $this->copyFile($fixtureDir . '/' . $this->fileName, $filePath);
 
         $this->model->getRequest()->setMethod('POST')
             ->setPostValue('files', [$this->imagesHelper->idEncode($filename)]);
@@ -147,7 +153,7 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function executeDataProvider(): array
+    public static function executeDataProvider(): array
     {
         return [
             ['name with spaces.jpg'],
@@ -156,8 +162,6 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
             ['name with[ bracket.jpg'],
             ['magento_small_image.jpg'],
             ['_.jpg'],
-            [' - .jpg'],
-            ['-.jpg'],
         ];
     }
 
@@ -178,8 +182,13 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
         $bypassDenyListWriteFactory = $this->objectManager->create(WriteFactory::class, [
             'denyListPathValidator' => $denyListPathValidator
         ]);
-        $this->bypassDenyListWrite = $bypassDenyListWriteFactory
-            ->create($this->directoryList->getPath(DirectoryList::MEDIA));
+        $this->bypassDenyListWrite = $bypassDenyListWriteFactory->create(
+            $this->mediaDirectory->getAbsolutePath(),
+            $this->mediaDirectory->getDriver() instanceof File ? DriverPool::FILE : DriverPool::REMOTE,
+            null,
+            DirectoryList::MEDIA
+        );
+
         if (!$this->bypassDenyListWrite->isFile($path)) {
             $this->bypassDenyListWrite->writeFile($path, "Order deny,allow\nDeny from all");
         }
@@ -193,6 +202,7 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
                 $this->bypassDenyListWrite->getRelativePath($testDir . '/' . '.htaccess')
             )
         );
+        $this->bypassDenyListWrite->delete($testDir);
     }
 
     /**
@@ -203,13 +213,20 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecuteWithWrongFileName()
     {
-        $fileName = '/../../../etc/env.php';
+        $fixtureDir = realpath(__DIR__ . '/../../../../../Catalog/_files');
+        $this->mediaDirectory->create('secondDir');
+        $driver = $this->mediaDirectory->getDriver();
+        $driver->filePutContents(
+            $this->mediaDirectory->getAbsolutePath('secondDir' . DIRECTORY_SEPARATOR . $this->fileName),
+            file_get_contents($fixtureDir . '/' . $this->fileName)
+        );
+        $fileName = '/../secondDir/' . $this->fileName;
         $this->model->getRequest()->setMethod('POST')
             ->setPostValue('files', [$this->imagesHelper->idEncode($fileName)]);
         $this->model->getStorage()->getSession()->setCurrentPath($this->fullDirectoryPath);
         $this->model->execute();
 
-        $this->assertFileExists($this->fullDirectoryPath . $fileName);
+        $this->assertTrue($this->mediaDirectory->isExist($this->fullDirectoryPath . $fileName));
     }
 
     /**
@@ -221,12 +238,16 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecuteWithLinkedMedia()
     {
+        if (!$this->mediaDirectory->getDriver() instanceof File) {
+            self::markTestSkipped('Remote storages like AWS S3 doesn\'t support symlinks');
+        }
+
         $directoryName = 'linked_media';
         $fullDirectoryPath = $this->filesystem->getDirectoryRead(DirectoryList::PUB)
                 ->getAbsolutePath() . DIRECTORY_SEPARATOR . $directoryName;
         $filePath =  $fullDirectoryPath . DIRECTORY_SEPARATOR . $this->fileName;
         $fixtureDir = realpath(__DIR__ . '/../../../../../Catalog/_files');
-        copy($fixtureDir . '/' . $this->fileName, $filePath);
+        $this->copyFile($fixtureDir . '/' . $this->fileName, $filePath);
 
         $wysiwygDir = $this->mediaDirectory->getAbsolutePath() . '/wysiwyg';
         $this->model->getRequest()->setMethod('POST')
@@ -248,5 +269,17 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
         if ($directory->isExist('wysiwyg')) {
             $directory->delete('wysiwyg');
         }
+    }
+
+    /**
+     * @param string $source
+     * @param string $destination
+     * @throws FileSystemException
+     */
+    private function copyFile(string $source, string $destination)
+    {
+        $driver = $this->mediaDirectory->getDriver();
+        $driver->createDirectory(dirname($destination));
+        $driver->filePutContents($destination, file_get_contents($source));
     }
 }

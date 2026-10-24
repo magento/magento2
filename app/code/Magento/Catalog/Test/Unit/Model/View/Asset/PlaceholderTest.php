@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\View\Asset;
 
+use Magento\Framework\Filesystem\Directory\WriteInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\View\Asset\Placeholder;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\View\Asset\ContextInterface;
@@ -15,43 +17,56 @@ use Magento\Framework\View\Asset\Repository;
 use Magento\Store\Model\ScopeInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\Filesystem;
+use Magento\Catalog\Model\Product\Media\ConfigInterface;
 
 class PlaceholderTest extends TestCase
 {
     /**
      * @var Placeholder
      */
-    protected $model;
+    private $model;
 
     /**
      * @var ScopeConfigInterface|MockObject
      */
-    protected $scopeConfig;
+    private $scopeConfig;
 
     /**
      * @var Repository|MockObject
      */
-    protected $repository;
+    private $repository;
 
     /**
      * @var ContextInterface|MockObject
      */
-    protected $imageContext;
+    private $imageContext;
+
+    /**
+     * @var Filesystem|MockObject
+     */
+    private $filesystem;
+
+    /**
+     * @var ConfigInterface|MockObject
+     */
+    private $mediaConfig;
 
     protected function setUp(): void
     {
-        $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->getMockForAbstractClass();
-        $this->imageContext = $this->getMockBuilder(ContextInterface::class)
-            ->getMockForAbstractClass();
-        $this->repository = $this->getMockBuilder(Repository::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $this->imageContext = $this->createMock(ContextInterface::class);
+        $this->repository = $this->createMock(Repository::class);
+        $this->filesystem = $this->createMock(Filesystem::class);
+        $this->filesystem->method('getDirectoryWrite')->willReturn($this->createMock(WriteInterface::class));
+        $this->mediaConfig = $this->createMock(ConfigInterface::class);
         $this->model = new Placeholder(
             $this->imageContext,
             $this->scopeConfig,
             $this->repository,
-            'thumbnail'
+            'thumbnail',
+            $this->filesystem,
+            $this->mediaConfig
         );
     }
 
@@ -79,15 +94,17 @@ class PlaceholderTest extends TestCase
     /**
      * @param string $imageType
      * @param string $placeholderPath
-     * @dataProvider getPathDataProvider
      */
+    #[DataProvider('getPathDataProvider')]
     public function testGetPathAndGetSourceFile($imageType, $placeholderPath)
     {
         $imageModel = new Placeholder(
             $this->imageContext,
             $this->scopeConfig,
             $this->repository,
-            $imageType
+            $imageType,
+            $this->filesystem,
+            $this->mediaConfig
         );
         $absolutePath = '/var/www/html/magento2ce/pub/media/catalog/product';
 
@@ -101,15 +118,13 @@ class PlaceholderTest extends TestCase
 
         if ($placeholderPath == null) {
             $this->imageContext->expects($this->never())->method('getPath');
-            $assetMock = $this->getMockBuilder(MergeableInterface::class)
-                ->getMockForAbstractClass();
+            $assetMock = $this->createMock(MergeableInterface::class);
             $expectedResult = 'path/to_default/placeholder/by_type';
-            $assetMock->expects($this->any())->method('getSourceFile')->willReturn($expectedResult);
-            $this->repository->expects($this->any())->method('createAsset')->willReturn($assetMock);
+            $assetMock->method('getSourceFile')->willReturn($expectedResult);
+            $this->repository->method('createAsset')->willReturn($assetMock);
         } else {
-            $this->imageContext->expects($this->any())->method('getPath')->willReturn($absolutePath);
-            $expectedResult = $absolutePath
-                . DIRECTORY_SEPARATOR . $imageModel->getModule()
+            $this->imageContext->method('getPath')->willReturn($absolutePath);
+            $expectedResult = DIRECTORY_SEPARATOR . $imageModel->getModule()
                 . DIRECTORY_SEPARATOR . $placeholderPath;
         }
 
@@ -120,15 +135,17 @@ class PlaceholderTest extends TestCase
     /**
      * @param string $imageType
      * @param string $placeholderPath
-     * @dataProvider getPathDataProvider
      */
+    #[DataProvider('getPathDataProvider')]
     public function testGetUrl($imageType, $placeholderPath)
     {
         $imageModel = new Placeholder(
             $this->imageContext,
             $this->scopeConfig,
             $this->repository,
-            $imageType
+            $imageType,
+            $this->filesystem,
+            $this->mediaConfig
         );
 
         $this->scopeConfig->expects($this->any())
@@ -142,10 +159,10 @@ class PlaceholderTest extends TestCase
         if ($placeholderPath == null) {
             $this->imageContext->expects($this->never())->method('getBaseUrl');
             $expectedResult = 'http://localhost/media/catalog/product/to_default/placeholder/by_type';
-            $this->repository->expects($this->any())->method('getUrl')->willReturn($expectedResult);
+            $this->repository->method('getUrl')->willReturn($expectedResult);
         } else {
             $baseUrl = 'http://localhost/media/catalog/product';
-            $this->imageContext->expects($this->any())->method('getBaseUrl')->willReturn($baseUrl);
+            $this->imageContext->method('getBaseUrl')->willReturn($baseUrl);
             $expectedResult = $baseUrl
                 . DIRECTORY_SEPARATOR . $imageModel->getModule()
                 . DIRECTORY_SEPARATOR . $placeholderPath;
@@ -157,7 +174,7 @@ class PlaceholderTest extends TestCase
     /**
      * @return array
      */
-    public function getPathDataProvider()
+    public static function getPathDataProvider()
     {
         return [
             [

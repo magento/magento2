@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\AsynchronousOperations\Controller\Adminhtml\Index\Index;
 use Magento\Backend\Model\Menu;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ViewInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\BlockInterface;
 use Magento\Framework\View\LayoutInterface;
@@ -26,6 +27,8 @@ use PHPUnit\Framework\TestCase;
  */
 class IndexTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var MockObject
      */
@@ -49,8 +52,8 @@ class IndexTest extends TestCase
     protected function setUp(): void
     {
         $objectManager =  new ObjectManager($this);
-        $this->viewMock = $this->getMockForAbstractClass(ViewInterface::class);
-        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->viewMock = $this->createMock(ViewInterface::class);
+        $this->requestMock = $this->createMock(RequestInterface::class);
         $this->resultFactoryMock = $this->createMock(PageFactory::class);
 
         $this->model = $objectManager->getObject(
@@ -68,17 +71,17 @@ class IndexTest extends TestCase
     {
         $itemId = 'Magento_AsynchronousOperations::system_magento_logging_bulk_operations';
         $prependText = 'Bulk Actions Log';
-        $layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
+        $layoutMock = $this->createMock(LayoutInterface::class);
         $menuModelMock = $this->createMock(Menu::class);
         $pageMock = $this->createMock(Page::class);
         $pageConfigMock = $this->createMock(Config::class);
         $titleMock = $this->createMock(Title::class);
         $this->resultFactoryMock->expects($this->once())->method('create')->willReturn($pageMock);
 
-        $blockMock = $this->getMockBuilder(BlockInterface::class)
-            ->addMethods(['setActive', 'getMenuModel'])
-            ->onlyMethods(['toHtml'])
-            ->getMockForAbstractClass();
+        $blockMock = $this->createPartialMockWithReflection(
+            BlockInterface::class,
+            ['setActive', 'getMenuModel', 'toHtml']
+        );
 
         $this->viewMock->expects($this->once())->method('getLayout')->willReturn($layoutMock);
         $layoutMock->expects($this->once())->method('getBlock')->willReturn($blockMock);

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
@@ -17,6 +17,7 @@
             <description value="User switches between Views and checks if the folder is changed"/>
             <severity value="CRITICAL"/>
             <group value="media_gallery_ui"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="category"/>

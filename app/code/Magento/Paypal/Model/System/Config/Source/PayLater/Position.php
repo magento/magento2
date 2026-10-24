@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -21,7 +21,7 @@ class Position
     {
         return [
             'header' => __('Header (center)'),
-            'near_pp_button' => __('Near PayPal Credit checkout button')
+            'near_pp_button' => __('Under PayPal Checkout buttons')
         ];
     }
 
@@ -46,7 +46,7 @@ class Position
     public function getPositionsCheckout(): array
     {
         return [
-            'near_pp_button' => __('Near PayPal Credit checkout button')
+            'near_pp_button' => __('Under PayPal Checkout buttons')
         ];
     }
 
@@ -72,7 +72,7 @@ class Position
     {
         return [
             'header' => __('Header (center)'),
-            'near_pp_button' => __('Near PayPal Credit checkout button')
+            'near_pp_button' => __('Under PayPal Checkout buttons')
         ];
     }
 }

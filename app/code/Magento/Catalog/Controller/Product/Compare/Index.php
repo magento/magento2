@@ -1,13 +1,12 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Controller\Product\Compare;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\View\Result\PageFactory;
 
@@ -81,6 +80,8 @@ class Index extends \Magento\Catalog\Controller\Product\Compare implements HttpG
             $this->_catalogSession->setBeforeCompareUrl(
                 $this->urlDecoder->decode($beforeUrl)
             );
+        } else {
+            $this->_catalogSession->unsBeforeCompareUrl();
         }
         return $this->resultPageFactory->create();
     }

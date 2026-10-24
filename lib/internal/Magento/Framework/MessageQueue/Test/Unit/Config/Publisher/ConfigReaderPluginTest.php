@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -38,8 +38,7 @@ class ConfigReaderPluginTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->configMock = $this->getMockBuilder(ConfigInterface::class)
-            ->getMockForAbstractClass();
+        $this->configMock = $this->createMock(ConfigInterface::class);
         $this->subjectMock = $this->getMockBuilder(PublisherConfigCompositeReader::class)
             ->disableOriginalConstructor()
             ->getMock();

@@ -1,15 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Interception\Code;
 
 use Magento\Framework\Code\Reader\ArgumentsReader;
 use Magento\Framework\Exception\ValidatorException;
+use Magento\Framework\GetParameterClassTrait;
 use Magento\Framework\Phrase;
-use ReflectionClass;
-use ReflectionException;
 use ReflectionParameter;
 
 /**
@@ -17,6 +16,8 @@ use ReflectionParameter;
  */
 class InterfaceValidator
 {
+    use GetParameterClassTrait;
+
     public const METHOD_BEFORE = 'before';
     public const METHOD_AROUND = 'around';
     public const METHOD_AFTER = 'after';
@@ -29,9 +30,19 @@ class InterfaceValidator
     protected $_argumentsReader;
 
     /**
+     * List of optional packages
+     *
+     * @var array
+     */
+    public static array $optionalPackages = [
+        'Swoole',
+        'OpenSwoole'
+    ];
+
+    /**
      * @param ArgumentsReader $argumentsReader
      */
-    public function __construct(ArgumentsReader $argumentsReader = null)
+    public function __construct(?ArgumentsReader $argumentsReader = null)
     {
         $this->_argumentsReader = $argumentsReader ?? new ArgumentsReader();
     }
@@ -49,8 +60,14 @@ class InterfaceValidator
      */
     public function validate($pluginClass, $interceptedType)
     {
-        $interceptedType = '\\' . trim($interceptedType, '\\');
-        $pluginClass = '\\' . trim($pluginClass, '\\');
+        // check if $interceptedType is a part of optional package
+        $interceptedPackage = strstr(trim((string)$interceptedType), "\\", true);
+        if (in_array($interceptedPackage, self::$optionalPackages)) {
+            return;
+        }
+
+        $interceptedType = '\\' . trim((string)$interceptedType, '\\');
+        $pluginClass = '\\' . trim((string)$pluginClass, '\\');
         $plugin = new \ReflectionClass($pluginClass);
         $type = new \ReflectionClass($interceptedType);
 
@@ -176,22 +193,6 @@ class InterfaceValidator
         return $parameterClass ?
             '\\' . $parameterClass->getName() :
             ($parameterType && $parameterType->getName() === 'array' ? 'array' : null);
-    }
-
-    /**
-     * Get class by reflection parameter
-     *
-     * @param ReflectionParameter $reflectionParameter
-     * @return ReflectionClass|null
-     * @throws ReflectionException
-     */
-    private function getParameterClass(ReflectionParameter $reflectionParameter): ?ReflectionClass
-    {
-        $parameterType = $reflectionParameter->getType();
-
-        return $parameterType && !$parameterType->isBuiltin()
-            ? new ReflectionClass($parameterType->getName())
-            : null;
     }
 
     /**

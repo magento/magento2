@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\TestModuleOverrideConfig\MagentoConfigFixture;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\TestModuleOverrideConfig\AbstractOverridesTest;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class check that fixtures can be replaced using override config
@@ -62,11 +63,10 @@ class ReplaceFixtureTest extends AbstractOverridesTest
      *
      * @magentoConfigFixture current_store test_section/test_group/field_1 new_value
      *
-     * @dataProvider testDataProvider
-     *
      * @param string $expectedConfigValue
      * @return void
      */
+    #[DataProvider('configDataProvider')]
     public function testReplaceFixtureForMethod(string $expectedConfigValue): void
     {
         $value = $this->config->getValue('test_section/test_group/field_1', ScopeInterface::SCOPE_STORES);
@@ -76,14 +76,14 @@ class ReplaceFixtureTest extends AbstractOverridesTest
     /**
      * @return array
      */
-    public function testDataProvider(): array
+    public static function configDataProvider(): array
     {
         return [
             'first_data_set' => [
-                'expected_config_value' => 'Overridden fixture for method',
+                'Overridden fixture for method',
             ],
             'second_data_set' => [
-                'expected_config_value' => 'Overridden fixture for data set',
+                'Overridden fixture for data set',
             ],
         ];
     }
@@ -106,11 +106,10 @@ class ReplaceFixtureTest extends AbstractOverridesTest
      *
      * @magentoConfigFixture current_store test_section/test_group/field_1 new_value
      *
-     * @dataProvider configValuesProvider
-     *
      * @param string $expectedConfigValue
      * @return void
      */
+    #[DataProvider('configValuesProvider')]
     public function testReplaceFixtureViaThirdModule(string $expectedConfigValue): void
     {
         $value = $this->config->getValue('test_section/test_group/field_1', ScopeInterface::SCOPE_STORES);
@@ -120,14 +119,14 @@ class ReplaceFixtureTest extends AbstractOverridesTest
     /**
      * @return array
      */
-    public function configValuesProvider(): array
+    public static function configValuesProvider(): array
     {
         return [
             'first_data_set' => [
-                'expected_config_value' => 'Overridden fixture for method from third module',
+                'Overridden fixture for method from third module',
             ],
             'second_data_set' => [
-                'expected_config_value' => 'Overridden fixture for data set from third module',
+                'Overridden fixture for data set from third module',
             ],
         ];
     }

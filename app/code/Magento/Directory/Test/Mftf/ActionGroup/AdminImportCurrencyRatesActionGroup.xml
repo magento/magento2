@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminImportCurrencyRatesActionGroup">
+        <annotations>
+            <description>Admin imports currency rate.</description>
+        </annotations>
+        <arguments>
+            <argument name="rateService" type="string" defaultValue="Fixer.io"/>
+        </arguments>
+        <selectOption selector="{{AdminCurrencyRatesSection.rateService}}" userInput="{{rateService}}" stepKey="selectRateService"/>
+        <waitForElementClickable selector="{{AdminCurrencyRatesSection.import}}" stepKey="waitToClickImport"/>
+        <click selector="{{AdminCurrencyRatesSection.import}}" stepKey="clickImport"/>
+        <waitForElementVisible selector="{{AdminCurrencyRatesSection.oldRate}}" stepKey="waitForOldRateVisible"/>
+    </actionGroup>
+</actionGroups>

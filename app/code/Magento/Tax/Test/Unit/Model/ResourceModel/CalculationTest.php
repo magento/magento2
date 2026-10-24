@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Tax\Helper\Data;
 use Magento\Tax\Model\ResourceModel\Calculation;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class CalculationTest extends TestCase
@@ -21,13 +22,13 @@ class CalculationTest extends TestCase
      *
      * @param string $postalCode
      * @param string|null $exactPostalcode
-     * @dataProvider dataProviderCreateSearchPostCodeTemplates
      */
-    public function testCreateSearchPostCodeTemplates($postalCode, $exactPostalcode)
+    #[DataProvider('dataProviderCreateSearchPostCodeTemplates')]
+    public function testCreateSearchPostCodeTemplates(string $postalCode, ?string $exactPostalcode): void
     {
         // create the mocks
         $resource = $this->createMock(ResourceConnection::class);
-        $storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $storeManager = $this->createMock(StoreManagerInterface::class);
 
         $taxData = $this->createPartialMock(Data::class, ['getPostCodeSubStringLength']);
         $taxData
@@ -50,7 +51,6 @@ class CalculationTest extends TestCase
             Calculation::class,
             '_createSearchPostCodeTemplates'
         );
-        $method->setAccessible(true);
 
         // test & verify
         $resultsArr = $method->invokeArgs($calcMock, [$postalCode, $exactPostalcode]);
@@ -88,7 +88,7 @@ class CalculationTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderCreateSearchPostCodeTemplates()
+    public static function dataProviderCreateSearchPostCodeTemplates()
     {
         return [
             'USA basic' => ['78729', null],

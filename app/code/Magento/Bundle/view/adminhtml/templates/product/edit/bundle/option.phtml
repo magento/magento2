@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
 // phpcs:disable PHPCompatibility.Miscellaneous.RemovedAlternativePHPTags.MaybeASPOpenTagFound
@@ -13,8 +13,8 @@
         <div class="fieldset-wrapper admin__collapsible-block-wrapper opened"
              id="<?= $block->escapeHtmlAttr($block->getFieldId()) ?>_<%- data.index %>-wrapper">
             <div class="fieldset-wrapper-title">
-                <strong class="admin__collapsible-title" data-toggle="collapse"
-                        data-target="#<?= $block->escapeHtmlAttr($block->getFieldId()) ?>_<%- data.index %>-content">
+                <strong class="admin__collapsible-title" data-bs-toggle="collapse"
+                        data-bs-target="#<?= $block->escapeHtmlAttr($block->getFieldId()) ?>_<%- data.index %>-content">
                     <span><%- data.default_title %></span>
                 </strong>
                 <div class="actions">

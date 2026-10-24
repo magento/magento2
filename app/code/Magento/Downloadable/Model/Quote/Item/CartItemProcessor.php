@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Downloadable\Model\Quote\Item;
 
@@ -58,7 +58,7 @@ class CartItemProcessor implements CartItemProcessorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function convertToBuyRequest(CartItemInterface $cartItem)
     {
@@ -88,7 +88,7 @@ class CartItemProcessor implements CartItemProcessorInterface
         $downloadableLinkIds = [];
         $option = $cartItem->getOptionByCode('downloadable_link_ids');
         if (!empty($option)) {
-            $downloadableLinkIds = explode(',', $option->getValue());
+            $downloadableLinkIds = explode(',', $option->getValue() ?? '');
         }
 
         $downloadableOption = $this->downloadableOptionFactory->create();

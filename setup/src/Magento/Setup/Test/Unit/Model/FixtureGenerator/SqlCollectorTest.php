@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Setup\Model\FixtureGenerator\SqlCollector;
 use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -19,6 +20,8 @@ use PHPUnit\Framework\TestCase;
  */
 class SqlCollectorTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var SqlCollector
      */
@@ -42,9 +45,7 @@ class SqlCollectorTest extends TestCase
 
     public function testGetEmptySql()
     {
-        $connection = $this->getMockBuilder(AdapterInterface::class)
-            ->setMethods(['getProfiler'])
-            ->getMockForAbstractClass();
+        $connection = $this->createMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class);
         $profiler = $this->getMockBuilder(\Zend_Db_Profiler::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -59,9 +60,7 @@ class SqlCollectorTest extends TestCase
 
     public function testGetEmptySqlWhenSelectQueryProcessed()
     {
-        $connection = $this->getMockBuilder(AdapterInterface::class)
-            ->setMethods(['getProfiler'])
-            ->getMockForAbstractClass();
+        $connection = $this->createMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class);
         $profiler = $this->getMockBuilder(\Zend_Db_Profiler::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -79,9 +78,7 @@ class SqlCollectorTest extends TestCase
 
     public function testGetSql()
     {
-        $connection = $this->getMockBuilder(AdapterInterface::class)
-            ->setMethods(['getProfiler'])
-            ->getMockForAbstractClass();
+        $connection = $this->createMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class);
         $profiler = $this->getMockBuilder(\Zend_Db_Profiler::class)
             ->disableOriginalConstructor()
             ->getMock();

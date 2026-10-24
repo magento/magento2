@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -53,15 +53,10 @@ class MailTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->configMock = $this->getMockBuilder(ConfigInterface::class)
-            ->getMockForAbstractClass();
-        $this->transportBuilderMock = $this->getMockBuilder(TransportBuilder::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->inlineTranslationMock = $this->getMockBuilder(StateInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->configMock = $this->createMock(ConfigInterface::class);
+        $this->transportBuilderMock = $this->createMock(TransportBuilder::class);
+        $this->inlineTranslationMock = $this->createMock(StateInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
 
         $objectManager = new ObjectManagerHelper($this);
         $this->mail = $objectManager->getObject(
@@ -83,9 +78,9 @@ class MailTest extends TestCase
         $email = 'reply-to@example.com';
         $templateVars = ['comment' => 'Comment'];
 
-        $transport = $this->getMockForAbstractClass(TransportInterface::class);
+        $transport = $this->createMock(TransportInterface::class);
 
-        $storeMock = $this->getMockForAbstractClass(StoreInterface::class);
+        $storeMock = $this->createMock(StoreInterface::class);
         $storeMock->expects($this->once())->method('getId')->willReturn(555);
 
         $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($storeMock);

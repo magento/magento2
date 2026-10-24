@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Pricing\Price;
@@ -18,7 +18,6 @@ use Magento\Framework\Pricing\Price\BasePriceProviderInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Pricing\PriceInfoInterface;
 use Magento\Customer\Model\Group\RetrieverInterface as CustomerGroupRetrieverInterface;
-use Magento\Tax\Model\Config;
 
 /**
  * @api
@@ -33,11 +32,12 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
     /**
      * Price type tier
      */
-    const PRICE_CODE = 'tier_price';
+    public const PRICE_CODE = 'tier_price';
 
     /**
      * @var Session
      * @deprecated 102.0.0
+     * @see Updated deprecation doc annotations
      */
     protected $customerSession;
 
@@ -92,7 +92,7 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
         PriceCurrencyInterface $priceCurrency,
         Session $customerSession,
         GroupManagementInterface $groupManagement,
-        CustomerGroupRetrieverInterface $customerGroupRetriever = null,
+        ?CustomerGroupRetrieverInterface $customerGroupRetriever = null,
         ?ScopeConfigInterface $scopeConfig = null
     ) {
         $quantity = (float)$quantity ? $quantity : 1;
@@ -176,26 +176,12 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
                 function (&$priceData) {
                     /* convert string value to float */
                     $priceData['price_qty'] *= 1;
-                    if ($this->getConfigTaxDisplayType() === Config::DISPLAY_TYPE_BOTH) {
-                        $exclTaxPrice = $this->calculator->getAmount($priceData['price'], $this->product, true);
-                        $priceData['excl_tax_price'] = $exclTaxPrice;
-                    }
                     $priceData['price'] = $this->applyAdjustment($priceData['price']);
                 }
             );
         }
 
         return $this->priceList;
-    }
-
-    /**
-     * Returns config tax display type
-     *
-     * @return int
-     */
-    private function getConfigTaxDisplayType(): int
-    {
-        return (int) $this->scopeConfig->getValue(self::XML_PATH_TAX_DISPLAY_TYPE);
     }
 
     /**
@@ -207,13 +193,13 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
     protected function filterTierPrices(array $priceList)
     {
         $qtyCache = [];
+        $minPrice = $this->priceInfo->getPrice(FinalPrice::PRICE_CODE)->getValue();
         $allCustomersGroupId = $this->groupManagement->getAllCustomersGroup()->getId();
         foreach ($priceList as $priceKey => &$price) {
-            if ($price['price'] >= $this->priceInfo->getPrice(FinalPrice::PRICE_CODE)->getValue()) {
+            if ($price['price'] >= $minPrice) {
                 unset($priceList[$priceKey]);
                 continue;
             }
-
             if (isset($price['price_qty']) && $price['price_qty'] == 1) {
                 unset($priceList[$priceKey]);
                 continue;
@@ -236,6 +222,7 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
             } else {
                 $qtyCache[$price['price_qty']] = $priceKey;
             }
+            $minPrice = $price['price'];
         }
         return array_values($priceList);
     }

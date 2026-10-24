@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\MessageQueue\Topology\Config;
 
 /**
  * Instances of this class represent queue config items.
+ * @api
  */
 interface QueueConfigItemInterface
 {

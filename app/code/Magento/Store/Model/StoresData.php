@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -54,7 +54,7 @@ class StoresData
      * @param string|null $scopeCode
      * @return array
      */
-    public function getStoresData(string $runMode, string $scopeCode = null) : array
+    public function getStoresData(string $runMode, ?string $scopeCode = null) : array
     {
         // md5() here is not for cryptographic use.
         // phpcs:ignore Magento2.Security.InsecureFunction

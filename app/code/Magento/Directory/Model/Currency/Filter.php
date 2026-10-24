@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -9,9 +9,10 @@
  */
 namespace Magento\Directory\Model\Currency;
 
+use Laminas\Filter\FilterInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 
-class Filter implements \Zend_Filter_Interface
+class Filter implements FilterInterface
 {
     /**
      * Rate value
@@ -43,8 +44,6 @@ class Filter implements \Zend_Filter_Interface
     protected $_localeCurrency;
 
     /**
-     * Price currency
-     *
      * @var PriceCurrencyInterface
      */
     protected $priceCurrency;

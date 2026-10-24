@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -37,7 +37,7 @@ class FileIteratorTest extends TestCase
     protected $moduleDirResolverMock;
 
     /**
-     * Array of relative file paths
+     * Array of relative paths
      *
      * @var array
      */
@@ -71,8 +71,8 @@ class FileIteratorTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testIterator(): void
     {
         $moduleName = 'Filesystem';
@@ -82,7 +82,6 @@ class FileIteratorTest extends TestCase
             '<template module="' . $moduleName . '" 321>'
         ];
         $index = 0;
-        $dirIndex = 0;
 
         $moduleDirResolverWithArgs = $moduleDirResolverWillReturnArgs = [];
         $fileReadFactoryWithArgs = $fileReadFactoryWillReturnArgs = [];
@@ -99,12 +98,25 @@ class FileIteratorTest extends TestCase
         }
         $this->moduleDirResolverMock
             ->method('getModuleName')
-            ->withConsecutive(...$moduleDirResolverWithArgs)
-            ->willReturnOnConsecutiveCalls(...$moduleDirResolverWillReturnArgs);
+            ->willReturnCallback(function (...$moduleDirResolverWithArgs) use ($moduleDirResolverWillReturnArgs) {
+                if (!empty($moduleDirResolverWithArgs)) {
+                    static $callCount = 0;
+                    $returnValue = $moduleDirResolverWillReturnArgs[$callCount];
+                    $callCount++;
+                    return $returnValue;
+                }
+            });
+
         $this->fileReadFactory
             ->method('create')
-            ->withConsecutive(...$fileReadFactoryWithArgs)
-            ->willReturnOnConsecutiveCalls(...$fileReadFactoryWillReturnArgs);
+            ->willReturnCallback(function (...$fileReadFactoryWithArgs) use ($fileReadFactoryWillReturnArgs) {
+                if (!empty($fileReadFactoryWithArgs)) {
+                    static $callCount = 0;
+                    $returnValue = $fileReadFactoryWillReturnArgs[$callCount];
+                    $callCount++;
+                    return $returnValue;
+                }
+            });
         $this->fileRead
             ->method('readAll')
             ->willReturnOnConsecutiveCalls(...$fileReadWillReturnArgs);
@@ -116,8 +128,8 @@ class FileIteratorTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testIteratorNegative(): void
     {
         $filePath = $this->filePaths[0];

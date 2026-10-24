@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -25,6 +25,8 @@ use Magento\Framework\GraphQl\Query\Resolver\ArgumentsProcessorInterface;
 
 /**
  * Retrieve filtered product data based off given search criteria in a format that GraphQL can interpret.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Filter implements ProductQueryInterface
 {
@@ -39,7 +41,7 @@ class Filter implements ProductQueryInterface
     private $productDataProvider;
 
     /**
-     * FieldSelection
+     * @var FieldSelection
      */
     private $fieldSelection;
 
@@ -72,7 +74,7 @@ class Filter implements ProductQueryInterface
         FieldSelection $fieldSelection,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         ScopeConfigInterface $scopeConfig,
-        ArgumentsProcessorInterface $argsSelection = null
+        ?ArgumentsProcessorInterface $argsSelection = null
     ) {
         $this->searchResultFactory = $searchResultFactory;
         $this->productDataProvider = $productDataProvider;
@@ -173,7 +175,7 @@ class Filter implements ProductQueryInterface
                 if ($condition === 'match') {
                     // reformat 'match' filter so MySQL filtering behaves like SearchAPI filtering
                     $condition = 'like';
-                    $value = str_replace('%', '', trim($value));
+                    $value = $value !== null ? str_replace('%', '', trim($value)) : '';
                     if (strlen($value) < $minimumQueryLength) {
                         throw new InputException(__('Invalid match filter'));
                     }

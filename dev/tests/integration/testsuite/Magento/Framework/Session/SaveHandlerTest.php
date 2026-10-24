@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Session;
@@ -115,8 +115,13 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
 
         $this->saveHandlerFactoryMock
             ->method('create')
-            ->withConsecutive(['redis'], [SaveHandlerInterface::DEFAULT_HANDLER])
-            ->willReturnOnConsecutiveCalls($redisHandlerMock, $defaultHandlerMock);
+            ->willReturnCallback(function ($arg) use ($redisHandlerMock, $defaultHandlerMock) {
+                if ($arg == 'redis') {
+                    return $redisHandlerMock;
+                } elseif($arg == SaveHandlerInterface::DEFAULT_HANDLER) {
+                    return $defaultHandlerMock;
+                }
+            });
 
         $sessionConfig = $this->objectManager->create(ConfigInterface::class);
         /** @var SaveHandler $saveHandler */

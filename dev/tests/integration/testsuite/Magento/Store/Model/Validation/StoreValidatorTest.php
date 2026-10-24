@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Store\Model\Validation;
 
 use Magento\Store\Model\Store;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class StoreValidatorTest extends TestCase
@@ -24,17 +25,17 @@ class StoreValidatorTest extends TestCase
     }
 
     /**
-     * @dataProvider isValidDataProvider
      * @param Store $store
      * @param bool $isValid
      */
+    #[DataProvider('isValidDataProvider')]
     public function testIsValid(Store $store, bool $isValid): void
     {
         $result = $this->storeValidator->isValid($store);
         $this->assertEquals($isValid, $result);
     }
 
-    public function isValidDataProvider(): array
+    public static function isValidDataProvider(): array
     {
         $validStore = Bootstrap::getObjectManager()->create(Store::class);
         $validStore->setName('name');

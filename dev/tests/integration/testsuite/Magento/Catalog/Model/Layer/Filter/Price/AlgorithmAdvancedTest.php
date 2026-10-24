@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\Layer\Filter\Price;
 
@@ -93,7 +93,7 @@ class AlgorithmAdvancedTest extends \PHPUnit\Framework\TestCase
      */
     public function testWithLimits()
     {
-        $this->markTestIncomplete('Bug MAGE-6561');
+        $this->markTestSkipped('Bug MAGE-6561');
 
         $layer = $this->createLayer();
         $priceResource = $this->createPriceResource($layer);

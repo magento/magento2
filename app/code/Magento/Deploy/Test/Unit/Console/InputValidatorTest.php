@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -42,7 +42,7 @@ class InputValidatorTest extends TestCase
     protected $localeValidator;
 
     /**
-     * @throws \Zend_Validate_Exception
+     * @inheritdoc
      */
     protected function setUp(): void
     {
@@ -50,7 +50,7 @@ class InputValidatorTest extends TestCase
 
         $regexFactoryMock = $this->getMockBuilder(RegexFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $regexObject = new Regex('/^[A-Za-z0-9_.]+$/');
@@ -59,7 +59,7 @@ class InputValidatorTest extends TestCase
             ->willReturn($regexObject);
 
         $localeObjectMock = $this->getMockBuilder(Locale::class)
-            ->setMethods(['isValid'])
+            ->onlyMethods(['isValid'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -76,14 +76,11 @@ class InputValidatorTest extends TestCase
         );
     }
 
-    /**
-     * @throws \Zend_Validate_Exception
-     */
     public function testValidate()
     {
         $input = $this->getMockBuilder(ArrayInput::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getOption', 'getArgument'])
+            ->onlyMethods(['getOption', 'getArgument'])
             ->getMock();
 
         $input->expects($this->atLeastOnce())->method('getArgument')->willReturn(['all']);

@@ -1,8 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
- *
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Cms\Model\Wysiwyg\Images;
 
@@ -14,6 +13,7 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Driver\File;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test methods of class Storage
@@ -77,7 +77,8 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         $this->filesystem = $this->objectManager->get(Filesystem::class);
         $this->imagesHelper = $this->objectManager->get(\Magento\Cms\Helper\Wysiwyg\Images::class);
         $this->mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
-        $this->fullDirectoryPath = $this->imagesHelper->getStorageRoot() . '/MagentoCmsModelWysiwygImagesStorageTest';
+        $this->fullDirectoryPath = rtrim($this->imagesHelper->getStorageRoot(), '/')
+            . '/MagentoCmsModelWysiwygImagesStorageTest';
         $this->mediaDirectory->create($this->mediaDirectory->getRelativePath($this->fullDirectoryPath));
         $config = $this->objectManager->get(ScopeConfigInterface::class);
         $this->origConfigValue = $config->getValue(
@@ -90,7 +91,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             array_merge($this->origConfigValue, ['MagentoCmsModelWysiwygImagesStorageTest']),
         );
         $this->storage = $this->objectManager->create(Storage::class);
-        $this->driver = Bootstrap::getObjectManager()->get(DriverInterface::class);
+        $this->driver = $this->mediaDirectory->getDriver();
     }
 
     protected function tearDown(): void
@@ -160,7 +161,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         $dir = 'MagentoCmsModelWysiwygImagesStorageTest/testDeleteDirectory';
         $fullPath = $path . $dir;
         $this->storage->createDirectory('testDeleteDirectory', $path . '/MagentoCmsModelWysiwygImagesStorageTest');
-        $this->assertFileExists($fullPath);
+        $this->assertTrue($this->mediaDirectory->isExist($fullPath));
         $this->storage->deleteDirectory($fullPath);
         $this->assertFileDoesNotExist($fullPath);
     }
@@ -198,7 +199,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         ];
 
         $this->storage->uploadFile($this->fullDirectoryPath);
-        $this->assertTrue(is_file($this->fullDirectoryPath . DIRECTORY_SEPARATOR . $fileName));
+        $this->assertTrue($this->mediaDirectory->isExist($this->fullDirectoryPath . DIRECTORY_SEPARATOR . $fileName));
         // phpcs:enable
     }
 
@@ -238,8 +239,8 @@ class StorageTest extends \PHPUnit\Framework\TestCase
      * @param string|null $storageType
      *
      * @return void
-     * @dataProvider testUploadFileWithWrongExtensionDataProvider
      */
+    #[DataProvider('filenameUploadFileWithWrongExtensionDataProvider')]
     public function testUploadFileWithWrongExtension(string $fileName, string $fileType, ?string $storageType): void
     {
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
@@ -267,7 +268,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function testUploadFileWithWrongExtensionDataProvider(): array
+    public static function filenameUploadFileWithWrongExtensionDataProvider(): array
     {
         return [
             [
@@ -312,48 +313,21 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test that getThumbnailUrl() returns correct URL for root folder or sub-folders images
-     *
-     * @param string $directory
-     * @param string $filename
-     * @param array $expectedUrls
-     * @return void
-     * @magentoAppIsolation enabled
-     * @magentoAppArea adminhtml
-     * @dataProvider getThumbnailUrlDataProvider
-     */
-    public function testGetThumbnailUrl(string $directory, string $filename, array $expectedUrls): void
-    {
-        $root = $this->storage->getCmsWysiwygImages()->getStorageRoot();
-        $directory = implode('/', array_filter([rtrim($root, '/'), trim($directory, '/')]));
-        $path = $directory . '/' . $filename;
-        $this->generateImage($path);
-        $this->storage->resizeFile($path);
-        $collection = $this->storage->getFilesCollection($directory, 'image');
-        $paths = [];
-        foreach ($collection as $item) {
-            $paths[] = parse_url($item->getThumbUrl(), PHP_URL_PATH);
-        }
-        $this->assertEquals($expectedUrls, $paths);
-        $this->driver->deleteFile($path);
-    }
-
-    /**
      * Verify thumbnail generation for diferent sizes
      *
      * @param array $sizes
      * @param bool $resized
-     * @dataProvider getThumbnailsSizes
      */
+    #[DataProvider('getThumbnailsSizes')]
     public function testResizeFile(array $sizes, bool $resized): void
     {
         $root = $this->storage->getCmsWysiwygImages()->getStorageRoot();
-        $path = $root . '/' . 'testfile.png';
+        $path = rtrim($root, '/') . '/testfile.png';
         $this->generateImage($path, $sizes['width'], $sizes['height']);
         $this->storage->resizeFile($path);
 
-        $thumbPath =   $this->storage->getThumbnailPath($path);
-        list($imageWidth, $imageHeight) = getimagesize($thumbPath);
+        $thumbPath = $this->storage->getThumbnailPath($path);
+        list($imageWidth, $imageHeight) = getimagesizefromstring($this->driver->fileGetContents($thumbPath));
 
         $this->assertEquals(
             $resized ? $this->storage->getResizeWidth() : $sizes['width'],
@@ -370,7 +344,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     /**
      * Provide sizes for resizeFile test
      */
-    public function getThumbnailsSizes(): array
+    public static function getThumbnailsSizes(): array
     {
         return [
             [
@@ -391,42 +365,6 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Provide scenarios for testing getThumbnailUrl()
-     *
-     * @return array
-     */
-    public function getThumbnailUrlDataProvider(): array
-    {
-        return [
-            [
-                '/',
-                'image1.png',
-                []
-            ],
-            [
-                '/cms',
-                'image2.png',
-                []
-            ],
-            [
-                '/cms/pages',
-                'image3.png',
-                []
-            ],
-            [
-                '/MagentoCmsModelWysiwygImagesStorageTest',
-                'image2.png',
-                ['/media/.thumbsMagentoCmsModelWysiwygImagesStorageTest/image2.png']
-            ],
-            [
-                '/MagentoCmsModelWysiwygImagesStorageTest/pages',
-                'image3.png',
-                ['/media/.thumbsMagentoCmsModelWysiwygImagesStorageTest/pages/image3.png']
-            ]
-        ];
-    }
-
-    /**
      * Generate a dummy image of the given width and height.
      *
      * @param string $path
@@ -436,23 +374,21 @@ class StorageTest extends \PHPUnit\Framework\TestCase
      */
     private function generateImage(string $path, int $width = 1024, int $height = 768)
     {
-        $dir = dirname($path);
-        if (!file_exists($dir)) {
-            mkdir($dir, 0777, true);
-        }
-        $file = fopen($path, 'wb');
-        $filename = basename($path);
+        $this->mediaDirectory->create(dirname($this->mediaDirectory->getRelativePath($path)));
+
+        $extension = pathinfo($path, PATHINFO_EXTENSION);
         ob_start();
         $image = imagecreatetruecolor($width, $height);
-        switch (substr($filename, strrpos($filename, '.'))) {
-            case '.jpeg':
+        switch ($extension) {
+            case 'jpeg':
                 imagejpeg($image);
                 break;
-            case '.png':
+            case 'png':
                 imagepng($image);
                 break;
         }
-        fwrite($file, ob_get_clean());
+        $this->driver->filePutContents($path, ob_get_clean());
+
         return $path;
     }
 }

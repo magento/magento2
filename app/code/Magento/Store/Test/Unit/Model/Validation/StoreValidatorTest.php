@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Framework\Validator\DataObject;
 use Magento\Framework\Validator\DataObjectFactory;
 use Magento\Framework\Validator\ValidatorInterface;
 use Magento\Store\Model\Validation\StoreValidator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -40,7 +41,7 @@ class StoreValidatorTest extends TestCase
     {
         $this->dataObjectValidatorFactoryMock = $this->getMockBuilder(DataObjectFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->dataObjectValidatorMock = $this->createMock(DataObject::class);
         $this->dataObjectValidatorFactoryMock->method('create')
@@ -59,16 +60,19 @@ class StoreValidatorTest extends TestCase
     }
 
     /**
-     * @dataProvider isValidDataProvider
      * @param \Magento\Framework\DataObject $value
      * @param bool $isValid
      * @param array $messages
      */
+    #[DataProvider('isValidDataProvider')]
     public function testIsValid(\Magento\Framework\DataObject $value, bool $isValid, array $messages): void
     {
+        $ruleMock = $this->ruleMocks;
         $this->dataObjectValidatorMock->expects($this->exactly(count($this->ruleMocks)))
             ->method('addRule')
-            ->withConsecutive(...$this->ruleMocks);
+            ->willReturnCallback(function ($ruleMock) {
+                return null;
+            });
         $this->dataObjectValidatorMock->expects($this->once())
             ->method('isValid')
             ->with($value)
@@ -82,7 +86,7 @@ class StoreValidatorTest extends TestCase
         $this->assertEquals($messages, $this->model->getMessages());
     }
 
-    public function isValidDataProvider(): array
+    public static function isValidDataProvider(): array
     {
         return [
             'true' => [

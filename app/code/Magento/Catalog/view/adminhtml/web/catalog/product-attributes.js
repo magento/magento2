@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 define([
@@ -52,7 +52,7 @@ define([
                         doc.execCommand('stop');
                         self.iframe.remove();
                     }
-                    self.modal.data('modal').modal.remove();
+                    self.modal.data('mageModal').modal.remove();
                     $(window).off('resize.modal');
                 }
             });
@@ -63,7 +63,7 @@ define([
          * @private
          */
         _getHeight: function () {
-            var modal = this.modal.data('modal').modal,
+            var modal = this.modal.data('mageModal').modal,
                 modalHead = modal.find('header'),
                 modalHeadHeight = modalHead.outerHeight(),
                 modalHeight = modal.outerHeight(),

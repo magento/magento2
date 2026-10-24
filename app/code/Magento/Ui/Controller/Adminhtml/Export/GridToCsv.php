@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Ui\Controller\Adminhtml\Export;
 
@@ -49,8 +49,8 @@ class GridToCsv extends Action
         Context $context,
         ConvertToCsv $converter,
         FileFactory $fileFactory,
-        Filter $filter = null,
-        LoggerInterface $logger = null
+        ?Filter $filter = null,
+        ?LoggerInterface $logger = null
     ) {
         parent::__construct($context);
         $this->converter = $converter;

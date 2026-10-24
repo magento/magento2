@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -22,7 +22,10 @@ class CurlTest extends TestCase
     public function testInvalidProtocol()
     {
         $this->expectException('Exception');
-        $this->expectExceptionMessageMatches('/Protocol .?telnet.? not supported or disabled in libcurl/');
+        // Accommodate different libcurl version error messages:
+        // - "Protocol telnet not supported or disabled in libcurl" (older versions)
+        // - "Protocol \"telnet\" disabled" (newer versions)
+        $this->expectExceptionMessageMatches('/Protocol .?telnet.? (not supported or )?disabled( in libcurl)?/');
         $client = new Curl();
         $client->get('telnet://127.0.0.1/test');
     }
@@ -38,7 +41,6 @@ class CurlTest extends TestCase
             $curl,
             'parseHeaders'
         );
-        $parseHeaders->setAccessible(true);
 
         // Parse headers
         foreach ($this->headersDataProvider() as $header) {

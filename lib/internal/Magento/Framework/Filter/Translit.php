@@ -1,16 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Filter;
+
+use Laminas\Filter\FilterInterface;
 
 /**
  * Translit filter
  *
  * Process string based on convertation table
  */
-class Translit implements \Zend_Filter_Interface
+class Translit implements FilterInterface
 {
     /**
      * Symbol convert table
@@ -25,12 +27,14 @@ class Translit implements \Zend_Filter_Interface
         'À' => 'a',
         'Á' => 'a',
         'Â' => 'a',
+        'Ã' => 'a',
         'Ä' => 'a',
         'Å' => 'a',
         'Æ' => 'ae',
         'Ç' => 'c',
         'È' => 'e',
         'É' => 'e',
+        'Ê' => 'e',
         'Ë' => 'e',
         'Ì' => 'i',
         'Í' => 'i',
@@ -51,6 +55,7 @@ class Translit implements \Zend_Filter_Interface
         'à' => 'a',
         'á' => 'a',
         'â' => 'a',
+        'ã' => 'a',
         'ä' => 'a',
         'å' => 'a',
         'æ' => 'ae',
@@ -497,7 +502,9 @@ class Translit implements \Zend_Filter_Interface
         '্' => 'h',
         'ং' => 'ng',
         'ৢ' => 'n',
-        'ৣ' => 'nn'
+        'ৣ' => 'nn',
+        'ñ' => 'n',
+        'Ñ' => 'n',
     ];
 
     /**
@@ -531,7 +538,7 @@ class Translit implements \Zend_Filter_Interface
      */
     public function filter($string)
     {
-        $string = strtr($string, $this->getConvertTable());
+        $string = $string !== null ? strtr($string, $this->getConvertTable()) : '';
         return '"libiconv"' == ICONV_IMPL ? iconv(
             \Magento\Framework\Stdlib\StringUtils::ICONV_CHARSET,
             'ascii//ignore//translit',

@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Api\Search;
 
 /**
- * Interface \Magento\Framework\Api\Search\AggregationValueInterface
+ * Interface Aggregation Value
  *
+ * @api
  */
 interface AggregationValueInterface
 {

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Api\ExtensionAttribute;
 
@@ -31,7 +31,7 @@ class Config extends \Magento\Framework\Config\Data
         Reader $reader,
         CacheInterface $cache,
         $cacheId = self::CACHE_ID,
-        SerializerInterface $serializer = null
+        ?SerializerInterface $serializer = null
     ) {
         parent::__construct($reader, $cache, $cacheId, $serializer);
     }

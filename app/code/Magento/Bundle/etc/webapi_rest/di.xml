@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
@@ -16,5 +16,10 @@
     <type name="Magento\Bundle\Api\ProductLinkManagementInterface">
         <plugin name="reindex_after_add_child_by_sku" type="Magento\Bundle\Plugin\Api\ProductLinkManagement\ReindexAfterAddChildBySkuPlugin"/>
         <plugin name="reindex_after_remove_child" type="Magento\Bundle\Plugin\Api\ProductLinkManagement\ReindexAfterRemoveChildPlugin"/>
+    </type>
+    <type name="Magento\Sales\Model\Order\Shipment">
+        <arguments>
+            <argument name="validator" xsi:type="object">Magento\Bundle\Model\Sales\Order\BundleOrderTypeValidator</argument>
+        </arguments>
     </type>
 </config>

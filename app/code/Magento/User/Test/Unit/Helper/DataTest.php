@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -36,15 +36,8 @@ class DataTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->mathRandomMock = $this->getMockBuilder(Random::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-
-        $this->configMock = $this->getMockBuilder(ConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMockForAbstractClass();
+        $this->mathRandomMock = $this->createMock(Random::class);
+        $this->configMock = $this->createMock(ConfigInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(

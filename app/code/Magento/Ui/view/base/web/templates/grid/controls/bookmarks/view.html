@@ -1,7 +1,7 @@
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 -->
 <div class="action-dropdown-menu-item-edit" if="$view.editable">
@@ -10,7 +10,6 @@
         data-bind="
             value: $view.value,
             hasFocus: $parent.isEditing($view.index),
-            autoselect,
             attr: {
                 placeholder: $view.label
             },

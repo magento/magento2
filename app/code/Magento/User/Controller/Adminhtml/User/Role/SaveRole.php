@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\User\Controller\Adminhtml\User\Role;
@@ -25,27 +24,27 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role implements H
     /**
      * Session keys for Info form data
      */
-    const ROLE_EDIT_FORM_DATA_SESSION_KEY = 'role_edit_form_data';
+    public const ROLE_EDIT_FORM_DATA_SESSION_KEY = 'role_edit_form_data';
 
     /**
      * Session keys for Users form data
      */
-    const IN_ROLE_USER_FORM_DATA_SESSION_KEY = 'in_role_user_form_data';
+    public const IN_ROLE_USER_FORM_DATA_SESSION_KEY = 'in_role_user_form_data';
 
     /**
      * Session keys for original Users form data
      */
-    const IN_ROLE_OLD_USER_FORM_DATA_SESSION_KEY = 'in_role_old_user_form_data';
+    public const IN_ROLE_OLD_USER_FORM_DATA_SESSION_KEY = 'in_role_old_user_form_data';
 
     /**
      * Session keys for Use all resources flag form data
      */
-    const RESOURCE_ALL_FORM_DATA_SESSION_KEY = 'resource_all_form_data';
+    public const RESOURCE_ALL_FORM_DATA_SESSION_KEY = 'resource_all_form_data';
 
     /**
      * Session keys for Resource form data
      */
-    const RESOURCE_FORM_DATA_SESSION_KEY = 'resource_form_data';
+    public const RESOURCE_FORM_DATA_SESSION_KEY = 'resource_form_data';
 
     /**
      * @var SecurityCookie
@@ -57,6 +56,7 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role implements H
      *
      * @return SecurityCookie
      * @deprecated 100.1.0
+     * @see we don't recommend this approach anymore
      */
     private function getSecurityCookie()
     {
@@ -98,6 +98,9 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role implements H
                 ->setPid($this->getRequest()->getParam('parent_id', false))
                 ->setRoleType(RoleGroup::ROLE_TYPE)
                 ->setUserType(UserContextInterface::USER_TYPE_ADMIN);
+            if ($this->getRequest()->getParam('gws_is_all', false)) {
+                $role->setGwsWebsites(null)->setGwsStoreGroups(null);
+            }
             $this->_eventManager->dispatch(
                 'admin_permissions_role_prepare_save',
                 ['object' => $role, 'request' => $this->getRequest()]
@@ -106,7 +109,13 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role implements H
             $this->processCurrentUsers($role, $roleUsers);
 
             $role->save();
-            $this->_rulesFactory->create()->setRoleId($role->getId())->setResources($resource)->saveRel();
+            $roleData = [
+                'role_id' => $role->getId(),
+                'resources' => $resource,
+                'role_assigned_users' => $roleUsers,
+                'role_unassigned_users' => array_diff($oldRoleUsers, $roleUsers)
+            ];
+            $this->_rulesFactory->create()->setData($roleData)->saveRel();
 
             $this->messageManager->addSuccessMessage(__('You saved the role.'));
         } catch (UserLockedException $e) {
@@ -155,7 +164,7 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role implements H
      */
     private function parseRequestVariable($paramName): array
     {
-        $value = $this->getRequest()->getParam($paramName, null);
+        $value = $this->getRequest()->getParam($paramName, '');
         // phpcs:ignore Magento2.Functions.DiscouragedFunction
         parse_str($value, $value);
         $value = array_keys($value);
@@ -215,7 +224,7 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role implements H
         if ($user->roleUserExists() === true) {
             return false;
         } else {
-            $user->save();
+            $user->setSkipRoleResourceValidation(true)->save();
             return true;
         }
     }

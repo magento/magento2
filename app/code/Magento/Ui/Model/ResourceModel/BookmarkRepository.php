@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Ui\Model\ResourceModel;
@@ -54,7 +54,7 @@ class BookmarkRepository implements BookmarkRepositoryInterface
         \Magento\Ui\Api\Data\BookmarkInterfaceFactory $bookmarkFactory,
         \Magento\Ui\Model\ResourceModel\Bookmark $bookmarkResourceModel,
         \Magento\Ui\Api\Data\BookmarkSearchResultsInterfaceFactory $searchResultsFactory,
-        CollectionProcessorInterface $collectionProcessor = null
+        ?CollectionProcessorInterface $collectionProcessor = null
     ) {
 
         $this->bookmarkResourceModel = $bookmarkResourceModel;

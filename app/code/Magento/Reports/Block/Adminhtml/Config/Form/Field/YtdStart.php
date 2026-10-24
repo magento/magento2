@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Reports\Block\Adminhtml\Config\Form\Field;
 
@@ -24,7 +24,7 @@ class YtdStart extends Field
     {
         $_months = [];
         for ($i = 1; $i <= 12; $i++) {
-            $month = $this->_localeDate->date(mktime(null, null, null, $i, 1))
+            $month = $this->_localeDate->date(mktime(0, 0, 0, $i, 1))
                 ->format('m');
             $_months[$month] = $month;
         }

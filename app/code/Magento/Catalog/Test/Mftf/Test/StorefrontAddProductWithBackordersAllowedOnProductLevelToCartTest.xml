@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -16,6 +16,7 @@
             <severity value="MAJOR"/>
             <description value="Customer should be able to add products to Cart if product qty less or equal 0 and Backorders are allowed on Product level"/>
             <group value="catalog"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
@@ -28,8 +29,8 @@
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
         </after>
 
-        <actionGroup ref="NavigateToCreatedProductEditPageActionGroup" stepKey="openCreatedProductEditPage">
-            <argument name="product" value="$$createProduct$$"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openCreatedProductEditPage">
+            <argument name="productId" value="$createProduct.id$"/>
         </actionGroup>
         <actionGroup ref="AdminClickOnAdvancedInventoryLinkActionGroup" stepKey="clickOnAdvancedInventoryLink"/>
         <actionGroup ref="AdminSetBackordersOnProductAdvancedInventoryActionGroup" stepKey="allowBackorders"/>

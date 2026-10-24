@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -40,7 +40,7 @@ $attributeMultiselect = $objectManager->create(
             'frontend_input' => 'multiselect',
             'frontend_label' => ['Multiselect Attribute'],
             'sort_order' => '0',
-            'backend_type' => 'varchar',
+            'backend_type' => 'text',
             'is_user_defined' => 1,
             'is_system' => 0,
             'is_required' => '0',

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -14,6 +14,7 @@ use Magento\Setup\Console\Command\ModuleConfigStatusCommand;
 use Magento\Setup\Model\Installer;
 use Magento\Setup\Model\InstallerFactory;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
@@ -25,8 +26,8 @@ class ModuleConfigStatusCommandTest extends TestCase
      * @param array $currentConfig
      * @param array $correctConfig
      * @param string $expectedOutput
-     * @dataProvider executeDataProvider
      */
+    #[DataProvider('executeDataProvider')]
     public function testExecute(array $currentConfig, array $correctConfig, string $expectedOutput)
     {
         $configReader = $this->createMock(Reader::class);
@@ -55,7 +56,7 @@ class ModuleConfigStatusCommandTest extends TestCase
     /**
      * @return array
      */
-    public function executeDataProvider()
+    public static function executeDataProvider()
     {
         $successMessage = 'The modules configuration is up to date.' . PHP_EOL;
         $failureMessage = 'The modules configuration in the \'app/etc/config.php\' '

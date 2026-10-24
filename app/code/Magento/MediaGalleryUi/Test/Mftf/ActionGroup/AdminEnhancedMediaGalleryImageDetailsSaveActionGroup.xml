@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -16,9 +16,12 @@
             <argument name="image"/>
         </arguments>
 
+        <waitForElementVisible selector="{{AdminEnhancedMediaGalleryEditDetailsSection.title}}" stepKey="waitForField"/>
         <fillField selector="{{AdminEnhancedMediaGalleryEditDetailsSection.title}}" userInput="{{image.title}}" stepKey="setTitle" />
         <fillField selector="{{AdminEnhancedMediaGalleryEditDetailsSection.description}}" userInput="{{image.description}}" stepKey="setDescription" />
         <click selector="{{AdminEnhancedMediaGalleryEditDetailsSection.save}}" stepKey="saveDetails"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear"/>
+        <waitForPageLoad stepKey="waitForLoadingMaskToDisappear"/>
+        <waitForElementNotVisible selector="{{AdminEnhancedMediaGalleryEditDetailsSection.modalTitle}}" stepKey="waitForSlideOutGone"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>
 </actionGroups>

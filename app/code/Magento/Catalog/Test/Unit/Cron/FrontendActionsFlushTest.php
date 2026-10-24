@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -33,16 +33,8 @@ class FrontendActionsFlushTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->productFrontendActionMock = $this->getMockBuilder(
-            ProductFrontendAction::class
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->frontendStorageConfigurationPoolMock = $this->getMockBuilder(
-            FrontendStorageConfigurationPool::class
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->productFrontendActionMock = $this->createMock(ProductFrontendAction::class);
+        $this->frontendStorageConfigurationPoolMock = $this->createMock(FrontendStorageConfigurationPool::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
@@ -56,9 +48,9 @@ class FrontendActionsFlushTest extends TestCase
 
     public function testExecute()
     {
-        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $connectionMock = $this->createMock(AdapterInterface::class);
         $selectMock = $this->createMock(Select::class);
-        $frontendConfiguration = $this->getMockForAbstractClass(FrontendStorageConfigurationInterface::class);
+        $frontendConfiguration = $this->createMock(FrontendStorageConfigurationInterface::class);
 
         $selectMock
             ->expects($this->once())

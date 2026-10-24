@@ -1,10 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Swatches\Controller\Adminhtml\Iframe;
+
+use Magento\TestFramework\Bootstrap;
 
 /**
  * @magentoAppArea adminhtml
@@ -21,7 +23,10 @@ class ShowTest extends \Magento\TestFramework\TestCase\AbstractBackendController
             ->get(\Magento\Framework\Acl\Builder::class)
             ->getAcl();
 
-        $acl->allow(null, \Magento\Swatches\Controller\Adminhtml\Iframe\Show::ADMIN_RESOURCE);
+        $acl->allow(
+            Bootstrap::ADMIN_ROLE_ID,
+            \Magento\Swatches\Controller\Adminhtml\Iframe\Show::ADMIN_RESOURCE
+        );
 
         $this->dispatch('backend/swatches/iframe/show/');
 
@@ -42,7 +47,10 @@ class ShowTest extends \Magento\TestFramework\TestCase\AbstractBackendController
             ->get(\Magento\Framework\Acl\Builder::class)
             ->getAcl();
 
-        $acl->deny(null, \Magento\Swatches\Controller\Adminhtml\Iframe\Show::ADMIN_RESOURCE);
+        $acl->deny(
+            Bootstrap::ADMIN_ROLE_ID,
+            \Magento\Swatches\Controller\Adminhtml\Iframe\Show::ADMIN_RESOURCE
+        );
 
         $this->dispatch('backend/swatches/iframe/show/');
 

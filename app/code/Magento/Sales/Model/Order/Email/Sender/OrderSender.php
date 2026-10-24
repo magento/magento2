@@ -1,8 +1,10 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Model\Order\Email\Sender;
 
 use Magento\Payment\Helper\Data as PaymentHelper;
@@ -18,6 +20,7 @@ use Magento\Framework\DataObject;
 /**
  * Sends order email to the customer.
  *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class OrderSender extends Sender

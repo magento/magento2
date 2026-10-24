@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Email\Model\Template\Css;
 
@@ -35,7 +35,7 @@ class Processor
     public function process($css)
     {
         $matches = [];
-        if (preg_match_all(Variable::VAR_REGEX, $css, $matches, PREG_SET_ORDER)) {
+        if ($css !== null && preg_match_all(Variable::VAR_REGEX, $css, $matches, PREG_SET_ORDER)) {
             $replacements = [];
             foreach ($matches as $match) {
                 if (!isset($replacements[$match[0]])) {

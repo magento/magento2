@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -21,7 +21,7 @@ class CronJobException
     /**
      * @param \Throwable|null $exception
      */
-    public function __construct(\Throwable $exception = null)
+    public function __construct(?\Throwable $exception = null)
     {
         $this->exception = $exception;
     }

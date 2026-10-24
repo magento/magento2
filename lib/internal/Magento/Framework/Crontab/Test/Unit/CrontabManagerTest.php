@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -19,6 +19,7 @@ use Magento\Framework\Phrase;
 use Magento\Framework\ShellInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Tests crontab manager functionality.
@@ -45,8 +46,7 @@ class CrontabManagerTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->shellMock = $this->getMockBuilder(ShellInterface::class)
-            ->getMockForAbstractClass();
+        $this->shellMock = $this->createMock(ShellInterface::class);
         $this->filesystemMock = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalClone()
             ->disableOriginalConstructor()
@@ -79,9 +79,8 @@ class CrontabManagerTest extends TestCase
      * @param string $content
      * @param array $tasks
      *
-     * @return void
-     * @dataProvider getTasksDataProvider
-     */
+     * @return void     */
+    #[DataProvider('getTasksDataProvider')]
     public function testGetTasks($content, $tasks): void
     {
         $this->shellMock->expects($this->once())
@@ -97,7 +96,7 @@ class CrontabManagerTest extends TestCase
      *
      * @return array
      */
-    public function getTasksDataProvider(): array
+    public static function getTasksDataProvider(): array
     {
         return [
             [
@@ -141,8 +140,15 @@ class CrontabManagerTest extends TestCase
 
         $this->shellMock
             ->method('execute')
-            ->withConsecutive(['crontab -l 2>/dev/null', []], ['echo "" | crontab -', []])
-            ->willReturnOnConsecutiveCalls('', $this->throwException($localizedException));
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($localizedException) {
+                    if ($arg1 == 'crontab -l 2>/dev/null' && empty($arg2)) {
+                        return '';
+                    } elseif ($arg1 == 'echo "" | crontab -' && empty($arg2)) {
+                        throw $localizedException;
+                    }
+                }
+            );
 
         $this->crontabManager->removeTasks();
     }
@@ -153,15 +159,21 @@ class CrontabManagerTest extends TestCase
      * @param string $contentBefore
      * @param string $contentAfter
      *
-     * @return void
-     * @dataProvider removeTasksDataProvider
-     */
+     * @return void     */
+    #[DataProvider('removeTasksDataProvider')]
     public function testRemoveTasks($contentBefore, $contentAfter): void
     {
         $this->shellMock
             ->method('execute')
-            ->withConsecutive(['crontab -l 2>/dev/null', []], ['echo "' . $contentAfter . '" | crontab -', []])
-            ->willReturn($contentBefore);
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($contentAfter, $contentBefore) {
+                    if ($arg1 == 'crontab -l 2>/dev/null' && $arg2 == []) {
+                        return $contentBefore;
+                    } elseif ($arg1 == 'echo "' . $contentAfter . '" | crontab -' && $arg2 == []) {
+                        return $contentBefore;
+                    }
+                }
+            );
 
         $this->crontabManager->removeTasks();
     }
@@ -171,7 +183,7 @@ class CrontabManagerTest extends TestCase
      *
      * @return array
      */
-    public function removeTasksDataProvider(): array
+    public static function removeTasksDataProvider(): array
     {
         return [
             [
@@ -208,13 +220,11 @@ class CrontabManagerTest extends TestCase
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionMessage('The list of tasks is empty. Add tasks and try again.');
-        $baseDirMock = $this->getMockBuilder(ReadInterface::class)
-            ->getMockForAbstractClass();
+        $baseDirMock = $this->createMock(ReadInterface::class);
         $baseDirMock->expects($this->never())
             ->method('getAbsolutePath')
             ->willReturn('/var/www/magento2/');
-        $logDirMock = $this->getMockBuilder(ReadInterface::class)
-            ->getMockForAbstractClass();
+        $logDirMock = $this->createMock(ReadInterface::class);
         $logDirMock->expects($this->never())
             ->method('getAbsolutePath');
 
@@ -237,13 +247,11 @@ class CrontabManagerTest extends TestCase
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionMessage('The command shouldn\'t be empty. Enter and try again.');
-        $baseDirMock = $this->getMockBuilder(ReadInterface::class)
-            ->getMockForAbstractClass();
+        $baseDirMock = $this->createMock(ReadInterface::class);
         $baseDirMock->expects($this->once())
             ->method('getAbsolutePath')
             ->willReturn('/var/www/magento2/');
-        $logDirMock = $this->getMockBuilder(ReadInterface::class)
-            ->getMockForAbstractClass();
+        $logDirMock = $this->createMock(ReadInterface::class);
         $logDirMock->expects($this->once())
             ->method('getAbsolutePath')
             ->willReturn('/var/www/magento2/var/log/');
@@ -267,18 +275,15 @@ class CrontabManagerTest extends TestCase
      * @param string $content
      * @param string $contentToSave
      *
-     * @return void
-     * @dataProvider saveTasksDataProvider
-     */
+     * @return void     */
+    #[DataProvider('saveTasksDataProvider')]
     public function testSaveTasks($tasks, $content, $contentToSave): void
     {
-        $baseDirMock = $this->getMockBuilder(ReadInterface::class)
-            ->getMockForAbstractClass();
+        $baseDirMock = $this->createMock(ReadInterface::class);
         $baseDirMock->expects($this->once())
             ->method('getAbsolutePath')
             ->willReturn('/var/www/magento2/');
-        $logDirMock = $this->getMockBuilder(ReadInterface::class)
-            ->getMockForAbstractClass();
+        $logDirMock = $this->createMock(ReadInterface::class);
         $logDirMock->expects($this->once())
             ->method('getAbsolutePath')
             ->willReturn('/var/www/magento2/var/log/');
@@ -292,8 +297,15 @@ class CrontabManagerTest extends TestCase
 
         $this->shellMock
             ->method('execute')
-            ->withConsecutive(['crontab -l 2>/dev/null', []], ['echo "' . $contentToSave . '" | crontab -', []])
-            ->willReturn($content);
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($contentToSave, $content) {
+                    if ($arg1 == 'crontab -l 2>/dev/null' && empty($arg2)) {
+                        return $content;
+                    } elseif ($arg1 == 'echo "' . $contentToSave . '" | crontab -' && empty($arg2)) {
+                        return $content;
+                    }
+                }
+            );
 
         $this->crontabManager->saveTasks($tasks);
     }
@@ -303,7 +315,7 @@ class CrontabManagerTest extends TestCase
      *
      * @return array
      */
-    public function saveTasksDataProvider(): array
+    public static function saveTasksDataProvider(): array
     {
         $content = '* * * * * /bin/php /var/www/cron.php' . PHP_EOL
             . CrontabManagerInterface::TASKS_BLOCK_START . ' ' . hash("sha256", BP) . PHP_EOL

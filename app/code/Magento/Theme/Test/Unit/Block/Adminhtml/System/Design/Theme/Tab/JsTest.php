@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -37,13 +37,13 @@ class JsTest extends TestCase
             Js::class,
             [
                 'formFactory' => $this->createMock(FormFactory::class),
-                'objectManager' => $this->getMockForAbstractClass(ObjectManagerInterface::class),
+                'objectManager' => $this->createMock(ObjectManagerInterface::class),
                 'urlBuilder' => $this->_urlBuilder
             ]
         );
 
         $this->_model = $this->getMockBuilder(Js::class)
-            ->setMethods(['_getCurrentTheme'])
+            ->onlyMethods(['_getCurrentTheme'])
             ->setConstructorArgs($constructArguments)
             ->getMock();
     }
@@ -61,7 +61,6 @@ class JsTest extends TestCase
     {
         $class = new \ReflectionClass(Js::class);
         $method = $class->getMethod($name);
-        $method->setAccessible(true);
         return $method;
     }
 

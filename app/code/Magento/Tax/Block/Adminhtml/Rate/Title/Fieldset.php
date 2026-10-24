@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Tax Rate Titles Fieldset
- *
- * @author Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Tax\Block\Adminhtml\Rate\Title;
 
@@ -37,6 +35,8 @@ class Fieldset extends \Magento\Framework\Data\Form\Element\Fieldset
     }
 
     /**
+     * Get title formatted in HTML
+     *
      * @return string
      */
     public function getBasicChildrenHtml()

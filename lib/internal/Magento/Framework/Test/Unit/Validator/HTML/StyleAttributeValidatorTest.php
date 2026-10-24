@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -10,6 +10,8 @@ namespace Magento\Framework\Test\Unit\Validator\HTML;
 
 use Magento\Framework\Validation\ValidationException;
 use Magento\Framework\Validator\HTML\StyleAttributeValidator;
+use PHPUnit\Framework\Attributes\DataProvider;
+
 use PHPUnit\Framework\TestCase;
 
 class StyleAttributeValidatorTest extends TestCase
@@ -19,7 +21,7 @@ class StyleAttributeValidatorTest extends TestCase
      *
      * @return array
      */
-    public function getAttributes(): array
+    public static function getAttributes(): array
     {
         return [
             'not a style' => ['class', 'value', true],
@@ -40,8 +42,8 @@ class StyleAttributeValidatorTest extends TestCase
      * @param string $value
      * @param bool $expectedValid
      * @return void
-     * @dataProvider getAttributes
      */
+    #[DataProvider('getAttributes')]
     public function testValidate(string $attr, string $value, bool $expectedValid): void
     {
         $validator = new StyleAttributeValidator();

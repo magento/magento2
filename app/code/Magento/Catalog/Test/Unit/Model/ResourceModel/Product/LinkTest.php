@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -45,7 +45,7 @@ class LinkTest extends TestCase
         $objectManager = new ObjectManager($this);
         $this->resource = $this->createMock(ResourceConnection::class);
         $this->connection =
-            $this->getMockForAbstractClass(AdapterInterface::class);
+            $this->createMock(AdapterInterface::class);
 
         $this->model = $objectManager->getObject(
             Link::class,
@@ -54,8 +54,8 @@ class LinkTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     protected function prepareAdapter(): void
     {
         $this->dbSelect = $this->createMock(Select::class);
@@ -69,8 +69,8 @@ class LinkTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetAttributesByType(): void
     {
         $typeId = 4;
@@ -93,8 +93,8 @@ class LinkTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetAttributeTypeTable(): void
     {
         $inputTable = 'megatable';
@@ -113,8 +113,8 @@ class LinkTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetChildrenIds(): void
     {
         //prepare mocks and data
@@ -145,8 +145,8 @@ class LinkTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetParentIdsByChild(): void
     {
         $childId = 234;
@@ -157,7 +157,7 @@ class LinkTest extends TestCase
         // method flow
         $this->prepareAdapter();
         $this->dbSelect->expects($this->once())->method('from')->willReturn($this->dbSelect);
-        $this->dbSelect->expects($this->any())->method('where')->willReturn($this->dbSelect);
+        $this->dbSelect->method('where')->willReturn($this->dbSelect);
 
         $this->connection->expects(
             $this->once()

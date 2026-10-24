@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\AdminNotification\Block;
@@ -17,17 +17,17 @@ class ToolbarEntry extends \Magento\Backend\Block\Template
     /**
      * Number of notifications showed on expandable window
      */
-    const NOTIFICATIONS_NUMBER = 3;
+    public const NOTIFICATIONS_NUMBER = 3;
 
     /**
      * Number of notifications showed on icon
      */
-    const NOTIFICATIONS_COUNTER_MAX = 99;
+    public const NOTIFICATIONS_COUNTER_MAX = 99;
 
     /**
      * Length of notification description showed by default
      */
-    const NOTIFICATION_DESCRIPTION_LENGTH = 150;
+    public const NOTIFICATION_DESCRIPTION_LENGTH = 150;
 
     /**
      * Collection of latest unread notifications

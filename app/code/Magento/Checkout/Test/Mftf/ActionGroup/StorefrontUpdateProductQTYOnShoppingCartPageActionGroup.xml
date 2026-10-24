@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontUpdateProductQTYOnShoppingCartPageActionGroup">
+        <arguments>
+            <argument name="product" type="entity"/>
+            <argument name="qty" type="string"/>
+        </arguments>
+        <fillField selector="{{CheckoutCartProductSection.ProductQuantityByName(product)}}" userInput="{{qty}}" stepKey="changeCartQty"/>
+        <click selector="{{CheckoutCartProductSection.updateShoppingCartButton}}" stepKey="clickUpdateShoppingCart"/>
+        <waitForPageLoad stepKey="waitForCheckoutPageLoad"/>
+    </actionGroup>
+</actionGroups>

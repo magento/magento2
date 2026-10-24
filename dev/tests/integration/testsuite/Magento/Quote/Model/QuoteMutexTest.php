@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Quote\Model;
 
 use Magento\Quote\Api\GuestCartManagementInterface;
 use Magento\TestFramework\Helper\Bootstrap as BootstrapHelper;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class QuoteMutexTest extends \PHPUnit\Framework\TestCase
 {
@@ -22,11 +23,14 @@ class QuoteMutexTest extends \PHPUnit\Framework\TestCase
      */
     private $quoteMutex;
 
+    private static $quoteMutexClass;
+
     protected function setUp(): void
     {
         $objectManager = BootstrapHelper::getObjectManager();
         $this->quoteMutex = $objectManager->create(QuoteMutexInterface::class);
         $this->guestCartManagement = $objectManager->create(GuestCartManagementInterface::class);
+        self::$quoteMutexClass = $this;
     }
 
     /**
@@ -36,8 +40,8 @@ class QuoteMutexTest extends \PHPUnit\Framework\TestCase
      * @param array $args
      * @param mixed $expectedResult
      * @return void
-     * @dataProvider callableDataProvider
      */
+    #[DataProvider('callableDataProvider')]
     public function testSuccessfulExecution(callable $callable, array $args, $expectedResult): void
     {
         $maskedQuoteId = $this->guestCartManagement->createEmptyCart();
@@ -49,7 +53,7 @@ class QuoteMutexTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array[]
      */
-    public function callableDataProvider(): array
+    public static function callableDataProvider(): array
     {
         $functionWithArgs = function (int $a, int $b) {
             return $a + $b;
@@ -63,7 +67,7 @@ class QuoteMutexTest extends \PHPUnit\Framework\TestCase
             ['callable' => $functionWithoutArgs, 'args' => [], 'expectedResult' => 'Function without args'],
             ['callable' => $functionWithArgs, 'args' => [1,2], 'expectedResult' => 3],
             [
-                'callable' => \Closure::fromCallable([$this, 'privateMethod']),
+                'callable' => \Closure::fromCallable([QuoteMutexTest::class, 'privateMethod']),
                 'args' => ['test'],
                 'expectedResult' => 'test'
             ],
@@ -77,7 +81,7 @@ class QuoteMutexTest extends \PHPUnit\Framework\TestCase
      * @return string
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
-    private function privateMethod(string $var)
+    private static function privateMethod(string $var)
     {
         return $var;
     }

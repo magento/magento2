@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -26,18 +26,22 @@
         </before>
         <after>
             <deleteData createDataKey="categoryEntity" stepKey="deleteSimpleSubCategory"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
             <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteVirtualProduct">
                 <argument name="product" value="virtualProductGeneralGroup"/>
             </actionGroup>
             <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForSuccessMessageAppears"/>
             <see selector="{{AdminMessagesSection.success}}" userInput="A total of 1 record(s) have been deleted." stepKey="seeSuccessMessage"/>
-            <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearFiltersAfter"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFiltersAfter"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
 
         <!-- Create virtual product-->
-        <amOnPage url="{{AdminProductCreatePage.url(AddToDefaultSet.attributeSetId,'virtual')}}" stepKey="openVirtualProductCreatePage"/>
+        <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="openVirtualProductCreatePage">
+            <argument name="attributeSetId" value="{{AddToDefaultSet.attributeSetId}}"/>
+            <argument name="productType" value="virtual"/>
+        </actionGroup>
         <actionGroup ref="FillMainProductFormNoWeightActionGroup" stepKey="fillNewProductData">
             <argument name="product" value="virtualProductGeneralGroup"/>
         </actionGroup>

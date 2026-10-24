@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -121,7 +121,6 @@ class UpdateItemOptionsTest extends TestCase
             ->method('create')
             ->with(ResultFactory::TYPE_REDIRECT, [])
             ->willReturn($this->resultRedirectMock);
-
     }
 
     /**
@@ -280,9 +279,13 @@ class UpdateItemOptionsTest extends TestCase
 
         $this->requestMock
             ->method('getParam')
-            ->withConsecutive(['product', null], ['id', null])
-            ->willReturnOnConsecutiveCalls(2, 3);
-
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 'product' && is_null($arg2)) {
+                    return 2;
+                } elseif ($arg1 == 'id' && is_null($arg2)) {
+                    return 3;
+                }
+            });
         $this->productRepositoryMock
             ->expects($this->once())
             ->method('getById')
@@ -373,9 +376,13 @@ class UpdateItemOptionsTest extends TestCase
 
         $this->requestMock
             ->method('getParam')
-            ->withConsecutive(['product', null], ['id', null])
-            ->willReturnOnConsecutiveCalls(2, 3);
-
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 'product' && is_null($arg2)) {
+                    return 2;
+                } elseif ($arg1 == 'id' && is_null($arg2)) {
+                    return 3;
+                }
+            });
         $this->productRepositoryMock
             ->expects($this->once())
             ->method('getById')
@@ -495,8 +502,13 @@ class UpdateItemOptionsTest extends TestCase
 
         $this->requestMock
             ->method('getParam')
-            ->withConsecutive(['product', null], ['id', null])
-            ->willReturnOnConsecutiveCalls(2, 3);
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 'product' && is_null($arg2)) {
+                    return 2;
+                } elseif ($arg1 == 'id' && is_null($arg2)) {
+                    return 3;
+                }
+            });
 
         $this->productRepositoryMock
             ->expects($this->once())
@@ -534,8 +546,10 @@ class UpdateItemOptionsTest extends TestCase
 
         $this->objectManagerMock
             ->method('get')
-            ->withConsecutive([Data::class], [Data::class], [LoggerInterface::class])
-            ->willReturnOnConsecutiveCalls($helper, $helper, $logger);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [Data::class] => $helper,
+                [LoggerInterface::class] => $logger
+            });
 
         $this->eventManagerMock
             ->expects($this->once())

@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -82,8 +81,8 @@ class CreateTest extends TestCase
         $objectManager = new ObjectManager($this);
         $this->customerSession = $this->createMock(Session::class);
         $this->registrationMock = $this->createMock(Registration::class);
-        $this->redirectMock = $this->getMockForAbstractClass(RedirectInterface::class);
-        $this->response = $this->getMockForAbstractClass(ResponseInterface::class);
+        $this->redirectMock = $this->createMock(RedirectInterface::class);
+        $this->response = $this->createMock(ResponseInterface::class);
         $this->request = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
             ->getMock();

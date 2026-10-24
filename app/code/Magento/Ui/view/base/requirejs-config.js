@@ -1,14 +1,21 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 var config = {
     deps: [],
     shim: {
         'chartjs/chartjs-adapter-moment': ['moment'],
-        'tiny_mce_5/tinymce.min': {
-            exports: 'tinyMCE'
+        'chartjs/es6-shim.min': {},
+        'hugerte/hugerte.min': {
+            exports: 'hugerte',
+            init: function () {
+                'use strict';
+                window.tinymce = window.hugerte;
+                window.tinyMCE = window.hugerte;
+                return window.hugerte;
+            }
         }
     },
     paths: {
@@ -27,8 +34,8 @@ var config = {
             buttonAdapter:  'Magento_Ui/js/form/button-adapter',
             chartJs:        'chartjs/Chart.min',
             'chart.js':     'chartjs/Chart.min',
-            tinymce:        'tiny_mce_5/tinymce.min',
-            wysiwygAdapter: 'mage/adminhtml/wysiwyg/tiny_mce/tinymce5Adapter'
+            tinymce:        'hugerte/hugerte.min',
+            wysiwygAdapter: 'mage/adminhtml/wysiwyg/tiny_mce/tinymceAdapter'
         }
     }
 };

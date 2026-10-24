@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -29,8 +29,8 @@ class SuccessValidatorTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testIsValid(): void
     {
         $checkoutSession = $this->getMockBuilder(
@@ -41,8 +41,8 @@ class SuccessValidatorTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testIsValidWithNotEmptyGetLastSuccessQuoteId(): void
     {
         $checkoutSession = $this->getMockBuilder(
@@ -52,15 +52,17 @@ class SuccessValidatorTest extends TestCase
 
         $checkoutSession
             ->method('__call')
-            ->withConsecutive(['getLastSuccessQuoteId'], ['getLastQuoteId'])
-            ->willReturnOnConsecutiveCalls(1, 0);
-
+            ->willReturnCallback(fn($operation) => match ([$operation]) {
+                ['getLastSuccessQuoteId'] => 1,
+                ['getLastQuoteId'] => 0
+            });
+        
         $this->assertFalse($this->createSuccessValidator($checkoutSession)->isValid($checkoutSession));
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testIsValidWithEmptyQuoteAndOrder(): void
     {
         $checkoutSession = $this->getMockBuilder(
@@ -70,15 +72,18 @@ class SuccessValidatorTest extends TestCase
 
         $checkoutSession
             ->method('__call')
-            ->withConsecutive(['getLastSuccessQuoteId'], ['getLastQuoteId'], ['getLastOrderId'])
-            ->willReturnOnConsecutiveCalls(1, 1, 0);
+            ->willReturnCallback(fn($operation) => match ([$operation]) {
+                ['getLastSuccessQuoteId'] => 1,
+                ['getLastQuoteId'] => 1,
+                ['getLastOrderId'] => 0
+            });
 
         $this->assertFalse($this->createSuccessValidator($checkoutSession)->isValid($checkoutSession));
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testIsValidTrue(): void
     {
         $checkoutSession = $this->getMockBuilder(
@@ -88,8 +93,11 @@ class SuccessValidatorTest extends TestCase
 
         $checkoutSession
             ->method('__call')
-            ->withConsecutive(['getLastSuccessQuoteId'], ['getLastQuoteId'], ['getLastOrderId'])
-            ->willReturnOnConsecutiveCalls(1, 1, 1);
+            ->willReturnCallback(fn($operation) => match ([$operation]) {
+                ['getLastSuccessQuoteId'] => 1,
+                ['getLastQuoteId'] => 1,
+                ['getLastOrderId'] => 1
+            });
 
         $this->assertTrue($this->createSuccessValidator($checkoutSession)->isValid($checkoutSession));
     }

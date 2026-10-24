@@ -1,14 +1,17 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\Order\Creditmemo\Total;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Sales\Api\Data\CreditmemoInterface;
 use Magento\Sales\Model\Order\Creditmemo;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\ResourceModel\Order\Invoice as ResourceInvoice;
+use Magento\Tax\Model\Calculation as TaxCalculation;
+use Magento\Tax\Model\Config as TaxConfig;
 
 /**
  * Collects credit memo taxes.
@@ -21,17 +24,27 @@ class Tax extends AbstractTotal
     private $resourceInvoice;
 
     /**
+     * Tax config from Tax model
+     *
+     * @var TaxConfig
+     */
+    private $taxConfig;
+
+    /**
      * @param ResourceInvoice $resourceInvoice
      * @param array $data
+     * @param TaxConfig|null $taxConfig
      */
-    public function __construct(ResourceInvoice $resourceInvoice, array $data = [])
+    public function __construct(ResourceInvoice $resourceInvoice, array $data = [], ?TaxConfig $taxConfig = null)
     {
         $this->resourceInvoice = $resourceInvoice;
+        $this->taxConfig = $taxConfig ?: ObjectManager::getInstance()->get(TaxConfig::class);
         parent::__construct($data);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -52,9 +65,9 @@ class Tax extends AbstractTotal
                 continue;
             }
 
-            $orderItemTax = (double)$orderItem->getTaxInvoiced();
-            $baseOrderItemTax = (double)$orderItem->getBaseTaxInvoiced();
-            $orderItemQty = (double)$orderItem->getQtyInvoiced();
+            $orderItemTax = (float)$orderItem->getTaxInvoiced();
+            $baseOrderItemTax = (float)$orderItem->getBaseTaxInvoiced();
+            $orderItemQty = (float)$orderItem->getQtyInvoiced();
 
             if ($orderItemQty) {
                 /** Check item tax amount */
@@ -104,7 +117,9 @@ class Tax extends AbstractTotal
                 $baseShippingTaxAmount = $creditmemo->roundPrice($baseShippingTaxAmount, 'base');
                 $totalDiscountTaxCompensation = $creditmemo->roundPrice($totalDiscountTaxCompensation);
                 $baseTotalDiscountTaxCompensation = $creditmemo->roundPrice($baseTotalDiscountTaxCompensation, 'base');
-                if ($taxFactor < 1 && $invoice->getShippingTaxAmount() > 0) {
+                if ($taxFactor < 1 && $invoice->getShippingTaxAmount() > 0 ||
+                    ($order->getShippingDiscountAmount() >= $order->getShippingAmount())
+                ) {
                     $isPartialShippingRefunded = true;
                 }
                 $totalTax += $shippingTaxAmount;
@@ -119,7 +134,8 @@ class Tax extends AbstractTotal
             $baseShippingDiscountTaxCompensationAmount = 0;
             $shippingDelta = $baseOrderShippingAmount - $baseOrderShippingRefundedAmount;
 
-            if ($shippingDelta > $creditmemo->getBaseShippingAmount()) {
+            if ($orderShippingAmount > 0 && ($shippingDelta > $creditmemo->getBaseShippingAmount() ||
+                $this->isShippingIncludeTaxWithTaxAfterDiscount($order->getStoreId()))) {
                 $part = $creditmemo->getShippingAmount() / $orderShippingAmount;
                 $basePart = $creditmemo->getBaseShippingAmount() / $baseOrderShippingAmount;
                 $shippingTaxAmount = $order->getShippingTaxAmount() * $part;
@@ -136,7 +152,9 @@ class Tax extends AbstractTotal
                     $baseShippingDiscountTaxCompensationAmount,
                     'base'
                 );
-                if ($part < 1 && $order->getShippingTaxAmount() > 0) {
+                if ($part < 1 && ($order->getShippingTaxAmount() > 0 ||
+                        ($order->getShippingDiscountAmount() >= $order->getShippingAmount()))
+                ) {
                     $isPartialShippingRefunded = true;
                 }
             } elseif ($shippingDelta == $creditmemo->getBaseShippingAmount()) {
@@ -187,7 +205,20 @@ class Tax extends AbstractTotal
             $creditmemo->getBaseGrandTotal() + $baseTotalTax + $baseTotalDiscountTaxCompensation
         );
         return $this;
+    }
 
+    /**
+     * Checks if shipping provided incl tax, tax applied after discount, and discount applied on shipping excl tax
+     *
+     * @param int|null $storeId
+     * @return bool
+     */
+    private function isShippingIncludeTaxWithTaxAfterDiscount(?int $storeId): bool
+    {
+        $calculationSequence = $this->taxConfig->getCalculationSequence($storeId);
+        return ($calculationSequence === TaxCalculation::CALC_TAX_AFTER_DISCOUNT_ON_EXCL
+            || $calculationSequence === TaxCalculation::CALC_TAX_AFTER_DISCOUNT_ON_INCL)
+            && $this->taxConfig->displaySalesShippingInclTax($storeId);
     }
 
     /**
@@ -201,8 +232,10 @@ class Tax extends AbstractTotal
         $invoice = $creditMemo->getInvoice();
         $order = $creditMemo->getOrder();
         if ($invoice!== null) {
-            $amount = $invoice->getTaxAmount()
+            $invoiceTaxAvailable = $invoice->getTaxAmount()
                 - $this->calculateInvoiceRefundedAmount($invoice, CreditmemoInterface::TAX_AMOUNT);
+            $orderTaxAvailable = $order->getTaxInvoiced() - $order->getTaxRefunded();
+            $amount = min($invoiceTaxAvailable, $orderTaxAvailable);
         } else {
             $amount = $order->getTaxInvoiced() - $order->getTaxRefunded();
         }
@@ -222,8 +255,10 @@ class Tax extends AbstractTotal
         $order = $creditMemo->getOrder();
 
         if ($invoice!== null) {
-            $amount = $invoice->getBaseTaxAmount()
+            $invoiceTaxAvailable = $invoice->getBaseTaxAmount()
                 - $this->calculateInvoiceRefundedAmount($invoice, CreditmemoInterface::BASE_TAX_AMOUNT);
+            $orderTaxAvailable = $order->getBaseTaxInvoiced() - $order->getBaseTaxRefunded();
+            $amount = min($invoiceTaxAvailable, $orderTaxAvailable);
         } else {
             $amount = $order->getBaseTaxInvoiced() - $order->getBaseTaxRefunded();
         }
@@ -243,7 +278,7 @@ class Tax extends AbstractTotal
         $order = $creditMemo->getOrder();
 
         if ($invoice) {
-            $amount = $invoice->getDiscountTaxCompensationAmount()
+            $invoiceAmount = $invoice->getDiscountTaxCompensationAmount()
                 + $invoice->getShippingDiscountTaxCompensationAmount()
                 - $this->calculateInvoiceRefundedAmount(
                     $invoice,
@@ -252,6 +287,11 @@ class Tax extends AbstractTotal
                     $invoice,
                     CreditmemoInterface::SHIPPING_DISCOUNT_TAX_COMPENSATION_AMOUNT
                 );
+            $orderAmount = $order->getDiscountTaxCompensationInvoiced()
+                + $order->getShippingDiscountTaxCompensationAmount()
+                - $order->getDiscountTaxCompensationRefunded()
+                - $order->getShippingDiscountTaxCompensationRefunded();
+            $amount = min($invoiceAmount, $orderAmount);
         } else {
             $amount = $order->getDiscountTaxCompensationInvoiced()
                 + $order->getShippingDiscountTaxCompensationAmount()
@@ -276,7 +316,7 @@ class Tax extends AbstractTotal
         $order = $creditMemo->getOrder();
 
         if ($invoice) {
-            $amount = $invoice->getBaseDiscountTaxCompensationAmount()
+            $invoiceAmount = $invoice->getBaseDiscountTaxCompensationAmount()
                 + $invoice->getBaseShippingDiscountTaxCompensationAmnt()
                 - $this->calculateInvoiceRefundedAmount(
                     $invoice,
@@ -285,6 +325,11 @@ class Tax extends AbstractTotal
                     $invoice,
                     CreditmemoInterface::BASE_SHIPPING_DISCOUNT_TAX_COMPENSATION_AMNT
                 );
+            $orderAmount = $order->getBaseDiscountTaxCompensationInvoiced()
+                + $order->getBaseShippingDiscountTaxCompensationAmnt()
+                - $order->getBaseDiscountTaxCompensationRefunded()
+                - $order->getBaseShippingDiscountTaxCompensationRefunded();
+            $amount = min($invoiceAmount, $orderAmount);
         } else {
             $amount = $order->getBaseDiscountTaxCompensationInvoiced()
                 + $order->getBaseShippingDiscountTaxCompensationAmnt()

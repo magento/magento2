@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,7 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\HTTP\PhpEnvironment\Request;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\Validator\StringLength;
 use Magento\MediaStorage\Model\File\Validator\AvailablePath;
 use Magento\Sitemap\Controller\Adminhtml\Sitemap\Save;
@@ -29,6 +30,8 @@ use PHPUnit\Framework\TestCase;
  */
 class SaveTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Save
      */
@@ -102,10 +105,10 @@ class SaveTest extends TestCase
         $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getPostValue'])
-            ->getMockForAbstractClass();
+        $this->requestMock = $this->createPartialMockWithReflection(
+            Request::class,
+            ['getPostValue', 'getParam']
+        );
         $this->resultRedirectMock = $this->getMockBuilder(Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -123,10 +126,10 @@ class SaveTest extends TestCase
             ->method('create')
             ->with(ResultFactory::TYPE_REDIRECT)
             ->willReturn($this->resultRedirectMock);
-        $this->session = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setFormData'])
-            ->getMock();
+        $this->session = $this->createPartialMockWithReflection(
+            Session::class,
+            ['setFormData']
+        );
 
         $this->contextMock->expects($this->once())
             ->method('getMessageManager')

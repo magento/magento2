@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Captcha\Model\Checkout;
 
@@ -67,7 +67,7 @@ class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
      */
     protected function isCaseSensitive($formId)
     {
-        return (boolean)$this->getCaptchaModel($formId)->isCaseSensitive();
+        return (bool)$this->getCaptchaModel($formId)->isCaseSensitive();
     }
 
     /**
@@ -116,7 +116,7 @@ class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
      */
     protected function isRequired($formId)
     {
-        return (boolean)$this->getCaptchaModel($formId)->isRequired();
+        return (bool)$this->getCaptchaModel($formId)->isRequired();
     }
 
     /**

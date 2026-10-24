@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Mview\View;
 
@@ -43,7 +43,7 @@ class Collection extends \Magento\Framework\Data\Collection implements Collectio
         \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory,
         \Magento\Framework\Mview\ConfigInterface $config,
         \Magento\Framework\Mview\View\State\CollectionFactory $statesFactory,
-        ConfigInterface $indexerConfig = null
+        ?ConfigInterface $indexerConfig = null
     ) {
         $this->config = $config;
         $this->statesFactory = $statesFactory;

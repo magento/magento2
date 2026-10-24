@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -22,6 +22,7 @@
         <fillField stepKey="fillTemplateSubjectField" selector="{{BasicFieldNewsletterSection.templateSubject}}" userInput="{{subject}}"/>
         <fillField stepKey="fillSenderNameField" selector="{{BasicFieldNewsletterSection.senderName}}" userInput="{{senderName}}"/>
         <fillField stepKey="fillSenderEmailField" selector="{{BasicFieldNewsletterSection.senderEmail}}" userInput="{{senderEmail}}"/>
+        <waitForElementVisible stepKey="waitForTemplateContentField" selector="{{TinyMCESection.Content}}"/>
         <fillField stepKey="fillTemplateContentField" selector="{{TinyMCESection.Content}}" userInput="{{templateContent}}"/>
         <!--Saving Created Template-->
         <click stepKey="clickSaveTemplateButton" selector="{{AdminNewsletterMainActionsSection.saveTemplateButton}}"/>

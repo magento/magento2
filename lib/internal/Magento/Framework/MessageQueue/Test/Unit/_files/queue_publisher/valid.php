@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,17 +9,32 @@ return [
     'top01' => [
         'topic' => 'top01',
         'disabled' => false,
-        'connections' => []
+        'connections' => [
+            '' => ['name' => null,
+            'exchange' => 'magento',
+            'disabled' => false
+            ]
+        ]
     ],
     'top02' => [
         'topic' => 'top02',
         'disabled' => false,
-        'connections' => []
+        'connections' => [
+            '' => ['name' => null,
+                'exchange' => 'magento',
+                'disabled' => false
+            ]
+        ]
     ],
     'top03' => [
         'topic' => 'top03',
         'disabled' => true,
-        'connections' => []
+        'connections' => [
+            '' => ['name' => null,
+                'exchange' => 'magento',
+                'disabled' => false
+            ]
+        ]
     ],
     'top04' => [
         'topic' => 'top04',

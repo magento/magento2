@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -36,9 +36,8 @@ class EntityAbstractTest extends \PHPUnit\Framework\TestCase
         $eavConfig->expects($this->any())->method('getEntityType')->willReturn($entityTypeMock);
 
         /** @var $model AbstractEntity|\PHPUnit\Framework\MockObject\MockObject */
-        $model = $this->getMockForAbstractClass(
-            AbstractEntity::class,
-            [
+        $model = $this->getMockBuilder(AbstractEntity::class)
+            ->setConstructorArgs([
                 $objectManager->get(\Magento\Framework\Json\Helper\Data::class),
                 $objectManager->get(\Magento\ImportExport\Helper\Data::class),
                 $objectManager->get(\Magento\ImportExport\Model\ResourceModel\Import\Data::class),
@@ -47,20 +46,15 @@ class EntityAbstractTest extends \PHPUnit\Framework\TestCase
                 $objectManager->get(\Magento\ImportExport\Model\ResourceModel\Helper::class),
                 $objectManager->get(\Magento\Framework\Stdlib\StringUtils::class),
                 $objectManager->get(ProcessingErrorAggregatorInterface::class),
-            ],
-            '',
-            true,
-            false,
-            true,
-            ['validateRow', 'getEntityTypeCode']
-        );
+            ])
+            ->onlyMethods(['validateRow', 'getEntityTypeCode', '_importData'])
+            ->getMock();
         $model->expects($this->any())->method('validateRow')->willReturn(true);
         $model->expects($this->any())->method('getEntityTypeCode')->willReturn('catalog_product');
 
         $model->setSource($source);
 
         $method = new \ReflectionMethod($model, '_saveValidatedBunches');
-        $method->setAccessible(true);
         $method->invoke($model);
 
         $this->assertEquals(1, $model->getProcessedEntitiesCount());

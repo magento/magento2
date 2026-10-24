@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Setup\Fixtures;
@@ -23,7 +23,8 @@ class CatalogPriceRulesFixture extends Fixture
     protected $priority = 90;
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @SuppressWarnings(PHPMD)
      */
     public function execute()
@@ -74,8 +75,8 @@ class CatalogPriceRulesFixture extends Fixture
         for ($i = 0; $i < $catalogPriceRulesCount; $i++) {
             $ruleName = sprintf('Catalog Price Rule %1$d', $i);
             $data = [
-                $idField                => null,
-                $linkField              => null,
+                // Guard against null array offsets on PHP 8.1+ by only setting when field names are present
+                // (identifier/link fields can be null depending on metadata implementation)
                 'name'                  => $ruleName,
                 'description'           => '',
                 'is_active'             => '1',
@@ -88,7 +89,7 @@ class CatalogPriceRulesFixture extends Fixture
                 ],
                 'from_date'             => '',
                 'to_date'               => '',
-                'sort_order'            => '',
+                'sort_order'            => '25',
                 'rule'                  => [
                     'conditions' => [
                         1 => [
@@ -120,6 +121,12 @@ class CatalogPriceRulesFixture extends Fixture
                 'banner_is_enabled'         => '',
                 'related_banners'           => [],
             ];
+            if (!empty($idField)) {
+                $data[$idField] = null;
+            }
+            if (!empty($linkField)) {
+                $data[$linkField] = null;
+            }
             if (isset($data['simple_action']) && $data['simple_action'] == 'by_percent'
                 && isset($data['discount_amount'])
             ) {
@@ -141,7 +148,7 @@ class CatalogPriceRulesFixture extends Fixture
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getActionTitle()
     {
@@ -149,7 +156,7 @@ class CatalogPriceRulesFixture extends Fixture
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function introduceParamLabels()
     {

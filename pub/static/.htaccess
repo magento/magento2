@@ -1,9 +1,9 @@
-<IfModule mod_php5.c>
-php_flag engine 0
+<IfModule mod_php7.c>
+    php_flag engine 0
 </IfModule>
 
-<IfModule mod_php7.c>
-php_flag engine 0
+<IfModule mod_php.c>
+    php_flag engine 0
 </IfModule>
 
 # To avoid situation when web server automatically adds extension to path
@@ -75,7 +75,7 @@ AddType application/xml xml
 <IfModule mod_headers.c>
 
     <FilesMatch .*\.(ico|jpg|jpeg|png|gif|svg|webp|avif|avifs|js|css|eot|ttf|otf|woff|woff2|html|json|webmanifest)$>
-        Header append Cache-Control public
+        Header append Cache-Control "public, max-age=31536000, immutable"
     </FilesMatch>
 
     <FilesMatch .*\.(zip|gz|gzip|bz2|csv|xml)$>
@@ -102,7 +102,7 @@ AddType application/xml xml
     ExpiresByType application/zip "access plus 0 seconds"
     ExpiresByType application/x-gzip "access plus 0 seconds"
     ExpiresByType application/x-bzip2 "access plus 0 seconds"
-    
+
     # Manifest
     <FilesMatch \.(webmanifest)$>
         ExpiresDefault "access plus 0 seconds"

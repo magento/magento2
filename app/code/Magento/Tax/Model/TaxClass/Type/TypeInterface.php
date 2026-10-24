@@ -1,17 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
- */
-
-/**
- * Interface for tax classes
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Tax\Model\TaxClass\Type;
 
 /**
  * Interface \Magento\Tax\Model\TaxClass\Type\TypeInterface
  *
+ * @api
  */
 interface TypeInterface
 {

@@ -5,8 +5,8 @@
  * The quote is not saved inside the original fixture. It is later saved inside child fixtures, but along with some
  * additional data which may break some tests.
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 use Magento\Quote\Model\QuoteFactory;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;

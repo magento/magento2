@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 define([
@@ -67,11 +67,13 @@ define([
             }
 
             _.each(this.values, function (propertyValue, propertyName) {
-                string = string.replace('{{' + propertyName + '}}', propertyValue);
+                string = string.split('{{' + propertyName + '}}').join(propertyValue);
                 nonEmptyValueFlag = nonEmptyValueFlag || !!propertyValue;
             });
 
             if (nonEmptyValueFlag) {
+                string = string.replace(/<style.*?>.*?<\/style>/gis, ''); //Remove style tags
+                string = string.replace(/{{widget.*?}}/gis, ''); //Remove widgets
                 string = string.replace(/(<([^>]+)>)/ig, ''); // Remove html tags
                 this.value(string);
             } else {

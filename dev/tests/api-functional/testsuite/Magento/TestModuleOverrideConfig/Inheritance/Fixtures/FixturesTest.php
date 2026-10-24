@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Config\Model\ConfigStorage;
 use Magento\TestModuleOverrideConfig\Model\FixtureCallStorage;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class checks that fixtures override config inherited from abstract class and interface.
@@ -53,11 +54,11 @@ class FixturesTest extends FixturesAbstractClass implements FixturesInterface
      * @magentoConfigFixture default_store test_section/test_group/field_3 new_value
      * @magentoApiDataFixture Magento/TestModuleOverrideConfig/_files/fixture2_first_module.php
      * @magentoApiDataFixture Magento/TestModuleOverrideConfig/_files/fixture3_first_module.php
-     * @dataProvider interfaceDataProvider
      * @param array $storeConfigs
      * @param array $fixtures
      * @return void
      */
+    #[DataProvider('interfaceDataProvider')]
     public function testInterfaceInheritance(
         array $storeConfigs,
         array $fixtures
@@ -69,11 +70,11 @@ class FixturesTest extends FixturesAbstractClass implements FixturesInterface
     /**
      * @magentoConfigFixture default_store test_section/test_group/field_2 new_value
      * @magentoApiDataFixture Magento/TestModuleOverrideConfig/_files/fixture2_first_module.php
-     * @dataProvider abstractDataProvider
      * @param array $storeConfigs
      * @param array $fixtures
      * @return void
      */
+    #[DataProvider('abstractDataProvider')]
     public function testAbstractInheritance(
         array $storeConfigs,
         array $fixtures
@@ -85,11 +86,11 @@ class FixturesTest extends FixturesAbstractClass implements FixturesInterface
     /**
      * @return array
      */
-    public function interfaceDataProvider(): array
+    public static function interfaceDataProvider(): array
     {
         return [
             'first_data_set' => [
-                'store_configs' => [
+                [
                     'test_section/test_group/field_1' => [
                         'value' => 'overridden config fixture value for class',
                         'exists_in_db' => true,
@@ -103,7 +104,7 @@ class FixturesTest extends FixturesAbstractClass implements FixturesInterface
                         'exists_in_db' => true,
                     ],
                 ],
-                'fixtures' => [
+                [
                     'fixture1_first_module.php' => 1,
                     'fixture2_first_module.php' => 0,
                     'fixture2_second_module.php' => 1,
@@ -111,7 +112,7 @@ class FixturesTest extends FixturesAbstractClass implements FixturesInterface
                 ],
             ],
             'second_data_set' => [
-                'store_configs' => [
+                [
                     'test_section/test_group/field_1' => [
                         'value' => 'overridden config fixture value for class',
                         'exists_in_db' => true,
@@ -125,7 +126,7 @@ class FixturesTest extends FixturesAbstractClass implements FixturesInterface
                         'exists_in_db' => false,
                     ],
                 ],
-                'fixtures' => [
+                [
                     'fixture1_first_module.php' => 1,
                     'fixture2_first_module.php' => 0,
                     'fixture2_second_module.php' => 1,
@@ -138,11 +139,11 @@ class FixturesTest extends FixturesAbstractClass implements FixturesInterface
     /**
      * @return array
      */
-    public function abstractDataProvider(): array
+    public static function abstractDataProvider(): array
     {
         return [
             'first_data_set' => [
-                'store_configs' => [
+                [
                     'test_section/test_group/field_1' => [
                         'value' => 'overridden config fixture value for class',
                         'exists_in_db' => true,
@@ -156,7 +157,7 @@ class FixturesTest extends FixturesAbstractClass implements FixturesInterface
                         'exists_in_db' => true,
                     ],
                 ],
-                'fixtures' => [
+                [
                     'fixture1_first_module.php' => 1,
                     'fixture2_first_module.php' => 0,
                     'fixture2_second_module.php' => 0,
@@ -164,7 +165,7 @@ class FixturesTest extends FixturesAbstractClass implements FixturesInterface
                 ],
             ],
             'second_data_set' => [
-                'store_configs' => [
+                [
                     'test_section/test_group/field_1' => [
                         'value' => 'overridden config fixture value for data set from abstract',
                         'exists_in_db' => true,
@@ -178,7 +179,7 @@ class FixturesTest extends FixturesAbstractClass implements FixturesInterface
                         'exists_in_db' => false,
                     ],
                 ],
-                'fixtures' => [
+                [
                     'fixture1_first_module.php' => 0,
                     'fixture2_first_module.php' => 0,
                     'fixture1_second_module.php' => 1,

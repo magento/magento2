@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Downloadable\Model\ResourceModel;
 
@@ -14,7 +14,7 @@ namespace Magento\Downloadable\Model\ResourceModel;
 class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
-     * Catalog data
+     * Catalog helper for price configuration.
      *
      * @var \Magento\Catalog\Helper\Data
      */
@@ -123,7 +123,7 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 $dataToInsert[] = [
                     'link_id' => $linkObject->getId(),
                     'website_id' => (int)$linkObject->getWebsiteId(),
-                    'price' => (double)$linkObject->getPrice(),
+                    'price' => (float)$linkObject->getPrice(),
                 ];
                 if ($linkObject->getOrigData('link_id') != $linkObject->getLinkId()) {
                     $_isNew = true;

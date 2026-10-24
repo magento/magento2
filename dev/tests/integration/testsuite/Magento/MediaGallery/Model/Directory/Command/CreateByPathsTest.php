@@ -1,8 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
- *
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,9 +15,12 @@ use Magento\Framework\Filesystem;
 use Magento\MediaGalleryApi\Api\CreateDirectoriesByPathsInterface;
 use Magento\MediaGalleryApi\Api\DeleteDirectoriesByPathsInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for CreateDirectoriesByPathsInterface
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CreateByPathsTest extends \PHPUnit\Framework\TestCase
 {
@@ -37,6 +39,9 @@ class CreateByPathsTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Absolute path to the media directory
+     */
+    /**
+     * @var \Magento\Framework\Filesystem\Directory\ReadInterface
      */
     private $mediaDirectoryPath;
 
@@ -106,16 +111,16 @@ class CreateByPathsTest extends \PHPUnit\Framework\TestCase
     public function testCreateDirectory(): void
     {
         $this->createByPaths->execute([self::TEST_DIRECTORY_NAME]);
-        $this->assertFileExists($this->mediaDirectoryPath . self::TEST_DIRECTORY_NAME);
+        $this->assertTrue($this->mediaDirectory->isExist($this->mediaDirectoryPath . self::TEST_DIRECTORY_NAME));
         $this->deleteByPaths->execute([self::TEST_DIRECTORY_NAME]);
-        $this->assertFileDoesNotExist($this->mediaDirectoryPath . self::TEST_DIRECTORY_NAME);
+        $this->assertFalse($this->mediaDirectory->isExist($this->mediaDirectoryPath . self::TEST_DIRECTORY_NAME));
     }
 
     /**
      * @param array $paths
      * @throws CouldNotSaveException
-     * @dataProvider notAllowedPathsProvider
      */
+    #[DataProvider('notAllowedPathsProvider')]
     public function testCreateDirectoryWithRelativePath(array $paths): void
     {
         $this->expectException(CouldNotSaveException::class);
@@ -128,7 +133,7 @@ class CreateByPathsTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function notAllowedPathsProvider(): array
+    public static function notAllowedPathsProvider(): array
     {
         return [
             [
@@ -152,11 +157,11 @@ class CreateByPathsTest extends \PHPUnit\Framework\TestCase
         $childPath = $dir . '/testCreateDirectory';
 
         $this->createByPaths->execute([$dir]);
-        $this->assertFileExists($this->mediaDirectoryPath . $dir);
+        $this->assertTrue($this->mediaDirectory->isExist($this->mediaDirectoryPath . $dir));
         $this->createByPaths->execute([$childPath]);
-        $this->assertFileExists($this->mediaDirectoryPath . $childPath);
+        $this->assertTrue($this->mediaDirectory->isExist($this->mediaDirectoryPath . $childPath));
         $this->deleteByPaths->execute([$dir]);
-        $this->assertFileDoesNotExist($this->mediaDirectoryPath . $dir);
+        $this->assertFalse($this->mediaDirectory->isExist($this->mediaDirectoryPath . $dir));
     }
 
     /**
@@ -167,7 +172,7 @@ class CreateByPathsTest extends \PHPUnit\Framework\TestCase
         $this->expectException(CouldNotSaveException::class);
 
         $this->createByPaths->execute([self::TEST_DIRECTORY_NAME]);
-        $this->assertFileExists($this->mediaDirectoryPath . self::TEST_DIRECTORY_NAME);
+        $this->assertTrue($this->mediaDirectory->isExist($this->mediaDirectoryPath . self::TEST_DIRECTORY_NAME));
         $this->createByPaths->execute([self::TEST_DIRECTORY_NAME]);
     }
 

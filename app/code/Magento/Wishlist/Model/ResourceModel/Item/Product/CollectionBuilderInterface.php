@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,8 @@ use Magento\Wishlist\Model\ResourceModel\Item\Collection as WishlistItemCollecti
 
 /**
  * Wishlist items products collection builder
+ *
+ * @api
  */
 interface CollectionBuilderInterface
 {

@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Adminhtml catalog product edit action attributes update tab block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 declare(strict_types=1);
 
@@ -75,7 +73,7 @@ class Attributes extends Form implements TabInterface
         ProductFactory $productFactory,
         Attribute $attributeAction,
         array $data = [],
-        array $excludeFields = null,
+        ?array $excludeFields = null,
         ?SecureHtmlRenderer $secureRenderer = null
     ) {
         $this->_attributeAction = $attributeAction;

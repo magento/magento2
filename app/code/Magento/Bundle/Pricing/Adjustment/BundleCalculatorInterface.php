@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
 
 namespace Magento\Bundle\Pricing\Adjustment;
 
@@ -11,6 +12,8 @@ use Magento\Framework\Pricing\Adjustment\CalculatorInterface;
 
 /**
  * Bundle calculator interface
+ *
+ * @api
  */
 interface BundleCalculatorInterface extends CalculatorInterface
 {

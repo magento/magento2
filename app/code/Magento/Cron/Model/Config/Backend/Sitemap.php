@@ -1,15 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Backend Model for Currency import options
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Cron\Model\Config\Backend;
+
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Sitemap configuration
@@ -17,14 +17,14 @@ namespace Magento\Cron\Model\Config\Backend;
 class Sitemap extends \Magento\Framework\App\Config\Value
 {
     /**
-     * Cron string path
+     * Cron string path for product alerts
      */
-    const CRON_STRING_PATH = 'crontab/default/jobs/sitemap_generate/schedule/cron_expr';
+    public const CRON_STRING_PATH = 'crontab/default/jobs/sitemap_generate/schedule/cron_expr';
 
     /**
      * Cron mode path
      */
-    const CRON_MODEL_PATH = 'crontab/default/jobs/sitemap_generate/run/model';
+    public const CRON_MODEL_PATH = 'crontab/default/jobs/sitemap_generate/run/model';
 
     /**
      * @var \Magento\Framework\App\Config\ValueFactory
@@ -53,8 +53,8 @@ class Sitemap extends \Magento\Framework\App\Config\Value
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
         \Magento\Framework\App\Config\ValueFactory $configValueFactory,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         $runModelPath = '',
         array $data = []
     ) {
@@ -67,16 +67,20 @@ class Sitemap extends \Magento\Framework\App\Config\Value
      * After save handler
      *
      * @return $this
-     * @throws \Exception
+     * @throws LocalizedException
      */
     public function afterSave()
     {
-        $time = $this->getData('groups/generate/fields/time/value');
-        $frequency = $this->getData('groups/generate/fields/frequency/value');
+        $time = $this->getData('groups/generate/fields/time/value') ?:
+            explode(
+                ',',
+                $this->_config->getValue('sitemap/generate/time', $this->getScope(), $this->getScopeId()) ?: '0,0,0'
+            );
+        $frequency = $this->getValue();
 
         $cronExprArray = [
-            (int)$time[1], //Minute
-            (int)$time[0], //Hour
+            (int)($time[1] ?? 0), //Minute
+            (int)($time[0] ?? 0), //Hour
             $frequency == \Magento\Cron\Model\Config\Source\Frequency::CRON_MONTHLY ? '1' : '*', //Day of the Month
             '*', //Month of the Year
             $frequency == \Magento\Cron\Model\Config\Source\Frequency::CRON_WEEKLY ? '1' : '*', //# Day of the Week
@@ -102,7 +106,7 @@ class Sitemap extends \Magento\Framework\App\Config\Value
                 self::CRON_MODEL_PATH
             )->save();
         } catch (\Exception $e) {
-            throw new \Exception(__('We can\'t save the cron expression.'));
+            throw new LocalizedException(__('We can\'t save the cron expression.'));
         }
         return parent::afterSave();
     }

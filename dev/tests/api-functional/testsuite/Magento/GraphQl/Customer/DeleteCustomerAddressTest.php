@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -241,7 +241,7 @@ MUTATION;
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('The account is locked');
 
-        $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/750');
+        $this->markTestSkipped('https://github.com/magento/graphql-ce/issues/750');
 
         $userName = 'customer@example.com';
         $password = 'password';

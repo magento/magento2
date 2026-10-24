@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -78,9 +78,7 @@ class GetComparableItemsCollection
         $this->items->useProductItem()->setStoreId($context->getExtensionAttributes()->getStore()->getStoreId());
         $this->items->addAttributeToSelect(
             $this->catalogConfig->getProductAttributes()
-        )->loadComparableAttributes()->addMinimalPrice()->addTaxPercents()->setVisibility(
-            $this->catalogProductVisibility->getVisibleInSiteIds()
-        );
+        )->loadComparableAttributes()->addMinimalPrice()->addTaxPercents();
 
         return $this->items;
     }

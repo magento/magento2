@@ -1,20 +1,25 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Filter;
+
+use Laminas\Filter\Decrypt as LaminasDecrypt;
+use Magento\Framework\Filter\Encrypt\AdapterInterface;
 
 /**
  * Decrypt filter
  */
-class Decrypt extends \Zend_Filter_Decrypt
+class Decrypt extends LaminasDecrypt
 {
     /**
-     * @param \Magento\Framework\Filter\Encrypt\AdapterInterface $adapter
+     * @param AdapterInterface $adapter
      */
-    public function __construct(\Magento\Framework\Filter\Encrypt\AdapterInterface $adapter)
+    public function __construct(AdapterInterface $adapter)
     {
+        parent::__construct();
+
         $this->setAdapter($adapter);
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -41,7 +41,7 @@ if (!$attribute->loadByCode($entityTypeId, 'multiselect_attribute_with_html')->g
             'used_in_product_listing' => 0,
             'used_for_sort_by' => 0,
             'frontend_label' => ['Multiselect Attribute'],
-            'backend_type' => 'varchar',
+            'backend_type' => 'text',
             'backend_model' => ArrayBackend::class,
             'option' => [
                 'value' => [

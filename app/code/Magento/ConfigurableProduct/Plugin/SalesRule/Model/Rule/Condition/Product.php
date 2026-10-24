@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,9 +10,7 @@ namespace Magento\ConfigurableProduct\Plugin\SalesRule\Model\Rule\Condition;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
 /**
- * Class Product
- *
- * @package Magento\ConfigurableProduct\Plugin\SalesRule\Model\Rule\Condition
+ * Plugin for Magento\SalesRule\Model\Rule\Condition\Product to apply rules on configurable children
  */
 class Product
 {
@@ -57,6 +55,7 @@ class Product
 
         /* Check for attributes which are not available for configurable products */
         if ($product->getTypeId() == Configurable::TYPE_CODE &&
+            $subject->getAttributeScope() !== 'parent' &&
             !$product->hasData($attrCode) &&
             count($model->getChildren())
         ) {

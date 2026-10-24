@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
@@ -36,7 +36,7 @@
         </before>
         <after>
             <!-- delete the simple product and catalog price rule and logout -->
-            <amOnPage stepKey="goToPriceRulePage" url="admin/catalog_rule/promo_catalog/"/>
+            <amOnPage stepKey="goToPriceRulePage" url="{{CatalogRulePage.url}}"/>
             <actionGroup stepKey="deletePriceRule" ref="deleteEntitySecondaryGrid">
                 <argument name="name" value="{{_defaultCatalogRule.name}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>

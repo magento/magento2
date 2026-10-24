@@ -1,13 +1,16 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sitemap\Model\ResourceModel\Catalog;
 
 use Magento\Catalog\Model\Product\Image\UrlBuilder;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Sitemap\Model\SitemapConfigReaderInterface;
 use Magento\Store\Model\Store;
 
 /**
@@ -19,7 +22,12 @@ use Magento\Store\Model\Store;
  */
 class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
-    const NOT_SELECTED_IMAGE = 'no_selection';
+    public const NOT_SELECTED_IMAGE = 'no_selection';
+
+    /**
+     * Batch size for loading product images to avoid database IN() clause limits
+     */
+    private const IMAGE_BATCH_SIZE = 1000;
 
     /**
      * Collection Zend Db select
@@ -36,17 +44,27 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $_attributesCache = [];
 
     /**
+     * Cached product images to avoid N+1 queries
+     *
+     * @var array
+     */
+    private $_productImagesCache = [];
+
+    /**
      * @var \Magento\Catalog\Model\Product\Gallery\ReadHandler
      * @since 100.1.0
      */
     protected $mediaGalleryReadHandler;
 
     /**
-     * Sitemap data
-     *
      * @var \Magento\Sitemap\Helper\Data
      */
     protected $_sitemapData = null;
+
+    /**
+     * @var SitemapConfigReaderInterface
+     */
+    private $sitemapConfigReader;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product
@@ -77,6 +95,7 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * @var \Magento\Catalog\Model\Product\Media\Config
      * @deprecated 100.2.0 unused
+     * @see getProductImageUrl
      */
     protected $_mediaConfig;
 
@@ -84,6 +103,11 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @var UrlBuilder
      */
     private $imageUrlBuilder;
+
+    /**
+     * @var ProductSelectBuilder
+     */
+    private $productSelectBuilder;
 
     /**
      * Product constructor.
@@ -102,6 +126,8 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Catalog\Helper\Image $catalogImageHelper
      * @param \Magento\Framework\App\Config\ScopeConfigInterface|null $scopeConfig
      * @param UrlBuilder $urlBuilder
+     * @param ProductSelectBuilder $productSelectBuilder
+     * @param SitemapConfigReaderInterface $sitemapConfigReader
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -116,10 +142,12 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         \Magento\Catalog\Model\Product\Gallery\ReadHandler $mediaGalleryReadHandler,
         \Magento\Catalog\Model\Product\Media\Config $mediaConfig,
         $connectionName = null,
-        \Magento\Catalog\Model\Product $productModel = null,
-        \Magento\Catalog\Helper\Image $catalogImageHelper = null,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig = null,
-        UrlBuilder $urlBuilder = null
+        ?\Magento\Catalog\Model\Product $productModel = null,
+        ?\Magento\Catalog\Helper\Image $catalogImageHelper = null,
+        ?\Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig = null,
+        ?UrlBuilder $urlBuilder = null,
+        ?ProductSelectBuilder $productSelectBuilder = null,
+        ?SitemapConfigReaderInterface $sitemapConfigReader = null
     ) {
         $this->_productResource = $productResource;
         $this->_storeManager = $storeManager;
@@ -130,6 +158,10 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $this->_mediaConfig = $mediaConfig;
         $this->_sitemapData = $sitemapData;
         $this->imageUrlBuilder = $urlBuilder ?? ObjectManager::getInstance()->get(UrlBuilder::class);
+        $this->productSelectBuilder = $productSelectBuilder ??
+            ObjectManager::getInstance()->get(ProductSelectBuilder::class);
+        $this->sitemapConfigReader = $sitemapConfigReader ??
+            ObjectManager::getInstance()->get(SitemapConfigReaderInterface::class);
 
         parent::__construct($context, $connectionName);
     }
@@ -287,30 +319,19 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         }
 
         $connection = $this->getConnection();
-        $this->_select = $connection->select()->from(
-            ['e' => $this->getMainTable()],
-            [$this->getIdFieldName(), $this->_productResource->getLinkField(), 'updated_at']
-        )->joinInner(
-            ['w' => $this->getTable('catalog_product_website')],
-            'e.entity_id = w.product_id',
-            []
-        )->joinLeft(
-            ['url_rewrite' => $this->getTable('url_rewrite')],
-            'e.entity_id = url_rewrite.entity_id AND url_rewrite.is_autogenerated = 1'
-            . ' AND url_rewrite.metadata IS NULL'
-            . $connection->quoteInto(' AND url_rewrite.store_id = ?', $store->getId())
-            . $connection->quoteInto(' AND url_rewrite.entity_type = ?', ProductUrlRewriteGenerator::ENTITY_TYPE),
-            ['url' => 'request_path']
-        )->where(
-            'w.website_id = ?',
-            $store->getWebsiteId()
+
+        $this->_select = $this->productSelectBuilder->execute(
+            $this->getMainTable(),
+            $this->getIdFieldName(),
+            $this->_productResource->getLinkField(),
+            $store
         );
 
         $this->_addFilter($store->getId(), 'visibility', $this->_productVisibility->getVisibleInSiteIds(), 'in');
         $this->_addFilter($store->getId(), 'status', $this->_productStatus->getVisibleStatusIds(), 'in');
 
         // Join product images required attributes
-        $imageIncludePolicy = $this->_sitemapData->getProductImageIncludePolicy($store->getId());
+        $imageIncludePolicy = $this->sitemapConfigReader->getProductImageIncludePolicy($store->getId());
         if (\Magento\Sitemap\Model\Source\Product\Image\IncludeImage::INCLUDE_NONE != $imageIncludePolicy) {
             $this->_joinAttribute($store->getId(), 'name', 'name');
             if (\Magento\Sitemap\Model\Source\Product\Image\IncludeImage::INCLUDE_ALL == $imageIncludePolicy) {
@@ -321,7 +342,25 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         }
 
         $query = $connection->query($this->prepareSelectStatement($this->_select));
+
+        // First, collect all product data without loading images
+        $productRows = [];
+        $productIds = [];
+        $linkField = $this->_productResource->getLinkField();
+
         while ($row = $query->fetch()) {
+            $productRows[] = $row;
+            $productIds[] = $row[$linkField];
+        }
+
+        // Pre-load all images in batch to avoid N+1 queries
+        $imageIncludePolicy = $this->sitemapConfigReader->getProductImageIncludePolicy($store->getId());
+        if (\Magento\Sitemap\Model\Source\Product\Image\IncludeImage::INCLUDE_NONE != $imageIncludePolicy) {
+            $this->_preloadAllProductImages($productIds, $store->getId());
+        }
+
+        // Now create products with cached image data
+        foreach ($productRows as $row) {
             $product = $this->_prepareProduct($row, $store->getId());
             $products[$product->getId()] = $product;
         }
@@ -335,12 +374,12 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param array $productRow
      * @param int $storeId
      *
-     * @return \Magento\Framework\DataObject
+     * @return DataObject
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _prepareProduct(array $productRow, $storeId)
     {
-        $product = new \Magento\Framework\DataObject();
+        $product = new DataObject();
 
         $product['id'] = $productRow[$this->getIdFieldName()];
         if (empty($productRow['url'])) {
@@ -355,16 +394,14 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Load product images
      *
-     * @param \Magento\Framework\DataObject $product
+     * @param DataObject $product
      * @param int $storeId
      * @return void
      */
     protected function _loadProductImages($product, $storeId)
     {
         $this->_storeManager->setCurrentStore($storeId);
-        /** @var $helper \Magento\Sitemap\Helper\Data */
-        $helper = $this->_sitemapData;
-        $imageIncludePolicy = $helper->getProductImageIncludePolicy($storeId);
+        $imageIncludePolicy = $this->sitemapConfigReader->getProductImageIncludePolicy($storeId);
 
         // Get product images
         $imagesCollection = [];
@@ -375,7 +412,7 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $product->getImage() != self::NOT_SELECTED_IMAGE
         ) {
             $imagesCollection = [
-                new \Magento\Framework\DataObject(
+                new DataObject(
                     ['url' => $this->getProductImageUrl($product->getImage())]
                 ),
             ];
@@ -391,7 +428,7 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             }
 
             $product->setImages(
-                new \Magento\Framework\DataObject(
+                new DataObject(
                     ['collection' => $imagesCollection, 'title' => $product->getName(), 'thumbnail' => $thumbnail]
                 )
             );
@@ -407,21 +444,38 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected function _getAllProductImages($product, $storeId)
     {
-        $product->setStoreId($storeId);
-        $gallery = $this->mediaGalleryResourceModel->loadProductGalleryByAttributeId(
-            $product,
-            $this->mediaGalleryReadHandler->getAttribute()->getId()
-        );
-
+        $linkField = $this->_productResource->getLinkField();
+        $productRowId = $product->getData($linkField);
         $imagesCollection = [];
-        if ($gallery) {
+
+        // Use cached images if available (from batch loading)
+        if (isset($this->_productImagesCache[$productRowId])) {
+            $gallery = $this->_productImagesCache[$productRowId];
             foreach ($gallery as $image) {
-                $imagesCollection[] = new \Magento\Framework\DataObject(
+                $imagesCollection[] = new DataObject(
                     [
                         'url' => $this->getProductImageUrl($image['file']),
                         'caption' => $image['label'] ? $image['label'] : $image['label_default'],
                     ]
                 );
+            }
+        } else {
+            // Fallback to individual query
+            $product->setStoreId($storeId);
+            $gallery = $this->mediaGalleryResourceModel->loadProductGalleryByAttributeId(
+                $product,
+                $this->mediaGalleryReadHandler->getAttribute()->getId()
+            );
+
+            if ($gallery) {
+                foreach ($gallery as $image) {
+                    $imagesCollection[] = new DataObject(
+                        [
+                            'url' => $this->getProductImageUrl($image['file']),
+                            'caption' => $image['label'] ? $image['label'] : $image['label_default'],
+                        ]
+                    );
+                }
             }
         }
 
@@ -450,6 +504,58 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     public function prepareSelectStatement(\Magento\Framework\DB\Select $select)
     {
         return $select;
+    }
+
+    /**
+     * Pre-load all product images in batched queries to avoid N+1 problem while respecting DB limits
+     *
+     * @param array $productIds
+     * @param int $storeId
+     * @return void
+     * @throws LocalizedException
+     */
+    private function _preloadAllProductImages($productIds, $storeId)
+    {
+        if (empty($productIds)) {
+            return;
+        }
+
+        // Split into smaller batches to avoid hitting database IN() clause limits
+        $productBatches = array_chunk($productIds, self::IMAGE_BATCH_SIZE);
+
+        $linkField = $this->_productResource->getLinkField();
+        $connection = $this->getConnection();
+
+        foreach ($productBatches as $batch) {
+            // Use the existing createBatchBaseSelect method for each batch
+            $select = $this->mediaGalleryResourceModel->createBatchBaseSelect(
+                $storeId,
+                $this->mediaGalleryReadHandler->getAttribute()->getId()
+            );
+
+            $select->where('entity.' . $linkField . ' IN (?)', $batch);
+
+            // Add ordering to ensure consistent results
+            $select->order(['entity.' . $linkField, 'position']);
+
+            $result = $connection->fetchAll($select);
+
+            // Group images by product ID
+            foreach ($result as $row) {
+                $productId = $row[$linkField];
+                if (!isset($this->_productImagesCache[$productId])) {
+                    $this->_productImagesCache[$productId] = [];
+                }
+                $this->_productImagesCache[$productId][] = $row;
+            }
+        }
+
+        // Ensure all requested products have an entry (even if empty)
+        foreach ($productIds as $productId) {
+            if (!isset($this->_productImagesCache[$productId])) {
+                $this->_productImagesCache[$productId] = [];
+            }
+        }
     }
 
     /**

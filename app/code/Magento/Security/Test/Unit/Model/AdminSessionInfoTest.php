@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Security\Model\AdminSessionInfo;
 use Magento\Security\Model\ConfigInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -46,12 +47,8 @@ class AdminSessionInfoTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->securityConfigMock =  $this->getMockBuilder(ConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->dateTimeMock =  $this->getMockBuilder(DateTime::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->securityConfigMock = $this->createMock(ConfigInterface::class);
+        $this->dateTimeMock = $this->createMock(DateTime::class);
 
         $this->model = $this->objectManager->getObject(
             AdminSessionInfo::class,
@@ -94,8 +91,8 @@ class AdminSessionInfoTest extends TestCase
     /**
      * @param bool $expectedResult
      * @param string $sessionLifetime
-     * @dataProvider dataProviderSessionLifetime
      */
+    #[DataProvider('dataProviderSessionLifetime')]
     public function testSessionExpired($expectedResult, $sessionLifetime)
     {
         $timestamp = time();
@@ -118,13 +115,33 @@ class AdminSessionInfoTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderSessionLifetime()
+    public static function dataProviderSessionLifetime()
     {
         return [
             ['expectedResult' => true, 'sessionLifetime' => '0'],
             ['expectedResult' => true, 'sessionLifetime' => '1'],
             ['expectedResult' => false, 'sessionLifetime' => '2']
         ];
+    }
+
+    /**
+     * @return void
+     */
+    public function testSessionExpiredWhenUpdatedAtIsNull()
+    {
+        $timestamp = time();
+        $sessionLifetime = '1';
+
+        $this->securityConfigMock->expects($this->once())
+            ->method('getAdminSessionLifetime')
+            ->willReturn($sessionLifetime);
+
+        $this->dateTimeMock->expects($this->once())
+            ->method('gmtTimestamp')
+            ->willReturn($timestamp);
+
+        $this->model->setUpdatedAt(null);
+        $this->assertTrue($this->model->isSessionExpired());
     }
 
     /**
@@ -147,8 +164,8 @@ class AdminSessionInfoTest extends TestCase
 
     /**
      * @param bool $isOtherSessionsTerminated
-     * @dataProvider dataProviderIsOtherSessionsTerminated
      */
+    #[DataProvider('dataProviderIsOtherSessionsTerminated')]
     public function testSetIsOtherSessionsTerminated($isOtherSessionsTerminated)
     {
         $this->assertInstanceOf(
@@ -160,7 +177,7 @@ class AdminSessionInfoTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderIsOtherSessionsTerminated()
+    public static function dataProviderIsOtherSessionsTerminated()
     {
         return [[true], [false]];
     }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -19,6 +19,7 @@ use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order\Payment\Info;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
@@ -27,6 +28,7 @@ use Magento\Framework\Exception\LocalizedException;
  */
 class InfoTest extends TestCase
 {
+
     /**
      * @var Info
      */
@@ -60,8 +62,8 @@ class InfoTest extends TestCase
         $contextMock = $this->createMock(Context::class);
         $registryMock = $this->createMock(Registry::class);
         $this->paymentHelperMock = $this->createPartialMock(Data::class, ['getMethodInstance']);
-        $this->encryptorInterfaceMock = $this->getMockForAbstractClass(EncryptorInterface::class);
-        $this->methodInstanceMock = $this->getMockForAbstractClass(MethodInterface::class);
+        $this->encryptorInterfaceMock = $this->createMock(EncryptorInterface::class);
+        $this->methodInstanceMock = $this->createMock(MethodInterface::class);
         $this->orderMock = $this->createMock(OrderInterface::class);
 
         $objectManagerHelper = new ObjectManagerHelper($this);
@@ -84,8 +86,8 @@ class InfoTest extends TestCase
      * @param string $keyCcEnc
      *
      * @return void
-     * @dataProvider ccKeysDataProvider
      */
+    #[DataProvider('ccKeysDataProvider')]
     public function testGetDataCcNumber(string $keyCc, string $keyCcEnc): void
     {
         // no data was set
@@ -106,7 +108,7 @@ class InfoTest extends TestCase
      *
      * @return array
      */
-    public function ccKeysDataProvider(): array
+    public static function ccKeysDataProvider(): array
     {
         return [
             ['cc_number', 'cc_number_enc'],
@@ -159,8 +161,13 @@ class InfoTest extends TestCase
 
         $this->paymentHelperMock
             ->method('getMethodInstance')
-            ->withConsecutive([$method], [Substitution::CODE])
-            ->willReturn($this->methodInstanceMock);
+            ->willReturnCallback(
+                function ($arg) use ($method) {
+                    if ($arg === $method || $arg === Substitution::CODE) {
+                        return $this->methodInstanceMock;
+                    }
+                }
+            );
 
         $this->info->getMethodInstance();
     }
@@ -257,8 +264,8 @@ class InfoTest extends TestCase
      * @param mixed $value
      *
      * @return void
-     * @dataProvider additionalInformationDataProvider
      */
+    #[DataProvider('additionalInformationDataProvider')]
     public function testSetAdditionalInformationMultipleTypes($key, $value = null): void
     {
         $this->info->setAdditionalInformation($key, $value);
@@ -270,7 +277,7 @@ class InfoTest extends TestCase
      *
      * @return array
      */
-    public function additionalInformationDataProvider(): array
+    public static function additionalInformationDataProvider(): array
     {
         return [
             [['key1' => 'data1', 'key2' => 'data2'], null],

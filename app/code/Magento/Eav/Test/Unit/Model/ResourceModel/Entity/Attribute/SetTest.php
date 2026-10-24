@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -25,12 +25,15 @@ use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SetTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var MockObject|Set
      */
@@ -77,10 +80,10 @@ class SetTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->resourceMock = $this->getMockBuilder(ResourceConnection::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getConnection', 'getTableName'])
-            ->getMock();
+        $this->resourceMock = $this->createPartialMockWithReflection(
+            ResourceConnection::class,
+            ['getConnection', 'getTableName']
+        );
         $this->transactionManagerMock = $this->createMock(
             TransactionManagerInterface::class
         );
@@ -96,10 +99,10 @@ class SetTest extends TestCase
             ->willReturn($this->relationProcessor);
         $contextMock->expects($this->once())->method('getResources')->willReturn($this->resourceMock);
 
-        $this->eavConfigMock = $this->getMockBuilder(Config::class)
-            ->setMethods(['isCacheEnabled', 'getEntityType', 'getCache'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->eavConfigMock = $this->createPartialMockWithReflection(
+            Config::class,
+            ['isCacheEnabled', 'getEntityType', 'getCache']
+        );
 
         $this->serializerMock = $this->createMock(Json::class);
 
@@ -119,11 +122,13 @@ class SetTest extends TestCase
         $objectManager->setBackwardCompatibleProperty($this->model, 'serializer', $this->serializerMock);
 
         $this->typeMock = $this->createMock(Type::class);
-        $this->objectMock = $this->getMockBuilder(AbstractModel::class)
-            ->addMethods(['getEntityTypeId', 'getAttributeSetId'])
-            ->onlyMethods(['beforeDelete', 'getId', 'isDeleted', 'afterDelete', 'afterDeleteCommit', '__wakeup'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->objectMock = $this->createPartialMockWithReflection(
+            AbstractModel::class,
+            [
+                'getEntityTypeId', 'getAttributeSetId', 'beforeDelete', 'getId',
+                'isDeleted', 'afterDelete', 'afterDeleteCommit', '__wakeup'
+            ]
+        );
     }
 
     /**
@@ -135,12 +140,12 @@ class SetTest extends TestCase
         $this->expectExceptionMessage('The default attribute set can\'t be deleted.');
         $this->resourceMock->expects($this->any())
             ->method('getConnection')
-            ->willReturn($this->getMockForAbstractClass(AdapterInterface::class));
+            ->willReturn($this->createMock(AdapterInterface::class));
 
         $this->transactionManagerMock->expects($this->once())
             ->method('start')
-            ->with($this->getMockForAbstractClass(AdapterInterface::class))
-            ->willReturn($this->getMockForAbstractClass(AdapterInterface::class));
+            ->with($this->createMock(AdapterInterface::class))
+            ->willReturn($this->createMock(AdapterInterface::class));
 
         $this->objectMock->expects($this->once())->method('getEntityTypeId')->willReturn(665);
         $this->eavConfigMock->expects($this->once())->method('getEntityType')->with(665)->willReturn($this->typeMock);
@@ -159,12 +164,12 @@ class SetTest extends TestCase
         $this->expectExceptionMessage('test exception');
         $this->resourceMock->expects($this->any())
             ->method('getConnection')
-            ->willReturn($this->getMockForAbstractClass(AdapterInterface::class));
+            ->willReturn($this->createMock(AdapterInterface::class));
 
         $this->transactionManagerMock->expects($this->once())
             ->method('start')
-            ->with($this->getMockForAbstractClass(AdapterInterface::class))
-            ->willReturn($this->getMockForAbstractClass(AdapterInterface::class));
+            ->with($this->createMock(AdapterInterface::class))
+            ->willReturn($this->createMock(AdapterInterface::class));
 
         $this->objectMock->expects($this->once())->method('getEntityTypeId')->willReturn(665);
         $this->eavConfigMock->expects($this->once())->method('getEntityType')->with(665)->willReturn($this->typeMock);
@@ -198,10 +203,10 @@ class SetTest extends TestCase
         $cached = [
             1 => $setElement
         ];
-        $cacheMock = $this->getMockBuilder(CacheInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['load', 'save', 'getFrontend', 'remove', 'clean'])
-            ->getMockForAbstractClass();
+        $cacheMock = $this->createPartialMockWithReflection(
+            CacheInterface::class,
+            ['load', 'save', 'getFrontend', 'remove', 'clean']
+        );
         $cacheKey = Set::ATTRIBUTES_CACHE_ID . 1;
         $cacheMock
             ->expects($this->once())
@@ -234,18 +239,18 @@ class SetTest extends TestCase
             ]
         ];
 
-        $selectMock = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['from', 'joinLeft', 'where'])
-            ->getMock();
+        $selectMock = $this->createPartialMockWithReflection(
+            Select::class,
+            ['from', 'joinLeft', 'where']
+        );
         $selectMock->expects($this->once())->method('from')->willReturnSelf();
         $selectMock->expects($this->once())->method('joinLeft')->willReturnSelf();
         $selectMock->expects($this->atLeastOnce())->method('where')->willReturnSelf();
 
-        $connectionMock = $this->getMockBuilder(Mysql::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['select', 'fetchAll'])
-            ->getMock();
+        $connectionMock = $this->createPartialMockWithReflection(
+            Mysql::class,
+            ['select', 'fetchAll']
+        );
         $connectionMock->expects($this->atLeastOnce())->method('select')->willReturn($selectMock);
         $connectionMock->expects($this->atLeastOnce())->method('fetchAll')->willReturn($fetchResult);
 
@@ -280,10 +285,10 @@ class SetTest extends TestCase
         $serializedData = 'serialized data';
         $this->resourceMock->expects($this->never())->method('getConnection');
         $this->eavConfigMock->expects($this->any())->method('isCacheEnabled')->willReturn(true);
-        $cacheMock = $this->getMockBuilder(CacheInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['load', 'save', 'getFrontend', 'remove', 'clean'])
-            ->getMockForAbstractClass();
+        $cacheMock = $this->createPartialMockWithReflection(
+            CacheInterface::class,
+            ['load', 'save', 'getFrontend', 'remove', 'clean']
+        );
         $cacheMock->expects($this->once())
             ->method('load')
             ->with(Set::ATTRIBUTES_CACHE_ID . 1)

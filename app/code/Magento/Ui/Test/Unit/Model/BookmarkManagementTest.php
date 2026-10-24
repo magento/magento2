@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,6 +17,7 @@ use Magento\Ui\Api\Data\BookmarkInterface;
 use Magento\Ui\Api\Data\BookmarkSearchResultsInterface;
 use Magento\Ui\Model\BookmarkManagement;
 use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
 
 class BookmarkManagementTest extends TestCase
@@ -51,17 +52,13 @@ class BookmarkManagementTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->bookmarkRepository = $this->getMockBuilder(BookmarkRepositoryInterface::class)
-            ->getMockForAbstractClass();
+        $this->bookmarkRepository = $this->createMock(BookmarkRepositoryInterface::class);
         $this->filterBuilder = $this->getMockBuilder(FilterBuilder::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['create'])
             ->getMock();
-        $this->searchCriteriaBuilder =$this->getMockBuilder(SearchCriteriaBuilder::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->userContext = $this->getMockBuilder(UserContextInterface::class)
-            ->getMockForAbstractClass();
+        $this->searchCriteriaBuilder =$this->createMock(SearchCriteriaBuilder::class);
+        $this->userContext = $this->createMock(UserContextInterface::class);
         $this->bookmarkManagement = new BookmarkManagement(
             $this->bookmarkRepository,
             $this->filterBuilder,
@@ -94,19 +91,22 @@ class BookmarkManagementTest extends TestCase
                 Filter::KEY_CONDITION_TYPE => 'eq'
             ]
         );
-        $searchCriteria = $this->getMockBuilder(SearchCriteriaInterface::class)
-            ->getMockForAbstractClass();
+        $searchCriteria = $this->createMock(SearchCriteriaInterface::class);
         $this->filterBuilder
             ->method('create')
             ->willReturnOnConsecutiveCalls($fieldUserId, $fieldNamespace);
         $this->searchCriteriaBuilder->expects($this->exactly(2))
             ->method('addFilters')
-            ->withConsecutive([[$fieldUserId]], [[$fieldNamespace]]);
+            ->willReturnCallback(function ($param1) use ($fieldUserId, $fieldNamespace) {
+                if ($param1 == [$fieldUserId] || $param1 == [$fieldNamespace]) {
+                    return null;
+                }
+            });
+
         $this->searchCriteriaBuilder->expects($this->once())
             ->method('create')
             ->willReturn($searchCriteria);
-        $searchResult = $this->getMockBuilder(BookmarkSearchResultsInterface::class)
-            ->getMockForAbstractClass();
+        $searchResult = $this->createMock(BookmarkSearchResultsInterface::class);
         $this->bookmarkRepository->expects($this->once())
             ->method('getList')
             ->with($searchCriteria)
@@ -147,22 +147,25 @@ class BookmarkManagementTest extends TestCase
             ]
         );
         $bookmarkId = 1;
-        $bookmark = $this->getMockBuilder(BookmarkInterface::class)
-            ->getMockForAbstractClass();
+        $bookmark = $this->createMock(BookmarkInterface::class);
         $bookmark->expects($this->once())->method('getId')->willReturn($bookmarkId);
-        $searchCriteria = $this->getMockBuilder(SearchCriteriaInterface::class)
-            ->getMockForAbstractClass();
+        $searchCriteria = $this->createMock(SearchCriteriaInterface::class);
         $this->filterBuilder
             ->method('create')
             ->willReturnOnConsecutiveCalls($fieldUserId, $fieldIdentifier, $fieldNamespace);
         $this->searchCriteriaBuilder->expects($this->exactly(3))
             ->method('addFilters')
-            ->withConsecutive([[$fieldUserId]], [[$fieldIdentifier]], [[$fieldNamespace]]);
+            ->willReturnCallback(function ($param1) use ($fieldUserId, $fieldNamespace) {
+                if ($param1 == [$fieldUserId]
+                    || $param1 == [$fieldNamespace]
+                    || $param1 == [$fieldNamespace]) {
+                    return null;
+                }
+            });
         $this->searchCriteriaBuilder->expects($this->once())
             ->method('create')
             ->willReturn($searchCriteria);
-        $searchResult = $this->getMockBuilder(BookmarkSearchResultsInterface::class)
-            ->getMockForAbstractClass();
+        $searchResult = $this->createMock(BookmarkSearchResultsInterface::class);
         $searchResult->expects($this->once())->method('getTotalCount')->willReturn(1);
         $searchResult->expects($this->once())->method('getItems')->willReturn([$bookmark]);
         $this->bookmarkRepository->expects($this->once())

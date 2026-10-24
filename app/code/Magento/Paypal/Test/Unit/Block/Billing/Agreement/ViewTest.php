@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -55,8 +55,8 @@ class ViewTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetRelatedOrders(): void
     {
         $visibleStatuses = [];
@@ -70,8 +70,18 @@ class ViewTest extends TestCase
             ->willReturn($orderCollection);
         $orderCollection
             ->method('addFieldToFilter')
-            ->withConsecutive([], ['status', ['in' => $visibleStatuses]])
-            ->willReturnOnConsecutiveCalls($orderCollection, $orderCollection);
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($orderCollection, $visibleStatuses) {
+                    static $callCount = 0;
+                    if ($callCount == 0) {
+                        $callCount++;
+                        return $orderCollection;
+                    } elseif ($callCount == 1 && $arg1 == 'status' && $arg2 == ['in' => $visibleStatuses]) {
+                        $callCount++;
+                        return $orderCollection;
+                    }
+                }
+            );
         $orderCollection
             ->method('setOrder')
             ->willReturn($orderCollection);

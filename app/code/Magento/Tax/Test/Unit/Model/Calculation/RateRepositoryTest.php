@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -27,6 +27,7 @@ use Magento\Tax\Model\Calculation\RateRepository;
 use Magento\Tax\Model\ResourceModel\Calculation\Rate;
 
 use Magento\Tax\Model\ResourceModel\Calculation\Rate\Collection;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -98,7 +99,7 @@ class RateRepositoryTest extends TestCase
             TaxRuleSearchResultsInterfaceFactory::class,
             ['create']
         );
-        $this->searchResultMock = $this->getMockForAbstractClass(TaxRuleSearchResultsInterface::class);
+        $this->searchResultMock = $this->createMock(TaxRuleSearchResultsInterface::class);
         $this->rateFactoryMock = $this->createPartialMock(
             RateFactory::class,
             ['create']
@@ -128,7 +129,7 @@ class RateRepositoryTest extends TestCase
         );
     }
 
-    public function testSave()
+    public function testSave(): void
     {
         $countryCode = 'US';
         $countryMock = $this->createMock(Country::class);
@@ -168,7 +169,7 @@ class RateRepositoryTest extends TestCase
         $this->model->save($rateMock);
     }
 
-    public function testSaveThrowsExceptionIfTargetTaxRateDoesNotExist()
+    public function testSaveThrowsExceptionIfTargetTaxRateDoesNotExist(): void
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('No such entity with id 9999');
@@ -198,21 +199,21 @@ class RateRepositoryTest extends TestCase
         $this->model->save($rateMock);
     }
 
-    public function testGet()
+    public function testGet(): void
     {
         $rateId = 1;
         $this->rateRegistryMock->expects($this->once())->method('retrieveTaxRate')->with($rateId);
         $this->model->get($rateId);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
         $rateMock = $this->getTaxRateMock(['id' => 1]);
         $this->rateResourceMock->expects($this->once())->method('delete')->with($rateMock);
         $this->model->delete($rateMock);
     }
 
-    public function testDeleteById()
+    public function testDeleteById(): void
     {
         $rateId = 1;
         $rateMock = $this->getTaxRateMock(['id' => $rateId]);
@@ -222,10 +223,9 @@ class RateRepositoryTest extends TestCase
         $this->model->deleteById($rateId);
     }
 
-    public function testGetList()
+    public function testGetList(): void
     {
-        $searchCriteriaMock = $this->getMockForAbstractClass(SearchCriteriaInterface::class);
-        $searchCriteriaMock = $this->getMockForAbstractClass(SearchCriteriaInterface::class);
+        $searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);
         $rateMock = $this->getTaxRateMock([]);
 
         $objectManager = new ObjectManager($this);
@@ -275,16 +275,19 @@ class RateRepositoryTest extends TestCase
     }
 
     /**
-     * @dataProvider saveThrowsExceptionIfCannotSaveTitlesDataProvider
-     * @param LocalizedException $expectedException
+     * @param \Exception $expectedException
      * @param string $exceptionType
      * @param string $exceptionMessage
      * @throws LocalizedException
      * @throws \Exception
      * @throws AlreadyExistsException
      */
-    public function testSaveThrowsExceptionIfCannotSaveTitles($expectedException, $exceptionType, $exceptionMessage)
-    {
+    #[DataProvider('saveThrowsExceptionIfCannotSaveTitlesDataProvider')]
+    public function testSaveThrowsExceptionIfCannotSaveTitles(
+        \Exception $expectedException,
+        string $exceptionType,
+        string $exceptionMessage
+    ): void {
         $countryCode = 'US';
         $countryMock = $this->createMock(Country::class);
         $countryMock->expects($this->any())->method('getId')->willReturn(1);
@@ -330,7 +333,7 @@ class RateRepositoryTest extends TestCase
     /**
      * @return array
      */
-    public function saveThrowsExceptionIfCannotSaveTitlesDataProvider()
+    public static function saveThrowsExceptionIfCannotSaveTitlesDataProvider()
     {
         return [
             'entity_already_exists' => [
@@ -346,9 +349,9 @@ class RateRepositoryTest extends TestCase
         ];
     }
 
-    public function testGetListWhenFilterGroupExists()
+    public function testGetListWhenFilterGroupExists(): void
     {
-        $searchCriteriaMock = $this->getMockForAbstractClass(SearchCriteriaInterface::class);
+        $searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);
         $objectManager = new ObjectManager($this);
         $rateMock = $this->getTaxRateMock([]);
         $items = [$rateMock];
@@ -378,7 +381,7 @@ class RateRepositoryTest extends TestCase
         $this->model->getList($searchCriteriaMock);
     }
 
-    public function testValidate()
+    public function testValidate(): void
     {
         $this->expectException(InputException::class);
         $this->expectExceptionMessage('One or more input exceptions have occurred.');
@@ -406,7 +409,7 @@ class RateRepositoryTest extends TestCase
         $this->model->save($rateMock);
     }
 
-    public function testValidateWithNoRate()
+    public function testValidateWithNoRate(): void
     {
         $this->expectException(InputException::class);
         $this->expectExceptionMessage('"percentage_rate" is required. Enter and try again.');
@@ -442,7 +445,7 @@ class RateRepositoryTest extends TestCase
         $this->model->save($rateMock);
     }
 
-    public function testValidateWithWrongRate()
+    public function testValidateWithWrongRate(): void
     {
         $this->expectException(InputException::class);
         $this->expectExceptionMessage('"percentage_rate" is required. Enter and try again.');

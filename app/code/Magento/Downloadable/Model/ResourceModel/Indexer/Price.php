@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Downloadable\Model\ResourceModel\Indexer;
 
@@ -255,7 +255,17 @@ class Price implements DimensionalIndexerInterface
         IndexTableStructure $temporaryPriceTable
     ) {
         $select = $this->baseFinalPrice->getQuery($dimensions, Type::TYPE_DOWNLOADABLE, iterator_to_array($entityIds));
-        $this->tableMaintainer->insertFromSelect($select, $temporaryPriceTable->getTableName(), []);
+        $this->tableMaintainer->insertFromSelect($select, $temporaryPriceTable->getTableName(), [
+            "entity_id",
+            "customer_group_id",
+            "website_id",
+            "tax_class_id",
+            "price",
+            "final_price",
+            "min_price",
+            "max_price",
+            "tier_price",
+        ]);
     }
 
     /**

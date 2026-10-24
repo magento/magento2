@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Bundle\Model\Product\CopyConstructor;
 
@@ -35,10 +35,15 @@ class Bundle implements \Magento\Catalog\Model\Product\CopyConstructorInterface
              * Set option and selection ids to 'null' in order to create new option(selection) for duplicated product,
              * but not modifying existing one, which led to lost of option(selection) in original product.
              */
-            $productLinks = $duplicatedBundleOption->getProductLinks() ?: [];
-            foreach ($productLinks as $productLink) {
-                $productLink->setSelectionId(null);
+            $productLinks = [];
+            foreach ($duplicatedBundleOption->getProductLinks() ?: [] as $productLink) {
+                $productLinkDuplicate = clone $productLink;
+                $productLinkDuplicate->setId(null);
+                $productLinkDuplicate->setSelectionId(null);
+                $productLinkDuplicate->setOptionId(null);
+                $productLinks[] = $productLinkDuplicate;
             }
+            $duplicatedBundleOption->setProductLinks($productLinks);
             $duplicatedBundleOption->setOptionId(null);
             $duplicatedBundleOptions[$key] = $duplicatedBundleOption;
         }

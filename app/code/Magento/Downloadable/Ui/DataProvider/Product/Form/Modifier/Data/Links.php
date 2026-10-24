@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier\Data;
 
@@ -120,7 +120,7 @@ class Links
             $linkData = [];
             $linkData['link_id'] = $link->getId();
             $linkData['title'] = $this->escaper->escapeHtml($link->getTitle());
-            $linkData['price'] = $this->getPriceValue($link->getPrice());
+            $linkData['price'] = $this->getPriceValue((float) $link->getPrice());
             $linkData['number_of_downloads'] = $link->getNumberOfDownloads();
             $linkData['is_shareable'] = $link->getIsShareable();
             $linkData['link_url'] = $link->getLinkUrl();

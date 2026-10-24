@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Payment\Gateway\Command;
 
@@ -74,9 +74,9 @@ class GatewayCommand implements CommandInterface
         TransferFactoryInterface $transferFactory,
         ClientInterface $client,
         LoggerInterface $logger,
-        HandlerInterface $handler = null,
-        ValidatorInterface $validator = null,
-        ErrorMessageMapperInterface $errorMessageMapper = null
+        ?HandlerInterface $handler = null,
+        ?ValidatorInterface $validator = null,
+        ?ErrorMessageMapperInterface $errorMessageMapper = null
     ) {
         $this->requestBuilder = $requestBuilder;
         $this->transferFactory = $transferFactory;

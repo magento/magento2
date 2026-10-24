@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,7 +13,7 @@ use Magento\Sales\Model\Order\Email\Sender\ShipmentCommentSender;
 use Magento\Sales\Model\Order\Shipment;
 use PHPUnit\Framework\MockObject\MockObject;
 
-class ShipmentCommentSenderTest extends AbstractSenderTest
+class ShipmentCommentSenderTest extends AbstractSenderTestCase
 {
     /**
      * @var ShipmentCommentSender
@@ -47,12 +47,15 @@ class ShipmentCommentSenderTest extends AbstractSenderTest
             $this->senderBuilderFactoryMock,
             $this->loggerMock,
             $this->addressRenderer,
-            $this->eventManagerMock
+            $this->eventManagerMock,
+            $this->appEmulator
         );
     }
 
     public function testSendFalse()
     {
+        $this->appEmulator->expects($this->once())->method('startEnvironmentEmulation');
+        $this->appEmulator->expects($this->once())->method('stopEnvironmentEmulation');
         $this->stepAddressFormat($this->addressMock);
         $result = $this->sender->send($this->shipmentMock);
         $this->assertFalse($result);
@@ -101,6 +104,8 @@ class ShipmentCommentSenderTest extends AbstractSenderTest
                     ]
                 ]
             );
+        $this->appEmulator->expects($this->once())->method('startEnvironmentEmulation');
+        $this->appEmulator->expects($this->once())->method('stopEnvironmentEmulation');
         $this->stepSendWithoutSendCopy();
         $result = $this->sender->send($this->shipmentMock, true, $comment);
         $this->assertTrue($result);
@@ -152,6 +157,8 @@ class ShipmentCommentSenderTest extends AbstractSenderTest
                     ]
                 ]
             );
+        $this->appEmulator->expects($this->once())->method('startEnvironmentEmulation');
+        $this->appEmulator->expects($this->once())->method('stopEnvironmentEmulation');
         $this->stepSendWithCallSendCopyTo();
         $result = $this->sender->send($this->shipmentMock, false, $comment);
         $this->assertTrue($result);
@@ -197,6 +204,8 @@ class ShipmentCommentSenderTest extends AbstractSenderTest
 
                 ]
             );
+        $this->appEmulator->expects($this->once())->method('startEnvironmentEmulation');
+        $this->appEmulator->expects($this->once())->method('stopEnvironmentEmulation');
         $this->assertFalse($this->sender->send($this->shipmentMock));
     }
 }

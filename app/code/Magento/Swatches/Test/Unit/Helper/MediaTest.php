@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -25,6 +25,7 @@ use Magento\Store\Model\StoreManager;
 use Magento\Swatches\Helper\Media;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Helper to move images from tmp to catalog directory
@@ -68,7 +69,7 @@ class MediaTest extends TestCase
 
     private function setupObjectManagerForCheckImageExist($return)
     {
-        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $objectManagerMock = $this->createStub(ObjectManagerInterface::class);
         $mockFileSystem = $this->createMock(Filesystem::class);
         $mockRead = $this->createMock(ReadInterface::class);
         $objectManagerMock->method($this->logicalOr('get', 'create'))->willReturn($mockFileSystem);
@@ -83,7 +84,7 @@ class MediaTest extends TestCase
         $objectManager = new ObjectManager($this);
 
         $this->mediaConfigMock = $this->createMock(Config::class);
-        $this->writeInstanceMock = $this->getMockForAbstractClass(WriteInterface::class);
+        $this->writeInstanceMock = $this->createMock(WriteInterface::class);
         $this->fileStorageDbMock = $this->createPartialMock(
             Database::class,
             ['checkDbUsage', 'getUniqueFilename', 'renameFile']
@@ -121,9 +122,7 @@ class MediaTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider dataForFullPath
-     */
+    #[DataProvider('dataForFullPath')]
     public function testGetSwatchAttributeImage($swatchType, $expectedResult)
     {
         $this->storeManagerMock
@@ -149,7 +148,7 @@ class MediaTest extends TestCase
     /**
      * @return array
      */
-    public function dataForFullPath()
+    public static function dataForFullPath()
     {
         return [
             [
@@ -183,8 +182,7 @@ class MediaTest extends TestCase
             ->expects($this->atLeastOnce())
             ->method('renameFile')
             ->willReturnSelf();
-        $driver = $this->getMockBuilder(DriverInterface::class)
-            ->getMockForAbstractClass();
+        $driver = $this->createMock(DriverInterface::class);
         $driver->method('getAbsolutePath')->willReturn('file');
         $this->mediaDirectoryMock
             ->method('getDriver')
@@ -238,9 +236,7 @@ class MediaTest extends TestCase
         $this->assertEquals($result, 'http://url/media/attribute/swatch');
     }
 
-    /**
-     * @dataProvider dataForFolderName
-     */
+    #[DataProvider('dataForFolderName')]
     public function testGetFolderNameSize($swatchType, $imageConfig, $expectedResult)
     {
         if ($imageConfig === null) {
@@ -253,7 +249,7 @@ class MediaTest extends TestCase
     /**
      * @return array
      */
-    public function dataForFolderName()
+    public static function dataForFolderName()
     {
         return [
             [
@@ -332,9 +328,7 @@ class MediaTest extends TestCase
         $this->assertEquals('attribute/swatch', $this->mediaHelperObject->getSwatchMediaPath());
     }
 
-    /**
-     * @dataProvider getSwatchTypes
-     */
+    #[DataProvider('getSwatchTypes')]
     public function testGetSwatchCachePath($swatchType, $expectedResult)
     {
         $this->assertEquals($expectedResult, $this->mediaHelperObject->getSwatchCachePath($swatchType));
@@ -343,7 +337,7 @@ class MediaTest extends TestCase
     /**
      * @return array
      */
-    public function getSwatchTypes()
+    public static function getSwatchTypes()
     {
         return [
             [

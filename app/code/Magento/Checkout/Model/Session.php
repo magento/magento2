@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Checkout\Model;
 
@@ -24,7 +24,7 @@ use Psr\Log\LoggerInterface;
  */
 class Session extends \Magento\Framework\Session\SessionManager
 {
-    const CHECKOUT_STATE_BEGIN = 'begin';
+    public const CHECKOUT_STATE_BEGIN = 'begin';
 
     /**
      * Quote instance
@@ -99,12 +99,12 @@ class Session extends \Magento\Framework\Session\SessionManager
     protected $customerRepository;
 
     /**
-     * @param QuoteIdMaskFactory
+     * @var QuoteIdMaskFactory
      */
     protected $quoteIdMaskFactory;
 
     /**
-     * @param bool
+     * @var bool
      */
     protected $isQuoteMasked;
 
@@ -160,7 +160,7 @@ class Session extends \Magento\Framework\Session\SessionManager
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
         QuoteIdMaskFactory $quoteIdMaskFactory,
         \Magento\Quote\Model\QuoteFactory $quoteFactory,
-        LoggerInterface $logger = null
+        ?LoggerInterface $logger = null
     ) {
         $this->_orderFactory = $orderFactory;
         $this->_customerSession = $customerSession;
@@ -184,6 +184,19 @@ class Session extends \Magento\Framework\Session\SessionManager
         );
         $this->logger = $logger ?: ObjectManager::getInstance()
             ->get(LoggerInterface::class);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->_quote = null;
+        $this->_customer = null;
+        $this->_loadInactive = false;
+        $this->isLoading = false;
+        $this->_order = null;
     }
 
     /**
@@ -254,7 +267,9 @@ class Session extends \Magento\Framework\Session\SessionManager
                         ? $this->_customer->getId()
                         : $this->_customerSession->getCustomerId();
 
-                    if ($quote->getData('customer_id') && (int)$quote->getData('customer_id') !== (int)$customerId) {
+                    if ($customerId && $quote->getData('customer_id') &&
+                        (int)$quote->getData('customer_id') !== (int)$customerId
+                    ) {
                         $quote = $this->quoteFactory->create();
                         $this->setQuoteId(null);
                     }
@@ -402,13 +417,27 @@ class Session extends \Magento\Framework\Session\SessionManager
             }
             $this->_quote = $customerQuote;
         } else {
-            $this->getQuote()->getBillingAddress();
-            $this->getQuote()->getShippingAddress();
-            $this->getQuote()->setCustomer($this->_customerSession->getCustomerDataObject())
+            $quote = $this->getQuote();
+            $quote->getBillingAddress();
+            $quote->getShippingAddress();
+            $quote->setCustomer($this->_customerSession->getCustomerDataObject())
                 ->setCustomerIsGuest(0)
                 ->setTotalsCollectedFlag(false)
                 ->collectTotals();
-            $this->quoteRepository->save($this->getQuote());
+            $this->quoteRepository->save($quote);
+
+            // Delete quote_id_mask when converting guest cart to customer cart
+            try {
+                $quoteIdMask = $this->quoteIdMaskFactory->create()->load($quote->getId(), 'quote_id');
+                if ($quoteIdMask->getId()) {
+                    $quoteIdMask->delete();
+                }
+            } catch (\Exception $e) {
+                $this->logger->warning(
+                    'Failed to delete quote_id_mask during guest-to-customer conversion',
+                    ['quote_id' => $quote->getId(), 'exception' => $e->getMessage()]
+                );
+            }
         }
         return $this;
     }
@@ -473,7 +502,9 @@ class Session extends \Magento\Framework\Session\SessionManager
      */
     public function clearQuote()
     {
-        $this->_eventManager->dispatch('checkout_quote_destroy', ['quote' => $this->getQuote()]);
+        if ($this->_quote !== null) {
+            $this->_eventManager->dispatch('checkout_quote_destroy', ['quote' => $this->_quote]);
+        }
         $this->_quote = null;
         $this->setQuoteId(null);
         $this->setLastSuccessQuoteId(null);

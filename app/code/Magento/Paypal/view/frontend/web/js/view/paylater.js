@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 
 define([
@@ -9,13 +9,15 @@ define([
     'uiElement',
     'uiLayout',
     'Magento_Paypal/js/in-context/paypal-sdk',
+    'Magento_Customer/js/customer-data',
     'domReady!'
 ], function (
     $,
     ko,
     Component,
     layout,
-    paypalSdk
+    paypalSdk,
+    customerData
 ) {
     'use strict';
 
@@ -27,6 +29,7 @@ define([
             attributes: {
                 class: 'pay-later-message'
             },
+            dataAttributes: {},
             refreshSelector: '',
             displayAmount: false,
             amountComponentConfig: {
@@ -36,6 +39,7 @@ define([
         },
         paypal: null,
         amount: null,
+        buyerCountry: null,
 
         /**
          * Initialize
@@ -43,15 +47,38 @@ define([
          * @returns {*}
          */
         initialize: function () {
+            let self = this,
+                buyerCountrySection = customerData.get('paypal-buyer-country'),
+                initialBuyerCountry = buyerCountrySection() && buyerCountrySection().code
+                    ? buyerCountrySection().code
+                    : null;
+
             this._super()
-                .observe(['amount']);
+                .observe(['amount', 'buyerCountry']);
+
+            // Set initial value (may be null for guests until section is loaded)
+            this.buyerCountry(initialBuyerCountry);
+
+            // Ensure buyer country is available for both guests and customers
+            if (!this.buyerCountry()) {
+                customerData.reload(['paypal-buyer-country'], false)
+                    .done(function () {
+                        let updated = customerData.get('paypal-buyer-country')(),
+                            code = updated && updated.code ? updated.code : null;
+
+                        self.buyerCountry(code);
+                        if (code) {
+                            self._refreshMessages();
+                        }
+                    });
+            }
 
             if (this.displayAmount) {
                 layout([this.amountComponentConfig]);
             }
 
             if (this.sdkUrl !== '') {
-                this.loadPayPalSdk(this.sdkUrl)
+                this.loadPayPalSdk(this.sdkUrl, this.dataAttributes)
                     .then(this._setPayPalObject.bind(this));
             }
 
@@ -76,10 +103,11 @@ define([
         /**
          * Load PP SDK with preconfigured options
          *
-         * @param {String} sdkUrl
+         * @param {String} sdkUrl - the url of the PayPal SDK
+         * @param {Array} dataAttributes - Array of the Attributes for PayPal SDK Script tag
          */
-        loadPayPalSdk: function (sdkUrl) {
-            return paypalSdk(sdkUrl);
+        loadPayPalSdk: function (sdkUrl, dataAttributes) {
+            return paypalSdk(sdkUrl, dataAttributes);
         },
 
         /**

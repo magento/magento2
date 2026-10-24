@@ -1,15 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Helper;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Catalog\Block\Product\ImageFactory;
 use Magento\Catalog\Helper\Image;
 use Magento\Catalog\Model\Config\CatalogMediaConfig;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Image as ProductImage;
 use Magento\Catalog\Model\Product\ImageFactory as ProductImageFactory;
 use Magento\Catalog\Model\View\Asset\PlaceholderFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -37,7 +40,7 @@ class ImageTest extends TestCase
     protected $context;
 
     /**
-     * @var \Magento\Catalog\Block\Product\ImageFactory|MockObject
+     * @var ImageFactory|MockObject
      */
     protected $imageFactory;
 
@@ -57,7 +60,7 @@ class ImageTest extends TestCase
     protected $viewConfig;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Image|MockObject
+     * @var ProductImage|MockObject
      */
     protected $image;
 
@@ -81,25 +84,16 @@ class ImageTest extends TestCase
         $this->mockContext();
         $this->mockImage();
 
-        $this->assetRepository = $this->getMockBuilder(Repository::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->assetRepository = $this->createMock(Repository::class);
 
-        $this->configView = $this->getMockBuilder(View::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->configView = $this->createMock(View::class);
 
-        $this->viewConfig = $this->getMockBuilder(ConfigInterface::class)
-            ->getMockForAbstractClass();
+        $this->viewConfig = $this->createMock(ConfigInterface::class);
 
-        $this->placeholderFactory = $this->getMockBuilder(PlaceholderFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->placeholderFactory = $this->createMock(PlaceholderFactory::class);
 
         $this->catalogMediaConfigMock = $this->createPartialMock(CatalogMediaConfig::class, ['getMediaUrlFormat']);
         $this->catalogMediaConfigMock->method('getMediaUrlFormat')->willReturn(CatalogMediaConfig::HASH);
-
-
         $this->helper = new Image(
             $this->context,
             $this->imageFactory,
@@ -112,44 +106,30 @@ class ImageTest extends TestCase
 
     protected function mockContext()
     {
-        $this->context = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->context = $this->createMock(Context::class);
 
-        $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->getMockForAbstractClass();
-        $this->context->expects($this->any())
-            ->method('getScopeConfig')
-            ->willReturn($this->scopeConfig);
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $this->context->method('getScopeConfig')->willReturn($this->scopeConfig);
     }
 
     protected function mockImage()
     {
-        $this->imageFactory = $this->getMockBuilder(ProductImageFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
+        $this->imageFactory = $this->createPartialMock(ProductImageFactory::class, ['create']);
 
-        $this->image = $this->getMockBuilder(\Magento\Catalog\Model\Product\Image::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->imageFactory->expects($this->any())
-            ->method('create')
-            ->willReturn($this->image);
+        $this->image = $this->createMock(ProductImage::class);
+        $this->imageFactory->method('create')->willReturn($this->image);
     }
 
     /**
      * @param array $data
-     * @dataProvider initDataProvider
      */
+    #[DataProvider('initDataProvider')]
     public function testInit($data)
     {
         $imageId = 'test_image_id';
         $attributes = [];
 
-        $productMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productMock = $this->createMock(Product::class);
 
         $this->prepareAttributes($data, $imageId);
         $this->prepareImageProperties($data);
@@ -164,7 +144,7 @@ class ImageTest extends TestCase
     /**
      * @return array
      */
-    public function initDataProvider()
+    public static function initDataProvider()
     {
         return [
             [
@@ -191,16 +171,14 @@ class ImageTest extends TestCase
      * @param array $data - optional 'frame' key
      * @param bool $whiteBorders view config
      * @param bool $expectedKeepFrame
-     * @dataProvider initKeepFrameDataProvider
      */
+    #[DataProvider('initKeepFrameDataProvider')]
     public function testInitKeepFrame($data, $whiteBorders, $expectedKeepFrame)
     {
         $imageId = 'test_image_id';
         $attributes = [];
 
-        $productMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productMock = $this->createMock(Product::class);
 
         $this->prepareAttributes($data, $imageId);
 
@@ -224,34 +202,34 @@ class ImageTest extends TestCase
     /**
      * @return array
      */
-    public function initKeepFrameDataProvider()
+    public static function initKeepFrameDataProvider()
     {
         return [
             // when frame defined explicitly, it wins
             [
-                'mediaImage' => [
+                'data' => [
                     'frame' => 1,
                 ],
                 'whiteBorders' => true,
-                'expected' => true,
+                'expectedKeepFrame' => true,
             ],
             [
-                'mediaImage' => [
+                'data' => [
                     'frame' => 0,
                 ],
                 'whiteBorders' => true,
-                'expected' => false,
+                'expectedKeepFrame' => false,
             ],
             // when frame is not defined, var is used
             [
-                'mediaImage' => [],
+                'data' => [],
                 'whiteBorders' => true,
-                'expected' => true,
+                'expectedKeepFrame' => true,
             ],
             [
-                'mediaImage' => [],
+                'data' => [],
                 'whiteBorders' => false,
-                'expected' => false,
+                'expectedKeepFrame' => false,
             ],
         ];
     }
@@ -281,9 +259,7 @@ class ImageTest extends TestCase
             ->method('setDestinationSubdir')
             ->with($data['type'])
             ->willReturnSelf();
-        $this->image->expects($this->any())
-            ->method('getDestinationSubdir')
-            ->willReturn($data['type']);
+        $this->image->method('getDestinationSubdir')->willReturn($data['type']);
         $this->image->expects($this->once())
             ->method('setWidth')
             ->with($data['width'])
@@ -378,9 +354,7 @@ class ImageTest extends TestCase
             'type' => 'image',
         ];
 
-        $productMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productMock = $this->createMock(Product::class);
 
         $this->prepareAttributes($data, $imageId);
 
@@ -397,9 +371,7 @@ class ImageTest extends TestCase
             'width' => 100,
         ];
 
-        $productMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productMock = $this->createMock(Product::class);
 
         $this->prepareAttributes($data, $imageId);
 
@@ -417,16 +389,14 @@ class ImageTest extends TestCase
 
     /**
      * @param array $data
-     * @dataProvider getHeightDataProvider
      */
+    #[DataProvider('getHeightDataProvider')]
     public function testGetHeight($data)
     {
         $imageId = 'test_image_id';
         $attributes = [];
 
-        $productMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productMock = $this->createMock(Product::class);
 
         $this->prepareAttributes($data, $imageId);
 
@@ -439,17 +409,21 @@ class ImageTest extends TestCase
     /**
      * @return array
      */
-    public function getHeightDataProvider()
+    public static function getHeightDataProvider()
     {
         return [
-            'data' => [
+            'height_only' => [
                 [
                     'height' => 100,
                 ],
+            ],
+            'width_and_height' => [
                 [
                     'width' => 100,
                     'height' => 100,
                 ],
+            ],
+            'width_only' => [
                 [
                     'width' => 100,
                 ],
@@ -459,16 +433,14 @@ class ImageTest extends TestCase
 
     /**
      * @param array $data
-     * @dataProvider getFrameDataProvider
      */
+    #[DataProvider('getFrameDataProvider')]
     public function testGetFrame($data)
     {
         $imageId = 'test_image_id';
         $attributes = [];
 
-        $productMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productMock = $this->createMock(Product::class);
 
         $this->prepareAttributes($data, $imageId);
 
@@ -479,13 +451,15 @@ class ImageTest extends TestCase
     /**
      * @return array
      */
-    public function getFrameDataProvider()
+    public static function getFrameDataProvider()
     {
         return [
-            'data' => [
+            'frame_0' => [
                 [
                     'frame' => 0,
                 ],
+            ],
+            'frame_1' => [
                 [
                     'frame' => 1,
                 ],
@@ -496,24 +470,20 @@ class ImageTest extends TestCase
     /**
      * @param array $data
      * @param string $expected
-     * @dataProvider getLabelDataProvider
      */
+    #[DataProvider('getLabelDataProvider')]
     public function testGetLabel($data, $expected)
     {
         $imageId = 'test_image_id';
         $attributes = [];
 
-        $productMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productMock = $this->createMock(Product::class);
 
         $productMock->expects($this->once())
             ->method('getData')
             ->with($data['type'] . '_' . 'label')
             ->willReturn($data['label']);
-        $productMock->expects($this->any())
-            ->method('getName')
-            ->willReturn($expected);
+        $productMock->method('getName')->willReturn($expected);
 
         $this->prepareAttributes($data, $imageId);
 
@@ -524,7 +494,7 @@ class ImageTest extends TestCase
     /**
      * @return array
      */
-    public function getLabelDataProvider()
+    public static function getLabelDataProvider()
     {
         return [
             [
@@ -532,14 +502,14 @@ class ImageTest extends TestCase
                     'type' => 'image',
                     'label' => 'test_label',
                 ],
-                'test_label',
+                "expected" => 'test_label',
             ],
             [
                 'data' => [
                     'type' => 'image',
                     'label' => null,
                 ],
-                'test_label',
+                "expected" => 'test_label',
             ],
         ];
     }
@@ -553,8 +523,8 @@ class ImageTest extends TestCase
      * @param boolean $isCached
      * @param boolean $isBaseFilePlaceholder
      * @param array $resizedImageInfo
-     * @dataProvider getResizedImageInfoDataProvider
      */
+    #[DataProvider('getResizedImageInfoDataProvider')]
     public function testGetResizedImageInfo(
         $imageId,
         $imageFile,
@@ -565,9 +535,7 @@ class ImageTest extends TestCase
         $isBaseFilePlaceholder,
         $resizedImageInfo
     ) {
-        $productMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productMock = $this->createMock(Product::class);
 
         $productMock->expects($this->any())
             ->method('getData')
@@ -581,12 +549,8 @@ class ImageTest extends TestCase
         $this->image->expects($this->once())
             ->method('getBaseFile')
             ->willReturn($baseFile);
-        $this->image->expects($this->any())
-            ->method('getDestinationSubdir')
-            ->willReturn($destination);
-        $this->image->expects($this->any())
-            ->method('isCached')
-            ->willReturn($isCached);
+        $this->image->method('getDestinationSubdir')->willReturn($destination);
+        $this->image->method('isCached')->willReturn($isCached);
         $this->image->expects($this->any())
             ->method('resize')
             ->willReturnSelf();
@@ -596,9 +560,7 @@ class ImageTest extends TestCase
         $this->image->expects($this->once())
             ->method('getResizedImageInfo')
             ->willReturn($resizedImageInfo);
-        $this->image->expects($this->any())
-            ->method('isBaseFilePlaceholder')
-            ->willReturn($isBaseFilePlaceholder);
+        $this->image->method('isBaseFilePlaceholder')->willReturn($isBaseFilePlaceholder);
 
         $this->prepareAttributes([], $imageId);
 
@@ -614,70 +576,70 @@ class ImageTest extends TestCase
     /**
      * @return array
      */
-    public function getResizedImageInfoDataProvider()
+    public static function getResizedImageInfoDataProvider()
     {
         return [
             [
-                'image_id' => 'test_image_id',
-                'image_file' => '/path/to/test_image_id.png',
-                'base_file' => '/path/to/base_image.png',
+                'imageId' => 'test_image_id',
+                'imageFile' => '/path/to/test_image_id.png',
+                'baseFile' => '/path/to/base_image.png',
                 'destination' => 'small_image',
-                'set_image_file' => true,
-                'is_cached' => false,
-                'is_base_file_placeholder' => false,
-                'resized_image_info' => [
+                'setImageFile' => true,
+                'isCached' => false,
+                'isBaseFilePlaceholder' => false,
+                'resizedImageInfo' => [
                     'x' => 100,
                     'y' => 100,
                 ],
             ],
             [
-                'image_id' => 'test_image_id',
-                'image_file' => '/path/to/test_image_id.png',
-                'base_file' => null,
+                'imageId' => 'test_image_id',
+                'imageFile' => '/path/to/test_image_id.png',
+                'baseFile' => null,
                 'destination' => 'small_image',
-                'set_image_file' => false,
-                'is_cached' => false,
-                'is_base_file_placeholder' => false,
-                'resized_image_info' => [
+                'setImageFile' => false,
+                'isCached' => false,
+                'isBaseFilePlaceholder' => false,
+                'resizedImageInfo' => [
                     'x' => 100,
                     'y' => 100,
                 ],
             ],
             [
-                'image_id' => 'test_image_id',
-                'image_file' => '/path/to/test_image_id.png',
-                'base_file' => null,
+                'imageId' => 'test_image_id',
+                'imageFile' => '/path/to/test_image_id.png',
+                'baseFile' => null,
                 'destination' => 'small_image',
-                'set_image_file' => true,
-                'is_cached' => false,
-                'is_base_file_placeholder' => false,
-                'resized_image_info' => [
+                'setImageFile' => true,
+                'isCached' => false,
+                'isBaseFilePlaceholder' => false,
+                'resizedImageInfo' => [
                     'x' => 100,
                     'y' => 100,
                 ],
             ],
             [
-                'image_id' => 'test_image_id',
-                'image_file' => '/path/to/test_image_id.png',
-                'base_file' => null,
+                'imageId' => 'test_image_id',
+                'imageFile' => '/path/to/test_image_id.png',
+                'baseFile' => null,
                 'destination' => 'small_image',
-                'set_image_file' => true,
-                'is_cached' => false,
-                'is_base_file_placeholder' => true,
-                'resized_image_info' => [
+                'setImageFile' => true,
+                'isCached' => false,
+                'isBaseFilePlaceholder' => true,
+                'resizedImageInfo' => [
                     'x' => 100,
                     'y' => 100,
                 ],
             ],
             [
-                'image_id' => 'test_image_id',
-                'image_file' => '/path/to/test_image_id.png',
-                'base_file' => null,
+                'imageId' => 'test_image_id',
+                'imageFile' => '/path/to/test_image_id.png',
+                'baseFile' => null,
                 'destination' => 'small_image',
-                'set_image_file' => true,
-                'is_cached' => false,
-                'is_base_file_placeholder' => false,
-                'resized_image_info' => [
+                'setImageFile' => true,
+                'isCached' => false,
+                'isBaseFilePlaceholder' => false,
+                'resizedImageInfo' => [
                     'x' => 100,
                     'y' => 100,
                 ],

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -51,7 +51,7 @@ class Delete extends Sitemap implements HttpPostActionInterface
      */
     public function execute()
     {
-        $directory = $this->filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $directory = $this->filesystem->getDirectoryWrite(DirectoryList::PUB);
         // check if we know what should be deleted
         $id = $this->getRequest()->getParam('sitemap_id');
         if ($id) {

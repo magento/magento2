@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -60,9 +60,9 @@ class AddTrack extends Action implements HttpPostActionInterface
     public function __construct(
         Action\Context $context,
         ShipmentLoader $shipmentLoader,
-        ShipmentRepositoryInterface $shipmentRepository = null,
-        ShipmentTrackInterfaceFactory $trackFactory = null,
-        SerializerInterface $serializer = null
+        ?ShipmentRepositoryInterface $shipmentRepository = null,
+        ?ShipmentTrackInterfaceFactory $trackFactory = null,
+        ?SerializerInterface $serializer = null
     ) {
         parent::__construct($context);
 

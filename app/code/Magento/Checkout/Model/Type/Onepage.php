@@ -1,8 +1,10 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
+
 namespace Magento\Checkout\Model\Type;
 
 use Magento\Customer\Api\AccountManagementInterface;
@@ -15,6 +17,9 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 
 /**
+ * Checkout type onepage model
+ *
+ * @api
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

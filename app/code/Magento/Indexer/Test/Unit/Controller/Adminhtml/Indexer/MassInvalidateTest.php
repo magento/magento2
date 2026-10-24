@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -26,6 +26,8 @@ use Magento\Framework\View\Page\Title;
 use Magento\Framework\View\Result\Page;
 use Magento\Indexer\Controller\Adminhtml\Indexer\MassInvalidate;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * Test for Mass invalidate action
@@ -34,6 +36,8 @@ use PHPUnit\Framework\TestCase;
  */
 class MassInvalidateTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var MassInvalidate
      */
@@ -136,14 +140,14 @@ class MassInvalidateTest extends TestCase
             ]
         );
 
-        $this->response = $this->getMockBuilder(ResponseInterface::class)
-            ->addMethods(['setRedirect'])
-            ->onlyMethods(['sendResponse'])
-            ->getMockForAbstractClass();
+        $this->response = $this->createPartialMockWithReflection(
+            ResponseInterface::class,
+            ['setRedirect', 'sendResponse']
+        );
 
-        $this->view = $this->getMockBuilder(ViewInterface::class)
-            ->addMethods(['getConfig', 'getTitle'])
-            ->onlyMethods([
+        $this->view = $this->createPartialMockWithReflection(
+            ViewInterface::class,
+            [
                 'loadLayout',
                 'getPage',
                 'renderLayout',
@@ -155,27 +159,24 @@ class MassInvalidateTest extends TestCase
                 'getLayout',
                 'addActionLayoutHandles',
                 'setIsLayoutLoaded',
-                'isLayoutLoaded'
-            ])
-            ->getMockForAbstractClass();
+                'isLayoutLoaded',
+                'getConfig',
+                'getTitle'
+            ]
+        );
 
-        $this->session = $this->getMockBuilder(Session::class)
-            ->addMethods(['setIsUrlNotice'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->session = $this->createPartialMockWithReflection(
+            Session::class,
+            ['setIsUrlNotice']
+        );
         $this->session->expects($this->any())->method('setIsUrlNotice')->willReturn($this->objectManager);
         $this->actionFlag = $this->createPartialMock(ActionFlag::class, ['get']);
         $this->actionFlag->expects($this->any())->method("get")->willReturn($this->objectManager);
-        $this->objectManager = $this->getMockBuilder(ObjectManager::class)
-            ->addMethods(['get'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->request = $this->getMockForAbstractClass(
-            RequestInterface::class,
-            ['getParam', 'getRequest'],
-            '',
-            false
+        $this->objectManager = $this->createPartialMockWithReflection(
+            ObjectManager::class,
+            ['get']
         );
+        $this->request = $this->createMock(RequestInterface::class);
 
         $resultRedirectFactory = $this->createPartialMock(
             RedirectFactory::class,
@@ -194,18 +195,12 @@ class MassInvalidateTest extends TestCase
         $this->page = $this->createMock(Page::class);
         $this->config = $this->createMock(Page::class);
         $this->title = $this->createMock(Title::class);
-        $this->messageManager = $this->getMockForAbstractClass(
-            ManagerInterface::class,
-            ['addErrorMessage', 'addSuccess'],
-            '',
-            false
-        );
+        $this->messageManager = $this->createMock(ManagerInterface::class);
 
-        $this->indexReg = $this->getMockBuilder(IndexerRegistry::class)
-            ->addMethods(['setScheduled'])
-            ->onlyMethods(['get'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->indexReg = $this->createPartialMockWithReflection(
+            IndexerRegistry::class,
+            ['setScheduled', 'get']
+        );
         $this->helper = $this->createPartialMock(Data::class, ['getUrl']);
         $this->contextMock->expects($this->any())->method("getObjectManager")->willReturn($this->objectManager);
         $this->contextMock->expects($this->any())->method("getRequest")->willReturn($this->request);
@@ -219,8 +214,8 @@ class MassInvalidateTest extends TestCase
     /**
      * @param array $indexerIds
      * @param \Exception $exception
-     * @dataProvider executeDataProvider
      */
+    #[DataProvider('executeDataProvider')]
     public function testExecute($indexerIds, $exception)
     {
         $this->controller = new MassInvalidate(
@@ -236,12 +231,7 @@ class MassInvalidateTest extends TestCase
                 ->method('addErrorMessage')->with(__('Please select indexers.'))
                 ->willReturn(1);
         } else {
-            $indexerInterface = $this->getMockForAbstractClass(
-                IndexerInterface::class,
-                ['invalidate'],
-                '',
-                false
-            );
+            $indexerInterface = $this->createMock(IndexerInterface::class);
             $this->indexReg->expects($this->any())
                 ->method('get')->with(1)
                 ->willReturn($indexerInterface);
@@ -281,23 +271,23 @@ class MassInvalidateTest extends TestCase
     /**
      * @return array
      */
-    public function executeDataProvider()
+    public static function executeDataProvider()
     {
         return [
             'set1' => [
-                'indexers' => 1,
+                'indexerIds' => 1,
                 'exception' => null,
             ],
             'set2' => [
-                'indexers' => [1],
+                'indexerIds' => [1],
                 'exception' => null,
             ],
             'set3' => [
-                'indexers' => [2],
+                'indexerIds' => [2],
                 'exception' => new LocalizedException(__('Test Phrase')),
             ],
             'set4' => [
-                'indexers' => [2],
+                'indexerIds' => [2],
                 'exception' => new \Exception(),
             ]
         ];

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -29,6 +29,7 @@
         <fillField userInput="{{simpleProduct.urlKey}}" selector="{{AdminProductSEOSection.urlKeyInput}}" stepKey="fillUrlKey"/>
 
         <click selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" stepKey="openCustomOptionsSection"/>
+        <waitForElementClickable selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" stepKey="waitForAddOption"/>
         <click selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" stepKey="clickAddOption"/>
         <fillField selector="{{AdminProductCustomizableOptionsSection.optionTitleInput('0')}}" userInput="option1" stepKey="fillOptionTitle"/>
         <click selector="{{AdminProductCustomizableOptionsSection.optionTypeOpenDropDown}}" stepKey="openTypeDropDown"/>

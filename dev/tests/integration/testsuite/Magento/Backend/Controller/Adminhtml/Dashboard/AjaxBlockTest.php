@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Backend\Controller\Adminhtml\Dashboard;
 
 use Magento\TestFramework\TestCase\AbstractBackendController;
 use Magento\Framework\App\Request\Http as HttpRequest;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoAppArea adminhtml
@@ -20,9 +21,8 @@ class AjaxBlockTest extends AbstractBackendController
      *
      * @param string $block
      * @param string $expectedResult
-     *
-     * @dataProvider ajaxBlockDataProvider
      */
+    #[DataProvider('ajaxBlockDataProvider')]
     public function testExecute($block, $expectedResult)
     {
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
@@ -42,7 +42,7 @@ class AjaxBlockTest extends AbstractBackendController
      *
      * @return array
      */
-    public function ajaxBlockDataProvider(): array
+    public static function ajaxBlockDataProvider(): array
     {
         return [
             [

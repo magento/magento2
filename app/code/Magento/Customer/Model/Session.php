@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -28,8 +28,6 @@ use Magento\Framework\Session\Generic;
 class Session extends \Magento\Framework\Session\SessionManager
 {
     /**
-     * Customer object
-     *
      * @var CustomerData
      */
     protected $_customer;
@@ -40,29 +38,21 @@ class Session extends \Magento\Framework\Session\SessionManager
     protected $_customerResource;
 
     /**
-     * Customer model
-     *
      * @var Customer
      */
     protected $_customerModel;
 
     /**
-     * Flag with customer id validations result
-     *
      * @var bool|null
      */
     protected $_isCustomerIdChecked = null;
 
     /**
-     * Customer URL
-     *
      * @var \Magento\Customer\Model\Url
      */
     protected $_customerUrl;
 
     /**
-     * Core url
-     *
      * @var \Magento\Framework\Url\Helper\Data|null
      */
     protected $_coreUrl = null;
@@ -118,8 +108,11 @@ class Session extends \Magento\Framework\Session\SessionManager
     private $accountConfirmation;
 
     /**
-     * Session constructor.
-     *
+     * @var CustomerRegistry
+     */
+    private $customerRegistry;
+
+    /**
      * @param \Magento\Framework\App\Request\Http $request
      * @param \Magento\Framework\Session\SidResolverInterface $sidResolver
      * @param \Magento\Framework\Session\Config\ConfigInterface $sessionConfig
@@ -142,6 +135,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      * @param GroupManagementInterface $groupManagement
      * @param \Magento\Framework\App\Response\Http $response
      * @param AccountConfirmation $accountConfirmation
+     * @param CustomerRegistry|null $customerRegistry
      * @throws \Magento\Framework\Exception\SessionException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -167,7 +161,8 @@ class Session extends \Magento\Framework\Session\SessionManager
         CustomerRepositoryInterface $customerRepository,
         GroupManagementInterface $groupManagement,
         \Magento\Framework\App\Response\Http $response,
-        AccountConfirmation $accountConfirmation = null
+        ?AccountConfirmation $accountConfirmation = null,
+        ?CustomerRegistry $customerRegistry = null,
     ) {
         $this->_coreUrl = $coreUrl;
         $this->_customerUrl = $customerUrl;
@@ -183,6 +178,9 @@ class Session extends \Magento\Framework\Session\SessionManager
         $this->response = $response;
         $this->accountConfirmation = $accountConfirmation ?: ObjectManager::getInstance()
             ->get(AccountConfirmation::class);
+        $this->customerRegistry = $customerRegistry ?: ObjectManager::getInstance()
+            ->get(CustomerRegistry::class);
+
         parent::__construct(
             $request,
             $sidResolver,
@@ -221,7 +219,7 @@ class Session extends \Magento\Framework\Session\SessionManager
         } else {
             $this->_httpContext->setValue(
                 Context::CONTEXT_GROUP,
-                $customer->getGroupId(),
+                (string)$customer->getGroupId(),
                 \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID
             );
             $this->setCustomerId($customer->getId());
@@ -281,7 +279,7 @@ class Session extends \Magento\Framework\Session\SessionManager
         $this->_customerModel = $customerModel;
         $this->_httpContext->setValue(
             Context::CONTEXT_GROUP,
-            $customerModel->getGroupId(),
+            (string)$customerModel->getGroupId(),
             \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID
         );
         $this->setCustomerId($customerModel->getId());
@@ -338,15 +336,12 @@ class Session extends \Magento\Framework\Session\SessionManager
     /**
      * Retrieve customer id from current session
      *
-     * @api
      * @return int|null
      */
     public function getCustomerId()
     {
-        if ($this->storage->getData('customer_id')) {
-            return $this->storage->getData('customer_id');
-        }
-        return null;
+        $customerId = $this->storage->getData('customer_id');
+        return ($customerId && $this->checkCustomerId($customerId)) ? $customerId : null;
     }
 
     /**
@@ -405,9 +400,21 @@ class Session extends \Magento\Framework\Session\SessionManager
     }
 
     /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_customer = null;
+        $this->_customerModel = null;
+        $this->setCustomerId(null);
+        $this->setCustomerGroupId($this->groupManagement->getNotLoggedInGroup()->getId());
+        $this->_isCustomerIdChecked = null;
+        parent::_resetState();
+    }
+
+    /**
      * Checking customer login status
      *
-     * @api
      * @return bool
      */
     public function isLoggedIn()
@@ -430,7 +437,7 @@ class Session extends \Magento\Framework\Session\SessionManager
         }
 
         try {
-            $this->customerRepository->getById($customerId);
+            $this->customerRegistry->retrieve($customerId);
             $this->_isCustomerIdChecked = $customerId;
             return true;
         } catch (\Exception $e) {
@@ -477,7 +484,6 @@ class Session extends \Magento\Framework\Session\SessionManager
     /**
      * Authorization customer by identifier
      *
-     * @api
      * @param   int $customerId
      * @return  bool
      */
@@ -495,7 +501,6 @@ class Session extends \Magento\Framework\Session\SessionManager
     /**
      * Logout customer
      *
-     * @api
      * @return $this
      */
     public function logout()
@@ -511,8 +516,8 @@ class Session extends \Magento\Framework\Session\SessionManager
     /**
      * Authenticate controller action by login customer
      *
-     * @param   bool|null $loginUrl
-     * @return  bool
+     * @param bool|null $loginUrl
+     * @return bool
      * @throws \Magento\Framework\Exception\SessionException
      */
     public function authenticate($loginUrl = null)

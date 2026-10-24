@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,8 @@ namespace Magento\GraphQl\Controller;
 
 /**
  * Use this interface to implement a processor for each entry of a header in an HTTP GraphQL request.
+ *
+ * @api
  */
 interface HttpHeaderProcessorInterface
 {

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -132,9 +132,9 @@ class LayoutProcessor implements LayoutProcessorInterface
             $elements[$code]['dataType'] = 'select';
             $elements[$code]['formElement'] = 'select';
 
-            foreach ($options as $key => $value) {
+            foreach ($options as $value) {
                 $elements[$code]['options'][] = [
-                    'value' => $key,
+                    'value' => $value,
                     'label' => $value,
                 ];
             }

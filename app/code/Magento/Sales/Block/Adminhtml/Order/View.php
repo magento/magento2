@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Block\Adminhtml\Order;
 
@@ -16,29 +16,21 @@ use Magento\Sales\Model\ConfigInterface;
 class View extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
-     * Block group
-     *
      * @var string
      */
     protected $_blockGroup = 'Magento_Sales';
 
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * Sales config
-     *
      * @var \Magento\Sales\Model\Config
      */
     protected $_salesConfig;
 
     /**
-     * Reorder helper
-     *
      * @var \Magento\Sales\Helper\Reorder
      */
     protected $_reorderHelper;
@@ -121,8 +113,10 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
             );
         }
 
-        if ($this->_isAllowedAction('Magento_Sales::emails') && !$order->isCanceled()) {
-            $message = __('Are you sure you want to send an order email to customer?');
+        if ($this->_isAllowedAction('Magento_Sales::email') && !$order->isCanceled()) {
+            $message = $this->escapeJs(
+                $this->escapeHtml(__('Are you sure you want to send an order email to customer?'))
+            );
             $this->addButton(
                 'send_notification',
                 [
@@ -134,9 +128,12 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
         }
 
         if ($this->_isAllowedAction('Magento_Sales::creditmemo') && $order->canCreditmemo()) {
-            $message = __(
-                'This will create an offline refund. ' .
-                'To create an online refund, open an invoice and create credit memo for it. Do you want to continue?'
+            $message = $this->escapeJs(
+                $this->escapeHtml(__(
+                    'This will create an offline refund. ' .
+                    'To create an online refund, open an invoice and create credit memo for it. ' .
+                    'Do you want to continue?'
+                ))
             );
             $onClick = "setLocation('{$this->getCreditmemoUrl()}')";
             if ($order->getPayment()->getMethodInstance()->isGateway()) {
@@ -150,7 +147,9 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
 
         // invoice action intentionally
         if ($this->_isAllowedAction('Magento_Sales::invoice') && $order->canVoidPayment()) {
-            $message = __('Are you sure you want to void the payment?');
+            $message = $this->escapeJs(
+                $this->escapeHtml(__('Are you sure you want to void the payment?'))
+            );
             $this->addButton(
                 'void_payment',
                 [
@@ -190,7 +189,9 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
 
         if ($this->_isAllowedAction('Magento_Sales::review_payment')) {
             if ($order->canReviewPayment()) {
-                $message = __('Are you sure you want to accept this payment?');
+                $message = $this->escapeJs(
+                    $this->escapeHtml(__('Are you sure you want to accept this payment?'))
+                );
                 $this->addButton(
                     'accept_payment',
                     [
@@ -198,7 +199,9 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
                         'onclick' => "confirmSetLocation('{$message}', '{$this->getReviewPaymentUrl('accept')}')"
                     ]
                 );
-                $message = __('Are you sure you want to deny this payment?');
+                $message = $this->escapeJs(
+                    $this->escapeHtml(__('Are you sure you want to deny this payment?'))
+                );
                 $this->addButton(
                     'deny_payment',
                     [

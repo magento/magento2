@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 
 define([
@@ -17,7 +17,7 @@ define([
         $inputEl.on('blur', function () {
             var inputVal = parseInt($inputEl.val(), 10);
 
-            if (256000 > inputVal) {
+            if (inputVal < 256000) {
                 confirm({
                     title: $t(config.modalTitleText),
                     content: $t(config.modalContentBody),

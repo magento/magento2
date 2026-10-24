@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -28,22 +28,24 @@ class PhpCookieManager implements CookieManagerInterface
 {
     /**#@+
      * Constants for Cookie manager.
-     * RFC 2109 - Page 15
+     * RFC 2109 - Page 26
      * http://www.ietf.org/rfc/rfc6265.txt
      */
-    const MAX_NUM_COOKIES = 50;
-    const MAX_COOKIE_SIZE = 4096;
-    const EXPIRE_NOW_TIME = 1;
-    const EXPIRE_AT_END_OF_SESSION_TIME = 0;
+    public const MAX_NUM_COOKIES = 50;
+    public const MAX_COOKIE_SIZE = 4096;
+    public const EXPIRE_NOW_TIME = 1;
+    public const EXPIRE_AT_END_OF_SESSION_TIME = 0;
     /**#@-*/
 
     /**#@+
      * Constant for metadata array key
      */
-    const KEY_EXPIRE_TIME = 'expiry';
+    public const KEY_EXPIRE_TIME = 'expiry';
     /**#@-*/
 
-    /**#@-*/
+    /**
+     * @var CookieScopeInterface
+     */
     private $scope;
 
     /**
@@ -74,8 +76,8 @@ class PhpCookieManager implements CookieManagerInterface
     public function __construct(
         CookieScopeInterface $scope,
         CookieReaderInterface $reader,
-        LoggerInterface $logger = null,
-        HttpHeader $httpHeader = null
+        ?LoggerInterface $logger = null,
+        ?HttpHeader $httpHeader = null
     ) {
         $this->scope = $scope;
         $this->reader = $reader;
@@ -97,7 +99,7 @@ class PhpCookieManager implements CookieManagerInterface
      * @throws CookieSizeLimitReachedException Thrown when the cookie is too big to store any additional data.
      * @throws InputException If the cookie name is empty or contains invalid characters.
      */
-    public function setSensitiveCookie($name, $value, SensitiveCookieMetadata $metadata = null)
+    public function setSensitiveCookie($name, $value, ?SensitiveCookieMetadata $metadata = null)
     {
         $metadataArray = $this->scope->getSensitiveCookieMetadata($metadata)->__toArray();
         $this->setCookie((string)$name, (string)$value, $metadataArray);
@@ -117,7 +119,7 @@ class PhpCookieManager implements CookieManagerInterface
      * @throws CookieSizeLimitReachedException Thrown when the cookie is too big to store any additional data.
      * @throws InputException If the cookie name is empty or contains invalid characters.
      */
-    public function setPublicCookie($name, $value, PublicCookieMetadata $metadata = null)
+    public function setPublicCookie($name, $value, ?PublicCookieMetadata $metadata = null)
     {
         $metadataArray = $this->scope->getPublicCookieMetadata($metadata)->__toArray();
         $this->setCookie((string)$name, (string)$value, $metadataArray);
@@ -213,7 +215,7 @@ class PhpCookieManager implements CookieManagerInterface
             $this->logger->warning(
                 new Phrase('Unable to send the cookie. Maximum number of cookies would be exceeded.'),
                 [
-                    'cookies' => $_COOKIE,
+                    'cookies' => array_keys($_COOKIE),
                     'user-agent' => $this->httpHeader->getHttpUserAgent()
                 ]
             );
@@ -297,7 +299,7 @@ class PhpCookieManager implements CookieManagerInterface
      *     received and accepted the request to delete this cookie.
      * @throws InputException If the cookie name is empty or contains invalid characters.
      */
-    public function deleteCookie($name, CookieMetadata $metadata = null)
+    public function deleteCookie($name, ?CookieMetadata $metadata = null)
     {
         $metadataArray = $this->scope->getCookieMetadata($metadata)->__toArray();
 

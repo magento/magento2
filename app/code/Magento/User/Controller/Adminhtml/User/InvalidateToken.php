@@ -1,18 +1,26 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
 
 namespace Magento\User\Controller\Adminhtml\User;
 
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Registry;
 use Magento\Integration\Api\AdminTokenServiceInterface;
+use Magento\User\Controller\Adminhtml\User;
+use Magento\User\Model\UserFactory;
+use Magento\User\Helper\ForceSignIn;
 
 /**
  * Class InvalidateToken - used to invalidate/revoke all authentication tokens for a specific user.
  */
-class InvalidateToken extends \Magento\User\Controller\Adminhtml\User
+class InvalidateToken extends User implements HttpGetActionInterface, HttpPostActionInterface
 {
     /**
      * @var AdminTokenServiceInterface
@@ -20,24 +28,34 @@ class InvalidateToken extends \Magento\User\Controller\Adminhtml\User
     protected $tokenService;
 
     /**
+     * @var ForceSignIn
+     */
+    private ForceSignIn $forceSignIn;
+
+    /**
      * Inject dependencies.
      *
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\User\Model\UserFactory $userFactory
+     * @param Context $context
+     * @param Registry $coreRegistry
+     * @param UserFactory $userFactory
      * @param AdminTokenServiceInterface $tokenService
+     * @param ForceSignIn|null $forceSignIn
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\User\Model\UserFactory $userFactory,
-        AdminTokenServiceInterface $tokenService
+        Context $context,
+        Registry $coreRegistry,
+        UserFactory $userFactory,
+        AdminTokenServiceInterface $tokenService,
+        ?ForceSignIn $forceSignIn = null
     ) {
         parent::__construct($context, $coreRegistry, $userFactory);
         $this->tokenService = $tokenService;
+        $this->forceSignIn = $forceSignIn ?: ObjectManager::getInstance()->get(ForceSignIn::class);
     }
 
     /**
+     * Revoke admin token
+     *
      * @return void
      */
     public function execute()
@@ -45,6 +63,7 @@ class InvalidateToken extends \Magento\User\Controller\Adminhtml\User
         if ($userId = $this->getRequest()->getParam('user_id')) {
             try {
                 $this->tokenService->revokeAdminAccessToken($userId);
+                $this->forceSignIn->updateAdminSessionStatus($userId);
                 $this->messageManager->addSuccess(__('You have revoked the user\'s tokens.'));
                 $this->_redirect('adminhtml/*/edit', ['user_id' => $userId]);
                 return;

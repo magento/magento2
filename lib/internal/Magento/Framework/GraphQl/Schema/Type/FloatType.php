@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,5 +15,5 @@ class FloatType extends \GraphQL\Type\Definition\FloatType implements InputTypeI
     /**
      * @var string
      */
-    public $name = "Magento_Float";
+    public string $name = "Magento_Float";
 }

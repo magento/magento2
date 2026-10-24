@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All rights reserved.
  */
 
 /**
@@ -9,52 +9,86 @@
 define([
     'jquery',
     'jquery/ui',
-    'jquery/jstree/jquery.jstree'
+    'jquery/jstree/jquery.jstree',
+    'mage/translate'
 ], function ($) {
     'use strict';
 
+    // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
     $.widget('mage.rolesTree', {
         options: {
             treeInitData: {},
-            treeInitSelectedData: {}
+            editFormSelector: '',
+            resourceFieldName: 'resource[]',
+            checkboxVisible: true
         },
 
         /** @inheritdoc */
         _create: function () {
             this.element.jstree({
-                plugins: ['themes', 'json_data', 'ui', 'crrm', 'types', 'vcheckbox', 'hotkeys'],
-                vcheckbox: {
-                    'two_state': true,
-                    'real_checkboxes': true,
-
-                    /**
-                     * @param {*} n
-                     * @return {Array}
-                     */
-                    'real_checkboxes_names': function (n) {
-                        return ['resource[]', $(n).data('id')];
-                    }
+                plugins: ['checkbox'],
+                checkbox: {
+                    three_state: false,
+                    visible: this.options.checkboxVisible,
+                    cascade: 'undetermined'
                 },
-                'json_data': {
-                    data: this.options.treeInitData
-                },
-                ui: {
-                    'select_limit': 0
-                },
-                hotkeys: {
-                    space: this._changeState,
-                    'return': this._changeState
-                },
-                types: {
-                    'types': {
-                        'disabled': {
-                            'check_node': false,
-                            'uncheck_node': false
-                        }
+                core: {
+                    data: this.options.treeInitData,
+                    themes: {
+                        dots: false
                     }
                 }
             });
             this._bind();
+            this._createButtons();
+        },
+
+        _createButtons: function () {
+            const $tree = $.jstree.reference(this.element),
+                collapseAllButton = document.createElement('button'),
+                expandAllButton = document.createElement('button'),
+                expandUsedButton = document.createElement('button'),
+                parent = this.element[0],
+                ul = this.element.find('ul')[0];
+
+            collapseAllButton.innerText = $.mage.__('Collapse all');
+            collapseAllButton.addEventListener('click', function () {
+                $tree.close_all();
+            });
+
+            expandAllButton.innerText = $.mage.__('Expand all');
+            expandAllButton.addEventListener('click', function () {
+                $tree.open_all();
+            });
+
+            expandUsedButton.innerText = $.mage.__('Expand selected');
+            expandUsedButton.addEventListener('click', function () {
+                const hasOpened = [];
+
+                $tree.get_checked(true).forEach(function (node) {
+                    $tree.open_node(node);
+                    hasOpened.push(node.id);
+                    for (let i = 0; i < node.parents.length - 1; i++) {
+                        const id = node.parents[i];
+
+                        if (!hasOpened.includes(id)) {
+                            $tree.open_node($tree.get_node(id));
+                            hasOpened.push(id);
+                        }
+                    }
+                });
+            });
+
+            this.buttons = [
+                collapseAllButton,
+                expandAllButton,
+                expandUsedButton
+            ];
+
+            this.buttons.forEach(function (button) {
+                button.type = 'button';
+                parent.insertBefore(button, ul);
+            });
         },
 
         /**
@@ -62,52 +96,81 @@ define([
          */
         _destroy: function () {
             this.element.jstree('destroy');
+
+            if (this.buttons) {
+                this.buttons.forEach(function (element) {
+                    if (element && element.parentNode) {
+                        element.parentNode.removeChild(element);
+                    }
+                });
+            }
         },
 
         /**
          * @private
          */
         _bind: function () {
-            this.element.on('loaded.jstree', $.proxy(this._checkNodes, this));
-            this.element.on('click.jstree', 'a', $.proxy(this._checkNode, this));
+            this.element.on('select_node.jstree', $.proxy(this._selectChildNodes, this));
+            this.element.on('deselect_node.jstree', $.proxy(this._deselectChildNodes, this));
+            this.element.on('changed.jstree', $.proxy(this._changedNode, this));
         },
 
         /**
-         * @param {jQuery.Event} event
+         * @param {Event} event
+         * @param {Object} selected
          * @private
          */
-        _checkNode: function (event) {
-            event.stopPropagation();
-            this.element.jstree(
-                'change_state',
-                event.currentTarget,
-                this.element.jstree('is_checked', event.currentTarget)
-            );
+        _selectChildNodes: function (event, selected) {
+            selected.instance.open_node(selected.node);
+            selected.node.children.each(function (id) {
+                var selector = '[id="' + id + '"]';
+
+                selected.instance.select_node(
+                    selected.instance.get_node($(selector), false)
+                );
+            });
         },
 
         /**
+         * @param {Event} event
+         * @param {Object} selected
          * @private
          */
-        _checkNodes: function () {
-            var $items = $('[data-id="' + this.options.treeInitSelectedData.join('"],[data-id="') + '"]');
+        _deselectChildNodes: function (event, selected) {
+            selected.node.children.each(function (id) {
+                var selector = '[id="' + id + '"]';
 
-            $items.removeClass('jstree-unchecked').addClass('jstree-checked');
-            $items.children(':checkbox').prop('checked', true);
+                // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
+                selected.instance.deselect_node(
+                    selected.instance.get_node($(selector), false)
+                );
+                // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
+            });
         },
 
         /**
-         * @return {Boolean}
+         * Add selected resources to form to be send later
+         *
+         * @param {Event} event
+         * @param {Object} selected
          * @private
          */
-        _changeState: function () {
-            var element;
+        _changedNode: function (event, selected) {
+            var form = $(this.options.editFormSelector),
+                fieldName = this.options.resourceFieldName,
+                items = selected.selected.concat($(this.element).jstree('get_undetermined'));
 
-            if (this.data.ui.hovered) {
-                element = this.data.ui.hovered;
-                this['change_state'](element, this['is_checked'](element));
+            if (this.options.editFormSelector === '') {
+                return;
             }
-
-            return false;
+            form.find('input[name="' + this.options.resourceFieldName +  '"]').remove();
+            items.each(function (id) {
+                $('<input>', {
+                    type: 'hidden',
+                    name: fieldName,
+                    value: id
+                }).appendTo(form);
+            });
         }
     });
 

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -39,7 +39,7 @@ class ExchangeRepositoryTest extends TestCase
         $this->exchangeFactory = $this
             ->getMockBuilder(ExchangeFactoryInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $objectManager = new ObjectManager($this);
         $this->exchangeRepository = $objectManager->getObject(

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\View\Design\FileResolution\Fallback;
@@ -51,7 +51,7 @@ class TemplateFile extends File
         MinifierInterface $templateMinifier,
         State $appState,
         ConfigInterface $assetConfig,
-        DeploymentConfig $deploymentConfig = null
+        ?DeploymentConfig $deploymentConfig = null
     ) {
         $this->appState = $appState;
         $this->templateMinifier = $templateMinifier;

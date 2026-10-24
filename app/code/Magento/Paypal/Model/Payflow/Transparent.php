@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,8 @@ namespace Magento\Paypal\Model\Payflow;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\State\InvalidTransitionException;
+use Magento\Framework\Validator\Exception as ValidatorException;
+use Magento\Payment\Gateway\Command\CommandException;
 use Magento\Payment\Helper\Formatter;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Model\Method\ConfigInterfaceFactory;
@@ -32,9 +34,9 @@ class Transparent extends Payflowpro implements TransparentInterface
 {
     use Formatter;
 
-    const CC_DETAILS = 'cc_details';
+    public const CC_DETAILS = 'cc_details';
 
-    const CC_VAULT_CODE = 'payflowpro_cc_vault';
+    public const CC_VAULT_CODE = 'payflowpro_cc_vault';
 
     /**
      * Result code of account verification transaction request.
@@ -124,8 +126,8 @@ class Transparent extends Payflowpro implements TransparentInterface
         PaymentTokenInterfaceFactory $paymentTokenFactory,
         OrderPaymentExtensionInterfaceFactory $paymentExtensionFactory,
         \Magento\Paypal\Model\CartFactory $payPalCartFactory,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         parent::__construct(
@@ -178,7 +180,9 @@ class Transparent extends Payflowpro implements TransparentInterface
      * @param InfoInterface|Object $payment
      * @param float $amount
      * @return $this
+     * @throws CommandException
      * @throws InvalidTransitionException
+     * @throws ValidatorException
      * @throws LocalizedException
      */
     public function authorize(InfoInterface $payment, $amount)
@@ -218,10 +222,10 @@ class Transparent extends Payflowpro implements TransparentInterface
 
         try {
             $this->responseValidator->validate($response, $this);
-        } catch (LocalizedException $exception) {
+        } catch (ValidatorException $exception) {
             $payment->setParentTransactionId($response->getData(self::PNREF));
             $this->void($payment);
-            throw new LocalizedException(__("The payment couldn't be processed at this time. Please try again later."));
+            throw new ValidatorException(__("The payment couldn't be processed at this time. Please try again later."));
         }
 
         $this->setTransStatus($payment, $response);
@@ -240,7 +244,7 @@ class Transparent extends Payflowpro implements TransparentInterface
     }
 
     /**
-     * {inheritdoc}
+     * @inheritDoc
      */
     public function getConfigInterface()
     {
@@ -280,7 +284,7 @@ class Transparent extends Payflowpro implements TransparentInterface
      */
     private function getExpirationDate(Payment $payment)
     {
-        $expDate = new \DateTime(
+        $cardExpDate = new \DateTime(
             $payment->getCcExpYear()
             . '-'
             . $payment->getCcExpMonth()
@@ -290,8 +294,13 @@ class Transparent extends Payflowpro implements TransparentInterface
             . '00:00:00',
             new \DateTimeZone('UTC')
         );
-        $expDate->add(new \DateInterval('P1M'));
-        return $expDate->format('Y-m-d 00:00:00');
+        $cardExpDate->add(new \DateInterval('P1M'));
+        $oneYearFromNow = new \DateTime('now', new \DateTimeZone('UTC'));
+        $oneYearFromNow->add(new \DateInterval('P1Y'));
+        if ($cardExpDate <= $oneYearFromNow) {
+            return $cardExpDate->format('Y-m-d 00:00:00');
+        }
+        return $oneYearFromNow->format('Y-m-d 00:00:00');
     }
 
     /**
@@ -383,20 +392,6 @@ class Transparent extends Payflowpro implements TransparentInterface
     public function denyPayment(InfoInterface $payment)
     {
         return true;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function fetchTransactionInfo(InfoInterface $payment, $transactionId)
-    {
-        $result = parent::fetchTransactionInfo($payment, $transactionId);
-        $this->_canFetchTransactionInfo = false;
-        if ($payment->getIsTransactionApproved()) {
-            $this->acceptPayment($payment);
-        }
-
-        return $result;
     }
 
     /**

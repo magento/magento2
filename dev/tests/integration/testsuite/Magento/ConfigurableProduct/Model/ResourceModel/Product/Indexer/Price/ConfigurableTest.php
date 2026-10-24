@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -125,7 +125,6 @@ class ConfigurableTest extends TestCase
      */
     public function testGetProductMinimalPriceIfOneOfChildIsOutOfStock(): void
     {
-        $this->markTestSkipped('MC-40451: Indexer\Price\ConfigurableTest failure on 2.4-develop');
         $configurableProduct = $this->getConfigurableProductFromCollection(1);
         $this->assertEquals(10, $configurableProduct->getMinimalPrice());
 
@@ -172,7 +171,6 @@ class ConfigurableTest extends TestCase
      */
     public function testReindexIfAllChildrenIsOutOfStock(): void
     {
-        $this->markTestSkipped('MC-40451: Indexer\Price\ConfigurableTest failure on 2.4-develop');
         $configurableProduct = $this->getConfigurableProductFromCollection(1);
         $this->assertEquals(10, $configurableProduct->getMinimalPrice());
 

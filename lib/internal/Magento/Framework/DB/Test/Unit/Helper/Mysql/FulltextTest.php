@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class FulltextTest extends TestCase
 {
@@ -41,9 +42,8 @@ class FulltextTest extends TestCase
     /**
      * @param $isCondition
      *
-     * @return void
-     * @dataProvider matchProvider
-     */
+     * @return void     */
+    #[DataProvider('matchProvider')]
     public function testMatch($isCondition): void
     {
         $fullCondition = "MATCH (title, description) AGAINST ('some searchable text' IN NATURAL LANGUAGE MODE)";
@@ -78,7 +78,7 @@ class FulltextTest extends TestCase
     /**
      * @return array
      */
-    public function matchProvider(): array
+    public static function matchProvider(): array
     {
         return [[true], [false]];
     }
@@ -88,9 +88,7 @@ class FulltextTest extends TestCase
      */
     protected function getResourceMock(): MockObject
     {
-        $connection = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $connection = $this->createMock(AdapterInterface::class);
         $connection
             ->method('quote')
             ->with('some searchable text')

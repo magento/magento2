@@ -1,16 +1,20 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\MediaGalleryMetadata\Test\Integration\Model;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\MediaGalleryMetadataApi\Api\ExtractMetadataInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for ExtractMetadata
@@ -23,30 +27,51 @@ class ExtractMetadataTest extends TestCase
     private $extractMetadata;
 
     /**
+     * @var WriteInterface
+     */
+    private $directory;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
         $this->extractMetadata = Bootstrap::getObjectManager()->get(ExtractMetadataInterface::class);
+        $this->directory = Bootstrap::getObjectManager()->get(FileSystem::class)
+            ->getDirectoryWrite(DirectoryList::MEDIA);
+        $this->directory->create('testDir');
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function tearDown(): void
+    {
+        $this->directory->delete('testDir');
     }
 
     /**
      * Test for ExtractMetadata::execute
-     *
-     * @dataProvider filesProvider
      * @param string $fileName
      * @param string $title
      * @param string $description
      * @param null|array $keywords
      * @throws LocalizedException
      */
+    #[DataProvider('filesProvider')]
     public function testExecute(
         string $fileName,
         string $title,
         string $description,
         ?array $keywords
     ): void {
-        $path = realpath(__DIR__ . '/../../_files/' . $fileName);
+        $path = $this->directory->getAbsolutePath('testDir/' . $fileName);
+        $driver = $this->directory->getDriver();
+        $driver->filePutContents(
+            $path,
+            file_get_contents(__DIR__ . '/../../_files/' . $fileName)
+        );
+
         $metadata = $this->extractMetadata->execute($path);
 
         $this->assertEquals($title, $metadata->getTitle());
@@ -59,7 +84,7 @@ class ExtractMetadataTest extends TestCase
      *
      * @return array[]
      */
-    public function filesProvider(): array
+    public static function filesProvider(): array
     {
         return [
             [

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,6 +17,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Layout;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class EditTest extends TestCase
@@ -60,7 +61,7 @@ class EditTest extends TestCase
     {
         $this->_systemConfigMock = $this->createMock(Structure::class);
 
-        $this->_requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->_requestMock = $this->createMock(RequestInterface::class);
         $this->_requestMock->expects(
             $this->any()
         )->method(
@@ -98,6 +99,7 @@ class EditTest extends TestCase
         ];
 
         $helper = new ObjectManager($this);
+        $helper->prepareObjectManager();
         $this->_object = $helper->getObject(Edit::class, $data);
     }
 
@@ -154,9 +156,7 @@ class EditTest extends TestCase
         $expectedLabel  = 'Test  Label';
         $expectedBlock  = 'Test  Block';
 
-        $blockMock = $this->getMockBuilder(Template::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $blockMock = $this->createMock(Template::class);
 
         $this->_sectionMock->expects($this->once())
             ->method('getFrontendModel')
@@ -190,11 +190,11 @@ class EditTest extends TestCase
     /**
      * @param array $requestData
      * @param array $expected
-     * @dataProvider getConfigSearchParamsJsonData
      */
+    #[DataProvider('getConfigSearchParamsJsonData')]
     public function testGetConfigSearchParamsJson(array $requestData, array $expected)
     {
-        $requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        $requestMock = $this->createMock(RequestInterface::class);
 
         $requestMock->expects($this->any())
             ->method('getParam')
@@ -221,7 +221,7 @@ class EditTest extends TestCase
     /**
      * @return array
      */
-    public function getConfigSearchParamsJsonData()
+    public static function getConfigSearchParamsJsonData()
     {
         return [
             [

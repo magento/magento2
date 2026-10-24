@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -105,8 +105,8 @@ class PayflowProResponse implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         if (!isset($args['input']['cart_id']) || empty($args['input']['cart_id'])) {
             throw new GraphQlInputException(__('Required parameter "cart_id" is missing.'));

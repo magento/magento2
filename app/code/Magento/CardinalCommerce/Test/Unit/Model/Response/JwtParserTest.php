@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,9 +15,12 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class JwtParserTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ObjectManager
      */
@@ -50,20 +53,17 @@ class JwtParserTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->configMock = $this->getMockBuilder(Config::class)
-            ->setMethods(['getApiKey', 'isDebugModeEnabled'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->configMock = $this->createPartialMock(
+            Config::class,
+            ['getApiKey', 'isDebugModeEnabled']
+        );
 
-        $this->jwtManagementMock = $this->getMockBuilder(JwtManagement::class)
-            ->setMethods(['decode'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->jwtManagementMock = $this->createPartialMock(
+            JwtManagement::class,
+            ['decode']
+        );
 
-        $this->jwtPayloadValidatorMock = $this->getMockBuilder(JwtPayloadValidatorInterface::class)
-            ->setMethods(['validate'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->jwtPayloadValidatorMock = $this->createMock(JwtPayloadValidatorInterface::class);
 
         $this->model = $this->objectManager->getObject(
             JwtParser::class,

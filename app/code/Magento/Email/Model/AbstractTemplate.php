@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Email\Model;
@@ -15,12 +15,14 @@ use Magento\Store\Model\Information as StoreInformation;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 use Magento\MediaStorage\Helper\File\Storage\Database;
+use Magento\Framework\Validation\ValidationException;
+use Magento\Email\Model\Template\Validator as TemplateValidator;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Template model class.
  *
  * phpcs:disable Magento2.Classes.AbstractApi
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @api
@@ -31,32 +33,32 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     /**
      * Default design area for emulation
      */
-    const DEFAULT_DESIGN_AREA = 'frontend';
+    public const DEFAULT_DESIGN_AREA = 'frontend';
 
     /**
      * Default path to email logo
      */
-    const DEFAULT_LOGO_FILE_ID = 'Magento_Email::logo_email.png';
+    public const DEFAULT_LOGO_FILE_ID = 'Magento_Email::logo_email.png';
 
     /**
      * Email logo url
      */
-    const XML_PATH_DESIGN_EMAIL_LOGO = 'design/email/logo';
+    public const XML_PATH_DESIGN_EMAIL_LOGO = 'design/email/logo';
 
     /**
      * Email logo alt text
      */
-    const XML_PATH_DESIGN_EMAIL_LOGO_ALT = 'design/email/logo_alt';
+    public const XML_PATH_DESIGN_EMAIL_LOGO_ALT = 'design/email/logo_alt';
 
     /**
      * Email logo width
      */
-    const XML_PATH_DESIGN_EMAIL_LOGO_WIDTH = 'design/email/logo_width';
+    public const XML_PATH_DESIGN_EMAIL_LOGO_WIDTH = 'design/email/logo_width';
 
     /**
      * Email logo height
      */
-    const XML_PATH_DESIGN_EMAIL_LOGO_HEIGHT = 'design/email/logo_height';
+    public const XML_PATH_DESIGN_EMAIL_LOGO_HEIGHT = 'design/email/logo_height';
 
     /**
      * Configuration of design package for template
@@ -144,8 +146,6 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     protected $filesystem;
 
     /**
-     * Scope config
-     *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $scopeConfig;
@@ -171,6 +171,11 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     private $fileStorageDatabase;
 
     /**
+     * @var TemplateValidator
+     */
+    private $templateValidator;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\View\DesignInterface $design
      * @param \Magento\Framework\Registry $registry
@@ -185,6 +190,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      * @param \Magento\Framework\UrlInterface $urlModel
      * @param array $data
      * @param Database $fileStorageDatabase
+     * @param TemplateValidator|null $templateValidator
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -202,7 +208,8 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         \Magento\Framework\Filter\FilterManager $filterManager,
         \Magento\Framework\UrlInterface $urlModel,
         array $data = [],
-        Database $fileStorageDatabase = null
+        ?Database $fileStorageDatabase = null,
+        ?TemplateValidator $templateValidator = null
     ) {
         $this->design = $design;
         $this->area = isset($data['area']) ? $data['area'] : null;
@@ -218,6 +225,8 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         $this->urlModel = $urlModel;
         $this->fileStorageDatabase = $fileStorageDatabase ?:
             \Magento\Framework\App\ObjectManager::getInstance()->get(Database::class);
+        $this->templateValidator = $templateValidator ?:
+            ObjectManager::getInstance()->get(TemplateValidator::class);
         parent::__construct($context, $registry, null, null, $data);
     }
 
@@ -361,24 +370,11 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         $variables = $this->addEmailVariables($variables, $storeId);
         $processor->setVariables($variables);
 
-        // Type        legacy  id      strict
-        // db legacy   true    numeric false
-        // db new      false   numeric true
-        // filesystem  false   string  false
-        // preview     false   null    true
-        $isLegacy = $this->getData('is_legacy');
-        $templateId = $this->getTemplateId();
-        $previousStrictMode = $processor->setStrictMode(
-            !$isLegacy && (is_numeric($templateId) || empty($templateId))
-        );
-
         try {
             $result = $processor->filter($this->getTemplateText());
         } catch (\Exception $e) {
             $this->cancelDesignConfig();
             throw new \LogicException(__($e->getMessage()), $e->getCode(), $e);
-        } finally {
-            $processor->setStrictMode($previousStrictMode);
         }
 
         if ($isDesignApplied) {
@@ -468,6 +464,8 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         if (!isset($variables['store'])) {
             $variables['store'] = $store;
         }
+        $storeAddress = $variables['store']->getFormattedAddress();
+        $variables['store']->setData('formatted_address', $storeAddress);
         if (!isset($variables['store']['frontend_name'])) {
             $variables['store']['frontend_name'] = $store->getFrontendName();
         }
@@ -772,5 +770,65 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
             $params['_scope_to_url'] = true;
         }
         return $url->getUrl($route, $params);
+    }
+
+    /**
+     * Set template text
+     *
+     * Rejects non-string input
+     *
+     * @param mixed $value
+     * @return $this
+     */
+    public function setTemplateText($value)
+    {
+        return $this->setData('template_text', is_string($value) ? $value : '');
+    }
+
+    /**
+     * Set template styles
+     *
+     * Rejects non-string input
+     *
+     * @param mixed $value
+     * @return $this
+     */
+    public function setTemplateStyles($value)
+    {
+        return $this->setData('template_styles', is_string($value) ? $value : '');
+    }
+
+    /**
+     * Validate template code
+     *
+     * @throws ValidationException
+     * @return $this
+     */
+    public function beforeSave()
+    {
+        $templateText = $this->getTemplateText();
+        if ($templateText) {
+            try {
+                $this->templateValidator->validate($templateText);
+            } catch (ValidationException $exception) {
+                throw new ValidationException(
+                    __('Content field contains restricted HTML elements. %1', $exception->getMessage()),
+                    $exception
+                );
+            }
+        }
+        $templateStyles = $this->getTemplateStyles();
+        if ($templateStyles) {
+            try {
+                $this->templateValidator->validate($templateStyles);
+            } catch (ValidationException $exception) {
+                throw new ValidationException(
+                    __('Styles field validation failed. %1', $exception->getMessage()),
+                    $exception
+                );
+            }
+        }
+        parent::beforeSave();
+        return $this;
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -21,6 +21,7 @@ use Magento\Theme\Model\Theme;
 use Magento\Theme\Model\Theme\File;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class AbstractFileTest extends TestCase
 {
@@ -53,7 +54,7 @@ class AbstractFileTest extends TestCase
 
         $this->_modelBuilder = $this->getMockBuilder(
             AbstractFile::class
-        )->setMethods(
+        )->onlyMethods(
             ['getType', 'getContentType']
         )->setConstructorArgs(
             [$this->_customizationPath, $this->_fileFactory, $this->_filesystem]
@@ -111,9 +112,8 @@ class AbstractFileTest extends TestCase
      * @covers \Magento\Framework\View\Design\Theme\Customization\AbstractFile::prepareFile
      * @covers \Magento\Framework\View\Design\Theme\Customization\AbstractFile::_prepareFileName
      * @covers \Magento\Framework\View\Design\Theme\Customization\AbstractFile::_prepareFilePath
-     * @covers \Magento\Framework\View\Design\Theme\Customization\AbstractFile::_prepareSortOrder
-     * @dataProvider getTestContent
-     */
+     * @covers \Magento\Framework\View\Design\Theme\Customization\AbstractFile::_prepareSortOrder     */
+    #[DataProvider('getTestContent')]
     public function testPrepareFile($type, $fileContent, $expectedContent, $existedFiles)
     {
         $model = $this->_modelBuilder->getMock();
@@ -153,7 +153,7 @@ class AbstractFileTest extends TestCase
     /**
      * @return array
      */
-    public function getTestContent()
+    public static function getTestContent()
     {
         return [
             'first_condition' => [
@@ -197,7 +197,7 @@ class AbstractFileTest extends TestCase
      */
     public function testSave()
     {
-        $model = $this->_modelBuilder->setMethods(['getFullPath'])->getMock();
+        $model = $this->_modelBuilder->onlyMethods(['getFullPath'])->getMock();
 
         $file = $this->createPartialMock(File::class, ['__wakeup']);
         $file->setData(
@@ -238,7 +238,7 @@ class AbstractFileTest extends TestCase
      */
     public function testDelete()
     {
-        $model = $this->_modelBuilder->setMethods(['getFullPath'])->getMock();
+        $model = $this->_modelBuilder->onlyMethods(['getFullPath'])->getMock();
         $file = $this->createPartialMock(File::class, ['__wakeup']);
         $file->setData(
             [

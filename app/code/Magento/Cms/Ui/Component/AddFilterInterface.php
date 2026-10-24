@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,8 @@ use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 
 /**
  * Provides extension point to add additional filters to search criteria.
+ *
+ * @api
  */
 interface AddFilterInterface
 {

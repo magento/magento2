@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\CatalogRule\Test\Unit\Cron;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\CatalogRule\Cron\DailyCatalogUpdate;
 use Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor;
 use Magento\CatalogRule\Model\ResourceModel\Rule\Collection as RuleCollection;
@@ -40,10 +41,10 @@ class DailyCatalogUpdateTest extends TestCase
     }
 
     /**
-     * @dataProvider executeDataProvider
      * @param int $activeRulesCount
      * @param bool $isInvalidationNeeded
      */
+    #[DataProvider('executeDataProvider')]
     public function testExecute(int $activeRulesCount, bool $isInvalidationNeeded)
     {
         $ruleCollection = $this->createMock(RuleCollection::class);
@@ -65,7 +66,7 @@ class DailyCatalogUpdateTest extends TestCase
     /**
      * @return array
      */
-    public function executeDataProvider(): array
+    public static function executeDataProvider(): array
     {
         return [
             [2, true],

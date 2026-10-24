@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Test\Integrity\Magento\Framework\Api;
 
@@ -135,9 +135,10 @@ class ExtensibleInterfacesTest extends \PHPUnit\Framework\TestCase
             } else {
                 // Get the parameter name via a regular expression capture because the class may
                 // not exist which causes a fatal error
-                preg_match('/\[\s\<\w+?>\s([\w]+)/s', $methodParameters[0]->__toString(), $matches);
+                preg_match('/\[\s\<\w+?>\s([?]?[\w\\\]+)/s', $methodParameters[0]->__toString(), $matches);
                 $isCorrectParameter = false;
-                if (isset($matches[1]) && '\\' . $matches[1] != $extensionInterfaceName) {
+                if (isset($matches[1])
+                    && ('\\' . ltrim($matches[1], '?')) === $extensionInterfaceName) {
                     $isCorrectParameter = true;
                 }
 

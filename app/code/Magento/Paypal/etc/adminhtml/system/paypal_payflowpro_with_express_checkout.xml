@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 -->
 <include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd">
@@ -150,7 +150,7 @@
                 </group>
             </group>
             <group id="paypal_payflow_advertise_paylater"  translate="label" showInDefault="1" showInWebsite="1" sortOrder="60">
-                <label>Advertise PayPal PayLater</label>
+                <label>Advertise PayPal Pay Later</label>
                 <field id="paylater_enabled" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/paylater_enabled" />
                 <depends>
                     <field id="enable_paypal_paylater_experience">1</field>

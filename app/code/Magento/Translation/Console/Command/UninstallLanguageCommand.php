@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Translation\Console\Command;
@@ -10,6 +10,7 @@ use Magento\Framework\App\Cache;
 use Magento\Framework\Composer\ComposerInformation;
 use Magento\Framework\Composer\DependencyChecker;
 use Magento\Framework\Composer\Remove;
+use Magento\Framework\Console\Cli;
 use Magento\Framework\Setup\BackupRollbackFactory;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -27,12 +28,12 @@ class UninstallLanguageCommand extends Command
     /**
      * Language code argument name
      */
-    const PACKAGE_ARGUMENT = 'package';
+    public const PACKAGE_ARGUMENT = 'package';
 
     /**
      * Backup-code option name
      */
-    const BACKUP_CODE_OPTION = 'backup-code';
+    public const BACKUP_CODE_OPTION = 'backup-code';
 
     /**
      * @var DependencyChecker
@@ -113,7 +114,7 @@ class UninstallLanguageCommand extends Command
     /**
      * @inheritdoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $languages = $input->getArgument(self::PACKAGE_ARGUMENT);
         $packagesToRemove = [];
@@ -144,6 +145,8 @@ class UninstallLanguageCommand extends Command
         } else {
             $output->writeln('<info>Nothing is removed.</info>');
         }
+
+        return Cli::RETURN_SUCCESS;
     }
 
     /**

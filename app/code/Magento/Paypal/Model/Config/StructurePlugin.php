@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Paypal\Model\Config;
 
@@ -63,7 +63,7 @@ class StructurePlugin
     public function __construct(
         ScopeDefiner $scopeDefiner,
         BackendHelper $backendHelper,
-        PaymentSectionModifier $paymentSectionModifier = null
+        ?PaymentSectionModifier $paymentSectionModifier = null
     ) {
         $this->scopeDefiner = $scopeDefiner;
         $this->backendHelper = $backendHelper;

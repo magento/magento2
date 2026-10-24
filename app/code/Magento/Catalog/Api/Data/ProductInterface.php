@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Api\Data;
@@ -14,33 +13,33 @@ namespace Magento\Catalog\Api\Data;
 interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataInterface
 {
     /**#@+
-     * Constants defined for keys of  data array
+     * public constants defined for keys of  data array
      */
-    const SKU = 'sku';
+    public const SKU = 'sku';
 
-    const NAME = 'name';
+    public const NAME = 'name';
 
-    const PRICE = 'price';
+    public const PRICE = 'price';
 
-    const WEIGHT = 'weight';
+    public const WEIGHT = 'weight';
 
-    const STATUS = 'status';
+    public const STATUS = 'status';
 
-    const VISIBILITY = 'visibility';
+    public const VISIBILITY = 'visibility';
 
-    const ATTRIBUTE_SET_ID = 'attribute_set_id';
+    public const ATTRIBUTE_SET_ID = 'attribute_set_id';
 
-    const TYPE_ID = 'type_id';
+    public const TYPE_ID = 'type_id';
 
-    const CREATED_AT = 'created_at';
+    public const CREATED_AT = 'created_at';
 
-    const UPDATED_AT = 'updated_at';
+    public const UPDATED_AT = 'updated_at';
 
-    const MEDIA_GALLERY = 'media_gallery';
+    public const MEDIA_GALLERY = 'media_gallery';
 
-    const TIER_PRICE = 'tier_price';
+    public const TIER_PRICE = 'tier_price';
 
-    const ATTRIBUTES = [
+    public const ATTRIBUTES = [
         self::SKU,
         self::NAME,
         self::PRICE,
@@ -249,7 +248,7 @@ interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataIn
      * @param \Magento\Catalog\Api\Data\ProductLinkInterface[] $links
      * @return $this
      */
-    public function setProductLinks(array $links = null);
+    public function setProductLinks(?array $links = null);
 
     /**
      * Get list of product options
@@ -264,7 +263,7 @@ interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataIn
      * @param \Magento\Catalog\Api\Data\ProductCustomOptionInterface[] $options
      * @return $this
      */
-    public function setOptions(array $options = null);
+    public function setOptions(?array $options = null);
 
     /**
      * Get media gallery entries
@@ -279,7 +278,7 @@ interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataIn
      * @param \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface[] $mediaGalleryEntries
      * @return $this
      */
-    public function setMediaGalleryEntries(array $mediaGalleryEntries = null);
+    public function setMediaGalleryEntries(?array $mediaGalleryEntries = null);
 
     /**
      * Gets list of product tier prices
@@ -294,5 +293,5 @@ interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataIn
      * @param \Magento\Catalog\Api\Data\ProductTierPriceInterface[] $tierPrices
      * @return $this
      */
-    public function setTierPrices(array $tierPrices = null);
+    public function setTierPrices(?array $tierPrices = null);
 }

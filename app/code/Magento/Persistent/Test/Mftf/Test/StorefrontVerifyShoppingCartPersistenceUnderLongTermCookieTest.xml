@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -50,7 +50,8 @@
 
         <!-- 1. Go to storefront and click the Create an Account link-->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="amOnHomePage"/>
-        <click selector="{{StorefrontPanelHeaderSection.createAnAccountLink}}" stepKey="clickCreateAnAccountLink" />
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickCreateAnAccountLink"/>
+        <actionGroup ref="StorefrontOpenCustomerAccountCreatePageActionGroup" stepKey="openCreateAccountPage"/>
         <actionGroup ref="StorefrontAssertPersistentRegistrationPageFields" stepKey="assertPersistentRegistrationPageFields"/>
 
         <!-- 2. Fill fields for registration, set password and unselect the Remember Me checkbox-->
@@ -152,6 +153,7 @@
         <actionGroup ref="AssertStorefrontCustomerLogoutSuccessPageActionGroup" stepKey="seeLogoutSuccessPageUrlAfterLogOutJohnSmithCustomerSecondTime"/>
         <waitForPageLoad stepKey="waitForHomePageLoadAfter5Seconds"/>
         <waitForText selector="{{StorefrontCMSPageSection.mainContent}}" userInput="CMS homepage content goes here." stepKey="waitForLoadMainContentMessageOnHomePage"/>
+        <waitForElementClickable selector="{{StorefrontPanelHeaderSection.notYouLink}}" stepKey="waitForNotYouLinkClickable" />
         <click selector="{{StorefrontPanelHeaderSection.notYouLink}}" stepKey="clickOnNotYouLink" />
         <waitForPageLoad stepKey="waitForCustomerLoginPageLoad"/>
         <actionGroup ref="AssertMiniCartEmptyActionGroup" stepKey="assertMiniCartEmptyAfterJohnDoeSignOut" />

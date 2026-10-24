@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -24,6 +24,9 @@ use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Reflection\MethodsMap;
 use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Api\Data\OrderPaymentInterface;
+use Magento\Sales\Model\Order\Payment;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -149,8 +152,15 @@ class DataObjectHelperTest extends TestCase
 
         $this->methodsMapProcessor
             ->method('getMethodReturnType')
-            ->withConsecutive([AddressInterface::class, 'getStreet'], [AddressInterface::class, 'getRegion'])
-            ->willReturnOnConsecutiveCalls('string[]', RegionInterface::class);
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 == AddressInterface::class && $arg2 == 'getStreet') {
+                        return 'string[]';
+                    } elseif ($arg1 == AddressInterface::class && $arg2 == 'getRegion') {
+                        return RegionInterface::class;
+                    }
+                }
+            );
         $this->objectFactoryMock->expects($this->once())
             ->method('create')
             ->with(RegionInterface::class, [])
@@ -298,12 +308,72 @@ class DataObjectHelperTest extends TestCase
     }
 
     /**
+     * @return void
+     */
+    public function testPopulateWithArrayWithOrderPaymentAttributes(): void
+    {
+        $method = 'companycredit';
+        $customerPaymentId = null;
+        $additionalData = null;
+        $poNumber = 'ReferenceNumber934829dek2';
+        $cc_type = "Debit";
+        $cc_number_enc = "393993138";
+        $cc_last_4 = "3982";
+        $cc_owner = "John Doe";
+        $cc_exp_month = "05";
+        $cc_exp_year = "24";
+        $cc_number = '1234567890';
+        $cc_cid = null;
+        $cc_ss_issue = null;
+        $cc_ss_start_month = "0";
+        $cc_ss_start_year = "0";
+
+        /** @var OrderPaymentInterface $orderPaymentObject */
+        $orderPaymentObject = $this->objectManager->getObject(
+            Payment::class,
+            ['dataObjectHelper' => $this->dataObjectHelper]
+        );
+
+        $data = [
+            'method' => $method,
+            'customer_payment_id' => $customerPaymentId,
+            'additionalData' => $additionalData,
+            'additionalInformation' => [],
+            'po_number' => $poNumber,
+            'cc_type' => $cc_type,
+            'cc_number_enc' => $cc_number_enc,
+            'cc_last_4' => $cc_last_4,
+            'cc_owner' => $cc_owner,
+            'cc_exp_month' => $cc_exp_month,
+            'cc_exp_year' => $cc_exp_year,
+            'cc_number' => $cc_number,
+            'cc_cid' => $cc_cid,
+            'cc_ss_issue' => $cc_ss_issue,
+            'cc_ss_start_month' => $cc_ss_start_month,
+            'cc_ss_start_year' => $cc_ss_start_year
+        ];
+        $this->dataObjectHelper->populateWithArray(
+            $orderPaymentObject,
+            $data,
+            OrderPaymentInterface::class
+        );
+        $this->assertEquals($method, $orderPaymentObject->getMethod());
+        $this->assertEquals($cc_exp_month, $orderPaymentObject->getCcExpMonth());
+        $this->assertEquals($cc_exp_year, $orderPaymentObject->getCcExpYear());
+        $this->assertEquals($cc_last_4, $orderPaymentObject->getCcLast4());
+        $this->assertEquals($cc_owner, $orderPaymentObject->getCcOwner());
+        $this->assertEquals($cc_number_enc, $orderPaymentObject->getCcNumberEnc());
+        $this->assertEquals($poNumber, $orderPaymentObject->getPoNumber());
+        $this->assertEquals($cc_type, $orderPaymentObject->getCcType());
+    }
+
+    /**
      * @param array $data1
      * @param array $data2
      *
      * @return void
-     * @dataProvider dataProviderForTestMergeDataObjects
      */
+    #[DataProvider('dataProviderForTestMergeDataObjects')]
     public function testMergeDataObjects($data1, $data2): void
     {
         /** @var Address $addressDataObject */
@@ -359,8 +429,16 @@ class DataObjectHelperTest extends TestCase
             ->willReturn($data2);
         $this->methodsMapProcessor
             ->method('getMethodReturnType')
-            ->withConsecutive([Address::class, 'getStreet'], [Address::class, 'getRegion'])
-            ->willReturnOnConsecutiveCalls('string[]', RegionInterface::class);
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 == Address::class && $arg2 == 'getStreet') {
+                        return 'string[]';
+                    } elseif ($arg1 == Address::class && $arg2 == 'getRegion') {
+                        return RegionInterface::class;
+                    }
+                }
+            );
+
         $this->objectFactoryMock->expects($this->once())
             ->method('create')
             ->with(RegionInterface::class, [])
@@ -382,7 +460,7 @@ class DataObjectHelperTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForTestMergeDataObjects(): array
+    public static function dataProviderForTestMergeDataObjects(): array
     {
         return [
             [

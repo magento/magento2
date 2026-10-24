@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Framework\GraphQl\Schema\SchemaGenerator;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\GraphQl\Model\Query\Logger\LoggerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -26,7 +27,7 @@ use PHPUnit\Framework\TestCase;
  */
 class LogDataTest extends TestCase
 {
-    const CONTENT_TYPE = 'application/json';
+    public const CONTENT_TYPE = 'application/json';
 
     /** @var ObjectManagerInterface */
     private $objectManager;
@@ -58,11 +59,11 @@ class LogDataTest extends TestCase
      * @param string $query
      * @param array $headers
      * @param array $expectedResult
-     * @dataProvider getQueryInformationDataProvider
      * @return void
      *
      * @magentoAppIsolation enabled
      */
+    #[DataProvider('getQueryInformationDataProvider')]
     public function testGetQueryInformation(string $query, array $headers, array $expectedResult): void
     {
         $this->request->setPathInfo('/graphql');
@@ -99,7 +100,7 @@ class LogDataTest extends TestCase
      *
      * @return array[]
      */
-    public function getQueryInformationDataProvider()
+    public static function getQueryInformationDataProvider()
     {
         return [
             [ // query with all headers
@@ -136,6 +137,7 @@ QUERY,
                     LoggerInterface::HAS_MUTATION => 'false',
                     LoggerInterface::NUMBER_OF_OPERATIONS => 1,
                     LoggerInterface::OPERATION_NAMES => 'products',
+                    LoggerInterface::TOP_LEVEL_OPERATION_NAME => 'products',
                     LoggerInterface::COMPLEXITY => 5,
                     LoggerInterface::HTTP_RESPONSE_CODE => 200,
                     LoggerInterface::X_MAGENTO_CACHE_ID => '1234'
@@ -164,6 +166,7 @@ QUERY,
                     LoggerInterface::HAS_MUTATION => 'false',
                     LoggerInterface::NUMBER_OF_OPERATIONS => 1,
                     LoggerInterface::OPERATION_NAMES => 'products',
+                    LoggerInterface::TOP_LEVEL_OPERATION_NAME => 'products',
                     LoggerInterface::COMPLEXITY => 5,
                     LoggerInterface::HTTP_RESPONSE_CODE => 200,
                     LoggerInterface::X_MAGENTO_CACHE_ID => ''
@@ -197,6 +200,7 @@ QUERY,
                     LoggerInterface::HAS_MUTATION => 'false',
                     LoggerInterface::NUMBER_OF_OPERATIONS => 0,
                     LoggerInterface::OPERATION_NAMES => 'operationNameNotFound',
+                    LoggerInterface::TOP_LEVEL_OPERATION_NAME => 'xyz',
                     LoggerInterface::COMPLEXITY => 5,
                     LoggerInterface::HTTP_RESPONSE_CODE => 200,
                     LoggerInterface::X_MAGENTO_CACHE_ID => '1234'
@@ -259,6 +263,7 @@ QUERY,
                     LoggerInterface::HAS_MUTATION => 'true',
                     LoggerInterface::NUMBER_OF_OPERATIONS => 1,
                     LoggerInterface::OPERATION_NAMES => 'placeOrder',
+                    LoggerInterface::TOP_LEVEL_OPERATION_NAME => 'placeOrder',
                     LoggerInterface::COMPLEXITY => 3,
                     LoggerInterface::HTTP_RESPONSE_CODE => 200,
                     LoggerInterface::X_MAGENTO_CACHE_ID => '1234'
@@ -284,6 +289,7 @@ QUERY,
                     LoggerInterface::HAS_MUTATION => 'true',
                     LoggerInterface::NUMBER_OF_OPERATIONS => 1,
                     LoggerInterface::OPERATION_NAMES => 'placeOrder',
+                    LoggerInterface::TOP_LEVEL_OPERATION_NAME => 'placeOrder',
                     LoggerInterface::COMPLEXITY => 3,
                     LoggerInterface::HTTP_RESPONSE_CODE => 200,
                     LoggerInterface::X_MAGENTO_CACHE_ID => ''
@@ -328,6 +334,7 @@ QUERY,
                     LoggerInterface::HAS_MUTATION => 'false',
                     LoggerInterface::NUMBER_OF_OPERATIONS => 2,
                     LoggerInterface::OPERATION_NAMES => 'cart,products',
+                    LoggerInterface::TOP_LEVEL_OPERATION_NAME => 'products',
                     LoggerInterface::COMPLEXITY => 8,
                     LoggerInterface::HTTP_RESPONSE_CODE => 200,
                     LoggerInterface::X_MAGENTO_CACHE_ID => '1234'

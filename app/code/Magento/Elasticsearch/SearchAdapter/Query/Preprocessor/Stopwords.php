@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Elasticsearch\SearchAdapter\Query\Preprocessor;
 
@@ -21,18 +21,20 @@ use Magento\Store\Model\StoreManagerInterface;
  *
  * @api
  * @since 100.1.0
+ * @deprecated Elasticsearch is no longer supported by Adobe
+ * @see this class will be responsible for ES only
  */
 class Stopwords implements PreprocessorInterface
 {
     /**
      * Cache id for elasticsearch stopwords
      */
-    const CACHE_ID = 'elasticsearch_stopwords';
+    public const CACHE_ID = 'elasticsearch_stopwords';
 
     /**
      * Stopwords file modification time gap, seconds
      */
-    const STOPWORDS_FILE_MODIFICATION_TIME_GAP = 900;
+    public const STOPWORDS_FILE_MODIFICATION_TIME_GAP = 900;
 
     /**
      * @var StoreManagerInterface

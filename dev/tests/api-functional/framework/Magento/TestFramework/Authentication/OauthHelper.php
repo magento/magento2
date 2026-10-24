@@ -1,20 +1,18 @@
 <?php
 /**
- * Helper class for generating OAuth related credentials
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\TestFramework\Authentication;
 
 use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Oauth\Exception;
-use Magento\TestFramework\Authentication\Rest\OauthClient;
+use Magento\Framework\App\Cache\TypeListInterface;
 use Magento\TestFramework\Helper\Bootstrap;
-use OAuth\Common\Consumer\Credentials;
 use Laminas\Stdlib\Exception\LogicException;
 use Magento\Integration\Model\Integration;
+use Magento\TestFramework\Authentication\Rest\OauthClient;
 
 /**
  * Authentication Oauth helper
@@ -68,41 +66,6 @@ class OauthHelper
     }
 
     /**
-     * Create an access token to associated to a consumer to access APIs. No resources are available to this consumer.
-     *
-     * @return array comprising of token  key and secret
-     * <pre>
-     * array (
-     *   'key' => 'ajdsjashgdkahsdlkjasldkjals', //token key
-     *   'secret' => 'alsjdlaskjdlaksjdlasjkdlas', //token secret
-     *   'oauth_client' => $oauthClient // OauthClient instance used to fetch the access token
-     *   );
-     * </pre>
-     * @throws LocalizedException
-     * @throws Exception
-     * @throws \OAuth\Common\Http\Exception\TokenResponseException
-     */
-    public static function getAccessToken()
-    {
-        $consumerCredentials = self::getConsumerCredentials();
-        $credentials = new Credentials($consumerCredentials['key'], $consumerCredentials['secret'], TESTS_BASE_URL);
-        $oAuthClient = new OauthClient($credentials);
-        $requestToken = $oAuthClient->requestRequestToken();
-        $accessToken = $oAuthClient->requestAccessToken(
-            $requestToken->getRequestToken(),
-            $consumerCredentials['verifier'],
-            $requestToken->getRequestTokenSecret()
-        );
-
-        /** TODO: Reconsider return format. It is not aligned with method name. */
-        return [
-            'key' => $accessToken->getAccessToken(),
-            'secret' => $accessToken->getAccessTokenSecret(),
-            'oauth_client' => $oAuthClient
-        ];
-    }
-
-    /**
      * Create an access token, tied to integration which has permissions to all API resources in the system.
      *
      * @param array $resources list of resources to grant to the integration
@@ -119,7 +82,7 @@ class OauthHelper
      * @throws LocalizedException
      * @throws Exception
      */
-    public static function getApiAccessCredentials($resources = null, Integration $integrationModel = null)
+    public static function getApiAccessCredentials($resources = null, ?Integration $integrationModel = null)
     {
         if (!self::$_apiCredentials) {
             $integration = $integrationModel === null ? self::_createIntegration($resources) : $integrationModel;
@@ -132,14 +95,13 @@ class OauthHelper
                 throw new LogicException('Access token was not created.');
             }
             $consumer = $oauthService->loadConsumer($integration->getConsumerId());
-            $credentials = new Credentials($consumer->getKey(), $consumer->getSecret(), TESTS_BASE_URL);
-            /** @var $oAuthClient OauthClient */
-            $oAuthClient = new OauthClient($credentials);
+            $oauthClientObj = $objectManager->create(OauthClient::class);
+            $oauthClient = $oauthClientObj->create($consumer->getKey(), $consumer->getSecret());
 
             self::$_apiCredentials = [
                 'key' => $accessToken->getToken(),
                 'secret' => $accessToken->getSecret(),
-                'oauth_client' => $oAuthClient,
+                'oauth_client' => $oauthClient,
                 'integration' => $integration,
             ];
         }
@@ -202,16 +164,10 @@ class OauthHelper
         $integration = $integrationService->create($params);
         $integration->setStatus(\Magento\Integration\Model\Integration::STATUS_ACTIVE)->save();
 
-        /** Magento cache must be cleared to activate just created ACL role. */
-        $varPath = realpath(BP . '/var');
-        if (!$varPath) {
-            throw new LogicException("Magento cache cannot be cleared after new ACL role creation.");
-        } else {
-            $cachePath = $varPath . '/cache';
-            if (is_dir($cachePath)) {
-                self::_rmRecursive($cachePath, true);
-            }
-        }
+        /** Clean integration cache types to activate just created ACL role. */
+        $cacheTypeList = $objectManager->get(TypeListInterface::class);
+        $cacheTypeList->cleanType('config_integration');
+        $cacheTypeList->cleanType('config_integration_api');
         return $integration;
     }
 }

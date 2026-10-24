@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
 
 namespace Magento\Checkout\Model;
 
@@ -25,6 +26,7 @@ use Magento\Quote\Api\PaymentMethodManagementInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\TotalsCollector;
 use Magento\Quote\Model\QuoteAddressValidator;
+use Magento\Quote\Model\QuoteAddressValidationService;
 use Magento\Quote\Model\ShippingAssignmentFactory;
 use Magento\Quote\Model\ShippingFactory;
 use Psr\Log\LoggerInterface as Logger;
@@ -33,71 +35,84 @@ use Psr\Log\LoggerInterface as Logger;
  * Class checkout shipping information management
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class ShippingInformationManagement implements ShippingInformationManagementInterface
 {
     /**
      * @var PaymentMethodManagementInterface
      */
-    protected $paymentMethodManagement;
+    protected PaymentMethodManagementInterface $paymentMethodManagement;
 
     /**
      * @var PaymentDetailsFactory
      */
-    protected $paymentDetailsFactory;
+    protected PaymentDetailsFactory $paymentDetailsFactory;
 
     /**
      * @var CartTotalRepositoryInterface
      */
-    protected $cartTotalsRepository;
+    protected CartTotalRepositoryInterface $cartTotalsRepository;
 
     /**
      * @var CartRepositoryInterface
      */
-    protected $quoteRepository;
-
+    protected CartRepositoryInterface $quoteRepository;
     /**
      * @var Logger
      */
-    protected $logger;
+    protected Logger $logger;
 
     /**
      * @var QuoteAddressValidator
      */
-    protected $addressValidator;
+    protected QuoteAddressValidator $addressValidator;
 
     /**
      * @var AddressRepositoryInterface
      * @deprecated 100.2.0
+     * @see AddressRepositoryInterface
      */
-    protected $addressRepository;
+    protected AddressRepositoryInterface $addressRepository;
 
     /**
      * @var ScopeConfigInterface
      * @deprecated 100.2.0
+     * @see ScopeConfigInterface
      */
-    protected $scopeConfig;
+    protected ScopeConfigInterface $scopeConfig;
 
     /**
      * @var TotalsCollector
      * @deprecated 100.2.0
+     * @see TotalsCollector
      */
-    protected $totalsCollector;
+    protected TotalsCollector $totalsCollector;
 
     /**
      * @var CartExtensionFactory
      */
-    private $cartExtensionFactory;
+    private CartExtensionFactory $cartExtensionFactory;
 
     /**
      * @var ShippingAssignmentFactory
      */
-    protected $shippingAssignmentFactory;
+    protected ShippingAssignmentFactory $shippingAssignmentFactory;
 
     /**
      * @var ShippingFactory
      */
     private $shippingFactory;
+
+    /**
+     * @var AddressComparatorInterface
+     */
+    private $addressComparator;
+
+    /**
+     * @var QuoteAddressValidationService
+     */
+    private $quoteAddressValidationService;
 
     /**
      * @param PaymentMethodManagementInterface $paymentMethodManagement
@@ -112,6 +127,8 @@ class ShippingInformationManagement implements ShippingInformationManagementInte
      * @param CartExtensionFactory|null $cartExtensionFactory
      * @param ShippingAssignmentFactory|null $shippingAssignmentFactory
      * @param ShippingFactory|null $shippingFactory
+     * @param AddressComparatorInterface|null $addressComparator
+     * @param QuoteAddressValidationService|null $quoteAddressValidationService
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -124,9 +141,11 @@ class ShippingInformationManagement implements ShippingInformationManagementInte
         AddressRepositoryInterface $addressRepository,
         ScopeConfigInterface $scopeConfig,
         TotalsCollector $totalsCollector,
-        CartExtensionFactory $cartExtensionFactory = null,
-        ShippingAssignmentFactory $shippingAssignmentFactory = null,
-        ShippingFactory $shippingFactory = null
+        ?CartExtensionFactory $cartExtensionFactory = null,
+        ?ShippingAssignmentFactory $shippingAssignmentFactory = null,
+        ?ShippingFactory $shippingFactory = null,
+        ?AddressComparatorInterface $addressComparator = null,
+        ?QuoteAddressValidationService $quoteAddressValidationService = null
     ) {
         $this->paymentMethodManagement = $paymentMethodManagement;
         $this->paymentDetailsFactory = $paymentDetailsFactory;
@@ -143,6 +162,10 @@ class ShippingInformationManagement implements ShippingInformationManagementInte
             ->get(ShippingAssignmentFactory::class);
         $this->shippingFactory = $shippingFactory ?: ObjectManager::getInstance()
             ->get(ShippingFactory::class);
+        $this->addressComparator = $addressComparator
+            ?? ObjectManager::getInstance()->get(AddressComparatorInterface::class);
+        $this->quoteAddressValidationService = $quoteAddressValidationService ?: ObjectManager::getInstance()
+            ->get(QuoteAddressValidationService::class);
     }
 
     /**
@@ -166,13 +189,20 @@ class ShippingInformationManagement implements ShippingInformationManagementInte
         $address = $addressInformation->getShippingAddress();
         $this->validateAddress($address);
 
+        $this->updateCustomerShippingAddressId($quote, $address);
         if (!$address->getCustomerAddressId()) {
             $address->setCustomerAddressId(null);
         }
 
         try {
             $billingAddress = $addressInformation->getBillingAddress();
+            $this->quoteAddressValidationService->validateAddressesWithRules(
+                $quote,
+                $address,
+                $billingAddress
+            );
             if ($billingAddress) {
+                $this->updateCustomerBillingAddressId($quote, $billingAddress);
                 if (!$billingAddress->getCustomerAddressId()) {
                     $billingAddress->setCustomerAddressId(null);
                 }
@@ -262,8 +292,11 @@ class ShippingInformationManagement implements ShippingInformationManagementInte
      * @param string $method
      * @return CartInterface
      */
-    private function prepareShippingAssignment(CartInterface $quote, AddressInterface $address, $method): CartInterface
-    {
+    private function prepareShippingAssignment(
+        CartInterface $quote,
+        AddressInterface $address,
+        string $method
+    ): CartInterface {
         $cartExtension = $quote->getExtensionAttributes();
         if ($cartExtension === null) {
             $cartExtension = $this->cartExtensionFactory->create();
@@ -286,5 +319,40 @@ class ShippingInformationManagement implements ShippingInformationManagementInte
         $shippingAssignment->setShipping($shipping);
         $cartExtension->setShippingAssignments([$shippingAssignment]);
         return $quote->setExtensionAttributes($cartExtension);
+    }
+
+    /**
+     * Update customer shipping address ID if the address is the same as the quote shipping address.
+     *
+     * @param Quote $quote
+     * @param AddressInterface $address
+     * @return void
+     */
+    private function updateCustomerShippingAddressId(Quote $quote, AddressInterface $address): void
+    {
+        $quoteShippingAddress = $quote->getShippingAddress();
+        if (!$address->getCustomerAddressId() &&
+            $quoteShippingAddress->getCustomerAddressId() &&
+            $this->addressComparator->isEqual($address, $quoteShippingAddress)
+        ) {
+            $address->setCustomerAddressId($quoteShippingAddress->getCustomerAddressId());
+        }
+    }
+
+    /**
+     * Update customer billing address ID if the address is the same as the quote billing address.
+     *
+     * @param Quote $quote
+     * @param AddressInterface $billingAddress
+     * @return void
+     */
+    private function updateCustomerBillingAddressId(Quote $quote, AddressInterface $billingAddress): void
+    {
+        $quoteBillingAddress = $quote->getBillingAddress();
+        if ($quoteBillingAddress->getCustomerAddressId() &&
+            $this->addressComparator->isEqual($billingAddress, $quoteBillingAddress)
+        ) {
+            $billingAddress->setCustomerAddressId($quoteBillingAddress->getCustomerAddressId());
+        }
     }
 }

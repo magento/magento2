@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Cms\Block\Adminhtml\Block\Widget;
 
@@ -96,7 +96,7 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     public function getRowClickCallback()
     {
-        $chooserJsObject = $this->getId();
+        $chooserJsObject = $this->_escaper->escapeJs($this->getId());
         $js = '
             function (grid, event) {
                 var trElement = Event.findElement(event, "tr");

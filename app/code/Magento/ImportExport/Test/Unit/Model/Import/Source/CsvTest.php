@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Framework\Filesystem\Driver\File;
 use Magento\Framework\Filesystem\Driver\Http;
 use Magento\Framework\Filesystem\File\Read;
 use Magento\ImportExport\Model\Import\Source\Csv;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -40,11 +41,16 @@ class CsvTest extends TestCase
 
     public function testConstructException()
     {
+        $filePath = __DIR__ . '/invalid_file';
         $this->expectException(\LogicException::class);
-        $this->_directoryMock->expects($this->any())
+        $this->_directoryMock->expects($this->once())
+            ->method('getRelativePath')
+            ->with($filePath)
+            ->willReturn($filePath);
+        $this->_directoryMock->expects($this->once())
             ->method('openFile')
             ->willThrowException(new FileSystemException(__('Error message')));
-        new Csv(__DIR__ . '/invalid_file', $this->_directoryMock);
+        new Csv($filePath, $this->_directoryMock);
     }
 
     public function testConstructStream()
@@ -56,9 +62,7 @@ class CsvTest extends TestCase
         )->method(
             'openFile'
         )->willReturn(
-            
-                new Read($stream, new Http())
-            
+            new Read($stream, new Http())
         );
         $this->_filesystem->expects(
             $this->any()
@@ -78,22 +82,20 @@ class CsvTest extends TestCase
      * @param string $delimiter
      * @param string $enclosure
      * @param array $expectedColumns
-     * @dataProvider optionalArgsDataProvider
      */
+    #[DataProvider('optionalArgsDataProvider')]
     public function testOptionalArgs($delimiter, $enclosure, $expectedColumns)
     {
-        $this->_directoryMock->expects(
-            $this->any()
-        )->method(
-            'openFile'
-        )->willReturn(
-            new Read(
-                __DIR__ . '/_files/test.csv',
-                new File()
-            )
-        );
+        $filePath = __DIR__ . '/_files/test.csv';
+        $this->_directoryMock->expects($this->once())
+            ->method('getRelativePath')
+            ->with($filePath)
+            ->willReturn($filePath);
+        $this->_directoryMock->expects($this->any())
+            ->method('openFile')
+            ->willReturn(new Read($filePath, new File()));
         $model = new Csv(
-            __DIR__ . '/_files/test.csv',
+            $filePath,
             $this->_directoryMock,
             $delimiter,
             $enclosure
@@ -104,7 +106,7 @@ class CsvTest extends TestCase
     /**
      * @return array
      */
-    public function optionalArgsDataProvider()
+    public static function optionalArgsDataProvider()
     {
         return [
             [',', '"', ['column1', 'column2']],
@@ -117,20 +119,15 @@ class CsvTest extends TestCase
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('wrongColumnsNumber');
-        $this->_directoryMock->expects(
-            $this->any()
-        )->method(
-            'openFile'
-        )->willReturn(
-            new Read(
-                __DIR__ . '/_files/test.csv',
-                new File()
-            )
-        );
-        $model = new Csv(
-            __DIR__ . '/_files/test.csv',
-            $this->_directoryMock
-        );
+        $filePath = __DIR__ . '/_files/test.csv';
+        $this->_directoryMock->expects($this->once())
+            ->method('getRelativePath')
+            ->with($filePath)
+            ->willReturn($filePath);
+        $this->_directoryMock->expects($this->any())
+            ->method('openFile')
+            ->willReturn(new Read($filePath, new File()));
+        $model = new Csv($filePath, $this->_directoryMock);
         $this->assertSame(-1, $model->key());
         $model->next();
         $this->assertSame(0, $model->key());

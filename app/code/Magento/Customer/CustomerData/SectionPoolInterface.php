@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\CustomerData;
 
 /**
  * Section pool interface
+ *
+ * @api
  */
 interface SectionPoolInterface
 {
@@ -17,5 +19,5 @@ interface SectionPoolInterface
      * @param bool $forceNewTimestamp
      * @return array
      */
-    public function getSectionsData(array $sectionNames = null, $forceNewTimestamp = false);
+    public function getSectionsData(?array $sectionNames = null, $forceNewTimestamp = false);
 }

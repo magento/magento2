@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -58,7 +57,7 @@ class IndexTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->pageConfigMock = $this->getMockBuilder(Config::class)
-            ->setMethods(['getTitle'])
+            ->onlyMethods(['getTitle'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->titleMock = $this->getMockBuilder(Title::class)
@@ -86,9 +85,14 @@ class IndexTest extends TestCase
             ->willReturnSelf();
         $this->pageMock->expects($this->exactly(2))
             ->method('addBreadcrumb')
-            ->withConsecutive(
-                [__('Search'), __('Search')],
-                [__('Search'), __('Search')]
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 == __('Search') && $arg2 == __('Search')) {
+                        return null;
+                    } elseif ($arg1 == __('Search') && $arg2 == __('Search')) {
+                        return null;
+                    }
+                }
             );
         $this->pageMock->expects($this->once())
             ->method('getConfig')

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Content;
 use Magento\Theme\Model\Wysiwyg\Storage;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ContentTest extends TestCase
 {
@@ -41,9 +42,11 @@ class ContentTest extends TestCase
     {
         $this->_helperStorage = $this->createMock(\Magento\Theme\Helper\Storage::class);
         $this->_urlBuilder = $this->createMock(Url::class);
-        $this->_request = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->_request = $this->createMock(RequestInterface::class);
 
         $objectManagerHelper = new ObjectManager($this);
+        $objectManagerHelper->prepareObjectManager();
+        
         $constructArguments = $objectManagerHelper->getConstructArguments(
             Content::class,
             [
@@ -59,9 +62,9 @@ class ContentTest extends TestCase
     }
 
     /**
-     * @dataProvider requestParamsProvider
      * @param array $requestParams
      */
+    #[DataProvider('requestParamsProvider')]
     public function testGetNewFolderUrl($requestParams)
     {
         $expectedUrl = 'some_url';
@@ -89,9 +92,9 @@ class ContentTest extends TestCase
     }
 
     /**
-     * @dataProvider requestParamsProvider
      * @param array $requestParams
      */
+    #[DataProvider('requestParamsProvider')]
     public function testGetDeleteFilesUrl($requestParams)
     {
         $expectedUrl = 'some_url';
@@ -119,9 +122,9 @@ class ContentTest extends TestCase
     }
 
     /**
-     * @dataProvider requestParamsProvider
      * @param array $requestParams
      */
+    #[DataProvider('requestParamsProvider')]
     public function testGetOnInsertUrl($requestParams)
     {
         $expectedUrl = 'some_url';
@@ -152,7 +155,7 @@ class ContentTest extends TestCase
      * Data provider for requestParams
      * @return array
      */
-    public function requestParamsProvider()
+    public static function requestParamsProvider()
     {
         return [
             [

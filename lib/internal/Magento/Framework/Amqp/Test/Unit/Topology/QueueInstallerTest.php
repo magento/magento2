@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -19,7 +19,7 @@ class QueueInstallerTest extends TestCase
         $model = new QueueInstaller();
         $channel = $this->createMock(AMQPChannel::class);
 
-        $queue = $this->getMockForAbstractClass(QueueConfigItemInterface::class);
+        $queue = $this->createMock(QueueConfigItemInterface::class);
         $queue->expects($this->once())->method('getName')->willReturn('queue01');
         $queue->expects($this->once())->method('isDurable')->willReturn(true);
         $queue->expects($this->once())->method('isAutoDelete')->willReturn(false);

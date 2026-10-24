@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Customer\Test\Unit\Model\Metadata\Form;
 
+use Magento\Customer\Model\Customer;
 use Magento\Customer\Model\FileProcessor;
 use Magento\Customer\Model\FileProcessorFactory;
 use Magento\Customer\Model\Metadata\ElementFactory;
@@ -17,8 +18,10 @@ use Magento\Framework\File\Uploader;
 use Magento\Framework\File\UploaderFactory;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\Filesystem\Io\File as IoFile;
 use Magento\Framework\Url\EncoderInterface;
 use Magento\MediaStorage\Model\File\Validator\NotProtectedExtension;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
@@ -26,7 +29,7 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 class FileTest extends AbstractFormTestCase
 {
-    const ENTITY_TYPE = 0;
+    public const ENTITY_TYPE = 0;
 
     /**
      * @var MockObject|EncoderInterface
@@ -64,27 +67,22 @@ class FileTest extends AbstractFormTestCase
     private $fileProcessorFactoryMock;
 
     /**
+     * @var IoFile|MockObject
+     */
+    protected $ioFile;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
     {
         parent::setUp();
-        $this->urlEncode = $this->getMockBuilder(EncoderInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->fileValidatorMock = $this->getMockBuilder(NotProtectedExtension::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->fileSystemMock = $this->getMockBuilder(Filesystem::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->requestMock = $this->getMockBuilder(Http::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->urlEncode = $this->createMock(EncoderInterface::class);
+        $this->fileValidatorMock = $this->createMock(NotProtectedExtension::class);
+        $this->fileSystemMock = $this->createMock(Filesystem::class);
+        $this->requestMock = $this->createMock(Http::class);
         $this->uploaderFactoryMock = $this->createMock(UploaderFactory::class);
-        $this->fileProcessorMock = $this->getMockBuilder(FileProcessor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->fileProcessorMock = $this->createMock(FileProcessor::class);
         $this->fileProcessorFactoryMock = $this->getMockBuilder(FileProcessorFactory::class)
             ->onlyMethods(['create'])
             ->disableOriginalConstructor()
@@ -92,6 +90,10 @@ class FileTest extends AbstractFormTestCase
         $this->fileProcessorFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->fileProcessorMock);
+        $this->ioFile = $this->getMockBuilder(IoFile::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods([])
+            ->getMock();
     }
 
     /**
@@ -100,24 +102,23 @@ class FileTest extends AbstractFormTestCase
      * @param bool $isAjax
      * @param string $delete
      *
-     * @return void
-     * @dataProvider extractValueNoRequestScopeDataProvider
-     */
+     * @return void */
+    #[DataProvider('extractValueNoRequestScopeDataProvider')]
     public function testExtractValueNoRequestScope($expected, $attributeCode = '', $delete = ''): void
     {
         $value = 'value';
 
-        $this->requestMock
-            ->method('getParam')
-            ->willReturnOnConsecutiveCalls($this->returnValue(['delete' => $delete]));
+        $callCount = 0;
+        $this->requestMock->method('getParam')
+            ->willReturnCallback(function () use (&$callCount, $delete) {
+                return $callCount++ === 0 ? ['delete' => $delete] : '';
+            });
 
         $this->attributeMetadataMock->expects(
             $this->any()
         )->method(
             'getAttributeCode'
-        )->will(
-            $this->returnValue($attributeCode)
-        );
+        )->willReturn($attributeCode);
         if (!empty($attributeCode)) {
             $_FILES[$attributeCode] = ['attributeCodeValue'];
         }
@@ -129,7 +130,7 @@ class FileTest extends AbstractFormTestCase
                 'entityTypeCode' => self::ENTITY_TYPE,
             ]
         );
-
+        $model->setRequestScope('');
         $this->assertEquals($expected, $model->extractValue($this->requestMock));
         if (!empty($attributeCode)) {
             unset($_FILES[$attributeCode]);
@@ -139,7 +140,7 @@ class FileTest extends AbstractFormTestCase
     /**
      * @return array
      */
-    public function extractValueNoRequestScopeDataProvider(): array
+    public static function extractValueNoRequestScopeDataProvider(): array
     {
         return [
             'no_file' => [[]],
@@ -154,9 +155,8 @@ class FileTest extends AbstractFormTestCase
      * @param string $requestScope
      * @param $mainScope
      *
-     * @return void
-     * @dataProvider extractValueWithRequestScopeDataProvider
-     */
+     * @return void */
+    #[DataProvider('extractValueWithRequestScopeDataProvider')]
     public function testExtractValueWithRequestScope($expected, $requestScope, $mainScope = false): void
     {
         $value = 'value';
@@ -164,17 +164,13 @@ class FileTest extends AbstractFormTestCase
             $this->any()
         )->method(
             'getParams'
-        )->will(
-            $this->returnValue(['delete' => true])
-        );
+        )->willReturn(['delete' => true]);
 
         $this->attributeMetadataMock->expects(
             $this->any()
         )->method(
             'getAttributeCode'
-        )->will(
-            $this->returnValue('attributeCode')
-        );
+        )->willReturn('attributeCode');
 
         $model = $this->initialize(
             [
@@ -198,7 +194,7 @@ class FileTest extends AbstractFormTestCase
     /**
      * @return array
      */
-    public function extractValueWithRequestScopeDataProvider(): array
+    public static function extractValueWithRequestScopeDataProvider(): array
     {
         return [
             'requestScope' => [[], 'requestScope'],
@@ -221,25 +217,20 @@ class FileTest extends AbstractFormTestCase
      * @param bool $isAjax
      * @param bool $isRequired
      *
-     * @return void
-     * @dataProvider validateValueNotToUploadDataProvider
-     */
+     * @return void */
+    #[DataProvider('validateValueNotToUploadDataProvider')]
     public function testValidateValueNotToUpload($expected, $value, $isAjax = false, $isRequired = true): void
     {
         $this->attributeMetadataMock->expects(
             $this->any()
         )->method(
             'isRequired'
-        )->will(
-            $this->returnValue($isRequired)
-        );
+        )->willReturn($isRequired);
         $this->attributeMetadataMock->expects(
             $this->any()
         )->method(
             'getStoreLabel'
-        )->will(
-            $this->returnValue('attributeLabel')
-        );
+        )->willReturn('attributeLabel');
 
         $model = $this->initialize(
             [
@@ -255,7 +246,7 @@ class FileTest extends AbstractFormTestCase
     /**
      * @return array
      */
-    public function validateValueNotToUploadDataProvider(): array
+    public static function validateValueNotToUploadDataProvider(): array
     {
         return [
             'emptyValue' => [true, [], true],
@@ -270,36 +261,29 @@ class FileTest extends AbstractFormTestCase
      * @param array $value
      * @param array $parameters
      *
-     * @return void
-     * @dataProvider validateValueToUploadDataProvider
-     */
+     * @return void */
+    #[DataProvider('validateValueToUploadDataProvider')]
     public function testValidateValueToUpload($expected, $value, $parameters = []): void
     {
         $parameters = array_merge(['uploaded' => true, 'valid' => true], $parameters);
 
-        $this->attributeMetadataMock->expects($this->any())->method('isRequired')->will($this->returnValue(false));
+        $this->attributeMetadataMock->expects($this->any())->method('isRequired')->willReturn(false);
         $this->attributeMetadataMock->expects(
             $this->any()
         )->method(
             'getStoreLabel'
-        )->will(
-            $this->returnValue('File Input Field Label')
-        );
+        )->willReturn('File Input Field Label');
 
         $this->fileValidatorMock->expects(
             $this->any()
         )->method(
             'getMessages'
-        )->will(
-            $this->returnValue(['Validation error message.'])
-        );
+        )->willReturn(['Validation error message.']);
         $this->fileValidatorMock->expects(
             $this->any()
         )->method(
             'isValid'
-        )->will(
-            $this->returnValue($parameters['valid'])
-        );
+        )->willReturn($parameters['valid']);
 
         $this->fileProcessorMock->expects($this->any())
             ->method('getStat')
@@ -326,7 +310,7 @@ class FileTest extends AbstractFormTestCase
     /**
      * @return array
      */
-    public function validateValueToUploadDataProvider(): array
+    public static function validateValueToUploadDataProvider(): array
     {
         return [
             'notValid' => [
@@ -362,8 +346,8 @@ class FileTest extends AbstractFormTestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testCompactValueIsAjax(): void
     {
         $model = $this->initialize(
@@ -378,17 +362,17 @@ class FileTest extends AbstractFormTestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testCompactValueNoDelete(): void
     {
-        $this->attributeMetadataMock->expects($this->any())->method('isRequired')->will($this->returnValue(false));
+        $this->attributeMetadataMock->expects($this->any())->method('isRequired')->willReturn(false);
 
         $model = $this->initialize(
             [
                 'value' => 'value',
                 'isAjax' => false,
-                'entityTypeCode' => self::ENTITY_TYPE
+                'entityTypeCode' => Customer::ENTITY
             ]
         );
 
@@ -401,13 +385,13 @@ class FileTest extends AbstractFormTestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testCompactValueDelete(): void
     {
-        $this->attributeMetadataMock->expects($this->any())->method('isRequired')->will($this->returnValue(false));
+        $this->attributeMetadataMock->expects($this->any())->method('isRequired')->willReturn(false);
 
-        $mediaDirMock = $this->getMockForAbstractClass(
+        $mediaDirMock = $this->createMock(
             \Magento\Framework\Filesystem\Directory\WriteInterface::class
         );
         $mediaDirMock->expects($this->any())
@@ -417,7 +401,7 @@ class FileTest extends AbstractFormTestCase
         $this->fileSystemMock->expects($this->any())
             ->method('getDirectoryWrite')
             ->with(DirectoryList::MEDIA)
-            ->will($this->returnValue($mediaDirMock));
+            ->willReturn($mediaDirMock);
 
         $model = $this->initialize(
             [
@@ -431,23 +415,23 @@ class FileTest extends AbstractFormTestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testCompactValueTmpFile(): void
     {
         $value = ['tmp_name' => 'tmp.file', 'name' => 'new.file'];
         $expected = 'saved.file';
 
-        $mediaDirMock = $this->getMockForAbstractClass(
+        $mediaDirMock = $this->createMock(
             \Magento\Framework\Filesystem\Directory\WriteInterface::class
         );
         $this->fileSystemMock->expects($this->once())
             ->method('getDirectoryWrite')
             ->with(DirectoryList::MEDIA)
-            ->will($this->returnValue($mediaDirMock));
+            ->willReturn($mediaDirMock);
         $mediaDirMock->expects($this->any())
             ->method('getAbsolutePath')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
         $uploaderMock = $this->createMock(\Magento\Framework\File\Uploader::class);
         $this->uploaderFactoryMock->expects($this->once())
             ->method('create')
@@ -472,7 +456,7 @@ class FileTest extends AbstractFormTestCase
             ->with(self::ENTITY_TYPE, 'new.file');
         $uploaderMock->expects($this->once())
             ->method('getUploadedFileName')
-            ->will($this->returnValue($expected));
+            ->willReturn($expected);
 
         $model = $this->initialize(
             [
@@ -486,8 +470,8 @@ class FileTest extends AbstractFormTestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testRestoreValue(): void
     {
         $value = 'value';
@@ -506,9 +490,8 @@ class FileTest extends AbstractFormTestCase
     /**
      * @param string $format
      *
-     * @return void
-     * @dataProvider outputValueDataProvider
-     */
+     * @return void */
+    #[DataProvider('outputValueDataProvider')]
     public function testOutputValueNonJson($format): void
     {
         $model = $this->initialize(
@@ -525,7 +508,7 @@ class FileTest extends AbstractFormTestCase
     /**
      * @return array
      */
-    public function outputValueDataProvider(): array
+    public static function outputValueDataProvider(): array
     {
         return [
             ElementFactory::OUTPUT_FORMAT_TEXT => [ElementFactory::OUTPUT_FORMAT_TEXT],
@@ -537,8 +520,8 @@ class FileTest extends AbstractFormTestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testOutputValueJson(): void
     {
         $value = 'value';
@@ -550,9 +533,7 @@ class FileTest extends AbstractFormTestCase
             'encode'
         )->with(
             $this->equalTo($value)
-        )->will(
-            $this->returnValue($urlKey)
-        );
+        )->willReturn($urlKey);
 
         $expected = ['value' => $value, 'url_key' => $urlKey];
 
@@ -586,13 +567,14 @@ class FileTest extends AbstractFormTestCase
             $this->fileValidatorMock,
             $this->fileSystemMock,
             $this->uploaderFactoryMock,
-            $this->fileProcessorFactoryMock
+            $this->fileProcessorFactoryMock,
+            $this->ioFile
         );
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testExtractValueFileUploaderUIComponent(): void
     {
         $attributeCode = 'img1';
@@ -605,16 +587,17 @@ class FileTest extends AbstractFormTestCase
 
         $this->requestMock
             ->method('getParam')
-            ->withConsecutive([$requestScope])
-            ->willReturnOnConsecutiveCalls(
-                [
-                    $attributeCode => [
-                        [
-                            'file' => $fileName
+            ->willReturnCallback(function ($arg1) use ($requestScope, $attributeCode, $fileName) {
+                if ($arg1 == $requestScope) {
+                    return [
+                        $attributeCode => [
+                            [
+                                'file' => $fileName
+                            ]
                         ]
-                    ]
-                ]
-            );
+                    ];
+                }
+            });
 
         $model = $this->initialize(
             [
@@ -631,8 +614,8 @@ class FileTest extends AbstractFormTestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testCompactValueRemoveUiComponentValue(): void
     {
         $value = 'value';
@@ -641,7 +624,7 @@ class FileTest extends AbstractFormTestCase
             [
                 'value' => $value,
                 'isAjax' => false,
-                'entityTypeCode' => self::ENTITY_TYPE
+                'entityTypeCode' => Customer::ENTITY
             ]
         );
 
@@ -654,8 +637,8 @@ class FileTest extends AbstractFormTestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testCompactValueNoAction(): void
     {
         $value = 'value';
@@ -672,8 +655,8 @@ class FileTest extends AbstractFormTestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testCompactValueUiComponent(): void
     {
         $value = [
@@ -697,8 +680,8 @@ class FileTest extends AbstractFormTestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testCompactValueInputField(): void
     {
         $value = [
@@ -709,10 +692,7 @@ class FileTest extends AbstractFormTestCase
         $absolutePath = 'absolute_path';
         $uploadedFilename = 'filename.ext1';
 
-        $mediaDirectoryMock = $this->getMockBuilder(
-            \Magento\Framework\Filesystem\Directory\WriteInterface::class
-        )
-            ->getMockForAbstractClass();
+        $mediaDirectoryMock = $this->createMock(\Magento\Framework\Filesystem\Directory\WriteInterface::class);
         $mediaDirectoryMock->expects($this->once())
             ->method('getAbsolutePath')
             ->with(self::ENTITY_TYPE)
@@ -723,10 +703,9 @@ class FileTest extends AbstractFormTestCase
             ->with(DirectoryList::MEDIA)
             ->willReturn($mediaDirectoryMock);
 
-        $uploaderMock = $this->getMockBuilder(
+        $uploaderMock = $this->createMock(
             Uploader::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        );
         $uploaderMock->expects($this->once())->method('getFileExtension')->willReturn('ext1');
         $this->fileValidatorMock->expects($this->once())
             ->method('isValid')
@@ -769,8 +748,8 @@ class FileTest extends AbstractFormTestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testCompactValueInputFieldWithException(): void
     {
         $value = [
@@ -780,9 +759,7 @@ class FileTest extends AbstractFormTestCase
 
         $originValue = 'origin';
 
-        $mediaDirectoryMock = $this->getMockBuilder(
-            \Magento\Framework\Filesystem\Directory\WriteInterface::class
-        )->getMockForAbstractClass();
+        $mediaDirectoryMock = $this->createMock(\Magento\Framework\Filesystem\Directory\WriteInterface::class);
         $mediaDirectoryMock->expects($this->once())
             ->method('delete')
             ->with(self::ENTITY_TYPE . '/' . $originValue);
@@ -849,9 +826,7 @@ class FileTest extends AbstractFormTestCase
 
         $originValue = 'origin';
 
-        $mediaDirectoryMock = $this->getMockBuilder(
-            WriteInterface::class
-        )->getMockForAbstractClass();
+        $mediaDirectoryMock = $this->createMock(WriteInterface::class);
         $mediaDirectoryMock->expects($this->once())
             ->method('delete')
             ->with(self::ENTITY_TYPE . '/' . $originValue);

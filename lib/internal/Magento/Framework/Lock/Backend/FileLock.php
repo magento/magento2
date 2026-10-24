@@ -1,16 +1,16 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Framework\Lock\Backend;
 
-use Magento\Framework\Lock\LockManagerInterface;
-use Magento\Framework\Filesystem\Driver\File as FileDriver;
-use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Exception\RuntimeException;
+use Magento\Framework\Filesystem\Driver\File as FileDriver;
+use Magento\Framework\Lock\LockManagerInterface;
 use Magento\Framework\Phrase;
 
 /**
@@ -42,7 +42,7 @@ class FileLock implements LockManagerInterface
     /**
      * The mapping list of the path lock with the file resource
      *
-     * @var array
+     * @var array<string, resource>
      */
     private $locks = [];
 
@@ -83,8 +83,14 @@ class FileLock implements LockManagerInterface
      */
     public function lock(string $name, int $timeout = -1): bool
     {
+        $lockFile = $this->getLockPath($name);
+
+        // If already held by this process, don't open a second fd on the same file.
+        if (isset($this->locks[$lockFile])) {
+            return true;
+        }
+
         try {
-            $lockFile = $this->getLockPath($name);
             $fileResource = $this->fileDriver->fileOpen($lockFile, 'w+');
             $skipDeadline = $timeout < 0;
             $deadline = microtime(true) + $timeout;
@@ -106,6 +112,49 @@ class FileLock implements LockManagerInterface
     }
 
     /**
+     * Find lock files that haven't been touched in the last 24 hours, are 0 bytes and are unlocked, then delete those
+     */
+    public function cleanupOldLocks(): int
+    {
+        if (!$this->fileDriver->isExists($this->path)) {
+            return 0;
+        }
+
+        $numberOfLocksDeleted = 0;
+        $timestamp24HoursAgo = strtotime('24 hours ago');
+
+        $lockFiles = $this->fileDriver->readDirectory($this->path);
+        foreach ($lockFiles as $lockFile) {
+            if (!$this->fileDriver->isFile($lockFile)) {
+                continue;
+            }
+
+            $modifiedTimestamp = filemtime($lockFile);
+            if ($timestamp24HoursAgo < $modifiedTimestamp) {
+                continue;
+            }
+
+            $filesize = filesize($lockFile);
+            if ($filesize !== 0) {
+                continue;
+            }
+
+            if ($this->isLockFileActive($lockFile)) {
+                continue;
+            }
+
+            try {
+                $this->fileDriver->deleteFile($lockFile);
+                ++$numberOfLocksDeleted;
+            } catch (FileSystemException $exception) { // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
+                // do nothing
+            }
+        }
+
+        return $numberOfLocksDeleted;
+    }
+
+    /**
      * Checks if a lock exists by name
      *
      * @param string $name The lock name
@@ -114,25 +163,7 @@ class FileLock implements LockManagerInterface
      */
     public function isLocked(string $name): bool
     {
-        $lockFile = $this->getLockPath($name);
-        $result = false;
-
-        try {
-            if ($this->fileDriver->isExists($lockFile)) {
-                $fileResource = $this->fileDriver->fileOpen($lockFile, 'w+');
-                if ($this->tryToLock($fileResource)) {
-                    $result = false;
-                } else {
-                    $result = true;
-                }
-                $this->tryToUnlock($fileResource);
-                $this->fileDriver->fileClose($fileResource);
-            }
-        } catch (FileSystemException $exception) {
-            throw new RuntimeException(new Phrase('Cannot verify that the lock exists.'), $exception);
-        }
-
-        return $result;
+        return $this->isFileLocked($this->getLockPath($name));
     }
 
     /**
@@ -161,7 +192,51 @@ class FileLock implements LockManagerInterface
      */
     private function getLockPath(string $name): string
     {
-        return $this->path . $name;
+        return $this->path . hash('sha256', $name);
+    }
+
+    /**
+     * Checks whether a lock file at the given absolute path is currently held
+     *
+     * @param string $lockFile Absolute path to the lock file
+     * @return bool
+     * @throws RuntimeException
+     */
+    private function isFileLocked(string $lockFile): bool
+    {
+        $result = false;
+
+        try {
+            if ($this->fileDriver->isExists($lockFile)) {
+                $fileResource = $this->fileDriver->fileOpen($lockFile, 'w+');
+                if ($this->tryToLock($fileResource)) {
+                    $result = false;
+                } else {
+                    $result = true;
+                }
+                $this->tryToUnlock($fileResource);
+                $this->fileDriver->fileClose($fileResource);
+            }
+        } catch (FileSystemException $exception) {
+            throw new RuntimeException(new Phrase('Cannot verify that the lock exists.'), $exception);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Checks whether a lock file at the given absolute path is actively held.
+     *
+     * @param string $lockFilePath Absolute path to the lock file
+     * @return bool
+     */
+    private function isLockFileActive(string $lockFilePath): bool
+    {
+        try {
+            return $this->isFileLocked($lockFilePath);
+        } catch (RuntimeException) {
+            return true;
+        }
     }
 
     /**

@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Cms\Test\Unit\Model\ResourceModel\Page;
 
 use Magento\Cms\Model\ResourceModel\Page\Collection;
-use Magento\Cms\Test\Unit\Model\ResourceModel\AbstractCollectionTest;
+use Magento\Cms\Test\Unit\Model\ResourceModel\AbstractCollectionTestCase;
 use Magento\Framework\DataObject;
 use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\EntityMetadata;
@@ -16,9 +16,10 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 
-class CollectionTest extends AbstractCollectionTest
+class CollectionTest extends AbstractCollectionTestCase
 {
     /**
      * @var Collection
@@ -39,8 +40,7 @@ class CollectionTest extends AbstractCollectionTest
     {
         parent::setUp();
 
-        $this->storeManagerMock  = $this->getMockBuilder(StoreManagerInterface::class)
-            ->getMockForAbstractClass();
+        $this->storeManagerMock  = $this->createMock(StoreManagerInterface::class);
 
         $this->metadataPoolMock  = $this->getMockBuilder(MetadataPool::class)
             ->disableOriginalConstructor()
@@ -93,9 +93,9 @@ class CollectionTest extends AbstractCollectionTest
     /**
      * @param \Magento\Framework\DataObject $item
      * @param array $storesData
-     * @dataProvider getItemsDataProvider
      * @throws \Exception
      */
+    #[DataProvider('getItemsDataProvider')]
     public function testAfterLoad($item, $storesData)
     {
         $linkField = 'row_id';
@@ -114,9 +114,7 @@ class CollectionTest extends AbstractCollectionTest
         $this->select->expects($this->any())->method('from')->willReturnSelf();
         $this->connection->expects($this->any())->method('fetchAll')->willReturn($storesData);
 
-        $storeDataMock = $this->getMockBuilder(
-            StoreInterface::class
-        )->getMockForAbstractClass();
+        $storeDataMock = $this->createMock(StoreInterface::class);
         $storeDataMock->expects($this->any())->method('getId')->willReturn(current($expectedResult[$item->getId()]));
         $storeDataMock->expects($this->any())->method('getCode')->willReturn('some_code');
         $this->storeManagerMock->expects($this->any())->method('getStores')->willReturn([$storeDataMock]);
@@ -132,7 +130,7 @@ class CollectionTest extends AbstractCollectionTest
     /**
      * @return array
      */
-    public function getItemsDataProvider()
+    public static function getItemsDataProvider()
     {
         return [
             [

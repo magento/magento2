@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -52,8 +52,8 @@ class AgreementsProviderTest extends TestCase
             CollectionFactory::class,
             ['create']
         );
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
 
         $this->model = $objectManager->getObject(
             AgreementsProvider::class,
@@ -66,8 +66,8 @@ class AgreementsProviderTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetRequiredAgreementIdsIfAgreementsEnabled(): void
     {
         $storeId = 100;
@@ -89,16 +89,22 @@ class AgreementsProviderTest extends TestCase
         $agreementCollection->expects($this->once())->method('addStoreFilter')->with($storeId)->willReturnSelf();
         $agreementCollection
             ->method('addFieldToFilter')
-            ->withConsecutive(['is_active', 1], ['mode', AgreementModeOptions::MODE_MANUAL])
-            ->willReturnOnConsecutiveCalls($agreementCollection, $agreementCollection);
+            ->willReturnCallback(function ($arg1, $arg2) use ($agreementCollection) {
+                if ($arg1 == 'is_active' && $arg2 == 1) {
+                    return $agreementCollection;
+                } elseif ($arg1 == 'mode' && $arg2 == AgreementModeOptions::MODE_MANUAL) {
+                    return $agreementCollection;
+                }
+            });
+
         $agreementCollection->expects($this->once())->method('getAllIds')->willReturn($expectedResult);
 
         $this->assertEquals($expectedResult, $this->model->getRequiredAgreementIds());
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetRequiredAgreementIdsIfAgreementsDisabled(): void
     {
         $expectedResult = [];

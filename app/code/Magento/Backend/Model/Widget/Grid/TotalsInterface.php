@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Backend\Model\Widget\Grid;
 
@@ -17,7 +17,6 @@ interface TotalsInterface
      * @abstract
      * @param \Magento\Framework\Data\Collection $collection
      * @return \Magento\Framework\DataObject
-     * @api
      */
     public function countTotals($collection);
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,16 +11,18 @@ use Magento\Backend\Block\Context;
 use Magento\Framework\DataObject;
 use Magento\Indexer\Block\Backend\Grid\Column\Renderer\Scheduled;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ScheduledTest extends TestCase
 {
     /**
+     * @param string $indexer
      * @param bool $rowValue
      * @param string $class
      * @param string $text
-     * @dataProvider typeProvider
      */
-    public function testRender($rowValue, $class, $text)
+    #[DataProvider('typeProvider')]
+    public function testRender($indexer, $rowValue, $class, $text)
     {
         $html = '<span class="' . $class . '"><span>' . $text . '</span></span>';
         $row = new DataObject();
@@ -32,6 +34,7 @@ class ScheduledTest extends TestCase
         $model = new Scheduled($context);
         $column->setGetter('getValue');
         $row->setValue($rowValue);
+        $row->setIndexerId($indexer);
         $model->setColumn($column);
 
         $result = $model->render($row);
@@ -41,12 +44,15 @@ class ScheduledTest extends TestCase
     /**
      * @return array
      */
-    public function typeProvider()
+    public static function typeProvider()
     {
         return [
-            [true, 'grid-severity-notice', __('Update by Schedule')],
-            [false, 'grid-severity-major', __('Update on Save')],
-            ['', 'grid-severity-major', __('Update on Save')],
+            ['customer_grid', true, 'grid-severity-notice', __('Update by Schedule')],
+            ['customer_grid', false, 'grid-severity-major', __('Update on Save')],
+            ['customer_grid', '', 'grid-severity-major', __('Update on Save')],
+            ['catalog_product_price', true, 'grid-severity-notice', __('Update by Schedule')],
+            ['catalog_product_price', false, 'grid-severity-major', __('Update on Save')],
+            ['catalog_product_price', '', 'grid-severity-major', __('Update on Save')],
         ];
     }
 }

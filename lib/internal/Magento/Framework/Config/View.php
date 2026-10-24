@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Config;
 
@@ -90,7 +90,7 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
         }
 
         $value = $this->data['vars'][$module];
-        foreach (explode('/', $var) as $node) {
+        foreach (explode('/', $var ?: '') as $node) {
             if (is_array($value) && isset($value[$node])) {
                 $value = $value[$node];
             } else {
@@ -200,7 +200,8 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @since 100.1.0
      */
     public function read($scope = null)

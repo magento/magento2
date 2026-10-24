@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Search\Model;
 
@@ -111,8 +111,8 @@ class Query extends AbstractModel implements QueryInterface
         CollectionFactory $searchCollectionFactory,
         StoreManagerInterface $storeManager,
         ScopeConfigInterface $scopeConfig,
-        AbstractResource $resource = null,
-        DbCollection $resourceCollection = null,
+        ?AbstractResource $resource = null,
+        ?DbCollection $resourceCollection = null,
         array $data = []
     ) {
         $this->_queryCollectionFactory = $queryCollectionFactory;

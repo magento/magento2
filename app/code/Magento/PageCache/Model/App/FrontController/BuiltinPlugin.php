@@ -1,10 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\PageCache\Model\App\FrontController;
 
+use Magento\Framework\App\PageCache\NotCacheableInterface;
 use Magento\Framework\App\Response\Http as ResponseHttp;
 
 /**
@@ -67,13 +68,13 @@ class BuiltinPlugin
         \Magento\Framework\App\RequestInterface $request
     ) {
         $this->version->process();
-        if (!$this->config->isEnabled() || $this->config->getType() != \Magento\PageCache\Model\Config::BUILT_IN) {
+        if (!$this->config->isEnabled() || $this->config->getType() !== \Magento\PageCache\Model\Config::BUILT_IN) {
             return $proceed($request);
         }
         $result = $this->kernel->load();
         if ($result === false) {
             $result = $proceed($request);
-            if ($result instanceof ResponseHttp) {
+            if ($result instanceof ResponseHttp && !$result instanceof NotCacheableInterface) {
                 $this->addDebugHeaders($result);
                 $this->kernel->process($result);
             }

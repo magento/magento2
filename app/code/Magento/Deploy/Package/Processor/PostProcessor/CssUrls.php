@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Deploy\Package\Processor\PostProcessor;
 
@@ -156,7 +156,7 @@ class CssUrls implements ProcessorInterface
             foreach ($targetFiles as $matchedFileData) {
                 $filePath = $matchedFileData['filePath'];
                 $oldCss = $this->staticDir->readFile($filePath);
-                $newCss = str_replace($ref, $matchedFileData['replace'], $oldCss);
+                $newCss = str_replace($ref, $matchedFileData['replace'] ?? '', $oldCss);
                 if ($oldCss !== $newCss) {
                     $this->staticDir->writeFile($filePath, $newCss);
                 }

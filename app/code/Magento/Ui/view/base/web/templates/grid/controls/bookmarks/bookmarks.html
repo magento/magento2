@@ -1,7 +1,7 @@
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 -->
 <div class="admin__action-dropdown-wrap admin__data-grid-action-bookmarks" collapsible>
@@ -20,8 +20,8 @@
             <div class="action-dropdown-menu-item-edit" visible="customVisible">
                 <input class="admin__control-text" type="text"
                     data-bind="
+                        attr: {'aria-label': $t('New View')},
                         value: customLabel,
-                        autoselect,
                         hasFocus: isCustomVisible(),
                         keyboard: {
                             13: applyCustom.bind($data),

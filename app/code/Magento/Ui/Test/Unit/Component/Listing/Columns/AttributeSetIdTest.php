@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types = 1);
 
@@ -27,9 +27,7 @@ class AttributeSetIdTest extends ColumnTest
      */
     public function testPrepare()
     {
-        $collectionMock = $this->getMockBuilder(AbstractCollection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $collectionMock = $this->createMock(AbstractCollection::class);
 
         $selectMock = $this->createMock(Select::class);
 
@@ -37,10 +35,15 @@ class AttributeSetIdTest extends ColumnTest
             ->method('order')
             ->with('attribute_set_name asc');
 
-        $this->dataProviderMock = $this->getMockBuilder(DataProviderInterface::class)
-            ->addMethods(['getCollection', 'getSelect'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->dataProviderMock = $this->createPartialMockWithReflection(
+            DataProviderInterface::class,
+            [
+                'getName', 'getConfigData', 'setConfigData', 'getMeta', 'getFieldMetaInfo',
+                'getFieldSetMetaInfo', 'getFieldsMetaInfo', 'getPrimaryFieldName',
+                'getRequestFieldName', 'getData', 'addFilter', 'addOrder', 'setLimit',
+                'getSearchCriteria', 'getSearchResult', 'getCollection', 'getSelect'
+            ]
+        );
 
         $this->dataProviderMock->expects($this->once())
             ->method('getCollection')

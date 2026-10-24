@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace Magento\Config\Test\Unit\Block\System\Config\Form\Field;
 
 use Magento\Config\Block\System\Config\Form\Field\Image;
+use Magento\Config\Model\Config\Backend\Image as BackendImage;
 use Magento\Framework\DataObject;
 use Magento\Framework\Escaper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -95,7 +96,7 @@ class ImageTest extends TestCase
                 'showInWebsite' => '1',
                 'showInStore' => '1',
                 'label' => null,
-                'backend_model' => \Magento\Config\Model\Config\Backend\Image::class,
+                'backend_model' => BackendImage::class,
                 'upload_dir' => [
                     'config' => 'system/filesystem/media',
                     'scope_info' => '1',

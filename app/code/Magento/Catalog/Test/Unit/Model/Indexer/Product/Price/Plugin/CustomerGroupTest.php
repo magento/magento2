@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Price\Plugin;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Indexer\Product\Price\DimensionModeConfiguration;
 use Magento\Catalog\Model\Indexer\Product\Price\Plugin\CustomerGroup;
 use Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer;
@@ -87,12 +88,11 @@ class CustomerGroupTest extends TestCase
      *
      * @param $customerGroupId
      * @param $callTimes
-     *
-     * @dataProvider aroundSaveDataProvider
      */
+    #[DataProvider('aroundSaveDataProvider')]
     public function testAroundSave($customerGroupId, $callTimes)
     {
-        $subjectMock = $this->getMockForAbstractClass(GroupRepositoryInterface::class);
+        $subjectMock = $this->createMock(GroupRepositoryInterface::class);
         $customerGroupMock = $this->createPartialMock(
             Group::class,
             ['getId']
@@ -115,20 +115,20 @@ class CustomerGroupTest extends TestCase
      *
      * @return array
      */
-    public function aroundSaveDataProvider()
+    public static function aroundSaveDataProvider()
     {
         return [
             'customer_group_id = 0' => [
-                'customer_group_id' => '0',
-                'create_tables_call_times' => 0
+                'customerGroupId' => '0',
+                'callTimes' => 0
             ],
             'customer_group_id = 1' => [
-                'customer_group_id' => '1',
-                'create_tables_call_times' => 0
+                'customerGroupId' => '1',
+                'callTimes' => 0
             ],
             'customer_group_id = null' => [
-                'customer_group_id' => null,
-                'create_tables_call_times' => 1
+                'customerGroupId' => null,
+                'callTimes' => 1
             ],
         ];
     }

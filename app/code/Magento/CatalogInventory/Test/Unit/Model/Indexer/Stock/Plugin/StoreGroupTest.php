@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\CatalogInventory\Test\Unit\Model\Indexer\Stock\Plugin;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\CatalogInventory\Model\Indexer\Stock\Plugin\StoreGroup;
 use Magento\CatalogInventory\Model\Indexer\Stock\Processor;
 use Magento\Framework\Model\AbstractModel;
@@ -34,8 +35,8 @@ class StoreGroupTest extends TestCase
 
     /**
      * @param array $data
-     * @dataProvider afterSaveDataProvider
      */
+    #[DataProvider('afterSaveDataProvider')]
     public function testAfterSave(array $data): void
     {
         $subjectMock = $this->createMock(Group::class);
@@ -63,7 +64,7 @@ class StoreGroupTest extends TestCase
     /**
      * @return array
      */
-    public function afterSaveDataProvider(): array
+    public static function afterSaveDataProvider(): array
     {
         return [
             [

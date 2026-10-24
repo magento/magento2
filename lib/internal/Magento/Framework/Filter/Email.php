@@ -1,13 +1,17 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Filter;
 
-class Email implements \Zend_Filter_Interface
+use Laminas\Filter\FilterInterface;
+
+class Email implements FilterInterface
 {
     /**
+     * Returns the result of filtering $value.
+     *
      * @param  mixed $value
      * @return mixed
      */

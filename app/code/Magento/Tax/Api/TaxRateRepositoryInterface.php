@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Tax\Api;
@@ -47,7 +46,7 @@ interface TaxRateRepositoryInterface
      * Search TaxRates
      *
      * This call returns an array of objects, but detailed information about each object’s attributes might not be
-     * included. See https://devdocs.magento.com/codelinks/attributes.html#TaxRateRepositoryInterface to
+     * included. See https://developer.adobe.com/commerce/webapi/rest/attributes#TaxRateRepositoryInterface to
      * determine which call to use to get detailed information about all attributes for an object.
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria

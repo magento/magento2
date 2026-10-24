@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,10 +14,14 @@ use Magento\NewRelicReporting\Model\NewRelicWrapper;
 use Magento\NewRelicReporting\Model\Observer\ReportOrderPlacedToNewRelic;
 use Magento\Sales\Model\Order;
 use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\TestCase;
 
 class ReportOrderPlacedToNewRelicTest extends TestCase
 {
+
+    use MockCreationTrait;
+    
     /**
      * @var ReportOrderPlacedToNewRelic
      */
@@ -42,11 +46,11 @@ class ReportOrderPlacedToNewRelicTest extends TestCase
     {
         $this->config = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isNewRelicEnabled'])
+            ->onlyMethods(['isNewRelicEnabled'])
             ->getMock();
         $this->newRelicWrapper = $this->getMockBuilder(NewRelicWrapper::class)
             ->disableOriginalConstructor()
-            ->setMethods(['addCustomParameter'])
+            ->onlyMethods(['addCustomParameter'])
             ->getMock();
 
         $this->model = new ReportOrderPlacedToNewRelic(
@@ -91,10 +95,7 @@ class ReportOrderPlacedToNewRelicTest extends TestCase
         $this->config->expects($this->once())
             ->method('isNewRelicEnabled')
             ->willReturn(true);
-        $event = $this->getMockBuilder(Event::class)
-            ->setMethods(['getOrder'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $event = $this->createPartialMockWithReflection(Event::class, ['getOrder']);
         $eventObserver->expects($this->once())
             ->method('getEvent')
             ->willReturn($event);

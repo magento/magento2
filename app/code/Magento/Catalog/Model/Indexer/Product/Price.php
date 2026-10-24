@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\Indexer\Product;
 
@@ -66,7 +66,6 @@ class Price implements IndexerActionInterface, MviewActionInterface
     public function execute($ids)
     {
         $this->_productPriceIndexerRows->execute($ids);
-        $this->cacheContext->registerEntities(ProductModel::CACHE_TAG, $ids);
     }
 
     /**

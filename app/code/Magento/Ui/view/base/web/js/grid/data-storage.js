@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -186,9 +186,14 @@ define([
                 delay = this.cachedRequestDelay,
                 result;
 
+            if (request.showTotalRecords === undefined) {
+                request.showTotalRecords = true;
+            }
+
             result = {
                 items: this.getByIds(request.ids),
                 totalRecords: request.totalRecords,
+                showTotalRecords: request.showTotalRecords,
                 errorMessage: request.errorMessage
             };
 
@@ -214,10 +219,15 @@ define([
                 this.removeRequest(cached);
             }
 
+            if (data.showTotalRecords === undefined) {
+                data.showTotalRecords = true;
+            }
+
             this._requests.push({
                 ids: this.getIds(data.items),
                 params: params,
                 totalRecords: data.totalRecords,
+                showTotalRecords: data.showTotalRecords,
                 errorMessage: data.errorMessage
             });
 

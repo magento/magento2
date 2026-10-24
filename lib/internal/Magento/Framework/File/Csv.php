@@ -1,8 +1,10 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
+
+declare(strict_types=1);
 
 namespace Magento\Framework\File;
 
@@ -11,7 +13,7 @@ use Magento\Framework\Filesystem\Driver\File;
 /**
  * Csv parse
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Csv
 {

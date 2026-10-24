@@ -1,7 +1,7 @@
 <?php
-/***
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,12 +9,12 @@ namespace Magento\Framework\DB\Test\Unit;
 
 use Magento\Framework\DB\ExpressionConverter;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ExpressionConverterTest extends TestCase
 {
-    /**
-     * @dataProvider shortenEntityNameDataProvider
-     */
+    /**     */
+    #[DataProvider('shortenEntityNameDataProvider')]
     public function testShortenEntityName($in, $prefix, $expectedOut)
     {
         $resultEntityName = ExpressionConverter::shortenEntityName($in, $prefix);
@@ -24,7 +24,7 @@ class ExpressionConverterTest extends TestCase
     /**
      * @return array
      */
-    public function shortenEntityNameDataProvider()
+    public static function shortenEntityNameDataProvider()
     {
         $length64 = '________________________________________________________________';
         $length40 = '________________________________________';
@@ -39,11 +39,16 @@ class ExpressionConverterTest extends TestCase
                 'pre_',
                 'pre_'
             ],
+            'Hashed identifer with long prefix' => [
+                $length64 . '_cannotBeAbbreviated',
+                'pre_' . $length40,
+                '8d703c761bf8a322a999'
+            ],
             'Abbreviated identifier' => [
                 $length40 . 'downloadable_notification_index',
                 'pre_',
                 $length40 . 'dl_ntfc_idx'
-            ],
+            ]
         ];
     }
 

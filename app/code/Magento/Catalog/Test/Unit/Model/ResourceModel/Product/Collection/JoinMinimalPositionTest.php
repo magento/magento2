@@ -1,0 +1,150 @@
+<?php
+/**
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
+ */
+declare(strict_types=1);
+
+namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product\Collection;
+
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\Catalog\Model\ResourceModel\Product\Collection\JoinMinimalPosition;
+use Magento\Framework\DB\Adapter\Pdo\Mysql;
+use Magento\Framework\DB\Select;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+/**
+ * Test for JoinMinimalPosition
+ */
+class JoinMinimalPositionTest extends TestCase
+{
+    /**
+     * @var TableMaintainer|MockObject
+     */
+    private $tableMaintainer;
+
+    /**
+     * @var JoinMinimalPosition
+     */
+    private $model;
+
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->tableMaintainer = $this->createMock(TableMaintainer::class);
+        $this->model = new JoinMinimalPosition(
+            $this->tableMaintainer
+        );
+    }
+
+    /**
+     * Test that correct SQL is generated
+     *
+     * @return void
+     * @throws LocalizedException
+     * @throws \Zend_Db_Select_Exception
+     */
+    public function testExecute(): void
+    {
+        $expectedColumns = [
+            [
+                'e',
+                '*',
+                null
+            ],
+            [
+                'at_status',
+                'value_id',
+                'status'
+            ],
+            [
+                'e',
+                'visibility',
+                null
+            ],
+            [
+                'e',
+                new \Zend_Db_Expr('LEAST(IFNULL(cat_index_3.position, ~0), IFNULL(cat_index_5.position, ~0))'),
+                'cat_index_position'
+            ],
+        ];
+        $expectedFromParts = [
+            'e' => [
+                'joinType' => 'from',
+                'schema' => null,
+                'tableName' => 'catalog_product_entity',
+                'joinCondition' => null,
+            ],
+            'cat_index_3' => [
+                'joinType' => 'left join',
+                'schema' => null,
+                'tableName' => 'catalog_category_product_index',
+                'joinCondition' => 'cat_index_3.product_id=e.entity_id' .
+                    ' AND cat_index_3.store_id=1' .
+                    ' AND cat_index_3.category_id=3',
+            ],
+            'cat_index_5' => [
+                'joinType' => 'left join',
+                'schema' => null,
+                'tableName' => 'catalog_category_product_index',
+                'joinCondition' => 'cat_index_5.product_id=e.entity_id' .
+                    ' AND cat_index_5.store_id=1' .
+                    ' AND cat_index_5.category_id=5',
+            ]
+        ];
+        $categoryIds = [3, 5];
+        $collection = $this->createMock(Collection::class);
+        $connection = $this->createMock(Mysql::class);
+        $select = $this->createPartialMock(Select::class, []);
+
+        $select->reset();
+        $select->from(['e' => 'catalog_product_entity']);
+        $select->columns(['cat_index_position' => 'position']);
+        $select->columns(['status' => 'at_status.value_id']);
+        $select->columns(['visibility']);
+
+        $collection->method('getConnection')
+            ->willReturn($connection);
+        $collection->method('getSelect')
+            ->willReturn($select);
+        $collection->method('getStoreId')
+            ->willReturn(1);
+        $collection->method('addStaticField')
+            ->with('entity_id')
+            ->willReturnSelf();
+
+        $connection->method('getLeastSql')
+            ->willReturn(
+                new \Zend_Db_Expr('LEAST(IFNULL(cat_index_3.position, ~0), IFNULL(cat_index_5.position, ~0))')
+            );
+
+        $connection->method('quoteInto')
+            ->willReturnCallback(function ($query, $value) {
+                return str_replace('?', (string)$value, $query);
+            });
+
+        $connection->method('getIfNullSql')
+            ->willReturnCallback(function ($field, $default) {
+                return "IFNULL($field, $default)";
+            });
+
+        $this->tableMaintainer->method('getMainTable')
+            ->willReturn('catalog_category_product_index');
+
+        $this->model->execute($collection, $categoryIds);
+        $this->assertEquals(
+            $expectedFromParts,
+            $select->getPart(Select::FROM)
+        );
+        $this->assertEquals(
+            $expectedColumns,
+            $select->getPart(Select::COLUMNS)
+        );
+    }
+}

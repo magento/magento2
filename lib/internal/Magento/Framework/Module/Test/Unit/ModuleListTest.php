@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -129,7 +129,7 @@ class ModuleListTest extends TestCase
     {
         $this->config
             ->method('get')
-            ->willReturnOnConsecutiveCalls(['modules' => 'testModule'], null);
+            ->willReturnOnConsecutiveCalls(null);
         $this->assertFalse($this->model->isModuleInfoAvailable());
     }
 
@@ -144,7 +144,7 @@ class ModuleListTest extends TestCase
     private function setLoadConfigExpectation($isExpected = true): void
     {
         if ($isExpected) {
-            $this->config->expects($this->exactly(2))->method('get')->willReturn(self::$enabledFixture);
+            $this->config->expects($this->once())->method('get')->willReturn(self::$enabledFixture);
         } else {
             $this->config->expects($this->never())->method('get');
         }

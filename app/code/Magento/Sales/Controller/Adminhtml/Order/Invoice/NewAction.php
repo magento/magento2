@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Sales\Controller\Adminhtml\Order\Invoice;
@@ -23,7 +23,7 @@ class NewAction extends \Magento\Backend\App\Action implements HttpGetActionInte
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Sales::sales_invoice';
+    public const ADMIN_RESOURCE = 'Magento_Sales::invoice';
 
     /**
      * @var Registry
@@ -57,7 +57,7 @@ class NewAction extends \Magento\Backend\App\Action implements HttpGetActionInte
         Registry $registry,
         PageFactory $resultPageFactory,
         InvoiceService $invoiceService,
-        OrderRepositoryInterface $orderRepository = null
+        ?OrderRepositoryInterface $orderRepository = null
     ) {
         parent::__construct($context);
 

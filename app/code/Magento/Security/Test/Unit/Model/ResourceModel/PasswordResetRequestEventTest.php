@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -43,7 +43,7 @@ class PasswordResetRequestEventTest extends TestCase
 
         $this->resourceMock = $this->createMock(ResourceConnection::class);
 
-        $this->dbAdapterMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $this->dbAdapterMock = $this->createMock(AdapterInterface::class);
 
         $this->model = $objectManager->getObject(
             PasswordResetRequestEvent::class,

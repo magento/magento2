@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -27,7 +27,7 @@ class DirTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->moduleRegistryMock = $this->getMockForAbstractClass(ComponentRegistrarInterface::class);
+        $this->moduleRegistryMock = $this->createMock(ComponentRegistrarInterface::class);
 
         $this->_model = new Dir($this->moduleRegistryMock);
     }

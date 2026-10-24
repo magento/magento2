@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -74,9 +75,9 @@ class LoggerTest extends TestCase
     /**
      * @param int $customerId
      * @param array $data
-     * @dataProvider logDataProvider
      * @return void
      */
+    #[DataProvider('logDataProvider')]
     public function testLog($customerId, $data)
     {
         $tableName = 'customer_log_table_name';
@@ -106,7 +107,7 @@ class LoggerTest extends TestCase
     /**
      * @return array
      */
-    public function logDataProvider()
+    public static function logDataProvider()
     {
         return [
             [235, ['last_login_at' => '2015-03-04 12:00:00']],
@@ -117,9 +118,9 @@ class LoggerTest extends TestCase
     /**
      * @param int $customerId
      * @param array $data
-     * @dataProvider getDataProvider
      * @return void
      */
+    #[DataProvider('getDataProvider')]
     public function testGet($customerId, $data)
     {
         $logArguments = [
@@ -164,7 +165,7 @@ class LoggerTest extends TestCase
     /**
      * @return array
      */
-    public function getDataProvider()
+    public static function getDataProvider()
     {
         return [
             [

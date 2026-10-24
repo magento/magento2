@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -48,9 +48,11 @@ class StockStatusFilter implements ProductFilterInterface
         switch ($value) {
             case self::IN_STOCK:
                 $this->stockHelper->addInStockFilterToCollection($collection);
+                $collection->setFlag(self::NAME . '_filter_applied');
                 break;
             case self::OUT_OF_STOCK:
                 $this->stockHelper->addOutOfStockFilterToCollection($collection);
+                $collection->setFlag(self::NAME . '_filter_applied');
                 break;
         }
         return $collection;

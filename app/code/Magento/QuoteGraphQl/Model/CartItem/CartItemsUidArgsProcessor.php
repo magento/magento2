@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\QuoteGraphQl\Model\CartItem;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\ArgumentsProcessorInterface;
 use Magento\Framework\GraphQl\Query\Uid;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Category UID processor class for category uid and category id arguments
@@ -24,17 +25,25 @@ class CartItemsUidArgsProcessor implements ArgumentsProcessorInterface
     private $uidEncoder;
 
     /**
-     * @param Uid $uidEncoder
+     * @var CustomizableOptionUidArgsProcessor
      */
-    public function __construct(Uid $uidEncoder)
+    private $optionUidArgsProcessor;
+
+    /**
+     * @param Uid $uidEncoder
+     * @param CustomizableOptionUidArgsProcessor|null $optionUidArgsProcessor
+     */
+    public function __construct(Uid $uidEncoder, ?CustomizableOptionUidArgsProcessor $optionUidArgsProcessor = null)
     {
         $this->uidEncoder = $uidEncoder;
+        $this->optionUidArgsProcessor =
+            $optionUidArgsProcessor ?: ObjectManager::getInstance()->get(CustomizableOptionUidArgsProcessor::class);
     }
 
     /**
      * Process the updateCartItems arguments for cart uids
      *
-     * @param string $fieldName,
+     * @param string $fieldName
      * @param array $args
      * @return array
      * @throws GraphQlInputException
@@ -57,6 +66,10 @@ class CartItemsUidArgsProcessor implements ArgumentsProcessorInterface
                 } elseif (!empty($uidFilter)) {
                     $args[$filterKey]['cart_items'][$key][self::ID] = $this->uidEncoder->decode((string)$uidFilter);
                     unset($args[$filterKey]['cart_items'][$key][self::UID]);
+                }
+                if (!empty($cartItem['customizable_options'])) {
+                    $args[$filterKey]['cart_items'][$key]['customizable_options'] =
+                        $this->optionUidArgsProcessor->process($fieldName, $cartItem['customizable_options']);
                 }
             }
         }

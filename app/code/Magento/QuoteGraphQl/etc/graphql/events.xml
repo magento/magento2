@@ -1,13 +1,16 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
     <event name="sales_model_service_quote_submit_success">
         <observer name="sendEmail" instance="Magento\Quote\Observer\SubmitObserver"/>
         <observer name="sendInvoiceEmail" instance="Magento\Quote\Observer\SendInvoiceEmailObserver"/>
+    </event>
+    <event name="sales_quote_item_qty_set_after">
+        <observer name="checkAndUpdateQty" instance="Magento\QuoteGraphQl\Observer\CheckAndUpdateQtyObserver"/>
     </event>
 </config>

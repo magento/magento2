@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,16 +11,14 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Reports\Model\ResourceModel\Helper;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class HelperTest extends TestCase
 {
-    /**
-     * @var Helper
-     */
-    protected $helper;
-
     /**
      * @var ResourceConnection|MockObject
      */
@@ -30,6 +28,11 @@ class HelperTest extends TestCase
      * @var AdapterInterface|MockObject
      */
     protected $connectionMock;
+
+    /**
+     * @var StoreManagerInterface
+     */
+    private StoreManagerInterface $storeManager;
 
     /**
      * {@inheritDoc}
@@ -48,9 +51,7 @@ class HelperTest extends TestCase
             ->method('getConnection')
             ->willReturn($this->connectionMock);
 
-        $this->helper = new Helper(
-            $this->resourceMock
-        );
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
     }
 
     /**
@@ -67,21 +68,29 @@ class HelperTest extends TestCase
             ->method('insertOnDuplicate')
             ->with($mainTable, $data, array_keys($data));
 
-        $this->helper->mergeVisitorProductIndex($mainTable, $data, $matchFields);
+        $helper = new Helper(
+            $this->resourceMock,
+            $this->storeManager
+        );
+        $helper->mergeVisitorProductIndex($mainTable, $data, $matchFields);
     }
 
     /**
      * @param string $type
      * @param array $result
-     * @dataProvider typesDataProvider
+     * @param bool $exists
      * @return void
      */
-    public function testUpdateReportRatingPos($type, $result)
+    #[DataProvider('typesDataProvider')]
+    public function testUpdateReportRatingPos($type, $result, $exists)
     {
         $mainTable = 'mainTable';
         $column = 'column';
         $aggregationTable = 'aggregationTable';
 
+        $store = $this->createMock(StoreInterface::class);
+        $store->expects($this->once())->method('getId')->willReturn(1);
+        $this->storeManager->expects($this->once())->method('getStores')->willReturn([$store]);
         $selectMock = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -107,22 +116,55 @@ class HelperTest extends TestCase
             ->expects($this->any())
             ->method('select')
             ->willReturn($selectMock);
+        $this->connectionMock
+            ->expects($this->atLeastOnce())
+            ->method('tableColumnExists')
+            ->willReturn($exists);
 
-        $this->helper->updateReportRatingPos($this->connectionMock, $type, $column, $mainTable, $aggregationTable);
+        $helper = new Helper(
+            $this->resourceMock,
+            $this->storeManager
+        );
+        $helper->updateReportRatingPos($this->connectionMock, $type, $column, $mainTable, $aggregationTable);
     }
 
     /**
      * @return array
      */
-    public function typesDataProvider()
+    public static function typesDataProvider()
     {
-        $mResult = ['period', 'store_id', 'product_id', 'product_name', 'product_price', 'column', 'rating_pos'];
-        $dResult = ['period', 'store_id', 'product_id', 'product_name', 'product_price', 'id', 'column', 'rating_pos'];
+        $mResult = [
+            'period',
+            'store_id',
+            'product_id',
+            'product_name',
+            'product_price',
+            'column',
+            'rating_pos'
+        ];
+        $dResult = [
+            'period',
+            'store_id',
+            'product_id',
+            'product_name',
+            'product_price',
+            'id',
+            'column',
+            'rating_pos'
+        ];
         return [
-            ['type' => 'year', 'result' => $mResult],
-            ['type' => 'month', 'result' => $mResult],
-            ['type' => 'day', 'result' => $dResult],
-            ['type' => null, 'result' => $mResult]
+            ['type' => 'year', 'result' => $mResult, 'exists' => false],
+            ['type' => 'month', 'result' => [
+                'store_id',
+                'product_id',
+                'product_name',
+                'product_price',
+                'period',
+                'column',
+                'rating_pos'
+            ], 'exists' => true],
+            ['type' => 'day', 'result' => $dResult, 'exists' => false],
+            ['type' => null, 'result' => $mResult, 'exists' => false]
         ];
     }
 }

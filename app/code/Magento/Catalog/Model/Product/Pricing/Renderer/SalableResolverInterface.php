@@ -1,13 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Model\Product\Pricing\Renderer;
 
 /**
  * Interface resolver checks whether product available for sale
+ *
+ * @api
  */
 interface SalableResolverInterface
 {

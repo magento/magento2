@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\View\Design\Fallback\Rule;
 
@@ -9,6 +9,8 @@ namespace Magento\Framework\View\Design\Fallback\Rule;
  * Rule Interface
  *
  * Interface for search path resolution during fallback process
+ *
+ * @api
  */
 interface RuleInterface
 {

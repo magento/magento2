@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\InstantPurchase\Model\QuoteManagement;
 
@@ -57,9 +57,11 @@ class QuoteCreation
         $quote->setCustomer($customer->getDataModel());
         $quote->setCustomerIsGuest(0);
         $quote->getShippingAddress()
-            ->importCustomerAddressData($shippingAddress->getDataModel());
+            ->importCustomerAddressData($shippingAddress->getDataModel())
+            ->setCollectShippingRates(true);
         $quote->getBillingAddress()
-            ->importCustomerAddressData($billingAddress->getDataModel());
+            ->importCustomerAddressData($billingAddress->getDataModel())
+            ->setCollectShippingRates(true);
         $quote->setInventoryProcessed(false);
         return $quote;
     }

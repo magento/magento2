@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Security\Model\Plugin;
 
@@ -95,7 +95,7 @@ class AuthSessionTest extends \PHPUnit\Framework\TestCase
         );
         $adminSessionInfoId = $this->authSession->getAdminSessionInfoId();
         $prolongsDiff = log($this->securityConfig->getAdminSessionLifetime()) - 2; // X from comment above
-        $dateInPast = $this->dateTime->formatDate($this->authSession->getUpdatedAt() - $prolongsDiff);
+        $dateInPast = $this->dateTime->formatDate((int) ($this->authSession->getUpdatedAt() - $prolongsDiff));
         $this->adminSessionsManager->getCurrentSession()
             ->setData(
                 'updated_at',
@@ -127,7 +127,7 @@ class AuthSessionTest extends \PHPUnit\Framework\TestCase
         );
         $adminSessionInfoId = $this->authSession->getAdminSessionInfoId();
         $prolongsDiff = 4 * log($this->securityConfig->getAdminSessionLifetime()) + 2; // X from comment above
-        $dateInPast = $this->dateTime->formatDate($this->authSession->getUpdatedAt() - $prolongsDiff);
+        $dateInPast = $this->dateTime->formatDate((int) ($this->authSession->getUpdatedAt() - $prolongsDiff));
         $this->adminSessionsManager->getCurrentSession()
             ->setData(
                 'updated_at',
@@ -171,7 +171,7 @@ class AuthSessionTest extends \PHPUnit\Framework\TestCase
         // need to trigger a prolong
         $adminSessionInfoId = $this->authSession->getAdminSessionInfoId();
         $prolongsDiff = 4 * log($this->securityConfig->getAdminSessionLifetime()) + 2;
-        $dateInPast = $this->dateTime->formatDate($this->authSession->getUpdatedAt() - $prolongsDiff);
+        $dateInPast = $this->dateTime->formatDate((int) ($this->authSession->getUpdatedAt() - $prolongsDiff));
         $this->adminSessionsManager->getCurrentSession()
             ->setData(
                 'updated_at',

@@ -1,15 +1,17 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Paypal\Test\Unit\Model\Payment\Method\Billing;
 
+use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Framework\DataObject;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Payment\Observer\AbstractDataAssignObserver;
 use Magento\Paypal\Model\Billing\Agreement;
@@ -26,6 +28,7 @@ use PHPUnit\Framework\TestCase;
  */
 class AbstractAgreementTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var ManagerInterface|MockObject
      */
@@ -45,15 +48,17 @@ class AbstractAgreementTest extends TestCase
     {
         $helper = new ObjectManager($this);
 
-        $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
-            ->setMethods(['dispatch'])
-            ->getMockForAbstractClass();
+        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
 
-        $this->agreementFactory = $this->getMockBuilder(AgreementFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
+        $this->agreementFactory = $this->createMock(AgreementFactory::class);
 
+        $objects = [
+            [
+                DirectoryHelper::class,
+                $this->createMock(DirectoryHelper::class)
+            ]
+        ];
+        $helper->prepareObjectManager($objects);
         $this->payment = $helper->getObject(
             AbstractAgreementStub::class,
             [
@@ -76,21 +81,19 @@ class AbstractAgreementTest extends TestCase
                 ]
             ]
         );
-        $paymentInfo = $this->getMockBuilder(Payment::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $quote = $this->getMockBuilder(Quote::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['__wakeup', 'getCustomerId'])
-            ->getMock();
+        $paymentInfo = $this->createMock(Payment::class);
+        $quote = $this->createPartialMockWithReflection(
+            Quote::class,
+            ['getCustomerId']
+        );
 
         $this->payment->setInfoInstance($paymentInfo);
         $this->parentAssignDataExpectation($data);
 
-        $agreementModel = $this->getMockBuilder(Agreement::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['__wakeup', 'load', 'getCustomerId', 'getId', 'getReferenceId'])
-            ->getMock();
+        $agreementModel = $this->createPartialMockWithReflection(
+            Agreement::class,
+            ['load', 'getId', 'getCustomerId', 'getReferenceId']
+        );
 
         $this->agreementFactory->expects(static::once())
             ->method('create')
@@ -121,8 +124,8 @@ class AbstractAgreementTest extends TestCase
             ->method('setAdditionalInformation')
             ->willReturnMap(
                 [
-                    AbstractAgreement::TRANSPORT_BILLING_AGREEMENT_ID, $baId,
-                    AbstractAgreement::PAYMENT_INFO_REFERENCE_ID, $referenceId
+                    [AbstractAgreement::TRANSPORT_BILLING_AGREEMENT_ID, $baId],
+                    [AbstractAgreement::PAYMENT_INFO_REFERENCE_ID, $referenceId]
                 ]
             );
 

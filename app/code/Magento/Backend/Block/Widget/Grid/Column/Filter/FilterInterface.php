@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
 
@@ -16,21 +16,24 @@ use Magento\Backend\Block\Widget\Grid\Column;
 interface FilterInterface
 {
     /**
+     * Retrieve column related to filter
+     *
      * @return Column
-     * @api
      */
     public function getColumn();
 
     /**
+     * Set column related to filter
+     *
      * @param Column $column
      * @return AbstractFilter
-     * @api
      */
     public function setColumn($column);
 
     /**
+     * Retrieve filter html
+     *
      * @return string
-     * @api
      */
     public function getHtml();
 }

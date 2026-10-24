@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,15 +16,11 @@ use Magento\Framework\View\TemplateEngineInterface;
 class Php implements TemplateEngineInterface
 {
     /**
-     * Current block
-     *
      * @var BlockInterface
      */
     protected $_currentBlock;
 
     /**
-     * Helper factory
-     *
      * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $_helperFactory;
@@ -70,7 +66,7 @@ class Php implements TemplateEngineInterface
             extract($dictionary, EXTR_SKIP);
             include $fileName;
             $this->_currentBlock = $tmpBlock;
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             ob_end_clean();
             throw $exception;
         }
@@ -125,8 +121,12 @@ class Php implements TemplateEngineInterface
     /**
      * Get helper singleton
      *
-     * @param string $className
-     * @return \Magento\Framework\App\Helper\AbstractHelper
+     * @template T of \Magento\Framework\App\Helper\AbstractHelper
+     *
+     * @param class-string<T> $className
+     *
+     * @return T
+     *
      * @throws \LogicException
      */
     public function helper($className)

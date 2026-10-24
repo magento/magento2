@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -11,6 +11,7 @@ namespace Magento\Framework\MessageQueue;
 use Magento\TestFramework\Helper\Amqp;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @see dev/tests/integration/_files/Magento/TestModuleMessageQueueConfiguration
@@ -31,31 +32,49 @@ class TopologyTest extends TestCase
     private $helper;
 
     /**
+     * @var string
+     */
+    private $connectionType;
+
+    /**
      * @return void
      */
     protected function setUp(): void
     {
-        $this->helper = Bootstrap::getObjectManager()->create(Amqp::class);
+        $objectManager = Bootstrap::getObjectManager();
+        /** @var DefaultValueProvider $defaultValueProvider */
+        $defaultValueProvider = $objectManager->get(DefaultValueProvider::class);
+        $this->connectionType = $defaultValueProvider->getConnection();
 
-        if (!$this->helper->isAvailable()) {
-            $this->fail('This test relies on RabbitMQ Management Plugin.');
+        if ($this->connectionType === 'amqp') {
+            $this->helper = Bootstrap::getObjectManager()->create(Amqp::class);
+
+            if (!$this->helper->isAvailable()) {
+                $this->fail('This test relies on RabbitMQ Management Plugin.');
+            }
+
+            $this->declaredExchanges = $this->helper->getExchanges();
         }
-
-        $this->declaredExchanges = $this->helper->getExchanges();
     }
 
     /**
-     * @dataProvider exchangeDataProvider
      * @param array $expectedConfig
      * @param array $bindingConfig
      */
+    #[DataProvider('exchangeDataProvider')]
     public function testTopologyInstallation(array $expectedConfig, array $bindingConfig): void
     {
+        if ($this->connectionType === 'stomp') {
+            $this->markTestSkipped('AMQP test skipped because STOMP connection is available.
+            This test is AMQP-specific.');
+        }
+
         $name = $expectedConfig['name'];
         $this->assertArrayHasKey($name, $this->declaredExchanges);
         unset(
             $this->declaredExchanges[$name]['message_stats'],
-            $this->declaredExchanges[$name]['user_who_performed_action']
+            $this->declaredExchanges[$name]['user_who_performed_action'],
+            $this->declaredExchanges[$name]['policy']
         );
 
         $this->assertEquals(
@@ -81,13 +100,14 @@ class TopologyTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function exchangeDataProvider(): array
+    public static function exchangeDataProvider(): array
     {
+        $virtualHost = defined('RABBITMQ_VIRTUALHOST') ? RABBITMQ_VIRTUALHOST : Amqp::DEFAULT_VIRTUALHOST;
         return [
             'magento-topic-based-exchange1' => [
-                'exchangeConfig' => [
+                'expectedConfig' => [
                     'name' => 'magento-topic-based-exchange1',
-                    'vhost' => '/',
+                    'vhost' => $virtualHost,
                     'type' => 'topic',
                     'durable' => true,
                     'auto_delete' => false,
@@ -99,7 +119,7 @@ class TopologyTest extends TestCase
                 'bindingConfig' => [
                     [
                         'source' => 'magento-topic-based-exchange1',
-                        'vhost' => '/',
+                        'vhost' => $virtualHost,
                         'destination' => 'topic-queue1',
                         'destination_type' => 'queue',
                         'routing_key' => 'anotherTopic1',
@@ -110,9 +130,9 @@ class TopologyTest extends TestCase
                 ]
             ],
             'magento-topic-based-exchange2' => [
-                'exchangeConfig' => [
+                'expectedConfig' => [
                     'name' => 'magento-topic-based-exchange2',
-                    'vhost' => '/',
+                    'vhost' => $virtualHost,
                     'type' => 'topic',
                     'durable' => true,
                     'auto_delete' => false,
@@ -125,7 +145,7 @@ class TopologyTest extends TestCase
                 'bindingConfig' => [
                     [
                         'source' => 'magento-topic-based-exchange2',
-                        'vhost' => '/',
+                        'vhost' => $virtualHost,
                         'destination' => 'topic-queue2',
                         'destination_type' => 'queue',
                         'routing_key' => 'anotherTopic2',
@@ -138,9 +158,9 @@ class TopologyTest extends TestCase
                 ]
             ],
             'magento-topic-based-exchange3' => [
-                'exchangeConfig' => [
+                'expectedConfig' => [
                     'name' => 'magento-topic-based-exchange3',
-                    'vhost' => '/',
+                    'vhost' => $virtualHost,
                     'type' => 'topic',
                     'durable' => false,
                     'auto_delete' => true,
@@ -150,9 +170,9 @@ class TopologyTest extends TestCase
                 'bindingConfig' => [],
             ],
             'magento-topic-based-exchange4' => [
-                'exchangeConfig' => [
+                'expectedConfig' => [
                     'name' => 'magento-topic-based-exchange4',
-                    'vhost' => '/',
+                    'vhost' => $virtualHost,
                     'type' => 'topic',
                     'durable' => true,
                     'auto_delete' => false,
@@ -162,7 +182,7 @@ class TopologyTest extends TestCase
                 'bindingConfig' => [
                     [
                         'source' => 'magento-topic-based-exchange4',
-                        'vhost' => '/',
+                        'vhost' => $virtualHost,
                         'destination' => 'topic-queue1',
                         'destination_type' => 'queue',
                         'routing_key' => '#',
@@ -172,7 +192,7 @@ class TopologyTest extends TestCase
                     ],
                     [
                         'source' => 'magento-topic-based-exchange4',
-                        'vhost' => '/',
+                        'vhost' => $virtualHost,
                         'destination' => 'topic-queue2',
                         'destination_type' => 'queue',
                         'routing_key' => '*.*.*',

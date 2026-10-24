@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -93,11 +93,15 @@ class SynchronizerTest extends TestCase
             ->willReturnCallback(function ($arg) {
                 return 'remote:' . $arg;
             });
+
         $localDriver->expects(self::once())
             ->method('copy')
-            ->withConsecutive(
-                [__DIR__ . '/_files/test/root_file.txt', 'remote:/_files/test/root_file.txt', $remoteDriver]
-            );
+            ->willReturnCallback(function ($arg1, $arg2, $arg3) use ($remoteDriver) {
+                if ($arg1 == __DIR__ . '/_files/test/root_file.txt' &&
+                $arg2 == 'remote:/_files/test/root_file.txt' && $arg3 == $remoteDriver) {
+                    return null;
+                }
+            });
 
         self::assertSame(
             [

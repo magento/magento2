@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Checkout\Block\Cart\Item;
 
@@ -124,7 +124,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
         \Magento\Framework\Module\Manager $moduleManager,
         InterpretationStrategyInterface $messageInterpretationStrategy,
         array $data = [],
-        ItemResolverInterface $itemResolver = null
+        ?ItemResolverInterface $itemResolver = null
     ) {
         $this->priceCurrency = $priceCurrency;
         $this->imageBuilder = $imageBuilder;

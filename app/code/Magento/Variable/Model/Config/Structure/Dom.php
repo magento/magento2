@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -42,7 +42,7 @@ class Dom extends \Magento\Framework\Config\Dom
         $typeAttributeName = null,
         $schemaFile = null,
         $errorFormat = self::ERROR_FORMAT_DEFAULT,
-        AvailableVariables $availableVariables = null
+        ?AvailableVariables $availableVariables = null
     ) {
         $this->structureConfig = $availableVariables
             ?: ObjectManager::getInstance()->get(AvailableVariables::class);

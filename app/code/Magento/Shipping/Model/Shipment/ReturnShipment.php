@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Shipping\Model\Shipment;
 
@@ -60,8 +60,6 @@ namespace Magento\Shipping\Model\Shipment;
  * @method string getShippingMethod()
  * @method \Magento\Shipping\Model\Shipment\Request setPackageWeight(float $value)
  * @method float getPackageWeight()
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class ReturnShipment extends \Magento\Framework\DataObject
 {

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Framework\MessageQueue\Test\Unit\Consumer\Config\Validator;
 use Magento\Framework\MessageQueue\Consumer\Config\Validator\FieldsTypes as FieldsTypesValidator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class FieldsTypesTest extends TestCase
 {
@@ -27,10 +28,9 @@ class FieldsTypesTest extends TestCase
         $this->validator = $objectManager->getObject(FieldsTypesValidator::class);
     }
 
-    /**
-     * @dataProvider validConfigDataProvider
-     * @param array $configData
+    /**     * @param array $configData
      */
+    #[DataProvider('validConfigDataProvider')]
     public function testValidateValid($configData)
     {
         $this->validator->validate($configData);
@@ -39,7 +39,7 @@ class FieldsTypesTest extends TestCase
     /**
      * @return array
      */
-    public function validConfigDataProvider()
+    public static function validConfigDataProvider()
     {
         return [
             'valid' => [
@@ -120,11 +120,10 @@ class FieldsTypesTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider invalidConfigDataProvider
-     * @param array $configData
+    /**     * @param array $configData
      * @param string $expectedExceptionMessage
      */
+    #[DataProvider('invalidConfigDataProvider')]
     public function testValidateInvalid($configData, $expectedExceptionMessage)
     {
         $this->expectException('\LogicException');
@@ -137,7 +136,7 @@ class FieldsTypesTest extends TestCase
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function invalidConfigDataProvider()
+    public static function invalidConfigDataProvider()
     {
         return [
             'invalid name' => [

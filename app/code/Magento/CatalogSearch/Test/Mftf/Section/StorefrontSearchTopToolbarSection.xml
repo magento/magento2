@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontSearchTopToolbarSection">
+        <element name="searchResultsToolbar" type="block" selector=".toolbar.toolbar-products" timeout="30"/>
+        <element name="gridMode" type="button" selector=".toolbar.toolbar-products .modes .mode-grid" timeout="30"/>
+        <element name="listMode" type="button" selector=".toolbar.toolbar-products .modes .mode-list" timeout="30"/>
+        <element name="sortByDropdown" type="select" selector=".toolbar.toolbar-products .sorter #sorter" timeout="30"/>
+        <element name="sortDirectionAsc" type="button" selector=".toolbar.toolbar-products .sorter a.sort-asc" timeout="30"/>
+        <element name="sortDirectionDesc" type="button" selector=".toolbar.toolbar-products .sorter a.sort-desc" timeout="30"/>
+        <element name="showDropdown" type="select" selector=".toolbar.toolbar-products .limiter #limiter" timeout="30"/>
+    </section>
+</sections>

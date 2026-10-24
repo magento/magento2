@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,9 +11,13 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Filter\Translit;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class TranslitTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Translit
      */
@@ -29,9 +33,8 @@ class TranslitTest extends TestCase
      * @param string $testString
      * @param string $result
      * @param string $resultIconv
-     * @param bool $isIconv
-     * @dataProvider filterDataProvider
-     */
+     * @param bool $isIconv     */
+    #[DataProvider('filterDataProvider')]
     public function testFilter($testString, $result, $resultIconv, $isIconv)
     {
         if ($isIconv) {
@@ -44,11 +47,12 @@ class TranslitTest extends TestCase
     /**
      * @return array
      */
-    public function filterDataProvider()
+    public static function filterDataProvider()
     {
         $isIconv = '"libiconv"' == ICONV_IMPL;
         return [
             ['test', 'test', 'test', $isIconv],
+            [null, '', '', $isIconv],
             ['привет мир', 'privet mir', 'privet mir', $isIconv],
             [
                 'Weiß, Goldmann, Göbel, Weiss, Göthe, Goethe und Götz',
@@ -69,12 +73,10 @@ class TranslitTest extends TestCase
 
     public function testFilterConfigured()
     {
-        $config = $this->getMockBuilder(
-            ScopeConfigInterface::class
-        )->disableOriginalConstructor()
-            ->setMethods(
-                ['getValue', 'setValue', 'isSetFlag']
-            )->getMock();
+        $config = $this->createPartialMockWithReflection(
+            ScopeConfigInterface::class,
+            ['setValue', 'getValue', 'isSetFlag']
+        );
 
         $config->expects(
             $this->once()

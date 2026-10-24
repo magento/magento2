@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -83,42 +83,20 @@ class UploadTest extends TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->storageDatabase = $this->getMockBuilder(Database::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['saveFile'])
-            ->getMock();
-        $this->uploaderFactory = $this->getMockBuilder(UploaderFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $this->resultFactory = $this->getMockBuilder(ResultFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $this->context = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->request = $this->getMockForAbstractClass(RequestInterface::class);
-        $this->response = $this->getMockBuilder(ResponseInterface::class)
-            ->addMethods(['setHttpResponseCode', 'clearBody', 'sendHeaders', 'setHeader'])
-            ->onlyMethods(['sendResponse'])
-            ->getMockForAbstractClass();
+        $this->storageDatabase = $this->createPartialMock(Database::class, ['saveFile']);
+        $this->uploaderFactory = $this->createPartialMock(UploaderFactory::class, ['create']);
+        $this->resultFactory = $this->createPartialMock(ResultFactory::class, ['create']);
+        $this->context = $this->createMock(Context::class);
+        $this->request = $this->createMock(RequestInterface::class);
+        $this->response = $this->createMock(ResponseInterface::class);
         $this->fileHelper = $this->createPartialMock(File::class, [
             'uploadFromTmp'
         ]);
-        $this->context->expects($this->any())
-            ->method('getRequest')
-            ->willReturn($this->request);
-        $this->context->expects($this->any())
-            ->method('getResultFactory')
-            ->willReturn($this->resultFactory);
+        $this->context->method('getRequest')->willReturn($this->request);
+        $this->context->method('getResultFactory')->willReturn($this->resultFactory);
 
-        $this->link = $this->getMockBuilder(Link::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->sample = $this->getMockBuilder(Sample::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->link = $this->createMock(Link::class);
+        $this->sample = $this->createMock(Sample::class);
 
         $this->upload = $this->objectManagerHelper->getObject(
             Upload::class,
@@ -140,13 +118,8 @@ class UploadTest extends TestCase
             'path' => 'path',
             'file' => 'file'
         ];
-        $uploader = $this->getMockBuilder(Uploader::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $resultJson = $this->getMockBuilder(Json::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setData'])
-            ->getMock();
+        $uploader = $this->createMock(Uploader::class);
+        $resultJson = $this->createPartialMock(Json::class, ['setData']);
         $this->request->expects($this->once())->method('getParam')->with('type')->willReturn('samples');
         $this->sample->expects($this->once())->method('getBaseTmpPath')->willReturn('base_tmp_path');
         $this->uploaderFactory->expects($this->once())->method('create')->willReturn($uploader);

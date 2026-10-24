@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 /* eslint-disable max-nested-callbacks */
@@ -35,8 +35,7 @@ define([
         });
 
         it('Checks if loader is called before redirect to success page.', function () {
-            spyOn(window.location, 'replace').and.returnValue(false);
-
+            spyOn(RedirectOnSuccess, 'redirectToSuccessPage').and.callFake(function () {});
             RedirectOnSuccess.execute();
 
             expect(FullScreenLoader.startLoader).toHaveBeenCalled();

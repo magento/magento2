@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -52,8 +52,8 @@ class CreditMemoItems implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         if (!(($value['model'] ?? null) instanceof CreditmemoInterface)) {
             throw new LocalizedException(__('"model" value should be specified'));
@@ -148,7 +148,7 @@ class CreditMemoItems implements ResolverInterface
             $discounts[] = [
                 'label' => $associatedOrder->getDiscountDescription() ?? __('Discount'),
                 'amount' => [
-                    'value' => abs($creditmemoItem->getDiscountAmount()) ?? 0,
+                    'value' => abs((float) $creditmemoItem->getDiscountAmount()),
                     'currency' => $associatedOrder->getOrderCurrencyCode()
                 ]
             ];

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -10,6 +10,7 @@ namespace Magento\Ui\Component\Form\Element;
 
 use Magento\Framework\Data\OptionSourceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -32,10 +33,8 @@ class MultiSelectTest extends TestCase
 
     /**
      * Options data to verify
-     *
-     * @return array
      */
-    public function getTestOptions(): array
+    public static function getTestOptions(): array
     {
         return [
             'List' => [
@@ -72,12 +71,8 @@ class MultiSelectTest extends TestCase
 
     /**
      * Check that options received from an options provider properly initiated.
-     *
-     * @param array|OptionSourceInterface $options Options provided
-     * @param array $expected Expected initialized options
-     * @return void
-     * @dataProvider getTestOptions
      */
+    #[DataProvider('getTestOptions')]
     public function testOptions($options, array $expected): void
     {
         /** @var MultiSelect $component */

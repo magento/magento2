@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -48,16 +48,9 @@ class ConnectionManagerTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->clientFactory = $this->getMockBuilder(ClientFactoryInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMockForAbstractClass();
-        $this->clientConfig = $this->getMockBuilder(ClientOptionsInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->clientFactory = $this->createPartialMock(ClientFactoryInterface::class, ['create']);
+        $this->clientConfig = $this->createMock(ClientOptionsInterface::class);
 
         $this->clientConfig->expects($this->any())
             ->method('prepareClientOptions')
@@ -86,9 +79,7 @@ class ConnectionManagerTest extends TestCase
      */
     public function testGetConnectionSuccessfull()
     {
-        $client = $this->getMockBuilder(ClientInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $client = $this->createMock(ClientInterface::class);
         $this->clientFactory->expects($this->once())
             ->method('create')
             ->willReturn($client);

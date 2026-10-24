@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,7 @@ use Magento\Customer\Model\ResourceModel\Address;
 use Magento\Framework\Exception\InputException;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -91,14 +92,13 @@ class UpdateAddressTest extends TestCase
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Customer/_files/customer_address.php
      *
-     * @dataProvider updateAddressIsDefaultDataProvider
-     *
      * @param bool $isShippingDefault
      * @param bool $isBillingDefault
      * @param int|null $expectedShipping
      * @param int|null $expectedBilling
      * @return void
      */
+    #[DataProvider('updateAddressIsDefaultDataProvider')]
     public function testUpdateAddressIsDefault(
         bool $isShippingDefault,
         bool $isBillingDefault,
@@ -124,7 +124,7 @@ class UpdateAddressTest extends TestCase
      *
      * @return array
      */
-    public function updateAddressIsDefaultDataProvider(): array
+    public static function updateAddressIsDefaultDataProvider(): array
     {
         return [
             'update_shipping_address_default' => [true, false, 1, null],
@@ -138,12 +138,11 @@ class UpdateAddressTest extends TestCase
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Customer/_files/customer_address.php
      *
-     * @dataProvider updateAddressesDataProvider
-     *
      * @param array $updateData
      * @param array $expectedData
      * @return void
      */
+    #[DataProvider('updateAddressesDataProvider')]
     public function testUpdateAddress(array $updateData, array $expectedData): void
     {
         $this->processedAddressesIds[] = 1;
@@ -163,7 +162,7 @@ class UpdateAddressTest extends TestCase
      *
      * @return array
      */
-    public function updateAddressesDataProvider(): array
+    public static function updateAddressesDataProvider(): array
     {
         return [
             'required_field_telephone' => [
@@ -230,12 +229,11 @@ class UpdateAddressTest extends TestCase
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Customer/_files/customer_address.php
      *
-     * @dataProvider updateWrongAddressesDataProvider
-     *
      * @param array $updateData
      * @param \Exception $expectException
      * @return void
      */
+    #[DataProvider('updateWrongAddressesDataProvider')]
     public function testExceptionThrownDuringUpdateAddress(array $updateData, \Exception $expectException): void
     {
         $this->processedAddressesIds[] = 1;
@@ -252,7 +250,7 @@ class UpdateAddressTest extends TestCase
      *
      * @return array
      */
-    public function updateWrongAddressesDataProvider(): array
+    public static function updateWrongAddressesDataProvider(): array
     {
         return [
             'required_field_empty_telephone' => [

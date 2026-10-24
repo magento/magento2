@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Ui\Api\Data;
@@ -24,7 +24,6 @@ interface BookmarkSearchResultsInterface extends \Magento\Framework\Api\SearchRe
     /**
      * Set customers list
      *
-     * @api
      * @param \Magento\Ui\Api\Data\BookmarkInterface[] $items
      * @return $this
      */

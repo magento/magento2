@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,7 +10,9 @@ namespace Magento\Reports\Test\Unit\Observer;
 use Magento\Catalog\Model\Product;
 use Magento\Customer\Model\Session;
 use Magento\Customer\Model\Visitor;
+use Magento\Framework\Event as FrameworkEvent;
 use Magento\Framework\Event\Observer;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Reports\Model\Event;
 use Magento\Reports\Model\EventFactory;
@@ -31,6 +33,8 @@ use PHPUnit\Framework\TestCase;
  */
 class CatalogProductViewObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var CatalogProductViewObserver
      */
@@ -103,7 +107,7 @@ class CatalogProductViewObserverTest extends TestCase
         $this->productIndexFactoryMock = $this->getMockBuilder(
             ViewedFactory::class
         )
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->productIndexMock = $this->getMockBuilder(Viewed::class)
@@ -115,7 +119,7 @@ class CatalogProductViewObserverTest extends TestCase
             ->willReturn($this->productIndexMock);
 
         $reportEventFactory = $this->getMockBuilder(EventFactory::class)
-            ->setMethods(['create'])->disableOriginalConstructor()
+            ->onlyMethods(['create'])->disableOriginalConstructor()
             ->getMock();
         $this->reportEventMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
@@ -126,7 +130,7 @@ class CatalogProductViewObserverTest extends TestCase
             ->willReturn($this->reportEventMock);
 
         /** @var StoreManagerInterface|MockObject $storeManager */
-        $storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $storeManager = $this->createMock(StoreManagerInterface::class);
         $this->storeMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -143,7 +147,7 @@ class CatalogProductViewObserverTest extends TestCase
             ComparedFactory::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->productCompFactoryMock->expects($this->any())
             ->method('create')
@@ -152,17 +156,17 @@ class CatalogProductViewObserverTest extends TestCase
         $this->productCompFactoryMock = $this->getMockBuilder(
             ComparedFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->eventSaverMock = $this->getMockBuilder(EventSaver::class)
             ->disableOriginalConstructor()
-            ->setMethods(['save'])
+            ->onlyMethods(['save'])
             ->getMock();
 
         $this->reportStatusMock = $this->getMockBuilder(ReportStatus::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isReportEnabled'])
+            ->onlyMethods(['isReportEnabled'])
             ->getMock();
 
         $this->observer = $objectManager->getObject(
@@ -288,12 +292,11 @@ class CatalogProductViewObserverTest extends TestCase
      */
     protected function getObserverMock($productId)
     {
-        $eventObserverMock = $this->getMockBuilder(Observer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $eventMock = $this->getMockBuilder(\Magento\Framework\Event::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getProduct'])->getMock();
+        $eventObserverMock = $this->createMock(Observer::class);
+        $eventMock = $this->createPartialMockWithReflection(
+            FrameworkEvent::class,
+            ['getProduct']
+        );
         $productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->getMock();

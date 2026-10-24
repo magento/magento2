@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,27 +14,22 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Read;
 use Magento\Framework\Module\Dir\Reader;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class FileResolverTest extends TestCase
 {
     /**
-     * Files resolver
-     *
      * @var FileResolver
      */
     protected $model;
 
     /**
-     * Filesystem
-     *
      * @var \Magento\Framework\Filesystem|MockObject
      */
     protected $filesystem;
 
     /**
-     * File iterator factory
-     *
      * @var FileIteratorFactory|MockObject
      */
     protected $iteratorFactory;
@@ -66,16 +61,9 @@ class FileResolverTest extends TestCase
         );
     }
 
-    /**
-     * Test for get method with primary scope.
-     *
-     * @param string $filename
-     * @param array $fileList
-     *
-     * @return void
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     * @dataProvider providerGet
+    /**     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
+    #[DataProvider('providerGet')]
     public function testGetPrimary($filename, $fileList): void
     {
         $scope = 'primary';
@@ -119,15 +107,9 @@ class FileResolverTest extends TestCase
         $this->assertTrue($this->model->get($filename, $scope));
     }
 
-    /**
-     * Test for get method with global scope.
-     *
-     * @param string $filename
-     * @param array $fileList
-     *
-     * @return void
-     * @dataProvider providerGet
+    /**     * @return void
      */
+    #[DataProvider('providerGet')]
     public function testGetGlobal($filename, $fileList): void
     {
         $scope = 'global';
@@ -143,15 +125,9 @@ class FileResolverTest extends TestCase
         $this->assertEquals($fileList, $this->model->get($filename, $scope));
     }
 
-    /**
-     * Test for get method with default scope.
-     *
-     * @param string $filename
-     * @param array $fileList
-     *
-     * @return void
-     * @dataProvider providerGet
+    /**     * @return void
      */
+    #[DataProvider('providerGet')]
     public function testGetDefault($filename, $fileList): void
     {
         $scope = 'some_scope';
@@ -172,7 +148,7 @@ class FileResolverTest extends TestCase
      *
      * @return array
      */
-    public function providerGet(): array
+    public static function providerGet(): array
     {
         return [
             ['di.xml', ['di.xml', 'anotherfolder/di.xml']],

@@ -1,10 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Eav\Model\ResourceModel\UpdateHandler;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 use Magento\Catalog\Model\Product;
 use Magento\Eav\Model\ResourceModel\UpdateHandler;
@@ -20,13 +22,13 @@ class ExecuteProcessForAllStoresTest extends UpdateHandlerAbstract
     /**
      * @covers \Magento\Eav\Model\ResourceModel\UpdateHandler::execute
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
-     * @dataProvider getAllStoresDataProvider
      * @param $code
      * @param $snapshotValue
      * @param $newValue
      * @param $expected
      * @magentoDbIsolation disabled
      */
+    #[DataProvider('getAllStoresDataProvider')]
     public function testExecuteProcessForAllStores($code, $snapshotValue, $newValue, $expected)
     {
         if ($snapshotValue !== '-') {
@@ -55,7 +57,7 @@ class ExecuteProcessForAllStoresTest extends UpdateHandlerAbstract
     /**
      * @return array
      */
-    public function getAllStoresDataProvider()
+    public static function getAllStoresDataProvider()
     {
         return [
             ['description', '', 'not_empty_value', 'not_empty_value'],                  //0

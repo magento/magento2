@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
@@ -15,5 +15,6 @@
         <element name="delete" type="button" selector="//ul[@class='action-menu _active']//a[text()='Delete']"/>
         <element name="edit" type="button" selector="//ul[@class='action-menu _active']//a[text()='Edit']"/>
         <element name="imageInGrid" type="button" selector="//li[@data-ui-id='title'and text()='{{imageTitle}}']/parent::*/parent::*/parent::div//img[@class='media-gallery-image-column']" parameterized="true"/>
+        <element name="imagesGrid" type="block" selector="//div[@class='masonry-image-grid']"/>
     </section>
 </sections>

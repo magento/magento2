@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
@@ -45,6 +45,13 @@
     <preference for="Magento\Integration\Api\Data\UserTokenParametersInterface" type="Magento\Integration\Model\UserToken\UserTokenParameters" />
     <preference for="Magento\Integration\Api\UserTokenValidatorInterface" type="Magento\Integration\Model\CompositeUserTokenValidator" />
     <preference for="Magento\Integration\Api\UserTokenIssuerInterface" type="Magento\Integration\Model\OpaqueToken\Issuer" />
-    <preference for="Magento\Integration\Api\UserTokenReaderInterface" type="Magento\Integration\Model\OpaqueToken\Reader" />
+    <preference for="Magento\Integration\Api\UserTokenReaderInterface" type="Magento\Integration\Model\CompositeTokenReader" />
     <preference for="Magento\Integration\Api\UserTokenRevokerInterface" type="Magento\Integration\Model\OpaqueToken\Revoker" />
+    <type name="Magento\Integration\Model\CompositeTokenReader">
+        <arguments>
+            <argument name="readers" xsi:type="array">
+                <item name="5" xsi:type="object">Magento\Integration\Model\OpaqueToken\Reader</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

@@ -1,11 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Review\Model\ResourceModel\Review\Product;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Tests some functionality of the Product Review collection
@@ -18,9 +20,9 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      * @param string $sortAttribute
      * @param string $dir
      * @param callable $assertion
-     * @dataProvider sortOrderAssertionsDataProvider
      * @magentoDataFixture Magento/Review/_files/different_reviews.php
      */
+    #[DataProvider('sortOrderAssertionsDataProvider')]
     public function testGetResultingIds(
         ?int $status,
         int $expectedCount,
@@ -46,7 +48,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function sortOrderAssertionsDataProvider() :array
+    public static function sortOrderAssertionsDataProvider() :array
     {
         return [
             [
@@ -55,7 +57,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
                 'rt.review_id',
                 'DESC',
                 function (array $actual) :void {
-                    $this->assertLessThan($actual[0], $actual[1]);
+                    self::assertLessThan($actual[0], $actual[1]);
                 }
             ],
             [
@@ -64,7 +66,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
                 'rt.review_id',
                 'ASC',
                 function (array $actual) :void {
-                    $this->assertLessThan($actual[1], $actual[0]);
+                    self::assertLessThan($actual[1], $actual[0]);
                 }
             ],
             [
@@ -73,7 +75,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
                 'rt.created_at',
                 'ASC',
                 function (array $actual) :void {
-                    $this->assertLessThan($actual[1], $actual[0]);
+                    self::assertLessThan($actual[1], $actual[0]);
                 }
             ],
             [
@@ -82,7 +84,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
                 'rt.review_id',
                 'ASC',
                 function (array $actual) :void {
-                    $this->assertLessThan($actual[1], $actual[0]);
+                    self::assertLessThan($actual[1], $actual[0]);
                 }
             ]
         ];
