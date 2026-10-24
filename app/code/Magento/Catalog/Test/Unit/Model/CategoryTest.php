@@ -195,6 +195,48 @@ class CategoryTest extends TestCase
         $this->category = $this->getCategoryModel();
     }
 
+    public function testNullUrlIsRecomputedForCurrentStore(): void
+    {
+        $store = $this->createMock(Store::class);
+        $store->method('getId')->willReturn(1);
+        $this->storeManager->method('getStore')->willReturn($store);
+        $store->expects($this->never())->method('getUrl');
+        $this->url->expects($this->once())->method('getDirectUrl')
+            ->with('category.html')->willReturn('https://example.com/default/category.html');
+        $this->category->setData('store_id', 1)->setData('url', null)->setData('request_path', 'category.html');
+
+        self::assertSame('https://example.com/default/category.html', $this->category->getUrl());
+        self::assertSame($this->url, $this->category->getUrlInstance());
+    }
+
+    public function testCategoryIdUrlFallsBackWhenStoreDoesNotExist(): void
+    {
+        $this->storeManager->method('getStore')->willThrowException(
+            new \Magento\Framework\Exception\NoSuchEntityException(__('Store does not exist'))
+        );
+        $this->category->setData('store_id', 999)->setData('url_key', 'category')->setId(42);
+        $this->url->expects($this->once())->method('getUrl')
+            ->with('catalog/category/view', ['s' => 'category', 'id' => 42])
+            ->willReturn('https://example.com/catalog/category/view/s/category/id/42/');
+
+        self::assertSame(
+            'https://example.com/catalog/category/view/s/category/id/42/',
+            $this->category->getCategoryIdUrl()
+        );
+    }
+
+    public function testDirectUrlFallsBackWhenStoreDoesNotExist(): void
+    {
+        $this->storeManager->method('getStore')->willThrowException(
+            new \Magento\Framework\Exception\NoSuchEntityException(__('Store does not exist'))
+        );
+        $this->category->setData('store_id', 999)->setData('request_path', 'category.html');
+        $this->url->expects($this->once())->method('getDirectUrl')->with('category.html')
+            ->willReturn('https://example.com/category.html');
+
+        self::assertSame('https://example.com/category.html', $this->category->getUrl());
+    }
+
     /**
      * @return void
      */
