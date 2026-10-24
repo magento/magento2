@@ -1,17 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\TestFramework\TestCase;
 
-use Magento\Framework\App\DeploymentConfig\Reader;
-use Magento\Framework\App\DeploymentConfig\Writer\PhpFormatter;
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Config\File\ConfigFilePool;
-use Magento\Framework\Filesystem;
-use Magento\GraphQlCache\Model\CacheId\CacheIdCalculator;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\TestCase\GraphQl\ResponseContainsErrorsException;
 
 /**
  * Test case for Web API functional tests for Graphql.
@@ -31,26 +26,6 @@ abstract class GraphQlAbstract extends WebapiAbstract
      * @var \Magento\Framework\App\Cache
      */
     private $appCache;
-
-    /**
-     * @var Filesystem
-     */
-    private $filesystem;
-
-    /**
-     * @var string
-     */
-    private $envConfigPath;
-
-    /**
-     * @var Reader
-     */
-    private $envConfigReader;
-
-    /**
-     * @var PhpFormatter
-     */
-    private $formatter;
 
     /**
      * Perform GraphQL query call via GET to the system under test.
@@ -174,6 +149,33 @@ abstract class GraphQlAbstract extends WebapiAbstract
     }
 
     /**
+     * Run a GraphQL query that depends on schema fields dynamically generated from EAV attributes
+     *
+     * @param string $query
+     * @param array $variables
+     * @param string $operationName
+     * @param array $headers
+     * @return array|int|string|float|bool GraphQL call results
+     * @throws \Exception
+     */
+    protected function graphQlQueryWithSchemaCacheRetry(
+        string $query,
+        array $variables = [],
+        string $operationName = '',
+        array $headers = []
+    ) {
+        try {
+            return $this->graphQlQuery($query, $variables, $operationName, $headers);
+        } catch (ResponseContainsErrorsException $e) {
+            $isSchemaCacheRace = preg_match('/is not defined by type|Cannot query field/', $e->getMessage());
+            if (!$isSchemaCacheRace || !$this->cleanCache()) {
+                throw $e;
+            }
+            return $this->graphQlQuery($query, $variables, $operationName, $headers);
+        }
+    }
+
+    /**
      * Return app cache setup.
      *
      * @return \Magento\Framework\App\Cache
@@ -234,60 +236,16 @@ abstract class GraphQlAbstract extends WebapiAbstract
     }
 
     /**
-     * If the cache id salt didn't exist in env.php before a GraphQL request it gets added. To prevent test failures
-     * due to a config getting changed (which is normally illegal), the salt needs to be removed from env.php after
-     * a test if it wasn't there before.
+     * Tear down test and flush page cache
      *
-     * @see \Magento\TestFramework\Isolation\DeploymentConfig
-     *
-     * @inheritdoc
+     * @return void
      */
-    protected function runTest()
+    protected function tearDown(): void
     {
-        /** @var Reader $reader */
-        if (!$this->envConfigPath) {
-            /** @var ConfigFilePool $configFilePool */
-            $configFilePool = Bootstrap::getObjectManager()->get(ConfigFilePool::class);
-            $this->envConfigPath = $configFilePool->getPath(ConfigFilePool::APP_ENV);
-        }
-        $this->envConfigReader = $this->envConfigReader ?: Bootstrap::getObjectManager()->get(Reader::class);
-        $initialConfig = $this->envConfigReader->load(ConfigFilePool::APP_ENV);
-
-        try {
-            return parent::runTest();
-        } finally {
-            $this->formatter = $this->formatter ?: new PhpFormatter();
-            $this->filesystem = $this->filesystem ?: Bootstrap::getObjectManager()->get(Filesystem::class);
-            $cacheSaltPathChunks = explode('/', CacheIdCalculator::SALT_CONFIG_PATH);
-            $currentConfig = $this->envConfigReader->load(ConfigFilePool::APP_ENV);
-            $resetConfig = $this->resetAddedSection($initialConfig, $currentConfig, $cacheSaltPathChunks);
-            $resetFileContents = $this->formatter->format($resetConfig);
-            $directoryWrite = $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG);
-            sleep(4);
-            $directoryWrite->writeFile($this->envConfigPath, $resetFileContents);
-        }
-    }
-
-    /**
-     * Go over the current deployment config and unset a section that was not present in the pre-test deployment config
-     *
-     * @param array $initial
-     * @param array $current
-     * @param string[] $chunks
-     * @return array
-     */
-    private function resetAddedSection(array $initial, array $current, array $chunks): array
-    {
-        if ($chunks) {
-            $chunk = array_shift($chunks);
-            if (!isset($initial[$chunk])) {
-                if (isset($current[$chunk])) {
-                    unset($current[$chunk]);
-                }
-            } elseif (isset($current[$chunk]) && is_array($initial[$chunk]) && is_array($current[$chunk])) {
-                $current[$chunk] = $this->resetAddedSection($initial[$chunk], $current[$chunk], $chunks);
-            }
-        }
-        return $current;
+        parent::tearDown();
+        $objectManager = Bootstrap::getObjectManager();
+        $objectManager
+            ->get(\Magento\Framework\App\Cache\TypeListInterface::class)
+            ->cleanType(\Magento\PageCache\Model\Cache\Type::TYPE_IDENTIFIER);
     }
 }

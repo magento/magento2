@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\View\Design\Fallback;
@@ -10,6 +10,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Filesystem;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Factory Test
@@ -68,9 +69,8 @@ class RulePoolTest extends \PHPUnit\Framework\TestCase
      * @param string $type
      * @param array $overriddenParams
      * @param string $expectedErrorMessage
-     *
-     * @dataProvider getPatternDirsExceptionDataProvider
      */
+    #[DataProvider('getPatternDirsExceptionDataProvider')]
     public function testGetPatternDirsException($type, array $overriddenParams, $expectedErrorMessage)
     {
         $this->expectException('InvalidArgumentException');
@@ -82,7 +82,7 @@ class RulePoolTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getPatternDirsExceptionDataProvider()
+    public static function getPatternDirsExceptionDataProvider()
     {
         $exceptions = [
             'no theme' => [
@@ -123,9 +123,8 @@ class RulePoolTest extends \PHPUnit\Framework\TestCase
      * @param string $type
      * @param array $overriddenParams
      * @param array $expectedResult
-     *
-     * @dataProvider getPatternDirsDataProvider
      */
+    #[DataProvider('getPatternDirsDataProvider')]
     public function testGetPatternDirs($type, array $overriddenParams, array $expectedResult)
     {
         $actualResult = $this->model->getRule($type)
@@ -138,7 +137,7 @@ class RulePoolTest extends \PHPUnit\Framework\TestCase
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function getPatternDirsDataProvider()
+    public static function getPatternDirsDataProvider()
     {
         $objectManager = Bootstrap::getObjectManager();
         /** @var \Magento\Framework\Component\ComponentRegistrarInterface $componentRegistrar */

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -13,13 +13,14 @@ namespace Magento\Framework\Encryption\Test\Unit\Adapter;
 
 use Magento\Framework\Encryption\Adapter\SodiumChachaIetf;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class SodiumChachaIetfTest extends TestCase
 {
     /**
      * @return array
      */
-    public function getCryptData(): array
+    public static function getCryptData(): array
     {
         $result = include __DIR__ . '/../Crypt/_files/_sodium_chachaieft_fixtures.php';
         /* Restore encoded string back to binary */
@@ -31,14 +32,13 @@ class SodiumChachaIetfTest extends TestCase
         return $result;
     }
 
-    /**
-     * @dataProvider getCryptData
-     *
+    /**     *
      * @param string $key
      * @param string $encrypted
      * @param string $decrypted
      * @throws \SodiumException
      */
+    #[DataProvider('getCryptData')]
     public function testEncrypt(string $key, string $encrypted, string $decrypted): void
     {
         $crypt = new SodiumChachaIetf($key);
@@ -47,13 +47,12 @@ class SodiumChachaIetfTest extends TestCase
         $this->assertNotEquals($encrypted, $result);
     }
 
-    /**
-     * @dataProvider getCryptData
-     *
+    /**     *
      * @param string $key
      * @param string $encrypted
      * @param string $decrypted
      */
+    #[DataProvider('getCryptData')]
     public function testDecrypt(string $key, string $encrypted, string $decrypted): void
     {
         $crypt = new SodiumChachaIetf($key);

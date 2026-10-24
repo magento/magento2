@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\View\Layout\Argument\Interpreter\Options;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class OptionsTest extends TestCase
 {
@@ -33,14 +34,14 @@ class OptionsTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->_objectManager = $this->createMock(ObjectManagerInterface::class);
         $this->_model = new Options($this->_objectManager);
     }
 
     public function testEvaluate()
     {
         $modelClass = OptionSourceInterface::class;
-        $model = $this->getMockForAbstractClass($modelClass);
+        $model = $this->createMock($modelClass);
         $model->expects(
             $this->once()
         )->method(
@@ -67,9 +68,8 @@ class OptionsTest extends TestCase
         $this->assertSame($expected, $actual);
     }
 
-    /**
-     * @dataProvider evaluateWrongModelDataProvider
-     */
+    /**     */
+    #[DataProvider('evaluateWrongModelDataProvider')]
     public function testEvaluateWrongModel($input, $expectedException, $expectedExceptionMessage)
     {
         $this->expectException($expectedException);
@@ -82,7 +82,7 @@ class OptionsTest extends TestCase
     /**
      * @return array
      */
-    public function evaluateWrongModelDataProvider()
+    public static function evaluateWrongModelDataProvider()
     {
         return [
             'no model' => [[], '\InvalidArgumentException', 'Options source model class is missing'],

@@ -1,14 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Quote\Model\Cart;
 
-use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Framework\App\ObjectManager;
+use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\Cart\BuyRequest\BuyRequestBuilder;
@@ -23,69 +22,22 @@ use Magento\Framework\Message\MessageInterface;
  */
 class AddProductsToCart
 {
-    /**#@+
-     * Error message codes
-     */
-    private const ERROR_PRODUCT_NOT_FOUND = 'PRODUCT_NOT_FOUND';
-    private const ERROR_INSUFFICIENT_STOCK = 'INSUFFICIENT_STOCK';
-    private const ERROR_NOT_SALABLE = 'NOT_SALABLE';
-    private const ERROR_UNDEFINED = 'UNDEFINED';
-    /**#@-*/
-
     /**
-     * List of error messages and codes.
-     */
-    private const MESSAGE_CODES = [
-        'Could not find a product with SKU' => self::ERROR_PRODUCT_NOT_FOUND,
-        'The required options you selected are not available' => self::ERROR_NOT_SALABLE,
-        'Product that you are trying to add is not available.' => self::ERROR_NOT_SALABLE,
-        'This product is out of stock' => self::ERROR_INSUFFICIENT_STOCK,
-        'There are no source items' => self::ERROR_NOT_SALABLE,
-        'The fewest you may purchase is' => self::ERROR_INSUFFICIENT_STOCK,
-        'The most you may purchase is' => self::ERROR_INSUFFICIENT_STOCK,
-        'The requested qty is not available' => self::ERROR_INSUFFICIENT_STOCK,
-    ];
-
-    /**
-     * @var CartRepositoryInterface
-     */
-    private $cartRepository;
-
-    /**
-     * @var MaskedQuoteIdToQuoteIdInterface
-     */
-    private $maskedQuoteIdToQuoteId;
-
-    /**
-     * @var BuyRequestBuilder
-     */
-    private $requestBuilder;
-
-    /**
-     * @var ProductReaderInterface
-     */
-    private $productReader;
-
-    /**
-     * @param ProductRepositoryInterface $productRepository
      * @param CartRepositoryInterface $cartRepository
      * @param MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId
      * @param BuyRequestBuilder $requestBuilder
-     * @param ProductReaderInterface|null $productReader
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @param ProductReaderInterface $productReader
+     * @param AddProductsToCartError $error
+     * @param StockRegistryInterface $stockRegistry
      */
     public function __construct(
-        ProductRepositoryInterface $productRepository,
-        CartRepositoryInterface $cartRepository,
-        MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId,
-        BuyRequestBuilder $requestBuilder,
-        ProductReaderInterface $productReader = null
+        private readonly CartRepositoryInterface $cartRepository,
+        private readonly MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId,
+        private readonly BuyRequestBuilder $requestBuilder,
+        private readonly ProductReaderInterface $productReader,
+        private readonly AddProductsToCartError $error,
+        private readonly StockRegistryInterface $stockRegistry
     ) {
-        $this->cartRepository = $cartRepository;
-        $this->maskedQuoteIdToQuoteId = $maskedQuoteIdToQuoteId;
-        $this->requestBuilder = $requestBuilder;
-        $this->productReader = $productReader ?: ObjectManager::getInstance()->get(ProductReaderInterface::class);
     }
 
     /**
@@ -101,14 +53,6 @@ class AddProductsToCart
         $cartId = $this->maskedQuoteIdToQuoteId->execute($maskedCartId);
         $cart = $this->cartRepository->get($cartId);
         $allErrors = [];
-        if ($cart->getData('has_error')) {
-            $errors = $cart->getErrors();
-
-            /** @var MessageInterface $error */
-            foreach ($errors as $error) {
-                $allErrors[] = $this->createError($error->getText());
-            }
-        }
 
         $failedCartItems = $this->addItemsToCart($cart, $cartItems);
         $saveCart = empty($failedCartItems);
@@ -157,7 +101,16 @@ class AddProductsToCart
         );
         $this->productReader->loadProducts($skus, $cart->getStoreId());
         foreach ($cartItems as $cartItemPosition => $cartItem) {
-            $errors = $this->addItemToCart($cart, $cartItem, $cartItemPosition);
+            $product = $this->productReader->getProductBySku($cartItem->getSku());
+            $stockItemQuantity = 0.0;
+            if ($product) {
+                $stockItem = $this->stockRegistry->getStockItem(
+                    $product->getId(),
+                    $cart->getStore()->getWebsiteId()
+                );
+                $stockItemQuantity = $stockItem->getQty() - $stockItem->getMinQty();
+            }
+            $errors = $this->addItemToCart($cart, $cartItem, $cartItemPosition, $stockItemQuantity);
             if ($errors) {
                 $failedCartItems[$cartItemPosition] = $errors;
             }
@@ -172,81 +125,57 @@ class AddProductsToCart
      * @param Quote $cart
      * @param Data\CartItem $cartItem
      * @param int $cartItemPosition
+     * @param float $stockItemQuantity
      * @return array
      */
-    private function addItemToCart(Quote $cart, Data\CartItem $cartItem, int $cartItemPosition): array
-    {
+    private function addItemToCart(
+        Quote $cart,
+        Data\CartItem $cartItem,
+        int $cartItemPosition,
+        float $stockItemQuantity
+    ): array {
         $sku = $cartItem->getSku();
         $errors = [];
         $result = null;
 
         if ($cartItem->getQuantity() <= 0) {
-            $errors[] = $this->createError(
-                __('The product quantity should be greater than 0')->render(),
-                $cartItemPosition
+            $errors[] = $this->error->create(
+                __('The product quantity should be greater than 0'),
+                $cartItemPosition,
+                $stockItemQuantity
             );
-        } else {
-            $product = $this->productReader->getProductBySku($sku);
-            if (!$product || !$product->isSaleable() || !$product->isAvailable()) {
-                $errors[] = $this->createError(
-                    __('Could not find a product with SKU "%sku"', ['sku' => $sku])->render(),
-                    $cartItemPosition
-                );
-            } else {
-                try {
-                    $result = $cart->addProduct($product, $this->requestBuilder->build($cartItem));
-                } catch (\Throwable $e) {
-                    $errors[] = $this->createError(
-                        __($e->getMessage())->render(),
-                        $cartItemPosition
-                    );
-                }
-            }
+        }
 
-            if (is_string($result)) {
-                foreach (array_unique(explode("\n", $result)) as $error) {
-                    $errors[] = $this->createError(__($error)->render(), $cartItemPosition);
-                }
+        $productBySku = $this->productReader->getProductBySku($sku);
+        $product = isset($productBySku) ? clone $productBySku : null;
+
+        if (!$product || !$product->isSaleable() || !$product->isAvailable()) {
+            return [
+                $this->error->create(
+                    __('Could not find a product with SKU "%sku"', ['sku' => $sku]),
+                    $cartItemPosition,
+                    $stockItemQuantity
+                )
+            ];
+        }
+
+        try {
+            $result = $cart->addProduct($product, $this->requestBuilder->build($cartItem));
+        } catch (\Throwable $e) {
+            $errors[] = $this->error->create(
+                __($e->getMessage()),
+                $cartItemPosition,
+                $stockItemQuantity
+            );
+        }
+
+        if (is_string($result)) {
+            foreach (array_unique(explode("\n", $result)) as $error) {
+                $errors[] = $this->error->create(__($error), $cartItemPosition, $stockItemQuantity);
             }
         }
 
         return $errors;
-    }
-
-    /**
-     * Returns an error object
-     *
-     * @param string $message
-     * @param int $cartItemPosition
-     * @return Data\Error
-     */
-    private function createError(string $message, int $cartItemPosition = 0): Data\Error
-    {
-        return new Data\Error(
-            $message,
-            $this->getErrorCode($message),
-            $cartItemPosition
-        );
-    }
-
-    /**
-     * Get message error code.
-     *
-     * TODO: introduce a separate class for getting error code from a message
-     *
-     * @param string $message
-     * @return string
-     */
-    private function getErrorCode(string $message): string
-    {
-        foreach (self::MESSAGE_CODES as $codeMessage => $code) {
-            if (false !== stripos($message, $codeMessage)) {
-                return $code;
-            }
-        }
-
-        /* If no code was matched, return the default one */
-        return self::ERROR_UNDEFINED;
     }
 
     /**

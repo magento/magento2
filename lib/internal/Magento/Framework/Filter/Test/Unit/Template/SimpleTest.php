@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Framework\Filter\Test\Unit\Template;
 
 use Magento\Framework\Filter\Template\Simple;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class SimpleTest extends TestCase
 {
@@ -34,9 +35,8 @@ class SimpleTest extends TestCase
 
     /**
      * @param string $startTag
-     * @param string $endTag
-     * @dataProvider setTagsDataProvider
-     */
+     * @param string $endTag     */
+    #[DataProvider('setTagsDataProvider')]
     public function testSetTags($startTag, $endTag)
     {
         $this->_filter->setTags($startTag, $endTag);
@@ -50,7 +50,7 @@ class SimpleTest extends TestCase
     /**
      * @return array
      */
-    public function setTagsDataProvider()
+    public static function setTagsDataProvider()
     {
         return ['(brackets)' => ['(', ')'], '#hash#' => ['#', '#']];
     }

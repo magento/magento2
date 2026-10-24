@@ -1,14 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Controller\Adminhtml\System\Config;
 
 /**
  * VAT validation controller
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 abstract class Validatevat extends \Magento\Backend\App\Action
 {
@@ -17,7 +15,7 @@ abstract class Validatevat extends \Magento\Backend\App\Action
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Customer::manage';
+    public const ADMIN_RESOURCE = 'Magento_Customer::manage';
 
     /**
      * Perform customer VAT ID validation

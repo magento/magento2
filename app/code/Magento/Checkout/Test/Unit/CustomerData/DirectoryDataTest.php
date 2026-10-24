@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -70,13 +70,9 @@ class DirectoryDataTest extends TestCase
         $testCountryInfo->setData('name_en_US', 'United States of America');
         $countries = ['US' => $testCountryInfo];
 
-        $this->directoryHelperMock->expects($this->any())
-            ->method('getRegionData')
-            ->willReturn($regions);
+        $this->directoryHelperMock->method('getRegionData')->willReturn($regions);
 
-        $this->directoryHelperMock->expects($this->any())
-            ->method('getCountryCollection')
-            ->willReturn($countries);
+        $this->directoryHelperMock->method('getCountryCollection')->willReturn($countries);
 
         /* Assert result */
         $this->assertEquals(

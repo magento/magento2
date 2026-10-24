@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\Order;
 
@@ -71,8 +71,8 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
         \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Directory\Model\RegionFactory $regionFactory,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $data = $this->implodeStreetField($data);
@@ -142,7 +142,7 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     {
         $name = '';
         if ($this->getPrefix()) {
-            $name .= $this->getPrefix() . ' ';
+            $name .= __($this->getPrefix()) . ' ';
         }
         $name .= $this->getFirstname();
         if ($this->getMiddlename()) {
@@ -150,7 +150,7 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
         }
         $name .= ' ' . $this->getLastname();
         if ($this->getSuffix()) {
-            $name .= ' ' . $this->getSuffix();
+            $name .= ' ' . __($this->getSuffix());
         }
         return $name;
     }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\UrlRewrite\Block\Catalog\Category;
@@ -12,8 +12,6 @@ use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Categories tree block for URL rewrites editing process
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
 {

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,7 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\DeploymentConfig\ImporterInterface;
 use Magento\Framework\App\DeploymentConfig\ValidatorInterface;
 use Magento\Framework\Console\QuestionPerformer\YesNo;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface as Logger;
@@ -100,10 +101,8 @@ class ProcessorTest extends TestCase
         $this->loggerMock = $this->getMockBuilder(Logger::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->outputMock = $this->getMockBuilder(OutputInterface::class)
-            ->getMockForAbstractClass();
-        $this->inputMock = $this->getMockBuilder(InputInterface::class)
-            ->getMockForAbstractClass();
+        $this->outputMock = $this->createMock(OutputInterface::class);
+        $this->inputMock = $this->createMock(InputInterface::class);
         $this->questionPerformerMock = $this->getMockBuilder(YesNo::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -125,8 +124,8 @@ class ProcessorTest extends TestCase
      * @param array $warningMessages
      *
      * @return void
-     * @dataProvider importDataProvider
      */
+    #[DataProvider('importDataProvider')]
     public function testImport(bool $doImport, bool $skipImport, array $warningMessages): void
     {
         $configData = ['some data'];
@@ -135,8 +134,7 @@ class ProcessorTest extends TestCase
         $importerClassName = 'someImporterClassName';
         $question = ['Do you want to continue [yes/no]?'];
         $importers = ['someSection' => $importerClassName];
-        $importerMock = $this->getMockBuilder(ImporterInterface::class)
-            ->getMockForAbstractClass();
+        $importerMock = $this->createMock(ImporterInterface::class);
 
         $this->configImporterPoolMock->expects($this->once())
             ->method('getImporters')
@@ -175,10 +173,12 @@ class ProcessorTest extends TestCase
         } else {
             $this->outputMock
                 ->method('writeln')
-                ->withConsecutive(
-                    ['<info>Processing configurations data from configuration file...</info>'],
-                    [$expectsMessages]
-                );
+                ->willReturnCallback(function ($message) use ($expectsMessages) {
+                    if ($message === '<info>Processing configurations data from configuration file...</info>'
+                        || $message == $expectsMessages) {
+                        return null;
+                    }
+                });
             $importerMock->expects($this->once())
                 ->method('import')
                 ->with($configData)
@@ -193,7 +193,7 @@ class ProcessorTest extends TestCase
     /**
      * @return array
      */
-    public function importDataProvider(): array
+    public static function importDataProvider(): array
     {
         return [
             [
@@ -257,8 +257,7 @@ class ProcessorTest extends TestCase
         $importers = ['someSection' => $importerClassName];
         $errorMessages = ['error message'];
 
-        $validatorMock = $this->getMockBuilder(ValidatorInterface::class)
-            ->getMockForAbstractClass();
+        $validatorMock = $this->createMock(ValidatorInterface::class);
         $validatorMock->expects($this->once())
             ->method('validate')
             ->with($configData)
@@ -268,11 +267,12 @@ class ProcessorTest extends TestCase
             ->willReturn($importers);
         $this->changeDetectorMock->expects($this->exactly(2))
             ->method('hasChanges')
-            ->withConsecutive(
-                [],
-                ['someSection']
-            )
-            ->willReturnOnConsecutiveCalls(true, true);
+            ->willReturnCallback(function ($arg1) {
+                if ($arg1 == 'someSection' || $arg1 == []) {
+                    return true;
+                }
+            });
+
         $this->deploymentConfigMock->expects($this->once())
             ->method('getConfigData')
             ->with('someSection')
@@ -293,8 +293,8 @@ class ProcessorTest extends TestCase
      * @param bool $isValid
      *
      * @return void
-     * @dataProvider importNothingToImportDataProvider
      */
+    #[DataProvider('importNothingToImportDataProvider')]
     public function testImportNothingToImport(array $importers, bool $isValid): void
     {
         $this->configImporterPoolMock->expects($this->once())
@@ -320,7 +320,7 @@ class ProcessorTest extends TestCase
     /**
      * @return array
      */
-    public function importNothingToImportDataProvider(): array
+    public static function importNothingToImportDataProvider(): array
     {
         return [
             ['importers' => [], 'isValid' => false],

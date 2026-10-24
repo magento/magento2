@@ -1,18 +1,20 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\GraphQl\Test\Unit\Plugin;
 
+use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\State;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Session\SessionStartChecker;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\GraphQl\Model\Config\DisableSession;
 use Magento\GraphQl\Plugin\DisableSession as DisableSessionPlugin;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -32,6 +34,11 @@ class DisableSessionTest extends TestCase
     private $appStateMock;
 
     /**
+     * @var Http|MockObject
+     */
+    private $requestMock;
+
+    /**
      * @var DisableSessionPlugin
      */
     private $model;
@@ -45,12 +52,14 @@ class DisableSessionTest extends TestCase
     {
         $this->disableSessionConfigMock = $this->createMock(DisableSession::class);
         $this->appStateMock = $this->createMock(State::class);
+        $this->requestMock = $this->createMock(Http::class);
         $this->sessionStartCheckerMock = $this->createMock(SessionStartChecker::class);
         $this->model = (new ObjectManager($this))->getObject(
             DisableSessionPlugin::class,
             [
                 'disableSessionConfig' => $this->disableSessionConfigMock,
-                'appState' => $this->appStateMock
+                'appState' => $this->appStateMock,
+                'request' => $this->requestMock
             ]
         );
     }
@@ -60,15 +69,22 @@ class DisableSessionTest extends TestCase
      *
      * @param string $area
      * @param bool $config
+     * @param bool $isGet
      * @param bool $methodResult
      * @param bool $expectedResult
      * @return void
-     * @dataProvider testAfterCheckDataProvider
      */
-    public function testAfterCheck(string $area, bool $config, bool $methodResult, bool $expectedResult)
-    {
+    #[DataProvider('afterCheckDataProvider')]
+    public function testAfterCheck(
+        string $area,
+        bool $config,
+        bool $isGet,
+        bool $methodResult,
+        bool $expectedResult
+    ): void {
         $this->disableSessionConfigMock->expects($this->any())->method('isDisabled')->willReturn($config);
         $this->appStateMock->expects($this->any())->method('getAreaCode')->willReturn($area);
+        $this->requestMock->expects($this->any())->method('isGet')->willReturn($isGet);
         $this->assertEquals($expectedResult, $this->model->afterCheck($this->sessionStartCheckerMock, $methodResult));
     }
 
@@ -77,17 +93,41 @@ class DisableSessionTest extends TestCase
      *
      * @return array[]
      */
-    public function testAfterCheckDataProvider()
+    public static function afterCheckDataProvider()
     {
         return [
-            ['area' => 'graphql', 'config' => true, 'methodResult' =>  false, 'expected' => false],
-            ['area' => 'graphql', 'config' => true, 'methodResult' =>  true, 'expected' => false],
-            ['area' => 'graphql', 'config' => false, 'methodResult' =>  true, 'expected' => true],
-            ['area' => 'graphql', 'config' => false, 'methodResult' =>  false, 'expected' => false],
-            ['area' => 'other', 'config' => false, 'methodResult' =>  false, 'expected' => false],
-            ['area' => 'other', 'config' => true, 'methodResult' =>  false, 'expected' => false],
-            ['area' => 'other', 'config' => true, 'methodResult' =>  true, 'expected' => true],
-            ['area' => 'other', 'config' => false, 'methodResult' =>  true, 'expected' => true],
+            [
+                'area' => 'graphql', 'config' => true, 'isGet' => false,
+                'methodResult' => false, 'expectedResult' => false
+            ],
+            [
+                'area' => 'graphql', 'config' => true, 'isGet' => false,
+                'methodResult' => true, 'expectedResult' => false
+            ],
+            [
+                'area' => 'graphql', 'config' => false, 'isGet' => false,
+                'methodResult' => true, 'expectedResult' => true
+            ],
+            [
+                'area' => 'graphql', 'config' => false, 'isGet' => true,
+                'methodResult' => true, 'expectedResult' => false
+            ],
+            [
+                'area' => 'graphql', 'config' => false, 'isGet' => true,
+                'methodResult' => false, 'expectedResult' => false
+            ],
+            [
+                'area' => 'other', 'config' => false, 'isGet' => true,
+                'methodResult' => true, 'expectedResult' => true
+            ],
+            [
+                'area' => 'other', 'config' => true, 'isGet' => true,
+                'methodResult' => true, 'expectedResult' => true
+            ],
+            [
+                'area' => 'other', 'config' => false, 'isGet' => false,
+                'methodResult' => false, 'expectedResult' => false
+            ],
         ];
     }
 
@@ -98,8 +138,8 @@ class DisableSessionTest extends TestCase
      * @param bool $methodResult
      * @param bool $expectedResult
      * @return void
-     * @dataProvider testAfterCheckDataProviderNoAreaCode
      */
+    #[DataProvider('afterCheckDataProviderNoAreaCode')]
     public function testAfterCheckNoArea(bool $config, bool $methodResult, bool $expectedResult)
     {
         $this->disableSessionConfigMock->expects($this->any())->method('isDisabled')->willReturn($config);
@@ -114,13 +154,13 @@ class DisableSessionTest extends TestCase
      *
      * @return array[]
      */
-    public function testAfterCheckDataProviderNoAreaCode()
+    public static function afterCheckDataProviderNoAreaCode()
     {
         return [
-            ['config' => true, 'methodResult' =>  true, 'expected' => true],
-            ['config' => true, 'methodResult' =>  false, 'expected' => false],
-            ['config' => false, 'methodResult' =>  true, 'expected' => true],
-            ['config' => false, 'methodResult' =>  false, 'expected' => false],
+            ['config' => true, 'methodResult' =>  true, 'expectedResult' => true],
+            ['config' => true, 'methodResult' =>  false, 'expectedResult' => false],
+            ['config' => false, 'methodResult' =>  true, 'expectedResult' => true],
+            ['config' => false, 'methodResult' =>  false, 'expectedResult' => false],
         ];
     }
 }

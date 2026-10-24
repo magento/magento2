@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 use Magento\Framework\App\Action\Action;
 
@@ -20,7 +20,7 @@ $_productCollection = $block->getLoadedProductCollection();
 /** @var \Magento\Catalog\Helper\Output $_helper */
 $_helper = $block->getData('outputHelper');
 ?>
-<?php if (!$_productCollection->count()): ?>
+<?php if ($block->getData('has_error') || !$_productCollection->count()): ?>
     <div class="message info empty">
         <div><?= $escaper->escapeHtml(__('We can\'t find products matching the selection.')) ?></div>
     </div>

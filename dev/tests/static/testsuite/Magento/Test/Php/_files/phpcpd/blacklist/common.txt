@@ -104,7 +104,7 @@ app/code/Magento/Integration/Model/IntegrationConfig.php
 Test/_files
 Test/Unit/_files
 Test/Integration/_files
-app/code/Magento/Elasticsearch/Elasticsearch5/Model/Adapter/FieldMapper/Product/FieldProvider/FieldType/Resolver/CompositeResolver.php
+app/code/Magento/Elasticsearch/ElasticAdapter/Model/Adapter/FieldMapper/Product/FieldProvider/FieldType/Resolver/CompositeResolver.php
 app/code/Magento/Elasticsearch/Model/Layer/Search/ItemCollectionProvider.php
 app/code/Magento/Newsletter/Model/Queue/TransportBuilder.php
 app/code/Magento/ConfigurableProduct/view/adminhtml/templates/catalog/product/edit/attribute/steps/bulk.phtml

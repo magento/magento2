@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Customer\Block\Address;
 
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Integration tests for the \Magento\Customer\Block\Address\Grid class
@@ -14,6 +16,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  */
 class GridTest extends \PHPUnit\Framework\TestCase
 {
+    use MockCreationTrait;
     /**
      * @var \Magento\Framework\View\LayoutInterface
      */
@@ -26,12 +29,10 @@ class GridTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        /** @var \PHPUnit\Framework\MockObject\MockObject $blockMock */
-        $blockMock = $this->getMockBuilder(
-            \Magento\Framework\View\Element\BlockInterface::class
-        )->disableOriginalConstructor()->setMethods(
+        $blockMock = $this->createPartialMockWithReflection(
+            \Magento\Framework\View\Element\BlockInterface::class,
             ['setTitle', 'toHtml']
-        )->getMock();
+        );
         $blockMock->expects($this->any())->method('setTitle');
 
         $this->currentCustomer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
@@ -82,9 +83,9 @@ class GridTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Customer/_files/customer_no_address.php
-     * @dataProvider getAdditionalAddressesDataProvider
      * @magentoAppIsolation enabled
      */
+    #[DataProvider('getAdditionalAddressesDataProvider')]
     public function testGetAdditionalAddressesNegative($customerId, $expected)
     {
         $gridBlock = $this->createBlockForCustomer($customerId);
@@ -92,7 +93,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $gridBlock->getAdditionalAddresses());
     }
 
-    public function getAdditionalAddressesDataProvider()
+    public static function getAdditionalAddressesDataProvider()
     {
         return ['5' => [5, []]];
     }

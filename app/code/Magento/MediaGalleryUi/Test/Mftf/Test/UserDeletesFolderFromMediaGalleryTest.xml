@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
@@ -23,13 +23,17 @@
 
             <!-- Step2 Disabled Old Media Gallery and Page Builder -->
             <magentoCLI command="config:set {{MediaGalleryConfigDataEnabled.path}} {{MediaGalleryConfigDataEnabled.value}}" stepKey="disabledOldMediaGallery"/>
-            <magentoCLI command="config:set cms/pagebuilder/enabled 0" stepKey="disablePageBuilder"/>
-            <magentoCLI command="cache:clean config" stepKey="flushCache"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="disablePageBuilder"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="flushCache">
+                <argument name="tags" value="config"/>
+            </actionGroup>
         </before>
         <after>
             <magentoCLI command="config:set {{MediaGalleryConfigDataDisabled.path}} {{MediaGalleryConfigDataDisabled.value}}" stepKey="enableOldMediaGallery"/>
-            <magentoCLI command="config:set cms/pagebuilder/enabled 1" stepKey="enablePageBuilder"/>
-            <magentoCLI command="cache:clean config" stepKey="flushCache"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="enablePageBuilder"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="flushCache">
+                <argument name="tags" value="config"/>
+            </actionGroup>
         </after>
 
         <!-- Step3 Creates folder in Media Gallery -->
@@ -51,11 +55,24 @@
         <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="openNewPageForWysiwyg"/>
         <actionGroup ref="AdminOpenMediaGalleryFromPageNoEditorActionGroup" stepKey="openMediaGalleryForPageFromWysiwyg"/>
 
+        <!-- Step4 Explicitly re-expand 'wysiwyg' and re-select the child folder to avoid a racy app auto-restore. -->
+        <actionGroup ref="AdminMediaGalleryExpandFolderActionGroup" stepKey="expandWysiwygFolderForStep4">
+            <argument name="fieldId" value="wysiwyg"/>
+        </actionGroup>
+        <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectCreatedFolderForStep4">
+            <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
+        </actionGroup>
+
         <!-- Step4.1 Delete Folder is diabled by default for no selected folder -->
         <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="unselectFoldersToVerifyDeleteFolderButtonStatus">
             <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
         </actionGroup>
-        <seeElement selector="{{AdminMediaGalleryFolderSection.disabledDeleteFolderButton}}" stepKey="DeleteFolderButtonIsDisabled"/>
+        <waitForPageLoad stepKey="waitForSearchResult" time="10"/>
+        <conditionalClick selector="{{AdminMediaGalleryFolderSection.clearFilterFolderName}}" dependentSelector="{{AdminMediaGalleryFolderSection.clearFilterFolderName}}" visible="true" stepKey="clearAllFiltersIfAny"/>
+        <!-- Retry deselection only while the button is enabled: lazy filterChips resolution can abort it (ACP2E-4605). -->
+        <conditionalClick selector="{{AdminMediaGalleryFolderSection.folderInTree(AdminMediaGalleryFolderData.name)}}" dependentSelector="{{AdminMediaGalleryFolderSection.disabledDeleteFolderButton}}" visible="false" stepKey="retryUnselectIfDeleteButtonStillActive"/>
+        <waitForPageLoad stepKey="waitForRetryUnselect"/>
+        <waitForElementVisible selector="{{AdminMediaGalleryFolderSection.disabledDeleteFolderButton}}" time="30" stepKey="DeleteFolderButtonIsDisabled"/>
 
         <!-- Step4.2 Delete Folder is enabled post selecting folder -->
         <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectWysiwygFolderToVerifyDeleteFolderStatus">
@@ -68,7 +85,18 @@
         <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="deselectWysiwygFolder">
             <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
         </actionGroup>
-        <seeElement selector="{{AdminMediaGalleryFolderSection.disabledDeleteFolderButton}}" stepKey="DeleteFolderButtonIsNowDisabledAgain"/>
+        <conditionalClick selector="{{AdminMediaGalleryFolderSection.clearFilterFolderName}}" dependentSelector="{{AdminMediaGalleryFolderSection.clearFilterFolderName}}" visible="true" stepKey="clearAllFiltersIfAny2"/>
+        <!-- Retry: the app's directoryTree.js lazily resolves its filterChips uiRegistry component (ACP2E-4605);
+             if that component isn't ready yet when the deselect click fires, the deselect handler throws and
+             the button never disables. Re-clicking the same folder node is a no-op once the deselect already
+             succeeded (button stays disabled) and only re-attempts the deselect when it's still needed.
+             Gated on disabledDeleteFolderButton being NOT visible (not activeDeleteFolderButton being visible -
+             that selector matches the button element regardless of its disabled state, so it is always visible
+             and would have made this retry fire unconditionally, re-selecting an already-successfully-deselected
+             folder instead of skipping). -->
+        <conditionalClick selector="{{AdminMediaGalleryFolderSection.folderInTree(AdminMediaGalleryFolderData.name)}}" dependentSelector="{{AdminMediaGalleryFolderSection.disabledDeleteFolderButton}}" visible="false" stepKey="retryDeselectIfDeleteButtonStillActive"/>
+        <waitForPageLoad stepKey="waitForRetryDeselect"/>
+        <waitForElementVisible selector="{{AdminMediaGalleryFolderSection.disabledDeleteFolderButton}}" time="30" stepKey="DeleteFolderButtonIsNowDisabledAgain"/>
 
         <!-- Step5 Select folder to delete -->
         <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectWysiwygFolderAgain">
@@ -89,3 +117,4 @@
         <waitForPageLoad stepKey="waitForMediaGalleryPageLoadPostFinalFolderDelete"/>
     </test>
 </tests>
+

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -118,9 +118,6 @@ class DefinitionAggregator implements DbDefinitionProcessorInterface
      */
     private function isMariaDbSqlConnection(): bool
     {
-        return strpos(
-            $this->sqlVersionProvider->getSqlVersion(),
-            SqlVersionProvider::MARIA_DB_10_VERSION
-        ) === 0;
+        return $this->sqlVersionProvider->isMariaDbEngine();
     }
 }

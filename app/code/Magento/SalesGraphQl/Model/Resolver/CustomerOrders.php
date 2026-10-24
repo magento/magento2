@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,14 +13,17 @@ use Magento\Framework\Exception\InputException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\GraphQl\Exception\GraphQlServerException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Sales\Api\Data\OrderSearchResultInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\SalesGraphQl\Model\Formatter\Order as OrderFormatter;
 use Magento\SalesGraphQl\Model\Resolver\CustomerOrders\Query\OrderFilter;
+use Magento\SalesGraphQl\Model\Resolver\CustomerOrders\Query\OrderSort;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Orders data resolver
@@ -50,6 +53,11 @@ class CustomerOrders implements ResolverInterface
     private $orderFormatter;
 
     /**
+     * @var OrderSort
+     */
+    private $orderSort;
+
+    /**
      * @var StoreManagerInterface|mixed|null
      */
     private $storeManager;
@@ -59,20 +67,26 @@ class CustomerOrders implements ResolverInterface
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param OrderFilter $orderFilter
      * @param OrderFormatter $orderFormatter
+     * @param OrderSort $orderSort
      * @param StoreManagerInterface|null $storeManager
+     * @param LoggerInterface|null $logger
      */
     public function __construct(
         OrderRepositoryInterface $orderRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         OrderFilter $orderFilter,
         OrderFormatter $orderFormatter,
-        ?StoreManagerInterface $storeManager = null
+        OrderSort $orderSort,
+        ?StoreManagerInterface $storeManager = null,
+        private ?LoggerInterface $logger = null,
     ) {
         $this->orderRepository = $orderRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->orderFilter = $orderFilter;
         $this->orderFormatter = $orderFormatter;
+        $this->orderSort = $orderSort;
         $this->storeManager = $storeManager ?? ObjectManager::getInstance()->get(StoreManagerInterface::class);
+        $this->logger ??= ObjectManager::getInstance()->get(LoggerInterface::class);
     }
 
     /**
@@ -82,8 +96,8 @@ class CustomerOrders implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         if (false === $context->getExtensionAttributes()->getIsCustomer()) {
             throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));
@@ -106,6 +120,9 @@ class CustomerOrders implements ResolverInterface
             $maxPages = (int)ceil($searchResult->getTotalCount() / $searchResult->getPageSize());
         } catch (InputException $e) {
             throw new GraphQlInputException(__($e->getMessage()));
+        } catch (\Exception $e) {
+            $this->logger->critical($e);
+            throw new GraphQlServerException(__('Unable to load one or more orders.'));
         }
 
         $ordersArray = [];
@@ -120,7 +137,8 @@ class CustomerOrders implements ResolverInterface
                 'page_size' => $searchResult->getPageSize(),
                 'current_page' => $searchResult->getCurPage(),
                 'total_pages' => $maxPages,
-            ]
+            ],
+            'store_ids' => $storeIds,
         ];
     }
 
@@ -143,6 +161,10 @@ class CustomerOrders implements ResolverInterface
         }
         if (isset($args['pageSize'])) {
             $this->searchCriteriaBuilder->setPageSize($args['pageSize']);
+        }
+        if (isset($args['sort'])) {
+            $sortOrders = $this->orderSort->createSortOrders($args);
+            $this->searchCriteriaBuilder->setSortOrders($sortOrders);
         }
         return $this->orderRepository->getList($this->searchCriteriaBuilder->create());
     }

@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -39,10 +38,9 @@ class MultiselectTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->groupServiceMock = $this->getMockForAbstractClass(GroupManagementInterface::class);
+        $this->groupServiceMock = $this->createMock(GroupManagementInterface::class);
         $this->converterMock = $this->createMock(DataObject::class);
-        $this->groupSourceLoggedInOnly = $this->getMockBuilder(GroupSourceLoggedInOnlyInterface::class)
-            ->getMock();
+        $this->groupSourceLoggedInOnly = $this->createMock(GroupSourceLoggedInOnlyInterface::class);
         $this->model = new Multiselect(
             $this->groupServiceMock,
             $this->converterMock,

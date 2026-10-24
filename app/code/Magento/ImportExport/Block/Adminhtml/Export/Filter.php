@@ -1,13 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
+
 namespace Magento\ImportExport\Block\Adminhtml\Export;
 
 use Magento\Eav\Model\Entity\Attribute;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\ImportExport\Model\Export\MandatoryAttributesProvider;
 use Magento\ImportExport\Model\ResourceModel\Export\AttributeGridCollectionFactory;
 
 /**
@@ -27,8 +29,6 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $_helper;
 
     /**
-     * Import export data
-     *
      * @var \Magento\ImportExport\Helper\Data
      */
     protected $_importExportData = null;
@@ -48,23 +48,37 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
     private $attributeGridCollectionFactory;
 
     /**
+     * @var MandatoryAttributesProvider
+     */
+    private $mandatoryAttributesProvider;
+
+    /**
+     * @var array|null of mandatory attributes
+     */
+    private ?array $mandatoryAttributes = null;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\ImportExport\Helper\Data $importExportData
      * @param array $data
      * @param AttributeGridCollectionFactory|null $attributeGridCollectionFactory
+     * @param MandatoryAttributesProvider|null $mandatoryAttributesProvider
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\ImportExport\Helper\Data $importExportData,
         array $data = [],
-        ?AttributeGridCollectionFactory $attributeGridCollectionFactory = null
+        ?AttributeGridCollectionFactory $attributeGridCollectionFactory = null,
+        ?MandatoryAttributesProvider $mandatoryAttributesProvider = null,
     ) {
         $this->_importExportData = $importExportData;
         parent::__construct($context, $backendHelper, $data);
         $this->attributeGridCollectionFactory = $attributeGridCollectionFactory
             ?: ObjectManager::getInstance()->get(AttributeGridCollectionFactory::class);
+        $this->mandatoryAttributesProvider = $mandatoryAttributesProvider
+            ?: ObjectManager::getInstance()->get(MandatoryAttributesProvider::class);
     }
 
     /**
@@ -167,7 +181,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
             $arguments = [
                 'name' => $this->getFilterElementName($attribute->getAttributeCode()) . '[]',
                 'id' => $this->getFilterElementId($attribute->getAttributeCode()),
-                'class' => 'multiselect multiselect-export-filter',
+                'class' => 'admin__control-multiselect multiselect multiselect-export-filter',
                 'extra_params' => 'multiple="multiple" size="' . ($size > 5 ? 5 : ($size < 2 ? 2 : $size)) . '"',
             ];
             /** @var $selectBlock \Magento\Framework\View\Element\Html\Select */
@@ -176,7 +190,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
                 '',
                 ['data' => $arguments]
             );
-            return $selectBlock->setOptions($options)->setValue($value)->getHtml();
+            return $selectBlock->setOptions($options)->setValue($value !== '' ? $value : null)->getHtml();
         } else {
             return __('We can\'t filter an attribute with no attribute options.');
         }
@@ -300,7 +314,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
                 'sortable' => false,
                 'index' => 'attribute_id',
                 'header_css_class' => 'col-id',
-                'column_css_class' => 'col-id data-grid-checkbox-cell'
+                'column_css_class' => 'col-id data-grid-checkbox-cell',
             ]
         );
         $this->addColumn(
@@ -310,7 +324,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
                 'index' => 'frontend_label',
                 'sortable' => false,
                 'header_css_class' => 'col-label',
-                'column_css_class' => 'col-label'
+                'column_css_class' => 'col-label',
             ]
         );
         $this->addColumn(
@@ -442,5 +456,52 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->setCollection($gridCollection);
 
         return $collection;
+    }
+
+    /**
+     * Modify grid data and dynamically lock checkboxes.
+     *
+     * @return $this
+     */
+    protected function _afterLoadCollection()
+    {
+        $collection = $this->getCollection();
+        if ($collection) {
+            $disabledIds = [];
+
+            foreach ($collection as $item) {
+                if (in_array($item->getAttributeCode(), $this->getMandatoryAttributes())) {
+                    $attributeId = $item->getData('attribute_id') ?: $item->getId();
+                    if ($attributeId) {
+                        $disabledIds[] = $attributeId;
+                    }
+
+                    $currentLabel = $item->getFrontendLabel();
+                    $item->setFrontendLabel(
+                        $currentLabel . ' [' . __('Mandatory') . ']',
+                    );
+                }
+            }
+
+            $skipColumn = $this->getColumn('skip');
+            if ($skipColumn && !empty($disabledIds)) {
+                $skipColumn->setDisabledValues($disabledIds);
+            }
+        }
+
+        return parent::_afterLoadCollection();
+    }
+
+    /**
+     * Merge mandatory EAV and system attributes.
+     *
+     * @return array
+     */
+    private function getMandatoryAttributes(): array
+    {
+        return $this->mandatoryAttributes ??= array_merge(
+            $this->mandatoryAttributesProvider->getMandatoryEavAttributes(),
+            $this->mandatoryAttributesProvider->getMandatorySystemAttributes()
+        );
     }
 }

@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontValidatePriceChangesForConfigurableProductWithMultipleAttributesInWidgetTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Product Price Display"/>
+            <title value="Validate price changes for configurable product with dropdown and text swatch attributes on storefront"/>
+            <description value="Verify configurable product price updates correctly when selecting different attribute options including products displayed in widgets"/>
+            <testCaseId value="AC-8423"/>
+            <severity value="MAJOR"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <!-- Step-1: Login to admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Create category for products -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <!-- Step-2: Create a dropdown product attribute -->
+            <createData entity="productDropDownAttribute" stepKey="createDropdownAttribute">
+                <field key="attribute_code">my_size</field>
+                <field key="default_frontend_label">my size</field>
+            </createData>
+            <createData entity="productAttributeOption" stepKey="createAttributeOptionSmall">
+                <requiredEntity createDataKey="createDropdownAttribute"/>
+                <field key="label">Small</field>
+            </createData>
+            <createData entity="productAttributeOption" stepKey="createAttributeOptionMedium">
+                <requiredEntity createDataKey="createDropdownAttribute"/>
+                <field key="label">Medium</field>
+            </createData>
+            <createData entity="productAttributeOption" stepKey="createAttributeOptionLarge">
+                <requiredEntity createDataKey="createDropdownAttribute"/>
+                <field key="label">Large</field>
+            </createData>
+            <!-- Step-3: Create a text swatch product attribute -->
+            <createData entity="productDropDownAttribute" stepKey="createTextSwatchAttribute">
+                <field key="attribute_code">color_swatch</field>
+                <field key="default_frontend_label">color1</field>
+                <field key="frontend_input">swatch_text</field>
+            </createData>
+            <createData entity="productAttributeOption" stepKey="createAttributeOptionBlack">
+                <requiredEntity createDataKey="createTextSwatchAttribute"/>
+                <field key="label">Black</field>
+            </createData>
+            <createData entity="productAttributeOption" stepKey="createAttributeOptionWhite">
+                <requiredEntity createDataKey="createTextSwatchAttribute"/>
+                <field key="label">White</field>
+            </createData>
+            <createData entity="productAttributeOption" stepKey="createAttributeOptionBlue">
+                <requiredEntity createDataKey="createTextSwatchAttribute"/>
+                <field key="label">Blue</field>
+            </createData>
+            <!-- Create configurable products -->
+            <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct1">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="name">Conf 1</field>
+                <field key="sku">conf-1</field>
+                <field key="price">100</field>
+            </createData>
+            <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct2">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="name">Conf 2</field>
+                <field key="sku">conf-2</field>
+                <field key="price">200</field>
+            </createData>
+        </before>
+        <after>
+            <!-- Delete category -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <!-- Delete configurable product & its variants via API using ProductApiHelper -->
+            <helper class="Magento\Catalog\Test\Mftf\Helper\ProductApiHelper" method="deleteAllProductsApi" stepKey="deleteAllProductsViaApi"/>
+            <!-- Delete widget -->
+            <actionGroup ref="AdminDeleteWidgetActionGroup" stepKey="deleteWidget">
+                <argument name="widget" value="SampleCatalogProductsListWidget"/>
+            </actionGroup>
+            <!-- Delete dropdown attribute -->
+            <deleteData createDataKey="createDropdownAttribute" stepKey="deleteDropdownAttribute"/>
+            <!-- Delete text swatch attribute -->
+            <deleteData createDataKey="createTextSwatchAttribute" stepKey="deleteSwatchAttribute"/>
+            <!-- Logout -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Step-4: Open Conf 1 and add configurations with my_size attribute -->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openConfigProduct1">
+            <argument name="productId" value="$createConfigProduct1.id$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForConfigProduct1PageLoad"/>
+        <!-- Create configurations for Conf 1 with my_size attribute -->
+        <actionGroup ref="GenerateConfigurationsByAttributeCodeActionGroup" stepKey="createConfigurationsForConf1">
+            <argument name="attributeCode" value="$createDropdownAttribute.attribute_code$"/>
+        </actionGroup>
+        <!-- Set custom prices for Small and Large variants -->
+        <actionGroup ref="ChangeConfigurableProductChildProductPriceActionGroup" stepKey="changePriceForSmall">
+            <argument name="productAttributes" value="my size: Small"/>
+            <argument name="productPrice" value="110"/>
+        </actionGroup>
+        <actionGroup ref="ChangeConfigurableProductChildProductPriceActionGroup" stepKey="changePriceForLarge">
+            <argument name="productAttributes" value="my size: Large"/>
+            <argument name="productPrice" value="130"/>
+        </actionGroup>
+        <actionGroup ref="SaveConfigurableProductAddToCurrentAttributeSetActionGroup" stepKey="saveConfigProduct1"/>
+        <!-- Step-5: Open Conf 2 and add configurations with both attributes (color_swatch and my_size) -->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openConfigProduct2">
+            <argument name="productId" value="$createConfigProduct2.id$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForConfigProduct2PageLoad"/>
+        <!-- Create configurations for Conf 2 with both attributes -->
+        <waitForElementClickable selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="waitForCreateConfigurationsClickableForConf2"/>
+        <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickCreateConfigurationsForConf2"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.createNewAttribute}}" stepKey="waitForConfigurationModalOpen"/>
+        <!-- Select both my_size and color_swatch attributes -->
+        <click selector="{{AdminCreateProductConfigurationsPanel.attributeCheckbox($createDropdownAttribute.attribute_code$)}}" stepKey="selectSizeAttribute"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.attributeCheckbox($createTextSwatchAttribute.attribute_code$)}}" stepKey="selectColorAttribute"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton1ForConf2"/>
+        <!-- Select only Small and Large for my_size, and Black and White for color_swatch -->
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.attributeCheckboxByName('Small')}}" stepKey="waitForOptionsForConf2"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.attributeCheckboxByName('Small')}}" stepKey="selectSmallOptionForConf2"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.attributeCheckboxByName('Large')}}" stepKey="selectLargeOptionForConf2"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.attributeCheckboxByName('Black')}}" stepKey="selectBlackOptionForConf2"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.attributeCheckboxByName('White')}}" stepKey="selectWhiteOptionForConf2"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton2ForConf2"/>
+        <!-- Apply single quantity to all SKUs -->
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="waitForQuantitySection"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="clickSingleQuantity"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.quantity}}" userInput="100" stepKey="fillQuantity"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton3ForConf2"/>
+        <!-- Generate products -->
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton4ForConf2"/>
+        <waitForElementVisible selector="{{AdminProductFormActionSection.saveButton}}" stepKey="waitForSaveButtonForConf2"/>
+        <!-- Set custom prices for all variants -->
+        <actionGroup ref="ChangeConfigurableProductChildProductPriceActionGroup" stepKey="changePriceForBlackSmall">
+            <argument name="productAttributes" value="my size: Small, color1: Black"/>
+            <argument name="productPrice" value="210"/>
+        </actionGroup>
+        <actionGroup ref="ChangeConfigurableProductChildProductPriceActionGroup" stepKey="changePriceForBlackLarge">
+            <argument name="productAttributes" value="my size: Large, color1: Black"/>
+            <argument name="productPrice" value="230"/>
+        </actionGroup>
+        <actionGroup ref="ChangeConfigurableProductChildProductPriceActionGroup" stepKey="changePriceForWhiteSmall">
+            <argument name="productAttributes" value="my size: Small, color1: White"/>
+            <argument name="productPrice" value="250"/>
+        </actionGroup>
+        <actionGroup ref="ChangeConfigurableProductChildProductPriceActionGroup" stepKey="changePriceForWhiteLarge">
+            <argument name="productAttributes" value="my size: Large, color1: White"/>
+            <argument name="productPrice" value="270"/>
+        </actionGroup>
+        <actionGroup ref="SaveConfigurableProductAddToCurrentAttributeSetActionGroup" stepKey="saveConfigProduct2"/>
+        <!-- Step-6: Create Catalog Products List widget to display Conf 2 on configurable product pages -->
+        <actionGroup ref="AdminConfigureWidgetWithSpecificProductsActionGroup" stepKey="configureWidget">
+            <argument name="productId" value="$createConfigProduct1.id$"/>
+        </actionGroup>
+        <actionGroup ref="AdminSaveAndContinueWidgetActionGroup" stepKey="saveWidget"/>
+        <!-- Step-7: Open Conf 1 product page on storefront and validate price changes -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openConf1ProductPage">
+            <argument name="productUrl" value="conf-1"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="waitForProductName"/>
+        <waitForText selector="{{StorefrontProductInfoMainSection.productName}}" userInput="Conf 1" stepKey="verifyProductName"/>
+        <!-- Verify default price before selection -->
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="waitForDefaultPrice"/>
+        <!-- Select Small option and verify price -->
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" stepKey="waitForAttributeDropdown"/>
+        <selectOption selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" userInput="Small" stepKey="selectSmallOption"/>
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="waitForPriceAfterSmallSelection"/>
+        <waitForText selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="$110.00" stepKey="verifySmallPrice"/>
+        <!-- Select Large option and verify price changes -->
+        <selectOption selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" userInput="Large" stepKey="selectLargeOption"/>
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="waitForPriceAfterLargeSelection"/>
+        <waitForText selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="$130.00" stepKey="verifyLargePrice"/>
+        <!-- Select Small again and verify price changes back -->
+        <selectOption selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" userInput="Small" stepKey="selectSmallOptionAgain"/>
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="waitForPriceAfterSmallSelectionAgain"/>
+        <waitForText selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="$110.00" stepKey="verifySmallPriceAgain"/>
+        <!-- Verify Conf 2 is displayed in widget on Conf 1 product page and validate price changes -->
+        <scrollTo selector="{{StorefrontCategoryProductSection.widgetProduct('Conf 2')}}" stepKey="scrollToWidgetProduct"/>
+        <waitForElementVisible selector="{{StorefrontCategoryProductSection.widgetProduct('Conf 2')}}" stepKey="verifyConf2DisplayedInWidget"/>
+        <!-- Click on Conf 2 from widget to navigate to its product page -->
+        <click selector="{{StorefrontCategoryProductSection.widgetProduct('Conf 2')}}" stepKey="clickConf2FromWidget"/>
+        <waitForPageLoad stepKey="waitForConf2PageLoad"/>
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="waitForConf2ProductName"/>
+        <waitForText selector="{{StorefrontProductInfoMainSection.productName}}" userInput="Conf 2" stepKey="verifyConf2ProductName"/>
+        <!-- Verify price changes for Conf 2 with multiple attribute combinations -->
+        <!-- Select Black color swatch -->
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel('Black')}}" stepKey="waitForBlackSwatch"/>
+        <click selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel('Black')}}" stepKey="selectBlackSwatch"/>
+        <waitForPageLoad stepKey="waitAfterBlackSelection"/>
+        <!-- Select Small size with Black color and verify price -->
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.attributeSelectByAttributeID('my size')}}" stepKey="waitForSizeDropdownForBlack"/>
+        <selectOption selector="{{StorefrontProductInfoMainSection.attributeSelectByAttributeID('my size')}}" userInput="Small" stepKey="selectSmallForBlack"/>
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="waitForPriceBlackSmall"/>
+        <waitForText selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="$210.00" stepKey="verifyBlackSmallPrice"/>
+        <!-- Select Large size with Black color and verify price -->
+        <selectOption selector="{{StorefrontProductInfoMainSection.attributeSelectByAttributeID('my size')}}" userInput="Large" stepKey="selectLargeForBlack"/>
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="waitForPriceBlackLarge"/>
+        <waitForText selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="$230.00" stepKey="verifyBlackLargePrice"/>
+        <!-- Select White color swatch -->
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel('White')}}" stepKey="waitForWhiteSwatch"/>
+        <click selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel('White')}}" stepKey="selectWhiteSwatch"/>
+        <waitForPageLoad stepKey="waitAfterWhiteSelection"/>
+        <!-- Select Small size with White color and verify price -->
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.attributeSelectByAttributeID('my size')}}" stepKey="waitForSizeDropdownForWhite"/>
+        <selectOption selector="{{StorefrontProductInfoMainSection.attributeSelectByAttributeID('my size')}}" userInput="Small" stepKey="selectSmallForWhite"/>
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="waitForPriceWhiteSmall"/>
+        <waitForText selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="$250.00" stepKey="verifyWhiteSmallPrice"/>
+        <!-- Select Large size with White color and verify price -->
+        <selectOption selector="{{StorefrontProductInfoMainSection.attributeSelectByAttributeID('my size')}}" userInput="Large" stepKey="selectLargeForWhite"/>
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="waitForPriceWhiteLarge"/>
+        <waitForText selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="$270.00" stepKey="verifyWhiteLargePrice"/>
+    </test>
+</tests>

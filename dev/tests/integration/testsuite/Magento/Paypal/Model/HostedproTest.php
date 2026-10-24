@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Paypal\Model;
 
@@ -41,7 +41,7 @@ class HostedproTest extends \PHPUnit\Framework\TestCase
 
         $this->api = $this->getMockBuilder(Nvp::class)
             ->disableOriginalConstructor()
-            ->setMethods(['call'])
+            ->onlyMethods(['call'])
             ->getMock();
 
         $proFactory = $this->getProFactory();
@@ -87,7 +87,7 @@ class HostedproTest extends \PHPUnit\Framework\TestCase
     {
         $config = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getValue'])
+            ->onlyMethods(['getValue'])
             ->getMock();
         $config->expects(static::any())
             ->method('getValue')
@@ -104,7 +104,7 @@ class HostedproTest extends \PHPUnit\Framework\TestCase
     {
         $pro = $this->getMockBuilder(Pro::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getApi', 'setMethod', 'getConfig', '__wakeup'])
+            ->onlyMethods(['getApi', 'setMethod', 'getConfig'])
             ->getMock();
 
         $config = $this->getConfig();
@@ -117,7 +117,7 @@ class HostedproTest extends \PHPUnit\Framework\TestCase
 
         $proFactory = $this->getMockBuilder(ProFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $proFactory->expects(static::once())
             ->method('create')

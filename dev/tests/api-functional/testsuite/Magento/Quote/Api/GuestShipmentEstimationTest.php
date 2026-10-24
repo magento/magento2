@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Quote\Api;
 
@@ -11,9 +11,9 @@ use Magento\Quote\Api\Data\AddressInterface;
 
 class GuestShipmentEstimationTest extends WebapiAbstract
 {
-    const SERVICE_VERSION = 'V1';
-    const SERVICE_NAME = 'quoteGuestShipmentEstimationV1';
-    const RESOURCE_PATH = '/V1/guest-carts/';
+    public const SERVICE_VERSION = 'V1';
+    public const SERVICE_NAME = 'quoteGuestShipmentEstimationV1';
+    public const RESOURCE_PATH = '/V1/guest-carts/';
 
     /**
      * @var ObjectManager
@@ -23,6 +23,33 @@ class GuestShipmentEstimationTest extends WebapiAbstract
     protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+    }
+
+    /**
+     * @return void
+     */
+    public function testNotAuthorized(): void
+    {
+        $this->_markTestAsRestOnly();
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => '/V1/carts/mine/estimate-shipping-methods',
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
+                'token' => null,
+            ]
+        ];
+
+        $requestData = [
+            'address' => [
+                'country_id' => "US",
+                'postcode' => null,
+                'region' => null,
+                'region_id' => null
+            ],
+        ];
+
+        $this->expectExceptionMessage("The consumer isn't authorized to access %resources.");
+        $this->_webApiCall($serviceInfo, $requestData);
     }
 
     /**

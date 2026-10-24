@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -26,6 +26,11 @@
             <magentoCLI command="config:set {{EnableTranslateInlineForStorefront.path}} {{EnableTranslateInlineForStorefront.value}}" stepKey="enableTranslateInlineForStorefront"/>
             <!-- Create Simple Product -->
             <createData entity="SimpleProduct2" stepKey="createProduct"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfterTranslateDisabled">
+                <argument name="tags" value="translate config full_page block_html"/>
+            </actionGroup>
+            <!-- Deploy static content -->
+            <magentoCLI command="setup:static-content:deploy -f" stepKey="deployStaticContent"/>
         </before>
         <after>
             <!-- Disable Translate Inline For Storefront -->

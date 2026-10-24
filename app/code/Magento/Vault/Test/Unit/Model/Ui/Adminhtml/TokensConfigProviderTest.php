@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Intl\DateTimeFactory;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\TestFramework\Unit\Matcher\MethodInvokedAtIndex;
 use Magento\Payment\Helper\Data;
@@ -22,6 +23,7 @@ use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Api\Data\PaymentTokenSearchResultsInterface;
@@ -31,6 +33,7 @@ use Magento\Vault\Model\Ui\Adminhtml\TokensConfigProvider;
 use Magento\Vault\Model\Ui\TokenUiComponentInterface;
 use Magento\Vault\Model\Ui\TokenUiComponentProviderInterface;
 use Magento\Vault\Model\VaultPaymentInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -41,15 +44,17 @@ use PHPUnit\Framework\TestCase;
  */
 class TokensConfigProviderTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**#@+
      * Global values
      */
-    const STORE_ID = 1;
-    const ORDER_ID = 2;
-    const ORDER_PAYMENT_ENTITY_ID = 3;
-    const ENTITY_ID = 4;
-    const VAULT_PAYMENT_CODE = 'vault_payment';
-    const VAULT_PROVIDER_CODE = 'payment';
+    public const STORE_ID = 1;
+    public const ORDER_ID = 2;
+    public const ORDER_PAYMENT_ENTITY_ID = 3;
+    public const ENTITY_ID = 4;
+    public const VAULT_PAYMENT_CODE = 'vault_payment';
+    public const VAULT_PROVIDER_CODE = 'payment';
     /**#@-*/
 
     /**
@@ -76,6 +81,11 @@ class TokensConfigProviderTest extends TestCase
      * @var StoreManagerInterface|MockObject
      */
     private $storeManager;
+
+    /**
+     * @var WebsiteInterface|MockObject
+     */
+    private $websiteMock;
 
     /**
      * @var StoreInterface|MockObject
@@ -124,37 +134,25 @@ class TokensConfigProviderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->paymentTokenRepository = $this->getMockBuilder(PaymentTokenRepositoryInterface::class)
-            ->getMockForAbstractClass();
-        $this->filterBuilder = $this->getMockBuilder(FilterBuilder::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->searchCriteriaBuilder = $this->getMockBuilder(SearchCriteriaBuilder::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->session = $this->getMockBuilder(Quote::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getCustomerId', 'getReordered', 'getStoreId'])
-            ->getMock();
-        $this->dateTimeFactory = $this->getMockBuilder(DateTimeFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->paymentDataHelper = $this->getMockBuilder(Data::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getMethodInstance'])
-            ->getMock();
-        $this->paymentTokenManagement = $this->getMockBuilder(PaymentTokenManagementInterface::class)
-            ->getMockForAbstractClass();
-        $this->orderRepository = $this->getMockBuilder(OrderRepositoryInterface::class)
-            ->getMockForAbstractClass();
+        $this->paymentTokenRepository = $this->createMock(PaymentTokenRepositoryInterface::class);
+        $this->filterBuilder = $this->createMock(FilterBuilder::class);
+        $this->searchCriteriaBuilder = $this->createMock(SearchCriteriaBuilder::class);
+        $this->session = $this->createPartialMockWithReflection(
+            Quote::class,
+            ['getCustomerId', 'getStoreId', 'getReordered', 'getQuote']
+        );
+        $this->dateTimeFactory = $this->createMock(DateTimeFactory::class);
+        $this->paymentDataHelper = $this->createMock(Data::class);
+        $this->paymentTokenManagement = $this->createMock(PaymentTokenManagementInterface::class);
+        $this->orderRepository = $this->createMock(OrderRepositoryInterface::class);
 
-        $this->vaultPayment = $this->getMockForAbstractClass(VaultPaymentInterface::class);
+        $this->vaultPayment = $this->createMock(VaultPaymentInterface::class);
 
         $this->objectManager = new ObjectManager($this);
 
         $this->initStoreMock();
 
-        $this->tokenComponentProvider = $this->getMockForAbstractClass(TokenUiComponentProviderInterface::class);
+        $this->tokenComponentProvider = $this->createMock(TokenUiComponentProviderInterface::class);
 
         $this->configProvider = new TokensConfigProvider(
             $this->session,
@@ -217,17 +215,27 @@ class TokensConfigProviderTest extends TestCase
             ->method('getProviderCode')
             ->willReturn(self::VAULT_PROVIDER_CODE);
 
+        $this->websiteMock = $this->createMock(WebsiteInterface::class);
+        $this->storeManager->expects(static::once())
+            ->method('getWebsite')
+            ->willReturn($this->websiteMock);
+
+        $this->websiteMock->expects(static::once())
+            ->method('getId')
+            ->willReturn(1);
+
+        $this->session->expects(static::once())
+            ->method('getQuote')
+            ->willReturn(null);
+
         /** @var PaymentTokenInterface|MockObject $token */
-        $token = $this->getMockBuilder(PaymentTokenInterface::class)
-            ->getMockForAbstractClass();
+        $token = $this->createMock(PaymentTokenInterface::class);
 
         $tokenUiComponent = $this->getTokenUiComponentProvider($token);
 
         $searchCriteria = $this->getSearchCriteria($customerId, self::ENTITY_ID, self::VAULT_PROVIDER_CODE);
 
-        $date = $this->getMockBuilder(\DateTime::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $date = $this->createMock(\DateTime::class);
         $this->dateTimeFactory->expects(static::once())
             ->method('create')
             ->with("now", new \DateTimeZone('UTC'))
@@ -237,8 +245,7 @@ class TokensConfigProviderTest extends TestCase
             ->with('Y-m-d 00:00:00')
             ->willReturn('2015-01-01 00:00:00');
 
-        $searchResult = $this->getMockBuilder(PaymentTokenSearchResultsInterface::class)
-            ->getMockForAbstractClass();
+        $searchResult = $this->createMock(PaymentTokenSearchResultsInterface::class);
         $this->paymentTokenRepository->expects(self::once())
             ->method('getList')
             ->with($searchCriteria)
@@ -281,10 +288,17 @@ class TokensConfigProviderTest extends TestCase
         $this->vaultPayment->expects(static::once())
             ->method('getProviderCode')
             ->willReturn(self::VAULT_PROVIDER_CODE);
+        $this->websiteMock = $this->createMock(WebsiteInterface::class);
+        $this->storeManager->expects(static::once())
+            ->method('getWebsite')
+            ->willReturn($this->websiteMock);
+
+        $this->websiteMock->expects(static::once())
+            ->method('getId')
+            ->willReturn(1);
 
         /** @var PaymentTokenInterface|MockObject $token */
-        $token = $this->getMockBuilder(PaymentTokenInterface::class)
-            ->getMockForAbstractClass();
+        $token = $this->createMock(PaymentTokenInterface::class);
 
         $this->session->expects(static::once())
             ->method('getReordered')
@@ -305,9 +319,7 @@ class TokensConfigProviderTest extends TestCase
 
         $searchCriteria = $this->getSearchCriteria($customerId, self::ENTITY_ID, self::VAULT_PROVIDER_CODE);
 
-        $date = $this->getMockBuilder('DateTime')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $date = $this->createMock(\DateTime::class);
         $this->dateTimeFactory->expects(static::once())
             ->method('create')
             ->with("now", new \DateTimeZone('UTC'))
@@ -317,8 +329,7 @@ class TokensConfigProviderTest extends TestCase
             ->with('Y-m-d 00:00:00')
             ->willReturn('2015-01-01 00:00:00');
 
-        $searchResult = $this->getMockBuilder(PaymentTokenSearchResultsInterface::class)
-            ->getMockForAbstractClass();
+        $searchResult = $this->createMock(PaymentTokenSearchResultsInterface::class);
         $this->paymentTokenRepository->expects(self::once())
             ->method('getList')
             ->with($searchCriteria)
@@ -334,8 +345,8 @@ class TokensConfigProviderTest extends TestCase
     /**
      * @param \Exception $exception
      * @covers \Magento\Vault\Model\Ui\Adminhtml\TokensConfigProvider::getTokensComponents
-     * @dataProvider getTokensComponentsGuestCustomerExceptionsProvider
      */
+    #[DataProvider('getTokensComponentsGuestCustomerExceptionsProvider')]
     public function testGetTokensComponentsGuestCustomerOrderNotFound($exception)
     {
         $customerId = null;
@@ -381,7 +392,7 @@ class TokensConfigProviderTest extends TestCase
      * Set of catching exception types
      * @return array
      */
-    public function getTokensComponentsGuestCustomerExceptionsProvider()
+    public static function getTokensComponentsGuestCustomerExceptionsProvider()
     {
         return [
             [new InputException()],
@@ -486,12 +497,12 @@ class TokensConfigProviderTest extends TestCase
      */
     private function initStoreMock()
     {
-        $this->store = $this->getMockForAbstractClass(StoreInterface::class);
+        $this->store = $this->createMock(StoreInterface::class);
         $this->store->expects(static::any())
             ->method('getId')
             ->willReturn(self::STORE_ID);
 
-        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
         $this->storeManager->expects(static::any())
             ->method('getStore')
             ->with(null)
@@ -505,11 +516,9 @@ class TokensConfigProviderTest extends TestCase
     private function getOrderMock()
     {
         /** @var OrderInterface|MockObject $order */
-        $order = $this->getMockBuilder(OrderInterface::class)
-            ->getMockForAbstractClass();
+        $order = $this->createMock(OrderInterface::class);
         /** @var OrderPaymentInterface|MockObject $orderPayment */
-        $orderPayment = $this->getMockBuilder(OrderPaymentInterface::class)
-            ->getMockForAbstractClass();
+        $orderPayment = $this->createMock(OrderPaymentInterface::class);
 
         $order->expects(static::once())
             ->method('getPayment')
@@ -528,7 +537,7 @@ class TokensConfigProviderTest extends TestCase
      */
     private function getTokenUiComponentProvider($token)
     {
-        $tokenUiComponent = $this->getMockForAbstractClass(TokenUiComponentInterface::class);
+        $tokenUiComponent = $this->createMock(TokenUiComponentInterface::class);
         $this->tokenComponentProvider->expects(static::once())
             ->method('getComponentForToken')
             ->with($token)
@@ -546,17 +555,17 @@ class TokensConfigProviderTest extends TestCase
      */
     private function createExpectedFilter($field, $value, $atIndex)
     {
-        $filterObject = $this->getMockBuilder(Filter::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $filterObject = $this->createMock(Filter::class);
         $this->filterBuilder->expects(new MethodInvokedAtIndex($atIndex))
             ->method('setField')
             ->with($field)
             ->willReturnSelf();
-        $this->filterBuilder->expects(new MethodInvokedAtIndex($atIndex))
-            ->method('setValue')
-            ->with($value)
-            ->willReturnSelf();
+        if ($value !== null) {
+            $this->filterBuilder->expects(new MethodInvokedAtIndex($atIndex))
+                ->method('setValue')
+                ->with($value)
+                ->willReturnSelf();
+        }
         $this->filterBuilder->expects(new MethodInvokedAtIndex($atIndex))
             ->method('create')
             ->willReturn($filterObject);
@@ -573,9 +582,7 @@ class TokensConfigProviderTest extends TestCase
      */
     private function getSearchCriteria($customerId, $entityId, $vaultProviderCode)
     {
-        $searchCriteria = $this->getMockBuilder(SearchCriteria::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $searchCriteria = $this->createMock(SearchCriteria::class);
 
         $customerFilter = $customerId ? $this->createExpectedFilter(PaymentTokenInterface::CUSTOMER_ID, $customerId, 0)
             : $this->createExpectedFilter(PaymentTokenInterface::ENTITY_ID, $entityId, 0);
@@ -595,13 +602,14 @@ class TokensConfigProviderTest extends TestCase
         );
 
         $isVisibleFilter = $this->createExpectedFilter(PaymentTokenInterface::IS_VISIBLE, 1, 4);
+        $websiteFilter1 = $this->createExpectedFilter(PaymentTokenInterface::WEBSITE_ID, 1, 5);
+        $websiteFilter2 = $this->createExpectedFilter(PaymentTokenInterface::WEBSITE_ID, null, 6);
 
-        $this->filterBuilder->expects(static::once())
+        $this->filterBuilder->expects(self::exactly(2))
             ->method('setConditionType')
-            ->with('gt')
             ->willReturnSelf();
 
-        $this->searchCriteriaBuilder->expects(self::exactly(5))
+        $this->searchCriteriaBuilder->expects(self::exactly(6))
             ->method('addFilters')
             ->willReturnMap(
                 [
@@ -610,6 +618,7 @@ class TokensConfigProviderTest extends TestCase
                     [$expiresAtFilter, $this->searchCriteriaBuilder],
                     [$isActiveFilter, $this->searchCriteriaBuilder],
                     [$isVisibleFilter, $this->searchCriteriaBuilder],
+                    [[$websiteFilter1, $websiteFilter2], $this->searchCriteriaBuilder],
                 ]
             );
 

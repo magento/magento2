@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Framework\Indexer\CacheContext;
 use Magento\Indexer\Model\Indexer\DeferredCacheCleaner;
 use Magento\Indexer\Model\Indexer\DeferredCacheContext;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -54,7 +55,7 @@ class DeferredCacheCleanerTest extends TestCase
         $this->cacheContext = $this->createMock(CacheContext::class);
         $this->deferredCacheContext = $this->createMock(DeferredCacheContext::class);
         $this->eventManager = $this->createMock(Manager::class);
-        $this->cache = $this->getMockForAbstractClass(CacheInterface::class);
+        $this->cache = $this->createMock(CacheInterface::class);
         $this->model = new DeferredCacheCleaner(
             $this->eventManager,
             $this->cache,
@@ -78,8 +79,8 @@ class DeferredCacheCleanerTest extends TestCase
      *
      * @param array $tags
      * @param bool $isCacheClean
-     * @dataProvider cacheTagsDataProvider
      */
+    #[DataProvider('cacheTagsDataProvider')]
     public function testFlush(array $tags, bool $isCacheClean = true): void
     {
         $this->eventManager->expects($this->once())
@@ -109,7 +110,7 @@ class DeferredCacheCleanerTest extends TestCase
     /**
      * @return array[]
      */
-    public function cacheTagsDataProvider(): array
+    public static function cacheTagsDataProvider(): array
     {
         return [
             [[], false],

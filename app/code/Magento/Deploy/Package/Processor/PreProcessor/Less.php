@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Deploy\Package\Processor\PreProcessor;
@@ -100,7 +100,7 @@ class Less implements ProcessorInterface
                 if ($packageFile && $packageFile->getOrigPackage() === $package) {
                     continue;
                 }
-                $deployFileName = $this->fileNameResolver->resolve($file->getFileName());
+                $deployFileName = $this->fileNameResolver->resolve($file->getFileName() ?? '');
                 if ($deployFileName !== $file->getFileName()) {
                     if ($this->hasOverrides($file, $package)) {
                         $file = clone $file;

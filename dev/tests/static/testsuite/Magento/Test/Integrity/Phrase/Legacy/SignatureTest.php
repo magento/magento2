@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -11,8 +11,9 @@ namespace Magento\Test\Integrity\Phrase\Legacy;
 
 use Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer;
 use Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\Translate\MethodCollector;
+use Magento\Test\Integrity\Phrase\AbstractTestCase;
 
-class SignatureTest extends \Magento\Test\Integrity\Phrase\AbstractTestCase
+class SignatureTest extends AbstractTestCase
 {
     /**
      * @var \Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\Translate\MethodCollector

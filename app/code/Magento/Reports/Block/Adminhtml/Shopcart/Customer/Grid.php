@@ -1,14 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Reports\Block\Adminhtml\Shopcart\Customer;
 
 /**
  * Adminhtml items in carts report grid block
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
@@ -35,6 +34,8 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
     }
 
     /**
+     * Initialize
+     *
      * @return void
      */
     protected function _construct()
@@ -44,6 +45,8 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
     }
 
     /**
+     * Prepare collection
+     *
      * @return \Magento\Backend\Block\Widget\Grid
      */
     protected function _prepareCollection()
@@ -60,6 +63,8 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
     }
 
     /**
+     * After load collection
+     *
      * @return \Magento\Backend\Block\Widget\Grid|void
      */
     protected function _afterLoadCollection()
@@ -68,6 +73,8 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
     }
 
     /**
+     * Prepare columns
+     *
      * @return \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareColumns()

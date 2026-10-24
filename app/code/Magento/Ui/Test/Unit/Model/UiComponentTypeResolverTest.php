@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Ui\Test\Unit\Model;
 
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Ui\Model\UiComponentTypeResolver;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class UiComponentTypeResolverTest extends TestCase
@@ -35,12 +36,12 @@ class UiComponentTypeResolverTest extends TestCase
 
     /**
      * @param string $acceptType
-     * @param string $contentType
-     * @dataProvider resolveDataProvider
+     * @param string $contentType     
      */
+    #[DataProvider('resolveDataProvider')]
     public function testResolve(string $acceptType, string $contentType)
     {
-        $uiComponentContextMock = $this->getMockForAbstractClass(ContextInterface::class);
+        $uiComponentContextMock = $this->createMock(ContextInterface::class);
         $uiComponentContextMock->expects($this->atLeastOnce())->method('getAcceptType')->willReturn($acceptType);
 
         $this->assertEquals($contentType, $this->model->resolve($uiComponentContextMock));
@@ -49,7 +50,7 @@ class UiComponentTypeResolverTest extends TestCase
     /**
      * @return array
      */
-    public function resolveDataProvider(): array
+    public static function resolveDataProvider(): array
     {
         return [
             ['json', 'application/json'],

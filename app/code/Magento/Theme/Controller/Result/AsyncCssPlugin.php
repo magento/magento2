@@ -1,15 +1,16 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Theme\Controller\Result;
 
+use Magento\Csp\Api\InlineUtilInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Framework\App\Response\Http;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Response\HttpInterface as HttpResponseInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\View\Result\Layout;
@@ -27,11 +28,22 @@ class AsyncCssPlugin
     private $scopeConfig;
 
     /**
-     * @param ScopeConfigInterface $scopeConfig
+     * @var InlineUtilInterface
      */
-    public function __construct(ScopeConfigInterface $scopeConfig)
-    {
+    private $cspInlineUtil;
+
+    /**
+     * @param ScopeConfigInterface $scopeConfig
+     * @param InlineUtilInterface|null $cspInlineUtil
+     */
+    public function __construct(
+        ScopeConfigInterface $scopeConfig,
+        ?InlineUtilInterface $cspInlineUtil = null
+    ) {
         $this->scopeConfig = $scopeConfig;
+        $this->cspInlineUtil = $cspInlineUtil ?: ObjectManager::getInstance()->get(
+            InlineUtilInterface::class
+        );
     }
 
     /**
@@ -99,10 +111,13 @@ class AsyncCssPlugin
                 $media = $mediaAttribute[2];
             }
             $media = $media ?? 'all';
-
+            $onload = $this->cspInlineUtil->renderEventListener(
+                'onload',
+                sprintf('this.onload=null;this.media=\'%s\'', $media)
+            );
             $style = sprintf(
-                '<link rel="stylesheet" media="print" onload="this.onload=null;this.media=\'%s\'" href="%s">',
-                $media,
+                '<link rel="stylesheet" media="print" %s href="%s">',
+                $onload,
                 $href
             );
             $styles .= "\n" . $style;

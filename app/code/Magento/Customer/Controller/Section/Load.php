@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Controller\Section;
 
@@ -24,6 +24,7 @@ class Load extends \Magento\Framework\App\Action\Action implements HttpGetAction
     /**
      * @var Identifier
      * @deprecated 101.0.0
+     * @see Used only for backward compatibility for do not break current class implementation with its dependencies
      */
     protected $sectionIdentifier;
 
@@ -49,7 +50,7 @@ class Load extends \Magento\Framework\App\Action\Action implements HttpGetAction
         JsonFactory $resultJsonFactory,
         Identifier $sectionIdentifier,
         SectionPoolInterface $sectionPool,
-        \Magento\Framework\Escaper $escaper = null
+        ?\Magento\Framework\Escaper $escaper = null
     ) {
         parent::__construct($context);
         $this->resultJsonFactory = $resultJsonFactory;
@@ -69,7 +70,9 @@ class Load extends \Magento\Framework\App\Action\Action implements HttpGetAction
         $resultJson->setHeader('Pragma', 'no-cache', true);
         try {
             $sectionNames = $this->getRequest()->getParam('sections');
-            $sectionNames = $sectionNames ? array_unique(\explode(',', $sectionNames)) : null;
+            $sectionNames = $sectionNames
+                ? array_unique(is_array($sectionNames) ? $sectionNames : explode(',', $sectionNames))
+                : null;
 
             $forceNewSectionTimestamp = $this->getRequest()->getParam('force_new_section_timestamp');
             if ('false' === $forceNewSectionTimestamp) {

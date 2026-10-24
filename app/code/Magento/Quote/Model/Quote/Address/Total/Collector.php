@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Quote\Model\Quote\Address\Total;
 
@@ -82,7 +82,7 @@ class Collector extends \Magento\Sales\Model\Config\Ordered
         \Magento\Quote\Model\Quote\Address\TotalFactory $totalFactory,
         $sourceData = null,
         $store = null,
-        SerializerInterface $serializer = null
+        ?SerializerInterface $serializer = null
     ) {
         $this->_scopeConfig = $scopeConfig;
         $this->_totalFactory = $totalFactory;

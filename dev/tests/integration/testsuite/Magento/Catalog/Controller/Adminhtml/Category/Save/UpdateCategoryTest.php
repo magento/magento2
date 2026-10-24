@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Model\Category;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test related to update category.
@@ -38,20 +39,19 @@ class UpdateCategoryTest extends AbstractSaveCategoryTest
     }
 
     /**
-     * @dataProvider categoryDataProvider
      * @magentoDataFixture Magento/Store/_files/second_store.php
      * @magentoDataFixture Magento/Catalog/_files/category.php
      *
      * @param array $postData
      * @return void
      */
+    #[DataProvider('categoryDataProvider')]
     public function testUpdateCategoryForDefaultStoreView(array $postData): void
     {
         $storeId = (int)$this->storeManager->getStore('default')->getId();
-        $postData = array_merge($postData, ['store_id' => $storeId]);
         $responseData = $this->performSaveCategoryRequest($postData);
         $this->assertRequestIsSuccessfullyPerformed($responseData);
-        $category = $this->categoryRepository->get($postData['entity_id'], $postData['store_id']);
+        $category = $this->categoryRepository->get($postData['entity_id'], $storeId);
         unset($postData['use_default']);
         unset($postData['use_config']);
         foreach ($postData as $key => $value) {
@@ -62,11 +62,11 @@ class UpdateCategoryTest extends AbstractSaveCategoryTest
     /**
      * @return array
      */
-    public function categoryDataProvider(): array
+    public static function categoryDataProvider(): array
     {
         return [
             [
-                'post_data' => [
+                'postData' => [
                     'entity_id' => 333,
                     CategoryInterface::KEY_IS_ACTIVE => '0',
                     CategoryInterface::KEY_INCLUDE_IN_MENU => '0',

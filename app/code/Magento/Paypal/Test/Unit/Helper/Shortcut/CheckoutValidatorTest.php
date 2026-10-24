@@ -1,24 +1,28 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Paypal\Test\Unit\Helper\Shortcut;
 
 use Magento\Checkout\Model\Session;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Payment\Helper\Data;
 use Magento\Payment\Model\Method\AbstractMethod;
 use Magento\Paypal\Helper\Shortcut\CheckoutValidator;
 use Magento\Paypal\Helper\Shortcut\Validator;
 use Magento\Quote\Model\Quote;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class CheckoutValidatorTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var CheckoutValidator */
     protected $checkoutValidator;
 
@@ -57,7 +61,7 @@ class CheckoutValidatorTest extends TestCase
         $isInCatalog = true;
         $methodInstanceMock = $this->getMockBuilder(AbstractMethod::class)
             ->disableOriginalConstructor()
-            ->setMethods([])->getMock();
+            ->onlyMethods(['isAvailable'])->getMock();
 
         $this->paypalShortcutHelperMock->expects($this->once())->method('isContextAvailable')
             ->with($code, $isInCatalog)->willReturn(true);
@@ -78,7 +82,7 @@ class CheckoutValidatorTest extends TestCase
         $paymentCode = 'code';
         $methodInstanceMock = $this->getMockBuilder(AbstractMethod::class)
             ->disableOriginalConstructor()
-            ->setMethods([])->getMock();
+            ->onlyMethods(['isAvailable'])->getMock();
 
         $this->paymentHelperMock->expects($this->once())->method('getMethodInstance')->with($paymentCode)
             ->willReturn($methodInstanceMock);
@@ -89,20 +93,19 @@ class CheckoutValidatorTest extends TestCase
     }
 
     /**
-     * @dataProvider methodAvailabilityDataProvider
      * @param bool $availability
      */
+    #[DataProvider('methodAvailabilityDataProvider')]
     public function testIsMethodQuoteAvailableWithQuoteMethodNotAvailable($availability)
     {
         $quote = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $isInCatalog = false;
         $paymentCode = 'code';
         $methodInstanceMock = $this->getMockBuilder(AbstractMethod::class)
             ->disableOriginalConstructor()
-            ->setMethods([])->getMock();
+            ->onlyMethods(['isAvailable'])->getMock();
 
         $this->sessionMock->expects($this->once())->method('getQuote')->willReturn($quote);
         $this->paymentHelperMock->expects($this->once())->method('getMethodInstance')->with($paymentCode)
@@ -119,7 +122,7 @@ class CheckoutValidatorTest extends TestCase
     /**
      * @return array
      */
-    public function methodAvailabilityDataProvider()
+    public static function methodAvailabilityDataProvider()
     {
         return [[true], [false]];
     }
@@ -135,7 +138,6 @@ class CheckoutValidatorTest extends TestCase
         $isInCatalog = false;
         $quote = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
 
         $this->sessionMock->expects($this->once())->method('getQuote')->willReturn($quote);
@@ -147,10 +149,10 @@ class CheckoutValidatorTest extends TestCase
     public function testIsQuoteSummaryValidGrandTotalFalse()
     {
         $isInCatalog = false;
-        $quote = $this->getMockBuilder(Quote::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getGrandTotal', 'validateMinimumAmount', '__wakeup'])
-            ->getMock();
+        $quote = $this->createPartialMockWithReflection(
+            Quote::class,
+            ['getGrandTotal', 'validateMinimumAmount', '__wakeup']
+        );
 
         $this->sessionMock->expects($this->once())->method('getQuote')->willReturn($quote);
         $quote->expects($this->once())->method('validateMinimumAmount')->willReturn(true);
@@ -162,10 +164,10 @@ class CheckoutValidatorTest extends TestCase
     public function testIsQuoteSummaryValidTrue()
     {
         $isInCatalog = false;
-        $quote = $this->getMockBuilder(Quote::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getGrandTotal', 'validateMinimumAmount', '__wakeup'])
-            ->getMock();
+        $quote = $this->createPartialMockWithReflection(
+            Quote::class,
+            ['getGrandTotal', 'validateMinimumAmount', '__wakeup']
+        );
 
         $this->sessionMock->expects($this->once())->method('getQuote')->willReturn($quote);
         $quote->expects($this->once())->method('validateMinimumAmount')->willReturn(true);

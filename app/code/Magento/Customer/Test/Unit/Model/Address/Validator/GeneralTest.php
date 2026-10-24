@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,14 +13,18 @@ use Magento\Directory\Helper\Data;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * Magento\Customer\Model\Address\Validator\General tests.
  */
 class GeneralTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var Data|MockObject  */
     private $directoryDataMock;
 
@@ -51,27 +55,24 @@ class GeneralTest extends TestCase
      * @param array $data
      * @param array $expected
      * @return void
-     *
-     * @dataProvider validateDataProvider
-     */
+     * */
+    #[DataProvider('validateDataProvider')]
     public function testValidate(array $data, array $expected)
     {
-        $addressMock = $this
-            ->getMockBuilder(AbstractAddress::class)
-            ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'getFirstname',
-                    'getLastname',
-                    'getStreetLine',
-                    'getCity',
-                    'getTelephone',
-                    'getFax',
-                    'getCompany',
-                    'getPostcode',
-                    'getCountryId',
-                ]
-            )->getMock();
+        $addressMock = $this->createPartialMockWithReflection(
+            AbstractAddress::class,
+            [
+                'getFirstname',
+                'getLastname',
+                'getCity',
+                'getTelephone',
+                'getFax',
+                'getCompany',
+                'getPostcode',
+                'getCountryId',
+                'getStreetLine'
+            ]
+        );
 
         $attributeMock = $this->createMock(Attribute::class);
         $attributeMock->expects($this->any())
@@ -103,7 +104,7 @@ class GeneralTest extends TestCase
     /**
      * @return array
      */
-    public function validateDataProvider()
+    public static function validateDataProvider()
     {
         $countryId = 1;
         $data = [

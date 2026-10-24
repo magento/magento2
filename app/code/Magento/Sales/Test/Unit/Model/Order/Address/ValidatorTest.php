@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,10 +11,12 @@ use Magento\Directory\Helper\Data;
 use Magento\Directory\Model\CountryFactory;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute;
+use Magento\Framework\Validator\EmailAddress;
 use Magento\Sales\Model\Order\Address;
 use Magento\Sales\Model\Order\Address\Validator;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ValidatorTest extends TestCase
 {
@@ -39,6 +41,11 @@ class ValidatorTest extends TestCase
     protected $countryFactoryMock;
 
     /**
+     * @var EmailAddress|MockObject
+     */
+    private $emailValidatorMock;
+
+    /**
      * Mock order address model
      */
     protected function setUp(): void
@@ -57,10 +64,12 @@ class ValidatorTest extends TestCase
         $eavConfigMock->expects($this->any())
             ->method('getAttribute')
             ->willReturn($attributeMock);
+        $this->emailValidatorMock = $this->createMock(EmailAddress::class);
         $this->validator = new Validator(
             $this->directoryHelperMock,
             $this->countryFactoryMock,
-            $eavConfigMock
+            $eavConfigMock,
+            $this->emailValidatorMock
         );
     }
 
@@ -71,8 +80,8 @@ class ValidatorTest extends TestCase
      * @param $email
      * @param $addressType
      * @param $expectedWarnings
-     * @dataProvider providerAddressData
      */
+    #[DataProvider('providerAddressData')]
     public function testValidate($addressData, $email, $addressType, $expectedWarnings)
     {
         $this->addressMock->expects($this->any())
@@ -84,6 +93,10 @@ class ValidatorTest extends TestCase
         $this->addressMock->expects($this->once())
             ->method('getAddressType')
             ->willReturn($addressType);
+        $this->emailValidatorMock->expects($this->once())
+            ->method('isValid')
+            ->with($email)
+            ->willReturn((stripos($email, '@') !== false));
         $actualWarnings = $this->validator->validate($this->addressMock);
         $this->assertEquals($expectedWarnings, $actualWarnings);
     }
@@ -93,7 +106,7 @@ class ValidatorTest extends TestCase
      *
      * @return array
      */
-    public function providerAddressData()
+    public static function providerAddressData()
     {
         return [
             [

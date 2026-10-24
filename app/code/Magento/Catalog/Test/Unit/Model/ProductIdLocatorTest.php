@@ -1,18 +1,20 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductIdLocator;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Framework\EntityManager\EntityMetadataInterface;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -21,6 +23,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ProductIdLocatorTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var int
      */
@@ -47,10 +50,7 @@ class ProductIdLocatorTest extends TestCase
     protected function setUp(): void
     {
         $metadataPool = $this->createMock(MetadataPool::class);
-        $collectionFactory = $this->getMockBuilder(CollectionFactory::class)
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $collectionFactory = $this->createPartialMock(CollectionFactory::class, ['create']);
         $this->idsLimit = 4;
 
         $this->linkField = 'entity_id';
@@ -72,17 +72,21 @@ class ProductIdLocatorTest extends TestCase
     {
         $skus = ['sku_1', 'sku_2'];
 
-        $product = $this->getMockBuilder(ProductInterface::class)
-            ->setMethods(['getSku', 'getData', 'getTypeId'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $product->method('getSku')
-            ->willReturn('sku_1');
-        $product->method('getData')
-            ->with($this->linkField)
-            ->willReturn(1);
-        $product->method('getTypeId')
-            ->willReturn('simple');
+        $product = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getSku', 'setData', 'getData', 'getTypeId']
+        );
+        $productData = [$this->linkField => 1];
+        $product->method('getSku')->willReturn('sku_1');
+        $product->method('setData')->willReturnCallback(function ($key, $value) use (&$productData) {
+            $productData[$key] = $value;
+        });
+        $product->method('getData')->willReturnCallback(function ($key) use (&$productData) {
+            return $productData[$key] ?? null;
+        });
+        $product->method('getTypeId')->willReturn('simple');
+        
+        $product->setData($this->linkField, 1);
 
         $this->collection->expects($this->once())
             ->method('addFieldToFilter')
@@ -116,24 +120,34 @@ class ProductIdLocatorTest extends TestCase
         $skus = ['111', '222', '333', '444', '555'];
         $products = [];
         foreach ($skus as $sku) {
-            $product = $this->getMockBuilder(ProductInterface::class)
-                ->setMethods(['getSku', 'getData', 'getTypeId'])
-                ->disableOriginalConstructor()
-                ->getMockForAbstractClass();
-            $product->method('getSku')
-                ->willReturn($sku);
-            $product->method('getData')
-                ->with($this->linkField)
-                ->willReturn((int) $sku);
-            $product->method('getTypeId')
-                ->willReturn('simple');
+            $productData = [$this->linkField => (int) $sku];
+            $product = $this->createPartialMockWithReflection(
+                Product::class,
+                ['getSku', 'setData', 'getData', 'getTypeId']
+            );
+            $product->method('getSku')->willReturn($sku);
+            $product->method('getData')->willReturnCallback(function ($key = null) use ($productData) {
+                if ($key === null) {
+                    return $productData;
+                }
+                return $productData[$key] ?? null;
+            });
+            $product->method('getTypeId')->willReturn('simple');
+            
             $products[] = $product;
         }
 
         $this->collection->expects($this->atLeastOnce())
             ->method('addFieldToFilter')
-            ->withConsecutive([ProductInterface::SKU, ['in' => $skus]], [ProductInterface::SKU, ['in' => ['1']]])
-            ->willReturnSelf();
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($skus) {
+                    if ($arg1 == ProductInterface::SKU && $arg2 == ['in' => $skus]) {
+                        return null;
+                    } elseif ($arg1 == ProductInterface::SKU && $arg2 == ['in' => ['1']]) {
+                        return null;
+                    }
+                }
+            );
         $this->collection->expects($this->atLeastOnce())
             ->method('getItems')
             ->willReturnOnConsecutiveCalls($products, []);

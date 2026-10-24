@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontValidatePriceTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Validate Price in frontend product search and product details pages"/>
+            <title value="Product price validation"/>
+            <description value="This test case verifies price in frontend product search and product details pages based on catalog price scope"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-3183"/>
+            <group value="catalog"/>
+        </annotations>
+        <before>
+            <!-- Precondition 2:Create Customer with allowed remote shopping assistance-->
+            <createData entity="Simple_US_Customer_Assistance_Allowed" stepKey="createCustomer"/>
+            <!-- Precondition 4:Create Simple Product -->
+            <createData entity="_defaultProduct" stepKey="createProduct">
+                <field key="price">100</field>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
+            <!-- Precondition 1:Create website-->
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createWebsite">
+                <argument name="newWebsiteName" value="{{customWebsite.name}}"/>
+                <argument name="websiteCode" value="{{customWebsite.code}}"/>
+            </actionGroup>
+            <!-- Create second store -->
+            <actionGroup ref="CreateCustomStoreActionGroup" stepKey="createCustomStore">
+                <argument name="website" value="{{customWebsite.name}}"/>
+                <argument name="store" value="{{customStoreGroup.name}}"/>
+                <argument name="rootCategory" value="Default Category"/>
+            </actionGroup>
+            <!-- Create second store view -->
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createCustomStoreView">
+                <argument name="StoreGroup" value="customStoreGroup"/>
+                <argument name="customStore" value="customStoreEN"/>
+            </actionGroup>
+            <!--Open customer edit page-->
+            <actionGroup ref="AdminOpenCustomerEditPageActionGroup" stepKey="openCustomerEditPage">
+                <argument name="customerId" value="$createCustomer.id$"/>
+            </actionGroup>
+            <!--Navigate to "Account Information" tab-->
+            <actionGroup ref="AdminOpenAccountInformationTabFromCustomerEditPageActionGroup" stepKey="openAccountInformationEditPage"/>
+            <!-- Precondition 3:Assign customer to custom website-->
+            <actionGroup ref="AdminUpdateCustomerWebsiteInCustomerInformationPageActionGroup" stepKey="updateCustomerWebsite">
+                <argument name="websiteName" value="{{customWebsite.name}}"/>
+            </actionGroup>
+            <!--Verify that changes are saved successfully-->
+            <actionGroup ref="AdminSaveCustomerAndAssertSuccessMessage" stepKey="assertThatChangesAreSavedSuccessfully"/>
+        </before>
+        <after>
+            <!-- Logout from customer, delete product, customer, website -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
+                <argument name="websiteName" value="{{customWebsite.name}}"/>
+            </actionGroup>
+        </after>
+        <!-- Step-1: Set catalog price scope to  website -->
+        <actionGroup ref="AdminSetCatalogPriceToWebsiteActionGroup" stepKey="setPriceScopeWebsite"/>
+        <!-- Step 2: Reindex and cache clear -->
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="cleanCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
+        <!-- Step 3: Open created product and assign to website-->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductEdit">
+            <argument name="productId" value="$createProduct.id$"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssignProductInWebsiteActionGroup" stepKey="assignProductToSecondWebsite">
+            <argument name="website" value="{{customWebsite.name}}"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveTheProduct"/>
+        <!-- Step 4: Edit product and change the price in default scope-->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openTheProductEdit">
+            <argument name="productId" value="$createProduct.id$"/>
+        </actionGroup>
+        <actionGroup ref="SwitchToTheNewStoreViewActionGroup" stepKey="switchDefaultStoreView">
+            <argument name="storeViewName" value="'Default Store View'"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{AdminProductFormSection.productPrice}}" stepKey="waitForProductPriceField"/>
+        <uncheckOption selector="{{AdminProductFormSection.productPriceUseDefault}}" stepKey="uncheckPriceDefaultValue"/>
+        <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="150" stepKey="fillSimpleProductPrice"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductPrice"/>
+        <!-- Step 5: Edit product and change the price in custom website-->
+        <actionGroup ref="SwitchToTheNewStoreViewActionGroup" stepKey="changeScopeToStoreView2">
+            <argument name="storeViewName" value="{{customStoreEN.name}}"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{AdminProductFormSection.productPrice}}" stepKey="waitForTheProductPriceField"/>
+        <uncheckOption selector="{{AdminProductFormSection.productPriceUseDefault}}" stepKey="uncheckThePriceDefaultValue"/>
+        <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="200" stepKey="fillTheSimpleProductPrice"/>
+        <!--Save product-->
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+        <!--Step6: From admin login as customer to storefront  and verify website scope product price is displayed in catalog search results page and product details page -->
+        <actionGroup ref="AdminLoginAsCustomerLoginFromCustomerPageActionGroup" stepKey="loginAsCustomerFromCustomerPage">
+            <argument name="customerId" value="$$createCustomer.id$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchByProductName">
+            <argument name="phrase" value="$createProduct.name$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForSearchResultsPage" />
+        <waitForText selector="{{StorefrontCategoryMainSection.productPrice}}" userInput="$200.00" stepKey="seeWebsiteScopeProductPriceInSearchResultsPage"/>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
+            <argument name="productUrl" value="$createProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <waitForText userInput="$200.00" selector="{{StorefrontProductInfoMainSection.price}}" stepKey="seeWebsiteScopeProductPrice"/>
+        <!-- Step 7: Set catalog price scope to website -->
+        <actionGroup ref="AdminSetDefaultCatalogPriceActionGroup" stepKey="setScopeGlobal"/>
+        <!-- Step 8: Reindex and cache clear -->
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexing">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="cacheClean">
+            <argument name="tags" value=""/>
+        </actionGroup>
+        <!--Step 9: Login as customer to storefront and verify global scope product price is displayed in catalog search results page and product details page -->
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchByProductName">
+            <argument name="phrase" value="$createProduct.name$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitSearchResult"/>
+        <waitForText selector="{{StorefrontCategoryMainSection.productPrice}}" userInput="$100.00" stepKey="seeGlobalPrice"/>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openTheProductPage">
+            <argument name="productUrl" value="$createProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForTheProductPageToOpen"/>
+        <waitForText userInput="$100.00" selector="{{StorefrontProductInfoMainSection.price}}" stepKey="seeTheGlobalPrice"/>
+    </test>
+</tests>

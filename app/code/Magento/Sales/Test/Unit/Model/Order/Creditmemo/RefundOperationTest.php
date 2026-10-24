@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,18 +12,24 @@ use Magento\Framework\Model\Context;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Sales\Api\Data\CreditmemoInterface;
 use Magento\Sales\Api\Data\CreditmemoItemInterface;
+use Magento\Sales\Model\Order\Creditmemo\Item as CreditmemoItem;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
+use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\Order\Creditmemo;
 use Magento\Sales\Model\Order\Creditmemo\RefundOperation;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * Unit test for refund operation.
  */
 class RefundOperationTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var RefundOperation
      */
@@ -59,33 +65,34 @@ class RefundOperationTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->orderMock = $this->getMockBuilder(OrderInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->orderMock = $this->createMock(OrderInterface::class);
 
-        $this->creditmemoMock = $this->getMockBuilder(CreditmemoInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getBaseCost', 'setDoTransaction', 'getPaymentRefundDisallowed'])
-            ->getMockForAbstractClass();
+        $this->creditmemoMock = $this->createPartialMockWithReflection(
+            Creditmemo::class,
+            [
+                'getBaseCost', 'setDoTransaction', 'getPaymentRefundDisallowed', 'getState', 'getOrderId',
+                'getItems', 'getBaseGrandTotal', 'getGrandTotal', 'getBaseSubtotal', 'getSubtotal',
+                'getBaseTaxAmount', 'getTaxAmount', 'getBaseShippingAmount', 'getShippingAmount',
+                'getBaseDiscountTaxCompensationAmount', 'getDiscountTaxCompensationAmount',
+                'getBaseShippingTaxAmount', 'getShippingTaxAmount', 'getAdjustmentPositive',
+                'getBaseAdjustmentPositive', 'getAdjustmentNegative', 'getBaseAdjustmentNegative',
+                'getDiscountAmount', 'getBaseDiscountAmount'
+            ]
+        );
 
-        $this->paymentMock = $this->getMockBuilder(PriceCurrencyInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['refund'])
-            ->getMockForAbstractClass();
+        $this->paymentMock = $this->createPartialMockWithReflection(
+            Payment::class,
+            ['refund']
+        );
 
-        $this->priceCurrencyMock = $this->getMockBuilder(PriceCurrencyInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['round'])
-            ->getMockForAbstractClass();
+        $this->priceCurrencyMock = $this->createMock(PriceCurrencyInterface::class);
 
         $contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['getEventDispatcher'])
             ->getMock();
 
-        $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
 
         $contextMock->expects($this->once())
             ->method('getEventDispatcher')
@@ -101,8 +108,8 @@ class RefundOperationTest extends TestCase
      * @param int $state
      *
      * @return void
-     * @dataProvider  executeNotRefundedCreditmemoDataProvider
      */
+    #[DataProvider('executeNotRefundedCreditmemoDataProvider')]
     public function testExecuteNotRefundedCreditmemo(int $state): void
     {
         $this->creditmemoMock->expects($this->once())
@@ -124,7 +131,7 @@ class RefundOperationTest extends TestCase
      *
      * @return array
      */
-    public function executeNotRefundedCreditmemoDataProvider(): array
+    public static function executeNotRefundedCreditmemoDataProvider(): array
     {
         return [
             [Creditmemo::STATE_OPEN],
@@ -160,8 +167,8 @@ class RefundOperationTest extends TestCase
      * @param array $amounts
      * @return void
      *
-     * @dataProvider baseAmountsDataProvider
      */
+    #[DataProvider('baseAmountsDataProvider')]
     public function testExecuteOffline(array $amounts): void
     {
         $orderId = 1;
@@ -227,8 +234,8 @@ class RefundOperationTest extends TestCase
      * @param array $amounts
      *
      * @return void
-     * @dataProvider baseAmountsDataProvider
      */
+    #[DataProvider('baseAmountsDataProvider')]
     public function testExecuteOnline(array $amounts): void
     {
         $orderId = 1;
@@ -286,7 +293,7 @@ class RefundOperationTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function baseAmountsDataProvider(): array
+    public static function baseAmountsDataProvider(): array
     {
         return [
             [[
@@ -423,8 +430,11 @@ class RefundOperationTest extends TestCase
         $item2->expects($this->once())->method('getQty')->willReturn(0);
         $item2
             ->method('isDeleted')
-            ->withConsecutive([], [true])
-            ->willReturnOnConsecutiveCalls(false, null);
+            ->willReturnCallback(
+                function () {
+                    return false;
+                }
+            );
 
         $item2->expects($this->never())->method('register');
 
@@ -444,10 +454,9 @@ class RefundOperationTest extends TestCase
      */
     private function getCreditmemoItemMock(): MockObject
     {
-        return $this->getMockBuilder(CreditmemoItemInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getQty'])
-            ->addMethods(['isDeleted', 'setCreditMemo', 'register'])
-            ->getMockForAbstractClass();
+        return $this->createPartialMockWithReflection(
+            CreditmemoItem::class,
+            ['getQty', 'isDeleted', 'setCreditMemo', 'register']
+        );
     }
 }

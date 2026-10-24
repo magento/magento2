@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -29,17 +29,17 @@ class IndexTest extends TestCase
     /**
      * @var Index
      */
-    protected $_controller;
+    protected Index $_controller;
 
     /**
      * @var MockObject
      */
-    protected $_cmsHelperMock;
+    protected MockObject $_cmsHelperMock;
 
     /**
      * @var MockObject
      */
-    protected $_requestMock;
+    protected MockObject $_requestMock;
 
     /**
      * @var ForwardFactory|MockObject
@@ -62,7 +62,7 @@ class IndexTest extends TestCase
     protected function setUp(): void
     {
         $helper = new ObjectManager($this);
-        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $responseMock = $this->createMock(Http::class);
         $this->resultPageMock = $this->getMockBuilder(Page::class)
             ->disableOriginalConstructor()
@@ -78,7 +78,7 @@ class IndexTest extends TestCase
             ->method('create')
             ->willReturn($this->forwardMock);
 
-        $scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->_requestMock = $this->createMock(RequestHttp::class);
         $this->_cmsHelperMock = $this->createMock(CmsPage::class);
         $valueMap = [
@@ -119,10 +119,17 @@ class IndexTest extends TestCase
             ->method('setStatusHeader')
             ->with(404, '1.1', 'Not Found')
             ->willReturn($this->resultPageMock);
+
         $this->resultPageMock
             ->method('setHeader')
-            ->with('Status', '404 File not found')
-            ->willReturn($this->resultPageMock);
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 'Status' && $arg2 == '404 File not found') {
+                    return $this->resultPageMock;
+                } elseif ($arg1 == 'Cache-Control' && $arg2 == 'no-store, no-cache, must-revalidate, max-age=0') {
+                    return $this->resultPageMock;
+                }
+            });
+
         $this->_cmsHelperMock->expects(
             $this->once()
         )->method(

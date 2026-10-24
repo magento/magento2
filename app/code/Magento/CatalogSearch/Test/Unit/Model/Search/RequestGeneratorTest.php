@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,7 +13,8 @@ use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory;
 use Magento\CatalogSearch\Model\Search\RequestGenerator;
 use Magento\CatalogSearch\Model\Search\RequestGenerator\GeneratorInterface;
 use Magento\CatalogSearch\Model\Search\RequestGenerator\GeneratorResolver;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -22,8 +23,7 @@ use PHPUnit\Framework\TestCase;
  */
 class RequestGeneratorTest extends TestCase
 {
-    /** @var ObjectManager  */
-    protected $objectManagerHelper;
+    use MockCreationTrait;
 
     /** @var RequestGenerator */
     protected $object;
@@ -33,41 +33,35 @@ class RequestGeneratorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->productAttributeCollectionFactory =
-            $this->getMockBuilder(CollectionFactory::class)
-                ->setMethods(['create'])
-                ->disableOriginalConstructor()
-                ->getMock();
-        $generatorResolver = $this->getMockBuilder(GeneratorResolver::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getGeneratorForType'])
-            ->getMock();
-        $generator = $this->getMockBuilder(GeneratorInterface::class)
-            ->setMethods(['getFilterData', 'getAggregationData'])
-            ->getMockForAbstractClass();
-        $generator->expects($this->any())
-            ->method('getFilterData')
+        $this->productAttributeCollectionFactory = $this->createPartialMock(
+            CollectionFactory::class,
+            ['create']
+        );
+        $generatorResolver = $this->createPartialMock(
+            GeneratorResolver::class,
+            ['getGeneratorForType']
+        );
+        $generator = $this->createPartialMock(
+            GeneratorInterface::class,
+            ['getFilterData', 'getAggregationData']
+        );
+        $generator->method('getFilterData')
             ->willReturn(['some filter data goes here']);
-        $generator->expects($this->any())
-            ->method('getAggregationData')
+        $generator->method('getAggregationData')
             ->willReturn(['some aggregation data goes here']);
         $generatorResolver->method('getGeneratorForType')
             ->willReturn($generator);
 
-        $this->objectManagerHelper = new ObjectManager($this);
-        $this->object = $this->objectManagerHelper->getObject(
-            RequestGenerator::class,
-            [
-                'productAttributeCollectionFactory' => $this->productAttributeCollectionFactory,
-                'generatorResolver' => $generatorResolver
-            ]
+        $this->object = new RequestGenerator(
+            $this->productAttributeCollectionFactory,
+            $generatorResolver
         );
     }
 
     /**
      * @return array
      */
-    public function attributesProvider()
+    public static function attributesProvider()
     {
         return [
             [
@@ -132,15 +126,12 @@ class RequestGeneratorTest extends TestCase
     /**
      * @param array $countResult
      * @param $attributeOptions
-     * @dataProvider attributesProvider
      */
+    #[DataProvider('attributesProvider')]
     public function testGenerate($countResult, $attributeOptions)
     {
-        $collection = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $collection->expects($this->any())
-            ->method('getIterator')
+        $collection = $this->createMock(Collection::class);
+        $collection->method('getIterator')
             ->willReturn(
                 new \ArrayIterator(
                     [
@@ -148,15 +139,13 @@ class RequestGeneratorTest extends TestCase
                     ]
                 )
             );
-        $collection->expects($this->any())
-            ->method('addFieldToFilter')
+        $collection->method('addFieldToFilter')
             ->with(
                 ['is_searchable', 'is_visible_in_advanced_search', 'is_filterable', 'is_filterable_in_search'],
                 [1, 1, [1, 2], 1]
             )->willReturnSelf();
 
-        $this->productAttributeCollectionFactory->expects($this->any())
-            ->method('create')
+        $this->productAttributeCollectionFactory->method('create')
             ->willReturn($collection);
         $result = $this->object->generate();
 
@@ -201,40 +190,32 @@ class RequestGeneratorTest extends TestCase
     private function createAttributeMock($attributeOptions)
     {
         /** @var \Magento\Catalog\Model\Entity\Attribute|MockObject $attribute */
-        $attribute = $this->getMockBuilder(AttributeResourceModel::class)
-            ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'getAttributeCode',
-                    'getBackendType',
-                    'getIsVisibleInAdvancedSearch',
-                    'getSearchWeight',
-                    'getFrontendInput',
-                    'getData',
-                    'getIsSearchable',
-                ]
-            )
-            ->getMock();
-        $attribute->expects($this->any())
-            ->method('getAttributeCode')
+        $attribute = $this->createPartialMockWithReflection(
+            AttributeResourceModel::class,
+            [
+                'getAttributeCode',
+                'getBackendType',
+                'getIsVisibleInAdvancedSearch',
+                'getFrontendInput',
+                'getData',
+                'getIsSearchable',
+                'getSearchWeight',
+            ]
+        );
+        $attribute->method('getAttributeCode')
             ->willReturn($attributeOptions[0]);
-        $attribute->expects($this->any())
-            ->method('getBackendType')
+        $attribute->method('getBackendType')
             ->willReturn($attributeOptions[1]);
-        $attribute->expects($this->any())
-            ->method('getFrontendInput')
+        $attribute->method('getFrontendInput')
             ->willReturn($attributeOptions[1]);
 
-        $attribute->expects($this->any())
-            ->method('getSearchWeight')
+        $attribute->method('getSearchWeight')
             ->willReturn(1);
 
-        $attribute->expects($this->any())
-            ->method('getIsVisibleInAdvancedSearch')
+        $attribute->method('getIsVisibleInAdvancedSearch')
             ->willReturn($attributeOptions[4]);
 
-        $attribute->expects($this->any())
-            ->method('getData')
+        $attribute->method('getData')
             ->willReturnMap(
                 [
                     ['is_filterable', null, $attributeOptions[2]],
@@ -242,8 +223,7 @@ class RequestGeneratorTest extends TestCase
                 ]
             );
 
-        $attribute->expects($this->any())
-            ->method('getIsSearchable')
+        $attribute->method('getIsSearchable')
             ->willReturn(1);
 
         return $attribute;

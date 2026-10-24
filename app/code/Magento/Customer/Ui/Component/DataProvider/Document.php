@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Ui\Component\DataProvider;
 
@@ -56,6 +56,11 @@ class Document extends \Magento\Framework\View\Element\UiComponent\DataProvider\
     private static $accountLockAttributeCode = 'lock_expires';
 
     /**
+     * @var array
+     */
+    private static $customerGroupCodeById = [];
+
+    /**
      * @var CustomerMetadataInterface
      */
     private $customerMetadata;
@@ -89,7 +94,7 @@ class Document extends \Magento\Framework\View\Element\UiComponent\DataProvider\
         GroupRepositoryInterface $groupRepository,
         CustomerMetadataInterface $customerMetadata,
         StoreManagerInterface $storeManager,
-        ScopeConfigInterface $scopeConfig = null
+        ?ScopeConfigInterface $scopeConfig = null
     ) {
         parent::__construct($attributeValueFactory);
         $this->customerMetadata = $customerMetadata;
@@ -164,8 +169,11 @@ class Document extends \Magento\Framework\View\Element\UiComponent\DataProvider\
     {
         $value = $this->getData(self::$groupAttributeCode);
         try {
-            $group = $this->groupRepository->getById($value);
-            $this->setCustomAttribute(self::$groupAttributeCode, $group->getCode());
+            if (!isset(static::$customerGroupCodeById[$value])) {
+                static::$customerGroupCodeById[$value] = $this->groupRepository->getById($value)->getCode();
+            }
+            $this->setCustomAttribute(self::$groupAttributeCode, static::$customerGroupCodeById[$value]);
+
         } catch (NoSuchEntityException $e) {
             $this->setCustomAttribute(self::$groupAttributeCode, 'N/A');
         }

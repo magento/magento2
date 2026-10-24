@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -36,7 +35,7 @@ class View
         $params = null
     ) {
         $qty = $controller->getRequest()->getParam('qty');
-        if ($qty) {
+        if ($qty && is_numeric($qty)) {
             if (null === $params || !$params instanceof DataObject) {
                 $params = new DataObject((array) $params);
             }

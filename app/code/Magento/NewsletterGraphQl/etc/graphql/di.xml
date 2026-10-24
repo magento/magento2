@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
@@ -14,6 +14,31 @@
                     <item name="not_active" xsi:type="string">2</item>
                     <item name="unsubscribed" xsi:type="string">3</item>
                     <item name="unconfirmed" xsi:type="string">4</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\StoreGraphQl\Model\Resolver\Store\StoreConfigDataProvider">
+        <arguments>
+            <argument name="extendedConfigData" xsi:type="array">
+                <item name="newsletter_enabled" xsi:type="string">newsletter/general/active</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\GraphQlResolverCache\Model\Resolver\Result\ResolverIdentityClassProvider">
+        <arguments>
+            <argument name="cacheableResolverClassNameIdentityMap" xsi:type="array">
+                <item name="Magento\NewsletterGraphQl\Model\Resolver\IsSubscribed" xsi:type="string">
+                    Magento\NewsletterGraphQl\Model\Resolver\Cache\Subscriber\ResolverCacheIdentity
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\Calculator\Provider">
+        <arguments>
+            <argument name="factorProviders" xsi:type="array">
+                <item name="Magento\NewsletterGraphQl\Model\Resolver\IsSubscribed" xsi:type="array">
+                    <item name="parent_customer_entity_id" xsi:type="string">Magento\NewsletterGraphQl\Model\Resolver\CacheKey\FactorProvider\ParentCustomerEntityId</item>
                 </item>
             </argument>
         </arguments>

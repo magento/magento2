@@ -1,14 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\ResourceModel\Order\Collection;
 
 /**
  * Flat sales order collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 abstract class AbstractCollection extends \Magento\Sales\Model\ResourceModel\Collection\AbstractCollection
 {

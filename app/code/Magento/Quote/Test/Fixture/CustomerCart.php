@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,7 +15,8 @@ use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
 class CustomerCart implements RevertibleDataFixtureInterface
 {
     private const DEFAULT_DATA = [
-        'customer_id' => null
+        'customer_id' => null,
+        'reserved_order_id' => null
     ];
 
     /**
@@ -53,8 +54,13 @@ class CustomerCart implements RevertibleDataFixtureInterface
     {
         $data = array_merge(self::DEFAULT_DATA, $data);
         $cartId = $this->cartManagement->createEmptyCartForCustomer($data['customer_id']);
+        $cart = $this->cartRepository->get($cartId);
+        if (isset($data['reserved_order_id'])) {
+            $cart->setReservedOrderId($data['reserved_order_id']);
+            $this->cartRepository->save($cart);
+        }
 
-        return $this->cartRepository->get($cartId);
+        return $cart;
     }
 
     /**

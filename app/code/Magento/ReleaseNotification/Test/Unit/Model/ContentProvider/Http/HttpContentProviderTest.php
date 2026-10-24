@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\ReleaseNotification\Test\Unit\Model\ContentProvider\Http;
 use Magento\Framework\HTTP\ClientInterface;
 use Magento\ReleaseNotification\Model\ContentProvider\Http\HttpContentProvider;
 use Magento\ReleaseNotification\Model\ContentProvider\Http\UrlBuilder;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -116,14 +117,21 @@ class HttpContentProviderTest extends TestCase
 
         $this->urlBuilderMock->expects($this->exactly(2))
             ->method('getUrl')
-            ->withConsecutive(
-                [$version, $edition, $locale],
-                [$version, $edition, 'en_US']
-            )
-            ->willReturnOnConsecutiveCalls($urlLocale, $urlDefaultLocale);
+            ->willReturnCallback(function ($version, $edition, $locale) use ($urlLocale, $urlDefaultLocale) {
+                if ($locale == 'en_US') {
+                    return $urlDefaultLocale;
+                } elseif ($locale == 'fr_FR') {
+                    return $urlLocale;
+                }
+            });
+
         $this->httpClientMock->expects($this->exactly(2))
             ->method('get')
-            ->withConsecutive([$urlLocale], [$urlDefaultLocale]);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$urlLocale] => null,
+                [$urlDefaultLocale] => null
+            });
+
         $this->httpClientMock->expects($this->exactly(2))
             ->method('getBody')
             ->willReturnOnConsecutiveCalls('', $response);
@@ -141,8 +149,8 @@ class HttpContentProviderTest extends TestCase
      * @param string $edition
      * @param string $locale
      * @param string $response
-     * @dataProvider getGetContentOnDefaultOrEmptyProvider
      */
+    #[DataProvider('getGetContentOnDefaultOrEmptyProvider')]
     public function testGetContentSuccessOnDefaultOrEmpty($version, $edition, $locale, $response)
     {
         $urlLocale = 'https://content.url.example/' . $version . '/' . $edition . '/' . $locale . '.json';
@@ -151,15 +159,33 @@ class HttpContentProviderTest extends TestCase
 
         $this->urlBuilderMock->expects($this->exactly(3))
             ->method('getUrl')
-            ->withConsecutive(
-                [$version, $edition, $locale],
-                [$version, $edition, 'en_US'],
-                [$version, '', 'default']
-            )
-            ->willReturnOnConsecutiveCalls($urlLocale, $urlDefaultLocale, $urlDefault);
+            ->willReturnCallback(
+                function (
+                    $version,
+                    $edition,
+                    $locale
+                ) use (
+                    $urlLocale,
+                    $urlDefaultLocale,
+                    $urlDefault
+                ) {
+                    if ($locale === 'en_US') {
+                        return $urlDefaultLocale;
+                    } elseif ($edition === '' && $locale === 'default') {
+                        return $urlDefault;
+                    }
+                    return $urlLocale;
+                }
+            );
+
         $this->httpClientMock->expects($this->exactly(3))
             ->method('get')
-            ->withConsecutive([$urlLocale], [$urlDefaultLocale], [$urlDefault]);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$urlLocale] => null,
+                [$urlDefaultLocale] => null,
+                [$urlDefault] => null
+            });
+
         $this->httpClientMock->expects($this->exactly(3))
             ->method('getBody')
             ->willReturnOnConsecutiveCalls('', '', $response);
@@ -175,7 +201,7 @@ class HttpContentProviderTest extends TestCase
     /**
      * @return array
      */
-    public function getGetContentOnDefaultOrEmptyProvider()
+    public static function getGetContentOnDefaultOrEmptyProvider()
     {
         return [
             'default-fr_FR' => [

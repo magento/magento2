@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Framework\MessageQueue\BatchConsumer;
 use Magento\Framework\MessageQueue\Consumer\Config\Validator\ConsumerInstance as ConsumerInstanceValidator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ConsumerInstanceTest extends TestCase
 {
@@ -28,10 +29,9 @@ class ConsumerInstanceTest extends TestCase
         $this->validator = $objectManager->getObject(ConsumerInstanceValidator::class);
     }
 
-    /**
-     * @dataProvider validConfigDataProvider
-     * @param array $configData
+    /**     * @param array $configData
      */
+    #[DataProvider('validConfigDataProvider')]
     public function testValidateValid($configData)
     {
         $this->validator->validate($configData);
@@ -40,7 +40,7 @@ class ConsumerInstanceTest extends TestCase
     /**
      * @return array
      */
-    public function validConfigDataProvider()
+    public static function validConfigDataProvider()
     {
         return [
             'valid' => [
@@ -64,11 +64,10 @@ class ConsumerInstanceTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider invalidConfigDataProvider
-     * @param array $configData
+    /**     * @param array $configData
      * @param string $expectedExceptionMessage
      */
+    #[DataProvider('invalidConfigDataProvider')]
     public function testValidateInvalid($configData, $expectedExceptionMessage)
     {
         $this->expectException('\LogicException');
@@ -79,7 +78,7 @@ class ConsumerInstanceTest extends TestCase
     /**
      * @return array
      */
-    public function invalidConfigDataProvider()
+    public static function invalidConfigDataProvider()
     {
         return [
             'invalid, consumerInstance not implementing consumer interface' => [

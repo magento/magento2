@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,7 @@ use Magento\Integration\Model\Oauth\Token as TokenModel;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\Customer as CustomerHelper;
 use Magento\TestFramework\TestCase\WebapiAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoApiDataFixture Magento/Customer/_files/customer.php
@@ -23,9 +24,9 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
  */
 class CustomerSharingOptionsTest extends WebapiAbstract
 {
-    const RESOURCE_PATH = '/V1/customers/me';
-    const REPO_SERVICE = 'customerCustomerRepositoryV1';
-    const SERVICE_VERSION = 'V1';
+    public const RESOURCE_PATH = '/V1/customers/me';
+    public const REPO_SERVICE = 'customerCustomerRepositoryV1';
+    public const SERVICE_VERSION = 'V1';
 
     /**
      * @var CustomerRepositoryInterface
@@ -71,7 +72,7 @@ class CustomerSharingOptionsTest extends WebapiAbstract
             ['customerRegistry' => $this->customerRegistry]
         );
 
-        $this->customerHelper = new CustomerHelper();
+        $this->customerHelper = new CustomerHelper($this->name());
         $this->customerData = $this->customerHelper->createSampleCustomer();
         $this->tokenService = Bootstrap::getObjectManager()->get(CustomerTokenServiceInterface::class);
 
@@ -99,10 +100,9 @@ class CustomerSharingOptionsTest extends WebapiAbstract
     /**
      * @param string $storeCode
      * @param bool $expectingException
-     * @dataProvider getCustomerDataWebsiteScopeDataProvider
-     *
      * @magentoConfigFixture default_store customer/account_share/scope 1
      */
+    #[DataProvider('getCustomerDataWebsiteScopeDataProvider')]
     public function testGetCustomerDataWebsiteScope(string $storeCode, bool $expectingException)
     {
         $this->_markTestAsRestOnly('SOAP is difficult to generate exception messages, inconsistencies in WSDL');
@@ -112,10 +112,9 @@ class CustomerSharingOptionsTest extends WebapiAbstract
     /**
      * @param string $storeCode
      * @param bool $expectingException
-     * @dataProvider getCustomerDataGlobalScopeDataProvider
-     *
      * @magentoConfigFixture customer/account_share/scope 0
      */
+    #[DataProvider('getCustomerDataGlobalScopeDataProvider')]
     public function testGetCustomerDataGlobalScope(string $storeCode, bool $expectingException)
     {
         $this->processGetCustomerData($storeCode, $expectingException);
@@ -158,16 +157,16 @@ class CustomerSharingOptionsTest extends WebapiAbstract
      *
      * @return array
      */
-    public function getCustomerDataWebsiteScopeDataProvider(): array
+    public static function getCustomerDataWebsiteScopeDataProvider(): array
     {
         return [
             'Default Store View' => [
-                'store_code' => 'default',
-                'exception' => false
+                'default', // storeCode
+                false // expectingException
             ],
             'Custom Store View' => [
-                'store_code' => 'fixture_second_store',
-                'exception' => true
+                'fixture_second_store', // storeCode
+                true // expectingException
             ]
         ];
     }
@@ -177,16 +176,16 @@ class CustomerSharingOptionsTest extends WebapiAbstract
      *
      * @return array
      */
-    public function getCustomerDataGlobalScopeDataProvider(): array
+    public static function getCustomerDataGlobalScopeDataProvider(): array
     {
         return [
             'Default Store View' => [
-                'store_code' => 'default',
-                'exception' => false
+                'default', // storeCode
+                false // expectingException
             ],
             'Custom Store View' => [
-                'store_code' => 'fixture_second_store',
-                'exception' => false
+                'fixture_second_store', // storeCode
+                false // expectingException
             ]
         ];
     }

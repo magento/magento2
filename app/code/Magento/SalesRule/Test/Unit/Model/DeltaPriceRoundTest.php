@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\SalesRule\Test\Unit\Model;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\SalesRule\Model\DeltaPriceRound;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -32,7 +33,7 @@ class DeltaPriceRoundTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->priceCurrency = $this->getMockForAbstractClass(PriceCurrencyInterface::class);
+        $this->priceCurrency = $this->createMock(PriceCurrencyInterface::class);
         $this->priceCurrency->method('round')
             ->willReturnCallback(
                 function ($amount) {
@@ -49,8 +50,8 @@ class DeltaPriceRoundTest extends TestCase
      * @param array $prices
      * @param array $roundedPrices
      * @return void
-     * @dataProvider roundDataProvider
      */
+    #[DataProvider('roundDataProvider')]
     public function testRound(array $prices, array $roundedPrices): void
     {
         foreach ($prices as $key => $price) {
@@ -64,16 +65,16 @@ class DeltaPriceRoundTest extends TestCase
     /**
      * @return array
      */
-    public function roundDataProvider(): array
+    public static function roundDataProvider(): array
     {
         return [
             [
                 'prices' => [1.004, 1.004],
-                'rounded prices' => [1.00, 1.01],
+                'roundedPrices' => [1.00, 1.01],
             ],
             [
                 'prices' => [1.005, 1.005],
-                'rounded prices' => [1.01, 1.0],
+                'roundedPrices' => [1.01, 1.0],
             ],
         ];
     }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -15,6 +15,7 @@
             <title value="Sitemap use canonical for product url"/>
             <description value="RSS Feed always use canonical url for product"/>
             <severity value="MAJOR"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <magentoCLI command="config:set catalog/seo/product_use_categories 1" stepKey="enableUseCategoryPathForProductUrl"/>

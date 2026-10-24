@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Backend\Block\Dashboard;
@@ -10,8 +10,6 @@ use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 
 /**
  * Adminhtml dashboard tab abstract
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 abstract class AbstractDashboard extends \Magento\Backend\Block\Widget
 {
@@ -40,6 +38,8 @@ abstract class AbstractDashboard extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Return a collection
+     *
      * @return array|AbstractCollection|\Magento\Eav\Model\Entity\Collection\Abstract
      */
     public function getCollection()
@@ -48,6 +48,8 @@ abstract class AbstractDashboard extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Return items count
+     *
      * @return int
      */
     public function getCount()
@@ -66,6 +68,8 @@ abstract class AbstractDashboard extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Prepare any data for display, if required
+     *
      * @return $this
      */
     protected function _prepareData()
@@ -74,6 +78,8 @@ abstract class AbstractDashboard extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Ensure data is prepared before layout
+     *
      * @return $this
      */
     protected function _prepareLayout()

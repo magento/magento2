@@ -1,21 +1,16 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
-/**
- * Textarea attribute WYSIWYG content
- *
- * @author     Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Catalog\Block\Adminhtml\Helper\Form\Wysiwyg;
 
 use Magento\Backend\Block\Widget\Form;
 use Magento\Backend\Block\Widget\Form\Generic;
 
 /**
- * Class Content
+ * Textarea attribute WYSIWYG content
  *
  * @deprecated 101.0.8
  * @see \Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Eav
@@ -46,7 +41,8 @@ class Content extends Generic
     }
 
     /**
-     * Prepare form.
+     * Prepare the form
+     *
      * Adding editor field to render
      *
      * @return Form

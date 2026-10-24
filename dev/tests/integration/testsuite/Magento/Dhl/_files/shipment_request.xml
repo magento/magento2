@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 -->
 <req:ShipmentRequest xmlns:req="http://www.dhl.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -48,6 +48,26 @@
         <DeclaredCurrency>USD</DeclaredCurrency>
         <TermsOfTrade>DAP</TermsOfTrade>
     </Dutiable>
+    <ExportDeclaration>
+        <InvoiceNumber/>
+        <InvoiceDate>1970-01-01</InvoiceDate>
+        <ExportLineItem>
+            <LineNumber>item1</LineNumber>
+            <Quantity>1</Quantity>
+            <QuantityUnit>PCS</QuantityUnit>
+            <Description>item_name</Description>
+            <Value>10.00</Value>
+            <Weight>
+                <Weight>0.454000000001</Weight>
+                <WeightUnit>K</WeightUnit>
+            </Weight>
+            <GrossWeight>
+                <Weight>0.454000000001</Weight>
+                <WeightUnit>K</WeightUnit>
+            </GrossWeight>
+            <ManufactureCountryCode>GB</ManufactureCountryCode>
+        </ExportLineItem>
+    </ExportDeclaration>
     <Reference xmlns="">
         <ReferenceID>shipment reference</ReferenceID>
         <ReferenceType>St</ReferenceType>

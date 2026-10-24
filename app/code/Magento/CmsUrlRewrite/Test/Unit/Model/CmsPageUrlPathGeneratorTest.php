@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -12,11 +12,14 @@ use Magento\Cms\Api\Data\PageInterface;
 use Magento\CmsUrlRewrite\Model\CmsPageUrlPathGenerator;
 use Magento\Framework\Filter\FilterManager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class CmsPageUrlPathGeneratorTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ObjectManagerHelper
      */
@@ -38,10 +41,10 @@ class CmsPageUrlPathGeneratorTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManagerHelper($this);
-        $this->filterManagerMock = $this->getMockBuilder(FilterManager::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['translitUrl'])
-            ->getMock();
+        $this->filterManagerMock = $this->createPartialMockWithReflection(
+            FilterManager::class,
+            ['translitUrl']
+        );
 
         $this->model = $this->objectManager->getObject(
             CmsPageUrlPathGenerator::class,
@@ -57,9 +60,7 @@ class CmsPageUrlPathGeneratorTest extends TestCase
     public function testGetUrlPath()
     {
         /* @var PageInterface $cmsPageMock*/
-        $cmsPageMock = $this->getMockBuilder(PageInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $cmsPageMock = $this->createMock(PageInterface::class);
 
         $cmsPageMock->expects($this->any())
             ->method('getIdentifier')
@@ -74,9 +75,7 @@ class CmsPageUrlPathGeneratorTest extends TestCase
     public function testGetCanonicalUrlPath()
     {
         /* @var PageInterface $cmsPageMock*/
-        $cmsPageMock = $this->getMockBuilder(PageInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $cmsPageMock = $this->createMock(PageInterface::class);
 
         $cmsPageMock->expects($this->any())
             ->method('getId')
@@ -99,9 +98,7 @@ class CmsPageUrlPathGeneratorTest extends TestCase
         ];
 
         /* @var PageInterface $cmsPageMock*/
-        $cmsPageMock = $this->getMockBuilder(PageInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $cmsPageMock = $this->createMock(PageInterface::class);
 
         $cmsPageMock->expects($this->any())
             ->method('getIdentifier')
@@ -133,9 +130,7 @@ class CmsPageUrlPathGeneratorTest extends TestCase
         ];
 
         /* @var PageInterface $cmsPageMock*/
-        $cmsPageMock = $this->getMockBuilder(PageInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $cmsPageMock = $this->createMock(PageInterface::class);
 
         $cmsPageMock->expects($this->any())
             ->method('getIdentifier')

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,32 +9,36 @@ namespace Magento\Framework\App\Test\Unit\Cache\Type;
 
 use Magento\Framework\App\Cache\StateInterface;
 use Magento\Framework\App\Cache\Type\AccessProxy;
+use Magento\Framework\Cache\CacheConstants;
 use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ProxyTesting;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class AccessProxyTest extends TestCase
 {
-    /**
-     * @param string $method
-     * @param array $params
-     * @param bool $disabledResult
-     * @param mixed $enabledResult
-     *
-     * @return void
-     * @dataProvider proxyMethodDataProvider
+    /**     * @return void
      */
+    #[DataProvider('proxyMethodDataProvider')]
     public function testProxyMethod($method, $params, $disabledResult, $enabledResult): void
     {
         $identifier = 'cache_type_identifier';
 
-        $frontendMock = $this->getMockForAbstractClass(FrontendInterface::class);
+        $frontendMock = $this->createMock(FrontendInterface::class);
 
-        $cacheEnabler = $this->getMockForAbstractClass(StateInterface::class);
+        $cacheEnabler = $this->createMock(StateInterface::class);
         $cacheEnabler
             ->method('isEnabled')
-            ->withConsecutive([$identifier], [$identifier])
-            ->willReturnOnConsecutiveCalls(false, true);
+            ->willReturnCallback(function ($arg1) use ($identifier) {
+                static $callCount = 0;
+                if ($callCount == 0 && $arg1 == $identifier) {
+                    $callCount++;
+                    return false;
+                } elseif ($callCount == 1 && $arg1 == $identifier) {
+                    $callCount++;
+                    return true;
+                }
+            });
 
         $object = new AccessProxy($frontendMock, $cacheEnabler, $identifier);
         $helper = new ProxyTesting();
@@ -58,7 +62,7 @@ class AccessProxyTest extends TestCase
             ['load', ['record_id'], false, '111'],
             ['save', ['record_value', 'record_id', ['tag'], 555], true, false],
             ['remove', ['record_id'], true, false],
-            ['clean', [\Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, ['tag']], true, false]
+            ['clean', [CacheConstants::CLEANING_MODE_MATCHING_ANY_TAG, ['tag']], true, false]
         ];
     }
 }

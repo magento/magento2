@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,13 +11,17 @@ namespace Magento\Wishlist\Test\Unit\Observer;
 use Magento\Checkout\Model\Session;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\App\Response\Http as ResponseHttp;
 use Magento\Framework\Event;
+use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Wishlist\Helper\Data;
 use Magento\Wishlist\Model\ResourceModel\Wishlist\Collection;
 use Magento\Wishlist\Model\Wishlist;
 use Magento\Wishlist\Model\WishlistFactory;
 use Magento\Wishlist\Observer\AddToCart as Observer;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use Magento\Customer\Model\Session as CustomerSession;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -26,6 +30,8 @@ use PHPUnit\Framework\TestCase;
  */
 class AddToCartTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Observer
      */
@@ -42,7 +48,7 @@ class AddToCartTest extends TestCase
     protected $checkoutSession;
 
     /**
-     * @var \Magento\Customer\Model\Session|MockObject
+     * @var CustomerSession|MockObject
      */
     protected $customerSession;
 
@@ -63,9 +69,8 @@ class AddToCartTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->checkoutSession = $this->getMockBuilder(
-            Session::class
-        )->setMethods(
+        $this->checkoutSession = $this->createPartialMockWithReflection(
+            Session::class,
             [
                 'getSharedWishlist',
                 'getWishlistPendingMessages',
@@ -78,21 +83,14 @@ class AddToCartTest extends TestCase
                 'setWishlistPendingMessages',
                 'setNoCartRedirect',
             ]
-        )->disableOriginalConstructor()
-            ->getMock();
-        $this->customerSession = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setWishlistItemCount', 'isLoggedIn', 'getCustomerId'])
-            ->getMock();
-        $this->wishlistFactory = $this->getMockBuilder(WishlistFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $this->wishlist = $this->getMockBuilder(Wishlist::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->messageManager = $this->getMockBuilder(ManagerInterface::class)
-            ->getMock();
+        );
+        $this->customerSession = $this->createPartialMockWithReflection(
+            CustomerSession::class,
+            ['setWishlistItemCount', 'isLoggedIn', 'getCustomerId']
+        );
+        $this->wishlistFactory = $this->createPartialMock(WishlistFactory::class, ['create']);
+        $this->wishlist = $this->createMock(Wishlist::class);
+        $this->messageManager = $this->createMock(ManagerInterface::class);
 
         $this->wishlistFactory->expects($this->any())
             ->method('create')
@@ -113,25 +111,18 @@ class AddToCartTest extends TestCase
         $url = 'http://some.pending/url';
         $message = 'some error msg';
 
-        $eventObserver = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $event = $this->getMockBuilder(Event::class)
-            ->setMethods(['getRequest', 'getResponse'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $request = $this->getMockBuilder(RequestInterface::class)
-            ->getMock();
-        $response = $this->getMockBuilder(ResponseInterface::class)
-            ->setMethods(['setRedirect'])
-            ->getMockForAbstractClass();
-        $wishlists = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $loadedWishlist = $this->getMockBuilder(Wishlist::class)
-            ->setMethods(['getId', 'delete'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $eventObserver = $this->createMock(EventObserver::class);
+        $event = $this->createPartialMockWithReflection(
+            Event::class,
+            ['getRequest', 'getResponse']
+        );
+        $request = $this->createMock(RequestInterface::class);
+        $response = $this->createPartialMock(
+            ResponseHttp::class,
+            ['setRedirect']
+        );
+        $wishlists = $this->createMock(Collection::class);
+        $loadedWishlist = $this->createPartialMock(Wishlist::class, ['getId', 'delete']);
 
         $eventObserver->expects($this->any())->method('getEvent')->willReturn($event);
 
@@ -195,7 +186,7 @@ class AddToCartTest extends TestCase
             ->method('setNoCartRedirect')
             ->with(true);
 
-        /** @var $eventObserver \Magento\Framework\Event\Observer */
+        /** @var $eventObserver EventObserver */
         $this->observer->execute($eventObserver);
     }
 }

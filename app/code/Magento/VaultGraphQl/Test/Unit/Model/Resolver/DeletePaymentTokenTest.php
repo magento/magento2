@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -19,12 +19,15 @@ use Magento\Vault\Api\PaymentTokenRepositoryInterface;
 use Magento\VaultGraphQl\Model\Resolver\DeletePaymentToken;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * Test class for \Magento\VaultGraphQl\Model\Resolver\DeletePaymentToken
  */
 class DeletePaymentTokenTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * Object Manager Instance
      *
@@ -81,44 +84,27 @@ class DeletePaymentTokenTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->contextMock = $this->getMockBuilder(ContextInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'getExtensionAttributes',
-                    'getUserId',
-                    'getUserType',
-                ]
-            )
-            ->getMockForAbstractClass();
+        $this->contextMock = $this->createMock(ContextInterface::class);
 
-        $this->contextExtensionMock = $this->getMockBuilder(ContextExtensionInterface::class)
-            ->setMethods(
-                [
-                    'getIsCustomer',
-                    'getStore',
-                    'setStore',
-                    'setIsCustomer',
-                ]
-            )
-            ->getMockForAbstractClass();
+        $this->contextExtensionMock = $this->createPartialMockWithReflection(
+            ContextExtensionInterface::class,
+            [
+                'getIsCustomer',
+                'getStore',
+                'setStore',
+                'setIsCustomer',
+            ]
+        );
 
-        $this->fieldMock = $this->getMockBuilder(Field::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->fieldMock = $this->createMock(Field::class);
 
-        $this->paymentTokenManagementMock = $this->getMockBuilder(PaymentTokenManagementInterface::class)
-            ->getMockForAbstractClass();
+        $this->paymentTokenManagementMock = $this->createMock(PaymentTokenManagementInterface::class);
 
-        $this->paymentTokenRepositoryMock = $this->getMockBuilder(PaymentTokenRepositoryInterface::class)
-            ->getMockForAbstractClass();
+        $this->paymentTokenRepositoryMock = $this->createMock(PaymentTokenRepositoryInterface::class);
 
-        $this->paymentTokenMock = $this->getMockBuilder(PaymentTokenInterface::class)
-            ->getMockForAbstractClass();
+        $this->paymentTokenMock = $this->createMock(PaymentTokenInterface::class);
 
-        $this->resolveInfoMock = $this->getMockBuilder(ResolveInfo::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resolveInfoMock = $this->createMock(ResolveInfo::class);
 
         $this->resolver = $this->objectManager->getObject(
             DeletePaymentToken::class,

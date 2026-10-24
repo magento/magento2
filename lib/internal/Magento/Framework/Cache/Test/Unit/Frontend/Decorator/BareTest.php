@@ -1,15 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Framework\Cache\Test\Unit\Frontend\Decorator;
 
+use Magento\Framework\Cache\CacheConstants;
 use Magento\Framework\Cache\Frontend\Decorator\Bare;
 use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ProxyTesting;
+use PHPUnit\Framework\Attributes\DataProvider;
+
 use PHPUnit\Framework\TestCase;
 
 class BareTest extends TestCase
@@ -18,11 +21,14 @@ class BareTest extends TestCase
      * @param string $method
      * @param array $params
      * @param mixed $expectedResult
-     * @dataProvider proxyMethodDataProvider
      */
+     #[DataProvider('proxyMethodDataProvider')]
     public function testProxyMethod($method, $params, $expectedResult)
     {
-        $frontendMock = $this->getMockForAbstractClass(FrontendInterface::class);
+        if (is_callable($expectedResult)) {
+            $expectedResult = $expectedResult($this);
+        }
+        $frontendMock = $this->createMock(FrontendInterface::class);
 
         $object = new Bare($frontendMock);
         $helper = new ProxyTesting();
@@ -33,16 +39,27 @@ class BareTest extends TestCase
     /**
      * @return array
      */
-    public function proxyMethodDataProvider()
+    public static function proxyMethodDataProvider()
     {
         return [
             ['test', ['record_id'], 111],
             ['load', ['record_id'], '111'],
             ['save', ['record_value', 'record_id', ['tag'], 555], true],
             ['remove', ['record_id'], true],
-            ['clean', [\Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, ['tag']], true],
-            ['getBackend', [], $this->createMock(\Zend_Cache_Backend::class)],
-            ['getLowLevelFrontend', [], $this->createMock(\Zend_Cache_Core::class)],
+            ['clean', [CacheConstants::CLEANING_MODE_MATCHING_ANY_TAG, ['tag']], true],
+            ['getBackend', [], static fn (self $testCase) => $testCase->createZendCacheBackendMock()],
+            ['getLowLevelFrontend', [], static fn (self $testCase) => $testCase->createZendCacheCoreMock()],
         ];
+    }
+
+    public function createZendCacheBackendMock()
+    {
+        return $this->createMock(\Magento\Framework\Cache\Backend\BackendInterface::class);
+    }
+
+    public function createZendCacheCoreMock()
+    {
+        // Return a simple mock object (no specific Zend class needed)
+        return $this->createMock(\stdClass::class);
     }
 }

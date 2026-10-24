@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,9 +14,14 @@ use Symfony\Component\Console\Output\Output;
  */
 class TestOutput extends Output
 {
+    /**
+     * Captured output content for testing purposes
+     *
+     * @var string
+     */
     public $output = '';
 
-    public function clear()
+    public function clear(): void
     {
         $this->output = '';
     }
@@ -25,7 +30,7 @@ class TestOutput extends Output
      * @param string $message
      * @param bool $newline
      */
-    protected function doWrite($message, $newline)
+    protected function doWrite($message, $newline): void
     {
         $this->output .= $message . ($newline ? "\n" : '');
     }

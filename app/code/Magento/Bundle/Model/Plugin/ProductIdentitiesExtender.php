@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,11 +9,12 @@ namespace Magento\Bundle\Model\Plugin;
 
 use Magento\Bundle\Model\Product\Type as BundleType;
 use Magento\Catalog\Model\Product as CatalogProduct;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Add parent identities to product identities.
  */
-class ProductIdentitiesExtender
+class ProductIdentitiesExtender implements ResetAfterRequestInterface
 {
     /**
      * @var BundleType
@@ -67,5 +68,13 @@ class ProductIdentitiesExtender
         }
 
         return $this->cacheParentIdsByChild[$entityId];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->cacheParentIdsByChild = [];
     }
 }

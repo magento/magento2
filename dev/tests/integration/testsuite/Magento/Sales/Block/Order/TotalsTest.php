@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Framework\View\Element\Text;
 use Magento\Framework\View\Layout;
 use Magento\Framework\View\LayoutInterface;
 use Magento\Sales\Api\Data\OrderInterfaceFactory;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\Xpath;
 use PHPUnit\Framework\TestCase;
@@ -25,6 +26,8 @@ use PHPUnit\Framework\TestCase;
  */
 class TotalsTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var ObjectManagerInterface */
     private $objectManager;
 
@@ -58,26 +61,33 @@ class TotalsTest extends TestCase
     public function testToHtmlChildrenInitialized(): void
     {
         $this->block->setOrder($this->orderFactory->create())->setTemplate('order/totals.phtml');
-        $context = $this->objectManager->get(Context::class);
-        $childOne = $this->getMockBuilder(Text::class)
-            ->setMethods(['initTotals'])
-            ->setConstructorArgs([$context])
-            ->getMock();
-        $childOne->expects($this->once())->method('initTotals');
+
+        $childOneCallCount = 0;
+        $childOne = $this->createPartialMockWithReflection(Text::class, ['initTotals']);
+        $childOne->method('initTotals')->willReturnCallback(function () use (&$childOneCallCount) {
+            $childOneCallCount++;
+        });
         $this->layout->addBlock($childOne, 'child1', 'block');
-        $childTwo = $this->getMockBuilder(Text::class)
-            ->setMethods(['initTotals'])
-            ->setConstructorArgs([$context])
-            ->getMock();
-        $childTwo->expects($this->once())->method('initTotals');
+
+        $childTwoCallCount = 0;
+        $childTwo = $this->createPartialMockWithReflection(Text::class, ['initTotals']);
+        $childTwo->method('initTotals')->willReturnCallback(function () use (&$childTwoCallCount) {
+            $childTwoCallCount++;
+        });
         $this->layout->addBlock($childTwo, 'child2', 'block');
-        $childThree = $this->getMockBuilder(Text::class)
-            ->setMethods(['initTotals'])
-            ->setConstructorArgs([$context])
-            ->getMock();
-        $childThree->expects($this->once())->method('initTotals');
+
+        $childThreeCallCount = 0;
+        $childThree = $this->createPartialMockWithReflection(Text::class, ['initTotals']);
+        $childThree->method('initTotals')->willReturnCallback(function () use (&$childThreeCallCount) {
+            $childThreeCallCount++;
+        });
         $this->layout->addBlock($childThree, 'child3', 'block');
+
         $this->block->toHtml();
+
+        $this->assertEquals(1, $childOneCallCount, 'initTotals should be called once on child1');
+        $this->assertEquals(1, $childTwoCallCount, 'initTotals should be called once on child2');
+        $this->assertEquals(1, $childThreeCallCount, 'initTotals should be called once on child3');
     }
 
     /**

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Setup\Model;
 
@@ -45,7 +45,7 @@ class ConfigOptionsListCollectorTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        $serviceLocator = $this->getMockForAbstractClass(ServiceLocatorInterface::class);
+        $serviceLocator = $this->createMock(ServiceLocatorInterface::class);
 
         $serviceLocator->expects($this->once())
             ->method('get')

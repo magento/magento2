@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Update customer address tests
@@ -159,7 +160,7 @@ MUTATION;
     public function testUpdateCustomerAddressWithMissingAttribute()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Required parameters are missing: firstname');
+        $this->expectExceptionMessage('"firstname" is required. Enter and try again.');
 
         $userName = 'customer@example.com';
         $password = 'password';
@@ -388,7 +389,7 @@ mutation {
 MUTATION;
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Field "updateCustomerAddress" argument "id" requires type Int!, found "".');
+        $this->expectExceptionMessage('Int cannot represent non-integer value: ""');
         $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
     }
 
@@ -397,10 +398,10 @@ MUTATION;
      *
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
-     * @dataProvider invalidInputDataProvider
      * @param string $input
      * @param string $exceptionMessage
      */
+    #[DataProvider('invalidInputDataProvider')]
     public function testUpdateCustomerAddressWithInvalidInput(string $input, string $exceptionMessage)
     {
         $userName = 'customer@example.com';
@@ -424,15 +425,15 @@ MUTATION;
     /**
      * @return array
      */
-    public function invalidInputDataProvider()
+    public static function invalidInputDataProvider()
     {
         return [
             ['', '"input" value must be specified'],
             [
                 'input: ""',
-                'Field "updateCustomerAddress" argument "input" requires type CustomerAddressInput, found ""'
+                'Expected value of type "CustomerAddressInput", found ""'
             ],
-            ['input: "foo"', 'requires type CustomerAddressInput, found "foo"']
+            ['input: "foo"', 'Expected value of type "CustomerAddressInput", found "foo"']
         ];
     }
 
@@ -481,7 +482,7 @@ MUTATION;
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('The account is locked.');
 
-        $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/750');
+        $this->markTestSkipped('https://github.com/magento/graphql-ce/issues/750');
 
         $userName = 'customer@example.com';
         $password = 'password';

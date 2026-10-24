@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,9 +15,12 @@ use Magento\Framework\View\Element\RendererList;
 use Magento\Framework\View\LayoutInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class RendererListTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var RendererList
      */
@@ -42,20 +45,20 @@ class RendererListTest extends TestCase
     {
         $objectManagerHelper = new ObjectManager($this);
 
-        $this->blockMock = $this->getMockBuilder(AbstractBlock::class)
-            ->setMethods(['setRenderedBlock', 'getTemplate', 'setTemplate'])->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->blockMock = $this->createPartialMockWithReflection(
+            AbstractBlock::class,
+            ['setRenderedBlock', 'getTemplate', 'setTemplate']
+        );
 
-        $this->layoutMock = $this->getMockBuilder(LayoutInterface::class)
-            ->setMethods(['getBlock', 'getChildName'])->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        // LayoutInterface has 32 abstract methods - use createMock() instead of onlyMethods()
+        $this->layoutMock = $this->createMock(LayoutInterface::class);
 
         $this->layoutMock->expects($this->any())
             ->method('getBlock')
             ->willReturn($this->blockMock);
 
         $this->contextMock = $this->getMockBuilder(Context::class)
-            ->setMethods(['getLayout'])->disableOriginalConstructor()
+            ->onlyMethods(['getLayout'])->disableOriginalConstructor()
             ->getMock();
 
         $this->contextMock->expects($this->any())

@@ -1,17 +1,20 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\GroupedProduct\Test\Unit\Block\Product\Grouped;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use Magento\Backend\Block\Template\Context;
 use Magento\GroupedProduct\Block\Product\Grouped\AssociatedProducts;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
+#[CoversClass(\Magento\GroupedProduct\Block\Product\Grouped\AssociatedProducts::class)]
 class AssociatedProductsTest extends TestCase
 {
     /**
@@ -24,10 +27,19 @@ class AssociatedProductsTest extends TestCase
      */
     protected $block;
 
+    /**
+     * @var ObjectManager
+     */
+    protected $objectManager;
+
     protected function setUp(): void
     {
+        $this->objectManager = new ObjectManager($this);
         $this->contextMock = $this->createMock(Context::class);
-        $this->block = new AssociatedProducts($this->contextMock);
+        $this->block = $this->objectManager->getObject(
+            AssociatedProducts::class,
+            ['context' => $this->contextMock]
+        );
     }
 
     /**

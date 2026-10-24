@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\SalesRule\Api;
@@ -95,7 +94,7 @@ class GuestTotalsInformationManagement extends WebapiAbstract
         $salesRuleId = $registry->registry(self::SALES_RULE_ID);
         $salesRule = Bootstrap::getObjectManager()->create(\Magento\SalesRule\Model\RuleFactory::class)->create();
         $salesRule->load($salesRuleId);
-        $this->assertContains($salesRule->getRuleId(), str_getcsv($quote->getAppliedRuleIds()));
+        $this->assertContains($salesRule->getRuleId(), str_getcsv($quote->getAppliedRuleIds(), ',', '"', '\\'));
         $this->assertEquals(0, $quote->getTriggerRecollect());
         $salesRule->setIsActive(0);
         $salesRule->save();
@@ -120,7 +119,7 @@ class GuestTotalsInformationManagement extends WebapiAbstract
         );
         $this->assertNotEmpty($response);
         $quote->load(self::QUOTE_RESERVED_ORDER_ID, 'reserved_order_id');
-        $this->assertNotContains($salesRule->getId(), str_getcsv($quote->getAppliedRuleIds()));
+        $this->assertNotContains($salesRule->getId(), str_getcsv($quote->getAppliedRuleIds(), ',', '"', '\\'));
     }
 
     /**

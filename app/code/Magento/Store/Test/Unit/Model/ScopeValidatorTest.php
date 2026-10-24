@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -52,14 +52,12 @@ class ScopeValidatorTest extends TestCase
         $scope = 'websites';
         $scopeId = 1;
 
-        $scopeObject = $this->getMockBuilder(ScopeInterface::class)
-            ->getMockForAbstractClass();
+        $scopeObject = $this->createMock(ScopeInterface::class);
         $scopeObject->expects($this->once())
             ->method('getId')
             ->willReturn(false);
 
-        $scopeResolver = $this->getMockBuilder(ScopeResolverInterface::class)
-            ->getMockForAbstractClass();
+        $scopeResolver = $this->createMock(ScopeResolverInterface::class);
         $scopeResolver->expects($this->once())
             ->method('getScope')
             ->with($scopeId)

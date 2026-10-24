@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -42,7 +42,7 @@ class SearchClient implements ClientInterface
     /**
      * @var DynamicTemplatesProvider|null
      */
-    private $dynamicTemplatesProvider;
+    public $dynamicTemplatesProvider;
 
     /**
      * Initialize Client
@@ -93,7 +93,7 @@ class SearchClient implements ClientInterface
      *
      * @return Client
      */
-    private function getOpenSearchClient(): Client
+    public function getOpenSearchClient(): Client
     {
         $pid = getmypid();
         if (!isset($this->client[$pid])) {
@@ -165,11 +165,11 @@ class SearchClient implements ClientInterface
      * Performs bulk query over OpenSearch  index
      *
      * @param array $query
-     * @return void
+     * @return array
      */
     public function bulkQuery(array $query)
     {
-        $this->getOpenSearchClient()->bulk($query);
+        return $this->getOpenSearchClient()->bulk($query);
     }
 
     /**
@@ -371,11 +371,33 @@ class SearchClient implements ClientInterface
      * @param array $properties
      * @return array
      */
-    private function applyFieldsMappingPreprocessors(array $properties): array
+    public function applyFieldsMappingPreprocessors(array $properties): array
     {
         foreach ($this->fieldsMappingPreprocessors as $preprocessor) {
             $properties = $preprocessor->process($properties);
         }
         return $properties;
+    }
+
+    /**
+     * Open point in time
+     *
+     * @param array $params
+     * @return array
+     */
+    public function openPointInTime(array $params = []): array
+    {
+        return $this->getOpenSearchClient()->createPointInTime($params);
+    }
+
+    /**
+     * Close point in time
+     *
+     * @param array $params
+     * @return array
+     */
+    public function closePointInTime(array $params = []): array
+    {
+        return $this->getOpenSearchClient()->deletePointInTime($params);
     }
 }

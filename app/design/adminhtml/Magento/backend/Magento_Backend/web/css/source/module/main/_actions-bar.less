@@ -1,13 +1,13 @@
 // /**
-//  * Copyright © Magento, Inc. All rights reserved.
-//  * See COPYING.txt for license details.
+//  * Copyright 2014 Adobe
+//  * All Rights Reserved.
 //  */
 
 //
 //  Main elements -> Actions bar
 //  _____________________________________________
 
-//  ToDo UI: Consist old styles, should be changed with new design
+//  ToDo UI -> Consist old styles, should be changed with new design
 
 //
 //  Components
@@ -24,7 +24,15 @@
     padding: @page-main-actions__padding;
 }
 
+.customer-index-edit .actions-scrollable {
+    .page-actions {
+        display: flex;
+        overflow-x: auto;
+    }
+}
+
 .page-main-actions {
+    display: flex;
     margin: 0 0 @indent__l;
 
     &._hidden {
@@ -44,6 +52,8 @@
 
 .page-actions {
     @_page-action__indent: 1.3rem;
+    margin-left: auto;
+    order: 2;
 
     &.floating-header {
         &:extend(.page-actions-buttons all);
@@ -86,7 +96,7 @@
 
         &.back,
         &.action-back {
-            //  ToDo UI: Should be changed to ._back
+            //  ToDo UI -> Should be changed to ._back
             float: left;
             .lib-vendor-prefix-order(-1);
 
@@ -101,7 +111,7 @@
 
         &.action-primary,
         &.primary {
-            //  ToDo UI: Should be changed to .action-primary
+            //  ToDo UI -> Should be changed to .action-primary
             &:extend(.abs-action-primary all);
             &:extend(.abs-action-l all);
             .lib-vendor-prefix-order(2);
@@ -113,14 +123,14 @@
         }
 
         &.save {
-            //  ToDo UI: Should be changed to ._save
+            //  ToDo UI -> Should be changed to ._save
             &:not(.primary) {
                 .lib-vendor-prefix-order(1);
             }
         }
 
         &.delete {
-            //  ToDo UI: Should be changed to ._delete
+            //  ToDo UI -> Should be changed to ._delete
             .lib-vendor-prefix-order(-1);
         }
     }

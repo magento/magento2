@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -17,6 +17,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1320712/scenarios/4931106"/>
             <group value="Cms"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -32,7 +33,9 @@
         </after>
         <amOnPage url="{{CmsPagesPage.url}}?filters[title]=$$createPage.title$$" stepKey="navigateToPageGridWithFilters"/>
         <waitForPageLoad stepKey="waitForPageGrid"/>
+        <seeInCurrentUrl url="{{CmsPagesPage.url}}?filters[title]=$$createPage.title$$" stepKey="assertUrl"/>
         <waitForText selector="{{CmsPagesPageActionsSection.pagesGridRowByTitle($$createPage.title$$)}}" userInput="$$createPage.title$$" stepKey="seePage"/>
+        <seeInCurrentUrl url="admin/cms/page?filters" stepKey="seeAdminCMSPageFilters"/>
         <waitForElementVisible selector="{{CmsPagesPageActionsSection.activeFilter}}" stepKey="seeEnabledFilters"/>
         <waitForText selector="{{CmsPagesPageActionsSection.activeFilter}}" userInput="Title: $$createPage.title$$" stepKey="seePageTitleFilter"/>
     </test>

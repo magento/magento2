@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Reflection;
@@ -31,6 +31,7 @@ class TypeProcessor
     public const INT_TYPE = 'integer';
     public const BOOLEAN_TYPE = 'bool';
     public const ANY_TYPE = 'mixed';
+    public const UNSTRUCTURED_ARRAY = 'UnstructuredArray';
     /**#@-*/
 
     /**#@+
@@ -59,7 +60,8 @@ class TypeProcessor
      *
      * @return NameFinder
      *
-     * @deprecated 100.1.0
+     * @deprecated 100.1.0 Refactor TypeProcessor
+     * @see https://jira.corp.adobe.com/browse/MAGETWO-51906
      */
     private function getNameFinder()
     {
@@ -143,7 +145,8 @@ class TypeProcessor
         }
         if (!$this->isTypeSimple($typeName) && !$this->isTypeAny($typeName)) {
             $typeSimple = $this->getArrayItemType($type);
-            if (!(class_exists($typeSimple) || interface_exists($typeSimple))) {
+            if (!(class_exists($typeSimple) || interface_exists($typeSimple))
+                && ($typeSimple !== self::UNSTRUCTURED_ARRAY)) {
                 throw new \LogicException(
                     sprintf(
                         'The "%s" class doesn\'t exist and the namespace must be specified. Verify and try again.',
@@ -173,6 +176,11 @@ class TypeProcessor
     {
         $typeName = $this->translateTypeName($class);
         $this->_types[$typeName] = [];
+        if ($typeName === self::UNSTRUCTURED_ARRAY) {
+            $this->_types[$typeName]['documentation'] = '';
+            $this->_types[$typeName]['parameters'] = [];
+            return $this->_types[$typeName];
+        }
         if ($this->isArrayType($class)) {
             $this->register($this->getArrayItemType($class));
         } else {
@@ -254,7 +262,8 @@ class TypeProcessor
      * @param string $getterName
      * @return string
      *
-     * @deprecated 100.1.0
+     * @deprecated 100.1.0 Refactor TypeProcessor
+     * @see https://jira.corp.adobe.com/browse/MAGETWO-51906
      */
     public function dataObjectGetterNameToFieldName($getterName)
     {
@@ -267,7 +276,8 @@ class TypeProcessor
      * @param string $shortDescription
      * @return string
      *
-     * @deprecated 100.1.0
+     * @deprecated 100.1.0 Refactor TypeProcessor
+     * @see https://jira.corp.adobe.com/browse/MAGETWO-51906
      */
     protected function dataObjectGetterDescriptionToFieldDescription($shortDescription)
     {
@@ -445,6 +455,9 @@ class TypeProcessor
 
             return ucfirst($moduleNamespace . $moduleName . implode('', $typeNameParts));
         }
+        if ($class === self::UNSTRUCTURED_ARRAY) {
+            return $class;
+        }
         throw new \InvalidArgumentException(
             sprintf('The "%s" parameter type is invalid. Verify the parameter and try again.', $class)
         );
@@ -547,7 +560,7 @@ class TypeProcessor
             return strpos($paramType, '[]') !== false ? $paramType : "{$paramType}[]";
         }
 
-        return $this->resolveFullyQualifiedClassName($param->getDeclaringClass(), $type);
+        return $this->resolveFullyQualifiedClassName($param->getDeclaringClass(), $type ?? '');
     }
 
     /**
@@ -701,7 +714,8 @@ class TypeProcessor
      * @return string processed method name
      * @throws \Exception If $camelCaseProperty has no corresponding getter method
      *
-     * @deprecated 100.1.0
+     * @deprecated 100.1.0 Refactor TypeProcessor
+     * @see https://jira.corp.adobe.com/browse/MAGETWO-51906
      */
     public function findGetterMethodName(ClassReflection $class, $camelCaseProperty)
     {
@@ -739,7 +753,8 @@ class TypeProcessor
      * @return string processed method name
      * @throws \Exception If $camelCaseProperty has no corresponding setter method
      *
-     * @deprecated 100.1.0
+     * @deprecated 100.1.0 Refactor TypeProcessor
+     * @see https://jira.corp.adobe.com/browse/MAGETWO-51906
      */
     public function findSetterMethodName(ClassReflection $class, $camelCaseProperty)
     {
@@ -756,7 +771,8 @@ class TypeProcessor
      * @return string processed method name
      * @throws \Exception If $camelCaseProperty has no corresponding setter method
      *
-     * @deprecated 100.1.0
+     * @deprecated 100.1.0 Refactor TypeProcessor
+     * @see https://jira.corp.adobe.com/browse/MAGETWO-51906
      */
     protected function findAccessorMethodName(
         ClassReflection $class,
@@ -777,7 +793,8 @@ class TypeProcessor
      * @param string $methodName
      * @return bool
      *
-     * @deprecated 100.1.0
+     * @deprecated 100.1.0 Refactor TypeProcessor
+     * @see https://jira.corp.adobe.com/browse/MAGETWO-51906
      */
     protected function classHasMethod(ClassReflection $class, $methodName)
     {

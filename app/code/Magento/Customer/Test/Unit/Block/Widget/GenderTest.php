@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,15 +16,16 @@ use Magento\Customer\Helper\Address;
 use Magento\Customer\Model\Session;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Element\Template\Context;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class GenderTest extends TestCase
 {
     /** Constants used in the unit tests */
-    const CUSTOMER_ENTITY_TYPE = 'customer';
+    private const CUSTOMER_ENTITY_TYPE = 'customer';
 
-    const GENDER_ATTRIBUTE_CODE = 'gender';
+    private const GENDER_ATTRIBUTE_CODE = 'gender';
 
     /**
      * @var MockObject|CustomerMetadataInterface
@@ -45,19 +46,15 @@ class GenderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->attribute = $this->getMockBuilder(AttributeMetadataInterface::class)
-            ->getMockForAbstractClass();
+        $this->attribute = $this->createMock(AttributeMetadataInterface::class);
 
-        $this->customerMetadata = $this->getMockBuilder(CustomerMetadataInterface::class)
-            ->getMockForAbstractClass();
+        $this->customerMetadata = $this->createMock(CustomerMetadataInterface::class);
         $this->customerMetadata->expects($this->any())
             ->method('getAttributeMetadata')
             ->with(self::GENDER_ATTRIBUTE_CODE)
             ->willReturn($this->attribute);
 
-        $this->customerRepository = $this
-            ->getMockBuilder(CustomerRepositoryInterface::class)
-            ->getMockForAbstractClass();
+        $this->customerRepository = $this->createMock(CustomerRepositoryInterface::class);
         $this->customerSession = $this->createMock(Session::class);
 
         $this->block = new Gender(
@@ -75,9 +72,8 @@ class GenderTest extends TestCase
      * @param bool $isVisible Determines whether the 'gender' attribute is visible or enabled
      * @param bool $expectedValue The value we expect from Gender::isEnabled()
      * @return void
-     *
-     * @dataProvider isEnabledDataProvider
-     */
+     * */
+    #[DataProvider('isEnabledDataProvider')]
     public function testIsEnabled($isVisible, $expectedValue)
     {
         $this->attribute->expects($this->once())->method('isVisible')->willReturn($isVisible);
@@ -88,7 +84,7 @@ class GenderTest extends TestCase
      * The testIsEnabled data provider.
      * @return array
      */
-    public function isEnabledDataProvider()
+    public static function isEnabledDataProvider()
     {
         return [[true, true], [false, false]];
     }
@@ -116,9 +112,8 @@ class GenderTest extends TestCase
      * @param bool $isRequired Determines whether the 'gender' attribute is required
      * @param bool $expectedValue The value we expect from Gender::isRequired()
      * @return void
-     *
-     * @dataProvider isRequiredDataProvider
-     */
+     * */
+    #[DataProvider('isRequiredDataProvider')]
     public function testIsRequired($isRequired, $expectedValue)
     {
         $this->attribute->expects($this->once())->method('isRequired')->willReturn($isRequired);
@@ -129,7 +124,7 @@ class GenderTest extends TestCase
      * The testIsRequired data provider.
      * @return array
      */
-    public function isRequiredDataProvider()
+    public static function isRequiredDataProvider()
     {
         return [[true, true], [false, false]];
     }
@@ -157,8 +152,7 @@ class GenderTest extends TestCase
      */
     public function testGetCustomer()
     {
-        $customerData = $this->getMockBuilder(CustomerInterface::class)
-            ->getMockForAbstractClass();
+        $customerData = $this->createMock(CustomerInterface::class);
         $this->customerSession->expects($this->once())->method('getCustomerId')->willReturn(1);
         $this->customerRepository
             ->expects($this->once())

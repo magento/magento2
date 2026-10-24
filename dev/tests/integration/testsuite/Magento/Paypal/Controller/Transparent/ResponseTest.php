@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,8 @@ use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Api\PaymentMethodManagementInterface;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Tests PayPal transparent response controller.
@@ -31,8 +33,8 @@ class ResponseTest extends \Magento\TestFramework\TestCase\AbstractController
      *
      * @magentoConfigFixture current_store payment/payflowpro/active 1
      * @magentoDataFixture Magento/Sales/_files/quote.php
-     * @dataProvider paymentCcExpirationDateDataProvider
      */
+    #[DataProvider('paymentCcExpirationDateDataProvider')]
     public function testPaymentCcExpirationDate(
         string $currentDateTime,
         string $paypalExpDate,
@@ -75,7 +77,7 @@ class ResponseTest extends \Magento\TestFramework\TestCase\AbstractController
     /**
      * @return array
      */
-    public function paymentCcExpirationDateDataProvider(): array
+    public static function paymentCcExpirationDateDataProvider(): array
     {
         return [
             'Expiration year in current century' => [

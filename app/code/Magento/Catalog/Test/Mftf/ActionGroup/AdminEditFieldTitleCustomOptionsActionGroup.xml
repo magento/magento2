@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<actionGroups
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminEditFieldTitleCustomOptionsActionGroup">
+        <annotations>
+            <description>Edit field custom options title</description>
+        </annotations>
+        <arguments>
+            <argument name="optionNumber" type="string"/>
+            <argument name="optionInputFieldNumber" type="string"/>
+            <argument name="title" type="string"/>
+        </arguments>
+        <waitForPageLoad stepKey="waitForCustomOptionsLoad"/>
+        <scrollTo selector="{{AdminProductCustomizableOptionsSection.useDefaultValue(optionNumber)}}" x="0" y="-80" stepKey="scrollToUseDefaultOptionValue"/>
+        <waitForElementClickable selector="{{AdminProductCustomizableOptionsSection.useDefaultValue(optionNumber)}}" stepKey="waitForUseDefaultOption"/>
+        <uncheckOption selector="{{AdminProductCustomizableOptionsSection.useDefaultValue(optionNumber)}}" stepKey="uncheckDefaultOptionTitle"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.optionTitleInput(optionInputFieldNumber)}}" userInput="{{title}}" stepKey="fillOptionTitle"/>
+    </actionGroup>
+</actionGroups>

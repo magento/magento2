@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,9 +9,11 @@ namespace Magento\StoreGraphQl\Test\Unit;
 
 use Magento\Framework\App\HttpRequestInterface;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\StoreGraphQl\Controller\HttpRequestValidator\StoreValidator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -21,6 +23,8 @@ use PHPUnit\Framework\TestCase;
  */
 class StoreValidatorTest extends TestCase
 {
+    use MockCreationTrait;
+
     private const DEFAULT_STORE_VIEW_CODE = 'default';
     private const STORE_CODE = 'sv1';
 
@@ -44,21 +48,11 @@ class StoreValidatorTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $this->requestMock = $this->getMockBuilder(HttpRequestInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'isPost',
-                    'isGet',
-                    'isPatch',
-                    'isDelete',
-                    'isPut',
-                    'isAjax',
-                    'getHeader'
-                ]
-            )
-            ->getMockForAbstractClass();
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->requestMock = $this->createPartialMockWithReflection(
+            HttpRequestInterface::class,
+            ['getHeader', 'isPost', 'isGet', 'isPatch', 'isDelete', 'isPut', 'isAjax']
+        );
 
         $objectManager = new ObjectManagerHelper($this);
 
@@ -75,9 +69,9 @@ class StoreValidatorTest extends TestCase
      *
      * @param array $config
      *
-     * @dataProvider getConfigDataProvider
      * @throws GraphQlInputException
      */
+    #[DataProvider('getConfigDataProvider')]
     public function testValidate(array $config): void
     {
         $this->requestMock
@@ -105,8 +99,8 @@ class StoreValidatorTest extends TestCase
      * @param array $config
      *
      * @throws GraphQlInputException
-     * @dataProvider getConfigDataProvider
      */
+    #[DataProvider('getConfigDataProvider')]
     public function testValidateWithStoreActive(array $config): void
     {
         $this->requestMock
@@ -132,7 +126,7 @@ class StoreValidatorTest extends TestCase
      *
      * @return array
      */
-    public function getConfigDataProvider(): array
+    public static function getConfigDataProvider(): array
     {
         return [
             [

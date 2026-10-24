@@ -1,9 +1,7 @@
 <?php declare(strict_types=1);
 /**
- * Unit test for customer service layer \Magento\Customer\Model\Customer
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -36,6 +34,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManager;
 use Magento\Store\Model\Website;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -123,9 +122,9 @@ class CustomerTest extends TestCase
         $this->_config = $this->createMock(Config::class);
         $this->_attribute = $this->createMock(Attribute::class);
         $this->_storeManager = $this->createMock(StoreManager::class);
-        $this->_scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->_scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->_transportBuilderMock = $this->createMock(TransportBuilder::class);
-        $this->_transportMock = $this->getMockForAbstractClass(TransportInterface::class);
+        $this->_transportMock = $this->createMock(TransportInterface::class);
         $this->attributeFactoryMock = $this->createPartialMock(
             \Magento\Customer\Model\AttributeFactory::class,
             ['create']
@@ -145,20 +144,20 @@ class CustomerTest extends TestCase
             ->method('getIdFieldName')
             ->willReturn('id');
         $this->registryMock = $this->createPartialMock(Registry::class, ['registry']);
-        $this->_encryptor = $this->getMockForAbstractClass(EncryptorInterface::class);
+        $this->_encryptor = $this->createMock(EncryptorInterface::class);
         $helper = new ObjectManager($this);
         $this->accountConfirmation = $this->createMock(AccountConfirmation::class);
         $this->addressesFactory = $this->getMockBuilder(AddressCollectionFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->customerDataFactory = $this->getMockBuilder(CustomerInterfaceFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->dataObjectHelper = $this->getMockBuilder(DataObjectHelper::class)
             ->disableOriginalConstructor()
-            ->setMethods(['populateWithArray'])
+            ->onlyMethods(['populateWithArray'])
             ->getMock();
         $this->mathRandom = $this->createMock(Random::class);
 
@@ -242,7 +241,7 @@ class CustomerTest extends TestCase
                 ->method($method)
                 ->willReturnSelf();
         }
-        $transportMock = $this->getMockForAbstractClass(TransportInterface::class);
+        $transportMock = $this->createMock(TransportInterface::class);
         $transportMock->expects($this->once())
             ->method('sendMessage')
             ->willReturnSelf();
@@ -266,9 +265,8 @@ class CustomerTest extends TestCase
 
     /**
      * @param $lockExpires
-     * @param $expectedResult
-     * @dataProvider isCustomerLockedDataProvider
-     */
+     * @param $expectedResult */
+    #[DataProvider('isCustomerLockedDataProvider')]
     public function testIsCustomerLocked($lockExpires, $expectedResult)
     {
         $this->_model->setLockExpires($lockExpires);
@@ -278,11 +276,11 @@ class CustomerTest extends TestCase
     /**
      * @return array
      */
-    public function isCustomerLockedDataProvider()
+    public static function isCustomerLockedDataProvider()
     {
         return [
-            ['lockExpirationDate' => date("F j, Y", strtotime('-1 days')), 'expectedResult' => false],
-            ['lockExpirationDate' => date("F j, Y", strtotime('+1 days')), 'expectedResult' => true]
+            ['lockExpires' => date("F j, Y", strtotime('-1 days')), 'expectedResult' => false],
+            ['lockExpires' => date("F j, Y", strtotime('+1 days')), 'expectedResult' => true]
         ];
     }
 
@@ -290,9 +288,8 @@ class CustomerTest extends TestCase
      * @param int $customerId
      * @param int $websiteId
      * @param bool $isConfirmationRequired
-     * @param bool $expected
-     * @dataProvider dataProviderIsConfirmationRequired
-     */
+     * @param bool $expected */
+    #[DataProvider('dataProviderIsConfirmationRequired')]
     public function testIsConfirmationRequired(
         $customerId,
         $websiteId,
@@ -316,7 +313,7 @@ class CustomerTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderIsConfirmationRequired()
+    public static function dataProviderIsConfirmationRequired()
     {
         return [
             [null, null, false, false],
@@ -351,9 +348,13 @@ class CustomerTest extends TestCase
 
         $this->dataObjectProcessor->expects($this->once())
             ->method('buildOutputDataArray')
-            ->withConsecutive(
-                [$customer, CustomerInterface::class]
-            )->willReturn($customerDataAttributes);
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($customer, $customerDataAttributes) {
+                    if ($arg1 == $customer && $arg2 == CustomerInterface::class) {
+                        return $customerDataAttributes;
+                    }
+                }
+            );
 
         $attribute->expects($this->exactly(3))
             ->method('getAttributeCode')
@@ -386,16 +387,17 @@ class CustomerTest extends TestCase
         $customerId = 1;
         $this->_model->setEntityId($customerId);
         $this->_model->setId($customerId);
-        $addressDataModel = $this->getMockForAbstractClass(AddressInterface::class);
+        $addressDataModel = $this->createMock(AddressInterface::class);
+        $addressDataModel->expects($this->exactly(4))->method('isDefaultShipping')->willReturn(true);
         $address = $this->getMockBuilder(AddressModel::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setCustomer', 'getDataModel'])
+            ->onlyMethods(['setCustomer', 'getDataModel'])
             ->getMock();
         $address->expects($this->atLeastOnce())->method('getDataModel')->willReturn($addressDataModel);
         $addresses = new \ArrayIterator([$address, $address]);
         $addressCollection = $this->getMockBuilder(AddressCollection::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setCustomerFilter', 'addAttributeToSelect', 'getIterator', 'getItems'])
+            ->onlyMethods(['setCustomerFilter', 'addAttributeToSelect', 'getIterator', 'getItems'])
             ->getMock();
         $addressCollection->expects($this->atLeastOnce())->method('setCustomerFilter')->willReturnSelf();
         $addressCollection->expects($this->atLeastOnce())->method('addAttributeToSelect')->willReturnSelf();
@@ -404,7 +406,7 @@ class CustomerTest extends TestCase
         $addressCollection->expects($this->atLeastOnce())->method('getItems')
             ->willReturn($addresses);
         $this->addressesFactory->expects($this->atLeastOnce())->method('create')->willReturn($addressCollection);
-        $customerDataObject = $this->getMockForAbstractClass(CustomerInterface::class);
+        $customerDataObject = $this->createMock(CustomerInterface::class);
         $this->customerDataFactory->expects($this->atLeastOnce())->method('create')->willReturn($customerDataObject);
         $this->dataObjectHelper->expects($this->atLeastOnce())->method('populateWithArray')
             ->with($customerDataObject, $this->_model->getData(), CustomerInterface::class)

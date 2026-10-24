@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
+
 declare(strict_types=1);
 
 namespace Magento\Sales\Controller\Adminhtml\Order\Invoice;
@@ -12,6 +13,7 @@ use Magento\Sales\Api\Data\InvoiceInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\ResourceModel\Order\Item;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Constraint\StringContains;
 
 /**
@@ -32,6 +34,11 @@ class SaveTest extends AbstractInvoiceControllerTest
 
     /** @var Item */
     private $orderItemResource;
+
+    /**
+     * @var string
+     */
+    protected $resource = "Magento_Sales::invoice";
 
     /**
      * @inheritdoc
@@ -91,8 +98,8 @@ class SaveTest extends AbstractInvoiceControllerTest
             )
         );
         $this->assertEquals($message->getSubject(), $subject);
-        $bodyParts = $message->getBody()->getParts();
-        $this->assertThat(reset($bodyParts)->getRawContent(), $messageConstraint);
+        $bodyParts = quoted_printable_decode($message->getBody()->bodyToString());
+        $this->assertThat($bodyParts, $messageConstraint);
     }
 
     /**
@@ -113,8 +120,6 @@ class SaveTest extends AbstractInvoiceControllerTest
     }
 
     /**
-     * @dataProvider invoiceDataProvider
-     *
      * @magentoDataFixture Magento/Sales/_files/order.php
      *
      * @param int $invoicedItemsQty
@@ -122,6 +127,7 @@ class SaveTest extends AbstractInvoiceControllerTest
      * @param bool $doShipment
      * @return void
      */
+    #[DataProvider('invoiceDataProvider')]
     public function testSuccessfulInvoice(
         int $invoicedItemsQty,
         string $commentMessage = '',
@@ -141,20 +147,20 @@ class SaveTest extends AbstractInvoiceControllerTest
     /**
      * @return array
      */
-    public function invoiceDataProvider(): array
+    public static function invoiceDataProvider(): array
     {
         return [
             'with_comment_message' => [
-                'invoiced_items_qty' => 2,
-                'comment_message' => 'test comment message',
+                'invoicedItemsQty' => 2,
+                'commentMessage' => 'test comment message',
             ],
             'partial_invoice' => [
-                'invoiced_items_qty' => 1,
+                'invoicedItemsQty' => 1,
             ],
             'with_do_shipment' => [
-                'invoiced_items_qty' => 2,
-                'comment_message' => '',
-                'do_shipment' => true,
+                'invoicedItemsQty' => 2,
+                'commentMessage' => '',
+                'doShipment' => true,
             ],
         ];
     }

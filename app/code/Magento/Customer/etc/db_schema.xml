@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All rights reserved.
  */
 -->
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -430,6 +430,9 @@
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="customer_group_id"/>
         </constraint>
+        <index referenceId="CUSTOMER_GROUP_CUSTOMER_GROUP_CODE" indexType="btree">
+            <column name="customer_group_code"/>
+        </index>
     </table>
     <table name="customer_eav_attribute" resource="default" engine="innodb" comment="Customer Eav Attribute">
         <column xsi:type="smallint" name="attribute_id" unsigned="true" nullable="false" identity="false"

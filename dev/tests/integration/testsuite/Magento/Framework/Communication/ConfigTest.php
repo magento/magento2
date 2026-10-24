@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Communication;
 
@@ -365,7 +365,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     protected function getConfigInstance($configFilePaths, $envConfigFilePath = null)
     {
-        $fileResolver = $this->getMockForAbstractClass(\Magento\Framework\Config\FileResolverInterface::class);
+        $fileResolver = $this->createMock(\Magento\Framework\Config\FileResolverInterface::class);
         $fileResolverResult = [];
         foreach ($configFilePaths as $configFilePath) {
             $fileResolverResult[] = file_get_contents($configFilePath);
@@ -380,7 +380,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         );
         $deploymentConfigReader = $this->getMockBuilder(\Magento\Framework\App\DeploymentConfig\Reader::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods(['load'])
             ->getMock();
         $envConfigData = include $envConfigFilePath ?: __DIR__ . '/_files/valid_communication_input.php';
         $deploymentConfigReader->expects($this->any())->method('load')->willReturn($envConfigData);

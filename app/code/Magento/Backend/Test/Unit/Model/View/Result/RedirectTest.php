@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -36,14 +36,17 @@ class RedirectTest extends TestCase
     /** @var RedirectInterface|MockObject */
     protected $redirect;
 
+    /**
+     * @var string
+     */
     protected $url = 'adminhtml/index';
 
     protected function setUp(): void
     {
         $this->session = $this->createMock(Session::class);
         $this->actionFlag = $this->createMock(ActionFlag::class);
-        $this->urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
-        $this->redirect = $this->getMockForAbstractClass(RedirectInterface::class);
+        $this->urlBuilder = $this->createMock(UrlInterface::class);
+        $this->redirect = $this->createMock(RedirectInterface::class);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->action = $this->objectManagerHelper->getObject(
             Redirect::class,

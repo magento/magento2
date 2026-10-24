@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\SalesRule\Model\ResourceModel\Coupon;
 
@@ -11,8 +11,6 @@ use Magento\SalesRule\Model\Rule;
 
 /**
  * SalesRule Model Resource Coupon_Collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Collection extends AbstractCollection
 {

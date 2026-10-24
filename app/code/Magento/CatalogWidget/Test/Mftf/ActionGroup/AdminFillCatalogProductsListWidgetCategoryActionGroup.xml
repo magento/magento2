@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -25,8 +25,8 @@
         <click selector="{{WidgetSection.RuleParam}}" stepKey="clickToAddRuleParam"/>
         <click selector="{{WidgetSection.Chooser}}" stepKey="clickToSelectFromList"/>
         <waitForPageLoad stepKey="waitForPageLoadAfterSelectingRuleParam"/>
-        <waitForElementVisible selector="{{WidgetSection.PreCreateCategory(categoryName)}}" stepKey="waitForCategoryElementVisible"/>
-        <click selector="{{WidgetSection.PreCreateCategory(categoryName)}}" stepKey="selectCategoryFromArguments"/>
+        <waitForElementVisible selector="{{WidgetSection.CreateCategory(categoryName)}}" stepKey="waitForCategoryElementVisible"/>
+        <click selector="{{WidgetSection.CreateCategory(categoryName)}}" stepKey="selectCategoryFromArguments"/>
         <click selector="{{AdminNewWidgetSection.applyParameter}}" stepKey="clickApplyButton"/>
         <waitForElementNotVisible selector="{{InsertWidgetSection.categoryTreeWrapper}}" stepKey="waitForCategoryTreeIsNotVisible"/>
     </actionGroup>

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -17,6 +17,7 @@
             <severity value="MAJOR" />
             <description value="Check login with restrict role."/>
             <group value="login"/>
+            <group value="cloud"/>
             <group value="pr_exclude"/>
         </annotations>
 
@@ -28,7 +29,7 @@
                 <argument name="restrictedRole" value="Global Search"/>
             </actionGroup>
             <actionGroup ref="AdminUserClickRoleResourceTabActionGroup" stepKey="switchToRoleResourceTab"/>
-            <actionGroup ref="AdminAddRestrictedRoleActionGroup" stepKey="addRestrictedRoleStores">
+            <actionGroup ref="AdminAddRestrictedRoleForGlobalSearchActionGroup" stepKey="addRestrictedRoleStores">
                 <argument name="User" value="adminRole"/>
                 <argument name="restrictedRole" value="Global Search"/>
             </actionGroup>

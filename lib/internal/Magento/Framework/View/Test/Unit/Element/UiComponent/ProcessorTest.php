@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -35,10 +35,8 @@ class ProcessorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->component = $this->getMockBuilder(UiComponentInterface::class)
-            ->getMockForAbstractClass();
-        $this->observer = $this->getMockBuilder(ObserverInterface::class)
-            ->getMockForAbstractClass();
+        $this->component = $this->createMock(UiComponentInterface::class);
+        $this->observer = $this->createMock(ObserverInterface::class);
         $this->processor = new Processor();
     }
 
@@ -59,8 +57,7 @@ class ProcessorTest extends TestCase
             ->method('update')
             ->with($this->component);
         /** @var UiComponentInterface $component2 */
-        $component2 = $this->getMockBuilder(UiComponentInterface::class)
-            ->getMockForAbstractClass();
+        $component2 = $this->createMock(UiComponentInterface::class);
         $component2->expects($this->any())
             ->method('getComponentName')
             ->willReturn('other_type');

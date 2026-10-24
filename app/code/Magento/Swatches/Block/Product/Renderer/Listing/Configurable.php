@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Swatches\Block\Product\Renderer\Listing;
 
@@ -74,10 +74,10 @@ class Configurable extends \Magento\Swatches\Block\Product\Renderer\Configurable
         SwatchData $swatchHelper,
         Media $swatchMediaHelper,
         array $data = [],
-        SwatchAttributesProvider $swatchAttributesProvider = null,
-        \Magento\Framework\Locale\Format $localeFormat = null,
-        \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices $variationPrices = null,
-        Resolver $layerResolver = null
+        ?SwatchAttributesProvider $swatchAttributesProvider = null,
+        ?\Magento\Framework\Locale\Format $localeFormat = null,
+        ?\Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices $variationPrices = null,
+        ?Resolver $layerResolver = null
     ) {
         parent::__construct(
             $context,

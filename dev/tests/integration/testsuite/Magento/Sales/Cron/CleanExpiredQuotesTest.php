@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -67,7 +67,7 @@ class CleanExpiredQuotesTest extends \PHPUnit\Framework\TestCase
     public function testExecuteWithBigAmountOfQuotes()
     {
         //Initial count - should be equal to 1000
-        $this->assertQuotesCount(1000);
+        $this->assertQuotesCount(6000);
 
         //Deleting expired quotes
         $this->cleanExpiredQuotes->execute();

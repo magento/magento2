@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
 -->
 <!-- Test XML Example -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
@@ -28,7 +28,9 @@
                 <argument name="storeGroupName" value="{{customStore.name}}"/>
                 <argument name="storeGroupCode" value="{{customStore.code}}"/>
             </actionGroup>
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <actionGroup ref="AdminBackupIndexPageOpenActionGroup" stepKey="navigateToBackupPage"/>
@@ -43,7 +45,9 @@
         <actionGroup ref="DeleteCustomStoreBackupEnabledYesActionGroup" stepKey="deleteCustomStoreGroup">
             <argument name="storeGroupName" value="{{customStore.name}}"/>
         </actionGroup>
-        <magentoCron groups="index" stepKey="reindex"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
 
         <!--Verify deleted Store group is not present in grid and verify AssertStoreGroupNotInGrid message-->
         <actionGroup ref="AssertStoreNotInGridActionGroup" stepKey="verifyDeletedStoreGroupNotInGrid">

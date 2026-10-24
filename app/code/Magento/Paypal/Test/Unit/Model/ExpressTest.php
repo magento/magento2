@@ -1,17 +1,19 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Paypal\Test\Unit\Model;
 
 use Magento\Checkout\Model\Session;
+use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Observer\AbstractDataAssignObserver;
@@ -34,6 +36,8 @@ use PHPUnit\Framework\TestCase;
  */
 class ExpressTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var string
      */
@@ -94,29 +98,20 @@ class ExpressTest extends TestCase
     protected function setUp(): void
     {
         $this->errorCodes[] = self::$authorizationExpiredCode;
-        $this->checkoutSession = $this->getMockBuilder(Session::class)
-            ->addMethods(['getPaypalTransactionData', 'setPaypalTransactionData'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->transactionBuilder = $this->getMockForAbstractClass(
-            BuilderInterface::class,
-            [],
-            '',
-            false,
-            false
+        $this->checkoutSession = $this->createPartialMockWithReflection(
+            Session::class,
+            ['getPaypalTransactionData', 'setPaypalTransactionData']
         );
-        $this->nvp = $this->getMockBuilder(Nvp::class)
-            ->addMethods(['setProcessableErrors', 'setAmount', 'setCurrencyCode', 'setTransactionId'])
-            ->onlyMethods(['callDoAuthorization', 'setData'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->transactionBuilder = $this->createMock(BuilderInterface::class);
+        $this->nvp = $this->createPartialMockWithReflection(
+            Nvp::class,
+            ['setProcessableErrors', 'setAmount', 'setCurrencyCode', 'setTransactionId', 'callDoAuthorization', 'setData']
+        );
         $this->pro = $this->createPartialMock(
             Pro::class,
             ['setMethod', 'getApi', 'importPaymentInfo', 'resetApi', 'void']
         );
-        $this->eventManager = $this->getMockBuilder(ManagerInterface::class)
-            ->setMethods(['dispatch'])
-            ->getMockForAbstractClass();
+        $this->eventManager = $this->createMock(ManagerInterface::class);
 
         $this->pro->method('getApi')
             ->willReturn($this->nvp);
@@ -129,7 +124,14 @@ class ExpressTest extends TestCase
     public function testSetApiProcessableErrors()
     {
         $this->nvp->expects($this->once())->method('setProcessableErrors')->with($this->errorCodes);
-
+        $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                DirectoryHelper::class,
+                $this->createMock(DirectoryHelper::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
         $this->model = $this->helper->getObject(
             Express::class,
             [
@@ -211,13 +213,7 @@ class ExpressTest extends TestCase
     {
         $transportValue = 'something';
 
-        $extensionAttribute = $this->getMockForAbstractClass(
-            PaymentExtensionInterface::class,
-            [],
-            '',
-            false,
-            false
-        );
+        $extensionAttribute = $this->createMock(PaymentExtensionInterface::class);
 
         $data = new DataObject(
             [
@@ -240,17 +236,26 @@ class ExpressTest extends TestCase
             ]
         );
 
-        $paymentInfo = $this->getMockForAbstractClass(InfoInterface::class);
+        $paymentInfo = $this->createMock(InfoInterface::class);
         $this->model->setInfoInstance($paymentInfo);
 
         $this->parentAssignDataExpectation($data);
 
         $paymentInfo->expects(static::exactly(3))
             ->method('setAdditionalInformation')
-            ->withConsecutive(
-                [Checkout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT, $transportValue],
-                [Checkout::PAYMENT_INFO_TRANSPORT_PAYER_ID, $transportValue],
-                [Checkout::PAYMENT_INFO_TRANSPORT_TOKEN, $transportValue]
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($transportValue) {
+                    if ($arg1 === Checkout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT
+                        && $arg2 === $transportValue) {
+                        return null;
+                    } elseif ($arg1 === Checkout::PAYMENT_INFO_TRANSPORT_PAYER_ID
+                        && $arg2 === $transportValue) {
+                        return null;
+                    } elseif ($arg1 === Checkout::PAYMENT_INFO_TRANSPORT_TOKEN
+                        && $arg2 === $transportValue) {
+                        return null;
+                    }
+                }
             );
 
         $this->model->assignData($data);

@@ -1,18 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
 
 /**
  * Sales report admin controller
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Reports\Controller\Adminhtml\Report;
 
 /**
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @since 100.0.2
  */
@@ -37,31 +37,23 @@ abstract class Sales extends AbstractReport
      */
     protected function _isAllowed()
     {
-        switch ($this->getRequest()->getActionName()) {
-            case 'sales':
-                return $this->_authorization->isAllowed('Magento_Reports::salesroot_sales');
-                break;
-            case 'tax':
-                return $this->_authorization->isAllowed('Magento_Reports::tax');
-                break;
-            case 'shipping':
-                return $this->_authorization->isAllowed('Magento_Reports::shipping');
-                break;
-            case 'invoiced':
-                return $this->_authorization->isAllowed('Magento_Reports::invoiced');
-                break;
-            case 'refunded':
-                return $this->_authorization->isAllowed('Magento_Reports::refunded');
-                break;
-            case 'coupons':
-                return $this->_authorization->isAllowed('Magento_Reports::coupons');
-                break;
-            case 'bestsellers':
-                return $this->_authorization->isAllowed('Magento_Reports::bestsellers');
-                break;
-            default:
-                return $this->_authorization->isAllowed('Magento_Reports::salesroot');
-                break;
-        }
+        return match (strtolower($this->getRequest()->getActionName())) {
+            'exportsalescsv', 'exportsalesexcel', 'sales' =>
+                $this->_authorization->isAllowed('Magento_Reports::salesroot_sales'),
+            'exporttaxcsv', 'exporttaxexcel', 'tax' =>
+                $this->_authorization->isAllowed('Magento_Reports::tax'),
+            'exportshippingcsv', 'exportshippingexcel', 'shipping' =>
+                $this->_authorization->isAllowed('Magento_Reports::shipping'),
+            'exportinvoicedcsv', 'exportinvoicedexcel', 'invoiced' =>
+                $this->_authorization->isAllowed('Magento_Reports::invoiced'),
+            'exportrefundedcsv', 'exportrefundedexcel', 'refunded' =>
+                $this->_authorization->isAllowed('Magento_Reports::refunded'),
+            'exportcouponscsv', 'exportcouponsexcel', 'coupons' =>
+                $this->_authorization->isAllowed('Magento_Reports::coupons'),
+            'exportbestsellerscsv', 'exportbestsellersexcel', 'bestsellers' =>
+                $this->_authorization->isAllowed('Magento_Reports::bestsellers'),
+            default =>
+                $this->_authorization->isAllowed('Magento_Reports::salesroot'),
+        };
     }
 }

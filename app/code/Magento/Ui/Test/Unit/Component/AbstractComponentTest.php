@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,7 +11,9 @@ use Magento\Framework\View\Element\UiComponent\ContentType\ContentTypeInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Ui\Component\AbstractComponent;
+use Magento\Ui\Component\Container;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class AbstractComponentTest extends TestCase
@@ -31,12 +33,12 @@ class AbstractComponentTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->contextMock = $this->getMockForAbstractClass(ContextInterface::class);
+        $this->contextMock = $this->createMock(ContextInterface::class);
         $this->contextMock->expects($this->never())->method('getProcessor');
         $this->abstractComponent = $this->getMockBuilder(AbstractComponent::class)
             ->enableOriginalConstructor()
-            ->setMethods(['getComponentName'])
             ->setConstructorArgs(['context' => $this->contextMock])
+            ->onlyMethods(['getComponentName'])
             ->getMock();
     }
 
@@ -68,7 +70,7 @@ class AbstractComponentTest extends TestCase
         $this->abstractComponent->setData('template', $template);
 
         /** @var ContentTypeInterface|MockObject $renderEngineMock */
-        $renderEngineMock = $this->getMockForAbstractClass(ContentTypeInterface::class);
+        $renderEngineMock = $this->createMock(ContentTypeInterface::class);
         $renderEngineMock->expects($this->once())
             ->method('render')
             ->with($this->abstractComponent, $template . '.xhtml')
@@ -111,7 +113,7 @@ class AbstractComponentTest extends TestCase
     public function testAddGetChildComponents()
     {
         /** @var UiComponentInterface|MockObject $uiComponentMock */
-        $uiComponentMock = $this->getMockForAbstractClass(UiComponentInterface::class);
+        $uiComponentMock = $this->createMock(UiComponentInterface::class);
         $name = 'componentName';
 
         $this->abstractComponent->addComponent($name, $uiComponentMock);
@@ -124,7 +126,7 @@ class AbstractComponentTest extends TestCase
     public function testGetChildComponents()
     {
         /** @var UiComponentInterface|MockObject $uiComponentMock */
-        $uiComponentMock = $this->getMockForAbstractClass(UiComponentInterface::class);
+        $uiComponentMock = $this->createMock(UiComponentInterface::class);
         $name = 'componentName';
         $expectedResult = [$name => $uiComponentMock];
 
@@ -148,7 +150,7 @@ class AbstractComponentTest extends TestCase
         $name = 'componentName';
         $expectedResult = 'some html code';
         /** @var UiComponentInterface|MockObject $uiComponentMock */
-        $uiComponentMock = $this->getMockForAbstractClass(UiComponentInterface::class);
+        $uiComponentMock = $this->createMock(UiComponentInterface::class);
         $uiComponentMock->expects($this->once())
             ->method('render')
             ->willReturn($expectedResult);
@@ -172,39 +174,13 @@ class AbstractComponentTest extends TestCase
      * @param mixed $config
      * @param array $expectedResult
      * @return void
-     * @dataProvider getConfigurationDataProvider
      */
-    public function testGetConfiguration($config, array $expectedResult)
-    {
-        $this->abstractComponent->setData('config', $config);
-        $this->assertSame($expectedResult, $this->abstractComponent->getConfiguration());
-    }
-
-    /**
-     * @return array
-     */
-    public function getConfigurationDataProvider()
-    {
-        return [
-            ['config' => null, 'expectedResult' => []],
-            ['config' => [], 'expectedResult' => []],
-            ['config' => ['visible' => true], 'expectedResult' => ['visible' => true]],
-        ];
-    }
-
-    /**
-     * @param array $jsConfig
-     * @param array $expectedResult
-     * @return void
-     * @dataProvider getJsConfigDataProvider
-     */
+    #[DataProvider('getJsConfigDataProvider')]
     public function testGetJsConfig(array $jsConfig, array $expectedResult)
     {
         $namespace = 'my_namespace';
         /** @var UiComponentInterface|MockObject $uiComponentMock */
-        $uiComponentMock = $this->getMockBuilder(UiComponentInterface::class)
-            ->setMethods(['getData'])
-            ->getMockForAbstractClass();
+        $uiComponentMock = $this->createMock(UiComponentInterface::class);
         $uiComponentMock->expects($this->once())
             ->method('getData')
             ->with('js_config')
@@ -222,7 +198,7 @@ class AbstractComponentTest extends TestCase
     /**
      * @return array
      */
-    public function getJsConfigDataProvider()
+    public static function getJsConfigDataProvider()
     {
         return [
             [

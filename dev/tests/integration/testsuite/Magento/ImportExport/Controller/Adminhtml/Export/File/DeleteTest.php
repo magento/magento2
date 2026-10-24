@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\AbstractBackendController;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for \Magento\ImportExport\Controller\Adminhtml\Export\File\Delete class.
@@ -58,10 +59,10 @@ class DeleteTest extends AbstractBackendController
      * Check that file can be removed under var/export directory.
      *
      * @param string $file
-     * @dataProvider testExecuteProvider
      * @return void
      * @magentoConfigFixture default_store admin/security/use_form_key 1
      */
+    #[DataProvider('csvExecuteProvider')]
     public function testExecute($file): void
     {
         $fullPath = 'export/' . $file;
@@ -100,7 +101,7 @@ class DeleteTest extends AbstractBackendController
      *
      * @return array
      */
-    public static function testExecuteProvider(): array
+    public static function csvExecuteProvider(): array
     {
         return [
             ['catalog_product.csv'],

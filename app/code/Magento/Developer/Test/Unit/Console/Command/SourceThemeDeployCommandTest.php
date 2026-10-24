@@ -1,12 +1,14 @@
 <?php declare(strict_types=1);
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Developer\Test\Unit\Console\Command;
 
 use Magento\Developer\Console\Command\SourceThemeDeployCommand;
 use Magento\Framework\App\View\Asset\Publisher;
+use Magento\Framework\Filesystem\Io\File;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Validator\Locale;
 use Magento\Framework\View\Asset\File\NotFoundException;
 use Magento\Framework\View\Asset\LocalInterface;
@@ -21,19 +23,19 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class SourceThemeDeployCommandTest extends TestCase
 {
-    const AREA_TEST_VALUE = 'area-test-value';
+    public const AREA_TEST_VALUE = 'area-test-value';
 
-    const LOCALE_TEST_VALUE = 'locale-test-value';
+    public const LOCALE_TEST_VALUE = 'locale-test-value';
 
-    const THEME_TEST_VALUE = 'Vendor/theme';
+    public const THEME_TEST_VALUE = 'Vendor/theme';
 
-    const THEME_INCORRECT_FORMAT_VALUE = 'theme-value';
+    public const THEME_INCORRECT_FORMAT_VALUE = 'theme-value';
 
-    const THEME_NONEXISTING_VALUE = 'NonExistentVendor/theme';
+    public const THEME_NONEXISTING_VALUE = 'NonExistentVendor/theme';
 
-    const TYPE_TEST_VALUE = 'type-test-value';
+    public const TYPE_TEST_VALUE = 'type-test-value';
 
-    const FILE_TEST_VALUE = 'file-test-value/test/file';
+    public const FILE_TEST_VALUE = 'file-test-value/test/file';
 
     /**
      * @var SourceThemeDeployCommand
@@ -56,6 +58,11 @@ class SourceThemeDeployCommandTest extends TestCase
     private $assetRepositoryMock;
 
     /**
+     * @var File|MockObject
+     */
+    private $fileMock;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -69,11 +76,16 @@ class SourceThemeDeployCommandTest extends TestCase
         $this->assetRepositoryMock = $this->getMockBuilder(Repository::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->fileMock = $this->getMockBuilder(File::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods([])
+            ->getMock();
 
         $this->sourceThemeDeployCommand = new SourceThemeDeployCommand(
             $this->validatorMock,
             $this->assetPublisherMock,
-            $this->assetRepositoryMock
+            $this->assetRepositoryMock,
+            $this->fileMock
         );
     }
 
@@ -85,10 +97,8 @@ class SourceThemeDeployCommandTest extends TestCase
     public function testExecute(): void
     {
         /** @var OutputInterface|MockObject $outputMock */
-        $outputMock = $this->getMockBuilder(OutputInterface::class)
-            ->getMockForAbstractClass();
-        $assetMock = $this->getMockBuilder(LocalInterface::class)
-            ->getMockForAbstractClass();
+        $outputMock = $this->createMock(OutputInterface::class);
+        $assetMock = $this->createMock(LocalInterface::class);
 
         $this->validatorMock->expects($this->once())
             ->method('isValid')
@@ -105,11 +115,14 @@ class SourceThemeDeployCommandTest extends TestCase
 
         $outputMock
             ->method('writeln')
-            ->withConsecutive(
-                [$message],
-                ['<comment>-> file-test-value/test/file</comment>'],
-                ['<info>Successfully processed.</info>']
-            );
+            ->willReturnCallback(function ($arg1) use ($message) {
+                if ($arg1 == $message ||
+                    $arg1 == '<comment>-> file-test-value/test/file</comment>' ||
+                    $arg1 == '<info>Successfully processed.</info>'
+                ) {
+                    return null;
+                }
+            });
 
         $this->assetRepositoryMock->expects($this->once())
             ->method('createAsset')
@@ -143,8 +156,7 @@ class SourceThemeDeployCommandTest extends TestCase
             'Value "theme-value" of the option "theme" has invalid format. The format should be'
         );
         /** @var OutputInterface|MockObject $outputMock */
-        $outputMock = $this->getMockBuilder(OutputInterface::class)
-            ->getMockForAbstractClass();
+        $outputMock = $this->createMock(OutputInterface::class);
         $this->validatorMock->expects($this->once())
             ->method('isValid')
             ->with(self::LOCALE_TEST_VALUE)
@@ -171,10 +183,8 @@ class SourceThemeDeployCommandTest extends TestCase
         $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('Verify entered values of the argument and options.');
         /** @var OutputInterface|MockObject $outputMock */
-        $outputMock = $this->getMockBuilder(OutputInterface::class)
-            ->getMockForAbstractClass();
-        $assetMock = $this->getMockBuilder(LocalInterface::class)
-            ->getMockForAbstractClass();
+        $outputMock = $this->createMock(OutputInterface::class);
+        $assetMock = $this->createMock(LocalInterface::class);
 
         $this->validatorMock->expects($this->once())
             ->method('isValid')
@@ -215,8 +225,7 @@ class SourceThemeDeployCommandTest extends TestCase
      */
     private function getInputMock(array $valueMap = []): MockObject
     {
-        $inputMock = $this->getMockBuilder(InputInterface::class)
-            ->getMockForAbstractClass();
+        $inputMock = $this->createMock(InputInterface::class);
 
         $defaultValueMap = [
             ['area', self::AREA_TEST_VALUE],

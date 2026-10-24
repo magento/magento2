@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Sales\Model\ExportViewFilterProcessor;
 use Magento\Ui\Model\Export\MetadataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test case for Process and filter order grid export columns according to view
@@ -48,18 +49,10 @@ class OrderGridExportFilterColumnTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->exportViewFilterProcessorMock = $this->getMockBuilder(ExportViewFilterProcessor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->metadataProviderMock = $this->getMockBuilder(MetadataProvider::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->uiComponentInterfaceMock = $this->getMockBuilder(UiComponentInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->contextInterfaceMock = $this->getMockBuilder(ContextInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->exportViewFilterProcessorMock = $this->createMock(ExportViewFilterProcessor::class);
+        $this->metadataProviderMock = $this->createMock(MetadataProvider::class);
+        $this->uiComponentInterfaceMock = $this->createMock(UiComponentInterface::class);
+        $this->contextInterfaceMock = $this->createMock(ContextInterface::class);
         $this->uiComponentInterfaceMock->expects($this->any())
             ->method('getContext')
             ->willReturn($this->contextInterfaceMock);
@@ -73,10 +66,9 @@ class OrderGridExportFilterColumnTest extends TestCase
      *
      * @param string $namespace
      * @param array $activeColumns
-     * @param array $result
-     * @dataProvider getColumnsDataProvider
-     * @throws Exception
+     * @param array $result     * @throws Exception
      */
+    #[DataProvider('getColumnsDataProvider')]
     public function testAfterGetHeaders(string $namespace, array $activeColumns, array $result): void
     {
         $this->contextInterfaceMock->expects($this->any())
@@ -103,10 +95,9 @@ class OrderGridExportFilterColumnTest extends TestCase
      *
      * @param string $namespace
      * @param array $activeColumns
-     * @param array $result
-     * @dataProvider getColumnsDataProvider
-     * @throws Exception
+     * @param array $result     * @throws Exception
      */
+    #[DataProvider('getColumnsDataProvider')]
     public function testAfterGetFields(string $namespace, array $activeColumns, array $result): void
     {
         $this->contextInterfaceMock->expects($this->any())
@@ -133,7 +124,7 @@ class OrderGridExportFilterColumnTest extends TestCase
      *
      * @return array
      */
-    public function getColumnsDataProvider(): array
+    public static function getColumnsDataProvider(): array
     {
         return [
             'test case when namespace is not `sales_order_grid`' =>

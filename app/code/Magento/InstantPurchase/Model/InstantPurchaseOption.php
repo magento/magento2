@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\InstantPurchase\Model;
@@ -54,10 +54,10 @@ class InstantPurchaseOption
      * Use InstantPurchaseOptionFactory instead.
      */
     public function __construct(
-        PaymentTokenInterface $paymentToken = null,
-        Address $shippingAddress = null,
-        Address $billingAddress = null,
-        ShippingMethodInterface $shippingMethod = null
+        ?PaymentTokenInterface $paymentToken = null,
+        ?Address $shippingAddress = null,
+        ?Address $billingAddress = null,
+        ?ShippingMethodInterface $shippingMethod = null
     ) {
         $customers = [];
         if ($paymentToken) {

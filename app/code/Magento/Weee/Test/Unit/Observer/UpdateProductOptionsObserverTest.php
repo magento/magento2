@@ -1,36 +1,47 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Weee\Test\Unit\Observer;
 
 use Magento\Bundle\Model\Product\Type;
+use Magento\Catalog\Model\Product;
 use Magento\Framework\DataObject;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use Magento\Tax\Helper\Data as TaxHelperData;
 use Magento\Tax\Model\Config as TaxConfig;
 use Magento\Weee\Helper\Data;
 use Magento\Weee\Model\Tax as WeeeDisplayConfig;
 use Magento\Weee\Observer\UpdateProductOptionsObserver;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Unit Tests to cover UpdateProductOptionsObserver
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+ */
 class UpdateProductOptionsObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * Tests the methods that rely on the ScopeConfigInterface object to provide their return values
      *
-     * @param array $initialArray The initial array that specifies the set of additional options
-     * @param bool $weeeEnabled Whether the Weee module is assumed to be enabled
-     * @param int $weeeDisplay Which Weee display is configured
-     * @param int $priceDisplay Values are: including tax, excluding tax, or both including and excluding tax
+     * @param array $initialArray  The initial array that specifies the set of additional options
+     * @param bool  $weeeEnabled   Whether the Weee module is assumed to be enabled
+     * @param int   $weeeDisplay   Which Weee display is configured
+     * @param int   $priceDisplay  Values are: including tax, excluding tax, or both including and excluding tax
      * @param array $expectedArray The revised array of the additional options
-     *
-     * @dataProvider updateProductOptionsProvider
      */
+    #[DataProvider('updateProductOptionsProvider')]
     public function testUpdateProductOptions($initialArray, $weeeEnabled, $weeeDisplay, $priceDisplay, $expectedArray)
     {
         $configObj = new DataObject(
@@ -70,7 +81,7 @@ class UpdateProductOptionsObserverTest extends TestCase
             ->method('getWeeeAttributesForBundle')
             ->willReturn([['fpt1' => $weeeObject1], ['fpt1'=>$weeeObject1, 'fpt2'=>$weeeObject2]]);
 
-        $taxHelper=$this->createMock(\Magento\Tax\Helper\Data::class);
+        $taxHelper=$this->createMock(TaxHelperData::class);
         $taxHelper->expects($this->any())
             ->method('displayPriceExcludingTax')
             ->willReturn($priceDisplay == TaxConfig::DISPLAY_TYPE_EXCLUDING_TAX);
@@ -78,10 +89,7 @@ class UpdateProductOptionsObserverTest extends TestCase
             ->method('priceIncludesTax')
             ->willReturn(true);
 
-        $responseObject=$this->getMockBuilder(Observer::class)
-            ->addMethods(['getResponseObject'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $responseObject=$this->createPartialMockWithReflection(Observer::class, ['getResponseObject']);
         $responseObject->expects($this->any())
             ->method('getResponseObject')
             ->willReturn($configObj);
@@ -91,10 +99,7 @@ class UpdateProductOptionsObserverTest extends TestCase
             ->method('getEvent')
             ->willReturn($responseObject);
 
-        $product = $this->getMockBuilder(Type::class)
-            ->addMethods(['getTypeId', 'getStoreId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $product = $this->createPartialMock(Product::class, ['getStoreId', 'getTypeId']);
         $product->expects($this->any())
             ->method('getStoreId')
             ->willReturn(1);
@@ -127,7 +132,7 @@ class UpdateProductOptionsObserverTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function updateProductOptionsProvider()
+    public static function updateProductOptionsProvider()
     {
         return [
             'weee not enabled' => [

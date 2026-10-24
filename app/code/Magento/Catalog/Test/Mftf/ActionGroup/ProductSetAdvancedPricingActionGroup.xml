@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -25,7 +25,11 @@
         <click selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}" stepKey="addCustomerGroupAllGroupsQty1PriceDiscountAnd10percent"/>
         <waitForElement selector="{{AdminProductFormAdvancedPricingSection.productTierPriceCustGroupSelect('0')}}" stepKey="waitForSelectCustomerGroupNameAttribute2"/>
         <selectOption selector="{{AdminProductFormAdvancedPricingSection.productTierPriceWebsiteSelect('0')}}" userInput="{{website}}" stepKey="selectProductWebsiteValue"/>
-        <selectOption selector="{{AdminProductFormAdvancedPricingSection.productTierPriceCustGroupSelect('0')}}" userInput="{{group}}" stepKey="selectProductCustomGroupValue"/>
+        <!-- The customer-group control is backed by a native <select> on every edition: the
+             advanced multiselect widget used on some editions is built directly on top of
+             this same <select> and listens for its change event (see lib/web/mage/multiselect.js),
+             so updating it via JS keeps both the native-select and widget editions in sync. -->
+        <executeJS function="var s=document.querySelector(&quot;{{AdminProductFormAdvancedPricingSection.productTierPriceCustGroupSelect('0')}}&quot;); if (s) { for (var o of s.options) { o.selected = (o.text.trim() === '{{group}}'); } s.dispatchEvent(new Event('change', {bubbles:true})); }" stepKey="selectProductCustomGroupValue"/>
         <fillField selector="{{AdminProductFormAdvancedPricingSection.productTierPriceQtyInput('0')}}" userInput="{{quantity}}" stepKey="fillProductTierPriceQtyInput"/>
         <selectOption selector="{{AdminProductFormAdvancedPricingSection.productTierPriceValueTypeSelect('0')}}" userInput="{{price}}" stepKey="selectProductTierPriceValueType"/>
         <fillField selector="{{AdminProductFormAdvancedPricingSection.productTierPricePercentageValuePriceInput('0')}}" userInput="{{amount}}" stepKey="selectProductTierPricePriceInput"/>

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -108,16 +108,21 @@ class MetadataProvider
      */
     protected function getColumns(UiComponentInterface $component): array
     {
-        if (!isset($this->columns[$component->getName()])) {
+        $componentName = (string)$component->getName();
+        if (!isset($this->columns[$componentName])) {
             $columns = $this->getColumnsComponent($component);
             foreach ($columns->getChildComponents() as $column) {
                 if ($column->getData('config/label') && $column->getData('config/dataType') !== 'actions') {
-                    $this->columns[$component->getName()][$column->getName()] = $column;
+                    $columnName = $column->getName();
+                    if ($columnName === null) {
+                        continue;
+                    }
+                    $this->columns[$componentName][(string)$columnName] = $column;
                 }
             }
         }
 
-        return $this->columns[$component->getName()];
+        return $this->columns[$componentName];
     }
 
     /**
@@ -171,7 +176,7 @@ class MetadataProvider
         foreach ($fields as $column) {
             if (isset($options[$column])) {
                 $key = $document->getCustomAttribute($column)->getValue();
-                if (isset($options[$column][$key])) {
+                if ($key !== null && isset($options[$column][$key])) {
                     $row[] = $options[$column][$key];
                 } else {
                     $row[] = $key;

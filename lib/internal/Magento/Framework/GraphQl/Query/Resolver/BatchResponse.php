@@ -1,18 +1,20 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Framework\GraphQl\Query\Resolver;
+
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Contains responses for batch requests.
  *
  * @api
  */
-class BatchResponse
+class BatchResponse implements ResetAfterRequestInterface
 {
     /**
      * @var \SplObjectStorage
@@ -53,5 +55,13 @@ class BatchResponse
         }
 
         return $this->responses[$item];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->responses = new \SplObjectStorage();
     }
 }

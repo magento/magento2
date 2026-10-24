@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminProductImagesDefaultScopeInheritanceTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Product image assignment for multiple stores"/>
+            <title value="Product images sorting, roles, alt text and visibility inheritance test"/>
+            <description value="Product images sorting, roles, alt text and visibility inheritance test"/>
+            <severity value="MINOR"/>
+            <useCaseId value="ACP2E-4280"/>
+            <testCaseId value="AC-16019"/>
+            <group value="product"/>
+        </annotations>
+        <before>
+            <!-- Create Category and Simple Product -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!-- Login Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Create Store View France -->
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreViewFr">
+                <argument name="customStore" value="customStoreFR"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Delete Category and Simple Product -->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <!-- Delete Store View France -->
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreViewFr">
+                <argument name="customStore" value="customStoreFR"/>
+            </actionGroup>
+            <!-- Clear Filter Store -->
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="resetFiltersOnStorePage"/>
+            <!-- Clear Filter Product -->
+            <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductFilters"/>
+            <!-- Logout Admin -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
+        </after>
+
+        <!-- PART 1: Open product, add 2 products and change alt text -->
+        
+        <!-- Open product edit page -->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProduct1">
+            <argument name="productId" value="$createProduct.id$"/>
+        </actionGroup>
+        <!-- Add first image "MagentoLogo" -->
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addFirstImage">
+            <argument name="image" value="MagentoLogo"/>
+        </actionGroup>
+        <!-- Add second image "TestImageAdobe"-->
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addSecondImage">
+            <argument name="image" value="TestImageAdobe"/>
+        </actionGroup>
+        <!-- Change "MagentoLogo" alt text to "first image alt text 1" -->
+        <actionGroup ref="AdminProductChangeImageAltTextActionGroup" stepKey="changeMagentoLogoAltText">
+            <argument name="image" value="MagentoLogo"/>
+            <argument name="altText" value="first image alt text 1"/>
+        </actionGroup>
+        <!-- Change "TestImageAdobe" alt text to "second image alt text 1" -->
+        <actionGroup ref="AdminProductChangeImageAltTextActionGroup" stepKey="changeTestImageAdobeAltText">
+            <argument name="image" value="TestImageAdobe"/>
+            <argument name="altText" value="second image alt text 1"/>
+        </actionGroup>
+        <!-- Save product -->
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSimpleProduct1"/>
+
+        <!-- PART 2: Switch to French store view and check that images sorting, alt text and roles are same as global scope -->
+
+        <!-- Switch to the French store view -->
+        <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="switchStoreViewFrenchProduct">
+            <argument name="storeView" value="customStoreFR.name"/>
+        </actionGroup>
+        <!-- Save product without expanding "Images And Videos" -->
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSimpleProduct2"/>
+        
+        <!-- Save product after expanding  -->
+        <actionGroup ref="AdminOpenProductImagesSectionActionGroup" stepKey="expandImages"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSimpleProduct2a"/>
+        
+        <!-- Verify that images are sorted according to default scope -->
+        <actionGroup ref="AdminProductImagesAssertSortOrderUsingDefaultActionGroup" stepKey="assertImagesSortOrderUsingDefault"/>
+        <!-- Verify that "MagentoLogo" is present and first -->
+        <actionGroup ref="AdminProductImagesAssertPositionActionGroup" stepKey="assertMagentoLogoIsFirstImage">
+            <argument name="image" value="MagentoLogo"/>
+            <argument name="position" value="1"/>
+        </actionGroup>
+        <!-- Verify that "TestImageAdobe" is present and second -->
+        <actionGroup ref="AdminProductImagesAssertPositionActionGroup" stepKey="assertTestImageAdobeIsSecondImage">
+            <argument name="image" value="TestImageAdobe"/>
+            <argument name="position" value="2"/>
+        </actionGroup>
+        <!-- Verify that "MagentoLogo" alt text is "first image alt text 1" and is using default -->
+        <actionGroup ref="AdminProductImagesAssertAltTextUsingDefaultActionGroup" stepKey="assertMagentoLogoAltTextIsUsingDefault">
+            <argument name="image" value="MagentoLogo"/>
+            <argument name="altText" value="first image alt text 1"/>
+        </actionGroup>
+        <!-- Verify that "MagentoLogo" is not hidden -->
+        <actionGroup ref="AdminProductImagesAssertNotHiddenActionGroup" stepKey="assertMagentoLogoIsNotHidden">
+            <argument name="image" value="MagentoLogo"/>
+        </actionGroup>
+        <!-- Verify that "MagentoLogo" visibility is using default -->
+        <actionGroup ref="AdminProductImagesAssertVisibilityUsingDefaultActionGroup" stepKey="assertMagentoLogoVisibilityIsUsingDefault">
+            <argument name="image" value="MagentoLogo"/>
+        </actionGroup>
+        <!-- Verify that "MagentoLogo" is assigned Base role and is using default -->
+        <actionGroup ref="AdminProductImagesAssertRoleSelectedActionGroup" stepKey="assertMagentoLogoIsAssignedBaseRole">
+            <argument name="image" value="MagentoLogo"/>
+            <argument name="role" value="{{ProductAttributeMediaGalleryRole.Base}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminProductImagesAssertRoleUsingDefaultActionGroup" stepKey="assertBaseRoleIsUsingDefault">
+            <argument name="image" value="MagentoLogo"/>
+            <argument name="role" value="{{ProductAttributeMediaGalleryRole.Base}}"/>
+        </actionGroup>
+        <!-- Verify that "MagentoLogo" is assigned Small role and is using default -->
+        <actionGroup ref="AdminProductImagesAssertRoleSelectedActionGroup" stepKey="assertMagentoLogoIsAssignedSmallRole">
+            <argument name="image" value="MagentoLogo"/>
+            <argument name="role" value="{{ProductAttributeMediaGalleryRole.Small}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminProductImagesAssertRoleUsingDefaultActionGroup" stepKey="assertSmallRoleIsUsingDefault">
+            <argument name="image" value="MagentoLogo"/>
+            <argument name="role" value="{{ProductAttributeMediaGalleryRole.Small}}"/>
+        </actionGroup>
+        <!-- Verify that "MagentoLogo" is assigned Thumbnail role and is using default -->
+        <actionGroup ref="AdminProductImagesAssertRoleSelectedActionGroup" stepKey="assertMagentoLogoIsAssignedThumbnailRole">
+            <argument name="image" value="MagentoLogo"/>
+            <argument name="role" value="{{ProductAttributeMediaGalleryRole.Thumbnail}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminProductImagesAssertRoleUsingDefaultActionGroup" stepKey="assertThumbnailRoleIsUsingDefault">
+            <argument name="image" value="MagentoLogo"/>
+            <argument name="role" value="{{ProductAttributeMediaGalleryRole.Thumbnail}}"/>
+        </actionGroup>
+        <!-- Verify that "MagentoLogo" is assigned Swatch role and is using default -->
+        <actionGroup ref="AdminProductImagesAssertRoleSelectedActionGroup" stepKey="assertMagentoLogoIsAssignedSwatchRole">
+            <argument name="image" value="MagentoLogo"/>
+            <argument name="role" value="{{ProductAttributeMediaGalleryRole.Swatch}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminProductImagesAssertRoleUsingDefaultActionGroup" stepKey="assertSwatchRoleIsUsingDefault">
+            <argument name="image" value="MagentoLogo"/>
+            <argument name="role" value="{{ProductAttributeMediaGalleryRole.Swatch}}"/>
+        </actionGroup>
+        <!-- Verify that "TestImageAdobe" alt text is "second image alt text 1" and is using default -->
+        <actionGroup ref="AdminProductImagesAssertAltTextUsingDefaultActionGroup" stepKey="assertTestImageAdobeAltTextIsUsingDefault">
+            <argument name="image" value="TestImageAdobe"/>
+            <argument name="altText" value="second image alt text 1"/>
+        </actionGroup>
+        
+        <!-- PART 3: Switch to French store view and change images order, alt text and roles -->
+        
+        <!-- Reorder images: move TestImageAdobe to first position -->
+        <actionGroup ref="AdminProductChangeImageSortOrderActionGroup" stepKey="reorderImagesInFrenchStore">
+            <argument name="image" value="TestImageAdobe"/>
+            <argument name="position" value="1"/>
+        </actionGroup>
+        <!-- Change "TestImageAdobe" alt text to "first image alt text french" -->
+        <actionGroup ref="AdminProductChangeImageAltTextActionGroup" stepKey="changeTestImageAdobeAltTextInFrenchStore">
+            <argument name="image" value="TestImageAdobe"/>
+            <argument name="altText" value="first image alt text french"/>
+        </actionGroup>
+        <!-- Assign all roles to TestImageAdobe -->
+        <actionGroup ref="AdminAssignImageRolesActionGroup" stepKey="assignAllRolesToTestImageAdobeInFrenchStore">
+            <argument name="image" value="TestImageAdobe"/>
+        </actionGroup>
+        <!-- Hide "MagentoLogo" -->
+        <actionGroup ref="AdminProductImagesHideActionGroup" stepKey="hideMagentoLogoInFrenchStore">
+            <argument name="image" value="MagentoLogo"/>
+        </actionGroup>
+        
+        <!-- Save product -->
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSimpleProduct3"/>
+        
+        <!-- PART 4: Check that changes are applied in French store view -->
+        
+        <!-- Verify that images sort order is not using default -->
+        <actionGroup ref="AdminProductImagesAssertSortOrderNotUsingDefaultActionGroup" stepKey="assertImagesSortOrderNotUsingDefault"/>
+        <!-- Verify that "TestImageAdobe" is present and first -->
+        <actionGroup ref="AdminProductImagesAssertPositionActionGroup" stepKey="assertTestImageAdobeIsFirstImage">
+            <argument name="image" value="TestImageAdobe"/>
+            <argument name="position" value="1"/>
+        </actionGroup>
+        <!-- Verify that "MagentoLogo" is present and second -->
+        <actionGroup ref="AdminProductImagesAssertPositionActionGroup" stepKey="assertMagentoLogoIsSecondImage">
+            <argument name="image" value="MagentoLogo"/>
+            <argument name="position" value="2"/>
+        </actionGroup>
+        <!-- Verify that "TestImageAdobe" alt text is "first image alt text french" and is not using default -->
+        <actionGroup ref="AdminProductImagesAssertAltTextNotUsingDefaultActionGroup" stepKey="assertTestImageAdobeAltTextIsNotUsingDefault">
+            <argument name="image" value="TestImageAdobe"/>
+            <argument name="altText" value="first image alt text french"/>
+        </actionGroup>
+        <!-- Verify that "TestImageAdobe" is assigned Base role and is not using default -->
+        <actionGroup ref="AdminProductImagesAssertRoleSelectedActionGroup" stepKey="assertTestImageAdobeIsAssignedBaseRole">
+            <argument name="image" value="TestImageAdobe"/>
+            <argument name="role" value="{{ProductAttributeMediaGalleryRole.Base}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminProductImagesAssertRoleNotUsingDefaultActionGroup" stepKey="assertBaseRoleIsNotUsingDefault">
+            <argument name="image" value="TestImageAdobe"/>
+            <argument name="role" value="{{ProductAttributeMediaGalleryRole.Base}}"/>
+        </actionGroup>
+        <!-- Verify that "TestImageAdobe" is assigned Small role and is not using default -->
+        <actionGroup ref="AdminProductImagesAssertRoleSelectedActionGroup" stepKey="assertTestImageAdobeIsAssignedSmallRole">
+            <argument name="image" value="TestImageAdobe"/>
+            <argument name="role" value="{{ProductAttributeMediaGalleryRole.Small}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminProductImagesAssertRoleNotUsingDefaultActionGroup" stepKey="assertSmallRoleIsNotUsingDefault">
+            <argument name="image" value="TestImageAdobe"/>
+            <argument name="role" value="{{ProductAttributeMediaGalleryRole.Small}}"/>
+        </actionGroup>
+        <!-- Verify that "TestImageAdobe" is assigned Thumbnail role and is not using default -->
+        <actionGroup ref="AdminProductImagesAssertRoleSelectedActionGroup" stepKey="assertTestImageAdobeIsAssignedThumbnailRole">
+            <argument name="image" value="TestImageAdobe"/>
+            <argument name="role" value="{{ProductAttributeMediaGalleryRole.Thumbnail}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminProductImagesAssertRoleNotUsingDefaultActionGroup" stepKey="assertThumbnailRoleIsNotUsingDefault">
+            <argument name="image" value="TestImageAdobe"/>
+            <argument name="role" value="{{ProductAttributeMediaGalleryRole.Thumbnail}}"/>
+        </actionGroup>
+        <!-- Verify that "TestImageAdobe" is assigned Swatch role and is not using default -->
+        <actionGroup ref="AdminProductImagesAssertRoleSelectedActionGroup" stepKey="assertTestImageAdobeIsAssignedSwatchRole">
+            <argument name="image" value="TestImageAdobe"/>
+            <argument name="role" value="{{ProductAttributeMediaGalleryRole.Swatch}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminProductImagesAssertRoleNotUsingDefaultActionGroup" stepKey="assertSwatchRoleIsNotUsingDefault">
+            <argument name="image" value="TestImageAdobe"/>
+            <argument name="role" value="{{ProductAttributeMediaGalleryRole.Swatch}}"/>
+        </actionGroup>
+        <!-- Verify that "MagentoLogo" alt text is "first image alt text 1" and is using default -->
+        <actionGroup ref="AdminProductImagesAssertAltTextUsingDefaultActionGroup" stepKey="assertMagentoLogoAltTextIsUsingDefaultInFrenchStore">
+            <argument name="image" value="MagentoLogo"/>
+            <argument name="altText" value="first image alt text 1"/>
+        </actionGroup>
+        <!-- Verify that "MagentoLogo" is hidden -->
+        <actionGroup ref="AdminProductImagesAssertHiddenActionGroup" stepKey="assertMagentoLogoIsHiddenInFrenchStore">
+            <argument name="image" value="MagentoLogo"/>
+            <argument name="visibility" value="hidden"/>
+        </actionGroup>
+        <!-- Verify that "MagentoLogo" visibility is not using default -->
+        <actionGroup ref="AdminProductImagesAssertVisibilityNotUsingDefaultActionGroup" stepKey="assertMagentoLogoVisibilityIsNotUsingDefaultInFrenchStore">
+            <argument name="image" value="MagentoLogo"/>
+        </actionGroup>
+        <!-- Verify that "MagentoLogo" is not assigned Base Role -->
+        <actionGroup ref="AdminProductImagesAssertRoleNotSelectedActionGroup" stepKey="assertMagentoLogoIsNotAssignedBaseRole">
+            <argument name="image" value="MagentoLogo"/>
+            <argument name="role" value="{{ProductAttributeMediaGalleryRole.Base}}"/>
+        </actionGroup>
+
+        <!-- PART 5: Select use default checkboxes -->
+        
+        <!-- Check "Use Default Order" -->
+        <actionGroup ref="AdminProductImagesUseDefaultSortOrderActionGroup" stepKey="checkUseDefaultSortOrder"/>
+        <!-- Check "Use Default" for all roles -->
+        <actionGroup ref="AdminProductImagesUseDefaultRolesActionGroup" stepKey="checkUseDefaultForAllRoles">
+            <argument name="image" value="MagentoLogo"/>
+        </actionGroup>
+        <!-- Check "Use Default" for "MagentoLogo" - visibility -->
+        <actionGroup ref="AdminProductImagesUseDefaultVisibilityActionGroup" stepKey="checkUseDefaultMagentoLogoVisibility">
+            <argument name="image" value="MagentoLogo"/>
+        </actionGroup>
+        <!-- Check "Use Default" for "TestImageAdobe" - "Alt Text" -->
+        <actionGroup ref="AdminProductImagesUseDefaultAltTextActionGroup" stepKey="checkUseDefaultAltTextForTestImageAdobe">
+            <argument name="image" value="TestImageAdobe"/>
+        </actionGroup>
+
+        <!-- Save product -->
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSimpleProduct5"/>
+        
+        <!-- PART 6: Check that all settings are inherited from default scope again -->
+        
+        <!-- Verify that images are sorted according to default scope -->
+        <actionGroup ref="AdminProductImagesAssertSortOrderUsingDefaultActionGroup" stepKey="assertImagesSortOrderUsingDefault2"/>
+        <!-- Verify that "MagentoLogo" is present and first -->
+        <actionGroup ref="AdminProductImagesAssertPositionActionGroup" stepKey="assertMagentoLogoIsFirstImage1">
+            <argument name="image" value="MagentoLogo"/>
+            <argument name="position" value="1"/>
+        </actionGroup>
+        <!-- Verify that "TestImageAdobe" is present and second -->
+        <actionGroup ref="AdminProductImagesAssertPositionActionGroup" stepKey="assertTestImageAdobeIsSecondImage2">
+            <argument name="image" value="TestImageAdobe"/>
+            <argument name="position" value="2"/>
+        </actionGroup>
+        <!-- Verify that "MagentoLogo" alt text is "first image alt text 1" and is using default -->
+        <actionGroup ref="AdminProductImagesAssertAltTextUsingDefaultActionGroup" stepKey="assertMagentoLogoAltTextIsUsingDefault2">
+            <argument name="image" value="MagentoLogo"/>
+            <argument name="altText" value="first image alt text 1"/>
+        </actionGroup>
+        <!-- Verify that "MagentoLogo" is not hidden -->
+        <actionGroup ref="AdminProductImagesAssertNotHiddenActionGroup" stepKey="assertMagentoLogoIsNotHidden2">
+            <argument name="image" value="MagentoLogo"/>
+        </actionGroup>
+        <!-- Verify that "MagentoLogo" visibility is using default -->
+        <actionGroup ref="AdminProductImagesAssertVisibilityUsingDefaultActionGroup" stepKey="assertMagentoLogoVisibilityIsUsingDefault2">
+            <argument name="image" value="MagentoLogo"/>
+        </actionGroup>
+        <!-- Verify that "MagentoLogo" is assigned Base role and is using default -->
+        <actionGroup ref="AdminProductImagesAssertRoleSelectedActionGroup" stepKey="assertMagentoLogoIsAssignedBaseRole2">
+            <argument name="image" value="MagentoLogo"/>
+            <argument name="role" value="{{ProductAttributeMediaGalleryRole.Base}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminProductImagesAssertRoleUsingDefaultActionGroup" stepKey="assertBaseRoleIsUsingDefault2">
+            <argument name="image" value="MagentoLogo"/>
+            <argument name="role" value="{{ProductAttributeMediaGalleryRole.Base}}"/>
+        </actionGroup>
+        <!-- Verify that "MagentoLogo" is assigned Small role and is using default -->
+        <actionGroup ref="AdminProductImagesAssertRoleSelectedActionGroup" stepKey="assertMagentoLogoIsAssignedSmallRole2">
+            <argument name="image" value="MagentoLogo"/>
+            <argument name="role" value="{{ProductAttributeMediaGalleryRole.Small}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminProductImagesAssertRoleUsingDefaultActionGroup" stepKey="assertSmallRoleIsUsingDefault2">
+            <argument name="image" value="MagentoLogo"/>
+            <argument name="role" value="{{ProductAttributeMediaGalleryRole.Small}}"/>
+        </actionGroup>
+        <!-- Verify that "MagentoLogo" is assigned Thumbnail role and is using default -->
+        <actionGroup ref="AdminProductImagesAssertRoleSelectedActionGroup" stepKey="assertMagentoLogoIsAssignedThumbnailRole2">
+            <argument name="image" value="MagentoLogo"/>
+            <argument name="role" value="{{ProductAttributeMediaGalleryRole.Thumbnail}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminProductImagesAssertRoleUsingDefaultActionGroup" stepKey="assertThumbnailRoleIsUsingDefault2">
+            <argument name="image" value="MagentoLogo"/>
+            <argument name="role" value="{{ProductAttributeMediaGalleryRole.Thumbnail}}"/>
+        </actionGroup>
+        <!-- Verify that "MagentoLogo" is assigned Swatch role and is using default -->
+        <actionGroup ref="AdminProductImagesAssertRoleSelectedActionGroup" stepKey="assertMagentoLogoIsAssignedSwatchRole2">
+            <argument name="image" value="MagentoLogo"/>
+            <argument name="role" value="{{ProductAttributeMediaGalleryRole.Swatch}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminProductImagesAssertRoleUsingDefaultActionGroup" stepKey="assertSwatchRoleIsUsingDefault2">
+            <argument name="image" value="MagentoLogo"/>
+            <argument name="role" value="{{ProductAttributeMediaGalleryRole.Swatch}}"/>
+        </actionGroup>
+        <!-- Verify that "TestImageAdobe" alt text is "second image alt text 1" and is using default -->
+        <actionGroup ref="AdminProductImagesAssertAltTextUsingDefaultActionGroup" stepKey="assertTestImageAdobeAltTextIsUsingDefault2">
+            <argument name="image" value="TestImageAdobe"/>
+            <argument name="altText" value="second image alt text 1"/>
+        </actionGroup>
+    </test>
+</tests>

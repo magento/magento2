@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\ReleaseNotification\Test\Unit\Model\ContentProvider\Http;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\ReleaseNotification\Model\ContentProvider\Http\UrlBuilder;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -27,8 +28,7 @@ class UrlBuilderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->configMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->getMockForAbstractClass();
+        $this->configMock = $this->createMock(ScopeConfigInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->urlBuilder = $objectManager->getObject(
@@ -45,8 +45,8 @@ class UrlBuilderTest extends TestCase
      * @param string $version
      * @param string $edition
      * @param string $locale
-     * @dataProvider getUrlDataProvider
      */
+    #[DataProvider('getUrlDataProvider')]
     public function testGetUrl($baseUrl, $version, $edition, $locale, $expected)
     {
         $this->configMock->expects($this->once())
@@ -64,7 +64,7 @@ class UrlBuilderTest extends TestCase
     /**
      * @return array
      */
-    public function getUrlDataProvider()
+    public static function getUrlDataProvider()
     {
         return [
             'all' => [

@@ -1,8 +1,7 @@
 <?php
-
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +13,7 @@ use Magento\Catalog\Model\Product\Type\Simple;
 use Magento\Framework\DataObject;
 use Magento\Framework\Registry;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Model\Quote\Item as QuoteItem;
 use Magento\Sales\Model\Order\Item;
@@ -22,6 +22,7 @@ use Magento\Tax\Helper\Data;
 use Magento\Weee\Helper\Data as WeeeHelper;
 use Magento\Weee\Model\Config;
 use Magento\Weee\Model\Tax;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -31,14 +32,16 @@ use PHPUnit\Framework\TestCase;
  */
 class DataTest extends TestCase
 {
-    const ROW_AMOUNT_INVOICED = '200';
-    const BASE_ROW_AMOUNT_INVOICED = '400';
-    const TAX_AMOUNT_INVOICED = '20';
-    const BASE_TAX_AMOUNT_INVOICED = '40';
-    const ROW_AMOUNT_REFUNDED = '100';
-    const BASE_ROW_AMOUNT_REFUNDED = '201';
-    const TAX_AMOUNT_REFUNDED = '10';
-    const BASE_TAX_AMOUNT_REFUNDED = '21';
+    use MockCreationTrait;
+
+    private const ROW_AMOUNT_INVOICED = '200';
+    private const BASE_ROW_AMOUNT_INVOICED = '400';
+    private const TAX_AMOUNT_INVOICED = '20';
+    private const BASE_TAX_AMOUNT_INVOICED = '40';
+    private const ROW_AMOUNT_REFUNDED = '100';
+    private const BASE_ROW_AMOUNT_REFUNDED = '201';
+    private const TAX_AMOUNT_REFUNDED = '10';
+    private const BASE_TAX_AMOUNT_REFUNDED = '21';
 
     /**
      * @var Product
@@ -81,8 +84,7 @@ class DataTest extends TestCase
             ['getPriceDisplayType', 'priceIncludesTax']
         );
 
-        $this->serializerMock = $this->getMockBuilder(Json::class)
-            ->getMock();
+        $this->serializerMock = $this->createMock(Json::class);
 
         $arguments = [
             'weeeConfig' => $weeeConfig,
@@ -236,8 +238,8 @@ class DataTest extends TestCase
      * @param array $expectedAmount
      *
      * @return void
-     * @dataProvider dataProviderGetWeeeAttributesForBundle
      */
+    #[DataProvider('dataProviderGetWeeeAttributesForBundle')]
     public function testGetWeeeAttributesForBundle(
         int $priceDisplay,
         bool $priceIncludesTax,
@@ -292,10 +294,10 @@ class DataTest extends TestCase
             ->method('priceIncludesTax')
             ->willReturn($priceIncludesTax);
 
-        $productSimple = $this->getMockBuilder(Simple::class)
-            ->addMethods(['getId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productSimple = $this->createPartialMockWithReflection(
+            Simple::class,
+            ['getId']
+        );
         $productSimple
             ->method('getId')
             ->willReturnOnConsecutiveCalls($prodId1, $prodId2);
@@ -337,7 +339,7 @@ class DataTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderGetWeeeAttributesForBundle(): array
+    public static function dataProviderGetWeeeAttributesForBundle(): array
     {
         return [
             [2, false, ["16.00", "15.00"]],
@@ -355,10 +357,10 @@ class DataTest extends TestCase
     public function testGetAppliedSimple(): void
     {
         $testArray = ['key' => 'value'];
-        $itemProductSimple = $this->getMockBuilder(QuoteItem::class)
-            ->addMethods(['getWeeeTaxApplied', 'getHasChildren'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $itemProductSimple = $this->createPartialMockWithReflection(
+            QuoteItem::class,
+            ['getWeeeTaxApplied', 'getHasChildren']
+        );
         $itemProductSimple
             ->method('getHasChildren')
             ->willReturn(false);
@@ -384,14 +386,14 @@ class DataTest extends TestCase
 
         $testArray = array_merge($testArray1, $testArray2);
 
-        $itemProductSimple1 = $this->getMockBuilder(QuoteItem::class)
-            ->addMethods(['getWeeeTaxApplied'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $itemProductSimple2 = $this->getMockBuilder(QuoteItem::class)
-            ->addMethods(['getWeeeTaxApplied'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $itemProductSimple1 = $this->createPartialMockWithReflection(
+            QuoteItem::class,
+            ['getWeeeTaxApplied']
+        );
+        $itemProductSimple2 = $this->createPartialMockWithReflection(
+            QuoteItem::class,
+            ['getWeeeTaxApplied']
+        );
 
         $itemProductSimple1
             ->method('getWeeeTaxApplied')
@@ -401,16 +403,12 @@ class DataTest extends TestCase
             ->method('getWeeeTaxApplied')
             ->willReturn(json_encode($testArray2));
 
-        $itemProductBundle = $this->getMockBuilder(QuoteItem::class)
-            ->addMethods(['getHasChildren'])
-            ->onlyMethods(['isChildrenCalculated', 'getChildren'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $itemProductBundle = $this->createPartialMockWithReflection(
+            QuoteItem::class,
+            ['getHasChildren', 'getChildren']
+        );
         $itemProductBundle
             ->method('getHasChildren')
-            ->willReturn(true);
-        $itemProductBundle
-            ->method('isChildrenCalculated')
             ->willReturn(true);
         $itemProductBundle
             ->method('getChildren')
@@ -431,10 +429,10 @@ class DataTest extends TestCase
         $testAmountUnit = 2;
         $testAmountRow = 34;
 
-        $itemProductSimple = $this->getMockBuilder(QuoteItem::class)
-            ->addMethods(['getHasChildren', 'getWeeeTaxAppliedAmount', 'getWeeeTaxAppliedRowAmount'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $itemProductSimple = $this->createPartialMockWithReflection(
+            QuoteItem::class,
+            ['getHasChildren', 'getWeeeTaxAppliedAmount', 'getWeeeTaxAppliedRowAmount']
+        );
         $itemProductSimple
             ->method('getHasChildren')
             ->willReturn(false);
@@ -463,14 +461,14 @@ class DataTest extends TestCase
         $testAmountRow2 = 444;
         $testTotalRow = $testAmountRow1 + $testAmountRow2;
 
-        $itemProductSimple1 = $this->getMockBuilder(QuoteItem::class)
-            ->addMethods(['getWeeeTaxAppliedAmount', 'getWeeeTaxAppliedRowAmount'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $itemProductSimple2 = $this->getMockBuilder(QuoteItem::class)
-            ->addMethods(['getWeeeTaxAppliedAmount', 'getWeeeTaxAppliedRowAmount'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $itemProductSimple1 = $this->createPartialMockWithReflection(
+            QuoteItem::class,
+            ['getWeeeTaxAppliedAmount', 'getWeeeTaxAppliedRowAmount']
+        );
+        $itemProductSimple2 = $this->createPartialMockWithReflection(
+            QuoteItem::class,
+            ['getWeeeTaxAppliedAmount', 'getWeeeTaxAppliedRowAmount']
+        );
 
         $itemProductSimple1
             ->method('getWeeeTaxAppliedAmount')
@@ -486,16 +484,12 @@ class DataTest extends TestCase
             ->method('getWeeeTaxAppliedRowAmount')
             ->willReturn($testAmountRow2);
 
-        $itemProductBundle = $this->getMockBuilder(QuoteItem::class)
-            ->addMethods(['getHasChildren'])
-            ->onlyMethods(['isChildrenCalculated', 'getChildren'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $itemProductBundle = $this->createPartialMockWithReflection(
+            QuoteItem::class,
+            ['getHasChildren', 'getChildren']
+        );
         $itemProductBundle
             ->method('getHasChildren')
-            ->willReturn(true);
-        $itemProductBundle
-            ->method('isChildrenCalculated')
             ->willReturn(true);
         $itemProductBundle
             ->method('getChildren')
@@ -544,14 +538,14 @@ class DataTest extends TestCase
         $item1Weee = 5;
         $item2Weee = 7;
         $expected = $item1Weee + $item2Weee;
-        $itemProductSimple1 = $this->getMockBuilder(QuoteItem::class)
-            ->addMethods(['getWeeeTaxAppliedRowAmount'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $itemProductSimple2 = $this->getMockBuilder(QuoteItem::class)
-            ->addMethods(['getWeeeTaxAppliedRowAmount'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $itemProductSimple1 = $this->createPartialMockWithReflection(
+            QuoteItem::class,
+            ['getWeeeTaxAppliedRowAmount']
+        );
+        $itemProductSimple2 = $this->createPartialMockWithReflection(
+            QuoteItem::class,
+            ['getWeeeTaxAppliedRowAmount']
+        );
         $items = [$itemProductSimple1, $itemProductSimple2];
 
         $itemProductSimple1
@@ -572,14 +566,14 @@ class DataTest extends TestCase
         $item1BaseWeee = 4;
         $item2BaseWeee = 3;
         $expected = $item1BaseWeee + $item2BaseWeee;
-        $itemProductSimple1 = $this->getMockBuilder(QuoteItem::class)
-            ->addMethods(['getBaseWeeeTaxAppliedRowAmnt'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $itemProductSimple2 = $this->getMockBuilder(QuoteItem::class)
-            ->addMethods(['getBaseWeeeTaxAppliedRowAmnt'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $itemProductSimple1 = $this->createPartialMockWithReflection(
+            QuoteItem::class,
+            ['getBaseWeeeTaxAppliedRowAmnt']
+        );
+        $itemProductSimple2 = $this->createPartialMockWithReflection(
+            QuoteItem::class,
+            ['getBaseWeeeTaxAppliedRowAmnt']
+        );
         $items = [$itemProductSimple1, $itemProductSimple2];
 
         $itemProductSimple1

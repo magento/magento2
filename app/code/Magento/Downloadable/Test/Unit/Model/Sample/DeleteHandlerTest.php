@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -23,9 +23,9 @@ use PHPUnit\Framework\TestCase;
  */
 class DeleteHandlerTest extends TestCase
 {
-    const STUB_PRODUCT_TYPE = 'simple';
-    const STUB_PRODUCT_SKU = 'sku';
-    const STUB_SAMPLE_ID = 1;
+    private const STUB_PRODUCT_TYPE = 'simple';
+    private const STUB_PRODUCT_SKU = 'sku';
+    private const STUB_SAMPLE_ID = 1;
 
     /**
      * @var ProductInterface|MockObject
@@ -48,10 +48,7 @@ class DeleteHandlerTest extends TestCase
     protected function setUp(): void
     {
         $this->entityMock = $this->createMock(Product::class);
-        $this->sampleRepositoryMock = $this->getMockBuilder(SampleRepository::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getList', 'delete'])
-            ->getMockForAbstractClass();
+        $this->sampleRepositoryMock = $this->createMock(SampleRepository::class);
 
         $this->deleteHandler = (new ObjectManagerHelper($this))->getObject(
             DeleteHandler::class,
@@ -71,7 +68,7 @@ class DeleteHandlerTest extends TestCase
             ->method('getSku')
             ->willReturn(self::STUB_PRODUCT_SKU);
 
-        $sampleMock = $this->getMockForAbstractClass(SampleInterface::class);
+        $sampleMock = $this->createMock(SampleInterface::class);
         $sampleMock->expects($this->once())
             ->method('getId')
             ->willReturn(self::STUB_SAMPLE_ID);

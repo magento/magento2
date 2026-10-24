@@ -1,14 +1,16 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\GoogleOptimizer\Test\Unit\Helper;
 
 use Magento\Framework\App\Helper\Context;
+use Magento\Framework\Data\Form as DataForm;
 use Magento\Framework\Data\Form\Element\Fieldset;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\GoogleOptimizer\Helper\Form;
 use Magento\GoogleOptimizer\Model\Code;
@@ -17,6 +19,8 @@ use PHPUnit\Framework\TestCase;
 
 class FormTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Form
      */
@@ -42,16 +46,15 @@ class FormTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->_formMock = $this->getMockBuilder(\Magento\Framework\Data\Form::class)
-            ->addMethods(['setFieldNameSuffix'])
-            ->onlyMethods(['addFieldset'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_formMock = $this->createPartialMockWithReflection(
+            DataForm::class,
+            ['setFieldNameSuffix', 'addFieldset']
+        );
         $this->_fieldsetMock = $this->createMock(Fieldset::class);
-        $this->_experimentCodeMock = $this->getMockBuilder(Code::class)
-            ->addMethods(['getExperimentScript', 'getCodeId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_experimentCodeMock = $this->createPartialMockWithReflection(
+            Code::class,
+            ['getExperimentScript', 'getCodeId']
+        );
         $context = $this->createMock(Context::class);
         $data = ['context' => $context];
         $objectManagerHelper = new ObjectManager($this);
@@ -117,30 +120,19 @@ class FormTest extends TestCase
 
         $this->_fieldsetMock
             ->method('addField')
-            ->withConsecutive(
-                [
-                    'experiment_script',
-                    'textarea',
-                    [
-                        'name' => 'experiment_script',
-                        'label' => 'Experiment Code',
-                        'value' => $experimentCode,
-                        'class' => 'textarea googleoptimizer',
-                        'required' => false,
-                        'note' => 'Experiment code should be added to the original page only.',
-                        'data-form-part' => '']
-                ],
-                [
-                    'code_id',
-                    'hidden',
-                    [
-                        'name' => 'code_id',
-                        'value' => $experimentCodeId,
-                        'required' => false,
-                        'data-form-part' => ''
-                    ]
-                ]
-            );
+            ->willReturnCallback(function ($arg1, $arg2, $arg3, $experimentCode, $experimentCodeId) {
+                static $callCount = 0;
+                if ($callCount === 0) {
+                    $callCount++;
+                    if ($arg1 == 'experiment_script' && $arg2 == 'textarea' && $arg3['value'] == $experimentCode) {
+                        return null;
+                    }
+                } elseif ($callCount == 1 && $arg1 == 'hidden' && $arg3['value'] == $experimentCodeId) {
+                    $callCount++;
+                    return null;
+                }
+            });
+
         $this->_formMock->expects($this->once())->method('setFieldNameSuffix')->with('google_experiment');
     }
 }

@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -20,12 +19,15 @@ use Magento\Framework\View\Page\Config;
 use Magento\Framework\View\Result\Page;
 use Magento\Indexer\Controller\Adminhtml\Indexer\ListAction;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ListActionTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ListAction
      */
@@ -99,21 +101,16 @@ class ListActionTest extends TestCase
             'getMessageManager'
         ]);
 
-        $response = $this->getMockBuilder(ResponseInterface::class)
-            ->addMethods(['setRedirect'])
-            ->onlyMethods(['sendResponse'])
-            ->getMockForAbstractClass();
-
-        $request = $this->getMockForAbstractClass(
-            RequestInterface::class,
-            ['getParam', 'getRequest'],
-            '',
-            false
+        $response = $this->createPartialMockWithReflection(
+            ResponseInterface::class,
+            ['setRedirect', 'sendResponse']
         );
 
-        $this->view = $this->getMockBuilder(ViewInterface::class)
-            ->addMethods(['getConfig', 'getTitle'])
-            ->onlyMethods([
+        $request = $this->createMock(RequestInterface::class);
+
+        $this->view = $this->createPartialMockWithReflection(
+            ViewInterface::class,
+            [
                 'loadLayout',
                 'getPage',
                 'loadLayoutUpdates',
@@ -125,41 +122,39 @@ class ListActionTest extends TestCase
                 'getLayout',
                 'addActionLayoutHandles',
                 'setIsLayoutLoaded',
-                'isLayoutLoaded'
-            ])
-            ->getMockForAbstractClass();
-
-        $this->block = $this->getMockBuilder(AbstractBlock::class)
-            ->addMethods(['setActive', 'getMenuModel'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-
-        $this->layout = $this->getMockForAbstractClass(
-            LayoutInterface::class,
-            ['getBlock'],
-            '',
-            false
+                'isLayoutLoaded',
+                'getConfig',
+                'getTitle'
+            ]
         );
+
+        $this->block = $this->createPartialMockWithReflection(
+            AbstractBlock::class,
+            ['setActive', 'getMenuModel']
+        );
+
+        $this->layout = $this->createMock(LayoutInterface::class);
 
         $this->menu = $this->createPartialMock(Menu::class, ['getParentItems']);
 
-        $this->items = $this->getMockBuilder(Item::class)
-            ->addMethods(['getParentItems'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->items = $this->createPartialMockWithReflection(
+            Item::class,
+            ['getParentItems']
+        );
 
         $this->contextMock->expects($this->any())->method("getRequest")->willReturn($request);
         $this->contextMock->expects($this->any())->method("getResponse")->willReturn($response);
         $this->contextMock->expects($this->any())->method('getView')->willReturn($this->view);
 
         $this->page = $this->createPartialMock(Page::class, ['getConfig']);
-        $this->config = $this->getMockBuilder(Page::class)
-            ->addMethods(['getTitle'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->title = $this->getMockBuilder('Title')
-            ->setMethods(['prepend'])
-            ->getMock();
+        $this->config = $this->createPartialMockWithReflection(
+            Page::class,
+            ['getTitle']
+        );
+        $this->title = $this->createPartialMockWithReflection(
+            \stdClass::class,
+            ['prepend']
+        );
 
         $this->block->expects($this->any())->method('setActive')->willReturn(1);
         $this->view->expects($this->any())->method('getLayout')->willReturn($this->layout);

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,9 +16,12 @@ use Magento\Sales\Block\Order\Email\Items\Order\DefaultOrder;
 use Magento\Sales\Model\Order\Item as OrderItem;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class DefaultOrderTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var MockObject|DefaultOrder
      */
@@ -51,7 +54,7 @@ class DefaultOrderTest extends TestCase
 
         $this->layoutMock = $this->getMockBuilder(Layout::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getBlock'])
+            ->onlyMethods(['getBlock'])
             ->getMock();
 
         $this->block = $this->objectManager->getObject(
@@ -64,14 +67,12 @@ class DefaultOrderTest extends TestCase
             ]
         );
 
-        $this->priceRenderBlock = $this->getMockBuilder(Template::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setItem', 'toHtml'])
-            ->getMock();
+        $this->priceRenderBlock = $this->createPartialMockWithReflection(
+            Template::class,
+            ['setItem', 'toHtml']
+        );
 
-        $this->itemMock = $this->getMockBuilder(OrderItem::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->itemMock = $this->createMock(OrderItem::class);
     }
 
     public function testGetItemPrice()

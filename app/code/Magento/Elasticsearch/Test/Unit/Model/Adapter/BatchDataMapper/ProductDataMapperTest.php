@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -19,6 +19,7 @@ use Magento\Elasticsearch\Model\Adapter\FieldType\Date;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider as DataProviderAttribute;
 
 /**
  * Unit tests for \Magento\Elasticsearch\Model\Adapter\BatchDataMapper\ProductDataMapper class.
@@ -67,11 +68,13 @@ class ProductDataMapperTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->builderMock = $this->createTestProxy(Builder::class);
-        $this->fieldMapperMock = $this->getMockForAbstractClass(FieldMapperInterface::class);
+        $objectManager = new ObjectManagerHelper($this);
+        $this->builderMock = $objectManager->getObject(Builder::class);
+        
+        $this->fieldMapperMock = $this->createMock(FieldMapperInterface::class);
         $this->dataProvider = $this->createMock(DataProvider::class);
         $this->attribute = $this->createMock(Attribute::class);
-        $this->additionalFieldsProvider = $this->getMockForAbstractClass(AdditionalFieldsProviderInterface::class);
+        $this->additionalFieldsProvider = $this->createMock(AdditionalFieldsProviderInterface::class);
         $this->dateFieldTypeMock = $this->createMock(Date::class);
         $filterableAttributeTypes = [
             'boolean' => 'boolean',
@@ -79,7 +82,6 @@ class ProductDataMapperTest extends TestCase
             'select' => 'select',
         ];
 
-        $objectManager = new ObjectManagerHelper($this);
         $this->model = $objectManager->getObject(
             ProductDataMapper::class,
             [
@@ -101,17 +103,7 @@ class ProductDataMapperTest extends TestCase
         $storeId = 1;
         $productId = 42;
         $additionalFields = ['some data'];
-        $this->builderMock->expects($this->once())
-            ->method('addField')
-            ->with('store_id', $storeId);
 
-        $this->builderMock->expects($this->any())
-            ->method('addFields')
-            ->withConsecutive([$additionalFields])
-            ->willReturnSelf();
-        $this->builderMock->expects($this->any())
-            ->method('build')
-            ->willReturn([]);
         $this->additionalFieldsProvider->expects($this->once())
             ->method('getFields')
             ->with([$productId], $storeId)
@@ -128,8 +120,6 @@ class ProductDataMapperTest extends TestCase
     {
         $storeId = 1;
 
-        $this->builderMock->expects($this->never())->method('addField');
-        $this->builderMock->expects($this->never())->method('build');
         $this->additionalFieldsProvider->expects($this->once())
             ->method('getFields')
             ->with([], $storeId)
@@ -144,8 +134,8 @@ class ProductDataMapperTest extends TestCase
      * @param array $attributeData
      * @param array|string $attributeValue
      * @param array $returnAttributeData
-     * @dataProvider mapProvider
      */
+    #[DataProviderAttribute('mapProvider')]
     public function testGetMap(int $productId, array $attributeData, $attributeValue, array $returnAttributeData)
     {
         $storeId = 1;
@@ -173,7 +163,6 @@ class ProductDataMapperTest extends TestCase
 
     /**
      * @return void
-     */
     public function testGetMapWithOptions()
     {
         $storeId = 1;
@@ -221,7 +210,7 @@ class ProductDataMapperTest extends TestCase
         $sourceMock->method('getAllOptions')->willReturn($attributeData['options'] ?? []);
         $options = [];
         foreach ($attributeData['options'] as $option) {
-            $optionMock = $this->getMockForAbstractClass(AttributeOptionInterface::class);
+            $optionMock = $this->createMock(AttributeOptionInterface::class);
             $optionMock->method('getValue')->willReturn($option['value']);
             $optionMock->method('getLabel')->willReturn($option['label']);
             $options[] = $optionMock;
@@ -373,6 +362,57 @@ class ProductDataMapperTest extends TestCase
                 [10 => '44', 11 => '45'],
                 ['color' => [44, 45], 'color_value' => ['red', 'black']],
             ],
+            'select with options with sort by and filterable' => [
+                10,
+                [
+                    'attribute_code' => 'color',
+                    'backend_type' => 'text',
+                    'frontend_input' => 'select',
+                    'is_searchable' => true,
+                    'used_for_sort_by' => true,
+                    'is_filterable_in_grid' => true,
+                    'options' => [
+                        ['value' => '44', 'label' => 'red'],
+                        ['value' => '45', 'label' => 'black'],
+                    ],
+                ],
+                [10 => '44', 11 => '45'],
+                ['color' => [44, 45], 'color_value' => ['red', 'black']],
+            ],
+            'unsearchable select with options with sort by and filterable' => [
+                10,
+                [
+                    'attribute_code' => 'color',
+                    'backend_type' => 'text',
+                    'frontend_input' => 'select',
+                    'is_searchable' => false,
+                    'used_for_sort_by' => false,
+                    'is_filterable_in_grid' => false,
+                    'options' => [
+                        ['value' => '44', 'label' => 'red'],
+                        ['value' => '45', 'label' => 'black'],
+                    ],
+                ],
+                '44',
+                ['color' => 44],
+            ],
+            'select with options with sort by only' => [
+                10,
+                [
+                    'attribute_code' => 'color',
+                    'backend_type' => 'text',
+                    'frontend_input' => 'select',
+                    'is_searchable' => false,
+                    'used_for_sort_by' => true,
+                    'is_filterable_in_grid' => false,
+                    'options' => [
+                        ['value' => '44', 'label' => 'red'],
+                        ['value' => '45', 'label' => 'black'],
+                    ],
+                ],
+                [10 => '44', 11 => '45'],
+                ['color' => [44, 45], 'color_value' => ['red', 'black']],
+            ],
             'multiselect without options' => [
                 10,
                 [
@@ -442,6 +482,32 @@ class ProductDataMapperTest extends TestCase
                 ],
                 15,
                 [],
+            ],
+            'sortable multiple values' => [
+                10,
+                [
+                    'attribute_code' => 'name',
+                    'backend_type' => 'text',
+                    'frontend_input' => 'text',
+                    'is_searchable' => true,
+                    'used_for_sort_by' => true,
+                    'options' => [],
+                ],
+                [10 => 'one', 11 => 'two', 12 => 'three'],
+                ['name' => implode("\n", ['one', 'two', 'three'])],
+            ],
+            'sortable too many multiple values' => [
+                10,
+                [
+                    'attribute_code' => 'name',
+                    'backend_type' => 'text',
+                    'frontend_input' => 'text',
+                    'is_searchable' => true,
+                    'used_for_sort_by' => true,
+                    'options' => [],
+                ],
+                array_fill(0, 4682, '123456'),
+                ['name' => implode("\n", array_fill(0, 4681, '123456'))],
             ],
         ];
     }

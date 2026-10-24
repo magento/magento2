@@ -1,22 +1,25 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Block\Widget;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Exception;
 use Magento\Catalog\Block\Widget\Link;
 use Magento\Catalog\Model\ResourceModel\AbstractResource;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Math\Random;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Url;
 use Magento\Framework\Url\ModifierInterface;
 use Magento\Framework\View\Element\Template\Context;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
@@ -57,18 +60,29 @@ class LinkTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $this->urlFinder = $this->getMockForAbstractClass(UrlFinderInterface::class);
+        $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                SecureHtmlRenderer::class,
+                $this->createMock(SecureHtmlRenderer::class)
+            ],
+            [
+                Random::class,
+                $this->createMock(Random::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
+
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->urlFinder = $this->createMock(UrlFinderInterface::class);
 
         $context = $this->createMock(Context::class);
-        $context->expects($this->any())
-            ->method('getStoreManager')
-            ->willReturn($this->storeManager);
+        $context->method('getStoreManager')->willReturn($this->storeManager);
 
         $this->entityResource =
             $this->createMock(AbstractResource::class);
 
-        $this->block = (new ObjectManager($this))->getObject(
+        $this->block = $objectManager->getObject(
             Link::class,
             [
                 'context' => $context,
@@ -125,9 +139,7 @@ class LinkTest extends TestCase
         $store->expects($this->any())
             ->method('getId');
 
-        $this->storeManager->expects($this->any())
-            ->method('getStore')
-            ->willReturn($store);
+        $this->storeManager->method('getStore')->willReturn($store);
 
         $this->urlFinder->expects($this->once())->method('findOneByData')
             ->willReturn(false);
@@ -138,13 +150,13 @@ class LinkTest extends TestCase
     /**
      * Tests getHref whether it should include the store code or not
      *
-     * @dataProvider dataProviderForTestGetHrefWithoutUrlStoreSuffix
      * @param string $path
      * @param int|null $storeId
      * @param bool $includeStoreCode
      * @param string $expected
      * @throws \ReflectionException
      */
+    #[DataProvider('dataProviderForTestGetHrefWithoutUrlStoreSuffix')]
     public function testStoreCodeShouldBeIncludedInURLOnlyIfItIsConfiguredSo(
         string $path,
         ?int $storeId,
@@ -157,8 +169,8 @@ class LinkTest extends TestCase
 
         $rewrite = $this->createPartialMock(UrlRewrite::class, ['getRequestPath']);
         $url = $this->createPartialMock(Url::class, ['setScope', 'getUrl']);
-        $urlModifier = $this->getMockForAbstractClass(ModifierInterface::class);
-        $config = $this->getMockForAbstractClass(ReinitableConfigInterface::class);
+        $urlModifier = $this->createMock(ModifierInterface::class);
+        $config = $this->createMock(ReinitableConfigInterface::class);
         $store = $objectManager->getObject(
             Store::class,
             [
@@ -168,7 +180,6 @@ class LinkTest extends TestCase
             ]
         );
         $property = (new ReflectionClass(get_class($store)))->getProperty('urlModifier');
-        $property->setAccessible(true);
         $property->setValue($store, $urlModifier);
 
         $urlModifier->expects($this->any())
@@ -180,10 +191,17 @@ class LinkTest extends TestCase
                 [
                     [Store::XML_PATH_USE_REWRITES, ReinitableConfigInterface::SCOPE_TYPE_DEFAULT, null, true],
                     [Store::XML_PATH_UNSECURE_BASE_LINK_URL, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null, ''],
+                ]
+            );
+        $config->expects($this->any())
+            ->method('isSetFlag')
+            ->willReturnMap(
+                [
                     [
                         Store::XML_PATH_STORE_IN_URL,
                         ReinitableConfigInterface::SCOPE_TYPE_DEFAULT,
-                        null, $includeStoreCode
+                        null,
+                        $includeStoreCode
                     ]
                 ]
             );
@@ -224,6 +242,7 @@ class LinkTest extends TestCase
                     UrlRewrite::ENTITY_ID => 'entity_id',
                     UrlRewrite::ENTITY_TYPE => 'entity_type',
                     UrlRewrite::STORE_ID => $this->storeManager->getStore($storeId)->getStoreId(),
+                    UrlRewrite::REDIRECT_TYPE => 0,
                 ]
             )
             ->willReturn($rewrite);
@@ -265,7 +284,7 @@ class LinkTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForTestGetHrefWithoutUrlStoreSuffix()
+    public static function dataProviderForTestGetHrefWithoutUrlStoreSuffix()
     {
         return [
             ['/accessories.html', null, true, 'french/accessories.html'],
@@ -287,13 +306,9 @@ class LinkTest extends TestCase
         $this->block->setData('id_path', ProductUrlRewriteGenerator::ENTITY_TYPE . '/entity_id/category_id');
 
         $store = $this->createPartialMock(Store::class, ['getId']);
-        $store->expects($this->any())
-            ->method('getId')
-            ->willReturn($storeId);
+        $store->method('getId')->willReturn($storeId);
 
-        $this->storeManager->expects($this->any())
-            ->method('getStore')
-            ->willReturn($store);
+        $this->storeManager->method('getStore')->willReturn($store);
 
         $this->urlFinder->expects($this->once())
             ->method('findOneByData')
@@ -303,6 +318,7 @@ class LinkTest extends TestCase
                     UrlRewrite::ENTITY_TYPE => ProductUrlRewriteGenerator::ENTITY_TYPE,
                     UrlRewrite::STORE_ID => $storeId,
                     UrlRewrite::METADATA => ['category_id' => 'category_id'],
+                    UrlRewrite::REDIRECT_TYPE => 0,
                 ]
             )
             ->willReturn(false);

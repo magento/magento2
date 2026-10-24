@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * @var \Magento\AdvancedSearch\Block\SearchData $block
  * @var \Magento\Framework\Locale\LocaleFormatter $localeFormatter
+ * @var \Magento\Framework\Escaper $escaper
  */
 ?>
 <?php
@@ -14,11 +15,11 @@
 $data = $block->getItems();
 if (count($data)): ?>
     <dl class="block">
-        <dt class="title"><?= $block->escapeHtml(__($block->getTitle())) ?></dt>
+        <dt class="title"><?= $escaper->escapeHtml(__($block->getTitle())) ?></dt>
         <?php foreach ($data as $additionalInfo): ?>
             <dd class="item">
-                <a href="<?= $block->escapeUrl($block->getLink($additionalInfo->getQueryText())) ?>"
-                    ><?= $block->escapeHtml($additionalInfo->getQueryText()) ?></a>
+                <a href="<?= $escaper->escapeUrl($block->getLink($additionalInfo->getQueryText())) ?>"
+                    ><?= $escaper->escapeHtml($additionalInfo->getQueryText()) ?></a>
                 <?php if ($block->isShowResultsCount()): ?>
                     <span class="count">
                         <?= /* @noEscape */ $localeFormatter->formatNumber((int)$additionalInfo->getResultsCount()) ?>

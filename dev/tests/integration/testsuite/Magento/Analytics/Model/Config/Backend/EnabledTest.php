@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -73,7 +73,6 @@ class EnabledTest extends \PHPUnit\Framework\TestCase
         $this->checkInitialStatus();
         $this->saveConfigValue(Enabled::XML_ENABLED_CONFIG_STRUCTURE_PATH, (string)Enabledisable::DISABLE_VALUE);
         $this->reinitableConfig->reinit();
-
         $this->checkDisabledStatus();
     }
 
@@ -83,8 +82,8 @@ class EnabledTest extends \PHPUnit\Framework\TestCase
      */
     public function testReEnable()
     {
-        $this->checkDisabledStatus();
         $this->saveConfigValue(Enabled::XML_ENABLED_CONFIG_STRUCTURE_PATH, (string)Enabledisable::ENABLE_VALUE);
+        $this->reinitableConfig->reinit();
         $this->checkReEnabledStatus();
     }
 

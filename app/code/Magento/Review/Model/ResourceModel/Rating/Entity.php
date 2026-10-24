@@ -1,14 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Review\Model\ResourceModel\Rating;
 
 /**
  * Rating entity resource
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Entity extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

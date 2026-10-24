@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Framework\Filesystem;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use stdClass;
 
 class ImagesTest extends TestCase
@@ -57,8 +58,8 @@ class ImagesTest extends TestCase
      * @param bool $renderAsTag
      * @param string|callable $expectedResult - string or callable to make unique assertions on $expectedResult
      * @magentoConfigFixture current_store web/unsecure/base_url http://example.com/
-     * @dataProvider providerGetImageHtmlDeclaration
      */
+    #[DataProvider('providerGetImageHtmlDeclaration')]
     public function testGetImageHtmlDeclaration(
         $isStaticUrlsAllowed,
         $filename,
@@ -98,7 +99,7 @@ class ImagesTest extends TestCase
      *
      * @return array
      */
-    public function providerGetImageHtmlDeclaration()
+    public static function providerGetImageHtmlDeclaration()
     {
         return [
             [true, 'wysiwyg/hello.png', true, '<img src="http://example.com/media/wysiwyg/hello.png" alt="" />'],
@@ -112,7 +113,7 @@ class ImagesTest extends TestCase
                         'e3ttZWRpYSB1cmw9Ind5c2l3eWcvaGVsbG8ucG5nIn19/'
                     );
 
-                    $this->assertStringContainsString($expectedResult, parse_url($actualResult, PHP_URL_PATH));
+                    self::assertStringContainsString($expectedResult, parse_url($actualResult, PHP_URL_PATH));
                 },
             ],
             [true, 'wysiwyg/hello.png', false, 'http://example.com/media/wysiwyg/hello.png'],

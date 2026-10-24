@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Interception\Config;
 
@@ -37,7 +37,8 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
 
     /**
      * Cache
-     * @deprecated 102.0.1
+     * @deprecated 102.0.1 Cache handling was moved to a dedicated class
+     * @see \Magento\Framework\Interception\Config\CacheManager
      * @var \Magento\Framework\Cache\FrontendInterface
      */
     protected $_cache;
@@ -80,6 +81,9 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
      */
     private $cacheManager;
 
+    /** @var array<string, array> */
+    private array $scopeReadCache = [];
+
     /**
      * Config constructor
      *
@@ -103,8 +107,8 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
         \Magento\Framework\Interception\ObjectManager\ConfigInterface $omConfig,
         \Magento\Framework\ObjectManager\DefinitionInterface $classDefinitions,
         $cacheId = 'interception',
-        SerializerInterface $serializer = null,
-        CacheManager $cacheManager = null
+        ?SerializerInterface $serializer = null,
+        ?CacheManager $cacheManager = null
     ) {
         $this->_omConfig = $omConfig;
         $this->_relations = $relations;
@@ -201,7 +205,10 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
     {
         $config = [];
         foreach ($this->_scopeList->getAllScopes() as $scope) {
-            $config = array_replace_recursive($config, $this->_reader->read($scope));
+            if (!isset($this->scopeReadCache[$scope])) {
+                $this->scopeReadCache[$scope] = $this->_reader->read($scope);
+            }
+            $config = array_replace_recursive($config, $this->scopeReadCache[$scope]);
         }
         unset($config['preferences']);
         foreach ($config as $typeName => $typeConfig) {

@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 /* eslint-disable max-nested-callbacks */
@@ -33,7 +33,8 @@ define([
                 thumbwidth: 88,
                 transition: 'slide',
                 transitionduration: 500,
-                width: 700
+                width: 700,
+                whiteBorders: 0
             },
             fullscreen: {
                 arrows: true,
@@ -99,6 +100,7 @@ define([
             expect(gallery.settings.data).toBeDefined();
             expect(gallery.settings.api).toBeDefined();
             expect(gallery.settings.activeBreakpoint).toEqual({});
+            expect(gallery.config.options.height).toEqual(element.height());
 
             $.fn.data = originSpy;
         });

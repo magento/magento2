@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -62,8 +62,7 @@ class CodesTest extends TestCase
         $area = 'area';
         $fullPath = 'some/full/path';
 
-        $themeMock = $this->getMockBuilder(ThemeInterface::class)
-            ->getMockForAbstractClass();
+        $themeMock = $this->createMock(ThemeInterface::class);
         $themeMock->expects($this->once())
             ->method('getFullPath')
             ->willReturn($fullPath);
@@ -71,8 +70,7 @@ class CodesTest extends TestCase
             ->method('create')
             ->with($code, $area)
             ->willReturn($themeMock);
-        $reader = $this->getMockBuilder(ReadInterface::class)
-            ->getMockForAbstractClass();
+        $reader = $this->createMock(ReadInterface::class);
         $reader->expects($this->once())
             ->method('read')
             ->with($fullPath)

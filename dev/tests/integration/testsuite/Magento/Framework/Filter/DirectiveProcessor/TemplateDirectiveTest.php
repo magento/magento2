@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 use Magento\Framework\Filter\Template;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class TemplateDirectiveTest extends TestCase
 {
@@ -47,8 +48,8 @@ class TemplateDirectiveTest extends TestCase
     }
 
     /**
-     * @dataProvider useCaseProvider
      */
+    #[DataProvider('useCaseProvider')]
     public function testCases(string $template, array $variables, string $expect)
     {
         $this->filter->setTemplateProcessor([$this, 'processTemplate']);
@@ -60,7 +61,7 @@ class TemplateDirectiveTest extends TestCase
         self::assertEquals($expect, $result);
     }
 
-    public function useCaseProvider()
+    public static function useCaseProvider()
     {
         $prefix = '{{template config_path=$path param1=myparam ';
         $expect = 'path=varpath/myparamabc/varpath';

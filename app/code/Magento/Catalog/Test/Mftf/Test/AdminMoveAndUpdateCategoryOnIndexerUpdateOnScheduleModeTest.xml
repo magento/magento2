@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminMoveAndUpdateCategoryOnIndexerUpdateOnScheduleModeTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Move and Update Category on Store View level"/>
+            <title value="Move and Update Category on Store View level when Category Flat Indexer is in Update on Schedule mode"/>
+            <description value="Verify that categories work properly on Storefront when Catalog Flat indexer is in Update on Schedule mode"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4172"/>
+            <group value="catalog"/>
+            <group value="WYSIWYGDisabled"/>
+        </annotations>
+        <before>
+            <!-- Pre-condition - 1:- Set indexers to Update on Schedule mode -->
+            <magentoCLI command="config:set catalog/frontend/flat_catalog_category 1"
+                        stepKey="enableCategoryFlatDataConfig"/>
+            <magentoCLI command="indexer:set-mode schedule catalog_category_flat"
+                        stepKey="setCategoryFlatIndexerToScheduleMode"/>
+            <magentoCLI command="indexer:set-mode schedule catalog_category_product"
+                        stepKey="setCategoryProductsIndexerToScheduleMode"/>
+            <magentoCLI command="indexer:set-mode schedule catalog_product_category"
+                        stepKey="setProductCategoriesIndexerToScheduleMode"/>
+            <!-- Pre-condition - 2:- Create anchor category A -->
+            <createData entity="ApiCategory" stepKey="createAnchorCategoryA"/>
+            <!-- Pre-condition - 3:- Assign product AA to category A -->
+            <createData entity="ApiSimpleProduct" stepKey="createProductAA">
+                <requiredEntity createDataKey="createAnchorCategoryA"/>
+            </createData>
+            <!-- Pre-condition - 4:- Create anchor category B as a subcategory of category A -->
+            <createData entity="SubCategoryWithParent" stepKey="createSubCategoryB">
+                <requiredEntity createDataKey="createAnchorCategoryA"/>
+            </createData>
+            <!-- Pre-condition - 5:- Assign product BB to category B -->
+            <createData entity="ApiSimpleProduct" stepKey="createProductBB">
+                <requiredEntity createDataKey="createSubCategoryB"/>
+            </createData>
+            <!-- Pre-condition - 6:- Create non-anchor category C as a subcategory of Default Category -->
+            <createData entity="ApiCategoryNonAnchor" stepKey="createNonAnchorCategoryC"/>
+            <!-- Pre-condition - 7:- Assign product CC to category C -->
+            <createData entity="ApiSimpleProduct" stepKey="createProductCC">
+                <requiredEntity createDataKey="createNonAnchorCategoryC"/>
+            </createData>
+            <!-- Pre-condition - 8:- Login as admin and set all category A settings to non-default values -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdminUser"/>
+            <actionGroup ref="GoToAdminCategoryPageByIdActionGroup" stepKey="navigateToAdminCategoryAPage">
+                <argument name="id" value="$createAnchorCategoryA.id$"/>
+            </actionGroup>
+            <actionGroup ref="AddCategoryImageActionGroup" stepKey="addImageToCategoryA"/>
+            <actionGroup ref="AdminUpdateCategoryDescriptionActionGroup" stepKey="addDescriptionToCategoryA">
+                <argument name="description" value="{{CustomDynamicProductDescription.value}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminUpdateCategoryDisplaySettingsWithCustomValuesActionGroup"
+                         stepKey="updateCategoryADisplaySettings">
+                <argument name="availableSortOptions" value="{{CategoryDisplaySettings.available_sort_by}}"/>
+                <argument name="defaultSortingOption" value="{{CategoryDisplaySettings.default_sort_by}}"/>
+                <argument name="priceRange" value="{{CategoryDisplaySettings.filter_price_range}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminUpdateCategoryMetaInformationActionGroup" stepKey="addMetaTitleToCategoryA">
+                <argument name="metaTitle" value="MetaAtitle"/>
+            </actionGroup>
+            <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveCategoryAWithUpdatedSettings"/>
+            <!-- Pre-condition - 9:- Set all category C settings to non-default values -->
+            <actionGroup ref="GoToAdminCategoryPageByIdActionGroup" stepKey="navigateToAdminCategoryCPage">
+                <argument name="id" value="$createNonAnchorCategoryC.id$"/>
+            </actionGroup>
+            <actionGroup ref="AddCategoryImageActionGroup" stepKey="addImageToCategoryC"/>
+            <actionGroup ref="AdminUpdateCategoryDescriptionActionGroup" stepKey="addDescriptionToCategoryC">
+                <argument name="description" value="{{CustomDynamicProductDescription.value}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminUpdateCategoryDisplaySettingsWithCustomValuesActionGroup"
+                         stepKey="updateCategoryCDisplaySettings">
+                <argument name="availableSortOptions" value="{{CategoryDisplaySettings.available_sort_by}}"/>
+                <argument name="defaultSortingOption" value="{{CategoryDisplaySettings.default_sort_by}}"/>
+                <argument name="priceRange" value="{{CategoryDisplaySettings.filter_price_range}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminUpdateCategoryMetaInformationActionGroup" stepKey="addMetaTitleToCategoryC">
+                <argument name="metaTitle" value="MetaCtitle"/>
+            </actionGroup>
+            <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveCategoryCWithUpdatedSettings"/>
+            <!-- Pre-condition - 10:- Clear cache and run cron twice -->
+            <magentoCLI command="cache:flush" stepKey="flushCacheAfterCategorySetup"/>
+            <magentoCron groups="index" stepKey="runFirstCronAfterCategorySetup"/>
+            <magentoCron groups="index" stepKey="runSecondCronAfterCategorySetup"/>
+        </before>
+        <after>
+            <!-- Reset indexer modes back to realtime for other tests -->
+            <magentoCLI command="indexer:set-mode realtime catalog_category_flat"
+                        stepKey="resetCategoryFlatIndexerToRealtimeMode"/>
+            <magentoCLI command="indexer:set-mode realtime catalog_category_product"
+                        stepKey="resetCategoryProductsIndexerToRealtimeMode"/>
+            <magentoCLI command="indexer:set-mode realtime catalog_product_category"
+                        stepKey="resetProductCategoriesIndexerToRealtimeMode"/>
+            <!-- Reset flat catalog configuration back to default (disabled) -->
+            <magentoCLI command="config:set catalog/frontend/flat_catalog_category 0"
+                        stepKey="disableCategoryFlatDataConfig"/>
+            <!-- Clean up test products in reverse order of creation -->
+            <deleteData createDataKey="createProductAA" stepKey="deleteProductAAFromCategoryA"/>
+            <deleteData createDataKey="createProductBB" stepKey="deleteProductBBFromCategoryB"/>
+            <deleteData createDataKey="createProductCC" stepKey="deleteProductCCFromCategoryC"/>
+            <!-- Clean up test categories in reverse order of creation -->
+            <deleteData createDataKey="createAnchorCategoryA" stepKey="deleteAnchorCategoryA"/>
+            <deleteData createDataKey="createSubCategoryB" stepKey="deleteSubCategoryB"/>
+            <deleteData createDataKey="createNonAnchorCategoryC" stepKey="deleteNonAnchorCategoryC"/>
+            <!-- Clean up custom store and store view created for multi-store testing -->
+            <actionGroup ref="DeleteCustomStoreActionGroup" stepKey="deleteCustomStoreGroup">
+                <argument name="storeGroupName" value="customStore.name"/>
+            </actionGroup>
+            <!-- Final cleanup: flush cache and reindex to ensure clean state -->
+            <magentoCLI command="cache:flush" stepKey="flushCacheAfterCleanup"/>
+            <magentoCLI command="indexer:reindex" stepKey="reindexAfterCleanup"/>
+            <!-- Logout from admin panel to clean up session -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdminPanel"/>
+        </after>
+        <!-- Step 1:- Open Category A on Storefront -->
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="navigateToStorefrontCategoryAInitially">
+            <argument name="categoryName" value="$createAnchorCategoryA.name$"/>
+        </actionGroup>
+        <!-- Step 1:- Verify the category displays correct amount of products as 2 -->
+        <actionGroup ref="StorefrontVerifyCategoryContentActionGroup" stepKey="verifyCategoryAInitially">
+            <argument name="description" value="{{CustomDynamicProductDescription.value}}"/>
+            <argument name="metaTitle" value="MetaAtitle"/>
+            <argument name="productCount" value="2"/>
+        </actionGroup>
+        <!-- Step 2:- Open Category C on Storefront -->
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="navigateToStorefrontCategoryCInitially">
+            <argument name="categoryName" value="$createNonAnchorCategoryC.name$"/>
+        </actionGroup>
+        <!-- Step 2:- Verify the category displays correct amount of products as 1 -->
+        <actionGroup ref="StorefrontVerifyCategoryContentActionGroup" stepKey="verifyCategoryCInitially">
+            <argument name="description" value="{{CustomDynamicProductDescription.value}}"/>
+            <argument name="metaTitle" value="MetaCtitle"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
+        <!-- Step 3:- Open Admin > Catalog > Categories and Move category A under category C -->
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="navigateToAdminCategoryPageForFirstMove"/>
+        <actionGroup ref="MoveCategoryActionGroup" stepKey="moveCategoryAUnderCategoryC">
+            <argument name="childCategory" value="$createAnchorCategoryA.name$"/>
+            <argument name="parentCategory" value="$createNonAnchorCategoryC.name$"/>
+        </actionGroup>
+        <!-- Step 3:- Verify the category has moved successfully -->
+        <waitForElementVisible selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="waitForSuccessMessageForFirstCategoryMove"/>
+        <waitForText userInput="You moved the category." selector="{{AdminCategoryMessagesSection.SuccessMessage}}"
+             stepKey="verifySuccessMessageForFirstCategoryMove"/>
+        <!-- Step 4:- Open Admin > System > Index Management -->
+        <actionGroup ref="AdminOpenIndexManagementPageActionGroup"
+                     stepKey="navigateToIndexManagementPageAfterFirstMove"/>
+        <grabTextFrom selector="{{AdminIndexManagementSection.indexerStatus('Category Flat Data')}}" stepKey="grabCategoryFlatDataIndexerStatus"/>
+        <!-- Step 4:- Verify the category flat data indexer is ready -->
+        <assertEquals stepKey="assertCategoryFlatDataIndexerStatusToReady">
+            <expectedResult type="string">READY</expectedResult>
+            <actualResult type="string">$grabCategoryFlatDataIndexerStatus</actualResult>
+        </assertEquals>
+        <!-- Step 5:- Open Category A on Storefront and verify it hasn't moved yet -->
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup"
+                     stepKey="navigateToStorefrontCategoryAAfterFirstMove">
+            <argument name="categoryName" value="$createAnchorCategoryA.name$"/>
+        </actionGroup>
+        <!-- Step 5:- Verify the category displays same amount of products as 2 -->
+        <waitForText userInput="2" selector="{{StorefrontCategoryMainSection.productCount}}"
+                     stepKey="verifyProductCountOnCategoryAAfterFirstMove"/>
+        <actionGroup ref="StorefrontAssertCategoryNameIsShownInMenuActionGroup"
+                     stepKey="verifyCategoryAStillInMenu">
+            <argument name="categoryName" value="$createAnchorCategoryA.name$"/>
+        </actionGroup>
+        <!-- Step 6:- Open Category C on Storefront and verify it doesn't contain Category A yet -->
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup"
+                     stepKey="navigateToStorefrontCategoryCAfterFirstMove">
+            <argument name="categoryName" value="$createNonAnchorCategoryC.name$"/>
+        </actionGroup>
+        <!-- Step 6:- Verify the category displays correct amount of products as 1 -->
+        <waitForText userInput="1" selector="{{StorefrontCategoryMainSection.productCount}}"
+                     stepKey="verifyProductCountOnCategoryCAfterFirstMove"/>
+        <actionGroup ref="StorefrontAssertCategoryNameIsShownInMenuActionGroup"
+                     stepKey="verifyCategoryAStillAtRootLevelBeforeCron">
+            <argument name="categoryName" value="$createAnchorCategoryA.name$"/>
+        </actionGroup>
+        <!-- Step 7:- Run cron twice to reindex -->
+        <magentoCron groups="index" stepKey="runFirstCronAfterFirstMove"/>
+        <magentoCron groups="index" stepKey="runSecondCronAfterFirstMove"/>
+        <!-- Step 8:- Open Category C on Storefront and verify Category A has moved under it -->
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup"
+                     stepKey="navigateToStorefrontCategoryCAfterFirstCron">
+            <argument name="categoryName" value="$createNonAnchorCategoryC.name$"/>
+        </actionGroup>
+        <!-- Step 8:- Verify the category displays correct amount of products as 1 -->
+        <waitForText userInput="1" selector="{{StorefrontCategoryMainSection.productCount}}"
+                     stepKey="verifyProductCountOnCategoryCAfterFirstCron"/>
+        <actionGroup ref="StorefrontCheckPresentSubCategoryActionGroup"
+                     stepKey="verifyCategoryAUnderCategoryCAfterCron">
+            <argument name="parenCategoryName" value="$createNonAnchorCategoryC.name$"/>
+            <argument name="childCategoryName" value="$createAnchorCategoryA.name$"/>
+        </actionGroup>
+        <!-- Step 9:- Open Admin > Catalog > Categories -->
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="navigateToAdminCategoryPageForSecondMove"/>
+        <!-- Step 9:- Move Category B under Category C and then Category A under Category B -->
+        <actionGroup ref="MoveCategoryActionGroup" stepKey="moveCategoryBUnderCategoryC">
+            <argument name="childCategory" value="$createSubCategoryB.name$"/>
+            <argument name="parentCategory" value="$createNonAnchorCategoryC.name$"/>
+        </actionGroup>
+        <!-- Step 9:- Verify the category has moved successfully -->
+        <waitForElementVisible selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="waitForSuccessMessageForSecondCategoryMove"/>
+        <waitForText userInput="You moved the category." selector="{{AdminCategoryMessagesSection.SuccessMessage}}"
+             stepKey="verifySuccessMessageForSecondCategoryMove"/>
+        <actionGroup ref="MoveCategoryActionGroup" stepKey="moveCategoryAUnderCategoryB">
+            <argument name="childCategory" value="$createAnchorCategoryA.name$"/>
+            <argument name="parentCategory" value="$createSubCategoryB.name$"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="waitForSuccessMessageForThirdCategoryMove"/>
+        <waitForText userInput="You moved the category." selector="{{AdminCategoryMessagesSection.SuccessMessage}}"
+             stepKey="verifySuccessMessageForThirdCategoryMove"/>
+        <!-- Step 10:- Open Category C on Storefront and verify Category B has moved under it -->
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup"
+                     stepKey="navigateToStorefrontCategoryCAfterSecondMove">
+            <argument name="categoryName" value="$createNonAnchorCategoryC.name$"/>
+        </actionGroup>
+        <!-- Step 10:- Verify the category displays correct amount of products as 1 -->
+        <waitForText userInput="1" selector="{{StorefrontCategoryMainSection.productCount}}"
+                     stepKey="verifyProductCountOnCategoryCAfterSecondMove"/>
+        <!-- Step 11:- Run cron twice to reindex -->
+        <magentoCron groups="index" stepKey="runFirstCronAfterSecondMove"/>
+        <magentoCron groups="index" stepKey="runSecondCronAfterSecondMove"/>
+        <!-- Step 12:- Open Category C on Storefront and verify Category A has moved under Category B -->
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup"
+                     stepKey="navigateToStorefrontCategoryCAfterSecondCron">
+            <argument name="categoryName" value="$createNonAnchorCategoryC.name$"/>
+        </actionGroup>
+        <!-- Step 12:- Verify the category displays correct amount of products as 1 -->
+        <waitForText userInput="1" selector="{{StorefrontCategoryMainSection.productCount}}"
+                     stepKey="verifyProductCountOnCategoryCAfterSecondCron"/>
+        <!-- Step 12:- Verify the category B has moved under category C successfully -->
+        <actionGroup ref="StorefrontCheckPresentSubCategoryActionGroup"
+                     stepKey="verifyCategoryBUnderCategoryCAfterSecondCron">
+            <argument name="parenCategoryName" value="$createNonAnchorCategoryC.name$"/>
+            <argument name="childCategoryName" value="$createSubCategoryB.name$"/>
+        </actionGroup>
+        <!-- Step 12:- Verify the category A has moved under category B successfully -->
+        <actionGroup ref="StorefrontCheckPresentSubCategoryActionGroup"
+                     stepKey="verifyCategoryAUnderCategoryBAfterSecondCron">
+            <argument name="parenCategoryName" value="$createSubCategoryB.name$"/>
+            <argument name="childCategoryName" value="$createAnchorCategoryA.name$"/>
+        </actionGroup>
+        <!-- Step 13:- Create an additional store in Admin > Stores > All Stores -->
+        <actionGroup ref="CreateCustomStoreActionGroup" stepKey="createCustomStoreForTesting">
+            <argument name="website" value="{{_defaultWebsite.name}}"/>
+            <argument name="store" value="{{customStore.name}}"/>
+            <argument name="rootCategory" value="{{DefaultCategory.name}}"/>
+        </actionGroup>
+        <!-- Step 14:- Create a store view for the new store in Admin > Stores > All Stores -->
+        <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createCustomStoreViewForTesting">
+            <argument name="StoreGroup" value="customStore"/>
+            <argument name="customStore" value="customStoreView2"/>
+        </actionGroup>
+        <!-- Step 15:- Run cron twice to reindex -->
+        <magentoCron groups="index" stepKey="runFirstCronAfterStoreCreation"/>
+        <magentoCron groups="index" stepKey="runSecondCronAfterStoreCreation"/>
+        <!-- Step 16:- Open Admin > System > Index Management -->
+        <actionGroup ref="AdminOpenIndexManagementPageActionGroup"
+                     stepKey="navigateToIndexManagementPageAfterStoreCreation"/>
+        <!-- Step 16:- Verify the category flat data indexer is ready -->
+        <grabTextFrom selector="{{AdminIndexManagementSection.indexerStatus('Category Flat Data')}}" stepKey="grabCategoryFlatDataIndexerStatusAfterStoreCreation"/>
+        <assertEquals stepKey="assertCategoryFlatDataIndexerStatusToReadyAfterStoreCreation">
+            <expectedResult type="string">READY</expectedResult>
+            <actualResult type="string">$grabCategoryFlatDataIndexerStatusAfterStoreCreation</actualResult>
+        </assertEquals>
+        <!-- Step 17:- Open Admin > Catalog > Categories > Category A, switch to Store View 2, and update category settings -->
+        <actionGroup ref="GoToAdminCategoryPageByIdActionGroup" stepKey="navigateToAdminCategoryAForStoreViewUpdate">
+            <argument name="id" value="$createAnchorCategoryA.id$"/>
+        </actionGroup>
+        <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="switchToCustomStoreView">
+            <argument name="storeView" value="customStoreView2.name"/>
+        </actionGroup>
+        <actionGroup ref="AdminChangeCategoryNameOnStoreViewLevelActionGroup" stepKey="changeCategoryNameOnStoreView">
+            <argument name="categoryName" value="Категория А"/>
+        </actionGroup>
+        <actionGroup ref="AdminChangeCategoryImageOnStoreviewActionGroup" stepKey="changeCategoryImageOnStoreView"/>
+        <actionGroup ref="AdminUpdateCategoryDescriptionActionGroup" stepKey="changeCategoryDescriptionOnStoreView">
+            <argument name="description" value="Другое описание категории А"/>
+        </actionGroup>
+        <actionGroup ref="AdminUpdateCategoryMetaInformationActionGroup" stepKey="changeCategoryMetaTitleOnStoreView">
+            <argument name="metaTitle" value="$createSubCategoryB.name$"/>
+        </actionGroup>
+        <!-- Step 17:- Verify the category settings on specific store view are saved -->
+        <actionGroup ref="ChangeSeoUrlKeyForSubCategoryActionGroup" stepKey="changeCategoryUrlKeyOnStoreView">
+            <argument name="value" value="kategoriya-A"/>
+        </actionGroup>
+        <!-- Step 18:- Switch to custom store and verify OLD (English) content before cron -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openStorefrontHomePage"/>
+        <actionGroup ref="StorefrontSwitchStoreActionGroup" stepKey="switchToCustomStoreFirst">
+            <argument name="storeName" value="{{customStore.name}}"/>
+        </actionGroup>
+        <!-- Step 18:- Navigate to category A -->
+        <actionGroup ref="StorefrontGoToSubSubCategoryPageActionGroup"
+                     stepKey="navigateToStorefrontCategoryAOnCustomStore">
+            <argument name="categoryName" value="$createNonAnchorCategoryC.name$"/>
+            <argument name="subCategoryName" value="$createSubCategoryB.name$"/>
+            <argument name="subSubCategoryName" value="$createAnchorCategoryA.name$"/>
+        </actionGroup>
+        <!-- Step 18:- Verify OLD content (English) - before cron runs -->
+        <actionGroup ref="StorefrontVerifyCategoryContentActionGroup" stepKey="verifyOldContentOnCategoryAStoreView">
+            <argument name="description" value="{{CustomDynamicProductDescription.value}}"/>
+            <argument name="metaTitle" value="MetaAtitle"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
+        <!-- Step 19:- Run cron twice to reindex and verify NEW (Russian) content -->
+        <magentoCron groups="index" stepKey="runFirstCronAfterStoreViewUpdate"/>
+        <magentoCron groups="index" stepKey="runSecondCronAfterStoreViewUpdate"/>
+        <!-- Step 20:- Open Store 2 on Storefront. Open category A. Verify NEW (Russian) content -->
+        <actionGroup ref="StorefrontGoToSubSubCategoryPageActionGroup"
+                     stepKey="navigateToStorefrontCategoryAOnCustomStoreViewAfterCron">
+            <argument name="categoryName" value="$createNonAnchorCategoryC.name$"/>
+            <argument name="subCategoryName" value="$createSubCategoryB.name$"/>
+            <argument name="subSubCategoryName" value="$createAnchorCategoryA.name$"/>
+        </actionGroup>
+        <!-- Step 20:- Verify NEW content (Russian) - after cron runs -->
+        <actionGroup ref="StorefrontVerifyCategoryContentActionGroup" stepKey="verifyNewContentOnCategoryAStoreView">
+            <argument name="description" value="Другое описание категории А"/>
+            <argument name="metaTitle" value="$createSubCategoryB.name$"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
+    </test>
+</tests>

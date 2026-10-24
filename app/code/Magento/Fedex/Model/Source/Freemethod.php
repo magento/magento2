@@ -1,19 +1,17 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Fedex\Model\Source;
 
 /**
  * Fedex freemethod source implementation
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Freemethod extends \Magento\Fedex\Model\Source\Method
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function toOptionArray()
     {

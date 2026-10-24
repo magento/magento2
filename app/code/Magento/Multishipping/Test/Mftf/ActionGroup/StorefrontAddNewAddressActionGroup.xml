@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontAddNewAddressActionGroup">
+        <annotations>
+            <description>On Storefront go to new address details page</description>
+        </annotations>
+
+        <waitForElementClickable selector="{{StorefrontCustomerAddressesSection.addNewAddress}}" stepKey="waitForAddAddressButtonToBeClickable"/>
+        <click selector="{{StorefrontCustomerAddressesSection.addNewAddress}}" stepKey="clickOnAddNewAddressButton"/>
+        <waitForPageLoad stepKey="waitForAddressDetailsPageToBeOpen"/>
+    </actionGroup>
+</actionGroups>

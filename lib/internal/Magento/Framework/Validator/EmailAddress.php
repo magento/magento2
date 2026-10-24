@@ -1,14 +1,23 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Validator;
 
 use Laminas\Validator\EmailAddress as LaminasEmailAddress;
 
+// Laminas 2.x uses a PHPDoc-only final marker; preserve Magento's inherited validator API.
+// @phpstan-ignore class.extendsFinalByPhpDoc
 class EmailAddress extends LaminasEmailAddress implements ValidatorInterface
 {
+    /**
+     * Quoted Pattern
+     *
+     * @var string
+     */
+    private const QUOTED_LOCAL_PART_PATTERN = '/^"/';
+
     /**
      * @var string[]
      */
@@ -57,15 +66,16 @@ class EmailAddress extends LaminasEmailAddress implements ValidatorInterface
     }
 
     /**
-     * Method to skipped validate internationalized local part.
-     *
-     * @param string $localPart
-     *
-     * @return false
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @inheritdoc
      */
-    protected function validateInternationalizedLocalPart($localPart)
+    public function isValid($value)
     {
-        return false;
+        if (is_string($value) && preg_match(self::QUOTED_LOCAL_PART_PATTERN, $value)) {
+            $this->setValue($value);
+            $this->error(self::INVALID_FORMAT);
+            return false;
+        }
+
+        return parent::isValid($value);
     }
 }

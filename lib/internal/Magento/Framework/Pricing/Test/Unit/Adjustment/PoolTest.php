@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Framework\Pricing\Adjustment\Factory;
 use Magento\Framework\Pricing\Adjustment\Pool;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class PoolTest extends TestCase
 {
@@ -32,7 +33,7 @@ class PoolTest extends TestCase
         /** @var Factory|MockObject $adjustmentFactory */
         $adjustmentFactory = $this->getMockBuilder(Factory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $adjustmentFactory->expects($this->any())->method('create')->willReturnCallback(
             function ($className, $data) {
@@ -58,9 +59,8 @@ class PoolTest extends TestCase
         $this->assertEquals($expectedResult, $result);
     }
 
-    /**
-     * @dataProvider getAdjustmentByCodeDataProvider
-     */
+    /**     */
+    #[DataProvider('getAdjustmentByCodeDataProvider')]
     public function testGetAdjustmentByCode($code, $expectedResult)
     {
         $result = $this->model->getAdjustmentByCode($code);
@@ -71,7 +71,7 @@ class PoolTest extends TestCase
     /**
      * @return array
      */
-    public function getAdjustmentByCodeDataProvider()
+    public static function getAdjustmentByCodeDataProvider()
     {
         return [
             ['adj1', 'adj1_class|10'],

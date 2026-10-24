@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -19,7 +19,8 @@ class PriceMapper implements MapperInterface
     {
         $templates[] = [
             'price_mapping' => [
-                'match' => 'price_*',
+                "match_pattern" => "regex",
+                'match' => 'price_\\d+_\\d+',
                 'match_mapping_type' => 'string',
                 'mapping' => [
                     'type' => 'double',

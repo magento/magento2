@@ -1,6 +1,6 @@
 // /**
-//  * Copyright © Magento, Inc. All rights reserved.
-//  * See COPYING.txt for license details.
+//  * Copyright 2015 Adobe
+//  * All Rights Reserved.
 //  */
 
 //
@@ -342,6 +342,12 @@
     }
 }
 
+//  Remove min-width specified for the global body element when the body has the class staging-update-preview
+//  This is to allow the preview to be displayed in a smaller window or mobile device simulation
+body.staging-update-preview {
+    min-width: initial;
+}
+
 //
 //  Generic restyled elements
 //  ---------------------------------------------
@@ -433,7 +439,7 @@
             border-left-color: @staging-preview-table-lighten__border-color;
             border-right-color: @staging-preview-table-lighten__border-color;
             color: @staging-preview-table-text__color;
-            
+
             &:first-child {
                 border-left: none;
             }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -83,7 +83,7 @@ foreach ($dropDownValues as $dropDownId => $dropDownValue) {
     $itemsOptions[$dropDownValue->getTitle()] = $options;
 }
 
-$validatorFileMock = $objectManager->get(ValidatorFileMock::class)->getInstance();
+$validatorFileMock = $objectManager->create(ValidatorFileMock::class, ['name' => 'testName'])->getInstance();
 $objectManager->addSharedInstance($validatorFileMock, ValidatorFile::class);
 
 $quote->setStoreId($storeManager->getStore()->getId())

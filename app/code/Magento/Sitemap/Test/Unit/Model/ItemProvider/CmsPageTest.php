@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Sitemap\Model\ResourceModel\Cms\Page as CmsPageResource;
 use Magento\Sitemap\Model\ResourceModel\Cms\PageFactory;
 use Magento\Sitemap\Model\SitemapItem;
 use Magento\Sitemap\Model\SitemapItemInterfaceFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -33,9 +34,9 @@ class CmsPageTest extends TestCase
     }
 
     /**
-     * @dataProvider pageProvider
      * @param array $pages
      */
+    #[DataProvider('pageProvider')]
     public function testGetItems(array $pages = [])
     {
         $configReaderMock = $this->getConfigReaderMock();
@@ -59,7 +60,7 @@ class CmsPageTest extends TestCase
     /**
      * @return array
      */
-    public function pageProvider()
+    public static function pageProvider()
     {
         return [
             [
@@ -79,10 +80,7 @@ class CmsPageTest extends TestCase
      */
     private function getItemFactoryMock()
     {
-        $itemFactoryMock = $this->getMockBuilder(SitemapItemInterfaceFactory::class)
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $itemFactoryMock = $this->createPartialMock(SitemapItemInterfaceFactory::class, ['create']);
 
         $itemFactoryMock->expects(self::any())
             ->method('create')
@@ -101,10 +99,7 @@ class CmsPageTest extends TestCase
      */
     private function getCmsPageFactoryMock($returnValue)
     {
-        $cmsPageFactoryMock = $this->getMockBuilder(PageFactory::class)
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $cmsPageFactoryMock = $this->createPartialMock(PageFactory::class, ['create']);
 
         $cmsPageFactoryMock->expects(self::any())
             ->method('create')
@@ -118,7 +113,7 @@ class CmsPageTest extends TestCase
      */
     private function getConfigReaderMock()
     {
-        $configReaderMock = $this->getMockForAbstractClass(ConfigReaderInterface::class);
+        $configReaderMock = $this->createMock(ConfigReaderInterface::class);
         $configReaderMock->expects($this->any())
             ->method('getPriority')
             ->willReturn('1.0');
@@ -135,10 +130,7 @@ class CmsPageTest extends TestCase
      */
     private function getCmsPageCollectionMock($returnValue)
     {
-        $sitemapCmsPageMock = $this->getMockBuilder(CmsPageResource::class)
-            ->setMethods(['getCollection'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $sitemapCmsPageMock = $this->createPartialMock(CmsPageResource::class, ['getCollection']);
 
         $sitemapCmsPageMock->expects(self::any())
             ->method('getCollection')

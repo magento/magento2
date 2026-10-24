@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -82,6 +82,7 @@ class MediaGalleryProcessor
      * @throws InputException
      * @throws StateException
      * @throws LocalizedException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function processMediaGallery(ProductInterface $product, array $mediaGalleryEntries) :void
     {
@@ -97,8 +98,9 @@ class MediaGalleryProcessor
                 }
             }
             foreach ($existingMediaGallery as $key => &$existingEntry) {
-                if (isset($entriesById[$existingEntry['value_id']])) {
-                    $updatedEntry = $entriesById[$existingEntry['value_id']];
+                $valueId = $existingEntry['value_id'] ?? null;
+                if ($valueId !== null && isset($entriesById[$valueId])) {
+                    $updatedEntry = $entriesById[$valueId];
                     if ($updatedEntry['file'] === null) {
                         unset($updatedEntry['file']);
                     }
@@ -113,6 +115,9 @@ class MediaGalleryProcessor
                         // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                         $existingMediaGallery[$key] = array_merge($existingEntry, $updatedEntry);
                     }
+                } elseif (!empty($newEntries) && isset($existingEntry['value_id'])) {
+                    //avoid deleting an exiting image while adding a new one
+                    unset($existingMediaGallery[$key]);
                 } elseif ($this->canRemoveImage($product, $existingEntry)) {
                     //set the removed flag
                     $existingEntry['removed'] = true;

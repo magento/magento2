@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -98,7 +98,7 @@ class UpdateItemQty extends Action implements HttpPostActionInterface
             $response = [];
             foreach ($cartData as $itemId => $itemInfo) {
                 $item = $quote->getItemById($itemId);
-                $qty = isset($itemInfo['qty']) ? (double) $itemInfo['qty'] : 0;
+                $qty = isset($itemInfo['qty']) ? (float) $itemInfo['qty'] : 0;
                 if ($item) {
                     try {
                         $this->updateItemQuantity($item, $qty);

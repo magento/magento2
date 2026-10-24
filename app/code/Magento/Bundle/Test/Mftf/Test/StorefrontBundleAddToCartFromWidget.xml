@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontBundleAddToCartFromWidget">
+        <annotations>
+            <features value="Bundle"/>
+            <stories value="Bundle product details page"/>
+            <title value="Customer should be able to add a bundle product to the cart from widget"/>
+            <description value="Customer should be able to add a bundle product to the cart from widget"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="AC-10867"/>
+            <useCaseId value="ACP2E-2615"/>
+            <group value="WYSIWYGDisabled"/>
+            <group value="Bundle"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
+        </before>
+        <after>
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteBundleProductBySku">
+                <argument name="sku" value="{{BundleProductWithSlashSku.sku}}"/>
+            </actionGroup>
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- Start creating a bundle product -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductList"/>
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProduct">
+            <argument name="product" value="BundleProduct"/>
+        </actionGroup>
+        <actionGroup ref="FillProductNameAndSkuInProductFormActionGroup" stepKey="fillNameAndSku">
+            <argument name="product" value="BundleProductWithSlashSku"/>
+        </actionGroup>
+
+        <!-- Add Option One, a "Drop-down" type option -->
+        <actionGroup ref="AddBundleOptionWithOneProductActionGroup" stepKey="addBundleOptionWithOneProduct">
+            <argument name="x" value="0"/>
+            <argument name="n" value="1"/>
+            <argument name="prodOneSku" value="$$simpleProduct1.sku$$"/>
+            <argument name="prodTwoSku" value=""/>
+            <argument name="optionTitle" value="Option One"/>
+            <argument name="inputType" value="select"/>
+        </actionGroup>
+
+        <!-- Save product, edit Homepage CMS page and add products widget -->
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+        <amOnPage url="{{AdminCmsPageEditPage.url(CmsHomePageContent.page_id)}}" stepKey="navigateToEditCmsHomePage"/>
+        <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickContentTab" />
+        <actionGroup ref="AdminInsertWidgetToCmsPageContentActionGroup" stepKey="insertWidgetToCmsPageContentActionGroup">
+            <argument name="widgetType" value="Catalog Products List"/>
+        </actionGroup>
+        <actionGroup ref="AdminFillCatalogProductsListWidgetSkuActionGroup" stepKey="selectProductForListing">
+            <argument name="sku" value="{{BundleProductWithSlashSku.sku}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminClickInsertWidgetActionGroup" stepKey="clickInsertWidgetButton2"/>
+        <actionGroup ref="SaveCmsPageActionGroup" stepKey="clickSaveButton"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the page." stepKey="seeSuccess"/>
+
+        <!-- Go to storefront homepage and add to cart -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage"/>
+        <actionGroup ref="StorefrontHoverProductOnCategoryPageActionGroup" stepKey="hoverProduct"/>
+        <actionGroup ref="StorefrontClickAddToCartButtonActionGroup" stepKey="addToCart"/>
+        <waitForPageLoad stepKey="waitForProductAdded"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="seeSuccessMessage"/>
+    </test>
+</tests>

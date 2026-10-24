@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StoreFrontVerifyCartPriceRuleWithMaximumQuantityActionTest">
+        <annotations>
+            <features value="SalesRule"/>
+            <stories value="Cart Price rule with Maximum quantity"/>
+            <title value="To check functionality of cart price rule"/>
+            <description value="Verify Cart Price rule with maximum quantity 1 applies discount for only 1 quantity of product in cart and discount should not be applied for higher product qty."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-7442"/>
+            <group value="SalesRule"/>
+        </annotations>
+        <before>
+            <!-- create simple product -->
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct">
+                <field key="price">1000.00</field>
+            </createData>
+            <!-- admin login -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- create cart price rule -->
+            <actionGroup ref="AdminCartPriceRuleDeleteAllActionGroup" stepKey="deleteAllExistingCartPriceRules"/>
+            <actionGroup ref="AdminCartPriceRuleMultiCustomerActionGroup" stepKey="fillCartPriceRuleMainInfo">
+                <argument name="ruleName" value="CartPriceRuleWithMaximumQuantity1"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateCartPriceRuleActionsSectionDiscountFieldsActionGroup" stepKey="fillCartPriceRuleActionsSection">
+                <argument name="rule" value="CartPriceRuleWithMaximumQuantity1"/>
+            </actionGroup>
+            <actionGroup ref="AdminCartPriceRuleSaveActionGroup" stepKey="saveCartPriceRule"/>
+            <!-- run indexer -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- delete product -->
+            <deleteData stepKey="deleteProduct" createDataKey="createSimpleProduct"/>
+            <!-- delete cart price rule -->
+            <actionGroup ref="DeleteCartPriceRuleByName" stepKey="deleteCartPriceRule">
+                <argument name="ruleName" value="{{CartPriceRuleWithMaximumQuantity1.name}}"/>
+            </actionGroup>
+            <!-- run indexer -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Go to frontend -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToFrontend"/>
+        <!-- open product page -->
+        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="amOnProductPage"/>
+        <!-- add product to cart -->
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+        </actionGroup>
+        <!-- Go to the shopping cart page -->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="amOnPageShoppingCart"/>
+        <actionGroup ref="AssertStorefrontCartDiscountActionGroup" stepKey="seeDiscountAmount">
+            <argument name="discount" value="600.00"/>
+        </actionGroup>
+        <!--update quantity to 2-->
+        <actionGroup ref="StorefrontUpdateProductQTYOnShoppingCartPageActionGroup" stepKey="updateProductQty">
+            <argument name="product" value="$createSimpleProduct.name$"/>
+            <argument name="qty" value="2"/>
+        </actionGroup>
+        <!-- verify quantity updated-->
+        <waitForText userInput="2" selector="{{StorefrontMinicartSection.productCount}}" stepKey="assertProductCount"/>
+        <!-- verify discount is applied for only one product -->
+        <actionGroup ref="AssertStorefrontCartDiscountActionGroup" stepKey="seeDiscountAmount1">
+            <argument name="discount" value="600.00"/>
+        </actionGroup>
+    </test>
+</tests>

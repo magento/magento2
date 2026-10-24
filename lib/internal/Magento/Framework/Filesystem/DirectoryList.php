@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -244,5 +244,16 @@ class DirectoryList
                 new \Magento\Framework\Phrase('Unknown directory type: \'%1\'', [$code])
             );
         }
+    }
+
+    /**
+     * Disable show ObjectManager internals with var_dump
+     *
+     * @see https://www.php.net/manual/en/language.oop5.magic.php#object.debuginfo
+     * @return array
+     */
+    public function __debugInfo()
+    {
+        return [];
     }
 }

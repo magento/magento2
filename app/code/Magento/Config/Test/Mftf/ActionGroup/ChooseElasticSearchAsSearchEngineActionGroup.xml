@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="ChooseElasticSearchAsSearchEngineActionGroup">
+        <annotations>
+            <description>Goes to the 'Configuration' page for 'Catalog'. Sets the 'Search Engine' to 'elasticsearch8'. Clicks on the Save button. PLEASE NOTE: The value is Hardcoded.</description>
+        </annotations>
+
+        <amOnPage url="{{AdminCatalogSearchConfigurationPage.url}}" stepKey="configureSearchEngine"/>
+        <waitForPageLoad stepKey="waitForConfigPage"/>
+        <scrollTo selector="{{AdminCatalogSearchConfigurationSection.catalogSearchTab}}" stepKey="scrollToCatalogSearchTab"/>
+        <conditionalClick selector="{{AdminCatalogSearchConfigurationSection.catalogSearchTab}}" dependentSelector="{{AdminCatalogSearchConfigurationSection.checkIfCatalogSearchTabExpand}}" visible="true" stepKey="expandCatalogSearchTab"/>
+        <waitForElementVisible selector="{{AdminCatalogSearchConfigurationSection.searchEngine}}" stepKey="waitForDropdownToBeVisible"/>
+        <uncheckOption selector="{{AdminCatalogSearchConfigurationSection.searchEngineDefaultSystemValue}}" stepKey="uncheckUseSystemValue"/>
+        <selectOption selector="{{AdminCatalogSearchConfigurationSection.searchEngine}}" userInput="Elasticsearch 8" stepKey="chooseES5"/>
+        <!--<scrollTo selector="{{AdminCatalogSearchConfigurationSection.catalogSearchTab}}" stepKey="scrollToCatalogSearchTab2"/>-->
+        <!--<click selector="{{AdminCatalogSearchConfigurationSection.catalogSearchTab}}" stepKey="collapseCatalogSearchTab"/>-->
+        <click selector="{{ContentManagementSection.Save}}" stepKey="saveConfiguration"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the configuration." stepKey="seeConfigurationSuccessMessage"/>
+    </actionGroup>
+</actionGroups>

@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\CatalogInventory\Model\System\Config\Backend;
 
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Customer\Api\GroupManagementInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class MinsaleqtyTest extends \PHPUnit\Framework\TestCase
 {
@@ -30,8 +31,8 @@ class MinsaleqtyTest extends \PHPUnit\Framework\TestCase
      * @param string $encodedExpectedValue
      * @param array $decodedExpectedValue
      * @magentoDbIsolation enabled
-     * @dataProvider saveAndLoadDataProvider
      */
+    #[DataProvider('saveAndLoadDataProvider')]
     public function testSaveAndLoad($value, $encodedExpectedValue, array $decodedExpectedValue)
     {
         $this->minSaleQtyConfig->setValue($value);
@@ -52,7 +53,7 @@ class MinsaleqtyTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function saveAndLoadDataProvider()
+    public static function saveAndLoadDataProvider()
     {
         $objectManager = Bootstrap::getObjectManager();
         $groupManagement = $objectManager->create(GroupManagementInterface::class);

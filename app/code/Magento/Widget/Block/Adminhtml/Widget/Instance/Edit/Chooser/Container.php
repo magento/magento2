@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -62,7 +62,7 @@ class Container extends Select
         ProcessorFactory $layoutProcessorFactory,
         CollectionFactory $themesFactory,
         array $data = [],
-        PageLayoutConfigBuilder $pageLayoutConfigBuilder = null
+        ?PageLayoutConfigBuilder $pageLayoutConfigBuilder = null
     ) {
         parent::__construct($context, $data);
         $this->_layoutProcessorFactory = $layoutProcessorFactory;

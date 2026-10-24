@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -29,11 +29,17 @@ class MessageTest extends TestCase
     {
         $this->message->setBodyHtml('body');
 
-        $part = $this->message->getBody()->getParts()[0];
-        $this->assertEquals('text/html', $part->getType());
-        $this->assertEquals('quoted-printable', $part->getEncoding());
-        $this->assertEquals('utf-8', $part->getCharset());
-        $this->assertEquals('body', $part->getContent());
+        $part = $this->message->getBody();
+        $this->assertEquals('html', $part->getMediaSubtype());
+        $this->assertEquals(
+            'quoted-printable',
+            $part->getPreparedHeaders()->get('Content-Transfer-Encoding')->getBody()
+        );
+        $this->assertEquals(
+            'utf-8',
+            $part->getPreparedHeaders()->get('Content-Transfer-Encoding')->getCharset()
+        );
+        $this->assertEquals('body', $part->getBody());
         $this->assertEquals('inline', $part->getDisposition());
     }
 
@@ -41,11 +47,14 @@ class MessageTest extends TestCase
     {
         $this->message->setBodyText('body');
 
-        $part = $this->message->getBody()->getParts()[0];
-        $this->assertEquals('text/plain', $part->getType());
-        $this->assertEquals('quoted-printable', $part->getEncoding());
-        $this->assertEquals('utf-8', $part->getCharset());
-        $this->assertEquals('body', $part->getContent());
+        $part = $this->message->getBody();
+        $this->assertEquals('plain', $part->getMediaSubtype());
+        $this->assertEquals(
+            'quoted-printable',
+            $part->getPreparedHeaders()->get('Content-Transfer-Encoding')->getBody()
+        );
+        $this->assertEquals('utf-8', $part->getPreparedHeaders()->get('Content-Transfer-Encoding')->getCharset());
+        $this->assertEquals('body', $part->getBody());
         $this->assertEquals('inline', $part->getDisposition());
     }
 }

@@ -1,13 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
 
 namespace Magento\Customer\Model\Plugin;
 
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Webapi\Rest\Request as RestRequest;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
@@ -46,20 +48,29 @@ class UpdateCustomer
      * @param CustomerInterface $customer
      * @param string|null $passwordHash
      * @return array
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
     public function beforeSave(
         CustomerRepositoryInterface $customerRepository,
         CustomerInterface $customer,
         ?string $passwordHash = null
     ): array {
-        $customerSessionId = $this->userContext->getUserType() === $this->userContext::USER_TYPE_CUSTOMER ?
-                             (int)$this->userContext->getUserId() : 0;
+        $userType = $this->userContext->getUserType();
+        $customerSessionId = (int)$this->userContext->getUserId();
         $customerId = (int)$this->request->getParam('customerId');
         $bodyParams = $this->request->getBodyParams();
-        if (!isset($bodyParams['customer']['Id']) && $customerId) {
-            if ($customerId === $customerSessionId || $customerSessionId === 0) {
-                $customer = $this->getUpdatedCustomer($customerRepository->getById($customerId), $customer);
-            }
+
+        if ($userType === UserContextInterface::USER_TYPE_CUSTOMER &&
+            !isset($bodyParams['customer']['Id']) &&
+            $customerId &&
+            $customerId === $customerSessionId
+        ) {
+            $customer = $this->getUpdatedCustomer($customerRepository->getById($customerId), $customer);
+        } elseif ($customerId && in_array($userType, [UserContextInterface::USER_TYPE_ADMIN,
+                    UserContextInterface::USER_TYPE_INTEGRATION], true)
+        ) {
+            $customer = $this->getUpdatedCustomer($customerRepository->getById($customerId), $customer);
         }
 
         return [$customer, $passwordHash];
@@ -79,7 +90,7 @@ class UpdateCustomer
         $newCustomer = clone $originCustomer;
         foreach ($customer->__toArray() as $name => $value) {
             if ($name === CustomerInterface::CUSTOM_ATTRIBUTES) {
-                $value = $customer->getCustomAttributes();
+                $value = array_replace($newCustomer->getCustomAttributes(), $customer->getCustomAttributes());
             } elseif ($name === CustomerInterface::EXTENSION_ATTRIBUTES_KEY) {
                 $value = $customer->getExtensionAttributes();
             } elseif ($name === CustomerInterface::KEY_ADDRESSES) {

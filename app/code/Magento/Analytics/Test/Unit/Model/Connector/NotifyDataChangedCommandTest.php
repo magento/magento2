@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -56,13 +56,13 @@ class NotifyDataChangedCommandTest extends TestCase
     {
         $this->analyticsTokenMock =  $this->createMock(AnalyticsToken::class);
 
-        $this->httpClientMock =  $this->getMockForAbstractClass(ClientInterface::class);
+        $this->httpClientMock =  $this->createMock(ClientInterface::class);
 
-        $this->configMock =  $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->configMock =  $this->createMock(ScopeConfigInterface::class);
 
-        $this->loggerMock =  $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->loggerMock =  $this->createMock(LoggerInterface::class);
         $successHandler = $this->getMockBuilder(ResponseHandlerInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $successHandler->method('handleResponse')
             ->willReturn(true);
         $serializerMock = $this->createMock(Json::class);

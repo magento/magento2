@@ -1,9 +1,10 @@
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 -->
+<!-- ko if: $row() -->
 <a
     class="action-menu-item"
     if="$col.isSingle($row()._rowIndex)"
@@ -20,3 +21,4 @@
         </li>
     </ul>
 </div>
+<!-- /ko -->

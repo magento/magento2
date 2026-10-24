@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -41,9 +41,9 @@ class CcConfigTest extends TestCase
     {
         $this->configMock = $this->createMock(Config::class);
         $this->repositoryMock = $this->createMock(Repository::class);
-        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
-        $this->urlMock = $this->getMockForAbstractClass(UrlInterface::class);
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->urlMock = $this->createMock(UrlInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
 
         $this->model = new CcConfig(
             $this->configMock,

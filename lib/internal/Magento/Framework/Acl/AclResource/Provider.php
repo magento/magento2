@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Acl\AclResource;
@@ -51,8 +51,8 @@ class Provider implements ProviderInterface
     public function __construct(
         \Magento\Framework\Config\ReaderInterface $configReader,
         TreeBuilder $resourceTreeBuilder,
-        \Magento\Framework\Acl\Data\CacheInterface $aclDataCache = null,
-        Json $serializer = null,
+        ?\Magento\Framework\Acl\Data\CacheInterface $aclDataCache = null,
+        ?Json $serializer = null,
         $cacheKey = self::ACL_RESOURCES_CACHE_KEY
     ) {
         $this->_configReader = $configReader;

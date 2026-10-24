@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -40,7 +40,9 @@
         <element name="placeOrderWithoutTimeout" type="button" selector=".payment-method._active button.action.primary.checkout"/>
         <element name="paymentSectionTitle" type="text" selector="//*[@id='checkout-payment-method-load']//div[@data-role='title']" />
         <element name="orderSummarySubtotal" type="text" selector="//tr[@class='totals sub']//span[@class='price']" />
+        <element name="orderSummarySubtotalIncludingTax" type="text" selector="//tr[@class='totals sub incl']//span[@class='price']" />
         <element name="orderSummaryShippingTotal" type="text" selector="//tr[@class='totals shipping excl']//span[@class='price']" />
+        <element name="orderSummaryShippingTotalIncludingTax" type="text" selector="//tr[@class='totals shipping incl']//span[@class='price']" />
         <element name="orderSummaryShippingMethod" type="text" selector="//tr[@class='totals shipping excl']//span[@class='value']" />
         <element name="orderSummaryTotal" type="text" selector="tr.grand.totals span.price" />
         <element name="ProductItemByName" type="text" selector="//div[@class='product-item-details']//strong[@class='product-item-name'][text()='{{var1}}']" parameterized="true" />
@@ -48,7 +50,10 @@
         <element name="ProductOptionsActiveByProductItemName" type="text" selector="//div[@class='product-item-details']//strong[@class='product-item-name'][text()='{{var1}}']//ancestor::div[@class='product-item-details']//div[@class='product options active']" parameterized="true" />
         <element name="ProductOptionLinkActiveByProductItemName" type="text" selector="//div[@class='product-item-details']//strong[@class='product-item-name'][text()='{{var1}}']//ancestor::div[@class='product-item-details']//div[@class='product options active']//a[text() = '{{var2}}']" parameterized="true" />
         <element name="shipToInformation" type="text" selector="//div[@class='ship-to']//div[@class='shipping-information-content']" />
-        <element name="shippingMethodInformation" type="text" selector="//div[@class='ship-via']//div[@class='shipping-information-content']" />
+        <element name="shippingMethodInformation" type="text" selector="//div[@class='ship-via']//div[@class='shipping-information-content']"/>
+        <element name="editShipToAddress" type="button" selector="//div[@class='ship-to']//button[@class='action action-edit']"/>
+        <element name="editShippingMethod" type="button" selector="//div[@class='ship-via']//button[@class='action action-edit']"/>
+        <element name="shippingMethodTitle" type="text" selector="//div[text()='Shipping Methods']"/>
         <element name="shippingInformationSection" type="text" selector=".ship-to .shipping-information-content" />
         <element name="paymentMethodTitle" type="text" selector=".payment-method-title span" />
         <element name="productOptionsByProductItemPrice" type="text" selector="//div[@class='product-item-inner']//div[@class='subtotal']//span[@class='price'][contains(.,'{{price}}')]//ancestor::div[@class='product-item-details']//div[@class='product options']" parameterized="true"/>
@@ -72,5 +77,7 @@
         <element name="billingAddressSameAsShippingCashOnDeliveryCheckbox" type="checkbox" selector="#billing-address-same-as-shipping-cashondelivery"/>
         <element name="errormessage" type="text" selector="//div[@data-ui-id='checkout-cart-validationmessages-message-error']"/>
         <element name="productQuantityInCartBlock"  type="text" selector="//div[@class='details-qty']/span[@class='value']" />
+        <element name="productChargedFor"  type="text" selector="tr.totals.charge span.price"/>
+        <element name="customerAddressAttribute" type="input" selector="//div[@name='billingAddresscheckmo.custom_attributes.{{attribute}}']//input[@name='custom_attributes[{{attribute}}]']" parameterized="true" timeout="30"/>
     </section>
 </sections>

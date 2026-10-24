@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\ResourceModel;
 
@@ -10,16 +10,17 @@ namespace Magento\Catalog\Model\ResourceModel;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Catalog\Api\Data\CategoryInterface;
-use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Framework\App\ObjectManager;
 use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
+use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implements ResetAfterRequestInterface
 {
     /**
      * Stores configuration array
@@ -115,7 +116,7 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         \Magento\Catalog\Model\Category $catalogCategory,
         \Psr\Log\LoggerInterface $logger,
         $connectionName = null,
-        TableMaintainer $tableMaintainer = null
+        ?TableMaintainer $tableMaintainer = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_eavConfig = $eavConfig;
@@ -411,7 +412,7 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         if (!is_array($categoryIds)) {
             $categoryIds = [$categoryIds];
         }
-        $isActiveExpr = $connection->getCheckSql('c.value_id > 0', 'c.value', 'c.value');
+        $isActiveExpr = $connection->getCheckSql('c.value_id IS NOT NULL', 'c.value', 'd.value');
         $select = $connection->select()->from(
             ['main_table' => $this->getTable('catalog_category_entity')],
             [
@@ -726,5 +727,16 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 ->get(\Magento\Framework\EntityManager\MetadataPool::class);
         }
         return $this->metadataPool;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_categoryAttributes = [];
+        $this->_productAttributes = [];
+        $this->_rootChildrenIds = [];
+        $this->_stores = null;
     }
 }

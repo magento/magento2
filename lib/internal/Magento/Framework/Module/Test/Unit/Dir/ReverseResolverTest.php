@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Framework\Module\Dir\ReverseResolver;
 use Magento\Framework\Module\ModuleListInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ReverseResolverTest extends TestCase
 {
@@ -32,16 +33,15 @@ class ReverseResolverTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_moduleList = $this->getMockForAbstractClass(ModuleListInterface::class);
+        $this->_moduleList = $this->createMock(ModuleListInterface::class);
         $this->_moduleDirs = $this->createMock(Dir::class);
         $this->_model = new ReverseResolver($this->_moduleList, $this->_moduleDirs);
     }
 
     /**
      * @param string $path
-     * @param string $expectedResult
-     * @dataProvider getModuleNameDataProvider
-     */
+     * @param string $expectedResult     */
+    #[DataProvider('getModuleNameDataProvider')]
     public function testGetModuleName($path, $expectedResult)
     {
         $this->_moduleList->expects($this->once())->method('getNames')->willReturn(
@@ -63,7 +63,7 @@ class ReverseResolverTest extends TestCase
     /**
      * @return array
      */
-    public function getModuleNameDataProvider()
+    public static function getModuleNameDataProvider()
     {
         return [
             'module root dir' => ['app/code/Fixture/ModuleOne', 'Fixture_ModuleOne'],

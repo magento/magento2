@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -36,7 +36,6 @@ class AppConfigTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $modelReflection = new \ReflectionClass($this->model);
         $testAppConfigProperty = $modelReflection->getProperty('testAppConfig');
-        $testAppConfigProperty->setAccessible(true);
         $testAppConfigMock = $this->getMockBuilder(\Magento\TestFramework\App\Config::class)
             ->disableOriginalConstructor()
             ->getMock();

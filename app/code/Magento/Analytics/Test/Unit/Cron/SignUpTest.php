@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -49,9 +49,9 @@ class SignUpTest extends TestCase
     protected function setUp(): void
     {
         $this->connectorMock = $this->createMock(Connector::class);
-        $this->configWriterMock = $this->getMockForAbstractClass(WriterInterface::class);
+        $this->configWriterMock = $this->createMock(WriterInterface::class);
         $this->flagManagerMock = $this->createMock(FlagManager::class);
-        $this->reinitableConfigMock = $this->getMockForAbstractClass(ReinitableConfigInterface::class);
+        $this->reinitableConfigMock = $this->createMock(ReinitableConfigInterface::class);
 
         $this->signUp = new SignUp(
             $this->connectorMock,

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Config\Model\Config\Structure\ElementVisibility\ConcealInProduction;
 use Magento\Config\Model\Config\Structure\ElementVisibilityInterface;
 use Magento\Framework\App\State;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ConcealInProductionTest extends TestCase
@@ -27,9 +28,7 @@ class ConcealInProductionTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->stateMock = $this->getMockBuilder(State::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->stateMock = $this->createMock(State::class);
 
         $configs = [
             'section1/group1/field1' => ElementVisibilityInterface::DISABLED,
@@ -56,8 +55,8 @@ class ConcealInProductionTest extends TestCase
      * @param string $mageMode
      * @param bool $isDisabled
      * @param bool $isHidden
-     * @dataProvider disabledDataProvider
      */
+    #[DataProvider('disabledDataProvider')]
     public function testCheckVisibility(string $path, string $mageMode, bool $isHidden, bool $isDisabled): void
     {
         $this->stateMock->expects($this->any())
@@ -71,7 +70,7 @@ class ConcealInProductionTest extends TestCase
     /**
      * @return array
      */
-    public function disabledDataProvider(): array
+    public static function disabledDataProvider(): array
     {
         return [
             //visibility of field 'section1/group1/field1' should be applied

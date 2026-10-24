@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -19,13 +19,17 @@ use Magento\Review\Model\Review\SummaryFactory;
 use Magento\Review\Test\Fixture\Review as ReviewFixture;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Test\Fixture\Store as StoreFixture;
+use Magento\Customer\Test\Fixture\Customer as CustomerFixture;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test coverage for product reviews queries
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class GetProductReviewsTest extends GraphQlAbstract
 {
@@ -258,9 +262,9 @@ QUERY;
         DataFixture(ReviewFixture::class, ['entity_pk_value' => '$product1.id$', 'store_id' => '$store2.id$']),
     ]
     /**
-     * @dataProvider storesDataProvider
      * @param string $storeCode
      */
+    #[DataProvider('storesDataProvider')]
     public function testProductReviewDifferentStores(string $storeCode): void
     {
         $productSku = 'product1';
@@ -288,10 +292,59 @@ QUERY;
         self::assertCount(1, $response['products']['items'][0]['reviews']['items']);
     }
 
+    #[
+        DataFixture(StoreFixture::class, ['code' => 'store2'], 'store2'),
+        DataFixture(CustomerFixture::class, ['email' => 'customer@example.com'], 'customer'),
+        DataFixture(ProductFixture::class, ['sku' => 'product1'], 'product1'),
+        DataFixture(ReviewFixture::class, [
+            'entity_pk_value' => '$product1.id$',
+            'customer_id' => '$customer.entity_id$'
+        ]),
+        DataFixture(ReviewFixture::class, [
+            'entity_pk_value' => '$product1.id$',
+            'store_id' => '$store2.id$',
+            'customer_id' => '$customer.entity_id$'
+        ]),
+    ]
+    /**
+     * @param string $storeCode
+     */
+    #[DataProvider('storesDataProvider')]
+    public function testCustomerReviewDifferentStores(string $storeCode): void
+    {
+        $query = <<<QUERY
+{
+  customer {
+    firstname
+    lastname
+    suffix
+    email
+    reviews(
+      currentPage: 1
+      pageSize: 20
+    ) {
+          items {
+              summary
+              text
+              summary
+          }
+      }
+  }
+}
+QUERY;
+        $headers = ['Store' => $storeCode, 'Authorization' => implode($this->getHeaderMap())];
+        $response = $this->graphQlQuery($query, [], '', $headers);
+        self::assertArrayHasKey('customer', $response);
+        self::assertArrayHasKey('reviews', $response['customer']);
+        self::assertArrayHasKey('items', $response['customer']['reviews']);
+        self::assertNotEmpty($response['customer']['reviews']['items']);
+        self::assertCount(1, $response['customer']['reviews']['items']);
+    }
+
     /**
      * @return array
      */
-    public function storesDataProvider(): array
+    public static function storesDataProvider(): array
     {
         return [
             ['default'],

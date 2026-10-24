@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,30 +11,21 @@ use Magento\Payment\Model\Checks\Composite;
 use Magento\Payment\Model\Checks\SpecificationInterface;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Quote\Model\Quote;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class CompositeTest extends TestCase
 {
     /**
-     * @dataProvider paymentMethodDataProvider
      * @param bool $expectation
      */
+    #[DataProvider('paymentMethodDataProvider')]
     public function testIsApplicable($expectation)
     {
-        $quote = $this->getMockBuilder(Quote::class)
-            ->disableOriginalConstructor()
-            ->setMethods(
-                []
-            )->getMock();
-        $paymentMethod = $this->getMockBuilder(
-            MethodInterface::class
-        )->disableOriginalConstructor()
-            ->setMethods([])->getMock();
+        $quote = $this->createMock(Quote::class);
+        $paymentMethod = $this->createMock(MethodInterface::class);
 
-        $specification = $this->getMockBuilder(
-            SpecificationInterface::class
-        )->disableOriginalConstructor()
-            ->setMethods([])->getMock();
+        $specification = $this->createMock(SpecificationInterface::class);
         $specification->expects($this->once())->method('isApplicable')->with($paymentMethod, $quote)->willReturn(
             $expectation
         );
@@ -45,7 +36,7 @@ class CompositeTest extends TestCase
     /**
      * @return array
      */
-    public function paymentMethodDataProvider()
+    public static function paymentMethodDataProvider()
     {
         return [[true], [false]];
     }

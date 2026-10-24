@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -42,7 +42,7 @@ class ExtensionAttributesGeneratorTest extends TestCase
 
         $this->typeProcessorMock = $this->getMockBuilder(TypeProcessor::class)
             ->disableOriginalConstructor()
-            ->setMethods(null)
+            ->onlyMethods([])
             ->getMock();
 
         $objectManager = new ObjectManager($this);
@@ -115,7 +115,6 @@ class ExtensionAttributesGeneratorTest extends TestCase
         );
         $reflectionObject = new \ReflectionObject($model);
         $reflectionMethod = $reflectionObject->getMethod('_validateData');
-        $reflectionMethod->setAccessible(true);
 
         $expectedValidationResult = false;
         $this->assertEquals($expectedValidationResult, $reflectionMethod->invoke($model));
@@ -137,7 +136,6 @@ class ExtensionAttributesGeneratorTest extends TestCase
     {
         $reflectionObject = new \ReflectionObject($this->model);
         $reflectionMethod = $reflectionObject->getMethod('_generateCode');
-        $reflectionMethod->setAccessible(true);
         $generatedCode = $reflectionMethod->invoke($this->model);
         $expectedResult = preg_replace('/\s+/', ' ', $expectedResult);
         $generatedCode = preg_replace('/\s+/', ' ', $generatedCode);

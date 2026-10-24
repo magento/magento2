@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -20,13 +20,17 @@ use Magento\Framework\Json\DecoderInterface;
 use Magento\Framework\Json\Helper\Data;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @phpstan-ignore-next-line
  */
 class DataTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * Array of customer attributes
      *
@@ -62,13 +66,15 @@ class DataTest extends TestCase
         $selectMock->expects($this->any())->method('order')->willReturnSelf();
 
         /** @var AdapterInterface $connectionMock */
-        $connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\Pdo\Mysql::class)
-            ->addMethods(['from', 'order'])
-            ->onlyMethods(['select', 'query'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $connectionMock->expects($this->any())->method('select')->willReturn($selectMock);
-        $connectionMock->expects($this->any())->method('query')->willReturn($statementMock);
+        $connectionMock = $this->createPartialMockWithReflection(
+            \stdClass::class,
+            ['select', 'query', 'fetchAll', 'fetchRow', 'getTransactionLevel']
+        );
+        $connectionMock->method('select')->willReturn($selectMock);
+        $connectionMock->method('query')->willReturn($statementMock);
+        $connectionMock->method('fetchAll')->willReturn($bunchData);
+        $connectionMock->method('fetchRow')->willReturn($bunchData[0] ?? []);
+        $connectionMock->method('getTransactionLevel')->willReturn(0);
 
         /** @var $resourceModelMock \Magento\Framework\App\ResourceConnection */
         $resourceModelMock = $this->createMock(ResourceConnection::class);
@@ -88,20 +94,18 @@ class DataTest extends TestCase
      * @covers \Magento\CustomerImportExport\Model\ResourceModel\Import\CustomerComposite\Data::_prepareRow
      * @covers \Magento\CustomerImportExport\Model\ResourceModel\Import\CustomerComposite\Data::_prepareAddressRowData
      *
-     * @dataProvider getNextBunchDataProvider
      * @param string $entityType
      * @param string $bunchData
      * @param array $expectedData
      */
+    #[DataProvider('getNextBunchDataProvider')]
     public function testGetNextBunch($entityType, $bunchData, $expectedData)
     {
         $dependencies = $this->_getDependencies($entityType, [[$bunchData]]);
 
         $resource = $dependencies['resource'];
         $helper = new ObjectManager($this);
-        $jsonDecoderMock = $this->getMockBuilder(DecoderInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $jsonDecoderMock = $this->createMock(DecoderInterface::class);
         $jsonDecoderMock->expects($this->once())
             ->method('decode')
             ->willReturn(json_decode($bunchData, true));
@@ -134,12 +138,12 @@ class DataTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function getNextBunchDataProvider()
+    public static function getNextBunchDataProvider()
     {
         return [
             'address entity' => [
-                '$entityType' => CustomerComposite::COMPONENT_ENTITY_ADDRESS,
-                '$bunchData' => json_encode(
+                'entityType' => CustomerComposite::COMPONENT_ENTITY_ADDRESS,
+                'bunchData' => json_encode(
                     [
                         [
                             '_scope' => CustomerComposite::SCOPE_DEFAULT,
@@ -155,7 +159,7 @@ class DataTest extends TestCase
                         ],
                     ]
                 ),
-                '$expectedData' => [
+                'expectedData' => [
                     0 => [
                         Address::COLUMN_WEBSITE => 'website1',
                         Address::COLUMN_EMAIL => 'email1',
@@ -168,8 +172,8 @@ class DataTest extends TestCase
                 ],
             ],
             'customer entity default scope' => [
-                '$entityType' => CustomerComposite::COMPONENT_ENTITY_CUSTOMER,
-                '$bunchData' => json_encode(
+                'entityType' => CustomerComposite::COMPONENT_ENTITY_CUSTOMER,
+                'bunchData' => json_encode(
                     [
                         [
                             '_scope' => CustomerComposite::SCOPE_DEFAULT,
@@ -185,7 +189,7 @@ class DataTest extends TestCase
                         ],
                     ]
                 ),
-                '$expectedData' => [
+                'expectedData' => [
                     0 => [
                         Address::COLUMN_WEBSITE => 'website1',
                         Address::COLUMN_EMAIL => 'email1',
@@ -200,8 +204,8 @@ class DataTest extends TestCase
                 ],
             ],
             'customer entity address scope' => [
-                '$entityType' => CustomerComposite::COMPONENT_ENTITY_CUSTOMER,
-                '$bunchData' => json_encode(
+                'entityType' => CustomerComposite::COMPONENT_ENTITY_CUSTOMER,
+                'bunchData' => json_encode(
                     [
                         [
                             '_scope' => CustomerComposite::SCOPE_ADDRESS,
@@ -217,7 +221,7 @@ class DataTest extends TestCase
                         ],
                     ]
                 ),
-                '$expectedData' => [],
+                'expectedData' => [],
             ]
         ];
     }

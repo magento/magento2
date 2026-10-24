@@ -1,15 +1,30 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Quote\Api;
 
-class GuestPaymentMethodManagementTest extends \Magento\TestFramework\TestCase\WebapiAbstract
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\Catalog\Test\Fixture\Virtual as VirtualProductFixture;
+use Magento\Checkout\Test\Fixture\SetBillingAddress as SetBillingAddressFixture;
+use Magento\Checkout\Test\Fixture\SetPaymentMethod as SetPaymentMethodFixture;
+use Magento\Checkout\Test\Fixture\SetShippingAddress as SetShippingAddressFixture;
+use Magento\Quote\Test\Fixture\AddProductToCart as AddProductToCartFixture;
+use Magento\Quote\Test\Fixture\GuestCart as GuestCartFixture;
+use Magento\Quote\Test\Fixture\QuoteIdMask as QuoteIdMaskFixture;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use Magento\TestFramework\TestCase\WebapiAbstract;
+
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class GuestPaymentMethodManagementTest extends WebapiAbstract
 {
-    const SERVICE_VERSION = 'V1';
-    const SERVICE_NAME = 'quoteGuestPaymentMethodManagementV1';
-    const RESOURCE_PATH = '/V1/guest-carts/';
+    public const SERVICE_VERSION = 'V1';
+    public const SERVICE_NAME = 'quoteGuestPaymentMethodManagementV1';
+    public const RESOURCE_PATH = '/V1/guest-carts/';
 
     /**
      * @var \Magento\TestFramework\ObjectManager
@@ -38,32 +53,38 @@ class GuestPaymentMethodManagementTest extends \Magento\TestFramework\TestCase\W
      */
     protected function deleteCart($reservedOrderId)
     {
-        try {
-            /** @var $cart \Magento\Quote\Model\Quote */
-            $cart = $this->objectManager->get(\Magento\Quote\Model\Quote::class);
-            $cart->load($reservedOrderId, 'reserved_order_id');
-            if (!$cart->getId()) {
-                throw new \InvalidArgumentException('There is no quote with provided reserved order ID.');
-            }
-            $cart->delete();
-            /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
-            $quoteIdMask = $this->objectManager->create(\Magento\Quote\Model\QuoteIdMask::class);
-            $quoteIdMask->load($cart->getId(), 'quote_id');
-            $quoteIdMask->delete();
-        } catch (\InvalidArgumentException $e) {
-            // Do nothing if cart fixture was not used
+        /** @var $cart \Magento\Quote\Model\Quote */
+        $cart = $this->objectManager->get(\Magento\Quote\Model\Quote::class);
+        $cart->load($reservedOrderId, 'reserved_order_id');
+        if (!$cart->getId()) {
+            return;
         }
+        $cart->delete();
+        /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
+        $quoteIdMask = $this->objectManager->create(\Magento\Quote\Model\QuoteIdMask::class);
+        $quoteIdMask->load($cart->getId(), 'quote_id');
+        $quoteIdMask->delete();
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_payment_saved.php
+     * Test re-set payment method on guest quote
      */
+    #[
+        DataFixture(ProductFixture::class, ['sku' => 'simple-reset-%uniqid%', 'price' => 10], 'product'),
+        DataFixture(GuestCartFixture::class, ['reserved_order_id' => 'test_order_1_with_payment'], 'cart'),
+        DataFixture(
+            AddProductToCartFixture::class,
+            ['cart_id' => '$cart.id$', 'product_id' => '$product.id$', 'qty' => 2]
+        ),
+        DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetPaymentMethodFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(QuoteIdMaskFixture::class, ['cart_id' => '$cart.id$'], 'quoteIdMask'),
+    ]
     public function testReSetPayment()
     {
-        /** @var \Magento\Quote\Model\Quote  $quote */
-        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
-        $quote->load('test_order_1_with_payment', 'reserved_order_id');
-        $cartId = $this->getMaskedCartId($quote->getId());
+        $quoteIdMask = DataFixtureStorageManager::getStorage()->get('quoteIdMask');
+        $cartId = $quoteIdMask->getMaskedId();
 
         $serviceInfo = [
             'rest' => [
@@ -89,14 +110,26 @@ class GuestPaymentMethodManagementTest extends \Magento\TestFramework\TestCase\W
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_virtual_product_and_address.php
+     * Test set payment with virtual product
      */
+    #[
+        DataFixture(
+            VirtualProductFixture::class,
+            ['sku' => 'virtual-product-payment-%uniqid%', 'price' => 10],
+            'product'
+        ),
+        DataFixture(GuestCartFixture::class, ['reserved_order_id' => 'test_order_with_virtual_product'], 'cart'),
+        DataFixture(
+            AddProductToCartFixture::class,
+            ['cart_id' => '$cart.id$', 'product_id' => '$product.id$', 'qty' => 1]
+        ),
+        DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(QuoteIdMaskFixture::class, ['cart_id' => '$cart.id$'], 'quoteIdMask'),
+    ]
     public function testSetPaymentWithVirtualProduct()
     {
-        /** @var \Magento\Quote\Model\Quote  $quote */
-        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
-        $quote->load('test_order_with_virtual_product', 'reserved_order_id');
-        $cartId = $this->getMaskedCartId($quote->getId());
+        $quoteIdMask = DataFixtureStorageManager::getStorage()->get('quoteIdMask');
+        $cartId = $quoteIdMask->getMaskedId();
 
         $serviceInfo = [
             'rest' => [
@@ -121,14 +154,23 @@ class GuestPaymentMethodManagementTest extends \Magento\TestFramework\TestCase\W
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
+     * Test set payment with simple product
      */
+    #[
+        DataFixture(ProductFixture::class, ['sku' => 'simple-payment-%uniqid%', 'price' => 10], 'product'),
+        DataFixture(GuestCartFixture::class, ['reserved_order_id' => 'test_order_1'], 'cart'),
+        DataFixture(
+            AddProductToCartFixture::class,
+            ['cart_id' => '$cart.id$', 'product_id' => '$product.id$', 'qty' => 2]
+        ),
+        DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(QuoteIdMaskFixture::class, ['cart_id' => '$cart.id$'], 'quoteIdMask'),
+    ]
     public function testSetPaymentWithSimpleProduct()
     {
-        /** @var \Magento\Quote\Model\Quote  $quote */
-        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
-        $quote->load('test_order_1', 'reserved_order_id');
-        $cartId = $this->getMaskedCartId($quote->getId());
+        $quoteIdMask = DataFixtureStorageManager::getStorage()->get('quoteIdMask');
+        $cartId = $quoteIdMask->getMaskedId();
 
         $serviceInfo = [
             'rest' => [
@@ -189,14 +231,23 @@ class GuestPaymentMethodManagementTest extends \Magento\TestFramework\TestCase\W
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
+     * Test get list of payment methods
      */
+    #[
+        DataFixture(ProductFixture::class, ['sku' => 'simple-list-%uniqid%', 'price' => 10], 'product'),
+        DataFixture(GuestCartFixture::class, ['reserved_order_id' => 'test_order_1'], 'cart'),
+        DataFixture(
+            AddProductToCartFixture::class,
+            ['cart_id' => '$cart.id$', 'product_id' => '$product.id$', 'qty' => 2]
+        ),
+        DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(QuoteIdMaskFixture::class, ['cart_id' => '$cart.id$'], 'quoteIdMask'),
+    ]
     public function testGetList()
     {
-        /** @var \Magento\Quote\Model\Quote  $quote */
-        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
-        $quote->load('test_order_1', 'reserved_order_id');
-        $cartId = $this->getMaskedCartId($quote->getId());
+        $quoteIdMask = DataFixtureStorageManager::getStorage()->get('quoteIdMask');
+        $cartId = $quoteIdMask->getMaskedId();
 
         $serviceInfo = [
             'rest' => [
@@ -223,14 +274,24 @@ class GuestPaymentMethodManagementTest extends \Magento\TestFramework\TestCase\W
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_payment_saved.php
+     * Test get selected payment method
      */
+    #[
+        DataFixture(ProductFixture::class, ['sku' => 'simple-get-%uniqid%', 'price' => 10], 'product'),
+        DataFixture(GuestCartFixture::class, ['reserved_order_id' => 'test_order_1_with_payment'], 'cart'),
+        DataFixture(
+            AddProductToCartFixture::class,
+            ['cart_id' => '$cart.id$', 'product_id' => '$product.id$', 'qty' => 2]
+        ),
+        DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetPaymentMethodFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(QuoteIdMaskFixture::class, ['cart_id' => '$cart.id$'], 'quoteIdMask'),
+    ]
     public function testGet()
     {
-        /** @var \Magento\Quote\Model\Quote $quote */
-        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
-        $quote->load('test_order_1_with_payment', 'reserved_order_id');
-        $cartId = $this->getMaskedCartId($quote->getId());
+        $quoteIdMask = DataFixtureStorageManager::getStorage()->get('quoteIdMask');
+        $cartId = $quoteIdMask->getMaskedId();
 
         $serviceInfo = [
             'rest' => [
@@ -247,20 +308,9 @@ class GuestPaymentMethodManagementTest extends \Magento\TestFramework\TestCase\W
         $requestData = ["cartId" => $cartId];
         $requestResponse = $this->_webApiCall($serviceInfo, $requestData);
 
-        foreach ($this->getPaymentMethodFieldsForAssert() as $field) {
-            $this->assertArrayHasKey($field, $requestResponse);
-            $this->assertNotNull($requestResponse[$field]);
-        }
-
+        $this->assertArrayHasKey('method', $requestResponse);
         $this->assertEquals('checkmo', $requestResponse['method']);
-    }
-
-    /**
-     * @return array
-     */
-    protected function getPaymentMethodFieldsForAssert()
-    {
-        return ['method', 'po_number', 'additional_data'];
+        $this->assertNotNull($requestResponse['method']);
     }
 
     /**

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -17,9 +17,6 @@
             <testCaseId value="MC-38693"/>
             <group value="remote_storage_aws_s3"/>
             <group value="skip_in_cloud_native_s3"/>
-            <skip>
-                <issueId value="MC-33903"/>
-            </skip>
             <group value="pr_exclude"/>
         </annotations>
         <before>

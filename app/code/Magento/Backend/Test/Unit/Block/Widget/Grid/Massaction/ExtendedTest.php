@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,15 +14,21 @@ use Magento\Backend\Block\Widget\Grid;
 use Magento\Backend\Block\Widget\Grid\Massaction;
 use Magento\Backend\Block\Widget\Grid\Massaction\Extended;
 use Magento\Backend\Model\Url;
+use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\Data\Collection;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\View\Layout;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class ExtendedTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Massaction
      */
@@ -53,19 +59,25 @@ class ExtendedTest extends TestCase
      */
     protected $_requestMock;
 
+    /**
+     * @var ObjectManager
+     */
+    private $objectManager;
+
     protected function setUp(): void
     {
+        $this->objectManager = new ObjectManager($this);
+        
         $this->_gridMock = $this->createPartialMock(
             Grid::class,
             ['getId', 'getCollection']
         );
         $this->_gridMock->expects($this->any())->method('getId')->willReturn('test_grid');
 
-        $this->_layoutMock = $this->getMockBuilder(Layout::class)
-            ->addMethods(['helper'])
-            ->onlyMethods(['getParentName', 'getBlock'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_layoutMock = $this->createPartialMockWithReflection(
+            Layout::class,
+            ['helper', 'getParentName', 'getBlock']
+        );
 
         $this->_layoutMock->expects(
             $this->any()
@@ -97,8 +109,19 @@ class ExtendedTest extends TestCase
             'data' => ['massaction_id_field' => 'test_id', 'massaction_id_filter' => 'test_id'],
         ];
 
-        $objectManagerHelper = new ObjectManager($this);
-        $this->_block = $objectManagerHelper->getObject(
+        $objects = [
+            [
+                JsonHelper::class,
+                $this->createMock(JsonHelper::class)
+            ],
+            [
+                DirectoryHelper::class,
+                $this->createMock(DirectoryHelper::class)
+            ]
+        ];
+        $this->objectManager->prepareObjectManager($objects);
+
+        $this->_block = $this->objectManager->getObject(
             Extended::class,
             $arguments
         );
@@ -132,9 +155,8 @@ class ExtendedTest extends TestCase
     /**
      * @param array $items
      * @param string $result
-     *
-     * @dataProvider dataProviderGetGridIdsJsonWithUseSelectAll
      */
+    #[DataProvider('dataProviderGetGridIdsJsonWithUseSelectAll')]
     public function testGetGridIdsJsonWithUseSelectAll(array $items, $result)
     {
         $this->_block->setUseSelectAll(true);
@@ -145,9 +167,7 @@ class ExtendedTest extends TestCase
             $massActionIdField = $this->_block->getParentBlock()->getMassactionIdField();
         }
 
-        $collectionMock = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $collectionMock = $this->createMock(Collection::class);
 
         $this->_gridMock->expects($this->once())
             ->method('getCollection')
@@ -168,7 +188,7 @@ class ExtendedTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderGetGridIdsJsonWithUseSelectAll()
+    public static function dataProviderGetGridIdsJsonWithUseSelectAll()
     {
         return [
             [

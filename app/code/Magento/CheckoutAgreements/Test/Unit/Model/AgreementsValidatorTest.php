@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\CheckoutAgreements\Test\Unit\Model;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\CheckoutAgreements\Model\AgreementsProviderInterface;
 use Magento\CheckoutAgreements\Model\AgreementsValidator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
@@ -37,10 +38,10 @@ class AgreementsValidatorTest extends TestCase
     }
 
     /**
-     * @dataProvider isValidDataProvider
      * @param $data
      * @param $result
      */
+    #[DataProvider('isValidDataProvider')]
     public function testIsValid($data, $result)
     {
         $this->object = $this->objectManagerHelper->getObject(
@@ -66,15 +67,13 @@ class AgreementsValidatorTest extends TestCase
     }
 
     /**
-     * @dataProvider notIsValidDataProvider
      * @param $data
      * @param $result
      */
+    #[DataProvider('notIsValidDataProvider')]
     public function testNotIsValid($data, $result)
     {
-        $provider = $this->getMockForAbstractClass(
-            AgreementsProviderInterface::class
-        );
+        $provider = $this->createMock(AgreementsProviderInterface::class);
         $provider->expects($this->once())
             ->method('getRequiredAgreementIds')
             ->willReturn([1, 3, '4']);

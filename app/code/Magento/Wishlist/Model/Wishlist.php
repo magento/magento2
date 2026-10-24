@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -192,9 +192,9 @@ class Wishlist extends AbstractModel implements IdentityInterface
         ProductRepositoryInterface $productRepository,
         $useCurrentWebsite = true,
         array $data = [],
-        Json $serializer = null,
-        StockRegistryInterface $stockRegistry = null,
-        ScopeConfigInterface $scopeConfig = null,
+        ?Json $serializer = null,
+        ?StockRegistryInterface $stockRegistry = null,
+        ?ScopeConfigInterface $scopeConfig = null,
         ?StockConfigurationInterface $stockConfiguration = null
     ) {
         $this->_useCurrentWebsite = $useCurrentWebsite;
@@ -353,6 +353,9 @@ class Wishlist extends AbstractModel implements IdentityInterface
             }
         } else {
             $qty = $forciblySetQty ? $qty : $item->getQty() + $qty;
+            if ($forciblySetQty) {
+                $item->setOptions($product->getCustomOptions());
+            }
             $item->setQty($qty)->save();
         }
 

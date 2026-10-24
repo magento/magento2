@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser;
 
@@ -22,7 +22,7 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $config = $this->getMockBuilder(
             \Magento\Framework\View\Layout\PageType\Config::class
-        )->setMethods(
+        )->onlyMethods(
             ['getPageTypes']
         )->disableOriginalConstructor()->getMock();
         $pageTypeValues = [

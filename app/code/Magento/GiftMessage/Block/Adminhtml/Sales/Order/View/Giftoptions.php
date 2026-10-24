@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\GiftMessage\Block\Adminhtml\Sales\Order\View;
 
@@ -9,7 +9,6 @@ namespace Magento\GiftMessage\Block\Adminhtml\Sales\Order\View;
  * Adminhtml sales order view gift options block
  *
  * @api
- * @author     Magento Core Team <core@magentocommerce.com>
  * @codeCoverageIgnore
  * @since 100.0.2
  */

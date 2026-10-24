@@ -1,13 +1,19 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\GraphQl\Quote\Guest;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
+use Magento\Quote\Model\ResourceModel\Quote\QuoteIdMask;
+use Magento\Quote\Test\Fixture\GuestCart;
+use Magento\Quote\Test\Fixture\QuoteIdMask as QuoteIdMaskFixture;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
@@ -421,7 +427,8 @@ mutation {
 QUERY;
 
         self::expectExceptionMessage(
-            'The billing address must contain either "customer_address_id", "address", or "same_as_shipping".'
+            'The billing address must contain either "customer_address_id", '
+            . '"customer_address_uid", "address", or "same_as_shipping".'
         );
         $this->graphQlMutation($query);
     }
@@ -581,6 +588,99 @@ QUERY;
             'Could not use the "same_as_shipping" option, because multiple shipping addresses have been set.'
         );
         $this->graphQlMutation($query);
+    }
+
+    /**
+     * Test graphql mutation setting middlename, prefix, suffix and fax in billing address
+     *
+     * @throws LocalizedException
+     */
+    #[
+        DataFixture(GuestCart::class, as: 'quote'),
+        DataFixture(QuoteIdMaskFixture::class, ['cart_id' => '$quote.id$'], as: 'mask'),
+    ]
+    public function testSetMiddlenamePrefixSuffixFaxBillingAddress()
+    {
+        /** @var QuoteIdMask $quoteMask */
+        $quoteMask = Bootstrap::getObjectManager()->get(DataFixtureStorageManager::class)->getStorage()->get('mask');
+
+        $expectedResult = [
+            'setBillingAddressOnCart' => [
+                'cart' => [
+                    'billing_address' => [
+                        'firstname' => 'test firstname',
+                        'lastname' => 'test lastname',
+                        'middlename' => 'test middlename',
+                        'prefix' => 'Mr.',
+                        'suffix' => 'Jr.',
+                        'fax' => '5552224455',
+                        'company' => 'test company',
+                        'street' => [
+                            'test street 1',
+                            'test street 2',
+                        ],
+                        'city' => 'test city',
+                        'postcode' => '887766',
+                        'telephone' => '88776655',
+                        'country' => [
+                            'code' => 'US',
+                            'label' => 'US',
+                        ],
+                        '__typename' => 'BillingCartAddress'
+                    ]
+                ]
+            ]
+        ];
+
+        $query = <<<QUERY
+mutation {
+  setBillingAddressOnCart(
+    input: {
+      cart_id: "{$quoteMask->getMaskedId()}"
+      billing_address: {
+         address: {
+          firstname: "test firstname"
+          lastname: "test lastname"
+          middlename: "test middlename"
+          prefix: "Mr."
+          suffix: "Jr."
+          fax: "5552224455"
+          company: "test company"
+          street: ["test street 1", "test street 2"]
+          city: "test city"
+          region: "AL"
+          postcode: "887766"
+          country_code: "US"
+          telephone: "88776655"
+         }
+      }
+    }
+  ) {
+    cart {
+      billing_address {
+        firstname
+        lastname
+        middlename
+        prefix
+        suffix
+        fax
+        company
+        street
+        city
+        postcode
+        telephone
+        country {
+          code
+          label
+        }
+        __typename
+      }
+    }
+  }
+}
+QUERY;
+        $response = $this->graphQlMutation($query);
+        $this->assertEquals($expectedResult, $response);
     }
 
     /**

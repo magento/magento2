@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\GraphQl\Catalog;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test is categories enabled for specific storeView
@@ -58,8 +59,8 @@ class CategoryEnabledTest extends GraphQlAbstract
      * @param array $category
      * @return void
      * @throws \Exception
-     * @dataProvider categoryEnabledDataProvider
      */
+    #[DataProvider('categoryEnabledDataProvider')]
     public function testCategoryEnabledForSpecificStoreView(string $query, string $storeCode, array $category): void
     {
         $response = $this->graphQlQuery($query, [], '', ['store' => $storeCode]);
@@ -79,8 +80,8 @@ class CategoryEnabledTest extends GraphQlAbstract
      * @param array $category
      * @return void
      * @throws \Exception
-     * @dataProvider categoryDisabledDataProvider
      */
+    #[DataProvider('categoryDisabledDataProvider')]
     public function testCategoryDisabledForSpecificStoreView(string $query, string $storeCode, array $category): void
     {
         $this->markTestSkipped(
@@ -100,13 +101,13 @@ class CategoryEnabledTest extends GraphQlAbstract
      *
      * @return array
      */
-    public function categoryEnabledDataProvider(): array
+    public static function categoryEnabledDataProvider(): array
     {
         return [
             [
-                'query' => $this->getQuery(44),
-                'store' => 'default',
-                'data' => [
+                'query' => self::getQuery(44),
+                'storeCode' => 'default',
+                'category' => [
                     'category' => [
                         'id' => 44,
                         'name' => 'Category_UA',
@@ -121,13 +122,13 @@ class CategoryEnabledTest extends GraphQlAbstract
      *
      * @return array[][]
      */
-    public function categoryDisabledDataProvider(): array
+    public static function categoryDisabledDataProvider(): array
     {
         return [
             [
-                'query' => $this->getQuery(33),
-                'store' => 'english',
-                'data' => [
+                'query' => self::getQuery(33),
+                'storeCode' => 'english',
+                'category' => [
                     'category' => null,
                 ],
             ],
@@ -140,7 +141,7 @@ class CategoryEnabledTest extends GraphQlAbstract
      * @param int $categoryId
      * @return string
      */
-    private function getQuery(int $categoryId): string
+    private static function getQuery(int $categoryId): string
     {
         return <<<QUERY
 {

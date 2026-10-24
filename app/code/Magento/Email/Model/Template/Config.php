@@ -1,10 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Email\Model\Template;
 
+use Magento\Email\Model\Template\Config\UnexpectedTemplateFieldNameValueException;
+use Magento\Email\Model\Template\Config\UnexpectedTemplateIdValueException;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\Framework\View\Design\Theme\ThemePackageList;
 
@@ -218,17 +220,17 @@ class Config implements \Magento\Framework\Mail\Template\ConfigInterface
      * @param string $templateId Name of an email template
      * @param string $fieldName Name of a field value of which to return
      * @return string
-     * @throws \UnexpectedValueException
+     * @throws UnexpectedTemplateIdValueException|UnexpectedTemplateFieldNameValueException
      */
     protected function _getInfo($templateId, $fieldName)
     {
         $data = $this->_dataStorage->get();
         if (!isset($data[$templateId])) {
-            throw new \UnexpectedValueException("Email template '{$templateId}' is not defined.");
+            throw new UnexpectedTemplateIdValueException(__("Email template is not defined."));
         }
         if (!isset($data[$templateId][$fieldName])) {
-            throw new \UnexpectedValueException(
-                "Field '{$fieldName}' is not defined for email template '{$templateId}'."
+            throw new UnexpectedTemplateFieldNameValueException(
+                "Field '{$fieldName}' is not defined for email template."
             );
         }
         return $data[$templateId][$fieldName];

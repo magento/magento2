@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Cache\Backend;
@@ -20,6 +20,8 @@ use Magento\Framework\Cache\StaleCacheNotifierInterface;
  */
 class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache_Backend_ExtendedInterface
 {
+    use LockSignTrait;
+
     /**
      * Local backend cache adapter
      *
@@ -195,14 +197,14 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
     {
         $localData = $this->local->load($id);
 
-        if ($localData) {
+        if ($localData !== false) {
             if ($this->getDataVersion($localData) === $this->loadRemoteDataVersion($id)) {
                 return $localData;
             }
         }
 
         $remoteData = $this->remote->load($id);
-        if ($remoteData) {
+        if ($remoteData !== false) {
             $this->local->save($remoteData, $id);
 
             return $remoteData;
@@ -223,20 +225,36 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      */
     public function test($id)
     {
-        return $this->local->test($id) ?? $this->remote->test($id);
+        return $this->_options['use_stale_cache'] ?
+            ($this->local->test($id) ?? $this->remote->test($id))
+            : $this->remote->test($id);
     }
 
     /**
      * @inheritdoc
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function save($data, $id, $tags = [], $specificLifetime = false)
     {
         $dataToSave = $data;
         $remHash = $this->loadRemoteDataVersion($id);
-
-        if ($remHash !== false && $this->getDataVersion($data) === $remHash) {
-            $dataToSave = $this->remote->load($id);
-        } else {
+        $isRemoteUpToDate = false;
+        $sameRemoteData = $remHash !== false && $this->getDataVersion($data) === $remHash;
+        // Tagged saves must reach the remote backend so a changed tag set is re-indexed even when
+        // the payload is identical. Keep the redundant-write optimization for tagless saves.
+        if (empty($tags) && $sameRemoteData) {
+            $remoteData = $this->remote->load($id);
+            if ($remoteData !== false && $this->getDataVersion($data) === $this->getDataVersion($remoteData)) {
+                $isRemoteUpToDate = true;
+                $dataToSave = $remoteData;
+            }
+        }
+        if (!$isRemoteUpToDate) {
+            if (!empty($tags) && $sameRemoteData) {
+                // Remove first so Redis backends drop the previous tag memberships before re-save.
+                $this->remote->remove($id);
+            }
             $this->remote->save($data, $id, $tags, $specificLifetime);
             $this->saveRemoteDataVersion($data, $id, $tags, $specificLifetime);
         }
@@ -430,7 +448,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      */
     private function unlockAll()
     {
-        foreach ($this->lockList as $id) {
+        foreach (array_keys($this->lockList) as $id) {
             $this->unlock($id);
         }
     }
@@ -443,29 +461,6 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
     public function __destruct()
     {
         $this->unlockAll();
-    }
-
-    /**
-     * Function that generates lock sign that helps to avoid removing a lock that was created by another client.
-     *
-     * @return string
-     */
-    private function generateLockSign()
-    {
-        $sign = \implode(
-            '-',
-            [
-                \getmypid(), \crc32(\gethostname())
-            ]
-        );
-
-        try {
-            $sign .= '-' . \bin2hex(\random_bytes(4));
-        } catch (\Exception $e) {
-            $sign .= '-' . \uniqid('-uniqid-');
-        }
-
-        return $sign;
     }
 
     /**

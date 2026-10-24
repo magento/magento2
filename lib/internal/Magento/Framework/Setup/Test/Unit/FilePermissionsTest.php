@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Framework\Filesystem\Directory\Write;
 use Magento\Framework\Setup\FilePermissions;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class FilePermissionsTest extends TestCase
 {
@@ -67,9 +68,8 @@ class FilePermissionsTest extends TestCase
     /**
      * @param string $mageMode
      *
-     * @return void
-     * @dataProvider modeDataProvider
-     */
+     * @return void     */
+    #[DataProvider('modeDataProvider')]
     public function testGetInstallationWritableDirectories($mageMode): void
     {
         $this->setUpDirectoryListInstallation();
@@ -141,9 +141,8 @@ class FilePermissionsTest extends TestCase
      * @param array $mockMethods
      * @param array $expected
      *
-     * @return void
-     * @dataProvider getApplicationCurrentNonWritableDirectoriesDataProvider
-     */
+     * @return void     */
+    #[DataProvider('getApplicationCurrentNonWritableDirectoriesDataProvider')]
     public function testGetApplicationCurrentNonWritableDirectories(array $mockMethods, array $expected): void
     {
         $this->directoryListMock
@@ -164,7 +163,7 @@ class FilePermissionsTest extends TestCase
     /**
      * @return array
      */
-    public function getApplicationCurrentNonWritableDirectoriesDataProvider(): array
+    public static function getApplicationCurrentNonWritableDirectoriesDataProvider(): array
     {
         return [
             [
@@ -185,11 +184,10 @@ class FilePermissionsTest extends TestCase
     /**
      * @param string $mageMode
      *
-     * @return void
-     * @dataProvider modeDataProvider
-     * @covers \Magento\Framework\Setup\FilePermissions::getMissingWritableDirectoriesForInstallation
+     * @return void     * @covers \Magento\Framework\Setup\FilePermissions::getMissingWritableDirectoriesForInstallation
      * @covers \Magento\Framework\Setup\FilePermissions::getMissingWritablePathsForInstallation
      */
+    #[DataProvider('modeDataProvider')]
     public function testGetMissingWritableDirectoriesAndPathsForInstallation($mageMode): void
     {
         $this->setUpDirectoryListInstallation();
@@ -262,9 +260,8 @@ class FilePermissionsTest extends TestCase
      * @param array $mockMethods
      * @param array $expected
      *
-     * @return void
-     * @dataProvider getUnnecessaryWritableDirectoriesForApplicationDataProvider
-     */
+     * @return void     */
+    #[DataProvider('getUnnecessaryWritableDirectoriesForApplicationDataProvider')]
     public function testGetUnnecessaryWritableDirectoriesForApplication(array $mockMethods, array $expected): void
     {
         $this->directoryListMock
@@ -287,7 +284,7 @@ class FilePermissionsTest extends TestCase
     /**
      * @return array
      */
-    public function getUnnecessaryWritableDirectoriesForApplicationDataProvider(): array
+    public static function getUnnecessaryWritableDirectoriesForApplicationDataProvider(): array
     {
         return [
             [['isExist' => true, 'isDirectory' => true, 'isReadable' => true, 'isWritable' => false], []],
@@ -302,19 +299,20 @@ class FilePermissionsTest extends TestCase
     {
         $this->directoryListMock
             ->method('getPath')
-            ->withConsecutive(
-                [DirectoryList::CONFIG],
-                [DirectoryList::VAR_DIR],
-                [DirectoryList::MEDIA],
-                [DirectoryList::GENERATED],
-                [DirectoryList::STATIC_VIEW]
-            )
-            ->willReturnOnConsecutiveCalls(
-                BP . '/app/etc',
-                BP . '/var',
-                BP . '/pub/media',
-                BP . '/generated',
-                BP . '/pub/static'
+            ->willReturnCallback(
+                function ($arg1) {
+                    if ($arg1 == DirectoryList::CONFIG) {
+                        return BP . '/app/etc';
+                    } elseif ($arg1 == DirectoryList::VAR_DIR) {
+                        return BP . '/var';
+                    } elseif ($arg1 == DirectoryList::MEDIA) {
+                        return BP . '/pub/media';
+                    } elseif ($arg1 == DirectoryList::GENERATED) {
+                        return BP . '/generated';
+                    } elseif ($arg1 == DirectoryList::STATIC_VIEW) {
+                        return BP . '/pub/static';
+                    }
+                }
             );
     }
 
@@ -325,8 +323,17 @@ class FilePermissionsTest extends TestCase
     {
         $this->directoryListMock
             ->method('getPath')
-            ->withConsecutive([DirectoryList::CONFIG], [DirectoryList::VAR_DIR], [DirectoryList::MEDIA])
-            ->willReturnOnConsecutiveCalls(BP . '/app/etc', BP . '/var', BP . '/pub/media');
+            ->willReturnCallback(
+                function ($arg1) {
+                    if ($arg1 == DirectoryList::CONFIG) {
+                        return BP . '/app/etc';
+                    } elseif ($arg1 == DirectoryList::VAR_DIR) {
+                        return BP . '/var';
+                    } elseif ($arg1 == DirectoryList::MEDIA) {
+                        return BP . '/pub/media';
+                    }
+                }
+            );
     }
 
     /**
@@ -336,7 +343,16 @@ class FilePermissionsTest extends TestCase
     {
         $this->directoryWriteMock
             ->method('isExist')
-            ->willReturnOnConsecutiveCalls(true, false, true);
+            ->willReturnCallback(function () use (&$callCount) {
+                $callCount++;
+                if ($callCount === 1) {
+                    return true;
+                } elseif ($callCount === 2) {
+                    return false;
+                } elseif ($callCount === 3) {
+                    return true;
+                }
+            });
         $this->directoryWriteMock
             ->method('isWritable')
             ->willReturn(true);
@@ -351,7 +367,7 @@ class FilePermissionsTest extends TestCase
     /**
      * @return array
      */
-    public function modeDataProvider(): array
+    public static function modeDataProvider(): array
     {
         return [
             [State::MODE_DEFAULT],

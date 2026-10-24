@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Setup\Declaration\Schema\Dto;
@@ -105,7 +105,7 @@ class Table extends GenericElement implements
         string $charset,
         string $collation,
         string $onCreate,
-        string $comment = null,
+        ?string $comment = null,
         array $columns = [],
         array $indexes = [],
         array $constraints = []

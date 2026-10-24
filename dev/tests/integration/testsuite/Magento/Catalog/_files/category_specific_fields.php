@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -34,7 +34,7 @@ $category
     ->setMetaKeywords('Category_en Meta Keywords')
     ->setMetaDescription('Category_en Meta Description')
     ->setParentId(2)
-    ->setPath('1/2/3')
+    ->setPath('1/2/10')
     ->setLevel(2)
     ->setIsActive(true)
     ->setPosition(1);

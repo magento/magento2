@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Framework\Stdlib\Test\Unit;
 
 use Magento\Framework\Stdlib\StringUtils;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Magento\Framework\Stdlib\StringUtilsTest test case
@@ -83,9 +84,8 @@ class StringUtilsTest extends TestCase
     /**
      * @param string $testString
      * @param string $expected
-     *
-     * @dataProvider upperCaseWordsDataProvider
-     */
+     *     */
+    #[DataProvider('upperCaseWordsDataProvider')]
     public function testUpperCaseWords($testString, $expected)
     {
         $actual = $this->_string->upperCaseWords($testString);
@@ -95,7 +95,7 @@ class StringUtilsTest extends TestCase
     /**
      * @return array
      */
-    public function upperCaseWordsDataProvider()
+    public static function upperCaseWordsDataProvider()
     {
         return [
             ['test test2', 'Test_Test2'],
@@ -109,9 +109,8 @@ class StringUtilsTest extends TestCase
      * @param string $sourceSeparator
      * @param string $destinationSeparator
      * @param string $expected
-     *
-     * @dataProvider upperCaseWordsWithSeparatorsDataProvider
-     */
+     *     */
+    #[DataProvider('upperCaseWordsWithSeparatorsDataProvider')]
     public function testUpperCaseWordsWithSeparators($testString, $sourceSeparator, $destinationSeparator, $expected)
     {
         $actual = $this->_string->upperCaseWords($testString, $sourceSeparator, $destinationSeparator);
@@ -121,7 +120,7 @@ class StringUtilsTest extends TestCase
     /**
      * @return array
      */
-    public function upperCaseWordsWithSeparatorsDataProvider()
+    public static function upperCaseWordsWithSeparatorsDataProvider()
     {
         return [['test test2_test3\test4|test5', '|', '\\', 'Test\Test2_test3\test4\Test5']];
     }

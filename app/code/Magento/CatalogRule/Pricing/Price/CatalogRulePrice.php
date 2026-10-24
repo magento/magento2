@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,8 +18,6 @@ use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
- * Class CatalogRulePrice
- *
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class CatalogRulePrice extends AbstractPrice implements BasePriceProviderInterface
@@ -27,7 +25,7 @@ class CatalogRulePrice extends AbstractPrice implements BasePriceProviderInterfa
     /**
      * Price type identifier string
      */
-    const PRICE_CODE = 'catalog_rule_price';
+    public const PRICE_CODE = 'catalog_rule_price';
 
     /**
      * @var TimezoneInterface
@@ -97,7 +95,7 @@ class CatalogRulePrice extends AbstractPrice implements BasePriceProviderInterfa
                 $this->value = $this->value ? (float)$this->value : false;
             }
             if ($this->value) {
-                $this->value = $this->priceCurrency->convertAndRound($this->value);
+                $this->value = $this->priceCurrency->convertAndRound($this->value, null, null, 4);
             }
         }
 

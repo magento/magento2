@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,12 +11,15 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\View\Design\Theme\Customization\Path;
 use Magento\Framework\View\Design\Theme\FileFactory;
 use Magento\Framework\View\Design\Theme\FileInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Theme\Model\Theme\Customization\File\CustomCss;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class CustomCssTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var MockObject|Path
      */
@@ -67,33 +70,19 @@ class CustomCssTest extends TestCase
      */
     public function testPrepareFile(): void
     {
-        $file = $this->getMockBuilder(FileInterface::class)
-            ->onlyMethods(
-                [
-                    'delete',
-                    'save',
-                    'getContent',
-                    'getFileInfo',
-                    'getFullPath',
-                    'getFileName',
-                    'setFileName',
-                    'getTheme',
-                    'setTheme',
-                    'getCustomizationService',
-                    'setCustomizationService'
-                ]
-            )
-            ->addMethods(['getId', 'setData'])
-            ->getMockForAbstractClass();
+        $file = $this->createPartialMockWithReflection(
+            FileInterface::class,
+            [
+                'delete', 'save', 'getContent', 'getFileInfo',
+                'getFullPath', 'getFileName', 'setFileName',
+                'getTheme', 'setTheme',
+                'getCustomizationService', 'setCustomizationService',
+                'getId', 'setData'
+            ]
+        );
         $file->expects($this->any())
             ->method('setData')
-            ->willReturnMap(
-                [
-                    ['file_type', CustomCss::TYPE, $this->returnSelf()],
-                    ['file_path', CustomCss::TYPE . '/' . CustomCss::FILE_NAME, $this->returnSelf()],
-                    ['sort_order', CustomCss::SORT_ORDER, $this->returnSelf()]
-                ]
-            );
+            ->willReturnSelf();
         $file->expects($this->once())
             ->method('getId')
             ->willReturn(null);

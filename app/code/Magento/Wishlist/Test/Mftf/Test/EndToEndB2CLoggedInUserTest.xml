@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -31,7 +31,13 @@
         <actionGroup ref="StorefrontCustomerAddProductToWishlistActionGroup" after="wishlistClickSimpleProduct2" stepKey="wishlistAddSimpleProduct2ToWishlist">
             <argument name="productVar" value="$$createSimpleProduct2$$"/>
         </actionGroup>
-        <actionGroup ref="StorefrontCustomerCheckProductInWishlistActionGroup" after="wishlistAddSimpleProduct2ToWishlist" stepKey="wishlistCheckSimpleProduct2InWishlist">
+        <!-- clear cache -->
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache" after="wishlistAddSimpleProduct2ToWishlist" >
+            <argument name="tags" value=""/>
+        </actionGroup>
+        <!-- reload wish list page -->
+        <actionGroup ref="ReloadPageActionGroup" stepKey="refreshPage" after="cleanCache"/>
+        <actionGroup ref="StorefrontCustomerCheckProductInWishlistActionGroup" after="refreshPage" stepKey="wishlistCheckSimpleProduct2InWishlist">
             <argument name="productVar" value="$$createSimpleProduct2$$"/>
         </actionGroup>
         <actionGroup ref="StorefrontCustomerCheckProductInWishlistSidebarActionGroup" after="wishlistCheckSimpleProduct2InWishlist" stepKey="wishlistCheckSimpleProduct2InWishlistSidebar">

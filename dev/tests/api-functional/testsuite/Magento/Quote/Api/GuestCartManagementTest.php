@@ -1,19 +1,38 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Quote\Api;
 
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\Checkout\Helper\Data;
+use Magento\Checkout\Test\Fixture\SetBillingAddress as SetBillingAddressFixture;
+use Magento\Checkout\Test\Fixture\SetDeliveryMethod as SetDeliveryMethodFixture;
+use Magento\Checkout\Test\Fixture\SetGuestEmail as SetGuestEmailFixture;
+use Magento\Checkout\Test\Fixture\SetPaymentMethod as SetPaymentMethodFixture;
+use Magento\Checkout\Test\Fixture\SetShippingAddress as SetShippingAddressFixture;
+use Magento\Quote\Test\Fixture\AddProductToCart as AddProductToCartFixture;
+use Magento\Quote\Test\Fixture\CustomerCart as CustomerCartFixture;
+use Magento\Quote\Test\Fixture\GuestCart as GuestCartFixture;
+use Magento\TestFramework\Fixture\Config;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class GuestCartManagementTest extends WebapiAbstract
 {
-    const SERVICE_VERSION = 'V1';
-    const SERVICE_NAME = 'quoteGuestCartManagementV1';
-    const RESOURCE_PATH = '/V1/guest-carts/';
+    private const SERVICE_VERSION = 'V1';
+    private const SERVICE_NAME = 'quoteGuestCartManagementV1';
+    private const RESOURCE_PATH = '/V1/guest-carts/';
 
+    /**
+     * @var array
+     */
     protected $createdQuotes = [];
 
     /**
@@ -187,7 +206,10 @@ class GuestCartManagementTest extends WebapiAbstract
     public function testAssignCustomerThrowsExceptionIfTargetCartIsNotAnonymous()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('The customer can\'t be assigned to the cart because the cart isn\'t anonymous.');
+        $this->expectExceptionMessageMatches(
+            '/The customer can\'t be assigned to the cart because the cart isn\'t anonymous\.'
+            . '|Could not find a cart with ID/'
+        );
 
         /** @var $customer \Magento\Customer\Model\Customer */
         $customer = $this->objectManager->create(\Magento\Customer\Model\Customer::class)->load(1);
@@ -234,14 +256,32 @@ class GuestCartManagementTest extends WebapiAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_items_saved.php
-     * @magentoApiDataFixture Magento/Sales/_files/quote.php
+     * Test assign customer merges guest cart with customer cart
+     *
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
      */
+    #[
+        DataFixture(ProductFixture::class, ['sku' => 'simple-merged-%uniqid%', 'price' => 10], 'product'),
+        DataFixture(
+            CustomerCartFixture::class,
+            ['customer_id' => 1, 'reserved_order_id' => 'test_order_item_with_items'],
+            'customer_cart'
+        ),
+        DataFixture(
+            AddProductToCartFixture::class,
+            ['cart_id' => '$customer_cart.id$', 'product_id' => '$product.id$', 'qty' => 1]
+        ),
+        DataFixture(GuestCartFixture::class, ['reserved_order_id' => 'test01'], 'guest_cart'),
+        DataFixture(
+            AddProductToCartFixture::class,
+            ['cart_id' => '$guest_cart.id$', 'product_id' => '$product.id$', 'qty' => 1]
+        ),
+    ]
     public function testAssignCustomerCartMerged()
     {
         /** @var $customer \Magento\Customer\Model\Customer */
         $customer = $this->objectManager->create(\Magento\Customer\Model\Customer::class)->load(1);
-        // Customer has a quote with reserved order ID test_order_1 (see fixture)
+        // Customer has a quote with reserved order ID
         /** @var $customerQuote \Magento\Quote\Model\Quote */
         $customerQuote = $this->objectManager->create(\Magento\Quote\Model\Quote::class)
             ->load('test_order_item_with_items', 'reserved_order_id');
@@ -295,20 +335,42 @@ class GuestCartManagementTest extends WebapiAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_check_payment.php
+     * Test place order for guest cart with check payment
      */
+    #[
+        DataFixture(
+            ProductFixture::class,
+            ['sku' => 'simple-place-order-%uniqid%', 'name' => 'Simple Product', 'price' => 10],
+            'product'
+        ),
+        DataFixture(GuestCartFixture::class, ['reserved_order_id' => 'guest_quote'], 'cart'),
+        DataFixture(
+            AddProductToCartFixture::class,
+            ['cart_id' => '$cart.id$', 'product_id' => '$product.id$', 'qty' => 1]
+        ),
+        DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetGuestEmailFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetDeliveryMethodFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetPaymentMethodFixture::class, ['cart_id' => '$cart.id$']),
+    ]
     public function testPlaceOrder()
     {
-        /** @var $quote \Magento\Quote\Model\Quote */
-        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class)
-            ->load('test_order_1', 'reserved_order_id');
+        $fixtures = DataFixtureStorageManager::getStorage();
+        $quote = $fixtures->get('cart');
         $cartId = $quote->getId();
+
+        // Ensure quote stays active for place order
+        $cartRepository = $this->objectManager->get(\Magento\Quote\Api\CartRepositoryInterface::class);
+        $quote = $cartRepository->get($cartId);
+        if (!$quote->getIsActive()) {
+            $quote->setIsActive(true);
+            $cartRepository->save($quote);
+        }
+
         /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
-        $quoteIdMask = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create(\Magento\Quote\Model\QuoteIdMaskFactory::class)
-            ->create();
+        $quoteIdMask = $this->objectManager->create(\Magento\Quote\Model\QuoteIdMaskFactory::class)->create();
         $quoteIdMask->load($cartId, 'quote_id');
-        //Use masked cart Id
         $cartId = $quoteIdMask->getMaskedId();
 
         $serviceInfo = [
@@ -339,7 +401,7 @@ class GuestCartManagementTest extends WebapiAbstract
     public function testAssignCustomerByGuestUser()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('You don\'t have the correct permissions to assign the customer to the cart.');
+        $this->expectExceptionMessage('Enter and try again.');
 
         /** @var $quote \Magento\Quote\Model\Quote */
         $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class)->load('test01', 'reserved_order_id');
@@ -377,5 +439,43 @@ class GuestCartManagementTest extends WebapiAbstract
         $this->assertEmpty($quote->getCustomerId());
 
         $this->_webApiCall($serviceInfo, $requestData);
+    }
+
+    #[
+        Config(Data::XML_PATH_GUEST_CHECKOUT, 0),
+        DataFixture(ProductFixture::class, as: 'product'),
+        DataFixture(GuestCartFixture::class, as: 'cart'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$product.id$']),
+        DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetGuestEmailFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetDeliveryMethodFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetPaymentMethodFixture::class, ['cart_id' => '$cart.id$']),
+    ]
+    public function testPlaceOrderWhenGuestCheckoutIsDisabled(): void
+    {
+        $this->expectExceptionMessage('Sorry, guest checkout is not available.');
+        $fixtures = DataFixtureStorageManager::getStorage();
+        $cart = $fixtures->get('cart');
+        /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
+        $quoteIdMask = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create(\Magento\Quote\Model\QuoteIdMaskFactory::class)
+            ->create();
+        $quoteIdMask->load($cart->getId(), 'quote_id');
+        //Use masked cart Id
+        $cartId = $quoteIdMask->getMaskedId();
+
+        $serviceInfo = [
+            'soap' => [
+                'service' => 'quoteGuestCartManagementV1',
+                'operation' => 'quoteGuestCartManagementV1PlaceOrder',
+                'serviceVersion' => 'V1',
+            ],
+            'rest' => [
+                'resourcePath' => '/V1/guest-carts/' . $cartId . '/order',
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
+            ],
+        ];
+        $this->_webApiCall($serviceInfo, ['cartId' => $cartId]);
     }
 }

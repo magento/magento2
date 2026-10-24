@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Model\Indexer\Product\Price;
@@ -132,9 +132,9 @@ abstract class AbstractAction
         Type $catalogProductType,
         Factory $indexerPriceFactory,
         DefaultPrice $defaultIndexerResource,
-        TierPrice $tierPriceIndexResource = null,
-        DimensionCollectionFactory $dimensionCollectionFactory = null,
-        TableMaintainer $tableMaintainer = null
+        ?TierPrice $tierPriceIndexResource = null,
+        ?DimensionCollectionFactory $dimensionCollectionFactory = null,
+        ?TableMaintainer $tableMaintainer = null
     ) {
         $this->_config = $config;
         $this->_storeManager = $storeManager;
@@ -179,7 +179,8 @@ abstract class AbstractAction
         // for backward compatibility split data from old idx table on dimension tables
         foreach ($this->dimensionCollectionFactory->create() as $dimensions) {
             $insertSelect = $this->getConnection()->select()->from(
-                ['ip_tmp' => $this->_defaultIndexerResource->getIdxTable()]
+                ['ip_tmp' => $this->_defaultIndexerResource->getIdxTable()],
+                array_keys($this->getConnection()->describeTable($this->tableMaintainer->getMainTableByDimensions($dimensions)))
             );
 
             foreach ($dimensions as $dimension) {

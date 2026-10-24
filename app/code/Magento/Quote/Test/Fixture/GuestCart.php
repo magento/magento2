@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -71,8 +71,21 @@ class GuestCart implements RevertibleDataFixtureInterface
     {
         $maskId = $this->guestCartManagement->createEmptyCart();
         $cartId = $this->maskedQuoteIdToQuoteId->execute($maskId);
+        $cart = $this->cartRepository->get($cartId);
 
-        return $this->cartRepository->get($cartId);
+        if (!isset($data['reserved_order_id']) && !isset($data['message_id'])) {
+            return $cart;
+        }
+        if (isset($data['reserved_order_id'])) {
+            $cart->setReservedOrderId($data['reserved_order_id']);
+            $this->cartRepository->save($cart);
+        }
+        if (isset($data['message_id'])) {
+            $cart->setGiftMessageId($data['message_id']);
+            $this->cartRepository->save($cart);
+        }
+
+        return $cart;
     }
 
     /**

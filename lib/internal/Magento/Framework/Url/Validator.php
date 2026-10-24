@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Url;
@@ -55,11 +55,14 @@ class Validator extends AbstractValidator
         $this->setValue($value);
 
         $valid = $this->validator->isValid($value);
-
-        if (!$valid) {
-            $this->error(Uri::INVALID);
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+        $protocol = parse_url($value ? $value : '', PHP_URL_SCHEME);
+        if ($valid && ($protocol === 'https' || $protocol === 'http')) {
+            return true;
         }
 
-        return $valid;
+        $this->error(Uri::INVALID);
+
+        return false;
     }
 }

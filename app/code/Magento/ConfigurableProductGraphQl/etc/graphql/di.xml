@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe.
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
@@ -85,12 +85,11 @@
     <type name="Magento\Quote\Model\Quote">
         <plugin name="update_customized_options" type="Magento\ConfigurableProductGraphQl\Plugin\Quote\UpdateCustomizedOptions"/>
     </type>
-    <virtualType name="Magento\ConfigurableProductGraphQl\Model\Resolver\Variant\Product"
-                 type="Magento\CatalogGraphQl\Model\Resolver\Product">
+    <type name="Magento\SalesGraphQl\Model\TypeResolver\OrderItem">
         <arguments>
-            <argument name="productDataProvider" xsi:type="object">
-                Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Deferred\ChildProduct
+            <argument name="productTypeMap" xsi:type="array">
+                <item name="configurable" xsi:type="string">ConfigurableOrderItem</item>
             </argument>
         </arguments>
-    </virtualType>
+    </type>
 </config>

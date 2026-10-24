@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Backend\Model\View\Result\RedirectFactory;
 use Magento\Cms\Controller\Adminhtml\Block\Delete;
 use Magento\Cms\Model\Block;
+use Magento\Framework\ObjectManager\ObjectManager as FrameworkObjectManager;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -59,7 +60,7 @@ class DeleteTest extends TestCase
     protected $requestMock;
 
     /**
-     * @var \Magento\Framework\ObjectManager\ObjectManager|MockObject
+     * @var FrameworkObjectManager|MockObject
      */
     protected $objectManagerMock;
 
@@ -77,30 +78,24 @@ class DeleteTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->messageManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
 
-        $this->requestMock = $this->getMockForAbstractClass(
-            RequestInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['getParam']
+        $this->requestMock = $this->createMock(
+            RequestInterface::class
         );
 
         $this->blockMock = $this->getMockBuilder(Block::class)
             ->disableOriginalConstructor()
-            ->setMethods(['load', 'delete'])
+            ->onlyMethods(['load', 'delete'])
             ->getMock();
 
-        $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManager\ObjectManager::class)
+        $this->objectManagerMock = $this->getMockBuilder(FrameworkObjectManager::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->resultRedirectMock = $this->getMockBuilder(Redirect::class)
-            ->setMethods(['setPath'])
+            ->onlyMethods(['setPath'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -108,7 +103,7 @@ class DeleteTest extends TestCase
             RedirectFactory::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->resultRedirectFactoryMock->expects($this->atLeastOnce())
             ->method('create')

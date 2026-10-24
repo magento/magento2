@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontVerifySingleProductCatalogPriceRuleAcrossWebsitesTest">
+        <annotations>
+            <features value="CatalogRule"/>
+            <stories value="Apply catalog price rule"/>
+            <title value="Catalog rule should apply for product on multiple websites"/>
+            <description value="Testcase verifies On storefront catalog price rule applied for product on multiple websites"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="AC-7409"/>
+        </annotations>
+        <before>
+            <!--Create dropdown product attribute-->
+            <createData entity="productAttributeAgeGroupDropdown" stepKey="createDropdownAttribute"/>
+            <!--Create attribute options-->
+            <createData entity="productAttributeOptionAdult" stepKey="createFirstAttributeOption">
+                <requiredEntity createDataKey="createDropdownAttribute"/>
+            </createData>
+            <createData entity="productAttributeOptionChildren" stepKey="createSecondAttributeOption">
+                <requiredEntity createDataKey="createDropdownAttribute"/>
+            </createData>
+            <!--Add attribute to default attribute set-->
+            <createData entity="AddToDefaultSet" stepKey="addAttributeToDefaultSet">
+                <requiredEntity createDataKey="createDropdownAttribute"/>
+            </createData>
+            <!-- Create Simple Product -->
+            <createData entity="SimpleProduct" stepKey="createProduct">
+                <field key="price">100.00</field>
+            </createData>
+            <!-- Login as Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!--Create custom website -->
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createCustomWebsite">
+                <argument name="newWebsiteName" value="{{NewWebSiteData.name}}"/>
+                <argument name="websiteCode" value="{{NewWebSiteData.code}}"/>
+            </actionGroup>
+            <!-- Create custom store-->
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createCustomStore">
+                <argument name="website" value="{{NewWebSiteData.name}}"/>
+                <argument name="storeGroupName" value="{{NewWebSiteData.name}}"/>
+                <argument name="storeGroupCode" value="{{NewWebSiteData.code}}"/>
+            </actionGroup>
+            <!-- Create custom store view-->
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createCustomStoreView">
+                <argument name="StoreGroup" value="NewWebSiteData"/>
+                <argument name="customStore" value="NewWebSiteData"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!--set main website as default-->
+            <actionGroup ref="AdminSetDefaultWebsiteActionGroup" stepKey="setMainWebsiteAsDefault">
+                <argument name="websiteName" value="Main Website"/>
+            </actionGroup>
+            <!-- Delete product -->
+            <deleteData createDataKey="createProduct" stepKey="deleteFirstProduct"/>
+            <deleteData createDataKey="createDropdownAttribute" stepKey="deleteDropdownAttribute"/>
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteCustomWebsite">
+                <argument name="websiteName" value="{{NewWebSiteData.name}}"/>
+            </actionGroup>
+            <!-- Delete created price rules -->
+            <actionGroup ref="RemoveCatalogPriceRuleActionGroup" stepKey="deleteCatalogPriceRule">
+                <argument name="ruleName" value="{{_defaultCatalogRule.name}}"/>
+            </actionGroup>
+            <!-- Logout -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <!--Assign product to custom website-->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductEditPage">
+            <argument name="productId" value="$$createProduct.id$$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <actionGroup ref="SelectProductInWebsitesActionGroup" stepKey="selectWebsiteInProduct">
+            <argument name="website" value="{{NewWebSiteData.name}}"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+        <!--Switch scope to Default store view-->
+        <actionGroup ref="SwitchToTheNewStoreViewActionGroup" stepKey="SwitchDefaultStoreView">
+            <argument name="storeViewName" value="'Default Store View'"/>
+        </actionGroup>
+        <uncheckOption selector="{{AdminProductFormSection.attributeOptionUncheckDefaultValue('$$createDropdownAttribute.attribute_code$$')}}" stepKey="unCheckDefaultValueInDefaultStoreview"/>
+        <selectOption selector="{{AdminProductFormSection.customSelectAttribute('$$createDropdownAttribute.attribute_code$$')}}" userInput="Adult" stepKey="selectValueForAttributeInDefaultStoreview"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductInDefaultStoreView"/>
+        <!--Switch scope to custom store view-->
+        <actionGroup ref="SwitchToTheNewStoreViewActionGroup" stepKey="switchScopeToCustomStoreView">
+            <argument name="storeViewName" value="{{NewWebSiteData.name}}"/>
+        </actionGroup>
+        <uncheckOption selector="{{AdminProductFormSection.attributeOptionUncheckDefaultValue('$$createDropdownAttribute.attribute_code$$')}}" stepKey="unCheckDefaultValueInCustomStoreview"/>
+        <selectOption selector="{{AdminProductFormSection.customSelectAttribute('$$createDropdownAttribute.attribute_code$$')}}" userInput="children" stepKey="selectValueForAttributeInCustomStoreview"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductInCustomStoreView"/>
+        <!-- create catalog price with 50% discount and condition -->
+        <actionGroup ref="AdminOpenNewCatalogPriceRuleFormPageActionGroup" stepKey="openNewCatalogPriceRulePage"/>
+        <actionGroup ref="AdminCatalogPriceRuleFillMainInfoActionGroup" stepKey="fillMainInfoForSecondCatalogPriceRule">
+            <argument name="websites" value="'Main Website',{{NewWebSiteData.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminFillCatalogRuleConditionWithSelectAttributeActionGroup" stepKey="fillConditionsForCatalogPriceRule">
+            <argument name="condition" value="$$createDropdownAttribute.default_frontend_label$$"/>
+            <argument name="conditionValue" value="Adult"/>
+        </actionGroup>
+        <actionGroup ref="AdminCatalogPriceRuleFillActionsActionGroup" stepKey="fillActionsForCatalogPriceRule">
+            <argument name="discountAmount" value="50"/>
+        </actionGroup>
+        <actionGroup ref="AdminCatalogPriceRuleSaveAndApplyActionGroup" stepKey="saveAndApplyCatalogPriceRule"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+            <argument name="tags" value="config full_page"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="goToProductOnStorefront">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+        <waitForText selector="{{StorefrontProductInfoMainSection.updatedPrice}}" userInput="$50.00" stepKey="assertProductPriceAmountOnMainWebsite"/>
+        <actionGroup ref="AdminSetDefaultWebsiteActionGroup" stepKey="setSecondaryWebsiteAsDefault">
+            <argument name="websiteName" value="{{NewWebSiteData.name}}"/>
+        </actionGroup>
+        <!-- Clean config and full page cache-->
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="flushCache">
+            <argument name="tags" value="config full_page"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openProductOnStorefront">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+        <waitForText selector="{{StorefrontProductInfoMainSection.updatedPrice}}" userInput="$100.00" stepKey="assertProductPriceAmountOnCustomWebsite"/>
+    </test>
+</tests>

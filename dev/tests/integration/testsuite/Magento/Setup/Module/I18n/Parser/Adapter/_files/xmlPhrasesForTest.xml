@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
- -->
+-->
 <config>
     <node name="Name only" translate="name"/>
     <node name="Name and title space delimiter" title="title1" translate="name title"/>

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework;
 
@@ -110,7 +110,7 @@ class Profiler
      * @param array|null $tags
      * @return bool
      */
-    private static function _checkTags(array $tags = null)
+    private static function _checkTags(?array $tags = null)
     {
         if (self::$_hasTagFilters) {
             if (is_array($tags)) {
@@ -163,7 +163,7 @@ class Profiler
      * @param array|null $tags
      * @return array|null
      */
-    private static function _getTags(array $tags = null)
+    private static function _getTags(?array $tags = null)
     {
         if (self::$_defaultTags) {
             return (array)$tags + self::$_defaultTags;
@@ -251,7 +251,7 @@ class Profiler
      * @return void
      * @throws \InvalidArgumentException
      */
-    public static function start($timerName, array $tags = null)
+    public static function start($timerName, ?array $tags = null)
     {
         if (!self::$_enabled) {
             return;

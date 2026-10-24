@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\GraphQl\SendFriend;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
@@ -123,7 +124,7 @@ class SendFriendTest extends GraphQlAbstract
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage(
-            'The product that was requested doesn\'t exist. Verify the product and try again.'
+            'The product with ID "2018" does not exist.'
         );
 
         $productId = 2018;
@@ -187,10 +188,10 @@ class SendFriendTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoConfigFixture default_store sendfriend/email/enabled 1
-     * @dataProvider sendFriendsErrorsDataProvider
      * @param string $input
      * @param string $errorMessage
      */
+    #[DataProvider('sendFriendsErrorsDataProvider')]
     public function testErrors(string $input, string $errorMessage)
     {
         $query =
@@ -292,18 +293,18 @@ QUERY;
     /**
      * @return array
      */
-    public function sendFriendsErrorsDataProvider(): array
+    public static function sendFriendsErrorsDataProvider(): array
     {
         return array_merge(
-            $this->getRecipientErrors(),
-            $this->getSenderErrors()
+            self::getRecipientErrors(),
+            self::getSenderErrors()
         );
     }
 
     /**
      * @return array
      */
-    private function getRecipientErrors(): array
+    private static function getRecipientErrors(): array
     {
         return [
             [
@@ -350,7 +351,7 @@ QUERY;
     /**
      * @return array
      */
-    private function getSenderErrors(): array
+    private static function getSenderErrors(): array
     {
         return [
             [

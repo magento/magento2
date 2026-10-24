@@ -1,19 +1,22 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Paypal\Test\Unit\Model;
 
+use Magento\Csp\Helper\CspNonceProvider;
 use Magento\Directory\Helper\Data;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Payment\Model\Source\CctypeFactory;
 use Magento\Paypal\Model\CertFactory;
 use Magento\Paypal\Model\Config;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -51,21 +54,24 @@ class ConfigTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
 
-        $this->directoryHelper = $this->getMockBuilder(Data::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->directoryHelper = $this->createMock(Data::class);
 
-        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
 
-        $this->ccTypeFactory = $this->getMockBuilder(CctypeFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->ccTypeFactory = $this->createMock(CctypeFactory::class);
 
-        $this->certFactory = $this->getMockBuilder(CertFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->certFactory = $this->createMock(CertFactory::class);
+
+        $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                CspNonceProvider::class,
+                $this->createMock(CspNonceProvider::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
 
         $this->model = new Config(
             $this->scopeConfig,
@@ -121,9 +127,7 @@ class ConfigTest extends TestCase
         $this->assertFalse($this->model->isMethodAvailable('payflow_direct'));
     }
 
-    /**
-     * @dataProvider isMethodAvailableDataProvider
-     */
+    #[DataProvider('isMethodAvailableDataProvider')]
     public function testIsMethodAvailableForIsMethodActive($methodName, $expected)
     {
         if ($methodName == Config::METHOD_WPP_BML) {
@@ -193,7 +197,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function isMethodAvailableDataProvider()
+    public static function isMethodAvailableDataProvider()
     {
         return [
             [Config::METHOD_WPP_EXPRESS, true],
@@ -249,9 +253,8 @@ class ConfigTest extends TestCase
      * @param string $name
      * @param string $expectedValue
      * @param string|null $expectedResult
-     *
-     * @dataProvider payPalStylesDataProvider
      */
+    #[DataProvider('payPalStylesDataProvider')]
     public function testGetSpecificConfigPathPayPalStyles($name, $expectedValue, $expectedResult)
     {
         // _mapGenericStyleFieldset
@@ -265,7 +268,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function payPalStylesDataProvider(): array
+    public static function payPalStylesDataProvider(): array
     {
         return [
             ['checkout_page_button_customize', 'value', 'value'],
@@ -273,9 +276,7 @@ class ConfigTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider skipOrderReviewStepDataProvider
-     */
+    #[DataProvider('skipOrderReviewStepDataProvider')]
     public function testGetPayPalBasicStartUrl($value, $url)
     {
         $this->scopeConfig->expects($this->once())
@@ -288,7 +289,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function skipOrderReviewStepDataProvider()
+    public static function skipOrderReviewStepDataProvider()
     {
         return [
             [true, 'https://www.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=token&useraction=commit'],
@@ -311,9 +312,7 @@ class ConfigTest extends TestCase
         $this->assertEquals('12345', $this->model->getBmlPublisherId());
     }
 
-    /**
-     * @dataProvider getBmlPositionDataProvider
-     */
+    #[DataProvider('getBmlPositionDataProvider')]
     public function testGetBmlPosition($section, $expected)
     {
         $this->scopeConfig->expects($this->once())
@@ -326,7 +325,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function getBmlPositionDataProvider()
+    public static function getBmlPositionDataProvider()
     {
         return [
             ['head', 'left'],
@@ -334,9 +333,7 @@ class ConfigTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider getBmlSizeDataProvider
-     */
+    #[DataProvider('getBmlSizeDataProvider')]
     public function testGetBmlSize($section, $expected)
     {
         $this->scopeConfig->expects($this->once())
@@ -349,7 +346,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function getBmlSizeDataProvider()
+    public static function getBmlSizeDataProvider()
     {
         return [
             ['head', '125x75'],
@@ -357,9 +354,7 @@ class ConfigTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dataProviderGetBmlDisplay
-     */
+    #[DataProvider('dataProviderGetBmlDisplay')]
     public function testGetBmlDisplay($section, $expectedValue, $expectedFlag, $expected)
     {
         $this->model->setStoreId(1);
@@ -385,7 +380,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderGetBmlDisplay()
+    public static function dataProviderGetBmlDisplay()
     {
         return [
             ['head', true, true, true],
@@ -403,8 +398,8 @@ class ConfigTest extends TestCase
      * @param bool $sandboxFlag
      * @param string $buttonType
      * @param string $result
-     * @dataProvider dataProviderGetExpressCheckoutShortcutImageUrl
      */
+    #[DataProvider('dataProviderGetExpressCheckoutShortcutImageUrl')]
     public function testGetExpressCheckoutShortcutImageUrl(
         $localeCode,
         $orderTotal,
@@ -436,7 +431,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderGetExpressCheckoutShortcutImageUrl()
+    public static function dataProviderGetExpressCheckoutShortcutImageUrl()
     {
         return [
             [
@@ -473,8 +468,8 @@ class ConfigTest extends TestCase
      * @param string $areButtonDynamic
      * @param bool $sandboxFlag
      * @param string $result
-     * @dataProvider dataProviderGetPaymentMarkImageUrl
      */
+    #[DataProvider('dataProviderGetPaymentMarkImageUrl')]
     public function testGetPaymentMarkImageUrl(
         $localeCode,
         $orderTotal,
@@ -505,7 +500,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderGetPaymentMarkImageUrl()
+    public static function dataProviderGetPaymentMarkImageUrl()
     {
         return [
             [

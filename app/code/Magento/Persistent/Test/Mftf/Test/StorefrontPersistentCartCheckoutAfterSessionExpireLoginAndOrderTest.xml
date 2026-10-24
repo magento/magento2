@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontPersistentCartCheckoutAfterSessionExpireLoginAndOrderTest">
+        <annotations>
+            <features value="Persistent"/>
+            <stories value="Persistent cart checkout after session expiration and login during checkout"/>
+            <title value="Cannot checkout after session expires with persistent shopping cart"/>
+            <description value="This test case verifies that a user cannot checkout after the session expires when using a persistent shopping cart."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-5489"/>
+            <group value="persistent"/>
+        </annotations>
+        <before>
+            <!-- Step 2: Enable Persistence shopping cart and set enable persistence to yes -->
+            <createData entity="PersistentConfigSettings" stepKey="enablePersistentConfigSettings"/>
+            <!-- Allow login during checkout-->
+            <actionGroup ref="AdminEnableDisableLoginOnCheckoutActionGroup" stepKey="enableLoginInGuestCheckout">
+                <argument name="enableDisableValue" value="1"/>
+            </actionGroup>
+            <!-- Step4: Create two simple products -->
+            <createData entity="_defaultProduct" stepKey="createSimpleProductOne"></createData>
+            <createData entity="_defaultProduct" stepKey="createSimpleProductTwo"></createData>
+        </before>
+        <after>
+            <!-- Revert persistence to use system values -->
+            <createData entity="PersistentConfigUseSystemValue" stepKey="restorePersistentDefaults"/>
+            <!-- Disable login on checkout page -->
+            <actionGroup ref="AdminEnableDisableLoginOnCheckoutActionGroup" stepKey="disableLoginInGuestCheckout">
+                <argument name="enableDisableValue" value="0"/>
+            </actionGroup>
+            <!-- Delete products-->
+            <deleteData createDataKey="createSimpleProductOne" stepKey="deleteSimpleProductOne"/>
+            <deleteData createDataKey="createSimpleProductTwo" stepKey="deleteSimpleProductTwo"/>
+            <!-- Delete created customer from Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="adminLoginForCleanup"/>
+            <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteRegisteredCustomer">
+                <argument name="customerEmail" value="Simple_US_Customer_NY.email"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogoutForCleanup"/>
+        </after>
+        <!-- Step 5: Go to storefront and register new customer -->
+        <actionGroup ref="StorefrontOpenCustomerAccountCreatePageActionGroup" stepKey="openCreateAccountPage"/>
+        <actionGroup ref="StorefrontFillCustomerAccountCreationFormActionGroup" stepKey="fillCreateAccountForm">
+            <argument name="customer" value="Simple_US_Customer_NY"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontClickCreateAnAccountCustomerAccountCreationFormActionGroup" stepKey="submitCreateAccountForm"/>
+        <actionGroup ref="AssertMessageCustomerCreateAccountActionGroup" stepKey="assertCustomerCreatedMessage">
+            <argument name="messageType" value="success"/>
+            <argument name="message" value="Thank you for registering with Main Website Store."/>
+        </actionGroup>
+        <!-- Add default address to new customer (so shipping can proceed without extra UI edits) -->
+        <actionGroup ref="EnterCustomerAddressInfoActionGroup" stepKey="addDefaultCustomerAddress">
+            <argument name="Address" value="US_Address_NY"/>
+        </actionGroup>
+        <!-- Step 6: Add first product to cart -->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addFirstProductToCart">
+            <argument name="product" value="$$createSimpleProductOne$$"/>
+        </actionGroup>
+        <!-- Step 7: Go to checkout and finish flow -->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutAfterFirstProduct"/>
+        <actionGroup ref="StorefrontSelectFirstShippingMethodActionGroup" stepKey="selectFirstShippingMethodForFirstOrder"/>
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="proceedToPaymentForFirstOrder"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrderPaymentForFirstOrder"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="placeFirstOrder"/>
+        <waitForElementVisible selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="waitForOderNumber"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+        <waitForText selector="{{CheckoutSuccessMainSection.orderNumberText}}" userInput="Your order number is: $grabOrderNumber." stepKey="assertFirstOrderSuccessMessage"/>
+        <!-- Step 8: Expire user session by removing PHPSESSID cookie -->
+        <resetCookie userInput="PHPSESSID" stepKey="expireSessionByResetCookie"/>
+        <!-- Step 9: Add second product to the cart as guest -->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSecondProductToCartAsGuest">
+            <argument name="product" value="$$createSimpleProductTwo$$"/>
+        </actionGroup>
+        <!-- Step 10: Go to checkout -->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutAfterSecondProduct"/>
+        <!-- Step 11: Login as current user on checkout page -->
+        <actionGroup ref="LoginAsCustomerOnCheckoutPageActionGroup" stepKey="loginAsCustomerOnCheckout">
+            <argument name="customer" value="Simple_US_Customer_NY"/>
+        </actionGroup>
+        <!-- Step 12: Place order -->
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="proceedToPaymentForSecondOrder"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrderPaymentForSecondOrder"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="placeSecondOrder"/>
+        <waitForElementVisible selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="waitForOrderNum"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNum"/>
+        <waitForText selector="{{CheckoutSuccessMainSection.orderNumberText}}" userInput="Your order number is: $grabOrderNum." stepKey="assertSecondOrderSuccessMessage"/>
+    </test>
+</tests>

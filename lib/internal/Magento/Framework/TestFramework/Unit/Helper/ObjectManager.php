@@ -1,17 +1,20 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2012 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\TestFramework\Unit\Helper;
 
 use Magento\Framework\GetParameterClassTrait;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\App\ObjectManager as AppObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Helper class for basic object retrieving, such as blocks, models etc...
  *
  * @deprecated Class under test should be instantiated with `new` keyword with explicit dependencies declaration
+ * @see https://github.com/magento/magento2/pull/29272
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ObjectManager
@@ -29,8 +32,6 @@ class ObjectManager
     ];
 
     /**
-     * Test object
-     *
      * @var \PHPUnit\Framework\TestCase
      */
     protected $_testObject;
@@ -92,20 +93,20 @@ class ObjectManager
      */
     protected function _getResourceModelMock()
     {
-        $resourceMock = $this->_testObject->getMockBuilder(\Magento\Framework\Module\ModuleResource::class)
-            ->disableOriginalConstructor()
-            ->disableOriginalClone()
-            ->disableArgumentCloning()
-            ->disallowMockingUnknownTypes()
-            ->setMethods(['getIdFieldName', '__sleep', '__wakeup'])
-            ->getMock();
+        $reflection = new \ReflectionClass($this->_testObject);
+        $method = $reflection->getMethod('createPartialMock');
+        $resourceMock = $method->invoke(
+            $this->_testObject,
+            \Magento\Framework\Module\ModuleResource::class,
+            ['getIdFieldName', '__sleep', '__wakeup']
+        );
+        $reflection = new \ReflectionClass($this->_testObject);
+        $anyMethod = $reflection->getMethod('any');
         $resourceMock->expects(
-            $this->_testObject->any()
+            $anyMethod->invoke($this->_testObject)
         )->method(
             'getIdFieldName'
-        )->will(
-            $this->_testObject->returnValue('id')
-        );
+        )->willReturn('id');
 
         return $resourceMock;
     }
@@ -118,17 +119,19 @@ class ObjectManager
      */
     protected function _getTranslatorMock($className)
     {
-        $translator = $this->_testObject->getMockBuilder($className)->disableOriginalConstructor()->getMock();
+        $reflection = new \ReflectionClass($this->_testObject);
+        $method = $reflection->getMethod('createMock');
+        $translator = $method->invoke($this->_testObject, $className);
         $translateCallback = function ($arguments) {
             return is_array($arguments) ? vsprintf(array_shift($arguments), $arguments) : '';
         };
+        $reflection = new \ReflectionClass($this->_testObject);
+        $anyMethod = $reflection->getMethod('any');
         $translator->expects(
-            $this->_testObject->any()
+            $anyMethod->invoke($this->_testObject)
         )->method(
             'translate'
-        )->will(
-            $this->_testObject->returnCallback($translateCallback)
-        );
+        )->willReturnCallback($translateCallback);
         return $translator;
     }
 
@@ -140,13 +143,10 @@ class ObjectManager
      */
     protected function _getMockWithoutConstructorCall($className)
     {
-        $mock = $this->_testObject->getMockBuilder($className)
-            ->disableOriginalConstructor()
-            ->disableOriginalClone()
-            ->disableArgumentCloning()
-            ->disallowMockingUnknownTypes()
-            ->getMock();
-        return $mock;
+        // Use reflection to call protected createMock method
+        $reflection = new \ReflectionClass($this->_testObject);
+        $method = $reflection->getMethod('createMock');
+        return $method->invoke($this->_testObject, $className);
     }
 
     /**
@@ -158,10 +158,7 @@ class ObjectManager
      */
     public function getObject($className, array $arguments = [])
     {
-        // phpstan:ignore
-        if (is_subclass_of($className, \Magento\Framework\Api\AbstractSimpleObjectBuilder::class)
-            || is_subclass_of($className, \Magento\Framework\Api\Builder::class)
-        ) {
+        if (is_subclass_of($className, \Magento\Framework\Api\AbstractSimpleObjectBuilder::class)) {
             return $this->getBuilder($className, $arguments);
         }
         $constructArguments = $this->getConstructArguments($className, $arguments);
@@ -173,7 +170,6 @@ class ObjectManager
             while ($propertyReflectionClass) {
                 if ($propertyReflectionClass->hasProperty($key)) {
                     $reflectionProperty = $propertyReflectionClass->getProperty($key);
-                    $reflectionProperty->setAccessible(true);
                     $reflectionProperty->setValue($newObject, $value);
                     break;
                 }
@@ -193,23 +189,22 @@ class ObjectManager
     protected function getBuilder($className, array $arguments)
     {
         if (!isset($arguments['objectFactory'])) {
-            $objectFactory = $this->_testObject->getMockBuilder(\Magento\Framework\Api\ObjectFactory::class)
+            $reflection = new \ReflectionClass($this->_testObject);
+            $method = $reflection->getMethod('getMockBuilder');
+            $mockBuilder = $method->invoke($this->_testObject, \Magento\Framework\Api\ObjectFactory::class);
+
+            // Use onlyMethods() with methods that actually exist in ObjectFactory
+            $objectFactory = $mockBuilder->onlyMethods(['create', 'get'])
                 ->disableOriginalConstructor()
-                ->disableOriginalClone()
-                ->disableArgumentCloning()
-                ->disallowMockingUnknownTypes()
-                ->setMethods(['populateWithArray', 'populate', 'create'])
                 ->getMock();
 
-            $objectFactory->expects($this->_testObject->any())
-                ->method('populateWithArray')
-                ->will($this->_testObject->returnSelf());
-            $objectFactory->expects($this->_testObject->any())
-                ->method('populate')
-                ->will($this->_testObject->returnSelf());
-            $objectFactory->expects($this->_testObject->any())
+            $reflection = new \ReflectionClass($this->_testObject);
+            $anyMethod = $reflection->getMethod('any');
+
+            // Only configure methods that actually exist in ObjectFactory
+            $objectFactory->expects($anyMethod->invoke($this->_testObject))
                 ->method('create')
-                ->will($this->_testObject->returnCallback(
+                ->willReturnCallback(
                     function ($className, $arguments) {
                         $reflectionClass = new \ReflectionClass($className);
                         $constructorMethod = $reflectionClass->getConstructor();
@@ -233,7 +228,15 @@ class ObjectManager
                         }
                         return new $className(...array_values($args));
                     }
-                ));
+                );
+
+            $objectFactory->expects($anyMethod->invoke($this->_testObject))
+                ->method('get')
+                ->willReturnCallback(
+                    function ($className) {
+                        return $this->_getMockWithoutConstructorCall($className);
+                    }
+                );
 
             $arguments['objectFactory'] = $objectFactory;
         }
@@ -282,12 +285,9 @@ class ObjectManager
                 if ($firstPosition !== false) {
                     $parameterString = substr($parameterString, $firstPosition + 11);
                     $parameterString = substr($parameterString, 0, strpos($parameterString, ' '));
-                    $object = $this->_testObject->getMockBuilder($parameterString)
-                        ->disableOriginalConstructor()
-                        ->disableOriginalClone()
-                        ->disableArgumentCloning()
-                        ->disallowMockingUnknownTypes()
-                        ->getMock();
+                    $reflection = new \ReflectionClass($this->_testObject);
+                    $method = $reflection->getMethod('createMock');
+                    $object = $method->invoke($this->_testObject, $parameterString);
                 }
             }
 
@@ -311,20 +311,17 @@ class ObjectManager
                 $className . ' does not instance of \Magento\Framework\Data\Collection'
             );
         }
-        $mock = $this->_testObject->getMockBuilder($className)
-            ->disableOriginalConstructor()
-            ->disableOriginalClone()
-            ->disableArgumentCloning()
-            ->disallowMockingUnknownTypes()
-            ->getMock();
+        $reflection = new \ReflectionClass($this->_testObject);
+        $method = $reflection->getMethod('createMock');
+        $mock = $method->invoke($this->_testObject, $className);
         $iterator = new \ArrayIterator($data);
+        $reflection = new \ReflectionClass($this->_testObject);
+        $anyMethod = $reflection->getMethod('any');
         $mock->expects(
-            $this->_testObject->any()
+            $anyMethod->invoke($this->_testObject)
         )->method(
             'getIterator'
-        )->will(
-            $this->_testObject->returnValue($iterator)
-        );
+        )->willReturn($iterator);
         return $mock;
     }
 
@@ -360,7 +357,26 @@ class ObjectManager
     {
         $reflection = new \ReflectionClass($className ? $className : get_class($object));
         $reflectionProperty = $reflection->getProperty($propertyName);
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($object, $propertyValue);
+    }
+
+    /**
+     * Helper method to get mock of ObjectManagerInterface
+     *
+     * @param array $map
+     */
+    public function prepareObjectManager(array $map = [])
+    {
+        $reflection = new \ReflectionClass($this->_testObject);
+        $method = $reflection->getMethod('createMock');
+        $objectManagerMock = $method->invoke(
+            $this->_testObject,
+            ObjectManagerInterface::class
+        );
+
+        $objectManagerMock->method('get')->willReturnMap($map);
+
+        $reflectionProperty = new \ReflectionProperty(AppObjectManager::class, '_instance');
+        $reflectionProperty->setValue($objectManagerMock, $objectManagerMock);
     }
 }

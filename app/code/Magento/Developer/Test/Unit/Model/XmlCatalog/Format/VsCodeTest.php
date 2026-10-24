@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,6 +17,7 @@ use Magento\Framework\Filesystem\File\Read;
 use Magento\Framework\Filesystem\File\Write;
 use Magento\Framework\Filesystem\File\WriteFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -54,7 +55,7 @@ class VsCodeTest extends TestCase
     {
         $this->objectManagerHelper = new ObjectManager($this);
 
-        $currentDirReadMock = $this->getMockForAbstractClass(ReadInterface::class);
+        $currentDirReadMock = $this->createMock(ReadInterface::class);
         $currentDirReadMock->expects($this->any())
             ->method('getRelativePath')
             ->willReturnCallback(function ($xsdPath) {
@@ -89,9 +90,10 @@ class VsCodeTest extends TestCase
      * @param array $dictionary
      *
      * @return void
-     * @dataProvider dictionaryDataProvider
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function testGenerateNewValidCatalog($content, $dictionary): void
+    #[DataProvider('dictionaryDataProvider')]
+    public function testGenerateNewValidCatalog($content, $dictionary, $invalidContent = null): void
     {
         $configFile = 'test';
 
@@ -104,17 +106,13 @@ class VsCodeTest extends TestCase
 
         $this->fileWriteFactoryMock
             ->method('create')
-            ->withConsecutive(
-                [$configFile, DriverPool::FILE, VsCode::FILE_MODE_READ],
-                [
-                    $configFile,
-                    DriverPool::FILE,
-                    VsCode::FILE_MODE_WRITE
-                ]
-            )->willReturnOnConsecutiveCalls(
-                $this->throwException(new FileSystemException($message)),
-                $fileMock
-            );
+            ->willReturnCallback(function ($arg1, $arg2, $arg3) use ($configFile, $fileMock, $message) {
+                if ($arg1 === $configFile && $arg2 === DriverPool::FILE && $arg3 === VsCode::FILE_MODE_READ) {
+                    throw new FileSystemException($message);
+                } elseif ($arg1 === $configFile && $arg2 === DriverPool::FILE && $arg3 === VsCode::FILE_MODE_WRITE) {
+                    return $fileMock;
+                }
+            });
 
         $this->vscodeFormat->generateCatalog($dictionary, $configFile);
     }
@@ -126,9 +124,10 @@ class VsCodeTest extends TestCase
      * @param array $dictionary
      *
      * @return void
-     * @dataProvider dictionaryDataProvider
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function testGenerateExistingValidCatalog($content, $dictionary): void
+    #[DataProvider('dictionaryDataProvider')]
+    public function testGenerateExistingValidCatalog($content, $dictionary, $invalidContent = null): void
     {
         $configFile = 'test';
 
@@ -145,11 +144,13 @@ class VsCodeTest extends TestCase
 
         $this->fileWriteFactoryMock
             ->method('create')
-            ->withConsecutive(
-                [$configFile, DriverPool::FILE, VsCode::FILE_MODE_READ],
-                [$configFile, DriverPool::FILE, VsCode::FILE_MODE_WRITE]
-            )
-            ->willReturnOnConsecutiveCalls($fileMock1, $fileMock2);
+            ->willReturnCallback(function ($arg1, $arg2, $arg3) use ($configFile, $fileMock1, $fileMock2) {
+                if ($arg1 === $configFile && $arg2 === DriverPool::FILE && $arg3 === VsCode::FILE_MODE_READ) {
+                    return $fileMock1;
+                } elseif ($arg1 === $configFile && $arg2 === DriverPool::FILE && $arg3 === VsCode::FILE_MODE_WRITE) {
+                    return $fileMock2;
+                }
+            });
 
         $this->vscodeFormat->generateCatalog($dictionary, $configFile);
     }
@@ -159,11 +160,13 @@ class VsCodeTest extends TestCase
      *
      * @param string $content
      * @param array $dictionary
+     * @param string|null $invalidContent
      *
      * @return void
-     * @dataProvider dictionaryDataProvider
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function testGenerateExistingEmptyValidCatalog($content, $dictionary): void
+    #[DataProvider('dictionaryDataProvider')]
+    public function testGenerateExistingEmptyValidCatalog($content, $dictionary, $invalidContent = null): void
     {
         $configFile = 'test';
 
@@ -180,11 +183,13 @@ class VsCodeTest extends TestCase
 
         $this->fileWriteFactoryMock
             ->method('create')
-            ->withConsecutive(
-                [$configFile, DriverPool::FILE, VsCode::FILE_MODE_READ],
-                [$configFile, DriverPool::FILE, VsCode::FILE_MODE_WRITE]
-            )
-            ->willReturnOnConsecutiveCalls($fileMock1, $fileMock2);
+            ->willReturnCallback(function ($arg1, $arg2, $arg3) use ($configFile, $fileMock1, $fileMock2) {
+                if ($arg1 === $configFile && $arg2 === DriverPool::FILE && $arg3 === VsCode::FILE_MODE_READ) {
+                    return $fileMock1;
+                } elseif ($arg1 === $configFile && $arg2 === DriverPool::FILE && $arg3 === VsCode::FILE_MODE_WRITE) {
+                    return $fileMock2;
+                }
+            });
 
         $this->vscodeFormat->generateCatalog($dictionary, $configFile);
     }
@@ -194,11 +199,12 @@ class VsCodeTest extends TestCase
      *
      * @param string $content
      * @param array $dictionary
+     * @param string $invalidContent
      *
      * @return void
-     * @dataProvider dictionaryDataProvider
      */
-    public function testGenerateExistingInvalidValidCatalog($content, $dictionary, $invalidContent): void
+    #[DataProvider('dictionaryDataProvider')]
+    public function testGenerateExistingInvalidValidCatalog($content, $dictionary, $invalidContent = null): void
     {
         $configFile = 'test';
 
@@ -215,11 +221,13 @@ class VsCodeTest extends TestCase
 
         $this->fileWriteFactoryMock
             ->method('create')
-            ->withConsecutive(
-                [$configFile, DriverPool::FILE, VsCode::FILE_MODE_READ],
-                [$configFile, DriverPool::FILE, VsCode::FILE_MODE_WRITE]
-            )
-            ->willReturnOnConsecutiveCalls($fileMock1, $fileMock2);
+            ->willReturnCallback(function ($arg1, $arg2, $arg3) use ($configFile, $fileMock1, $fileMock2) {
+                if ($arg1 === $configFile && $arg2 === DriverPool::FILE && $arg3 === VsCode::FILE_MODE_READ) {
+                    return $fileMock1;
+                } elseif ($arg1 === $configFile && $arg2 === DriverPool::FILE && $arg3 === VsCode::FILE_MODE_WRITE) {
+                    return $fileMock2;
+                }
+            });
 
         $this->vscodeFormat->generateCatalog($dictionary, $configFile);
     }
@@ -229,7 +237,7 @@ class VsCodeTest extends TestCase
      *
      * @return array
      */
-    public function dictionaryDataProvider(): array
+    public static function dictionaryDataProvider(): array
     {
         $fixtureXmlFile = __DIR__ . '/_files/valid_catalog.xml';
         $content = file_get_contents($fixtureXmlFile);

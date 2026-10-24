@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -41,7 +41,7 @@ $attribute->setAttributeCode('flat_attribute')
     ->setEntityTypeId($entityTypeId)
     ->setIsVisible(true)
     ->setFrontendInput('text')
-    ->setIsFilterable(1)
+    ->setIsFilterable(0)
     ->setIsUserDefined(1)
     ->setUsedInProductListing(1)
     ->setBackendType('varchar')

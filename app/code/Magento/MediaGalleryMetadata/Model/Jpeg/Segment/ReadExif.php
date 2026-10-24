@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -41,7 +41,7 @@ class ReadExif implements ReadMetadataInterface
      */
     public function __construct(
         MetadataInterfaceFactory $metadataFactory,
-        ExifReader $exifReader = null
+        ?ExifReader $exifReader = null
     ) {
         $this->metadataFactory = $metadataFactory;
         $this->exifReader = $exifReader ?? ObjectManager::getInstance()->get(ExifReader::class);

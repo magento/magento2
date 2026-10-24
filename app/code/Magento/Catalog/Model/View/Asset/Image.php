@@ -1,20 +1,20 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Model\View\Asset;
 
+use Magento\Catalog\Helper\Image as ImageHelper;
 use Magento\Catalog\Model\Config\CatalogMediaConfig;
+use Magento\Catalog\Model\Product\Image\ConvertImageMiscParamsToReadableFormat;
 use Magento\Catalog\Model\Product\Media\ConfigInterface;
-use Magento\Framework\Encryption\Encryptor;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Asset\ContextInterface;
 use Magento\Framework\View\Asset\LocalInterface;
-use Magento\Catalog\Helper\Image as ImageHelper;
-use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -24,6 +24,11 @@ use Magento\Store\Model\StoreManagerInterface;
  */
 class Image implements LocalInterface
 {
+    /**
+     * Current hashing algorithm
+     */
+    private const HASH_ALGORITHM = 'md5';
+
     /**
      * Image type of image (thumbnail,small_image,image,swatch_image,swatch_thumb)
      *
@@ -79,6 +84,11 @@ class Image implements LocalInterface
     private $mediaFormatUrl;
 
     /**
+     * @var ConvertImageMiscParamsToReadableFormat
+     */
+    private $convertImageMiscParamsToReadableFormat;
+
+    /**
      * Image constructor.
      *
      * @param ConfigInterface $mediaConfig
@@ -89,6 +99,9 @@ class Image implements LocalInterface
      * @param ImageHelper $imageHelper
      * @param CatalogMediaConfig $catalogMediaConfig
      * @param StoreManagerInterface $storeManager
+     * @param ConvertImageMiscParamsToReadableFormat $convertImageMiscParamsToReadableFormat
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         ConfigInterface $mediaConfig,
@@ -96,9 +109,10 @@ class Image implements LocalInterface
         EncryptorInterface $encryptor,
         $filePath,
         array $miscParams,
-        ImageHelper $imageHelper = null,
-        CatalogMediaConfig $catalogMediaConfig = null,
-        StoreManagerInterface $storeManager = null
+        ?ImageHelper $imageHelper = null,
+        ?CatalogMediaConfig $catalogMediaConfig = null,
+        ?StoreManagerInterface $storeManager = null,
+        ?ConvertImageMiscParamsToReadableFormat $convertImageMiscParamsToReadableFormat = null
     ) {
         if (isset($miscParams['image_type'])) {
             $this->sourceContentType = $miscParams['image_type'];
@@ -116,6 +130,8 @@ class Image implements LocalInterface
 
         $catalogMediaConfig =  $catalogMediaConfig ?: ObjectManager::getInstance()->get(CatalogMediaConfig::class);
         $this->mediaFormatUrl = $catalogMediaConfig->getMediaUrlFormat();
+        $this->convertImageMiscParamsToReadableFormat = $convertImageMiscParamsToReadableFormat ?:
+            ObjectManager::getInstance()->get(ConvertImageMiscParamsToReadableFormat::class);
     }
 
     /**
@@ -250,29 +266,27 @@ class Image implements LocalInterface
     }
 
     /**
-     * Retrieve part of path based on misc params
-     *
-     * @return string
-     */
-    private function getMiscPath()
-    {
-        return $this->encryptor->hash(
-            implode('_', $this->convertToReadableFormat($this->miscParams)),
-            Encryptor::HASH_VERSION_MD5
-        );
-    }
-
-    /**
-     * Generate path from image info
+     * Generate path from image info.
      *
      * @return string
      */
     private function getImageInfo()
     {
-        $path = $this->getModule()
-            . DIRECTORY_SEPARATOR . $this->getMiscPath()
-            . DIRECTORY_SEPARATOR . $this->getFilePath();
-        return preg_replace('|\Q'. DIRECTORY_SEPARATOR . '\E+|', DIRECTORY_SEPARATOR, $path);
+        $data = implode('_', $this->convertToReadableFormat($this->miscParams));
+
+        $pathTemplate = $this->getModule()
+            . DIRECTORY_SEPARATOR . "%s" . DIRECTORY_SEPARATOR
+            . $this->getFilePath();
+
+        /**
+         * New paths are generated without dependency on
+         * an encryption key.
+         */
+        return preg_replace(
+            '|\Q' . DIRECTORY_SEPARATOR . '\E+|',
+            DIRECTORY_SEPARATOR,
+            sprintf($pathTemplate, hash(self::HASH_ALGORITHM, $data))
+        );
     }
 
     /**
@@ -283,17 +297,6 @@ class Image implements LocalInterface
      */
     private function convertToReadableFormat(array $miscParams)
     {
-        $miscParams['image_height'] = 'h:' . ($miscParams['image_height'] ?? 'empty');
-        $miscParams['image_width'] = 'w:' . ($miscParams['image_width'] ?? 'empty');
-        $miscParams['quality'] = 'q:' . ($miscParams['quality'] ?? 'empty');
-        $miscParams['angle'] = 'r:' . ($miscParams['angle'] ?? 'empty');
-        $miscParams['keep_aspect_ratio'] = (!empty($miscParams['keep_aspect_ratio']) ? '' : 'non') . 'proportional';
-        $miscParams['keep_frame'] = (!empty($miscParams['keep_frame']) ? '' : 'no') . 'frame';
-        $miscParams['keep_transparency'] = (!empty($miscParams['keep_transparency']) ? '' : 'no') . 'transparency';
-        $miscParams['constrain_only'] = (!empty($miscParams['constrain_only']) ? 'do' : 'not') . 'constrainonly';
-        $miscParams['background'] = !empty($miscParams['background'])
-            ? 'rgb' . implode(',', $miscParams['background'])
-            : 'nobackground';
-        return $miscParams;
+        return $this->convertImageMiscParamsToReadableFormat->convertImageMiscParamsToReadableFormat($miscParams);
     }
 }

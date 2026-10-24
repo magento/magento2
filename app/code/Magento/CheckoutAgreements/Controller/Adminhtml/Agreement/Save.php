@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CheckoutAgreements\Controller\Adminhtml\Agreement;
 
@@ -30,7 +29,7 @@ class Save extends Agreement implements HttpPostActionInterface
     public function __construct(
         Context $context,
         Registry $coreRegistry,
-        AgreementFactory $agreementFactory = null
+        ?AgreementFactory $agreementFactory = null
     ) {
         $this->agreementFactory = $agreementFactory ?:
                 ObjectManager::getInstance()->get(AgreementFactory::class);

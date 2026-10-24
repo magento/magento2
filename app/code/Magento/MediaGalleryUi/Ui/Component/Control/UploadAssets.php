@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\MediaGalleryUi\Ui\Component\Control;
 
@@ -38,7 +38,7 @@ class UploadAssets implements ButtonProviderInterface
     {
         $buttonData = [
             'label' => __('Upload Image'),
-            'on_click' => 'jQuery("#image-uploader-input").click();',
+            'on_click' => 'jQuery("#image-uploader-form .uppy-Dashboard-browse").click();',
             'class' => 'action-default scalable add media-gallery-actions-buttons',
             'sort_order' => 20,
         ];

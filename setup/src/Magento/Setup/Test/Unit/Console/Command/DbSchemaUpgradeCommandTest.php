@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Setup\Console\Command\DbSchemaUpgradeCommand;
 use Magento\Setup\Model\Installer;
 use Magento\Setup\Model\InstallerFactory;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -34,10 +35,10 @@ class DbSchemaUpgradeCommandTest extends TestCase
     }
 
     /**
-     * @dataProvider executeDataProvider
      * @param $options
      * @param $expectedOptions
      */
+    #[DataProvider('executeDataProvider')]
     public function testExecute($options, $expectedOptions)
     {
         $this->deploymentConfig->expects($this->once())->method('isAvailable')->willReturn(true);
@@ -57,7 +58,7 @@ class DbSchemaUpgradeCommandTest extends TestCase
     /**
      * @return array
      */
-    public function executeDataProvider()
+    public static function executeDataProvider()
     {
         return [
             [

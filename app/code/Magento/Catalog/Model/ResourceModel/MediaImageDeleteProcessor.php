@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -101,7 +101,7 @@ class MediaImageDeleteProcessor
      */
     private function canDeleteImage(string $file): bool
     {
-        return $this->productGallery->countImageUses($file) <= 1;
+        return $this->productGallery->countImageUses($file) < 1;
     }
 
     /**

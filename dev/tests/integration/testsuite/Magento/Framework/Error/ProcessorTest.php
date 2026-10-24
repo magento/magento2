@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Error;
 
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 require_once __DIR__ . '/../../../../../../../pub/errors/processor.php';
 
@@ -41,8 +42,8 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
      * @param int $logReportDirNestingLevel
      * @param int $logReportDirNestingLevelChanged
      * @param string $exceptionMessage
-     * @dataProvider dataProviderSaveAndLoadReport
      */
+    #[DataProvider('dataProviderSaveAndLoadReport')]
     public function testSaveAndLoadReport(
         int $logReportDirNestingLevel,
         int $logReportDirNestingLevelChanged,
@@ -74,7 +75,7 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function dataProviderSaveAndLoadReport(): array
+    public static function dataProviderSaveAndLoadReport(): array
     {
         return [
             [

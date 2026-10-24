@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -76,12 +76,12 @@ class DataProviderTest extends TestCase
      * Check that custom layout date is handled properly.
      *
      * @magentoDataFixture Magento/Cms/_files/pages_with_layout_xml.php
-     * @dataProvider customLayoutDataProvider
      *
      * @param string $identifier
      * @param string|null $layoutUpdateSelected
      * @return void
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('customLayoutDataProvider')]
     public function testCustomLayoutData(string $identifier, ?string $layoutUpdateSelected): void
     {
         $page = $this->repo->execute($identifier, 0);
@@ -105,7 +105,7 @@ class DataProviderTest extends TestCase
      *
      * @return array
      */
-    public function customLayoutDataProvider(): array
+    public static function customLayoutDataProvider(): array
     {
         return [
             ['test_custom_layout_page_1', '_existing_'],

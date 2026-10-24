@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -26,5 +26,10 @@
         <element name="orderId" type="text" selector="|Order # (\d+)|"/>
         <element name="orderStatusUnderViewM" type="text" selector="//td//div[contains(text(),'{{product}}')]/../..//td[@class='col-status' and contains(text(),'{{status}}')]" parameterized="true" timeout="30"/>
         <element name="orderStatusUnderViewS" type="text" selector="//tr//div[contains(text(),'{{product}}')]/../../..//td[@class='col-status' and contains(text(),'{{status}}')]" parameterized="true" timeout="30"/>
+        <element name="paymentInformationField" type="text" selector="//*[contains(text(),'{{paymentInformationField}}')]/following-sibling::td" parameterized="true"/>
+        <element name="rateValue" type="text" selector="//table[contains(@class, 'order-information-table')]//th[contains(text(), 'rate:')]/following-sibling::td"/>
+        <element name="historyStatus" type="button" selector="//select[@name='history[status]']"/>
+        <element name="statusUpdate" type="button" selector="//button[@title='Update']"/>
+        <element name="orderNote" type="block" selector="//div[@id='order_history_block']//ul[@class='note-list']"/>
     </section>
 </sections>

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,10 +12,10 @@ use Magento\Eav\Api\AttributeSetRepositoryInterface;
 use Magento\Eav\Api\Data\AttributeSetInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 
-class AttributeSetTextTest extends AbstractColumnTest
+class AttributeSetTextTest extends AbstractColumnTestCase
 {
-    const ATTRIBUTE_SET_ID = 4;
-    const ATTRIBUTE_SET_NAME = 'Default';
+    private const ATTRIBUTE_SET_ID = 4;
+    private const ATTRIBUTE_SET_NAME = 'Default';
 
     /**
      * @var AttributeSetRepositoryInterface|MockObject
@@ -31,12 +31,8 @@ class AttributeSetTextTest extends AbstractColumnTest
     {
         parent::setUp();
 
-        $this->attributeSetRepositoryMock = $this->getMockBuilder(AttributeSetRepositoryInterface::class)
-            ->setMethods(['get'])
-            ->getMockForAbstractClass();
-        $this->attributeSetMock = $this->getMockBuilder(AttributeSetInterface::class)
-            ->setMethods(['getAttributeSetName'])
-            ->getMockForAbstractClass();
+        $this->attributeSetRepositoryMock = $this->createMock(AttributeSetRepositoryInterface::class);
+        $this->attributeSetMock = $this->createMock(AttributeSetInterface::class);
     }
 
     /**

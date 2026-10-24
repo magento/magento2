@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Backend\Controller\Adminhtml;
 
 use Magento\Framework\Message\MessageInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test class for \Magento\Backend\Controller\Adminhtml\Auth
@@ -187,11 +188,11 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractController
 
     /**
      * Test user logging process when user not assigned to any role
-     * @dataProvider incorrectLoginDataProvider
      * @magentoDbIsolation enabled
      *
      * @param $params
      */
+    #[DataProvider('incorrectLoginDataProvider')]
     public function testIncorrectLogin($params)
     {
         /** @var \Magento\Framework\Data\Form\FormKey $formKey */
@@ -216,7 +217,7 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertRedirect($this->stringStartsWith($url));
     }
 
-    public function incorrectLoginDataProvider()
+    public static function incorrectLoginDataProvider()
     {
         return [
             'login dummy user' => [

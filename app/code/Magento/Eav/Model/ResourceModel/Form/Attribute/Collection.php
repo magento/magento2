@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Eav\Model\ResourceModel\Form\Attribute;
 
@@ -70,8 +70,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
+        ?\Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
+        ?\Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_eavConfig = $eavConfig;
@@ -94,6 +94,16 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
                 __('The current module EAV entity is undefined.')
             );
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_store = null;
+        $this->_entityType = null;
+        parent::_resetState();
     }
 
     /**
@@ -193,6 +203,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _beforeLoad()
     {
+        $store = $this->getStore();
         $select = $this->getSelect();
         $connection = $this->getConnection();
         $entityType = $this->getEntityType();
@@ -254,7 +265,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
                 }
             }
 
-            $store = $this->getStore();
             $joinWebsiteExpression = $connection->quoteInto(
                 'sa.attribute_id = main_table.attribute_id AND sa.website_id = ?',
                 (int)$store->getWebsiteId()

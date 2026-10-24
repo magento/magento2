@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 
@@ -165,7 +165,7 @@ class Websites extends AbstractModifier
         $websitesList = $this->getWebsitesList();
         $isNewProduct = !$this->locator->getProduct()->getId();
         $tooltip = [
-            'link' => 'https://docs.magento.com/user-guide/configuration/scope.html',
+            'link' => 'https://experienceleague.adobe.com/docs/commerce-admin/start/setup/websites-stores-views.html#scope-settings', // @codingStandardsIgnoreLine
             'description' => __(
                 'If your Magento installation has multiple websites, ' .
                 'you can edit the scope to use the product on specific sites.'
