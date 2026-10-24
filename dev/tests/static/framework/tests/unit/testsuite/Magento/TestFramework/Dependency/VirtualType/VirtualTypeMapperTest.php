@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\TestFramework\Dependency\VirtualType;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class VirtualTypeMapperTest extends \PHPUnit\Framework\TestCase
 {
@@ -41,9 +42,8 @@ class VirtualTypeMapperTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $scope
      * @param string $type
-     * @param string $expected
-     * @dataProvider getTypeDataProvider
-     */
+     * @param string $expected     */
+    #[DataProvider('getTypeDataProvider')]
     public function testGetType($scope, $type, $expected)
     {
         static::assertEquals($expected, $this->mapper->getType($type, $scope));
@@ -52,7 +52,7 @@ class VirtualTypeMapperTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getTypeDataProvider()
+    public static function getTypeDataProvider()
     {
         return [
             [
@@ -85,9 +85,8 @@ class VirtualTypeMapperTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $diFilesPath
-     * @param array $expectedVirtualTypesDependencies
-     * @dataProvider loadConfigurationDataProvider
-     */
+     * @param array $expectedVirtualTypesDependencies     */
+    #[DataProvider('loadConfigurationDataProvider')]
     public function testLoad(array $diFilesPath, array $expectedVirtualTypesDependencies)
     {
         $mapper = new VirtualTypeMapper();
@@ -99,9 +98,8 @@ class VirtualTypeMapperTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $diFilesPath
-     * @param array $expectedVirtualTypesDependencies
-     * @dataProvider loadConfigurationDataProvider
-     */
+     * @param array $expectedVirtualTypesDependencies     */
+    #[DataProvider('loadConfigurationDataProvider')]
     public function testGetTypeComplex(array $diFilesPath, array $expectedVirtualTypesDependencies)
     {
         $mapper = new VirtualTypeMapper();
@@ -120,12 +118,12 @@ class VirtualTypeMapperTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function loadConfigurationDataProvider()
+    public static function loadConfigurationDataProvider()
     {
         return [
             // collects two virtual types, defined in module configuration on global area level
             [
-                'diFilesPath' => [$this->getFilePath('etc/di.xml')],
+                'diFilesPath' => [self::getFilePath('etc/di.xml')],
                 'expectedVirtualTypesDependencies' => [
                     'global' => [
                         'Magento\Internal\Some\Class' => 'ExternalVirtualType',
@@ -139,7 +137,7 @@ class VirtualTypeMapperTest extends \PHPUnit\Framework\TestCase
              * but extended for adminhtml as it contains own virtual types definitions
              */
             [
-                'diFilesPath' => [$this->getFilePath('etc/di.xml'), $this->getFilePath('etc/adminhtml/di.xml')],
+                'diFilesPath' => [self::getFilePath('etc/di.xml'), self::getFilePath('etc/adminhtml/di.xml')],
                 'expectedVirtualTypesDependencies' => [
                     'global' => [
                         'Magento\Internal\Some\Class' => 'ExternalVirtualType',
@@ -176,7 +174,7 @@ class VirtualTypeMapperTest extends \PHPUnit\Framework\TestCase
      * @param string $fileName
      * @return string
      */
-    private function getFilePath($fileName)
+    private static function getFilePath($fileName)
     {
         return __DIR__
         . DIRECTORY_SEPARATOR

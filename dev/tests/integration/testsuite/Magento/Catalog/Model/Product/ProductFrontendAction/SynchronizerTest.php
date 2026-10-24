@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Catalog\Model\ProductRepository;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\Session;
 use Magento\Customer\Model\Visitor;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for \Magento\Catalog\Model\Product\ProductFrontendAction\Synchronizer.
@@ -135,12 +136,12 @@ class SynchronizerTest extends \PHPUnit\Framework\TestCase
      * @param string|null $customerEmail
      * @param int $expectedCollectionSize
      * @return void
-     * @dataProvider getAllActionsDataProvider
      *
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
      */
+    #[DataProvider('getAllActionsDataProvider')]
     public function testGetAllActions(?int $visitorId, ?string $customerEmail, int $expectedCollectionSize): void
     {
         $customerId = $customerEmail ? $this->customerRepository->get($customerEmail)->getId() : null;
@@ -175,7 +176,7 @@ class SynchronizerTest extends \PHPUnit\Framework\TestCase
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function getAllActionsDataProvider()
+    public static function getAllActionsDataProvider()
     {
         return [
             ['visitorId' => null, 'customerEmail' => 'customer@example.com', 'expectedCollectionSize' => 2],

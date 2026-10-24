@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 
@@ -23,7 +23,6 @@ use Magento\Ui\Component\Form\Element\Checkbox;
 use Magento\Ui\Component\Form\Element\ActionDelete;
 use Magento\Ui\Component\Form\Element\DataType\Text;
 use Magento\Ui\Component\Form\Element\DataType\Number;
-use Magento\Framework\Locale\CurrencyInterface;
 
 /**
  * Data provider for "Customizable Options" panel
@@ -95,6 +94,13 @@ class CustomOptions extends AbstractModifier
     public const CUSTOM_OPTIONS_LISTING = 'product_custom_options_listing';
     /**#@-*/
 
+    /**#@+
+     * Precision for price value
+     */
+    private const MAX_PRECISION = 6;
+    private const MIN_PRECISION = 2;
+    /**#@-*/
+
     /**
      * @var LocatorInterface
      * @since 101.0.0
@@ -136,11 +142,6 @@ class CustomOptions extends AbstractModifier
      * @since 101.0.0
      */
     protected $meta = [];
-
-    /**
-     * @var CurrencyInterface
-     */
-    private $localeCurrency;
 
     /**
      * @param LocatorInterface $locator
@@ -194,10 +195,12 @@ class CustomOptions extends AbstractModifier
             }
         }
 
+        $productId = $this->locator->getProduct()->getId() ?? '';
+
         return array_replace_recursive(
             $data,
             [
-                $this->locator->getProduct()->getId() => [
+                $productId => [
                     static::DATA_SOURCE_DEFAULT => [
                         static::FIELD_ENABLE => 1,
                         static::GRID_OPTIONS_NAME => $options
@@ -220,7 +223,7 @@ class CustomOptions extends AbstractModifier
         $value = $this->arrayManager->get($path, $data);
 
         if (is_numeric($value)) {
-            $data = $this->arrayManager->replace($path, $data, $this->formatPrice($value));
+            $data = $this->arrayManager->replace($path, $data, $this->formatPriceValue($value));
         }
 
         return $data;
@@ -378,8 +381,8 @@ class CustomOptions extends AbstractModifier
                     'config' => [
                         'addButtonLabel' => __('Add Option'),
                         'componentType' => DynamicRows::NAME,
-                        'component' => 'Magento_Catalog/js/components/dynamic-rows-import-custom-options',
-                        'template' => 'ui/dynamic-rows/templates/collapsible',
+                        'component' => 'Magento_Catalog/js/components/dynamic-rows-import-custom-options-per-page',
+                        'template' => 'Magento_Catalog/components/dynamic-rows-import-custom-options-per-page',
                         'additionalClasses' => 'admin__field-wide',
                         'deleteProperty' => static::FIELD_IS_DELETE,
                         'deleteValue' => '1',
@@ -393,6 +396,9 @@ class CustomOptions extends AbstractModifier
                             'insertData' => '${ $.provider }:${ $.dataProvider }',
                             '__disableTmpl' => ['insertData' => false],
                         ],
+                        'sizesConfig' => [
+                            'enabled' => true
+                        ]
                     ],
                 ],
             ],
@@ -1183,37 +1189,26 @@ class CustomOptions extends AbstractModifier
     }
 
     /**
-     * The getter function to get the locale currency for real application code
-     *
-     * @return \Magento\Framework\Locale\CurrencyInterface
-     *
-     * @deprecated 101.0.0
-     */
-    private function getLocaleCurrency()
-    {
-        if ($this->localeCurrency === null) {
-            $this->localeCurrency = \Magento\Framework\App\ObjectManager::getInstance()->get(CurrencyInterface::class);
-        }
-        return $this->localeCurrency;
-    }
-
-    /**
-     * Format price according to the locale of the currency
+     * Format price value to have the same number of digits after delimiter as the original value
      *
      * @param mixed $value
      * @return string
-     * @since 101.0.0
      */
-    protected function formatPrice($value)
+    private function formatPriceValue($value)
     {
-        if (!is_numeric($value)) {
-            return null;
+        if ($value === null) {
+            return '';
         }
 
-        $store = $this->storeManager->getStore();
-        $currency = $this->getLocaleCurrency()->getCurrency($store->getBaseCurrencyCode());
-        $value = $currency->toCurrency($value, ['display' => \Magento\Framework\Currency::NO_SYMBOL]);
+        $stringVal = (string)(float)$value;
+        $dotIndex = strpos($stringVal, '.');
+        $decimals = $dotIndex === false ? 0 : strlen(substr($stringVal, $dotIndex + 1));
 
-        return $value;
+        return number_format(
+            (float)$value,
+            max(self::MIN_PRECISION, min(self::MAX_PRECISION, $decimals)),
+            '.',
+            ''
+        );
     }
 }

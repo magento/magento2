@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\File;
 
@@ -12,7 +12,6 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\TargetDirectory;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Filesystem\DriverPool;
-use Magento\Framework\Filter\ArrayFilter;
 use Magento\Framework\Validation\ValidationException;
 use Psr\Log\LoggerInterface;
 
@@ -218,11 +217,11 @@ class Uploader
      */
     public function __construct(
         $fileId,
-        Mime $fileMime = null,
-        DirectoryList $directoryList = null,
-        DriverPool $driverPool = null,
-        TargetDirectory $targetDirectory = null,
-        Filesystem $filesystem = null
+        ?Mime $fileMime = null,
+        ?DirectoryList $directoryList = null,
+        ?DriverPool $driverPool = null,
+        ?TargetDirectory $targetDirectory = null,
+        ?Filesystem $filesystem = null
     ) {
         $this->directoryList = $directoryList ?: ObjectManager::getInstance()->get(DirectoryList::class);
         $this->targetDirectory = $targetDirectory ?: ObjectManager::getInstance()->get(TargetDirectory::class);
@@ -267,7 +266,7 @@ class Uploader
 
         $this->_result = false;
         $destinationFile = $destinationFolder;
-        $fileName = isset($newFileName) ? $newFileName : $this->_file['name'];
+        $fileName = $newFileName ?? $this->_file['name'];
         $fileName = static::getCorrectFileName($fileName);
         if ($this->_enableFilesDispersion) {
             $fileName = $this->correctFileNameCase($fileName);
@@ -343,6 +342,7 @@ class Uploader
      * @return void
      *
      * @deprecated 100.0.8
+     * @see Nothing
      */
     protected function chmod($file)
     {
@@ -361,11 +361,13 @@ class Uploader
         $rootCode = DirectoryList::PUB;
 
         try {
-            if (strpos($destPath, $this->getDirectoryList()->getPath($rootCode)) !== 0) {
+            $path = $this->getDirectoryList()->getPath($rootCode) ?: '';
+            $destPath = $destPath ?: '';
+            if (strpos($destPath, $path) !== 0) {
                 $rootCode = DirectoryList::ROOT;
             }
 
-            $destPath = str_replace($this->getDirectoryList()->getPath($rootCode), '', $destPath);
+            $destPath = str_replace($path, '', $destPath);
             $directory = $this->getTargetDirectory()->getDirectoryWrite($rootCode);
 
             return $this->getFileDriver()->rename(
@@ -382,8 +384,9 @@ class Uploader
     /**
      * Get logger instance.
      *
-     * @deprecated
      * @return LoggerInterface
+     * @deprecated
+     * @see Nothing
      */
     private function getLogger(): LoggerInterface
     {
@@ -497,17 +500,18 @@ class Uploader
      */
     public static function getCorrectFileName($fileName)
     {
-        $fileName = preg_replace('/[^a-z0-9_\\-\\.]+/i', '_', ltrim($fileName, '.'));
+        $fileName = $fileName !== null ? ltrim($fileName, '.') : '';
+        $fileName = preg_replace('/[^a-z0-9_\\-\\.]+/i', '_', $fileName);
         $fileInfo = pathinfo($fileName);
         $fileInfo['extension'] = $fileInfo['extension'] ?? '';
 
-        if (strlen($fileInfo['basename']) > self::MAX_FILE_NAME_LENGTH) {
+        if (strlen($fileInfo['basename'] ?? '') > self::MAX_FILE_NAME_LENGTH) {
             throw new \LengthException(
                 __('Filename is too long; must be %1 characters or less', self::MAX_FILE_NAME_LENGTH)
             );
         }
 
-        if (preg_match('/^_+$/', $fileInfo['filename'])) {
+        if (preg_match('/^_+$/', $fileInfo['filename'] ?? '')) {
             $fileName = 'file.' . $fileInfo['extension'];
         }
 
@@ -536,7 +540,7 @@ class Uploader
      */
     protected static function _addDirSeparator($dir)
     {
-        if (substr($dir, -1) != '/') {
+        if (!$dir || substr($dir, -1) != '/') {
             $dir .= '/';
         }
         return $dir;
@@ -630,7 +634,7 @@ class Uploader
     public function setAllowedExtensions($extensions = [])
     {
         foreach ((array)$extensions as $extension) {
-            $this->_allowedExtensions[] = strtolower($extension);
+            $this->_allowedExtensions[] = $extension !== null ? strtolower($extension) : '';
         }
         return $this;
     }
@@ -644,7 +648,7 @@ class Uploader
     public function checkAllowedExtension($extension)
     {
         //File extensions should only be allowed to contain alphanumeric characters
-        if (preg_match('/[^a-z0-9]/i', $extension)) {
+        if ($extension && preg_match('/[^a-z0-9]/i', $extension)) {
             return false;
         }
 
@@ -652,7 +656,7 @@ class Uploader
             return true;
         }
 
-        return in_array(strtolower($extension), $this->_allowedExtensions);
+        return $extension && in_array(strtolower($extension), $this->_allowedExtensions);
     }
 
     /**
@@ -671,7 +675,7 @@ class Uploader
      * @param string|array $fileId
      * @return void
      * @throws \DomainException
-     * @throws \InvalidArgumentException
+     * @throws \InvalidArgumentException|FileSystemException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function _setUploadFileId($fileId)
@@ -685,7 +689,8 @@ class Uploader
                 throw new \DomainException('$_FILES array is empty');
             }
 
-            preg_match("/^(.*?)\[(.*?)\]$/", $fileId, $file);
+            $fileId = $fileId !== null ? $fileId : '';
+            preg_match("/^(.*?)(\[.+])$/", $fileId, $file);
 
             if (is_array($file) && count($file) > 0 && !empty($file[0]) && !empty($file[1])) {
                 array_shift($file);
@@ -695,7 +700,14 @@ class Uploader
                 $tmpVar = [];
 
                 foreach ($fileAttributes as $attributeName => $attributeValue) {
-                    $tmpVar[$attributeName] = $attributeValue[$file[1]];
+                    $keys = explode('][', trim($file[1], '[]'));
+                    foreach ($keys as $key) {
+                        $key = trim($key, '[]');
+                        if (isset($attributeValue[$key])) {
+                            $attributeValue = $attributeValue[$key];
+                        }
+                    }
+                    $tmpVar[$attributeName] = $attributeValue;
                 }
 
                 $fileAttributes = $tmpVar;
@@ -718,6 +730,7 @@ class Uploader
      * @return void
      * @throws \InvalidArgumentException
      * @throws FileSystemException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function validateFileId(array $fileId): void
     {
@@ -725,7 +738,7 @@ class Uploader
         if (isset($fileId['tmp_name'])) {
             $tmpName = trim($fileId['tmp_name']);
 
-            if (preg_match('/\.\.(\\\|\/)/', $tmpName) !== 1) {
+            if (is_uploaded_file($tmpName) && preg_match('/\.\.(\\\|\/)/', $tmpName) !== 1) {
                 $allowedFolders = [
                     sys_get_temp_dir(),
                     $this->directoryList->getPath(DirectoryList::SYS_TMP),
@@ -794,7 +807,7 @@ class Uploader
     }
 
     /**
-     * Get new file name if the same is already exists
+     * Get new file name if the same already exists
      *
      * @param string $destinationFile
      * @return string
@@ -828,6 +841,7 @@ class Uploader
      * @param string $fileName
      * @return string
      * @deprecated 101.0.4
+     * @see Nothing
      */
     public static function getDispretionPath($fileName)
     {
@@ -845,7 +859,7 @@ class Uploader
     {
         $char = 0;
         $dispersionPath = '';
-        while ($char < 2 && $char < strlen($fileName)) {
+        while ($char < 2 && ($fileName && $char < strlen($fileName))) {
             if (empty($dispersionPath)) {
                 $dispersionPath = '/' . ('.' == $fileName[$char] ? '_' : $fileName[$char]);
             } else {
@@ -861,8 +875,9 @@ class Uploader
     /**
      * Get driver for file
      *
-     * @deprecated
      * @return DriverInterface
+     * @deprecated
+     * @see Nothing
      */
     private function getFileDriver(): DriverInterface
     {

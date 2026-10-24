@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Downloadable\Helper;
 
@@ -11,8 +11,6 @@ use Magento\Store\Model\ScopeInterface;
 
 /**
  * Downloadable helper
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {

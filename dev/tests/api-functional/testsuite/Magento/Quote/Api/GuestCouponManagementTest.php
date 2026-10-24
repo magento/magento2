@@ -1,19 +1,32 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Quote\Api;
 
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\Checkout\Test\Fixture\SetBillingAddress as SetBillingAddressFixture;
+use Magento\Checkout\Test\Fixture\SetShippingAddress as SetShippingAddressFixture;
+use Magento\Quote\Test\Fixture\AddProductToCart as AddProductToCartFixture;
+use Magento\Quote\Test\Fixture\ApplyCoupon as ApplyCouponFixture;
+use Magento\Quote\Test\Fixture\GuestCart as GuestCartFixture;
+use Magento\Quote\Test\Fixture\QuoteIdMask as QuoteIdMaskFixture;
+use Magento\SalesRule\Model\Rule;
+use Magento\SalesRule\Test\Fixture\Rule as SalesRuleFixture;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class GuestCouponManagementTest extends WebapiAbstract
 {
-    const SERVICE_VERSION = 'V1';
-    const SERVICE_NAME = 'quoteGuestCouponManagementV1';
-    const RESOURCE_PATH = '/V1/guest-carts/';
+    public const SERVICE_VERSION = 'V1';
+    public const SERVICE_NAME = 'quoteGuestCouponManagementV1';
+    public const RESOURCE_PATH = '/V1/guest-carts/';
 
     /**
      * @var \Magento\TestFramework\ObjectManager
@@ -49,17 +62,36 @@ class GuestCouponManagementTest extends WebapiAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_coupon_saved.php
+     * Test get coupon from guest cart
      */
+    #[
+        DataFixture(SalesRuleFixture::class, [
+            'simple_action' => Rule::BY_PERCENT_ACTION,
+            'discount_amount' => 10,
+            'coupon_code' => 'test_coupon_10',
+        ], 'rule'),
+        DataFixture(ProductFixture::class, ['sku' => 'simple-coupon-get-%uniqid%', 'price' => 10], 'product'),
+        DataFixture(GuestCartFixture::class, ['reserved_order_id' => 'test_order_1'], 'cart'),
+        DataFixture(
+            AddProductToCartFixture::class,
+            ['cart_id' => '$cart.id$', 'product_id' => '$product.id$', 'qty' => 2],
+            'add_product_to_cart'
+        ),
+        DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(ApplyCouponFixture::class, ['cart_id' => '$cart.id$', 'coupon_codes' => ['test_coupon_10']]),
+        DataFixture(QuoteIdMaskFixture::class, ['cart_id' => '$cart.id$'], 'quoteIdMask'),
+    ]
     public function testGet()
     {
-        /** @var \Magento\Quote\Model\Quote  $quote */
-        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
-        $quote->load('test_order_1', 'reserved_order_id');
+        $cart = DataFixtureStorageManager::getStorage()->get('cart');
+        $quoteIdMask = DataFixtureStorageManager::getStorage()->get('quoteIdMask');
+        $cartId = $quoteIdMask->getMaskedId();
+        /** @var \Magento\Quote\Api\CartRepositoryInterface $cartRepository */
+        $cartRepository = $this->objectManager->get(\Magento\Quote\Api\CartRepositoryInterface::class);
+        $quote = $cartRepository->get($cart->getId());
+        $expectedCouponCode = $quote->getCouponCode();
 
-        $cartId = $this->getQuoteMaskedId($quote->getId());
-
-        $couponCode = $quote->getCouponCode();
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . $cartId . '/coupons/' ,
@@ -73,18 +105,37 @@ class GuestCouponManagementTest extends WebapiAbstract
         ];
 
         $requestData = ["cartId" => $cartId];
-        $this->assertEquals($couponCode, $this->_webApiCall($serviceInfo, $requestData));
+        $this->assertEquals($expectedCouponCode, $this->_webApiCall($serviceInfo, $requestData));
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_coupon_saved.php
+     * Test delete coupon from guest cart
      */
+    #[
+        DataFixture(SalesRuleFixture::class, [
+            'simple_action' => Rule::BY_PERCENT_ACTION,
+            'discount_amount' => 10,
+            'coupon_code' => 'test_coupon_10',
+        ], 'rule'),
+        DataFixture(ProductFixture::class, ['sku' => 'simple-coupon-delete-%uniqid%', 'price' => 10], 'product'),
+        DataFixture(GuestCartFixture::class, ['reserved_order_id' => 'test_order_1'], 'cart'),
+        DataFixture(
+            AddProductToCartFixture::class,
+            ['cart_id' => '$cart.id$', 'product_id' => '$product.id$', 'qty' => 2],
+            'add_product_to_cart'
+        ),
+        DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(ApplyCouponFixture::class, ['cart_id' => '$cart.id$', 'coupon_codes' => ['test_coupon_10']]),
+        DataFixture(QuoteIdMaskFixture::class, ['cart_id' => '$cart.id$'], 'quoteIdMask'),
+    ]
     public function testDelete()
     {
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_1', 'reserved_order_id');
-        $cartId = $this->getQuoteMaskedId($quote->getId());
+        $quoteIdMask = DataFixtureStorageManager::getStorage()->get('quoteIdMask');
+        $cartId = $quoteIdMask->getMaskedId();
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . $cartId . '/coupons',
@@ -103,17 +154,27 @@ class GuestCouponManagementTest extends WebapiAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
+     * Test set coupon throws exception if coupon does not exist
      */
+    #[
+        DataFixture(ProductFixture::class, ['sku' => 'simple-coupon-invalid-%uniqid%', 'price' => 10], 'product'),
+        DataFixture(GuestCartFixture::class, ['reserved_order_id' => 'test_order_1'], 'cart'),
+        DataFixture(
+            AddProductToCartFixture::class,
+            ['cart_id' => '$cart.id$', 'product_id' => '$product.id$', 'qty' => 2],
+            'add_product_to_cart'
+        ),
+        DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(QuoteIdMaskFixture::class, ['cart_id' => '$cart.id$'], 'quoteIdMask'),
+    ]
     public function testSetCouponThrowsExceptionIfCouponDoesNotExist()
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('The coupon code isn\'t valid. Verify the code and try again.');
 
-        /** @var \Magento\Quote\Model\Quote $quote */
-        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
-        $quote->load('test_order_1', 'reserved_order_id');
-        $cartId = $this->getQuoteMaskedId($quote->getId());
+        $quoteIdMask = DataFixtureStorageManager::getStorage()->get('quoteIdMask');
+        $cartId = $quoteIdMask->getMaskedId();
 
         $couponCode = 'invalid_coupon_code';
 

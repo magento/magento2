@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Search\Request;
 
@@ -82,7 +82,7 @@ class Binder
     private function processData($data, $bindData)
     {
         array_walk_recursive($bindData, function (&$item) {
-            $item = trim($item);
+            $item = $item !== null ? trim($item) : '';
         });
         $bindData = array_filter($bindData, function ($element) {
             return is_array($element) ? count($element) : strlen($element);

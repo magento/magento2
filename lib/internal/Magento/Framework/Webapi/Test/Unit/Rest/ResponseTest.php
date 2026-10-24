@@ -2,8 +2,8 @@
 /**
  * Test Rest response controller.
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -172,7 +172,7 @@ class ResponseTest extends TestCase
         )->method(
             'render'
         )->willReturnCallback(
-            [$this, 'callbackForSendResponseTest'], $this->returnArgument(0)
+            [$this, 'callbackForSendResponseTest']
         );
         $exceptionMessage = 'Message';
         $exceptionHttpCode = \Magento\Framework\Webapi\Exception::HTTP_BAD_REQUEST;

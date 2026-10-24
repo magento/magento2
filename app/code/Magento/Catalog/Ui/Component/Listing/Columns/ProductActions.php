@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Ui\Component\Listing\Columns;
 
@@ -58,7 +58,7 @@ class ProductActions extends Column
                         'catalog/product/edit',
                         ['id' => $item['entity_id'], 'store' => $storeId]
                     ),
-                    'ariaLabel' => __('Edit ') . $item['name'],
+                    'ariaLabel' => __('Edit ') . ($item['name'] ?? ''),
                     'label' => __('Edit'),
                     'hidden' => false,
                 ];

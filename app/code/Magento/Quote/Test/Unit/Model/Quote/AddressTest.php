@@ -1,18 +1,20 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Quote\Test\Unit\Model\Quote;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Directory\Model\Currency;
 use Magento\Directory\Model\Region;
 use Magento\Directory\Model\RegionFactory;
 use Magento\Framework\App\Config;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Address\CustomAttributeListInterface;
@@ -31,6 +33,7 @@ use Magento\Shipping\Model\Rate\Result;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -44,6 +47,8 @@ use PHPUnit\Framework\TestCase;
  */
 class AddressTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Address
      */
@@ -150,10 +155,11 @@ class AddressTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->rateCollection = $this->getMockBuilder(RateCollectorInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getResult'])
-            ->getMockForAbstractClass();
+        $this->rateCollection = $this->createPartialMockWithReflection(
+            RateCollectorInterface::class,
+            ['collectRates', 'getResult']
+        );
+        $this->rateCollection->method('collectRates')->willReturnSelf();
 
         $this->itemCollectionFactory = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()
@@ -167,18 +173,14 @@ class AddressTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
 
-        $this->store = $this->getMockBuilder(StoreInterface::class)
+        $this->store = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
-            ->addMethods(['getBaseCurrency', 'getCurrentCurrency', 'getCurrentCurrencyCode'])
-            ->getMockForAbstractClass();
+            ->onlyMethods(['getBaseCurrency', 'getCurrentCurrency', 'getCurrentCurrencyCode', 'getWebsiteId'])
+            ->getMock();
 
-        $this->website = $this->getMockBuilder(WebsiteInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->website = $this->createMock(WebsiteInterface::class);
 
         $this->attributeList = $this->createMock(
             CustomAttributeListInterface::class
@@ -224,58 +226,74 @@ class AddressTest extends TestCase
     }
 
     /**
-     * @return void
+     * Provide data for test different cases
+     *
+     * @param void
+     * @return array
      */
-    public function testValidateMinimumAmountVirtual(): void
+    public static function getDataProvider(): array
     {
-        $storeId = 1;
-        $scopeConfigValues = [
-            ['sales/minimum_order/active', ScopeInterface::SCOPE_STORE, $storeId, true],
-            ['sales/minimum_order/amount', ScopeInterface::SCOPE_STORE, $storeId, 20],
-            ['sales/minimum_order/include_discount_amount', ScopeInterface::SCOPE_STORE, $storeId, true],
-            ['sales/minimum_order/tax_including', ScopeInterface::SCOPE_STORE, $storeId, true]
+        return [
+            'Non-virtual Quote' => [
+                'scopeConfigValues' => [
+                    ['sales/minimum_order/active', ScopeInterface::SCOPE_STORE, 1, true],
+                    ['sales/minimum_order/amount', ScopeInterface::SCOPE_STORE, 1, 20],
+                    ['sales/minimum_order/include_discount_amount', ScopeInterface::SCOPE_STORE, 1, true],
+                    ['sales/minimum_order/tax_including', ScopeInterface::SCOPE_STORE, 1, true]
+                ],
+                'address' => [
+                    'setAddressType' => 'billing'
+                ],
+                'quote' => [
+                    'getStoreId' => 1,
+                    'getIsVirtual' => false
+                ],
+                'result' => true
+            ],
+            'With Shipping Discount' => [
+                'scopeConfigValues' => [
+                    ['sales/minimum_order/active', ScopeInterface::SCOPE_STORE, 1, true],
+                    ['sales/minimum_order/amount', ScopeInterface::SCOPE_STORE, 1, 2],
+                    ['sales/minimum_order/include_discount_amount', ScopeInterface::SCOPE_STORE, 1, true],
+                    ['sales/minimum_order/tax_including', ScopeInterface::SCOPE_STORE, 1, true]
+                ],
+                'address' => [
+                    'setBaseSubtotal' => 25.00,
+                    'setBaseDiscountAmount' => -27.60,
+                    'setBaseShippingDiscountAmount' => 4.6,
+                    'setAddressType' => 'shipping'
+                ],
+                'quote' => [
+                    'getStoreId' => 1,
+                    'getIsVirtual' => false
+                ],
+                'result' => true
+            ]
         ];
-
-        $this->quote->expects($this->once())
-            ->method('getStoreId')
-            ->willReturn($storeId);
-        $this->quote->expects($this->once())
-            ->method('getIsVirtual')
-            ->willReturn(true);
-        $this->address->setAddressType(Address::TYPE_SHIPPING);
-
-        $this->scopeConfig->expects($this->once())
-            ->method('isSetFlag')
-            ->willReturnMap($scopeConfigValues);
-
-        $this->assertTrue($this->address->validateMinimumAmount());
     }
 
-    /**
-     * @return void
-     */
-    public function testValidateMinimumAmount(): void
-    {
-        $storeId = 1;
-        $scopeConfigValues = [
-            ['sales/minimum_order/active', ScopeInterface::SCOPE_STORE, $storeId, true],
-            ['sales/minimum_order/amount', ScopeInterface::SCOPE_STORE, $storeId, 20],
-            ['sales/minimum_order/include_discount_amount', ScopeInterface::SCOPE_STORE, $storeId, true],
-            ['sales/minimum_order/tax_including', ScopeInterface::SCOPE_STORE, $storeId, true]
-        ];
+    #[DataProvider('getDataProvider')]
+    public function testValidateMinimumAmount(
+        array $scopeConfigValues,
+        array $address,
+        array $quote,
+        bool $result
+    ): void {
+        foreach ($quote as $method => $value) {
+            $this->quote->expects($this->once())
+                ->method($method)
+                ->willReturn($value);
+        }
 
-        $this->quote->expects($this->once())
-            ->method('getStoreId')
-            ->willReturn($storeId);
-        $this->quote->expects($this->once())
-            ->method('getIsVirtual')
-            ->willReturn(false);
+        foreach ($address as $setter => $value) {
+            $this->address->$setter($value);
+        }
 
         $this->scopeConfig->expects($this->once())
             ->method('isSetFlag')
             ->willReturnMap($scopeConfigValues);
 
-        $this->assertTrue($this->address->validateMinimumAmount());
+        $this->assertEquals($result, $this->address->validateMinimumAmount());
     }
 
     /**
@@ -364,27 +382,15 @@ class AddressTest extends TestCase
     {
         $storeId = 12345;
         $webSiteId = 6789;
-        $baseCurrency = $this->getMockBuilder(Currency::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['convert'])
-            ->addMethods(['getCurrentCurrencyCode'])
-            ->getMockForAbstractClass();
+        $baseCurrency = $this->createPartialMock(Currency::class, ['convert']);
 
-        $currentCurrency = $this->getMockBuilder(Currency::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['convert'])
-            ->addMethods(['getCurrentCurrencyCode'])
-            ->getMockForAbstractClass();
+        $currentCurrency = $this->createPartialMock(Currency::class, ['convert']);
 
         $currentCurrencyCode = 'UAH';
 
-        $this->quote->expects($this->any())
-            ->method('getStoreId')
-            ->willReturn($storeId);
+        $this->quote->method('getStoreId')->willReturn($storeId);
 
-        $this->store->expects($this->any())
-            ->method('getWebsiteId')
-            ->willReturn($webSiteId);
+        $this->store->method('getWebsiteId')->willReturn($webSiteId);
 
         $this->scopeConfig->expects($this->exactly(1))
             ->method('getValue')
@@ -396,19 +402,10 @@ class AddressTest extends TestCase
             ->willReturn(1);
 
         /** @var RateRequest */
-        $request = $this->getMockBuilder(RateRequest::class)
-            ->disableOriginalConstructor()
-            ->addMethods(
-                [
-                    'setStoreId',
-                    'setWebsiteId',
-                    'setBaseCurrency',
-                    'setPackageCurrency',
-                    'getBaseSubtotalTotalInclTax',
-                    'getBaseSubtotal'
-                ]
-            )
-            ->getMock();
+        $request = $this->createPartialMockWithReflection(
+            RateRequest::class,
+            ['setStoreId', 'setWebsiteId', 'setBaseCurrency', 'setPackageCurrency']
+        );
 
         /** @var Collection */
         $collection = $this->getMockBuilder(Collection::class)
@@ -434,9 +431,7 @@ class AddressTest extends TestCase
             ->getMock();
 
         /** @var  AbstractResult */
-        $rateItem = $this->getMockBuilder(AbstractResult::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $rateItem = $this->createMock(AbstractResult::class);
 
         /** @var Rate */
         $rate = $this->getMockBuilder(Rate::class)
@@ -463,13 +458,7 @@ class AddressTest extends TestCase
             ->method('create')
             ->willReturn($this->rateCollection);
 
-        $this->rateCollection->expects($this->once())
-            ->method('collectRates')
-            ->willReturnSelf();
-
-        $this->rateCollection->expects($this->once())
-            ->method('getResult')
-            ->willReturn($rates);
+        $this->rateCollection->method('getResult')->willReturn($rates);
 
         $this->itemCollectionFactory->expects($this->once())
             ->method('create')
@@ -484,8 +473,13 @@ class AddressTest extends TestCase
             ->willReturnSelf();
 
         $this->storeManager->method('getStore')
-            ->withConsecutive([$storeId], [null])
-            ->willReturn($this->store);
+            ->willReturnCallback(
+                function ($arg) use ($storeId,) {
+                    if ($arg === $storeId || is_null($arg)) {
+                        return $this->store;
+                    }
+                }
+            );
 
         $this->store->method('getBaseCurrency')
             ->willReturn($baseCurrency);

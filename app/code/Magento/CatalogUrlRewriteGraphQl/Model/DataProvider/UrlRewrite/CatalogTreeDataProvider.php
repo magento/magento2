@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\CatalogUrlRewriteGraphQl\Model\DataProvider\UrlRewrite;
 use Magento\Catalog\Model\CategoryRepository;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\CategoryTree as CategoryTreeDataProvider;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\ExtractDataFromCategoryTree;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\UrlRewriteGraphQl\Model\DataProvider\EntityDataProviderInterface;
@@ -55,19 +56,24 @@ class CatalogTreeDataProvider implements EntityDataProviderInterface
      * @param int|null $storeId
      * @return array
      * @throws GraphQlNoSuchEntityException
+     * @throws NoSuchEntityException
      */
     public function getData(
         string $entity_type,
         int $id,
-        ResolveInfo $info = null,
-        int $storeId = null
+        ?ResolveInfo $info = null,
+        ?int $storeId = null
     ): array {
         $categoryId = (int)$id;
-        $categoriesTree = $this->categoryTree->getTree($info, $categoryId, $storeId);
-        if (empty($categoriesTree) || ($categoriesTree->count() == 0)) {
+        $category = $this->categoryRepository->get($categoryId, $storeId);
+        if (!$category->getIsActive()) {
             throw new GraphQlNoSuchEntityException(__('Category doesn\'t exist'));
         }
-        $result = current($this->extractDataFromCategoryTree->execute($categoriesTree));
+        $categoriesTree = $this->categoryTree->getTreeCollection($info, $categoryId, $storeId);
+        if ($categoriesTree->count() == 0) {
+            throw new GraphQlNoSuchEntityException(__('Category doesn\'t exist'));
+        }
+        $result = current($this->extractDataFromCategoryTree->buildTree($categoriesTree, [$categoryId]));
         $result['type_id'] = $entity_type;
         return $result;
     }

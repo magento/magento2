@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Setup\Console\Style;
@@ -32,7 +32,7 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
     /**
      * Default console line max length(use for limitation in case terminal width greater than 120 characters).
      */
-    const MAX_LINE_LENGTH = 120;
+    public const MAX_LINE_LENGTH = 120;
 
     /**
      * Console input provider.
@@ -97,8 +97,8 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
      */
     public function block(
         $messages,
-        string $type = null,
-        string $style = null,
+        ?string $type = null,
+        ?string $style = null,
         string $prefix = ' ',
         bool $padding = false
     ) {
@@ -111,10 +111,10 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
     /**
      * @inheritdoc
      */
-    public function title($message)
+    public function title($message): void
     {
         $this->autoPrependBlock();
-        $bar = str_repeat('=', Helper::strlenWithoutDecoration($this->getFormatter(), $message));
+        $bar = str_repeat('=', Helper::width(Helper::removeDecoration($this->getFormatter(), $message)));
         $this->writeln(
             [
                 sprintf(' <options=bold>%s</>', OutputFormatter::escapeTrailingBackslash($message)),
@@ -127,10 +127,10 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
     /**
      * @inheritdoc
      */
-    public function section($message)
+    public function section($message): void
     {
         $this->autoPrependBlock();
-        $bar = str_repeat('-', Helper::strlenWithoutDecoration($this->getFormatter(), $message));
+        $bar = str_repeat('-', Helper::width(Helper::removeDecoration($this->getFormatter(), $message)));
         $this->writeln(
             [
                 sprintf(' <fg=white>%s</>', OutputFormatter::escapeTrailingBackslash($message)),
@@ -143,7 +143,7 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
     /**
      * @inheritdoc
      */
-    public function listing(array $elements)
+    public function listing(array $elements): void
     {
         $this->autoPrependText();
         $elements = array_map(
@@ -160,7 +160,7 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
     /**
      * @inheritdoc
      */
-    public function text($message)
+    public function text($message): void
     {
         $this->autoPrependText();
         $messages = is_array($message) ? array_values($message) : [$message];
@@ -184,7 +184,7 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
     /**
      * @inheritdoc
      */
-    public function success($message, $padding = true)
+    public function success($message, $padding = true): void
     {
         $this->block($message, 'SUCCESS', 'fg=black;bg=green', ' ', $padding);
     }
@@ -192,7 +192,7 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
     /**
      * @inheritdoc
      */
-    public function error($message, $padding = true)
+    public function error($message, $padding = true): void
     {
         $this->block($message, 'ERROR', 'fg=white;bg=red', ' ', $padding);
     }
@@ -200,7 +200,7 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
     /**
      * @inheritdoc
      */
-    public function warning($message, $padding = true)
+    public function warning($message, $padding = true): void
     {
         $this->block($message, 'WARNING', 'fg=black;bg=yellow', ' ', $padding);
     }
@@ -208,7 +208,7 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
     /**
      * @inheritdoc
      */
-    public function note($message, $padding = false)
+    public function note($message, $padding = false): void
     {
         $this->block($message, 'NOTE', 'fg=yellow', ' ', $padding);
     }
@@ -216,7 +216,7 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
     /**
      * @inheritdoc
      */
-    public function caution($message, $padding = true)
+    public function caution($message, $padding = true): void
     {
         $this->block($message, 'CAUTION', 'fg=black;bg=yellow', ' ! ', $padding);
     }
@@ -224,7 +224,7 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
     /**
      * @inheritdoc
      */
-    public function table(array $headers, array $rows)
+    public function table(array $headers, array $rows): void
     {
         $style = clone Table::getStyleDefinition('symfony-style-guide');
         $style->setCellHeaderFormat('<info>%s</info>');
@@ -242,7 +242,7 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
      * @inheritdoc
      * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
      */
-    public function ask($question, $default = null, $validator = null, $maxAttempts = null)
+    public function ask($question, $default = null, $validator = null, $maxAttempts = null):mixed
     {
         $question = new Question($question, $default);
         $question->setValidator($validator);
@@ -255,7 +255,7 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
      * @inheritdoc
      * @throws \Symfony\Component\Console\Exception\LogicException
      */
-    public function askHidden($question, $validator = null)
+    public function askHidden($question, $validator = null):mixed
     {
         $question = new Question($question);
 
@@ -268,7 +268,7 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
     /**
      * @inheritdoc
      */
-    public function confirm($question, $default = true)
+    public function confirm($question, $default = true):bool
     {
         return $this->askQuestion(new ConfirmationQuestion($question, $default));
     }
@@ -276,7 +276,7 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
     /**
      * @inheritdoc
      */
-    public function choice($question, array $choices, $default = null)
+    public function choice($question, array $choices, $default = null):mixed
     {
         if (null !== $default) {
             $values = array_flip($choices);
@@ -289,7 +289,7 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
     /**
      * @inheritdoc
      */
-    public function progressStart($max = 0)
+    public function progressStart($max = 0): void
     {
         $this->progressBar = $this->createProgressBar($max);
         $this->progressBar->start();
@@ -300,7 +300,7 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
      * @throws \Symfony\Component\Console\Exception\LogicException
      * @throws \Symfony\Component\Console\Exception\RuntimeException
      */
-    public function progressAdvance($step = 1)
+    public function progressAdvance($step = 1): void
     {
         $this->getProgressBar()->advance($step);
     }
@@ -309,7 +309,7 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
      * @inheritdoc
      * @throws \Symfony\Component\Console\Exception\RuntimeException
      */
-    public function progressFinish()
+    public function progressFinish(): void
     {
         $this->getProgressBar()->finish();
         $this->newLine(2);
@@ -319,7 +319,7 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
     /**
      * @inheritdoc
      */
-    public function createProgressBar($max = 0)
+    public function createProgressBar($max = 0): ProgressBar
     {
         $progressBar = parent::createProgressBar($max);
         $progressBar->setEmptyBarCharacter(' ');
@@ -371,10 +371,10 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
     public function askForMissingArgument(
         string $argument,
         string $question,
-        string $default = null,
-        callable $validator = null,
-        int $maxAttempts = null,
-        bool $comment = null,
+        ?string $default = null,
+        ?callable $validator = null,
+        ?int $maxAttempts = null,
+        ?bool $comment = null,
         string $commentFormat = 'Argument [%s] set to: %s'
     ) {
         try {
@@ -415,10 +415,10 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
     public function askForMissingOption(
         string $option,
         string $question,
-        string $default = null,
-        callable $validator = null,
-        int $maxAttempts = null,
-        bool $comment = null,
+        ?string $default = null,
+        ?callable $validator = null,
+        ?int $maxAttempts = null,
+        ?bool $comment = null,
         string $commentFormat = 'Option [%s] set to: %s'
     ) {
         try {
@@ -447,7 +447,7 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
     /**
      * @inheritdoc
      */
-    public function writeln($messages, $type = self::OUTPUT_NORMAL)
+    public function writeln($messages, $type = self::OUTPUT_NORMAL): void
     {
         parent::writeln($messages, $type);
         $this->bufferedOutput->writeln($this->reduceBuffer($messages), $type);
@@ -456,7 +456,7 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
     /**
      * @inheritdoc
      */
-    public function write($messages, $newline = false, $type = self::OUTPUT_NORMAL)
+    public function write($messages, $newline = false, $type = self::OUTPUT_NORMAL): void
     {
         parent::write($messages, $newline, $type);
         $this->bufferedOutput->write($this->reduceBuffer($messages), $newline, $type);
@@ -465,7 +465,7 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
     /**
      * @inheritdoc
      */
-    public function newLine($count = 1)
+    public function newLine(int $count = 1): void
     {
         parent::newLine($count);
         $this->bufferedOutput->write(str_repeat(PHP_EOL, $count));
@@ -558,13 +558,13 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
      */
     private function createBlock(
         array $messages,
-        string $type = null,
-        string $style = null,
+        ?string $type = null,
+        ?string $style = null,
         string $prefix = ' ',
         bool $padding = false
     ) {
         $indentLength = 0;
-        $prefixLength = Helper::strlenWithoutDecoration($this->getFormatter(), $prefix);
+        $prefixLength = Helper::width(Helper::removeDecoration($this->getFormatter(), $prefix));
         $lineIndentation = '';
         if (null !== $type) {
             $type = sprintf('[%s] ', $type);
@@ -583,7 +583,7 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
                 $line = $firstLineIndex === $i ? $type . $line : $lineIndentation . $line;
             }
             $line = $prefix . $line;
-            $multiplier = $this->lineLength - Helper::strlenWithoutDecoration($this->getFormatter(), $line);
+            $multiplier = $this->lineLength - Helper::width(Helper::removeDecoration($this->getFormatter(), $line));
             $line .= str_repeat(' ', $multiplier);
             if ($style) {
                 $line = sprintf('<%s>%s</>', $style, $line);

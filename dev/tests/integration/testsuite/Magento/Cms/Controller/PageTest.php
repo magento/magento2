@@ -1,16 +1,21 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Cms\Controller;
 
 use Magento\Cms\Api\GetPageByIdentifierInterface;
 use Magento\Cms\Model\Page\CustomLayoutManagerInterface;
+use Magento\Framework\App\Cache\Type\Block;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\LayoutInterface;
 use Magento\TestFramework\Cms\Model\CustomLayoutManager;
+use Magento\Cms\Api\PageRepositoryInterface;
 use Magento\TestFramework\TestCase\AbstractController;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for \Magento\Cms\Controller\Page\View class.
@@ -123,10 +128,11 @@ class PageTest extends AbstractController
      * Tests page renders even with unavailable custom page layout.
      *
      * @magentoDataFixture Magento/Cms/Fixtures/page_list.php
-     * @dataProvider pageLayoutDataProvider
      * @param string $pageIdentifier
      * @return void
+     * @throws NoSuchEntityException
      */
+    #[DataProvider('pageLayoutDataProvider')]
     public function testPageWithCustomLayout(string $pageIdentifier): void
     {
         $page = $this->pageRetriever->execute($pageIdentifier, 0);
@@ -140,11 +146,45 @@ class PageTest extends AbstractController
     /**
      * @return array
      */
-    public function pageLayoutDataProvider(): array
+    public static function pageLayoutDataProvider(): array
     {
         return [
             'Page with 1column layout' => ['page-with-1column-layout'],
             'Page with unavailable layout' => ['page-with-unavailable-layout']
         ];
+    }
+
+    /**
+     * Tests page renders with changed layout
+     *
+     * @magentoDataFixture Magento/Cms/Fixtures/page_list.php
+     * @return void
+     * @throws NoSuchEntityException|LocalizedException
+     */
+    public function testPageWithChangedLayoutCanCleanCacheTag(): void
+    {
+        $pageIdentifier = 'page-with-1column-layout';
+        $blockHtmlCache = $this->_objectManager->get(
+            Block::class
+        );
+        $page = $this->pageRetriever->execute($pageIdentifier, 0);
+        $cacheKey = sprintf(
+            '%s_%s',
+            'CMS_PAGE_VIEW_ID',
+            str_replace('-', '_', strtoupper($page->getId()))
+        );
+
+        $this->dispatch('/cms/page/view/page_id/' . $page->getId());
+        $this->assertStringContainsString(
+            '<main id="maincontent" class="page-main">',
+            $this->getResponse()->getBody()
+        );
+        $pageRepository = $this->_objectManager->get(PageRepositoryInterface::class);
+        $page->setPageLayout('cms-full-width');
+        $pageRepository->save($page);
+        $this->dispatch('/cms/page/view/page_id/' . $page->getId());
+        $this->assertFalse(
+            $blockHtmlCache->test($cacheKey)
+        );
     }
 }

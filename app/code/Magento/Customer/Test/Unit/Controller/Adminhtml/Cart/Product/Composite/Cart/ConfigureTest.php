@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -23,12 +23,15 @@ use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ConfigureTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var int
      */
@@ -80,8 +83,11 @@ class ConfigureTest extends TestCase
 
         $request->expects($this->exactly(3))
             ->method('getParam')
-            ->withConsecutive(['customer_id'], ['id'], ['website_id'])
-            ->willReturnOnConsecutiveCalls($customerId, $this->quoteItemId, $this->websiteId);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['customer_id'] => $customerId,
+                ['id'] => $this->quoteItemId,
+                ['website_id'] => $this->websiteId
+            });
 
         $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
@@ -104,7 +110,7 @@ class ConfigureTest extends TestCase
             ->willReturn($this->option);
 
         $context = $this->getMockBuilder(Context::class)
-            ->setMethods(['getRequest', 'getObjectManager'])
+            ->onlyMethods(['getRequest', 'getObjectManager'])
             ->disableOriginalConstructor()
             ->getMock();
         $context->expects($this->any())
@@ -123,7 +129,7 @@ class ConfigureTest extends TestCase
             ->getMock();
 
         $this->quoteItemRetriever = $this->getMockBuilder(QuoteItemRetriever::class)
-            ->setMethods(['getById'])
+            ->onlyMethods(['getById'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -148,10 +154,10 @@ class ConfigureTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $quote = $this->getMockBuilder(Quote::class)
-            ->setMethods(['setWebsite', 'getItemById'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $quote = $this->createPartialMockWithReflection(
+            Quote::class,
+            ['getItemById', 'setWebsite']
+        );
         $quote->expects($this->once())
             ->method('setWebsite')
             ->willReturnSelf();

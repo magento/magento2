@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Payment\Model\Method;
@@ -25,7 +25,7 @@ use Magento\Directory\Helper\Data as DirectoryHelper;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @deprecated 100.0.6
  * @see \Magento\Payment\Model\Method\Adapter
- * @see https://devdocs.magento.com/guides/v2.4/payments-integrations/payment-gateway/payment-gateway-intro.html
+ * @see https://developer.adobe.com/commerce/php/development/payments-integrations/payment-gateway/
  * @since 100.0.2
  */
 abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibleModel implements
@@ -190,10 +190,10 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Payment\Model\Method\Logger $logger,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        DirectoryHelper $directory = null
+        ?DirectoryHelper $directory = null
     ) {
         parent::__construct(
             $context,
@@ -437,7 +437,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
         for specific country, the flag will set up as 1
         */
         if ($this->getConfigData('allowspecific') == 1) {
-            $availableCountries = explode(',', $this->getConfigData('specificcountry'));
+            $availableCountries = explode(',', $this->getConfigData('specificcountry') ?? '');
             if (!in_array($country, $availableCountries)) {
                 return false;
             }
@@ -774,7 +774,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
      * @return bool
      * @deprecated 100.2.0
      */
-    public function isAvailable(\Magento\Quote\Api\Data\CartInterface $quote = null)
+    public function isAvailable(?\Magento\Quote\Api\Data\CartInterface $quote = null)
     {
         if (!$this->isActive($quote ? $quote->getStoreId() : null)) {
             return false;

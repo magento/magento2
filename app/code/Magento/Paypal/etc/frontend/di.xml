@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
@@ -119,6 +119,7 @@
         <arguments>
             <argument name="sectionSourceMap" xsi:type="array">
                 <item name="paypal-billing-agreement" xsi:type="string">Magento\Paypal\CustomerData\BillingAgreement</item>
+                <item name="paypal-buyer-country" xsi:type="string">Magento\Paypal\CustomerData\BuyerCountry</item>
             </argument>
         </arguments>
     </type>
@@ -173,6 +174,7 @@
         <arguments>
             <argument name="disallowedFundingMap" xsi:type="array">
                 <item name="CREDIT" xsi:type="string">credit</item>
+                <item name="VENMO" xsi:type="string">venmo</item>
                 <item name="CARD" xsi:type="string">card</item>
                 <item name="ELV" xsi:type="string">sepa</item>
             </argument>

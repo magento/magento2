@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -73,15 +73,8 @@ class SaveTest extends TestCase
         $this->redirectFactory = $this->createMock(RedirectFactory::class);
         $this->redirect = $this->createMock(Redirect::class);
         $this->configFactory = $this->createMock(ConfigFactory::class);
-        $this->messageManager = $this->getMockForAbstractClass(
-            ManagerInterface::class,
-            [],
-            '',
-            false
-        );
-        $this->request = $this->getMockBuilder(Http::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->messageManager = $this->createMock(ManagerInterface::class);
+        $this->request = $this->createMock(Http::class);
 
         $this->request->expects($this->atLeastOnce())
             ->method('isPost')
@@ -95,15 +88,9 @@ class SaveTest extends TestCase
                 'resultRedirectFactory' => $this->redirectFactory
             ]
         );
-        $this->designConfig = $this->getMockForAbstractClass(
-            DesignConfigInterface::class,
-            [],
-            '',
-            false
-        );
+        $this->designConfig = $this->createMock(DesignConfigInterface::class);
         $this->fileParams = $this->createMock(Parameters::class);
-        $this->dataPersistor = $this->getMockBuilder(DataPersistorInterface::class)
-            ->getMockForAbstractClass();
+        $this->dataPersistor = $this->createMock(DataPersistorInterface::class);
         $this->controller = new Save(
             $this->context,
             $this->designConfigRepository,
@@ -121,16 +108,15 @@ class SaveTest extends TestCase
             ->willReturn($this->redirect);
         $this->request->expects($this->exactly(3))
             ->method('getParam')
-            ->withConsecutive(
-                ['scope'],
-                ['scope_id'],
-                ['back', false]
-            )
-            ->willReturnOnConsecutiveCalls(
-                $scope,
-                $scopeId,
-                true
-            );
+            ->willReturnCallback(function ($arg1, $arg2) use ($scope, $scopeId) {
+                if ($arg1 == 'scope') {
+                    return $scope;
+                } elseif ($arg1 == 'scope_id') {
+                    return $scopeId;
+                } elseif ($arg1 == 'back') {
+                    return true;
+                }
+            });
         $this->request->expects($this->once())
             ->method('getParams')
             ->willReturn(['header_default_title' => 'Default title']);
@@ -161,10 +147,13 @@ class SaveTest extends TestCase
             ->with('theme_design_config');
         $this->redirect->expects($this->exactly(2))
             ->method('setPath')
-            ->withConsecutive(
-                ['theme/design_config/'],
-                ['theme/design_config/edit', ['scope' => $scope, 'scope_id' => $scopeId]]
-            );
+            ->willReturnCallback(function ($arg1, $arg2) use ($scope, $scopeId) {
+                if ($arg1 == 'theme/design_config/') {
+                    return null;
+                } elseif ($arg1 == 'theme/design_config/edit' && $arg2 == ['scope' => $scope, 'scope_id' => $scopeId]) {
+                    return null;
+                }
+            });
 
         $this->assertSame($this->redirect, $this->controller->execute());
     }
@@ -178,14 +167,11 @@ class SaveTest extends TestCase
             ->willReturn($this->redirect);
         $this->request->expects($this->exactly(2))
             ->method('getParam')
-            ->withConsecutive(
-                ['scope'],
-                ['scope_id']
-            )
-            ->willReturnOnConsecutiveCalls(
-                $scope,
-                $scopeId
-            );
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['scope'] => $scope,
+                ['scope_id'] => $scopeId
+            });
+
         $this->request->expects($this->once())
             ->method('getParams')
             ->willReturn(['header_default_title' => 'Default title']);
@@ -232,14 +218,10 @@ class SaveTest extends TestCase
             ->willReturn($this->redirect);
         $this->request->expects($this->exactly(2))
             ->method('getParam')
-            ->withConsecutive(
-                ['scope'],
-                ['scope_id']
-            )
-            ->willReturnOnConsecutiveCalls(
-                $scope,
-                $scopeId
-            );
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['scope'] => $scope,
+                ['scope_id'] => $scopeId
+            });
         $this->request->expects($this->once())
             ->method('getParams')
             ->willReturn(['header_default_title' => 'Default title']);

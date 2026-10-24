@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -56,11 +56,11 @@ class PaymentVaultInformationManagement
         PaymentInformationManagementInterface $subject,
         string $cartId,
         PaymentInterface $paymentMethod,
-        AddressInterface $billingAddress = null
+        ?AddressInterface $billingAddress = null
     ): void {
         $availableMethods = $this->vaultPaymentMethodList->getActiveList($this->storeManager->getStore()->getId());
         foreach ($availableMethods as $availableMethod) {
-            if (strpos($paymentMethod->getMethod(), $availableMethod->getCode()) !== false) {
+            if (strpos($paymentMethod->getMethod() ?? '', $availableMethod->getCode()) !== false) {
                 $paymentMethod->setMethod($availableMethod->getCode());
             }
         }

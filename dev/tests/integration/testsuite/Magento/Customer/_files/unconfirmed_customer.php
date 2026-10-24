@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -39,8 +39,6 @@ $customer->setWebsiteId($website->getId())
     ->setMiddlename('A')
     ->setLastname('Smith')
     ->setSuffix('Esq.')
-    ->setDefaultBilling(1)
-    ->setDefaultShipping(1)
     ->setConfirmation($random->getUniqueHash())
     ->setGender($gender);
 

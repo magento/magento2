@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -21,6 +21,7 @@ use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\TestFramework\TestCase\AbstractBackendController;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Tests for configurable product admin save.
@@ -94,10 +95,10 @@ class ProductTest extends AbstractBackendController
 
     /**
      * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_attribute.php
-     * @dataProvider saveNewProductDataProvider
      * @param array $childProducts
      * @return void
      */
+    #[DataProvider('saveNewProductDataProvider')]
     public function testSaveNewProduct(array $childProducts): void
     {
         $this->serRequestParams($childProducts);
@@ -111,11 +112,11 @@ class ProductTest extends AbstractBackendController
     /**
      * @return array
      */
-    public function saveNewProductDataProvider(): array
+    public static function saveNewProductDataProvider(): array
     {
         return [
             'with_different_prices_and_qty' => [
-                'child_products' => [
+                'childProducts' => [
                     'simple_1' => [
                         'name' => 'simple_1',
                         'sku' => 'simple_1',
@@ -135,7 +136,7 @@ class ProductTest extends AbstractBackendController
                 ],
             ],
             'without_weight' => [
-                'child_products' => [
+                'childProducts' => [
                     'simple_1' => [
                         'name' => 'simple_1',
                         'sku' => 'simple_1',
@@ -158,11 +159,11 @@ class ProductTest extends AbstractBackendController
     /**
      * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_product_with_one_simple.php
      * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_attribute_2.php
-     * @dataProvider saveExistProductDataProvider
      * @param array $childProducts
      * @param array $associatedProducts
      * @return void
      */
+    #[DataProvider('saveExistProductDataProvider')]
     public function testSaveExistProduct(array $childProducts, array $associatedProducts): void
     {
         $configurableProduct = $this->productRepository->get('configurable');
@@ -180,11 +181,11 @@ class ProductTest extends AbstractBackendController
     /**
      * @return array
      */
-    public function saveExistProductDataProvider(): array
+    public static function saveExistProductDataProvider(): array
     {
         return [
             'added_new_option' => [
-                'child_products' => [
+                'childProducts' => [
                     'simple_2' => [
                         'name' => 'simple_2',
                         'sku' => 'simple_2',
@@ -194,10 +195,10 @@ class ProductTest extends AbstractBackendController
                         'attributes' => ['test_configurable' => 'Option 2'],
                     ],
                 ],
-                'associated_products' => ['simple_1'],
+                'associatedProducts' => ['simple_1'],
             ],
             'added_new_option_and_delete_old' => [
-                'child_products' => [
+                'childProducts' => [
                     'simple_2' => [
                         'name' => 'simple_2',
                         'sku' => 'simple_2',
@@ -206,14 +207,14 @@ class ProductTest extends AbstractBackendController
                         'attributes' => ['test_configurable' => 'Option 2'],
                     ],
                 ],
-                'associated_products' => [],
+                'associatedProducts' => [],
             ],
             'delete_all_options' => [
-                'child_products' => [],
-                'associated_products' => [],
+                'childProducts' => [],
+                'associatedProducts' => [],
             ],
             'added_new_attribute' => [
-                'child_products' => [
+                'childProducts' => [
                     'simple_1_1' => [
                         'name' => 'simple_1_1',
                         'sku' => 'simple_1_1',
@@ -237,10 +238,10 @@ class ProductTest extends AbstractBackendController
                         ],
                     ],
                 ],
-                'associated_products' => [],
+                'associatedProducts' => [],
             ],
             'added_new_attribute_and_delete_old' => [
-                'child_products' => [
+                'childProducts' => [
                     'simple_2_1' => [
                         'name' => 'simple_2_1',
                         'sku' => 'simple_2_1',
@@ -256,7 +257,7 @@ class ProductTest extends AbstractBackendController
                         'attributes' => ['test_configurable_2' => 'Option 2'],
                     ],
                 ],
-                'associated_products' => [],
+                'associatedProducts' => [],
             ],
         ];
     }
@@ -342,7 +343,7 @@ class ProductTest extends AbstractBackendController
             $this->assertEquals($expectedProduct['price'], $product->getPrice());
 
             if (!empty($expectedProduct['weight'])) {
-                $this->assertEquals($expectedProduct['weight'], (double)$product->getWeight());
+                $this->assertEquals($expectedProduct['weight'], (float)$product->getWeight());
                 $this->assertInstanceOf(Simple::class, $product->getTypeInstance());
             } else {
                 $this->assertInstanceOf(Virtual::class, $product->getTypeInstance());
@@ -529,7 +530,6 @@ class ProductTest extends AbstractBackendController
         $reflection = new \ReflectionObject($this);
         foreach ($reflection->getProperties() as $property) {
             if (!$property->isStatic() && 0 !== strpos($property->getDeclaringClass()->getName(), 'PHPUnit')) {
-                $property->setAccessible(true);
                 $property->setValue($this, null);
             }
         }

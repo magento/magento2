@@ -1,13 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Filter\Encrypt;
+
+use Laminas\Filter\Encrypt\EncryptionAlgorithmInterface;
 
 /**
  * Encrypt adapter interface
  */
-interface AdapterInterface extends \Zend_Filter_Encrypt_Interface
+interface AdapterInterface extends EncryptionAlgorithmInterface
 {
 }

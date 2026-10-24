@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -19,13 +19,6 @@ use Magento\Framework\Validator\EmailAddress as EmailAddressValidator;
 class ValidateCustomerData
 {
     /**
-     * Get allowed/required customer attributes
-     *
-     * @var GetAllowedCustomerAttributes
-     */
-    private $getAllowedCustomerAttributes;
-
-    /**
      * @var EmailAddressValidator
      */
     private $emailAddressValidator;
@@ -38,16 +31,13 @@ class ValidateCustomerData
     /**
      * ValidateCustomerData constructor.
      *
-     * @param GetAllowedCustomerAttributes $getAllowedCustomerAttributes
      * @param EmailAddressValidator $emailAddressValidator
      * @param array $validators
      */
     public function __construct(
-        GetAllowedCustomerAttributes $getAllowedCustomerAttributes,
         EmailAddressValidator $emailAddressValidator,
         $validators = []
     ) {
-        $this->getAllowedCustomerAttributes = $getAllowedCustomerAttributes;
         $this->emailAddressValidator = $emailAddressValidator;
         $this->validators = $validators;
     }

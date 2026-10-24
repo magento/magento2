@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Oauth;
 
+use Magento\Framework\Oauth\Helper\Utility;
 use Magento\Framework\Encryption\Helper\Security;
 use Magento\Framework\Phrase;
 use Magento\Framework\Oauth\Exception as AuthException;
@@ -21,11 +22,6 @@ class Oauth implements OauthInterface
     protected $_oauthHelper;
 
     /**
-     * @var  \Zend_Oauth_Http_Utility
-     */
-    protected $_httpUtility;
-
-    /**
      * @var \Magento\Framework\Oauth\NonceGeneratorInterface
      */
     protected $_nonceGenerator;
@@ -36,22 +32,26 @@ class Oauth implements OauthInterface
     protected $_tokenProvider;
 
     /**
+     * @var Utility
+     */
+    private Utility $httpUtility;
+
+    /**
      * @param Helper\Oauth $oauthHelper
      * @param NonceGeneratorInterface $nonceGenerator
      * @param TokenProviderInterface $tokenProvider
-     * @param \Zend_Oauth_Http_Utility $httpUtility
+     * @param Utility $utility
      */
     public function __construct(
         Helper\Oauth $oauthHelper,
         NonceGeneratorInterface $nonceGenerator,
         TokenProviderInterface $tokenProvider,
-        \Zend_Oauth_Http_Utility $httpUtility = null
+        Utility $utility
     ) {
         $this->_oauthHelper = $oauthHelper;
         $this->_nonceGenerator = $nonceGenerator;
         $this->_tokenProvider = $tokenProvider;
-        // null default to prevent ObjectManagerFactory from injecting, see MAGETWO-30809
-        $this->_httpUtility = $httpUtility ?: new \Zend_Oauth_Http_Utility();
+        $this->httpUtility = $utility;
     }
 
     /**
@@ -154,7 +154,7 @@ class Oauth implements OauthInterface
             'oauth_version' => '1.0',
         ];
         $headerParameters = array_merge($headerParameters, $params);
-        $headerParameters['oauth_signature'] = $this->_httpUtility->sign(
+        $headerParameters['oauth_signature'] = $this->httpUtility->sign(
             $params,
             $signatureMethod,
             $headerParameters['oauth_consumer_secret'],
@@ -162,10 +162,8 @@ class Oauth implements OauthInterface
             $httpMethod,
             $requestUrl
         );
-        $authorizationHeader = $this->_httpUtility->toAuthorizationHeader($headerParameters);
-        // toAuthorizationHeader adds an optional realm="" which is not required for now.
-        // http://tools.ietf.org/html/rfc2617#section-1.2
-        return str_replace('realm="",', '', $authorizationHeader);
+
+        return $this->httpUtility->toAuthorizationHeader($headerParameters);
     }
 
     /**
@@ -190,11 +188,8 @@ class Oauth implements OauthInterface
             );
         }
 
-        $allowedSignParams = $params;
-        unset($allowedSignParams['oauth_signature']);
-
-        $calculatedSign = $this->_httpUtility->sign(
-            $allowedSignParams,
+        $calculatedSign = $this->httpUtility->sign(
+            $this->processNonRequiredParams($params),
             $params['oauth_signature_method'],
             $consumerSecret,
             $tokenSecret,
@@ -205,6 +200,30 @@ class Oauth implements OauthInterface
         if (!Security::compareStrings($calculatedSign, $params['oauth_signature'])) {
             throw new AuthException(new Phrase('The signature is invalid. Verify and try again.'));
         }
+    }
+
+    /**
+     * Avoid double encoding for query param values
+     *
+     * @param array $params
+     * @return array
+     */
+    private function processNonRequiredParams(array $params): array
+    {
+        $requiredParams = [
+            "oauth_consumer_key",
+            "oauth_consumer_secret",
+            "oauth_token",
+            "oauth_token_secret",
+            "oauth_signature"
+        ];
+        foreach ($params as $key => $value) {
+            if (!in_array($key, $requiredParams)) {
+                $params[$key] = urldecode($value);
+            }
+        }
+
+        return $params;
     }
 
     /**
@@ -249,12 +268,8 @@ class Oauth implements OauthInterface
         }
         $this->_checkRequiredParams($protocolParams, $requiredParams);
 
-        if (isset(
-            $protocolParams['oauth_token']
-        ) && !$this->_tokenProvider->validateOauthToken(
-            $protocolParams['oauth_token']
-        )
-        ) {
+        if (isset($protocolParams['oauth_token'])
+            && !$this->_tokenProvider->validateOauthToken($protocolParams['oauth_token'])) {
             throw new OauthInputException(new Phrase('The token length is invalid. Check the length and try again.'));
         }
 

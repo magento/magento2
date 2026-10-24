@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -22,7 +22,6 @@ use Psr\Log\LoggerInterface;
  */
 class UpgradeOauthToken implements DataPatchInterface, PatchVersionInterface
 {
-
     /**
      * @var TokenCollection
      */
@@ -90,7 +89,7 @@ class UpgradeOauthToken implements DataPatchInterface, PatchVersionInterface
             foreach ($this->tokenCollection as $token) {
                 $existingSecret = $token->getSecret();
                 $entityId = $token->getEntityId();
-                $type = strtolower($token->getType());
+                $type = $token->getType() !== null ? strtolower($token->getType()) : '';
 
                 if ($entityId && $existingSecret && $type === TokenModel::TYPE_ACCESS) {
                     if (strlen($existingSecret) <= OauthHelper::LENGTH_TOKEN_SECRET) {

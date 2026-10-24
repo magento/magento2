@@ -1,5 +1,5 @@
-# Copyright © Magento, Inc. All rights reserved.
-# See COPYING.txt for license details.
+# Copyright 2018 Adobe
+# All Rights Reserved.
 
 type Query {
     wishlist: WishlistOutput @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\WishlistResolver") @deprecated(reason: "Moved under `Customer.wishlist`.") @doc(description: "Return the contents of a customer's wish list.") @cache(cacheable: false)
@@ -64,6 +64,7 @@ type Mutation {
         wishlistId: ID!, @doc(description: "The unique ID of the wish list")
         wishlistItemIds: [ID!] @doc(description: "An array of IDs representing products to be added to the cart. If no IDs are specified, all items in the wishlist will be added to the cart")
     ): AddWishlistItemsToCartOutput @resolver(class: "Magento\\WishlistGraphQl\\Model\\Resolver\\Wishlist\\AddToCart") @doc(description: "Add items in the specified wishlist to the customer's cart.")
+    clearWishlist(wishlistId: ID! @doc(description: "The ID of a wish list.")): RemoveProductsFromWishlistOutput @doc(description: "Remove all the products from the specified wish list.") @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\ClearWishlist")
 }
 
 type AddWishlistItemsToCartOutput @doc(description: "Contains the resultant wish list and any error information.") {
@@ -81,6 +82,7 @@ type WishlistCartUserInputError @doc(description: "Contains details about errors
 
 enum WishlistCartUserInputErrorType @doc(description: "A list of possible error types.") {
     PRODUCT_NOT_FOUND
+    REQUIRED_PARAMETER_MISSING
     NOT_SALABLE
     INSUFFICIENT_STOCK
     UNDEFINED

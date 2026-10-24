@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,11 +14,13 @@ use Magento\Quote\Model\ChangeQuoteControl;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\QuoteRepository;
 use Magento\Quote\Model\QuoteRepository\Plugin\AccessChangeQuoteControl;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class AccessChangeQuoteControlTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var AccessChangeQuoteControl
      */
@@ -46,15 +48,11 @@ class AccessChangeQuoteControlTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->userContextMock = $this->getMockBuilder(UserContextInterface::class)
-            ->getMockForAbstractClass();
+        $this->userContextMock = $this->createMock(UserContextInterface::class);
         $this->userContextMock->method('getUserId')
             ->willReturn(1);
 
-        $this->quoteMock = $this->getMockBuilder(Quote::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getCustomerId'])
-            ->getMock();
+        $this->quoteMock = $this->createPartialMockWithReflection(Quote::class, ['getCustomerId']);
 
         $this->quoteRepositoryMock = $this->getMockBuilder(QuoteRepository::class)
             ->disableOriginalConstructor()

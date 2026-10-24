@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Tax\Model\Sales\Quote;
 
@@ -145,7 +145,7 @@ class ItemDetails extends AbstractExtensibleModel implements QuoteDetailsItemInt
      * @param \Magento\Tax\Api\Data\TaxClassKeyInterface $taxClassKey
      * @return $this
      */
-    public function setTaxClassKey(\Magento\Tax\Api\Data\TaxClassKeyInterface $taxClassKey = null)
+    public function setTaxClassKey(?\Magento\Tax\Api\Data\TaxClassKeyInterface $taxClassKey = null)
     {
         return $this->setData(self::KEY_TAX_CLASS_KEY, $taxClassKey);
     }

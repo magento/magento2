@@ -1,15 +1,22 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\View\Page\Config;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Escaper;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Stdlib\StringUtils;
+use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Asset\GroupedCollection;
+use Magento\Framework\View\Asset\MergeService;
 use Magento\Framework\View\Page\Config;
 use Magento\Framework\View\Page\Config\Metadata\MsApplicationTileImage;
+use Psr\Log\LoggerInterface;
 
 /**
  * Page config Renderer model
@@ -18,6 +25,19 @@ use Magento\Framework\View\Page\Config\Metadata\MsApplicationTileImage;
  */
 class Renderer implements RendererInterface
 {
+    private const DEFAULT_CRITICAL_SCRIPT_PATTERNS = [
+        '/\/require(\.min)?\.js$/',
+        '/\/requirejs-config(\.min)?\.js$/',
+        '/\/requirejs\/mixins(\.min)?\.js$/',
+        '/\/requirejs\/baseUrlResolver(\.min)?\.js$/',
+        '/\/requirejs-map(\.min)?\.js$/',
+        '#/(?:_cache|merged)/#',
+        '#/requirejs-min-resolver(\.min)?(\.[A-Za-z0-9]+)?\.js$#',
+        '/\/static(\.min)?\.js$/',
+        '#/js/bundle/[^/]+(\.min)?(\.[A-Za-z0-9]+)?\.js$#',
+        '/\/sri(\.min)?\.js$/',
+    ];
+
     /**
      * @var array
      */
@@ -51,29 +71,29 @@ class Renderer implements RendererInterface
     protected $pageConfig;
 
     /**
-     * @var \Magento\Framework\View\Asset\MergeService
+     * @var MergeService
      */
     protected $assetMergeService;
 
     /**
-     * @var \Magento\Framework\Escaper
+     * @var UrlInterface
+     */
+    protected $urlBuilder;
+
+    /**
+     * @var Escaper
      */
     protected $escaper;
 
     /**
-     * @var \Magento\Framework\Stdlib\StringUtils
+     * @var StringUtils
      */
     protected $string;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     protected $logger;
-
-    /**
-     * @var \Magento\Framework\UrlInterface
-     */
-    protected $urlBuilder;
 
     /**
      * @var MsApplicationTileImage
@@ -81,22 +101,36 @@ class Renderer implements RendererInterface
     private $msApplicationTileImage;
 
     /**
+     * @var ScopeConfigInterface
+     */
+    private ScopeConfigInterface $scopeConfig;
+
+    /**
+     * @var array
+     */
+    private array $criticalFilePatterns = [];
+
+    /**
      * @param Config $pageConfig
-     * @param \Magento\Framework\View\Asset\MergeService $assetMergeService
-     * @param \Magento\Framework\UrlInterface $urlBuilder
-     * @param \Magento\Framework\Escaper $escaper
-     * @param \Magento\Framework\Stdlib\StringUtils $string
-     * @param \Psr\Log\LoggerInterface $logger
+     * @param MergeService $assetMergeService
+     * @param UrlInterface $urlBuilder
+     * @param Escaper $escaper
+     * @param StringUtils $string
+     * @param LoggerInterface $logger
      * @param MsApplicationTileImage|null $msApplicationTileImage
+     * @param ScopeConfigInterface|null $scopeConfig
+     * @param array $criticalFilePatterns
      */
     public function __construct(
         Config $pageConfig,
-        \Magento\Framework\View\Asset\MergeService $assetMergeService,
-        \Magento\Framework\UrlInterface $urlBuilder,
-        \Magento\Framework\Escaper $escaper,
-        \Magento\Framework\Stdlib\StringUtils $string,
-        \Psr\Log\LoggerInterface $logger,
-        MsApplicationTileImage $msApplicationTileImage = null
+        MergeService $assetMergeService,
+        UrlInterface $urlBuilder,
+        Escaper $escaper,
+        StringUtils $string,
+        LoggerInterface $logger,
+        ?MsApplicationTileImage $msApplicationTileImage = null,
+        ?ScopeConfigInterface $scopeConfig = null,
+        array $criticalFilePatterns = []
     ) {
         $this->pageConfig = $pageConfig;
         $this->assetMergeService = $assetMergeService;
@@ -105,7 +139,9 @@ class Renderer implements RendererInterface
         $this->string = $string;
         $this->logger = $logger;
         $this->msApplicationTileImage = $msApplicationTileImage ?:
-            \Magento\Framework\App\ObjectManager::getInstance()->get(MsApplicationTileImage::class);
+            ObjectManager::getInstance()->get(MsApplicationTileImage::class);
+        $this->scopeConfig = $scopeConfig ?: ObjectManager::getInstance()->get(ScopeConfigInterface::class);
+        $this->criticalFilePatterns = array_merge(self::DEFAULT_CRITICAL_SCRIPT_PATTERNS, $criticalFilePatterns);
     }
 
     /**
@@ -134,6 +170,17 @@ class Renderer implements RendererInterface
         $result .= $this->renderMetadata();
         $result .= $this->renderTitle();
         $this->prepareFavicon();
+        return $result;
+    }
+
+    /**
+     * Render head assets
+     *
+     * @return string
+     */
+    public function renderHeadAssets()
+    {
+        $result = '';
         $result .= $this->renderAssets($this->getAvailableResultGroups());
         $result .= $this->pageConfig->getIncludes();
         return $result;
@@ -210,26 +257,20 @@ class Renderer implements RendererInterface
 
         switch ($name) {
             case Config::META_CHARSET:
-                $metadataTemplate = '<meta charset="%content"/>' . "\n";
-                break;
+                return '<meta charset="%content"/>' . "\n";
 
             case Config::META_CONTENT_TYPE:
-                $metadataTemplate = '<meta http-equiv="Content-Type" content="%content"/>' . "\n";
-                break;
+                return '<meta http-equiv="Content-Type" content="%content"/>' . "\n";
 
             case Config::META_X_UI_COMPATIBLE:
-                $metadataTemplate = '<meta http-equiv="X-UA-Compatible" content="%content"/>' . "\n";
-                break;
+                return '<meta http-equiv="X-UA-Compatible" content="%content"/>' . "\n";
 
             case Config::META_MEDIA_TYPE:
-                $metadataTemplate = false;
-                break;
+                return false;
 
             default:
-                $metadataTemplate = '<meta name="%name" content="%content"/>' . "\n";
-                break;
+                return '<meta name="%name" content="%content"/>' . "\n";
         }
-        return $metadataTemplate;
     }
 
     /**
@@ -277,7 +318,7 @@ class Renderer implements RendererInterface
     {
         /** @var $group \Magento\Framework\View\Asset\PropertyGroup */
         foreach ($this->pageConfig->getAssetCollection()->getGroups() as $group) {
-            $type = $group->getProperty(GroupedCollection::PROPERTY_CONTENT_TYPE);
+            $type = $group->getProperty(GroupedCollection::PROPERTY_CONTENT_TYPE) ?? '';
             if (!isset($resultGroups[$type])) {
                 $resultGroups[$type] = '';
             }
@@ -375,12 +416,12 @@ class Renderer implements RendererInterface
     {
         switch ($contentType) {
             case 'js':
-                $groupTemplate = '<script ' . $attributes . ' src="%s"></script>' . "\n";
+                $groupTemplate = preg_replace('/\s+/', ' ', '<script ' . $attributes . ' src="%s"></script>') . "\n";
                 break;
 
             case 'css':
             default:
-                $groupTemplate = '<link ' . $attributes . ' href="%s" />' . "\n";
+                $groupTemplate = preg_replace('/\s+/', ' ', '<link ' . $attributes . ' href="%s" />') . "\n";
                 break;
         }
         return $groupTemplate;
@@ -413,22 +454,81 @@ class Renderer implements RendererInterface
         $assets = $this->processMerge($group->getAll(), $group);
         $attributes = $this->getGroupAttributes($group);
 
-        $result = '';
-        $template = '';
+        $result = $defaultAttributes = '';
         try {
+            $deferEnabled = $this->scopeConfig->getValue('dev/js/defer_non_critical');
             /** @var $asset \Magento\Framework\View\Asset\AssetInterface */
             foreach ($assets as $asset) {
+                $defaultAttributes = $this->addDefaultAttributes($this->getAssetContentType($asset), $attributes);
+                if ($deferEnabled &&
+                    $this->getAssetContentType($asset) === 'js' &&
+                    $this->shouldDefer(
+                        $asset->getUrl(),
+                        $group->getProperty('attributes') ?? []
+                    )
+                ) {
+                    $defaultAttributes .= ' defer';
+                }
                 $template = $this->getAssetTemplate(
                     $group->getProperty(GroupedCollection::PROPERTY_CONTENT_TYPE),
-                    $this->addDefaultAttributes($this->getAssetContentType($asset), $attributes)
+                    $defaultAttributes
                 );
                 $result .= sprintf($template, $asset->getUrl());
             }
         } catch (LocalizedException $e) {
             $this->logger->critical($e);
+            $template = $this->getAssetTemplate(
+                $group->getProperty(GroupedCollection::PROPERTY_CONTENT_TYPE),
+                $defaultAttributes
+            );
             $result .= sprintf($template, $this->urlBuilder->getUrl('', ['_direct' => 'core/index/notFound']));
         }
         return $result;
+    }
+
+    /**
+     * Check if we should add the defer tag or not
+     *
+     * @param string $url
+     * @param mixed $attrs
+     * @return bool
+     */
+    private function shouldDefer(string $url, mixed $attrs): bool
+    {
+        if ($this->isCriticalRequireAsset($url)) {
+            return false;
+        }
+        if (is_string($attrs)) {
+            if (str_contains(strtolower($attrs), 'defer') || str_contains(strtolower($attrs), 'async')) {
+                return false;
+            }
+            return true;
+        }
+        if (isset($attrs['async']) && $attrs['async']) {
+            return false;
+        }
+        if (isset($attrs['defer']) && $attrs['defer'] === 'false') {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Check if an asset is considered critical
+     *
+     * @param string $url
+     * @return bool
+     */
+    private function isCriticalRequireAsset(string $url): bool
+    {
+        foreach ($this->criticalFilePatterns as $pattern) {
+            if (preg_match($pattern, $url)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\View\Asset\PreProcessor;
 
@@ -12,8 +12,6 @@ use Magento\Framework\View\Asset\LockerProcessInterface;
 use Magento\Framework\View\Asset\PreProcessor\AlternativeSource\AssetBuilder;
 
 /**
- * Class AlternativeSource
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AlternativeSource implements AlternativeSourceInterface
@@ -21,7 +19,7 @@ class AlternativeSource implements AlternativeSourceInterface
     /**
      * The key name of the processor class
      */
-    const PROCESSOR_CLASS = 'class';
+    public const PROCESSOR_CLASS = 'class';
 
     /**
      * @var Helper\SortInterface
@@ -100,7 +98,7 @@ class AlternativeSource implements AlternativeSourceInterface
     {
         $path = $chain->getAsset()->getFilePath();
         $content = $chain->getContent();
-        if (trim($content) !== '') {
+        if ($content && trim($content) !== '') {
             return;
         }
 
@@ -155,7 +153,7 @@ class AlternativeSource implements AlternativeSourceInterface
             }
             $content = $processor->processContent($asset);
 
-            if (trim($content) !== '') {
+            if ($content && trim($content) !== '') {
                 return $content;
             }
         }

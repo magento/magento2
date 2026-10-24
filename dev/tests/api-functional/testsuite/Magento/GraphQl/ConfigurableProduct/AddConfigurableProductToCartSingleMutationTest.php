@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -155,7 +155,7 @@ class AddConfigurableProductToCartSingleMutationTest extends GraphQlAbstract
         $response = $this->graphQlMutation($query);
 
         self::assertEquals(
-            'The requested qty is not available',
+            'Not enough items for sale',
             $response['addProductsToCart']['user_errors'][0]['message']
         );
     }

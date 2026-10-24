@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -11,7 +11,6 @@ namespace Magento\Framework\HTTP\Client;
 /**
  * Class to work with HTTP protocol using curl library
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @api
  */
@@ -30,7 +29,6 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
     protected $_host = 'localhost';
 
     /**
-     * Port
      * @var int
      */
     protected $_port = 80;
@@ -60,19 +58,16 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
     protected $_cookies = [];
 
     /**
-     * Response headers
      * @var array
      */
     protected $_responseHeaders = [];
 
     /**
-     * Response body
      * @var string
      */
     protected $_responseBody = '';
 
     /**
-     * Response status
      * @var int
      */
     protected $_responseStatus = 0;
@@ -282,7 +277,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
         }
         $out = [];
         foreach ($this->_responseHeaders['Set-Cookie'] as $row) {
-            $values = explode("; ", $row);
+            $values = explode("; ", $row ?? '');
             $c = count($values);
             if (!$c) {
                 continue;
@@ -309,7 +304,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
         }
         $out = [];
         foreach ($this->_responseHeaders['Set-Cookie'] as $row) {
-            $values = explode("; ", $row);
+            $values = explode("; ", $row ?? '');
             $c = count($values);
             if (!$c) {
                 continue;
@@ -326,7 +321,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
             }
             for ($i = 0; $i < $c; $i++) {
                 list($subkey, $val) = explode("=", $values[$i]);
-                $out[trim($key)][trim($subkey)] = trim($val);
+                $out[trim($key)][trim($subkey)] = $val !== null ? trim($val) : '';
             }
         }
         return $out;
@@ -415,7 +410,6 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
         if ($err) {
             $this->doError(curl_error($this->_ch));
         }
-        curl_close($this->_ch);
     }
 
     /**
@@ -442,6 +436,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      */
     protected function parseHeaders($ch, $data)
     {
+        $data = $data !== null ? $data : '';
         if ($this->_headerCount == 0) {
             $line = explode(" ", trim($data), 3);
             if (count($line) < 2) {
@@ -473,7 +468,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      * Set curl option directly
      *
      * @param string $name
-     * @param string $value
+     * @param mixed $value
      * @return void
      */
     protected function curlOption($name, $value)
@@ -507,7 +502,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      * Set curl option
      *
      * @param string $name
-     * @param string $value
+     * @param mixed $value
      * @return void
      */
     public function setOption($name, $value)

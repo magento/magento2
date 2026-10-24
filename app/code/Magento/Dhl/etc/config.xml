@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
@@ -20,14 +20,19 @@
                 <account />
                 <active>0</active>
                 <title>DHL</title>
+                <type>DHL_XML</type>
                 <sallowspecific>0</sallowspecific>
                 <nondoc_methods>1,3,4,8,P,Q,E,F,H,J,M,N,V,Y</nondoc_methods>
                 <doc_methods>2,5,6,7,9,B,C,D,U,K,L,G,W,I,N,O,R,S,T,X</doc_methods>
                 <free_method>G</free_method>
-                <gateway_url>https://xmlpi-ea.dhl.com/XMLShippingServlet</gateway_url>
-                <sandbox_url>https://xmlpitest-ea.dhl.com/XMLShippingServlet</sandbox_url>
+                <gateway_xml_url>https://xmlpi-ea.dhl.com/XMLShippingServlet</gateway_xml_url>
+                <sandbox_xml_url>https://xmlpitest-ea.dhl.com/XMLShippingServlet</sandbox_xml_url>
+                <gateway_rest_url>https://express.api.dhl.com/mydhlapi</gateway_rest_url>
+                <sandbox_rest_url>https://express.api.dhl.com/mydhlapi/test</sandbox_rest_url>
                 <id backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <password backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <api_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <api_secret backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <content_type>N</content_type>
                 <specificerrmsg>This shipping method is currently unavailable. If you would like to ship using this shipping method, please contact us.</specificerrmsg>
                 <divide_order_weight>1</divide_order_weight>

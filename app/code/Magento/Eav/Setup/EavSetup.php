@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Eav\Setup;
@@ -18,6 +18,7 @@ use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Framework\Validator\ValidateException;
 
 /**
  * Base eav setup class.
@@ -114,11 +115,11 @@ class EavSetup
         Context $context,
         CacheInterface $cache,
         CollectionFactory $attrGroupCollectionFactory,
-        Code $attributeCodeValidator = null,
-        AddOptionToAttribute $addAttributeOption = null,
-        ReservedAttributeCheckerInterface $reservedAttributeChecker = null,
-        AttributeFactory $attributeFactory = null,
-        Config $eavConfig = null
+        ?Code $attributeCodeValidator = null,
+        ?AddOptionToAttribute $addAttributeOption = null,
+        ?ReservedAttributeCheckerInterface $reservedAttributeChecker = null,
+        ?AttributeFactory $attributeFactory = null,
+        ?Config $eavConfig = null
     ) {
         $this->cache = $cache;
         $this->attrGroupCollectionFactory = $attrGroupCollectionFactory;
@@ -137,6 +138,7 @@ class EavSetup
      * Gets setup model.
      *
      * @deprecated 102.0.0
+     * @see we don't recommend this approach anymore
      * @return ModuleDataSetupInterface
      */
     public function getSetup()
@@ -612,7 +614,7 @@ class EavSetup
      */
     public function convertToAttributeGroupCode($groupName)
     {
-        return trim(preg_replace('/[^a-z0-9]+/', '-', strtolower($groupName)), '-');
+        return trim(preg_replace('/[^a-z0-9]+/', '-', strtolower((string)$groupName)), '-');
     }
 
     /**
@@ -821,8 +823,7 @@ class EavSetup
      * @param string $code
      * @param array $attr
      * @return $this
-     * @throws LocalizedException
-     * @throws \Zend_Validate_Exception
+     * @throws LocalizedException|ValidateException
      */
     public function addAttribute($entityTypeId, $code, array $attr)
     {
@@ -1505,7 +1506,7 @@ class EavSetup
      *
      * @param array $data
      * @throws LocalizedException
-     * @throws \Zend_Validate_Exception
+     * @throws ValidateException
      */
     private function validateAttributeCode(array $data): void
     {

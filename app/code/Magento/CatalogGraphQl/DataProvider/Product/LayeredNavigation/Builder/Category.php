@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,13 +17,15 @@ use Magento\Framework\Api\Search\AggregationInterface;
 use Magento\Framework\Api\Search\AggregationValueInterface;
 use Magento\Framework\Api\Search\BucketInterface;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\GraphQl\Query\Uid;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Category layer builder
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Category implements LayerBuilderInterface
+class Category implements LayerBuilderInterface, ResetAfterRequestInterface
 {
     /**
      * @var string
@@ -75,6 +77,9 @@ class Category implements LayerBuilderInterface
      */
     private Aggregations\Category\IncludeDirectChildrenOnly $includeDirectChildrenOnly;
 
+    /** @var Uid */
+    private Uid $uidEncoder;
+
     /**
      * @param CategoryAttributeQuery $categoryAttributeQuery
      * @param CategoryAttributesMapper $attributesMapper
@@ -83,6 +88,7 @@ class Category implements LayerBuilderInterface
      * @param LayerFormatter $layerFormatter
      * @param Aggregations\Category\IncludeDirectChildrenOnly $includeDirectChildrenOnly
      * @param CollectionFactory $categoryCollectionFactory
+     * @param Uid $uidEncoder
      */
     public function __construct(
         CategoryAttributeQuery $categoryAttributeQuery,
@@ -91,7 +97,8 @@ class Category implements LayerBuilderInterface
         ResourceConnection $resourceConnection,
         LayerFormatter $layerFormatter,
         Aggregations\Category\IncludeDirectChildrenOnly $includeDirectChildrenOnly,
-        CollectionFactory $categoryCollectionFactory
+        CollectionFactory $categoryCollectionFactory,
+        Uid $uidEncoder
     ) {
         $this->categoryAttributeQuery = $categoryAttributeQuery;
         $this->attributesMapper = $attributesMapper;
@@ -100,6 +107,7 @@ class Category implements LayerBuilderInterface
         $this->layerFormatter = $layerFormatter;
         $this->includeDirectChildrenOnly = $includeDirectChildrenOnly;
         $this->categoryCollectionFactory = $categoryCollectionFactory;
+        $this->uidEncoder = $uidEncoder;
     }
 
     /**
@@ -155,7 +163,7 @@ class Category implements LayerBuilderInterface
             }
             $result['options'][] = $this->layerFormatter->buildItem(
                 $categoryLabels[$categoryId] ?? $categoryId,
-                $categoryId,
+                $this->uidEncoder->encode((string) $categoryId),
                 $value->getMetrics()['count']
             );
         }
@@ -193,5 +201,18 @@ class Category implements LayerBuilderInterface
             )
         );
         return $collection->getAllIds();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        self::$bucketMap = [
+            self::CATEGORY_BUCKET => [
+                'request_name' => 'category_uid',
+                'label' => 'Category'
+            ],
+        ];
     }
 }

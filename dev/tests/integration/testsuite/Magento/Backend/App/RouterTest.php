@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Backend\App;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoAppArea adminhtml
@@ -39,15 +41,14 @@ class RouterTest extends \PHPUnit\Framework\TestCase
      * @param string $module
      * @param string $controller
      * @param string $className
-     *
-     * @dataProvider getControllerClassNameDataProvider
      */
+    #[DataProvider('getControllerClassNameDataProvider')]
     public function testGetControllerClassName($module, $controller, $className)
     {
         $this->assertEquals($className, $this->model->getActionClassName($module, $controller));
     }
 
-    public function getControllerClassNameDataProvider()
+    public static function getControllerClassNameDataProvider()
     {
         return [
             ['Magento_TestModule', 'controller', \Magento\TestModule\Controller\Adminhtml\Controller::class],
@@ -69,7 +70,7 @@ class RouterTest extends \PHPUnit\Framework\TestCase
         ];
 
         $routeConfig = $this->getMockBuilder(\Magento\Framework\App\Route\Config::class)
-            ->setMethods(['_getRoutes'])
+            ->onlyMethods(['_getRoutes'])
             ->setConstructorArgs(
                 [
                     'reader' => $this->objectManager->get(\Magento\Framework\App\Route\Config\Reader::class),

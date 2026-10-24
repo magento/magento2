@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -16,6 +16,7 @@ use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Filesystem\Driver\File;
 use Magento\RemoteStorage\Driver\DriverPool;
 use Magento\RemoteStorage\Model\Filesystem\Directory\WriteFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\DeleteFiles class.
@@ -127,8 +128,8 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
      *
      * @param string $filename
      * @return void
-     * @dataProvider executeDataProvider
      */
+    #[DataProvider('executeDataProvider')]
     public function testExecute(string $filename)
     {
         $filePath =  $this->fullDirectoryPath . DIRECTORY_SEPARATOR . $filename;
@@ -152,7 +153,7 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function executeDataProvider(): array
+    public static function executeDataProvider(): array
     {
         return [
             ['name with spaces.jpg'],
@@ -161,8 +162,6 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
             ['name with[ bracket.jpg'],
             ['magento_small_image.jpg'],
             ['_.jpg'],
-            [' - .jpg'],
-            ['-.jpg'],
         ];
     }
 

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -21,15 +21,18 @@ use Magento\Sales\Model\Order\Shipment;
 use Magento\Shipping\Controller\Adminhtml\Order\Shipment\PrintLabel;
 use Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader;
 use Magento\Shipping\Model\Shipping\LabelGenerator;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.UnusedLocalVariable)
  */
 class PrintLabelTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var ShipmentLoader|MockObject
      */
@@ -95,11 +98,10 @@ class PrintLabelTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->shipmentLoaderMock = $this->getMockBuilder(ShipmentLoader::class)
-            ->addMethods(['setOrderId', 'setShipmentId', 'setShipment', 'setTracking'])
-            ->onlyMethods(['load'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->shipmentLoaderMock = $this->createPartialMockWithReflection(
+            ShipmentLoader::class,
+            ['setOrderId', 'setShipmentId', 'setShipment', 'setTracking', 'load']
+        );
         $this->labelGenerator = $this->createPartialMock(
             LabelGenerator::class,
             ['createPdfPageFromImageString']
@@ -115,12 +117,12 @@ class PrintLabelTest extends TestCase
         $this->messageManagerMock = $this->createPartialMock(Manager::class, ['addError']);
         $this->requestMock = $this->createPartialMock(Http::class, ['getParam']);
         $this->responseMock = $this->createMock(\Magento\Framework\App\Response\Http::class);
-        $this->sessionMock = $this->getMockBuilder(Session::class)
-            ->addMethods(['setIsUrlNotice'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->sessionMock = $this->createPartialMockWithReflection(
+            Session::class,
+            ['setIsUrlNotice']
+        );
         $this->actionFlag = $this->createPartialMock(ActionFlag::class, ['get']);
-        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $this->helperMock = $this->createPartialMock(Data::class, ['getUrl']);
         $contextMock = $this->createPartialMock(Context::class, [
             'getRequest',
@@ -167,18 +169,13 @@ class PrintLabelTest extends TestCase
 
         $this->requestMock
             ->method('getParam')
-            ->withConsecutive(
-                ['order_id'],
-                ['shipment_id'],
-                ['shipment'],
-                ['tracking']
-            )
-            ->willReturnOnConsecutiveCalls(
-                $orderId,
-                $shipmentId,
-                $shipment,
-                $tracking
-            );
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['order_id'] => $orderId,
+                ['shipment_id'] => $shipmentId,
+                ['shipment'] => $shipment,
+                ['tracking'] => $tracking
+            });
+
         $this->shipmentLoaderMock->expects($this->once())
             ->method('setOrderId')
             ->with($orderId);
@@ -257,10 +254,10 @@ class PrintLabelTest extends TestCase
     {
         $labelContent = 'Label-content';
         $pdfPageMock = $this->createPartialMock(\Zend_Pdf_Page::class, ['render', 'getPageDictionary']);
-        $pageDictionaryMock = $this->getMockBuilder(\Zend_Pdf_Element_Dictionary::class)->addMethods(['getObject'])
-            ->onlyMethods(['touch'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $pageDictionaryMock = $this->createPartialMockWithReflection(
+            \Zend_Pdf_Element_Dictionary::class,
+            ['getObject', 'touch']
+        );
 
         $this->shipmentLoaderMock->expects($this->once())
             ->method('load')
@@ -294,25 +291,17 @@ class PrintLabelTest extends TestCase
         $shipmentId = 1;
         $shipment = [];
         $tracking = [];
-
+        $exception = new \Exception();
         $this->requestMock
             ->method('getParam')
-            ->withConsecutive(
-                ['order_id'],
-                ['shipment_id'],
-                ['shipment'],
-                ['tracking'],
-                ['shipment_id']
-            )
-            ->willReturnOnConsecutiveCalls(
-                $orderId,
-                $shipmentId,
-                $shipment,
-                $tracking,
-                $shipmentId
-            );
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['order_id'] => $orderId,
+                ['shipment_id'] => $shipmentId,
+                ['shipment'] => $shipment,
+                ['tracking'] => $tracking
+            });
 
-        $loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $loggerMock = $this->createMock(LoggerInterface::class);
 
         $this->shipmentLoaderMock->expects($this->once())
             ->method('load')
@@ -329,14 +318,20 @@ class PrintLabelTest extends TestCase
             ->willReturn(false);
         $this->messageManagerMock
             ->method('addError')
-            ->withConsecutive(
-                [sprintf('We don\'t recognize or support the file extension in this shipment: %s.', $incrementId)],
-                ['An error occurred while creating shipping label.']
-            )
-            ->willReturnOnConsecutiveCalls(
-                $this->throwException(new \Exception()),
-                $this->messageManagerMock
+            ->willReturnCallback(
+                function ($arg1) use ($incrementId) {
+                    if ($arg1 ==
+                        sprintf(
+                            'We don\'t recognize or support the file extension in this shipment: %s.',
+                            $incrementId
+                        )) {
+                        throw new \Exception();
+                    } elseif ($arg1 == 'An error occurred while creating shipping label.') {
+                        return $this->messageManagerMock;
+                    }
+                }
             );
+
         $this->objectManagerMock->expects($this->once())
             ->method('get')
             ->with(LoggerInterface::class)

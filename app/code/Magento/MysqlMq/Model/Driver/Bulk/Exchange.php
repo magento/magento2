@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -88,7 +88,7 @@ class Exchange implements ExchangeInterface
      */
     private function isMatchedBinding(BindingInterface $binding, string $topic): bool
     {
-        $pattern = '/^' . str_replace(['.', '*', '#'], ['\.', '[^.]+?', '(.*?)'], $binding->getTopic()) . '$/';
+        $pattern = '/^' . str_replace(['.', '*', '#'], ['\.', '[^.]+?', '(.*?)'], $binding->getTopic() ?? '') . '$/';
         return preg_match($pattern, $topic) ? true : false;
     }
 }

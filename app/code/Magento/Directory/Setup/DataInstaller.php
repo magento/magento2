@@ -1,54 +1,60 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Directory\Setup;
 
+use Magento\Directory\Model\ResourceModel\Region\CollectionFactory as RegionCollectionFactory;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\AppInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 
 /**
- * Class DataInstaller
- * @package Magento\Directory\Setup
+ * Add Required Regions for Country
  */
 class DataInstaller
 {
-    /**
-     * @var \Magento\Directory\Helper\Data
-     */
-    private $data;
-
     /**
      * @var ResourceConnection
      */
     private $resourceConnection;
 
     /**
+     * @var RegionCollectionFactory
+     */
+    private $regionCollectionFactory;
+
+    /**
      * DatInstaller constructor.
-     * @param \Magento\Directory\Helper\Data $data
+     *
      * @param ResourceConnection $resourceConnection
+     * @param RegionCollectionFactory $regionCollectionFactory
      */
     public function __construct(
-        \Magento\Directory\Helper\Data $data,
-        ResourceConnection $resourceConnection
+        ResourceConnection $resourceConnection,
+        RegionCollectionFactory $regionCollectionFactory
     ) {
-        $this->data = $data;
         $this->resourceConnection = $resourceConnection;
+        $this->regionCollectionFactory = $regionCollectionFactory;
     }
 
     /**
      * Add country-region data.
      *
-     * @param AdapterInterface $adapter
-     * @param array $data
+     * @param  AdapterInterface $adapter
+     * @param  array $data
+     * @return void
      */
-    public function addCountryRegions(AdapterInterface $adapter, array $data)
+    public function addCountryRegions(AdapterInterface $adapter, array $data): void
     {
         /**
          * Fill table directory/country_region
          * Fill table directory/country_region_name for en_US locale
+         *
+         * state_required config is set initially by InitializeDirectoryData and can be
+         * changed in admin or via a dedicated data patch if a new country must require region.
          */
         foreach ($data as $row) {
             $bind = ['country_id' => $row[0], 'code' => $row[1], 'default_name' => $row[2]];
@@ -57,20 +63,80 @@ class DataInstaller
             $bind = ['locale' => 'en_US', 'region_id' => $regionId, 'name' => $row[2]];
             $adapter->insert($this->resourceConnection->getTableName('directory_country_region_name'), $bind);
         }
-        /**
-         * Upgrade core_config_data general/region/state_required field.
-         */
-        $countries = $this->data->getCountryCollection()->getCountriesWithRequiredStates();
-        $adapter->update(
-            $this->resourceConnection->getTableName('core_config_data'),
-            [
-                'value' => implode(',', array_keys($countries))
-            ],
-            [
-                'scope="default"',
-                'scope_id=0',
-                'path=?' => \Magento\Directory\Helper\Data::XML_PATH_STATES_REQUIRED
-            ]
-        );
+    }
+
+    /**
+     * Update country-region codes and optionally names.
+     *
+     * @param AdapterInterface $adapter
+     * @param string $countryCode
+     * @param array $codeMapping Array of ['old_code' => 'new_code'] mappings
+     * @param array $nameMapping Array of ['old_code' => 'new_name'] mappings (optional)
+     * @return void
+     */
+    public function updateCountryRegionCodes(
+        AdapterInterface $adapter,
+        string $countryCode,
+        array $codeMapping,
+        array $nameMapping = []
+    ): void {
+        if (empty($codeMapping)) {
+            return;
+        }
+
+        $regionCollection = $this->regionCollectionFactory->create();
+        $regionCollection->addCountryFilter($countryCode);
+        $regionCollection->addRegionCodeFilter(array_keys($codeMapping));
+
+        $regionItems = $regionCollection->getItems();
+        if (empty($regionItems)) {
+            return;
+        }
+
+        $countryRegionDataToUpdate = [];
+        $countryRegionNameDataToUpdate = [];
+
+        foreach ($regionItems as $regionItem) {
+            $oldCode = $regionItem->getData('code');
+            $newCode = $codeMapping[$oldCode] ?? null;
+
+            if ($newCode === null) {
+                continue;
+            }
+
+            $newName = $nameMapping[$oldCode] ?? $regionItem->getData('default_name');
+
+            // Collect data to update in the 'directory_country_region' table
+            $countryRegionDataToUpdate[] = [
+                'region_id' => $regionItem->getData('region_id'),
+                'country_id' => $regionItem->getData('country_id'),
+                'code' => $newCode,
+                'default_name' => $newName,
+            ];
+
+            // Collect data to update in the 'directory_country_region_name' table
+            $countryRegionNameDataToUpdate[] = [
+                'locale' => AppInterface::DISTRO_LOCALE_CODE,
+                'region_id' => $regionItem->getData('region_id'),
+                'name' => $newName
+            ];
+        }
+
+        // Update region tables with new region codes and names
+        if (!empty($countryRegionDataToUpdate)) {
+            $adapter->insertOnDuplicate(
+                $this->resourceConnection->getTableName('directory_country_region'),
+                $countryRegionDataToUpdate,
+                ['code', 'default_name']
+            );
+        }
+
+        if (!empty($countryRegionNameDataToUpdate)) {
+            $adapter->insertOnDuplicate(
+                $this->resourceConnection->getTableName('directory_country_region_name'),
+                $countryRegionNameDataToUpdate,
+                ['name']
+            );
+        }
     }
 }

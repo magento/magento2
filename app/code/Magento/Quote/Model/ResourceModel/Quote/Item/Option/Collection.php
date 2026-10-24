@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Quote\Model\ResourceModel\Quote\Item\Option;
 
@@ -9,8 +9,6 @@ use Magento\Quote\Model\Quote\Item;
 
 /**
  * Item option collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -121,7 +119,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         $this->load();
 
         $options = [];
-        if (isset($this->_optionsByItem[$itemId])) {
+        // PHP 8.5 Compatibility: Check for null before using as array offset
+        if ($itemId !== null && isset($this->_optionsByItem[$itemId])) {
             foreach ($this->_optionsByItem[$itemId] as $optionId) {
                 $options[] = $this->_items[$optionId];
             }
@@ -135,6 +134,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int | \Magento\Catalog\Model\Product $product
      * @return array
+     * phpcs:disable
      */
     public function getOptionsByProduct($product)
     {

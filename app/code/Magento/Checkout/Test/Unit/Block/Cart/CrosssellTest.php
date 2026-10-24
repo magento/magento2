@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -20,16 +20,21 @@ use Magento\Framework\DataObject;
 use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\EntityMetadataInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
+use Magento\Quote\Model\Quote;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CrosssellTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Session|MockObject
      */
@@ -78,11 +83,10 @@ class CrosssellTest extends TestCase
                 'storeManager' => $this->storeManager
             ]
         );
-        $this->checkoutSession = $this->getMockBuilder(Session::class)
-            ->addMethods(['getLastAddedProductId'])
-            ->onlyMethods(['getQuote'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->checkoutSession = $this->createPartialMockWithReflection(
+            Session::class,
+            ['getQuote', 'getLastAddedProductId']
+        );
         $this->productRepository = $this->createMock(
             ProductRepositoryInterface::class
         );
@@ -108,12 +112,12 @@ class CrosssellTest extends TestCase
     }
 
     /**
-     * @dataProvider getItemsDataProvider
      * @param array $productLinks
      * @param array $cartProductIds
      * @param int|null $lastAddedProductId
      * @param array $expected
      */
+    #[DataProvider('getItemsDataProvider')]
     public function testGetItems(
         array $productLinks,
         array $cartProductIds,
@@ -133,11 +137,10 @@ class CrosssellTest extends TestCase
             },
             $cartProducts
         );
-        $quote = new DataObject(['all_items' => $cartItems]);
-        $this->checkoutSession->method('getQuote')
-            ->willReturn($quote);
-        $this->checkoutSession->method('getLastAddedProductId')
-            ->willReturn($lastAddedProductId);
+        $quote = $this->createPartialMockWithReflection(Quote::class, ['getAllItems']);
+        $quote->method('getAllItems')->willReturn($cartItems);
+        $this->checkoutSession->method('getQuote')->willReturn($quote);
+        $this->checkoutSession->method('getLastAddedProductId')->willReturn($lastAddedProductId);
         $this->productRepository->method('getById')
             ->willReturnCallback(
                 function ($id) {
@@ -176,7 +179,7 @@ class CrosssellTest extends TestCase
     /**
      * @return array
      */
-    public function getItemsDataProvider(): array
+    public static function getItemsDataProvider(): array
     {
         $links = [
             1001 => [
@@ -190,12 +193,12 @@ class CrosssellTest extends TestCase
         return [
             [
                 'productLinks' => $links,
-                'cartProducts' => [
+                'cartProductIds' => [
                     1001,
                     1006,
                 ],
-                'lastAddedProduct' => 1006,
-                'cross-sells' => [
+                'lastAddedProductId' => 1006,
+                'expected' => [
                     1002,
                     1003,
                     1005
@@ -203,12 +206,12 @@ class CrosssellTest extends TestCase
             ],
             [
                 'productLinks' => $links,
-                'cartProducts' => [
+                'cartProductIds' => [
                     1001,
                     1006,
                 ],
-                'lastAddedProduct' => null,
-                'cross-sells' => [
+                'lastAddedProductId' => null,
+                'expected' => [
                     1003,
                     1005,
                     1002,
@@ -216,23 +219,23 @@ class CrosssellTest extends TestCase
             ],
             [
                 'productLinks' => $links,
-                'cartProducts' => [
+                'cartProductIds' => [
                     1001,
                     1005,
                 ],
-                'lastAddedProduct' => null,
-                'cross-sells' => [
+                'lastAddedProductId' => null,
+                'expected' => [
                     1003
                 ]
             ],
             [
                 'productLinks' => $links,
-                'cartProducts' => [
+                'cartProductIds' => [
                     1002,
                     1003,
                 ],
-                'lastAddedProduct' => null,
-                'cross-sells' => [
+                'lastAddedProductId' => null,
+                'expected' => [
                 ]
             ]
         ];
@@ -337,7 +340,7 @@ class CrosssellTest extends TestCase
      */
     private function createProductCollection(): MockObject
     {
-        $productCollection = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product\Collection::class);
+        $productCollection = $this->createMock(ProductCollection::class);
         $entityMetadataInterface =$this->createMock(EntityMetadataInterface::class);
         $entityMetadataInterface->method('getLinkField')
             ->willReturn('entity_id');

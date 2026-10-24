@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminSaveProductWithTwoORMorePagesOfCustomOptionsTest">
+        <annotations>
+            <features value="Create product"/>
+            <stories value="Save product with 2 or more page of custom options"/>
+            <title value="Admin should be able to Save product with 2 or more pages of custom options"/>
+            <description value="Admin save product with 2 or more pages of custom options"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4158"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+             <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
+                <argument name="product" value="SimpleProduct"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProduct">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+        <actionGroup ref="FillMainProductFormNoWeightActionGroup" stepKey="fillProductForm">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+        <click selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" stepKey="openCustomizableOptions"/>
+        <click stepKey="clickAddOptions" selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}"/>
+        <!-- Fill in the option and select the type of drop down -->
+       <fillField selector="{{AdminProductCustomizableOptionsSection.optionTitleInput('0')}}" userInput="{{virtualProductCustomizableOption1.title}}" stepKey="fillOptionTitleForDataSet"/>
+        <click stepKey="clickOptionTypeParent" selector="{{AdminProductCustomizableOptionsSection.lastOptionTypeParent}}"/>
+        <waitForPageLoad stepKey="waitForDropdownOpen"/>
+        <click stepKey="clickOptionType" selector="{{AdminProductCustomizableOptionsSection.optionType('Drop-down')}}"/>
+        <actionGroup ref="AdminAddCustomOptionsActionGroup" stepKey="createCustomOptions1">
+            <argument name="title" value="value1"/>
+            <argument name="price" value="10"/>
+        </actionGroup>
+        <actionGroup ref="AdminAddCustomOptionsActionGroup" stepKey="createCustomOptions2">
+            <argument name="title" value="value2"/>
+            <argument name="price" value="20"/>
+        </actionGroup>
+        <actionGroup ref="AdminAddCustomOptionsActionGroup" stepKey="createCustomOptions3">
+            <argument name="title" value="value3"/>
+            <argument name="price" value="30"/>
+        </actionGroup>
+        <actionGroup ref="AdminAddCustomOptionsActionGroup" stepKey="createCustomOptions4">
+            <argument name="title" value="value4"/>
+            <argument name="price" value="40"/>
+        </actionGroup>
+        <actionGroup ref="AdminAddCustomOptionsActionGroup" stepKey="createCustomOptions5">
+            <argument name="title" value="value5"/>
+            <argument name="price" value="50"/>
+        </actionGroup>
+        <actionGroup ref="AdminAddCustomOptionsActionGroup" stepKey="createCustomOptions6">
+            <argument name="title" value="value6"/>
+            <argument name="price" value="60"/>
+        </actionGroup>
+        <actionGroup ref="AdminAddCustomOptionsActionGroup" stepKey="createCustomOptions7">
+            <argument name="title" value="value7"/>
+            <argument name="price" value="70"/>
+        </actionGroup>
+        <actionGroup ref="AdminAddCustomOptionsActionGroup" stepKey="createCustomOptions8">
+            <argument name="title" value="value8"/>
+            <argument name="price" value="80"/>
+        </actionGroup>
+        <actionGroup ref="AdminAddCustomOptionsActionGroup" stepKey="createCustomOptions9">
+            <argument name="title" value="value9"/>
+            <argument name="price" value="90"/>
+        </actionGroup>
+        <actionGroup ref="AdminAddCustomOptionsActionGroup" stepKey="createCustomOptions10">
+            <argument name="title" value="value10"/>
+            <argument name="price" value="100"/>
+        </actionGroup>
+        <actionGroup ref="AdminAddCustomOptionsActionGroup" stepKey="createCustomOptions11">
+            <argument name="title" value="value11"/>
+            <argument name="price" value="10"/>
+        </actionGroup>
+        <actionGroup ref="AdminAddCustomOptionsActionGroup" stepKey="createCustomOptions12">
+            <argument name="title" value="value12"/>
+            <argument name="price" value="20"/>
+        </actionGroup>
+        <actionGroup ref="AdminAddCustomOptionsActionGroup" stepKey="createCustomOptions13">
+            <argument name="title" value="value13"/>
+            <argument name="price" value="30"/>
+        </actionGroup>
+        <actionGroup ref="AdminAddCustomOptionsActionGroup" stepKey="createCustomOptions14">
+            <argument name="title" value="value14"/>
+            <argument name="price" value="40"/>
+        </actionGroup>
+        <actionGroup ref="AdminAddCustomOptionsActionGroup" stepKey="createCustomOptions15">
+            <argument name="title" value="value15"/>
+            <argument name="price" value="50"/>
+        </actionGroup>
+        <actionGroup ref="AdminAddCustomOptionsActionGroup" stepKey="createCustomOptions16">
+            <argument name="title" value="value16"/>
+            <argument name="price" value="60"/>
+        </actionGroup>
+        <actionGroup ref="AdminAddCustomOptionsActionGroup" stepKey="createCustomOptions17">
+            <argument name="title" value="value17"/>
+            <argument name="price" value="70"/>
+        </actionGroup>
+        <actionGroup ref="AdminAddCustomOptionsActionGroup" stepKey="createCustomOptions18">
+            <argument name="title" value="value18"/>
+            <argument name="price" value="80"/>
+        </actionGroup>
+        <actionGroup ref="AdminAddCustomOptionsActionGroup" stepKey="createCustomOptions19">
+            <argument name="title" value="value19"/>
+            <argument name="price" value="90"/>
+        </actionGroup>
+        <actionGroup ref="AdminAddCustomOptionsActionGroup" stepKey="createCustomOptions20">
+            <argument name="title" value="value20"/>
+            <argument name="price" value="100"/>
+        </actionGroup>
+        <actionGroup ref="AdminAddCustomOptionsActionGroup" stepKey="createCustomOptions21">
+            <argument name="title" value="value21"/>
+            <argument name="price" value="10"/>
+        </actionGroup>
+        <actionGroup ref="AdminAddCustomOptionsActionGroup" stepKey="createCustomOptions22">
+            <argument name="title" value="value22"/>
+            <argument name="price" value="20"/>
+        </actionGroup>
+        <actionGroup ref="AdminAddCustomOptionsActionGroup" stepKey="createCustomOptions23">
+            <argument name="title" value="value23"/>
+            <argument name="price" value="30"/>
+        </actionGroup>
+        <actionGroup ref="AdminAddCustomOptionsActionGroup" stepKey="createCustomOptions24">
+            <argument name="title" value="value24"/>
+            <argument name="price" value="40"/>
+        </actionGroup>
+        <actionGroup ref="AdminAddCustomOptionsActionGroup" stepKey="createCustomOptions25">
+            <argument name="title" value="value25"/>
+            <argument name="price" value="50"/>
+        </actionGroup>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButton"/>
+        <waitForElementVisible selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeProductSavedMessage"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadPage"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButtonAgain"/>
+        <waitForElementVisible selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="messageYouSavedTheProductIsShownAgain"/>
+    </test>
+</tests>

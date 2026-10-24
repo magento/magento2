@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,8 +12,10 @@ use Magento\Elasticsearch\Model\Adapter\Index\Config\EsConfigInterface;
 use Magento\Framework\Locale\Resolver as LocaleResolver;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Search\Model\ResourceModel\SynonymReader;
+use Magento\Store\Model\Store;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class BuilderTest extends TestCase
 {
@@ -45,7 +47,7 @@ class BuilderTest extends TestCase
     {
         $this->localeResolver = $this->getMockBuilder(\Magento\Framework\Locale\Resolver::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'emulate',
                 'getLocale'
             ])
@@ -89,8 +91,8 @@ class BuilderTest extends TestCase
      * in the prefix_search and sku_prefix_search analyzers.
      *
      * @param string $locale
-     * @dataProvider buildDataProvider
      */
+    #[DataProvider('buildDataProvider')]
     public function testBuildWithoutSynonymsProvided(string $locale)
     {
         $synonymsFilterName = 'synonyms';
@@ -99,9 +101,10 @@ class BuilderTest extends TestCase
             ->method('getLocale')
             ->willReturn($locale);
         $this->synonymReaderMock->expects($this->once())
-            ->method('getAllSynonyms')
+            ->method('getAllSynonymsForStoreViewId')
             ->willReturn([]);
 
+        $this->model->setStoreId(Store::DEFAULT_STORE_ID);
         $result = $this->model->build();
 
         $analysisFilters = $result["analysis"]["filter"];
@@ -132,8 +135,7 @@ class BuilderTest extends TestCase
      * and referenced in the prefix_search and sku_prefix_search analyzers.
      *
      * @param string $locale
-     * @dataProvider buildDataProvider
-     */
+     #[DataProvider(\'buildDataProvider\')]
     public function testBuildWithProvidedSynonyms(string $locale)
     {
         $synonymsFilterName = 'synonyms';
@@ -153,9 +155,10 @@ class BuilderTest extends TestCase
             ->willReturn($locale);
 
         $this->synonymReaderMock->expects($this->once())
-            ->method('getAllSynonyms')
+            ->method('getAllSynonymsForStoreViewId')
             ->willReturn($synonyms);
 
+        $this->model->setStoreId(Store::DEFAULT_STORE_ID);
         $result = $this->model->build();
 
         $analysisFilters = $result["analysis"]["filter"];
@@ -187,7 +190,7 @@ class BuilderTest extends TestCase
     /**
      * @return array
      */
-    public function buildDataProvider()
+    public static function buildDataProvider()
     {
         return [
             ['en_US'],

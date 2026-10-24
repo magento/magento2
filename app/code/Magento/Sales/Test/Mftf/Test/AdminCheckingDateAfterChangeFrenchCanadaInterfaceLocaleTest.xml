@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
+ */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
@@ -32,6 +32,7 @@
         <after>
             <!--Delete entities-->
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <!--Set Admin "Interface Locale" to default value-->
             <actionGroup ref="SetAdminAccountActionGroup" stepKey="setAdminInterfaceLocaleToDefaultValue">
@@ -81,7 +82,10 @@
         <grabTextFrom selector="{{AdminOrdersGridSection.gridCell('1','Purchase Date')}}" stepKey="grabPurchaseDateInFrenchLocale"/>
 
         <!--Get month name in French-->
-        <executeJS function="return (new Date('{$grabPurchaseDateInDefaultLocale}').toLocaleDateString('fr-CA', {month: 'short'}))" stepKey="getMonthNameInFrench"/>
+       <executeJS function="
+       var moment = require('moment');
+       moment.locale('fr-Ca');
+       return (moment('{$grabPurchaseDateInDefaultLocale}').locale('fr-Ca').format('MMM'))" stepKey="getMonthNameInFrench"/>
 
         <!--Checking Date after changing "Interface Locale"-->
         <assertStringContainsString stepKey="checkingDateAfterChangeInterfaceLocale">

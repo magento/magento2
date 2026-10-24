@@ -1,24 +1,32 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Block\Adminhtml\Product\Helper\Form;
 
 use Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Weight;
+use Magento\Directory\Helper\Data;
+use Magento\Framework\App\ObjectManager as AppObjectManager;
 use Magento\Framework\Data\Form;
 use Magento\Framework\Data\Form\Element\CollectionFactory;
 use Magento\Framework\Data\Form\Element\Factory;
 use Magento\Framework\Data\Form\Element\Radios;
+use Magento\Framework\Escaper;
 use Magento\Framework\Locale\Format;
+use Magento\Framework\Math\Random;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class WeightTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Weight
      */
@@ -44,16 +52,29 @@ class WeightTest extends TestCase
      */
     protected $localeFormat;
 
+    /**
+     * @var Escaper|MockObject
+     */
+    protected $escaper;
+
+    /**
+     * @var Data|MockObject
+     */
+    protected $directoryHelper;
+
+    /**
+     * @var SecureHtmlRenderer|MockObject
+     */
+    protected $secureRenderer;
+
     protected function setUp(): void
     {
-        $this->weightSwitcher = $this->getMockBuilder(Radios::class)
-            ->addMethods(['setName', 'setLabel'])
-            ->onlyMethods(['setId', 'setForm'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->weightSwitcher->method('setId')->willReturnSelf();
-        $this->weightSwitcher->method('setName')->willReturnSelf();
-        $this->weightSwitcher->method('setLabel')->willReturnSelf();
+        // Create minimal ObjectManager mock
+        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        AppObjectManager::setInstance($objectManagerMock);
+
+        $this->weightSwitcher = $this->createPartialMock(Radios::class, ['__call']);
+        $this->weightSwitcher->method('__call')->willReturnSelf();
 
         $this->factory = $this->createMock(Factory::class);
         $this->factory->expects(
@@ -66,32 +87,31 @@ class WeightTest extends TestCase
             $this->weightSwitcher
         );
         $this->localeFormat = $this->createMock(Format::class);
+        $this->escaper = $this->createMock(Escaper::class);
+        $this->directoryHelper = $this->createMock(Data::class);
+        $this->secureRenderer = $this->createMock(SecureHtmlRenderer::class);
 
         $this->collectionFactory = $this->createPartialMock(
             CollectionFactory::class,
             ['create']
         );
 
-        $this->_model = (new ObjectManager($this))->getObject(
-            Weight::class,
-            [
-                'factoryElement' => $this->factory,
-                'factoryCollection' => $this->collectionFactory,
-                'localeFormat' => $this->localeFormat
-            ]
+        // Instantiate block directly with all required constructor arguments
+        $this->_model = new Weight(
+            $this->factory,
+            $this->collectionFactory,
+            $this->escaper,
+            $this->localeFormat,
+            $this->directoryHelper,
+            [],
+            $this->secureRenderer
         );
     }
 
     public function testSetForm()
     {
         $form = $this->createMock(Form::class);
-        $this->weightSwitcher->method(
-            'setForm'
-        )->with(
-            $form
-        )->willReturnSelf(
-        );
-
+        // The anonymous class already returns $this for setForm, so no need for expectations
         $this->_model->setForm($form);
     }
 

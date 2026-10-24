@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -53,9 +53,9 @@ class ValidatorTest extends TestCase
         $scopeCode = 'not_exist_scope_code';
 
         $scopeResolver = $this->getMockBuilder(ScopeResolverInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $scopeObject = $this->getMockBuilder(ScopeInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $scopeResolver->expects($this->once())
             ->method('getScope')
             ->with($scopeCode)
@@ -100,7 +100,7 @@ class ValidatorTest extends TestCase
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionMessage(
-            'The scope code can include only lowercase letters (a-z), numbers (0-9) and underscores'
+            'The scope code can include only letters (a-z), numbers (0-9) and underscores'
         );
         $this->model->isValid('not_default_scope', '123');
     }
@@ -130,7 +130,7 @@ class ValidatorTest extends TestCase
         $scopeCode = 'not_exist_scope_code';
 
         $scopeResolver = $this->getMockBuilder(ScopeResolverInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $scopeResolver->expects($this->once())
             ->method('getScope')
             ->with($scopeCode)

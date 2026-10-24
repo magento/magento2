@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -55,6 +55,7 @@
             <argument name="keyword" value="api-simple-product"/>
         </actionGroup>
         <actionGroup ref="SortProductsByIdDescendingActionGroup" stepKey="sortProductsByIdDescending"/>
+        <waitForElementClickable selector="{{AdminProductGridSection.productGridCheckboxOnRow('1')}}" stepKey="waitForSelectCheckbox1"/>
         <checkOption selector="{{AdminProductGridSection.productGridCheckboxOnRow('1')}}" stepKey="clickCheckbox1"/>
         <checkOption selector="{{AdminProductGridSection.productGridCheckboxOnRow('2')}}" stepKey="clickCheckbox2"/>
         <!-- Mass update qty increments -->

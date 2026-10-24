@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\MysqlMq\Test\Unit\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\MysqlMq\Model\MessageStatus;
 use Magento\MysqlMq\Model\QueueManagement;
@@ -24,6 +25,8 @@ use PHPUnit\Framework\TestCase;
  */
 class QueueManagementTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Queue|MockObject
      */
@@ -56,20 +59,13 @@ class QueueManagementTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->messageResource = $this->getMockBuilder(Queue::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->dateTime = $this->getMockBuilder(DateTime::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->messageStatusCollectionFactory = $this
-            ->getMockBuilder(MessageStatusCollectionFactory::class)
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->messageResource = $this->createMock(Queue::class);
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $this->dateTime = $this->createMock(DateTime::class);
+        $this->messageStatusCollectionFactory = $this->createPartialMock(
+            MessageStatusCollectionFactory::class,
+            ['create']
+        );
 
         $objectManager = new ObjectManager($this);
         $this->queueManagement = $objectManager->getObject(
@@ -133,45 +129,26 @@ class QueueManagementTest extends TestCase
     public function testMarkMessagesForDelete()
     {
         $messageId = 99;
-        $collection = $this->getMockBuilder(MessageStatusCollection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $collection = $this->createMock(MessageStatusCollection::class);
         $this->messageStatusCollectionFactory->expects($this->once())->method('create')->willReturn($collection);
         $this->scopeConfig->expects($this->exactly(8))->method('getValue')
-            ->withConsecutive(
-                [
-                    QueueManagement::XML_PATH_SUCCESSFUL_MESSAGES_LIFETIME,
-                    ScopeInterface::SCOPE_STORE,
-                ],
-                [
-                    QueueManagement::XML_PATH_FAILED_MESSAGES_LIFETIME,
-                    ScopeInterface::SCOPE_STORE,
-                ],
-                [
-                    QueueManagement::XML_PATH_NEW_MESSAGES_LIFETIME,
-                    ScopeInterface::SCOPE_STORE,
-                ],
-                [
-                    QueueManagement::XML_PATH_RETRY_IN_PROGRESS_AFTER,
-                    ScopeInterface::SCOPE_STORE,
-                ],
-                [
-                    QueueManagement::XML_PATH_SUCCESSFUL_MESSAGES_LIFETIME,
-                    ScopeInterface::SCOPE_STORE,
-                ],
-                [
-                    QueueManagement::XML_PATH_FAILED_MESSAGES_LIFETIME,
-                    ScopeInterface::SCOPE_STORE,
-                ],
-                [
-                    QueueManagement::XML_PATH_NEW_MESSAGES_LIFETIME,
-                    ScopeInterface::SCOPE_STORE,
-                ],
-                [
-                    QueueManagement::XML_PATH_RETRY_IN_PROGRESS_AFTER,
-                    ScopeInterface::SCOPE_STORE,
-                ]
-            )->willReturn(1);
+            ->willReturnCallback(
+                function ($path, $scope) {
+                    if ($path == QueueManagement::XML_PATH_SUCCESSFUL_MESSAGES_LIFETIME &&
+                        $scope == ScopeInterface::SCOPE_STORE) {
+                        return 1;
+                    } elseif ($path == QueueManagement::XML_PATH_FAILED_MESSAGES_LIFETIME &&
+                        $scope == ScopeInterface::SCOPE_STORE) {
+                        return 1;
+                    } elseif ($path == QueueManagement::XML_PATH_NEW_MESSAGES_LIFETIME &&
+                        $scope == ScopeInterface::SCOPE_STORE) {
+                        return 1;
+                    } elseif ($path == QueueManagement::XML_PATH_RETRY_IN_PROGRESS_AFTER &&
+                        $scope == ScopeInterface::SCOPE_STORE) {
+                        return 1;
+                    }
+                }
+            );
         $collection->expects($this->once())->method('addFieldToFilter')
             ->with(
                 'status',
@@ -227,10 +204,10 @@ class QueueManagementTest extends TestCase
      */
     private function getMessageStatusMock()
     {
-        $messageStatus = $this->getMockBuilder(MessageStatus::class)
-            ->setMethods(['getStatus', 'setStatus', 'save', 'getId', 'getUpdatedAt'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $messageStatus = $this->createPartialMockWithReflection(
+            MessageStatus::class,
+            ['getStatus', 'setStatus', 'getUpdatedAt', 'save', 'getId']
+        );
         $messageStatus->expects($this->once())->method('getUpdatedAt')->willReturn('2010-01-01 00:00:00');
         return $messageStatus;
     }

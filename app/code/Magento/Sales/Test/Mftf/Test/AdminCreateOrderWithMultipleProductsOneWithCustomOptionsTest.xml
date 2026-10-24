@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateOrderWithMultipleProductsOneWithCustomOptionsTest">
+        <annotations>
+            <features value="Sales"/>
+            <stories value="Create order in Admin with multiple products"/>
+            <title value="Admin can create order with product having custom options and simple product without options"/>
+            <description value="Verify admin can create an order with a product having custom options and a simple product without options."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-15286"/>
+            <group value="sales"/>
+        </annotations>
+        <before>
+            <!-- Create customer -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <!-- Create simple product without custom options -->
+            <createData entity="SimpleProduct" stepKey="simpleProductWithoutOptions"/>
+            <!-- Create simple product that will have custom options -->
+            <createData entity="SimpleProduct" stepKey="simpleProductForCustomOptions"/>
+            <!-- Add file upload and radio button custom options to product via API -->
+            <updateData entity="productWithFileUploadAndRadiobuttonOptions" createDataKey="simpleProductForCustomOptions" stepKey="addCustomOptions">
+                <requiredEntity createDataKey="simpleProductForCustomOptions"/>
+            </updateData>
+            <!-- Login to Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+           <!-- Delete created customer -->
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <!-- Delete created products -->
+            <deleteData createDataKey="simpleProductWithoutOptions" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="simpleProductForCustomOptions" stepKey="deleteProductWithOptions"/>
+            <!-- Logout from Admin -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <!-- Step 1: Navigate to create new order page and select customer -->
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderPage">
+            <argument name="customer" value="$createCustomer$"/>
+        </actionGroup>
+        <!-- Step 2: Select default store view if multiple stores exist -->
+        <conditionalClick selector="{{AdminOrderFormStoreSelectorSection.defaultStoreViewButton}}" dependentSelector="{{AdminOrderFormStoreSelectorSection.storeSelectorContainer}}" visible="true" stepKey="selectDefaultStoreView"/>
+        <waitForPageLoad stepKey="waitForStoreSelection"/>
+        <!-- Step 3: Add product with custom options -->
+        <!-- Click Add Products button -->
+        <click selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="clickAddProductsFirst"/>
+        <waitForPageLoad stepKey="waitForProductGridFirst"/>
+        <!-- Search for product with custom options -->
+        <fillField selector="{{AdminOrderFormItemsSection.skuFilter}}" userInput="$simpleProductForCustomOptions.sku$" stepKey="fillSkuFilterForProductWithOptions"/>
+        <click selector="{{AdminOrderFormItemsSection.search}}" stepKey="clickSearchFirst"/>
+        <waitForPageLoad stepKey="waitForSearchResultsFirst"/>
+        <!-- Select the product - slide opens automatically -->
+        <scrollTo selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" x="0" y="-100" stepKey="scrollToCheckColumnFirst"/>
+        <checkOption selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" stepKey="selectProductWithOptions"/>
+        <waitForPageLoad stepKey="waitForProductSelectionFirst"/>
+        <!-- Wait for custom options slide to appear -->
+        <waitForElementVisible selector="{{AdminOrderFormCustomOptionsSection.optionsContainer}}" stepKey="waitForOptionsContainer"/>
+        <!-- Grab the first radio button option value and select it -->
+        <waitForElementVisible selector="{{AdminOrderFormCustomOptionsSection.firstRadioButtonOption}}" stepKey="waitForRadioButtonOption"/>
+        <grabAttributeFrom selector="{{AdminOrderFormCustomOptionsSection.firstRadioButtonOption}}" userInput="value" stepKey="grabRadioOptionValue"/>
+        <click selector="{{AdminOrderFormCustomOptionsSection.radioButtonOptionByValue({$grabRadioOptionValue})}}" stepKey="selectRadioButtonOption"/>
+        <!-- Fill quantity as 10 -->
+        <waitForElementVisible selector="{{AdminOrderFormCustomOptionsSection.quantity}}" stepKey="waitForQuantityField"/>
+        <fillField selector="{{AdminOrderFormCustomOptionsSection.quantity}}" userInput="10" stepKey="fillQuantityForProductWithOptions"/>
+        <!-- Click OK to add product to order -->
+        <click selector="{{AdminOrderFormCustomOptionsSection.buttonOk}}" stepKey="clickOkButton"/>
+        <waitForPageLoad stepKey="waitForProductAddedFirst"/>
+        <waitForElementNotVisible selector="{{AdminOrderFormCustomOptionsSection.buttonOk}}" stepKey="waitForPopupToClose"/>
+        <!-- Click Add Selected Product(s) to Order button -->
+        <scrollTo selector="{{AdminOrderFormItemsSection.addSelected}}" x="0" y="-100" stepKey="scrollToAddSelectedFirst"/>
+        <click selector="{{AdminOrderFormItemsSection.addSelected}}" stepKey="clickAddSelectedFirst"/>
+        <waitForPageLoad stepKey="waitForFirstProductAddedToOrder"/>
+        <!-- Step 4: Add simple product without custom options -->
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSimpleProductToOrder">
+            <argument name="product" value="$simpleProductWithoutOptions$"/>
+            <argument name="productQty" value="1"/>
+        </actionGroup>
+        <!-- Step 5: Verify both products are in the Items Ordered grid -->
+        <!-- Verify product with custom options is present with qty 10 -->
+        <waitForText userInput="$simpleProductForCustomOptions.name$" selector="{{AdminOrderFormItemsSection.orderedItemProductName('1')}}" stepKey="seeProductWithOptionsName"/>
+        <seeInField userInput="10" selector="{{AdminOrderFormItemsSection.orderedItemQty('1')}}" stepKey="seeProductWithOptionsQty"/>
+        <!-- Verify simple product is present with qty 1 -->
+        <waitForText userInput="$simpleProductWithoutOptions.name$" selector="{{AdminOrderFormItemsSection.orderedItemProductName('2')}}" stepKey="seeSimpleProductName"/>
+        <seeInField userInput="1" selector="{{AdminOrderFormItemsSection.orderedItemQty('2')}}" stepKey="seeSimpleProductQty"/>
+        <!-- Verify we have 2 items in the order -->
+        <waitForText userInput="Total 2 product(s)" selector="{{AdminOrderFormItemsOrderedSection.itemsOrderedSummaryText}}" stepKey="seeTotalTwoProducts"/>
+        <!-- Verify no error messages appear -->
+        <waitForElementNotVisible selector="{{AdminOrderFormMessagesSection.error}}" stepKey="verifyNoErrorMessages"/>
+        <!-- Verify no duplicate product exists (no 3rd row) -->
+        <waitForElementNotVisible selector="{{AdminOrderFormItemsSection.orderedItemProductName('3')}}" stepKey="verifyNoDuplicateProduct"/>
+    </test>
+</tests>

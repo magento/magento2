@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -57,26 +57,17 @@ class ValueTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->context = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->context = $this->createMock(Context::class);
 
-        $this->registry = $this->getMockBuilder(Registry::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->registry = $this->createMock(Registry::class);
 
-        $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->getMockForAbstractClass();
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
 
-        $this->typeList = $this->getMockBuilder(TypeListInterface::class)
-            ->getMockForAbstractClass();
+        $this->typeList = $this->createMock(TypeListInterface::class);
 
-        $this->storeResolver = $this->getMockBuilder(StoreResolver::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->storeResolver = $this->createMock(StoreResolver::class);
 
-        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
-            ->getMockForAbstractClass();
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
 
         $this->model = new Value(
             $this->context,
@@ -95,8 +86,7 @@ class ValueTest extends TestCase
     {
         $storeId = 1;
 
-        $storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->getMockForAbstractClass();
+        $storeMock = $this->createMock(StoreInterface::class);
 
         $this->storeManager->expects($this->once())
             ->method('getStore')

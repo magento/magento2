@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Layer;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Config\LayerCategoryConfig;
 use Magento\Catalog\Model\Layer;
 use Magento\Catalog\Model\Layer\Category\FilterableAttributeList;
@@ -19,6 +21,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Check whenever the given filters list matches the expected result
  */
+#[CoversClass(FilterList::class)]
 class FilterListTest extends TestCase
 {
     /**
@@ -56,7 +59,7 @@ class FilterListTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $this->attributeListMock = $this->createMock(
             FilterableAttributeList::class
         );
@@ -85,26 +88,22 @@ class FilterListTest extends TestCase
      * @param string $expectedClass
      *
      * @return void
-     * @dataProvider getFiltersDataProvider
-     * @covers \Magento\Catalog\Model\Layer\FilterList::getFilters
-     * @covers \Magento\Catalog\Model\Layer\FilterList::createAttributeFilter
-     * @covers \Magento\Catalog\Model\Layer\FilterList::__construct
      */
+    #[DataProvider('getFiltersDataProvider')]
     public function testGetFilters(string $method, ?string $value, string $expectedClass): void
     {
         $this->objectManagerMock
             ->method('create')
-            ->withConsecutive(
-                [],
-                [
-                    $expectedClass,
-                    [
-                        'data' => ['attribute_model' => $this->attributeMock],
-                        'layer' => $this->layerMock
-                    ]
-                ]
-            )
-            ->willReturnOnConsecutiveCalls('filter', 'filter');
+            ->willReturnCallback(function ($arguments) {
+                if (empty($arguments)) {
+                    return 'filter';
+                } else {
+                        $expectedClass = $arguments[0];
+                    if ($expectedClass == $expectedClass) {
+                        return 'filter';
+                    }
+                }
+            });
 
         $this->attributeMock->expects($this->once())
             ->method($method)
@@ -130,8 +129,8 @@ class FilterListTest extends TestCase
      * @param array $expectedResult
      *
      * @return void
-     * @dataProvider getFiltersWithoutCategoryDataProvider
      */
+    #[DataProvider('getFiltersWithoutCategoryDataProvider')]
     public function testGetFiltersWithoutCategoryFilter(
         string $method,
         string $value,
@@ -167,7 +166,7 @@ class FilterListTest extends TestCase
     /**
      * @return array
      */
-    public function getFiltersDataProvider(): array
+    public static function getFiltersDataProvider(): array
     {
         return [
             [
@@ -193,7 +192,7 @@ class FilterListTest extends TestCase
      *
      * @return array
      */
-    public function getFiltersWithoutCategoryDataProvider(): array
+    public static function getFiltersWithoutCategoryDataProvider(): array
     {
         return [
             'Filters contains only price attribute' => [

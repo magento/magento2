@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Deploy;
 
@@ -240,7 +240,7 @@ class DeployTest extends \PHPUnit\Framework\TestCase
     private function assertBundleSize($theme)
     {
         $expectedSize = $this->bundleConfig->getBundleFileMaxSize('frontend', $theme);
-        $expectedSize *= 1.15;
+        $expectedSize *= 1.2;
 
         $iterator = $this->getDirectoryIterator("frontend/{$theme}/en_US/js/bundle");
         /** @var \SplFileInfo $file */

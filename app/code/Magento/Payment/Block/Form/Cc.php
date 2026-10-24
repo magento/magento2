@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Payment\Block\Form;
 
@@ -117,7 +117,12 @@ class Cc extends \Magento\Payment\Block\Form
      */
     public function hasSsCardType()
     {
-        $availableTypes = explode(',', $this->getMethod()->getConfigData('cctypes'));
+        $ccTypes = $this->getMethod()->getConfigData('cctypes');
+        if ($ccTypes === null) {
+            return false;
+        }
+
+        $availableTypes = explode(',', $ccTypes);
         $ssPresenations = array_intersect(['SS', 'SM', 'SO'], $availableTypes);
         if ($availableTypes && count($ssPresenations) > 0) {
             return true;

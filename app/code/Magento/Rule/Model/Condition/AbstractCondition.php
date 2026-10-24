@@ -1,9 +1,8 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
-
 namespace Magento\Rule\Model\Condition;
 
 use Magento\Framework\Data\Form;
@@ -866,6 +865,11 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
                     }
                 }
                 break;
+            case '===':
+                if (!is_array($validatedValue) && !is_array($value)) {
+                    $result = $this->_compareValues($validatedValue, $value);
+                }
+                break;
         }
 
         if ('!=' == $option || '>' == $option || '<' == $option || '!{}' == $option || '!()' == $option) {
@@ -885,8 +889,11 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
      */
     protected function _compareValues($validatedValue, $value, $strict = true)
     {
-        if (null === $value || null === $validatedValue ||
-            $strict && is_numeric($validatedValue) && is_numeric($value)) {
+        if ($strict && is_numeric($validatedValue) && is_numeric($value)) {
+            $pattern = '/^0\d+$/';
+            if (preg_match($pattern, $validatedValue) || preg_match($pattern, $value)) {
+                return $validatedValue === $value;
+            }
             return $validatedValue == $value;
         }
 
@@ -894,7 +901,7 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
         if ($strict) {
             $validatePattern = '^' . $validatePattern . '$';
         }
-        return (bool)preg_match('~' . $validatePattern . '~iu', $value);
+        return (bool)preg_match('~' . $validatePattern . '~iu', (string)$value);
     }
 
     /**
@@ -906,6 +913,7 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
     public function validate(\Magento\Framework\Model\AbstractModel $model)
     {
         if (!$model->hasData($this->getAttribute())) {
+            $model = clone $model;
             $model->load($model->getId());
         }
         $attributeValue = $model->getData($this->getAttribute());

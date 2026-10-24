@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -66,6 +66,23 @@ class ReorderTest extends TestCase
             self::assertEquals($firstQuoteItem->getId(), $quoteItem->getParentItemId());
             self::assertEquals(0, (int)$quoteItem->getCustomPrice());
         }
+
+        $customerMock = $this->getMockBuilder(\Magento\Customer\Model\Data\Customer::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(
+                [
+                    'getGroupId',
+                    'getEmail',
+                    '_getExtensionAttributes'
+                ]
+            )->getMock();
+        $customerMock->method('getGroupId')
+            ->willReturn(1);
+        $customerMock->method('getEmail')
+            ->willReturn('customer@example.com');
+        $customerMock->method('_getExtensionAttributes')
+            ->willReturn(null);
+        $this->model->getQuote()->setCustomer($customerMock);
 
         $shippingMethod = 'freeshipping_freeshipping';
         /** @var Rate $rate */

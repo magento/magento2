@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab;
 
@@ -59,7 +59,7 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
         \Magento\Rule\Block\Actions $ruleActions,
         \Magento\Backend\Block\Widget\Form\Renderer\Fieldset $rendererFieldset,
         array $data = [],
-        \Magento\SalesRule\Model\RuleFactory $ruleFactory = null
+        ?\Magento\SalesRule\Model\RuleFactory $ruleFactory = null
     ) {
         $this->_rendererFieldset = $rendererFieldset;
         $this->_ruleActions = $ruleActions;

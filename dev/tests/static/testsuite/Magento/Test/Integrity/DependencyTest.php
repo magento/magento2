@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Test\Integrity;
 
@@ -24,6 +24,8 @@ use Magento\TestFramework\Dependency\PhpRule;
 use Magento\TestFramework\Dependency\ReportsConfigRule;
 use Magento\TestFramework\Dependency\Route\RouteMapper;
 use Magento\TestFramework\Dependency\VirtualType\VirtualTypeMapper;
+use PHPUnit\Framework\Attributes\Depends;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Scan source code for incorrect or undeclared modules dependencies
@@ -58,6 +60,12 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
      * The identifier of dependency for mapping.
      */
     public const MAP_TYPE_REDUNDANT = 'redundant';
+
+    /**
+     * Redundant dependencies error message
+     */
+    public const UNUSED_DEPENDENCY_ERROR_MSG =
+        'Some dependencies required by composer.json are not used in the module and must be removed:';
 
     /**
      * Count of directories in path
@@ -435,6 +443,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
     {
         $contents = null;
         switch ($fileType) {
+            case 'fixture':
             case 'php':
                 $contents = php_strip_whitespace($file);
                 break;
@@ -499,7 +508,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
                 $result = [];
 
                 foreach ($undeclaredDependency as $type => $modules) {
-                    $modules = $this->filterOutBlacklistedDependencies($file, $modules, $blackList);
+                    $modules = $this->filterOutBlacklistedDependencies($file, $fileType, $modules, $blackList);
                     $modules = array_unique($modules);
                     if (empty($modules)) {
                         continue;
@@ -517,18 +526,24 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
     /**
      * Filter out list of module dependencies based on the provided blacklist.
      *
-     * Always exclude dependency on Setup because it is part of base Magento package.
+     * Additionally, exclude:
+     *   - dependency on Setup for all modules as it is part of base Magento package.
+     *   - dependency on Magento\TestFramework for in fixture classes
      *
      * @param string $filePath
+     * @param string $fileType
      * @param string[] $modules
      * @param array $blackList
      * @return string[]
      */
-    private function filterOutBlacklistedDependencies($filePath, $modules, array $blackList): array
+    private function filterOutBlacklistedDependencies($filePath, $fileType, $modules, $blackList): array
     {
         $relativeFilePath = substr_replace($filePath, '', 0, strlen(BP . '/'));
         foreach ($modules as $moduleKey => $module) {
-            if ($module == 'Magento\Setup') {
+            if ($module === 'Magento\Setup') {
+                unset($modules[$moduleKey]);
+            }
+            if ($fileType === 'fixture' && $module === 'Magento\TestFramework') {
                 unset($modules[$moduleKey]);
             }
             if (isset($blackList[$relativeFilePath])
@@ -567,7 +582,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
                 // Prepare output message
                 $result = [];
                 foreach ($externalDependencies as $type => $modules) {
-                    $modules = $this->filterOutBlacklistedDependencies($file, $modules, $blackList);
+                    $modules = $this->filterOutBlacklistedDependencies($file, $fileType, $modules, $blackList);
                     $modules = array_unique($modules);
                     if (empty($modules)) {
                         continue;
@@ -810,10 +825,10 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
      * Collect redundant dependencies
      *
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @test
-     * @depends testUndeclared
      * @throws \Exception
      */
+    #[Test]
+    #[Depends('testUndeclared')]
     public function collectRedundant()
     {
         $objectManager = Bootstrap::create(BP, $_SERVER)->getObjectManager();
@@ -836,9 +851,8 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Check redundant dependencies
-     *
-     * @depends collectRedundant
      */
+    #[Depends('collectRedundant')]
     public function testRedundant()
     {
         $output = [];
@@ -862,7 +876,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
             }
         }
         if (!empty($output)) {
-            $this->fail("Redundant dependencies found!\r\n" . implode(' ', $output));
+            $this->fail(self::UNUSED_DEPENDENCY_ERROR_MSG . "\r\n" . implode(' ', $output));
         }
     }
 
@@ -903,7 +917,8 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
             ),
             $this->_prepareFiles('config', Files::init()->getConfigFiles()),
             $this->_prepareFiles('layout', Files::init()->getLayoutFiles()),
-            $this->_prepareFiles('template', Files::init()->getPhtmlFiles())
+            $this->_prepareFiles('template', Files::init()->getPhtmlFiles()),
+            $this->_prepareFiles('fixture', Files::composeDataSets($this->getFixtureFiles()), true)
         );
     }
 
@@ -953,7 +968,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
                 $area = $matches['area'];
                 self::$_mapLayoutBlocks[$area] = self::$_mapLayoutBlocks[$area] ?? [];
             }
-            if (preg_match('/(?<namespace>[A-Z][a-z]+)[_\/\\\\](?<module>[A-Z][a-zA-Z]+)/', $file, $matches)) {
+            if (preg_match('/(?<namespace>[A-Z][A-Za-z]+)[_\/\\\\](?<module>[A-Z][a-zA-Z]+)/', $file, $matches)) {
                 $module = $matches['namespace'] . '\\' . $matches['module'];
                 $xml = simplexml_load_file($file);
                 foreach ((array)$xml->xpath('//container | //block') as $element) {
@@ -1315,5 +1330,19 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
             self::$allowedDependencies = \array_merge_recursive([], ...$allowedDependencies);
         }
         return self::$allowedDependencies;
+    }
+
+    /**
+     * Returns fixture files located in <module-directory>/Test/Fixture directory
+     *
+     * @return array
+     */
+    private function getFixtureFiles(): array
+    {
+        $fixtureDirs = [];
+        foreach (self::getComponentRegistrar()->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
+            $fixtureDirs[] = $moduleDir . '/Test/Fixture';
+        }
+        return Files::getFiles($fixtureDirs, '*.php');
     }
 }

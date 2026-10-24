@@ -1,29 +1,43 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Email\Test\Unit\Block\Adminhtml\Template;
 
+use Magento\Backend\Block\Template\Context;
+use Magento\Backend\Block\Widget\Button\ButtonList;
+use Magento\Backend\Block\Widget\Button\ToolbarInterface;
+use Magento\Backend\Model\Menu\Item\Factory;
 use Magento\Backend\Helper\Data;
 use Magento\Backend\Model\Menu;
 use Magento\Backend\Model\Menu\Config;
 use Magento\Backend\Model\Menu\Item;
-use Magento\Backend\Model\Url;
 use Magento\Config\Model\Config\Structure;
 use Magento\Config\Model\Config\Structure\Element\Field;
 use Magento\Config\Model\Config\Structure\Element\Group;
 use Magento\Config\Model\Config\Structure\Element\Section;
 use Magento\Email\Block\Adminhtml\Template\Edit;
 use Magento\Email\Model\BackendTemplate;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\State;
+use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Read;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Json\EncoderInterface;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
+use Magento\Framework\Registry;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\UrlInterface;
+use Magento\Framework\View\Element\Template\File\Resolver;
+use Magento\Framework\View\Element\Template\File\Validator;
 use Magento\Framework\View\FileSystem as FilesystemView;
 use Magento\Framework\View\Layout;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -33,6 +47,8 @@ use Psr\Log\LoggerInterface;
  */
 class EditTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Edit
      */
@@ -62,31 +78,39 @@ class EditTest extends TestCase
      */
     protected $filesystemMock;
 
+    /**
+     * @var Context|MockObject
+     */
+    private Context $context;
+
     protected function setUp(): void
     {
-        $objectManager = new ObjectManager($this);
-        $layoutMock = $this->getMockBuilder(Layout::class)
-            ->addMethods(['helper'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $layoutMock = $this->createPartialMockWithReflection(
+            Layout::class,
+            ['helper']
+        );
         $helperMock = $this->createMock(Data::class);
         $menuConfigMock = $this->createMock(Config::class);
         $menuMock = $this->getMockBuilder(Menu::class)
-            ->setConstructorArgs([$this->getMockForAbstractClass(LoggerInterface::class)])
-            ->getMock();
+            ->setConstructorArgs(
+                [
+                    $this->createMock(LoggerInterface::class),
+                    '',
+                    $this->createMock(Factory::class),
+                    $this->createMock(SerializerInterface::class)
+                ]
+            )->getMock();
         $menuItemMock = $this->createMock(Item::class);
-        $urlBuilder = $this->createMock(Url::class);
         $this->_configStructureMock = $this->createMock(Structure::class);
         $this->_emailConfigMock = $this->createMock(\Magento\Email\Model\Template\Config::class);
 
-        $this->filesystemMock = $this->getMockBuilder(Filesystem::class)
-            ->addMethods(['getFilesystem', 'getPath'])
-            ->onlyMethods(['getDirectoryRead'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->filesystemMock = $this->createPartialMockWithReflection(
+            Filesystem::class,
+            ['getFilesystem', 'getPath', 'getDirectoryRead']
+        );
 
         $viewFilesystem = $this->getMockBuilder(FilesystemView::class)
-            ->setMethods(['getTemplateFileName'])
+            ->onlyMethods(['getTemplateFileName'])
             ->disableOriginalConstructor()
             ->getMock();
         $viewFilesystem->expects(
@@ -96,20 +120,29 @@ class EditTest extends TestCase
         )->willReturn(
             DirectoryList::ROOT . '/custom/filename.phtml'
         );
-
-        $params = [
-            'urlBuilder' => $urlBuilder,
-            'layout' => $layoutMock,
-            'menuConfig' => $menuConfigMock,
-            'configStructure' => $this->_configStructureMock,
-            'emailConfig' => $this->_emailConfigMock,
-            'filesystem' => $this->filesystemMock,
-            'viewFileSystem' => $viewFilesystem,
-        ];
-        $arguments = $objectManager->getConstructArguments(
-            Edit::class,
-            $params
-        );
+        $this->context = $this->createMock(Context::class);
+        $this->context->expects($this->any())->method('getStoreManager')
+            ->willReturn($this->createMock(StoreManagerInterface::class));
+        $urlBuilder = $this->createMock(UrlInterface::class);
+        $this->context->expects($this->any())->method('getUrlBuilder')->willReturn($urlBuilder);
+        $eventManager = $this->createMock(ManagerInterface::class);
+        $this->context->expects($this->any())->method('getEventManager')->willReturn($eventManager);
+        $scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $this->context->expects($this->any())->method('getScopeConfig')->willReturn($scopeConfig);
+        $appState = $this->createMock(State::class);
+        $this->context->expects($this->any())->method('getAppState')->willReturn($appState);
+        $resolver = $this->createMock(Resolver::class);
+        $this->context->expects($this->any())->method('getResolver')->willReturn($resolver);
+        $fileSystem = $this->createMock(Filesystem::class);
+        $fileSystem->expects($this->any())
+            ->method('getDirectoryRead')
+            ->willReturn($this->createMock(Read::class));
+        $this->context->expects($this->any())->method('getFilesystem')->willReturn($fileSystem);
+        $validator = $this->createMock(Validator::class);
+        $this->context->expects($this->any())->method('getValidator')->willReturn($validator);
+        $this->context->expects($this->any())
+            ->method('getLogger')
+            ->willReturn($this->createMock(LoggerInterface::class));
 
         $urlBuilder->expects($this->any())->method('getUrl')->willReturnArgument(0);
         $menuConfigMock->expects($this->any())->method('getMenu')->willReturn($menuMock);
@@ -118,7 +151,25 @@ class EditTest extends TestCase
 
         $layoutMock->expects($this->any())->method('helper')->willReturn($helperMock);
 
-        $this->_block = $objectManager->getObject(Edit::class, $arguments);
+        $encoder = $this->createMock(EncoderInterface::class);
+        $registry = $this->createMock(Registry::class);
+        $jsonHelper = $this->createMock(JsonHelper::class);
+        $buttonList = $this->createMock(ButtonList::class);
+        $toolbar = $this->createMock(ToolbarInterface::class);
+        $this->_block = new Edit(
+            $this->context,
+            $encoder,
+            $registry,
+            $menuConfigMock,
+            $this->_configStructureMock,
+            $this->_emailConfigMock,
+            $jsonHelper,
+            $buttonList,
+            $toolbar,
+            [
+                'directoryHelper' => $this->createMock(\Magento\Directory\Helper\Data::class)
+            ]
+        );
     }
 
     /**
@@ -148,6 +199,7 @@ class EditTest extends TestCase
             ['getLabel']
         );
         $map = [
+            [['section1'], $sectionMock],
             [['section1', 'group1'], $groupMock1],
             [['section1', 'group1', 'group2'], $groupMock2],
             [['section1', 'group1', 'group2', 'group3'], $groupMock3],

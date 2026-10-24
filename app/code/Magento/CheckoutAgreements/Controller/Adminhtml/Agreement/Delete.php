@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CheckoutAgreements\Controller\Adminhtml\Agreement;
 
@@ -29,7 +28,7 @@ class Delete extends Agreement implements HttpPostActionInterface
     public function __construct(
         Context $context,
         Registry $coreRegistry,
-        CheckoutAgreementsRepositoryInterface $agreementRepository = null
+        ?CheckoutAgreementsRepositoryInterface $agreementRepository = null
     ) {
         $this->agreementRepository = $agreementRepository ?:
                 ObjectManager::getInstance()->get(CheckoutAgreementsRepositoryInterface::class);

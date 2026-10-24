@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Paypal\Model\Hostedpro;
 
@@ -15,8 +15,6 @@ use Magento\Tax\Helper\Data;
 
 /**
  *  Website Payments Pro Hosted Solution request model to get token.
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Request extends DataObject
 {
@@ -213,8 +211,9 @@ class Request extends DataObject
      */
     protected function getPaymentData(Hostedpro $paymentMethod)
     {
+        $paymentAction = $paymentMethod->getConfigData('payment_action');
         $request = [
-            'paymentaction' => strtolower($paymentMethod->getConfigData('payment_action')),
+            'paymentaction' => $paymentAction !== null ? strtolower($paymentAction) : '',
             'notify_url' => $paymentMethod->getNotifyUrl(),
             'cancel_return' => $paymentMethod->getCancelUrl(),
             'return' => $paymentMethod->getReturnUrl(),

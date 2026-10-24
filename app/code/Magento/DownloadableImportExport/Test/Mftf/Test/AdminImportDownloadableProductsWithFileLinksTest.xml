@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -67,6 +67,7 @@
         <after>
             <!-- Delete Data -->
             <deleteData createDataKey="createImportCategory" stepKey="deleteImportCategory"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="deleteDirectory" stepKey="deleteProductImageDirectory">
                 <argument name="path">var/import/images/{{ImportProduct_Downloadable_FileLinks.name}}</argument>
@@ -107,7 +108,11 @@
         <see userInput="{{ImportProduct_Downloadable_FileLinks.importSummary}}" selector="{{AdminDataGridTableSection.firstRow}}" stepKey="seeSummary"/>
 
         <!-- Admin: Verify Downloadable Product on Edit Product Page -->
-        <actionGroup ref="NavigateToCreatedProductEditPageActionGroup" stepKey="goToDownloadableProductEditPage">
+        <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="openProductCatalogPageForImportedProduct"/>
+        <actionGroup ref="SearchProductGridByKeywordActionGroup" stepKey="searchImportedDownloadableProductByKeyword">
+            <argument name="keyword" value="ImportProduct_Downloadable_FileLinks.sku"/>
+        </actionGroup>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="goToDownloadableProductEditPage">
             <argument name="product" value="ImportProduct_Downloadable_FileLinks"/>
         </actionGroup>
         <actionGroup ref="AdminAssertProductInfoOnEditPageActionGroup" stepKey="assertDownloadableProductOnEditPage">

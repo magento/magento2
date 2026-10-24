@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -81,11 +81,11 @@ class ObserverTest extends TestCase
     protected function setUp(): void
     {
         $this->importFactoryMock = $this->createMock(Factory::class);
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->transportBuilderMock = $this->createMock(TransportBuilder::class);
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->currencyFactoryMock = $this->createMock(CurrencyFactory::class);
-        $this->inlineTranslationMock = $this->getMockForAbstractClass(StateInterface::class);
+        $this->inlineTranslationMock = $this->createMock(StateInterface::class);
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
             Observer::class,
@@ -102,46 +102,29 @@ class ObserverTest extends TestCase
 
     /**
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testScheduledUpdateCurrencyRates(): void
     {
         $importWarnings = ['WARNING: error1', 'WARNING: error2'];
         $this->scopeConfigMock->expects($this->any())
             ->method('getValue')
-            ->withConsecutive(
-                [
-                    Observer::IMPORT_ENABLE,
-                    ScopeInterface::SCOPE_STORE
-                ],
-                [
-                    Observer::CRON_STRING_PATH,
-                    ScopeInterface::SCOPE_STORE
-                ],
-                [
-                    Observer::IMPORT_SERVICE,
-                    ScopeInterface::SCOPE_STORE
-                ],
-                [
-                    Observer::XML_PATH_ERROR_RECIPIENT,
-                    ScopeInterface::SCOPE_STORE
-                ],
-                [
-                    Observer::XML_PATH_ERROR_TEMPLATE,
-                    ScopeInterface::SCOPE_STORE
-                ],
-                [
-                    Observer::XML_PATH_ERROR_IDENTITY,
-                    ScopeInterface::SCOPE_STORE
-                ]
-            )->willReturnOnConsecutiveCalls(
-                1,
-                '* * * * *',
-                'fixerio',
-                'test1@email.com,test2@email.com',
-                self::STUB_ERROR_TEMPLATE,
-                self::STUB_SENDER
-            );
-        $import = $this->getMockForAbstractClass(ImportInterface::class);
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == Observer::IMPORT_ENABLE && $arg2 == ScopeInterface::SCOPE_STORE) {
+                    return 1;
+                } elseif ($arg1 == Observer::CRON_STRING_PATH && $arg2 == ScopeInterface::SCOPE_STORE) {
+                    return '* * * * *';
+                } elseif ($arg1 == Observer::IMPORT_SERVICE && $arg2 == ScopeInterface::SCOPE_STORE) {
+                    return 'fixerio';
+                } elseif ($arg1 == Observer::XML_PATH_ERROR_RECIPIENT && $arg2 == ScopeInterface::SCOPE_STORE) {
+                    return 'test1@email.com,test2@email.com';
+                } elseif ($arg1 == Observer::XML_PATH_ERROR_TEMPLATE && $arg2 == ScopeInterface::SCOPE_STORE) {
+                    return self::STUB_ERROR_TEMPLATE;
+                } elseif ($arg1 == Observer::XML_PATH_ERROR_IDENTITY && $arg2 == ScopeInterface::SCOPE_STORE) {
+                    return self::STUB_SENDER;
+                }
+            });
+        $import = $this->createMock(ImportInterface::class);
         $import->expects($this->once())->method('fetchRates')
             ->willReturn([]);
         $import->expects($this->once())->method('getMessages')
@@ -170,7 +153,7 @@ class ObserverTest extends TestCase
             ->method('addTo')
             ->with(['test1@email.com', 'test2@email.com'])
             ->willReturnSelf();
-        $transport = $this->getMockForAbstractClass(TransportInterface::class);
+        $transport = $this->createMock(TransportInterface::class);
 
         $this->transportBuilderMock->expects($this->once())
             ->method('getTransport')

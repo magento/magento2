@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Quote\Model\Quote\Address;
 
@@ -40,7 +40,7 @@ class Total extends \Magento\Framework\DataObject
      */
     public function __construct(
         array $data = [],
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
@@ -58,6 +58,7 @@ class Total extends \Magento\Framework\DataObject
     {
         $amount = is_float($amount) ? round($amount, 4) : $amount;
 
+        $code = $code ?? '';
         $this->totalAmounts[$code] = $amount;
         if ($code != 'subtotal') {
             $code = $code . '_amount';
@@ -78,6 +79,7 @@ class Total extends \Magento\Framework\DataObject
     {
         $amount = is_float($amount) ? round($amount, 4) : $amount;
 
+        $code = $code ?? '';
         $this->baseTotalAmounts[$code] = $amount;
         if ($code != 'subtotal') {
             $code = $code . '_amount';
@@ -125,6 +127,7 @@ class Total extends \Magento\Framework\DataObject
      */
     public function getTotalAmount($code)
     {
+        $code = $code ?? '';
         if (isset($this->totalAmounts[$code])) {
             return $this->totalAmounts[$code];
         }
@@ -140,6 +143,7 @@ class Total extends \Magento\Framework\DataObject
      */
     public function getBaseTotalAmount($code)
     {
+        $code = $code ?? '';
         if (isset($this->baseTotalAmounts[$code])) {
             return $this->baseTotalAmounts[$code];
         }

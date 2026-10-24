@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,9 +17,12 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\Store\Model\Store;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class AttributeTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var  MockObject */
     protected $connection;
 
@@ -48,11 +51,10 @@ class AttributeTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->connection = $this->getMockBuilder(AdapterInterface::class)
-            ->getMock();
+        $this->connection = $this->createMock(AdapterInterface::class);
 
         $this->resource = $this->createMock(ResourceConnection::class);
-        $this->resource->expects($this->any())->method('getConnection')->willReturn($this->connection);
+        $this->resource->method('getConnection')->willReturn($this->connection);
         $this->resource->expects($this->any())->method('getTableName')->willReturnArgument(0);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
@@ -71,9 +73,7 @@ class AttributeTest extends TestCase
     {
         $attributeId = 4354;
 
-        $select = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $select = $this->createMock(Select::class);
         $this->connection->expects($this->once())->method('select')->willReturn($select);
         $select->expects($this->once())->method('from')->willReturnSelf();
         $select
@@ -96,14 +96,14 @@ class AttributeTest extends TestCase
                 'value' => 'test',
             ]
         );
-        $attributeMock = $this->getMockBuilder(AttributeModel::class)
-            ->onlyMethods(['getId', 'getLabel'])
-            ->addMethods(['getUseDefault'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $attributeMock->expects($this->atLeastOnce())->method('getId')->willReturn($attributeId);
-        $attributeMock->expects($this->atLeastOnce())->method('getUseDefault')->willReturn(0);
-        $attributeMock->expects($this->atLeastOnce())->method('getLabel')->willReturn('test');
+        $attributeMock = $this->createPartialMockWithReflection(
+            AttributeModel::class,
+            ['getId', 'setId', 'getUseDefault', 'setUseDefault', 'getLabel', 'setLabel', 'getStoreId', 'setStoreId']
+        );
+        $attributeMock->method('getId')->willReturn($attributeId);
+        $attributeMock->method('getUseDefault')->willReturn(0);
+        $attributeMock->method('getLabel')->willReturn('test');
+        $attributeMock->method('getStoreId')->willReturn(Store::DEFAULT_STORE_ID);
         $this->assertEquals($this->attribute, $this->attribute->saveLabel($attributeMock));
     }
 
@@ -113,9 +113,7 @@ class AttributeTest extends TestCase
     public function testSaveExistingLabel(): void
     {
         $attributeId = 4354;
-        $select = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $select = $this->createMock(Select::class);
         $this->connection->expects($this->once())->method('select')->willReturn($select);
         $select->expects($this->once())->method('from')->willReturnSelf();
         $select
@@ -138,15 +136,14 @@ class AttributeTest extends TestCase
                 'value' => 'test'
             ]
         );
-        $attributeMock = $this->getMockBuilder(AttributeModel::class)
-            ->onlyMethods(['getId', 'getLabel'])
-            ->addMethods(['getUseDefault', 'getStoreId'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $attributeMock->expects($this->atLeastOnce())->method('getId')->willReturn($attributeId);
-        $attributeMock->expects($this->atLeastOnce())->method('getStoreId')->willReturn(1);
-        $attributeMock->expects($this->atLeastOnce())->method('getUseDefault')->willReturn(0);
-        $attributeMock->expects($this->atLeastOnce())->method('getLabel')->willReturn('test');
+        $attributeMock = $this->createPartialMockWithReflection(
+            AttributeModel::class,
+            ['getId', 'setId', 'getUseDefault', 'setUseDefault', 'getLabel', 'setLabel', 'getStoreId', 'setStoreId']
+        );
+        $attributeMock->method('getId')->willReturn($attributeId);
+        $attributeMock->method('getStoreId')->willReturn(1);
+        $attributeMock->method('getUseDefault')->willReturn(0);
+        $attributeMock->method('getLabel')->willReturn('test');
         $this->assertEquals($this->attribute, $this->attribute->saveLabel($attributeMock));
     }
 }

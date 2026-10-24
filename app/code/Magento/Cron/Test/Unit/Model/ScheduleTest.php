@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -55,33 +56,29 @@ class ScheduleTest extends TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->resourceJobMock = $this->getMockBuilder(SchoduleResourceModel::class)
-            ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'trySetJobStatusAtomic',
-                    '__wakeup',
-                    'getIdFieldName',
-                    'trySetJobStatuses',
-                    'getConnection',
-                    'getTable'
-                ]
-            )
-            ->getMockForAbstractClass();
+        $this->resourceJobMock = $this->createPartialMock(
+            SchoduleResourceModel::class,
+            [
+                'trySetJobStatusAtomic',
+                '__wakeup',
+                'getIdFieldName',
+                'getConnection',
+                'getTable',
+                '_construct'
+            ]
+        );
 
         $this->resourceJobMock->expects($this->any())
             ->method('getIdFieldName')
             ->willReturn('id');
 
-        $this->timezoneConverterMock = $this->getMockBuilder(TimezoneInterface::class)
-            ->setMethods(['date'])
-            ->getMockForAbstractClass();
+        $this->timezoneConverterMock = $this->createStub(TimezoneInterface::class);
 
         $this->dateTimeFactoryMock = $this->getMockBuilder(DateTimeFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
-        $this->retrierMock = $this->getMockForAbstractClass(DeadlockRetrierInterface::class);
+        $this->retrierMock = $this->createMock(DeadlockRetrierInterface::class);
     }
 
     /**
@@ -91,8 +88,8 @@ class ScheduleTest extends TestCase
      * @param array $expected
      *
      * @return void
-     * @dataProvider setCronExprDataProvider
      */
+    #[DataProvider('setCronExprDataProvider')]
     public function testSetCronExpr($cronExpression, $expected): void
     {
         // 1. Create mocks
@@ -115,7 +112,7 @@ class ScheduleTest extends TestCase
      *
      * @return array
      */
-    public function setCronExprDataProvider(): array
+    public static function setCronExprDataProvider(): array
     {
         return [
             ['1 2 3 4 5', [1, 2, 3, 4, 5]],
@@ -186,8 +183,8 @@ class ScheduleTest extends TestCase
      * @param string $cronExpression
      *
      * @return void
-     * @dataProvider setCronExprExceptionDataProvider
      */
+    #[DataProvider('setCronExprExceptionDataProvider')]
     public function testSetCronExprException($cronExpression): void
     {
         $this->expectException(CronException::class);
@@ -208,7 +205,7 @@ class ScheduleTest extends TestCase
      *
      * @return array
      */
-    public function setCronExprExceptionDataProvider(): array
+    public static function setCronExprExceptionDataProvider(): array
     {
         return [
             [''],
@@ -226,8 +223,8 @@ class ScheduleTest extends TestCase
      * @param $expected
      *
      * @return void
-     * @dataProvider tryScheduleDataProvider
      */
+    #[DataProvider('tryScheduleDataProvider')]
     public function testTrySchedule($scheduledAt, $cronExprArr, $expected): void
     {
         // 1. Create mocks
@@ -298,7 +295,7 @@ class ScheduleTest extends TestCase
      *
      * @return array
      */
-    public function tryScheduleDataProvider(): array
+    public static function tryScheduleDataProvider(): array
     {
         $date = '2011-12-13 14:15:16';
         $timestamp = (new \DateTime($date))->getTimestamp();
@@ -327,8 +324,8 @@ class ScheduleTest extends TestCase
      * @param bool $expectedResult
      *
      * @return void
-     * @dataProvider matchCronExpressionDataProvider
      */
+    #[DataProvider('matchCronExpressionDataProvider')]
     public function testMatchCronExpression($cronExpressionPart, $dateTimePart, $expectedResult): void
     {
         // 1. Create mocks
@@ -347,7 +344,7 @@ class ScheduleTest extends TestCase
      *
      * @return array
      */
-    public function matchCronExpressionDataProvider(): array
+    public static function matchCronExpressionDataProvider(): array
     {
         return [
             ['*', 0, true],
@@ -399,8 +396,8 @@ class ScheduleTest extends TestCase
      * @param string $cronExpressionPart
      *
      * @return void
-     * @dataProvider matchCronExpressionExceptionDataProvider
      */
+    #[DataProvider('matchCronExpressionExceptionDataProvider')]
     public function testMatchCronExpressionException($cronExpressionPart): void
     {
         $this->expectException(CronException::class);
@@ -419,13 +416,14 @@ class ScheduleTest extends TestCase
      *
      * @return array
      */
-    public function matchCronExpressionExceptionDataProvider(): array
+    public static function matchCronExpressionExceptionDataProvider(): array
     {
         return [
             ['1/2/3'],    //Invalid cron expression, expecting 'match/modulus': 1/2/3
             ['1/'],       //Invalid cron expression, expecting numeric modulus: 1/
             ['-'],        //Invalid cron expression
             ['1-2-3'],    //Invalid cron expression, expecting 'from-to' structure: 1-2-3
+            ['0/0'],
         ];
     }
 
@@ -436,8 +434,8 @@ class ScheduleTest extends TestCase
      * @param int $expectedResult
      *
      * @return void
-     * @dataProvider getNumericDataProvider
      */
+    #[DataProvider('getNumericDataProvider')]
     public function testGetNumeric($param, $expectedResult): void
     {
         // 1. Create mocks
@@ -456,7 +454,7 @@ class ScheduleTest extends TestCase
      *
      * @return array
      */
-    public function getNumericDataProvider(): array
+    public static function getNumericDataProvider(): array
     {
         return [
             [null, false],
@@ -492,7 +490,7 @@ class ScheduleTest extends TestCase
         $jobCode = 'test_job';
         $tableName = 'cron_schedule';
 
-        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $connectionMock = $this->createMock(AdapterInterface::class);
         $connectionMock->expects($this->once())
             ->method('update')
             ->with(
@@ -550,7 +548,7 @@ class ScheduleTest extends TestCase
         $jobCode = 'test_job';
         $tableName = 'cron_schedule';
 
-        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $connectionMock = $this->createMock(AdapterInterface::class);
         $connectionMock->expects($this->once())
             ->method('update')
             ->with(

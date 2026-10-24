@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\View\Asset;
@@ -230,7 +230,7 @@ class Bundle
         if (!isset($this->assetsContent[$assetContextCode][$assetContentType][$assetKey])) {
             $content = $asset->getContent();
             if (mb_detect_encoding($content) !== "UTF-8") {
-                $content = mb_convert_encoding($content, "UTF-8");
+                $content = $content !== null ? mb_convert_encoding($content, "UTF-8") : '';
             }
             $this->assetsContent[$assetContextCode][$assetContentType][$assetKey] = $content;
         }

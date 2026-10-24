@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Test\Integrity\Modular\Magento\Customer;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class AddressFormatsFilesTest extends \PHPUnit\Framework\TestCase
 {
@@ -23,8 +25,8 @@ class AddressFormatsFilesTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param string $file
-     * @dataProvider fileFormatDataProvider
      */
+    #[DataProvider('fileFormatDataProvider')]
     public function testFileFormat($file)
     {
         $validationStateMock = $this->createMock(\Magento\Framework\Config\ValidationStateInterface::class);
@@ -38,7 +40,7 @@ class AddressFormatsFilesTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function fileFormatDataProvider()
+    public static function fileFormatDataProvider()
     {
         return \Magento\Framework\App\Utility\Files::init()->getConfigFiles(
             '{*/address_formats.xml,address_formats.xml}'

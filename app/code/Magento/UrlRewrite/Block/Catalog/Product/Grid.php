@@ -1,14 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\UrlRewrite\Block\Catalog\Product;
 
 /**
  * Products grid for URL rewrites editing
  *
- * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid

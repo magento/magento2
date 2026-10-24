@@ -1,18 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\AsynchronousOperations\Model;
 
-/**
- * Class AccessValidator
- */
+use Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface;
+use Magento\Authorization\Model\UserContextInterface;
+
 class AccessValidator
 {
     /**
-     * @var \Magento\Authorization\Model\UserContextInterface
+     * @var UserContextInterface
      */
     private $userContext;
 
@@ -27,13 +27,12 @@ class AccessValidator
     private $bulkSummaryFactory;
 
     /**
-     * AccessValidator constructor.
-     * @param \Magento\Authorization\Model\UserContextInterface $userContext
+     * @param UserContextInterface $userContext
      * @param \Magento\Framework\EntityManager\EntityManager $entityManager
      * @param \Magento\AsynchronousOperations\Api\Data\BulkSummaryInterfaceFactory $bulkSummaryFactory
      */
     public function __construct(
-        \Magento\Authorization\Model\UserContextInterface $userContext,
+        UserContextInterface $userContext,
         \Magento\Framework\EntityManager\EntityManager $entityManager,
         \Magento\AsynchronousOperations\Api\Data\BulkSummaryInterfaceFactory $bulkSummaryFactory
     ) {
@@ -50,11 +49,15 @@ class AccessValidator
      */
     public function isAllowed($bulkUuid)
     {
-        /** @var \Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface $bulkSummary */
+        /** @var BulkSummaryInterface $bulkSummary */
         $bulkSummary = $this->entityManager->load(
             $this->bulkSummaryFactory->create(),
             $bulkUuid
         );
+        if ((int) $bulkSummary->getUserType() === UserContextInterface::USER_TYPE_INTEGRATION) {
+            return true;
+        }
+
         return ((int) $bulkSummary->getUserId()) === ((int) $this->userContext->getUserId());
     }
 }

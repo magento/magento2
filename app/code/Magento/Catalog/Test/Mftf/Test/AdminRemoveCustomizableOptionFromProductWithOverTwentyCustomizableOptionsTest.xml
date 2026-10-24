@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    /**
+     * Copyright 2024 Adobe
+     * All Rights Reserved.
+     */
+   -->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminRemoveCustomizableOptionFromProductWithOverTwentyCustomizableOptionsTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Remove Customizable Option from Product"/>
+            <title value="Admin should be able to Remove Customizable Option from Product with over 20 Customizable Options."/>
+            <description value="Remove Customizable Option from Product with over 20 Customizable Options."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4703"/>
+            <group value="Catalog"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct"/>
+            <updateData entity="ProductWithTwentyOneTextFieldOptions" createDataKey="createSimpleProduct" stepKey="addCustomOptions">
+                <requiredEntity createDataKey="createSimpleProduct"/>
+            </updateData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductForEdit">
+            <argument name="productId" value="$createSimpleProduct.id$"/>
+        </actionGroup>
+        <scrollTo selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" stepKey="scrollToCustomizableOptions"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" stepKey="clickAdminProductCustomizableOption"/>
+        <actionGroup ref="AdminDeleteProductCustomOptionActionGroup" stepKey="deleteCustomOptionArea">
+            <argument name="option" value="ProductOptionField21"/>
+        </actionGroup>
+        <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="clickSaveButton"/>
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openProductPage">
+            <argument name="product" value="$createSimpleProduct$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertCustomOptionByTitleActionGroup" stepKey="assertDropDownOptionByTitleOnStorefront">
+            <argument name="title" value="{{ProductOptionField.title}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertCustomOptionByTitleActionGroup" stepKey="assertDropDownOptionByTitle2OnStorefront">
+            <argument name="title" value="{{ProductOptionField2.title}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertCustomOptionByTitleActionGroup" stepKey="assertDropDownOptionByTitle5OnStorefront">
+            <argument name="title" value="{{ProductOptionField5.title}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertCustomOptionByTitleActionGroup" stepKey="assertDropDownOptionByTitle12nStorefront">
+            <argument name="title" value="{{ProductOptionField12.title}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertCustomOptionByTitleActionGroup" stepKey="assertDropDownOptionByTitle20nStorefront">
+            <argument name="title" value="{{ProductOptionField20.title}}"/>
+        </actionGroup>
+       <dontSee selector="{{StorefrontProductInfoMainSection.customOptionByTitle('OptionField21')}}" stepKey="dontSeeCustomOption"/>
+    </test>
+</tests>

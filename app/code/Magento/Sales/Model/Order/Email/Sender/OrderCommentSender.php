@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\Order\Email\Sender;
 
@@ -51,7 +51,7 @@ class OrderCommentSender extends NotifySender
         \Psr\Log\LoggerInterface $logger,
         Renderer $addressRenderer,
         ManagerInterface $eventManager,
-        Emulation $appEmulation = null
+        ?Emulation $appEmulation = null
     ) {
         parent::__construct($templateContainer, $identityContainer, $senderBuilderFactory, $logger, $addressRenderer);
         $this->addressRenderer = $addressRenderer;

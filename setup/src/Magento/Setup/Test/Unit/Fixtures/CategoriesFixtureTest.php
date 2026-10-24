@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,10 +16,13 @@ use Magento\Setup\Fixtures\CategoriesFixture;
 use Magento\Setup\Fixtures\FixtureModel;
 use Magento\Store\Model\Store;
 use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\TestCase;
 
 class CategoriesFixtureTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var MockObject|FixtureModel
      */
@@ -46,7 +49,7 @@ class CategoriesFixtureTest extends TestCase
     private $categoryFactoryMock;
 
     /**
-     * @inhertidoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {
@@ -92,27 +95,14 @@ class CategoriesFixtureTest extends TestCase
         $this->collectionFactoryMock->expects($this->once())->method('create')->willReturn($this->collectionMock);
         $this->collectionMock->expects($this->once())->method('getSize')->willReturn(2);
 
-        $parentCategoryMock = $this->getMockBuilder(Category::class)
-            ->addMethods(['setUrlKey', 'setUrlPath', 'setDefaultSortBy', 'setIsAnchor'])
-            ->onlyMethods(
-                [
-                    'getName',
-                    'setId',
-                    'getId',
-                    'setName',
-                    'setParentId',
-                    'setPath',
-                    'setLevel',
-                    'getLevel',
-                    'setAvailableSortBy',
-                    'setIsActive',
-                    'save',
-                    'setStoreId',
-                    'load'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $parentCategoryMock = $this->createPartialMockWithReflection(
+            Category::class,
+            [
+                'getName', 'setId', 'getId', 'setName', 'setParentId', 'setPath', 'setLevel', 'getLevel',
+                'setAvailableSortBy', 'setIsActive', 'save', 'setStoreId', 'load', 'setUrlKey', 'setUrlPath',
+                'setDefaultSortBy', 'getResource', 'setIsAnchor'
+            ]
+        );
         $parentCategoryMock->expects($this->once())->method('getId')->willReturn(5);
         $parentCategoryMock->expects($this->once())->method('getLevel')->willReturn(3);
         $categoryMock = clone $parentCategoryMock;

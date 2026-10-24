@@ -1,0 +1,4 @@
+sku,store_view_code,attribute_set_code,product_type,categories,product_websites,name,description,short_description,weight,product_online,tax_class_name,visibility,price,url_key,qty,is_in_stock
+simple1,,set1,simple,"Default Category",base,Simple Product 1,,,1.0000,1,"Taxable Goods","Catalog, Search",100.0000,simple1,100.0000,1
+simple2,,set1,simple,"Default Category",base,Simple Product 2,,,1.0000,1,"Taxable Goods","Catalog, Search",200.0000,simple2,100.0000,1
+

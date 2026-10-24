@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Ui\Component\Product\Form\Categories;
 
@@ -43,7 +43,7 @@ class Options implements OptionSourceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function toOptionArray()
     {
@@ -70,7 +70,8 @@ class Options implements OptionSourceInterface
 
             /** @var \Magento\Catalog\Model\Category $category */
             foreach ($matchingNamesCollection as $category) {
-                foreach (explode('/', $category->getPath()) as $parentId) {
+
+                foreach (explode('/', $category->getPath() ?? '') as $parentId) {
                     $shownCategoriesIds[$parentId] = 1;
                 }
             }

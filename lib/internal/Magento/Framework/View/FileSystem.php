@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\View;
 
@@ -171,7 +171,7 @@ class FileSystem
      */
     public static function normalizePath($path)
     {
-        $parts = explode('/', $path);
+        $parts = $path !== null ? explode('/', $path) : [];
         $result = [];
 
         foreach ($parts as $part) {

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\CatalogSearch\Model\Autocomplete;
@@ -21,11 +21,9 @@ class DataProvider implements DataProviderInterface
     /**
      * Autocomplete limit
      */
-    const CONFIG_AUTOCOMPLETE_LIMIT = 'catalog/search/autocomplete_limit';
+    public const CONFIG_AUTOCOMPLETE_LIMIT = 'catalog/search/autocomplete_limit';
 
     /**
-     * Query factory
-     *
      * @var QueryFactory
      */
     protected $queryFactory;
@@ -38,8 +36,6 @@ class DataProvider implements DataProviderInterface
     protected $itemFactory;
 
     /**
-     * Limit
-     *
      * @var int
      */
     protected $limit;
@@ -68,8 +64,12 @@ class DataProvider implements DataProviderInterface
      */
     public function getItems()
     {
-        $collection = $this->getSuggestCollection();
         $query = $this->queryFactory->get()->getQueryText();
+        if (!$query) {
+            return [];
+        }
+
+        $collection = $this->getSuggestCollection();
         $result = [];
         foreach ($collection as $item) {
             $resultItem = $this->itemFactory->create([

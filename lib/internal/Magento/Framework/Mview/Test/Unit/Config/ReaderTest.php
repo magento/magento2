@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,6 +17,7 @@ use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ReaderTest extends TestCase
 {
@@ -48,7 +49,7 @@ class ReaderTest extends TestCase
             ->willReturn('test_folder');
         $schemaLocator = new SchemaLocator($urnResolverMock);
 
-        $validationState = $this->getMockForAbstractClass(ValidationStateInterface::class);
+        $validationState = $this->createMock(ValidationStateInterface::class);
         $validationState->expects($this->any())
             ->method('isValidationRequired')
             ->willReturn(false);
@@ -61,9 +62,8 @@ class ReaderTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider readerDataProvider
-     */
+    /**     */
+    #[DataProvider('readerDataProvider')]
     public function testReadValidConfig($files, $expectedFile)
     {
         $this->_fileResolverMock->expects(
@@ -103,7 +103,7 @@ class ReaderTest extends TestCase
     /**
      * @return array
      */
-    public function readerDataProvider()
+    public static function readerDataProvider()
     {
         return [
             'mview_merged_one' => [

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\LoggerInterface;
 
 class BooleanTest extends TestCase
@@ -25,9 +26,9 @@ class BooleanTest extends TestCase
 
     protected function setUp(): void
     {
-        $timezoneMock = $this->getMockForAbstractClass(TimezoneInterface::class);
-        $loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
-        $localeResolverMock = $this->getMockForAbstractClass(ResolverInterface::class);
+        $timezoneMock = $this->createMock(TimezoneInterface::class);
+        $loggerMock = $this->createMock(LoggerInterface::class);
+        $localeResolverMock = $this->createMock(ResolverInterface::class);
 
         $this->model = new Boolean($timezoneMock, $loggerMock, $localeResolverMock);
     }
@@ -38,8 +39,8 @@ class BooleanTest extends TestCase
      * @param string $format
      * @param mixed $value
      * @param mixed $expectedResult
-     * @dataProvider getOptionTextDataProvider
      */
+    #[DataProvider('getOptionTextDataProvider')]
     public function testOutputValue($format, $value, $expectedResult)
     {
         $entityMock = $this->createMock(AbstractModel::class);
@@ -55,7 +56,7 @@ class BooleanTest extends TestCase
     /**
      * @return array
      */
-    public function getOptionTextDataProvider()
+    public static function getOptionTextDataProvider()
     {
         return [
             [

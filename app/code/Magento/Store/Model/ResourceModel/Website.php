@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Store\Model\ResourceModel;
@@ -68,7 +68,7 @@ class Website extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
-        if (!preg_match('/^[a-z]+[a-z0-9_]*$/i', $object->getCode())) {
+        if (!$object->getCode() || !preg_match('/^[a-z]+[a-z0-9_]*$/i', $object->getCode())) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __(
                     'Website code may only contain letters (a-z), numbers (0-9) or underscore (_),'

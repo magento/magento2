@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Model\Product\Type;
 
+use Magento\Framework\File\Http;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Option;
@@ -56,18 +57,17 @@ class AbstractTypeTest extends TestCase
         $this->objectManager = Bootstrap::getObjectManager();
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
         $catalogProductOption = $this->objectManager->get(Option::class);
-        $catalogProductType = $this->createMock(Type::class);
-        $eventManager = $this->createPartialMock(ManagerInterface::class, ['dispatch']);
-        $fileStorageDb = $this->createMock(Database::class);
-        $filesystem = $this->createMock(Filesystem::class);
-        $registry = $this->createMock(Registry::class);
-        $logger = $this->createMock(LoggerInterface::class);
+        $catalogProductType = $this->createStub(Type::class);
+        $eventManager = $this->createStub(ManagerInterface::class);
+        $fileStorageDb = $this->createStub(Database::class);
+        $filesystem = $this->createStub(Filesystem::class);
+        $registry = $this->createStub(Registry::class);
+        $logger = $this->createStub(LoggerInterface::class);
         $serializer = $this->objectManager->get(
             Json::class
         );
-        $this->_model = $this->getMockForAbstractClass(
-            AbstractType::class,
-            [
+        $this->_model = $this->getMockBuilder(AbstractType::class)
+            ->setConstructorArgs([
                 $catalogProductOption,
                 $this->objectManager->get(Config::class),
                 $catalogProductType,
@@ -78,8 +78,10 @@ class AbstractTypeTest extends TestCase
                 $logger,
                 $this->productRepository,
                 $serializer
-            ]
-        );
+            ])
+            ->onlyMethods(['deleteTypeSpecificData'])
+            ->getMock();
+        $this->_model->expects($this->never())->method('deleteTypeSpecificData');
     }
 
     public function testGetRelationInfo()
@@ -376,8 +378,6 @@ class AbstractTypeTest extends TestCase
 
     public function testHasOptions()
     {
-        $this->markTestIncomplete('Bug MAGE-2814');
-
         $product = new DataObject();
         $this->assertFalse($this->_model->hasOptions($product));
 
@@ -526,7 +526,6 @@ class AbstractTypeTest extends TestCase
             AbstractType::class,
             '_prepareOptions'
         );
-        $method->setAccessible(true);
         $exceptionIsThrown = false;
         try {
             $method->invoke($this->_model, $buyRequest, $product, 'full');
@@ -659,18 +658,16 @@ class AbstractTypeTest extends TestCase
     /**
      * Create prepared uploader instance for test
      *
-     * @return \Zend_File_Transfer_Adapter_Http
+     * @return Http
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    private function getPreparedUploader(): \Zend_File_Transfer_Adapter_Http
+    private function getPreparedUploader(): Http
     {
-        $uploader = new \Zend_File_Transfer_Adapter_Http();
+        $uploader = new Http();
         $refObject = new \ReflectionObject($uploader);
-        $validators = $refObject->getProperty('_validators');
-        $validators->setAccessible(true);
+        $validators = $refObject->getProperty('validators');
         $validators->setValue($uploader, []);
-        $files = $refObject->getProperty('_files');
-        $files->setAccessible(true);
+        $files = $refObject->getProperty('files');
         $filesValues = $files->getValue($uploader);
         foreach (array_keys($filesValues) as $value) {
             $filesValues[$value]['validators'] = [];

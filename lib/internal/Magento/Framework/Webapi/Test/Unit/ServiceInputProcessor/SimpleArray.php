@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -23,7 +23,7 @@ class SimpleArray extends AbstractExtensibleObject
      * @param int[] $ids
      * @return $this
      */
-    public function setIds(array $ids = null)
+    public function setIds(?array $ids = null)
     {
         return $this->setData('ids', $ids);
     }

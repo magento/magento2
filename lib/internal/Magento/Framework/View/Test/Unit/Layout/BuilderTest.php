@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
  */
 class BuilderTest extends TestCase
 {
-    const CLASS_NAME = Builder::class;
+    private const CLASS_NAME = Builder::class;
 
     /**
      * @return void
@@ -37,7 +37,7 @@ class BuilderTest extends TestCase
         $request->expects($this->exactly(3))->method('getFullActionName')->willReturn($fullActionName);
 
         /** @var ProcessorInterface|MockObject $processor */
-        $processor = $this->getMockForAbstractClass(ProcessorInterface::class);
+        $processor = $this->createMock(ProcessorInterface::class);
         $processor->expects($this->once())->method('load');
 
         /** @var Layout|MockObject */
@@ -51,14 +51,18 @@ class BuilderTest extends TestCase
 
         $data = ['full_action_name' => $fullActionName, 'layout' => $layout];
         /** @var ManagerInterface|MockObject $eventManager */
-        $eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
+        $eventManager = $this->createMock(ManagerInterface::class);
         $eventManager
             ->method('dispatch')
-            ->withConsecutive(
-                ['layout_load_before', $data],
-                ['layout_generate_blocks_before', $data],
-                ['layout_generate_blocks_after', $data]
-            );
+            ->willReturnCallback(function ($arg1, $arg2) use ($data) {
+                if ($arg1 == 'layout_load_before' && $arg2 == $data) {
+                    return null;
+                } elseif ($arg1 == 'layout_generate_blocks_before' && $arg2 == $data) {
+                    return null;
+                } elseif ($arg1 == 'layout_generate_blocks_after' && $arg2 == $data) {
+                    return null;
+                }
+            });
         $builder = $this->getBuilder(['eventManager' => $eventManager, 'request' => $request, 'layout' => $layout]);
         $builder->build();
     }

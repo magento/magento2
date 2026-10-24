@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Validation;
 
@@ -34,9 +34,9 @@ class ValidationException extends LocalizedException implements AggregateExcepti
      */
     public function __construct(
         Phrase $phrase,
-        \Exception $cause = null,
+        ?\Exception $cause = null,
         $code = 0,
-        ValidationResult $validationResult = null
+        ?ValidationResult $validationResult = null
     ) {
         parent::__construct($phrase, $cause, $code);
         $this->validationResult = $validationResult;

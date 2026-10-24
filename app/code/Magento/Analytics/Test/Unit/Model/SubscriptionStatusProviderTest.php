@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\FlagManager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class SubscriptionStatusProviderTest extends TestCase
@@ -50,7 +51,7 @@ class SubscriptionStatusProviderTest extends TestCase
     protected function setUp(): void
     {
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->analyticsTokenMock = $this->createMock(AnalyticsToken::class);
 
@@ -70,8 +71,8 @@ class SubscriptionStatusProviderTest extends TestCase
 
     /**
      * @param array $flagManagerData
-     * @dataProvider getStatusShouldBeFailedDataProvider
      */
+    #[DataProvider('getStatusShouldBeFailedDataProvider')]
     public function testGetStatusShouldBeFailed(array $flagManagerData)
     {
         $this->analyticsTokenMock->expects($this->once())
@@ -89,17 +90,17 @@ class SubscriptionStatusProviderTest extends TestCase
     /**
      * @return array
      */
-    public function getStatusShouldBeFailedDataProvider()
+    public static function getStatusShouldBeFailedDataProvider()
     {
         return [
             'Subscription update doesn\'t active' => [
-                'Flag Manager data mapping' => [
+                'flagManagerData' => [
                     [SubscriptionUpdateHandler::PREVIOUS_BASE_URL_FLAG_CODE, null],
                     [SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE, null]
                 ],
             ],
             'Subscription update is active' => [
-                'Flag Manager data mapping' => [
+                'flagManagerData' => [
                     [SubscriptionUpdateHandler::PREVIOUS_BASE_URL_FLAG_CODE, 'http://store.com'],
                     [SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE, null]
                 ],
@@ -110,8 +111,8 @@ class SubscriptionStatusProviderTest extends TestCase
     /**
      * @param array $flagManagerData
      * @param bool $isTokenExist
-     * @dataProvider getStatusShouldBePendingDataProvider
      */
+    #[DataProvider('getStatusShouldBePendingDataProvider')]
     public function testGetStatusShouldBePending(array $flagManagerData, bool $isTokenExist)
     {
         $this->analyticsTokenMock->expects($this->once())
@@ -129,25 +130,25 @@ class SubscriptionStatusProviderTest extends TestCase
     /**
      * @return array
      */
-    public function getStatusShouldBePendingDataProvider()
+    public static function getStatusShouldBePendingDataProvider()
     {
         return [
             'Subscription update doesn\'t active and the token does not exist' => [
-                'Flag Manager data mapping' => [
+                'flagManagerData' => [
                     [SubscriptionUpdateHandler::PREVIOUS_BASE_URL_FLAG_CODE, null],
                     [SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE, 45]
                 ],
                 'isTokenExist' => false,
             ],
             'Subscription update is active and the token does not exist' => [
-                'Flag Manager data mapping' => [
+                'flagManagerData' => [
                     [SubscriptionUpdateHandler::PREVIOUS_BASE_URL_FLAG_CODE, 'http://store.com'],
                     [SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE, 45]
                 ],
                 'isTokenExist' => false,
             ],
             'Subscription update is active and token exist' => [
-                'Flag Manager data mapping' => [
+                'flagManagerData' => [
                     [SubscriptionUpdateHandler::PREVIOUS_BASE_URL_FLAG_CODE, 'http://store.com'],
                     [SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE, null]
                 ],

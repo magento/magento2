@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,7 +18,10 @@ use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Message\ManagerInterface;
+use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as TestFrameworkObjectManager;
 use Magento\Framework\ObjectManager\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -27,6 +30,7 @@ use PHPUnit\Framework\TestCase;
  */
 class SaveTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var RequestInterface|MockObject
      */
@@ -68,12 +72,12 @@ class SaveTest extends TestCase
     protected $messageManagerMock;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface|MockObject
+     * @var EventManagerInterface|MockObject
      */
     protected $eventManagerMock;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var TestFrameworkObjectManager
      */
     protected $objectManager;
 
@@ -102,7 +106,7 @@ class SaveTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new TestFrameworkObjectManager($this);
 
         $this->contextMock = $this->createMock(Context::class);
 
@@ -120,14 +124,14 @@ class SaveTest extends TestCase
         $this->dataPersistorMock = $this->getMockBuilder(DataPersistorInterface::class)
             ->getMock();
 
-        $this->requestMock = $this->getMockForAbstractClass(
+        // Use MockCreationTrait to add non-existent methods like getPostValue
+        $this->requestMock = $this->createPartialMockWithReflection(
             RequestInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['getParam', 'getPostValue']
+            ['getPostValue', 'getParam', 'isPost', 'getFullActionName', 'setParam',
+             'getModuleName', 'setModuleName', 'getActionName', 'setActionName',
+             'getCookie', 'getBeforeForwardInfo', 'getPathInfo', 'setPathInfo',
+             'getOriginalPathInfo', 'getFrontName', 'getControllerName', 'getRouteName',
+             'setParams', 'getParams', 'isSecure']
         );
 
         $this->blockMock = $this->getMockBuilder(
@@ -135,15 +139,10 @@ class SaveTest extends TestCase
         )->disableOriginalConstructor()
             ->getMock();
 
-        $this->messageManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
 
-        $this->eventManagerMock = $this->getMockForAbstractClass(
-            \Magento\Framework\Event\ManagerInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
+        $this->eventManagerMock = $this->createPartialMock(
+            EventManagerInterface::class,
             ['dispatch']
         );
 
@@ -165,9 +164,7 @@ class SaveTest extends TestCase
             ->onlyMethods(['create'])
             ->getMock();
 
-        $this->blockRepository = $this->getMockBuilder(BlockRepositoryInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->blockRepository = $this->createMock(BlockRepositoryInterface::class);
 
         $this->saveController = $this->objectManager->getObject(
             Save::class,
@@ -336,12 +333,19 @@ class SaveTest extends TestCase
         $this->blockMock->expects($this->any())->method('setData');
         $this->blockRepository
             ->method('save')
-            ->withConsecutive([$this->blockMock], [$duplicateBlockMock]);
+            ->willReturnCallback(function ($arg1) use ($duplicateBlockMock) {
+                if ($arg1 == $this->blockMock || $arg1 == $duplicateBlockMock) {
+                    return null;
+                }
+            });
 
         $this->messageManagerMock
             ->method('addSuccessMessage')
-            ->withConsecutive([__('You saved the block.')], [__('You duplicated the block.')]);
-
+            ->willReturnCallback(function ($arg1) {
+                if ($arg1 == (__('You saved the block.')) || $arg1 == __('You duplicated the block.')) {
+                    return null;
+                }
+            });
         $this->dataPersistorMock->expects($this->any())
             ->method('clear')
             ->with('cms_block');

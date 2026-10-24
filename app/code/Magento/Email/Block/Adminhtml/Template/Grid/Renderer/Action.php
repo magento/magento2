@@ -1,14 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Email\Block\Adminhtml\Template\Grid\Renderer;
 
 /**
  * Email templates grid block action item renderer
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Action
 {
@@ -24,8 +22,8 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Action
 
         $actions[] = [
             'url' => $this->getUrl('adminhtml/*/preview', ['id' => $row->getId()]),
-            'popup' => true,
             'caption' => __('Preview'),
+            'target' => '_blank'
         ];
 
         $this->getColumn()->setActions($actions);

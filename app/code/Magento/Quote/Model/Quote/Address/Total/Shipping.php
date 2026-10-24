@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -37,6 +37,15 @@ class Shipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
     ) {
         $this->priceCurrency = $priceCurrency;
         $this->freeShipping = $freeShipping;
+        $this->setCode('shipping');
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
         $this->setCode('shipping');
     }
 

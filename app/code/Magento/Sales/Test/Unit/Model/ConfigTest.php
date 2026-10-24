@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -32,12 +32,8 @@ class ConfigTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->configDataMock = $this->getMockBuilder(Data::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->stateMock = $this->getMockBuilder(State::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->configDataMock = $this->createMock(Data::class);
+        $this->stateMock = $this->createMock(State::class);
         $this->model = new Config($this->configDataMock, $this->stateMock);
     }
 

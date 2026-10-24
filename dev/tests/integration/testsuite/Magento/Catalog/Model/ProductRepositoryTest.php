@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,9 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Media\ConfigInterface;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
+use Magento\Catalog\Test\Fixture\AttributeSet as AttributeSetFixture;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\Customer\Model\Group;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\CouldNotSaveException;
@@ -22,10 +25,17 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Test\Fixture\Group as StoreGroupFixture;
+use Magento\Store\Test\Fixture\Store as StoreFixture;
+use Magento\Store\Test\Fixture\Website as WebsiteFixture;
 use Magento\TestFramework\Catalog\Model\ProductLayoutUpdateManager;
+use Magento\TestFramework\Fixture\AppArea;
+use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -34,6 +44,8 @@ use PHPUnit\Framework\TestCase;
  * @magentoDbIsolation enabled
  * @magentoAppIsolation enabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ * @SuppressWarnings(PHPMD.StaticAccess)
  */
 class ProductRepositoryTest extends TestCase
 {
@@ -58,7 +70,7 @@ class ProductRepositoryTest extends TestCase
     /**
      * @var SearchCriteriaBuilder
      */
-    private $searchCriteriaBuilder;
+    private $criteriaBuilder;
 
     /**
      * @var ProductFactory
@@ -121,7 +133,7 @@ class ProductRepositoryTest extends TestCase
         $this->objectManager = Bootstrap::getObjectManager();
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
         $this->productRepository->cleanCache();
-        $this->searchCriteriaBuilder = $this->objectManager->get(SearchCriteriaBuilder::class);
+        $this->criteriaBuilder = $this->objectManager->get(SearchCriteriaBuilder::class);
         $this->productFactory = $this->objectManager->get(ProductFactory::class);
         $this->productResource = $this->objectManager->get(ProductResource::class);
         $this->layoutManager = $this->objectManager->get(ProductLayoutUpdateManager::class);
@@ -158,7 +170,7 @@ class ProductRepositoryTest extends TestCase
      */
     public function testFilterByStoreId(): void
     {
-        $searchCriteria = $this->searchCriteriaBuilder
+        $searchCriteria = $this->criteriaBuilder
             ->addFilter('store_id', '1', 'eq')
             ->create();
         $list = $this->productRepository->getList($searchCriteria);
@@ -172,8 +184,8 @@ class ProductRepositoryTest extends TestCase
      * @param string $sku
      * @return void
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
-     * @dataProvider skuDataProvider
      */
+    #[DataProvider('skuDataProvider')]
     public function testGetProduct(string $sku): void
     {
         $expectedSku = 'simple';
@@ -186,7 +198,7 @@ class ProductRepositoryTest extends TestCase
      *
      * @return array
      */
-    public function skuDataProvider(): array
+    public static function skuDataProvider(): array
     {
         return [
             ['sku' => 'simple'],
@@ -298,7 +310,7 @@ class ProductRepositoryTest extends TestCase
     private function assertProductNotExist(string $sku): void
     {
         $this->expectExceptionObject(new NoSuchEntityException(
-            __("The product that was requested doesn't exist. Verify the product and try again.")
+            __('The product with SKU "' . $sku . '" does not exist.')
         ));
         $this->productRepository->get($sku);
     }
@@ -306,29 +318,29 @@ class ProductRepositoryTest extends TestCase
     /**
      * Tests product repository update
      *
-     * @dataProvider productUpdateDataProvider
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @param int $storeId
      * @param int $checkStoreId
      * @param string $expectedNameStore
-     * @param string $expectedNameCheckedStore
+     * @param string $expNameChecked
      */
+    #[DataProvider('productUpdateDataProvider')]
     public function testProductUpdate(
         int $storeId,
         int $checkStoreId,
         string $expectedNameStore,
-        string $expectedNameCheckedStore
+        string $expNameChecked
     ): void {
         $sku = self::STUB_PRODUCT_SKU;
 
         $product = $this->productRepository->get($sku, false, $storeId);
         $product->setName(self::STUB_UPDATED_PRODUCT_NAME);
         $this->productRepository->save($product);
-        $productNameStoreId = $this->productRepository->get($sku, false, $storeId)->getName();
-        $productNameCheckedStoreId = $this->productRepository->get($sku, false, $checkStoreId)->getName();
+        $nameAtStore = $this->productRepository->get($sku, false, $storeId)->getName();
+        $nameAtChecked = $this->productRepository->get($sku, false, $checkStoreId)->getName();
 
-        $this->assertEquals($expectedNameStore, $productNameStoreId);
-        $this->assertEquals($expectedNameCheckedStore, $productNameCheckedStoreId);
+        $this->assertEquals($expectedNameStore, $nameAtStore);
+        $this->assertEquals($expNameChecked, $nameAtChecked);
     }
 
     /**
@@ -336,7 +348,7 @@ class ProductRepositoryTest extends TestCase
      *
      * @return array
      */
-    public function productUpdateDataProvider(): array
+    public static function productUpdateDataProvider(): array
     {
         return [
             'Updating for global store' => [
@@ -355,15 +367,17 @@ class ProductRepositoryTest extends TestCase
     }
 
     /**
-     * @magentoDataFixture Magento\Store\Test\Fixture\Website as:website2
-     * @magentoDataFixture Magento\Store\Test\Fixture\Group with:{"website_id":"$website2.id$"} as:store_group2
-     * @magentoDataFixture Magento\Store\Test\Fixture\Store with:{"store_group_id":"$store_group2.id$"} as:store2
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"website_ids":[1,"$website2.id$"]} as:product1
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"website_ids":[1,"$website2.id$"]} as:product2
      * @magentoDataFixture setPriceScopeToWebsite
-     * @magentoDbIsolation disabled
-     * @magentoAppArea adminhtml
      */
+    #[
+        AppArea('adminhtml'),
+        DbIsolation(false),
+        DataFixture(WebsiteFixture::class, as: 'website2'),
+        DataFixture(StoreGroupFixture::class, ['website_id' => '$website2.id$'], 'store_group2'),
+        DataFixture(StoreFixture::class, ['store_group_id' => '$store_group2.id$'], 'store2'),
+        DataFixture(ProductFixture::class, ['website_ids' => [1, '$website2.id']], 'product1'),
+        DataFixture(ProductFixture::class, ['website_ids' => [1, '$website2.id']], 'product2'),
+    ]
     public function testConsecutivePartialProductsUpdateInStoreView(): void
     {
         $store1 = $this->storeManager->getStore('default')->getId();
@@ -416,6 +430,135 @@ class ProductRepositoryTest extends TestCase
         $this->assertEquals($product1Store1Name, $product1->getName());
         $this->assertEquals($product2Store1Name, $product2->getName());
         $this->assertEquals($product2Store1Price, $product2->getPrice());
+    }
+
+    #[
+        AppArea('adminhtml'),
+        DataFixture(AttributeSetFixture::class, as: 'attribute_set2'),
+        DataFixture(
+            ProductFixture::class,
+            [
+                'tier_prices' => [
+                    [
+                        'customer_group_id' => Group::NOT_LOGGED_IN_ID,
+                        'qty' => 2,
+                        'value' => 7.5
+                    ]
+                ]
+            ],
+            'product1'
+        ),
+        DataFixture(
+            ProductFixture::class,
+            [
+                'attribute_set_id' => '$attribute_set2.attribute_set_id$',
+                'tier_prices' => [
+                    [
+                        'customer_group_id' => Group::NOT_LOGGED_IN_ID,
+                        'qty' => 4,
+                        'value' => 8
+                    ]
+                ]
+            ],
+            'product2'
+        ),
+    ]
+    public function testConsecutiveProductsUpdateWithDifferentAttributeSets(): void
+    {
+        $product1 = $this->fixtures->get('product1');
+        $product2 = $this->fixtures->get('product2');
+        $store1 = $this->storeManager->getStore('default')->getId();
+        $this->storeManager->setCurrentStore($store1);
+        $product1UpdatedName = $product1->getName() . ' for default store view';
+        $product2UpdatedName = $product2->getName() . ' for default store view';
+        $this->productRepository->save(
+            $this->getProductInstance(
+                [
+                    'sku' => $product1->getSku(),
+                    'name' => $product1UpdatedName,
+                ]
+            )
+        );
+        $this->productRepository->save(
+            $this->getProductInstance(
+                [
+                    'sku' => $product2->getSku(),
+                    'name' => $product2UpdatedName,
+                ]
+            )
+        );
+        $product1 = $this->productRepository->get($product1->getSku(), true, $store1, true);
+        $this->assertEquals($product1UpdatedName, $product1->getName());
+        $this->assertCount(1, $product1->getTierPrices());
+        $this->assertEquals(
+            [
+                'customer_group_id' => Group::NOT_LOGGED_IN_ID,
+                'qty' => 2,
+                'value' => 7.5
+            ],
+            [
+                'customer_group_id' => $product1->getTierPrices()[0]->getCustomerGroupId(),
+                'qty' => $product1->getTierPrices()[0]->getQty(),
+                'value' => $product1->getTierPrices()[0]->getValue()
+            ]
+        );
+
+        $product2 = $this->productRepository->get($product2->getSku(), true, $store1, true);
+        $this->assertEquals($product2UpdatedName, $product2->getName());
+        $this->assertCount(1, $product2->getTierPrices());
+        $this->assertEquals(
+            [
+                'customer_group_id' => Group::NOT_LOGGED_IN_ID,
+                'qty' => 4,
+                'value' => 8
+            ],
+            [
+                'customer_group_id' => $product2->getTierPrices()[0]->getCustomerGroupId(),
+                'qty' => $product2->getTierPrices()[0]->getQty(),
+                'value' => $product2->getTierPrices()[0]->getValue()
+            ]
+        );
+    }
+
+    /**
+     * Verify that getById returns the correct product for a valid numeric ID
+     */
+    #[
+        DataFixture(ProductFixture::class, as: 'product'),
+    ]
+    public function testGetByIdWithValidId(): void
+    {
+        $product = $this->fixtures->get('product');
+        $result = $this->productRepository->getById((int)$product->getId());
+
+        $this->assertInstanceOf(ProductInterface::class, $result);
+        $this->assertSame((int)$product->getId(), (int)$result->getId());
+        $this->assertSame($product->getSku(), $result->getSku());
+    }
+
+    /**
+     * Verify that getById throws NoSuchEntityException for non-numeric product IDs
+     *
+     * @param string $invalidId
+     */
+    #[DataProvider('nonNumericProductIdDataProvider')]
+    public function testGetByIdWithNonNumericProductId(string $invalidId): void
+    {
+        $this->expectException(NoSuchEntityException::class);
+        $this->productRepository->getById($invalidId);
+    }
+
+    /**
+     * Data provider for completely non-numeric product ID values
+     *
+     * @return array
+     */
+    public static function nonNumericProductIdDataProvider(): array
+    {
+        return [
+            'Alphabetic string' => ['abc'],
+            'Special characters only' => ['!@#$%'],
+        ];
     }
 
     /**

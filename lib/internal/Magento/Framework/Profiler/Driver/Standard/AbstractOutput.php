@@ -2,8 +2,8 @@
 /**
  * Abstract class that represents profiler standard driver output
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Profiler\Driver\Standard;
 
@@ -42,7 +42,7 @@ abstract class AbstractOutput implements OutputInterface
      *
      * @param array|null $config
      */
-    public function __construct(array $config = null)
+    public function __construct(?array $config = null)
     {
         if (!empty($config['filterPattern'])) {
             $this->setFilterPattern($config['filterPattern']);

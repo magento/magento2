@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @see RemoteAddress
@@ -40,15 +41,14 @@ class RemoteAddressTest extends TestCase
      * @param bool $ipToLong
      * @param string[]|null $trustedProxies
      *
-     * @return void
-     * @dataProvider getRemoteAddressProvider
-     */
+     * @return void     */
+    #[DataProvider('getRemoteAddressProvider')]
     public function testGetRemoteAddress(
         array $alternativeHeaders,
         array $serverValueMap,
         $expected,
         bool $ipToLong,
-        array $trustedProxies = null
+        ?array $trustedProxies = null
     ): void {
         $remoteAddress = new RemoteAddress(
             $this->requestMock,
@@ -68,7 +68,7 @@ class RemoteAddressTest extends TestCase
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function getRemoteAddressProvider()
+    public static function getRemoteAddressProvider()
     {
         return [
             [

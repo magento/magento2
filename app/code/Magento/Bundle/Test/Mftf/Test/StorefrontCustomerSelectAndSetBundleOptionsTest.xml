@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -17,13 +17,15 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-231"/>
             <group value="Bundle"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
-
-            <magentoCron stepKey="runCronIndex" groups="index"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <!-- Delete the bundled product -->
@@ -92,8 +94,10 @@
         <!-- Save product and go to storefront -->
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
 
-        <wait stepKey="waitBeforeIndexerAfterBundle" time="60"/>
-        <magentoCLI command="cron:run --group=index" stepKey="runCronIndexerAfterBundle"/>
+        <comment userInput="BIC workaround" stepKey="waitBeforeIndexerAfterBundle"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndexerAfterBundle">
+            <argument name="indices" value=""/>
+        </actionGroup>
 
         <amOnPage url="{{BundleProduct.sku}}.html" stepKey="goToStorefront"/>
         <waitForPageLoad stepKey="waitForStorefront"/>
@@ -105,23 +109,23 @@
         <selectOption selector="{{StorefrontBundledSection.dropDownOptionOneProducts('Option One')}}" userInput="$$simpleProduct1.name$$ +$$$simpleProduct1.price$$.00" stepKey="selectOption0Product0"/>
         <seeOptionIsSelected selector="{{StorefrontBundledSection.dropDownOptionOneProducts('Option One')}}" userInput="$$simpleProduct1.name$$ +$$$simpleProduct1.price$$.00" stepKey="checkOption0Product0"/>
         <fillField selector="{{StorefrontBundledSection.dropDownOptionOneQuantity('Option One')}}" userInput="3" stepKey="fillQuantity00"/>
-        <seeInField selector="{{StorefrontBundledSection.dropDownOptionOneQuantity('Option One')}}" userInput="3" stepKey="checkQuantity00"/>
+        <seeInField selector="{{StorefrontBundledSection.dropDownOptionOneQuantity('Option One')}}" userInput="03" stepKey="checkQuantity00"/>
 
         <selectOption selector="{{StorefrontBundledSection.dropDownOptionOneProducts('Option One')}}" userInput="$$simpleProduct2.name$$ +$$$simpleProduct2.price$$.00" stepKey="selectOption0Product1"/>
         <seeOptionIsSelected selector="{{StorefrontBundledSection.dropDownOptionOneProducts('Option One')}}" userInput="$$simpleProduct2.name$$ +$$$simpleProduct2.price$$.00" stepKey="checkOption0Product1"/>
         <fillField selector="{{StorefrontBundledSection.dropDownOptionOneQuantity('Option One')}}" userInput="3" stepKey="fillQuantity01"/>
-        <seeInField selector="{{StorefrontBundledSection.dropDownOptionOneQuantity('Option One')}}" userInput="3" stepKey="checkQuantity01"/>
+        <seeInField selector="{{StorefrontBundledSection.dropDownOptionOneQuantity('Option One')}}" userInput="03" stepKey="checkQuantity01"/>
 
         <!--"Radio Buttons" type option-->
         <checkOption selector="{{StorefrontBundledSection.radioButtonOptionTwoProducts('Option Two', '1')}}" stepKey="selectOption1Product0"/>
         <seeCheckboxIsChecked selector="{{StorefrontBundledSection.radioButtonOptionTwoProducts('Option Two', '1')}}" stepKey="checkOption1Product0"/>
         <fillField selector="{{StorefrontBundledSection.radioButtonOptionTwoQuantity('Option Two')}}" userInput="3" stepKey="fillQuantity10"/>
-        <seeInField selector="{{StorefrontBundledSection.radioButtonOptionTwoQuantity('Option Two')}}" userInput="3" stepKey="checkQuantity10"/>
+        <seeInField selector="{{StorefrontBundledSection.radioButtonOptionTwoQuantity('Option Two')}}" userInput="03" stepKey="checkQuantity10"/>
 
         <checkOption selector="{{StorefrontBundledSection.radioButtonOptionTwoProducts('Option Two', '2')}}" stepKey="selectOption1Product1"/>
         <seeCheckboxIsChecked selector="{{StorefrontBundledSection.radioButtonOptionTwoProducts('Option Two', '2')}}" stepKey="checkOption1Product1"/>
         <fillField selector="{{StorefrontBundledSection.radioButtonOptionTwoQuantity('Option Two')}}" userInput="3" stepKey="fillQuantity11"/>
-        <seeInField selector="{{StorefrontBundledSection.radioButtonOptionTwoQuantity('Option Two')}}" userInput="3" stepKey="checkQuantity11"/>
+        <seeInField selector="{{StorefrontBundledSection.radioButtonOptionTwoQuantity('Option Two')}}" userInput="03" stepKey="checkQuantity11"/>
 
         <!--"Checkbox" type option-->
         <!--This option does not support user defined quantities-->

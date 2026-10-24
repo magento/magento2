@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -78,6 +78,8 @@ class Config extends \Magento\Framework\Config\AbstractXml
     }
 
     /**
+     * Get options
+     *
      * @param bool $withEmpty
      * @return array
      */
@@ -109,7 +111,7 @@ class Config extends \Magento\Framework\Config\AbstractXml
 
         /** @var \DOMElement $layout */
         foreach ($dom->getElementsByTagName('layout') as $layout) {
-            $result[$layout->getAttribute('id')] = trim($layout->nodeValue);
+            $result[$layout->getAttribute('id')] = $layout->nodeValue !== null ? trim($layout->nodeValue) : '';
         }
         return $result;
     }

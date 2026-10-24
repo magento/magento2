@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Customer\Api;
 
 use Magento\Customer\Api\Data\CustomerInterface as Customer;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Customer\Model\Data\AttributeMetadata;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -16,9 +17,9 @@ use Magento\TestFramework\Helper\Bootstrap;
  */
 class CustomerMetadataTest extends WebapiAbstract
 {
-    const SERVICE_NAME = "customerCustomerMetadataV1";
-    const SERVICE_VERSION = "V1";
-    const RESOURCE_PATH = "/V1/attributeMetadata/customer";
+    public const SERVICE_NAME = "customerCustomerMetadataV1";
+    public const SERVICE_VERSION = "V1";
+    public const RESOURCE_PATH = "/V1/attributeMetadata/customer";
 
     /**
      * @var CustomerMetadataInterface
@@ -37,9 +38,8 @@ class CustomerMetadataTest extends WebapiAbstract
      * Test retrieval of attribute metadata for the customer entity type.
      *
      * @param string $attributeCode The attribute code of the requested metadata.
-     * @param array $expectedMetadata Expected entity metadata for the attribute code.
-     * @dataProvider getAttributeMetadataDataProvider
-     */
+     * @param array $expectedMetadata Expected entity metadata for the attribute code. */
+    #[DataProvider('getAttributeMetadataDataProvider')]
     public function testGetAttributeMetadata($attributeCode, $expectedMetadata)
     {
         $serviceInfo = [
@@ -70,7 +70,7 @@ class CustomerMetadataTest extends WebapiAbstract
      *
      * @return array
      */
-    public function getAttributeMetadataDataProvider()
+    public static function getAttributeMetadataDataProvider()
     {
         return [
             Customer::FIRSTNAME => [
@@ -184,12 +184,12 @@ class CustomerMetadataTest extends WebapiAbstract
 
         $attributeMetadata = $this->_webApiCall($serviceInfo);
 
-        $firstName = $this->getAttributeMetadataDataProvider()[Customer::FIRSTNAME][1];
+        $firstName = self::getAttributeMetadataDataProvider()[Customer::FIRSTNAME][1];
         $validationResult = $this->checkMultipleAttributesValidationRules($firstName, $attributeMetadata);
         list($firstName, $attributeMetadata) = $validationResult;
         $this->assertContainsEquals($firstName, $attributeMetadata);
 
-        $websiteId = $this->getAttributeMetadataDataProvider()[Customer::WEBSITE_ID][1];
+        $websiteId = self::getAttributeMetadataDataProvider()[Customer::WEBSITE_ID][1];
         $validationResult = $this->checkMultipleAttributesValidationRules($websiteId, $attributeMetadata);
         list($websiteId, $attributeMetadata) = $validationResult;
         $this->assertContainsEquals($websiteId, $attributeMetadata);
@@ -221,9 +221,8 @@ class CustomerMetadataTest extends WebapiAbstract
      * Test retrieval of attributes
      *
      * @param string $formCode Form code
-     * @param array $expectedMetadata The expected attribute metadata
-     * @dataProvider getAttributesDataProvider
-     */
+     * @param array $expectedMetadata The expected attribute metadata */
+    #[DataProvider('getAttributesDataProvider')]
     public function testGetAttributes($formCode, $expectedMetadata)
     {
         $serviceInfo = [
@@ -259,9 +258,9 @@ class CustomerMetadataTest extends WebapiAbstract
      *
      * @return array
      */
-    public function getAttributesDataProvider()
+    public static function getAttributesDataProvider()
     {
-        $attributeMetadata = $this->getAttributeMetadataDataProvider();
+        $attributeMetadata = self::getAttributeMetadataDataProvider();
         return [
             [
                 'adminhtml_customer',

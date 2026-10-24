@@ -1,9 +1,7 @@
 <?php
 /**
- * Associated products collection
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\GroupedProduct\Model\ResourceModel\Product\Type\Grouped;
 
@@ -78,7 +76,7 @@ class AssociatedProductsCollection extends \Magento\Catalog\Model\ResourceModel\
         \Magento\Customer\Api\GroupManagementInterface $groupManagement,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Catalog\Model\ProductTypes\ConfigInterface $config,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
+        ?\Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_config = $config;

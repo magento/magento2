@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -50,8 +50,13 @@ class AvailablePaymentMethods implements ResolverInterface
     /**
      * @inheritdoc
      */
-    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
-    {
+    public function resolve(
+        Field $field,
+        $context,
+        ResolveInfo $info,
+        ?array $value = null,
+        ?array $args = null
+    ) {
         if (!isset($value['model'])) {
             throw new LocalizedException(__('"model" value should be specified'));
         }
@@ -79,17 +84,19 @@ class AvailablePaymentMethods implements ResolverInterface
             /**
              * Checking payment method and shipping method for zero price product
              */
-            if ((int)$grandTotal === 0 && $carrierCode === self::FREE_SHIPPING_METHOD
-                && $paymentMethod->getCode() === self::FREE_PAYMENT_METHOD_CODE) {
-                $paymentMethodsData[] = [
-                    'title' => $paymentMethod->getTitle(),
-                    'code' => $paymentMethod->getCode(),
+            if ((int)$grandTotal === 0 && $carrierCode === self::FREE_SHIPPING_METHOD &&
+            $paymentMethod->getCode() === self::FREE_PAYMENT_METHOD_CODE
+            ) {
+                return [
+                    [
+                        'title' => $paymentMethod->getTitle(),
+                        'code' => $paymentMethod->getCode()
+                    ]
                 ];
-            } elseif ((int)$grandTotal >= 0
-                && $carrierCode !== self::FREE_SHIPPING_METHOD) {
+            } elseif ((int)$grandTotal >= 0) {
                 $paymentMethodsData[] = [
                     'title' => $paymentMethod->getTitle(),
-                    'code' => $paymentMethod->getCode(),
+                    'code' => $paymentMethod->getCode()
                 ];
             }
         }

@@ -1,9 +1,7 @@
 <?php declare(strict_types=1);
 /**
- * Unit Test for \Magento\Framework\Filesystem\Directory\PathValidator
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Filesystem\Test\Unit\Directory;
 
@@ -11,6 +9,7 @@ use Magento\Framework\Filesystem\Directory\PathValidator;
 use Magento\Framework\Filesystem\Driver\File;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class PathValidatorTest extends TestCase
 {
@@ -50,9 +49,8 @@ class PathValidatorTest extends TestCase
      * @param string $path
      * @param string $scheme
      * @param bool $absolutePath
-     * @param string $prefix
-     * @dataProvider validateDataProvider
-     */
+     * @param string $prefix     */
+    #[DataProvider('validateDataProvider')]
     public function testValidate($directoryPath, $path, $scheme, $absolutePath, $prefix)
     {
         $this->driver->expects($this->exactly(2))
@@ -72,11 +70,12 @@ class PathValidatorTest extends TestCase
     /**
      * @return array
      */
-    public function validateDataProvider()
+    public static function validateDataProvider()
     {
         return [
             ['/directory/path/', '/directory/path/', '/', false, '/://'],
             ['/directory/path/', '/var/.regenerate', null, false, ''],
+            ['/directory/path/', '/var/image - 1.jpg', null, false, ''],
         ];
     }
 }

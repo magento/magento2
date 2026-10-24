@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAssignImageThumbNailRoleActionGroup">
+        <annotations>
+            <description>Requires the navigation to the Product Creation page. Checks Thumb Thumbnail Role area for image.</description>
+        </annotations>
+        <arguments>
+            <argument name="image"/>
+        </arguments>
+        <conditionalClick selector="{{AdminProductImagesSection.productImagesToggle}}" dependentSelector="{{AdminProductImagesSection.imageFile(image.fileName)}}" visible="false" stepKey="expandImages"/>
+        <waitForElementVisible selector="{{AdminProductImagesSection.imageFile(image.fileName)}}" stepKey="seeProductImageName"/>
+        <click selector="{{AdminProductImagesSection.imageFile(image.fileName)}}" stepKey="clickProductImage"/>
+        <waitForElementVisible selector="{{AdminProductImagesSection.altText}}" stepKey="seeAltTextSection"/>
+        <waitForPageLoad stepKey="waitForSlideOut"/>
+        <conditionalClick selector="{{AdminProductImagesSection.roleThumbnailUseDefault}}" dependentSelector="{{AdminProductImagesSection.isThumbnailUseDefaultSelected}}" visible="true" stepKey="uncheckUseDefault"/>
+        <waitForElementNotVisible selector="{{AdminProductImagesSection.isThumbnailDisabled}}" stepKey="waitForCheckboxEnabled"/>
+        <conditionalClick selector="{{AdminProductImagesSection.roleThumbnail}}" dependentSelector="{{AdminProductImagesSection.isThumbnailSelected}}" visible="false" stepKey="checkRoles"/>
+        <click selector="{{AdminSlideOutDialogSection.closeButton}}" stepKey="clickCloseButton"/>
+    </actionGroup>
+</actionGroups>

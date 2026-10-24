@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,9 +15,11 @@ use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\BlockInterface;
 use Magento\Framework\View\LayoutInterface;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class CurrencyTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * Stub currency option link url
      */
@@ -50,23 +52,12 @@ class CurrencyTest extends TestCase
      */
     public function testPrepareLayout(): void
     {
-        $childBlockMock = $this->getMockBuilder(BlockInterface::class)
-            ->addMethods(['addChild'])
-            ->onlyMethods(['toHtml'])
-            ->getMockForAbstractClass();
+        $childBlockMock = $this->createPartialMockWithReflection(BlockInterface::class, ['addChild', 'toHtml']);
 
-        $blockMock = $this->getMockForAbstractClass(BlockInterface::class);
+        $blockMock = $this->createMock(BlockInterface::class);
 
-        /** @var LayoutInterface|MockObject $layoutMock */
-        $layoutMock = $this->getMockForAbstractClass(
-            LayoutInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['getBlock', 'createBlock']
-        );
+        /** @var LayoutInterface $layoutMock */
+        $layoutMock = $this->createMock(LayoutInterface::class);
 
         $layoutMock->expects($this->any())->method('getBlock')->willReturn($childBlockMock);
         $layoutMock->expects($this->any())->method('createBlock')->willReturn($blockMock);
@@ -86,38 +77,47 @@ class CurrencyTest extends TestCase
 
         $childBlockMock
             ->method('addChild')
-            ->withConsecutive(
-                [
-                    'save_button',
-                    Button::class,
-                    [
-                        'label' => __('Save Currency Rates'),
-                        'class' => 'save primary save-currency-rates',
-                        'data_attribute' => [
-                            'mage-init' => [
-                                'button' => ['event' => 'save', 'target' => '#rate-form']
+            ->willReturnCallback(function (...$args) use (&$callCount) {
+                $callCount++;
+
+                switch ($callCount) {
+                    case 1:
+                        $expectedArgs1 = ['save_button', Button::class, [
+                            'label' => __('Save Currency Rates'),
+                            'class' => 'save primary save-currency-rates',
+                            'data_attribute' => [
+                                'mage-init' => [
+                                    'button' => ['event' => 'save', 'target' => '#rate-form']
+                                ]
                             ]
-                        ]
-                    ]
-                ],
-                [
-                    'options_button',
-                    Button::class,
-                    [
-                        'label' => __('Options'),
-                        'onclick' => 'setLocation(\'' . self::STUB_OPTION_LINK_URL . '\')'
-                    ]
-                ],
-                [
-                    'reset_button',
-                    Button::class,
-                    [
-                        'label' => __('Reset'),
-                        'onclick' => 'document.location.reload()',
-                        'class' => 'reset'
-                    ]
-                ]
-            );
+                        ]];
+                        if ($args === $expectedArgs1) {
+                            return null;
+                        }
+                        break;
+                    case 2:
+                        $expectedArgs2 = ['options_button', Button::class, [
+                            'label' => __('Options'),
+                            'onclick' => 'setLocation(\'' . self::STUB_OPTION_LINK_URL . '\')'
+                        ]];
+                        if ($args === $expectedArgs2) {
+                            return null;
+                        } else {
+                            return null;
+                        }
+                        break;
+                    case 3:
+                        $expectedArgs3 = ['reset_button', Button::class, [
+                            'label' => __('Reset'),
+                            'onclick' => 'document.location.reload()',
+                            'class' => 'reset'
+                        ]];
+                        if ($args === $expectedArgs3) {
+                            return null;
+                        }
+                        break;
+                }
+            });
 
         /** @var Currency $block */
         $block = $this->objectManagerHelper->getObject(

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Setup;
 
@@ -75,7 +75,7 @@ class FilePermissions
     public function __construct(
         Filesystem $filesystem,
         DirectoryList $directoryList,
-        State $state = null
+        ?State $state = null
     ) {
         $this->filesystem = $filesystem;
         $this->directoryList = $directoryList;

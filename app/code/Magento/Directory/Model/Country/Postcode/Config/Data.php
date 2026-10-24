@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Directory\Model\Country\Postcode\Config;
 
@@ -24,7 +24,7 @@ class Data extends \Magento\Framework\Config\Data
         \Magento\Directory\Model\Country\Postcode\Config\Reader $reader,
         \Magento\Framework\Config\CacheInterface $cache,
         $cacheId = 'country_postcodes',
-        SerializerInterface $serializer = null
+        ?SerializerInterface $serializer = null
     ) {
         parent::__construct($reader, $cache, $cacheId, $serializer);
     }

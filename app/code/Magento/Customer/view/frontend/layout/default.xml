@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
@@ -48,7 +48,13 @@
                 </arguments>
             </block>
             <block name="customer.customer.data"  class="Magento\Customer\Block\CustomerData"
-                   template="Magento_Customer::js/customer-data.phtml"/>
+                   template="Magento_Customer::js/customer-data.phtml">
+                <arguments>
+                    <argument name="auth" xsi:type="object">Magento\Customer\ViewModel\Customer\Auth</argument>
+                    <argument name="json_serializer" xsi:type="object">Magento\Customer\ViewModel\Customer\JsonSerializer</argument>
+                    <argument name="cookie_settings" xsi:type="object">Magento\Customer\ViewModel\CookieSettings</argument>
+                </arguments>
+            </block>
             <block name="customer.data.invalidation.rules" class="Magento\Customer\Block\CustomerScopeData"
                    template="Magento_Customer::js/customer-data/invalidation-rules.phtml"/>
         </referenceContainer>

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -72,22 +72,10 @@ class MassDeleteTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->request = $this->getMockBuilder(RequestInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods([])
-            ->getMockForAbstractClass();
-        $this->objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMockForAbstractClass();
-        $this->messageManager = $this->getMockBuilder(ManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['addSuccessMessage', 'addErrorMessage'])
-            ->getMockForAbstractClass();
-        $this->pageFactory = $this->getMockBuilder(PageFactory::class)
-            ->addMethods([])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->request = $this->createMock(RequestInterface::class);
+        $this->objectManager = $this->createStub(ObjectManagerInterface::class);
+        $this->messageManager = $this->createMock(ManagerInterface::class);
+        $this->pageFactory = $this->createMock(PageFactory::class);
         $this->resultRedirectMock = $this->getMockBuilder(Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -145,8 +133,14 @@ class MassDeleteTest extends TestCase
 
         $this->objectManager
             ->method('create')
-            ->withConsecutive([Query::class], [Query::class])
-            ->willReturnOnConsecutiveCalls(...$willReturnArgs);
+            ->willReturnCallback(function ($arg) use ($willReturnArgs) {
+                if ($arg == Query::class) {
+                    static $callCount = 0;
+                    $returnValue = $willReturnArgs[$callCount] ?? null;
+                    $callCount++;
+                    return $returnValue;
+                }
+            });
 
         $this->messageManager->expects($this->once())
             ->method('addSuccessMessage')->willReturnSelf();

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\ImportExport\Controller\Adminhtml\Export;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Framework\App\Request\Http;
+use Magento\Framework\Locale\ResolverInterface as LocaleResolver;
 use Magento\Framework\MessageQueue\DefaultValueProvider;
 use Magento\Framework\MessageQueue\Envelope;
 use Magento\Framework\MessageQueue\QueueRepository;
@@ -44,8 +45,11 @@ class ExportTest extends AbstractBackendController
      */
     private $defaultValueProvider;
 
+    /** @var LocaleResolver */
+    private $localeResolver;
+
     /**
-     * @inheridoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {
@@ -55,6 +59,7 @@ class ExportTest extends AbstractBackendController
         $this->clearQueueProcessor->execute('exportProcessor');
         $this->queueRepository = $this->_objectManager->get(QueueRepository::class);
         $this->defaultValueProvider = $this->_objectManager->get(DefaultValueProvider::class);
+        $this->localeResolver = $this->_objectManager->get(LocaleResolver::class);
     }
 
     /**
@@ -76,6 +81,7 @@ class ExportTest extends AbstractBackendController
     {
         $expectedSessionMessage = (string)__('Message is added to queue, wait to get your file soon.'
             . ' Make sure your cron job is running to export the file');
+        $locale = $this->localeResolver->getLocale();
         $fileFormat = 'csv';
         $filter = ['price' => [0, 1000]];
         $this->getRequest()->setMethod(Http::METHOD_POST)
@@ -84,6 +90,7 @@ class ExportTest extends AbstractBackendController
                 [
                     'entity' => ProductAttributeInterface::ENTITY_TYPE_CODE,
                     'file_format' => $fileFormat,
+                    'fields_enclosure' => '1'
                 ]
             );
         $this->dispatch('backend/admin/export/export');
@@ -99,5 +106,9 @@ class ExportTest extends AbstractBackendController
         $actualFilter = $this->json->unserialize($body['export_filter']);
         $this->assertCount(1, $actualFilter);
         $this->assertEquals($filter, reset($actualFilter));
+        $this->assertNotEmpty($body['locale']);
+        $this->assertEquals($locale, $body['locale']);
+        $this->assertArrayHasKey('fields_enclosure', $body);
+        $this->assertTrue($body['fields_enclosure']);
     }
 }

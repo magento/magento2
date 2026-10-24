@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -25,12 +25,15 @@ use Magento\Sales\Block\Adminhtml\Order\Create\Form\Address;
 use Magento\Store\Model\Store;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AddressTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var QuoteSession|MockObject
      */
@@ -112,14 +115,11 @@ class AddressTest extends TestCase
         $this->customerId = 10;
         $this->addressId = 100;
 
-        $this->quoteSession = $this->getMockBuilder(QuoteSession::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getStore'])
-            ->addMethods(['getCustomerId'])
-            ->getMock();
-        $this->store = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->quoteSession = $this->createPartialMockWithReflection(
+            QuoteSession::class,
+            ['getStore', 'getCustomerId']
+        );
+        $this->store = $this->createMock(Store::class);
         $this->quoteSession->expects($this->any())
             ->method('getStore')
             ->willReturn($this->store);
@@ -145,12 +145,8 @@ class AddressTest extends TestCase
             ->disableOriginalConstructor()
             ->onlyMethods(['create', 'addFilters'])
             ->getMock();
-        $this->addressService = $this->getMockBuilder(AddressRepositoryInterface::class)
-            ->onlyMethods(['getList'])
-            ->getMockForAbstractClass();
-        $this->addressItem = $this->getMockBuilder(AddressInterface::class)
-            ->onlyMethods(['getId'])
-            ->getMockForAbstractClass();
+        $this->addressService = $this->createMock(AddressRepositoryInterface::class);
+        $this->addressItem = $this->createMock(AddressInterface::class);
         $this->addressItem->expects($this->any())
             ->method('getId')
             ->willReturn($this->addressId);
@@ -189,9 +185,7 @@ class AddressTest extends TestCase
             ->willReturn('emptyFormData');
 
         /** @var Filter|MockObject $filter */
-        $filter = $this->getMockBuilder(Filter::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $filter = $this->createMock(Filter::class);
         $this->filterBuilder->expects($this->once())
             ->method('setField')
             ->with('parent_id')
@@ -209,9 +203,7 @@ class AddressTest extends TestCase
             ->willReturn($filter);
 
         /** @var SearchCriteria|MockObject $searchCriteria */
-        $searchCriteria = $this->getMockBuilder(SearchCriteria::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $searchCriteria = $this->createMock(SearchCriteria::class);
         $this->criteriaBuilder->expects($this->once())
             ->method('create')
             ->willReturn($searchCriteria);
@@ -220,9 +212,7 @@ class AddressTest extends TestCase
             ->with([$filter]);
 
         /** @var AddressSearchResultsInterface|MockObject $result */
-        $result = $this->getMockBuilder(AddressSearchResultsInterface::class)
-            ->addMethods(['getList'])
-            ->getMockForAbstractClass();
+        $result = $this->createMock(AddressSearchResultsInterface::class);
         $result->expects($this->once())
             ->method('getItems')
             ->willReturn([$this->addressItem]);
@@ -251,20 +241,17 @@ class AddressTest extends TestCase
             ->willReturn($this->defaultCountryId);
         $this->formFactory
             ->method('create')
-            ->withConsecutive(
-                [
-                    'customer_address',
-                    'adminhtml_customer_address',
-                    [AddressInterface::COUNTRY_ID => $this->defaultCountryId]
-                ],
-                [
-                    'customer_address',
-                    'adminhtml_customer_address',
-                    [],
-                    false,
-                    false
-                ]
-            )->willReturnOnConsecutiveCalls($emptyForm, $addressForm);
+            ->willReturnCallback(
+                function ($arg1, $arg2, $arg3 = [], $arg4 = false, $arg5 = false) use ($emptyForm, $addressForm) {
+                    if ($arg1 === 'customer_address' && $arg2 === 'adminhtml_customer_address' &&
+                        $arg3 === [AddressInterface::COUNTRY_ID => $this->defaultCountryId]) {
+                        return $emptyForm;
+                    } elseif ($arg1 === 'customer_address' && $arg2 === 'adminhtml_customer_address' &&
+                        empty($arg3) && $arg4 === false && $arg5 === false) {
+                        return $addressForm;
+                    }
+                }
+            );
 
         $this->address->getAddressCollectionJson();
     }

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontSearchSetDefaultDisplaySettingsActionGroup">
+        <annotations>
+            <description>Sets search display to default settings: grid mode, relevance descending, 12 items per page. Fails if not on search results page.</description>
+        </annotations>
+
+        <!-- Check if we're on the search results page -->
+        <seeInCurrentUrl url="{{StorefrontCatalogSearchPage.url}}" stepKey="verifyOnSearchPage"/>
+
+        <!-- Set display mode to grid (default) -->
+        <click selector="{{StorefrontSearchTopToolbarSection.gridMode}}" stepKey="selectGridMode"/>
+        <waitForPageLoad stepKey="waitForGridModeApplied"/>
+
+        <!-- Set sort field to relevance (default for search) -->
+        <selectOption selector="{{StorefrontSearchTopToolbarSection.sortByDropdown}}" userInput="relevance" stepKey="selectSortByRelevance"/>
+        <waitForPageLoad stepKey="waitForRelevanceSortingApplied"/>
+
+        <!-- If currently ascending, click to change to descending -->
+        <conditionalClick
+            selector="{{StorefrontSearchTopToolbarSection.sortDirectionAsc}}"
+            dependentSelector="{{StorefrontSearchTopToolbarSection.sortDirectionAsc}}"
+            visible="true"
+            stepKey="clickAscendingIfVisible"/>
+
+        <!-- Set items per page to 12 (default) -->
+        <selectOption selector="{{StorefrontSearchTopToolbarSection.showDropdown}}" userInput="12" stepKey="selectItemsPerPage12"/>
+        <waitForPageLoad stepKey="waitForSettingsApplied"/>
+
+        <!-- Verify all default settings are properly applied -->
+        <seeElement selector="{{StorefrontSearchTopToolbarSection.gridMode}}" stepKey="verifyGridModeSelected"/>
+        <seeOptionIsSelected selector="{{StorefrontSearchTopToolbarSection.sortByDropdown}}" userInput="relevance" stepKey="verifyRelevanceSortSelected"/>
+        <seeElement selector="{{StorefrontSearchTopToolbarSection.sortDirectionDesc}}" stepKey="verifyDescendingSortDirection"/>
+        <seeOptionIsSelected selector="{{StorefrontSearchTopToolbarSection.showDropdown}}" userInput="12" stepKey="verify12ItemsPerPageSelected"/>
+    </actionGroup>
+</actionGroups>

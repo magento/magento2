@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,14 +9,14 @@ namespace Magento\Framework\App\Test\Unit\Console;
 
 use Magento\Framework\App\Console\MaintenanceModeEnabler;
 use Magento\Framework\App\MaintenanceMode;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class MaintenanceModeEnablerTest extends TestCase
 {
-    /**
-     * @dataProvider initialAppStateProvider
-     */
+    /**     */
+    #[DataProvider('initialAppStateProvider')]
     public function testSuccessfulTask(bool $maintenanceModeEnabledInitially)
     {
         $maintenanceMode = $this->createMaintenanceMode($maintenanceModeEnabledInitially);
@@ -38,9 +38,8 @@ class MaintenanceModeEnablerTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider initialAppStateProvider
-     */
+    /**     */
+    #[DataProvider('initialAppStateProvider')]
     public function testFailedTaskWithMaintenanceModeOnFailure(bool $maintenanceModeEnabledInitially)
     {
         $maintenanceMode = $this->createMaintenanceMode($maintenanceModeEnabledInitially);
@@ -63,9 +62,8 @@ class MaintenanceModeEnablerTest extends TestCase
         }
     }
 
-    /**
-     * @dataProvider initialAppStateProvider
-     */
+    /**     */
+    #[DataProvider('initialAppStateProvider')]
     public function testFailedTaskWithRestoredModeOnFailure(bool $maintenanceModeEnabledInitially)
     {
         $maintenanceMode = $this->createMaintenanceMode($maintenanceModeEnabledInitially);
@@ -92,7 +90,7 @@ class MaintenanceModeEnablerTest extends TestCase
     /**
      * @return array
      */
-    public function initialAppStateProvider()
+    public static function initialAppStateProvider()
     {
         return [
             'Maintenance mode disabled initially' => [false],
@@ -127,7 +125,7 @@ class MaintenanceModeEnablerTest extends TestCase
     private function createOutput(): OutputInterface
     {
         $output = $this->getMockBuilder(OutputInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         return $output;
     }
 }

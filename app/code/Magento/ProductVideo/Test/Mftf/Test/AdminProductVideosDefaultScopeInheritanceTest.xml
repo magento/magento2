@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminProductVideosDefaultScopeInheritanceTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Product image assignment for multiple stores"/>
+            <title value="Product videos roles, title, description and visibility inheritance test"/>
+            <description value="Product videos roles, title, description and visibility inheritance test"/>
+            <severity value="MINOR"/>
+            <useCaseId value="ACP2E-4280"/>
+            <testCaseId value="AC-16037"/>
+            <group value="product"/>
+            <group value="productVideo"/>
+        </annotations>
+        <before>
+            <!-- Create Category and Simple Product -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!-- Login Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Create Store View France -->
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreViewFr">
+                <argument name="customStore" value="customStoreFR"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Delete Category and Simple Product -->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <!-- Delete Store View France -->
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreViewFr">
+                <argument name="customStore" value="customStoreFR"/>
+            </actionGroup>
+            <!-- Clear Filter Store -->
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="resetFiltersOnStorePage"/>
+            <!-- Clear Filter Product -->
+            <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductFilters"/>
+            <!-- Logout Admin -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
+        </after>
+
+        <!-- PART 1: Open product, add a video -->
+
+        <!-- Open product edit page -->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProduct1">
+            <argument name="productId" value="$createProduct.id$"/>
+        </actionGroup>
+
+        <!-- Add a video -->
+        <actionGroup ref="AddProductVideoActionGroup" stepKey="addProductVideo">
+            <argument name="video" value="VimeoProductVideo"/>
+        </actionGroup>
+
+        <!-- Save product -->
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSimpleProduct1"/>
+
+        <!-- PART 2: Switch to French store view and check that images sorting, alt text and roles are same as global scope -->
+
+        <!-- Switch to the French store view -->
+        <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="switchStoreViewFrenchProduct">
+            <argument name="storeView" value="customStoreFR.name"/>
+        </actionGroup>
+        <!-- Save product without expanding "Images And Videos" -->
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSimpleProduct2"/>
+        <!-- Save product after expanding  -->
+        <actionGroup ref="AdminOpenProductImagesSectionActionGroup" stepKey="expandImages"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSimpleProduct2a"/>
+        <!-- Assert video is present -->
+        <actionGroup ref="AssertProductVideoAdminProductPageActionGroup" stepKey="assertProductVideoPresentInProductEditPage">
+            <argument name="video" value="VimeoProductVideo"/>
+        </actionGroup>
+        <!-- Open the video details -->
+        <actionGroup ref="AdminProductImagesOpenVideoDetailsActionGroup" stepKey="openVideoModal"/>
+        <!-- Assert that 'Use Default Value' checkboxes are checked -->
+        <seeCheckboxIsChecked selector="{{AdminProductNewVideoSection.videoTitleUseDefault}}" stepKey="seeVideoTitleUseDefaultChecked"/>
+        <seeCheckboxIsChecked selector="{{AdminProductNewVideoSection.videoDescriptionUseDefault}}" stepKey="seeVideoDescriptionUseDefaultChecked"/>
+        <seeCheckboxIsChecked selector="{{AdminProductNewVideoSection.roleImageUseDefault}}" stepKey="seeVideoRoleImageUseDefaultChecked"/>
+        <seeCheckboxIsChecked selector="{{AdminProductNewVideoSection.roleSmallUseDefault}}" stepKey="seeVideoRoleSmallUseDefaultChecked"/>
+        <seeCheckboxIsChecked selector="{{AdminProductNewVideoSection.roleSwatchUseDefault}}" stepKey="seeVideoRoleSwatchUseDefaultChecked"/>
+        <seeCheckboxIsChecked selector="{{AdminProductNewVideoSection.roleThumbnailUseDefault}}" stepKey="seeVideoRoleThumbnailUseDefaultChecked"/>
+        <seeCheckboxIsChecked selector="{{AdminProductNewVideoSection.hideFromProductPageUseDefault}}" stepKey="seeVideoHideFromProductPageUseDefaultChecked"/>
+        <!-- Assert that all roles checkboxes are checked -->
+        <seeCheckboxIsChecked selector="{{AdminProductNewVideoSection.baseCheckbox}}" stepKey="seeVideoRoleImageChecked"/>
+        <seeCheckboxIsChecked selector="{{AdminProductNewVideoSection.smallCheckbox}}" stepKey="seeVideoRoleSmallChecked"/>
+        <seeCheckboxIsChecked selector="{{AdminProductNewVideoSection.swatchCheckbox}}" stepKey="seeVideoRoleSwatchChecked"/>
+        <seeCheckboxIsChecked selector="{{AdminProductNewVideoSection.thumbnailCheckbox}}" stepKey="seeVideoRoleThumbnailChecked"/>
+        <!-- Assert video title is using default value -->
+        <seeInField selector="{{AdminProductNewVideoSection.videoTitleTextField}}" userInput="{{VimeoProductVideo.videoTitle}}" stepKey="assertVideoTitle" />
+        <grabValueFrom selector="{{AdminProductNewVideoSection.videoDescriptionTextField}}" stepKey="getVideoDescription" />
+        <assertStringContainsString stepKey="assertVideoDescription">
+            <actualResult type="variable">getVideoDescription</actualResult>
+            <expectedResult type="string">{{VimeoProductVideo.videoShortDescription}}</expectedResult>
+        </assertStringContainsString>
+        <!-- Assert video visibility is using default value -->
+        <dontSeeCheckboxIsChecked selector="{{AdminProductNewVideoSection.hideFromProductPageCheckbox}}" stepKey="dontSeeHideFromProductPageChecked"/>
+
+        <!-- PART 3: Change title, description, roles and visibility in French store view -->
+
+        <!-- Unselect 'Use Default Value' -->
+        <uncheckOption selector="{{AdminProductNewVideoSection.videoTitleUseDefault}}" stepKey="uncheckVideoTitleUseDefault"/>
+        <uncheckOption selector="{{AdminProductNewVideoSection.videoDescriptionUseDefault}}" stepKey="uncheckVideoDescriptionUseDefault"/>
+        <uncheckOption selector="{{AdminProductNewVideoSection.roleImageUseDefault}}" stepKey="uncheckVideoRoleImageUseDefault"/>
+        <uncheckOption selector="{{AdminProductNewVideoSection.roleSmallUseDefault}}" stepKey="uncheckVideoRoleSmallUseDefault"/>
+        <uncheckOption selector="{{AdminProductNewVideoSection.roleSwatchUseDefault}}" stepKey="uncheckVideoRoleSwatchUseDefault"/>
+        <uncheckOption selector="{{AdminProductNewVideoSection.roleThumbnailUseDefault}}" stepKey="uncheckVideoRoleThumbnailUseDefault"/>
+        <uncheckOption selector="{{AdminProductNewVideoSection.hideFromProductPageUseDefault}}" stepKey="uncheckVideoHideFromProductPageUseDefault"/>
+        <!-- Change title, description, roles and visibility -->
+        <fillField selector="{{AdminProductNewVideoSection.videoTitleTextField}}" userInput="French Video Title" stepKey="fillVideoTitle"/>
+        <fillField selector="{{AdminProductNewVideoSection.videoDescriptionTextField}}" userInput="French Video Description" stepKey="fillVideoDescription"/>
+        <waitForElementClickable selector="{{AdminProductNewVideoSection.swatchCheckboxLabel}}" stepKey="waitForSwatchCheckboxLabel"/>
+        <click selector="{{AdminProductNewVideoSection.swatchCheckboxLabel}}" stepKey="uncheckVideoRoleSwatch"/>
+        <waitForElementClickable selector="{{AdminProductNewVideoSection.thumbnailCheckboxLabel}}" stepKey="waitForThumbnailCheckboxLabel"/>
+        <click selector="{{AdminProductNewVideoSection.thumbnailCheckboxLabel}}" stepKey="uncheckVideoRoleThumbnail"/>
+        <waitForElementClickable selector="{{AdminProductNewVideoSection.hideFromProductPageCheckboxLabel}}" stepKey="waitForHideFromProductPageCheckboxLabel"/>
+        <click selector="{{AdminProductNewVideoSection.hideFromProductPageCheckboxLabel}}" stepKey="checkVideoHideFromProductPage"/>
+        <!-- Save video -->
+        <actionGroup ref="AdminProductImagesSaveVideoActionGroup" stepKey="saveVideo"/>
+        <!-- Save product -->
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSimpleProduct3"/>
+
+        <!-- PART 4: Check that changes are applied in French store view -->
+        
+        <actionGroup ref="AdminProductImagesOpenVideoDetailsActionGroup" stepKey="openVideoModal2"/>
+        <!-- Assert that 'Use Default Value' checkboxes are unchecked -->
+        <dontSeeCheckboxIsChecked selector="{{AdminProductNewVideoSection.videoTitleUseDefault}}" stepKey="dontSeeVideoTitleUseDefaultChecked2"/>
+        <dontSeeCheckboxIsChecked selector="{{AdminProductNewVideoSection.videoDescriptionUseDefault}}" stepKey="dontSeeVideoDescriptionUseDefaultChecked2"/>
+        <dontSeeCheckboxIsChecked selector="{{AdminProductNewVideoSection.roleImageUseDefault}}" stepKey="dontSeeVideoRoleImageUseDefaultChecked2"/>
+        <dontSeeCheckboxIsChecked selector="{{AdminProductNewVideoSection.roleSmallUseDefault}}" stepKey="dontSeeVideoRoleSmallUseDefaultChecked2"/>
+        <dontSeeCheckboxIsChecked selector="{{AdminProductNewVideoSection.roleSwatchUseDefault}}" stepKey="dontSeeVideoRoleSwatchUseDefaultChecked2"/>
+        <dontSeeCheckboxIsChecked selector="{{AdminProductNewVideoSection.roleThumbnailUseDefault}}" stepKey="dontSeeVideoRoleThumbnailUseDefaultChecked2"/>
+        <dontSeeCheckboxIsChecked selector="{{AdminProductNewVideoSection.hideFromProductPageUseDefault}}" stepKey="dontSeeVideoHideFromProductPageUseDefaultChecked2"/>
+        <!-- Assert that thumbnail and swatch roles checkboxes are unchecked, image and small are checked -->
+        <seeCheckboxIsChecked selector="{{AdminProductNewVideoSection.baseCheckbox}}" stepKey="seeVideoRoleImageChecked2"/>
+        <seeCheckboxIsChecked selector="{{AdminProductNewVideoSection.smallCheckbox}}" stepKey="seeVideoRoleSmallChecked2"/>
+        <dontSeeCheckboxIsChecked selector="{{AdminProductNewVideoSection.swatchCheckbox}}" stepKey="dontSeeVideoRoleSwatchChecked2"/>
+        <dontSeeCheckboxIsChecked selector="{{AdminProductNewVideoSection.thumbnailCheckbox}}" stepKey="dontSeeVideoRoleThumbnailChecked2"/>
+        <!-- Assert video title and description -->
+        <seeInField selector="{{AdminProductNewVideoSection.videoTitleTextField}}" userInput="French Video Title" stepKey="assertVideoTitle2" />
+        <seeInField selector="{{AdminProductNewVideoSection.videoDescriptionTextField}}" userInput="French Video Description" stepKey="assertVideoDescription2" />
+        <!-- Assert video visibility -->
+        <seeCheckboxIsChecked selector="{{AdminProductNewVideoSection.hideFromProductPageCheckbox}}" stepKey="seeHideFromProductPageChecked2"/>
+
+        <!-- PART 5: Select use default checkboxes -->
+        
+        <!-- Select 'Use Default Value' -->
+        <checkOption selector="{{AdminProductNewVideoSection.videoTitleUseDefault}}" stepKey="checkVideoTitleUseDefault"/>
+        <checkOption selector="{{AdminProductNewVideoSection.videoDescriptionUseDefault}}" stepKey="checkVideoDescriptionUseDefault"/>
+        <checkOption selector="{{AdminProductNewVideoSection.roleImageUseDefault}}" stepKey="checkVideoRoleImageUseDefault"/>
+        <checkOption selector="{{AdminProductNewVideoSection.roleSmallUseDefault}}" stepKey="checkVideoRoleSmallUseDefault"/>
+        <checkOption selector="{{AdminProductNewVideoSection.roleSwatchUseDefault}}" stepKey="checkVideoRoleSwatchUseDefault"/>
+        <checkOption selector="{{AdminProductNewVideoSection.roleThumbnailUseDefault}}" stepKey="checkVideoRoleThumbnailUseDefault"/>
+        <checkOption selector="{{AdminProductNewVideoSection.hideFromProductPageUseDefault}}" stepKey="checkVideoHideFromProductPageUseDefault"/>
+        <!-- Save video -->
+        <actionGroup ref="AdminProductImagesSaveVideoActionGroup" stepKey="saveVideo2"/>
+        <!-- Save product -->
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSimpleProduct4"/>
+        
+        <!-- PART 6: Check that all settings are inherited from default scope again -->
+        
+        <actionGroup ref="AdminProductImagesOpenVideoDetailsActionGroup" stepKey="openVideoModal3"/>
+        <!-- Assert that 'Use Default Value' checkboxes are checked -->
+        <seeCheckboxIsChecked selector="{{AdminProductNewVideoSection.videoTitleUseDefault}}" stepKey="seeVideoTitleUseDefaultChecked2"/>
+        <seeCheckboxIsChecked selector="{{AdminProductNewVideoSection.videoDescriptionUseDefault}}" stepKey="seeVideoDescriptionUseDefaultChecked2"/>
+        <seeCheckboxIsChecked selector="{{AdminProductNewVideoSection.roleImageUseDefault}}" stepKey="seeVideoRoleImageUseDefaultChecked2"/>
+        <seeCheckboxIsChecked selector="{{AdminProductNewVideoSection.roleSmallUseDefault}}" stepKey="seeVideoRoleSmallUseDefaultChecked2"/>
+        <seeCheckboxIsChecked selector="{{AdminProductNewVideoSection.roleSwatchUseDefault}}" stepKey="seeVideoRoleSwatchUseDefaultChecked2"/>
+        <seeCheckboxIsChecked selector="{{AdminProductNewVideoSection.roleThumbnailUseDefault}}" stepKey="seeVideoRoleThumbnailUseDefaultChecked2"/>
+        <seeCheckboxIsChecked selector="{{AdminProductNewVideoSection.hideFromProductPageUseDefault}}" stepKey="seeVideoHideFromProductPageUseDefaultChecked2"/>
+        <!-- Assert that all roles checkboxes are checked -->
+        <seeCheckboxIsChecked selector="{{AdminProductNewVideoSection.baseCheckbox}}" stepKey="seeVideoRoleImageChecked3"/>
+        <seeCheckboxIsChecked selector="{{AdminProductNewVideoSection.smallCheckbox}}" stepKey="seeVideoRoleSmallChecked3"/>
+        <seeCheckboxIsChecked selector="{{AdminProductNewVideoSection.swatchCheckbox}}" stepKey="seeVideoRoleSwatchChecked3"/>
+        <seeCheckboxIsChecked selector="{{AdminProductNewVideoSection.thumbnailCheckbox}}" stepKey="seeVideoRoleThumbnailChecked3"/>
+        <!-- Assert video title is using default value -->
+        <seeInField selector="{{AdminProductNewVideoSection.videoTitleTextField}}" userInput="{{VimeoProductVideo.videoTitle}}" stepKey="assertVideoTitle3" />
+        <seeInField selector="{{AdminProductNewVideoSection.videoDescriptionTextField}}" userInput="$getVideoDescription" stepKey="assertVideoDescription3" />
+        <!-- Assert video visibility is using default value -->
+        <dontSeeCheckboxIsChecked selector="{{AdminProductNewVideoSection.hideFromProductPageCheckbox}}" stepKey="dontSeeHideFromProductPageChecked3"/>
+    </test>
+</tests>

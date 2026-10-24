@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -19,6 +19,7 @@ use Magento\Framework\View\Layout\ScheduledStructure;
 use Magento\Framework\View\Layout\ScheduledStructure\Helper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class GeneratorPoolTest extends TestCase
 {
@@ -71,7 +72,7 @@ class GeneratorPoolTest extends TestCase
             ->getMock();
         $this->structureMock = $this->getMockBuilder(\Magento\Framework\View\Layout\Data\Structure::class)
             ->disableOriginalConstructor()
-            ->setMethods(['reorderChildElement'])
+            ->onlyMethods(['reorderChildElement'])
             ->getMock();
         $this->generatorContextMock->expects($this->any())->method('getStructure')
             ->willReturn($this->structureMock);
@@ -95,11 +96,11 @@ class GeneratorPoolTest extends TestCase
      */
     protected function getGeneratorsMocks()
     {
-        $firstGenerator = $this->getMockForAbstractClass(GeneratorInterface::class);
+        $firstGenerator = $this->createMock(GeneratorInterface::class);
         $firstGenerator->expects($this->any())->method('getType')->willReturn('first_generator');
         $firstGenerator->expects($this->atLeastOnce())->method('process');
 
-        $secondGenerator = $this->getMockForAbstractClass(GeneratorInterface::class);
+        $secondGenerator = $this->createMock(GeneratorInterface::class);
         $secondGenerator->expects($this->any())->method('getType')->willReturn('second_generator');
         $secondGenerator->expects($this->atLeastOnce())->method('process');
         return [$firstGenerator, $secondGenerator];
@@ -108,9 +109,8 @@ class GeneratorPoolTest extends TestCase
     /**
      * @param array $schedule
      * @param array $expectedSchedule
-     * @return void
-     * @dataProvider processDataProvider
-     */
+     * @return void     */
+    #[DataProvider('processDataProvider')]
     public function testProcess($schedule, $expectedSchedule)
     {
         foreach ($schedule['structure'] as $structureElement) {
@@ -129,7 +129,14 @@ class GeneratorPoolTest extends TestCase
             $reorderMap[] = [$destination, $elementName, $sibling, $isAfter];
         }
         $invocation = $this->structureMock->expects($this->any())->method('reorderChildElement');
-        call_user_func_array([$invocation, 'withConsecutive'], $reorderMap);
+        $invocation->willReturnCallback(function ($arg) use ($reorderMap) {
+                static $callCount = 0;
+                $expectedId = $reorderMap[$callCount][0];
+                $callCount++;
+            if ($expectedId == $arg) {
+                return null;
+            }
+        });
 
         foreach ($schedule['remove'] as $remove) {
             $this->scheduledStructure->setElementToRemoveList($remove);
@@ -157,7 +164,7 @@ class GeneratorPoolTest extends TestCase
      *
      * @return array
      */
-    public function processDataProvider()
+    public static function processDataProvider()
     {
         return [
             [
@@ -177,7 +184,7 @@ class GeneratorPoolTest extends TestCase
                         'sort.element' => ['second.element', 'sibling', false, 'alias'],
                     ],
                 ],
-                'expectedScheduledElements' => [
+                'expectedSchedule' => [
                     'first.element' => ['block', []],
                     'second.element' => ['block', []],
                     'third.element' => ['block', []],

@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 define([
@@ -39,10 +39,6 @@ define([
                 }
                 _.each(item.options, function (option) {
                     currentOption = utils.copy(option);
-
-                    if (currentOption.hasOwnProperty('sort_order')) {
-                        delete currentOption['sort_order'];
-                    }
 
                     if (currentOption.hasOwnProperty('option_id')) {
                         delete currentOption['option_id'];

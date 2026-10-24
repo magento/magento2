@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer;
 
@@ -35,6 +35,8 @@ class StockItem
 
     /**
      * @var StockStateProviderInterface
+     * @deprecated
+     * @see was overriding ItemBackorders value with the Default Scope value; caused discrepancy in multistock config
      */
     private $stockStateProvider;
 
@@ -48,7 +50,7 @@ class StockItem
         ConfigInterface $typeConfig,
         QuoteItemQtyList $quoteItemQtyList,
         StockStateInterface $stockState,
-        StockStateProviderInterface $stockStateProvider = null
+        ?StockStateProviderInterface $stockStateProvider = null
     ) {
         $this->quoteItemQtyList = $quoteItemQtyList;
         $this->typeConfig = $typeConfig;
@@ -121,11 +123,6 @@ class StockItem
         if ($result->getHasError() === true && in_array($result->getErrorCode(), ['qty_available', 'out_stock'])) {
             $quoteItem->setHasError(true);
         }
-
-        /* We need to ensure that any possible plugin will not erase the data */
-        $backOrdersQty = $this->stockStateProvider->checkQuoteItemQty($stockItem, $rowQty, $qtyForCheck, $qty)
-            ->getItemBackorders();
-        $result->setItemBackorders($backOrdersQty);
 
         if ($stockItem->hasIsChildItem()) {
             $stockItem->unsIsChildItem();

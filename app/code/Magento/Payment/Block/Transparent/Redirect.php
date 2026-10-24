@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Payment\Block\Transparent;
 
@@ -67,7 +67,7 @@ class Redirect extends Template
         $params = [];
         foreach ($this->_request->getPostValue() as $name => $value) {
             if (!empty($value) && mb_detect_encoding($value, 'UTF-8', true) === false) {
-                $value = utf8_encode($value);
+                $value = mb_convert_encoding($value, 'UTF-8', 'ISO-8859-1');
             }
             $params[$name] = $value;
         }

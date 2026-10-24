@@ -1,18 +1,25 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Model\ResourceModel\Product;
 
 use Magento\Catalog\Model\Product\Visibility;
+use Magento\Catalog\Test\Fixture\Category as CategoryFixture;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\Catalog\Test\Fixture\ProductGlobalPriceStoreScopedDecimal;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\State;
 use Magento\Store\Model\Store;
+use Magento\TestFramework\Fixture\AppIsolation;
+use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for Magento\Catalog\Model\ResourceModel\Product\Collection
@@ -150,20 +157,20 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(1, $collectionStoreFilterAfter->getItems());
     }
 
-    /**
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Category as:c1
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Category with:{"parent_id":"$c1.id$","is_anchor":0} as:c11
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Category with:{"parent_id":"$c1.id$","is_anchor":0} as:c12
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Category with:{"parent_id":"$c11.id$"} as:c111
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Category as:c2
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"category_ids":["$c1.id$"]} as:p1
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"category_ids":["$c111.id$"]} as:p2
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"category_ids":["$c12.id$"]} as:p3
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"category_ids":["$c2.id$"]} as:p4
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"category_ids":["$c2.id$"]} as:p5
-     * @magentoAppIsolation enabled
-     * @magentoDbIsolation disabled
-     */
+    #[
+        AppIsolation(true),
+        DbIsolation(false),
+        DataFixture(CategoryFixture::class, as: 'c1'),
+        DataFixture(CategoryFixture::class, ['parent_id' => '$c1.id$', 'is_anchor' => 0], 'c11'),
+        DataFixture(CategoryFixture::class, ['parent_id' => '$c1.id$', 'is_anchor' => 0], 'c12'),
+        DataFixture(CategoryFixture::class, ['parent_id' => '$c11.id$'], 'c111'),
+        DataFixture(CategoryFixture::class, as: 'c2'),
+        DataFixture(ProductFixture::class, ['category_ids' => ['$c1.id$']], 'p1'),
+        DataFixture(ProductFixture::class, ['category_ids' => ['$c111.id$']], 'p2'),
+        DataFixture(ProductFixture::class, ['category_ids' => ['$c12.id$']], 'p3'),
+        DataFixture(ProductFixture::class, ['category_ids' => ['$c2.id$']], 'p4'),
+        DataFixture(ProductFixture::class, ['category_ids' => ['$c2.id$']], 'p5'),
+    ]
     public function testSetCategoryFilter()
     {
         $categoryId = $this->fixtures->get('c1')->getId();
@@ -223,12 +230,12 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     /**
      * Test addAttributeToSort() with attribute 'is_saleable' works properly on frontend.
      *
-     * @dataProvider addIsSaleableAttributeToSortDataProvider
      * @magentoDataFixture Magento/Catalog/_files/multiple_products_with_non_saleable_product.php
      * @magentoConfigFixture current_store cataloginventory/options/show_out_of_stock 1
      * @magentoAppIsolation enabled
      * @magentoAppArea frontend
      */
+    #[DataProvider('addIsSaleableAttributeToSortDataProvider')]
     public function testAddIsSaleableAttributeToSort(string $productSku, string $order)
     {
         $this->collection->addAttributeToSort('is_saleable', $order);
@@ -239,15 +246,15 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function addIsSaleableAttributeToSortDataProvider(): array
+    public static function addIsSaleableAttributeToSortDataProvider(): array
     {
         return [
             [
-                'product_sku' => 'simple_saleable',
+                'productSku' => 'simple_saleable',
                 'order' => Collection::SORT_ORDER_DESC,
             ],
             [
-                'product_sku' => 'simple_not_saleable',
+                'productSku' => 'simple_not_saleable',
                 'order' => Collection::SORT_ORDER_ASC,
             ]
         ];
@@ -256,13 +263,13 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     /**
      * Test addAttributeToSort() with attribute 'price' works properly on frontend.
      *
-     * @dataProvider addPriceAttributeToSortDataProvider
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoDataFixture Magento/Catalog/_files/simple_product_with_tier_price_equal_zero.php
      * @magentoAppIsolation enabled
      * @magentoDbIsolation disabled
      * @magentoAppArea frontend
      */
+    #[DataProvider('addPriceAttributeToSortDataProvider')]
     public function testAddPriceAttributeToSort(string $productSku, string $order)
     {
         $this->processor->getIndexer()->reindexAll();
@@ -275,15 +282,15 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function addPriceAttributeToSortDataProvider(): array
+    public static function addPriceAttributeToSortDataProvider(): array
     {
         return [
             [
-                'product_sku' => 'simple',
+                'productSku' => 'simple',
                 'order' => Collection::SORT_ORDER_DESC,
             ],
             [
-                'product_sku' => 'simple-2',
+                'productSku' => 'simple-2',
                 'order' => Collection::SORT_ORDER_ASC,
             ]
         ];
@@ -332,9 +339,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      * @param mixed $condition
      * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/few_simple_products.php
      * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/product_simple.php
-     *
-     * @dataProvider addAttributeTierPriceToFilterDataProvider
      */
+    #[DataProvider('addAttributeTierPriceToFilterDataProvider')]
     public function testAddAttributeTierPriceToFilter($condition): void
     {
         $size = $this->collection->addAttributeToFilter('tier_price', $condition)->getSize();
@@ -344,7 +350,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function addAttributeTierPriceToFilterDataProvider(): array
+    public static function addAttributeTierPriceToFilterDataProvider(): array
     {
         return [
             'condition is array' => [['eq' => 8]],
@@ -359,9 +365,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      *
      * @param mixed $condition
      * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/product_simple.php
-     *
-     * @dataProvider addAttributeIsSaleableToFilterDataProvider
      */
+    #[DataProvider('addAttributeIsSaleableToFilterDataProvider')]
     public function testAddAttributeIsSaleableToFilter($condition): void
     {
         $size = $this->collection->addAttributeToFilter('is_saleable', $condition)->getSize();
@@ -371,7 +376,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function addAttributeIsSaleableToFilterDataProvider(): array
+    public static function addAttributeIsSaleableToFilterDataProvider(): array
     {
         return [
             'condition is array' => [['eq' => 1]],
@@ -379,5 +384,35 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             'condition is int' => [1],
             'condition is null' => [null]
         ];
+    }
+
+    /**
+     * Global `price` and store-scoped decimals share `catalog_product_entity_decimal`; collection load must not
+     * collapse store scope for other attributes in that batch (see AC-40218 / PR 40419).
+     *
+     * DbIsolation disabled: fixture uses CategorySetup::addAttribute (DDL) and product save triggers indexers;
+     * wrapping those in a DB transaction causes MySQL ER_CANT_EXECUTE_WITH_PRIMARY_CHANGED / 1412 in MSI + ES
+     * pipelines.
+     */
+    #[
+        AppIsolation(true),
+        DbIsolation(false),
+        DataFixture(ProductGlobalPriceStoreScopedDecimal::class),
+    ]
+    public function testStoreScopedDecimalLoadedWithGlobalPriceOnSameDecimalTable(): void
+    {
+        $sku = 'simple-global-price-store-decimal-pr40419';
+        $attributeCode = 'decimal_attr_store_scope_pr40419';
+
+        $collection = Bootstrap::getObjectManager()->create(Collection::class);
+        $collection->setStore('fixture_second_store')
+            ->addAttributeToSelect(['price', $attributeCode])
+            ->addFieldToFilter('sku', $sku)
+            ->load();
+
+        $this->assertCount(1, $collection->getItems());
+        $item = $collection->getFirstItem();
+        $this->assertSame(77.5, (float)$item->getPrice());
+        $this->assertEqualsWithDelta(9.99, (float)$item->getData($attributeCode), 0.0001);
     }
 }

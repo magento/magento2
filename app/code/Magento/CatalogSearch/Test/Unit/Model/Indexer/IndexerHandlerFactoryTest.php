@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -27,10 +27,8 @@ class IndexerHandlerFactoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->getMockForAbstractClass();
-        $this->engineResolverMock = $this->getMockBuilder(EngineResolverInterface::class)
-            ->getMockForAbstractClass();
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->engineResolverMock = $this->createMock(EngineResolverInterface::class);
     }
 
     public function testCreate()
@@ -46,8 +44,7 @@ class IndexerHandlerFactoryTest extends TestCase
             ->method('getCurrentSearchEngine')
             ->willReturn($currentHandler);
 
-        $indexerMock = $this->getMockBuilder($currentHandlerClass)
-            ->getMockForAbstractClass();
+        $indexerMock = $this->createMock($currentHandlerClass);
 
         $this->objectManagerMock->expects($this->once())
             ->method('create')
@@ -103,8 +100,7 @@ class IndexerHandlerFactoryTest extends TestCase
             ->method('getCurrentSearchEngine')
             ->willReturn($currentHandler);
 
-        $indexerMock = $this->getMockBuilder($currentHandlerClass)
-            ->getMockForAbstractClass();
+        $indexerMock = $this->createMock($currentHandlerClass);
 
         $this->objectManagerMock->expects($this->once())
             ->method('create')
@@ -135,8 +131,7 @@ class IndexerHandlerFactoryTest extends TestCase
             ->method('getCurrentSearchEngine')
             ->willReturn($currentHandler);
 
-        $indexerMock = $this->getMockBuilder($currentHandlerClass)
-            ->getMockForAbstractClass();
+        $indexerMock = $this->createMock($currentHandlerClass);
 
         $this->objectManagerMock->expects($this->once())
             ->method('create')

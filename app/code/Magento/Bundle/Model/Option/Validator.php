@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Bundle\Model\Option;
 
 use Magento\Framework\Validator\NotEmpty;
 use Magento\Framework\Validator\NotEmptyFactory;
-use Zend_Validate_Exception;
+use Magento\Framework\Validator\ValidateException;
 
 class Validator extends \Magento\Framework\Validator\AbstractValidator
 {
@@ -31,7 +31,7 @@ class Validator extends \Magento\Framework\Validator\AbstractValidator
      * @param \Magento\Bundle\Model\Option $value
      *
      * @return boolean
-     * @throws Zend_Validate_Exception If validation of $value is impossible
+     * @throws ValidateException
      */
     public function isValid($value)
     {
@@ -46,7 +46,7 @@ class Validator extends \Magento\Framework\Validator\AbstractValidator
      * @param \Magento\Bundle\Model\Option $value
      *
      * @return void
-     * @throws \Exception|Zend_Validate_Exception
+     * @throws \Exception|ValidateException
      */
     protected function validateRequiredFields($value)
     {

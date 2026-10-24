@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\AdvancedSearch\Test\Unit\Controller\Adminhtml\Search\System\Config;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use Magento\AdvancedSearch\Controller\Adminhtml\Search\System\Config\TestConnection;
 use Magento\AdvancedSearch\Model\Client\ClientInterface;
 use Magento\AdvancedSearch\Model\Client\ClientResolver;
@@ -21,9 +22,9 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Magento\AdvancedSearch\Controller\Adminhtml\Search\System\Config\TestConnection
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
+#[CoversClass(TestConnection::class)]
 class TestConnectionTest extends TestCase
 {
     /**
@@ -75,7 +76,7 @@ class TestConnectionTest extends TestCase
         $responseMock = $this->createMock(HttpResponse::class);
 
         $context = $this->getMockBuilder(Context::class)
-            ->setMethods(['getRequest', 'getResponse', 'getMessageManager', 'getSession'])
+            ->onlyMethods(['getRequest', 'getResponse', 'getMessageManager', 'getSession'])
             ->setConstructorArgs(
                 $helper->getConstructArguments(
                     Context::class,
@@ -90,10 +91,10 @@ class TestConnectionTest extends TestCase
 
         $this->clientResolverMock = $this->getMockBuilder(ClientResolver::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
-        $this->clientMock = $this->getMockForAbstractClass(ClientInterface::class);
+        $this->clientMock = $this->createMock(ClientInterface::class);
 
         $this->resultJsonMock = $this->getMockBuilder(Json::class)
             ->disableOriginalConstructor()
@@ -101,12 +102,12 @@ class TestConnectionTest extends TestCase
 
         $this->resultJsonFactoryMock = $this->getMockBuilder(JsonFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->tagFilterMock = $this->getMockBuilder(StripTags::class)
             ->disableOriginalConstructor()
-            ->setMethods(['filter'])
+            ->onlyMethods(['filter'])
             ->getMock();
 
         $this->controller = new TestConnection(

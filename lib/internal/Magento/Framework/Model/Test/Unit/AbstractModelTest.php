@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,6 +18,7 @@ use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Registry;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -64,9 +65,9 @@ class AbstractModelTest extends TestCase
     {
         $this->actionValidatorMock = $this->createMock(RemoveAction::class);
         $this->contextMock = new Context(
-            $this->getMockForAbstractClass(LoggerInterface::class),
-            $this->getMockForAbstractClass(ManagerInterface::class),
-            $this->getMockForAbstractClass(CacheInterface::class),
+            $this->createMock(LoggerInterface::class),
+            $this->createMock(ManagerInterface::class),
+            $this->createMock(CacheInterface::class),
             $this->createMock(State::class),
             $this->actionValidatorMock
         );
@@ -80,14 +81,24 @@ class AbstractModelTest extends TestCase
             'getIdFieldName',
             'rollBack'
         ]);
-        $this->resourceCollectionMock = $this->getMockBuilder(\Magento\Framework\Data\Collection\AbstractDb::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->model = $this->getMockForAbstractClass(
-            AbstractModel::class,
-            [$this->contextMock, $this->registryMock, $this->resourceMock, $this->resourceCollectionMock]
+        $this->resourceCollectionMock = $this->createPartialMock(
+            \Magento\Framework\Data\Collection\AbstractDb::class,
+            ['getResource']
         );
-        $this->connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        
+        // Use getMockBuilder with onlyMethods([]) to allow real implementations
+        // This creates a partial mock that doesn't override any methods
+        $this->model = $this->getMockBuilder(AbstractModel::class)
+            ->setConstructorArgs([
+                $this->contextMock,
+                $this->registryMock,
+                $this->resourceMock,
+                $this->resourceCollectionMock
+            ])
+            ->onlyMethods([])
+            ->getMock();
+        
+        $this->connectionMock = $this->createMock(AdapterInterface::class);
         $this->resourceMock->expects($this->any())
             ->method('getConnection')
             ->willReturn($this->connectionMock);
@@ -189,5 +200,51 @@ class AbstractModelTest extends TestCase
         $this->assertFalse($this->model->hasDataChanges());
         $this->model->setDataChanges(true);
         $this->assertTrue($this->model->hasDataChanges());
+    }
+
+    /**
+     * Test case for checking setData function is working for all possible key value pairs
+     *     */
+    #[DataProvider('getKeyValueDataPairs')]
+    public function testSetDataWithDifferentKeyValuePairs(
+        array $data,
+        mixed $testKey,
+        mixed $testValue,
+        bool $hasDataChangedFor
+    ): void {
+        $this->model->setData($data);
+        $this->model->setOrigData();
+        $this->model->setData($testKey, $testValue);
+        $this->assertEquals($data, $this->model->getOrigData());
+        $this->assertEquals($hasDataChangedFor, $this->model->dataHasChangedFor($testKey));
+    }
+
+    /**
+     * Data provider for testSetDataWithDifferentKeyValuePairs
+     *
+     * @return array
+     */
+    public static function getKeyValueDataPairs(): array
+    {
+        return [
+            'when test data and compare data are string' => [['key' => 'value'], 'key', 'value', false],
+            'when test data and compare data are different' => [['key' => 'value'], 'key', 10, true],
+            'when test data string and compare data is null' => [['key' => 'value'], 'key', null, true],
+            'when test data and compare data both null' => [['key' => null], 'key', null, false],
+            'when test data empty string and compare data is null' => [['key' => ''], 'key', null, false],
+            'when test data and compare data are empty string' => [['key' => ''], 'key', '', false],
+            'when test data is null and compare data is empty string' => [['key' => null], 'key', '', false],
+            'when test data and compare data are int' => [['key' => 1], 'key', 1, false],
+            'when test data is int and compare data is float' => [['key' => 1.0], 'key', 1, false],
+            'when test data is string and compare data is float' => [['key' => '1.0'], 'key', 1.0, false],
+            'when test data is string and compare data is int' => [['key' => '1'], 'key', 1, false],
+            'when test data is float and compare data is string' => [['key' => 1.0], 'key', '1.0', false],
+            'when test data is int and compare data is string' => [['key' => 1], 'key', '1', false],
+            'when test data and compare data are float' => [['key' => 1.0], 'key', 1.0, false],
+            'when test data is 0 and compare data is null' => [['key' => 0], 'key', null, false],
+            'when test data is null and compare data is 0' => [['key' => null], 'key', 0, false],
+            'when test data is string array and compare data is int' => [['key' => '10'], 'key', 10, false],
+            'when test data is string array and compare data is float' => [['key' => '22.00'], 'key', 22.00, false]
+        ];
     }
 }

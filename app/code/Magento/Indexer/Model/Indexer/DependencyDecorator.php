@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -232,10 +232,9 @@ class DependencyDecorator implements IndexerInterface
     {
         $this->indexer->invalidate();
         $currentIndexerId = $this->indexer->getId();
-        $idsToRunBefore = $this->dependencyInfoProvider->getIndexerIdsToRunBefore($currentIndexerId);
         $idsToRunAfter = $this->dependencyInfoProvider->getIndexerIdsToRunAfter($currentIndexerId);
 
-        $indexersToInvalidate = array_unique(array_merge($idsToRunBefore, $idsToRunAfter));
+        $indexersToInvalidate = array_unique($idsToRunAfter);
         foreach ($indexersToInvalidate as $indexerId) {
             $indexer = $this->indexerRegistry->get($indexerId);
             if (!$indexer->isInvalid()) {

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -46,5 +46,11 @@
         <element name="productImage" type="text" selector="//ol[@id='mini-cart']//img[@class='product-image-photo']"/>
         <element name="productSubTotal" type="text" selector="//div[@class='subtotal']//span/span[@class='price']"/>
         <element name="productCountLabel" type="text" selector="//*[@id='minicart-content-wrapper']/div[2]/div[1]/span[2]"/>
+        <element name="productCartName" type="text" selector="//tbody[@class='cart item']//strong[@class='product-item-name']//a[contains(text(),'{{var}}')]" parameterized="true"/>
+        <element name="minicartclose" type="button" selector="//button[@id='btn-minicart-close']"/>
+        <element name="productCountNew" type="text" selector=".minicart-wrapper .action.showcart .counter-number"/>
+        <element name="image" type="text" selector="//*[@class='product-image-container']//img[contains(@src, '{{var1}}')]" parameterized="true"/>
+        <element name="proceedToCheckout" type="button" selector="//button[@data-role='proceed-to-checkout']"/>
+        <element name="deleteProductBasedOnQty" type="button" selector="//input[@data-item-qty='{{quantity}}']/../../..//div[@class='product actions']//a[@class='action delete']" parameterized="true"/>
     </section>
 </sections>

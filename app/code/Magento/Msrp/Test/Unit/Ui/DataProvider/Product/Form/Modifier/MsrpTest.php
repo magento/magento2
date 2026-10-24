@@ -1,18 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Msrp\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
-use Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier\AbstractModifierTest;
+use Magento\Bundle\Test\Unit\Ui\DataProvider\Product\Form\Modifier\AbstractModifierTestCase;
 use Magento\Msrp\Model\Config as MsrpConfig;
 use Magento\Msrp\Ui\DataProvider\Product\Form\Modifier\Msrp;
 use PHPUnit\Framework\MockObject\MockObject;
 
-class MsrpTest extends AbstractModifierTest
+class MsrpTest extends AbstractModifierTestCase
 {
     /**
      * @var MsrpConfig|MockObject

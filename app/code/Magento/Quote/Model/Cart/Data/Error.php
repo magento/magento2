@@ -1,42 +1,29 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Quote\Model\Cart\Data;
 
+use Magento\Quote\Api\ErrorInterface;
+
 /**
  * DTO represents error item
  */
-class Error
+class Error implements ErrorInterface
 {
-    /**
-     * @var string
-     */
-    private $message;
-
-    /**
-     * @var string
-     */
-    private $code;
-
-    /**
-     * @var int
-     */
-    private $cartItemPosition;
-
     /**
      * @param string $message
      * @param string $code
      * @param int $cartItemPosition
      */
-    public function __construct(string $message, string $code, int $cartItemPosition)
-    {
-        $this->message = $message;
-        $this->code = $code;
-        $this->cartItemPosition = $cartItemPosition;
+    public function __construct(
+        private readonly string $message,
+        private readonly string $code,
+        private readonly int $cartItemPosition
+    ) {
     }
 
     /**

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -16,7 +16,7 @@
             <description value="Support quick search with Partial word search using ES"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-34205"/>
-            <group value="SearchEngineElasticsearch"/>
+            <group value="SearchEngine"/>
             <group value="pr_exclude"/>
         </annotations>
         <before>
@@ -31,7 +31,9 @@
             <createData entity="ApiSimpleProductWithNoSpace" stepKey="product3">
                 <requiredEntity createDataKey="newCategory"/>
             </createData>
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <deleteData createDataKey="product1" stepKey="deleteProduct1"/>

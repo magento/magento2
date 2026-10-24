@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -54,5 +54,7 @@
         <!-- Required attention section -->
         <element name="removeProductBySku" type="button" selector="//div[contains(., '{{sku}}')]/ancestor::tbody//button" parameterized="true" timeout="30"/>
         <element name="failedItemBySku" type="block" selector="//div[contains(.,'{{sku}}')]/ancestor::tbody" parameterized="true" timeout="30"/>
+        <element name="attributeText" selector="//tbody[@class='cart item']//a[text()='{{product_name}}']/../..//dl//dt[text()='{{attribute_name}}']/..//dd[contains(text(),'{{attribute_option}}')]" type="text" parameterized="true"/>
+        <element name="ProductErrorMessageByName" type="text" selector="//a[text()='{{productName}}']/ancestor::strong/following-sibling::div[contains(@class, 'cart item message error')]//div" parameterized="true"/>
     </section>
 </sections>

@@ -1,18 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes;
 
 /**
  * Bundle Special Price Attribute Block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Special extends \Magento\Catalog\Block\Adminhtml\Form\Renderer\Fieldset\Element
 {
     /**
+     * Return the HTML for this element
+     *
      * @return string
      */
     public function getElementHtml()

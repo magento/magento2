@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\ResourceModel\Order\Shipment;
 
@@ -11,31 +11,25 @@ use Magento\Sales\Model\Spi\ShipmentTrackResourceInterface;
 
 /**
  * Flat sales order shipment comment resource
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Track extends SalesResource implements ShipmentTrackResourceInterface
 {
     /**
-     * Event prefix
-     *
      * @var string
      */
     protected $_eventPrefix = 'sales_order_shipment_track_resource';
 
     /**
-     * Validator
-     *
      * @var \Magento\Sales\Model\Order\Shipment\Track\Validator
      */
     protected $validator;
 
     /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param \Magento\Sales\Model\ResourceModel\Attribute $attribute
-     * @param \Magento\SalesSequence\Model\Manager $sequenceManager
      * @param Snapshot $entitySnapshot
      * @param \Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite $entityRelationComposite
+     * @param \Magento\Sales\Model\ResourceModel\Attribute $attribute
+     * @param \Magento\SalesSequence\Model\Manager $sequenceManager
      * @param \Magento\Sales\Model\Order\Shipment\Track\Validator $validator
      * @param string $connectionName
      */

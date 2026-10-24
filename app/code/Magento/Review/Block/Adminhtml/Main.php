@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -67,7 +67,7 @@ class Main extends \Magento\Backend\Block\Widget\Grid\Container
         \Magento\Framework\Registry $registry,
         \Magento\Customer\Helper\View $customerViewHelper,
         array $data = [],
-        ProductCollectionFactory $productCollectionFactory = null
+        ?ProductCollectionFactory $productCollectionFactory = null
     ) {
         $this->_coreRegistry = $registry;
         $this->customerRepository = $customerRepository;

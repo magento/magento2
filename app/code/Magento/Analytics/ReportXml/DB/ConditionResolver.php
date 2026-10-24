@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Analytics\ReportXml\DB;
@@ -140,6 +140,7 @@ class ConditionResolver
             $parts = [];
             foreach ($filter['condition'] as $condition) {
                 if (isset($condition['type']) && $condition['type'] == 'variable') {
+                    // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                     $selectBuilder->setParams(array_merge($selectBuilder->getParams(), [$condition['_value']]));
                 }
                 $parts[] = $this->getCondition(

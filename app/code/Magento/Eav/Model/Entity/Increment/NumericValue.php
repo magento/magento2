@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Eav\Model\Entity\Increment;
 
@@ -27,9 +27,10 @@ class NumericValue extends \Magento\Eav\Model\Entity\Increment\AbstractIncrement
     public function getNextId()
     {
         $last = $this->getLastId();
+        $prefix = (string)$this->getPrefix();
 
-        if (is_string($last) && '' !== $last && strpos($last, (string) $this->getPrefix()) === 0) {
-            $last = (int)substr($last, strlen($this->getPrefix()));
+        if (is_string($last) && '' !== $last && strpos($last, $prefix) === 0) {
+            $last = (int)substr($last, strlen($prefix));
         } else {
             $last = (int)$last;
         }

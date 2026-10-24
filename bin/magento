@@ -1,8 +1,8 @@
 #!/usr/bin/env php
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 if (PHP_SAPI !== 'cli') {
@@ -23,6 +23,13 @@ try {
     $application->run();
 } catch (\Throwable $e) {
     while ($e) {
+        if ($e->getFile()) {
+            echo sprintf("\nThere is an error in %s", $e->getFile());
+            if ($e->getLine()) {
+                echo sprintf(" at line: %d", $e->getLine());
+            }
+            echo "\n";
+        }
         echo $e->getMessage();
         echo $e->getTraceAsString();
         echo "\n\n";

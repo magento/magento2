@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Webapi\Rest;
@@ -103,7 +103,7 @@ class Request extends \Magento\Framework\Webapi\Request
         $qualityToTypes = [];
         $orderedTypes = [];
 
-        foreach (preg_split('/,\s*/', $this->getHeader('Accept')) as $definition) {
+        foreach (preg_split('/,\s*/', $this->getHeader('Accept') ?? '') as $definition) {
             $typeWithQ = explode(';', $definition);
             $mimeType = trim(array_shift($typeWithQ));
 
@@ -157,7 +157,6 @@ class Request extends \Magento\Framework\Webapi\Request
     public function getContentType()
     {
         $headerValue = $this->getHeader('Content-Type');
-
         if (!$headerValue) {
             throw new \Magento\Framework\Exception\InputException(new Phrase('Content-Type header is empty.'));
         }

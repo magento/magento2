@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Ui\DataProvider;
 
@@ -70,6 +70,7 @@ class CatalogEavValidationRules
             case 'validate-digits':
             case 'validate-email':
             case 'validate-url':
+            case 'validate-trailing-hyphen':
             case 'validate-alpha':
             case 'validate-alphanum':
                 $rules = array_merge($rules, [$class => true]);

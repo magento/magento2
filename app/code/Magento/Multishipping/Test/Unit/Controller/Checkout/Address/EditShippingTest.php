@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -22,6 +22,7 @@ use Magento\Framework\View\Result\Page;
 use Magento\Multishipping\Controller\Checkout\Address\EditShipping;
 use Magento\Multishipping\Helper\Data;
 use Magento\Multishipping\Model\Checkout\Type\Multishipping;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Multishipping\Model\Checkout\Type\Multishipping\State;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -31,6 +32,8 @@ use PHPUnit\Framework\TestCase;
  */
 class EditShippingTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var EditShipping
      */
@@ -99,23 +102,16 @@ class EditShippingTest extends TestCase
             $this->createMock(Multishipping::class);
         $this->titleMock = $this->createMock(Title::class);
         $this->layoutMock = $this->createMock(Layout::class);
-        $this->viewMock = $this->getMockForAbstractClass(ViewInterface::class);
-        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
-        $this->stateMock =
-            $this->createMock(State::class);
+        $this->viewMock = $this->createMock(ViewInterface::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->stateMock = $this->createMock(State::class);
         $valueMap = [
             [State::class, $this->stateMock],
             [Multishipping::class, $this->checkoutMock]
         ];
         $this->objectManagerMock->expects($this->any())->method('get')->willReturnMap($valueMap);
-        $this->request = $this->getMockBuilder(RequestInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMockForAbstractClass();
-        $response = $this->getMockBuilder(ResponseInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMockForAbstractClass();
+        $this->request = $this->createMock(RequestInterface::class);
+        $response = $this->createMock(ResponseInterface::class);
         $contextMock = $this->createMock(Context::class);
         $contextMock->expects($this->atLeastOnce())
             ->method('getRequest')
@@ -125,13 +121,11 @@ class EditShippingTest extends TestCase
             ->willReturn($response);
         $contextMock->expects($this->any())->method('getView')->willReturn($this->viewMock);
         $contextMock->expects($this->any())->method('getObjectManager')->willReturn($this->objectManagerMock);
-        $this->addressFormMock =
-            $this->getMockBuilder(Edit::class)
-                ->addMethods(['setTitle', 'setSuccessUrl', 'setBackUrl', 'setErrorUrl'])
-                ->onlyMethods(['getTitle'])
-                ->disableOriginalConstructor()
-                ->getMock();
-        $this->urlMock = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->addressFormMock = $this->createPartialMockWithReflection(
+            Edit::class,
+            ['setTitle', 'setSuccessUrl', 'setBackUrl', 'setErrorUrl', 'getTitle']
+        );
+        $this->urlMock = $this->createMock(UrlInterface::class);
         $contextMock->expects($this->any())->method('getUrl')->willReturn($this->urlMock);
         $this->pageMock = $this->createMock(Page::class);
         $this->pageMock->expects($this->any())->method('getConfig')->willReturn($this->configMock);
@@ -162,10 +156,7 @@ class EditShippingTest extends TestCase
             ->method('setTitle')
             ->with('Edit Shipping Address')
             ->willReturnSelf();
-        $helperMock = $this->getMockBuilder(Data::class)
-            ->addMethods(['__'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $helperMock = $this->createPartialMockWithReflection(Data::class, ['__']);
         $helperMock->expects($this->any())->method('__')->willReturn('Edit Shipping Address');
         $this->addressFormMock->expects($this->once())->method('setSuccessUrl')->with('success/url')->willReturnSelf();
         $this->addressFormMock->expects($this->once())->method('setErrorUrl')->with('error/url')->willReturnSelf();

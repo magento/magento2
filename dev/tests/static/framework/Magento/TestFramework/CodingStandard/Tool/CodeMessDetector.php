@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -21,16 +21,12 @@ class CodeMessDetector implements ToolInterface
     private $rulesetFile;
 
     /**
-     * Report file
-     *
      * @var string
      */
     private $reportFile;
 
     /**
-     * Constructor
-     *
-     * @param string $rulesetDir \Directory that locates the inspection rules
+     * @param string $rulesetFile \Directory that locates the inspection rules
      * @param string $reportFile Destination file to write inspection report to
      */
     public function __construct($rulesetFile, $reportFile)
@@ -50,27 +46,26 @@ class CodeMessDetector implements ToolInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function run(array $whiteList)
     {
         if (empty($whiteList)) {
-            return \PHPMD\TextUI\Command::EXIT_SUCCESS;
+            return class_exists(\PHPMD\TextUI\ExitCode::class) ? \PHPMD\TextUI\ExitCode::Success : 0;
         }
 
-        $commandLineArguments = [
-            'run_file_mock', //emulate script name in console arguments
-            implode(',', $whiteList),
-            'text', //report format
-            $this->rulesetFile,
-            '--reportfile',
-            $this->reportFile,
-        ];
-
-        $options = new \PHPMD\TextUI\CommandLineOptions($commandLineArguments);
-
         $command = new \PHPMD\TextUI\Command();
-
-        return $command->run($options, new \PHPMD\RuleSetFactory());
+        // Build ArrayInput matching PHPMD's Symfony Command definition:
+        $input = new \Symfony\Component\Console\Input\ArrayInput(
+            [
+                'paths' => array_values($whiteList),
+                '--format' => 'text',
+                '--ruleset' => [realpath($this->rulesetFile)],
+                '--reportfile-text' => $this->reportFile,
+            ],
+            $command->getDefinition()
+        );
+        $output = new \Symfony\Component\Console\Output\NullOutput();
+        return $command->run($input, $output);
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,7 @@ use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Backend\Model\View\Result\RedirectFactory;
 use Magento\Framework\App\ActionFlag;
 use Magento\Framework\App\Request\Http;
+use Magento\Framework\App\Response\Http as ResponseHttp;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Message\Manager;
 use Magento\Framework\ObjectManagerInterface;
@@ -31,6 +32,7 @@ use PHPUnit\Framework\TestCase;
  */
 class CancelTest extends TestCase
 {
+
     /**
      * @var Cancel
      */
@@ -106,41 +108,27 @@ class CancelTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->creditmemoManagementMock = $this->getMockForAbstractClass(CreditmemoManagementInterface::class);
-        $this->requestMock = $this->getMockBuilder(Http::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->responseMock = $this->getMockBuilder(\Magento\Framework\App\Response\Http::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
-        $this->messageManagerMock = $this->getMockBuilder(Manager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->sessionMock = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->helperMock = $this->getMockBuilder(Data::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->creditmemoManagementMock = $this->createMock(CreditmemoManagementInterface::class);
+        $this->requestMock = $this->createMock(Http::class);
+        $this->responseMock = $this->createMock(ResponseHttp::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->messageManagerMock = $this->createMock(Manager::class);
+        $this->sessionMock = $this->createMock(Session::class);
+        $this->helperMock = $this->createMock(Data::class);
         $this->resultRedirectFactoryMock = $this->getMockBuilder(
             RedirectFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->resultForwardFactoryMock = $this->getMockBuilder(
             ForwardFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
-        $this->resultRedirectMock = $this->getMockBuilder(Redirect::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->resultForwardMock = $this->getMockBuilder(Forward::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resultRedirectMock = $this->createMock(Redirect::class);
+        $this->resultForwardMock = $this->createMock(Forward::class);
         $this->contextMock = $this->getMockBuilder(Context::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getRequest',
                     'getResponse',
@@ -157,9 +145,7 @@ class CancelTest extends TestCase
         $this->contextMock->expects($this->any())
             ->method('getHelper')
             ->willReturn($this->helperMock);
-        $this->actionFlagMock = $this->getMockBuilder(ActionFlag::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->actionFlagMock = $this->createMock(ActionFlag::class);
         $this->contextMock->expects($this->any())
             ->method('getSession')
             ->willReturn($this->sessionMock);

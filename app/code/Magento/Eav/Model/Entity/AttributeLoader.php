@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Eav\Model\Entity;
 
@@ -55,7 +55,7 @@ class AttributeLoader implements AttributeLoaderInterface
      * @return AbstractEntity
      * @throws LocalizedException
      */
-    public function loadAllAttributes(AbstractEntity $resource, DataObject $object = null)
+    public function loadAllAttributes(AbstractEntity $resource, ?DataObject $object = null)
     {
         $attributes = $this->config->getEntityAttributes($resource->getEntityType(), $object);
         $attributeCodes = array_keys($attributes);

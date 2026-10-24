@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -21,12 +21,20 @@ class CreateBuyRequest
     private $dataObjectFactory;
 
     /**
+     * @var CreateBuyRequestDataProviderInterface[]
+     */
+    private $providers;
+
+    /**
      * @param DataObjectFactory $dataObjectFactory
+     * @param array $providers
      */
     public function __construct(
-        DataObjectFactory $dataObjectFactory
+        DataObjectFactory $dataObjectFactory,
+        array $providers = []
     ) {
         $this->dataObjectFactory = $dataObjectFactory;
+        $this->providers = $providers;
     }
 
     /**
@@ -39,21 +47,30 @@ class CreateBuyRequest
     public function execute(float $qty, array $customizableOptionsData): DataObject
     {
         $customizableOptions = [];
+        $enteredOptions = [];
         foreach ($customizableOptionsData as $customizableOption) {
             if (isset($customizableOption['value_string'])) {
-                $customizableOptions[$customizableOption['id']] = $this->convertCustomOptionValue(
-                    $customizableOption['value_string']
-                );
+                if (!is_numeric($customizableOption['id'])) {
+                    $enteredOptions[$customizableOption['id']] = $customizableOption['value_string'];
+                } else {
+                    $customizableOptions[$customizableOption['id']] = $this->convertCustomOptionValue(
+                        $customizableOption['value_string']
+                    );
+                }
             }
         }
 
-        $dataArray = [
-            'data' => [
+        $requestData = [
+            [
                 'qty' => $qty,
-                'options' => $customizableOptions,
-            ],
+                'options' => $customizableOptions
+            ]
         ];
-        return $this->dataObjectFactory->create($dataArray);
+        foreach ($this->providers as $provider) {
+            $requestData[] = $provider->execute($enteredOptions);
+        }
+
+        return $this->dataObjectFactory->create(['data' => array_merge([], ...$requestData)]);
     }
 
     /**

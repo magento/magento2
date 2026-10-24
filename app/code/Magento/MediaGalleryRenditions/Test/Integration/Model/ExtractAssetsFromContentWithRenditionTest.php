@@ -1,8 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
- *
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +10,7 @@ namespace Magento\MediaGalleryRenditions\Test\Integration\Model;
 use Magento\MediaContentApi\Api\ExtractAssetsFromContentInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for Extracting assets from rendition paths/urls in content
@@ -35,11 +35,10 @@ class ExtractAssetsFromContentWithRenditionTest extends TestCase
      * Assert rendition urls/path in the content are associated with an asset
      *
      * @magentoDataFixture Magento/MediaGallery/_files/media_asset.php
-     *
-     * @dataProvider contentProvider
      * @param string $content
      * @param array $assetIds
      */
+    #[DataProvider('contentProvider')]
     public function testExecute(string $content, array $assetIds): void
     {
         $assets = $this->extractAssetsFromContent->execute($content);
@@ -60,7 +59,7 @@ class ExtractAssetsFromContentWithRenditionTest extends TestCase
      *
      * @return array
      */
-    public function contentProvider()
+    public static function contentProvider()
     {
         return [
             'Empty Content' => [

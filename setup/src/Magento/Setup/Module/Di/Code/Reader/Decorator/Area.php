@@ -1,19 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
+
 namespace Magento\Setup\Module\Di\Code\Reader\Decorator;
 
 use Magento\Setup\Module\Di\Code\Reader\ClassesScanner;
 use Magento\Setup\Module\Di\Code\Reader\ClassReaderDecorator;
 use Magento\Framework\Exception\FileSystemException;
 
-/**
- * Class Area
- *
- * @package Magento\Setup\Module\Di\Code\Reader\Decorator
- */
 class Area implements \Magento\Setup\Module\Di\Code\Reader\ClassesScannerInterface
 {
     /**
@@ -50,7 +46,7 @@ class Area implements \Magento\Setup\Module\Di\Code\Reader\ClassesScannerInterfa
     {
         $classes = [];
         foreach ($this->classesScanner->getList($path) as $className) {
-            $classes[$className] = $this->classReaderDecorator->getConstructor($className);
+            $classes[$className] = (array) $this->classReaderDecorator->getConstructor($className);
         }
 
         return $classes;

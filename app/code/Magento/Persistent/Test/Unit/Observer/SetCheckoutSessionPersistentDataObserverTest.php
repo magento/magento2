@@ -1,14 +1,14 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Persistent\Test\Unit\Observer;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Exception\LocalizedException;
@@ -16,11 +16,17 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Persistent\Helper\Data;
 use Magento\Persistent\Helper\Session;
 use Magento\Persistent\Observer\SetCheckoutSessionPersistentDataObserver;
+use Magento\Persistent\Model\Session as PersistentSession;
+use Magento\Checkout\Model\Session as CheckoutSession;
 use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\TestCase;
 
 class SetCheckoutSessionPersistentDataObserverTest extends TestCase
 {
+
+    use MockCreationTrait;
+
     /**
      * @var SetCheckoutSessionPersistentDataObserver
      */
@@ -37,17 +43,17 @@ class SetCheckoutSessionPersistentDataObserverTest extends TestCase
     private $sessionHelperMock;
 
     /**
-     * @var \Magento\Checkout\Model\Session|MockObject
+     * @var CheckoutSession|MockObject
      */
     private $checkoutSessionMock;
 
     /**
-     * @var \Magento\Customer\Model\Session|MockObject
+     * @var CustomerSession|MockObject
      */
     private $customerSessionMock;
 
     /**
-     * @var \Magento\Persistent\Model\Session|MockObject
+     * @var PersistentSession|MockObject
      */
     private $persistentSessionMock;
 
@@ -73,14 +79,14 @@ class SetCheckoutSessionPersistentDataObserverTest extends TestCase
     {
         $this->helperMock = $this->createMock(Data::class);
         $this->sessionHelperMock = $this->createMock(Session::class);
-        $this->checkoutSessionMock = $this->createMock(\Magento\Checkout\Model\Session::class);
-        $this->customerSessionMock = $this->createMock(\Magento\Customer\Model\Session::class);
+        $this->checkoutSessionMock = $this->createMock(CheckoutSession::class);
+        $this->customerSessionMock = $this->createMock(CustomerSession::class);
         $this->observerMock = $this->createMock(Observer::class);
         $this->eventMock = $this->createPartialMock(Event::class, ['getData']);
-        $this->persistentSessionMock = $this->getMockBuilder(\Magento\Persistent\Model\Session::class)
-            ->addMethods(['getCustomerId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->persistentSessionMock = $this->createPartialMockWithReflection(
+            PersistentSession::class,
+            ['getCustomerId']
+        );
         $this->customerRepositoryMock = $this->createMock(
             CustomerRepositoryInterface::class
         );
@@ -147,7 +153,7 @@ class SetCheckoutSessionPersistentDataObserverTest extends TestCase
             ->willReturn($this->persistentSessionMock);
         $this->customerRepositoryMock->expects($this->once())
             ->method('getById')
-            ->willReturn(true); //?
+            ->willReturn(true);
         $this->checkoutSessionMock->expects($this->never())
             ->method('setLoadInactive');
         $this->checkoutSessionMock->expects($this->once())

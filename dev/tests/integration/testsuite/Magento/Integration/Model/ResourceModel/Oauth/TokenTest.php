@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Integration\Model\ResourceModel\Oauth;
@@ -9,6 +9,7 @@ namespace Magento\Integration\Model\ResourceModel\Oauth;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Oauth\Helper\Oauth;
 use Magento\Integration\Model\Oauth\Token;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Integration test for @see \Magento\Integration\Model\ResourceModel\Oauth\Token
@@ -131,9 +132,9 @@ class TokenTest extends \PHPUnit\Framework\TestCase
      * @param array $expectedRemovedTokenNumbers
      * @param array $expectedPreservedTokenNumbers
      *
-     * @dataProvider deleteExpiredTokenUsingObserverDataProvider
      * @covers \Magento\Integration\Cron\CleanExpiredTokens::execute
      */
+    #[DataProvider('deleteExpiredTokenUsingObserverDataProvider')]
     public function testDeleteExpiredTokenUsingObserver(
         $secondsAfterBaseCreatedTimestamp,
         $expectedRemovedTokenNumbers,
@@ -155,7 +156,7 @@ class TokenTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function deleteExpiredTokenUsingObserverDataProvider()
+    public static function deleteExpiredTokenUsingObserverDataProvider()
     {
         return [
             "Clean up long before default admin and default customer token life time" => [
@@ -196,9 +197,9 @@ class TokenTest extends \PHPUnit\Framework\TestCase
      * @param $expectedPreservedTokenNumbers
      *
      * @magentoDbIsolation enabled
-     * @dataProvider deleteExpiredTokensDataProvider
      * @covers \Magento\Integration\Model\ResourceModel\Oauth\Token::deleteExpiredTokens
      */
+    #[DataProvider('deleteExpiredTokensDataProvider')]
     public function testDeleteExpiredTokens(
         $secondsAfterBaseCreatedTimestamp,
         $tokenTypesToClean,
@@ -216,7 +217,7 @@ class TokenTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function deleteExpiredTokensDataProvider()
+    public static function deleteExpiredTokensDataProvider()
     {
         return [
           "Clean up for admin tokens which were created ('token_lifetime' + 1 second) ago" => [

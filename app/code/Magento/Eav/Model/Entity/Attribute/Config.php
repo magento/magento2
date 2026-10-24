@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Eav\Model\Entity\Attribute;
 
@@ -27,7 +27,7 @@ class Config extends \Magento\Framework\Config\Data
         \Magento\Eav\Model\Entity\Attribute\Config\Reader $reader,
         \Magento\Framework\Config\CacheInterface $cache,
         $cacheId = 'eav_attributes',
-        SerializerInterface $serializer = null
+        ?SerializerInterface $serializer = null
     ) {
         parent::__construct($reader, $cache, $cacheId, $serializer);
     }

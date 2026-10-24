@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CatalogSearch\Model\ResourceModel\Advanced;
 
 use Magento\CatalogSearch\Model\Indexer\Fulltext;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test class for \Magento\CatalogSearch\Model\ResourceModel\Advanced\Collection.
@@ -31,9 +32,9 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider filtersDataProvider
      * @magentoDataFixture Magento/Framework/Search/_files/products.php
      */
+    #[DataProvider('filtersDataProvider')]
     public function testLoadWithFilterNoFilters($filters, $expectedCount)
     {
         // addFieldsToFilter will load filters,
@@ -43,7 +44,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertCount($expectedCount, $items);
     }
 
-    public function filtersDataProvider()
+    public static function filtersDataProvider()
     {
         return [
             [['name' => ['like' => 'shorts'], 'description' => ['like' => 'green']], 1],

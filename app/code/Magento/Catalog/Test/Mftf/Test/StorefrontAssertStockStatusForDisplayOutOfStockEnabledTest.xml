@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontAssertStockStatusForDisplayOutOfStockEnabledTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Manage Out Of Stock products In Storefront"/>
+            <title value="Ensure Catalog Display with 'Out of Stock Products' Enabled"/>
+            <description value="Verifying catalog data when display out of stock products is enabled In Storefront"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="AC-6393"/>
+        </annotations>
+        <before>
+            <!--Create Category-->
+            <createData entity="CategoryB" stepKey="createCategory"/>
+            <!--Create Simple Product-->
+            <createData entity="productA" stepKey="createOutStockProduct">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="price">15.00</field>
+                <field key="quantity">0</field>
+            </createData>
+            <createData entity="productA" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="price">20.00</field>
+                <field key="quantity">0</field>
+            </createData>
+            <createData entity="productA" stepKey="createSimpleOutStockProduct">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="price">25.00</field>
+                <field key="quantity">0</field>
+            </createData>
+            <createData entity="productA" stepKey="createProductNoQuantity">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="price">30.00</field>
+                <field key="quantity">0</field>
+            </createData>
+        </before>
+        <after>
+            <!-- Set Magento back to default configuration -->
+            <magentoCLI command="config:set {{CatalogInventoryOptionsShowOutOfStockDisable.path}} {{CatalogInventoryOptionsShowOutOfStockDisable.value}}" stepKey="setConfigShowOutOfStockFalse"/>
+            <!-- Delete created entity -->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createOutStockProduct" stepKey="deleteFirstProduct"/>
+            <deleteData createDataKey="createSimpleOutStockProduct" stepKey="deleteSecondProduct"/>
+            <deleteData createDataKey="createProductNoQuantity" stepKey="deleteThirdProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <!-- Logout From Customer and Admin -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Step1: Login as admin -->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+        <!-- Step2: Stores - Configuration - Catalog - Inventory - Stock options - Enable display out of stock products to yes -->
+        <magentoCLI command="config:set {{CatalogInventoryOptionsShowOutOfStockEnable.path}} {{CatalogInventoryOptionsShowOutOfStockEnable.value}}" stepKey="setConfigShowOutOfStockTrue"/>
+        <!-- Step3: Clear cache and verify catalog on front end all categories -->
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+            <argument name="tags" value="config full_page"/>
+        </actionGroup>
+        <!-- Go to storefront category page -->
+        <actionGroup ref="GoToStorefrontCategoryPageByParametersActionGroup" stepKey="GoToStorefrontCategoryPage3">
+            <argument name="category" value="$$createCategory.custom_attributes[url_key]$$"/>
+            <argument name="mode" value="list"/>
+            <argument name="numOfProductsPerPage" value="10"/>
+            <argument name="sortBy" value="price"/>
+            <argument name="sort" value="desc"/>
+        </actionGroup>
+        <waitForText userInput="$$createProductNoQuantity.name$$" selector="{{StorefrontCategoryMainSection.lineProductName('1')}}" stepKey="seeFirstProductNameLine"/>
+        <waitForText userInput="$$createSimpleOutStockProduct.name$$" selector="{{StorefrontCategoryMainSection.lineProductName('2')}}" stepKey="seeSecondProductNameLine"/>
+        <waitForText userInput="$$createProduct.name$$" selector="{{StorefrontCategoryMainSection.lineProductName('3')}}" stepKey="seeThirdProductNameLine"/>
+        <waitForText userInput="$$createOutStockProduct.name$$" selector="{{StorefrontCategoryMainSection.lineProductName('4')}}" stepKey="seeForthProductNameLine"/>
+        <!-- Step4: Apply filters and verify catalog -->
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="goToFirstProductPage">
+            <argument name="productUrlKey" value="$createProductNoQuantity.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductStockStatusOnProductPageActionGroup" stepKey="seeFirstProductStatusInStoreFront">
+            <argument name="productStockStatus" value="In Stock"/>
+        </actionGroup>
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="goToSecondProductPage">
+            <argument name="productUrlKey" value="$createSimpleOutStockProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductStockStatusOnProductPageActionGroup" stepKey="seeSecondProductStatusInStoreFront">
+            <argument name="productStockStatus" value="In Stock"/>
+        </actionGroup>
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="goToThirdProductPage">
+            <argument name="productUrlKey" value="$createProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductStockStatusOnProductPageActionGroup" stepKey="seeThirdProductStatusInStoreFront">
+            <argument name="productStockStatus" value="In Stock"/>
+        </actionGroup>
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="goToProductPage">
+            <argument name="productUrlKey" value="$createOutStockProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductStockStatusOnProductPageActionGroup" stepKey="seeProductStatusInStoreFront">
+            <argument name="productStockStatus" value="In Stock"/>
+        </actionGroup>
+    </test>
+</tests>

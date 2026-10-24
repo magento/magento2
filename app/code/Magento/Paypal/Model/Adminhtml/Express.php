@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -84,8 +84,8 @@ class Express extends PaypalExpress
         TransactionRepositoryInterface $transactionRepository,
         BuilderInterface $transactionBuilder,
         AuthorizeCommand $authCommand,
-        AbstractResource $resource = null,
-        AbstractDb $resourceCollection = null,
+        ?AbstractResource $resource = null,
+        ?AbstractDb $resourceCollection = null,
         $data = []
     ) {
         $this->authCommand = $authCommand;

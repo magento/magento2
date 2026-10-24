@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -66,7 +66,7 @@ class QueryTest extends TestCase
 
         $this->selectMock =
             $this->createPartialMock(Select::class, ['reset', 'columns', 'getConnection']);
-        $this->criteriaMock = $this->getMockForAbstractClass(
+        $this->criteriaMock = $this->createMock(
             CriteriaInterface::class,
             [],
             '',
@@ -75,7 +75,7 @@ class QueryTest extends TestCase
             true,
             []
         );
-        $this->resourceMock = $this->getMockForAbstractClass(
+        $this->resourceMock = $this->createMock(
             AbstractDb::class,
             [],
             '',
@@ -85,8 +85,8 @@ class QueryTest extends TestCase
             ['getIdFieldName']
         );
         $this->fetchStmtMock = $this->createPartialMock(\Zend_Db_Statement_Pdo::class, ['fetch']);
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
-        $this->fetchStrategyMock = $this->getMockForAbstractClass(
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->fetchStrategyMock = $this->createMock(
             FetchStrategyInterface::class,
             [],
             '',

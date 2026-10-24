@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\App\Router;
@@ -82,10 +82,10 @@ class ActionList
         $actionInterface = ActionInterface::class,
         $cacheKey = 'app_action_list',
         $reservedWords = [],
-        SerializerInterface $serializer = null,
-        State $state = null,
-        DirectoryList $directoryList = null,
-        ReflectionClassFactory $reflectionClassFactory = null
+        ?SerializerInterface $serializer = null,
+        ?State $state = null,
+        ?DirectoryList $directoryList = null,
+        ?ReflectionClassFactory $reflectionClassFactory = null
     ) {
         $this->reservedWords = array_merge($reservedWords, $this->reservedWords);
         $this->actionInterface = $actionInterface;
@@ -130,11 +130,11 @@ class ActionList
         if ($area) {
             $area = '\\' . $area;
         }
-        $namespace = strtolower($namespace);
+        $namespace = $namespace !== null ? strtolower($namespace) : '';
         if (strpos($namespace, self::NOT_ALLOWED_IN_NAMESPACE_PATH) !== false) {
             return null;
         }
-        if (in_array(strtolower($action), $this->reservedWords)) {
+        if ($action && in_array(strtolower($action), $this->reservedWords)) {
             $action .= 'action';
         }
         $fullPath = str_replace(

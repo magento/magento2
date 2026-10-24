@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Shipping\Model;
@@ -130,7 +130,7 @@ class Shipping implements RateCollectorInterface
         \Magento\Directory\Model\RegionFactory $regionFactory,
         \Magento\Framework\Math\Division $mathDivision,
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
-        RateRequestFactory $rateRequestFactory = null,
+        ?RateRequestFactory $rateRequestFactory = null,
         ?PackageResultFactory $packageResultFactory = null,
         ?CarrierResultFactory $carrierResultFactory = null
     ) {
@@ -273,7 +273,7 @@ class Shipping implements RateCollectorInterface
      */
     private function prepareCarrier(string $carrierCode, RateRequest $request): AbstractCarrier
     {
-        $carrier = $this->isShippingCarrierAvailable($carrierCode)
+        $carrier = $this->isShippingCarrierAvailable($carrierCode, $request->getStoreId())
             ? $this->_carrierFactory->create($carrierCode, $request->getStoreId())
             : null;
         if (!$carrier) {
@@ -363,7 +363,7 @@ class Shipping implements RateCollectorInterface
         $fullItems = [];
         $weightItems = [];
 
-        $maxWeight = (double)$carrier->getConfigData('max_package_weight');
+        $maxWeight = (float)$carrier->getConfigData('max_package_weight');
 
         /** @var $item \Magento\Quote\Model\Quote\Item */
         foreach ($allItems as $item) {
@@ -541,13 +541,15 @@ class Shipping implements RateCollectorInterface
      * Checks availability of carrier.
      *
      * @param string $carrierCode
+     * @param null|int $storeId
      * @return bool
      */
-    private function isShippingCarrierAvailable(string $carrierCode): bool
+    private function isShippingCarrierAvailable(string $carrierCode, ?int $storeId = null): bool
     {
         return $this->_scopeConfig->isSetFlag(
             'carriers/' . $carrierCode . '/' . $this->_availabilityConfigField,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $storeId
         );
     }
 }

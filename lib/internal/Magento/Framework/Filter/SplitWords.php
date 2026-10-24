@@ -1,11 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Filter;
 
-class SplitWords implements \Zend_Filter_Interface
+use Laminas\Filter\FilterInterface;
+
+class SplitWords implements FilterInterface
 {
     /**
      * @var bool
@@ -43,7 +45,7 @@ class SplitWords implements \Zend_Filter_Interface
     public function filter($str)
     {
         $result = [];
-        $split = preg_split('#' . $this->wordSeparatorRegexp . '#siu', $str, -1, PREG_SPLIT_NO_EMPTY);
+        $split = preg_split('#' . $this->wordSeparatorRegexp . '#siu', (string)$str, -1, PREG_SPLIT_NO_EMPTY);
         foreach ($split as $word) {
             if ($this->uniqueOnly) {
                 $result[$word] = $word;

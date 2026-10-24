@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\ProductAlert\Test\Unit\Block\Product\View;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -57,13 +58,13 @@ class StockTest extends TestCase
             Product::class,
             ['isAvailable', 'getId', '__wakeup']
         );
-        $this->_product->expects($this->any())->method('getId')->willReturn(1);
+        $this->_product->method('getId')->willReturn(1);
         $this->_registry = $this->getMockBuilder(
             Registry::class
         )->disableOriginalConstructor()
-            ->setMethods(
-            ['registry']
-        )->getMock();
+            ->onlyMethods(
+                ['registry']
+            )->getMock();
         $this->_block = $objectManager->getObject(
             Stock::class,
             ['helper' => $this->_helper, 'registry' => $this->_registry]
@@ -106,8 +107,8 @@ class StockTest extends TestCase
     /**
      * @param bool $stockAlertAllowed
      * @param bool $productAvailable
-     * @dataProvider setTemplateStockUrlNotAllowedDataProvider
      */
+    #[DataProvider('setTemplateStockUrlNotAllowedDataProvider')]
     public function testSetTemplateStockUrlNotAllowed($stockAlertAllowed, $productAvailable)
     {
         $this->_helper->expects(
@@ -119,7 +120,7 @@ class StockTest extends TestCase
         );
         $this->_helper->expects($this->never())->method('getSaveUrl');
 
-        $this->_product->expects($this->any())->method('isAvailable')->willReturn($productAvailable);
+        $this->_product->method('isAvailable')->willReturn($productAvailable);
 
         $this->_registry->expects(
             $this->any()
@@ -141,7 +142,7 @@ class StockTest extends TestCase
     /**
      * @return array
      */
-    public function setTemplateStockUrlNotAllowedDataProvider()
+    public static function setTemplateStockUrlNotAllowedDataProvider()
     {
         return [
             'stock alert not allowed' => [false, false],

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,8 +11,10 @@ use Magento\Framework\Api\CustomAttributesDataInterface;
 
 /**
  * Product attribute adapter for elasticsearch context.
+ * @see this class will be responsible for ES only
  *
  * @api
+ * @deprecated Elasticsearch is no longer supported by Adobe
  */
 class AttributeAdapter
 {
@@ -137,7 +139,7 @@ class AttributeAdapter
     public function isComplexType(): bool
     {
         return in_array($this->getAttribute()->getFrontendInput(), ['select', 'multiselect'], true)
-            || $this->getAttribute()->usesSource();
+            || ($this->getAttribute()->usesSource() && $this->getAttribute()->getFrontendInput() !== 'boolean');
     }
 
     /**

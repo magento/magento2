@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Customer\Api;
@@ -85,7 +85,7 @@ class AccountManagementMeTest extends \Magento\TestFramework\TestCase\WebapiAbst
         $this->customerAccountManagement = Bootstrap::getObjectManager()
             ->get(\Magento\Customer\Api\AccountManagementInterface::class);
 
-        $this->customerHelper = new CustomerHelper();
+        $this->customerHelper = new CustomerHelper($this->name());
         $this->customerData = $this->customerHelper->createSampleCustomer();
         $this->tokenService = Bootstrap::getObjectManager()->get(CustomerTokenServiceInterface::class);
 

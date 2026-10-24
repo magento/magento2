@@ -1,11 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Sales\Controller\Adminhtml\Order;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Tests for order export via admin grid.
@@ -18,10 +20,10 @@ class ExportTest extends ExportBase
      * @magentoConfigFixture general/locale/timezone America/Chicago
      * @magentoConfigFixture test_website general/locale/timezone America/Adak
      * @magentoDataFixture Magento/Sales/_files/order_with_invoice_shipment_creditmemo_on_second_website.php
-     * @dataProvider exportOrderDataProvider
      * @param string $format
      * @return void
      */
+    #[DataProvider('exportOrderDataProvider')]
     public function testExportOrder(string $format): void
     {
         $order = $this->getOrder('200000001');
@@ -42,7 +44,7 @@ class ExportTest extends ExportBase
     /**
      * @return array
      */
-    public function exportOrderDataProvider(): array
+    public static function exportOrderDataProvider(): array
     {
         return [
             'order_grid_in_csv' => ['format' => ExportBase::CSV_FORMAT],

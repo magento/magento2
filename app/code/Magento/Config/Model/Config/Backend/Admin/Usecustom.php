@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -40,8 +40,8 @@ class Usecustom extends \Magento\Framework\App\Config\Value
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
         \Magento\Framework\App\Config\Storage\WriterInterface $configWriter,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_configWriter = $configWriter;
@@ -78,16 +78,16 @@ class Usecustom extends \Magento\Framework\App\Config\Value
         $value = $this->getValue();
 
         if (!$value) {
-            $this->_configWriter->delete(
+            $paths = [
                 Custom::XML_PATH_SECURE_BASE_URL,
-                Custom::CONFIG_SCOPE,
-                Custom::CONFIG_SCOPE_ID
-            );
-            $this->_configWriter->delete(
                 Custom::XML_PATH_UNSECURE_BASE_URL,
-                Custom::CONFIG_SCOPE,
-                Custom::CONFIG_SCOPE_ID
-            );
+                Custom::XML_PATH_SECURE_BASE_LINK_URL,
+                Custom::XML_PATH_UNSECURE_BASE_LINK_URL,
+            ];
+
+            foreach ($paths as $path) {
+                $this->_configWriter->delete($path, Custom::CONFIG_SCOPE, Custom::CONFIG_SCOPE_ID);
+            }
         }
 
         return parent::afterSave();

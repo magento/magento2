@@ -1,18 +1,19 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Cms\Model\Page;
 
 use Magento\Cms\Model\Page;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Identity map of loaded pages.
  */
-class IdentityMap
+class IdentityMap implements ResetAfterRequestInterface
 {
     /**
      * @var Page[]
@@ -66,6 +67,14 @@ class IdentityMap
      * @return void
      */
     public function clear(): void
+    {
+        $this->pages = [];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
     {
         $this->pages = [];
     }

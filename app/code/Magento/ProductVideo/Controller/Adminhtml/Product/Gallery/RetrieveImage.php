@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\ProductVideo\Controller\Adminhtml\Product\Gallery;
@@ -21,7 +21,7 @@ class RetrieveImage extends \Magento\Backend\App\Action implements HttpPostActio
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Catalog::products';
+    public const ADMIN_RESOURCE = 'Magento_Catalog::products';
 
     /**
      * @var \Magento\Framework\Controller\Result\RawFactory
@@ -73,8 +73,8 @@ class RetrieveImage extends \Magento\Backend\App\Action implements HttpPostActio
      * @param \Magento\Framework\Image\AdapterFactory $imageAdapterFactory
      * @param \Magento\Framework\HTTP\Adapter\Curl $curl
      * @param \Magento\MediaStorage\Model\ResourceModel\File\Storage\File $fileUtility
-     * @param \Magento\Framework\Validator\ValidatorInterface $protocolValidator
-     * @param \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension $extensionValidator
+     * @param \Magento\Framework\Validator\ValidatorInterface|null $protocolValidator
+     * @param \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension|null $extensionValidator
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -84,8 +84,8 @@ class RetrieveImage extends \Magento\Backend\App\Action implements HttpPostActio
         \Magento\Framework\Image\AdapterFactory $imageAdapterFactory,
         \Magento\Framework\HTTP\Adapter\Curl $curl,
         \Magento\MediaStorage\Model\ResourceModel\File\Storage\File $fileUtility,
-        \Magento\Framework\Validator\ValidatorInterface $protocolValidator = null,
-        \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension $extensionValidator = null
+        ?\Magento\Framework\Validator\ValidatorInterface $protocolValidator = null,
+        ?\Magento\MediaStorage\Model\File\Validator\NotProtectedExtension $extensionValidator = null
     ) {
         parent::__construct($context);
         $this->resultRawFactory = $resultRawFactory;
@@ -103,6 +103,8 @@ class RetrieveImage extends \Magento\Backend\App\Action implements HttpPostActio
     }
 
     /**
+     * Execute retrieve image action
+     *
      * @return \Magento\Framework\Controller\Result\Raw
      */
     public function execute()
@@ -111,6 +113,7 @@ class RetrieveImage extends \Magento\Backend\App\Action implements HttpPostActio
         try {
             $remoteFileUrl = $this->getRequest()->getParam('remote_image');
             $this->validateRemoteFile($remoteFileUrl);
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $localFileName = Uploader::getCorrectFileName(basename($remoteFileUrl));
             $localTmpFileName = Uploader::getDispersionPath($localFileName) . DIRECTORY_SEPARATOR . $localFileName;
             $localFilePath = $baseTmpMediaPath . ($localTmpFileName);
@@ -163,6 +166,7 @@ class RetrieveImage extends \Magento\Backend\App\Action implements HttpPostActio
      */
     private function validateRemoteFileExtensions($filePath)
     {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $extension = pathinfo($filePath, PATHINFO_EXTENSION);
         if (!$this->extensionValidator->isValid($extension)) {
             throw new \Magento\Framework\Exception\ValidatorException(__('Disallowed file type.'));
@@ -170,11 +174,14 @@ class RetrieveImage extends \Magento\Backend\App\Action implements HttpPostActio
     }
 
     /**
+     * Get image info
+     *
      * @param string $fileName
      * @return mixed
      */
     protected function appendResultSaveRemoteImage($fileName)
     {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $fileInfo = pathinfo($fileName);
         $tmpFileName = Uploader::getDispersionPath($fileInfo['basename']) . DIRECTORY_SEPARATOR . $fileInfo['basename'];
         $result['name'] = $fileInfo['basename'];
@@ -197,7 +204,7 @@ class RetrieveImage extends \Magento\Backend\App\Action implements HttpPostActio
      */
     protected function retrieveRemoteImage($fileUrl, $localFilePath)
     {
-        $this->curl->setConfig(['header' => false]);
+        $this->curl->setOptions(['header' => false]);
         $this->curl->write('GET', $fileUrl);
         $image = $this->curl->read();
         if (empty($image)) {
@@ -209,6 +216,8 @@ class RetrieveImage extends \Magento\Backend\App\Action implements HttpPostActio
     }
 
     /**
+     * Get local file path
+     *
      * @param string $localFilePath
      * @return string
      */
@@ -216,11 +225,14 @@ class RetrieveImage extends \Magento\Backend\App\Action implements HttpPostActio
     {
         $destinationFile = $this->appendAbsoluteFileSystemPath($localFilePath);
         $fileName = Uploader::getNewFileName($destinationFile);
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $fileInfo = pathinfo($localFilePath);
         return $fileInfo['dirname'] . DIRECTORY_SEPARATOR . $fileName;
     }
 
     /**
+     * Get local temporary file path
+     *
      * @param string $localTmpFile
      * @return string
      */

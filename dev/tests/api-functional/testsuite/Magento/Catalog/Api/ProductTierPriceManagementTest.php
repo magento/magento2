@@ -1,12 +1,12 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Api;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
@@ -20,8 +20,8 @@ class ProductTierPriceManagementTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
-     * @dataProvider getListDataProvider
      */
+    #[DataProvider('getListDataProvider')]
     public function testGetList($customerGroupId, $count, $value, $qty)
     {
         $productSku = 'simple';
@@ -49,7 +49,7 @@ class ProductTierPriceManagementTest extends WebapiAbstract
         }
     }
 
-    public function getListDataProvider()
+    public static function getListDataProvider()
     {
         return [
             [0, 3, 5, 3],
@@ -62,8 +62,8 @@ class ProductTierPriceManagementTest extends WebapiAbstract
      * @param string|int $customerGroupId
      * @param int $qty
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
-     * @dataProvider deleteDataProvider
      */
+    #[DataProvider('deleteDataProvider')]
     public function testDelete($customerGroupId, $qty)
     {
         $productSku = 'simple';
@@ -83,7 +83,7 @@ class ProductTierPriceManagementTest extends WebapiAbstract
         $this->assertTrue($this->_webApiCall($serviceInfo, $requestData, null, "all"));
     }
 
-    public function deleteDataProvider()
+    public static function deleteDataProvider()
     {
         return [
             'delete_tier_price_for_specific_customer_group' => [0, 3],

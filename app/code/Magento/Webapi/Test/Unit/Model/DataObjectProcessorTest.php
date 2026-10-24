@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -41,7 +41,7 @@ class DataObjectProcessorTest extends TestCase
                 'typeProcessor' => $objectManager->getObject(TypeProcessor::class),
             ]
         );
-        $serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
+        $serializerMock = $this->createMock(SerializerInterface::class);
         $serializerMock->method('serialize')
             ->willReturn('serializedData');
         $serializerMock->method('unserialize')

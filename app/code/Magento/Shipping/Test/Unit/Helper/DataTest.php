@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Framework\App\Helper\Context;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\Url\DecoderInterface;
 use Magento\Shipping\Helper\Data as HelperData;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -47,7 +48,7 @@ class DataTest extends TestCase
     protected function setUp(): void
     {
         $this->contextMock = $this->createMock(Context::class);
-        $this->urlDecoderMock = $this->getMockForAbstractClass(DecoderInterface::class);
+        $this->urlDecoderMock = $this->createMock(DecoderInterface::class);
         $this->contextMock->expects($this->any())->method('getUrlDecoder')
             ->willReturn($this->urlDecoderMock);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
@@ -66,8 +67,8 @@ class DataTest extends TestCase
      * @param string $hash
      * @param string $urlDecodeResult
      * @param array $expected
-     * @dataProvider decodeTrackingHashDataProvider
      */
+    #[DataProvider('decodeTrackingHashDataProvider')]
     public function testDecodeTrackingHash($hash, $urlDecodeResult, $expected)
     {
         $this->urlDecoderMock->expects($this->any())->method('decode')
@@ -81,7 +82,7 @@ class DataTest extends TestCase
      *
      * @return array
      */
-    public function decodeTrackingHashDataProvider()
+    public static function decodeTrackingHashDataProvider()
     {
         return [
             'Test with hash key is allowed' => [

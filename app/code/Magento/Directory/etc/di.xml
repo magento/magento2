@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
@@ -11,8 +11,12 @@
         <arguments>
             <argument name="servicesConfig" xsi:type="array">
                 <item name="fixerio" xsi:type="array">
-                    <item name="label" xsi:type="string" translatable="true">Fixer.io</item>
+                    <item name="label" xsi:type="string" translatable="true">Fixer.io (legacy)</item>
                     <item name="class" xsi:type="string">Magento\Directory\Model\Currency\Import\FixerIo</item>
+                </item>
+                <item name="fixerio_apilayer" xsi:type="array">
+                    <item name="label" xsi:type="string" translatable="true">Fixer Api (APILayer)</item>
+                    <item name="class" xsi:type="string">Magento\Directory\Model\Currency\Import\FixerIoApiLayer</item>
                 </item>
                 <item name="currencyconverterapi" xsi:type="array">
                     <item name="label" xsi:type="string" translatable="true">Currency Converter API</item>

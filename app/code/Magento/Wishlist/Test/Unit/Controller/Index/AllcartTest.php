@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,13 +11,16 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\ActionFlag;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Request\Http;
+use Magento\Framework\App\Response\Http as ResponseHttp;
 use Magento\Framework\App\View;
 use Magento\Framework\Controller\Result\Forward;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\Event\Manager;
+use Magento\Framework\Message\Manager as MessageManager;
 use Magento\Framework\Url;
+use Magento\Store\App\Response\Redirect as StoreRedirect;
 use Magento\Wishlist\Controller\Index\Allcart;
 use Magento\Wishlist\Controller\WishlistProvider;
 use Magento\Wishlist\Controller\WishlistProviderInterface;
@@ -57,7 +60,7 @@ class AllcartTest extends TestCase
     protected $request;
 
     /**
-     * @var \Magento\Framework\App\Response\Http|MockObject
+     * @var ResponseHttp|MockObject
      */
     protected $response;
 
@@ -83,16 +86,10 @@ class AllcartTest extends TestCase
         $this->itemCarrier = $this->createMock(ItemCarrier::class);
         $this->formKeyValidator = $this->createMock(Validator::class);
         $this->request = $this->createMock(Http::class);
-        $this->response = $this->createMock(\Magento\Framework\App\Response\Http::class);
-        $this->resultFactoryMock = $this->getMockBuilder(ResultFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->resultRedirectMock = $this->getMockBuilder(Redirect::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->resultForwardMock = $this->getMockBuilder(Forward::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->response = $this->createMock(ResponseHttp::class);
+        $this->resultFactoryMock = $this->createMock(ResultFactory::class);
+        $this->resultRedirectMock = $this->createMock(Redirect::class);
+        $this->resultForwardMock = $this->createMock(Forward::class);
 
         $this->resultFactoryMock->expects($this->any())
             ->method('create')
@@ -110,9 +107,9 @@ class AllcartTest extends TestCase
         $eventManager = $this->createMock(Manager::class);
         $url = $this->createMock(Url::class);
         $actionFlag = $this->createMock(ActionFlag::class);
-        $redirect = $this->createMock(\Magento\Store\App\Response\Redirect::class);
+        $redirect = $this->createMock(StoreRedirect::class);
         $view = $this->createMock(View::class);
-        $messageManager = $this->createMock(\Magento\Framework\Message\Manager::class);
+        $messageManager = $this->createMock(MessageManager::class);
 
         $this->context
             ->expects($this->any())

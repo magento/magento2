@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -20,6 +20,7 @@
         <amOnPage url="{{AdminUsersPage.url}}" stepKey="amOnAdminUsersPage"/>
         <waitForPageLoad stepKey="waitForAdminUserPageLoad"/>
         <click selector="{{AdminCreateUserSection.create}}" stepKey="clickToCreateNewUser"/>
+        <waitForElementVisible selector="{{AdminEditUserSection.usernameTextField}}" stepKey="waitForUserNameFieldVisible" />
         <fillField selector="{{AdminEditUserSection.usernameTextField}}" userInput="{{User.username}}" stepKey="enterUserName"/>
         <fillField selector="{{AdminEditUserSection.firstNameTextField}}" userInput="{{User.firstName}}" stepKey="enterFirstName"/>
         <fillField selector="{{AdminEditUserSection.lastNameTextField}}" userInput="{{User.lastName}}" stepKey="enterLastName"/>

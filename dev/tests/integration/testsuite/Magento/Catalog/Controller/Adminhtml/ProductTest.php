@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -25,6 +25,7 @@ use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Product\Attribute\Repository as ProductAttributeRepository;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test class for Product adminhtml actions
@@ -254,13 +255,13 @@ class ProductTest extends AbstractBackendController
     /**
      * Test create product with already existing url key.
      *
-     * @dataProvider saveActionWithAlreadyExistingUrlKeyDataProvider
      * @magentoDataFixture Magento/Catalog/_files/product_image.php
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoDbIsolation disabled
      * @param array $postData
      * @return void
      */
+    #[DataProvider('saveActionWithAlreadyExistingUrlKeyDataProvider')]
     public function testSaveActionWithAlreadyExistingUrlKey(array $postData)
     {
         $this->getRequest()->setPostValue($postData);
@@ -290,11 +291,11 @@ class ProductTest extends AbstractBackendController
      *
      * @return array
      */
-    public function saveActionWithAlreadyExistingUrlKeyDataProvider()
+    public static function saveActionWithAlreadyExistingUrlKeyDataProvider()
     {
         return [
             [
-                'post_data' => [
+                'postData' => [
                     'product' =>
                         [
                             'attribute_set_id' => '4',
@@ -346,12 +347,12 @@ class ProductTest extends AbstractBackendController
     /**
      * Test product save with selected tier price
      *
-     * @dataProvider saveActionTierPriceDataProvider
      * @param array $postData
      * @param array $tierPrice
      * @magentoDataFixture Magento/Catalog/_files/product_has_tier_price_show_as_low_as.php
      * @magentoConfigFixture current_store catalog/price/scope 1
      */
+    #[DataProvider('saveActionTierPriceDataProvider')]
     public function testSaveActionTierPrice(array $postData, array $tierPrice)
     {
         $postData['product'] = $this->getProductData($tierPrice);
@@ -369,11 +370,11 @@ class ProductTest extends AbstractBackendController
      *
      * @return array
      */
-    public function saveActionTierPriceDataProvider()
+    public static function saveActionTierPriceDataProvider()
     {
         return [
             [
-                'post_data' => [
+                'postData' => [
                     'id' => '1',
                     'type' => 'simple',
                     'store' => '0',
@@ -390,7 +391,7 @@ class ProductTest extends AbstractBackendController
                     'configurable_matrix_serialized' => '[]',
                     'associated_product_ids_serialized' => '[]'
                 ],
-                'tier_price_for_request' => [
+                'tierPrice' => [
                     [
                         'price_id' => '1',
                         'website_id' => '0',
@@ -481,7 +482,10 @@ class ProductTest extends AbstractBackendController
         //Trying to update product's design settings without proper permissions.
         //Expected list of sessions messages collected throughout the controller calls.
         $sessionMessages = ['Not allowed to edit the product\'s design attributes'];
-        $this->aclBuilder->getAcl()->deny(null, 'Magento_Catalog::edit_product_design');
+        $this->aclBuilder->getAcl()->deny(
+            \Magento\TestFramework\Bootstrap::ADMIN_ROLE_ID,
+            'Magento_Catalog::edit_product_design'
+        );
         $requestData['product']['custom_design'] = '1';
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue($requestData);
@@ -492,7 +496,10 @@ class ProductTest extends AbstractBackendController
         );
 
         //Trying again with the permissions.
-        $this->aclBuilder->getAcl()->allow(null, ['Magento_Catalog::products', 'Magento_Catalog::edit_product_design']);
+        $this->aclBuilder->getAcl()->allow(
+            \Magento\TestFramework\Bootstrap::ADMIN_ROLE_ID,
+            ['Magento_Catalog::products', 'Magento_Catalog::edit_product_design']
+        );
         $this->getRequest()->setDispatched(false);
         $this->dispatch($uri);
         /** @var ProductRepository $repo */
@@ -541,7 +548,10 @@ class ProductTest extends AbstractBackendController
         $uri = 'backend/catalog/product/save';
 
         //Updating product's design settings without proper permissions.
-        $this->aclBuilder->getAcl()->deny(null, 'Magento_Catalog::edit_product_design');
+        $this->aclBuilder->getAcl()->deny(
+            \Magento\TestFramework\Bootstrap::ADMIN_ROLE_ID,
+            'Magento_Catalog::edit_product_design'
+        );
         //Testing that special "No Update" value is treated as no change.
         $requestData['product']['custom_layout_update_file'] = LayoutUpdate::VALUE_NO_UPDATE;
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
@@ -639,11 +649,11 @@ class ProductTest extends AbstractBackendController
      *
      * @return array
      */
-    public function saveActionWithInvalidUrlKeyDataProvider()
+    public static function saveActionWithInvalidUrlKeyDataProvider()
     {
         return [
             [
-                'post_data' => [
+                'postData' => [
                     'product' =>
                         [
                             'attribute_set_id' => '4',
@@ -673,11 +683,11 @@ class ProductTest extends AbstractBackendController
     /**
      * Test create product with invalid existing url key.
      *
-     * @dataProvider saveActionWithInvalidUrlKeyDataProvider
      * @magentoDbIsolation disabled
      * @param array $postData
      * @return void
      */
+    #[DataProvider('saveActionWithInvalidUrlKeyDataProvider')]
     public function testSaveActionWithInvalidUrlKey(array $postData)
     {
         $identifier = 'graphql';

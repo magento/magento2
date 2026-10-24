@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -18,7 +18,8 @@
             <argument name="customerAddressVar"/>
         </arguments>
 
-        <fillField selector="{{CheckoutShippingSection.email}}" userInput="{{customerVar.email}}" stepKey="enterEmail"/>
+        <waitForElementVisible selector="{{CheckoutShippingSection.emailAddress}}" stepKey="waitForEmailField" />
+        <fillField selector="{{CheckoutShippingSection.emailAddress}}" userInput="{{customerVar.email}}" stepKey="enterEmail"/>
         <waitForPageLoad stepKey="waitForLoading3"/>
         <fillField selector="{{CheckoutPaymentSection.guestFirstName}}" userInput="{{customerVar.firstname}}" stepKey="enterFirstName"/>
         <fillField selector="{{CheckoutPaymentSection.guestLastName}}" userInput="{{customerVar.lastname}}" stepKey="enterLastName"/>

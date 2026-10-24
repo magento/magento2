@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Amqp;
 
@@ -42,5 +42,19 @@ class ConfigPool
             $this->pool[$connectionName] = $this->configFactory->create(['connectionName' => $connectionName]);
         }
         return $this->pool[$connectionName];
+    }
+
+    /**
+     * Close all opened connections.
+     *
+     * @return void
+     */
+    public function closeConnections(): void
+    {
+        foreach ($this->pool as $config) {
+            $connection = $config->getChannel()->getConnection();
+            $config->getChannel()->close();
+            $connection?->close();
+        }
     }
 }

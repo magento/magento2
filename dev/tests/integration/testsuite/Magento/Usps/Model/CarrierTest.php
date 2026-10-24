@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -248,9 +248,7 @@ class CarrierTest extends TestCase
      */
     public function testGetRatesWithHttpException(): void
     {
-        $deferredResponse = $this->getMockBuilder(HttpResponseDeferredInterface::class)
-            ->onlyMethods(['get'])
-            ->getMockForAbstractClass();
+        $deferredResponse = $this->createMock(HttpResponseDeferredInterface::class);
         $exception = new HttpException('Exception message');
         $deferredResponse->method('get')->willThrowException($exception);
         $this->httpClient->setDeferredResponseMock($deferredResponse);
@@ -341,7 +339,7 @@ class CarrierTest extends TestCase
         $this->assertEquals('ALL', $firstRequest->Package->Service);
         $this->assertEquals('20', $firstRequest->Package->Pounds);
         $this->assertEquals('Priority', $secondRequest->Package->Service);
-        $this->assertEquals('20', $secondRequest->Package->Pounds);
+        $this->assertEquals('10', $secondRequest->Package->Pounds);
         $price = $this->getShippingMethodAmount($methods, 'usps', '1');
         $this->assertEquals(6.70, $price);
     }

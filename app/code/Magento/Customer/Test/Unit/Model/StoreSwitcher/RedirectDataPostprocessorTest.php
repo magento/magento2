@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -118,7 +118,7 @@ class RedirectDataPostprocessorTest extends TestCase
 
     public function testProcessShouldThrowExceptionIfCustomerDoesNotExist(): void
     {
-        $this->expectErrorMessage('Something went wrong.');
+        $this->expectExceptionMessage('Something went wrong.');
         $data = ['customer_id' => 1];
         $this->session->expects($this->never())
             ->method('setCustomerDataAsLoggedIn');
@@ -127,7 +127,7 @@ class RedirectDataPostprocessorTest extends TestCase
 
     public function testProcessShouldThrowExceptionIfAnErrorOccur(): void
     {
-        $this->expectErrorMessage('Something went wrong.');
+        $this->expectExceptionMessage('Something went wrong.');
         $data = ['customer_id' => 2];
         $this->session->expects($this->never())
             ->method('setCustomerDataAsLoggedIn');

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Setup\Fixtures;
@@ -31,7 +31,6 @@ class TaxRatesFixture extends Fixture
         if (empty($taxRatesFile)) {
             return;
         }
-        $this->fixtureModel->resetObjectManager();
         /** Clean predefined tax rates to maintain consistency */
         /** @var $collection \Magento\Tax\Model\ResourceModel\Calculation\Rate\Collection */
         $collection = $this->fixtureModel->getObjectManager()

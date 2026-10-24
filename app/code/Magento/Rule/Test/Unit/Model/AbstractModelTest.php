@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,6 +17,7 @@ use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Rule\Model\AbstractModel;
 use Magento\Rule\Model\Action\Collection;
 use Magento\Rule\Model\Condition\Combine;
@@ -30,6 +31,7 @@ use PHPUnit\Framework\TestCase;
  */
 class AbstractModelTest extends TestCase
 {
+    use MockCreationTrait;
 
     /**
      * @var AbstractModel|MockObject
@@ -63,59 +65,40 @@ class AbstractModelTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->localeDateMock = $this->getMockBuilder(TimezoneInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->localeDateMock = $this->createMock(TimezoneInterface::class);
 
-        $this->formFactoryMock = $this->getMockBuilder(FormFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->formFactoryMock = $this->createMock(FormFactory::class);
 
-        $this->registryMock = $this->getMockBuilder(Registry::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->registryMock = $this->createMock(Registry::class);
 
-        $this->contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getEventDispatcher'])
-            ->getMock();
+        $this->contextMock = $this->createPartialMock(Context::class, ['getEventDispatcher']);
 
-        $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['dispatch'])
-            ->getMockForAbstractClass();
+        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
         $this->contextMock->expects($this->any())
             ->method('getEventDispatcher')
             ->willReturn($this->eventManagerMock);
 
-        $resourceMock = $this->getMockBuilder(AbstractResource::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $resourceCollectionMock = $this->getMockBuilder(AbstractDb::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $extensionFactory = $this->getMockBuilder(ExtensionAttributesFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $customAttributeFactory = $this->getMockBuilder(AttributeValueFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $resourceMock = $this->createMock(AbstractResource::class);
+        $resourceCollectionMock = $this->createMock(AbstractDb::class);
+        $extensionFactory = $this->createMock(ExtensionAttributesFactory::class);
+        $customAttributeFactory = $this->createMock(AttributeValueFactory::class);
 
-        $this->model = $this->getMockForAbstractClass(
-            AbstractModel::class,
-            [
-                'context' => $this->contextMock,
-                'registry' => $this->registryMock,
-                'formFactory' => $this->formFactoryMock,
-                'localeDate' => $this->localeDateMock,
-                'resource' => $resourceMock,
-                'resourceCollection' => $resourceCollectionMock,
-                'data' => [],
-                'extensionFactory' => $extensionFactory,
-                'customAttributeFactory' => $customAttributeFactory,
-                'serializer' => $this->getSerializerMock(),
-            ]
-        );
+        $this->model = $this->createPartialMock(AbstractModel::class, ['getConditionsInstance', 'getActionsInstance']);
+        
+        $constructorArgs = [
+            $this->contextMock,
+            $this->registryMock,
+            $this->formFactoryMock,
+            $this->localeDateMock,
+            $resourceMock,
+            $resourceCollectionMock,
+            [],
+            $extensionFactory,
+            $customAttributeFactory,
+            $this->getSerializerMock(),
+        ];
+        
+        $this->model->__construct(...$constructorArgs);
     }
 
     /**
@@ -125,10 +108,7 @@ class AbstractModelTest extends TestCase
      */
     private function getSerializerMock()
     {
-        $serializerMock = $this->getMockBuilder(Json::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['serialize', 'unserialize'])
-            ->getMock();
+        $serializerMock = $this->createPartialMock(Json::class, ['serialize', 'unserialize']);
 
         $serializerMock->expects($this->any())
             ->method('serialize')
@@ -153,10 +133,10 @@ class AbstractModelTest extends TestCase
     {
         $conditionsArray = ['conditions' => 'serialized'];
         $serializedConditions = json_encode($conditionsArray);
-        $conditions = $this->getMockBuilder(Combine::class)
-            ->setMethods(['setRule', 'setId', 'setPrefix', 'loadArray'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $conditions = $this->createPartialMockWithReflection(
+            Combine::class,
+            ['loadArray', 'setRule', 'setId', 'setPrefix']
+        );
 
         $conditions->expects($this->once())->method('setRule')->willReturnSelf();
         $conditions->expects($this->once())->method('setId')->willReturnSelf();
@@ -175,10 +155,10 @@ class AbstractModelTest extends TestCase
     {
         $actionsArray = ['actions' => 'some_actions'];
         $actionsSerialized = json_encode($actionsArray);
-        $actions = $this->getMockBuilder(Collection::class)
-            ->setMethods(['setRule', 'setId', 'setPrefix', 'loadArray'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $actions = $this->createPartialMockWithReflection(
+            Collection::class,
+            ['loadArray', 'setRule', 'setId', 'setPrefix']
+        );
 
         $actions->expects($this->once())->method('setRule')->willReturnSelf();
         $actions->expects($this->once())->method('setId')->willReturnSelf();
@@ -195,15 +175,9 @@ class AbstractModelTest extends TestCase
 
     public function testBeforeSave()
     {
-        $conditions = $this->getMockBuilder(Combine::class)
-            ->setMethods(['asArray'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $conditions = $this->createPartialMock(Combine::class, ['asArray']);
 
-        $actions = $this->getMockBuilder(Collection::class)
-            ->setMethods(['asArray'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $actions = $this->createPartialMock(Collection::class, ['asArray']);
 
         $this->model->setConditions($conditions);
         $this->model->setActions($actions);

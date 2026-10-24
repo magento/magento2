@@ -1,10 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Oauth\Helper;
 
+use Laminas\Http\Client;
 use Magento\Framework\App\RequestInterface;
 use Laminas\Uri\UriFactory;
 
@@ -38,10 +39,15 @@ class Request
     {
         $oauthParams = $this->_processRequest(
             $httpRequest->getHeader('Authorization'),
-            $httpRequest->getHeader(\Zend_Http_Client::CONTENT_TYPE),
+            $httpRequest->getHeader('Content-Type'),
             $httpRequest->getContent(),
             $this->getRequestUrl($httpRequest)
         );
+        foreach ($oauthParams as $key => $value) {
+            if ($key !== 'oauth_signature') {
+                $oauthParams[$key] = rawurlencode($value);
+            }
+        }
         return $oauthParams;
     }
 
@@ -74,7 +80,7 @@ class Request
         }
 
         if ($requestBodyString !== null && $contentTypeHeader &&
-            0 === strpos($contentTypeHeader, \Zend_Http_Client::ENC_URLENCODED)
+            0 === strpos($contentTypeHeader, Client::ENC_URLENCODED)
         ) {
             $protocolParamsNotSet = !$protocolParams;
 
@@ -187,7 +193,7 @@ class Request
      */
     public function prepareErrorResponse(
         \Exception $exception,
-        \Magento\Framework\HTTP\PhpEnvironment\Response $response = null
+        ?\Magento\Framework\HTTP\PhpEnvironment\Response $response = null
     ) {
         $errorMsg = $exception->getMessage();
 

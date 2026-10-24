@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Paypal\Test\Unit\Model\Method\Checks;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Payment\Model\Checks\SpecificationInterface;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Paypal\Model\Billing\Agreement as BillingAgreement;
@@ -15,11 +16,14 @@ use Magento\Paypal\Model\Billing\AgreementFactory as BillingAgreementFactory;
 use Magento\Paypal\Model\Method\Checks\SpecificationPlugin;
 use Magento\Paypal\Model\ResourceModel\Billing\Agreement\Collection as BillingAgreementCollection;
 use Magento\Quote\Model\Quote;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class SpecificationPluginTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var SpecificationPlugin
      */
@@ -62,24 +66,15 @@ class SpecificationPluginTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->billingAgreementFactoryMock = $this->getMockBuilder(BillingAgreementFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $this->specificationMock = $this->getMockBuilder(SpecificationInterface::class)
-            ->getMockForAbstractClass();
-        $this->paymentMethodMock = $this->getMockBuilder(MethodInterface::class)
-            ->getMockForAbstractClass();
-        $this->quoteMock = $this->getMockBuilder(Quote::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getCustomerId'])
-            ->getMock();
-        $this->billingAgreementCollectionMock = $this->getMockBuilder(BillingAgreementCollection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->billingAgreementMock = $this->getMockBuilder(BillingAgreement::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->billingAgreementFactoryMock = $this->createMock(BillingAgreementFactory::class);
+        $this->specificationMock = $this->createMock(SpecificationInterface::class);
+        $this->paymentMethodMock = $this->createMock(MethodInterface::class);
+        $this->quoteMock = $this->createPartialMockWithReflection(
+            Quote::class,
+            ['getCustomerId']
+        );
+        $this->billingAgreementCollectionMock = $this->createMock(BillingAgreementCollection::class);
+        $this->billingAgreementMock = $this->createMock(BillingAgreement::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->plugin = $this->objectManagerHelper->getObject(
@@ -134,9 +129,8 @@ class SpecificationPluginTest extends TestCase
 
     /**
      * @param int $count
-     *
-     * @dataProvider afterIsApplicableDataProvider
      */
+    #[DataProvider('afterIsApplicableDataProvider')]
     public function testAfterIsApplicable($count)
     {
         $this->setExpectations('paypal_billing_agreement', 1);
@@ -161,7 +155,7 @@ class SpecificationPluginTest extends TestCase
     /**
      * @return array
      */
-    public function afterIsApplicableDataProvider()
+    public static function afterIsApplicableDataProvider()
     {
         return [[0], [1], [2]];
     }

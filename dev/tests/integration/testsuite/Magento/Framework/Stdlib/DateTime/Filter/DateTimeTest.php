@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Stdlib\DateTime\Filter;
 
 use Magento\TestFramework\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class DateTimeTest extends \PHPUnit\Framework\TestCase
 {
@@ -49,9 +50,9 @@ class DateTimeTest extends \PHPUnit\Framework\TestCase
      * @param string $inputData
      * @param string $expectedDate
      *
-     * @dataProvider localeDatetimeFilterProvider
      * @return void
      */
+    #[DataProvider('localeDatetimeFilterProvider')]
     public function testLocaleDatetimeFilter($locale, $inputData, $expectedDate)
     {
         $this->localeResolver->setLocale($locale);
@@ -61,7 +62,7 @@ class DateTimeTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function localeDatetimeFilterProvider()
+    public static function localeDatetimeFilterProvider()
     {
         return [
             ['en_US', '01/02/2010 3:30pm', '2010-01-02 15:30:00'],

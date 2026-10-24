@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Quote\Model\Quote;
 
@@ -10,6 +10,9 @@ use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\RegionInterfaceFactory;
 use Magento\Customer\Model\Address\AbstractAddress;
+use Magento\Customer\Model\Address\AbstractAddress\CountryModelsCache;
+use Magento\Customer\Model\Address\AbstractAddress\RegionModelsCache;
+use Magento\Customer\Model\Address\CompositeValidator;
 use Magento\Customer\Model\Address\Mapper;
 use Magento\Directory\Helper\Data;
 use Magento\Directory\Model\CountryFactory;
@@ -86,7 +89,6 @@ use Magento\Store\Model\StoreManagerInterface;
  * @method float getDiscountAmount()
  * @method Address setDiscountAmount(float $value)
  * @method float getBaseDiscountAmount()
- * @method Address setBaseDiscountAmount(float $value)
  * @method float getGrandTotal()
  * @method Address setGrandTotal(float $value)
  * @method float getBaseGrandTotal()
@@ -141,6 +143,8 @@ class Address extends AbstractAddress implements
     public const ADDRESS_TYPE_SHIPPING = 'shipping';
 
     private const CACHED_ITEMS_ALL = 'cached_items_all';
+
+    private const BASE_DISCOUNT_AMOUNT = 'base_discount_amount';
 
     /**
      * Prefix of model events
@@ -334,6 +338,9 @@ class Address extends AbstractAddress implements
      * @param array $data
      * @param Json $serializer
      * @param StoreManagerInterface $storeManager
+     * @param CompositeValidator|null $compositeValidator
+     * @param CountryModelsCache|null $countryModelsCache
+     * @param RegionModelsCache|null $regionModelsCache
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -367,11 +374,14 @@ class Address extends AbstractAddress implements
         Address\CustomAttributeListInterface $attributeList,
         TotalsCollector $totalsCollector,
         TotalsReader $totalsReader,
-        AbstractResource $resource = null,
-        AbstractDb $resourceCollection = null,
+        ?AbstractResource $resource = null,
+        ?AbstractDb $resourceCollection = null,
         array $data = [],
-        Json $serializer = null,
-        StoreManagerInterface $storeManager = null
+        ?Json $serializer = null,
+        ?StoreManagerInterface $storeManager = null,
+        ?CompositeValidator $compositeValidator = null,
+        ?CountryModelsCache $countryModelsCache = null,
+        ?RegionModelsCache $regionModelsCache = null,
     ) {
         $this->_scopeConfig = $scopeConfig;
         $this->_addressItemFactory = $addressItemFactory;
@@ -408,7 +418,10 @@ class Address extends AbstractAddress implements
             $dataObjectHelper,
             $resource,
             $resourceCollection,
-            $data
+            $data,
+            $compositeValidator,
+            $countryModelsCache,
+            $regionModelsCache,
         );
     }
 
@@ -1019,7 +1032,7 @@ class Address extends AbstractAddress implements
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function requestShippingRates(AbstractItem $item = null)
+    public function requestShippingRates(?AbstractItem $item = null)
     {
         $storeId = $this->getQuote()->getStoreId() ?: $this->storeManager->getStore()->getId();
         $taxInclude = $this->_scopeConfig->getValue(
@@ -1228,9 +1241,10 @@ class Address extends AbstractAddress implements
             ? $this->getBaseTaxAmount() + $this->getBaseDiscountTaxCompensationAmount()
             : 0;
 
+        // Note: ($x > $y - 0.0001) means ($x >= $y) for floats
         return $includeDiscount ?
-            ($this->getBaseSubtotalWithDiscount() + $taxes >= $amount) :
-            ($this->getBaseSubtotal() + $taxes >= $amount);
+            ($this->getBaseSubtotalWithDiscount() + $taxes > $amount - 0.0001) :
+            ($this->getBaseSubtotal() + $taxes > $amount - 0.0001);
     }
 
     /**
@@ -1386,7 +1400,7 @@ class Address extends AbstractAddress implements
      */
     public function getBaseSubtotalWithDiscount()
     {
-        return $this->getBaseSubtotal() + $this->getBaseDiscountAmount();
+        return $this->getBaseSubtotal() + $this->getBaseDiscountAmount() + $this->getBaseShippingDiscountAmount();
     }
 
     /**
@@ -1794,5 +1808,18 @@ class Address extends AbstractAddress implements
     protected function getCustomAttributesCodes()
     {
         return array_keys($this->attributeList->getAttributes());
+    }
+
+    /**
+     * Realization of the actual set method to boost performance
+     *
+     * @param float $value
+     * @return $this
+     */
+    public function setBaseDiscountAmount(float $value)
+    {
+        $this->_data[self::BASE_DISCOUNT_AMOUNT] = $value;
+
+        return $this;
     }
 }

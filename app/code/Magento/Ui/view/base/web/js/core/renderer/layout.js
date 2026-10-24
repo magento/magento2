@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 define([
@@ -118,9 +118,10 @@ define([
                 component: node.component
             });
             loaded.resolve(node, constr);
-        }, function () {
+        }, function (err) {
             consoleLogger.error('componentLoadingFail', {
-                component: node.component
+                component: node.component,
+                errorMsg: err
             });
         });
 

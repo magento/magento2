@@ -1,8 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
- *
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +9,7 @@ namespace Magento\MediaGallery\Model\Directory;
 
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for @see \Magento\MediaGallery\Model\Directory\IsExcluded.
@@ -30,11 +30,11 @@ class IsExcludedTest extends TestCase
     }
 
     /**
-     * @dataProvider directoriesDataProvider
      * @param string $path
      * @param bool $expectedResult
      * @return void
      */
+    #[DataProvider('directoriesDataProvider')]
     public function testIsExcluded(string $path, bool $expectedResult): void
     {
         $actualResult = $this->model->execute($path);
@@ -44,7 +44,7 @@ class IsExcludedTest extends TestCase
     /**
      * @return array
      */
-    public function directoriesDataProvider(): array
+    public static function directoriesDataProvider(): array
     {
         return [
             [

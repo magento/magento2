@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -43,7 +43,9 @@ class RuleQuoteRecollectTotalsObserver implements ObserverInterface
     {
         /** @var Rule $rule */
         $rule = $observer->getRule();
-        if (!$rule->isObjectNew() && (!$rule->getIsActive() || $rule->isDeleted())) {
+        if (!$rule->isObjectNew()
+            && ($rule->isDeleted() || ($rule->dataHasChangedFor('is_active') && !$rule->getIsActive()))
+        ) {
             $this->recollectTotals->execute((int) $rule->getId());
         }
     }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Service\V1;
 
@@ -13,13 +13,15 @@ use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
  */
 class OrderCreateTest extends WebapiAbstract
 {
-    const RESOURCE_PATH = '/V1/orders';
+    private const RESOURCE_PATH = '/V1/orders';
 
-    const SERVICE_READ_NAME = 'salesOrderRepositoryV1';
+    private const RESOURCE_PATH_CREATE = '/V1/orders/create';
 
-    const SERVICE_VERSION = 'V1';
+    private const SERVICE_READ_NAME = 'salesOrderRepositoryV1';
 
-    const ORDER_INCREMENT_ID = '100000001';
+    private const SERVICE_VERSION = 'V1';
+
+    private const ORDER_INCREMENT_ID = '100000001';
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
@@ -34,7 +36,7 @@ class OrderCreateTest extends WebapiAbstract
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function prepareOrder()
+    protected function prepareOrder(string $sku = 'sku#1')
     {
         /** @var \Magento\Sales\Model\Order $orderBuilder */
         $orderFactory = $this->objectManager->get(\Magento\Sales\Model\OrderFactory::class);
@@ -58,7 +60,7 @@ class OrderCreateTest extends WebapiAbstract
         );
 
         $email = uniqid() . 'email@example.com';
-        $orderItem->setSku('sku#1');
+        $orderItem->setSku($sku);
         if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
             $orderItem->setData('parent_item', $orderItem->getData() + ['parent_item' => null]);
             $orderItem->setAdditionalData('test');
@@ -146,6 +148,41 @@ class OrderCreateTest extends WebapiAbstract
                     'stock_id' => null,
                 ]
             ];
+        $orderData['extension_attributes']['taxes'] = [
+            [
+                'code' => 'US-NY-*-Rate 1',
+                'title' => 'US-NY-*-Rate 1',
+                'percent' => 5,
+                'amount' => 0.75,
+                'base_amount' => 0.75,
+                'base_real_amount' => 0.75,
+                'position' => 0,
+                'priority' => 0,
+                'process' => 0
+            ],
+        ];
+        $orderData['extension_attributes']['additional_itemized_taxes'] = [
+            [
+                'tax_percent' => 5,
+                'tax_code' => 'US-NY-*-Rate 1',
+                'amount' => 0.25,
+                'base_amount' => 0.25,
+                'real_amount' => 0.25,
+                'real_base_amount' => 0.25,
+                'taxable_item_type' => 'shipping',
+            ]
+        ];
+        $orderData['items'][0]['extension_attributes']['itemized_taxes'] = [
+            [
+                'tax_percent' => 5,
+                'tax_code' => 'US-NY-*-Rate 1',
+                'amount' => 0.5,
+                'base_amount' => 0.5,
+                'real_amount' => 0.5,
+                'real_base_amount' => 0.5,
+                'taxable_item_type' => 'product',
+            ]
+        ];
         return $orderData;
     }
 
@@ -160,7 +197,7 @@ class OrderCreateTest extends WebapiAbstract
 
     /**
      * @param array $orderItem
-     * @return array
+     * @return void
      */
     protected function addProductOption($orderItem)
     {
@@ -195,10 +232,10 @@ class OrderCreateTest extends WebapiAbstract
                 $returnValue = '2015-09-09 07:16:00';
                 break;
             case 'drop_down':
-                $returnValue = '3-1-select';
-                break;
             case 'radio':
-                $returnValue = '4-1-radio';
+                $optionValues = $option->getValues();
+                $optionValue = reset($optionValues);
+                $returnValue = (string)$optionValue->getOptionTypeId();
                 break;
         }
         return $returnValue;
@@ -222,19 +259,98 @@ class OrderCreateTest extends WebapiAbstract
                 'operation' => self::SERVICE_READ_NAME . 'save',
             ],
         ];
-        $this->assertNotEmpty($this->_webApiCall($serviceInfo, ['entity' => $order]));
+        $result = $this->_webApiCall($serviceInfo, ['entity' => $order]);
 
-        /** @var \Magento\Sales\Model\Order $model */
-        $model = $this->objectManager->get(\Magento\Sales\Model\Order::class);
-        $model->load($order['customer_email'], 'customer_email');
-        $this->assertTrue((bool)$model->getId());
-        $this->assertEquals($order['base_grand_total'], $model->getBaseGrandTotal());
-        $this->assertEquals($order['grand_total'], $model->getGrandTotal());
-        $this->assertNotNull($model->getShippingAddress());
-        $this->assertTrue((bool)$model->getShippingAddress()->getId());
-        $this->assertEquals('Flat Rate - Fixed', $model->getShippingDescription());
-        $shippingMethod = $model->getShippingMethod(true);
-        $this->assertEquals('flatrate', $shippingMethod['carrier_code']);
-        $this->assertEquals('flatrate', $shippingMethod['method']);
+        $getServiceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . '/' . $result['entity_id'],
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_READ_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_READ_NAME . 'get',
+            ],
+        ];
+        $result = $this->_webApiCall($getServiceInfo, ['id' => $result['entity_id']]);
+
+        $this->assertEquals(100, $result['base_grand_total']);
+        $this->assertEquals(100, $result['grand_total']);
+        $shipping = $result['extension_attributes']['shipping_assignments'][0]['shipping'];
+        $this->assertGreaterThan(0, $shipping['address']['entity_id']);
+        $this->assertEquals(['Street'], $shipping['address']['street']);
+        $this->assertEquals('flatrate_flatrate', $shipping['method']);
+        $taxes = $result['extension_attributes']['taxes'];
+        $this->assertCount(1, $taxes);
+        $this->assertEquals('US-NY-*-Rate 1', $taxes[0]['code']);
+        $this->assertEquals('US-NY-*-Rate 1', $taxes[0]['title']);
+        $this->assertEquals(5, $taxes[0]['percent']);
+        $this->assertEquals(0.75, $taxes[0]['amount']);
+        $this->assertEquals(0.75, $taxes[0]['base_amount']);
+        $this->assertCount(1, $result['extension_attributes']['additional_itemized_taxes']);
+        $shippingTaxItem = $result['extension_attributes']['additional_itemized_taxes'][0];
+        $this->assertEquals('shipping', $shippingTaxItem['taxable_item_type']);
+        $this->assertEquals(5, $shippingTaxItem['tax_percent']);
+        $this->assertEquals(0.25, $shippingTaxItem['amount']);
+        $this->assertEquals(0.25, $shippingTaxItem['base_amount']);
+        $this->assertEquals(0.25, $shippingTaxItem['real_amount']);
+        $this->assertCount(1, $result['items'][0]['extension_attributes']['itemized_taxes']);
+        $orderItemTaxItem = $result['items'][0]['extension_attributes']['itemized_taxes'][0];
+        $this->assertEquals('product', $orderItemTaxItem['taxable_item_type']);
+        $this->assertEquals(5, $orderItemTaxItem['tax_percent']);
+        $this->assertEquals(0.50, $orderItemTaxItem['amount']);
+        $this->assertEquals(0.50, $orderItemTaxItem['base_amount']);
+        $this->assertEquals(0.50, $orderItemTaxItem['real_amount']);
+        $this->assertEquals($result['items'][0]['item_id'], $orderItemTaxItem['item_id']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     */
+    public function testOrderCreateEndpointPersistsGeneratedProductOptions(): void
+    {
+        $this->_markTestAsRestOnly();
+        $order = $this->prepareOrder('simple');
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH_CREATE,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
+            ],
+        ];
+
+        $result = $this->_webApiCall($serviceInfo, ['entity' => $order]);
+        $this->assertOrderItemProductOptionsAreGenerated((int)$result['items'][0]['item_id']);
+    }
+
+    /**
+     * Assert direct order Web API item options are expanded into persisted product_options metadata.
+     *
+     * @param int $itemId
+     * @return void
+     */
+    private function assertOrderItemProductOptionsAreGenerated(int $itemId): void
+    {
+        /** @var \Magento\Sales\Api\OrderItemRepositoryInterface $orderItemRepository */
+        $orderItemRepository = $this->objectManager->get(\Magento\Sales\Api\OrderItemRepositoryInterface::class);
+        $productOptions = $orderItemRepository->get($itemId)->getProductOptions();
+
+        $this->assertArrayHasKey('info_buyRequest', $productOptions);
+        $this->assertArrayHasKey('options', $productOptions);
+        $this->assertCount(4, $productOptions['options']);
+
+        $optionLabels = array_column($productOptions['options'], 'label');
+        $this->assertContains('Test Field', $optionLabels);
+        $this->assertContains('Test Date and Time', $optionLabels);
+        $this->assertContains('Test Select', $optionLabels);
+        $this->assertContains('Test Radio', $optionLabels);
+
+        foreach ($productOptions['options'] as $option) {
+            $this->assertArrayHasKey('value', $option);
+            $this->assertArrayHasKey('print_value', $option);
+            $this->assertArrayHasKey('option_id', $option);
+            $this->assertArrayHasKey('option_type', $option);
+            $this->assertArrayHasKey('option_value', $option);
+        }
     }
 }

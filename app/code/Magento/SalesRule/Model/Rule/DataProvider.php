@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\SalesRule\Model\Rule;
 
@@ -11,7 +11,7 @@ use Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory;
 use Magento\SalesRule\Model\Rule;
 
 /**
- * Class DataProvider
+ * Data Provider for sales rule form
  */
 class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 {
@@ -26,8 +26,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     protected $loadedData;
 
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $coreRegistry;
@@ -64,7 +62,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         \Magento\SalesRule\Model\Rule\Metadata\ValueProvider $metadataValueProvider,
         array $meta = [],
         array $data = [],
-        DataPersistorInterface $dataPersistor = null
+        ?DataPersistorInterface $dataPersistor = null
     ) {
         $this->collection = $collectionFactory->create();
         $this->coreRegistry = $registry;
@@ -103,6 +101,8 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             $rule->setDiscountQty($rule->getDiscountQty() * 1);
 
             $this->loadedData[$rule->getId()] = $rule->getData();
+            $labels = $rule->getStoreLabels();
+            $this->loadedData[$rule->getId()]['store_labels'] = $labels;
         }
         $data = $this->dataPersistor->get('sale_rule');
         if (!empty($data)) {

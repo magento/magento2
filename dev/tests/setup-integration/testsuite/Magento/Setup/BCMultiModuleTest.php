@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Setup;
@@ -14,6 +14,7 @@ use Magento\TestFramework\Deploy\TableData;
 use Magento\TestFramework\Deploy\TestModuleManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\SetupTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * The purpose of this test is to check whether whole declarative installation is work
@@ -200,7 +201,6 @@ class BCMultiModuleTest extends SetupTestCase
 
     /**
      * @moduleName Magento_TestSetupDeclarationModule1
-     * @dataProvider firstCleanInstallOneModuleDataProvider
      * @param string $dbPrefix
      * @param string $tableName
      * @param string $indexName
@@ -208,6 +208,7 @@ class BCMultiModuleTest extends SetupTestCase
      * @param string $foreignKeyName
      * @throws \Exception
      */
+    #[DataProvider('firstCleanInstallOneModuleDataProvider')]
     public function testFirstCleanInstallOneModule(
         string $dbPrefix,
         string $tableName,
@@ -243,7 +244,7 @@ class BCMultiModuleTest extends SetupTestCase
     /**
      * @return array
      */
-    public function firstCleanInstallOneModuleDataProvider()
+    public static function firstCleanInstallOneModuleDataProvider()
     {
         return [
             'Installation without db prefix' => [

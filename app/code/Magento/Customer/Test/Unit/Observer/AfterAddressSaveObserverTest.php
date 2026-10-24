@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -26,14 +26,18 @@ use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AfterAddressSaveObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var AfterAddressSaveObserver
      */
@@ -97,19 +101,14 @@ class AfterAddressSaveObserverTest extends TestCase
         $this->escaper = $this->createMock(Escaper::class);
         $this->appState = $this->createMock(AppState::class);
         $this->customerSessionMock = $this->createMock(Session::class);
-        $this->group = $this->getMockBuilder(GroupInterface::class)
-            ->setMethods(['getId'])
-            ->getMockForAbstractClass();
+        $this->group = $this->createMock(GroupInterface::class);
         $this->group->expects($this->any())->method('getId')->willReturn(1);
-        $this->groupManagement = $this->getMockBuilder(GroupManagementInterface::class)
-            ->setMethods(['getDefaultGroup'])
-            ->getMockForAbstractClass();
+        $this->groupManagement = $this->createMock(GroupManagementInterface::class);
         $this->groupManagement->expects($this->any())->method('getDefaultGroup')->willReturn($this->group);
 
-        $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->getMockForAbstractClass();
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
         $this->messageManager = $this->getMockBuilder(ManagerInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->model = new AfterAddressSaveObserver(
             $this->vat,
@@ -129,15 +128,14 @@ class AfterAddressSaveObserverTest extends TestCase
      * @param bool $processedFlag
      * @param bool $forceProcess
      * @param int $addressId
-     * @param int $registeredAddressId
-     * @param string $configAddressType
-     * @dataProvider dataProviderAfterAddressSaveRestricted
-     */
+     * @param mixed $registeredAddressId
+     * @param mixed $configAddressType */
+    #[DataProvider('dataProviderAfterAddressSaveRestricted')]
     public function testAfterAddressSaveRestricted(
-        $isVatValidationEnabled,
-        $processedFlag,
-        $forceProcess,
-        $addressId,
+        bool $isVatValidationEnabled,
+        bool $processedFlag,
+        bool $forceProcess,
+        int  $addressId,
         $registeredAddressId,
         $configAddressType
     ) {
@@ -145,10 +143,10 @@ class AfterAddressSaveObserverTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $customer = $this->getMockBuilder(Customer::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getDefaultBilling', 'getStore', 'getDefaultShipping', 'getGroupId'])
-            ->getMock();
+        $customer = $this->createPartialMockWithReflection(
+            Customer::class,
+            ['getDefaultBilling', 'getDefaultShipping', 'getStore', 'getGroupId']
+        );
         $customer->expects($this->any())
             ->method('getStore')
             ->willReturn($store);
@@ -162,21 +160,12 @@ class AfterAddressSaveObserverTest extends TestCase
             ->method('getGroupID')
             ->willReturn(1);
 
-        $address = $this->getMockBuilder(\Magento\Customer\Model\Address::class)
-            ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'getId',
-                    'getIsDefaultBilling',
-                    'getIsDefaultShipping',
-                    'setForceProcess',
-                    'getIsPrimaryBilling',
-                    'getIsPrimaryShipping',
-                    'getCustomer',
-                    'getForceProcess'
-                ]
-            )
-            ->getMock();
+        $address = $this->createPartialMockWithReflection(
+            \Magento\Customer\Model\Address::class,
+            ['getIsDefaultBilling', 'getIsDefaultShipping', 'setForceProcess',
+             'getIsPrimaryBilling', 'getIsPrimaryShipping', 'getForceProcess',
+             'getId', 'getCustomer']
+        );
         $address->expects($this->any())
             ->method('getId')
             ->willReturn($addressId);
@@ -199,12 +188,12 @@ class AfterAddressSaveObserverTest extends TestCase
             ->method('getIsDefaultShipping')
             ->willReturn($addressId);
 
-        $observer = $this->getMockBuilder(Observer::class)
-            ->disableOriginalConstructor()
-            ->setMethods([
+        $observer = $this->createPartialMockWithReflection(
+            Observer::class,
+            [
                 'getCustomerAddress',
-            ])
-            ->getMock();
+            ]
+        );
         $observer->expects($this->once())
             ->method('getCustomerAddress')
             ->willReturn($address);
@@ -231,7 +220,7 @@ class AfterAddressSaveObserverTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderAfterAddressSaveRestricted()
+    public static function dataProviderAfterAddressSaveRestricted()
     {
         return [
             [false, false, false, 1, null, null],
@@ -255,14 +244,10 @@ class AfterAddressSaveObserverTest extends TestCase
             ->method('getStore')
             ->willReturn($store);
 
-        $address = $this->getMockBuilder(\Magento\Customer\Model\Address::class)
-            ->disableOriginalConstructor()
-            ->setMethods([
-                'getCustomer',
-                'getForceProcess',
-                'getVatId',
-            ])
-            ->getMock();
+        $address = $this->createPartialMockWithReflection(
+            \Magento\Customer\Model\Address::class,
+            ['getForceProcess', 'getVatId', 'getCustomer']
+        );
         $address->expects($this->any())
             ->method('getCustomer')
             ->willReturn($customer);
@@ -273,12 +258,12 @@ class AfterAddressSaveObserverTest extends TestCase
             ->method('getVatId')
             ->willThrowException(new \Exception('Exception'));
 
-        $observer = $this->getMockBuilder(Observer::class)
-            ->disableOriginalConstructor()
-            ->setMethods([
+        $observer = $this->createPartialMockWithReflection(
+            Observer::class,
+            [
                 'getCustomerAddress',
-            ])
-            ->getMock();
+            ]
+        );
         $observer->expects($this->once())
             ->method('getCustomerAddress')
             ->willReturn($address);
@@ -303,64 +288,56 @@ class AfterAddressSaveObserverTest extends TestCase
     }
 
     /**
-     * @param string $vatId
+     * @param mixed $vatId
      * @param int $countryId
      * @param bool $isCountryInEU
+     * @param int $customerGroupId
      * @param int $defaultGroupId
-     * @dataProvider dataProviderAfterAddressSaveDefaultGroup
-     */
+     * @param bool $disableAutoGroupChange */
+    #[DataProvider('dataProviderAfterAddressSaveDefaultGroup')]
     public function testAfterAddressSaveDefaultGroup(
         $vatId,
-        $countryId,
-        $isCountryInEU,
-        $defaultGroupId
+        int    $countryId,
+        bool   $isCountryInEU,
+        int $customerGroupId,
+        int $defaultGroupId,
+        bool $disableAutoGroupChange
     ) {
         $store = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $dataGroup = $this->getMockBuilder(GroupInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $dataGroup->expects($this->any())
             ->method('getId')
             ->willReturn($defaultGroupId);
 
-        $customer = $this->getMockBuilder(Customer::class)
-            ->disableOriginalConstructor()
-            ->setMethods([
-                'getStore',
-                'getDisableAutoGroupChange',
-                'getGroupId',
-                'setGroupId',
-                'save',
-            ])
-            ->getMock();
+        $customer = $this->createPartialMockWithReflection(
+            Customer::class,
+            ['getDisableAutoGroupChange', 'setGroupId', 'getStore', 'getGroupId', 'save']
+        );
         $customer->expects($this->exactly(2))
             ->method('getStore')
             ->willReturn($store);
         $customer->expects($this->once())
             ->method('getDisableAutoGroupChange')
-            ->willReturn(false);
-        $customer->expects($this->exactly(2))
+            ->willReturn($disableAutoGroupChange);
+        $customer->expects($this->any())
             ->method('getGroupId')
-            ->willReturn(null);
-        $customer->expects($this->once())
+            ->willReturn($customerGroupId);
+        $customer->expects($this->any())
             ->method('setGroupId')
             ->with($defaultGroupId)
             ->willReturnSelf();
-        $customer->expects($this->once())
+        $customer->expects($this->any())
             ->method('save')
             ->willReturnSelf();
 
-        $address = $this->getMockBuilder(\Magento\Customer\Model\Address::class)
-            ->disableOriginalConstructor()
-            ->setMethods([
-                'getCustomer',
-                'getForceProcess',
-                'getVatId',
-                'getCountry',
-            ])
-            ->getMock();
+        $address = $this->createPartialMockWithReflection(
+            \Magento\Customer\Model\Address::class,
+            ['getForceProcess', 'getVatId', 'getCustomer', 'getCountry']
+        );
         $address->expects($this->once())
             ->method('getCustomer')
             ->willReturn($customer);
@@ -374,12 +351,12 @@ class AfterAddressSaveObserverTest extends TestCase
             ->method('getCountry')
             ->willReturn($countryId);
 
-        $observer = $this->getMockBuilder(Observer::class)
-            ->disableOriginalConstructor()
-            ->setMethods([
+        $observer = $this->createPartialMockWithReflection(
+            Observer::class,
+            [
                 'getCustomerAddress',
-            ])
-            ->getMock();
+            ]
+        );
         $observer->expects($this->once())
             ->method('getCustomerAddress')
             ->willReturn($address);
@@ -405,17 +382,20 @@ class AfterAddressSaveObserverTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderAfterAddressSaveDefaultGroup()
+    public static function dataProviderAfterAddressSaveDefaultGroup()
     {
         return [
-            ['', 1, false, 1],
-            [1, 1, false, 1],
+            'when vatId is empty, non EU country and disable auto group false' => ['', 1, false, 1, 1, false],
+            'when vatId is empty, non EU country and disable auto group true' => ['', 1, false, 1, 1, true],
+            'when vatId is empty, non EU country, disable auto group true
+            and different groupId' => ['', 1, false, 1, 2, true],
+            'when vatId is not empty, non EU country and disable auto group false' => [1, 1, false, 1, 1, false],
         ];
     }
 
     /**
-     * @param string $vatId
-     * @param $vatClass
+     * @param mixed $vatId
+     * @param mixed $vatClass
      * @param int $countryId
      * @param string $country
      * @param int $newGroupId
@@ -425,34 +405,34 @@ class AfterAddressSaveObserverTest extends TestCase
      * @param string $resultValidMessage
      * @param string $resultInvalidMessage
      * @param string $resultErrorMessage
-     * @dataProvider dataProviderAfterAddressSaveNewGroup
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
+    #[DataProvider('dataProviderAfterAddressSaveNewGroup')]
     public function testAfterAddressSaveNewGroup(
         $vatId,
         $vatClass,
-        $countryId,
-        $country,
-        $newGroupId,
-        $areaCode,
-        $resultVatIsValid,
-        $resultRequestSuccess,
-        $resultValidMessage,
-        $resultInvalidMessage,
-        $resultErrorMessage
+        int    $countryId,
+        string $country,
+        int    $newGroupId,
+        string $areaCode,
+        bool   $resultVatIsValid,
+        bool   $resultRequestSuccess,
+        string $resultValidMessage,
+        string $resultInvalidMessage,
+        string $resultErrorMessage
     ) {
         $store = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $validationResult = $this->getMockBuilder(DataObject::class)
-            ->disableOriginalConstructor()
-            ->setMethods([
+        $validationResult = $this->createPartialMockWithReflection(
+            DataObject::class,
+            [
                 'getIsValid',
                 'getRequestSuccess',
-            ])
-            ->getMock();
+            ]
+        );
         $validationResult->expects($this->any())
             ->method('getIsValid')
             ->willReturn($resultVatIsValid);
@@ -460,16 +440,10 @@ class AfterAddressSaveObserverTest extends TestCase
             ->method('getRequestSuccess')
             ->willReturn($resultRequestSuccess);
 
-        $customer = $this->getMockBuilder(Customer::class)
-            ->disableOriginalConstructor()
-            ->setMethods([
-                'getStore',
-                'getDisableAutoGroupChange',
-                'getGroupId',
-                'setGroupId',
-                'save',
-            ])
-            ->getMock();
+        $customer = $this->createPartialMockWithReflection(
+            Customer::class,
+            ['getDisableAutoGroupChange', 'setGroupId', 'getStore', 'getGroupId', 'save', 'setData']
+        );
         $customer->expects($this->exactly(2))
             ->method('getStore')
             ->willReturn($store);
@@ -492,17 +466,10 @@ class AfterAddressSaveObserverTest extends TestCase
             ->with($newGroupId)
             ->willReturnSelf();
 
-        $address = $this->getMockBuilder(\Magento\Customer\Model\Address::class)
-            ->disableOriginalConstructor()
-            ->setMethods([
-                'getCustomer',
-                'getForceProcess',
-                'getVatId',
-                'getCountryId',
-                'getCountry',
-                'setVatValidationResult',
-            ])
-            ->getMock();
+        $address = $this->createPartialMockWithReflection(
+            \Magento\Customer\Model\Address::class,
+            ['getForceProcess', 'getVatId', 'setVatValidationResult', 'getCountryId', 'getCustomer', 'getCountry']
+        );
         $address->expects($this->any())
             ->method('getCustomer')
             ->willReturn($customer);
@@ -523,12 +490,12 @@ class AfterAddressSaveObserverTest extends TestCase
             ->with($validationResult)
             ->willReturnSelf();
 
-        $observer = $this->getMockBuilder(Observer::class)
-            ->disableOriginalConstructor()
-            ->setMethods([
+        $observer = $this->createPartialMockWithReflection(
+            Observer::class,
+            [
                 'getCustomerAddress',
-            ])
-            ->getMock();
+            ]
+        );
         $observer->expects($this->once())
             ->method('getCustomerAddress')
             ->willReturn($address);
@@ -597,73 +564,73 @@ class AfterAddressSaveObserverTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderAfterAddressSaveNewGroup()
+    public static function dataProviderAfterAddressSaveNewGroup()
     {
         return [
             [
-                'vat_id' => 1,
-                'vat_class' => null,
-                'country_id' => 1,
-                'country_code' => 'US',
-                'group_id' => 1,
-                'area_code' => Area::AREA_ADMINHTML,
-                'is_vat_valid' => false,
-                'request_sucess' => false,
-                'valid_message' => '',
-                'invalid_message' => '',
-                'error_message' => '',
+                'vatId' => 1,
+                'vatClass' => null,
+                'countryId' => 1,
+                'country' => 'US',
+                'newGroupId' => 1,
+                'areaCode' => Area::AREA_ADMINHTML,
+                'resultVatIsValid' => false,
+                'resultRequestSuccess' => false,
+                'resultValidMessage' => '',
+                'resultInvalidMessage' => '',
+                'resultErrorMessage' => '',
             ],
             [
-                'vat_id' => 1,
-                'vat_class' => Vat::VAT_CLASS_DOMESTIC,
-                'country_id' => 1,
-                'country_code' => 'US',
-                'group_id' => 1,
-                'area_code' => Area::AREA_FRONTEND,
-                'is_vat_valid' => true,
-                'request_sucess' => false,
-                'valid_message' => 'Your VAT ID was successfully validated. You will be charged tax.',
-                'invalid_message' => '',
-                'error_message' => '',
+                'vatId' => 1,
+                'vatClass' => Vat::VAT_CLASS_DOMESTIC,
+                'countryId' => 1,
+                'country' => 'US',
+                'newGroupId' => 1,
+                'areaCode' => Area::AREA_FRONTEND,
+                'resultVatIsValid' => true,
+                'resultRequestSuccess' => false,
+                'resultValidMessage' => 'Your VAT ID was successfully validated. You will be charged tax.',
+                'resultInvalidMessage' => '',
+                'resultErrorMessage' => '',
             ],
             [
-                'vat_id' => 1,
-                'vat_class' => Vat::VAT_CLASS_INTRA_UNION,
-                'country_id' => 1,
-                'country_code' => 'US',
-                'group_id' => 1,
-                'area_code' => Area::AREA_FRONTEND,
-                'is_vat_valid' => true,
-                'request_sucess' => false,
-                'valid_message' => 'Your VAT ID was successfully validated. You will not be charged tax.',
-                'invalid_message' => '',
-                'error_message' => '',
+                'vatId' => 1,
+                'vatClass' => Vat::VAT_CLASS_INTRA_UNION,
+                'countryId' => 1,
+                'country' => 'US',
+                'newGroupId' => 1,
+                'areaCode' => Area::AREA_FRONTEND,
+                'resultVatIsValid' => true,
+                'resultRequestSuccess' => false,
+                'resultValidMessage' => 'Your VAT ID was successfully validated. You will not be charged tax.',
+                'resultInvalidMessage' => '',
+                'resultErrorMessage' => '',
             ],
             [
-                'vat_id' => 1,
-                'vat_class' => Vat::VAT_CLASS_INTRA_UNION,
-                'country_id' => 1,
-                'country_code' => 'US',
-                'group_id' => 1,
-                'area_code' => Area::AREA_FRONTEND,
-                'is_vat_valid' => false,
-                'request_sucess' => true,
-                'valid_message' => '',
-                'invalid_message' => 'The VAT ID entered (1) is not a valid VAT ID. You will be charged tax.',
-                'error_message' => '',
+                'vatId' => 1,
+                'vatClass' => Vat::VAT_CLASS_INTRA_UNION,
+                'countryId' => 1,
+                'country' => 'US',
+                'newGroupId' => 1,
+                'areaCode' => Area::AREA_FRONTEND,
+                'resultVatIsValid' => false,
+                'resultRequestSuccess' => true,
+                'resultValidMessage' => '',
+                'resultInvalidMessage' => 'The VAT ID entered (1) is not a valid VAT ID. You will be charged tax.',
+                'resultErrorMessage' => '',
             ],
             [
-                'vat_id' => 1,
-                'vat_class' => Vat::VAT_CLASS_INTRA_UNION,
-                'country_id' => 1,
-                'country_code' => 'US',
-                'group_id' => 1,
-                'area_code' => Area::AREA_FRONTEND,
-                'is_vat_valid' => false,
-                'request_sucess' => false,
-                'valid_message' => '',
-                'invalid_message' => '',
-                'error_message' => 'Your Tax ID cannot be validated. You will be charged tax. '
+                'vatId' => 1,
+                'vatClass' => Vat::VAT_CLASS_INTRA_UNION,
+                'countryId' => 1,
+                'country' => 'US',
+                'newGroupId' => 1,
+                'areaCode' => Area::AREA_FRONTEND,
+                'resultVatIsValid' => false,
+                'resultRequestSuccess' => false,
+                'resultValidMessage' => '',
+                'resultInvalidMessage' => '',
+                'resultErrorMessage' => 'Your Tax ID cannot be validated. You will be charged tax. '
                     . 'If you believe this is an error, please contact us at admin@example.com',
             ],
         ];

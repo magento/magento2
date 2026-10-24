@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Pricing\Render;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Pricing\Render\PriceBox;
 use Magento\Framework\Json\Helper\Data;
@@ -81,8 +82,8 @@ class PriceBoxTest extends TestCase
      *
      * @param string $typeCode
      * @param bool $expected
-     * @dataProvider getCanDisplayQtyDataProvider
      */
+    #[DataProvider('getCanDisplayQtyDataProvider')]
     public function testGetCanDisplayQty($typeCode, $expected)
     {
         $product = $this->createPartialMock(Product::class, ['getTypeId']);
@@ -97,7 +98,7 @@ class PriceBoxTest extends TestCase
     /**
      * @return array
      */
-    public function getCanDisplayQtyDataProvider()
+    public static function getCanDisplayQtyDataProvider()
     {
         return [
             'product is not of type grouped' => ['configurable', true],

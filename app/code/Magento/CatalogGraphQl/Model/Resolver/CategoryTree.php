@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -24,7 +24,7 @@ class CategoryTree implements ResolverInterface
     /**
      * Name of type in GraphQL
      */
-    const CATEGORY_INTERFACE = 'CategoryInterface';
+    public const CATEGORY_INTERFACE = 'CategoryInterface';
 
     /**
      * @var CategoryTreeDataProvider
@@ -59,7 +59,7 @@ class CategoryTree implements ResolverInterface
     /**
      * @inheritdoc
      */
-    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
+    public function resolve(Field $field, $context, ResolveInfo $info, ?array $value = null, ?array $args = null)
     {
         if (isset($value[$field->getName()])) {
             return $value[$field->getName()];
@@ -72,13 +72,13 @@ class CategoryTree implements ResolverInterface
             $this->checkCategoryIsActive->execute($rootCategoryId);
         }
         $store = $context->getExtensionAttributes()->getStore();
-        $categoriesTree = $this->categoryTree->getTree($info, $rootCategoryId, (int)$store->getId());
+        $categoriesTree = $this->categoryTree->getTreeCollection($info, $rootCategoryId, (int)$store->getId());
 
-        if (empty($categoriesTree) || ($categoriesTree->count() == 0)) {
+        if ($categoriesTree->count() == 0) {
             throw new GraphQlNoSuchEntityException(__('Category doesn\'t exist'));
         }
 
-        $result = $this->extractDataFromCategoryTree->execute($categoriesTree);
+        $result = $this->extractDataFromCategoryTree->buildTree($categoriesTree, [$rootCategoryId]);
         return current($result);
     }
 }

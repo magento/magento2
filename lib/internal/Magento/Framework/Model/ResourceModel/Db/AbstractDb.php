@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Model\ResourceModel\Db;
 
@@ -89,7 +89,7 @@ abstract class AbstractDb extends AbstractResource
      * or string 'my_field_name' - will be autoconverted to
      *      array( array( 'field' => 'my_field_name', 'title' => 'my_field_name' ) )
      *
-     * @var array
+     * @var array|null
      */
     protected $_uniqueFields = null;
 
@@ -486,7 +486,16 @@ abstract class AbstractDb extends AbstractResource
     {
         foreach ($this->_serializableFields as $field => $parameters) {
             list($serializeDefault, $unserializeDefault) = $parameters;
-            $this->_unserializeField($object, $field, $unserializeDefault);
+            try {
+                $this->_unserializeField($object, $field, $unserializeDefault);
+            } catch (\InvalidArgumentException) {
+                $tableName = $this->getMainTable();
+                $idFieldName = $this->getIdFieldName();
+                $id = $object->getData($idFieldName) ?: '<null>';
+                throw new \InvalidArgumentException(
+                    sprintf('Unable to unserialize %s.%s field for row %s=%s.', $tableName, $field, $idFieldName, $id)
+                );
+            }
         }
     }
 

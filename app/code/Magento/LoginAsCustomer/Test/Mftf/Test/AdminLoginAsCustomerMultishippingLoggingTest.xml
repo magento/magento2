@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -17,10 +17,6 @@
             <severity value="MAJOR"/>
             <group value="login_as_customer"/>
             <group value="multishipping"/>
-            <skip>
-                <issueId value="https://github.com/magento/magento2-login-as-customer/pull/192"/>
-            </skip>
-            <group value="pr_exclude"/>
         </annotations>
 
         <before>
@@ -34,15 +30,44 @@
             <comment userInput="Adding the comment to replace 'cache:flush' command for preserving Backward Compatibility" stepKey="flushCacheBeforeTestRun"/>
             <createData entity="SimpleProduct2" stepKey="createProduct1"/>
             <createData entity="SimpleProduct2" stepKey="createProduct2"/>
-            <createData entity="Simple_US_Customer_Assistance_Allowed_Two_Addresses" stepKey="createCustomer"/>
-            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <createData entity="Simple_US_Customer_Multiple_Addresses" stepKey="createCustomer"/>
+            <!-- Create new User -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
+            <actionGroup ref="AdminCreateUserWithRoleActionGroup" stepKey="createAdminUser">
+                <argument name="user" value="activeAdmin"/>
+                <argument name="role" value="roleDefaultAdministrator"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutMasterAdmin"/>
+
+            <!-- Login as new User -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToNewAdmin">
+                <argument name="username" value="{{activeAdmin.username}}"/>
+                <argument name="password" value="{{activeAdmin.password}}"/>
+            </actionGroup>
+
+            <!--Go to All Customers Page to open the customer-->
+            <amOnPage url="{{AdminCustomerPage.url}}" stepKey="goToAllCustomersPage2"/>
+            <actionGroup ref="OpenEditCustomerFromAdminActionGroup" stepKey="OpenEditCustomerFrom2">
+                <argument name="customer" value="$$createCustomer$$"/>
+            </actionGroup>
+            <actionGroup ref="AdminOpenAccountInformationTabFromCustomerEditPageAllowAssistanceActionGroup" stepKey="clickOnAllowAssistanceConfig2"/>
+            <!--Verify that changes are saved successfully-->
+            <actionGroup ref="AdminSaveCustomerAndAssertSuccessMessage" stepKey="assertThatChangesAreSavedSuccessfully2"/>
         </before>
 
         <after>
             <deleteData createDataKey="createProduct1" stepKey="deleteProduct1"/>
             <deleteData createDataKey="createProduct2" stepKey="deleteProduct2"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearAllOrdersGridFilters"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+
+            <!-- Delete new User -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
+            <actionGroup ref="AdminDeleteUserActionGroup" stepKey="deleteUser">
+                <argument name="user" value="activeAdmin"/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
             <actionGroup ref="CliDisableFreeShippingMethodActionGroup" stepKey="disableFreeShipping"/>
             <comment userInput="Adding the comment to replace 'cache:flush' command for preserving Backward Compatibility" stepKey="flushCacheAfterTestRun"/>
@@ -66,7 +91,10 @@
         <actionGroup ref="CheckingWithMultipleAddressesActionGroup" stepKey="checkoutWithMultipleAddresses"/>
         <waitForPageLoad stepKey="waitForShippingInfoPageLoad"/>
         <actionGroup ref="SelectMultiShippingInfoActionGroup" stepKey="checkoutWithMultipleShipping"/>
-        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
+        <!-- Selects the 'Check / Money Order' Payment Method -->
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <conditionalClick selector="{{StorefrontCheckoutPaymentMethodSection.paymentMethod('Check / Money order')}}" dependentSelector="{{StorefrontCheckoutPaymentMethodSection.paymentMethod('Check / Money order')}}" visible="true" stepKey="selectCheckmoPaymentMethod"/>
+        <!-- Select Billing Info -->
         <actionGroup ref="SelectBillingInfoActionGroup" stepKey="checkoutWithPaymentMethod"/>
         <waitForPageLoad stepKey="waitForReviewOrderPageLoad"/>
         <actionGroup ref="ReviewOrderForMultiShipmentActionGroup" stepKey="reviewOrderForMultiShipment">
@@ -82,22 +110,28 @@
         </actionGroup>
         <waitForPageLoad stepKey="waitForOrderPageLoad"/>
 
-        <!-- Assert Storefront Order page contains message about Order created by a Store Administrator -->
-        <actionGroup ref="StorefrontAssertContainsMessageOrderCreatedByAdminActionGroup" stepKey="verifyStorefrontMessageFirstOrder">
-            <argument name="orderId" value="{$getFirstOrderIdPlaceOrder}"/>
-        </actionGroup>
-        <actionGroup ref="StorefrontAssertContainsMessageOrderCreatedByAdminActionGroup" stepKey="verifyStorefrontMessageSecondOrder">
-            <argument name="orderId" value="{$getSecondOrderIdPlaceOrder}"/>
-        </actionGroup>
+        <!-- Assert Storefront First Order page contains message about Order created by a Store Administrator -->
+        <actionGroup ref="StorefrontNavigateToCustomerOrdersHistoryPageActionGroup" stepKey="goToOrderHistoryPage"/>
+        <click selector="{{OrdersGridSection.viewOrder({$getFirstOrderIdPlaceOrder})}}" stepKey="verifyStorefrontMessageFirstOrder"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabFirstOrderId"/>
+        <waitForText selector="{{StorefrontCustomerOrderSection.orderComments}}" userInput="Order Placed by Store Administrator" stepKey="seeMessageOrderCreatedByAdmin"/>
+
+        <!-- Assert Storefront Second Order page contains message about Order created by a Store Administrator -->
+        <actionGroup ref="StorefrontNavigateToCustomerOrdersHistoryPageActionGroup" stepKey="goToOrderHistoryPage2"/>
+        <click selector="{{OrdersGridSection.viewOrder({$getSecondOrderIdPlaceOrder})}}" stepKey="verifyStorefrontMessageSecondOrder"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabSecondOrderId"/>
+        <waitForText selector="{{StorefrontCustomerOrderSection.orderComments}}" userInput="Order Placed by Store Administrator" stepKey="seeMessageOrderCreatedByAdmin2"/>
 
         <!-- Assert Admin Order page contains message about Order created by a Store Administrator -->
         <actionGroup ref="AdminAssertContainsMessageOrderCreatedByAdminActionGroup" stepKey="verifyAdminMessageFirstOrder">
-            <argument name="orderId" value="{$getFirstOrderIdPlaceOrder}"/>
-            <argument name="adminUserFullName" value="Magento User"/>
+            <argument name="orderId" value="{$grabFirstOrderId}"/>
+            <argument name="adminUserFullName" value="{{activeAdmin.firstname}} {{activeAdmin.lastname}}"/>
         </actionGroup>
         <actionGroup ref="AdminAssertContainsMessageOrderCreatedByAdminActionGroup" stepKey="verifyAdminMessageSecondOrder">
-            <argument name="orderId" value="{$getSecondOrderIdPlaceOrder}"/>
-            <argument name="adminUserFullName" value="Magento User"/>
+            <argument name="orderId" value="{$grabSecondOrderId}"/>
+            <argument name="adminUserFullName" value="{{activeAdmin.firstname}} {{activeAdmin.lastname}}"/>
         </actionGroup>
     </test>
 </tests>

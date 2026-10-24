@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -39,7 +39,7 @@ class CacheCleanerTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->action = $this->getMockForAbstractClass(ActionInterface::class);
+        $this->action = $this->createMock(ActionInterface::class);
         $this->cacheCleaner = $this->createMock(DeferredCacheCleaner::class);
         $this->model = new CacheCleaner($this->cacheCleaner);
     }

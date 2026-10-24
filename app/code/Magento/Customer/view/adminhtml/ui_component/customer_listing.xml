@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-/**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
- */
+ /**
+  * Copyright 2015 Adobe
+  * All Rights Reserved.
+  */
 -->
 <listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <argument name="data" xsi:type="array">
@@ -226,7 +226,6 @@
         <column name="dob" class="Magento\Ui\Component\Listing\Columns\Date" component="Magento_Ui/js/grid/columns/date" sortOrder="170">
             <settings>
                 <timezone>false</timezone>
-                <dateFormat>MMM d, y</dateFormat>
                 <skipTimeZoneConversion>true</skipTimeZoneConversion>
                 <filter>dateRange</filter>
                 <dataType>date</dataType>

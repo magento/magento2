@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -39,13 +39,14 @@ class Alphanum extends \Magento\Eav\Model\Entity\Increment\AbstractIncrement
      */
     public function getNextId()
     {
-        $lastId = $this->getLastId();
+        $lastId = (string)$this->getLastId();
+        $prefix = (string)$this->getPrefix();
 
-        if (strpos($lastId, (string) $this->getPrefix()) === 0) {
-            $lastId = substr($lastId, strlen($this->getPrefix()));
+        if (strpos($lastId, $prefix) === 0) {
+            $lastId = substr($lastId, strlen($prefix));
         }
 
-        $lastId = str_pad((string)$lastId, $this->getPadLength(), $this->getPadChar(), STR_PAD_LEFT);
+        $lastId = str_pad($lastId, $this->getPadLength(), $this->getPadChar(), STR_PAD_LEFT);
 
         $nextId = '';
         $bumpNextChar = true;

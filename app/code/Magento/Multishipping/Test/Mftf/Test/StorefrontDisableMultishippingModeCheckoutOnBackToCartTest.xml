@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -18,6 +18,7 @@
             <testCaseId value="MC-39007"/>
             <useCaseId value="MC-38825"/>
             <group value="multishipping"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="ApiCategory" stepKey="createCategory"/>
@@ -33,6 +34,7 @@
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="createVirtualProduct" stepKey="deleteVirtualProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomerWithMultipleAddresses" stepKey="deleteCustomer"/>
         </after>
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
@@ -56,11 +58,15 @@
         </actionGroup>
 
         <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCartFromMinicart"/>
+        <waitForElement time="30" selector="{{CheckoutCartSummarySection.estimateShippingAndTaxForm}}" stepKey="waitForEstimateShippingAndTaxForm"/>
+        <waitForElement time="30" selector="{{CheckoutCartSummarySection.shippingMethodForm}}" stepKey="waitForShippingMethodForm"/>
+        <waitForElementVisible time="30" selector="{{CheckoutCartSummarySection.total}}" stepKey="waitForTotalElement"/>
         <waitForPageLoad stepKey="waitForGrandTotalToLoad"/>
         <grabTextFrom selector="{{CheckoutPaymentSection.orderSummaryTotal}}" stepKey="grabTotal"/>
 
         <actionGroup ref="StorefrontGoCheckoutWithMultipleAddressesActionGroup" stepKey="goCheckoutWithMultipleAddresses"/>
         <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goBackToShoppingCartPage"/>
+        <actionGroup ref="StorefrontCheckoutCartFillEstimateShippingAndTaxActionGroup" stepKey="updateShippingAndTaxEstimator" />
         <actionGroup ref="AssertStorefrontCheckoutPaymentSummaryTotalActionGroup" stepKey="assertSummaryTotal">
             <argument name="orderTotal" value="{$grabTotal}"/>
         </actionGroup>

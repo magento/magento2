@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Customer\Model\Customer;
 use Magento\Customer\Model\Session;
 use Magento\Framework\DataObject\Copy;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Paypal\Model\Config;
 use Magento\Paypal\Model\Express\Checkout;
 use Magento\Quote\Api\Data\CartExtensionInterface;
@@ -29,6 +30,8 @@ use PHPUnit\Framework\TestCase;
  */
 class CheckoutTest extends TestCase
 {
+    use MockCreationTrait;
+
     const SHIPPING_METHOD = 'new_shipping_method';
     /**
      * @var Checkout|Checkout
@@ -69,33 +72,10 @@ class CheckoutTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
         $this->customerMock = $this->createMock(Customer::class);
-        $this->quoteMock = $this->getMockBuilder(Quote::class)
-            ->addMethods(['getCustomerData'])
-            ->onlyMethods(
-                [
-                    'getId',
-                    'assignCustomer',
-                    'assignCustomerWithAddressChange',
-                    'getBillingAddress',
-                    'getShippingAddress',
-                    'isVirtual',
-                    'addCustomerAddress',
-                    'collectTotals',
-                    '__wakeup',
-                    'save',
-                    'getIsVirtual',
-                    'getExtensionAttributes'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->quoteMock = $this->createMock(Quote::class);
         $this->customerAccountManagementMock = $this->createMock(AccountManagement::class);
-        $this->objectCopyServiceMock = $this->getMockBuilder(Copy::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->customerSessionMock = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->objectCopyServiceMock = $this->createMock(Copy::class);
+        $this->customerSessionMock = $this->createMock(Session::class);
         $paypalConfigMock = $this->createMock(Config::class);
         $this->checkoutModel = $this->objectManager->getObject(
             Checkout::class,
@@ -114,7 +94,7 @@ class CheckoutTest extends TestCase
 
     public function testSetCustomerData()
     {
-        $customerDataMock = $this->getMockForAbstractClass(CustomerInterface::class);
+        $customerDataMock = $this->createMock(CustomerInterface::class);
         $this->quoteMock->expects($this->once())->method('assignCustomer')->with($customerDataMock);
         $customerDataMock->expects($this->once())
             ->method('getId');
@@ -124,7 +104,7 @@ class CheckoutTest extends TestCase
     public function testSetCustomerWithAddressChange()
     {
         /** @var CustomerInterface $customerDataMock */
-        $customerDataMock = $this->getMockForAbstractClass(CustomerInterface::class);
+        $customerDataMock = $this->createMock(CustomerInterface::class);
         /** @var Address $customerDataMock */
         $quoteAddressMock = $this->createMock(Address::class);
         $this->quoteMock
@@ -137,13 +117,11 @@ class CheckoutTest extends TestCase
 
     public function testUpdateShippingMethod()
     {
-        $shippingAddressMock = $this->getMockBuilder(Address::class)
-            ->setMethods(['setCollectShippingRates', 'getShippingMethod', 'setShippingMethod'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $billingAddressMock = $this->getMockBuilder(Address::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $shippingAddressMock = $this->createPartialMockWithReflection(
+            Address::class,
+            ['setCollectShippingRates', 'setShippingMethod', 'getShippingMethod']
+        );
+        $billingAddressMock = $this->createMock(Address::class);
         $shippingAddressMock->expects(static::once())
             ->method('getShippingMethod')
             ->willReturn('old_method');
@@ -152,23 +130,20 @@ class CheckoutTest extends TestCase
             ->with(self::SHIPPING_METHOD)
             ->willReturnSelf();
 
-        $shippingMock = $this->getMockBuilder(Shipping::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $shippingMock = $this->createMock(Shipping::class);
         $shippingMock->expects(static::once())
             ->method('setMethod')
             ->with(self::SHIPPING_METHOD);
 
-        $shippingAssignmentMock = $this->getMockBuilder(ShippingAssignment::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $shippingAssignmentMock = $this->createMock(ShippingAssignment::class);
         $shippingAssignmentMock->expects(static::once())
             ->method('getShipping')
             ->willReturn($shippingMock);
 
-        $cartExtensionMock = $this->getMockBuilder(CartExtensionInterface::class)
-            ->setMethods(['getShippingAssignments'])
-            ->getMockForAbstractClass();
+        $cartExtensionMock = $this->createPartialMockWithReflection(
+            CartExtensionInterface::class,
+            ['getShippingAssignments']
+        );
         $cartExtensionMock->expects(static::exactly(2))
             ->method('getShippingAssignments')
             ->willReturn([$shippingAssignmentMock]);

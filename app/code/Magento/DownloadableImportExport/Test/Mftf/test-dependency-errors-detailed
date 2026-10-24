@@ -1,0 +1,12 @@
+
+File "/var/www/html/app/code/Magento/DownloadableImportExport/Test/Mftf/Test/AdminExportDownloadableProductWithFileLinksTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminExportMessageConsumerData from module(s): magento/module-message-queue
+	 CliConsumerStartActionGroup from module(s): magento/module-message-queue
+
+File "/var/www/html/app/code/Magento/DownloadableImportExport/Test/Mftf/Test/AdminExportDownloadableProductWithURLLinksTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminExportMessageConsumerData from module(s): magento/module-message-queue
+	 CliConsumerStartActionGroup from module(s): magento/module-message-queue

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
@@ -22,6 +22,7 @@
             <createData entity="ApiSimpleProduct" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <magentoCLI command="config:set checkout/options/display_billing_address_on 1" stepKey="setShowBillingAddressOnPaymentPage"/>
             <magentoCLI command="config:set payment/checkmo/allowspecific 1" stepKey="allowSpecificValue"/>
             <magentoCLI command="config:set payment/checkmo/specificcountry GB" stepKey="specificCountryValue"/>
@@ -33,6 +34,7 @@
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="simpleuscustomer" stepKey="deleteCustomer"/>
             <magentoCLI command="config:set payment/checkmo/allowspecific 0" stepKey="allowSpecificValue"/>
             <magentoCLI command="config:set payment/checkmo/specificcountry ''" stepKey="specificCountryValue"/>
             <magentoCLI command="config:set checkout/options/display_billing_address_on 0" stepKey="setDisplayBillingAddressOnPaymentMethod"/>
@@ -59,7 +61,7 @@
         <actionGroup ref="StorefrontSelectFirstShippingMethodActionGroup" stepKey="selectAddress"/>
         <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNextButton"/>
         <waitForPageLoad stepKey="waitBillingForm"/>
-        <seeInCurrentUrl url="{{CheckoutPage.url}}/#payment" stepKey="assertCheckoutPaymentUrl"/>
+        <seeCurrentUrlMatches regex="~/checkout/?#payment~" stepKey="assertCheckoutPaymentUrl"/>
         <dontSee selector="{{CheckoutPaymentSection.paymentMethodByName('Check / Money order')}}" stepKey="paymentMethodDoesNotAvailable"/>
 
         <!-- Fill UK Address and verify that payment available and checkout successful -->

@@ -1,15 +1,30 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\GraphQl\Quote\Customer;
 
+use Magento\Bundle\Test\Fixture\AddProductToCart as AddBundleProductToCart;
+use Magento\Bundle\Test\Fixture\Link as BundleSelectionFixture;
+use Magento\Bundle\Test\Fixture\Option as BundleOptionFixture;
+use Magento\Bundle\Test\Fixture\Product as BundleProductFixture;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\Catalog\Test\Fixture\ProductStock as ProductStockFixture;
+use Magento\Customer\Test\Fixture\Customer;
+use Magento\Indexer\Test\Fixture\Indexer as IndexerFixture;
 use Magento\Quote\Model\QuoteFactory;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
+use Magento\Quote\Test\Fixture\AddProductToCart;
+use Magento\Quote\Test\Fixture\CustomerCart;
+use Magento\Quote\Test\Fixture\GuestCart as GuestCartFixture;
+use Magento\TestFramework\Fixture\Config as ConfigFixture;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorage;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
@@ -39,6 +54,21 @@ class MergeCartsTest extends GraphQlAbstract
      */
     private $customerTokenService;
 
+    /**
+     * @var DataFixtureStorage
+     */
+    private $fixtures;
+
+    /**
+     * @var \Magento\Quote\Model\QuoteIdMaskFactory
+     */
+    private $quoteIdMaskedFactory;
+
+    /**
+     * @var \Magento\Quote\Model\ResourceModel\Quote\QuoteIdMask
+     */
+    private $quoteIdMaskedResource;
+
     protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
@@ -46,6 +76,9 @@ class MergeCartsTest extends GraphQlAbstract
         $this->quoteFactory = $objectManager->get(QuoteFactory::class);
         $this->quoteIdToMaskedId = $objectManager->get(QuoteIdToMaskedQuoteIdInterface::class);
         $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
+        $this->fixtures = DataFixtureStorageManager::getStorage();
+        $this->quoteIdMaskedFactory = $objectManager->get(\Magento\Quote\Model\QuoteIdMaskFactory::class);
+        $this->quoteIdMaskedResource = $objectManager->get(\Magento\Quote\Model\ResourceModel\Quote\QuoteIdMask::class);
     }
 
     protected function tearDown(): void
@@ -99,6 +132,170 @@ class MergeCartsTest extends GraphQlAbstract
         $item2 = $cartResponse['cart']['items'][1];
         self::assertArrayHasKey('quantity', $item2);
         self::assertEquals(1, $item2['quantity']);
+    }
+
+    #[
+        DataFixture(ProductFixture::class, ['sku' => 'simple1', 'price' => 10], as:'p1'),
+        DataFixture(ProductFixture::class, ['sku' => 'simple2', 'price' => 20], as:'p2'),
+        DataFixture(BundleSelectionFixture::class, ['sku' => '$p1.sku$', 'price' => 10, 'price_type' => 0], as:'link1'),
+        DataFixture(BundleSelectionFixture::class, ['sku' => '$p2.sku$', 'price' => 25, 'price_type' => 0], as:'link2'),
+        DataFixture(BundleOptionFixture::class, ['title' => 'Checkbox Options', 'type' => 'checkbox',
+            'required' => 1,'product_links' => ['$link1$', '$link2$']], 'opt1'),
+        DataFixture(BundleOptionFixture::class, ['title' => 'Checkbox Options', 'type' => 'checkbox',
+            'required' => 1,'product_links' => ['$link1$', '$link2$']], 'opt2'),
+        DataFixture(
+            BundleProductFixture::class,
+            ['sku' => 'bundle-product-multiselect-checkbox-options','price' => 50,'price_type' => 1,
+                '_options' => ['$opt1$', '$opt2$']],
+            as:'bp1'
+        ),
+        DataFixture(Customer::class, ['email' => 'me@example.com'], as: 'customer'),
+        DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], as: 'customerCart'),
+        DataFixture(
+            AddBundleProductToCart::class,
+            [
+                'cart_id' => '$customerCart.id$',
+                'product_id' => '$bp1.id$',
+                'selections' => [['$p1.id$'], ['$p2.id$']],
+                'qty' => 1
+            ]
+        ),
+        DataFixture(GuestCartFixture::class, as: 'guestCart'),
+        DataFixture(
+            AddBundleProductToCart::class,
+            [
+                'cart_id' => '$guestCart.id$',
+                'product_id' => '$bp1.id$',
+                'selections' => [['$p1.id$'], ['$p2.id$']],
+                'qty' => 2
+            ]
+        )
+    ]
+    public function testMergeGuestWithCustomerCartBundleProduct()
+    {
+        $guestCart = $this->fixtures->get('guestCart');
+        $guestQuoteMaskedId = $this->quoteIdToMaskedId->execute((int)$guestCart->getId());
+
+        $customerCart = $this->fixtures->get('customerCart');
+        $customerCartId = (int)$customerCart->getId();
+        $customerQuoteMaskedId = $this->quoteIdToMaskedId->execute($customerCartId);
+        if (!$customerQuoteMaskedId) {
+            $quoteIdMask = $this->quoteIdMaskedFactory->create()->setQuoteId($customerCartId);
+            $this->quoteIdMaskedResource->save($quoteIdMask);
+            $customerQuoteMaskedId = $this->quoteIdToMaskedId->execute($customerCartId);
+        }
+
+        $queryHeader = $this->getHeaderMap('me@example.com', 'password');
+        $cartMergeQuery = $this->getCartMergeMutation($guestQuoteMaskedId, $customerQuoteMaskedId);
+        $mergeResponse = $this->graphQlMutation($cartMergeQuery, [], '', $queryHeader);
+        self::assertArrayHasKey('mergeCarts', $mergeResponse);
+
+        $cartResponse = $mergeResponse['mergeCarts'];
+        self::assertArrayHasKey('items', $cartResponse);
+        self::assertCount(1, $cartResponse['items']);
+        $cartResponse = $this->graphQlMutation($this->getCartQuery($customerQuoteMaskedId), [], '', $queryHeader);
+
+        self::assertArrayHasKey('cart', $cartResponse);
+        self::assertArrayHasKey('items', $cartResponse['cart']);
+        self::assertCount(1, $cartResponse['cart']['items']);
+        $item1 = $cartResponse['cart']['items'][0];
+        self::assertArrayHasKey('quantity', $item1);
+        self::assertEquals(3, $item1['quantity']);
+    }
+
+    #[
+        ConfigFixture('cataloginventory/options/backorders', 1), // 1 = BACKORDERS_YES_NOTIFY
+        ConfigFixture('cataloginventory/item_options/use_config_backorders', 0),
+        DataFixture(ProductFixture::class, [
+            'extension_attributes' => [
+                'stock_item' => [
+                    'use_config_backorders' => false,
+                    'backorders' => 1,
+                    'is_in_stock' => 1
+                ]
+            ]
+        ], as: 'product'),
+        DataFixture(
+            ProductStockFixture::class,
+            [
+                'prod_id' => '$product.id$',
+                'prod_qty' => 0
+            ]
+        ),
+        DataFixture(IndexerFixture::class),
+        DataFixture(GuestCartFixture::class, as: 'guestCart'),
+        DataFixture(
+            AddProductToCart::class,
+            [
+                'cart_id' => '$guestCart.id$',
+                'product_id' => '$product.id$',
+                'qty' => 3
+            ]
+        ),
+        DataFixture(Customer::class, as: 'customer'),
+        DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], 'customerCart'),
+        DataFixture(
+            AddProductToCart::class,
+            [
+                'cart_id' => '$customerCart.id$',
+                'product_id' => '$product.id$',
+                'qty' => 2
+            ]
+        ),
+    ]
+    public function testMergeGuestWithCustomerCartBackorderProduct()
+    {
+        $updatedQuantity = 5; //including 3 from guest cart and 2 from customer cart
+        $guestCartId = (int)$this->fixtures->get('guestCart')->getId();
+        $customerCartId = (int)$this->fixtures->get('customerCart')->getId();
+        $customerEmail = $this->fixtures->get('customer')->getEmail();
+        $productSku = $this->fixtures->get('product')->getSku();
+
+        $guestQuoteMaskedId = $this->quoteIdToMaskedId->execute($guestCartId);
+        $customerQuoteMaskedId = $this->quoteIdToMaskedId->execute($customerCartId);
+        if (!$customerQuoteMaskedId) {
+            $quoteIdMask = $this->quoteIdMaskedFactory->create()->setQuoteId($customerCartId);
+            $this->quoteIdMaskedResource->save($quoteIdMask);
+            $customerQuoteMaskedId = $this->quoteIdToMaskedId->execute($customerCartId);
+        }
+
+        $queryHeader = $this->getHeaderMap($customerEmail);
+        $cartMergeQuery = $this->getCartMergeMutation($guestQuoteMaskedId, $customerQuoteMaskedId);
+
+        $mergeResponse = $this->graphQlMutation($cartMergeQuery, [], '', $queryHeader);
+        $this->assertEquals(
+            [
+                "mergeCarts" => [
+                    "items" => [
+                        0 => [
+                            "quantity" => $updatedQuantity,
+                            "product" => [
+                                "sku" => $productSku,
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            $mergeResponse
+        );
+
+        $cartQuery = $this->getCartQuery($customerQuoteMaskedId);
+        $cartResponse = $this->graphQlMutation($cartQuery, [], '', $queryHeader);
+        $this->assertEquals(
+            [
+                "cart" => [
+                    "items" => [
+                        0 => [
+                            "quantity" => $updatedQuantity,
+                            "product" => [
+                                "sku" => $productSku,
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            $cartResponse
+        );
     }
 
     /**

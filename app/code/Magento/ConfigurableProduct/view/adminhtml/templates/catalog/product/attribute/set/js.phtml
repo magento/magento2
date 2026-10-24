@@ -1,11 +1,22 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+/** @var \Magento\Framework\Escaper $escaper */
+
+$cannotDeleteGroupAlert = $escaper->escapeJs(
+    __(
+        'This group contains attributes used in configurable products. '
+        . 'Please move these attributes to another group and try again.'
+    )
+);
+
+$cannotUnassignAttributeAlert = $escaper->escapeJs(
+    __('This attribute is used in configurable products. You cannot remove it from the attribute set.')
+);
 ?>
 
 <?php $scriptString = <<<script
@@ -14,58 +25,29 @@ require([
     "Magento_Ui/js/modal/alert",
     "tree-panel"
 ], function(alert){
-ConfigurableNodeExists = function(currentNode) {
-    for (var i in currentNode.childNodes ) {
-        if (currentNode.childNodes[i].id) {
-            child = editSet.currentNode.childNodes[i];
-            if (child.attributes.is_configurable) {
-                return true;
-            }
-        }
-    }
-    return false;
-};
-
-editSet.submit = editSet.submit.wrap(function(original) {
-    if (editSet.currentNode){
-        if (ConfigurableNodeExists(editSet.currentNode)) {
-            alert({
-                content: '{$block->escapeJs(
-                    __('This group contains attributes used in configurable products. ' .
-                        'Please move these attributes to another group and try again.')
-                )}'
-            });
-            return;
-        }
-    }
-    return original();
-});
-
-editSet.rightBeforeAppend = editSet.rightBeforeAppend.wrap(function(original, tree, nodeThis, node, newParent) {
-    if (node.attributes.is_configurable == 1) {
+function check(tree, data) {
+    if (tree.isGroup(data.node) && tree.find(data.node, [{is_configurable: 1}])) {
         alert({
-            content: '{$block->escapeJs(
-                __('This attribute is used in configurable products. You cannot remove it from the attribute set.')
-            )}'
+            content: '$cannotDeleteGroupAlert'
         });
         return false;
-    }
-    return original(tree, nodeThis, node, newParent);
-});
-
-editSet.rightBeforeInsert = editSet.rightBeforeInsert.wrap(function(original, tree, nodeThis, node, newParent) {
-    if (node.attributes.is_configurable == 1) {
+    } else if (tree.getOriginalNode(data.node).is_configurable) {
         alert({
-            content: '{$block->escapeJs(
-                __('This attribute is used in configurable products. You cannot remove it from the attribute set.')
-            )}'
+            content: '$cannotUnassignAttributeAlert'
         });
         return false;
+    } else {
+        return true;
     }
-    return original(tree, nodeThis, node, newParent);
+}
+editSet.beforeUnassign = editSet.beforeUnassign.wrap(function(original, tree, data) {
+    return check.call(this, this.assigned, data) && original(tree, data);
 });
-
+editSet.beforeDelete = editSet.beforeDelete.wrap(function(original, tree, data) {
+    return check.call(this, tree, data) && original(tree, data);
+});
 });
 script;
 ?>
-<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
+<?= /* @noEscape */
+$secureRenderer->renderTag('script', [], $scriptString, false) ?>

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Model;
 
@@ -100,7 +100,7 @@ class Options
         $options = explode(';', trim($options));
 
         foreach ($options as $value) {
-            $result[] = $this->escaper->escapeHtml(trim($value)) ?: ' ';
+            $result[] = $this->escaper->escapeHtml(trim(__($value))) ?: ' ';
         }
 
         if ($isOptional && trim(current($options))) {

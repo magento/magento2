@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -199,17 +199,16 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
      */
     private function getFileParams()
     {
-        $file = null;
         $plain = false;
-        if ($this->getRequest()->getParam('file')) {
+        if ($this->getRequest()->getParam('file', '')) {
             // download file
             $file = $this->urlDecoder->decode(
-                $this->getRequest()->getParam('file')
+                $this->getRequest()->getParam('file', '')
             );
-        } elseif ($this->getRequest()->getParam('image')) {
+        } elseif ($this->getRequest()->getParam('image', '')) {
             // show plain image
             $file = $this->urlDecoder->decode(
-                $this->getRequest()->getParam('image')
+                $this->getRequest()->getParam('image', '')
             );
             $plain = true;
         } else {

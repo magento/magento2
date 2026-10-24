@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,12 +10,13 @@ namespace Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Deferred;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product as ProductDataProvider;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\GraphQl\Model\Query\ContextInterface;
 
 /**
  * Deferred resolver for product data.
  */
-class Product
+class Product implements ResetAfterRequestInterface
 {
     /**
      * @var ProductDataProvider
@@ -62,10 +63,7 @@ class Product
      */
     public function addProductSku(string $sku) : void
     {
-        if (!in_array($sku, $this->productSkus) && !empty($this->productList)) {
-            $this->productList = [];
-            $this->productSkus[] = $sku;
-        } elseif (!in_array($sku, $this->productSkus)) {
+        if (!in_array($sku, $this->productSkus)) {
             $this->productSkus[] = $sku;
         }
     }
@@ -79,12 +77,7 @@ class Product
     public function addProductSkus(array $skus) : void
     {
         foreach ($skus as $sku) {
-            if (!in_array($sku, $this->productSkus) && !empty($this->productList)) {
-                $this->productList = [];
-                $this->productSkus[] = $sku;
-            } elseif (!in_array($sku, $this->productSkus)) {
-                $this->productSkus[] = $sku;
-            }
+            $this->addProductSku($sku);
         }
     }
 
@@ -103,43 +96,63 @@ class Product
      * Get product from result set.
      *
      * @param string $sku
+     * @param null|ContextInterface $context
      * @return array
      */
-    public function getProductBySku(string $sku) : array
+    public function getProductBySku(string $sku, ?ContextInterface $context = null) : array
     {
-        $products = $this->fetch();
+        if (isset($this->productList[$sku])) {
+            return $this->productList[$sku];
+        }
 
-        if (!isset($products[$sku])) {
+        $this->fetch($context);
+
+        if (!isset($this->productList[$sku])) {
             return [];
         }
 
-        return $products[$sku];
+        return $this->productList[$sku];
     }
 
     /**
      * Fetch product data and return in array format. Keys for products will be their skus.
      *
-     * @return array
+     * @param null|ContextInterface $context
      */
-    private function fetch() : array
+    private function fetch(?ContextInterface $context = null): void
     {
-        if (empty($this->productSkus) || !empty($this->productList)) {
-            return $this->productList;
+        if (empty($this->productSkus)) {
+            return;
         }
 
-        $this->searchCriteriaBuilder->addFilter(ProductInterface::SKU, $this->productSkus, 'in');
+        $skusToFetch = array_diff($this->productSkus, array_keys($this->productList));
+
+        if (empty($skusToFetch)) {
+            return;
+        }
+
+        $this->searchCriteriaBuilder->addFilter(ProductInterface::SKU, $skusToFetch, 'in');
         $result = $this->productDataProvider->getList(
             $this->searchCriteriaBuilder->create(),
             $this->attributeCodes,
             false,
-            false
+            true,
+            $context
         );
 
         /** @var \Magento\Catalog\Model\Product $product */
         foreach ($result->getItems() as $product) {
             $this->productList[$product->getSku()] = ['model' => $product];
         }
+    }
 
-        return $this->productList;
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->productList = [];
+        $this->productSkus = [];
+        $this->attributeCodes = [];
     }
 }

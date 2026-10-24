@@ -1,33 +1,37 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Validator;
 
-use Magento\Framework\Module\Dir\Reader;
-use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\Phrase;
-use Magento\Framework\Validator;
 use Magento\Framework\Cache\FrontendInterface;
+use Magento\Framework\Module\Dir\Reader;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Translate\Adapter;
+use Magento\Framework\Validator;
 
 /**
  * Factory for \Magento\Framework\Validator and \Magento\Framework\Validator\Builder.
  */
-class Factory
+class Factory implements ResetAfterRequestInterface
 {
     /**
      * cache key
      *
      * @deprecated
+     * @see we don't recommend this approach anymore
      */
-    const CACHE_KEY = __CLASS__;
+    public const CACHE_KEY = __CLASS__;
 
     /**
      * @var ObjectManagerInterface
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
-    protected $_objectManager;
+    protected readonly ObjectManagerInterface $_objectManager;
 
     /**
      * Validator config files
@@ -43,8 +47,10 @@ class Factory
 
     /**
      * @var Reader
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
-    private $moduleReader;
+    private readonly Reader $moduleReader;
 
     /**
      * Initialize dependencies
@@ -61,6 +67,15 @@ class Factory
     ) {
         $this->_objectManager = $objectManager;
         $this->moduleReader = $moduleReader;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_configFiles = null;
+        $this->isDefaultTranslatorInitialized = false;
     }
 
     /**
@@ -84,15 +99,9 @@ class Factory
     protected function _initializeDefaultTranslator()
     {
         if (!$this->isDefaultTranslatorInitialized) {
-            // Pass translations to \Magento\Framework\TranslateInterface from validators
-            $translatorCallback = function () {
-                $argc = func_get_args();
-                return (string)new Phrase(array_shift($argc), $argc);
-            };
-            /** @var \Magento\Framework\Translate\Adapter $translator */
-            $translator = $this->_objectManager->create(\Magento\Framework\Translate\Adapter::class);
-            $translator->setOptions(['translator' => $translatorCallback]);
-            \Magento\Framework\Validator\AbstractValidator::setDefaultTranslator($translator);
+            /** @var Adapter $translator */
+            $translator = $this->_objectManager->create(Adapter::class);
+            AbstractValidator::setDefaultTranslator($translator);
             $this->isDefaultTranslatorInitialized = true;
         }
     }
@@ -124,7 +133,7 @@ class Factory
      * @return Builder
      * @throws \Zend_Translate_Exception
      */
-    public function createValidatorBuilder($entityName, $groupName, array $builderConfig = null)
+    public function createValidatorBuilder($entityName, $groupName, ?array $builderConfig = null)
     {
         $this->_initializeDefaultTranslator();
         return $this->getValidatorConfig()->createValidatorBuilder($entityName, $groupName, $builderConfig);
@@ -139,7 +148,7 @@ class Factory
      * @return Validator
      * @throws \Zend_Translate_Exception
      */
-    public function createValidator($entityName, $groupName, array $builderConfig = null)
+    public function createValidator($entityName, $groupName, ?array $builderConfig = null)
     {
         $this->_initializeDefaultTranslator();
         return $this->getValidatorConfig()->createValidator($entityName, $groupName, $builderConfig);

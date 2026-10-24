@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -40,5 +40,17 @@
         <element name="productOptionList" type="text" selector="#narrow-by-list"/>
         <element name="productNameByPosition" type="text" selector=".products-grid li:nth-of-type({{position}}) .product-item-name a" parameterized="true"/>
         <element name="sidebarAdditional" type="block" selector="#maincontent .sidebar.sidebar-additional"/>
+        <element name="searchStore" type="input" selector="//div/input[@id='search']" />
+        <element name="productAttributeName" type="button" selector="//div[@class='filter-options-title' and contains(text(),'{{var1}}')]" parameterized="true"/>
+        <element name="productAttributeOptionValue" type="button" selector="//div[@id='narrow-by-list']//a[contains(text(), '{{var1}}')]" parameterized="true"/>
+        <element name="outOfStockProductCategoryPage" type="text" selector="//div[@class='stock unavailable']//span[text()='Out of stock']"/>
+        <element name="ListedProductAttributes" type="block" selector="//div[@aria-label='{{vs_attribute}}']//div[@aria-label='{{attribute_name}}']" parameterized="true"/>
+        <element name="quickOrderLink" type="text" selector="//div[@class='panel header']//a[text()='Quick Order']" />
+        <element name="productListInCategoryStorefront" type="block" selector="//div[@class='products wrapper grid products-grid']//li[@class='item product product-item'][{{index}}]//img[@alt='{{product_name}}']" parameterized="true"/>
+        <element name="productNameWithPriceOrLabel" type="text" selector="//div[@class='product details product-item-details']//a[contains(text(),'{{ProductName}}')]//parent::strong/following-sibling::div//span[contains(text(),'{{PriceLabelOrPrice}}')]" parameterized="true"/>
+        <element name="sortByDropdownContent" type="select" selector="//select[@id='sorter']//option[contains(text(),'{{arg}}')]" parameterized="true"/>
+        <element name="productInOrderDisplay" type="text" selector="//li[@class='item product product-item'][{{index}}]//a[@class='product-item-link' and contains(text(),'{{product_name}}')]" parameterized="true"/>
+        <element name="enableCookies" type="text" selector="//a//span[contains(text(),'Enable Cookies')]"/>
+        <element name="CatalogDescriptionWithoutPTag" type="text" selector="//div[@class='category-description']"/>
     </section>
 </sections>

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -10,6 +10,7 @@ namespace Magento\Framework\Jwt\Test\Unit\Claim;
 
 use Magento\Framework\Jwt\Claim\AbstractClaim;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class AbstractClaimTest extends TestCase
 {
@@ -20,9 +21,8 @@ class AbstractClaimTest extends TestCase
      * @param string $expectedTime
      * @param string $expectedZone
      * @return void
-     *
-     * @dataProvider getDates
-     */
+     *     */
+    #[DataProvider('getDates')]
     public function testParseNumericDate(string $numericDate, string $expectedTime): void
     {
         $dt = AbstractClaim::parseNumericDate($numericDate);
@@ -30,7 +30,7 @@ class AbstractClaimTest extends TestCase
         $this->assertEquals('UTC', $dt->getTimezone()->getName());
     }
 
-    public function getDates(): array
+    public static function getDates(): array
     {
         return [
             ['1970-01-01T00:00:00Z', '1970-01-01 00:00:00'],

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Model\ResourceModel;
@@ -24,19 +24,21 @@ class AttributePersistor extends \Magento\Eav\Model\ResourceModel\AttributePersi
     private $conditionBuilder;
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function __construct(
         FormatInterface $localeFormat,
         AttributeRepositoryInterface $attributeRepository,
         MetadataPool $metadataPool,
-        ConditionBuilder $conditionBuilder = null
+        ?ConditionBuilder $conditionBuilder = null
     ) {
         parent::__construct($localeFormat, $attributeRepository, $metadataPool);
         $this->conditionBuilder = $conditionBuilder ?: ObjectManager::getInstance()->get(ConditionBuilder::class);
     }
 
     /**
+     * Method to get scope value
+     *
      * @param ScopeInterface $scope
      * @param AbstractAttribute $attribute
      * @param bool $useDefault
@@ -51,7 +53,7 @@ class AttributePersistor extends \Magento\Eav\Model\ResourceModel\AttributePersi
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function buildUpdateConditions(
         AbstractAttribute $attribute,
@@ -72,7 +74,7 @@ class AttributePersistor extends \Magento\Eav\Model\ResourceModel\AttributePersi
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function buildInsertConditions(
         AbstractAttribute $attribute,
@@ -92,7 +94,7 @@ class AttributePersistor extends \Magento\Eav\Model\ResourceModel\AttributePersi
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function buildDeleteConditions(
         AbstractAttribute $attribute,
@@ -113,6 +115,8 @@ class AttributePersistor extends \Magento\Eav\Model\ResourceModel\AttributePersi
     }
 
     /**
+     * Method to check whether it is website attribute
+     *
      * @param AbstractAttribute $attribute
      * @return bool
      */

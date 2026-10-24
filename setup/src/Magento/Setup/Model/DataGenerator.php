@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Setup\Model;
@@ -52,7 +52,7 @@ class DataGenerator
     protected function readData()
     {
         $f = fopen($this->dictionaryFile, 'r');
-        while (!feof($f) && is_array($line = fgetcsv($f))) {
+        while (!feof($f) && is_array($line = fgetcsv($f, 0, ',', '"', '\\'))) {
             $this->dictionaryData[] = $line[0];
         }
     }

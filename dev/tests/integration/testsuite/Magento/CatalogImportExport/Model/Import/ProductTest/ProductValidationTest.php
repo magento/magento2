@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,14 +9,21 @@ namespace Magento\CatalogImportExport\Model\Import\ProductTest;
 
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
+use Magento\Catalog\Test\Fixture\Attribute as AttributeFixture;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
+use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 use Magento\CatalogImportExport\Model\Import\ProductTestBase;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 use Magento\ImportExport\Model\Import\Source\Csv;
+use Magento\ImportExport\Test\Fixture\CsvFile as CsvFileFixture;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap as BootstrapHelper;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Integration test for \Magento\CatalogImportExport\Model\Import\Product class.
@@ -24,6 +31,7 @@ use Magento\TestFramework\Helper\Bootstrap as BootstrapHelper;
  * @magentoAppArea adminhtml
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_reindex_schedule.php
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_catalog_product_reindex_schedule.php
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProductValidationTest extends ProductTestBase
 {
@@ -64,8 +72,8 @@ class ProductValidationTest extends ProductTestBase
      * @param bool $expectedResult
      * @magentoAppArea adminhtml
      * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/product_simple.php
-     * @dataProvider validateRowDataProvider
      */
+    #[DataProvider('validateRowDataProvider')]
     public function testValidateRow(array $row, $behavior, $expectedResult)
     {
         $this->_model->setParameters(['behavior' => $behavior, 'entity' => 'catalog_product']);
@@ -75,7 +83,7 @@ class ProductValidationTest extends ProductTestBase
     /**
      * @return array
      */
-    public function validateRowDataProvider()
+    public static function validateRowDataProvider()
     {
         return [
             [
@@ -209,8 +217,8 @@ class ProductValidationTest extends ProductTestBase
      * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_with_product_links_data.php
      * @magentoAppArea adminhtml
      * @magentoAppIsolation enabled
-     * @dataProvider getEmptyLinkedData
      */
+    #[DataProvider('getEmptyLinkedData')]
     public function testProductLinksWithEmptyValue(
         string $pathToFile,
         bool $expectedResultCrossell,
@@ -254,7 +262,7 @@ class ProductValidationTest extends ProductTestBase
      *
      * @return array[]
      */
-    public function getEmptyLinkedData(): array
+    public static function getEmptyLinkedData(): array
     {
         return [
             [
@@ -374,6 +382,29 @@ class ProductValidationTest extends ProductTestBase
         );
     }
 
+    #[
+        DataFixture(
+            CsvFileFixture::class,
+            [
+                'rows' => [
+                    ['sku', 'store_view_code', 'attribute_set_code', 'product_type', 'name', 'price', 'weight'],
+                    ['simple-negative-price', '', 'Default', 'simple', 'Negative Price Product', '-10', '1'],
+                ]
+            ],
+            'file'
+        )
+    ]
+    public function testProductWithNegativePrice(): void
+    {
+        $pathToFile = DataFixtureStorageManager::getStorage()->get('file')->getAbsolutePath();
+        $errors = $this->createImportModel($pathToFile)->validateData();
+        $this->assertErrorsCount(1, $errors);
+        $this->assertStringContainsString(
+            "must be greater than or equal to",
+            $errors->getErrorByRowNumber(0)[0]->getErrorMessage()
+        );
+    }
+
     /**
      * Test validate multiselect values with custom separator
      *
@@ -400,5 +431,58 @@ class ProductValidationTest extends ProductTestBase
             ->validateData();
 
         $this->assertEmpty($errors->getAllErrors());
+    }
+
+    #[
+        DataFixture(AttributeFixture::class, ['is_unique' => 1, 'attribute_code' => 'uniq_test_attr']),
+        DataFixture(ProductFixture::class, ['uniq_test_attr' => 'uniq_test_attr_val'], as: 'p1'),
+        DataFixture(ProductFixture::class, as: 'p2'),
+        DataFixture(
+            CsvFileFixture::class,
+            [
+                'rows' => [
+                    ['sku', 'product_type', 'additional_attributes'],
+                    ['$p2.sku$', 'simple', 'uniq_test_attr=uniq_test_attr_val'],
+                ]
+            ],
+            'file'
+        )
+    ]
+    public function testUniqueValidationShouldFailIfValueExistForAnotherProduct(): void
+    {
+        $fixtures = DataFixtureStorageManager::getStorage();
+        $pathToFile = $fixtures->get('file')->getAbsolutePath();
+        $importModel = $this->createImportModel($pathToFile);
+        $errors = $importModel->validateData();
+        $this->assertErrorsCount(1, $errors);
+        $this->assertEquals(
+            RowValidatorInterface::ERROR_DUPLICATE_UNIQUE_ATTRIBUTE,
+            $errors->getErrorByRowNumber(0)[0]->getErrorCode()
+        );
+    }
+
+    #[
+        DataFixture(AttributeFixture::class, ['is_unique' => 1, 'attribute_code' => 'uniq_test_attr']),
+        DataFixture(ProductFixture::class, ['uniq_test_attr' => 'uniq_test_attr_val'], as: 'p1'),
+        DataFixture(ProductFixture::class, ['uniq_test_attr' => 'uniq_test_attr_val2'], as: 'p2'),
+        DataFixture(
+            CsvFileFixture::class,
+            [
+                'rows' => [
+                    ['sku', 'product_type', 'additional_attributes'],
+                    ['$p1.sku$', 'simple', 'uniq_test_attr=uniq_test_attr_val'],
+                ]
+            ],
+            'file'
+        )
+    ]
+    public function testUniqueValidationShouldNotFailIfValueExistForTheImportedProductOnly(): void
+    {
+        $fixtures = DataFixtureStorageManager::getStorage();
+        $pathToFile = $fixtures->get('file')->getAbsolutePath();
+        $importModel = $this->createImportModel($pathToFile);
+        $errors = $importModel->validateData();
+        $this->assertErrorsCount(0, $errors);
+        $importModel->importData();
     }
 }

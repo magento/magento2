@@ -1,11 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\CustomerImportExport\Model\Import;
 
+use Magento\Framework\Validator\EmailAddress;
+use Magento\Framework\Validator\ValidateException;
+use Magento\Framework\Validator\ValidatorChain;
 use Magento\ImportExport\Model\Import;
 use Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\Storage;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
@@ -124,7 +127,6 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
             $eavConfig,
             $data
         );
-
         $this->addMessageTemplate(self::ERROR_WEBSITE_IS_EMPTY, __('Please specify a website.'));
         $this->addMessageTemplate(
             self::ERROR_EMAIL_IS_EMPTY,
@@ -171,6 +173,7 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
     protected function _getCustomerId($email, $websiteCode)
     {
         $email = strtolower(trim($email));
+
         if (isset($this->_websiteCodeToId[$websiteCode])) {
             $websiteId = $this->_websiteCodeToId[$websiteCode];
             return $this->_customerStorage->getCustomerId($email, $websiteId);
@@ -227,6 +230,7 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
      * @param array $rowData
      * @param int $rowNumber
      * @return bool
+     * @throws ValidateException
      */
     protected function _checkUniqueKey(array $rowData, $rowNumber)
     {
@@ -238,7 +242,7 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
             $email = strtolower($rowData[static::COLUMN_EMAIL]);
             $website = $rowData[static::COLUMN_WEBSITE];
 
-            if (!\Zend_Validate::is($email, \Magento\Framework\Validator\EmailAddress::class)) {
+            if (!ValidatorChain::is($email, EmailAddress::class)) {
                 $this->addRowError(static::ERROR_INVALID_EMAIL, $rowNumber, static::COLUMN_EMAIL);
             } elseif (!isset($this->_websiteCodeToId[$website])) {
                 $this->addRowError(static::ERROR_INVALID_WEBSITE, $rowNumber, static::COLUMN_WEBSITE);

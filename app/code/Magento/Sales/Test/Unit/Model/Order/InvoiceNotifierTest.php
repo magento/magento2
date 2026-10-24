@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -19,9 +19,12 @@ use Magento\Sales\Model\ResourceModel\Order\Status\History\CollectionFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class InvoiceNotifierTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var CollectionFactory|MockObject
      */
@@ -64,7 +67,7 @@ class InvoiceNotifierTest extends TestCase
             InvoiceSender::class,
             ['send']
         );
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->notifier = new InvoiceNotifier(
             $this->historyCollectionFactory,
             $this->loggerMock,
@@ -79,11 +82,10 @@ class InvoiceNotifierTest extends TestCase
      */
     public function testNotifySuccess(): void
     {
-        $historyCollection = $this->getMockBuilder(Collection::class)
-            ->addMethods(['setIsCustomerNotified'])
-            ->onlyMethods(['getUnnotifiedForInstance', 'save'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $historyCollection = $this->createPartialMockWithReflection(
+            Collection::class,
+            ['setIsCustomerNotified', 'getUnnotifiedForInstance', 'save']
+        );
         $historyItem = $this->createPartialMock(
             History::class,
             ['setIsCustomerNotified', 'save']

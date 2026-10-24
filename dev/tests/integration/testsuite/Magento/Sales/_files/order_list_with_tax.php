@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -60,13 +60,12 @@ foreach ($orderList as $order) {
     $salesOrderTaxItem = $salesOrderFactory->create();
     $salesOrderTaxItem->setTaxId($tax->getId())
         ->setTaxPercent(8.37)
-        ->setTaxAmount($amount)
+        ->setAmount($amount)
         ->setBaseAmount($amount)
         ->setRealAmount($amount)
         ->setRealBaseAmount($amount)
         ->setAppliedTaxes([$tax])
-        ->setTaxableItemType('shipping')
-        ->setItemId($salesOrderItem->getId());
+        ->setTaxableItemType('shipping');
 
     $taxItemCollection = $objectManager->create(\Magento\Sales\Model\ResourceModel\Order\Tax\Item::class);
     $taxItemCollection->save($salesOrderTaxItem);

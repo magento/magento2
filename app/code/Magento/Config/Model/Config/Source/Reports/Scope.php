@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Config source reports event store filter
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Config\Model\Config\Source\Reports;
 

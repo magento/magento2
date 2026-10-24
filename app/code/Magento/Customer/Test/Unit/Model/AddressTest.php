@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,8 +17,8 @@ use PHPUnit\Framework\TestCase;
 
 class AddressTest extends TestCase
 {
-    const ORIG_CUSTOMER_ID = 1;
-    const ORIG_PARENT_ID = 2;
+    private const ORIG_CUSTOMER_ID = 1;
+    private const ORIG_PARENT_ID = 2;
 
     /**
      * @var ObjectManager
@@ -49,9 +49,7 @@ class AddressTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->customer = $this->getMockBuilder(Customer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->customer = $this->createMock(Customer::class);
         $this->customer->expects($this->any())
             ->method('getId')
             ->willReturn(self::ORIG_CUSTOMER_ID);
@@ -61,15 +59,13 @@ class AddressTest extends TestCase
 
         $this->customerFactory = $this->getMockBuilder(CustomerFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->customerFactory->expects($this->any())
             ->method('create')
             ->willReturn($this->customer);
 
-        $this->resource = $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\Address::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resource = $this->createMock(\Magento\Customer\Model\ResourceModel\Address::class);
 
         $this->address = $this->objectManager->getObject(
             Address::class,
@@ -100,9 +96,7 @@ class AddressTest extends TestCase
         $this->assertEquals(self::ORIG_CUSTOMER_ID, $customer->getId());
 
         /** @var Customer $customer */
-        $customer = $this->getMockBuilder(Customer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $customer = $this->createMock(Customer::class);
         $customer->expects($this->any())
             ->method('getId')
             ->willReturn(self::ORIG_CUSTOMER_ID + 1);
@@ -133,9 +127,7 @@ class AddressTest extends TestCase
 
     public function testGetEntityTypeId()
     {
-        $mockEntityType = $this->getMockBuilder(Type::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $mockEntityType = $this->createMock(Type::class);
         $mockEntityType->expects($this->any())
             ->method('getId')
             ->willReturn(self::ORIG_CUSTOMER_ID);

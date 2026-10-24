@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Filesystem\DirectoryList;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\TestFramework\TestCase\AbstractBackendController;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Provide tests for admin product upload image action.
@@ -69,12 +70,12 @@ class UploadTest extends AbstractBackendController
     /**
      * Test upload image on admin product page.
      *
-     * @dataProvider uploadActionDataProvider
      * @magentoDbIsolation enabled
      * @param array $file
      * @param array $expectation
      * @return void
      */
+    #[DataProvider('uploadActionDataProvider')]
     public function testUploadAction(array $file, array $expectation): void
     {
         $this->copyFileToSysTmpDir($file);
@@ -95,7 +96,7 @@ class UploadTest extends AbstractBackendController
     /**
      * @return array
      */
-    public function uploadActionDataProvider(): array
+    public static function uploadActionDataProvider(): array
     {
         return [
             'upload_image_with_type_jpg' => [
@@ -146,12 +147,12 @@ class UploadTest extends AbstractBackendController
     /**
      * Test upload image on admin product page.
      *
-     * @dataProvider uploadActionWithErrorsDataProvider
      * @magentoDbIsolation enabled
      * @param array $file
      * @param array $expectation
      * @return void
      */
+    #[DataProvider('uploadActionWithErrorsDataProvider')]
     public function testUploadActionWithErrors(array $file, array $expectation): void
     {
         if (!empty($file['create_file'])) {
@@ -176,7 +177,7 @@ class UploadTest extends AbstractBackendController
     /**
      * @return array
      */
-    public function uploadActionWithErrorsDataProvider(): array
+    public static function uploadActionWithErrorsDataProvider(): array
     {
         return [
             'upload_image_with_invalid_type' => [

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\View\Url\Config;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ConfigTest extends TestCase
 {
@@ -36,9 +37,8 @@ class ConfigTest extends TestCase
     /**
      * @param $path
      * @param $expectedValue
-     *
-     * @dataProvider getConfigDataProvider
-     */
+     *     */
+    #[DataProvider('getConfigDataProvider')]
     public function testGetValue($path, $expectedValue)
     {
         $this->_scopeConfig->expects(
@@ -57,7 +57,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function getConfigDataProvider()
+    public static function getConfigDataProvider()
     {
         return [
             ['some/valid/path1', 'someValue'],

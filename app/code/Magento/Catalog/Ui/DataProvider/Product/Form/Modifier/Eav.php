@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 
@@ -27,7 +27,6 @@ use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Filter\Translit;
-use Magento\Framework\Locale\CurrencyInterface;
 use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Ui\Component\Form\Element\Wysiwyg as WysiwygElement;
@@ -192,11 +191,6 @@ class Eav extends AbstractModifier
     private $prevSetAttributes;
 
     /**
-     * @var CurrencyInterface
-     */
-    private $localeCurrency;
-
-    /**
      * @var array
      */
     private $attributesCache = [];
@@ -268,9 +262,9 @@ class Eav extends AbstractModifier
         DataPersistorInterface $dataPersistor,
         $attributesToDisable = [],
         $attributesToEliminate = [],
-        CompositeConfigProcessor $wysiwygConfigProcessor = null,
-        ScopeConfigInterface $scopeConfig = null,
-        AttributeCollectionFactory $attributeCollectionFactory = null,
+        ?CompositeConfigProcessor $wysiwygConfigProcessor = null,
+        ?ScopeConfigInterface $scopeConfig = null,
+        ?AttributeCollectionFactory $attributeCollectionFactory = null,
         ?AuthorizationInterface $auth = null
     ) {
         $this->locator = $locator;
@@ -418,7 +412,7 @@ class Eav extends AbstractModifier
             return $this->resolvePersistentData($data);
         }
 
-        $productId = $this->locator->getProduct()->getId();
+        $productId = $this->locator->getProduct()->getId() ?? '';
 
         /** @var string $groupCode */
         foreach (array_keys($this->getGroups()) as $groupCode) {
@@ -474,7 +468,7 @@ class Eav extends AbstractModifier
     {
         $persistentData = (array)$this->dataPersistor->get('catalog_product');
         $this->dataPersistor->clear('catalog_product');
-        $productId = $this->locator->getProduct()->getId();
+        $productId = $this->locator->getProduct()->getId() ?? '';
 
         if (empty($data[$productId][self::DATA_SOURCE_DEFAULT])) {
             $data[$productId][self::DATA_SOURCE_DEFAULT] = [];
@@ -575,7 +569,7 @@ class Eav extends AbstractModifier
         $groupIds = [];
 
         foreach ($groups as $group) {
-            $groupIds[$group->getAttributeGroupId()] = $this->calculateGroupCode($group);
+            $groupIds[(string)$group->getAttributeGroupId()] = $this->calculateGroupCode($group);
             $attributes[$this->calculateGroupCode($group)] = [];
         }
 
@@ -585,7 +579,7 @@ class Eav extends AbstractModifier
         $mapAttributeToGroup = [];
 
         foreach ($collection->getItems() as $attribute) {
-            $mapAttributeToGroup[$attribute->getAttributeId()] = $attribute->getAttributeGroupId();
+            $mapAttributeToGroup[(string)$attribute->getAttributeId()] = $attribute->getAttributeGroupId();
         }
 
         $sortOrder = $this->sortOrderBuilder
@@ -607,7 +601,7 @@ class Eav extends AbstractModifier
             $applyTo = $attribute->getApplyTo();
             $isRelated = !$applyTo || in_array($productType, $applyTo);
             if ($isRelated) {
-                $attributeGroupId = $mapAttributeToGroup[$attribute->getAttributeId()];
+                $attributeGroupId = (string)$mapAttributeToGroup[(string)$attribute->getAttributeId()];
                 $attributeGroupCode = $groupIds[$attributeGroupId];
                 $attributes[$attributeGroupCode][] = $attribute;
             }
@@ -1097,39 +1091,5 @@ class Eav extends AbstractModifier
         }
 
         return $attributeGroupCode;
-    }
-
-    /**
-     * The getter function to get the locale currency for real application code
-     *
-     * @return \Magento\Framework\Locale\CurrencyInterface
-     *
-     * @deprecated 101.0.0
-     */
-    private function getLocaleCurrency()
-    {
-        if ($this->localeCurrency === null) {
-            $this->localeCurrency = \Magento\Framework\App\ObjectManager::getInstance()->get(CurrencyInterface::class);
-        }
-        return $this->localeCurrency;
-    }
-
-    /**
-     * Format price according to the locale of the currency
-     *
-     * @param mixed $value
-     * @return string
-     */
-    protected function formatPrice($value)
-    {
-        if (!is_numeric($value)) {
-            return null;
-        }
-
-        $store = $this->storeManager->getStore();
-        $currency = $this->getLocaleCurrency()->getCurrency($store->getBaseCurrencyCode());
-        $value = $currency->toCurrency($value, ['display' => \Magento\Framework\Currency::NO_SYMBOL]);
-
-        return $value;
     }
 }

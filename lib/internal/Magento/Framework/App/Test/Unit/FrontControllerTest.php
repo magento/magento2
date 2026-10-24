@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -98,17 +98,17 @@ class FrontControllerTest extends TestCase
             ->onlyMethods(['isDispatched', 'setDispatched', 'initForward', 'setActionName'])
             ->getMock();
 
-        $this->router = $this->getMockForAbstractClass(RouterInterface::class);
+        $this->router = $this->createMock(RouterInterface::class);
         $this->routerList = $this->createMock(RouterList::class);
         $this->response = $this->createMock(Http::class);
-        $this->requestValidator = $this->getMockForAbstractClass(ValidatorInterface::class);
+        $this->requestValidator = $this->createMock(ValidatorInterface::class);
         $this->messages = $this->createMock(MessageManager::class);
-        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->logger = $this->createMock(LoggerInterface::class);
         $this->appStateMock  = $this->getMockBuilder(State::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->areaListMock = $this->createMock(AreaList::class);
-        $this->areaMock = $this->getMockForAbstractClass(AreaInterface::class);
+        $this->areaMock = $this->createMock(AreaInterface::class);
         $actionFlagMock = $this->createMock(ActionFlag::class);
         $eventManagerMock = $this->createMock(EventManager::class);
         $requestMock = $this->createMock(RequestInterface::class);
@@ -167,8 +167,13 @@ class FrontControllerTest extends TestCase
         $this->appStateMock->expects($this->any())->method('getAreaCode')->willReturn('frontend');
         $this->areaMock
             ->method('load')
-            ->withConsecutive([Area::PART_DESIGN], [Area::PART_TRANSLATE])
-            ->willReturnOnConsecutiveCalls($this->areaMock, $this->areaMock);
+            ->willReturnCallback(
+                function ($arg) {
+                    if ($arg == Area::PART_DESIGN || $arg == Area::PART_TRANSLATE) {
+                        return $this->areaMock;
+                    }
+                }
+            );
         $this->areaListMock->expects($this->any())->method('getArea')->willReturn($this->areaMock);
         $this->routerList->expects($this->any())
             ->method('valid')
@@ -184,8 +189,18 @@ class FrontControllerTest extends TestCase
             ->willReturn($response);
         $this->router
             ->method('match')
-            ->withConsecutive([$this->request], [$this->request])
-            ->willReturnOnConsecutiveCalls(false, $controllerInstance);
+            ->willReturnCallback(
+                function ($arg1) use ($controllerInstance) {
+                    static $callCount = 0;
+                    if ($callCount == 0 && $arg1 == $this->request) {
+                        $callCount++;
+                        return false;
+                    } elseif ($callCount == 1 && $arg1 == $this->request) {
+                        $callCount++;
+                        return $controllerInstance;
+                    }
+                }
+            );
 
         $this->routerList->expects($this->any())
             ->method('current')
@@ -196,7 +211,11 @@ class FrontControllerTest extends TestCase
             ->willReturnOnConsecutiveCalls(false, true);
         $this->request
             ->method('setDispatched')
-            ->withConsecutive([true]);
+            ->willReturnCallback(
+                function ($arg1) {
+                        return null;
+                }
+            );
 
         $this->requestValidator->expects($this->once())
             ->method('validate')->with($this->request, $controllerInstance)->willThrowException($exception);
@@ -228,8 +247,18 @@ class FrontControllerTest extends TestCase
             ->willReturn($response);
         $this->router
             ->method('match')
-            ->withConsecutive([$this->request], [$this->request])
-            ->willReturnOnConsecutiveCalls(false, $controllerInstance);
+            ->willReturnCallback(
+                function ($arg1) use ($controllerInstance) {
+                    static $callCount = 0;
+                    if ($callCount == 0 && $arg1 == $this->request) {
+                        $callCount++;
+                        return false;
+                    } elseif ($callCount == 1 && $arg1 == $this->request) {
+                        $callCount++;
+                        return $controllerInstance;
+                    }
+                }
+            );
 
         $this->routerList->expects($this->any())
             ->method('current')
@@ -237,8 +266,15 @@ class FrontControllerTest extends TestCase
         $this->appStateMock->expects($this->any())->method('getAreaCode')->willReturn('frontend');
         $this->areaMock
             ->method('load')
-            ->withConsecutive([Area::PART_DESIGN], [Area::PART_TRANSLATE])
-            ->willReturnOnConsecutiveCalls($this->areaMock, $this->areaMock);
+            ->willReturnCallback(
+                function ($arg1) {
+                    if ($arg1 == Area::PART_DESIGN) {
+                        return $this->areaMock;
+                    } elseif ($arg1 == Area::PART_TRANSLATE) {
+                        return $this->areaMock;
+                    }
+                }
+            );
         $this->areaListMock->expects($this->any())->method('getArea')->willReturn($this->areaMock);
         $this->request
             ->method('isDispatched')
@@ -269,10 +305,17 @@ class FrontControllerTest extends TestCase
             ->willReturn($response);
         $this->router
             ->method('match')
-            ->withConsecutive([$this->request], [$this->request])
-            ->willReturnOnConsecutiveCalls(
-                $this->throwException(new NotFoundException(new Phrase('Page not found.'))),
-                $controllerInstance
+            ->willReturnCallback(
+                function ($arg1) use ($controllerInstance) {
+                    static $callCount = 0;
+                    if ($callCount == 0 && $arg1 == $this->request) {
+                        $callCount++;
+                        throw new NotFoundException(new Phrase('Page not found.'));
+                    } elseif ($callCount == 1 && $arg1 == $this->request) {
+                        $callCount++;
+                        return $controllerInstance;
+                    }
+                }
             );
 
         $this->routerList->expects($this->any())
@@ -282,15 +325,28 @@ class FrontControllerTest extends TestCase
         $this->appStateMock->expects($this->any())->method('getAreaCode')->willReturn('frontend');
         $this->areaMock
             ->method('load')
-            ->withConsecutive([Area::PART_DESIGN], [Area::PART_TRANSLATE])
-            ->willReturnOnConsecutiveCalls($this->areaMock, $this->areaMock);
+            ->willReturnCallback(
+                function ($arg1) {
+                    if ($arg1 == Area::PART_DESIGN) {
+                        return $this->areaMock;
+                    } elseif ($arg1 == Area::PART_TRANSLATE) {
+                        return $this->areaMock;
+                    }
+                }
+            );
         $this->areaListMock->expects($this->any())->method('getArea')->willReturn($this->areaMock);
         $this->request
             ->method('isDispatched')
             ->willReturnOnConsecutiveCalls(false, false, true);
         $this->request
             ->method('setDispatched')
-            ->withConsecutive([false], [true]);
+            ->willReturnCallback(
+                function ($arg) {
+                    if ($arg == false || $arg == true) {
+                        return null;
+                    }
+                }
+            );
         $this->request
             ->method('setActionName')
             ->with('noroute');

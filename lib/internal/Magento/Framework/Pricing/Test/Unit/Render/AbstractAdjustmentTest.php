@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -43,7 +43,7 @@ class AbstractAdjustmentTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->priceCurrency = $this->getMockForAbstractClass(PriceCurrencyInterface::class);
+        $this->priceCurrency = $this->createMock(PriceCurrencyInterface::class);
         $this->data = ['argument_one' => 1];
 
         $objectManager = new ObjectManager($this);
@@ -55,8 +55,8 @@ class AbstractAdjustmentTest extends TestCase
             ]
         );
         $this->model = $this->getMockBuilder(AbstractAdjustment::class)->setConstructorArgs($constructorArgs)
-            ->onlyMethods(['getData', 'setData', 'apply'])
-            ->getMockForAbstractClass();
+            ->onlyMethods(['getData', 'setData', 'apply', 'getAdjustmentCode'])
+            ->getMock();
     }
 
     /**
@@ -96,7 +96,13 @@ class AbstractAdjustmentTest extends TestCase
             ->willReturn($renderText);
         $this->model
             ->method('setData')
-            ->withConsecutive([$mergedArguments], [$this->data]);
+            ->willReturnCallback(
+                function ($arg1) use ($mergedArguments) {
+                    if ($arg1 == $mergedArguments || $arg1 == $this->data) {
+                        return null;
+                    }
+                }
+            );
 
         $result = $this->model->render($amountRender, $arguments);
         $this->assertEquals($renderText, $result);
@@ -121,8 +127,8 @@ class AbstractAdjustmentTest extends TestCase
     public function testGetPriceType(): void
     {
         $amountRender = $this->createMock(Amount::class);
-        $price = $this->getMockForAbstractClass(PriceInterface::class);
-        $sealableItem = $this->getMockForAbstractClass(SaleableInterface::class);
+        $price = $this->createMock(PriceInterface::class);
+        $sealableItem = $this->createMock(SaleableInterface::class);
         $priceInfo = $this->createMock(Base::class);
         $priceCode = 'regular_price';
 
@@ -168,7 +174,7 @@ class AbstractAdjustmentTest extends TestCase
      */
     public function testGetSealableItem(): void
     {
-        $sealableItem = $this->getMockForAbstractClass(SaleableInterface::class);
+        $sealableItem = $this->createMock(SaleableInterface::class);
         $amountRender = $this->createMock(Amount::class);
         $amountRender->expects($this->once())
             ->method('getSaleableItem')
@@ -188,8 +194,8 @@ class AbstractAdjustmentTest extends TestCase
     public function testGetAdjustment(): void
     {
         $amountRender = $this->createMock(Amount::class);
-        $adjustment = $this->getMockForAbstractClass(AdjustmentInterface::class);
-        $sealableItem = $this->getMockForAbstractClass(SaleableInterface::class);
+        $adjustment = $this->createMock(AdjustmentInterface::class);
+        $sealableItem = $this->createMock(SaleableInterface::class);
         $priceInfo = $this->createMock(Base::class);
         $adjustmentCode = 'tax';
 

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,6 +18,7 @@ use Magento\Framework\View\File\Factory;
 use Magento\Framework\View\Helper\PathPattern;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ThemeModularTest extends TestCase
 {
@@ -68,7 +69,7 @@ class ThemeModularTest extends TestCase
         $this->readDirFactory->expects($this->any())
             ->method('create')
             ->willReturn($this->themeDirectory);
-        $this->componentRegistrar = $this->getMockForAbstractClass(
+        $this->componentRegistrar = $this->createMock(
             ComponentRegistrarInterface::class
         );
         $this->model = new ThemeModular(
@@ -88,7 +89,7 @@ class ThemeModularTest extends TestCase
         $this->componentRegistrar->expects($this->once())
             ->method('getPath')
             ->willReturn('');
-        $theme = $this->getMockForAbstractClass(ThemeInterface::class);
+        $theme = $this->createMock(ThemeInterface::class);
         $theme->expects($this->once())
             ->method('getFullPath')
             ->willReturn('area/Vendor/theme');
@@ -100,12 +101,11 @@ class ThemeModularTest extends TestCase
      * @param string $filePath
      * @param string $pathPattern
      *
-     * @return void
-     * @dataProvider getFilesDataProvider
-     */
+     * @return void     */
+    #[DataProvider('getFilesDataProvider')]
     public function testGetFiles($files, $filePath, $pathPattern): void
     {
-        $theme = $this->getMockForAbstractClass(ThemeInterface::class);
+        $theme = $this->createMock(ThemeInterface::class);
         $themePath = 'area/theme/path';
         $theme->expects($this->once())->method('getFullPath')->willReturn($themePath);
 
@@ -141,8 +141,14 @@ class ThemeModularTest extends TestCase
         }
         $this->fileFactory
             ->method('create')
-            ->withConsecutive(...$withArgs)
-            ->willReturnOnConsecutiveCalls(...$willReturnArgs);
+            ->willReturnCallback(function ($withArgs) use ($willReturnArgs) {
+                if (!empty($withArgs)) {
+                    static $callCount = 0;
+                    $returnValue = $willReturnArgs[$callCount] ?? null;
+                    $callCount++;
+                    return $returnValue;
+                }
+            });
 
         $this->assertSame($checkResult, $this->model->getFiles($theme, $filePath));
     }
@@ -150,7 +156,7 @@ class ThemeModularTest extends TestCase
     /**
      * @return array
      */
-    public function getFilesDataProvider(): array
+    public static function getFilesDataProvider(): array
     {
         return [
             [

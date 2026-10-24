@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Model\Checkout;
 
@@ -50,7 +50,7 @@ class ConfigProvider implements ConfigProviderInterface
         UrlInterface $urlBuilder,
         StoreManagerInterface $storeManager,
         ScopeConfigInterface $scopeConfig,
-        Url $customerUrl = null
+        ?Url $customerUrl = null
     ) {
         $this->urlBuilder = $urlBuilder;
         $this->storeManager = $storeManager;

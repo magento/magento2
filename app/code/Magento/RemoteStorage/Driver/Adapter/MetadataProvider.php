@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -50,7 +50,7 @@ class MetadataProvider implements MetadataProviderInterface
     private function isDirectory($path): bool
     {
         try {
-            return iterator_count($this->adapter->listContents($path, false)) > 0;
+            return $this->adapter->directoryExists($path);
         } catch (\Throwable $e) {
             // catch closed iterator
             return false;

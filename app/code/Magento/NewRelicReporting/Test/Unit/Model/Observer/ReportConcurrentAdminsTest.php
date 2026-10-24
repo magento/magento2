@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\NewRelicReporting\Test\Unit\Model\Observer;
 use Magento\Backend\Model\Auth\Session;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Json\EncoderInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\NewRelicReporting\Model\Config;
 use Magento\NewRelicReporting\Model\Observer\ReportConcurrentAdmins;
 use Magento\NewRelicReporting\Model\Users;
@@ -20,6 +21,8 @@ use PHPUnit\Framework\TestCase;
 
 class ReportConcurrentAdminsTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ReportConcurrentAdmins
      */
@@ -59,15 +62,12 @@ class ReportConcurrentAdminsTest extends TestCase
     {
         $this->config = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isNewRelicEnabled'])
+            ->onlyMethods(['isNewRelicEnabled'])
             ->getMock();
-        $this->backendAuthSession = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['isLoggedIn', 'getUser'])
-            ->getMock();
+        $this->backendAuthSession = $this->createPartialMockWithReflection(Session::class, ['getUser', 'isLoggedIn']);
         $this->usersFactory = $this->getMockBuilder(UsersFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->usersModel = $this->getMockBuilder(Users::class)
             ->disableOriginalConstructor()

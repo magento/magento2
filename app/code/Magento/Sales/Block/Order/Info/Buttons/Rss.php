@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Block\Order\Info\Buttons;
 
@@ -48,7 +48,7 @@ class Rss extends \Magento\Framework\View\Element\Template
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Framework\App\Rss\UrlBuilderInterface $rssUrlBuilder,
         array $data = [],
-        Signature $signature = null
+        ?Signature $signature = null
     ) {
         $this->orderFactory = $orderFactory;
         $this->rssUrlBuilder = $rssUrlBuilder;

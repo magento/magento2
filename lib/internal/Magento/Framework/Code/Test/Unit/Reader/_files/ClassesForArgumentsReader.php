@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -126,7 +126,7 @@ class ClassExtendsDefaultPhpTypeWithIOverrideConstructor extends \RuntimeExcepti
      * @param int $code
      * @param Exception $previous
      */
-    public function __construct($message = '', $code = 0, Exception $previous = null)
+    public function __construct($message = '', $code = 0, ?Exception $previous = null)
     {
         parent::__construct($message, $code, $previous);
     }
@@ -255,5 +255,52 @@ class ClassWithSuppressWarnings
     {
         $this->argumentOne = $stdClassObject;
         $this->argumentTwo = $secondClass;
+    }
+}
+class ClassWithNamedArgumentsForParentCall extends FirstClassForParentCall
+{
+    /**
+     * @var stdClass
+     */
+    protected $_stdClassObject;
+
+    /**
+     * @var ClassExtendsDefaultPhpType
+     */
+    protected $_runeTimeException;
+
+    /**
+     * @param stdClass $stdClassObject
+     * @param ClassExtendsDefaultPhpType $runeTimeException
+     */
+    public function __construct(\stdClass $stdClassObject, \ClassExtendsDefaultPhpType $runeTimeException)
+    {
+        parent::__construct(stdClassObject: $stdClassObject, runeTimeException: $runeTimeException);
+        $this->_stdClassObject = $stdClassObject;
+        $this->_runeTimeException = $runeTimeException;
+    }
+}
+
+class ClassWithMixedArgumentsForParentCall extends FirstClassForParentCall
+{
+    /**
+     * @var stdClass
+     */
+    protected $_stdClassObject;
+
+    /**
+     * @var ClassExtendsDefaultPhpType
+     */
+    protected $_runeTimeException;
+
+    /**
+     * @param stdClass $stdClassObject
+     * @param ClassExtendsDefaultPhpType $runeTimeException
+     */
+    public function __construct(\stdClass $stdClassObject, \ClassExtendsDefaultPhpType $runeTimeException)
+    {
+        parent::__construct($stdClassObject, runeTimeException: $runeTimeException);
+        $this->_stdClassObject = $stdClassObject;
+        $this->_runeTimeException = $runeTimeException;
     }
 }

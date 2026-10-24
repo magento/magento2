@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\DB\Query;
@@ -32,12 +32,6 @@ class BatchRangeIterator implements BatchIteratorInterface
      * @var string|array
      */
     private $rangeField;
-
-    /**
-     * @var string
-     * @deprecated 102.0.0 unused class property
-     */
-    private $rangeFieldAlias;
 
     /**
      * @var int
@@ -87,19 +81,19 @@ class BatchRangeIterator implements BatchIteratorInterface
      * @param string $correlationName
      * @param string|array $rangeField
      * @param string $rangeFieldAlias @deprecated
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         Select $select,
         $batchSize,
         $correlationName,
         $rangeField,
-        $rangeFieldAlias
+        $rangeFieldAlias = ''
     ) {
         $this->batchSize = $batchSize;
         $this->select = $select;
         $this->correlationName = $correlationName;
         $this->rangeField = $rangeField;
-        $this->rangeFieldAlias = $rangeFieldAlias;
         $this->connection = $select->getConnection();
     }
 

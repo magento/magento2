@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -373,6 +373,6 @@ class LocalFileAssertions extends Helper
      */
     private function expandPath($filePath): string
     {
-        return (substr($filePath, 0, 1) === '/') ? $filePath : MAGENTO_BP . '/' . $filePath;
+        return ($filePath && substr($filePath, 0, 1) === '/') ? $filePath : MAGENTO_BP . '/' . $filePath;
     }
 }

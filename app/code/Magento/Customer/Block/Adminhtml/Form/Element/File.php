@@ -1,14 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Block\Adminhtml\Form\Element;
 
 /**
  * Customer Widget Form File Element Block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class File extends \Magento\Framework\Data\Form\Element\AbstractElement
 {
@@ -18,8 +16,6 @@ class File extends \Magento\Framework\Data\Form\Element\AbstractElement
     protected $_assetRepo;
 
     /**
-     * Adminhtml data
-     *
      * @var \Magento\Backend\Helper\Data
      */
     protected $_adminhtmlData = null;

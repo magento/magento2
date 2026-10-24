@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Webapi\Controller;
@@ -16,9 +16,9 @@ use Magento\Framework\Webapi\ServiceInputProcessor;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Webapi\Controller\Rest\ParamsOverrider;
+use Magento\Webapi\Controller\Rest\RequestProcessorPool;
 use Magento\Webapi\Controller\Rest\Router;
 use Magento\Webapi\Controller\Rest\Router\Route;
-use Magento\Webapi\Controller\Rest\RequestProcessorPool;
 
 /**
  * Front controller for WebAPI REST area.
@@ -38,12 +38,14 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
     /**
      * @var Router
      * @deprecated 100.1.0
+     * @see MAGETWO-71174
      */
     protected $_router;
 
     /**
      * @var Route
      * @deprecated 100.1.0
+     * @see MAGETWO-71174
      */
     protected $_route;
 
@@ -70,12 +72,14 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
     /**
      * @var Authorization
      * @deprecated 100.1.0
+     * @see MAGETWO-71174
      */
     protected $authorization;
 
     /**
      * @var ServiceInputProcessor
      * @deprecated 100.1.0
+     * @see MAGETWO-71174
      */
     protected $serviceInputProcessor;
 
@@ -102,6 +106,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
     /**
      * @var ParamsOverrider
      * @deprecated 100.1.0
+     * @see MAGETWO-71174
      */
     protected $paramsOverrider;
 
@@ -118,6 +123,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
     /**
      * @var StoreManagerInterface
      * @deprecated 100.1.0
+     * @see MAGETWO-71174
      */
     private $storeManager;
 
@@ -264,7 +270,8 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
         if ($this->storeManager->getStore()->getCode() === Store::ADMIN_CODE
             && strtoupper($this->_request->getMethod()) === RestRequest::HTTP_METHOD_GET
         ) {
-            throw new \Magento\Framework\Webapi\Exception(__('Cannot perform GET operation with store code \'all\''));
+            throw
+            new \Magento\Framework\Webapi\Exception(__('Cannot perform GET operation with store code \'all\''));
         }
     }
 }

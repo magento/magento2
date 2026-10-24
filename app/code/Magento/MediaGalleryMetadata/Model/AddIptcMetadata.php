@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -59,8 +59,8 @@ class AddIptcMetadata
         FileInterfaceFactory $fileFactory,
         DriverInterface $driver,
         ReadFile $fileReader,
-        Filesystem $filesystem = null,
-        IptcEmbed $iptcEmbed = null
+        ?Filesystem $filesystem = null,
+        ?IptcEmbed $iptcEmbed = null
     ) {
         $this->fileFactory = $fileFactory;
         $this->fileReader = $fileReader;

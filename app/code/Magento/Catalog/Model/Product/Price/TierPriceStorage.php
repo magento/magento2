@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Model\Product\Price;
@@ -11,6 +11,8 @@ use Magento\Catalog\Api\TierPriceStorageInterface;
 use Magento\Catalog\Model\Indexer\Product\Price\Processor as PriceIndexerProcessor;
 use Magento\Catalog\Model\Product\Price\Validation\TierPriceValidator;
 use Magento\Catalog\Model\ProductIdLocatorInterface;
+use Magento\Framework\Exception\InputException;
+use Magento\Customer\Model\ResourceModel\Group\GetCustomerGroupCodesByIds;
 
 class TierPriceStorage implements TierPriceStorageInterface
 {
@@ -22,8 +24,6 @@ class TierPriceStorage implements TierPriceStorageInterface
     private $tierPricePersistence;
 
     /**
-     * Tier price validator.
-     *
      * @var TierPriceValidator
      */
     private $tierPriceValidator;
@@ -36,18 +36,19 @@ class TierPriceStorage implements TierPriceStorageInterface
     private $tierPriceFactory;
 
     /**
-     * Price index processor.
-     *
      * @var PriceIndexerProcessor
      */
     private $priceIndexProcessor;
 
     /**
-     * Product ID locator.
-     *
      * @var ProductIdLocatorInterface
      */
     private $productIdLocator;
+
+    /**
+     * @var GetCustomerGroupCodesByIds
+     */
+    private $getCustomerGroupCodesByIds;
 
     /**
      * @param TierPricePersistence $tierPricePersistence
@@ -55,19 +56,22 @@ class TierPriceStorage implements TierPriceStorageInterface
      * @param TierPriceFactory $tierPriceFactory
      * @param PriceIndexerProcessor $priceIndexProcessor
      * @param ProductIdLocatorInterface $productIdLocator
+     * @param GetCustomerGroupCodesByIds $getCustomerGroupCodesByIds
      */
     public function __construct(
         TierPricePersistence $tierPricePersistence,
         TierPriceValidator $tierPriceValidator,
         TierPriceFactory $tierPriceFactory,
         PriceIndexerProcessor $priceIndexProcessor,
-        ProductIdLocatorInterface $productIdLocator
+        ProductIdLocatorInterface $productIdLocator,
+        GetCustomerGroupCodesByIds $getCustomerGroupCodesByIds
     ) {
         $this->tierPricePersistence = $tierPricePersistence;
         $this->tierPriceValidator = $tierPriceValidator;
         $this->tierPriceFactory = $tierPriceFactory;
         $this->priceIndexProcessor = $priceIndexProcessor;
         $this->productIdLocator = $productIdLocator;
+        $this->getCustomerGroupCodesByIds = $getCustomerGroupCodesByIds;
     }
 
     /**
@@ -83,8 +87,13 @@ class TierPriceStorage implements TierPriceStorageInterface
     /**
      * @inheritdoc
      */
-    public function update(array $prices)
+    public function update($prices)
     {
+        if ($prices === null || !is_array($prices)) {
+            throw new InputException(
+                __('Invalid input data format. Expected an array of prices.')
+            );
+        }
         $affectedIds = $this->retrieveAffectedProductIdsForPrices($prices);
         $skus = array_unique(
             array_map(
@@ -121,8 +130,13 @@ class TierPriceStorage implements TierPriceStorageInterface
     /**
      * @inheritdoc
      */
-    public function delete(array $prices)
+    public function delete($prices)
     {
+        if ($prices === null || !is_array($prices)) {
+            throw new InputException(
+                __('Invalid input data format. Expected an array of prices.')
+            );
+        }
         $affectedIds = $this->retrieveAffectedProductIdsForPrices($prices);
         $result = $this->tierPriceValidator->retrieveValidationResult($prices);
         $prices = $this->removeIncorrectPrices($prices, $result->getFailedRowIds());
@@ -148,8 +162,22 @@ class TierPriceStorage implements TierPriceStorageInterface
         if ($rawPrices) {
             $linkField = $this->tierPricePersistence->getEntityLinkField();
             $skuByIdLookup = $this->buildSkuByIdLookup($skus);
+            $customerGroupCodesByIds = $this->getCustomerGroupCodesByIds->execute(
+                array_column(
+                    array_filter(
+                        $rawPrices,
+                        static function (array $row) {
+                            return (int) $row['all_groups'] !== 1;
+                        }
+                    ),
+                    'customer_group_id'
+                ),
+            );
             foreach ($rawPrices as $rawPrice) {
                 $sku = $skuByIdLookup[$rawPrice[$linkField]];
+                if (isset($customerGroupCodesByIds[$rawPrice['customer_group_id']])) {
+                    $rawPrice['customer_group_code'] = $customerGroupCodesByIds[$rawPrice['customer_group_id']];
+                }
                 $price = $this->tierPriceFactory->create($rawPrice, $sku);
                 if ($groupBySku) {
                     $prices[$sku][] = $price;
@@ -257,6 +285,7 @@ class TierPriceStorage implements TierPriceStorageInterface
                 && $existingPrice['qty'] == $price['qty']
                 && $this->isCorrectPriceValue($existingPrice, $price)
                 && $existingPrice[$linkField] == $price[$linkField]
+                && $existingPrice['website_id'] == $price['website_id']
             ) {
                 return (int) $existingPrice['value_id'];
             }

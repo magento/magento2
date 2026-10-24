@@ -1,31 +1,37 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2012 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Test\Annotation;
 
+use Magento\Framework\App\ScopeResolverPool;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\DataObject;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
-use Magento\Framework\Serialize\Serializer\Json;
-use Magento\TestFramework\Annotation\DataFixture;
-use Magento\TestFramework\Annotation\DataFixtureDataProvider;
+use Magento\TestFramework\Annotation\DataFixture as DataFixtureAnnotation;
 use Magento\TestFramework\Annotation\DataFixtureSetup;
 use Magento\TestFramework\Event\Param\Transaction;
-use Magento\TestFramework\Annotation\DataFixtureDirectivesParser;
+use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureInterface;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Fixture\LegacyDataFixturePathResolver;
+use Magento\TestFramework\Fixture\CallableDataFixture;
 use Magento\TestFramework\Fixture\DataFixtureFactory;
+use Magento\TestFramework\Fixture\ImageFixture;
 use Magento\TestFramework\Fixture\LegacyDataFixture;
 use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
+use Magento\TestFramework\Fixture\ScopeFixture;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\ScopeSwitcherInterface;
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+use PHPUnit\Framework\AssertionFailedError;
+use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\TestFramework\Annotation\TestsIsolation;
@@ -33,15 +39,16 @@ use ReflectionException;
 
 /**
  * Test class for \Magento\TestFramework\Annotation\DataFixture.
+ * Uses real fixture class names (CallableDataFixture, ImageFixture, ScopeFixture) so
+ * DataFixtureFactory::create() sees class_exists() and the object manager mock returns our mocks.
  *
  * @magentoDataFixture sampleFixtureOne
- * @magentoDataFixtureDataProvider classFixtureDataProvider
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DataFixtureTest extends TestCase
 {
     /**
-     * @var DataFixture|MockObject
+     * @var DataFixtureAnnotation|MockObject
      */
     protected $object;
 
@@ -75,40 +82,40 @@ class DataFixtureTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->object = new DataFixture();
+        $this->object = new DataFixtureAnnotation();
         $this->testsIsolationMock = $this->getMockBuilder(TestsIsolation::class)
             ->onlyMethods(['createDbSnapshot', 'checkTestIsolation'])
             ->getMock();
         /** @var ObjectManagerInterface|MockObject $objectManager */
         $objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->onlyMethods(['get', 'create'])
+            ->onlyMethods(['get', 'create', 'configure'])
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
-        $this->fixture1 = $this->getMockBuilder(RevertibleDataFixtureInterface::class)
-            ->setMockClassName('MockFixture1')
-            ->getMockForAbstractClass();
-        $this->fixture2 = $this->getMockBuilder(RevertibleDataFixtureInterface::class)
-            ->setMockClassName('MockFixture2')
-            ->getMockForAbstractClass();
-        $this->fixture3 = $this->getMockBuilder(DataFixtureInterface::class)
-            ->setMockClassName('MockFixture3')
-            ->getMockForAbstractClass();
+        $this->fixture1 = $this->createMock(RevertibleDataFixtureInterface::class);
+        $this->fixture2 = $this->createMock(RevertibleDataFixtureInterface::class);
+        $this->fixture3 = $this->createMock(DataFixtureInterface::class);
 
         $this->fixtureStorage = new DataFixtureStorage();
         DataFixtureStorageManager::setStorage($this->fixtureStorage);
 
         $dataFixtureFactory = new DataFixtureFactory($objectManager);
+        $annotationParser = new \Magento\TestFramework\Annotation\Parser\DataFixture('magentoDataFixture');
 
+        $dataFixtureSetup = new DataFixtureSetup(
+            new Registry(),
+            $dataFixtureFactory,
+            $this->createMock(ScopeSwitcherInterface::class),
+            $this->createMock(ScopeResolverPool::class),
+        );
         $sharedInstances = [
             TestsIsolation::class => $this->testsIsolationMock,
-            DataFixtureDirectivesParser::class => new DataFixtureDirectivesParser(new Json()),
+            \Magento\TestFramework\Annotation\Parser\DataFixture::class => $annotationParser,
             DataFixtureFactory::class => $dataFixtureFactory,
-            DataFixtureSetup::class => new DataFixtureSetup(new Registry(), $dataFixtureFactory),
-            DataFixtureDataProvider::class => new DataFixtureDataProvider(new Json()),
-            'MockFixture1' => $this->fixture1,
-            'MockFixture2' => $this->fixture2,
-            'MockFixture3' => $this->fixture3,
+            DataFixtureSetup::class => $dataFixtureSetup,
+            CallableDataFixture::class => $this->fixture1,
+            ImageFixture::class => $this->fixture2,
+            ScopeFixture::class => $this->fixture3,
         ];
         $objectManager->expects($this->atLeastOnce())
             ->method('get')
@@ -121,10 +128,14 @@ class DataFixtureTest extends TestCase
             ->method('create')
             ->willReturnCallback(
                 function (string $type, array $arguments = []) use ($sharedInstances) {
+                    // Return test mocks only when fixture name was the class (no constructor args).
+                    if (isset($sharedInstances[$type]) && $arguments === []) {
+                        return $sharedInstances[$type];
+                    }
                     if ($type === LegacyDataFixture::class) {
                         array_unshift($arguments, new LegacyDataFixturePathResolver(new ComponentRegistrar()));
                     }
-                    return $sharedInstances[$type] ?? new $type(...array_values($arguments));
+                    return new $type(...array_values($arguments));
                 }
             );
         Bootstrap::setObjectManager($objectManager);
@@ -135,6 +146,22 @@ class DataFixtureTest extends TestCase
         }
 
         $this->createResolverMock();
+    }
+
+    /**
+     * @param string $class
+     * @param string $mockClassName
+     * @return MockObject
+     */
+    private function getMock(string $class, string $mockClassName): MockObject
+    {
+        if (class_exists($mockClassName)) {
+            return new $mockClassName();
+        }
+
+        $mockBuilder = $this->getMockBuilder($class);
+        $mockBuilder->setMockClassName($mockClassName);
+        return $mockBuilder->getMock();
     }
 
     /**
@@ -322,12 +349,12 @@ class DataFixtureTest extends TestCase
         $this->assertEquals('3', getenv('sample_fixture_three'));
     }
 
-    /**
-     * @magentoDataFixture MockFixture1
-     * @magentoDataFixture MockFixture2
-     * @magentoDataFixture MockFixture3
-     * @magentoDbIsolation disabled
-     */
+    #[
+        DbIsolation(false),
+        DataFixture(CallableDataFixture::class),
+        DataFixture(ImageFixture::class),
+        DataFixture(ScopeFixture::class),
+    ]
     public function testFixtureClass(): void
     {
         $fixture1 = new DataObject();
@@ -353,12 +380,46 @@ class DataFixtureTest extends TestCase
         $this->revertFixtures();
     }
 
-    /**
-     * @magentoDataFixture MockFixture1 with:{"key1": "value1"}
-     * @magentoDataFixture MockFixture2 with:{"key2": "value2"}
-     * @magentoDataFixture MockFixture3 with:{"key3": "value3"}
-     * @magentoDbIsolation disabled
-     */
+    #[
+        DbIsolation(false),
+        DataFixture(CallableDataFixture::class, as: 'fixture1'),
+        DataFixture(ImageFixture::class, as: 'fixture2'),
+        DataFixture(ScopeFixture::class, as: 'fixture3'),
+    ]
+    public function testFixtureClassWithAlias(): void
+    {
+        $fixture1 = new DataObject();
+        $fixture2 = new DataObject();
+        $this->fixture1->expects($this->once())
+            ->method('apply')
+            ->with([])
+            ->willReturn($fixture1);
+        $this->fixture2->expects($this->once())
+            ->method('apply')
+            ->with([])
+            ->willReturn($fixture2);
+        $this->fixture3->expects($this->once())
+            ->method('apply')
+            ->with([]);
+        $this->applyFixtures();
+        $this->assertSame($fixture1, $this->fixtureStorage->get('fixture1'));
+        $this->assertSame($fixture2, $this->fixtureStorage->get('fixture2'));
+        $this->assertNull($this->fixtureStorage->get('fixture3'));
+        $this->fixture1->expects($this->once())
+            ->method('revert')
+            ->with($fixture1);
+        $this->fixture2->expects($this->once())
+            ->method('revert')
+            ->with($fixture2);
+        $this->revertFixtures();
+    }
+
+    #[
+        DbIsolation(false),
+        DataFixture(CallableDataFixture::class, ['key1' => 'value1']),
+        DataFixture(ImageFixture::class, ['key2' => 'value2']),
+        DataFixture(ScopeFixture::class, ['key3' => 'value3']),
+    ]
     public function testFixtureClassWithParameters(): void
     {
         $fixture1 = new DataObject();
@@ -384,12 +445,12 @@ class DataFixtureTest extends TestCase
         $this->revertFixtures();
     }
 
-    /**
-     * @magentoDataFixture MockFixture1 with:{"alias-key1": "alias-value1"} as:fixture1
-     * @magentoDataFixture MockFixture2 with:{"alias-key2": "alias-value2"} as:fixture2
-     * @magentoDataFixture MockFixture3 with:{"alias-key3": "alias-value3"} as:fixture3
-     * @magentoDbIsolation disabled
-     */
+    #[
+        DbIsolation(false),
+        DataFixture(CallableDataFixture::class, ['alias-key1' => 'alias-value1'], 'fixture1'),
+        DataFixture(ImageFixture::class, ['alias-key2' => 'alias-value2'], 'fixture2'),
+        DataFixture(ScopeFixture::class, ['alias-key3' => 'alias-value3'], 'fixture3'),
+    ]
     public function testFixtureClassWithParametersAndAlias(): void
     {
         $fixture1 = new DataObject();
@@ -418,154 +479,12 @@ class DataFixtureTest extends TestCase
         $this->revertFixtures();
     }
 
-    /**
-     * @magentoDataFixture MockFixture1 as:fixture1
-     * @magentoDataFixture MockFixture2 as:fixture2
-     * @magentoDataFixture MockFixture3 as:fixture3
-     * @magentoDataFixtureDataProvider methodFixtureDataProvider
-     * @magentoDbIsolation disabled
-     */
-    public function testMethodFixtureDataProvider(): void
-    {
-        $fixture1 = new DataObject();
-        $fixture2 = new DataObject();
-        $this->fixture1->expects($this->once())
-            ->method('apply')
-            ->with(['method-key1' => 'method-value1'])
-            ->willReturn($fixture1);
-        $this->fixture2->expects($this->once())
-            ->method('apply')
-            ->with(['method-key2' => 'method-value2'])
-            ->willReturn($fixture2);
-        $this->fixture3->expects($this->once())
-            ->method('apply')
-            ->with(['method-key3' => 'method-value3']);
-        $this->applyFixtures();
-        $this->assertSame($fixture1, $this->fixtureStorage->get('fixture1'));
-        $this->assertSame($fixture2, $this->fixtureStorage->get('fixture2'));
-        $this->assertNull($this->fixtureStorage->get('fixture3'));
-        $this->fixture1->expects($this->once())
-            ->method('revert')
-            ->with($fixture1);
-        $this->fixture2->expects($this->once())
-            ->method('revert')
-            ->with($fixture2);
-        $this->revertFixtures();
-    }
-
-    /**
-     * @return array
-     */
-    public function methodFixtureDataProvider(): array
-    {
-        return [
-            'fixture1' => [
-                'method-key1' => 'method-value1',
-            ],
-            'fixture2' => [
-                'method-key2' => 'method-value2',
-            ],
-            'fixture3' => [
-                'method-key3' => 'method-value3',
-            ],
-        ];
-    }
-
-    /**
-     * @magentoDataFixture MockFixture1 as:fixture1
-     * @magentoDataFixture MockFixture2 as:fixture2
-     * @magentoDataFixture MockFixture3 as:fixture3
-     * @magentoDbIsolation disabled
-     */
-    public function testClassFixtureDataProvider(): void
-    {
-        $fixture1 = new DataObject();
-        $fixture2 = new DataObject();
-        $this->fixture1->expects($this->once())
-            ->method('apply')
-            ->with(['class-key1' => 'class-value1'])
-            ->willReturn($fixture1);
-        $this->fixture2->expects($this->once())
-            ->method('apply')
-            ->with(['class-key2' => 'class-value2'])
-            ->willReturn($fixture2);
-        $this->fixture3->expects($this->once())
-            ->method('apply')
-            ->with(['class-key3' => 'class-value3']);
-        $this->applyFixtures();
-        $this->assertSame($fixture1, $this->fixtureStorage->get('fixture1'));
-        $this->assertSame($fixture2, $this->fixtureStorage->get('fixture2'));
-        $this->assertNull($this->fixtureStorage->get('fixture3'));
-        $this->fixture1->expects($this->once())
-            ->method('revert')
-            ->with($fixture1);
-        $this->fixture2->expects($this->once())
-            ->method('revert')
-            ->with($fixture2);
-        $this->revertFixtures();
-    }
-
-    /**
-     * @return array
-     */
-    public function classFixtureDataProvider(): array
-    {
-        return [
-            'fixture1' => [
-                'class-key1' => 'class-value1',
-            ],
-            'fixture2' => [
-                'class-key2' => 'class-value2',
-            ],
-            'fixture3' => [
-                'class-key3' => 'class-value3',
-            ],
-        ];
-    }
-
-    /**
-     * @magentoDataFixture MockFixture1 as:fixture1
-     * @magentoDataFixture MockFixture2 as:fixture2
-     * @magentoDataFixture MockFixture3 as:fixture3
-     * @magentoDbIsolation disabled
-     * @magentoDataFixtureDataProvider {"fixture1":{"inline-key1":"inline-value1"}}
-     * @magentoDataFixtureDataProvider {"fixture2":{"inline-key2":"inline-value2"}}
-     * @magentoDataFixtureDataProvider {"fixture3":{"inline-key3":"inline-value3"}}
-     */
-    public function testInlineFixtureDataProvider(): void
-    {
-        $fixture1 = new DataObject();
-        $fixture2 = new DataObject();
-        $this->fixture1->expects($this->once())
-            ->method('apply')
-            ->with(['inline-key1' => 'inline-value1'])
-            ->willReturn($fixture1);
-        $this->fixture2->expects($this->once())
-            ->method('apply')
-            ->with(['inline-key2' => 'inline-value2'])
-            ->willReturn($fixture2);
-        $this->fixture3->expects($this->once())
-            ->method('apply')
-            ->with(['inline-key3' => 'inline-value3']);
-        $this->applyFixtures();
-        $this->assertSame($fixture1, $this->fixtureStorage->get('fixture1'));
-        $this->assertSame($fixture2, $this->fixtureStorage->get('fixture2'));
-        $this->assertNull($this->fixtureStorage->get('fixture3'));
-        $this->fixture1->expects($this->once())
-            ->method('revert')
-            ->with($fixture1);
-        $this->fixture2->expects($this->once())
-            ->method('revert')
-            ->with($fixture2);
-        $this->revertFixtures();
-    }
-
-    /**
-     * @magentoDataFixture MockFixture1 with:{"p1": "param-value1"} as:fixture1
-     * @magentoDataFixture MockFixture2 with:{"p2": "$fixture1.attr_1$"} as:fixture2
-     * @magentoDataFixture MockFixture3 with:{"p3": "$fixture2.attr_3$", "p4": {"p5": "$fixture1$" }} as:fixture3
-     * @magentoDbIsolation disabled
-     */
+    #[
+        DbIsolation(false),
+        DataFixture(CallableDataFixture::class, ['p1' => 'param-value1'], 'fixture1'),
+        DataFixture(ImageFixture::class, ['p2' => '$fixture1.attr_1$'], 'fixture2'),
+        DataFixture(ScopeFixture::class, ['p3' => '$fixture2.attr_3$', 'p4' => ['p5' => '$fixture1$']], 'fixture3'),
+    ]
     public function testVariables(): void
     {
         $fixture1 = new DataObject(['attr_1' => 'attr-value1', 'attr_2' => 'attr-value2']);
@@ -588,6 +507,119 @@ class DataFixtureTest extends TestCase
         $this->fixture1->expects($this->once())
             ->method('revert')
             ->with($fixture1);
+        $this->fixture2->expects($this->once())
+            ->method('revert')
+            ->with($fixture2);
+        $this->revertFixtures();
+    }
+
+    #[TestWith(['value' => 'dataset-fixture-value'])]
+    #[DbIsolation(false)]
+    #[DataFixture(ImageFixture::class, ['param' => '$dataset.value$'], 'fixture1')]
+    public function testDatasetInjectionWithDataProvider(string $value): void
+    {
+        $fixture1Result = new DataObject();
+        $this->fixture2->expects($this->once())
+            ->method('apply')
+            ->with(['param' => $value])
+            ->willReturn($fixture1Result);
+        $this->applyFixtures();
+        $this->assertSame($fixture1Result, $this->fixtureStorage->get('fixture1'));
+        $datasetFixture = $this->fixtureStorage->get('dataset');
+        $this->assertInstanceOf(DataObject::class, $datasetFixture);
+        $this->assertEquals($value, $datasetFixture->getData('value'));
+    }
+
+    #[TestWith(['dataset-fixture-value'])]
+    #[DbIsolation(false)]
+    #[DataFixture(ImageFixture::class, ['param' => '$dataset.0$'], 'fixture1')]
+    public function testDatasetInjectionWithNumericalKey(string $value): void
+    {
+        $fixture1Result = new DataObject();
+        $this->fixture2->expects($this->once())
+            ->method('apply')
+            ->with(['param' => $value])
+            ->willReturn($fixture1Result);
+        $this->applyFixtures();
+        $datasetFixture = $this->fixtureStorage->get('dataset');
+        $this->assertInstanceOf(DataObject::class, $datasetFixture);
+        $this->assertEquals($value, $datasetFixture->getData('0'));
+    }
+
+    #[DbIsolation(false)]
+    #[DataFixture(ImageFixture::class, [], 'fixture1')]
+    public function testNoDatasetInjectionWithoutDataProvider(): void
+    {
+        $this->fixture2->method('apply')->willReturn(new DataObject());
+        $this->applyFixtures();
+        $this->assertNull($this->fixtureStorage->get('dataset'));
+    }
+
+    #[TestWith(['value' => 'dataset-fixture-value'])]
+    #[DbIsolation(false)]
+    #[DataFixture(ImageFixture::class, ['param' => '$dataset.unknown$'], 'fixture1')]
+    public function testDatasetUnknownKeyThrowsException(string $value): void
+    {
+        $this->fixture2->expects($this->never())->method('apply');
+        $this->expectException(AssertionFailedError::class);
+        $this->expectExceptionMessageMatches(
+            "/Key 'unknown' does not exist in the data set #0. Available keys: value/"
+        );
+        $this->applyFixtures();
+        $this->assertEquals($value, $this->fixtureStorage->get('dataset')->getData('value'));
+    }
+
+    #[TestWith(['value' => 'dataset-fixture-value'], 'dataset-1')]
+    #[DbIsolation(false)]
+    #[DataFixture(ImageFixture::class, ['param' => '$dataset.unknown$'], 'fixture1')]
+    public function testDatasetWithNameUnknownKeyThrowsException(string $value): void
+    {
+        $this->fixture2->expects($this->never())->method('apply');
+        $this->expectException(AssertionFailedError::class);
+        $this->expectExceptionMessageMatches(
+            "/Key 'unknown' does not exist in the data set 'dataset-1'. Available keys: value/"
+        );
+        $this->applyFixtures();
+        $this->assertEquals($value, $this->fixtureStorage->get('dataset')->getData('value'));
+    }
+
+    #[
+        DbIsolation(false),
+        DataFixture(CallableDataFixture::class, ['p1' => 'param-value1'], 'fixture1', count: 2),
+        DataFixture(ImageFixture::class, ['p2' => '$fixture12.attr_1$'], 'fixture2'),
+        DataFixture(ScopeFixture::class, ['p3' => '$fixture2.attr_3$', 'p4' => ['p5' => '$fixture11$']], 'fixture3'),
+    ]
+    public function testCount(): void
+    {
+        $fixture11 = new DataObject(['attr_1' => 'attr-value11', 'attr_2' => 'attr-value21']);
+        $fixture12 = new DataObject(['attr_1' => 'attr-value12', 'attr_2' => 'attr-value22']);
+        $fixture2 = new DataObject(['attr_3' => 1]);
+        $this->fixture1->expects($this->exactly(2))
+            ->method('apply')
+            ->with(['p1' => 'param-value1'])
+            ->willReturnOnConsecutiveCalls($fixture11, $fixture12);
+        $this->fixture2->expects($this->once())
+            ->method('apply')
+            ->with(['p2' => 'attr-value12'])
+            ->willReturn($fixture2);
+        $this->fixture3->expects($this->once())
+            ->method('apply')
+            ->with(['p3' => 1, 'p4' => ['p5' => $fixture11]]);
+        $this->applyFixtures();
+        $this->assertSame($fixture11, $this->fixtureStorage->get('fixture11'));
+        $this->assertSame($fixture12, $this->fixtureStorage->get('fixture12'));
+        $this->assertSame($fixture2, $this->fixtureStorage->get('fixture2'));
+        $this->assertNull($this->fixtureStorage->get('fixture3'));
+        $this->fixture1->expects($this->exactly(2))
+            ->method('revert')
+            ->willReturnCallback(
+                function ($arg) use ($fixture12, $fixture11) {
+                    if ($arg == $fixture12 || $arg == $fixture11) {
+                        return null;
+                    }
+                }
+            );
+
         $this->fixture2->expects($this->once())
             ->method('revert')
             ->with($fixture2);
@@ -625,8 +657,7 @@ class DataFixtureTest extends TestCase
             ->getMock();
         $reflection = new \ReflectionClass(Resolver::class);
         $reflectionProperty = $reflection->getProperty('instance');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue(Resolver::class, $mock);
+        $reflectionProperty->setValue(null, $mock);
         $mock->method('applyDataFixtures')
             ->willReturnArgument(1);
     }

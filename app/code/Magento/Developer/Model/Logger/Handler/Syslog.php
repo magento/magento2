@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Developer\Model\Logger\Handler;
 use Magento\Config\Setup\ConfigOptionsList;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\DeploymentConfig;
+use Monolog\LogRecord;
 
 /**
  * Enable/disable syslog logging based on the deployment config setting.
@@ -22,8 +23,6 @@ class Syslog extends \Magento\Framework\Logger\Handler\Syslog
     public const CONFIG_PATH = 'dev/syslog/syslog_logging';
 
     /**
-     * Deployment config.
-     *
      * @var DeploymentConfig
      */
     private $deploymentConfig;
@@ -43,7 +42,7 @@ class Syslog extends \Magento\Framework\Logger\Handler\Syslog
     /**
      * @inheritdoc
      */
-    public function isHandling(array $record): bool
+    public function isHandling(LogRecord $record): bool
     {
         return parent::isHandling($record)
             && $this->deploymentConfig->isDbAvailable()

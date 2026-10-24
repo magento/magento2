@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+   * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAssertValuesInProductPageForPaypalExpressCheckoutActionGroup">
+        <annotations>
+            <description>Check the default Dropdown Values Available in Admin Cart Page.</description>
+        </annotations>
+        <arguments>
+            <argument name="countryCode" type="string" defaultValue="us"/>
+        </arguments>
+        <waitForElementClickable selector="{{AdminPaypalProductPageConfigSection.expandCatalogProductPage(countryCode)}}" stepKey="waitForCatalogPageClickable"/>
+        <click selector="{{AdminPaypalProductPageConfigSection.expandCatalogProductPage(countryCode)}}" stepKey="clickCatalog"/>
+        <selectOption selector ="{{AdminPaypalProductPageConfigSection.display(countryCode)}}" userInput="Yes" stepKey="enableDisplayforPaylaterCartPage"/>
+        <click selector="{{AdminPaypalProductPageConfigSection.position(countryCode)}}"  stepKey="clickOnPosition"/>
+        <see selector="{{AdminPaypalProductPageConfigSection.position(countryCode)}}" userInput="Header (center)" stepKey="seeDefaultPosition"/>
+        <see selector="{{AdminPaypalProductPageConfigSection.position(countryCode)}}" userInput="Under PayPal Checkout buttons" stepKey="seeOtherPosition"/>
+        <selectOption selector="{{AdminPaypalProductPageConfigSection.position(countryCode)}}" userInput="Header (center)" stepKey="selectDefaultPosition"/>
+    </actionGroup>
+</actionGroups>
