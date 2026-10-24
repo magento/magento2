@@ -12,22 +12,16 @@ use Magento\Sitemap\Model\SitemapItemInterfaceFactory;
 class Product implements ItemProviderInterface
 {
     /**
-     * Product factory
-     *
      * @var ProductFactory
      */
     private $productFactory;
 
     /**
-     * Sitemap item factory
-     *
      * @var SitemapItemInterfaceFactory
      */
     private $itemFactory;
 
     /**
-     * Config reader
-     *
      * @var ConfigReaderInterface
      */
     private $configReader;
@@ -50,7 +44,7 @@ class Product implements ItemProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getItems($storeId)
     {
@@ -58,14 +52,18 @@ class Product implements ItemProviderInterface
             ->getCollection($storeId);
 
         return array_map(function ($item) use ($storeId) {
-            return $this->itemFactory->create($this->prepareParams($item, $storeId));
+            return $this->itemFactory->create($this->getItemData($item, $storeId));
         }, $collection);
     }
 
     /**
-     * {@inheritdoc}
+     * Get constructor arguments for the sitemap item factory.
+     *
+     * @param \Magento\Framework\DataObject $item
+     * @param int $storeId
+     * @return array
      */
-    public function prepareParams($item, $storeId)
+    public function getItemData($item, $storeId)
     {
         return [
             'url' => $item->getUrl(),

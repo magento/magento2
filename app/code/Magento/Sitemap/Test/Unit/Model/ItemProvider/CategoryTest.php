@@ -21,6 +21,57 @@ use PHPUnit\Framework\TestCase;
 
 class CategoryTest extends TestCase
 {
+    public function testGetItemData(): void
+    {
+        $entity = new DataObject([
+            'url' => 'entity.html',
+            'updated_at' => '2026-01-01',
+            'images' => new DataObject(['title' => 'Image & caption']),
+        ]);
+        $resolver = new CategoryItemResolver(
+            $this->getConfigReaderMock(),
+            $this->getCategoryFactoryMock($this->getCategoryCollectionMock([])),
+            $this->getItemFactoryMock()
+        );
+
+        self::assertSame([
+            'url' => 'entity.html',
+            'updatedAt' => '2026-01-01',
+            'images' => $entity->getImages(),
+            'priority' => '1.0',
+            'changeFrequency' => 'daily',
+        ], $resolver->getItemData($entity, 1));
+    }
+
+    public function testGetItemsUsesOverriddenItemData(): void
+    {
+        $entities = [
+            4 => new DataObject(['url' => 'custom.html']),
+            9 => new DataObject(['url' => 'default.html']),
+        ];
+        $resolver = new class (
+            $this->getConfigReaderMock(),
+            $this->getCategoryFactoryMock($this->getCategoryCollectionMock($entities)),
+            $this->getItemFactoryMock()
+        ) extends CategoryItemResolver {
+            public function getItemData($item, $storeId)
+            {
+                $data = parent::getItemData($item, $storeId);
+                $priorities = ['custom.html' => '0.3', 'default.html' => $data['priority']];
+                $data['priority'] = $priorities[$item->getUrl()];
+                return $data;
+            }
+        };
+
+        $items = $resolver->getItems(1);
+
+        self::assertSame([4, 9], array_keys($items));
+        self::assertSame('0.3', $items[4]->getPriority());
+        self::assertSame('1.0', $items[9]->getPriority());
+        self::assertSame('custom.html', $items[4]->getUrl());
+        self::assertSame('daily', $items[4]->getChangeFrequency());
+    }
+
     public function testGetItemsEmpty()
     {
         $configReaderMock = $this->getConfigReaderMock();
@@ -82,7 +133,10 @@ class CategoryTest extends TestCase
      */
     private function getCategoryFactoryMock($returnValue)
     {
-        $cmsPageFactoryMock = $this->createPartialMock(CategoryFactory::class, ['create']);
+        $cmsPageFactoryMock = $this->getMockBuilder(CategoryFactory::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['create'])
+            ->getMock();
 
         $cmsPageFactoryMock->expects($this->any())
             ->method('create')
@@ -96,7 +150,10 @@ class CategoryTest extends TestCase
      */
     private function getItemFactoryMock()
     {
-        $itemFactoryMock = $this->createPartialMock(SitemapItemInterfaceFactory::class, ['create']);
+        $itemFactoryMock = $this->getMockBuilder(SitemapItemInterfaceFactory::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['create'])
+            ->getMock();
 
         $itemFactoryMock->expects($this->any())
             ->method('create')
@@ -131,7 +188,10 @@ class CategoryTest extends TestCase
      */
     private function getCategoryCollectionMock($returnValue)
     {
-        $sitemapCmsPageMock = $this->createPartialMock(CategoryResource::class, ['getCollection']);
+        $sitemapCmsPageMock = $this->getMockBuilder(CategoryResource::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getCollection'])
+            ->getMock();
 
         $sitemapCmsPageMock->expects($this->any())
             ->method('getCollection')

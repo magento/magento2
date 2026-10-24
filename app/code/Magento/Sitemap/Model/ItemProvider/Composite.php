@@ -40,12 +40,4 @@ class Composite implements ItemProviderInterface
 
         return $items;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function prepareParams($item, $storeId)
-    {
-
-    }
 }
