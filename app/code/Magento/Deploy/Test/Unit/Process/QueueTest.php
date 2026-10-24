@@ -14,6 +14,7 @@ use Magento\Deploy\Service\DeployPackage;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\App\State as AppState;
 use Magento\Framework\Locale\ResolverInterface as LocaleResolver;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -396,30 +397,58 @@ class QueueTest extends TestCase
      *
      * @param bool $depDeployed
      * @param bool $depInPkg
-     * @param int $calls
+     * @param bool $depCompletes
+     * @param string[] $expectedDeployed
      * @return void
      * @covers ::assertAndExecute
      * @covers ::isDeployed
      * @covers ::executePackage
      */
     #[DataProvider('assertAndExecuteDataProvider')]
-    public function testAssertAndExecuteWithDependencies(bool $depDeployed, bool $depInPkg, int $calls): void
-    {
+    #[AllowMockObjectsWithoutExpectations]
+    public function testAssertAndExecuteWithDependencies(
+        bool $depDeployed,
+        bool $depInPkg,
+        bool $depCompletes,
+        array $expectedDeployed
+    ): void {
         $queue = $this->createQueue();
         $parent = $this->createPackageMock('parent/path');
-        $dep = $this->createPackageMock('dep/path', $depDeployed ? Package::STATE_COMPLETED : null);
-        $dep->expects($this->any())->method('getParent')->willReturn(null);
+        $depState = $depDeployed ? Package::STATE_COMPLETED : null;
 
-        $package = $this->createMock(Package::class);
-        $package->expects($this->any())->method('getPath')->willReturn('main/path');
-        $package->expects($this->any())->method('getParent')->willReturn($parent);
-        $package->expects($this->any())->method('getState')->willReturn($depDeployed ? 0 : null);
-        $package->expects($this->any())->method('getArea')->willReturn('frontend');
-        $package->expects($this->any())->method('getLocale')->willReturn('en_US');
-        $package->expects($this->any())->method('getFiles')->willReturn([]);
-        $package->expects($this->any())->method('getPreProcessors')->willReturn([]);
+        $dep = $this->createStub(Package::class);
+        $dep->method('getPath')->willReturn('dep/path');
+        $dep->method('getParent')->willReturn(null);
+        $dep->method('getState')->willReturnCallback(
+            static function () use (&$depState) {
+                return $depState;
+            }
+        );
+        $dep->method('getArea')->willReturn('frontend');
+        $dep->method('getLocale')->willReturn('en_US');
+        $dep->method('getFiles')->willReturn([]);
+        $dep->method('getPreProcessors')->willReturn([]);
 
-        $this->appState->expects($this->exactly($calls))->method('emulateAreaCode');
+        $package = $this->createStub(Package::class);
+        $package->method('getPath')->willReturn('main/path');
+        $package->method('getParent')->willReturn($parent);
+        $package->method('getState')->willReturn(null);
+        $package->method('getArea')->willReturn('frontend');
+        $package->method('getLocale')->willReturn('en_US');
+        $package->method('getFiles')->willReturn([]);
+        $package->method('getPreProcessors')->willReturn([]);
+
+        // Serial mode deploys synchronously, a dependency that does not complete stands in for a running fork
+        $deployed = [];
+        $this->deployPackageService->method('deploy')->willReturnCallback(
+            static function (Package $deployedPackage) use (&$deployed, &$depState, $dep, $depCompletes) {
+                $deployed[] = $deployedPackage->getPath();
+                if ($deployedPackage === $dep && $depCompletes) {
+                    $depState = Package::STATE_COMPLETED;
+                }
+                return true;
+            }
+        );
 
         $packages = ['main/path' => ['package' => $package, 'dependencies' => ['dep/path' => $dep]]];
         if ($depInPkg) {
@@ -427,6 +456,8 @@ class QueueTest extends TestCase
         }
 
         $this->invokeMethod($queue, 'assertAndExecute', ['main/path', &$packages, $packages['main/path']]);
+
+        $this->assertSame($expectedDeployed, $deployed);
     }
 
     /**
@@ -437,9 +468,10 @@ class QueueTest extends TestCase
     public static function assertAndExecuteDataProvider(): array
     {
         return [
-            'dep deployed' => [true, false, 1],
-            'dep waiting' => [false, false, 0],
-            'dep recursive' => [false, true, 2],
+            'dep deployed' => [true, false, false, ['main/path']],
+            'dep waiting' => [false, false, false, []],
+            'dep recursive, completed' => [false, true, true, ['dep/path', 'main/path']],
+            'dep recursive, still running' => [false, true, false, ['dep/path']],
         ];
     }
 
