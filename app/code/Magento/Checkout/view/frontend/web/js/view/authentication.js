@@ -17,6 +17,7 @@ define([
     var checkoutConfig = window.checkoutConfig;
 
     return Component.extend({
+        isSubmitting: false,
         isGuestCheckoutAllowed: checkoutConfig.isGuestCheckoutAllowed,
         isCustomerLoginRequired: checkoutConfig.isCustomerLoginRequired,
         registerUrl: checkoutConfig.registerUrl,
@@ -42,7 +43,13 @@ define([
          */
         login: function (loginForm) {
             var loginData = {},
-                formDataArray = $(loginForm).serializeArray();
+                formDataArray;
+
+            if (this.isSubmitting) {
+                return;
+            }
+
+            formDataArray = $(loginForm).serializeArray();
 
             formDataArray.forEach(function (entry) {
                 loginData[entry.name] = entry.value;
@@ -51,10 +58,18 @@ define([
             if ($(loginForm).validation() &&
                 $(loginForm).validation('isValid')
             ) {
+                this.isSubmitting = true;
                 fullScreenLoader.startLoader();
-                loginAction(loginData, checkoutConfig.checkoutUrl, undefined, messageContainer).always(function () {
-                    fullScreenLoader.stopLoader();
-                });
+                loginAction(loginData, checkoutConfig.checkoutUrl, undefined, messageContainer)
+                    .done(function (response) {
+                        if (response.errors) {
+                            this.isSubmitting = false;
+                        }
+                    }.bind(this)).fail(function () {
+                        this.isSubmitting = false;
+                    }.bind(this)).always(function () {
+                        fullScreenLoader.stopLoader();
+                    });
             }
         }
     });
