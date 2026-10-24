@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryIntegration\Plugin;
 
-use Exception;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\File\Uploader;
@@ -16,11 +15,6 @@ use Magento\MediaGalleryApi\Api\IsPathExcludedInterface;
 use Magento\MediaGallerySynchronizationApi\Api\SynchronizeFilesInterface;
 use Magento\MediaGalleryUiApi\Api\ConfigInterface;
 use Psr\Log\LoggerInterface;
-use function implode;
-use function ltrim;
-use function preg_match;
-use function rtrim;
-use function strpos;
 
 /**
  * Save image information by SaveAssetsInterface.
@@ -93,9 +87,9 @@ class SaveImageInformation
     public function afterSave(Uploader $subject, array $result): array
     {
         $mediaFolder = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->getAbsolutePath();
-        $uploadedFile = rtrim($result['path'] ?? '', '/') . '/' . ltrim($result['file'] ?? '', '/');
 
-        if ($this->config->isEnabled() && strpos($uploadedFile, $mediaFolder) === 0) {
+        if ($this->config->isEnabled() && strpos($result['path'] ?? '', $mediaFolder) === 0) {
+            $uploadedFile = rtrim($result['path'] ?? '', '/') . '/' . ltrim($result['file'] ?? '', '/');
             $path = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->getRelativePath($uploadedFile);
 
             if ($this->isApplicable($path)) {
@@ -118,7 +112,7 @@ class SaveImageInformation
             return $path
                 && !$this->isPathExcluded->execute($path)
                 && preg_match('#\.(' . implode('|', $this->imageExtensions) . ')$# i', $path);
-        } catch (Exception $exception) {
+        } catch (\Exception $exception) {
             $this->log->critical($exception);
             return false;
         }
