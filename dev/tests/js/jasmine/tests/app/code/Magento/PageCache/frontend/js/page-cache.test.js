@@ -29,6 +29,7 @@ define([
 
         afterEach(function () {
             $(element).remove();
+            $(iframe).remove();
         });
 
         it('comments fn exists', function () {
