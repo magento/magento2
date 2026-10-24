@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -50,14 +50,9 @@ class PageTest extends TestCase
     {
         $mockedCollection = $this->getMockedCollection();
 
-        $mockBuilder = $this->getMockBuilder(CollectionFactory::class);
-        $mock = $mockBuilder->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $mock = $this->createPartialMock(CollectionFactory::class, ['create']);
 
-        $mock->expects($this->any())
-            ->method('create')
-            ->willReturn($mockedCollection);
+        $mock->method('create')->willReturn($mockedCollection);
 
         return $mock;
     }
@@ -67,17 +62,11 @@ class PageTest extends TestCase
      */
     private function getMockedCollection()
     {
-        $mockBuilder = $this->getMockBuilder(Collection::class);
-        $mock = $mockBuilder->disableOriginalConstructor()
-            ->getMock();
+        $mock = $this->createMock(Collection::class);
 
-        $mock->expects($this->any())
-            ->method('load')
-            ->willReturn($mock);
+        $mock->method('load')->willReturn($mock);
 
-        $mock->expects($this->any())
-            ->method('toOptionArray')
-            ->willReturn($this->testArray);
+        $mock->method('toOptionArray')->willReturn($this->testArray);
 
         return $mock;
     }

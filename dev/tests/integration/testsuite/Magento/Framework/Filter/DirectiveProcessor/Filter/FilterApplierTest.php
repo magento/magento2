@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -10,6 +10,7 @@ namespace Magento\Framework\Filter\DirectiveProcessor\Filter;
 
 use Magento\Framework\App\ObjectManager;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class FilterApplierTest extends TestCase
 {
@@ -24,8 +25,8 @@ class FilterApplierTest extends TestCase
     }
 
     /**
-     * @dataProvider arrayUseCaseProvider
      */
+    #[DataProvider('arrayUseCaseProvider')]
     public function testArrayUseCases($param, $input, $expected)
     {
         $result = $this->applier->applyFromArray($param, $input);
@@ -33,7 +34,7 @@ class FilterApplierTest extends TestCase
         self::assertSame($expected, $result);
     }
 
-    public function arrayUseCaseProvider()
+    public static function arrayUseCaseProvider()
     {
         $standardInput = 'Hello ' . "\n" . ' &world!';
         return [
@@ -52,8 +53,8 @@ class FilterApplierTest extends TestCase
     }
 
     /**
-     * @dataProvider rawUseCaseProvider
      */
+    #[DataProvider('rawUseCaseProvider')]
     public function testRawUseCases($param, $input, $expected)
     {
         $result = $this->applier->applyFromRawParam($param, $input, ['escape']);
@@ -61,7 +62,7 @@ class FilterApplierTest extends TestCase
         self::assertSame($expected, $result);
     }
 
-    public function rawUseCaseProvider()
+    public static function rawUseCaseProvider()
     {
         $standardInput = 'Hello ' . "\n" . ' &world!';
         return [

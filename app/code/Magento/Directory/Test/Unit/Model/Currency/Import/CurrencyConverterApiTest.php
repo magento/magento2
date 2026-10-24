@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\HTTP\LaminasClient;
 use Magento\Framework\HTTP\LaminasClientFactory;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -23,6 +24,8 @@ use PHPUnit\Framework\TestCase;
  */
 class CurrencyConverterApiTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var CurrencyConverterApi
      */
@@ -50,16 +53,13 @@ class CurrencyConverterApiTest extends TestCase
     {
         $this->currencyFactory = $this->getMockBuilder(CurrencyFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->httpClientFactory = $this->getMockBuilder(LaminasClientFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
-        $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMockForAbstractClass();
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $objectManagerHelper->getObject(
@@ -100,21 +100,25 @@ class CurrencyConverterApiTest extends TestCase
         $this->prepareCurrencyFactoryMock();
 
         $this->scopeConfig->method('getValue')
-            ->withConsecutive(
-                ['currency/currencyconverterapi/api_key', 'store'],
-                ['currency/currencyconverterapi/timeout', 'store']
-            )
-            ->willReturnOnConsecutiveCalls('api_key', 100);
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 === 'currency/currencyconverterapi/api_key' && $arg2 === 'store') {
+                        return 'api_key';
+                    } elseif ($arg1 === 'currency/currencyconverterapi/timeout' && $arg2 === 'store') {
+                        return 100;
+                    }
+                }
+            );
 
         /** @var LaminasClient|MockObject $httpClient */
         $httpClient = $this->getMockBuilder(LaminasClient::class)
             ->disableOriginalConstructor()
             ->getMock();
         /** @var DataObject|MockObject $currencyMock */
-        $httpResponse = $this->getMockBuilder(DataObject::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getBody'])
-            ->getMock();
+        $httpResponse = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['getBody']
+        );
 
         $this->httpClientFactory->expects($this->once())->method('create')->willReturn($httpClient);
         $httpClient->expects($this->once())->method('setUri')->willReturnSelf();
@@ -180,11 +184,15 @@ class CurrencyConverterApiTest extends TestCase
         $this->prepareCurrencyFactoryMock();
 
         $this->scopeConfig->method('getValue')
-            ->withConsecutive(
-                ['currency/currencyconverterapi/api_key', 'store'],
-                ['currency/currencyconverterapi/timeout', 'store']
-            )
-            ->willReturnOnConsecutiveCalls('', 100);
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 === 'currency/currencyconverterapi/api_key' && $arg2 === 'store') {
+                        return '';
+                    } elseif ($arg1 === 'currency/currencyconverterapi/timeout' && $arg2 === 'store') {
+                        return 100;
+                    }
+                }
+            );
 
         $expectedCurrencyRateList = ['USD' => ['EUR' => null, 'UAH' => null]];
         self::assertEquals($expectedCurrencyRateList, $this->model->fetchRates());

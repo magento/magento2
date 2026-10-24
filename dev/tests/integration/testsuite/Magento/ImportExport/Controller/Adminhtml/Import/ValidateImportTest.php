@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\ImportExport\Controller\Adminhtml\Import;
@@ -10,6 +10,7 @@ use Magento\Framework\Filesystem\DirectoryList;
 use Magento\Framework\HTTP\Adapter\FileTransferFactory;
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoAppArea adminhtml
@@ -17,7 +18,6 @@ use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorI
 class ValidateImportTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
-     * @dataProvider validationDataProvider
      * @param string $fileName
      * @param string $mimeType
      * @param string $message
@@ -27,6 +27,7 @@ class ValidateImportTest extends \Magento\TestFramework\TestCase\AbstractBackend
      * @magentoDbIsolation enabled
      * @SuppressWarnings(PHPMD.Superglobals)
      */
+    #[DataProvider('validationDataProvider')]
     public function testValidationReturn(string $fileName, string $mimeType, string $message, string $delimiter): void
     {
         $validationStrategy = ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_STOP_ON_ERROR;
@@ -81,42 +82,42 @@ class ValidateImportTest extends \Magento\TestFramework\TestCase\AbstractBackend
     /**
      * @return array
      */
-    public function validationDataProvider(): array
+    public static function validationDataProvider(): array
     {
         return [
             [
-                'file_name' => 'catalog_product.csv',
-                'mime-type' => 'text/csv',
+                'fileName' => 'catalog_product.csv',
+                'mimeType' => 'text/csv',
                 'message' => 'File is valid',
                 'delimiter' => ',',
             ],
             [
-                'file_name' => 'test.txt',
-                'mime-type' => 'text/csv',
+                'fileName' => 'test.txt',
+                'mimeType' => 'text/csv',
                 'message' => 'The file cannot be uploaded.',
                 'delimiter' => ',',
             ],
             [
-                'file_name' => 'incorrect_catalog_product_comma.csv',
-                'mime-type' => 'text/csv',
+                'fileName' => 'incorrect_catalog_product_comma.csv',
+                'mimeType' => 'text/csv',
                 'message' => 'Download full report',
                 'delimiter' => ',',
             ],
             [
-                'file_name' => 'incorrect_catalog_product_semicolon.csv',
-                'mime-type' => 'text/csv',
+                'fileName' => 'incorrect_catalog_product_semicolon.csv',
+                'mimeType' => 'text/csv',
                 'message' => 'Download full report',
                 'delimiter' => ';',
             ],
             [
-                'file_name' => 'invalid_catalog_products.zip',
-                'mime-type' => 'application/zip',
+                'fileName' => 'invalid_catalog_products.zip',
+                'mimeType' => 'application/zip',
                 'message' => 'Data validation failed.',
                 'delimiter' => ',',
             ],
             [
-                'file_name' => 'catalog_product.zip',
-                'mime-type' => 'application/zip',
+                'fileName' => 'catalog_product.zip',
+                'mimeType' => 'application/zip',
                 'message' => 'File is valid',
                 'delimiter' => ',',
             ],

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -23,6 +23,7 @@ use PHPUnit\Framework\TestCase;
 
 class ShipmentServiceTest extends TestCase
 {
+
     /**
      * Repository
      *
@@ -70,12 +71,7 @@ class ShipmentServiceTest extends TestCase
     {
         $objectManager = new ObjectManagerHelper($this);
 
-        $this->commentRepositoryMock = $this->getMockForAbstractClass(
-            ShipmentCommentRepositoryInterface::class,
-            ['getList'],
-            '',
-            false
-        );
+        $this->commentRepositoryMock = $this->createMock(ShipmentCommentRepositoryInterface::class);
         $this->searchCriteriaBuilderMock = $this->createPartialMock(
             SearchCriteriaBuilder::class,
             ['create', 'addFilters']
@@ -84,12 +80,7 @@ class ShipmentServiceTest extends TestCase
             FilterBuilder::class,
             ['setField', 'setValue', 'setConditionType', 'create']
         );
-        $this->repositoryMock = $this->getMockForAbstractClass(
-            ShipmentRepositoryInterface::class,
-            ['get'],
-            '',
-            false
-        );
+        $this->repositoryMock = $this->createMock(ShipmentRepositoryInterface::class);
         $this->notifierMock = $this->createPartialMock(ShipmentNotifier::class, ['notify']);
 
         $this->shipmentService = $objectManager->getObject(
@@ -170,12 +161,7 @@ class ShipmentServiceTest extends TestCase
         $id = 123;
         $returnValue = 'return-value';
 
-        $modelMock = $this->getMockForAbstractClass(
-            AbstractModel::class,
-            [],
-            '',
-            false
-        );
+        $modelMock = $this->createMock(AbstractModel::class);
 
         $this->repositoryMock->expects($this->once())
             ->method('get')

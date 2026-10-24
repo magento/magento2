@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Shipping\Test\Unit\Controller\Adminhtml\Order\Shipment;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Backend\Helper\Data;
+use Magento\Backend\Block\Menu as MenuBlock;
 use Magento\Backend\Model\Menu;
 use Magento\Backend\Model\Session;
 use Magento\Framework\App\ActionFlag;
@@ -29,6 +30,7 @@ use Magento\Sales\Model\Order\Shipment;
 use Magento\Shipping\Controller\Adminhtml\Order\Shipment\NewAction;
 use Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader;
 use Magento\Shipping\Model\ShipmentProviderInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -37,6 +39,7 @@ use PHPUnit\Framework\TestCase;
  */
 class NewActionTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var ShipmentLoader|MockObject
      */
@@ -118,51 +121,32 @@ class NewActionTest extends TestCase
     protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
-        $this->shipmentLoader = $this->getMockBuilder(
-            ShipmentLoader::class
-        )->disableOriginalConstructor()
-            ->setMethods(['setShipmentId', 'setOrderId', 'setShipment', 'setTracking', 'load'])
-            ->getMock();
-        $this->context = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->shipmentLoader = $this->createPartialMockWithReflection(
+            ShipmentLoader::class,
+            ['setShipmentId', 'setOrderId', 'setShipment', 'setTracking', 'load']
+        );
+        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
         $this->context = $this->createPartialMock(Context::class, [
             'getRequest', 'getResponse', 'getMessageManager', 'getRedirect', 'getObjectManager',
             'getSession', 'getActionFlag', 'getHelper', 'getView'
         ]);
-        $this->response = $this->getMockBuilder(ResponseInterface::class)
-            ->addMethods(['setRedirect'])
-            ->onlyMethods(['sendResponse'])
-            ->getMockForAbstractClass();
-        $this->request = $this->getMockBuilder(Http::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->response = $this->createMock(ResponseInterface::class);
+        $this->request = $this->createMock(Http::class);
         $this->messageManager = $this->createPartialMock(
             Manager::class,
             ['addSuccess', 'addError']
         );
-        $this->session = $this->getMockBuilder(Session::class)
-            ->addMethods(['setIsUrlNotice', 'getCommentText'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->shipmentProviderMock = $this->getMockBuilder(ShipmentProviderInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getShipmentData'])
-            ->getMockForAbstractClass();
+        $this->session = $this->createPartialMockWithReflection(
+            Session::class,
+            ['setIsUrlNotice', 'getCommentText']
+        );
+        $this->shipmentProviderMock = $this->createMock(ShipmentProviderInterface::class);
         $this->actionFlag = $this->createPartialMock(ActionFlag::class, ['get']);
         $this->helper = $this->createPartialMock(Data::class, ['getUrl']);
-        $this->view = $this->getMockForAbstractClass(ViewInterface::class);
-        $this->resultPageMock = $this->getMockBuilder(Page::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->pageConfigMock = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->pageTitleMock = $this->getMockBuilder(Title::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->view = $this->createMock(ViewInterface::class);
+        $this->resultPageMock = $this->createMock(Page::class);
+        $this->pageConfigMock = $this->createMock(Config::class);
+        $this->pageTitleMock = $this->createMock(Title::class);
         $this->context->expects($this->once())
             ->method('getMessageManager')
             ->willReturn($this->messageManager);
@@ -249,11 +233,11 @@ class NewActionTest extends TestCase
         $this->pageConfigMock->expects($this->any())
             ->method('getTitle')
             ->willReturn($this->pageTitleMock);
-        $layout = $this->getMockForAbstractClass(LayoutInterface::class);
-        $menuBlock = $this->getMockBuilder(BlockInterface::class)
-            ->addMethods(['setActive', 'getMenuModel'])
-            ->onlyMethods(['toHtml'])
-            ->getMockForAbstractClass();
+        $layout = $this->createMock(LayoutInterface::class);
+        $menuBlock = $this->createPartialMockWithReflection(
+            MenuBlock::class,
+            ['setActive', 'getMenuModel']
+        );
         $menuModel = $this->getMockBuilder(Menu::class)
             ->disableOriginalConstructor()
             ->getMock();

@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Backend\App;
 
 use Magento\TestFramework\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test class for \Magento\Backend\App\AbstractAction.
@@ -71,8 +72,8 @@ class AbstractActionTest extends \Magento\TestFramework\TestCase\AbstractBackend
      * @param string $blockName
      * @param string $resource
      * @param bool $isLimitedAccess
-     * @dataProvider nodesWithAcl
      */
+    #[DataProvider('nodesWithAcl')]
     public function testAclInNodes($blockName, $resource, $isLimitedAccess)
     {
         /** @var $noticeInbox \Magento\AdminNotification\Model\Inbox */
@@ -116,7 +117,7 @@ class AbstractActionTest extends \Magento\TestFramework\TestCase\AbstractBackend
      *
      * @return array
      */
-    public function nodesWithAcl()
+    public static function nodesWithAcl()
     {
         return [
             ['notification_window', 'Magento_AdminNotification::show_toolbar', true],

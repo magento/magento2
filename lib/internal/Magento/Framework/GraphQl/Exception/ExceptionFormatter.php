@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -20,7 +20,7 @@ use Throwable;
  */
 class ExceptionFormatter
 {
-    const HTTP_GRAPH_QL_SCHEMA_ERROR_STATUS = 500;
+    public const HTTP_GRAPH_QL_SCHEMA_ERROR_STATUS = 500;
 
     /**
      * @var State
@@ -36,11 +36,11 @@ class ExceptionFormatter
      * @param State $appState
      * @param ErrorProcessor $errorProcessor
      * @param LoggerInterface $logger
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(State $appState, ErrorProcessor $errorProcessor, LoggerInterface $logger)
     {
         $this->appState = $appState;
-        $errorProcessor->registerShutdownFunction();
         $this->logger = $logger;
     }
 

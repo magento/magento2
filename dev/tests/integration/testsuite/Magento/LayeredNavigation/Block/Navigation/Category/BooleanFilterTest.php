@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\LayeredNavigation\Block\Navigation\Category;
 use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
 use Magento\Catalog\Model\Layer\Resolver;
 use Magento\LayeredNavigation\Block\Navigation\AbstractFiltersTest;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Provides tests for custom boolean filter in navigation block on category page.
@@ -23,12 +24,12 @@ class BooleanFilterTest extends AbstractFiltersTest
     /**
      * @magentoDataFixture Magento/Catalog/_files/product_boolean_attribute.php
      * @magentoDataFixture Magento/Catalog/_files/category_with_different_price_products.php
-     * @dataProvider getFiltersWithCustomAttributeDataProvider
      * @param array $products
      * @param array $attributeData
      * @param array $expectation
      * @return void
      */
+    #[DataProvider('getFiltersWithCustomAttributeDataProvider')]
     public function testGetFiltersWithCustomAttribute(array $products, array $attributeData, array $expectation): void
     {
         $this->getCategoryFiltersAndAssert($products, $attributeData, $expectation, 'Category 999');
@@ -37,30 +38,30 @@ class BooleanFilterTest extends AbstractFiltersTest
     /**
      * @return array
      */
-    public function getFiltersWithCustomAttributeDataProvider(): array
+    public static function getFiltersWithCustomAttributeDataProvider(): array
     {
         return [
             'not_used_in_navigation' => [
-                'products_data' => [],
-                'attribute_data' => ['is_filterable' => 0],
+                'products' => [],
+                'attributeData' => ['is_filterable' => 0],
                 'expectation' => [],
             ],
             'used_in_navigation_with_results' => [
-                'products_data' => [
+                'products' => [
                     'simple1000' => 'Yes',
                     'simple1001' => 'Yes',
                 ],
-                'attribute_data' => ['is_filterable' => AbstractFilter::ATTRIBUTE_OPTIONS_ONLY_WITH_RESULTS],
+                'attributeData' => ['is_filterable' => AbstractFilter::ATTRIBUTE_OPTIONS_ONLY_WITH_RESULTS],
                 'expectation' => [
                     ['label' => 'Yes', 'count' => 2],
                 ],
             ],
             'used_in_navigation_without_results' => [
-                'products_data' => [
+                'products' => [
                     'simple1000' => 'Yes',
                     'simple1001' => 'Yes',
                 ],
-                'attribute_data' => ['is_filterable' => 2],
+                'attributeData' => ['is_filterable' => 2],
                 'expectation' => [
                     ['label' => 'Yes', 'count' => 2],
                     ['label' => 'No', 'count' => 0],
@@ -72,13 +73,13 @@ class BooleanFilterTest extends AbstractFiltersTest
     /**
      * @magentoDataFixture Magento/Catalog/_files/product_boolean_attribute.php
      * @magentoDataFixture Magento/Catalog/_files/category_with_different_price_products.php
-     * @dataProvider getActiveFiltersWithCustomAttributeDataProvider
      * @param array $products
      * @param array $expectation
      * @param string $filterValue
      * @param int $productsCount
      * @return void
      */
+    #[DataProvider('getActiveFiltersWithCustomAttributeDataProvider')]
     public function testGetActiveFiltersWithCustomAttribute(
         array $products,
         array $expectation,
@@ -91,32 +92,32 @@ class BooleanFilterTest extends AbstractFiltersTest
     /**
      * @return array
      */
-    public function getActiveFiltersWithCustomAttributeDataProvider(): array
+    public static function getActiveFiltersWithCustomAttributeDataProvider(): array
     {
         return [
             'selected_yes_option_in_all_products' => [
-                'products_data' => ['simple1000' => 'Yes', 'simple1001' => 'Yes'],
+                'products' => ['simple1000' => 'Yes', 'simple1001' => 'Yes'],
                 'expectation' => ['label' => 'Yes', 'count' => 0],
-                'filter_value' => 'Yes',
-                'products_count' => 2,
+                'filterValue' => 'Yes',
+                'productsCount' => 2,
             ],
             'selected_yes_option_in_one_product' => [
-                'products_data' => ['simple1000' => 'Yes', 'simple1001' => 'No'],
+                'products' => ['simple1000' => 'Yes', 'simple1001' => 'No'],
                 'expectation' => ['label' => 'Yes', 'count' => 0],
-                'filter_value' => 'Yes',
-                'products_count' => 1,
+                'filterValue' => 'Yes',
+                'productsCount' => 1,
             ],
             'selected_no_option_in_all_products' => [
-                'products_data' => ['simple1000' => 'No', 'simple1001' => 'No'],
+                'products' => ['simple1000' => 'No', 'simple1001' => 'No'],
                 'expectation' => ['label' => 'No', 'count' => 0],
-                'filter_value' => 'No',
-                'products_count' => 2,
+                'filterValue' => 'No',
+                'productsCount' => 2,
             ],
             'selected_no_option_in_one_product' => [
-                'products_data' => ['simple1000' => 'Yes', 'simple1001' => 'No'],
+                'products' => ['simple1000' => 'Yes', 'simple1001' => 'No'],
                 'expectation' => ['label' => 'No', 'count' => 0],
-                'filter_value' => 'No',
-                'products_count' => 1,
+                'filterValue' => 'No',
+                'productsCount' => 1,
             ],
         ];
     }

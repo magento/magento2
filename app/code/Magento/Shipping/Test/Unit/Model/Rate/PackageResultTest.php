@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -14,6 +14,7 @@ use Magento\Quote\Model\Quote\Address\RateResult\Method;
 use Magento\Shipping\Model\Rate\PackageResult;
 use Magento\Shipping\Model\Rate\Result;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -24,6 +25,7 @@ use PHPUnit\Framework\TestCase;
  */
 class PackageResultTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var StoreManagerInterface|MockObject
      */
@@ -44,12 +46,8 @@ class PackageResultTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->errorFactory = $this->getMockBuilder(ErrorFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->errorFactory = $this->createMock(ErrorFactory::class);
         $errorMock = $this->getMockBuilder(Error::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -75,10 +73,10 @@ class PackageResultTest extends TestCase
      */
     public function testComposing(): void
     {
-        $rate1 = $this->getMockBuilder(Method::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getMethod', 'getPrice', 'setPrice'])
-            ->getMock();
+        $rate1 = $this->createPartialMockWithReflection(
+            Method::class,
+            ['getMethod', 'getPrice', 'setPrice']
+        );
         $price1 = 3;
         $rate1->method('getMethod')->willReturn('method');
         $rate1->method('getPrice')->willReturnReference($price1);
@@ -102,10 +100,10 @@ class PackageResultTest extends TestCase
                 }
             );
 
-        $rate2 = $this->getMockBuilder(Method::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getMethod', 'getPrice', 'setPrice'])
-            ->getMock();
+        $rate2 = $this->createPartialMockWithReflection(
+            Method::class,
+            ['getMethod', 'getPrice', 'setPrice']
+        );
         $price2 = 4;
         $rate2->method('getMethod')->willReturn('method');
         $rate2->method('getPrice')->willReturnReference($price2);
@@ -143,10 +141,10 @@ class PackageResultTest extends TestCase
     {
         $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('Same object received from carrier.');
-        $rate1 = $this->getMockBuilder(Method::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getMethod', 'getPrice', 'setPrice'])
-            ->getMock();
+        $rate1 = $this->createPartialMockWithReflection(
+            Method::class,
+            ['getMethod', 'getPrice', 'setPrice']
+        );
         $price1 = 3;
         $rate1->method('getMethod')->willReturn('method');
         $rate1->method('getPrice')->willReturnReference($price1);

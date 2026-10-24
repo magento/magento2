@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,6 +18,7 @@ use Magento\Framework\HTTP\Adapter\FileTransferFactory;
 use Magento\Framework\View\Design\Theme\Image\Uploader;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class UploaderTest extends TestCase
 {
@@ -81,13 +82,13 @@ class UploaderTest extends TestCase
     /**
      * @return array
      */
-    public function uploadDataProvider()
+    public static function uploadDataProvider()
     {
         return [
             [
                 'isUploaded' => true,
                 'isValid' => true,
-                'checkAllowedExtension' => true,
+                'checkExtension' => true,
                 'save' => true,
                 'result' => '/tmp/test_filename',
                 'exception' => null,
@@ -95,7 +96,7 @@ class UploaderTest extends TestCase
             [
                 'isUploaded' => false,
                 'isValid' => true,
-                'checkAllowedExtension' => true,
+                'checkExtension' => true,
                 'save' => true,
                 'result' => false,
                 'exception' => null
@@ -103,7 +104,7 @@ class UploaderTest extends TestCase
             [
                 'isUploaded' => true,
                 'isValid' => false,
-                'checkAllowedExtension' => true,
+                'checkExtension' => true,
                 'save' => true,
                 'result' => false,
                 'exception' => LocalizedException::class
@@ -111,7 +112,7 @@ class UploaderTest extends TestCase
             [
                 'isUploaded' => true,
                 'isValid' => true,
-                'checkAllowedExtension' => false,
+                'checkExtension' => false,
                 'save' => true,
                 'result' => false,
                 'exception' => LocalizedException::class
@@ -119,7 +120,7 @@ class UploaderTest extends TestCase
             [
                 'isUploaded' => true,
                 'isValid' => true,
-                'checkAllowedExtension' => true,
+                'checkExtension' => true,
                 'save' => false,
                 'result' => false,
                 'exception' => LocalizedException::class
@@ -127,10 +128,9 @@ class UploaderTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider uploadDataProvider
-     * @covers \Magento\Framework\View\Design\Theme\Image\Uploader::uploadPreviewImage
+    /**     * @covers \Magento\Framework\View\Design\Theme\Image\Uploader::uploadPreviewImage
      */
+    #[DataProvider('uploadDataProvider')]
     public function testUploadPreviewImage($isUploaded, $isValid, $checkExtension, $save, $result, $exception)
     {
         if ($exception) {

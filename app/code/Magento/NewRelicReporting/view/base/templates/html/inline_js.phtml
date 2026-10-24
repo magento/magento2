@@ -1,0 +1,18 @@
+<?php
+/**
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
+ */
+
+/**
+ * @var \Magento\Framework\View\Element\Template $block
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ * @var \Magento\NewRelicReporting\ViewModel\ContentProviderInterface $contentProvider
+ */
+
+$contentProvider = $block->getContentProvider();
+$content = $contentProvider->getContent();
+?>
+<?php if ($content): ?>
+    <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $content, false) ?>
+<?php endif; ?>

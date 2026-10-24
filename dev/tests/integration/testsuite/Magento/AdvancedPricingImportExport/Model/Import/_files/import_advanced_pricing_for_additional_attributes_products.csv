@@ -1,0 +1,128 @@
+sku,tier_price_website,tier_price_customer_group,tier_price_qty,tier_price,tier_price_value_type
+test-sample,"All Websites [USD]","ALL GROUPS",2.0000,10.000000,Fixed
+test-sample,"All Websites [USD]","ALL GROUPS",3.0000,15.00,Discount
+test-sample,"All Websites [USD]",General,2.0000,10.000000,Fixed
+test-sample,"All Websites [USD]",General,3.0000,15.00,Discount
+test-sample-1,"All Websites [USD]","ALL GROUPS",2.0000,10.000000,Fixed
+test-sample-1,"All Websites [USD]","ALL GROUPS",3.0000,15.00,Discount
+test-sample-1,"All Websites [USD]",General,2.0000,10.000000,Fixed
+test-sample-1,"All Websites [USD]",General,3.0000,15.00,Discount
+test-sample-Blue-34,"All Websites [USD]","ALL GROUPS",2.0000,10.000000,Fixed
+test-sample-Blue-34,"All Websites [USD]","ALL GROUPS",3.0000,15.00,Discount
+test-sample-Blue-34,"All Websites [USD]",General,2.0000,10.000000,Fixed
+test-sample-Blue-34,"All Websites [USD]",General,3.0000,15.00,Discount
+test-sample-Blue-36,"All Websites [USD]","ALL GROUPS",2.0000,10.000000,Fixed
+test-sample-Blue-36,"All Websites [USD]","ALL GROUPS",3.0000,15.00,Discount
+test-sample-Blue-36,"All Websites [USD]",General,2.0000,10.000000,Fixed
+test-sample-Blue-36,"All Websites [USD]",General,3.0000,15.00,Discount
+test-sample-Blue-38,"All Websites [USD]","ALL GROUPS",2.0000,10.000000,Fixed
+test-sample-Blue-38,"All Websites [USD]","ALL GROUPS",3.0000,15.00,Discount
+test-sample-Blue-38,"All Websites [USD]",General,2.0000,10.000000,Fixed
+test-sample-Blue-38,"All Websites [USD]",General,3.0000,15.00,Discount
+test-sample-Blue-39,"All Websites [USD]","ALL GROUPS",2.0000,10.000000,Fixed
+test-sample-Blue-39,"All Websites [USD]","ALL GROUPS",3.0000,15.00,Discount
+test-sample-Blue-39,"All Websites [USD]",General,2.0000,10.000000,Fixed
+test-sample-Blue-39,"All Websites [USD]",General,3.0000,15.00,Discount
+test-sample-Blue-42,"All Websites [USD]","ALL GROUPS",2.0000,10.000000,Fixed
+test-sample-Blue-42,"All Websites [USD]","ALL GROUPS",3.0000,15.00,Discount
+test-sample-Blue-42,"All Websites [USD]",General,2.0000,10.000000,Fixed
+test-sample-Blue-42,"All Websites [USD]",General,3.0000,15.00,Discount
+test-sample-Blue-44,"All Websites [USD]","ALL GROUPS",2.0000,10.000000,Fixed
+test-sample-Blue-44,"All Websites [USD]","ALL GROUPS",3.0000,15.00,Discount
+test-sample-Blue-44,"All Websites [USD]",General,2.0000,10.000000,Fixed
+test-sample-Blue-44,"All Websites [USD]",General,3.0000,15.00,Discount
+test-sample-Green-34,"All Websites [USD]","ALL GROUPS",2.0000,10.000000,Fixed
+test-sample-Green-34,"All Websites [USD]","ALL GROUPS",3.0000,15.00,Discount
+test-sample-Green-34,"All Websites [USD]",General,2.0000,10.000000,Fixed
+test-sample-Green-34,"All Websites [USD]",General,3.0000,15.00,Discount
+test-sample-Green-36,"All Websites [USD]","ALL GROUPS",2.0000,10.000000,Fixed
+test-sample-Green-36,"All Websites [USD]","ALL GROUPS",3.0000,15.00,Discount
+test-sample-Green-36,"All Websites [USD]",General,2.0000,10.000000,Fixed
+test-sample-Green-36,"All Websites [USD]",General,3.0000,15.00,Discount
+test-sample-Green-38,"All Websites [USD]","ALL GROUPS",2.0000,10.000000,Fixed
+test-sample-Green-38,"All Websites [USD]","ALL GROUPS",3.0000,15.00,Discount
+test-sample-Green-38,"All Websites [USD]",General,2.0000,10.000000,Fixed
+test-sample-Green-38,"All Websites [USD]",General,3.0000,15.00,Discount
+test-sample-Green-39,"All Websites [USD]","ALL GROUPS",2.0000,10.000000,Fixed
+test-sample-Green-39,"All Websites [USD]","ALL GROUPS",3.0000,15.00,Discount
+test-sample-Green-39,"All Websites [USD]",General,2.0000,10.000000,Fixed
+test-sample-Green-39,"All Websites [USD]",General,3.0000,15.00,Discount
+test-sample-Green-42,"All Websites [USD]","ALL GROUPS",2.0000,10.000000,Fixed
+test-sample-Green-42,"All Websites [USD]","ALL GROUPS",3.0000,15.00,Discount
+test-sample-Green-42,"All Websites [USD]",General,2.0000,10.000000,Fixed
+test-sample-Green-42,"All Websites [USD]",General,3.0000,15.00,Discount
+test-sample-Green-44,"All Websites [USD]","ALL GROUPS",2.0000,10.000000,Fixed
+test-sample-Green-44,"All Websites [USD]","ALL GROUPS",3.0000,15.00,Discount
+test-sample-Green-44,"All Websites [USD]",General,2.0000,10.000000,Fixed
+test-sample-Green-44,"All Websites [USD]",General,3.0000,15.00,Discount
+test-sample-Orange-34,"All Websites [USD]","ALL GROUPS",2.0000,10.000000,Fixed
+test-sample-Orange-34,"All Websites [USD]","ALL GROUPS",3.0000,15.00,Discount
+test-sample-Orange-34,"All Websites [USD]",General,2.0000,10.000000,Fixed
+test-sample-Orange-34,"All Websites [USD]",General,3.0000,15.00,Discount
+test-sample-Orange-36,"All Websites [USD]","ALL GROUPS",2.0000,10.000000,Fixed
+test-sample-Orange-36,"All Websites [USD]","ALL GROUPS",3.0000,15.00,Discount
+test-sample-Orange-36,"All Websites [USD]",General,2.0000,10.000000,Fixed
+test-sample-Orange-36,"All Websites [USD]",General,3.0000,15.00,Discount
+test-sample-Orange-38,"All Websites [USD]","ALL GROUPS",2.0000,10.000000,Fixed
+test-sample-Orange-38,"All Websites [USD]","ALL GROUPS",3.0000,15.00,Discount
+test-sample-Orange-38,"All Websites [USD]",General,2.0000,10.000000,Fixed
+test-sample-Orange-38,"All Websites [USD]",General,3.0000,15.00,Discount
+test-sample-Orange-39,"All Websites [USD]","ALL GROUPS",2.0000,10.000000,Fixed
+test-sample-Orange-39,"All Websites [USD]","ALL GROUPS",3.0000,15.00,Discount
+test-sample-Orange-39,"All Websites [USD]",General,2.0000,10.000000,Fixed
+test-sample-Orange-39,"All Websites [USD]",General,3.0000,15.00,Discount
+test-sample-Orange-42,"All Websites [USD]","ALL GROUPS",2.0000,10.000000,Fixed
+test-sample-Orange-42,"All Websites [USD]","ALL GROUPS",3.0000,15.00,Discount
+test-sample-Orange-42,"All Websites [USD]",General,2.0000,10.000000,Fixed
+test-sample-Orange-42,"All Websites [USD]",General,3.0000,15.00,Discount
+test-sample-Orange-44,"All Websites [USD]","ALL GROUPS",2.0000,10.000000,Fixed
+test-sample-Orange-44,"All Websites [USD]","ALL GROUPS",3.0000,15.00,Discount
+test-sample-Orange-44,"All Websites [USD]",General,2.0000,10.000000,Fixed
+test-sample-Orange-44,"All Websites [USD]",General,3.0000,15.00,Discount
+test-sample-Red-34,"All Websites [USD]","ALL GROUPS",2.0000,10.000000,Fixed
+test-sample-Red-34,"All Websites [USD]","ALL GROUPS",3.0000,15.00,Discount
+test-sample-Red-34,"All Websites [USD]",General,2.0000,10.000000,Fixed
+test-sample-Red-36,"All Websites [USD]","ALL GROUPS",2.0000,10.000000,Fixed
+test-sample-Red-36,"All Websites [USD]","ALL GROUPS",3.0000,15.00,Discount
+test-sample-Red-36,"All Websites [USD]",General,2.0000,10.000000,Fixed
+test-sample-Red-36,"All Websites [USD]",General,3.0000,15.00,Discount
+test-sample-Red-38,"All Websites [USD]","ALL GROUPS",2.0000,10.000000,Fixed
+test-sample-Red-38,"All Websites [USD]","ALL GROUPS",3.0000,15.00,Discount
+test-sample-Red-38,"All Websites [USD]",General,2.0000,10.000000,Fixed
+test-sample-Red-38,"All Websites [USD]",General,3.0000,15.00,Discount
+test-sample-Red-39,"All Websites [USD]","ALL GROUPS",2.0000,10.000000,Fixed
+test-sample-Red-39,"All Websites [USD]","ALL GROUPS",3.0000,15.00,Discount
+test-sample-Red-39,"All Websites [USD]",General,2.0000,10.000000,Fixed
+test-sample-Red-39,"All Websites [USD]",General,3.0000,15.00,Discount
+test-sample-Red-42,"All Websites [USD]","ALL GROUPS",2.0000,10.000000,Fixed
+test-sample-Red-42,"All Websites [USD]","ALL GROUPS",3.0000,15.00,Discount
+test-sample-Red-42,"All Websites [USD]",General,2.0000,10.000000,Fixed
+test-sample-Red-42,"All Websites [USD]",General,3.0000,15.00,Discount
+test-sample-Red-44,"All Websites [USD]","ALL GROUPS",2.0000,10.000000,Fixed
+test-sample-Red-44,"All Websites [USD]","ALL GROUPS",3.0000,15.00,Discount
+test-sample-Red-44,"All Websites [USD]",General,2.0000,10.000000,Fixed
+test-sample-Red-44,"All Websites [USD]",General,3.0000,15.00,Discount
+test-sample-Yellow-34,"All Websites [USD]","ALL GROUPS",2.0000,10.000000,Fixed
+test-sample-Yellow-34,"All Websites [USD]","ALL GROUPS",3.0000,15.00,Discount
+test-sample-Yellow-34,"All Websites [USD]",General,2.0000,10.000000,Fixed
+test-sample-Yellow-34,"All Websites [USD]",General,3.0000,15.00,Discount
+test-sample-Yellow-36,"All Websites [USD]","ALL GROUPS",2.0000,10.000000,Fixed
+test-sample-Yellow-36,"All Websites [USD]","ALL GROUPS",3.0000,15.00,Discount
+test-sample-Yellow-36,"All Websites [USD]",General,2.0000,10.000000,Fixed
+test-sample-Yellow-36,"All Websites [USD]",General,3.0000,15.00,Discount
+test-sample-Yellow-38,"All Websites [USD]","ALL GROUPS",2.0000,10.000000,Fixed
+test-sample-Yellow-38,"All Websites [USD]","ALL GROUPS",3.0000,15.00,Discount
+test-sample-Yellow-38,"All Websites [USD]",General,2.0000,10.000000,Fixed
+test-sample-Yellow-38,"All Websites [USD]",General,3.0000,15.00,Discount
+test-sample-Yellow-39,"All Websites [USD]","ALL GROUPS",2.0000,10.000000,Fixed
+test-sample-Yellow-39,"All Websites [USD]","ALL GROUPS",3.0000,15.00,Discount
+test-sample-Yellow-39,"All Websites [USD]",General,2.0000,10.000000,Fixed
+test-sample-Yellow-39,"All Websites [USD]",General,3.0000,15.00,Discount
+test-sample-Yellow-42,"All Websites [USD]","ALL GROUPS",2.0000,10.000000,Fixed
+test-sample-Yellow-42,"All Websites [USD]","ALL GROUPS",3.0000,15.00,Discount
+test-sample-Yellow-42,"All Websites [USD]",General,2.0000,10.000000,Fixed
+test-sample-Yellow-42,"All Websites [USD]",General,3.0000,15.00,Discount
+test-sample-Yellow-44,"All Websites [USD]","ALL GROUPS",2.0000,10.000000,Fixed
+test-sample-Yellow-44,"All Websites [USD]","ALL GROUPS",3.0000,15.00,Discount
+test-sample-Yellow-44,"All Websites [USD]",General,2.0000,10.000000,Fixed
+test-sample-Yellow-44,"All Websites [USD]",General,3.0000,15.00,Discount

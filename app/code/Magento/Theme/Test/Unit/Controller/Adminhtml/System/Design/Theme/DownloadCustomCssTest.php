@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -23,6 +23,7 @@ use Magento\Framework\View\Design\Theme\Customization;
 use Magento\Framework\View\Design\Theme\FileInterface;
 use Magento\Framework\View\Design\Theme\FlyweightFactory;
 use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Theme\Controller\Adminhtml\System\Design\Theme\DownloadCustomCss;
 use Magento\Theme\Model\Theme\Customization\File\CustomCss;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -34,6 +35,8 @@ use Psr\Log\LoggerInterface;
  */
 class DownloadCustomCssTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Registry|MockObject
      */
@@ -91,23 +94,17 @@ class DownloadCustomCssTest extends TestCase
 
     protected function setUp(): void
     {
-        $context = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $context = $this->createMock(Context::class);
         $this->request = $this->getMockBuilder(RequestInterface::class)
             ->getMock();
-        $this->redirect = $this->getMockBuilder(RedirectInterface::class)
-            ->getMock();
-        $this->response = $this->getMockBuilder(ResponseInterface::class)
-            ->setMethods(['sendResponse', 'setRedirect'])
-            ->getMockForAbstractClass();
-        $this->objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->getMock();
-        $this->messageManager = $this->getMockBuilder(ManagerInterface::class)
-            ->getMock();
-        $this->resultFactory = $this->getMockBuilder(ResultFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->redirect = $this->createMock(RedirectInterface::class);
+        $this->response = $this->createPartialMockWithReflection(
+            ResponseInterface::class,
+            ['sendResponse', 'setRedirect']
+        );
+        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
+        $this->messageManager = $this->createMock(ManagerInterface::class);
+        $this->resultFactory = $this->createMock(ResultFactory::class);
         $context->expects($this->any())
             ->method('getRequest')
             ->willReturn($this->request);
@@ -127,19 +124,12 @@ class DownloadCustomCssTest extends TestCase
             ->method('getResultFactory')
             ->willReturn($this->resultFactory);
 
-        $this->registry = $this->getMockBuilder(
+        $this->registry = $this->createMock(
             Registry::class
-        )->disableOriginalConstructor()
-            ->getMock();
-        $this->fileFactory = $this->getMockBuilder(FileFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->repository = $this->getMockBuilder(Repository::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->filesystem = $this->getMockBuilder(Filesystem::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        );
+        $this->fileFactory = $this->createMock(FileFactory::class);
+        $this->repository = $this->createMock(Repository::class);
+        $this->filesystem = $this->createMock(Filesystem::class);
 
         /** @var Context $context */
         $this->controller = new DownloadCustomCss(
@@ -159,12 +149,15 @@ class DownloadCustomCssTest extends TestCase
 
         $file = $this->getMockBuilder(FileInterface::class)
             ->getMock();
-        $customization = $this->getMockBuilder(Customization::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $theme = $this->getMockBuilder(ThemeInterface::class)
-            ->setMethods(['getCustomization'])
-            ->getMockForAbstractClass();
+        $customization = $this->createMock(Customization::class);
+        $theme = $this->createPartialMockWithReflection(
+            ThemeInterface::class,
+            [
+                'getArea', 'getThemePath', 'getFullPath', 'getParentTheme',
+                'getCode', 'isPhysical', 'getInheritedThemes', 'getId',
+                'getCustomization'
+            ]
+        );
         $file->expects($this->once())
             ->method('getContent')
             ->willReturn('some_content');
@@ -188,7 +181,7 @@ class DownloadCustomCssTest extends TestCase
             ->with('theme_id')
             ->willReturn($themeId);
         $themeFactory = $this->getMockBuilder(FlyweightFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->objectManager->expects($this->any())
@@ -218,7 +211,7 @@ class DownloadCustomCssTest extends TestCase
             ->with('theme_id')
             ->willReturn($themeId);
         $themeFactory = $this->getMockBuilder(FlyweightFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $logger = $this->getMockBuilder(LoggerInterface::class)

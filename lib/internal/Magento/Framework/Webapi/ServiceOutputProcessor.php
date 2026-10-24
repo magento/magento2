@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Webapi;
 
@@ -44,7 +44,7 @@ class ServiceOutputProcessor implements ServicePayloadConverterInterface
     public function __construct(
         DataObjectProcessor $dataObjectProcessor,
         MethodsMap $methodsMapProcessor,
-        TypeProcessor $typeProcessor = null
+        ?TypeProcessor $typeProcessor = null
     ) {
         $this->dataObjectProcessor = $dataObjectProcessor;
         $this->methodsMapProcessor = $methodsMapProcessor;

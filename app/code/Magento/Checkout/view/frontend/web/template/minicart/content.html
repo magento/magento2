@@ -1,7 +1,7 @@
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 -->
 <div class="block-title">
@@ -38,7 +38,7 @@
                 <!-- ko if: (getCartParam('summary_count') > 1) -->
                     <span translate="'Items in Cart'"></span>
                 <!--/ko-->
-                <!-- ko if: (getCartParam('summary_count') === 1) -->
+                <!-- ko if: (getCartParam('summary_count') <= 1) -->
                     <span translate="'Item in Cart'"></span>
                 <!--/ko-->
         </div>

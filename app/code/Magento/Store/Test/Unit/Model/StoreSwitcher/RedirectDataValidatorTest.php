@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreSwitcher\ContextInterface;
 use Magento\Store\Model\StoreSwitcher\RedirectDataInterface;
 use Magento\Store\Model\StoreSwitcher\RedirectDataValidator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class RedirectDataValidatorTest extends TestCase
@@ -69,8 +70,8 @@ class RedirectDataValidatorTest extends TestCase
     /**
      * @param array $params
      * @param bool $result
-     * @dataProvider validationDataProvider
      */
+    #[DataProvider('validationDataProvider')]
     public function testValidation(array $params, bool $result): void
     {
         $originalData = '{"customer_id":1}';
@@ -93,7 +94,7 @@ class RedirectDataValidatorTest extends TestCase
     /**
      * @return array
      */
-    public function validationDataProvider(): array
+    public static function validationDataProvider(): array
     {
         return [
             [

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Elasticsearch\Model\Indexer;
 
@@ -9,6 +9,10 @@ use Magento\Framework\Indexer\IndexStructureInterface;
 use Magento\Elasticsearch\Model\Adapter\Elasticsearch as ElasticsearchAdapter;
 use Magento\Framework\App\ScopeResolverInterface;
 
+/**
+ * @deprecated Elasticsearch is no longer supported by Adobe
+ * @see this class will be responsible for ES only
+ */
 class IndexStructure implements IndexStructureInterface
 {
     /**
@@ -34,7 +38,7 @@ class IndexStructure implements IndexStructureInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function delete(
         $indexerId,
@@ -46,8 +50,7 @@ class IndexStructure implements IndexStructureInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
+     * @inheritdoc
      */
     public function create(
         $indexerId,

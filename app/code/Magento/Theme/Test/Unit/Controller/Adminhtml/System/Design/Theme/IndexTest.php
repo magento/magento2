@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,10 +10,10 @@ namespace Magento\Theme\Test\Unit\Controller\Adminhtml\System\Design\Theme;
 use Magento\Backend\Model\Menu;
 use Magento\Framework\View\LayoutInterface;
 use Magento\Theme\Block\Html\Title;
-use Magento\Theme\Test\Unit\Controller\Adminhtml\System\Design\ThemeTest;
+use Magento\Theme\Test\Unit\Controller\Adminhtml\System\Design\ThemeTestCase;
 use Psr\Log\LoggerInterface;
 
-class IndexTest extends ThemeTest
+class IndexTest extends ThemeTestCase
 {
     /**
      * @var string
@@ -24,7 +23,7 @@ class IndexTest extends ThemeTest
     public function testIndexAction()
     {
         $menuModel = $this->getMockBuilder(Menu::class)
-            ->setConstructorArgs([$this->getMockForAbstractClass(LoggerInterface::class)])
+            ->setConstructorArgs([$this->createMock(LoggerInterface::class)])
             ->getMock();
         $menuModel->expects($this->once())
             ->method('getParentItems')
@@ -39,7 +38,7 @@ class IndexTest extends ThemeTest
         $titleBlock = $this->createMock(Title::class);
         $titleBlock->expects($this->once())->method('setPageTitle');
 
-        $layout = $this->getMockForAbstractClass(LayoutInterface::class);
+        $layout = $this->createMock(LayoutInterface::class);
         $layout->expects($this->any())
             ->method('getBlock')
             ->willReturnMap([

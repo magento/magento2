@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontEmailToFriendSection">
+        <element name="name" type="input" selector="#sender-name.input-text"/>
+        <element name="email" type="input" selector="#sender-email.input-text"/>
+        <element name="message" type="input" selector="#sender-message.input-text"/>
+        <element name="recipientName" type="input" selector="#recipients-name0.input-text"/>
+        <element name="recipientEmail" type="input" selector="#recipients-email0.input-text"/>
+        <element name="sendEmail" type="button" selector=".action.submit.primary"/>
+        <element name="captchaField" type="input" selector="#product-sendtofriend-form input[name='captcha[product_sendtofriend_form]']" />
+        <element name="captchaImg" type="block" selector="#product-sendtofriend-form img.captcha-img"/>
+        <element name="captchaReload" type="block" selector="#product-sendtofriend-form button.captcha-reload"/>
+    </section>
+</sections>

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,6 +18,8 @@ use Magento\Framework\Config\ScopeInterface;
 use Magento\Framework\Flag;
 use Magento\Framework\FlagManager;
 use Magento\Framework\Stdlib\ArrayUtils;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject as Mock;
 use PHPUnit\Framework\TestCase;
 
@@ -29,6 +31,8 @@ use PHPUnit\Framework\TestCase;
  */
 class ImporterTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Importer
      */
@@ -80,37 +84,28 @@ class ImporterTest extends TestCase
     private $saveProcessorMock;
 
     /**
+     * @var ObjectManager
+     */
+    private $objectManager;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
-        $this->flagManagerMock = $this->getMockBuilder(FlagManager::class)
-            ->onlyMethods(['getFlagData', 'saveFlag'])
-            ->addMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->flagMock = $this->getMockBuilder(Flag::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->arrayUtilsMock = $this->getMockBuilder(ArrayUtils::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->valueFactoryMock = $this->getMockBuilder(PreparedValueFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->valueMock = $this->getMockBuilder(Value::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->getMockForAbstractClass();
-        $this->stateMock = $this->getMockBuilder(State::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->scopeMock = $this->getMockBuilder(ScopeInterface::class)
-            ->getMockForAbstractClass();
-        $this->saveProcessorMock = $this->getMockBuilder(SaveProcessor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->objectManager = new ObjectManager($this);
+        $this->flagManagerMock = $this->createPartialMockWithReflection(
+            FlagManager::class,
+            ['getFlagData', 'saveFlag', 'create']
+        );
+        $this->flagMock = $this->createMock(Flag::class);
+        $this->arrayUtilsMock = $this->createMock(ArrayUtils::class);
+        $this->valueFactoryMock = $this->createMock(PreparedValueFactory::class);
+        $this->valueMock = $this->createMock(Value::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->stateMock = $this->createMock(State::class);
+        $this->scopeMock = $this->createMock(ScopeInterface::class);
+        $this->saveProcessorMock = $this->createMock(SaveProcessor::class);
 
         $this->flagManagerMock->expects($this->any())
             ->method('create')
@@ -159,7 +154,11 @@ class ImporterTest extends TestCase
             ->with([]);
         $this->scopeMock
             ->method('setCurrentScope')
-            ->withConsecutive([Area::AREA_ADMINHTML], ['oldScope'], ['oldScope']);
+            ->willReturnCallback(function ($arg1) {
+                if ($arg1 == Area::AREA_ADMINHTML || $arg1 == 'oldScope') {
+                    return null;
+                }
+            });
         $this->flagManagerMock->expects($this->once())
             ->method('saveFlag')
             ->with(Importer::FLAG_CODE, $data);

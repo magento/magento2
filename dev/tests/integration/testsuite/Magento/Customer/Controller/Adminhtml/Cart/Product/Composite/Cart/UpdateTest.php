@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -24,6 +24,7 @@ use Magento\Quote\Model\ResourceModel\Quote\Item\CollectionFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Quote\Model\GetQuoteByReservedOrderId;
 use Magento\TestFramework\TestCase\AbstractBackendController;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
@@ -106,13 +107,13 @@ class UpdateTest extends AbstractBackendController
     }
 
     /**
-     * @dataProvider updateWithQuoteProvider
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Customer/_files/quote.php
      * @param bool $hasQuoteItem
      * @param array $expectedUpdateResult
      * @return void
      */
+    #[DataProvider('updateWithQuoteProvider')]
     public function testUpdateWithQuote(bool $hasQuoteItem, array $expectedUpdateResult): void
     {
         $itemsCollection = $this->quoteItemCollectionFactory->create();
@@ -143,19 +144,19 @@ class UpdateTest extends AbstractBackendController
      *
      * @return array
      */
-    public function updateWithQuoteProvider(): array
+    public static function updateWithQuoteProvider(): array
     {
         return [
             'with_quote_item_id' => [
-                'has_quote_item' => true,
-                'expected_update_result' => [
+                'hasQuoteItem' => true,
+                'expectedUpdateResult' => [
                     'ok' => true,
                     'js_var_name' => 'iFrameResponse',
                 ],
             ],
             'without_quote_item_id' => [
-                'has_quote_item' => false,
-                'expected_update_result' => [
+                'hasQuoteItem' => false,
+                'expectedUpdateResult' => [
                     'error' => true,
                     'message' => (string)__('The quote items are incorrect. Verify the quote items and try again.'),
                     'js_var_name' => 'iFrameResponse',
@@ -209,11 +210,11 @@ class UpdateTest extends AbstractBackendController
      *
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Checkout/_files/quote_with_bundle_product.php
-     * @dataProvider bundleOptionQuantityProvider
      * @param string $quantity
      * @param string|null $message
      * @return void
      */
+    #[DataProvider('bundleOptionQuantityProvider')]
     public function testUpdateBundleOptionQuantity(string $quantity, ?string $message): void
     {
         $productRepository = $this->_objectManager->get(ProductRepositoryInterface::class);
@@ -257,7 +258,7 @@ class UpdateTest extends AbstractBackendController
     /**
      * @return array
      */
-    public function bundleOptionQuantityProvider(): array
+    public static function bundleOptionQuantityProvider(): array
     {
         return [
             'Quantity, less than allowed in the Shopping Cart' => [
@@ -270,7 +271,7 @@ class UpdateTest extends AbstractBackendController
             ],
             'Quantity, greater than available' => [
                 '1000',
-                'The requested qty is not available',
+                'Not enough items for sale',
             ],
             'Quantity, greater than allowed in the Shopping Cart' => [
                 '100000',

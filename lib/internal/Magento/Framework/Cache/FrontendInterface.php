@@ -1,9 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Cache;
+
+use Magento\Framework\Cache\Backend\BackendInterface;
+use Magento\Framework\Cache\CacheConstants;
+use Magento\Framework\Cache\LowLevelFrontendInterface;
 
 /**
  * Interface of a cache frontend - an ultimate publicly available interface to an actual cache storage
@@ -51,23 +55,31 @@ interface FrontendInterface
     /**
      * Clean cache records matching specified tags
      *
+     * The mode constants in CacheConstants share the exact string values of the legacy
+     * \Zend_Cache::CLEANING_MODE_* constants, so either may be passed interchangeably.
+     *
      * @param string $mode
      * @param array $tags
      * @return bool
      */
-    public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL, array $tags = []);
+    public function clean($mode = CacheConstants::CLEANING_MODE_ALL, array $tags = []);
 
     /**
      * Retrieve backend instance
      *
-     * @return \Zend_Cache_Backend_Interface
+     * Symfony-backed frontends return a PSR-6 pool / Magento BackendInterface; the legacy Zend
+     * adapter returns a \Zend_Cache_Backend_Interface. Both remain supported.
+     *
+     * @return \Zend_Cache_Backend_Interface|BackendInterface
      */
     public function getBackend();
 
     /**
-     * Retrieve frontend instance compatible with Zend Locale Data setCache() to be used as a workaround
+     * Retrieve low-level frontend instance for compatibility
      *
-     * @return \Zend_Cache_Core
+     * Return the common low-level frontend contract for both Zend and Symfony cache implementations.
+     *
+     * @return LowLevelFrontendInterface
      */
     public function getLowLevelFrontend();
 }

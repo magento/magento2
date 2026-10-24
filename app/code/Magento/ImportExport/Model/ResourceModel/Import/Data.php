@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\ImportExport\Model\ResourceModel\Import;
 
@@ -125,9 +125,7 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
     {
         $this->getConnection()->delete(
             $this->getMainTable(),
-            [
-                'is_processed' => '1'
-            ]
+            'is_processed = 1 OR TIMESTAMPADD(DAY, 1, updated_at) < CURRENT_TIMESTAMP() '
         );
     }
 

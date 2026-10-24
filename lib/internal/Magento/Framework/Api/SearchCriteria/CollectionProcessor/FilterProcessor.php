@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Api\SearchCriteria\CollectionProcessor;
 
@@ -140,7 +140,7 @@ class FilterProcessor implements CollectionProcessorInterface
         $_fields = array_unique($fields);
         $_conditions = [];
         foreach ($conditions as $condition) {
-            $_conditions[array_key_first($condition)] = array_first($condition);
+            $_conditions[array_key_first($condition)] = reset($condition);
         }
         if ((count($_fields) == 1) && (count($_conditions) == 2)
             && isset($_conditions['from']) && isset($_conditions['to'])

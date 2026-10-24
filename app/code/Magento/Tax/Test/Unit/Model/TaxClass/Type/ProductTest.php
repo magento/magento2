@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,24 +9,28 @@ namespace Magento\Tax\Test\Unit\Model\TaxClass\Type;
 
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
 
 class ProductTest extends TestCase
 {
-    public function testIsAssignedToObjects()
+    use MockCreationTrait;
+
+    public function testIsAssignedToObjects(): void
     {
         $collectionClassName = AbstractCollection::class;
-        $collectionMock = $this->getMockBuilder($collectionClassName)
-            ->setMethods(['addAttributeToFilter', 'getSize'])->disableOriginalConstructor()
-            ->getMock();
+        $collectionMock = $this->createPartialMockWithReflection(
+            $collectionClassName,
+            ['addAttributeToFilter', 'getSize']
+        );
         $collectionMock->expects($this->once())->method('addAttributeToFilter')
             ->with('tax_class_id', 1)->willReturnSelf();
         $collectionMock->expects($this->once())->method('getSize')
             ->willReturn(1);
 
         $productMock = $this->getMockBuilder(Product::class)
-            ->setMethods(['getCollection', '__wakeup', 'getEntityId'])
+            ->onlyMethods(['getCollection', '__wakeup', 'getEntityId'])
             ->disableOriginalConstructor()
             ->getMock();
         $productMock->expects($this->once())->method('getCollection')->willReturn($collectionMock);

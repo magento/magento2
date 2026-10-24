@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Validator\Test\Unit;
 
@@ -21,6 +21,7 @@ use Magento\Framework\Validator\Constraint\Option\Callback;
 use Magento\Framework\Validator\Test\Unit\Test\NotEmpty;
 use Magento\Framework\Validator\UniversalFactory;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -61,7 +62,7 @@ class ConfigTest extends TestCase
      *
      * @param array|null $files
      */
-    protected function _initConfig(array $files = null)
+    protected function _initConfig(?array $files = null)
     {
         if (null === $files) {
             $files = glob(__DIR__ . '/_files/validation/positive/*/validation.xml', GLOB_NOSORT);
@@ -159,15 +160,14 @@ class ConfigTest extends TestCase
         $this->assertInstanceOf(Builder::class, $builder);
     }
 
-    /**
-     * @dataProvider getValidationRulesDataProvider
-     *
+    /**     *
      * @param string $entityName
      * @param string $groupName
      * @param mixed $value
      * @param bool $expectedResult
      * @param array $expectedMessages
      */
+    #[DataProvider('getValidationRulesDataProvider')]
     public function testCreateValidator($entityName, $groupName, $value, $expectedResult, $expectedMessages)
     {
         $this->_initConfig();
@@ -183,7 +183,7 @@ class ConfigTest extends TestCase
      *
      * @return array
      */
-    public function getValidationRulesDataProvider()
+    public static function getValidationRulesDataProvider()
     {
         $result = [];
 
@@ -297,11 +297,10 @@ class ConfigTest extends TestCase
 
     /**
      * Check XSD schema validates invalid config files
-     *
-     * @dataProvider getInvalidXmlFiles
-     *
+     *     *
      * @param array|string $configFile
      */
+    #[DataProvider('getInvalidXmlFiles')]
     public function testValidateInvalidConfigFiles($configFile)
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');
@@ -313,7 +312,7 @@ class ConfigTest extends TestCase
      *
      * @return array
      */
-    public function getInvalidXmlFiles()
+    public static function getInvalidXmlFiles()
     {
         // TODO: add case There are no "entity_constraints" and "property_constraints" elements inside "rule" element
         return [

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminUpdateAttributeValuesOnProductDetailsPageActionGroup">
+        <annotations>
+            <description>Admin Update attribute values on product details page.</description>
+        </annotations>
+        <arguments>
+            <argument name="taxValue" type="string" defaultValue="None"/>
+            <argument name="weightValue" type="string" defaultValue="1"/>
+            <argument name="visibilityValue" type="string" defaultValue="Search"/>
+            <argument name="country" type="string" defaultValue="Afghanistan"/>
+        </arguments>
+        <waitForElement selector="{{AdminProductFormSection.productTaxClass}}" stepKey="waitForProductTaxClassFieldToBeVisible"/>
+        <selectOption selector="{{AdminProductFormSection.productTaxClass}}" userInput="{{taxValue}}" stepKey="selectProductTaxClass"/>
+        <waitForElementVisible selector="{{AdminProductFormSection.productWeight}}" stepKey="waitForSimpleProductWeightToBeVisible"/>
+        <fillField selector="{{AdminProductFormSection.productWeight}}" userInput="{{weightValue}}" stepKey="fillSimpleProductWeight"/>
+        <waitForElement selector="{{AdminProductFormSection.visibility}}" stepKey="waitForVisibilityToBeVisible"/>
+        <selectOption selector="{{AdminProductFormSection.visibility}}" userInput="{{visibilityValue}}" stepKey="selectVisibility"/>
+        <waitForElement selector="{{AdminProductFormSection.countryOfManufacture}}" stepKey="waitForCountryOfManufactureToBeVisible"/>
+        <selectOption selector="{{AdminProductFormSection.countryOfManufacture}}" userInput="{{country}}" stepKey="selectCountryOfManufacture"/>
+    </actionGroup>
+</actionGroups>

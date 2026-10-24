@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Archive;
@@ -350,9 +350,11 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
         $header['100-symlink'] = is_link($file) ? readlink($file) : '';
         $header['6-magic'] = 'ustar ';
         $header['2-version'] = ' ';
-        $a = function_exists('posix_getpwuid') ? posix_getpwuid(fileowner($file)) : ['name' => ''];
+        $a = function_exists('posix_getpwuid') && posix_getpwuid(fileowner($file)) ?
+            posix_getpwuid(fileowner($file)) : ['name' => ''];
         $header['32-uname'] = $a['name'];
-        $a = function_exists('posix_getgrgid') ? posix_getgrgid(filegroup($file)) : ['name' => ''];
+        $a = function_exists('posix_getgrgid') && posix_getpwuid(fileowner($file)) ?
+            posix_getgrgid(filegroup($file)) : ['name' => ''];
         $header['32-gname'] = $a['name'];
         $header['8-devmajor'] = '';
         $header['8-devminor'] = '';

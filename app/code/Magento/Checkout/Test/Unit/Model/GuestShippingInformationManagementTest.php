@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,21 +11,28 @@ use Magento\Checkout\Api\Data\PaymentDetailsInterface;
 use Magento\Checkout\Api\Data\ShippingInformationInterface;
 use Magento\Checkout\Api\ShippingInformationManagementInterface;
 use Magento\Checkout\Model\GuestShippingInformationManagement;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Quote\Model\QuoteIdMask;
+use Magento\Quote\Model\GuestCart\GetGuestCart;
+use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\QuoteIdMaskFactory;
+use Magento\Quote\Model\QuoteIdMask;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class GuestShippingInformationManagementTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
-     * @var MockObject
+     * @var ShippingInformationManagementInterface|MockObject
      */
     protected $shippingInformationManagementMock;
 
     /**
-     * @var MockObject
+     * @var QuoteIdMaskFactory|MockObject
      */
     protected $quoteIdMaskFactoryMock;
 
@@ -34,46 +41,45 @@ class GuestShippingInformationManagementTest extends TestCase
      */
     protected $model;
 
+    /**
+     * @var GetGuestCart|MockObject
+     */
+    private $getGuestCartMock;
+
     protected function setUp(): void
     {
-        $objectManager = new ObjectManager($this);
-        $this->quoteIdMaskFactoryMock = $this->createPartialMock(
-            QuoteIdMaskFactory::class,
-            ['create']
-        );
+        $this->quoteIdMaskFactoryMock = $this->createMock(QuoteIdMaskFactory::class);
         $this->shippingInformationManagementMock = $this->createMock(
             ShippingInformationManagementInterface::class
         );
+        $this->getGuestCartMock = $this->createMock(GetGuestCart::class);
+        $this->getGuestCartMock->method('execute')->willReturn($this->createMock(Quote::class));
 
-        $this->model = $objectManager->getObject(
-            GuestShippingInformationManagement::class,
-            [
-                'quoteIdMaskFactory' => $this->quoteIdMaskFactoryMock,
-                'shippingInformationManagement' => $this->shippingInformationManagementMock
-            ]
+        $this->model = new GuestShippingInformationManagement(
+            $this->quoteIdMaskFactoryMock,
+            $this->shippingInformationManagementMock,
+            $this->getGuestCartMock
         );
     }
 
     public function testSaveAddressInformation()
     {
         $cartId = 'masked_id';
-        $quoteId = 100;
-        $addressInformationMock = $this->getMockForAbstractClass(ShippingInformationInterface::class);
+        $quoteId = '100';
+        $addressInformationMock = $this->createMock(ShippingInformationInterface::class);
 
-        $quoteIdMaskMock = $this->getMockBuilder(QuoteIdMask::class)
-            ->addMethods(['getQuoteId'])
-            ->onlyMethods(['load'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->quoteIdMaskFactoryMock->expects($this->once())->method('create')->willReturn($quoteIdMaskMock);
+        $quoteIdMask = $this->createPartialMockWithReflection(QuoteIdMask::class, ['load', 'getQuoteId']);
+        $quoteIdMask->method('load')->willReturnSelf();
+        $quoteIdMask->method('getQuoteId')->willReturn($quoteId);
+        $this->quoteIdMaskFactoryMock->expects($this->once())->method('create')->willReturn($quoteIdMask);
 
-        $quoteIdMaskMock->expects($this->once())->method('load')->with($cartId, 'masked_id')->willReturnSelf();
-        $quoteIdMaskMock->expects($this->once())->method('getQuoteId')->willReturn($quoteId);
-
-        $paymentInformationMock = $this->getMockForAbstractClass(PaymentDetailsInterface::class);
+        $paymentInformationMock = $this->createMock(PaymentDetailsInterface::class);
         $this->shippingInformationManagementMock->expects($this->once())
             ->method('saveAddressInformation')
-            ->with($quoteId, $addressInformationMock)
+            ->with(
+                self::callback(fn($actualQuoteId): bool => (int) $quoteId === $actualQuoteId),
+                $addressInformationMock
+            )
             ->willReturn($paymentInformationMock);
 
         $this->model->saveAddressInformation($cartId, $addressInformationMock);

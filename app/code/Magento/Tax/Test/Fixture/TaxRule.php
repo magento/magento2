@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Tax\Test\Fixture;
 use Magento\Framework\DataObject;
 use Magento\Tax\Api\TaxRuleRepositoryInterface;
 use Magento\TestFramework\Fixture\Api\ServiceFactory;
+use Magento\TestFramework\Fixture\Data\ProcessorInterface;
 use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
 
 class TaxRule implements RevertibleDataFixtureInterface
@@ -30,11 +31,20 @@ class TaxRule implements RevertibleDataFixtureInterface
     private ServiceFactory $serviceFactory;
 
     /**
-     * @param ServiceFactory $serviceFactory
+     * @var ProcessorInterface
      */
-    public function __construct(ServiceFactory $serviceFactory)
-    {
+    private ProcessorInterface $dataProcessor;
+
+    /**
+     * @param ServiceFactory $serviceFactory
+     * @param ProcessorInterface $dataProcessor
+     */
+    public function __construct(
+        ServiceFactory $serviceFactory,
+        ProcessorInterface $dataProcessor
+    ) {
         $this->serviceFactory = $serviceFactory;
+        $this->dataProcessor = $dataProcessor;
     }
 
     /**
@@ -44,7 +54,11 @@ class TaxRule implements RevertibleDataFixtureInterface
     {
         $service = $this->serviceFactory->create(TaxRuleRepositoryInterface::class, 'save');
 
-        return $service->execute(['rule' => array_merge(self::DEFAULT_DATA, $data)]);
+        return $service->execute(
+            [
+                'rule' => $this->dataProcessor->process($this, array_merge(self::DEFAULT_DATA, $data))
+            ]
+        );
     }
 
     /**

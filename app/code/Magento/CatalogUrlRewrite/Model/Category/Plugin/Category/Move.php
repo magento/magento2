@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CatalogUrlRewrite\Model\Category\Plugin\Category;
 
@@ -9,7 +9,7 @@ use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\CategoryFactory;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator;
 use Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider;
-use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Perform url updating for children categories.
@@ -32,18 +32,26 @@ class Move
     private $categoryFactory;
 
     /**
+     * @var  StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @param CategoryUrlPathGenerator $categoryUrlPathGenerator
      * @param ChildrenCategoriesProvider $childrenCategoriesProvider
      * @param CategoryFactory $categoryFactory
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         CategoryUrlPathGenerator $categoryUrlPathGenerator,
         ChildrenCategoriesProvider $childrenCategoriesProvider,
-        CategoryFactory $categoryFactory
+        CategoryFactory $categoryFactory,
+        StoreManagerInterface $storeManager
     ) {
         $this->categoryUrlPathGenerator = $categoryUrlPathGenerator;
         $this->childrenCategoriesProvider = $childrenCategoriesProvider;
         $this->categoryFactory = $categoryFactory;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -67,6 +75,7 @@ class Move
         $categoryStoreId = $category->getStoreId();
         foreach ($category->getStoreIds() as $storeId) {
             $category->setStoreId($storeId);
+            $this->removeObsoleteUrlPathEntries($category, $categoryStoreId);
             $this->updateCategoryUrlKeyForStore($category);
             $category->unsUrlPath();
             $category->setUrlPath($this->categoryUrlPathGenerator->getUrlPath($category));
@@ -74,6 +83,9 @@ class Move
             $this->updateUrlPathForChildren($category);
         }
         $category->setStoreId($categoryStoreId);
+        $this->updateCategoryUrlKeyForStore($category);
+        $category->unsUrlPath();
+        $category->setUrlPath($this->categoryUrlPathGenerator->getUrlPath($category));
 
         return $result;
     }
@@ -93,29 +105,48 @@ class Move
     }
 
     /**
-     * Check is global scope.
-     *
-     * @param int|null $storeId
-     * @return bool
-     */
-    private function isGlobalScope($storeId)
-    {
-        return null === $storeId || $storeId == Store::DEFAULT_STORE_ID;
-    }
-
-    /**
      * Updates url_path for child categories.
      *
      * @param Category $category
      * @return void
      */
-    private function updateUrlPathForChildren($category)
+    private function updateUrlPathForChildren(Category $category): void
     {
-        foreach ($this->childrenCategoriesProvider->getChildren($category, true) as $childCategory) {
-            $childCategory->setStoreId($category->getStoreId());
+        $storeId = $category->getStoreId();
+        foreach ($this->childrenCategoriesProvider->getChildren($category, true, $storeId) as $childCategory) {
+            $childCategory->setStoreId($storeId);
             $childCategory->unsUrlPath();
             $childCategory->setUrlPath($this->categoryUrlPathGenerator->getUrlPath($childCategory));
             $childCategory->getResource()->saveAttribute($childCategory, 'url_path');
+        }
+    }
+
+    /**
+     * Clean obsolete entries
+     *
+     * @param Category $category
+     * @param int $categoryStoreId
+     * @return void
+     */
+    private function removeObsoleteUrlPathEntries(Category $category, $categoryStoreId): void
+    {
+        if ($this->storeManager->hasSingleStore()) {
+            return;
+        }
+        $origPath = $category->getOrigData('path');
+        $path = $category->getData('path');
+        if ($origPath != null && $path != null && $origPath != $path) {
+            $processingStoreId = $category->getStoreId();
+            $category->unsUrlPath();
+            if ($processingStoreId !== $categoryStoreId) {
+                $category->setStoreId($categoryStoreId);
+            }
+            $this->updateCategoryUrlKeyForStore($category);
+            $category->setUrlPath($this->categoryUrlPathGenerator->getUrlPath($category));
+            $category->getResource()->saveAttribute($category, 'url_path');
+            if ($processingStoreId !== $categoryStoreId) {
+                $category->setStoreId($processingStoreId);
+            }
         }
     }
 }

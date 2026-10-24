@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Block\Order;
 
@@ -23,7 +23,7 @@ class Recent extends \Magento\Framework\View\Element\Template
     /**
      * Limit of orders
      */
-    const ORDER_LIMIT = 5;
+    public const ORDER_LIMIT = 5;
 
     /**
      * @var CollectionFactoryInterface
@@ -59,7 +59,7 @@ class Recent extends \Magento\Framework\View\Element\Template
         Session $customerSession,
         Config $orderConfig,
         array $data = [],
-        StoreManagerInterface $storeManager = null
+        ?StoreManagerInterface $storeManager = null
     ) {
         $this->_orderCollectionFactory = $orderCollectionFactory;
         $this->_customerSession = $customerSession;
@@ -91,9 +91,6 @@ class Recent extends \Magento\Framework\View\Element\Template
             'customer_id',
             $customerId
         )->addAttributeToFilter(
-            'store_id',
-            $this->storeManager->getStore()->getId()
-        )->addAttributeToFilter(
             'status',
             ['in' => $this->_orderConfig->getVisibleOnFrontStatuses()]
         )->addAttributeToSort(
@@ -122,6 +119,8 @@ class Recent extends \Magento\Framework\View\Element\Template
      * @param object $order
      * @return string
      * @deprecated 102.0.3 Action does not exist
+     * @see This method is not used anymore
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getTrackUrl($order)

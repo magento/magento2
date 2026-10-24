@@ -2,8 +2,8 @@
 /**
  * Test for \Magento\Framework\Acl\Loader\ResourceLoader
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Acl\Test\Unit\Loader;
 
@@ -31,14 +31,21 @@ class ResourceLoaderTest extends TestCase
         $acl->expects($this->exactly(2))->method('addResource');
         $acl
             ->method('addResource')
-            ->withConsecutive([$aclResource, null], [$aclResource, $aclResource])
-            ->willReturnOnConsecutiveCalls($acl, $acl);
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($aclResource, $acl) {
+                    if ($arg1 == $aclResource && $arg2 == null) {
+                        return $acl;
+                    } elseif ($arg1 == $aclResource && $arg2 == $aclResource) {
+                        return $acl;
+                    }
+                }
+            );
 
         $factoryObject = $this->createPartialMock(AclResourceFactory::class, ['createResource']);
         $factoryObject->expects($this->any())->method('createResource')->willReturn($aclResource);
 
         /** @var $resourceProvider ProviderInterface */
-        $resourceProvider = $this->getMockForAbstractClass(ProviderInterface::class);
+        $resourceProvider = $this->createMock(ProviderInterface::class);
         $resourceProvider->expects($this->once())
             ->method('getAclResources')
             ->willReturn(
@@ -84,7 +91,7 @@ class ResourceLoaderTest extends TestCase
         $factoryObject->expects($this->any())->method('createResource')->willReturn($aclResource);
 
         /** @var $resourceProvider ProviderInterface */
-        $resourceProvider = $this->getMockForAbstractClass(ProviderInterface::class);
+        $resourceProvider = $this->createMock(ProviderInterface::class);
         $resourceProvider->expects($this->once())
             ->method('getAclResources')
             ->willReturn(

@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver;
 
 use Magento\Catalog\Api\Data\CategoryInterface;
-use Magento\Catalog\Model\ResourceModel\Category\Collection;
+use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 use Magento\CatalogGraphQl\Model\AttributesJoiner;
 use Magento\CatalogGraphQl\Model\Category\Hydrator as CategoryHydrator;
@@ -27,46 +27,39 @@ use Magento\Store\Model\StoreManagerInterface;
 class Categories implements ResolverInterface
 {
     /**
-     * @var Collection
+     * @var CollectionFactory
      */
-    private $collection;
-
-    /**
-     * Accumulated category ids
-     *
-     * @var array
-     */
-    private $categoryIds = [];
+    private CollectionFactory $collectionFactory;
 
     /**
      * @var AttributesJoiner
      */
-    private $attributesJoiner;
+    private AttributesJoiner $attributesJoiner;
 
     /**
      * @var CustomAttributesFlattener
      */
-    private $customAttributesFlattener;
+    private CustomAttributesFlattener $customAttributesFlattener;
 
     /**
      * @var ValueFactory
      */
-    private $valueFactory;
+    private ValueFactory $valueFactory;
 
     /**
      * @var CategoryHydrator
      */
-    private $categoryHydrator;
+    private CategoryHydrator $categoryHydrator;
 
     /**
      * @var ProductCategories
      */
-    private $productCategories;
+    private ProductCategories $productCategories;
 
     /**
      * @var StoreManagerInterface
      */
-    private $storeManager;
+    private StoreManagerInterface $storeManager;
 
     /**
      * @param CollectionFactory $collectionFactory
@@ -86,7 +79,7 @@ class Categories implements ResolverInterface
         ProductCategories $productCategories,
         StoreManagerInterface $storeManager
     ) {
-        $this->collection = $collectionFactory->create();
+        $this->collectionFactory = $collectionFactory;
         $this->attributesJoiner = $attributesJoiner;
         $this->customAttributesFlattener = $customAttributesFlattener;
         $this->valueFactory = $valueFactory;
@@ -100,48 +93,46 @@ class Categories implements ResolverInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
+    public function resolve(Field $field, $context, ResolveInfo $info, ?array $value = null, ?array $args = null)
     {
         if (!isset($value['model'])) {
             throw new LocalizedException(__('"model" value should be specified'));
         }
-
         /** @var \Magento\Catalog\Model\Product $product */
         $product = $value['model'];
-        $storeId = $this->storeManager->getStore()->getId();
-        $categoryIds = $this->productCategories->getCategoryIdsByProduct((int)$product->getId(), (int)$storeId);
-        $this->categoryIds = array_merge($this->categoryIds, $categoryIds);
-        $that = $this;
-
+        if ($product->getVisibility() == Visibility::VISIBILITY_NOT_VISIBLE && in_array('orders', $info->path)) {
+            $categoryIds = $product->getCategoryIds();
+        } else {
+            $storeId = $this->storeManager->getStore()->getId();
+            $categoryIds = $this->productCategories->getCategoryIdsByProduct((int)$product->getId(), (int)$storeId);
+        }
+        $collection = $this->collectionFactory->create();
         return $this->valueFactory->create(
-            function () use ($that, $categoryIds, $info) {
+            function () use ($categoryIds, $info, $collection) {
                 $categories = [];
-                if (empty($that->categoryIds)) {
+                if (empty($categoryIds)) {
                     return [];
                 }
-
-                if (!$this->collection->isLoaded()) {
-                    $that->attributesJoiner->join($info->fieldNodes[0], $this->collection, $info);
-                    $this->collection->addIdFilter($this->categoryIds);
+                if (!$collection->isLoaded()) {
+                    $this->attributesJoiner->join($info->fieldNodes[0], $collection, $info);
+                    $collection->addIdFilter($categoryIds);
                 }
                 /** @var CategoryInterface | \Magento\Catalog\Model\Category $item */
-                foreach ($this->collection as $item) {
+                foreach ($collection as $item) {
                     if (in_array($item->getId(), $categoryIds)) {
                         // Try to extract all requested fields from the loaded collection data
                         $categories[$item->getId()] = $this->categoryHydrator->hydrateCategory($item, true);
                         $categories[$item->getId()]['model'] = $item;
-                        $requestedFields = $that->attributesJoiner->getQueryFields($info->fieldNodes[0], $info);
+                        $requestedFields = $this->attributesJoiner->getQueryFields($info->fieldNodes[0], $info);
                         $extractedFields = array_keys($categories[$item->getId()]);
                         $foundFields = array_intersect($requestedFields, $extractedFields);
                         if (count($requestedFields) === count($foundFields)) {
                             continue;
                         }
-
                         // If not all requested fields were extracted from the collection, start more complex extraction
                         $categories[$item->getId()] = $this->categoryHydrator->hydrateCategory($item);
                     }
                 }
-
                 return $categories;
             }
         );

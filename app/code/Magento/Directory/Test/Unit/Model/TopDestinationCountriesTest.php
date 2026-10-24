@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Directory\Test\Unit\Model;
 use Magento\Directory\Model\TopDestinationCountries;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class TopDestinationCountriesTest extends TestCase
@@ -36,9 +37,7 @@ class TopDestinationCountriesTest extends TestCase
             ->getObject(TopDestinationCountries::class, $arguments);
     }
 
-    /**
-     * @dataProvider toTestGetTopDestinationsDataProvider
-     */
+    #[DataProvider('toTestGetTopDestinationsDataProvider')]
     public function testGetTopDestinations($options, $expectedResults)
     {
         $this->scopeConfigMock->expects($this->once())->method('getValue')->willReturn($options);
@@ -48,7 +47,7 @@ class TopDestinationCountriesTest extends TestCase
     /**
      * @return array
      */
-    public function toTestGetTopDestinationsDataProvider()
+    public static function toTestGetTopDestinationsDataProvider()
     {
         return [
             ['UA,AF', ['UA', 'AF']],

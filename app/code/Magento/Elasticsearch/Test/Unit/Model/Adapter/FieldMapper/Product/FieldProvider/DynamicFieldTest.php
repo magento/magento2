@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Elasticsearch\Test\Unit\Model\Adapter\FieldMapper\Product\FieldProvider;
 
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
+use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Customer\Api\Data\GroupSearchResultsInterface;
 use Magento\Customer\Api\GroupRepositoryInterface;
@@ -26,6 +27,7 @@ use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -87,18 +89,12 @@ class DynamicFieldTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->groupRepository = $this->getMockBuilder(GroupRepositoryInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->groupRepository = $this->createMock(GroupRepositoryInterface::class);
         $this->searchCriteriaBuilder = $this->getMockBuilder(SearchCriteriaBuilder::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->fieldTypeConverter = $this->getMockBuilder(FieldTypeConverterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->indexTypeConverter = $this->getMockBuilder(IndexTypeConverterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->fieldTypeConverter = $this->createMock(FieldTypeConverterInterface::class);
+        $this->indexTypeConverter = $this->createMock(IndexTypeConverterInterface::class);
         $this->attributeAdapterProvider = $this->getMockBuilder(AttributeProvider::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['getByAttributeCode'])
@@ -111,8 +107,13 @@ class DynamicFieldTest extends TestCase
             ->disableOriginalConstructor()
             ->onlyMethods(['getAllIds'])
             ->getMock();
-        $this->storeManager = $this->createMock(StoreManagerInterface::class);
-
+        $categoryCollection = $this->getMockBuilder(CollectionFactory::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['create'])
+            ->getMock();
+        $categoryCollection->method('create')
+            ->willReturn($this->categoryCollection);
+        $this->storeManager = $this->createStub(StoreManagerInterface::class);
         $this->provider = new DynamicField(
             $this->fieldTypeConverter,
             $this->indexTypeConverter,
@@ -121,7 +122,8 @@ class DynamicFieldTest extends TestCase
             $this->fieldNameResolver,
             $this->attributeAdapterProvider,
             $this->categoryCollection,
-            $this->storeManager
+            $this->storeManager,
+            $categoryCollection
         );
     }
 
@@ -130,8 +132,8 @@ class DynamicFieldTest extends TestCase
      * @param array $groupIds
      * @param array $context
      * @param array $expected
-     * @dataProvider attributeProvider
      */
+    #[DataProvider('attributeProvider')]
     public function testGetFields(
         array $categoryIds,
         array $groupIds,
@@ -160,10 +162,7 @@ class DynamicFieldTest extends TestCase
             ->getMock();
         $this->searchCriteriaBuilder->method('create')
             ->willReturn($searchCriteria);
-        $groupSearchResults = $this->getMockBuilder(GroupSearchResultsInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getItems'])
-            ->getMockForAbstractClass();
+        $groupSearchResults = $this->createMock(GroupSearchResultsInterface::class);
         $groups = [];
         foreach ($groupIds as $groupId) {
             $groups[] = $this->createConfiguredMock(
@@ -227,7 +226,7 @@ class DynamicFieldTest extends TestCase
     /**
      * @return array
      */
-    public function attributeProvider(): array
+    public static function attributeProvider(): array
     {
         return [
             [

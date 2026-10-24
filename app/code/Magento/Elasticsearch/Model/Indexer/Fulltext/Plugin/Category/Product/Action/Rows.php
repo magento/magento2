@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,6 +17,8 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 
 /**
  * Catalog search indexer plugin for catalog category products assignment.
+ * @deprecated Elasticsearch is no longer supported by Adobe
+ * @see this class will be responsible for ES only
  */
 class Rows
 {
@@ -75,8 +77,7 @@ class Rows
         array $entityIds,
         bool $useTempTable = false
     ): ActionRows {
-        $indexer = $this->indexerRegistry->get(FulltextIndexer::INDEXER_ID);
-        if (!empty($entityIds) && $indexer->isScheduled()) {
+        if (!empty($entityIds)) {
             $productIds = [];
 
             foreach ($this->storeManager->getStores() as $store) {
@@ -84,9 +85,16 @@ class Rows
                 $productIds[] = $this->getProductIdsFromIndex($indexTable, $entityIds);
             }
 
-            $productIds = array_merge([], ...$productIds);
+            $productIds = array_unique(array_merge([], ...$productIds));
             if (!empty($productIds)) {
-                $indexer->reindexList(array_unique($productIds));
+                $indexer = $this->indexerRegistry->get(FulltextIndexer::INDEXER_ID);
+                if ($indexer->isScheduled()) {
+                    $changelog = $indexer->getView()->getChangelog();
+                    $changelog->create();
+                    $changelog->addList($productIds);
+                } else {
+                    $indexer->invalidate();
+                }
             }
         }
 

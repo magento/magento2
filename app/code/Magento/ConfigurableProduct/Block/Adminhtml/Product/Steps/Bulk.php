@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps;
 
@@ -53,7 +53,7 @@ class Bulk extends \Magento\Ui\Block\Component\StepsWizard\StepAbstract
         Config $catalogProductMediaConfig,
         ProductFactory $productFactory,
         array $data = [],
-        JsonHelper $jsonHelper = null
+        ?JsonHelper $jsonHelper = null
     ) {
         $data['jsonHelper'] = $jsonHelper ?? ObjectManager::getInstance()->get(JsonHelper::class);
         parent::__construct($context, $data);

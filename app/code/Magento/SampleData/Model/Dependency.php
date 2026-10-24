@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\SampleData\Model;
 
@@ -59,7 +59,7 @@ class Dependency
         Filesystem $filesystem,
         PackageFactory $packageFactory,
         ComponentRegistrarInterface $componentRegistrar,
-        \Magento\Framework\Filesystem\Directory\ReadFactory $directoryReadFactory = null
+        ?\Magento\Framework\Filesystem\Directory\ReadFactory $directoryReadFactory = null
     ) {
         $this->composerInformation = $composerInformation;
         $this->packageFactory = $packageFactory;

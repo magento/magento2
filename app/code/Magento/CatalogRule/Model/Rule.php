@@ -1,8 +1,10 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogRule\Model;
 
 use Magento\Catalog\Model\Product;
@@ -13,6 +15,7 @@ use Magento\CatalogRule\Api\Data\RuleInterface;
 use Magento\CatalogRule\Helper\Data;
 use Magento\CatalogRule\Model\Data\Condition\Converter;
 use Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor;
+use Magento\CatalogRule\Model\ResourceModel\Product\ConditionsToCollectionApplier;
 use Magento\CatalogRule\Model\ResourceModel\Rule as RuleResourceModel;
 use Magento\CatalogRule\Model\Rule\Action\CollectionFactory as RuleCollectionFactory;
 use Magento\CatalogRule\Model\Rule\Condition\CombineFactory;
@@ -28,27 +31,28 @@ use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Model\ResourceModel\Iterator;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Rule\Model\AbstractModel;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\CatalogRule\Model\ResourceModel\Product\ConditionsToCollectionApplier;
 
 /**
  * Catalog Rule data model
  *
- * @method \Magento\CatalogRule\Model\Rule setFromDate(string $value)
- * @method \Magento\CatalogRule\Model\Rule setToDate(string $value)
- * @method \Magento\CatalogRule\Model\Rule setCustomerGroupIds(string $value)
+ * @method Rule setFromDate(string $value)
+ * @method Rule setToDate(string $value)
+ * @method Rule setCustomerGroupIds(string $value)
  * @method string getWebsiteIds()
- * @method \Magento\CatalogRule\Model\Rule setWebsiteIds(string $value)
+ * @method Rule setWebsiteIds(string $value)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
-class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, IdentityInterface
+class Rule extends AbstractModel implements RuleInterface, IdentityInterface, ResetAfterRequestInterface
 {
     /**
      * Prefix of model events names
@@ -81,6 +85,35 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     protected $_productsFilter = null;
 
     /**
+     * Counter for products processed during validation
+     *
+     * @var int
+     */
+    private $productsProcessedCount = 0;
+
+    /**
+     * Total time spent in condition validation
+     *
+     * @var float
+     */
+    private $totalValidationTime = 0.0;
+
+    /**
+     * @var array|null
+     */
+    private $cachedWebsitesMap = null;
+
+    /**
+     * @var array|null
+     */
+    private $cachedWebsiteIdsArray = null;
+
+    /**
+     * @var \Magento\Rule\Model\Condition\Combine|null
+     */
+    private $cachedConditions = null;
+
+    /**
      * Store current date at "Y-m-d H:i:s" format
      *
      * @var string
@@ -95,7 +128,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     protected static $_priceRulesData = [];
 
     /**
-     * Catalog rule data
+     * Catalog rule data class
      *
      * @var \Magento\CatalogRule\Helper\Data
      */
@@ -222,15 +255,15 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
         TypeListInterface $cacheTypesList,
         DateTime $dateTime,
         RuleProductProcessor $ruleProductProcessor,
-        AbstractResource $resource = null,
-        AbstractDb $resourceCollection = null,
+        ?AbstractResource $resource = null,
+        ?AbstractDb $resourceCollection = null,
         array $relatedCacheTypes = [],
         array $data = [],
-        ExtensionAttributesFactory $extensionFactory = null,
-        AttributeValueFactory $customAttributeFactory = null,
-        Json $serializer = null,
-        RuleResourceModel $ruleResourceModel = null,
-        ConditionsToCollectionApplier $conditionsToCollectionApplier = null
+        ?ExtensionAttributesFactory $extensionFactory = null,
+        ?AttributeValueFactory $customAttributeFactory = null,
+        ?Json $serializer = null,
+        ?RuleResourceModel $ruleResourceModel = null,
+        ?ConditionsToCollectionApplier $conditionsToCollectionApplier = null
     ) {
         $this->_productCollectionFactory = $productCollectionFactory;
         $this->_storeManager = $storeManager;
@@ -344,21 +377,31 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
         if ($this->_productIds === null) {
             $this->_productIds = [];
             $this->setCollectedAttributes([]);
-
+            $this->productsProcessedCount = 0;
+            $this->totalValidationTime = 0.0;
+            $this->cachedWebsitesMap = null;
+            $this->cachedWebsiteIdsArray = null;
+            $this->cachedConditions = null;
             if ($this->getWebsiteIds()) {
                 /** @var $productCollection \Magento\Catalog\Model\ResourceModel\Product\Collection */
                 $productCollection = $this->_productCollectionFactory->create();
+                $productCollection->setStoreId($this->_storeManager->getDefaultStoreView()->getId());
                 $productCollection->addWebsiteFilter($this->getWebsiteIds());
                 if ($this->_productsFilter) {
                     $productCollection->addIdFilter($this->_productsFilter);
                 }
                 $this->getConditions()->collectValidatedAttributes($productCollection);
-
                 if ($this->canPreMapProducts()) {
-                    $productCollection = $this->conditionsToCollectionApplier
-                        ->applyConditionsToCollection($this->getConditions(), $productCollection);
+                    $productCollection = $this->conditionsToCollectionApplier->applyConditionsToCollection(
+                        $this->getConditions(),
+                        $productCollection
+                    );
                 }
 
+                $this->cachedWebsitesMap = $this->_getWebsitesMap();
+                $websiteIds = $this->getWebsiteIds();
+                $this->cachedWebsiteIdsArray = is_array($websiteIds) ? $websiteIds : explode(',', $websiteIds);
+                $this->cachedConditions = $this->getConditions();
                 $this->_resourceIterator->walk(
                     $productCollection->getSelect(),
                     [[$this, 'callbackValidateProduct']],
@@ -401,14 +444,21 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
         $product = clone $args['product'];
         $product->setData($args['row']);
 
-        $websites = $this->_getWebsitesMap();
         $results = [];
 
-        foreach ($websites as $websiteId => $defaultStoreId) {
+        $validationStart = microtime(true);
+        foreach ($this->cachedWebsitesMap as $websiteId => $defaultStoreId) {
+            if (!in_array($websiteId, $this->cachedWebsiteIdsArray)) {
+                continue;
+            }
             $product->setStoreId($defaultStoreId);
-            $results[$websiteId] = $this->getConditions()->validate($product);
+            $results[$websiteId] = $this->cachedConditions->validate($product);
         }
+        $this->totalValidationTime += (microtime(true) - $validationStart);
+
         $this->_productIds[$product->getId()] = $results;
+
+        $this->productsProcessedCount++;
     }
 
     /**
@@ -593,13 +643,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
             return parent::afterSave();
         }
 
-        if ($this->isObjectNew() && !$this->_ruleProductProcessor->isIndexerScheduled()) {
-            $productIds = $this->getMatchingProductIds();
-            if (!empty($productIds) && is_array($productIds)) {
-                $this->ruleResourceModel->addCommitCallback([$this, 'reindex']);
-            }
-        } else {
-            $this->_ruleProductProcessor->getIndexer()->invalidate();
+        if (!$this->_ruleProductProcessor->isIndexerScheduled()) {
+            $this->ruleResourceModel->addCommitCallback([$this, 'reindex']);
         }
 
         return parent::afterSave();
@@ -612,15 +657,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
      */
     public function reindex()
     {
-        $productIds = $this->_productIds ? array_keys(
-            array_filter(
-                $this->_productIds,
-                function (array $data) {
-                    return array_filter($data);
-                }
-            )
-        ) : [];
-        $this->_ruleProductProcessor->reindexList($productIds);
+        $this->_ruleProductProcessor->reindexRow($this->getRuleId());
     }
 
     /**
@@ -630,7 +667,9 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
      */
     public function afterDelete()
     {
-        $this->_ruleProductProcessor->getIndexer()->invalidate();
+        if ($this->getIsActive() && !$this->_ruleProductProcessor->isIndexerScheduled()) {
+            $this->ruleResourceModel->addCommitCallback([$this, 'reindex']);
+        }
         return parent::afterDelete();
     }
 
@@ -879,6 +918,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
      *
      * @return Data\Condition\Converter
      * @deprecated 100.1.0
+     * @see getRuleCondition, setRuleCondition
      */
     private function getRuleConditionConverter()
     {
@@ -905,5 +945,19 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     public function clearPriceRulesData(): void
     {
         self::$_priceRulesData = [];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        self::$_priceRulesData = [];
+        $this->_productIds = null;
+        $this->productsProcessedCount = 0;
+        $this->totalValidationTime = 0.0;
+        $this->cachedWebsitesMap = null;
+        $this->cachedWebsiteIdsArray = null;
+        $this->cachedConditions = null;
     }
 }

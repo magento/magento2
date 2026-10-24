@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -64,8 +64,8 @@ class Reviews implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         if (false === $context->getExtensionAttributes()->getIsCustomer()) {
             throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));
@@ -82,7 +82,8 @@ class Reviews implements ResolverInterface
         $reviewsCollection = $this->customerReviewsDataProvider->getData(
             (int) $context->getUserId(),
             $args['currentPage'],
-            $args['pageSize']
+            $args['pageSize'],
+            (int) $context->getExtensionAttributes()->getStore()->getId()
         );
 
         return $this->aggregatedReviewsDataProvider->getData($reviewsCollection);

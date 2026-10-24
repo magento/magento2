@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Setup\Module\Di\Definition;
@@ -91,6 +91,6 @@ class Collection
      */
     public function hasInstance($instanceName)
     {
-        return isset($this->definitions[$instanceName]);
+        return array_key_exists($instanceName, $this->definitions);
     }
 }

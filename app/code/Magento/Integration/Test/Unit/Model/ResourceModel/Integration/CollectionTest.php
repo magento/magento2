@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Integration\Test\Unit\Model\ResourceModel\Integration;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Integration\Model\ResourceModel\Integration\Collection;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -20,6 +21,7 @@ use PHPUnit\Framework\TestCase;
  */
 class CollectionTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Select|MockObject
      */
@@ -46,10 +48,10 @@ class CollectionTest extends TestCase
             ->method('select')
             ->willReturn($this->select);
 
-        $resource = $this->getMockBuilder(AbstractDb::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['__wakeup', 'getConnection'])
-            ->getMockForAbstractClass();
+        $resource = $this->createPartialMockWithReflection(
+            AbstractDb::class,
+            ['__wakeup', 'getConnection', '_construct']
+        );
         $resource->expects($this->any())
             ->method('getConnection')
             ->willReturn($connection);
@@ -72,8 +74,15 @@ class CollectionTest extends TestCase
     {
         $this->collection
             ->method('_translateCondition')
-            ->withConsecutive(['endpoint', ['like' => 'http:%']], ['identity_link_url', ['like' => 'http:%']])
-            ->willReturnOnConsecutiveCalls('endpoint like \'http:%\'', 'identity_link_url like \'http:%\'');
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 == 'endpoint' && $arg2 == ['like' => 'http:%']) {
+                        return 'endpoint like \'http:%\'';
+                    } elseif ($arg1 == 'identity_link_url' && $arg2 == ['like' => 'http:%']) {
+                        return 'identity_link_url like \'http:%\'';
+                    }
+                }
+            );
 
         $this->select->expects($this->once())
             ->method('where')

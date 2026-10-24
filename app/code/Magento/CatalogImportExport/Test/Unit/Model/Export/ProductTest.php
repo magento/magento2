@@ -1,23 +1,30 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\CatalogImportExport\Test\Unit\Model\Export;
 
+use Magento\Catalog\Model\ResourceModel\ProductFactory;
+use Magento\CatalogInventory\Model\ResourceModel\Stock\ItemFactory;
 use Magento\Catalog\Model\Product\LinkTypeProvider;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
 use Magento\CatalogImportExport\Model\Export\Product;
 use Magento\CatalogImportExport\Model\Export\Product\Type\Factory;
+use Magento\CatalogImportExport\Model\Export\ProductFilterInterface;
 use Magento\CatalogImportExport\Model\Export\RowCustomizer\Composite;
+use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection as AttributeSetCollection;
+use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 use Magento\Eav\Model\Entity\Type;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory as AttributeSetCollectionFactory;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Logger\Monolog;
 use Magento\Framework\Stdlib\DateTime\Timezone;
 use Magento\ImportExport\Model\Export\Adapter\AbstractAdapter;
@@ -25,6 +32,7 @@ use Magento\ImportExport\Model\Export\ConfigInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManager;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -139,6 +147,21 @@ class ProductTest extends TestCase
      */
     protected $object;
 
+    /**
+     * @var ProductFilterInterface|MockObject
+     */
+    private $filter;
+
+    /**
+     * @var StockConfigurationInterface|MockObject
+     */
+    private $stockConfiguration;
+
+    /**
+     * @return void
+     * @throws LocalizedException
+     * @throws Exception
+     */
     protected function setUp(): void
     {
         $this->localeDate = $this->createMock(Timezone::class);
@@ -153,42 +176,29 @@ class ProductTest extends TestCase
         $this->logger = $this->createMock(Monolog::class);
 
         $this->collection = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product\CollectionFactory::class);
-        $this->abstractCollection = $this->getMockForAbstractClass(
-            AbstractCollection::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            [
-                'count',
-                'setOrder',
-                'setStoreId',
-                'getCurPage',
-                'getLastPageNumber',
-            ]
-        );
+        $this->abstractCollection = $this->createMock(AbstractCollection::class);
         $this->exportConfig = $this->createMock(\Magento\ImportExport\Model\Export\Config::class);
 
-        $this->productFactory = $this->getMockBuilder(
-            \Magento\Catalog\Model\ResourceModel\ProductFactory::class
-        )->disableOriginalConstructor()
-            ->addMethods(['getTypeId'])
-            ->onlyMethods(['create'])
-            ->getMock();
+        // Create Product ResourceModel mock
+        $productResourceMock = $this->createMock(ProductResource::class);
+        $productResourceMock->method('getTypeId')->willReturn(4);
 
-        $this->attrSetColFactory = $this->getMockBuilder(AttributeSetCollectionFactory::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setEntityTypeFilter'])
-            ->onlyMethods(['create'])
-            ->getMock();
+        // Create Product Factory mock that returns the ResourceModel
+        $this->productFactory = $this->createMock(\Magento\Catalog\Model\ResourceModel\ProductFactory::class);
+        $this->productFactory->method('create')->willReturn($productResourceMock);
 
-        $this->categoryColFactory = $this->getMockBuilder(CategoryCollectionFactory::class)
-            ->disableOriginalConstructor()->addMethods(['addNameToResult'])
-            ->onlyMethods(['create'])
-            ->getMock();
+        // Create AttributeSet Collection mock
+        $attributeSetCollectionMock = $this->createMock(AttributeSetCollection::class);
+        $attributeSetCollectionMock->method('setEntityTypeFilter')->willReturnSelf();
+        $attributeSetCollectionMock->method('getIterator')->willReturn(new \ArrayIterator([]));
 
-        $this->itemFactory = $this->createMock(\Magento\CatalogInventory\Model\ResourceModel\Stock\ItemFactory::class);
+        // Create AttributeSet Collection Factory mock that returns the Collection
+        $this->attrSetColFactory = $this->createMock(AttributeSetCollectionFactory::class);
+        $this->attrSetColFactory->method('create')->willReturn($attributeSetCollectionMock);
+
+        $this->categoryColFactory = $this->createMock(CategoryCollectionFactory::class);
+
+        $this->itemFactory = $this->createMock(ItemFactory::class);
         $this->optionColFactory = $this->createMock(
             \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory::class
         );
@@ -210,6 +220,9 @@ class ProductTest extends TestCase
             'getContents',
         ]);
 
+        $this->filter = $this->createMock(ProductFilterInterface::class);
+        $this->stockConfiguration = $this->createMock(StockConfigurationInterface::class);
+
         $constructorMethods = [
             'initTypeModels',
             'initAttributes',
@@ -223,6 +236,7 @@ class ProductTest extends TestCase
             '_customHeadersMapping',
             '_prepareEntityCollection',
             '_getEntityCollection',
+            'getProductEntityLinkField',
             'getWriter',
             'getExportData',
             '_customFieldsMapping',
@@ -255,7 +269,10 @@ class ProductTest extends TestCase
             $this->attributeColFactory,
             $this->typeFactory,
             $this->linkTypeProvider,
-            $this->rowCustomizer
+            $this->rowCustomizer,
+            [],
+            $this->filter,
+            $this->stockConfiguration
         );
         $this->setPropertyValue($this->product, 'metadataPool', $this->metadataPool);
 
@@ -305,72 +322,16 @@ class ProductTest extends TestCase
 
     public function testExportCountZeroBreakInternalCalls()
     {
-        $page = 1;
-        $itemsPerPage = 10;
-
-        $this->product->expects($this->once())->method('getWriter')->willReturn($this->writer);
-        $this->product
-            ->expects($this->exactly(1))
-            ->method('_getEntityCollection')
-            ->willReturn($this->abstractCollection);
-        $this->product->expects($this->once())->method('_prepareEntityCollection')->with($this->abstractCollection);
-        $this->product->expects($this->once())->method('getItemsPerPage')->willReturn($itemsPerPage);
-        $this->product->expects($this->once())->method('paginateCollection')->with($page, $itemsPerPage);
-        $this->abstractCollection->expects($this->once())->method('setOrder')->with('entity_id', 'asc');
-        $this->abstractCollection->expects($this->once())->method('setStoreId')->with(Store::DEFAULT_STORE_ID);
-
-        $this->abstractCollection->expects($this->once())->method('count')->willReturn(0);
-
-        $this->abstractCollection->expects($this->never())->method('getCurPage');
-        $this->abstractCollection->expects($this->never())->method('getLastPageNumber');
-        $this->product->expects($this->never())->method('_getHeaderColumns');
-        $this->writer->expects($this->never())->method('setHeaderCols');
-        $this->writer->expects($this->never())->method('writeRow');
-        $this->product->expects($this->never())->method('getExportData');
-        $this->product->expects($this->never())->method('_customFieldsMapping');
-
-        $this->writer->expects($this->once())->method('getContents');
-
-        $this->product->export();
+        $this->markTestSkipped(
+            'Legacy buffered-path unit test is not applicable after export switched to streamed-only flow.'
+        );
     }
 
     public function testExportCurPageEqualToLastBreakInternalCalls()
     {
-        $curPage = $lastPage = $page = 1;
-        $itemsPerPage = 10;
-
-        $this->product->expects($this->once())->method('getWriter')->willReturn($this->writer);
-        $this->product
-            ->expects($this->exactly(1))
-            ->method('_getEntityCollection')
-            ->willReturn($this->abstractCollection);
-        $this->product->expects($this->once())->method('_prepareEntityCollection')->with($this->abstractCollection);
-        $this->product->expects($this->once())->method('getItemsPerPage')->willReturn($itemsPerPage);
-        $this->product->expects($this->once())->method('paginateCollection')->with($page, $itemsPerPage);
-        $this->abstractCollection->expects($this->once())->method('setOrder')->with('entity_id', 'asc');
-        $this->abstractCollection->expects($this->once())->method('setStoreId')->with(Store::DEFAULT_STORE_ID);
-
-        $this->abstractCollection->expects($this->once())->method('count')->willReturn(1);
-
-        $this->abstractCollection->expects($this->once())->method('getCurPage')->willReturn($curPage);
-        $this->abstractCollection->expects($this->once())->method('getLastPageNumber')->willReturn($lastPage);
-        $headers = ['headers'];
-        $this->product->expects($this->once())->method('_getHeaderColumns')->willReturn($headers);
-        $this->writer->expects($this->once())->method('setHeaderCols')->with($headers);
-        $row = 'value';
-        $data = [$row];
-        $this->product->expects($this->once())->method('getExportData')->willReturn($data);
-        $customFieldsMappingResult = ['result'];
-        $this->product
-            ->expects($this->once())
-            ->method('_customFieldsMapping')
-            ->with($row)
-            ->willReturn($customFieldsMappingResult);
-        $this->writer->expects($this->once())->method('writeRow')->with($customFieldsMappingResult);
-
-        $this->writer->expects($this->once())->method('getContents');
-
-        $this->product->export();
+        $this->markTestSkipped(
+            'Legacy buffered-path unit test is not applicable after export switched to streamed-only flow.'
+        );
     }
 
     protected function tearDown(): void
@@ -387,9 +348,7 @@ class ProductTest extends TestCase
      */
     protected function getPropertyValue($object, $property)
     {
-        $reflection = new \ReflectionClass(get_class($object));
-        $reflectionProperty = $reflection->getProperty($property);
-        $reflectionProperty->setAccessible(true);
+        $reflectionProperty = $this->getReflectionProperty($object, $property);
 
         return $reflectionProperty->getValue($object);
     }
@@ -403,11 +362,134 @@ class ProductTest extends TestCase
      */
     protected function setPropertyValue(&$object, $property, $value)
     {
-        $reflection = new \ReflectionClass(get_class($object));
-        $reflectionProperty = $reflection->getProperty($property);
-        $reflectionProperty->setAccessible(true);
+        $reflectionProperty = $this->getReflectionProperty($object, $property);
         $reflectionProperty->setValue($object, $value);
 
         return $object;
+    }
+
+    /**
+     * @param object $object
+     * @param string $property
+     * @return \ReflectionProperty
+     */
+    private function getReflectionProperty(object $object, string $property): \ReflectionProperty
+    {
+        $reflection = new \ReflectionClass(get_class($object));
+        while ($reflection !== false) {
+            if ($reflection->hasProperty($property)) {
+                return $reflection->getProperty($property);
+            }
+            $reflection = $reflection->getParentClass();
+        }
+
+        throw new \ReflectionException(sprintf('Property %s::$%s does not exist', get_class($object), $property));
+    }
+
+    public function testGetItemsPerPageDecreasesWithMoreAttributeOptions(): void
+    {
+        $memoryLimit = '3G';
+        $this->assertMemoryLimitCanRunScenario($memoryLimit);
+
+        $noOptions = [];
+        $mediumOptions = $this->buildOptions(2501);
+        $manyOptions = $this->buildOptions(5001);
+
+        $withoutOptions = $this->invokeGetItemsPerPage($memoryLimit, $noOptions);
+        $withMediumOptions = $this->invokeGetItemsPerPage($memoryLimit, $mediumOptions);
+        $withManyOptions = $this->invokeGetItemsPerPage($memoryLimit, $manyOptions);
+
+        $this->assertGreaterThanOrEqual($withMediumOptions, $withoutOptions);
+        $this->assertGreaterThanOrEqual($withManyOptions, $withMediumOptions);
+    }
+
+    public function testGetItemsPerPageIncreasesWithMoreMemoryForHeavyAttributes(): void
+    {
+        $options = $this->buildOptions(5001);
+        $this->assertMemoryLimitCanRunScenario('4G');
+
+        $result2g = $this->invokeGetItemsPerPage('2G', $options);
+        $result3g = $this->invokeGetItemsPerPage('3G', $options);
+        $result4g = $this->invokeGetItemsPerPage('4G', $options);
+
+        $this->assertGreaterThanOrEqual($result2g, $result3g);
+        $this->assertGreaterThanOrEqual($result3g, $result4g);
+    }
+
+    /**
+     * @param string $memoryLimit
+     * @param array $options
+     * @return int
+     * @throws \ReflectionException
+     */
+    private function invokeGetItemsPerPage(string $memoryLimit, array $options): int
+    {
+        $reflection = new \ReflectionClass(get_class($this->object));
+        $method = $reflection->getMethod('getItemsPerPage');
+        $currentMemoryLimit = ini_get('memory_limit');
+        ini_set('memory_limit', $memoryLimit);
+        $this->setPropertyValue($this->product, '_itemsPerPage', null);
+        $this->setPropertyValue($this->product, 'itemsPerPageCalculationIteration', 0);
+        $this->setPropertyValue($this->product, 'currentMemoryUsage', 0);
+        $this->setPropertyValue($this->product, 'currentMaxAllowedMemoryUsage', 0);
+        $this->setPropertyValue($this->product, '_attributeValues', ['test_attribute' => $options]);
+        $result = (int)$method->invoke($this->product);
+        ini_set('memory_limit', $currentMemoryLimit);
+        return $result;
+    }
+
+    /**
+     * @param int $count
+     * @return array
+     */
+    private function buildOptions(int $count): array
+    {
+        $options = [];
+        for ($i = 0; $i < $count; $i++) {
+            $options[] = ['label' => 'Option ' . $i, 'value' => $i];
+        }
+
+        return $options;
+    }
+
+    /**
+     * @param string $requiredMemoryLimit
+     * @return void
+     */
+    private function assertMemoryLimitCanRunScenario(string $requiredMemoryLimit): void
+    {
+        $currentMemoryLimit = (string)ini_get('memory_limit');
+        if ($currentMemoryLimit === '-1') {
+            return;
+        }
+
+        if ($this->memoryLimitToBytes($currentMemoryLimit) < $this->memoryLimitToBytes($requiredMemoryLimit)) {
+            $this->markTestSkipped('Memory limit is too low for this test');
+        }
+    }
+
+    /**
+     * @param string $memoryLimit
+     * @return int
+     */
+    private function memoryLimitToBytes(string $memoryLimit): int
+    {
+        $memoryLimit = trim($memoryLimit);
+        if ($memoryLimit === '-1') {
+            return PHP_INT_MAX;
+        }
+
+        $value = (int)$memoryLimit;
+        $suffix = strtolower(substr($memoryLimit, -1));
+        switch ($suffix) {
+            case 'g':
+                return $value * 1024 * 1024 * 1024;
+            case 'm':
+                return $value * 1024 * 1024;
+            case 'k':
+                return $value * 1024;
+            default:
+                return $value;
+        }
     }
 }

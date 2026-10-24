@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -18,6 +18,8 @@
             <testCaseId value="AC-2619"/>
             <group value="persistent"/>
             <group value="customer"/>
+            <group value="cloud"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!--Enable Persistence-->
@@ -45,6 +47,9 @@
             <!--Delete Simple Product 1,customer and Category-->
             <deleteData createDataKey="createSimple1" stepKey="deleteSimple1"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexCustomerGrid">
+                <argument name="indices" value="customer_grid"/>
+            </actionGroup>
             <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteJohnSmithCustomer">
                 <argument name="customerEmail" value="John_Smith_Customer.email"/>
             </actionGroup>
@@ -85,6 +90,7 @@
 
         <wait time="15" stepKey="waitSometime3" />
         <reloadPage stepKey="refreshSessionCookieByPageRefresh3" />
+        <waitForPageLoad stepKey="waitForPageLoadToSeeSuccessMessage"/>
 
         <actionGroup ref="StorefrontAssertPersistentCustomerWelcomeMessageActionGroup" stepKey="seeWelcomeForJohnDoeCustomer">
             <argument name="customerFullName" value="{{John_Smith_Customer.fullname}}"/>

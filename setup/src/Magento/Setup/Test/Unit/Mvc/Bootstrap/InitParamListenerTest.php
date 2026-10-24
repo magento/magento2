@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,16 +9,17 @@ namespace Magento\Setup\Test\Unit\Mvc\Bootstrap;
 
 use Laminas\EventManager\EventManagerInterface;
 use Laminas\EventManager\SharedEventManager;
-use Laminas\Mvc\Application;
-use Laminas\Mvc\MvcEvent;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\ServiceManager\ServiceManager;
 use Laminas\Stdlib\RequestInterface;
+use Magento\Framework\Setup\Mvc\MvcApplication;
+use Magento\Framework\Setup\Mvc\MvcEvent;
 use Magento\Framework\App\Bootstrap as AppBootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Setup\Mvc\Bootstrap\InitParamListener;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -33,7 +34,9 @@ class InitParamListenerTest extends TestCase
      */
     private $listener;
 
-    /** callable[][] */
+    /**
+     * @var array
+     */
     private $callbacks = [];
 
     protected function setUp(): void
@@ -59,7 +62,7 @@ class InitParamListenerTest extends TestCase
     {
         /** @var MvcEvent|MockObject $mvcEvent */
         $mvcEvent = $this->createMock(MvcEvent::class);
-        $mvcApplication = $this->getMockBuilder(Application::class)
+        $mvcApplication = $this->getMockBuilder(MvcApplication::class)
             ->disableOriginalConstructor()
             ->getMock();
         $mvcEvent->expects($this->once())->method('getApplication')->willReturn($mvcApplication);
@@ -68,19 +71,18 @@ class InitParamListenerTest extends TestCase
         $serviceManager->expects($this->once())->method('get')
             ->willReturn($initParams);
         $serviceManager->expects($this->exactly(2))->method('setService')
-            ->withConsecutive(
-                [
-                    DirectoryList::class,
-                    $this->isInstanceOf(DirectoryList::class),
-                ],
-                [
-                    Filesystem::class,
-                    $this->isInstanceOf(Filesystem::class),
-                ]
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 === DirectoryList::class && $arg2 instanceof DirectoryList) {
+                        return null;
+                    } elseif ($arg1 === Filesystem::class && $arg2 instanceof Filesystem) {
+                        return null;
+                    }
+                }
             );
         $mvcApplication->expects($this->any())->method('getServiceManager')->willReturn($serviceManager);
 
-        $eventManager = $this->getMockForAbstractClass(EventManagerInterface::class);
+        $eventManager = $this->createMock(EventManagerInterface::class);
         $mvcApplication->expects($this->any())->method('getEventManager')->willReturn($eventManager);
         $eventManager->expects($this->any())->method('attach');
 
@@ -109,8 +111,8 @@ class InitParamListenerTest extends TestCase
      * @param array|string|null $argv Argv
      * @param array $expectedArray Expected result array
      *
-     * @dataProvider createServiceDataProvider
      */
+    #[DataProvider('createServiceDataProvider')]
     public function testCreateService($zfAppConfig, $env, $argv, $expectedArray)
     {
         foreach ($env as $envKey => $envValue) {
@@ -120,8 +122,8 @@ class InitParamListenerTest extends TestCase
         /**
          * @var ServiceLocatorInterface|MockObject $serviceLocator
          */
-        $serviceLocator = $this->getMockForAbstractClass(ServiceLocatorInterface::class);
-        $mvcApplication = $this->getMockBuilder(Application::class)
+        $serviceLocator = $this->createMock(ServiceLocatorInterface::class);
+        $mvcApplication = $this->getMockBuilder(MvcApplication::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -143,7 +145,7 @@ class InitParamListenerTest extends TestCase
     /**
      * @return array
      */
-    public function createServiceDataProvider()
+    public static function createServiceDataProvider()
     {
         return [
             'none' => [
@@ -173,13 +175,17 @@ class InitParamListenerTest extends TestCase
             'one MAGE_DIRS CLI' => [
                 [],
                 [],
-                ['bin/magento', 'setup:install', '--magento-init-params=MAGE_MODE=developer&MAGE_DIRS[base][path]=/var/www/magento2'],
+                ['bin/magento', 'setup:install',
+                    '--magento-init-params=MAGE_MODE=developer&MAGE_DIRS[base][path]=/var/www/magento2'],
                 ['MAGE_DIRS' => ['base' => ['path' => '/var/www/magento2']], 'MAGE_MODE' => 'developer'],
             ],
             'two MAGE_DIRS CLI' => [
                 [],
                 [],
-                ['bin/magento', 'setup:install', '--magento-init-params=MAGE_MODE=developer&MAGE_DIRS[base][path]=/var/www/magento2&MAGE_DIRS[cache][path]=/tmp/cache'],
+                // phpcs:disable Generic.Files.LineLength
+                ['bin/magento', 'setup:install',
+                    '--magento-init-params=MAGE_MODE=developer&MAGE_DIRS[base][path]=/var/www/magento2&MAGE_DIRS[cache][path]=/tmp/cache'],
+                // phpcs:disable Generic.Files.LineLength
                 [
                     'MAGE_DIRS' => ['base' => ['path' => '/var/www/magento2'], 'cache' => ['path' => '/tmp/cache']],
                     'MAGE_MODE' => 'developer',
@@ -200,7 +206,10 @@ class InitParamListenerTest extends TestCase
             'two MAGE_DIRS' => [
                 [],
                 [],
-                ['bin/magento', 'setup:install', '--magento-init-params=MAGE_MODE=developer&MAGE_DIRS[base][path]=/var/www/magento2&MAGE_DIRS[cache][path]=/tmp/cache'],
+                // phpcs:disable Generic.Files.LineLength
+                ['bin/magento', 'setup:install',
+                    '--magento-init-params=MAGE_MODE=developer&MAGE_DIRS[base][path]=/var/www/magento2&MAGE_DIRS[cache][path]=/tmp/cache'],
+                // phpcs:disable Generic.Files.LineLength
                 [
                     'MAGE_DIRS' => ['base' => ['path' => '/var/www/magento2'], 'cache' => ['path' => '/tmp/cache']],
                     'MAGE_MODE' => 'developer',
@@ -255,11 +264,11 @@ class InitParamListenerTest extends TestCase
         $this->callbacks[] = [$this->listener, 'onBootstrap'];
 
         /** @var EventManagerInterface|MockObject $events */
-        $eventManager = $this->getMockForAbstractClass(EventManagerInterface::class);
+        $eventManager = $this->createMock(EventManagerInterface::class);
 
         $sharedManager = $this->createMock(SharedEventManager::class);
         $sharedManager->expects($this->once())->method('attach')->with(
-            Application::class,
+            MvcApplication::class,
             MvcEvent::EVENT_BOOTSTRAP,
             [$this->listener, 'onBootstrap']
         );

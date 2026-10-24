@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Model\Product\Price;
@@ -17,6 +17,7 @@ use Magento\Catalog\Model\ProductIdLocatorInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Api\StoreRepositoryInterface;
+use Magento\Framework\Exception\InputException;
 use Magento\Store\Model\Store;
 
 /**
@@ -111,7 +112,7 @@ class BasePriceStorage implements BasePriceStorageInterface
         Result $validationResult,
         InvalidSkuProcessor $invalidSkuProcessor,
         array $allowedProductTypes = [],
-        ProductAttributeRepositoryInterface $productAttributeRepository = null
+        ?ProductAttributeRepositoryInterface $productAttributeRepository = null
     ) {
         $this->pricePersistenceFactory = $pricePersistenceFactory;
         $this->basePriceInterfaceFactory = $basePriceInterfaceFactory;
@@ -152,14 +153,22 @@ class BasePriceStorage implements BasePriceStorageInterface
 
     /**
      * @inheritdoc
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function update(array $prices)
+    public function update($prices)
     {
+        if ($prices === null || !is_array($prices)) {
+            throw new InputException(
+                __('Invalid input data format. Expected an array of prices.')
+            );
+        }
         $prices = $this->retrieveValidPrices($prices);
         $formattedPrices = [];
+        $productIds = [];
 
         foreach ($prices as $price) {
             $ids = array_keys($this->productIdLocator->retrieveProductIdsBySkus([$price->getSku()])[$price->getSku()]);
+            $productIds[] = $ids[key($ids)];
             foreach ($ids as $id) {
                 $formattedPrices[] = [
                     'store_id' => $price->getStoreId(),
@@ -182,6 +191,7 @@ class BasePriceStorage implements BasePriceStorageInterface
         }
 
         $this->getPricePersistence()->update($formattedPrices);
+        $this->getPricePersistence()->updateLastUpdatedAt($productIds);
 
         return $this->validationResult->getFailedItems();
     }

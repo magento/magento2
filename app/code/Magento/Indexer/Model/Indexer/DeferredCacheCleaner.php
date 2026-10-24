@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,11 +10,12 @@ namespace Magento\Indexer\Model\Indexer;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\Event\Manager as EventManager;
 use Magento\Framework\Indexer\CacheContext;
+use Magento\Framework\Indexer\DeferredCacheCleanerInterface;
 
 /**
  * Deferred cache cleaner for indexers
  */
-class DeferredCacheCleaner
+class DeferredCacheCleaner implements DeferredCacheCleanerInterface
 {
     /**
      * @var EventManager

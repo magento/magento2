@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -63,7 +63,7 @@ class RemoveItemTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->requestMock = $this->createMock(RequestInterface::class);
         $this->resultJsonFactoryMock = $this->createPartialMock(
             ResultJsonFactory::class,
             ['create']
@@ -74,7 +74,7 @@ class RemoveItemTest extends TestCase
         );
         $this->sidebarMock = $this->createMock(Sidebar::class);
         $this->formKeyValidatorMock = $this->createMock(Validator::class);
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->action = $objectManager->getObject(
@@ -201,8 +201,7 @@ class RemoveItemTest extends TestCase
 
         $this->loggerMock->expects($this->once())
             ->method('critical')
-            ->with($exception)
-            ->willReturn(null);
+            ->with($exception);
 
         $this->sidebarMock->expects($this->once())
             ->method('getResponseData')

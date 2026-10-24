@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -32,19 +32,18 @@ class ProductIdentitiesExtenderTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->product = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getEntityId', 'getTypeId'])
-            ->getMock();
+        $this->product = $this->createPartialMock(Product::class, ['getEntityId', 'getTypeId']);
 
-        $this->type = $this->getMockBuilder(Type::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getChildrenIds'])
-            ->getMock();
+        $this->type = $this->createPartialMock(Type::class, ['getChildrenIds']);
 
         $this->plugin = new ProductPlugin($this->type);
     }
 
+    /**
+     * Verify after get identities
+     *
+     * @return void
+     */
     public function testAfterGetIdentities(): void
     {
         $baseIdentities = [

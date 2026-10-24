@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -54,7 +54,11 @@ abstract class AbstractBundleProductSaveTest extends AbstractBackendController
     protected function tearDown(): void
     {
         if ($this->productToDelete) {
-            $this->productRepository->deleteById($this->productToDelete);
+            try {
+                $this->productRepository->deleteById($this->productToDelete);
+            } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+                // Product doesn't exist
+            }
         }
 
         parent::tearDown();

@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Widget\Setup;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class LayoutUpdateConverterTest extends \PHPUnit\Framework\TestCase
 {
@@ -22,14 +24,14 @@ class LayoutUpdateConverterTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $value
      * @param string $expected
-     * @dataProvider convertDataProvider
      */
+    #[DataProvider('convertDataProvider')]
     public function testConvert($value, $expected)
     {
         $this->assertEquals($expected, $this->converter->convert($value));
     }
 
-    public function convertDataProvider()
+    public static function convertDataProvider()
     {
         // @codingStandardsIgnoreStart
         $beginning = '<body><referenceContainer name="content"><block class="Magento\CatalogWidget\Block\Product\ProductsList" name="23e38bbfa7cc6474454570e51aeffcc3" template="Magento_CatalogWidget::product/widget/content/grid.phtml"><action method="setData"><argument name="name" xsi:type="string">show_pager</argument><argument name="value" xsi:type="string">0</argument></action><action method="setData"><argument name="name" xsi:type="string">products_count</argument><argument name="value" xsi:type="string">10</argument></action><action method="setData">';

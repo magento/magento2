@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\View\Asset\PreProcessor;
 
@@ -36,20 +36,17 @@ class FileNameResolver
      * @param string $fileName
      * @return string
      */
-    public function resolve($fileName)
+    public function resolve(string $fileName): string
     {
         $compiledFile = $fileName;
         $extension = pathinfo($fileName, PATHINFO_EXTENSION);
         foreach ($this->alternativeSources as $name => $alternative) {
-            if ($alternative->isExtensionSupported($extension)
-                && strpos(basename($fileName), '_') !== 0
-            ) {
-                $compiledFile = $fileName !== null
-                    ? substr($fileName, 0, strlen($fileName) - strlen($extension) - 1)
-                    : '';
-                $compiledFile = $compiledFile . '.' . $name;
+            if ($alternative->isExtensionSupported($extension) && !str_starts_with(basename($fileName), '_')) {
+                $compiledFile = substr($fileName, 0, strlen($fileName) - strlen($extension) - 1);
+                $compiledFile = sprintf('%s.%s', $compiledFile, $name);
             }
         }
+
         return $compiledFile;
     }
 }

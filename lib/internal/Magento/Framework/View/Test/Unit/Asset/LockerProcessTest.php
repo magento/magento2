@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -140,8 +140,7 @@ class LockerProcessTest extends TestCase
      */
     private function getTmpDirectoryMock()
     {
-        $tmpDirectoryMock = $this->getMockBuilder(WriteInterface::class)
-            ->getMockForAbstractClass();
+        $tmpDirectoryMock = $this->createMock(WriteInterface::class);
 
         return $tmpDirectoryMock;
     }

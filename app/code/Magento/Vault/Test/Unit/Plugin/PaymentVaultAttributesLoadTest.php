@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
 
 namespace Magento\Vault\Test\Unit\Plugin;
 
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Sales\Api\Data\OrderPaymentExtensionFactory;
 use Magento\Sales\Api\Data\OrderPaymentExtensionInterface;
@@ -23,6 +24,8 @@ use PHPUnit\Framework\TestCase;
  */
 class PaymentVaultAttributesLoadTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var OrderPaymentExtensionFactory|MockObject
      */
@@ -53,20 +56,14 @@ class PaymentVaultAttributesLoadTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->paymentMock = $this->getMockBuilder(OrderPaymentInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getEntityId', 'setExtensionAttributes'])
-            ->getMockForAbstractClass();
-        $this->paymentExtensionMock = $this->getMockBuilder(OrderPaymentExtensionInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getVaultPaymentToken', 'setVaultPaymentToken'])
-            ->getMockForAbstractClass();
+        $this->paymentMock = $this->createMock(OrderPaymentInterface::class);
+        $this->paymentExtensionMock = $this->createPartialMockWithReflection(
+            OrderPaymentExtensionInterface::class,
+            ['getVaultPaymentToken', 'setVaultPaymentToken']
+        );
 
         $this->paymentExtensionFactoryMock = $this->createMock(OrderPaymentExtensionFactory::class);
-        $this->paymentTokenManagementMock = $this->getMockBuilder(PaymentTokenManagementInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getByPaymentId'])
-            ->getMockForAbstractClass();
+        $this->paymentTokenManagementMock = $this->createMock(PaymentTokenManagementInterface::class);
 
         $this->plugin = (new ObjectManagerHelper($this))->getObject(
             PaymentVaultAttributesLoad::class,
@@ -99,7 +96,7 @@ class PaymentVaultAttributesLoadTest extends TestCase
     {
         $this->paymentExtensionMock->expects($this->once())
             ->method('getVaultPaymentToken')
-            ->willReturn($this->getMockForAbstractClass(PaymentTokenInterface::class));
+            ->willReturn($this->createMock(PaymentTokenInterface::class));
         $this->paymentTokenManagementMock->expects($this->never())->method('getByPaymentId');
         $this->paymentMock->expects($this->never())->method('setExtensionAttributes');
         $this->assertSame(
@@ -115,7 +112,7 @@ class PaymentVaultAttributesLoadTest extends TestCase
     {
         $this->paymentExtensionMock->expects($this->once())->method('getVaultPaymentToken')->willReturn(null);
 
-        $paymentTokenMock = $this->getMockForAbstractClass(PaymentTokenInterface::class);
+        $paymentTokenMock = $this->createMock(PaymentTokenInterface::class);
         $this->paymentTokenManagementMock->expects($this->once())
             ->method('getByPaymentId')
             ->willReturn($paymentTokenMock);

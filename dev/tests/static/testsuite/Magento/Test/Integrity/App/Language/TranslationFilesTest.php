@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Test\Integrity\App\Language;
 
@@ -10,6 +10,8 @@ use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Setup\Module\I18n\Dictionary\Options\ResolverFactory;
 use Magento\Setup\Module\I18n\Locale;
 use Magento\Setup\Module\I18n\Pack\Writer\File\Csv;
+use Magento\Framework\Filesystem\Driver\File;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -17,11 +19,11 @@ use Magento\Setup\Module\I18n\Pack\Writer\File\Csv;
 class TranslationFilesTest extends TranslationFiles
 {
     /**
-     * Context
+     * I18n\Context
      *
      * @var \Magento\Setup\Module\I18n\Context
      */
-    protected $context;
+    protected static $context;
 
     /**
      * Test default locale
@@ -30,9 +32,8 @@ class TranslationFilesTest extends TranslationFiles
      *
      * @param string $file
      * @param array $phrases
-     *
-     * @dataProvider defaultLocaleDataProvider
      */
+    #[DataProvider('defaultLocaleDataProvider')]
     public function testDefaultLocale($file, $phrases)
     {
         $this->markTestSkipped('MAGETWO-26083');
@@ -47,9 +48,9 @@ class TranslationFilesTest extends TranslationFiles
      * @return array
      * @throws \RuntimeException
      */
-    public function defaultLocaleDataProvider()
+    public static function defaultLocaleDataProvider()
     {
-        $parser = $this->prepareParser();
+        $parser = self::prepareParser();
 
         $optionResolverFactory = new ResolverFactory();
         $optionResolver = $optionResolverFactory->create(BP, true);
@@ -62,9 +63,9 @@ class TranslationFilesTest extends TranslationFiles
                 throw new \RuntimeException(sprintf('Missed context in row #%d.', $key + 1));
             }
             foreach ($phrase->getContextValue() as $context) {
-                $phraseText = $this->eliminateSpecialChars($phrase->getPhrase());
-                $phraseTranslation = $this->eliminateSpecialChars($phrase->getTranslation());
-                $file = $this->buildFilePath($phrase, $context);
+                $phraseText = self::eliminateSpecialChars($phrase->getPhrase());
+                $phraseTranslation = self::eliminateSpecialChars($phrase->getTranslation());
+                $file = self::buildFilePath($phrase, $context);
                 $defaultLocale[$file]['file'] = $file;
                 $defaultLocale[$file]['phrases'][$phraseText] = $phraseTranslation;
             }
@@ -77,36 +78,37 @@ class TranslationFilesTest extends TranslationFiles
      * @param array $context
      * @return string
      */
-    protected function buildFilePath($phrase, $context)
+    protected static function buildFilePath($phrase, $context)
     {
-        $path = $this->getContext()->buildPathToLocaleDirectoryByContext($phrase->getContextType(), $context);
+        $path = self::getContext()->buildPathToLocaleDirectoryByContext($phrase->getContextType(), $context);
         return $path . Locale::DEFAULT_SYSTEM_LOCALE . '.' . Csv::FILE_EXTENSION;
     }
 
     /**
      * @return \Magento\Setup\Module\I18n\Context
      */
-    protected function getContext()
+    protected static function getContext()
     {
-        if ($this->context === null) {
-            $this->context = new \Magento\Setup\Module\I18n\Context(new ComponentRegistrar());
+        if (self::$context === null) {
+            self::$context = new \Magento\Setup\Module\I18n\Context(new ComponentRegistrar());
         }
-        return $this->context;
+        return self::$context;
     }
 
     /**
      * @return \Magento\Setup\Module\I18n\Parser\Contextual
      */
-    protected function prepareParser()
+    protected static function prepareParser()
     {
         $filesCollector = new \Magento\Setup\Module\I18n\FilesCollector();
 
         $phraseCollector = new \Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\PhraseCollector(
             new \Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer()
         );
+        $fileSystem = new File;
         $adapters = [
             'php' => new \Magento\Setup\Module\I18n\Parser\Adapter\Php($phraseCollector),
-            'js' =>  new \Magento\Setup\Module\I18n\Parser\Adapter\Js(),
+            'js' =>  new \Magento\Setup\Module\I18n\Parser\Adapter\Js($fileSystem),
             'xml' => new \Magento\Setup\Module\I18n\Parser\Adapter\Xml(),
             'html' => new \Magento\Setup\Module\I18n\Parser\Adapter\Html(),
         ];
@@ -127,7 +129,7 @@ class TranslationFilesTest extends TranslationFiles
      * @param string $text
      * @return string
      */
-    protected function eliminateSpecialChars($text)
+    protected static function eliminateSpecialChars($text)
     {
         return preg_replace(['/\\\\\'/', '/\\\\\\\\/'], ['\'', '\\'], $text);
     }
@@ -137,8 +139,8 @@ class TranslationFilesTest extends TranslationFiles
      * Compares count numeric placeholders in keys and translates.
      *
      * @param string $placePath
-     * @dataProvider getLocalePlacePath
      */
+    #[DataProvider('getLocalePlacePath')]
     public function testPhrasePlaceHolders($placePath)
     {
         $this->markTestSkipped('MAGETWO-26083');

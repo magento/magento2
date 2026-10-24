@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,6 +17,8 @@ use Magento\Store\Model\Website;
 use Magento\Backend\Block\Template\Context;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class SwitcherTest extends TestCase
@@ -26,6 +28,9 @@ class SwitcherTest extends TestCase
      */
     private $switcherBlock;
 
+    /**
+     * @var StoreManagerInterface|MockObject
+     */
     private $storeManagerMock;
 
     /**
@@ -55,26 +60,13 @@ class SwitcherTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $objectHelper = new ObjectManager($this);
-        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->getMockForAbstractClass();
-        $this->websiteFactoryMock = $this->getMockBuilder(WebsiteFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $this->storeFactoryMock = $this->getMockBuilder(StoreFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $this->websiteMock = $this->getMockBuilder(Website::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['load', 'getId', 'getName'])
-            ->getMock();
-        $this->storeMock = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['load', 'getId', 'getName'])
-            ->getMock();
+        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->websiteFactoryMock = $this->createPartialMock(WebsiteFactory::class, ['create']);
+        $this->storeFactoryMock = $this->createPartialMock(StoreFactory::class, ['create']);
+        $this->websiteMock = $this->createPartialMock(Website::class, ['load', 'getId', 'getName']);
+        $this->storeMock = $this->createPartialMock(Store::class, ['load', 'getId', 'getName']);
         $this->websiteFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->websiteMock);
@@ -131,9 +123,9 @@ class SwitcherTest extends TestCase
      * @param array $requestedStore
      * @param string $expectedResult
      * @return void
-     * @dataProvider getStoreNameDataProvider
      * @throws LocalizedException
      */
+    #[DataProvider('getStoreNameDataProvider')]
     public function testAfterGetCurrentStoreName(array $requestedStore, string $expectedResult): void
     {
         $this->requestMock->expects($this->any())
@@ -153,7 +145,7 @@ class SwitcherTest extends TestCase
      *
      * @return array
      */
-    public function getStoreNameDataProvider(): array
+    public static function getStoreNameDataProvider(): array
     {
         return [
             'test storeName with valid requested store' =>
@@ -175,8 +167,8 @@ class SwitcherTest extends TestCase
      * @param array $requestedWebsite
      * @param string $expectedResult
      * @return void
-     * @dataProvider getWebsiteNameDataProvider
      */
+    #[DataProvider('getWebsiteNameDataProvider')]
     public function testGetCurrentWebsiteName(array $requestedWebsite, string $expectedResult): void
     {
         $this->requestMock->expects($this->any())
@@ -196,7 +188,7 @@ class SwitcherTest extends TestCase
      *
      * @return array
      */
-    public function getWebsiteNameDataProvider(): array
+    public static function getWebsiteNameDataProvider(): array
     {
         return [
             'test websiteName with valid requested website' =>

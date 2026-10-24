@@ -1,28 +1,31 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Bundle\Model\ResourceModel\Indexer;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BasePriceModifier;
-use Magento\Framework\DB\Select;
-use Magento\Framework\Indexer\DimensionalIndexerInterface;
-use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer;
-use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\IndexTableStructureFactory;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BasePriceModifier;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\IndexTableStructure;
+use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\IndexTableStructureFactory;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\Query\JoinAttributeProcessor;
 use Magento\Customer\Model\Indexer\CustomerGroupDimensionProvider;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Select;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Indexer\DimensionalIndexerInterface;
+use Magento\Framework\Module\Manager;
 use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
-use Magento\Catalog\Model\Product\Attribute\Source\Status;
-use Magento\CatalogInventory\Model\Stock;
 
 /**
  * Bundle products Price indexer resource model
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class Price implements DimensionalIndexerInterface
 {
@@ -107,16 +110,28 @@ class Price implements DimensionalIndexerInterface
     private $tmpBundleOptionTable;
 
     /**
+     * @var StockStatusQueryProcessorInterface
+     */
+    private StockStatusQueryProcessorInterface $stockStatusQueryProcessor;
+
+    /**
+     * @var SelectionPriceModifierInterface
+     */
+    private SelectionPriceModifierInterface $selectionPriceIndexer;
+
+    /**
      * @param IndexTableStructureFactory $indexTableStructureFactory
      * @param TableMaintainer $tableMaintainer
      * @param MetadataPool $metadataPool
-     * @param \Magento\Framework\App\ResourceConnection $resource
+     * @param ResourceConnection $resource
      * @param BasePriceModifier $basePriceModifier
      * @param JoinAttributeProcessor $joinAttributeProcessor
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param ManagerInterface $eventManager
+     * @param Manager $moduleManager
+     * @param StockStatusQueryProcessorInterface|null $stockStatusQueryProcessor
      * @param bool $fullReindexAction
      * @param string $connectionName
+     * @param SelectionPriceModifierInterface|null $selectionPriceIndexer
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -129,8 +144,10 @@ class Price implements DimensionalIndexerInterface
         JoinAttributeProcessor $joinAttributeProcessor,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\Module\Manager $moduleManager,
+        ?StockStatusQueryProcessorInterface $stockStatusQueryProcessor = null,
         $fullReindexAction = false,
-        $connectionName = 'indexer'
+        $connectionName = 'indexer',
+        ?SelectionPriceModifierInterface $selectionPriceIndexer = null
     ) {
         $this->indexTableStructureFactory = $indexTableStructureFactory;
         $this->tableMaintainer = $tableMaintainer;
@@ -142,6 +159,12 @@ class Price implements DimensionalIndexerInterface
         $this->joinAttributeProcessor = $joinAttributeProcessor;
         $this->eventManager = $eventManager;
         $this->moduleManager = $moduleManager;
+        $this->stockStatusQueryProcessor = $stockStatusQueryProcessor ??
+            \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(StockStatusQueryProcessorInterface::class);
+        $this->selectionPriceIndexer = $selectionPriceIndexer ??
+            \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(SelectionPriceModifierInterface::class);
     }
 
     /**
@@ -446,6 +469,7 @@ class Price implements DimensionalIndexerInterface
         $this->prepareBundleSelectionTable();
         $this->calculateFixedBundleSelectionPrice();
         $this->calculateDynamicBundleSelectionPrice($dimensions);
+        $this->selectionPriceIndexer->modify($this->getBundleSelectionTable(), $dimensions);
 
         $this->prepareBundleOptionTable();
 
@@ -671,10 +695,9 @@ class Price implements DimensionalIndexerInterface
      * @return void
      * @throws \Exception
      */
-    private function calculateDynamicBundleSelectionPrice($dimensions)
+    private function calculateDynamicBundleSelectionPrice(array $dimensions): void
     {
         $connection = $this->getConnection();
-
         $price = 'idx.min_price * bs.selection_qty';
         $specialExpr = $connection->getCheckSql(
             'i.special_price > 0 AND i.special_price < 100',
@@ -710,14 +733,34 @@ class Price implements DimensionalIndexerInterface
                 'tier_price' => $tierExpr,
             ]
         );
-        $select->join(
-            ['si' => $this->getTable('cataloginventory_stock_status')],
-            'si.product_id = bs.product_id',
-            []
-        );
-        $select->where('si.stock_status = ?', Stock::STOCK_IN_STOCK);
+        $select = $this->stockStatusQueryProcessor->execute($select);
+        $query = str_replace('AS `idx`', 'AS `idx` USE INDEX (PRIMARY)', (string) $select);
 
-        $this->tableMaintainer->insertFromSelect($select, $this->getBundleSelectionTable(), []);
+        $insertColumns = [
+            'entity_id',
+            'customer_group_id',
+            'website_id',
+            'option_id',
+            'selection_id',
+            'group_type',
+            'is_required',
+            'price',
+            'tier_price'
+        ];
+        $insertColumns = array_map(function ($item) use ($connection) {
+            return $connection->quoteIdentifier($item);
+        }, $insertColumns);
+        $updateValues = [];
+        foreach ($insertColumns as $column) {
+            $updateValues[] = sprintf("%s = VALUES(%s)", $column, $column);
+        }
+
+        $connection->query(sprintf(
+            "INSERT INTO `" . $this->getBundleSelectionTable() . "` (%s) %s ON DUPLICATE KEY UPDATE %s",
+            implode(",", $insertColumns),
+            $query,
+            implode(",", $updateValues)
+        ));
     }
 
     /**

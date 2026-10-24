@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,7 +18,7 @@ use PHPUnit\Framework\TestCase;
 
 class SalableProcessorTest extends TestCase
 {
-    const STOCK_FLAG = 'has_stock_status_filter';
+    private const STOCK_FLAG = 'has_stock_status_filter';
 
     /** @var ObjectManager */
     private $objectManager;
@@ -33,12 +33,10 @@ class SalableProcessorTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->stockStatusFactory = $this->getMockBuilder(
-            StatusFactory::class
-        )
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->stockStatusFactory = $this->createPartialMock(
+            StatusFactory::class,
+            ['create']
+        );
 
         $this->model = $this->objectManager->getObject(
             SalableProcessor::class,
@@ -50,19 +48,16 @@ class SalableProcessorTest extends TestCase
 
     public function testProcess()
     {
-        $productCollection = $this->getMockBuilder(Collection::class)
-            ->setMethods(['addAttributeToFilter'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productCollection = $this->createPartialMock(Collection::class, ['addAttributeToFilter']);
 
         $productCollection->expects($this->once())
             ->method('addAttributeToFilter')
             ->with(ProductInterface::STATUS, Status::STATUS_ENABLED)->willReturnSelf();
 
-        $stockStatusResource = $this->getMockBuilder(\Magento\CatalogInventory\Model\ResourceModel\Stock\Status::class)
-            ->setMethods(['addStockDataToCollection'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $stockStatusResource = $this->createPartialMock(
+            \Magento\CatalogInventory\Model\ResourceModel\Stock\Status::class,
+            ['addStockDataToCollection']
+        );
         $stockStatusResource->expects($this->once())
             ->method('addStockDataToCollection')
             ->with($productCollection, true)->willReturnSelf();

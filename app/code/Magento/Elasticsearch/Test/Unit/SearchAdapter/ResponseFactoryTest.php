@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -53,7 +53,7 @@ class ResponseFactoryTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $objectManagerHelper->getObject(
@@ -137,8 +137,10 @@ class ResponseFactoryTest extends TestCase
 
         $this->documentFactory
             ->method('create')
-            ->withConsecutive([$modifiedDocuments[0]], [$modifiedDocuments[1]])
-            ->willReturnOnConsecutiveCalls('document1', 'document2');
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$modifiedDocuments[0]] => 'document1',
+                [$modifiedDocuments[1]] => 'document2',
+            });
 
         $this->aggregationFactory
             ->method('create')

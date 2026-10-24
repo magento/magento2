@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -17,10 +17,12 @@
             <testCaseId value="MC-16166"/>
             <group value="sales"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="LoginAsAdmin"/>
-           
+            <!-- Enable Flat rate-->
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="SimpleProduct" stepKey="createProduct01">
                 <requiredEntity createDataKey="createCategory"/>
@@ -87,6 +89,7 @@
 
         </before>
         <after>
+            <comment userInput="config:set DisableFlatRateConfigData.path DisableFlatRateConfigData.value" stepKey="disableFlatRate"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createProduct01" stepKey="deleteProduct1"/>
             <deleteData createDataKey="createProduct02" stepKey="deleteProduct2"/>
@@ -109,14 +112,15 @@
             <deleteData createDataKey="createProduct19" stepKey="deleteProduct19"/>
             <deleteData createDataKey="createProduct20" stepKey="deleteProduct20"/>
 
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-        
+
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
             <argument name="Customer" value="$$createCustomer$$" />
         </actionGroup>
-        
+
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="onCategoryPage"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageLoad"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="scrollToLimiter"/>
@@ -207,7 +211,7 @@
             <requiredEntity createDataKey="createCustomerCart"/>
             <requiredEntity createDataKey="createProduct20"/>
         </createData>
-        
+
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="onCheckout"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="see20Products"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickNextButton"/>

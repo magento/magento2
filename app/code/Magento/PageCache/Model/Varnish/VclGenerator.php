@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\PageCache\Model\Varnish;
@@ -84,11 +84,12 @@ class VclGenerator implements VclGeneratorInterface
      * Return generated varnish.vcl configuration file
      *
      * @param int $version
+     * @param string $inputFile
      * @return string
      */
-    public function generateVcl($version)
+    public function generateVcl($version, $inputFile = null)
     {
-        $template = $this->vclTemplateLocator->getTemplate($version);
+        $template = $this->vclTemplateLocator->getTemplate($version, $inputFile);
         return strtr($template, $this->getReplacements());
     }
 

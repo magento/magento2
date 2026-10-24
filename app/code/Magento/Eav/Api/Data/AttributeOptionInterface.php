@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Eav\Api\Data;
 
@@ -100,5 +99,5 @@ interface AttributeOptionInterface
      * @param \Magento\Eav\Api\Data\AttributeOptionLabelInterface[] $storeLabels
      * @return $this
      */
-    public function setStoreLabels(array $storeLabels = null);
+    public function setStoreLabels(?array $storeLabels = null);
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Framework\Filter\Input\PurifierInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class MaliciousCodeTest extends TestCase
 {
@@ -27,10 +28,7 @@ class MaliciousCodeTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->purifier = $this->getMockBuilder(PurifierInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['purify'])
-            ->getMockForAbstractClass();
+        $this->purifier = $this->createMock(PurifierInterface::class);
 
         $objectManager = new ObjectManager($this);
 
@@ -44,9 +42,8 @@ class MaliciousCodeTest extends TestCase
 
     /**
      * @param string|string[] $input
-     * @param string|string[] $expectedOutput
-     * @dataProvider filterDataProvider
-     */
+     * @param string|string[] $expectedOutput     */
+    #[DataProvider('filterDataProvider')]
     public function testFilter($input, $expectedOutput)
     {
         $this->purifier->expects(self::atLeastOnce())
@@ -59,7 +56,7 @@ class MaliciousCodeTest extends TestCase
     /**
      * @return array
      */
-    public function filterDataProvider()
+    public static function filterDataProvider()
     {
         return [
             'Comments' => ['Comment /** This is omitted */ is removed', 'Comment  is removed'],
@@ -134,18 +131,11 @@ class MaliciousCodeTest extends TestCase
                 '<scri<script>pt>alert(1);</scri<script>pt>',
                 'alert(1);',
             ],
-            'Nested scripts' => [
-                '<?php echo "test" ?>',
-                '',
-                '<?= "test" ?>',
-                '',
-                '<?   ="test" ?>',
-                '',
-                '<?="test?>',
-                '',
-                '<?=$test?>',
-                '',
-            ],
+            'Nested scripts: php echo' => ['<?php echo "test" ?>', ''],
+            'Nested scripts: short echo 1' => ['<?= "test" ?>', ''],
+            'Nested scripts: short echo 2' => ['<?   ="test" ?>', ''],
+            'Nested scripts: short echo 3' => ['<?="test?>', ''],
+            'Nested scripts: short variable' => ['<?=$test?>', ''],
             'Null Value' => [null, ''],
         ];
     }

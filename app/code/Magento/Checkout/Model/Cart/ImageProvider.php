@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Checkout\Model\Cart;
 
@@ -52,9 +52,9 @@ class ImageProvider
     public function __construct(
         \Magento\Quote\Api\CartItemRepositoryInterface $itemRepository,
         \Magento\Checkout\CustomerData\ItemPoolInterface $itemPool,
-        \Magento\Checkout\CustomerData\DefaultItem $customerDataItem = null,
-        \Magento\Catalog\Helper\Image $imageHelper = null,
-        \Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface $itemResolver = null
+        ?\Magento\Checkout\CustomerData\DefaultItem $customerDataItem = null,
+        ?\Magento\Catalog\Helper\Image $imageHelper = null,
+        ?\Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface $itemResolver = null
     ) {
         $this->itemRepository = $itemRepository;
         $this->itemPool = $itemPool;

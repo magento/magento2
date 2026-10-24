@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Developer\Test\Unit\Console\Command;
@@ -50,7 +50,7 @@ class XmlCatalogGenerateCommandTest extends TestCase
 
         $formats = ['phpstorm' => $phpstormFormatMock];
         $readFactory = $this->createMock(ReadFactory::class);
-        $readDirMock = $this->getMockForAbstractClass(ReadInterface::class);
+        $readDirMock = $this->createMock(ReadInterface::class);
 
         $content = file_get_contents($fixtureXmlFile);
 
@@ -101,7 +101,7 @@ class XmlCatalogGenerateCommandTest extends TestCase
 
         $formats = ['vscode' => $vscodeFormatMock];
         $readFactory = $this->createMock(ReadFactory::class);
-        $readDirMock = $this->getMockForAbstractClass(ReadInterface::class);
+        $readDirMock = $this->createMock(ReadInterface::class);
 
         $content = file_get_contents($fixtureXmlFile);
 

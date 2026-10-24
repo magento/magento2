@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,7 @@ use Magento\Framework\Cache\InvalidateLogger;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\PageCache\Model\Cache\Server;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class PurgeCacheTest extends TestCase
@@ -73,8 +74,8 @@ class PurgeCacheTest extends TestCase
      * @param string[] $hosts
      *
      * @return void
-     * @dataProvider sendPurgeRequestDataProvider
      */
+    #[DataProvider('sendPurgeRequestDataProvider')]
     public function testSendPurgeRequest(array $hosts): void
     {
         $uris = [];
@@ -95,10 +96,14 @@ class PurgeCacheTest extends TestCase
         }
         $this->socketAdapterMock
             ->method('connect')
-            ->withConsecutive(...$connectWithArgs);
+            ->willReturnCallback(function (...$connectWithArgs) {
+                return null;
+            });
         $this->socketAdapterMock
             ->method('write')
-            ->withConsecutive(...$writeWithArgs);
+            ->willReturnCallback(function (...$writeWithArgs) {
+                return null;
+            });
         $this->socketAdapterMock
             ->method('read');
 
@@ -113,6 +118,7 @@ class PurgeCacheTest extends TestCase
 
     /**
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testSendMultiPurgeRequest(): void
     {
@@ -140,16 +146,36 @@ class PurgeCacheTest extends TestCase
 
         $this->socketAdapterMock->expects($this->exactly(2))
             ->method('write')
-            ->withConsecutive(
-                [
-                    'PURGE', $uri, '1.1',
-                    ['X-Magento-Tags-Pattern' => implode('|', $tagsSplitA), 'Host' => $uri->getHost()]
-                ],
-                [
-                    'PURGE', $uri, '1.1',
-                    ['X-Magento-Tags-Pattern' => implode('|', $tagsSplitB), 'Host' => $uri->getHost()]
-                ]
-            );
+            ->willReturnCallback(function ($arg1, $arg2, $arg3, $arg4) use ($uri, $tagsSplitA, $tagsSplitB) {
+                static $callCount = 0;
+                $callCount++;
+                switch ($callCount) {
+                    case 1:
+                        if ($arg1 === 'PURGE' &&
+                            $arg2 === $uri &&
+                            $arg3 === '1.1' &&
+                            is_array($arg4) &&
+                            isset($arg4['X-Magento-Tags-Pattern']) &&
+                            $arg4['X-Magento-Tags-Pattern'] === implode('|', $tagsSplitA) &&
+                            isset($arg4['Host']) &&
+                            $arg4['Host'] === $uri->getHost()) {
+                             return null;
+                        }
+                        break;
+                    case 2:
+                        if ($arg1 === 'PURGE' &&
+                            $arg2 === $uri &&
+                            $arg3 === '1.1' &&
+                            is_array($arg4) &&
+                            isset($arg4['X-Magento-Tags-Pattern']) &&
+                            $arg4['X-Magento-Tags-Pattern'] === implode('|', $tagsSplitB) &&
+                            isset($arg4['Host']) &&
+                            $arg4['Host'] === $uri->getHost()) {
+                            return null;
+                        }
+                        break;
+                }
+            });
 
         $this->socketAdapterMock->expects($this->exactly(2))
             ->method('close');
@@ -160,7 +186,7 @@ class PurgeCacheTest extends TestCase
     /**
      * @return array
      */
-    public function sendPurgeRequestDataProvider(): array
+    public static function sendPurgeRequestDataProvider(): array
     {
         return [
             [

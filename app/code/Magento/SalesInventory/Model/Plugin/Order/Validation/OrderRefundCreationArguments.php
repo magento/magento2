@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\SalesInventory\Model\Plugin\Order\Validation;
 
@@ -54,8 +54,8 @@ class OrderRefundCreationArguments
         array $items = [],
         $notify = false,
         $appendComment = false,
-        CreditmemoCommentCreationInterface $comment = null,
-        CreditmemoCreationArgumentsInterface $arguments = null
+        ?CreditmemoCommentCreationInterface $comment = null,
+        ?CreditmemoCreationArgumentsInterface $arguments = null
     ) {
         if ($this->isReturnToStockItems($arguments)) {
             return $validationResults;

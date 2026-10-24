@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Range grid column filter
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
 
@@ -18,6 +16,8 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
 class Range extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilter
 {
     /**
+     * Return formatted HTML
+     *
      * @return string
      */
     public function getHtml()
@@ -56,6 +56,8 @@ class Range extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
     }
 
     /**
+     * Return the value at the specified index
+     *
      * @param string|null $index
      * @return mixed
      */
@@ -72,7 +74,7 @@ class Range extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getCondition()
     {

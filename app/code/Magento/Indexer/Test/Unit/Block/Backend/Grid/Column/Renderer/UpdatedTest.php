@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,14 +11,15 @@ use Magento\Backend\Block\Context;
 use Magento\Framework\DataObject;
 use Magento\Indexer\Block\Backend\Grid\Column\Renderer\Updated;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class UpdatedTest extends TestCase
 {
     /**
      * @param string $defaultValue
      * @param string $assert
-     * @dataProvider renderProvider
      */
+    #[DataProvider('renderProvider')]
     public function testRender($defaultValue, $assert)
     {
         $context = $this->getMockBuilder(Context::class)
@@ -37,7 +38,7 @@ class UpdatedTest extends TestCase
     /**
      * @return array
      */
-    public function renderProvider()
+    public static function renderProvider()
     {
         return [
             ['true', 'true'],

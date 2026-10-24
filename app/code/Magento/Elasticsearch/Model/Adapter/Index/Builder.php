@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Elasticsearch\Model\Adapter\Index;
 
@@ -105,6 +105,12 @@ class Builder implements BuilderInterface
                 'tokenizer' => $tokenizer,
                 'filter' => array_merge($filter, $synonymFilter),
                 'char_filter' => $charFilter,
+                'normalizer' => [
+                    'folding' => [
+                        'type' => 'custom',
+                        'filter' => ['asciifolding', 'lowercase'],
+                    ],
+                ],
             ],
         ];
 

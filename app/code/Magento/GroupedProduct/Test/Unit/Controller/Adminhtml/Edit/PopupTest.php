@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -66,15 +66,11 @@ class PopupTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->request = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->request = $this->createMock(RequestInterface::class);
         $this->factory = $this->createPartialMock(ProductFactory::class, ['create']);
         $this->registry = $this->createMock(Registry::class);
-        $this->resultFactoryMock = $this->getMockBuilder(ResultFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->resultLayoutMock = $this->getMockBuilder(Layout::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resultFactoryMock = $this->createMock(ResultFactory::class);
+        $this->resultLayoutMock = $this->createMock(Layout::class);
 
         $this->resultFactoryMock->expects($this->any())
             ->method('create')
@@ -119,8 +115,17 @@ class PopupTest extends TestCase
         $product->expects($this->once())->method('setData')->with('_edit_mode', true);
         $this->request
             ->method('getParam')
-            ->withConsecutive(['id'], ['store', 0], ['type'], ['set'])
-            ->willReturnOnConsecutiveCalls($productId, $storeId, $typeId, $setId);
+            ->willReturnCallback(function ($arg1, $arg2) use ($productId, $storeId, $typeId, $setId) {
+                if ($arg1 == 'id') {
+                    return $productId;
+                } elseif ($arg1 == 'store' && $arg2 == 0) {
+                    return $storeId;
+                } elseif ($arg1 == 'type') {
+                    return $typeId;
+                } elseif ($arg1 == 'set') {
+                    return $setId;
+                }
+            });
         $this->registry->expects($this->once())->method('register')->with('current_product', $product);
 
         $this->assertSame($this->resultLayoutMock, $this->action->execute());
@@ -147,8 +152,17 @@ class PopupTest extends TestCase
         $product->expects($this->once())->method('load')->with($productId);
         $this->request
             ->method('getParam')
-            ->withConsecutive(['id'], ['store', 0], ['type'], ['set'])
-            ->willReturnOnConsecutiveCalls($productId, $storeId, $typeId, $setId);
+            ->willReturnCallback(function ($arg1, $arg2) use ($productId, $storeId, $typeId, $setId) {
+                if ($arg1 == 'id') {
+                    return $productId;
+                } elseif ($arg1 == 'store' && $arg2 == 0) {
+                    return $storeId;
+                } elseif ($arg1 == 'type') {
+                    return $typeId;
+                } elseif ($arg1 == 'set') {
+                    return $setId;
+                }
+            });
         $this->registry->expects($this->once())->method('register')->with('current_product', $product);
 
         $this->assertSame($this->resultLayoutMock, $this->action->execute());

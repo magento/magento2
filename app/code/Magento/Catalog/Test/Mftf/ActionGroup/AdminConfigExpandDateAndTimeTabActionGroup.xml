@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminConfigExpandDateAndTimeTabActionGroup">
+        <annotations>
+            <description>Expand date and time options tab.</description>
+        </annotations>
+
+        <scrollTo selector="{{CatalogSection.dateAndTimeCustomOptions}}" stepKey="scrollDownToDateAndTime"/>
+        <conditionalClick selector="{{CatalogSection.dateAndTimeCustomOptions}}" dependentSelector="{{CatalogSection.CheckIfTabExpandForDateAndTimeCustomOptions}}" visible="true" stepKey="expandDateAndTimeCustomOptionsTab"/>
+    </actionGroup>
+</actionGroups>

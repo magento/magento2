@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
+
 declare(strict_types=1);
 
 namespace Magento\Catalog\Controller\Adminhtml\Product\Set;
@@ -167,6 +168,101 @@ class UpdateTest extends AbstractBackendController
     }
 
     /**
+     * Test - should be able to remove group if system attributes were moved to another group.
+     *
+     * @magentoDataFixture Magento/Catalog/_files/attribute_set_based_on_default.php
+     *
+     * @magentoDbIsolation disabled
+     *
+     * @return void
+     */
+    public function testShouldBeAbleToRemoveGroupIfSystemAttributesAreMovedToAnotherGroup(): void
+    {
+        $testGroupName = 'Images';
+        $currentAttrSet = $this->getAttributeSetByName->execute('new_attribute_set');
+        $this->assertNotNull($currentAttrSet);
+        $attrSetId = (int)$currentAttrSet->getAttributeSetId();
+        $beforeUpdateGroupCollection = $this->getAttributeSetGroupCollection($attrSetId)
+            ->getColumnValues(AttributeGroupInterface::GROUP_NAME);
+        $this->assertContains($testGroupName, $beforeUpdateGroupCollection);
+        // Move system attribute "image" to "Content" group
+        $postData = $this->prepareDataToRequest($currentAttrSet, [], ['image' => 'Content'], [$testGroupName]);
+        $this->assertNotEmpty($postData['removeGroups']);
+        $this->performRequest($attrSetId, $postData);
+        $this->assertSessionMessages(
+            $this->equalTo([(string)__('You saved the attribute set.')]),
+            MessageInterface::TYPE_SUCCESS
+        );
+        $afterUpdateGroupCollection = $this->getAttributeSetGroupCollection($attrSetId)
+            ->getColumnValues(AttributeGroupInterface::GROUP_NAME);
+        $this->assertEquals(1, count($beforeUpdateGroupCollection) - count($afterUpdateGroupCollection));
+        $this->assertNotContains($testGroupName, $afterUpdateGroupCollection);
+    }
+
+    /**
+     * Test - should not be able to delete a group with system attributes.
+     *
+     * @magentoDataFixture Magento/Catalog/_files/attribute_set_based_on_default.php
+     *
+     * @magentoDbIsolation disabled
+     *
+     * @return void
+     */
+    public function testShouldNotBeAbleToRemoveGroupWithSystemAttributes(): void
+    {
+        $testGroupName = 'Images';
+        $currentAttrSet = $this->getAttributeSetByName->execute('new_attribute_set');
+        $this->assertNotNull($currentAttrSet);
+        $attrSetId = (int)$currentAttrSet->getAttributeSetId();
+        $beforeUpdateGroupCollection = $this->getAttributeSetGroupCollection($attrSetId)
+            ->getColumnValues(AttributeGroupInterface::GROUP_NAME);
+        $postData = $this->prepareDataToRequest($currentAttrSet, [], [], [$testGroupName]);
+        $this->assertNotEmpty($postData['removeGroups']);
+        $this->performRequest($attrSetId, $postData);
+        $jsonResponse = $this->json->unserialize($this->getResponse()->getBody());
+        $this->assertNotNull($jsonResponse);
+        $this->assertEquals(1, $jsonResponse['error']);
+        $this->assertStringContainsString(
+            "This group contains system attributes. Please move system attributes to another group and try again.",
+            $jsonResponse['message']
+        );
+        $afterUpdateGroupCollection = $this->getAttributeSetGroupCollection($attrSetId)
+            ->getColumnValues(AttributeGroupInterface::GROUP_NAME);
+        $this->assertEqualsCanonicalizing($beforeUpdateGroupCollection, $afterUpdateGroupCollection);
+    }
+
+    /**
+     * Test - should not be able to remove system attributes from the attribute set.
+     *
+     * @magentoDataFixture Magento/Catalog/_files/attribute_set_based_on_default.php
+     *
+     * @magentoDbIsolation disabled
+     *
+     * @return void
+     */
+    public function testShouldNotBeAbleToRemoveSystemAttributes(): void
+    {
+        $currentAttrSet = $this->getAttributeSetByName->execute('new_attribute_set');
+        $this->assertNotNull($currentAttrSet);
+        $attrSetId = (int)$currentAttrSet->getAttributeSetId();
+        $beforeUpdateAttributesCollection = $this->getAttributeCodes($attrSetId);
+        $postData = $this->prepareDataToRequest($currentAttrSet, ['image']);
+        $this->performRequest($attrSetId, $postData);
+        $jsonResponse = $this->json->unserialize($this->getResponse()->getBody());
+        $this->assertNotNull($jsonResponse);
+        $this->assertEquals(1, $jsonResponse['error']);
+        $this->assertStringContainsString(
+            "The system attribute can&#039;t be deleted.",
+            $jsonResponse['message']
+        );
+        $afterUpdateAttributesCollection = $this->getAttributeCodes($attrSetId);
+        $this->assertEqualsCanonicalizing(
+            $beforeUpdateAttributesCollection,
+            $afterUpdateAttributesCollection
+        );
+    }
+
+    /**
      * Process attribute set save request.
      *
      * @param int $attributeSetId
@@ -187,19 +283,33 @@ class UpdateTest extends AbstractBackendController
      * Prepare default data to request from attribute set.
      *
      * @param AttributeSetInterface $attributeSet
+     * @param array $unassignAttributes
+     * @param array $regroupAttributes
+     * @param array $removeGroups
      * @return array
      */
-    private function prepareDataToRequest(AttributeSetInterface $attributeSet): array
-    {
+    private function prepareDataToRequest(
+        AttributeSetInterface $attributeSet,
+        array $unassignAttributes = [],
+        array $regroupAttributes = [],
+        array $removeGroups = [],
+    ): array {
         $result = [
             'attribute_set_name' => $attributeSet->getAttributeSetName(),
+            'groups' => [],
+            'attributes' => [],
             'removeGroups' => [],
             'not_attributes' => [],
         ];
-        $groups = $attributes = [];
+        $groupIdsByNames = [];
         /** @var AttributeGroupInterface $group */
         foreach ($this->getAttributeSetGroupCollection((int)$attributeSet->getAttributeSetId()) as $group) {
-            $groups[] = [
+            $groupIdsByNames[$group->getAttributeGroupName()] = $group->getAttributeGroupId();
+            if (in_array($group->getAttributeGroupName(), $removeGroups, true)) {
+                $result['removeGroups'][] = $group->getAttributeGroupId();
+                continue;
+            }
+            $result['groups'][] = [
                 $group->getAttributeGroupId(),
                 $group->getAttributeGroupName(),
                 $group->getSortOrder(),
@@ -210,14 +320,21 @@ class UpdateTest extends AbstractBackendController
             $attributeSet->getAttributeSetId()
         );
         foreach ($attributeSetAttributes as $attribute) {
-            $attributes[] = [
+            $groupId = $attribute->getAttributeGroupId();
+            if (isset($regroupAttributes[$attribute->getAttributeCode()])) {
+                $groupId = $groupIdsByNames[$regroupAttributes[$attribute->getAttributeCode()]];
+            } elseif (in_array($attribute->getAttributeCode(), $unassignAttributes, true)
+                || in_array($attribute->getAttributeGroupId(), $result['removeGroups'], true)
+            ) {
+                $result['not_attributes'][] = $attribute->getEntityAttributeId();
+                continue;
+            }
+            $result['attributes'][]  = [
                 $attribute->getAttributeId(),
-                $attribute->getAttributeGroupId(),
+                $groupId,
                 $attribute->getSortOrder(),
             ];
         }
-        $result['groups'] = $groups;
-        $result['attributes'] = $attributes;
 
         return $result;
     }
@@ -234,5 +351,22 @@ class UpdateTest extends AbstractBackendController
         $groupCollection->setAttributeSetFilter($attributeSetId);
 
         return $groupCollection;
+    }
+
+    /**
+     * @param int $attributeSetId
+     * @return array
+     */
+    private function getAttributeCodes(int $attributeSetId): array
+    {
+        return array_values(array_map(
+            static function ($attribute) {
+                return $attribute->getAttributeCode();
+            },
+            $this->attributeManagement->getAttributes(
+                ProductAttributeInterface::ENTITY_TYPE_CODE,
+                $attributeSetId
+            )
+        ));
     }
 }

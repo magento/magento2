@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,8 @@ use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Backend\Model\View\Result\RedirectFactory;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\AuthorizationInterface;
+use Magento\Framework\Controller\Result\Json;
+use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Api\OrderRepositoryInterface;
@@ -21,6 +23,7 @@ use Magento\Sales\Model\Order\Email\Sender\OrderCommentSender;
 use Magento\Sales\Model\Order\Status\History;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -77,6 +80,12 @@ class AddCommentTest extends TestCase
      */
     private $objectManagerMock;
 
+    /** @var JsonFactory|MockObject */
+    private $jsonFactory;
+
+    /** @var Json|MockObject */
+    private $resultJson;
+
     /**
      * Test setup
      */
@@ -84,15 +93,18 @@ class AddCommentTest extends TestCase
     {
         $this->contextMock = $this->createMock(Context::class);
         $this->requestMock = $this->createMock(Http::class);
-        $this->orderRepositoryMock = $this->getMockForAbstractClass(OrderRepositoryInterface::class);
+        $this->orderRepositoryMock = $this->createMock(OrderRepositoryInterface::class);
         $this->orderMock = $this->createMock(Order::class);
         $this->resultRedirectFactoryMock = $this->createMock(RedirectFactory::class);
         $this->resultRedirectMock = $this->createMock(Redirect::class);
-        $this->authorizationMock = $this->getMockForAbstractClass(AuthorizationInterface::class);
+        $this->authorizationMock = $this->createMock(AuthorizationInterface::class);
         $this->statusHistoryCommentMock = $this->createMock(History::class);
-        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
 
         $this->contextMock->expects($this->once())->method('getRequest')->willReturn($this->requestMock);
+
+        $this->resultJson = $this->createMock(Json::class);
+        $this->jsonFactory = $this->createMock(JsonFactory::class);
 
         $objectManagerHelper = new ObjectManager($this);
         $this->addCommentController = $objectManagerHelper->getObject(
@@ -101,96 +113,165 @@ class AddCommentTest extends TestCase
                 'context' => $this->contextMock,
                 'orderRepository' => $this->orderRepositoryMock,
                 '_authorization' => $this->authorizationMock,
-                '_objectManager' => $this->objectManagerMock
+                '_objectManager' => $this->objectManagerMock,
+                'resultJsonFactory' => $this->jsonFactory
             ]
         );
     }
 
     /**
      * @param array $historyData
+     * @param string $orderStatus
      * @param bool $userHasResource
      * @param bool $expectedNotify
+     * @param string $expectedOrderStatus
      *
-     * @dataProvider executeWillNotifyCustomerDataProvider
      */
-    public function testExecuteWillNotifyCustomer(array $historyData, bool $userHasResource, bool $expectedNotify)
-    {
-        $orderId = 30;
-        $this->requestMock->expects($this->once())->method('getParam')->with('order_id')->willReturn($orderId);
-        $this->orderRepositoryMock->expects($this->once())
+    #[DataProvider('executeWillNotifyCustomerDataProvider')]
+    public function testExecuteWillNotifyCustomer(
+        array $historyData,
+        string $orderStatus,
+        bool $userHasResource,
+        bool $expectedNotify,
+        string $expectedOrderStatus
+    ) {
+         $orderId = 30;
+         $this->requestMock->expects($this->once())->method('getParam')->with('order_id')->willReturn($orderId);
+         $this->orderMock->expects($this->any())->method('getDataByKey')
+            ->with('status')->willReturn($orderStatus);
+         $this->orderRepositoryMock->expects($this->once())
             ->method('get')
             ->willReturn($this->orderMock);
-        $this->requestMock->expects($this->once())->method('getPost')->with('history')->willReturn($historyData);
-        $this->authorizationMock->expects($this->any())->method('isAllowed')->willReturn($userHasResource);
-        $this->orderMock->expects($this->once())
+         $this->requestMock->expects($this->once())->method('getPost')->with('history')->willReturn($historyData);
+         $this->authorizationMock->expects($this->any())->method('isAllowed')->willReturn($userHasResource);
+         $this->orderMock->expects($this->once())
             ->method('addStatusHistoryComment')
             ->willReturn($this->statusHistoryCommentMock);
-        $this->statusHistoryCommentMock->expects($this->once())->method('setIsCustomerNotified')->with($expectedNotify);
-        $this->objectManagerMock->expects($this->once())->method('create')->willReturn(
-            $this->createMock(OrderCommentSender::class)
-        );
+         $this->statusHistoryCommentMock->expects($this->once())
+            ->method('setIsCustomerNotified')
+            ->with($expectedNotify);
+         $this->objectManagerMock->expects($this->once())->method('create')->willReturn(
+             $this->createMock(OrderCommentSender::class)
+         );
 
-        $this->addCommentController->execute();
+        // Verify the getOrderStatus method call
+         $this->orderMock->expects($this->once())->method('setStatus')->with($expectedOrderStatus);
+         $this->orderMock->expects($this->once())->method('save');
+         $this->statusHistoryCommentMock->expects($this->once())->method('save');
+
+         $this->addCommentController->execute();
     }
 
     /**
      * @return array
      */
-    public function executeWillNotifyCustomerDataProvider()
+    public static function executeWillNotifyCustomerDataProvider()
     {
         return [
             'User Has Access - Notify True' => [
-                'postData' => [
+                'historyData' => [
                     'comment' => 'Great Product!',
                     'is_customer_notified' => true,
-                    'status' => 'Processing'
+                    'status' => 'processing'
                 ],
+                'orderStatus' => 'processing',
                 'userHasResource' => true,
-                'expectedNotify' => true
+                'expectedNotify' => true,
+                'expectedOrderStatus' => 'processing'
             ],
             'User Has Access - Notify False' => [
-                'postData' => [
+                'historyData' => [
                     'comment' => 'Great Product!',
                     'is_customer_notified' => false,
-                    'status' => 'Processing'
+                    'status' => 'processing'
                 ],
+                'orderStatus' => 'processing',
                 'userHasResource' => true,
-                'expectedNotify' => false
+                'expectedNotify' => false,
+                'expectedOrderStatus' => 'processing'
             ],
             'User Has Access - Notify Unset' => [
-                'postData' => [
+                'historyData' => [
                     'comment' => 'Great Product!',
-                    'status' => 'Processing'
+                    'status' => 'processing'
                 ],
+                'orderStatus' => 'fraud',
                 'userHasResource' => true,
-                'expectedNotify' => false
+                'expectedNotify' => false,
+                'expectedOrderStatus' => 'processing'
             ],
             'User No Access - Notify True' => [
-                'postData' => [
+                'historyData' => [
                     'comment' => 'Great Product!',
                     'is_customer_notified' => true,
-                    'status' => 'Processing'
+                    'status' => 'fraud'
                 ],
+                'orderStatus' => 'processing',
                 'userHasResource' => false,
-                'expectedNotify' => false
+                'expectedNotify' => false,
+                'expectedOrderStatus' => 'fraud'
             ],
             'User No Access - Notify False' => [
-                'postData' => [
+                'historyData' => [
                     'comment' => 'Great Product!',
                     'is_customer_notified' => false,
-                    'status' => 'Processing'
+                    'status' => 'processing'
                 ],
+                'orderStatus' => 'complete',
                 'userHasResource' => false,
-                'expectedNotify' => false
+                'expectedNotify' => false,
+                'expectedOrderStatus' => 'processing'
             ],
             'User No Access - Notify Unset' => [
-                'postData' => [
+                'historyData' => [
                     'comment' => 'Great Product!',
-                    'status' => 'Processing'
+                    'status' => 'processing'
                 ],
+                'orderStatus' => 'complete',
                 'userHasResource' => false,
-                'expectedNotify' => false
+                'expectedNotify' => false,
+                'expectedOrderStatus' => 'processing'
             ],
         ];
+    }
+
+    /**
+     * Assert error message for empty comment value
+     *
+     * @return void
+     */
+    public function testExecuteForEmptyCommentMessage(): void
+    {
+        $orderId = 30;
+        $orderStatus = 'processing';
+        $historyData = [
+            'comment' => '',
+            'is_customer_notified' => false,
+            'status' => 'processing'
+        ];
+
+        $this->requestMock->expects($this->once())->method('getParam')->with('order_id')->willReturn($orderId);
+        $this->orderMock->expects($this->atLeastOnce())->method('getDataByKey')
+            ->with('status')->willReturn($orderStatus);
+        $this->orderRepositoryMock->expects($this->once())
+            ->method('get')
+            ->willReturn($this->orderMock);
+        $this->requestMock->expects($this->once())->method('getPost')->with('history')->willReturn($historyData);
+
+        $this->resultJson->expects($this->once())
+            ->method('setData')
+            ->with(
+                [
+                    'error' => true,
+                    'message' => 'Please provide a comment text or ' .
+                        'update the order status to be able to submit a comment for this order.'
+                ]
+            )
+            ->willReturnSelf();
+        $this->jsonFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($this->resultJson);
+
+        $this->assertSame($this->resultJson, $this->addCommentController->execute());
     }
 }

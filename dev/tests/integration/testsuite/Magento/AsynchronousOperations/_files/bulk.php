@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\Bulk\OperationInterface;
@@ -26,6 +26,13 @@ $bulks = [
         'uuid' => 'bulk-uuid-2',
         'user_id' => 1,
         'user_type' => \Magento\Authorization\Model\UserContextInterface::USER_TYPE_ADMIN,
+        'description' => 'Bulk Description',
+        'operation_count' => 3,
+    ],
+    'in_progress_integration' => [
+        'uuid' => 'bulk-uuid-2.1',
+        'user_id' => 100,
+        'user_type' => \Magento\Authorization\Model\UserContextInterface::USER_TYPE_INTEGRATION,
         'description' => 'Bulk Description',
         'operation_count' => 3,
     ],

@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\TestFramework\Integrity\Library\PhpParser;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Check Uses parsing
@@ -26,11 +28,11 @@ class UsesTest extends \PHPUnit\Framework\TestCase
     /**
      * Covered hasUses method
      *
-     * @dataProvider hasUsesDataProvider
      * @test
      *
      * @param array $tokens
      */
+    #[DataProvider('hasUsesDataProvider')]
     public function testHasUses($tokens)
     {
         foreach ($tokens as $k => $token) {
@@ -44,7 +46,7 @@ class UsesTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function hasUsesDataProvider(): array
+    public static function hasUsesDataProvider(): array
     {
         return [
             'simple_php7' => [
@@ -157,8 +159,8 @@ class UsesTest extends \PHPUnit\Framework\TestCase
      * Covered getClassNameWithNamespace
      *
      * @test
-     * @dataProvider classNamesDataProvider
      */
+    #[DataProvider('classNamesDataProvider')]
     public function testGetClassNameWithNamespace($className, $tokens)
     {
         foreach ($tokens as $k => $token) {
@@ -173,7 +175,7 @@ class UsesTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function classNamesDataProvider(): array
+    public static function classNamesDataProvider(): array
     {
         return [
             'class_from_uses_php7' => [

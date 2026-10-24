@@ -1,7 +1,7 @@
 <?php
-/***
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -46,17 +46,11 @@ class IndexTest extends TestCase
         $contextMock = $this->createMock(Context::class);
 
         /** @var MockObject|PageConfig $pageConfigMock */
-        $this->pageConfigMock = $this->getMockBuilder(PageConfig::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->pageConfigMock = $this->createMock(PageConfig::class);
         /** @var MockObject|PageFactory $resultPageFactory */
-        $this->resultPageFactory = $this->getMockBuilder(PageFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resultPageFactory = $this->createMock(PageFactory::class);
 
-        $this->config = self::getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->config = $this->createMock(Config::class);
 
         $this->indexAction = new Index(
             $contextMock,
@@ -67,9 +61,10 @@ class IndexTest extends TestCase
     }
 
     /**
-     * @doesNotPerformAssertions
+     * @return void
+     * @throws NotFoundException
      */
-    public function testExecute()
+    public function testExecute(): void
     {
         $this->pageConfigMock->expects($this->once())
             ->method('addBodyClass')
@@ -85,9 +80,7 @@ class IndexTest extends TestCase
         $this->expectException(NotFoundException::class);
         $this->expectExceptionMessage('Page not found.');
 
-        $request = self::getMockBuilder(Http::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $request = $this->createMock(Http::class);
 
         $this->config->method('isEnabled')
             ->willReturn(false);
@@ -95,13 +88,12 @@ class IndexTest extends TestCase
     }
 
     /**
-     * @doesNotPerformAssertions
+     * @return void
+     * @throws NotFoundException
      */
-    public function testDispatchIsSuccessfulWhenEnabled()
+    public function testDispatchIsSuccessfulWhenEnabled(): void
     {
-        $request = self::getMockBuilder(Http::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $request = $this->createMock(Http::class);
         // Assert that execute is called
         $request->expects($this->once())
             ->method('getFullActionName');

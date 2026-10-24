@@ -1,0 +1,1036 @@
+{
+  "originZIPCode": "60031",
+  "destinationZIPCode": "90034",
+  "pricingOptions": [
+    {
+      "shippingOptions": [
+        {
+          "mailClass": "PARCEL_SELECT",
+          "rateOptions": [
+            {
+              "commitment": {
+                "name": "7 Days",
+                "scheduleDeliveryDate": "2025-04-17",
+                "guaranteedDelivery": false
+              },
+              "totalBasePrice": 4.61,
+              "rates": [
+                {
+                  "description": "Parcel Select Machinable DDU Single-piece",
+                  "startDate": "2025-01-19",
+                  "endDate": "",
+                  "price": 4.61,
+                  "zone": "07",
+                  "weight": 1,
+                  "dimensionalWeight": 0,
+                  "dimWeight": 0,
+                  "fees": [],
+                  "priceType": "COMMERCIAL",
+                  "mailClass": "PARCEL_SELECT",
+                  "productName": "",
+                  "productDefinition": "",
+                  "processingCategory": "MACHINABLE",
+                  "rateIndicator": "SP",
+                  "destinationEntryFacilityType": "DESTINATION_DELIVERY_UNIT",
+                  "SKU": "DVXP0XXUXC00010"
+                }
+              ],
+              "extraServices": [
+                {
+                  "name": "Sunday/Holiday Delivery",
+                  "price": 1.95,
+                  "extraService": "991",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXZ6XXXXXCX0000"
+                },
+                {
+                  "name": "Certified Mail",
+                  "price": 4.85,
+                  "extraService": "910",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXEX0XXXXCX0000"
+                },
+                {
+                  "name": "Certified Mail Restricted Delivery",
+                  "price": 12.75,
+                  "extraService": "911",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXEX0XJXXCX0000"
+                },
+                {
+                  "name": "Return Receipt",
+                  "price": 4.1,
+                  "extraService": "955",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXRX0XXXXCX0000"
+                },
+                {
+                  "name": "Certified Mail Adult Signature Required",
+                  "price": 12.75,
+                  "extraService": "912",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXEX0XAXXCX0000"
+                },
+                {
+                  "name": "Certified Mail Adult Signature Restricted Delivery",
+                  "price": 12.75,
+                  "extraService": "913",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXEX0XBXXCX0000"
+                },
+                {
+                  "name": "Return Receipt Electronic",
+                  "price": 2.62,
+                  "extraService": "957",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXRX0EXXXCX0000"
+                },
+                {
+                  "name": "COD Restricted Delivery",
+                  "price": 7.7,
+                  "extraService": "917",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXCX0XJXXCX0000"
+                },
+                {
+                  "name": "Premium Data Retention and Retrieval Services 6 months",
+                  "price": 0.99,
+                  "extraService": "480",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "D2KVYOXXXC00000"
+                },
+                {
+                  "name": "Premium Data Retention and Retrieval Services 1 year",
+                  "price": 1.2,
+                  "extraService": "481",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "D2KV1OXXXC00000"
+                },
+                {
+                  "name": "Premium Data Retention and Retrieval Services 3 years",
+                  "price": 1.5,
+                  "extraService": "482",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "D2KV3OXXXC00000"
+                },
+                {
+                  "name": "Premium Data Retention and Retrieval Services 5 years",
+                  "price": 2,
+                  "extraService": "483",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "D2KV5OXXXC00000"
+                },
+                {
+                  "name": "Premium Data Retention and Retrieval Services 7 years",
+                  "price": 3,
+                  "extraService": "484",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "D2KV7OXXXC00000"
+                },
+                {
+                  "name": "Premium Data Retention and Retrieval Services 10 years",
+                  "price": 4.2,
+                  "extraService": "485",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "D2KVZOXXXC00000"
+                },
+                {
+                  "name": "Premium Data Retention and Retrieval Services 3 years with signature",
+                  "price": 3.75,
+                  "extraService": "486",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "D2KV3OSXXC00000"
+                },
+                {
+                  "name": "Return Receipt For Merchandise",
+                  "price": 0,
+                  "extraService": "960",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXRX0MXXXCX0000"
+                },
+                {
+                  "name": "Premium Data Retention and Retrieval Services 5 years with signature",
+                  "price": 4.75,
+                  "extraService": "487",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "D2KV5OSXXC00000"
+                },
+                {
+                  "name": "Premium Data Retention and Retrieval Services 7 years with signature",
+                  "price": 5.75,
+                  "extraService": "488",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "D2KV7OSXXC00000"
+                },
+                {
+                  "name": "Premium Data Retention and Retrieval Services 10 years with signature",
+                  "price": 6.75,
+                  "extraService": "489",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "D2KVZOSXXC00000"
+                },
+                {
+                  "name": "USPS Tracking",
+                  "price": 0,
+                  "extraService": "920",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXTV0EXXXCX0000"
+                },
+                {
+                  "name": "Signature Confirmation",
+                  "price": 3.7,
+                  "extraService": "921",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXSV0EXXXCX0000"
+                },
+                {
+                  "name": "Adult Signature Required",
+                  "price": 8.4,
+                  "extraService": "922",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXAX0XXXXCX0000"
+                },
+                {
+                  "name": "Adult Signature Restricted Delivery",
+                  "price": 8.65,
+                  "extraService": "923",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXBX0XXXXCX0000"
+                },
+                {
+                  "name": "Signature Confirmation Restricted Delivery",
+                  "price": 11.4,
+                  "extraService": "924",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXSV0EJXXCX0000"
+                },
+                {
+                  "name": "Label Delivery",
+                  "price": 1.55,
+                  "extraService": "415",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXQX0XXXXCX0000"
+                },
+                {
+                  "name": "Insurance Restricted Delivery",
+                  "price": 7.7,
+                  "extraService": "934",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXIX0XJXXCX0000"
+                },
+                {
+                  "name": "Registered Mail",
+                  "price": 18.6,
+                  "extraService": "940",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXGX0XXXXCX0000"
+                },
+                {
+                  "name": "Registered Mail Restricted Delivery",
+                  "price": 26.3,
+                  "extraService": "941",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXGX0XJXXCX0000"
+                }
+              ]
+            },
+            {
+              "commitment": {
+                "name": "7 Days",
+                "scheduleDeliveryDate": "2025-04-17",
+                "guaranteedDelivery": false
+              },
+              "totalBasePrice": 6.49,
+              "rates": [
+                {
+                  "description": "Parcel Select Machinable DNDC Single-piece",
+                  "startDate": "2025-01-19",
+                  "endDate": "",
+                  "price": 6.49,
+                  "zone": "07",
+                  "weight": 1,
+                  "dimensionalWeight": 0,
+                  "dimWeight": 0,
+                  "fees": [],
+                  "priceType": "COMMERCIAL",
+                  "mailClass": "PARCEL_SELECT",
+                  "productName": "",
+                  "productDefinition": "",
+                  "processingCategory": "MACHINABLE",
+                  "rateIndicator": "SP",
+                  "destinationEntryFacilityType": "DESTINATION_NETWORK_DISTRIBUTION_CENTER",
+                  "SKU": "DVXP0XXCXC00010"
+                }
+              ],
+              "extraServices": [
+                {
+                  "name": "Sunday/Holiday Delivery",
+                  "price": 1.95,
+                  "extraService": "991",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXZ6XXXXXCX0000"
+                },
+                {
+                  "name": "Certified Mail",
+                  "price": 4.85,
+                  "extraService": "910",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXEX0XXXXCX0000"
+                },
+                {
+                  "name": "Certified Mail Restricted Delivery",
+                  "price": 12.75,
+                  "extraService": "911",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXEX0XJXXCX0000"
+                },
+                {
+                  "name": "Return Receipt",
+                  "price": 4.1,
+                  "extraService": "955",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXRX0XXXXCX0000"
+                },
+                {
+                  "name": "Certified Mail Adult Signature Required",
+                  "price": 12.75,
+                  "extraService": "912",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXEX0XAXXCX0000"
+                },
+                {
+                  "name": "Certified Mail Adult Signature Restricted Delivery",
+                  "price": 12.75,
+                  "extraService": "913",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXEX0XBXXCX0000"
+                },
+                {
+                  "name": "Return Receipt Electronic",
+                  "price": 2.62,
+                  "extraService": "957",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXRX0EXXXCX0000"
+                },
+                {
+                  "name": "COD Restricted Delivery",
+                  "price": 7.7,
+                  "extraService": "917",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXCX0XJXXCX0000"
+                },
+                {
+                  "name": "Premium Data Retention and Retrieval Services 6 months",
+                  "price": 0.99,
+                  "extraService": "480",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "D2KVYOXXXC00000"
+                },
+                {
+                  "name": "Premium Data Retention and Retrieval Services 1 year",
+                  "price": 1.2,
+                  "extraService": "481",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "D2KV1OXXXC00000"
+                },
+                {
+                  "name": "Premium Data Retention and Retrieval Services 3 years",
+                  "price": 1.5,
+                  "extraService": "482",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "D2KV3OXXXC00000"
+                },
+                {
+                  "name": "Premium Data Retention and Retrieval Services 5 years",
+                  "price": 2,
+                  "extraService": "483",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "D2KV5OXXXC00000"
+                },
+                {
+                  "name": "Premium Data Retention and Retrieval Services 7 years",
+                  "price": 3,
+                  "extraService": "484",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "D2KV7OXXXC00000"
+                },
+                {
+                  "name": "Premium Data Retention and Retrieval Services 10 years",
+                  "price": 4.2,
+                  "extraService": "485",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "D2KVZOXXXC00000"
+                },
+                {
+                  "name": "Premium Data Retention and Retrieval Services 3 years with signature",
+                  "price": 3.75,
+                  "extraService": "486",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "D2KV3OSXXC00000"
+                },
+                {
+                  "name": "Return Receipt For Merchandise",
+                  "price": 0,
+                  "extraService": "960",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXRX0MXXXCX0000"
+                },
+                {
+                  "name": "Premium Data Retention and Retrieval Services 5 years with signature",
+                  "price": 4.75,
+                  "extraService": "487",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "D2KV5OSXXC00000"
+                },
+                {
+                  "name": "Premium Data Retention and Retrieval Services 7 years with signature",
+                  "price": 5.75,
+                  "extraService": "488",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "D2KV7OSXXC00000"
+                },
+                {
+                  "name": "Premium Data Retention and Retrieval Services 10 years with signature",
+                  "price": 6.75,
+                  "extraService": "489",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "D2KVZOSXXC00000"
+                },
+                {
+                  "name": "USPS Tracking",
+                  "price": 0,
+                  "extraService": "920",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXTV0EXXXCX0000"
+                },
+                {
+                  "name": "Signature Confirmation",
+                  "price": 3.7,
+                  "extraService": "921",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXSV0EXXXCX0000"
+                },
+                {
+                  "name": "Adult Signature Required",
+                  "price": 8.4,
+                  "extraService": "922",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXAX0XXXXCX0000"
+                },
+                {
+                  "name": "Adult Signature Restricted Delivery",
+                  "price": 8.65,
+                  "extraService": "923",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXBX0XXXXCX0000"
+                },
+                {
+                  "name": "Signature Confirmation Restricted Delivery",
+                  "price": 11.4,
+                  "extraService": "924",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXSV0EJXXCX0000"
+                },
+                {
+                  "name": "Label Delivery",
+                  "price": 1.55,
+                  "extraService": "415",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXQX0XXXXCX0000"
+                },
+                {
+                  "name": "Insurance Restricted Delivery",
+                  "price": 7.7,
+                  "extraService": "934",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXIX0XJXXCX0000"
+                },
+                {
+                  "name": "Registered Mail",
+                  "price": 18.6,
+                  "extraService": "940",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXGX0XXXXCX0000"
+                },
+                {
+                  "name": "Registered Mail Restricted Delivery",
+                  "price": 26.3,
+                  "extraService": "941",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXGX0XJXXCX0000"
+                }
+              ]
+            },
+            {
+              "commitment": {
+                "name": "7 Days",
+                "scheduleDeliveryDate": "2025-04-17",
+                "guaranteedDelivery": false
+              },
+              "totalBasePrice": 5.1,
+              "rates": [
+                {
+                  "description": "Parcel Select Machinable DSCF SCF",
+                  "startDate": "2025-01-19",
+                  "endDate": "",
+                  "price": 5.1,
+                  "zone": "07",
+                  "weight": 1,
+                  "dimensionalWeight": 0,
+                  "dimWeight": 0,
+                  "fees": [],
+                  "priceType": "COMMERCIAL",
+                  "mailClass": "PARCEL_SELECT",
+                  "productName": "",
+                  "productDefinition": "",
+                  "processingCategory": "MACHINABLE",
+                  "rateIndicator": "DE",
+                  "destinationEntryFacilityType": "DESTINATION_SECTIONAL_CENTER_FACILITY",
+                  "SKU": "DVXP0XXFXC00010"
+                }
+              ],
+              "extraServices": [
+                {
+                  "name": "Sunday/Holiday Delivery",
+                  "price": 1.95,
+                  "extraService": "991",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXZ6XXXXXCX0000"
+                },
+                {
+                  "name": "Certified Mail",
+                  "price": 4.85,
+                  "extraService": "910",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXEX0XXXXCX0000"
+                },
+                {
+                  "name": "Certified Mail Restricted Delivery",
+                  "price": 12.75,
+                  "extraService": "911",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXEX0XJXXCX0000"
+                },
+                {
+                  "name": "Return Receipt",
+                  "price": 4.1,
+                  "extraService": "955",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXRX0XXXXCX0000"
+                },
+                {
+                  "name": "Certified Mail Adult Signature Required",
+                  "price": 12.75,
+                  "extraService": "912",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXEX0XAXXCX0000"
+                },
+                {
+                  "name": "Certified Mail Adult Signature Restricted Delivery",
+                  "price": 12.75,
+                  "extraService": "913",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXEX0XBXXCX0000"
+                },
+                {
+                  "name": "Return Receipt Electronic",
+                  "price": 2.62,
+                  "extraService": "957",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXRX0EXXXCX0000"
+                },
+                {
+                  "name": "COD Restricted Delivery",
+                  "price": 7.7,
+                  "extraService": "917",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXCX0XJXXCX0000"
+                },
+                {
+                  "name": "Premium Data Retention and Retrieval Services 6 months",
+                  "price": 0.99,
+                  "extraService": "480",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "D2KVYOXXXC00000"
+                },
+                {
+                  "name": "Premium Data Retention and Retrieval Services 1 year",
+                  "price": 1.2,
+                  "extraService": "481",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "D2KV1OXXXC00000"
+                },
+                {
+                  "name": "Premium Data Retention and Retrieval Services 3 years",
+                  "price": 1.5,
+                  "extraService": "482",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "D2KV3OXXXC00000"
+                },
+                {
+                  "name": "Premium Data Retention and Retrieval Services 5 years",
+                  "price": 2,
+                  "extraService": "483",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "D2KV5OXXXC00000"
+                },
+                {
+                  "name": "Premium Data Retention and Retrieval Services 7 years",
+                  "price": 3,
+                  "extraService": "484",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "D2KV7OXXXC00000"
+                },
+                {
+                  "name": "Premium Data Retention and Retrieval Services 10 years",
+                  "price": 4.2,
+                  "extraService": "485",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "D2KVZOXXXC00000"
+                },
+                {
+                  "name": "Premium Data Retention and Retrieval Services 3 years with signature",
+                  "price": 3.75,
+                  "extraService": "486",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "D2KV3OSXXC00000"
+                },
+                {
+                  "name": "Return Receipt For Merchandise",
+                  "price": 0,
+                  "extraService": "960",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXRX0MXXXCX0000"
+                },
+                {
+                  "name": "Premium Data Retention and Retrieval Services 5 years with signature",
+                  "price": 4.75,
+                  "extraService": "487",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "D2KV5OSXXC00000"
+                },
+                {
+                  "name": "Premium Data Retention and Retrieval Services 7 years with signature",
+                  "price": 5.75,
+                  "extraService": "488",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "D2KV7OSXXC00000"
+                },
+                {
+                  "name": "Premium Data Retention and Retrieval Services 10 years with signature",
+                  "price": 6.75,
+                  "extraService": "489",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "D2KVZOSXXC00000"
+                },
+                {
+                  "name": "USPS Tracking",
+                  "price": 0,
+                  "extraService": "920",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXTV0EXXXCX0000"
+                },
+                {
+                  "name": "Signature Confirmation",
+                  "price": 3.7,
+                  "extraService": "921",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXSV0EXXXCX0000"
+                },
+                {
+                  "name": "Adult Signature Required",
+                  "price": 8.4,
+                  "extraService": "922",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXAX0XXXXCX0000"
+                },
+                {
+                  "name": "Adult Signature Restricted Delivery",
+                  "price": 8.65,
+                  "extraService": "923",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXBX0XXXXCX0000"
+                },
+                {
+                  "name": "Signature Confirmation Restricted Delivery",
+                  "price": 11.4,
+                  "extraService": "924",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXSV0EJXXCX0000"
+                },
+                {
+                  "name": "Label Delivery",
+                  "price": 1.55,
+                  "extraService": "415",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXQX0XXXXCX0000"
+                },
+                {
+                  "name": "Insurance Restricted Delivery",
+                  "price": 7.7,
+                  "extraService": "934",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXIX0XJXXCX0000"
+                },
+                {
+                  "name": "Registered Mail",
+                  "price": 18.6,
+                  "extraService": "940",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXGX0XXXXCX0000"
+                },
+                {
+                  "name": "Registered Mail Restricted Delivery",
+                  "price": 26.3,
+                  "extraService": "941",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXGX0XJXXCX0000"
+                }
+              ]
+            },
+            {
+              "commitment": {
+                "name": "7 Days",
+                "scheduleDeliveryDate": "2025-04-17",
+                "guaranteedDelivery": false
+              },
+              "totalBasePrice": 5.1,
+              "rates": [
+                {
+                  "description": "Parcel Select Machinable DHUB Single-piece",
+                  "startDate": "2025-01-19",
+                  "endDate": "",
+                  "price": 5.1,
+                  "zone": "07",
+                  "weight": 1,
+                  "dimensionalWeight": 0,
+                  "dimWeight": 0,
+                  "fees": [],
+                  "priceType": "COMMERCIAL",
+                  "mailClass": "PARCEL_SELECT",
+                  "productName": "",
+                  "productDefinition": "",
+                  "processingCategory": "MACHINABLE",
+                  "rateIndicator": "SP",
+                  "destinationEntryFacilityType": "DESTINATION_SERVICE_HUB",
+                  "SKU": "DVXP0XXBXC00010"
+                }
+              ],
+              "extraServices": [
+                {
+                  "name": "Sunday/Holiday Delivery",
+                  "price": 1.95,
+                  "extraService": "991",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXZ6XXXXXCX0000"
+                },
+                {
+                  "name": "Certified Mail",
+                  "price": 4.85,
+                  "extraService": "910",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXEX0XXXXCX0000"
+                },
+                {
+                  "name": "Certified Mail Restricted Delivery",
+                  "price": 12.75,
+                  "extraService": "911",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXEX0XJXXCX0000"
+                },
+                {
+                  "name": "Return Receipt",
+                  "price": 4.1,
+                  "extraService": "955",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXRX0XXXXCX0000"
+                },
+                {
+                  "name": "Certified Mail Adult Signature Required",
+                  "price": 12.75,
+                  "extraService": "912",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXEX0XAXXCX0000"
+                },
+                {
+                  "name": "Certified Mail Adult Signature Restricted Delivery",
+                  "price": 12.75,
+                  "extraService": "913",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXEX0XBXXCX0000"
+                },
+                {
+                  "name": "Return Receipt Electronic",
+                  "price": 2.62,
+                  "extraService": "957",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXRX0EXXXCX0000"
+                },
+                {
+                  "name": "COD Restricted Delivery",
+                  "price": 7.7,
+                  "extraService": "917",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXCX0XJXXCX0000"
+                },
+                {
+                  "name": "Premium Data Retention and Retrieval Services 6 months",
+                  "price": 0.99,
+                  "extraService": "480",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "D2KVYOXXXC00000"
+                },
+                {
+                  "name": "Premium Data Retention and Retrieval Services 1 year",
+                  "price": 1.2,
+                  "extraService": "481",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "D2KV1OXXXC00000"
+                },
+                {
+                  "name": "Premium Data Retention and Retrieval Services 3 years",
+                  "price": 1.5,
+                  "extraService": "482",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "D2KV3OXXXC00000"
+                },
+                {
+                  "name": "Premium Data Retention and Retrieval Services 5 years",
+                  "price": 2,
+                  "extraService": "483",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "D2KV5OXXXC00000"
+                },
+                {
+                  "name": "Premium Data Retention and Retrieval Services 7 years",
+                  "price": 3,
+                  "extraService": "484",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "D2KV7OXXXC00000"
+                },
+                {
+                  "name": "Premium Data Retention and Retrieval Services 10 years",
+                  "price": 4.2,
+                  "extraService": "485",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "D2KVZOXXXC00000"
+                },
+                {
+                  "name": "Premium Data Retention and Retrieval Services 3 years with signature",
+                  "price": 3.75,
+                  "extraService": "486",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "D2KV3OSXXC00000"
+                },
+                {
+                  "name": "Return Receipt For Merchandise",
+                  "price": 0,
+                  "extraService": "960",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXRX0MXXXCX0000"
+                },
+                {
+                  "name": "Premium Data Retention and Retrieval Services 5 years with signature",
+                  "price": 4.75,
+                  "extraService": "487",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "D2KV5OSXXC00000"
+                },
+                {
+                  "name": "Premium Data Retention and Retrieval Services 7 years with signature",
+                  "price": 5.75,
+                  "extraService": "488",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "D2KV7OSXXC00000"
+                },
+                {
+                  "name": "Premium Data Retention and Retrieval Services 10 years with signature",
+                  "price": 6.75,
+                  "extraService": "489",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "D2KVZOSXXC00000"
+                },
+                {
+                  "name": "USPS Tracking",
+                  "price": 0,
+                  "extraService": "920",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXTV0EXXXCX0000"
+                },
+                {
+                  "name": "Signature Confirmation",
+                  "price": 3.7,
+                  "extraService": "921",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXSV0EXXXCX0000"
+                },
+                {
+                  "name": "Adult Signature Required",
+                  "price": 8.4,
+                  "extraService": "922",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXAX0XXXXCX0000"
+                },
+                {
+                  "name": "Adult Signature Restricted Delivery",
+                  "price": 8.65,
+                  "extraService": "923",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXBX0XXXXCX0000"
+                },
+                {
+                  "name": "Signature Confirmation Restricted Delivery",
+                  "price": 11.4,
+                  "extraService": "924",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXSV0EJXXCX0000"
+                },
+                {
+                  "name": "Label Delivery",
+                  "price": 1.55,
+                  "extraService": "415",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXQX0XXXXCX0000"
+                },
+                {
+                  "name": "Insurance Restricted Delivery",
+                  "price": 7.7,
+                  "extraService": "934",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXIX0XJXXCX0000"
+                },
+                {
+                  "name": "Registered Mail",
+                  "price": 18.6,
+                  "extraService": "940",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXGX0XXXXCX0000"
+                },
+                {
+                  "name": "Registered Mail Restricted Delivery",
+                  "price": 26.3,
+                  "extraService": "941",
+                  "priceType": "COMMERCIAL",
+                  "warnings": [],
+                  "SKU": "DXGX0XJXXCX0000"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "priceType": "COMMERCIAL"
+    }
+  ]
+}

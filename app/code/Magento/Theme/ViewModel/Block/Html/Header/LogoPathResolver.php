@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -39,9 +39,13 @@ class LogoPathResolver implements LogoPathResolverInterface, ArgumentInterface
     public function getPath(): ?string
     {
         $path = null;
+        $scopeType = ScopeInterface::SCOPE_STORE;
+        if ($this->scopeConfig->getValue('general/single_store_mode/enabled') === "1") {
+            $scopeType = ScopeInterface::SCOPE_WEBSITE;
+        }
         $storeLogoPath = $this->scopeConfig->getValue(
             'design/header/logo_src',
-            ScopeInterface::SCOPE_STORE
+            $scopeType
         );
         if ($storeLogoPath !== null) {
             $path = Logo::UPLOAD_DIR . '/' . $storeLogoPath;

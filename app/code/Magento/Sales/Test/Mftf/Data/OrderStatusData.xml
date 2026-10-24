@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -19,5 +19,17 @@
     <entity name="duplicatingLabelOrderStatus">
         <data key="status" unique="suffix">order_status</data>
         <data key="label">Suspected Fraud</data>
+    </entity>
+    <entity name="sentStatus">
+        <data key="code" unique="suffix">sent</data>
+        <data key="label" unique="suffix">Sent</data>
+    </entity>
+    <entity name="readyForPickup">
+        <data key="code" unique="suffix">readyforpickup</data>
+        <data key="label" unique="suffix">Ready For Pickup</data>
+    </entity>
+    <entity name="readyToPickup">
+        <data key="code" unique="suffix">readytopickup</data>
+        <data key="label" unique="suffix">Ready To Pickup</data>
     </entity>
 </entities>

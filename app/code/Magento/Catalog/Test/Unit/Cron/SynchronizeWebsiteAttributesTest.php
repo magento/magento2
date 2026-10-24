@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,13 +15,10 @@ class SynchronizeWebsiteAttributesTest extends TestCase
 {
     public function testExecuteSuccess()
     {
-        $synchronizerMock = $this->getMockBuilder(WebsiteAttributesSynchronizer::class)
-            ->disableOriginalConstructor()
-            ->setMethods([
-                'isSynchronizationRequired',
-                'synchronize',
-            ])
-            ->getMock();
+        $synchronizerMock = $this->createPartialMock(WebsiteAttributesSynchronizer::class, [
+            'isSynchronizationRequired',
+            'synchronize',
+        ]);
 
         $synchronizerMock->expects($this->once())
             ->method('isSynchronizationRequired')
@@ -38,13 +35,10 @@ class SynchronizeWebsiteAttributesTest extends TestCase
 
     public function testExecuteWithNoSyncRequired()
     {
-        $synchronizerMock = $this->getMockBuilder(WebsiteAttributesSynchronizer::class)
-            ->disableOriginalConstructor()
-            ->setMethods([
-                'isSynchronizationRequired',
-                'synchronize',
-            ])
-            ->getMock();
+        $synchronizerMock = $this->createPartialMock(WebsiteAttributesSynchronizer::class, [
+            'isSynchronizationRequired',
+            'synchronize',
+        ]);
 
         $synchronizerMock->expects($this->once())
             ->method('isSynchronizationRequired')

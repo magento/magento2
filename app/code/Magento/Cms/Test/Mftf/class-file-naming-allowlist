@@ -1,0 +1,10 @@
+AdminAddImageToCMSBlockContent
+AssertBlockContent
+AssignBlockToCMSPage
+CreateNewPageWithBasicValues
+FillOutBlockContent
+FillOutCMSPageContent
+deleteBlock
+searchBlockOnGridPage
+VerifyCreatedCmsPage
+CmsNewBlock

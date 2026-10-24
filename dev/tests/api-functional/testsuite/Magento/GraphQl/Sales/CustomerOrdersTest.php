@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,13 +14,9 @@ use Magento\Checkout\Test\Fixture\SetBillingAddress;
 use Magento\Checkout\Test\Fixture\SetDeliveryMethod as SetDeliveryMethodFixture;
 use Magento\Checkout\Test\Fixture\SetPaymentMethod as SetPaymentMethodFixture;
 use Magento\Checkout\Test\Fixture\SetShippingAddress;
-use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Customer\Model\CustomerAuthUpdate;
-use Magento\Customer\Model\CustomerRegistry;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\Quote\Test\Fixture\AddProductToCart;
 use Magento\Quote\Test\Fixture\CustomerCart;
 use Magento\Store\Test\Fixture\Group as StoreGroupFixture;
@@ -32,32 +28,15 @@ use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * GraphQl tests for @see \Magento\SalesGraphQl\Model\Resolver\CustomerOrders.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CustomerOrdersTest extends GraphQlAbstract
 {
-    /**
-     * @var CustomerTokenServiceInterface
-     */
-    private $customerTokenService;
-
-    /**
-     * @var CustomerRegistry
-     */
-    private $customerRegistry;
-
-    /**
-     * @var CustomerAuthUpdate
-     */
-    private $customerAuthUpdate;
-
-    /**
-     * @var CustomerRepositoryInterface
-     */
-    private $customerRepository;
-
     /**
      * @var ObjectManagerInterface
      */
@@ -69,7 +48,7 @@ class CustomerOrdersTest extends GraphQlAbstract
     private $fixtures;
 
     /**
-     * @inheridoc
+     * @inheritDoc
      * @throws LocalizedException
      */
     protected function setUp(): void
@@ -78,10 +57,6 @@ class CustomerOrdersTest extends GraphQlAbstract
 
         $this->objectManager = Bootstrap::getObjectManager();
         $this->fixtures = $this->objectManager->get(DataFixtureStorageManager::class)->getStorage();
-        $this->customerTokenService = $this->objectManager->get(CustomerTokenServiceInterface::class);
-        $this->customerRegistry = $this->objectManager->get(CustomerRegistry::class);
-        $this->customerAuthUpdate = $this->objectManager->get(CustomerAuthUpdate::class);
-        $this->customerRepository = $this->objectManager->get(CustomerRepositoryInterface::class);
     }
 
     /**
@@ -99,33 +74,20 @@ class CustomerOrdersTest extends GraphQlAbstract
         DataFixture(
             Customer::class,
             [
-                'email' => 'customer_graphql@mail.com',
-                'password' => 'password',
                 'store_id' => '$store2.id$',
                 'website_id' => '$website2.id$',
-                'addresses' => [
-                    [
-                        'country_id' => 'US',
-                        'region_id' => 32,
-                        'city' => 'Boston',
-                        'street' => ['10 Milk Street'],
-                        'postcode' => '02108',
-                        'telephone' => '1234567890',
-                        'default_billing' => true,
-                        'default_shipping' => true
-                    ]
-                ]
+                'addresses' => [[]]
             ],
             as: 'customer'
         ),
-        DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$', 'store_id' => '$store2.id$'], as: 'quote1'),
+        DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], as: 'quote1', scope: 'store2'),
         DataFixture(AddProductToCart::class, ['cart_id' => '$quote1.id$', 'product_id' => '$product.id$', 'qty' => 1]),
         DataFixture(SetBillingAddress::class, ['cart_id' => '$quote1.id$']),
         DataFixture(SetShippingAddress::class, ['cart_id' => '$quote1.id$']),
         DataFixture(SetDeliveryMethodFixture::class, ['cart_id' => '$quote1.id$']),
         DataFixture(SetPaymentMethodFixture::class, ['cart_id' => '$quote1.id$']),
         DataFixture(PlaceOrderFixture::class, ['cart_id' => '$quote1.id$'], 'order1'),
-        DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$', 'store_id' => '$store3.id$'], as: 'quote2'),
+        DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], as: 'quote2', scope: 'store3'),
         DataFixture(AddProductToCart::class, ['cart_id' => '$quote2.id$', 'product_id' => '$product.id$', 'qty' => 1]),
         DataFixture(SetBillingAddress::class, ['cart_id' => '$quote2.id$']),
         DataFixture(SetShippingAddress::class, ['cart_id' => '$quote2.id$']),
@@ -184,7 +146,7 @@ class CustomerOrdersTest extends GraphQlAbstract
             $query,
             [],
             '',
-            $this->getCustomerHeaders($customerToken, null)
+            $this->getCustomerHeaders($customerToken, $store2->getCode())
         );
 
         $this->assertEquals(2, count($response['customer']['orders']['items']));
@@ -194,10 +156,58 @@ class CustomerOrdersTest extends GraphQlAbstract
             $query,
             [],
             '',
-            $this->getCustomerHeaders($customerToken, null)
+            $this->getCustomerHeaders($customerToken, $store2->getCode())
         );
 
-        $this->assertEquals(0, count($response['customer']['orders']['items']));
+        $this->assertEquals(1, count($response['customer']['orders']['items']));
+    }
+
+    /**
+     * Test graphql customer orders when customer doesn't have access to custom website in Multi-Store setup.
+     */
+    #[DataProvider('dataProviderScope')]
+    #[
+        DataFixture(WebsiteFixture::class, as: 'website2'),
+        DataFixture(StoreGroupFixture::class, ['website_id' => '$website2.id$'], 'store_group2'),
+        DataFixture(StoreFixture::class, ['store_group_id' => '$store_group2.id$'], 'store2'),
+        DataFixture(StoreFixture::class, ['store_group_id' => '$store_group2.id$'], 'store3'),
+        DataFixture(ProductFixture::class, ['website_ids' => [1, '$website2.id$' ]], as: 'product'),
+        DataFixture(
+            Customer::class,
+            [
+                'store_id' => '$store2.id$',
+                'website_id' => '$website2.id$',
+                'addresses' => [[]]
+            ],
+            as: 'customer'
+        )
+    ]
+    public function testGetCustomerOrdersCustomerHasNoAccess($scope)
+    {
+        $store2 = $this->fixtures->get('store2');
+        $customer = $this->fixtures->get('customer');
+        $currentEmail = $customer->getEmail();
+        $currentPassword = 'password';
+
+        $generateToken = $this->generateCustomerToken($currentEmail, $currentPassword);
+        $tokenResponse = $this->graphQlMutationWithResponseHeaders(
+            $generateToken,
+            [],
+            '',
+            ['Store' => $store2->getCode()]
+        );
+        $customerToken = $tokenResponse['body']['generateCustomerToken']['token'];
+
+        $query = $this->getCustomerOrdersQuery($scope);
+
+        $this->expectException(\Magento\TestFramework\TestCase\GraphQl\ResponseContainsErrorsException::class);
+        $this->expectExceptionMessage('The current customer isn\'t authorized.');
+        $this->graphQlQuery(
+            $query,
+            [],
+            '',
+            $this->getCustomerHeaders($customerToken, null)
+        );
     }
 
     /**
@@ -265,5 +275,20 @@ mutation {
     }
 }
 MUTATION;
+    }
+
+    /**
+     * Scopes Data provider
+     *
+     * @return array
+     */
+    public static function dataProviderScope()
+    {
+        return [
+            'store scope' => ['STORE'],
+            'website scope' => ['WEBSITE'],
+            'global scope' => ['GLOBAL'],
+            'no scope' => [null],
+        ];
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Ui\Component\Listing\Columns;
 
@@ -56,12 +56,13 @@ class StatusText extends \Magento\Ui\Component\Listing\Columns\Column
             return $dataSource;
         }
 
-        $fieldName = $this->getData('name');
+        $fieldName = $this->getData('name') ?? '';
         $sourceFieldName = ProductInterface::STATUS;
 
         foreach ($dataSource['data']['items'] as &$item) {
-            if (!empty($item[$sourceFieldName])) {
-                $item[$fieldName] = $this->status->getOptionText($item[$sourceFieldName]);
+            $sourceValue = $item[$sourceFieldName] ?? null;
+            if (!empty($sourceValue)) {
+                $item[$fieldName] = $this->status->getOptionText($sourceValue);
             }
         }
 

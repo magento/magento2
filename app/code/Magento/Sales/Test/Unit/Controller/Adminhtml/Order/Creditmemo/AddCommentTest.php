@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order\Creditmemo;
 use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\View\Result\Page;
 use Magento\Framework\App\Request\Http;
+use Magento\Framework\App\Response\Http as ResponseHttp;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Controller\Result\Raw;
@@ -34,6 +35,7 @@ use PHPUnit\Framework\TestCase;
  */
 class AddCommentTest extends TestCase
 {
+
     /**
      * @var AddComment
      */
@@ -106,15 +108,11 @@ class AddCommentTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->requestMock = $this->getMockBuilder(Http::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->responseMock = $this->getMockBuilder(\Magento\Framework\App\Response\Http::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->requestMock = $this->createMock(Http::class);
+        $this->responseMock = $this->createMock(ResponseHttp::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $this->contextMock = $this->getMockBuilder(Context::class)
-            ->setMethods(['getRequest', 'getResponse', 'getObjectManager'])
+            ->onlyMethods(['getRequest', 'getResponse', 'getObjectManager'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->contextMock->expects($this->any())
@@ -126,33 +124,23 @@ class AddCommentTest extends TestCase
         $this->contextMock->expects($this->any())
             ->method('getObjectManager')
             ->willReturn($this->objectManagerMock);
-        $this->loaderMock = $this->getMockBuilder(CreditmemoLoader::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->senderMock = $this->getMockBuilder(CreditmemoSender::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->loaderMock = $this->createMock(CreditmemoLoader::class);
+        $this->senderMock = $this->createMock(CreditmemoSender::class);
         $this->resultPageFactoryMock = $this->getMockBuilder(PageFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->resultJsonFactoryMock = $this->getMockBuilder(JsonFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->resultRawFactoryMock = $this->getMockBuilder(RawFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
-        $this->resultPageMock = $this->getMockBuilder(Page::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->resultJsonMock = $this->getMockBuilder(Json::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->resultRawMock = $this->getMockBuilder(Raw::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resultPageMock = $this->createMock(Page::class);
+        $this->resultJsonMock = $this->createMock(Json::class);
+        $this->resultRawMock = $this->createMock(Raw::class);
 
         $objectManager = new ObjectManager($this);
         $this->controller = $objectManager->getObject(
@@ -264,18 +252,10 @@ class AddCommentTest extends TestCase
         $data = ['comment' => $comment];
         $html = 'test output';
 
-        $creditmemoMock = $this->getMockBuilder(Creditmemo::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $commentMock = $this->getMockBuilder(Comment::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $layoutMock = $this->getMockBuilder(Layout::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $blockMock = $this->getMockBuilder(Comments::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $creditmemoMock = $this->createMock(Creditmemo::class);
+        $commentMock = $this->createMock(Comment::class);
+        $layoutMock = $this->createMock(Layout::class);
+        $blockMock = $this->createMock(Comments::class);
 
         $this->requestMock->expects($this->once())
             ->method('getPost')

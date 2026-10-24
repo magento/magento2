@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Setup\Test\Unit\Module\I18n\Dictionary;
 
 use Magento\Setup\Module\I18n\Dictionary\Phrase;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class PhraseTest extends TestCase
 {
@@ -16,8 +17,8 @@ class PhraseTest extends TestCase
      * @param array $constructArguments
      * @param string $getter
      * @param string|array $result
-     * @dataProvider dataProviderPhraseCreation
      */
+    #[DataProvider('dataProviderPhraseCreation')]
     public function testPhraseCreation($constructArguments, $getter, $result)
     {
         $phrase = new Phrase(...array_values($constructArguments));
@@ -27,7 +28,7 @@ class PhraseTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderPhraseCreation()
+    public static function dataProviderPhraseCreation()
     {
         return [
             [['phrase', 'translation'], 'getPhrase', 'phrase'],
@@ -54,8 +55,8 @@ class PhraseTest extends TestCase
     /**
      * @param array $constructArguments
      * @param string $message
-     * @dataProvider dataProviderWrongParametersWhilePhraseCreation
      */
+    #[DataProvider('dataProviderWrongParametersWhilePhraseCreation')]
     public function testWrongParametersWhilePhraseCreation($constructArguments, $message)
     {
         $this->expectException('DomainException');
@@ -67,7 +68,7 @@ class PhraseTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderWrongParametersWhilePhraseCreation()
+    public static function dataProviderWrongParametersWhilePhraseCreation()
     {
         return [
             [[null, 'translation'], 'Missed phrase'],
@@ -80,8 +81,8 @@ class PhraseTest extends TestCase
      * @param string $value
      * @param string $setter
      * @param string $getter
-     * @dataProvider dataProviderAccessorMethods
      */
+    #[DataProvider('dataProviderAccessorMethods')]
     public function testAccessorMethods($value, $setter, $getter)
     {
         $phrase = new Phrase('phrase', 'translation');
@@ -93,7 +94,7 @@ class PhraseTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderAccessorMethods()
+    public static function dataProviderAccessorMethods()
     {
         return [
             ['value1', 'setPhrase', 'getPhrase'],

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -20,9 +20,12 @@ use Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface;
 use Magento\Sales\Model\Order\Payment\Transaction\ManagerInterface as TransactionManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class CaptureOperationTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var TransactionManagerInterface|MockObject
      */
@@ -55,13 +58,11 @@ class CaptureOperationTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->transactionManager = $this->getMockForAbstractClass(TransactionManagerInterface::class);
-        $this->eventManager = $this->getMockForAbstractClass(EventManagerInterface::class);
-        $this->transactionBuilder = $this->getMockForAbstractClass(BuilderInterface::class);
-        $this->stateCommand = $this->getMockForAbstractClass(CommandInterface::class);
-        $this->processInvoiceOperation = $this->getMockBuilder(ProcessInvoiceOperation::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->transactionManager = $this->createMock(TransactionManagerInterface::class);
+        $this->eventManager = $this->createMock(EventManagerInterface::class);
+        $this->transactionBuilder = $this->createMock(BuilderInterface::class);
+        $this->stateCommand = $this->createMock(CommandInterface::class);
+        $this->processInvoiceOperation = $this->createMock(ProcessInvoiceOperation::class);
 
         $this->model = new CaptureOperation(
             $this->stateCommand,
@@ -79,16 +80,14 @@ class CaptureOperationTest extends TestCase
      */
     public function testCaptureWithoutInvoice()
     {
-        $invoice = $this->getMockBuilder(Invoice::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $invoice = $this->createMock(Invoice::class);
         $invoice->expects($this->once())
             ->method('register');
         $invoice->expects($this->once())
             ->method('capture');
 
         $order = $this->getMockBuilder(Order::class)
-            ->setMethods(['prepareInvoice', 'addRelatedObject', 'setStatus'])
+            ->onlyMethods(['prepareInvoice', 'addRelatedObject', 'setStatus'])
             ->disableOriginalConstructor()
             ->getMock();
         $order->expects($this->once())
@@ -101,15 +100,15 @@ class CaptureOperationTest extends TestCase
             ->with(Order::STATUS_FRAUD);
 
         /** @var MethodInterface $paymentMethod */
-        $paymentMethod = $this->getMockForAbstractClass(MethodInterface::class);
+        $paymentMethod = $this->createMock(MethodInterface::class);
         $paymentMethod->method('canCapture')
             ->willReturn(true);
 
         /** @var Payment|MockObject  $orderPayment | */
-        $orderPayment = $this->getMockBuilder(Payment::class)
-            ->setMethods(['setCreatedInvoice', 'getOrder', 'getMethodInstance', 'getIsFraudDetected'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $orderPayment = $this->createPartialMockWithReflection(
+            Payment::class,
+            ['setCreatedInvoice', 'getOrder', 'getMethodInstance', 'getIsFraudDetected']
+        );
         $orderPayment->expects($this->once())
             ->method('setCreatedInvoice')
             ->with($invoice);
@@ -134,14 +133,10 @@ class CaptureOperationTest extends TestCase
     public function testCaptureWithInvoice()
     {
         /** @var Invoice|MockObject  $invoice */
-        $invoice = $this->getMockBuilder(Invoice::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $invoice = $this->createMock(Invoice::class);
 
         /** @var Payment|MockObject  $orderPayment | */
-        $orderPayment = $this->getMockBuilder(Payment::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $orderPayment = $this->createMock(Payment::class);
 
         $this->processInvoiceOperation->expects($this->once())
             ->method('execute')

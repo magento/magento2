@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -49,7 +49,7 @@ class ExportTest extends AbstractBackendController
     private $localeResolver;
 
     /**
-     * @inheridoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {
@@ -90,6 +90,7 @@ class ExportTest extends AbstractBackendController
                 [
                     'entity' => ProductAttributeInterface::ENTITY_TYPE_CODE,
                     'file_format' => $fileFormat,
+                    'fields_enclosure' => '1'
                 ]
             );
         $this->dispatch('backend/admin/export/export');
@@ -107,5 +108,7 @@ class ExportTest extends AbstractBackendController
         $this->assertEquals($filter, reset($actualFilter));
         $this->assertNotEmpty($body['locale']);
         $this->assertEquals($locale, $body['locale']);
+        $this->assertArrayHasKey('fields_enclosure', $body);
+        $this->assertTrue($body['fields_enclosure']);
     }
 }

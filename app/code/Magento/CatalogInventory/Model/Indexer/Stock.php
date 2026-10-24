@@ -1,31 +1,32 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved
  */
 namespace Magento\CatalogInventory\Model\Indexer;
 
 use Magento\Framework\Indexer\CacheContext;
+use Magento\Framework\App\ObjectManager;
 
 class Stock implements \Magento\Framework\Indexer\ActionInterface, \Magento\Framework\Mview\ActionInterface
 {
     /**
-     * @var \Magento\CatalogInventory\Model\Indexer\Stock\Action\Row
+     * @var Row
      */
     protected $_productStockIndexerRow;
 
     /**
-     * @var \Magento\CatalogInventory\Model\Indexer\Stock\Action\Rows
+     * @var Rows
      */
     protected $_productStockIndexerRows;
 
     /**
-     * @var \Magento\CatalogInventory\Model\Indexer\Stock\Action\Full
+     * @var Full
      */
     protected $_productStockIndexerFull;
 
     /**
-     * @var \Magento\Framework\Indexer\CacheContext
+     * @var CacheContext
      */
     private $cacheContext;
 
@@ -33,15 +34,18 @@ class Stock implements \Magento\Framework\Indexer\ActionInterface, \Magento\Fram
      * @param Stock\Action\Row $productStockIndexerRow
      * @param Stock\Action\Rows $productStockIndexerRows
      * @param Stock\Action\Full $productStockIndexerFull
+     * @param CacheContext|null $cacheContext
      */
     public function __construct(
         \Magento\CatalogInventory\Model\Indexer\Stock\Action\Row $productStockIndexerRow,
         \Magento\CatalogInventory\Model\Indexer\Stock\Action\Rows $productStockIndexerRows,
-        \Magento\CatalogInventory\Model\Indexer\Stock\Action\Full $productStockIndexerFull
+        \Magento\CatalogInventory\Model\Indexer\Stock\Action\Full $productStockIndexerFull,
+        ?CacheContext $cacheContext = null
     ) {
         $this->_productStockIndexerRow = $productStockIndexerRow;
         $this->_productStockIndexerRows = $productStockIndexerRows;
         $this->_productStockIndexerFull = $productStockIndexerFull;
+        $this->cacheContext = $cacheContext ?: ObjectManager::getInstance()->get(CacheContext::class);
     }
 
     /**
@@ -99,14 +103,14 @@ class Stock implements \Magento\Framework\Indexer\ActionInterface, \Magento\Fram
     /**
      * Get cache context
      *
-     * @return \Magento\Framework\Indexer\CacheContext
+     * @return CacheContext
      * @deprecated 100.0.7
      * @see we don't add dependecies this way anymore
      */
     protected function getCacheContext()
     {
         if (!($this->cacheContext instanceof CacheContext)) {
-            return \Magento\Framework\App\ObjectManager::getInstance()->get(CacheContext::class);
+            return ObjectManager::getInstance()->get(CacheContext::class);
         } else {
             return $this->cacheContext;
         }

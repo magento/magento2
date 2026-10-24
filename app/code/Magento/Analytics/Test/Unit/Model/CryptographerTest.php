@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,8 +11,11 @@ use Magento\Analytics\Model\AnalyticsToken;
 use Magento\Analytics\Model\Cryptographer;
 use Magento\Analytics\Model\EncodedContext;
 use Magento\Analytics\Model\EncodedContextFactory;
+use Magento\Framework\Filesystem\File\ReadInterface as FileReadInterface;
+use Magento\Framework\Filesystem\File\WriteInterface as FileWriteInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class CryptographerTest extends TestCase
@@ -51,9 +54,8 @@ class CryptographerTest extends TestCase
      * @var array
      */
     private $initializationVectors;
-
     /**
-     * @var
+     * @var string
      */
     private $source;
 
@@ -70,7 +72,7 @@ class CryptographerTest extends TestCase
         $this->analyticsTokenMock = $this->createMock(AnalyticsToken::class);
 
         $this->encodedContextFactoryMock = $this->getMockBuilder(EncodedContextFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -170,8 +172,98 @@ class CryptographerTest extends TestCase
     }
 
     /**
-     * @dataProvider encodeNotValidSourceDataProvider
+     * Streaming encryption must yield cipher byte-for-byte identical to a single-pass openssl_encrypt,
+     * so the encrypted archive stays decryptable with the returned initialization vector.
+     *
+     * @param int $sourceLength
+     * @return void
      */
+    #[DataProvider('encodeToFileDataProvider')]
+    public function testEncodeToFileMatchesSinglePass($sourceLength)
+    {
+        $token = 'some-token-value';
+        $key = hash('sha256', $token);
+        $source = $sourceLength > 0 ? random_bytes($sourceLength) : '';
+
+        $this->analyticsTokenMock
+            ->method('getToken')
+            ->willReturn($token);
+
+        $capturedVector = null;
+        $this->encodedContextFactoryMock
+            ->expects($this->once())
+            ->method('create')
+            ->willReturnCallback(function ($parameters) use (&$capturedVector) {
+                $capturedVector = $parameters['initializationVector'];
+                return $this->encodedContextMock;
+            });
+
+        // Emit the source in small pieces to exercise the block-alignment carry across chunks.
+        $offset = 0;
+        $sourceMock = $this->createMock(FileReadInterface::class);
+        $sourceMock->method('read')->willReturnCallback(
+            function ($length) use (&$offset, $source) {
+                if ($offset >= strlen($source)) {
+                    return '';
+                }
+                $chunk = substr($source, $offset, min((int)$length, 100));
+                $offset += strlen($chunk);
+                return $chunk;
+            }
+        );
+
+        $written = '';
+        $destinationMock = $this->createMock(FileWriteInterface::class);
+        $destinationMock->method('write')->willReturnCallback(
+            function ($data) use (&$written) {
+                $written .= $data;
+                return strlen($data);
+            }
+        );
+
+        $result = $this->cryptographer->encodeToFile($sourceMock, $destinationMock);
+
+        $this->assertSame($this->encodedContextMock, $result);
+        $expected = openssl_encrypt($source, $this->cipherMethod, $key, OPENSSL_RAW_DATA, $capturedVector);
+        $this->assertSame($expected, $written);
+    }
+
+    /**
+     * @return array
+     */
+    public static function encodeToFileDataProvider()
+    {
+        return [
+            'Shorter than one block' => [9],
+            'Exactly one block' => [16],
+            'One block plus a byte' => [17],
+            'Two blocks' => [32],
+            'Spanning multiple read chunks' => [5003],
+        ];
+    }
+
+    /**
+     * An empty source must be rejected, mirroring encode()'s empty-input guard.
+     *
+     * @return void
+     */
+    public function testEncodeToFileThrowsOnEmptySource()
+    {
+        $this->analyticsTokenMock
+            ->method('getToken')
+            ->willReturn('some-token-value');
+
+        $sourceMock = $this->createMock(FileReadInterface::class);
+        $sourceMock->method('read')->willReturn('');
+
+        $destinationMock = $this->createMock(FileWriteInterface::class);
+        $destinationMock->expects($this->never())->method('write');
+
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->cryptographer->encodeToFile($sourceMock, $destinationMock);
+    }
+
+    #[DataProvider('encodeNotValidSourceDataProvider')]
     public function testEncodeNotValidSource($source)
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');
@@ -181,7 +273,7 @@ class CryptographerTest extends TestCase
     /**
      * @return array
      */
-    public function encodeNotValidSourceDataProvider()
+    public static function encodeNotValidSourceDataProvider()
     {
         return [
             'Array' => [[]],

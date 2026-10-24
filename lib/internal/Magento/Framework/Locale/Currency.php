@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Locale;
 
@@ -74,15 +74,15 @@ class Currency implements \Magento\Framework\Locale\CurrencyInterface
     public function getCurrency($currency)
     {
         \Magento\Framework\Profiler::start('locale/currency');
-        if (!isset(self::$_currencyCache[$this->_localeResolver->getLocale()][$currency])) {
+        if (!isset(self::$_currencyCache[$this->_localeResolver->getLocale() ?? ''][$currency])) {
             $options = [];
             try {
                 $currencyObject = $this->_currencyFactory->create(
-                    ['options' => $currency, 'locale' => $this->_localeResolver->getLocale()]
+                    ['options' => $currency, 'locale' => $this->_localeResolver->getLocale() ?? '']
                 );
             } catch (\Exception $e) {
                 $currencyObject = $this->_currencyFactory->create(
-                    ['options' => $this->getDefaultCurrency(), 'locale' => $this->_localeResolver->getLocale()]
+                    ['options' => $this->getDefaultCurrency(), 'locale' => $this->_localeResolver->getLocale() ?? '']
                 );
                 $options[self::CURRENCY_OPTION_NAME] = $currency;
                 $options[self::CURRENCY_OPTION_CURRENCY] = $currency;
@@ -96,9 +96,9 @@ class Currency implements \Magento\Framework\Locale\CurrencyInterface
             );
 
             $currencyObject->setFormat($options->toArray());
-            self::$_currencyCache[$this->_localeResolver->getLocale()][$currency] = $currencyObject;
+            self::$_currencyCache[$this->_localeResolver->getLocale() ?? ''][$currency] = $currencyObject;
         }
         \Magento\Framework\Profiler::stop('locale/currency');
-        return self::$_currencyCache[$this->_localeResolver->getLocale()][$currency];
+        return self::$_currencyCache[$this->_localeResolver->getLocale() ?? ''][$currency];
     }
 }

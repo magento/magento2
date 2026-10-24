@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\CatalogUrlRewrite\Observer\CategoryProcessUrlRewriteSavingObserver;
 use Magento\CatalogUrlRewrite\Observer\UrlRewriteHandler;
 use Magento\Framework\App\Config\ScopeConfigInterface as ScopeConfigInterfaceAlias;
 use Magento\Framework\Event\Observer;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Store\Model\ResourceModel\Group\CollectionFactory;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -25,6 +26,8 @@ use PHPUnit\Framework\TestCase;
  */
 class CategoryProcessUrlRewriteSavingObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Observer|MockObject
      */
@@ -79,39 +82,25 @@ class CategoryProcessUrlRewriteSavingObserverTest extends TestCase
             Observer::class,
             ['getEvent', 'getData']
         );
-        $this->category = $this->getMockBuilder(Category::class)
-            ->addMethods(['getChangedProductIds'])
-            ->onlyMethods(['hasData', 'getParentId', 'getStoreId', 'dataHasChangedFor'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->observer->expects($this->any())
-            ->method('getEvent')
+        $this->category = $this->createPartialMockWithReflection(
+            Category::class,
+            ['getChangedProductIds', 'hasData', 'getParentId', 'getStoreId', 'dataHasChangedFor']
+        );
+        $this->observer->method('getEvent')
             ->willReturnSelf();
-        $this->observer->expects($this->any())
-            ->method('getData')
+        $this->observer->method('getData')
             ->with('category')
             ->willReturn($this->category);
 
-        $this->categoryUrlRewriteGeneratorMock = $this->getMockBuilder(CategoryUrlRewriteGenerator::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->urlRewriteBunchReplacerMock = $this->getMockBuilder(UrlRewriteBunchReplacer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->urlRewriteHandlerMock = $this->getMockBuilder(UrlRewriteHandler::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->databaseMapPoolMock = $this->getMockBuilder(DatabaseMapPool::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->storeGroupFactory = $this->getMockBuilder(CollectionFactory::class)
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterfaceAlias::class)
-            ->onlyMethods(['getValue'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->categoryUrlRewriteGeneratorMock = $this->createMock(CategoryUrlRewriteGenerator::class);
+        $this->urlRewriteBunchReplacerMock = $this->createMock(UrlRewriteBunchReplacer::class);
+        $this->urlRewriteHandlerMock = $this->createMock(UrlRewriteHandler::class);
+        $this->databaseMapPoolMock = $this->createMock(DatabaseMapPool::class);
+        $this->storeGroupFactory = $this->createPartialMock(
+            CollectionFactory::class,
+            ['create']
+        );
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterfaceAlias::class);
         $this->scopeConfigMock->method('getValue')->willReturn(true);
 
         $this->categoryProcessUrlRewriteSavingObserver = (new ObjectManagerHelper($this))->getObject(
@@ -241,8 +230,10 @@ class CategoryProcessUrlRewriteSavingObserverTest extends TestCase
             ->willReturn($result2);
         $this->urlRewriteBunchReplacerMock
             ->method('doBunchReplace')
-            ->withConsecutive([$result1], [$result2])
-            ->willReturnOnConsecutiveCalls(null, null);
+            ->willReturnCallback(fn($operation) => match ([$operation]) {
+                [$result1] => null,
+                [$result2] => null,
+            });
 
         $this->databaseMapPoolMock->expects($this->any())
             ->method('resetMap');

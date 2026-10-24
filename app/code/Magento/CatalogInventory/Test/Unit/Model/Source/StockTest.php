@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,7 +12,6 @@ use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\EntityMetadata;
 use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -54,8 +53,11 @@ class StockTest extends TestCase
         $collectionMock->expects($this->atLeastOnce())->method('getSelect')->willReturn($selectMock);
         $collectionMock->expects($this->atLeastOnce())->method('getTable')->willReturn('cataloginventory_stock_item');
         $collectionMock->expects($this->exactly(3))->method('joinField')
-            ->withConsecutive(['child_id'], ['child_stock'], ['parent_stock'])
-            ->willReturnSelf();
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['child_id'] => $collectionMock,
+                ['child_stock'] => $collectionMock,
+                ['parent_stock'] => $collectionMock
+            });
 
         $selectMock->expects($this->once())
             ->method('group')

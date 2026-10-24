@@ -1,7 +1,7 @@
 <?php
-/***
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -53,12 +53,12 @@ class ConfigGeneratorTest extends TestCase
 
         $this->configDataMock = $this->getMockBuilder(ConfigData::class)
             ->disableOriginalConstructor()
-            ->setMethods(['set'])
+            ->onlyMethods(['set'])
             ->getMock();
 
         $configDataFactoryMock = $this->getMockBuilder(ConfigDataFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $configDataFactoryMock->method('create')
@@ -66,7 +66,7 @@ class ConfigGeneratorTest extends TestCase
 
         $this->driverOptionsMock = $this->getMockBuilder(DriverOptions::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getDriverOptions'])
+            ->onlyMethods(['getDriverOptions'])
             ->getMock();
 
         $this->model = $objectManager->getObject(

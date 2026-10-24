@@ -1,20 +1,21 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model;
 
 use Magento\Framework\DB\Select;
 use Magento\Framework\DB\Sql\UnionExpression;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
 
 /**
  * Provides info about product categories.
  */
-class ProductCategoryList
+class ProductCategoryList implements ResetAfterRequestInterface
 {
     /**
      * @var array
@@ -50,8 +51,8 @@ class ProductCategoryList
     public function __construct(
         ResourceModel\Product $productResource,
         ResourceModel\Category $category,
-        StoreManagerInterface $storeManager = null,
-        TableMaintainer $tableMaintainer = null
+        ?StoreManagerInterface $storeManager = null,
+        ?TableMaintainer $tableMaintainer = null
     ) {
         $this->productResource = $productResource;
         $this->category = $category;
@@ -105,5 +106,13 @@ class ProductCategoryList
             'product_id = ?',
             $productId
         );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->categoryIdList = [];
     }
 }

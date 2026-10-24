@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -23,6 +23,7 @@ use Magento\Sales\Model\Order\Payment;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -58,37 +59,26 @@ class PayflowlinkTest extends TestCase
     protected function setUp(): void
     {
         $this->store = $this->createMock(Store::class);
-        $storeManager = $this->createMock(
-            StoreManagerInterface::class
+        $storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->paypalConfig = $this->createMock(Config::class);
+
+        $configFactoryMock = $this->createPartialMock(
+            ConfigInterfaceFactory::class,
+            ['create']
         );
-        $this->paypalConfig = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
 
-        $configFactoryMock = $this->getMockBuilder(ConfigInterfaceFactory::class)
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $requestFactory = $this->createPartialMock(
+            RequestFactory::class,
+            ['create']
+        );
 
-        $requestFactory = $this->getMockBuilder(RequestFactory::class)
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->payflowRequest = $this->createMock(Request::class);
 
-        $this->payflowRequest = $this->getMockBuilder(Request::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->infoInstance = $this->createMock(Payment::class);
 
-        $this->infoInstance = $this->getMockBuilder(Payment::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
 
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->getMockForAbstractClass();
-
-        $this->gatewayMock = $this->getMockBuilder(Gateway::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->gatewayMock = $this->createMock(Gateway::class);
 
         $storeManager->expects($this->any())->method('getStore')->willReturn($this->store);
         $configFactoryMock->expects($this->any())
@@ -105,6 +95,7 @@ class PayflowlinkTest extends TestCase
         $requestFactory->expects($this->any())->method('create')->willReturn($this->payflowRequest);
 
         $helper = new ObjectManagerHelper($this);
+        $helper->prepareObjectManager([]);
         $this->model = $helper->getObject(
             Payflowlink::class,
             [
@@ -163,12 +154,9 @@ class PayflowlinkTest extends TestCase
                         'verbosity' => null,
                         'BUTTONSOURCE' => 'build notation code',
                         'tender' => 'C',
-                    ],
-                    $this->returnSelf()
-                ],
-                ['USER1', 1, $this->returnSelf()],
-                ['USER2', 'a20d3dc6824c1f7780c5529dc37ae5e', $this->returnSelf()]
-            );
+                    ]
+                ]
+            )->willReturnSelf();
 
         $stateObject = new DataObject();
         $this->model->initialize(Config::PAYMENT_ACTION_AUTH, $stateObject);
@@ -178,8 +166,8 @@ class PayflowlinkTest extends TestCase
     /**
      * @param bool $expectedResult
      * @param string $configResult
-     * @dataProvider dataProviderForTestIsActive
      */
+    #[DataProvider('dataProviderForTestIsActive')]
     public function testIsActive($expectedResult, $configResult)
     {
         $storeId = 15;
@@ -197,7 +185,7 @@ class PayflowlinkTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForTestIsActive()
+    public static function dataProviderForTestIsActive()
     {
         return [
             [false, '0'],

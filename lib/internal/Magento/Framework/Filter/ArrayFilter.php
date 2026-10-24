@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Filter;
 
@@ -23,7 +23,7 @@ class ArrayFilter
     /**
      * @param FilterChain|null $filterChain
      */
-    public function __construct(FilterChain $filterChain = null)
+    public function __construct(?FilterChain $filterChain = null)
     {
         $this->filterChain = $filterChain ?? new FilterChain();
     }

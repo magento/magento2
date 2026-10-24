@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create;
 
@@ -12,21 +12,16 @@ use Magento\Catalog\Pricing\Price\FinalPrice;
 /**
  * Adminhtml sales order create abstract block
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 abstract class AbstractCreate extends \Magento\Backend\Block\Widget
 {
     /**
-     * Session quote
-     *
      * @var \Magento\Backend\Model\Session\Quote
      */
     protected $_sessionQuote;
 
     /**
-     * Order create
-     *
      * @var \Magento\Sales\Model\AdminOrder\Create
      */
     protected $_orderCreate;
@@ -133,6 +128,8 @@ abstract class AbstractCreate extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Get Item Price
+     *
      * @param Product $product
      * @return string
      */
@@ -164,6 +161,7 @@ abstract class AbstractCreate extends \Magento\Backend\Block\Widget
     /**
      * If item is quote or wishlist we need to get product from it.
      *
+     * phpcs:disable
      * @param $item
      *
      * @return Product

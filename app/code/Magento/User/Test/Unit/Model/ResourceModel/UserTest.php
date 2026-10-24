@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,10 +18,12 @@ use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Stdlib\DateTime;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\User\Model\ResourceModel\User;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\User\Model\User as UserModel;
 
 /**
  * Test class for \Magento\User\Model\ResourceModel\User testing
@@ -30,10 +32,12 @@ use PHPUnit\Framework\TestCase;
  */
 class UserTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var User */
     protected $model;
 
-    /** @var \Magento\User\Model\User|MockObject */
+    /** @var UserModel|MockObject */
     protected $userMock;
 
     /** @var Context|MockObject */
@@ -64,45 +68,14 @@ class UserTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->userMock = $this->getMockBuilder(\Magento\User\Model\User::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-
-        $this->resourceMock = $this->getMockBuilder(ResourceConnection::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-
-        $this->roleFactoryMock = $this->getMockBuilder(RoleFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-
-        $this->roleMock = $this->getMockBuilder(Role::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-
-        $this->dateTimeMock = $this->getMockBuilder(DateTime::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-
-        $this->selectMock = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-
-        $this->dbAdapterMock = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMockForAbstractClass();
-
-        $this->aclDataCacheMock = $this->getMockBuilder(CacheInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMockForAbstractClass();
+        $this->userMock = $this->createMock(UserModel::class);
+        $this->resourceMock = $this->createMock(ResourceConnection::class);
+        $this->roleFactoryMock = $this->createPartialMock(RoleFactory::class, ['create']);
+        $this->roleMock = $this->createMock(Role::class);
+        $this->dateTimeMock = $this->createMock(DateTime::class);
+        $this->selectMock = $this->createMock(Select::class);
+        $this->dbAdapterMock = $this->createMock(AdapterInterface::class);
+        $this->aclDataCacheMock = $this->createMock(CacheInterface::class);
 
         $helper = new ObjectManager($this);
         $this->model = $helper->getObject(
@@ -166,10 +139,10 @@ class UserTest extends TestCase
 
     public function testHasAssigned2RolePassAnObject()
     {
-        $methodUserMock = $this->getMockBuilder(AbstractModel::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getUserId'])
-            ->getMock();
+        $methodUserMock = $this->createPartialMockWithReflection(
+            AbstractModel::class,
+            ['getUserId']
+        );
         $returnData = [1, 2, 3];
         $uid = 1234;
         $methodUserMock->expects($this->once())->method('getUserId')->willReturn($uid);
@@ -337,10 +310,10 @@ class UserTest extends TestCase
 
     public function testDeleteFromRole()
     {
-        $methodUserMock = $this->getMockBuilder(AbstractModel::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getUserId', 'getRoleId'])
-            ->getMock();
+        $methodUserMock = $this->createPartialMockWithReflection(
+            AbstractModel::class,
+            ['getUserId', 'getRoleId']
+        );
         $uid = 1234;
         $roleId = 44;
         $methodUserMock->expects($this->once())->method('getUserId')->willReturn($uid);
@@ -356,10 +329,10 @@ class UserTest extends TestCase
 
     public function testRoleUserExists()
     {
-        $methodUserMock = $this->getMockBuilder(AbstractModel::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getUserId', 'getRoleId'])
-            ->getMock();
+        $methodUserMock = $this->createPartialMockWithReflection(
+            AbstractModel::class,
+            ['getUserId', 'getRoleId']
+        );
         $uid = 1234;
         $roleId = 44;
         $returnData = [1, 2, 3];
@@ -420,10 +393,11 @@ class UserTest extends TestCase
     public function testAfterSave()
     {
         $roleId = 123;
-        $methodUserMock = $this->getMockBuilder(\Magento\User\Model\User::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['hasRoleId', 'getRoleId', 'getExtra', 'setExtra'])
-            ->getMock();
+        $objectManager = new ObjectManager($this);
+        $methodUserMock = $this->createPartialMockWithReflection(
+            UserModel::class,
+            ['hasRoleId', 'getRoleId', 'getExtra', 'setExtra']
+        );
         $methodUserMock->expects($this->once())->method('hasRoleId')->willReturn(true);
         $methodUserMock->expects($this->once())->method('getRoleId')->willReturn($roleId);
         $extraData = ['user', 'extra', 'data'];
@@ -442,8 +416,6 @@ class UserTest extends TestCase
             ->method('setExtra')
             ->with($extraData);
 
-        $objectManager = new ObjectManager($this);
-
         $objectManager->setBackwardCompatibleProperty($this->model, 'serializer', $serializerMock);
 
         $this->resourceMock->expects($this->atLeastOnce())->method('getConnection')->willReturn($this->dbAdapterMock);
@@ -460,10 +432,11 @@ class UserTest extends TestCase
 
     public function testAfterLoad()
     {
-        $methodUserMock = $this->getMockBuilder(\Magento\User\Model\User::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getExtra', 'setExtra'])
-            ->getMock();
+        $objectManager = new ObjectManager($this);
+        $methodUserMock = $this->createPartialMockWithReflection(
+            UserModel::class,
+            ['getExtra', 'setExtra']
+        );
         $extraData = ['user', 'extra', 'data'];
 
         $serializerMock = $this->createPartialMock(Json::class, ['serialize', 'unserialize']);
@@ -480,8 +453,6 @@ class UserTest extends TestCase
             ->method('setExtra')
             ->with($extraData);
 
-        $objectManager = new ObjectManager($this);
-
         $objectManager->setBackwardCompatibleProperty($this->model, 'serializer', $serializerMock);
 
         $this->assertInstanceOf(
@@ -492,10 +463,11 @@ class UserTest extends TestCase
 
     public function testAfterLoadNoExtra()
     {
-        $methodUserMock = $this->getMockBuilder(\Magento\User\Model\User::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getExtra', 'setExtra'])
-            ->getMock();
+        $objectManager = new ObjectManager($this);
+        $methodUserMock = $this->createPartialMockWithReflection(
+            UserModel::class,
+            ['getExtra', 'setExtra']
+        );
         $extraData = null;
 
         $serializerMock = $this->createPartialMock(Json::class, ['serialize', 'unserialize']);
@@ -508,8 +480,6 @@ class UserTest extends TestCase
 
         $methodUserMock->expects($this->never())
             ->method('setExtra');
-
-        $objectManager = new ObjectManager($this);
 
         $objectManager->setBackwardCompatibleProperty($this->model, 'serializer', $serializerMock);
 
@@ -531,7 +501,6 @@ class UserTest extends TestCase
     {
         $reflection = new \ReflectionClass(get_class($object));
         $method = $reflection->getMethod($methodName);
-        $method->setAccessible(true);
 
         return $method->invokeArgs($object, $parameters);
     }

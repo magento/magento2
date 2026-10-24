@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -20,13 +20,15 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 use Magento\Framework\EntityManager\EntityManager;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Resource model for category entity
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Category extends AbstractResource
+class Category extends AbstractResource implements ResetAfterRequestInterface
 {
     /**
      * Category tree object
@@ -36,8 +38,6 @@ class Category extends AbstractResource
     protected $_tree;
 
     /**
-     * Catalog products table name
-     *
      * @var string
      */
     protected $_categoryProductTable;
@@ -48,15 +48,11 @@ class Category extends AbstractResource
     private $entitiesWhereAttributesIs;
 
     /**
-     * Id of 'is_active' category attribute
-     *
      * @var int
      */
     protected $_isActiveAttributeId = null;
 
     /**
-     * Id of store
-     *
      * @var int
      */
     protected $_storeId = null;
@@ -126,10 +122,10 @@ class Category extends AbstractResource
         \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,
         Processor $indexerProcessor,
         $data = [],
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
-        MetadataPool $metadataPool = null,
-        \Magento\Framework\EntityManager\EntityManager $entityManager = null,
-        \Magento\Catalog\Model\ResourceModel\Category\AggregateCount $aggregateCount = null
+        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null,
+        ?MetadataPool $metadataPool = null,
+        ?\Magento\Framework\EntityManager\EntityManager $entityManager = null,
+        ?\Magento\Catalog\Model\ResourceModel\Category\AggregateCount $aggregateCount = null
     ) {
         parent::__construct(
             $context,
@@ -315,11 +311,14 @@ class Category extends AbstractResource
                 $object->setPath($object->getPath() . '/');
             }
 
-            $this->getConnection()->update(
-                $this->getEntityTable(),
-                ['children_count' => new \Zend_Db_Expr('children_count+1')],
-                ['entity_id IN(?)' => $toUpdateChild]
-            );
+            $createdIn = $object->getData('created_in');
+            if (!$createdIn || $createdIn == 1) {
+                $this->getConnection()->update(
+                    $this->getEntityTable(),
+                    ['children_count' => new \Zend_Db_Expr('children_count+1')],
+                    ['entity_id IN(?)' => $toUpdateChild]
+                );
+            }
         }
         return $this;
     }
@@ -454,7 +453,7 @@ class Category extends AbstractResource
                     'position' => (int)$position,
                 ];
             }
-            $connection->insertMultiple($this->getCategoryProductTable(), $data);
+            $connection->insertOnDuplicate($this->getCategoryProductTable(), $data, ['position']);
         }
 
         /**
@@ -662,7 +661,9 @@ class Category extends AbstractResource
         $entityIdsFilterHash = md5($serializeData);
         // @codingStandardsIgnoreEnd
 
-        if (!isset($this->entitiesWhereAttributesIs[$entityIdsFilterHash][$attribute->getId()][$expectedValue])) {
+        $attributeId = $attribute->getId() ?? '';
+
+        if (!isset($this->entitiesWhereAttributesIs[$entityIdsFilterHash][$attributeId][$expectedValue])) {
             $linkField = $this->getLinkField();
             $bind = ['attribute_id' => $attribute->getId(), 'value' => $expectedValue];
             $selectEntities = $this->getConnection()->select()->from(
@@ -679,11 +680,11 @@ class Category extends AbstractResource
                 $entityIdsFilter,
                 \Zend_Db::INT_TYPE
             );
-            $this->entitiesWhereAttributesIs[$entityIdsFilterHash][$attribute->getId()][$expectedValue] =
+            $this->entitiesWhereAttributesIs[$entityIdsFilterHash][$attributeId][$expectedValue] =
                 $this->getConnection()->fetchCol($selectEntities, $bind);
         }
 
-        return $this->entitiesWhereAttributesIs[$entityIdsFilterHash][$attribute->getId()][$expectedValue];
+        return $this->entitiesWhereAttributesIs[$entityIdsFilterHash][$attributeId][$expectedValue];
     }
 
     /**
@@ -1026,6 +1027,29 @@ class Category extends AbstractResource
     }
 
     /**
+     * @inheritDoc
+     */
+    public function validate($object)
+    {
+        $errors = parent::validate($object);
+        $currentId = $object->getId();
+        $newParentId = $object->getParentId();
+        if ($parentPath = $this->getCategoryPathById($newParentId)) {
+            $parentPathIds = explode("/", $parentPath);
+        } else {
+             $parentPathIds = [];
+        }
+
+        if ($currentId && !empty($parentPathIds) && in_array($currentId, $parentPathIds)) {
+            throw new LocalizedException(
+                __('A category cannot be assigned to one of its own descendants.')
+            );
+        }
+
+        return $errors;
+    }
+
+    /**
      * Process positions of old parent category children and new parent category children.
      *
      * Get position for moved category
@@ -1054,7 +1078,7 @@ class Category extends AbstractResource
         if ($afterCategoryId) {
             $select = $connection->select()->from($table, 'position')->where('entity_id = :entity_id');
             $position = $connection->fetchOne($select, ['entity_id' => $afterCategoryId]);
-            $position++;
+            $position = (int)$position + 1;
         } else {
             $position = 1;
         }
@@ -1171,5 +1195,15 @@ class Category extends AbstractResource
             )->order('path');
 
         return $connection->fetchAll($select);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->entitiesWhereAttributesIs = [];
+        $this->_storeId = null;
     }
 }

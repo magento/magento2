@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Developer\Model\XmlCatalog\Format\PhpStorm;
 
@@ -26,7 +26,7 @@ class DomDocumentFactory
     /**
      * {@inheritdoc}
      */
-    public function create(string $data = null)
+    public function create(?string $data = null)
     {
         $dom = $this->documentFactory->create($data);
 

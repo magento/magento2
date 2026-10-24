@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -9,7 +9,7 @@
  */
 namespace Magento\TestFramework\Event;
 
-class PhpUnit implements \PHPUnit\Framework\TestListener
+class PhpUnit
 {
     /**
      * Used when PHPUnit framework instantiates the class on its own and passes nothing to the constructor
@@ -28,7 +28,7 @@ class PhpUnit implements \PHPUnit\Framework\TestListener
      *
      * @param \Magento\TestFramework\EventManager $eventManager
      */
-    public static function setDefaultEventManager(\Magento\TestFramework\EventManager $eventManager = null)
+    public static function setDefaultEventManager(?\Magento\TestFramework\EventManager $eventManager = null)
     {
         self::$_defaultEventManager = $eventManager;
     }
@@ -37,7 +37,7 @@ class PhpUnit implements \PHPUnit\Framework\TestListener
      * @param \Magento\TestFramework\EventManager $eventManager
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function __construct(\Magento\TestFramework\EventManager $eventManager = null)
+    public function __construct(?\Magento\TestFramework\EventManager $eventManager = null)
     {
         $this->_eventManager = $eventManager ?: self::$_defaultEventManager;
         if (!$this->_eventManager) {

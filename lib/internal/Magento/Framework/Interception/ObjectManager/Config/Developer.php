@@ -2,8 +2,8 @@
 /**
  * ObjectManager config with interception processing
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Interception\ObjectManager\Config;
 
@@ -25,9 +25,9 @@ class Developer extends \Magento\Framework\ObjectManager\Config\Config implement
      * @param InterceptableValidator $interceptableValidator
      */
     public function __construct(
-        RelationsInterface $relations = null,
-        DefinitionInterface $definitions = null,
-        InterceptableValidator $interceptableValidator = null
+        ?RelationsInterface $relations = null,
+        ?DefinitionInterface $definitions = null,
+        ?InterceptableValidator $interceptableValidator = null
     ) {
         $this->interceptableValidator = $interceptableValidator ?: new InterceptableValidator();
         parent::__construct($relations, $definitions);

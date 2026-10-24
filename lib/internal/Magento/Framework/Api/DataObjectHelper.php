@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Api;
@@ -102,17 +102,14 @@ class DataObjectHelper
             return $this;
         }
         $setMethods = $this->getSetters($dataObject);
-        if ($dataObject instanceof ExtensibleDataInterface
-            && !empty($data[CustomAttributesDataInterface::CUSTOM_ATTRIBUTES])
-        ) {
-            foreach ($data[CustomAttributesDataInterface::CUSTOM_ATTRIBUTES] as $customAttribute) {
-                $dataObject->setCustomAttribute(
-                    $customAttribute[AttributeInterface::ATTRIBUTE_CODE],
-                    $customAttribute[AttributeInterface::VALUE]
-                );
-            }
-            unset($data[CustomAttributesDataInterface::CUSTOM_ATTRIBUTES]);
-        }
+        $data = $this->setCustomAttributes(
+            $dataObject,
+            $data,
+            [
+                CustomAttributesDataInterface::CUSTOM_ATTRIBUTES,
+                CustomAttributesDataInterface::CUSTOM_ATTRIBUTES . "V2"
+            ]
+        );
         if ($dataObject instanceof \Magento\Framework\Model\AbstractModel) {
             $simpleData = array_filter($data, static function ($e) {
                 return is_scalar($e) || is_null($e);
@@ -305,8 +302,8 @@ class DataObjectHelper
                         // (2) remove set_ in start of name
                         // (3) add name without is_ prefix
                         preg_replace(
-                            ['/(^|,)(?!set)[^,]*/S','/(.)([A-Z])/S', '/(^|,)set_/iS', '/(^|,)is_([^,]+)/is'],
-                            ['', '$1_$2', '$1', '$1$2,is_$2'],
+                            ['/(^|,)(?!set)[^,]*/S','/([A-Z])/S', '/(^|,)set_/iS', '/(^|,)is_([^,]+)/is'],
+                            ['', '_$1', '$1', '$1$2,is_$2'],
                             implode(',', $dataObjectMethods)
                         )
                     )
@@ -315,5 +312,31 @@ class DataObjectHelper
             $this->settersCache[$class] = array_flip($setters);
         }
         return $this->settersCache[$class];
+    }
+
+    /**
+     * Set custom attributes using the $attributeKeys parameter.
+     *
+     * @param mixed $dataObject
+     * @param array $data
+     * @param array $attributeKeys
+     * @return array
+     */
+    public function setCustomAttributes(mixed $dataObject, array $data, array $attributeKeys): array
+    {
+        foreach ($attributeKeys as $attributeKey) {
+            if ($dataObject instanceof ExtensibleDataInterface
+                && !empty($data[$attributeKey])
+            ) {
+                foreach ($data[$attributeKey] as $customAttribute) {
+                    $dataObject->setCustomAttribute(
+                        $customAttribute[AttributeInterface::ATTRIBUTE_CODE],
+                        $customAttribute[AttributeInterface::VALUE]
+                    );
+                }
+                unset($data[$attributeKey]);
+            }
+        }
+        return $data;
     }
 }

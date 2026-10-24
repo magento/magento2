@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Cms\Api;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Authorization\Model\Role;
 use Magento\Authorization\Model\RoleFactory;
 use Magento\Authorization\Model\Rules;
@@ -188,12 +189,12 @@ class PageRepositoryTest extends WebapiAbstract
     }
 
     /**
-     * @dataProvider byStoresProvider
      * @magentoApiDataFixture Magento/Cms/_files/pages.php
      * @magentoApiDataFixture Magento/Store/_files/second_website_with_store_group_and_store.php
      * @param string $requestStore
      * @return void
      */
+    #[DataProvider('byStoresProvider')]
     public function testGetByStores(string $requestStore): void
     {
         $newStoreId = $this->getStoreIdByRequestStore($requestStore);
@@ -248,11 +249,11 @@ class PageRepositoryTest extends WebapiAbstract
     }
 
     /**
-     * @dataProvider byStoresProvider
      * @magentoApiDataFixture Magento/Store/_files/second_website_with_store_group_and_store.php
      * @param string $requestStore
      * @return void
      */
+    #[DataProvider('byStoresProvider')]
     public function testCreateByStores(string $requestStore): void
     {
         $newStoreId = $this->getStoreIdByRequestStore($requestStore);
@@ -358,12 +359,12 @@ class PageRepositoryTest extends WebapiAbstract
     }
 
     /**
-     * @dataProvider byStoresProvider
      * @magentoApiDataFixture Magento/Cms/_files/pages.php
      * @magentoApiDataFixture Magento/Store/_files/second_website_with_store_group_and_store.php
      * @param string $requestStore
      * @return void
      */
+    #[DataProvider('byStoresProvider')]
     public function testUpdateByStores(string $requestStore): void
     {
         $newStoreId = $this->getStoreIdByRequestStore($requestStore);
@@ -416,12 +417,12 @@ class PageRepositoryTest extends WebapiAbstract
     }
 
     /**
-     * @dataProvider byStoresProvider
      * @magentoApiDataFixture Magento/Cms/_files/pages.php
      * @magentoApiDataFixture Magento/Store/_files/second_website_with_store_group_and_store.php
      * @param string $requestStore
      * @return void
      */
+    #[DataProvider('byStoresProvider')]
     public function testDeleteByStores(string $requestStore): void
     {
         $newStoreId = $this->getStoreIdByRequestStore($requestStore);
@@ -533,17 +534,17 @@ class PageRepositoryTest extends WebapiAbstract
      *
      * @return array
      */
-    public function byStoresProvider(): array
+    public static function byStoresProvider(): array
     {
         return [
             'default_store' => [
-                'request_store' => 'default',
+                'requestStore' => 'default',
             ],
             'second_store' => [
-                'request_store' => 'fixture_second_store',
+                'requestStore' => 'fixture_second_store',
             ],
             'all' => [
-                'request_store' => 'all',
+                'requestStore' => 'all',
             ],
         ];
     }

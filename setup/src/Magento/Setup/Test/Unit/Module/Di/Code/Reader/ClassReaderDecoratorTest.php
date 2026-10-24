@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Framework\Code\Reader\ClassReader;
 use Magento\Setup\Module\Di\Code\Reader\ClassReaderDecorator;
 use Magento\Setup\Module\Di\Compiler\ConstructorArgument;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ClassReaderDecoratorTest extends TestCase
@@ -29,7 +30,6 @@ class ClassReaderDecoratorTest extends TestCase
     {
         $this->classReaderMock = $this->getMockBuilder(ClassReader::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $this->model = new ClassReaderDecorator($this->classReaderMock);
     }
@@ -38,8 +38,8 @@ class ClassReaderDecoratorTest extends TestCase
      * @param $expectation
      * @param $className
      * @param $willReturn
-     * @dataProvider getConstructorDataProvider
      */
+    #[DataProvider('getConstructorDataProvider')]
     public function testGetConstructor($expectation, $className, $willReturn)
     {
         $this->classReaderMock->expects($this->once())
@@ -55,7 +55,7 @@ class ClassReaderDecoratorTest extends TestCase
     /**
      * @return array
      */
-    public function getConstructorDataProvider()
+    public static function getConstructorDataProvider()
     {
         return [
             [null, 'null', null],

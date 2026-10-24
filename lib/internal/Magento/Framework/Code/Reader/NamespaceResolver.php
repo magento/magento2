@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Code\Reader;
@@ -30,7 +30,7 @@ class NamespaceResolver
      * NamespaceResolver constructor.
      * @param ScalarTypesProvider $scalarTypesProvider
      */
-    public function __construct(ScalarTypesProvider $scalarTypesProvider = null)
+    public function __construct(?ScalarTypesProvider $scalarTypesProvider = null)
     {
         $this->scalarTypesProvider = $scalarTypesProvider ?: new ScalarTypesProvider();
     }

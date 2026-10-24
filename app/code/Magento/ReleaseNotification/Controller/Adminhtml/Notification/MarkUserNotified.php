@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\ReleaseNotification\Controller\Adminhtml\Notification;
 
 use Magento\Backend\App\Action;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\ReleaseNotification\Model\ResourceModel\Viewer\Logger as NotificationLogger;
@@ -14,9 +15,11 @@ use Magento\Framework\App\ProductMetadataInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Controller to record that the current admin user has seen the release notification content
+ * @deprecated Starting from Magento OS 2.4.7 Magento_ReleaseNotification module is deprecated
+ * in favor of another in-product messaging mechanism
+ * @see Current in-product messaging mechanism
  */
-class MarkUserNotified extends Action
+class MarkUserNotified extends Action implements HttpPostActionInterface
 {
     /**
      * @var ProductMetadataInterface
@@ -83,13 +86,5 @@ class MarkUserNotified extends Action
         }
         $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
         return $resultJson->setData($responseContent);
-    }
-
-    /**
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return parent::_isAllowed();
     }
 }

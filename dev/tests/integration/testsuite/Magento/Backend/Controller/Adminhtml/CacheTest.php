@@ -1,10 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Backend\Controller\Adminhtml;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoAppArea adminhtml
@@ -65,9 +67,9 @@ class CacheTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     }
 
     /**
-     * @dataProvider massActionsInvalidTypesDataProvider
      * @param $action
      */
+    #[DataProvider('massActionsInvalidTypesDataProvider')]
     public function testMassActionsInvalidTypes($action)
     {
         $this->getRequest()->setParams(['types' => ['invalid_type_1', 'invalid_type_2', 'config']]);
@@ -81,7 +83,7 @@ class CacheTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     /**
      * @return array
      */
-    public function massActionsInvalidTypesDataProvider()
+    public static function massActionsInvalidTypesDataProvider()
     {
         return [
             'enable' => ['massEnable'],

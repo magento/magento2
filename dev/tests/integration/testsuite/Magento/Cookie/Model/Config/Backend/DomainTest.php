@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Cookie\Model\Config\Backend;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -18,10 +19,10 @@ class DomainTest extends TestCase
 {
     /**
      * @param string $value
-     * @param string $exceptionMessage
+     * @param string|null $exceptionMessage
      * @magentoDbIsolation enabled
-     * @dataProvider beforeSaveDataProvider
      */
+    #[DataProvider('beforeSaveDataProvider')]
     public function testBeforeSave($value, $exceptionMessage = null)
     {
         /** @var $domain Domain */
@@ -45,19 +46,31 @@ class DomainTest extends TestCase
     /**
      * @return array
      */
-    public function beforeSaveDataProvider(): array
+    public static function beforeSaveDataProvider(): array
     {
         return [
-            'notString' => [['array'], 'Invalid domain name: must be a string'],
+            'notString' => [
+                ['array'],  // $value
+                'Invalid domain name: must be a string'  // $exceptionMessage
+            ],
             'invalidHostname' => [
-                'http://',
+                'http://',  // $value
                 'Invalid domain name: The input does not match the expected structure for a DNS hostname; '
                 . 'The input does not appear to be a valid URI hostname; '
-                . 'The input does not appear to be a valid local network name',
+                . 'The input does not appear to be a valid local network name'  // $exceptionMessage
             ],
-            'validHostname' => ['hostname.com'],
-            'emptyString' => [''],
-            'invalidCharacter' => ['hostname,com', 'Invalid domain name: invalid character in cookie domain'],
+            'validHostname' => [
+                'hostname.com',  // $value
+                null  // $exceptionMessage
+            ],
+            'emptyString' => [
+                '',  // $value
+                null  // $exceptionMessage
+            ],
+            'invalidCharacter' => [
+                'hostname,com',  // $value
+                'Invalid domain name: invalid character in cookie domain'  // $exceptionMessage
+            ],
         ];
     }
 }

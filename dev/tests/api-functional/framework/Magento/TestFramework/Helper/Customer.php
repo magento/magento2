@@ -1,46 +1,47 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\TestFramework\Helper;
 
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\Data\Customer as CustomerData;
 use Magento\Framework\Reflection\DataObjectProcessor;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Framework\Webapi\Rest\Request as RestRequest;
 
 class Customer extends WebapiAbstract
 {
-    const RESOURCE_PATH = '/V1/customers';
-    const SERVICE_NAME = 'customerAccountManagementV1';
-    const CUSTOMER_REPOSITORY_SERVICE_NAME = "customerCustomerRepositoryV1";
-    const SERVICE_VERSION = 'V1';
+    public const RESOURCE_PATH = '/V1/customers';
+    public const SERVICE_NAME = 'customerAccountManagementV1';
+    public const CUSTOMER_REPOSITORY_SERVICE_NAME = "customerCustomerRepositoryV1";
+    public const SERVICE_VERSION = 'V1';
 
-    const CONFIRMATION = 'a4fg7h893e39d';
-    const CREATED_AT = '2013-11-05';
-    const CREATED_IN = 'default';
-    const STORE_NAME = 'Store Name';
-    const DOB = '1970-01-01';
-    const GENDER = 'Male';
-    const GROUP_ID = 1;
-    const MIDDLENAME = 'A';
-    const PREFIX = 'Mr.';
-    const STORE_ID = 1;
-    const SUFFIX = 'Esq.';
-    const TAXVAT = '12';
-    const WEBSITE_ID = 1;
+    public const CONFIRMATION = 'a4fg7h893e39d';
+    public const CREATED_AT = '2013-11-05';
+    public const CREATED_IN = 'default';
+    public const STORE_NAME = 'Store Name';
+    public const DOB = '1970-01-01';
+    public const GENDER = 'Male';
+    public const GROUP_ID = 1;
+    public const MIDDLENAME = 'A';
+    public const PREFIX = 'Mr.';
+    public const STORE_ID = 1;
+    public const SUFFIX = 'Esq.';
+    public const TAXVAT = '12';
+    public const WEBSITE_ID = 1;
 
     /** Sample values for testing */
-    const FIRSTNAME = 'Jane';
-    const LASTNAME = 'Doe';
-    const PASSWORD = 'test@123';
+    public const FIRSTNAME = 'Jane';
+    public const LASTNAME = 'Doe';
+    public const PASSWORD = 'test@123';
 
-    const ADDRESS_CITY1 = 'CityM';
-    const ADDRESS_CITY2 = 'CityX';
-    const ADDRESS_REGION_CODE1 = 'AL';
-    const ADDRESS_REGION_CODE2 = 'AL';
+    public const ADDRESS_CITY1 = 'CityM';
+    public const ADDRESS_CITY2 = 'CityX';
+    public const ADDRESS_REGION_CODE1 = 'AL';
+    public const ADDRESS_REGION_CODE2 = 'AL';
 
     /**
      * @var \Magento\Customer\Api\Data\AddressInterfaceFactory
@@ -60,28 +61,61 @@ class Customer extends WebapiAbstract
     /** @var DataObjectProcessor */
     private $dataObjectProcessor;
 
-    public function __construct($name = null, array $data = [], $dataName = '')
+    /**
+     * Lazy getter for customerAddressFactory
+     */
+    private function getCustomerAddressFactory()
     {
-        parent::__construct($name, $data, $dataName);
-
-        $this->customerAddressFactory = Bootstrap::getObjectManager()->create(
-            \Magento\Customer\Api\Data\AddressInterfaceFactory::class
-        );
-
-        $this->customerDataFactory = Bootstrap::getObjectManager()->create(
-            \Magento\Customer\Api\Data\CustomerInterfaceFactory::class
-        );
-
-        $this->dataObjectHelper = Bootstrap::getObjectManager()->create(
-            \Magento\Framework\Api\DataObjectHelper::class
-        );
-
-        $this->dataObjectProcessor = Bootstrap::getObjectManager()->create(
-            \Magento\Framework\Reflection\DataObjectProcessor::class
-        );
+        if ($this->customerAddressFactory === null) {
+            $this->customerAddressFactory = Bootstrap::getObjectManager()->create(
+                \Magento\Customer\Api\Data\AddressInterfaceFactory::class
+            );
+        }
+        return $this->customerAddressFactory;
     }
 
     /**
+     * Lazy getter for customerDataFactory
+     */
+    private function getCustomerDataFactory()
+    {
+        if ($this->customerDataFactory === null) {
+            $this->customerDataFactory = Bootstrap::getObjectManager()->create(
+                \Magento\Customer\Api\Data\CustomerInterfaceFactory::class
+            );
+        }
+        return $this->customerDataFactory;
+    }
+
+    /**
+     * Lazy getter for dataObjectHelper
+     */
+    private function getDataObjectHelper()
+    {
+        if ($this->dataObjectHelper === null) {
+            $this->dataObjectHelper = Bootstrap::getObjectManager()->create(
+                \Magento\Framework\Api\DataObjectHelper::class
+            );
+        }
+        return $this->dataObjectHelper;
+    }
+
+    /**
+     * Lazy getter for dataObjectProcessor
+     */
+    private function getDataObjectProcessor()
+    {
+        if ($this->dataObjectProcessor === null) {
+            $this->dataObjectProcessor = Bootstrap::getObjectManager()->create(
+                \Magento\Framework\Reflection\DataObjectProcessor::class
+            );
+        }
+        return $this->dataObjectProcessor;
+    }
+
+    /**
+     * Create sample customer via API.
+     *
      * @param array $additional
      * @return array|bool|float|int|string
      */
@@ -99,7 +133,7 @@ class Customer extends WebapiAbstract
             ],
         ];
 
-        $customerDataArray = $this->dataObjectProcessor->buildOutputDataArray(
+        $customerDataArray = $this->getDataObjectProcessor()->buildOutputDataArray(
             $this->createSampleCustomerDataObject($additional),
             \Magento\Customer\Api\Data\CustomerInterface::class
         );
@@ -111,8 +145,8 @@ class Customer extends WebapiAbstract
     /**
      * Update Existing customer
      *
-     * @param array $additional
      * @param int $customerId
+     * @param array $additional
      * @return array|bool|float|int|string
      */
     public function updateSampleCustomer($customerId, array $additional = [])
@@ -129,7 +163,7 @@ class Customer extends WebapiAbstract
             ],
         ];
 
-        $customerDataArray = $this->dataObjectProcessor->buildOutputDataArray(
+        $customerDataArray = $this->getDataObjectProcessor()->buildOutputDataArray(
             $this->createSampleCustomerDataObject($additional),
             \Magento\Customer\Api\Data\CustomerInterface::class
         );
@@ -139,6 +173,8 @@ class Customer extends WebapiAbstract
     }
 
     /**
+     * Get customer sample data array.
+     *
      * @param array $additional
      * @return array
      */
@@ -179,7 +215,7 @@ class Customer extends WebapiAbstract
      */
     public function createSampleCustomerDataObject(array $additional = [])
     {
-        $customerAddress1 = $this->customerAddressFactory->create();
+        $customerAddress1 = $this->getCustomerAddressFactory()->create();
         $customerAddress1->setCountryId('US');
         $customerAddress1->setIsDefaultBilling(true);
         $customerAddress1->setIsDefaultShipping(true);
@@ -196,12 +232,12 @@ class Customer extends WebapiAbstract
         $customerAddress1->setCity(self::ADDRESS_CITY1);
         $customerAddress1->setFirstname('John');
         $customerAddress1->setLastname('Smith');
-        $address1 = $this->dataObjectProcessor->buildOutputDataArray(
+        $address1 = $this->getDataObjectProcessor()->buildOutputDataArray(
             $customerAddress1,
             \Magento\Customer\Api\Data\AddressInterface::class
         );
 
-        $customerAddress2 = $this->customerAddressFactory->create();
+        $customerAddress2 = $this->getCustomerAddressFactory()->create();
         $customerAddress2->setCountryId('US');
         $customerAddress2->setIsDefaultBilling(false);
         $customerAddress2->setIsDefaultShipping(false);
@@ -218,7 +254,7 @@ class Customer extends WebapiAbstract
         $customerAddress2->setCity(self::ADDRESS_CITY2);
         $customerAddress2->setFirstname('John');
         $customerAddress2->setLastname('Smith');
-        $address2 = $this->dataObjectProcessor->buildOutputDataArray(
+        $address2 = $this->getDataObjectProcessor()->buildOutputDataArray(
             $customerAddress2,
             \Magento\Customer\Api\Data\AddressInterface::class
         );
@@ -226,8 +262,8 @@ class Customer extends WebapiAbstract
         $customerData = $this->getCustomerSampleData(
             array_merge([CustomerData::KEY_ADDRESSES => [$address1, $address2]], $additional)
         );
-        $customer = $this->customerDataFactory->create();
-        $this->dataObjectHelper->populateWithArray(
+        $customer = $this->getCustomerDataFactory()->create();
+        $this->getDataObjectHelper()->populateWithArray(
             $customer,
             $customerData,
             \Magento\Customer\Api\Data\CustomerInterface::class

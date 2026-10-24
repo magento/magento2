@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -118,7 +118,7 @@ class Bootstrap
      * @param ObjectManagerFactory $factory
      * @return Bootstrap
      */
-    public static function create($rootDir, array $initParams, ObjectManagerFactory $factory = null)
+    public static function create($rootDir, array $initParams, ?ObjectManagerFactory $factory = null)
     {
         self::populateAutoloader($rootDir, $initParams);
         if ($factory === null) {

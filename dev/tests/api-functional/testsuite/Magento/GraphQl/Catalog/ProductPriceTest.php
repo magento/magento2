@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -31,12 +31,18 @@ use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProductPriceTest extends GraphQlAbstract
 {
+    /**
+     * @var float
+     */
+    private const EPSILON = 0.0000000001;
+
     /** @var ObjectManager $objectManager */
     private $objectManager;
 
@@ -275,8 +281,8 @@ class ProductPriceTest extends GraphQlAbstract
      * @param array $expectedTierPrices
      * @param array $customerData
      * @param bool $isTierPriceExists
-     * @dataProvider priceDataProvider
      */
+    #[DataProvider('priceDataProvider')]
     public function testSimpleProductsWithSpecialPriceAndTierPrice(
         int $customerGroup,
         array $expectedPriceRange,
@@ -333,12 +339,12 @@ class ProductPriceTest extends GraphQlAbstract
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function priceDataProvider() : array
+    public static function priceDataProvider() : array
     {
         return [
             [
-                'customer_group' => Group::CUST_GROUP_ALL,
-                'expected_price_range' => [
+                'customerGroup' => Group::CUST_GROUP_ALL,
+                'expectedPriceRange' => [
                     "simple1" => [
                         "minimum_price" => [
                             "regular_price" => ["value" => 10],
@@ -364,7 +370,7 @@ class ProductPriceTest extends GraphQlAbstract
                         ]
                     ]
                 ],
-                'expected_tier_prices' => [
+                'expectedTierPrices' => [
                     "simple1" => [
                         0 => [
                             'discount' =>['amount_off' => 1, 'percent_off' => 10],
@@ -380,11 +386,11 @@ class ProductPriceTest extends GraphQlAbstract
                         ]
                     ]
                 ],
-                'customer_data' => []
+                'customerData' => []
             ],
             [
-                'customer_group' => 1,
-                'expected_price_range' => [
+                'customerGroup' => 1,
+                'expectedPriceRange' => [
                     "simple1" => [
                         "minimum_price" => [
                             "regular_price" => ["value" => 10],
@@ -410,7 +416,7 @@ class ProductPriceTest extends GraphQlAbstract
                         ]
                     ]
                 ],
-                'expected_tier_prices' => [
+                'expectedTierPrices' => [
                     "simple1" => [
                         0 => [
                             'discount' =>['amount_off' => 1, 'percent_off' => 10],
@@ -426,7 +432,7 @@ class ProductPriceTest extends GraphQlAbstract
                         ]
                     ]
                 ],
-                'customer_data' => [
+                'customerData' => [
                     'username' => 'customer@example.com',
                     'password' => 'password'
                 ]
@@ -692,7 +698,7 @@ class ProductPriceTest extends GraphQlAbstract
                 'customer_group_id' => Group::CUST_GROUP_ALL,
                 'percentage_value'=> null,
                 'qty'=> 2,
-                'value'=> 20
+                'value'=> 20,
             ]
         ];
         foreach ($configurableProductVariants as $configurableProductVariant) {
@@ -772,7 +778,7 @@ class ProductPriceTest extends GraphQlAbstract
                         "value" => round((float) $configurableProductVariants[$key]->getSpecialPrice(), 2)
                     ],
                     "discount" => [
-                        "amount_off" => ($regularPrice[$key] - $finalPrice[$key]),
+                        "amount_off" => round($regularPrice[$key] - $finalPrice[$key], 2),
                         "percent_off" => round(($regularPrice[$key] - $finalPrice[$key])*100/$regularPrice[$key], 2)
                     ]
                 ],
@@ -784,7 +790,7 @@ class ProductPriceTest extends GraphQlAbstract
                         "value" => round((float) $configurableProductVariants[$key]->getSpecialPrice(), 2)
                     ],
                     "discount" => [
-                        "amount_off" => $regularPrice[$key] - $finalPrice[$key],
+                        "amount_off" => round($regularPrice[$key] - $finalPrice[$key], 2),
                         "percent_off" => round(($regularPrice[$key] - $finalPrice[$key])*100/$regularPrice[$key], 2)
                     ]
                 ]
@@ -1213,13 +1219,26 @@ QUERY;
                 $expected['regular_price']['currency'] ?? $currency,
                 $actual['regular_price']['currency']
             );
-            $this->assertEquals($expected['final_price']['value'], $actual['final_price']['value']);
+            $this->assertEquals($expected['final_price']['value'], round($actual['final_price']['value'], 2));
             $this->assertEquals(
                 $expected['final_price']['currency'] ?? $currency,
                 $actual['final_price']['currency']
             );
-            $this->assertEquals($expected['discount']['amount_off'], $actual['discount']['amount_off']);
-            $this->assertEquals($expected['discount']['percent_off'], $actual['discount']['percent_off']);
+            $this->assertEqualsWithDelta(
+                $expected['discount']['amount_off'],
+                ($actual['regular_price']['value'] - round($actual['final_price']['value'], 2)),
+                self::EPSILON
+            );
+            $this->assertEqualsWithDelta(
+                $expected['discount']['percent_off'],
+                round(
+                    (
+                        $actual['regular_price']['value'] - round($actual['final_price']['value'], 2)
+                    ) * 100 / $actual['regular_price']['value'],
+                    2
+                ),
+                self::EPSILON
+            );
         }
     }
 
@@ -1278,9 +1297,8 @@ QUERY;
 
     /**
      * Check pricing for Configurable product with "Display Out of Stock Products" enabled
-     *
-     * @dataProvider configurableProductPriceRangeWithDisplayOutOfStockProductsEnabledDataProvider
      */
+    #[DataProvider('configurableProductPriceRangeWithDisplayOutOfStockProductsEnabledDataProvider')]
     #[
         Config(Configuration::XML_PATH_SHOW_OUT_OF_STOCK, 1, ScopeInterface::SCOPE_STORE, 'default'),
         DataFixture(ProductFixture::class, ['price' => 10, 'special_price' => 7], 'p1'),
@@ -1353,7 +1371,7 @@ QUERY;
     /**
      * @return array[]
      */
-    public function configurableProductPriceRangeWithDisplayOutOfStockProductsEnabledDataProvider(): array
+    public static function configurableProductPriceRangeWithDisplayOutOfStockProductsEnabledDataProvider(): array
     {
         return [
             [

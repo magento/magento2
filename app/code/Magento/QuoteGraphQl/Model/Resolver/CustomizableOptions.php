@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -36,7 +36,7 @@ class CustomizableOptions implements ResolverInterface
     /**
      * @inheritdoc
      */
-    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
+    public function resolve(Field $field, $context, ResolveInfo $info, ?array $value = null, ?array $args = null)
     {
         if (!isset($value['model'])) {
             throw new LocalizedException(__('"model" value should be specified'));
@@ -59,7 +59,10 @@ class CustomizableOptions implements ResolverInterface
                 $cartItem,
                 (int)$customizableOptionId
             );
-            $customizableOptionsData[] = $customizableOption;
+
+            if (!empty($customizableOption)) {
+                $customizableOptionsData[] = $customizableOption;
+            }
         }
         return $customizableOptionsData;
     }

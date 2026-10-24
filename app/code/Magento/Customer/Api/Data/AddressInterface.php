@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Customer\Api\Data;
@@ -81,7 +80,7 @@ interface AddressInterface extends \Magento\Framework\Api\CustomAttributesDataIn
      * @param \Magento\Customer\Api\Data\RegionInterface $region
      * @return $this
      */
-    public function setRegion(RegionInterface $region = null);
+    public function setRegion(?RegionInterface $region = null);
 
     /**
      * Get region ID

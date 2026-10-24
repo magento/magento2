@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,14 +12,20 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Model\Order as SalesOrder;
 use Magento\Sales\Model\Order\Creditmemo;
 use Magento\Sales\Model\Order\Creditmemo\Total\Shipping;
+use Magento\Tax\Model\Calculation as TaxCalculation;
 use Magento\Tax\Model\Config;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class ShippingTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var MockObject
      */
@@ -39,25 +45,16 @@ class ShippingTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->creditmemoMock = $this->getMockBuilder(Creditmemo::class)
-            ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'getOrder',
-                    'hasBaseShippingAmount',
-                    'getBaseShippingAmount',
-                    'setShippingAmount',
-                    'setBaseShippingAmount',
-                    'setShippingInclTax',
-                    'setBaseShippingInclTax',
-                    'setGrandTotal',
-                    'setBaseGrandTotal',
-                    'getGrandTotal',
-                    'getBaseGrandTotal',
-                ]
-            )->getMock();
+        $this->creditmemoMock = $this->createPartialMockWithReflection(
+            Creditmemo::class,
+            [
+                'hasBaseShippingAmount', 'getOrder', 'getBaseShippingAmount', 'setShippingAmount',
+                'setBaseShippingAmount', 'setShippingInclTax', 'setBaseShippingInclTax',
+                'setGrandTotal', 'setBaseGrandTotal', 'getGrandTotal', 'getBaseGrandTotal'
+            ]
+        );
 
-        $priceCurrencyMock = $this->getMockForAbstractClass(PriceCurrencyInterface::class);
+        $priceCurrencyMock = $this->createMock(PriceCurrencyInterface::class);
         $priceCurrencyMock->expects($this->any())
             ->method('round')
             ->willReturnCallback(
@@ -78,7 +75,6 @@ class ShippingTest extends TestCase
         // needed until 'taxConfig' becomes part of the constructor for shippingCollector
         $reflection = new \ReflectionClass(get_class($this->shippingCollector));
         $reflectionProperty = $reflection->getProperty('taxConfig');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->shippingCollector, $this->taxConfig);
     }
 
@@ -96,19 +92,17 @@ class ShippingTest extends TestCase
 
         $this->taxConfig->expects($this->any())->method('displaySalesShippingInclTax')->willReturn(false);
 
-        $currencyMock = $this->getMockBuilder(Currency::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $currencyMock = $this->createMock(Currency::class);
         $currencyMock->expects($this->once())
             ->method('format')
             ->with($allowedShippingAmount, null, false)
             ->willReturn($allowedShippingAmount);
 
-        $order = new DataObject(
+        $order = $this->getOrderMock(
             [
-                'base_shipping_amount' => $orderShippingAmount,
-                'base_shipping_refunded' => $orderShippingRefunded,
-                'base_currency' => $currencyMock,
+            'base_shipping_amount' => $orderShippingAmount,
+            'base_shipping_refunded' => $orderShippingRefunded,
+            'base_currency' => $currencyMock
             ]
         );
 
@@ -124,6 +118,18 @@ class ShippingTest extends TestCase
 
         //expect to have an exception thrown
         $this->shippingCollector->collect($this->creditmemoMock);
+    }
+
+    private function getOrderMock($data)
+    {
+        $orderMock = $this->createMock(SalesOrder::class);
+
+        foreach ($data as $method => $returnValue) {
+            $orderMock
+                ->method('get' . str_replace('_', '', ucwords($method, '_')))
+                ->willReturn($returnValue);
+        }
+        return $orderMock;
     }
 
     /**
@@ -154,7 +160,7 @@ class ShippingTest extends TestCase
 
         $this->taxConfig->expects($this->any())->method('displaySalesShippingInclTax')->willReturn(false);
 
-        $order = new DataObject(
+        $order = $this->getOrderMock(
             [
                 'shipping_amount' => $orderShippingAmount,
                 'shipping_refunded' => $orderShippingRefunded,
@@ -213,8 +219,8 @@ class ShippingTest extends TestCase
 
     /**
      * @param float $ratio
-     * @dataProvider collectWithSpecifiedShippingAmountDataProvider
      */
+    #[DataProvider('collectWithSpecifiedShippingAmountDataProvider')]
     public function testCollectWithSpecifiedShippingAmount($ratio)
     {
         $orderShippingAmount = 10;
@@ -241,7 +247,7 @@ class ShippingTest extends TestCase
 
         $this->taxConfig->expects($this->any())->method('displaySalesShippingInclTax')->willReturn(false);
 
-        $order = new DataObject(
+        $order = $this->getOrderMock(
             [
                 'shipping_amount' => $orderShippingAmount,
                 'shipping_refunded' => $orderShippingAmountRefunded,
@@ -300,7 +306,7 @@ class ShippingTest extends TestCase
     /**
      * @return array
      */
-    public function collectWithSpecifiedShippingAmountDataProvider()
+    public static function collectWithSpecifiedShippingAmountDataProvider()
     {
         return [
             'half' => [0.5], //This will test the case where specified amount equals maximum allowed amount
@@ -346,7 +352,7 @@ class ShippingTest extends TestCase
         $expectedGrandTotal = $grandTotalBefore + $expectedShippingAmount;
         $expectedBaseGrandTtoal = $baseGrandTotalBefore + $expectedBaseShippingAmount;
 
-        $order = new DataObject(
+        $order = $this->getOrderMock(
             [
                 'shipping_amount' => $orderShippingAmount,
                 'base_shipping_amount' => $baseOrderShippingAmount,
@@ -405,6 +411,7 @@ class ShippingTest extends TestCase
 
         $this->shippingCollector->collect($this->creditmemoMock);
     }
+
     /**
      * situation: The admin user did *not* specify any desired refund amount
      *
@@ -434,7 +441,7 @@ class ShippingTest extends TestCase
 
         $this->taxConfig->expects($this->any())->method('displaySalesShippingInclTax')->willReturn(false);
 
-        $order = new DataObject(
+        $order = $this->getOrderMock(
             [
                 'shipping_amount' => $orderShippingAmount,
                 'shipping_refunded' => $orderShippingRefunded,
@@ -488,5 +495,115 @@ class ShippingTest extends TestCase
             ->with($expectedBaseGrandTotal)
             ->willReturnSelf();
         $this->shippingCollector->collect($this->creditmemoMock);
+    }
+
+    /**
+     * situation: The admin user specified the desired refund amount that has taxes and discount embedded within it
+     *
+     * @throws LocalizedException
+     */
+    #[DataProvider('calculationSequenceDataProvider')]
+    public function testCollectUsingShippingInclTaxAndDiscountBeforeTax(string $calculationSequence)
+    {
+        $this->taxConfig->expects($this->any())->method('displaySalesShippingInclTax')->willReturn(true);
+        $this->taxConfig->expects($this->any())
+            ->method('getCalculationSequence')
+            ->willReturn($calculationSequence);
+
+        $orderShippingAmount = 14.55;
+        $shippingTaxAmount = 0.45;
+        $shippingDiscountAmount = 10;
+        $orderShippingInclTax = 15;
+        $orderShippingAmountRefunded = 7.27;
+        $orderShippingAmountInclTaxRefunded = 8;
+        $shippingTaxRefunded = 0.24;
+
+        $currencyMultiple = 2;
+        $baseOrderShippingAmount = $orderShippingAmount * $currencyMultiple;
+        $baseShippingTaxAmount = $shippingTaxAmount * $currencyMultiple;
+        $baseOrderShippingInclTax = $orderShippingInclTax * $currencyMultiple;
+        $baseOrderShippingAmountRefunded = $orderShippingAmountRefunded * $currencyMultiple;
+        $baseShippingTaxRefunded = $shippingTaxRefunded * $currencyMultiple;
+
+        //determine expected amounts
+        $expectedShippingAmount = $orderShippingAmount - $orderShippingAmountRefunded;
+        $expectedShippingAmountInclTax = $orderShippingInclTax - $orderShippingAmountInclTaxRefunded;
+
+        $expectedBaseShippingAmount = $expectedShippingAmount * $currencyMultiple;
+        $expectedBaseShippingAmountInclTax = $expectedShippingAmountInclTax * $currencyMultiple;
+
+        $grandTotalBefore = 27;
+        $baseGrandTotalBefore = $grandTotalBefore * $currencyMultiple;
+        $expectedGrandTotal = $grandTotalBefore + $expectedShippingAmount;
+        $expectedBaseGrandTotal = $baseGrandTotalBefore + $expectedBaseShippingAmount;
+
+        $order = $this->getOrderMock(
+            [
+                'shipping_amount' => $orderShippingAmount,
+                'base_shipping_amount' => $baseOrderShippingAmount,
+                'shipping_refunded' => $orderShippingAmountRefunded,
+                'base_shipping_refunded' => $baseOrderShippingAmountRefunded,
+                'shipping_incl_tax' => $orderShippingInclTax,
+                'base_shipping_incl_tax' => $baseOrderShippingInclTax,
+                'shipping_tax_amount' => $shippingTaxAmount,
+                'shipping_tax_refunded' => $shippingTaxRefunded,
+                'base_shipping_tax_amount' => $baseShippingTaxAmount,
+                'base_shipping_tax_refunded' => $baseShippingTaxRefunded,
+                'shipping_discount_amount' => $shippingDiscountAmount
+            ]
+        );
+        $orderCreditMemo = $this->createMock(Creditmemo::class);
+        $orderCreditMemo->expects($this->atLeastOnce())
+            ->method('getShippingInclTax')
+            ->willReturn($orderShippingAmountInclTaxRefunded);
+        $orderCreditMemo->expects($this->atLeastOnce())
+            ->method('getBaseShippingInclTax')
+            ->willReturn($orderShippingAmountInclTaxRefunded * $currencyMultiple);
+        $order->expects($this->atLeastOnce())
+            ->method('getCreditmemosCollection')
+            ->willReturn([$orderCreditMemo]);
+
+        $this->creditmemoMock->expects($this->once())->method('getOrder')->willReturn($order);
+        $this->creditmemoMock->expects($this->once())->method('hasBaseShippingAmount')->willReturn(false);
+        $this->creditmemoMock->expects($this->once())->method('getGrandTotal')->willReturn($grandTotalBefore);
+        $this->creditmemoMock->expects($this->once())->method('getBaseGrandTotal')->willReturn($baseGrandTotalBefore);
+
+        //verify
+        $this->creditmemoMock->expects($this->once())
+            ->method('setShippingAmount')
+            ->with($expectedShippingAmount)
+            ->willReturnSelf();
+        $this->creditmemoMock->expects($this->once())
+            ->method('setBaseShippingAmount')
+            ->with($expectedBaseShippingAmount)
+            ->willReturnSelf();
+        $this->creditmemoMock->expects($this->once())
+            ->method('setShippingInclTax')
+            ->with($expectedShippingAmountInclTax)
+            ->willReturnSelf();
+        $this->creditmemoMock->expects($this->once())
+            ->method('setBaseShippingInclTax')
+            ->with($expectedBaseShippingAmountInclTax)
+            ->willReturnSelf();
+        $this->creditmemoMock->expects($this->once())
+            ->method('setGrandTotal')
+            ->with($expectedGrandTotal)
+            ->willReturnSelf();
+        $this->creditmemoMock->expects($this->once())
+            ->method('setBaseGrandTotal')
+            ->with($expectedBaseGrandTotal)
+            ->willReturnSelf();
+        $this->shippingCollector->collect($this->creditmemoMock);
+    }
+
+    /**
+     * @return array
+     */
+    public static function calculationSequenceDataProvider(): array
+    {
+        return [
+            'inclTax' => [TaxCalculation::CALC_TAX_AFTER_DISCOUNT_ON_INCL],
+            'exclTax' => [TaxCalculation::CALC_TAX_AFTER_DISCOUNT_ON_EXCL],
+        ];
     }
 }

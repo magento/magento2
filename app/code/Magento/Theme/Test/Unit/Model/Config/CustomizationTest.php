@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -54,7 +54,7 @@ class CustomizationTest extends TestCase
 
         $this->themeProviderMock = $this->getMockBuilder(ThemeProvider::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getThemeCustomizations', 'getThemeByFullPath'])
+            ->onlyMethods(['getThemeCustomizations', 'getThemeByFullPath'])
             ->getMock();
 
         $this->storeThemesResolver = $this->createMock(StoreThemesResolverInterface::class);

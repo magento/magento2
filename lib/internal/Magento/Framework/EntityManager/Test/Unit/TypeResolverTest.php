@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,7 @@ use Magento\Framework\EntityManager\TypeResolver;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class TypeResolverTest extends TestCase
 {
@@ -44,9 +45,8 @@ class TypeResolverTest extends TestCase
 
     /**
      * @param object $dataObject
-     * @param string $interfaceName
-     * @dataProvider resolveDataProvider
-     */
+     * @param string $interfaceName     */
+    #[DataProvider('resolveDataProvider')]
     public function testResolve($dataObject, $interfaceName)
     {
         $customerDataObject = $this->objectManager->getObject($dataObject);
@@ -63,7 +63,7 @@ class TypeResolverTest extends TestCase
     /**
      * @return array
      */
-    public function resolveDataProvider()
+    public static function resolveDataProvider()
     {
         return [
             [

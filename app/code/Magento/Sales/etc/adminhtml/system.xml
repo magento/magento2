@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
@@ -575,6 +575,18 @@
                   <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
               </field>
           </group>
+        </section>
+        <section id="csp">
+            <group id="mode">
+                <group id="admin_sales_order_create_index" translate="label" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Admin > Create Order</label>
+                    <field id="report_uri" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Report URI</label>
+                        <comment>If empty, Default Report URI for admin area will be used.</comment>
+                        <validate>validate-url</validate>
+                    </field>
+                </group>
+            </group>
         </section>
     </system>
 </config>

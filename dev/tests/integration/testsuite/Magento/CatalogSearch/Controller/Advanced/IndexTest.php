@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\CatalogSearch\Controller\Advanced;
 
 use Magento\TestFramework\TestCase\AbstractController;
 use Laminas\Stdlib\Parameters;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test cases for catalog advanced index using params.
@@ -22,11 +23,11 @@ class IndexTest extends AbstractController
      * Advanced index test by params with the array in params.
      *
      * @magentoAppArea frontend
-     * @dataProvider fromParamsInArrayDataProvider
      *
      * @param array $searchParams
      * @return void
      */
+    #[DataProvider('fromParamsInArrayDataProvider')]
     public function testExecuteWithArrayInParams(array $searchParams): void
     {
         $this->getRequest()->setQuery(
@@ -47,7 +48,7 @@ class IndexTest extends AbstractController
      *
      * @return array
      */
-    public function fromParamsInArrayDataProvider(): array
+    public static function fromParamsInArrayDataProvider(): array
     {
         return [
             'from_data_with_from_param_is_array' => [

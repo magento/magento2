@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -74,11 +74,15 @@ class SaveHandlerTest extends TestCase
 
         $this->resourceMock
             ->method('bindRuleToEntity')
-            ->withConsecutive(
-                [$entityId, explode(',', (string) $websiteIds), 'website'],
-                [$entityId, explode(',', (string)$customerGroupIds), 'customer_group']
-            )
-            ->willReturnOnConsecutiveCalls($this->resourceMock, $this->resourceMock);
+            ->willReturnCallback(function ($arg1, $arg2, $arg3) use ($entityId, $websiteIds, $customerGroupIds) {
+                $websiteIds = explode(',', (string) $websiteIds);
+                $customerGroupIds = explode(',', (string)$customerGroupIds);
+                if ($arg1== $entityId && $arg2== $websiteIds && $arg3 == 'website') {
+                    return $this->resourceMock;
+                } elseif ($arg1== $entityId && $arg2== $customerGroupIds && $arg3 == 'customer_group') {
+                    return $this->resourceMock;
+                }
+            });
 
         $this->assertEquals($entityData, $this->subject->execute($entityType, $entityData));
     }

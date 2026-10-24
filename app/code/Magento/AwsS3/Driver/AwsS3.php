@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -74,7 +74,7 @@ class AwsS3 implements RemoteDriverInterface
         FilesystemAdapter $adapter,
         LoggerInterface $logger,
         string $objectUrl,
-        MetadataProviderInterface $metadataProvider = null
+        ?MetadataProviderInterface $metadataProvider = null
     ) {
         $this->adapter = $adapter;
         $this->logger = $logger;
@@ -188,7 +188,9 @@ class AwsS3 implements RemoteDriverInterface
         $parentDir = dirname($path);
 
         while (!$this->isDirectory($parentDir)) {
-            $this->createDirectoryRecursively($parentDir);
+            if (!$this->createDirectoryRecursively($parentDir)) {
+                return false;
+            }
         }
 
         if (!$this->isDirectory($path)) {
@@ -207,7 +209,7 @@ class AwsS3 implements RemoteDriverInterface
     /**
      * @inheritDoc
      */
-    public function copy($source, $destination, DriverInterface $targetDriver = null): bool
+    public function copy($source, $destination, ?DriverInterface $targetDriver = null): bool
     {
         try {
             $this->adapter->copy(
@@ -257,7 +259,7 @@ class AwsS3 implements RemoteDriverInterface
     /**
      * @inheritDoc
      */
-    public function filePutContents($path, $content, $mode = null): int
+    public function filePutContents($path, $content, $mode = null): bool|int
     {
         $path = $this->normalizeRelativePath($path, true);
         $config = self::CONFIG;
@@ -272,10 +274,11 @@ class AwsS3 implements RemoteDriverInterface
 
         try {
             $this->adapter->write($path, $content, new Config($config));
-            return $this->adapter->fileSize($path)->fileSize();
+            return ($this->adapter->fileSize($path)->fileSize() !== null)??true;
+
         } catch (FlysystemFilesystemException | UnableToRetrieveMetadata $e) {
             $this->logger->error($e->getMessage());
-            return 0;
+            return false;
         }
     }
 
@@ -525,7 +528,7 @@ class AwsS3 implements RemoteDriverInterface
     /**
      * @inheritDoc
      */
-    public function rename($oldPath, $newPath, DriverInterface $targetDriver = null): bool
+    public function rename($oldPath, $newPath, ?DriverInterface $targetDriver = null): bool
     {
         if ($oldPath === $newPath) {
             return true;
@@ -635,7 +638,7 @@ class AwsS3 implements RemoteDriverInterface
     /**
      * @inheritDoc
      */
-    public function symlink($source, $destination, DriverInterface $targetDriver = null): bool
+    public function symlink($source, $destination, ?DriverInterface $targetDriver = null): bool
     {
         return $this->copy($source, $destination, $targetDriver);
     }
@@ -776,7 +779,7 @@ class AwsS3 implements RemoteDriverInterface
     public function filePutCsv($resource, array $data, $delimiter = ',', $enclosure = '"')
     {
         //phpcs:ignore Magento2.Functions.DiscouragedFunction
-        return fputcsv($resource, $data, $delimiter, $enclosure);
+        return fputcsv($resource, $data, $delimiter, $enclosure, '\\');
     }
 
     /**
@@ -861,15 +864,21 @@ class AwsS3 implements RemoteDriverInterface
      */
     public function fileClose($resource): bool
     {
+        if (!is_resource($resource)) {
+            return false;
+        }
         //phpcs:disable
-        $resourcePath = stream_get_meta_data($resource)['uri'];
+        $meta = stream_get_meta_data($resource);
         //phpcs:enable
 
         foreach ($this->streams as $path => $stream) {
             // phpcs:ignore
-            if (stream_get_meta_data($stream)['uri'] === $resourcePath) {
+            if (stream_get_meta_data($stream)['uri'] === $meta['uri']) {
+                if (isset($meta['seekable']) && $meta['seekable']) {
+                    // rewind the file pointer to make sure the full content of the file is saved
+                    $this->fileSeek($resource, 0);
+                }
                 $this->adapter->writeStream($path, $resource, new Config(self::CONFIG));
-
                 // Remove path from streams after
                 unset($this->streams[$path]);
 
@@ -886,16 +895,24 @@ class AwsS3 implements RemoteDriverInterface
      */
     public function fileOpen($path, $mode)
     {
+        $_mode = str_replace(['b', '+'], '', strtolower($mode));
+        if (!in_array($_mode, ['r', 'w', 'a'], true)) {
+            throw new FileSystemException(new Phrase('Invalid file open mode "%1".', [$mode]));
+        }
         $path = $this->normalizeRelativePath($path, true);
 
         if (!isset($this->streams[$path])) {
             $this->streams[$path] = tmpfile();
             try {
                 if ($this->adapter->fileExists($path)) {
-                    //phpcs:ignore Magento2.Functions.DiscouragedFunction
-                    fwrite($this->streams[$path], $this->adapter->read($path));
-                    //phpcs:ignore Magento2.Functions.DiscouragedFunction
-                    rewind($this->streams[$path]);
+                    if ($_mode !== 'w') {
+                        //phpcs:ignore Magento2.Functions.DiscouragedFunction
+                        fwrite($this->streams[$path], $this->adapter->read($path));
+                        //phpcs:ignore Magento2.Functions.DiscouragedFunction
+                        if ($_mode !== 'a') {
+                            rewind($this->streams[$path]);
+                        }
+                    }
                 }
             } catch (FlysystemFilesystemException $e) {
                 $this->logger->error($e->getMessage());
@@ -906,14 +923,18 @@ class AwsS3 implements RemoteDriverInterface
     }
 
     /**
-     * Removes slashes in path.
+     * Normalizes path for S3 operations by trimming slashes and removing '.' components.
      *
      * @param string $path
      * @return string
      */
     private function fixPath(string $path): string
     {
-        return trim($path, '/');
+        $parts = explode('/', trim($path, '/'));
+        $parts = array_values(array_filter($parts, static function (string $part): bool {
+            return $part !== '.' && $part !== '';
+        }));
+        return implode('/', $parts);
     }
 
     /**

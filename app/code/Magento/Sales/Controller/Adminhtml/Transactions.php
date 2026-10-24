@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Controller\Adminhtml;
 
@@ -13,8 +13,6 @@ use Magento\Sales\Api\OrderPaymentRepositoryInterface;
 
 /**
  * Adminhtml sales transactions controller
- *
- * @author Magento Core Team <core@magentocommerce.com>
  */
 abstract class Transactions extends \Magento\Backend\App\Action
 {
@@ -23,11 +21,9 @@ abstract class Transactions extends \Magento\Backend\App\Action
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Sales::transactions';
+    public const ADMIN_RESOURCE = 'Magento_Sales::transactions';
 
     /**
-     * Core registry
-     *
      * @var Registry
      */
     protected $_coreRegistry = null;

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -38,6 +38,7 @@ class Shipping extends CommonTaxCollector
             return $this;
         }
 
+        $shippingAddress = $shippingAssignment->getShipping()->getAddress();
         $quoteDetails = $this->prepareQuoteDetails($shippingAssignment, [$shippingDataObject]);
         $taxDetails = $this->taxCalculationService
             ->calculateTax($quoteDetails, $storeId);
@@ -48,10 +49,8 @@ class Shipping extends CommonTaxCollector
             ->calculateTax($baseQuoteDetails, $storeId);
         $baseTaxDetailsItems = $baseTaxDetails->getItems()[self::ITEM_CODE_SHIPPING];
 
-        $quote->getShippingAddress()
-            ->setShippingAmount($taxDetailsItems->getRowTotal());
-        $quote->getShippingAddress()
-            ->setBaseShippingAmount($baseTaxDetailsItems->getRowTotal());
+        $shippingAddress->setShippingAmount($taxDetailsItems->getRowTotal());
+        $shippingAddress->setBaseShippingAmount($baseTaxDetailsItems->getRowTotal());
 
         $this->processShippingTaxInfo(
             $shippingAssignment,
@@ -64,6 +63,8 @@ class Shipping extends CommonTaxCollector
     }
 
     /**
+     * Fetch shipping including tax
+     *
      * @param \Magento\Quote\Model\Quote $quote
      * @param Address\Total $total
      * @return array|null

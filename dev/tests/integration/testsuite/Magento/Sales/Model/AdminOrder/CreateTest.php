@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2012 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\AdminOrder;
 
@@ -20,7 +20,9 @@ use Magento\Sales\Model\Order;
 use Magento\Sales\Model\AdminOrder\EmailSender;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -142,6 +144,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
             ['additional_option_key' => 'additional_option_value'],
             $newOrderItem->getProductOptionByCode('additional_options')
         );
+        Response::closeOutputBuffers(1, false);
     }
 
     /**
@@ -475,10 +478,10 @@ class CreateTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
-     * @dataProvider createOrderNewCustomerWithFailedFirstPlaceOrderActionDataProvider
      * @param string $customerEmailFirstAttempt
      * @param string $customerEmailSecondAttempt
      */
+    #[DataProvider('createOrderNewCustomerWithFailedFirstPlaceOrderActionDataProvider')]
     public function testCreateOrderNewCustomerWithFailedFirstPlaceOrderAction(
         $customerEmailFirstAttempt,
         $customerEmailSecondAttempt
@@ -509,7 +512,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
         );
 
         // Emulates failing place order action
-        $orderManagement = $this->getMockForAbstractClass(OrderManagementInterface::class);
+        $orderManagement = $this->createMock(OrderManagementInterface::class);
         $orderManagement->method('place')
             ->willThrowException(new \Exception('Can\'t place order'));
         $this->objectManager->addSharedInstance($orderManagement, OrderManagementInterface::class);
@@ -543,7 +546,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
      * @case #2 Changed after failed first place order action.
      * @return array
      */
-    public function createOrderNewCustomerWithFailedFirstPlaceOrderActionDataProvider()
+    public static function createOrderNewCustomerWithFailedFirstPlaceOrderActionDataProvider(): array
     {
         return [
             1 => ['customer@email.com', 'customer@email.com'],
@@ -696,6 +699,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
         /** @var SessionQuote $session */
         $session = $this->objectManager->create(SessionQuote::class);
         $session->setCustomerId($fixtureCustomerId);
+
         /** @var $quoteFixture Quote */
         $quoteFixture = $this->objectManager->create(Quote::class);
         $quoteFixture->load('test01', 'reserved_order_id');
@@ -703,10 +707,12 @@ class CreateTest extends \PHPUnit\Framework\TestCase
 
         $customerQuote = $this->model->getCustomerCart();
         $item = $customerQuote->getAllVisibleItems()[0];
+        $session->setTransferredItems(['cart' => [$item->getId()]]);
 
         $this->model->moveQuoteItem($item, 'cart', 3);
         self::assertEquals(4, $item->getQty(), 'Number of Qty isn\'t correct for Quote item.');
         self::assertEquals(3, $item->getQtyToAdd(), 'Number of added qty isn\'t correct for Quote item.');
+        self::assertEquals($session->getTransferredItems(), ['cart' => []]);
     }
 
     /**
@@ -726,7 +732,9 @@ class CreateTest extends \PHPUnit\Framework\TestCase
         /** SUT execution */
         $customerQuote = $this->model->getCustomerCart();
         self::assertInstanceOf(Quote::class, $customerQuote);
-        self::assertEmpty($customerQuote->getData());
+        // Verify it's a new cart: no saved entity_id and no items
+        self::assertNull($customerQuote->getId(), 'New cart should not have an entity ID');
+        self::assertEmpty($customerQuote->getAllItems(), 'New cart should have no items');
     }
 
     /**
@@ -775,6 +783,12 @@ class CreateTest extends \PHPUnit\Framework\TestCase
              */
             $session->setCustomerId(0);
         }
+
+        /** Save changes and reload the quote to make sure future changes to the quote trigger collectTotals */
+        $quoteRepository = $this->objectManager->create(\Magento\Quote\Api\CartRepositoryInterface::class);
+        $quoteRepository->save($this->model->getQuote());
+        $quote = $quoteRepository->get($this->model->getQuote()->getId(), [$this->model->getQuote()->getStoreId()]);
+        $this->model->setQuote($quote);
 
         /** Emulate availability of shipping method (all are disabled by default) */
         /** @var $rate Quote\Address\Rate */
@@ -983,7 +997,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
     {
         $customerMock = $this->getMockBuilder(\Magento\Customer\Model\Data\Customer::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getId',
                     'getGroupId',

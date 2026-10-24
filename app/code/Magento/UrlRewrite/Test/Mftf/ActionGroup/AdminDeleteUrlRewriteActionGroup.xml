@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -33,5 +33,7 @@
         <click selector="{{AdminUrlRewriteEditSection.okButton}}" stepKey="clickOnOkButton"/>
         <waitForPageLoad stepKey="waitForPageToLoad3"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="You deleted the URL rewrite." stepKey="seeSuccessMessage"/>
+        <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clearFilters"/>
+        <waitForPageLoad stepKey="waitForPageToLoad4"/>
     </actionGroup>
 </actionGroups>

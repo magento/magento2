@@ -1,17 +1,20 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 /** @var \Magento\Newsletter\Block\Subscribe $block */
+/** @var \Magento\Framework\View\Element\ButtonLockManager|null $buttonLockManager */
+$buttonLockManager = $block->getData('button_lock_manager');
+/** @var $escaper \Magento\Framework\Escaper */
 ?>
 <div class="block newsletter">
-    <div class="title"><strong><?= $block->escapeHtml(__('Newsletter')) ?></strong></div>
+    <div class="title"><strong><?= $escaper->escapeHtml(__('Newsletter')) ?></strong></div>
     <div class="content">
         <form class="form subscribe"
             novalidate
-            action="<?= $block->escapeUrl($block->getFormActionUrl()) ?>"
+            action="<?= $escaper->escapeUrl($block->getFormActionUrl()) ?>"
             method="post"
             data-mage-init='{"validation": {"errorClass": "mage-error"}}'
             id="newsletter-validate-detail">
@@ -19,10 +22,10 @@
                 <div class="control">
                     <label for="newsletter">
                         <span class="label">
-                            <?= $block->escapeHtml(__('Sign Up for Our Newsletter:')) ?>
+                            <?= $escaper->escapeHtml(__('Sign Up for Our Newsletter:')) ?>
                         </span>
                         <input name="email" type="email" id="newsletter"
-                               placeholder="<?= $block->escapeHtml(__('Enter your email address')) ?>"
+                               placeholder="<?= $escaper->escapeHtml(__('Enter your email address')) ?>"
                                data-mage-init='{"mage/trim-input":{}}'
                                data-validate="{required:true, 'validate-email':true}"
                         />
@@ -31,10 +34,13 @@
             </div>
             <div class="actions">
                 <button class="action subscribe primary"
-                        title="<?= $block->escapeHtmlAttr(__('Subscribe')) ?>"
+                        title="<?= $escaper->escapeHtmlAttr(__('Subscribe')) ?>"
                         type="submit"
-                        aria-label="Subscribe">
-                    <span><?= $block->escapeHtml(__('Subscribe')) ?></span>
+                        aria-label="Subscribe"
+                    <?php if ($buttonLockManager?->isDisabled('newsletter_form_submit')): ?>
+                        disabled="disabled"
+                    <?php endif; ?>>
+                    <span><?= $escaper->escapeHtml(__('Subscribe')) ?></span>
                 </button>
             </div>
         </form>

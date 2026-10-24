@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -56,7 +56,6 @@ class PublisherConsumerController
     private $clearQueueProcessor;
 
     /**
-     * PublisherConsumerController constructor.
      * @param PublisherInterface $publisher
      * @param OsInfo $osInfo
      * @param Amqp $amqpHelper
@@ -70,18 +69,18 @@ class PublisherConsumerController
         PublisherInterface $publisher,
         OsInfo $osInfo,
         Amqp $amqpHelper,
-        $logFilePath,
-        $consumers,
-        $appInitParams,
-        $maxMessages = null,
-        ClearQueueProcessor $clearQueueProcessor = null
+        string $logFilePath = TESTS_TEMP_DIR . '/MessageQueueTestLog.txt',
+        array $consumers = [],
+        array $appInitParams = [],
+        ?int $maxMessages = null,
+        ?ClearQueueProcessor $clearQueueProcessor = null
     ) {
         $this->consumers = $consumers;
         $this->publisher = $publisher;
         $this->logFilePath = $logFilePath;
         $this->maxMessages = $maxMessages;
         $this->osInfo = $osInfo;
-        $this->appInitParams = $appInitParams;
+        $this->appInitParams = $appInitParams ?: Bootstrap::getInstance()->getAppInitParams();
         $this->amqpHelper = $amqpHelper;
         $this->clearQueueProcessor = $clearQueueProcessor
             ?: Bootstrap::getObjectManager()->get(ClearQueueProcessor::class);
@@ -198,15 +197,16 @@ class PublisherConsumerController
      *
      * @param callable $condition
      * @param array $params
+     * @param int $maxIterations Maximum loop iterations; each iteration sleeps 3 seconds before evaluating $condition
      * @throws PreconditionFailedException
      */
-    public function waitForAsynchronousResult(callable $condition, $params)
+    public function waitForAsynchronousResult(callable $condition, $params = [], int $maxIterations = 20)
     {
         $i = 0;
         do {
-            sleep(1);
+            sleep(3);
             $assertion = call_user_func_array($condition, $params);
-        } while (!$assertion && ($i++ < 180));
+        } while (!$assertion && ($i++ < $maxIterations));
 
         if (!$assertion) {
             throw new PreconditionFailedException("No asynchronous messages were processed.");

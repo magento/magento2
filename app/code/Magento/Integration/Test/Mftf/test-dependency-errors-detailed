@@ -1,0 +1,30 @@
+
+File "/var/www/html/app/code/Magento/Integration/Test/Mftf/Test/AdminCreateIntegrationEntityWithDuplicatedNameTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminMenuSystem from module(s): magento/module-admin-notification
+
+File "/var/www/html/app/code/Magento/Integration/Test/Mftf/Test/AdminDeleteIntegrationEntityTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminMenuSystem from module(s): magento/module-admin-notification
+
+File "/var/www/html/app/code/Magento/Integration/Test/Mftf/Test/AdminReAuthorizeTokensIntegrationEntityTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminMenuSystem from module(s): magento/module-admin-notification
+
+File "/var/www/html/app/code/Magento/Integration/Test/Mftf/Test/AdminSystemIntegrationsNavigateMenuTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminMenuSystem from module(s): magento/module-admin-notification
+
+File "/var/www/html/app/code/Magento/Integration/Test/Mftf/Test/AdminUpdateIntegrationEntityTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminMenuSystem from module(s): magento/module-admin-notification
+
+File "/var/www/html/app/code/Magento/Integration/Test/Mftf/Test/AdminUpdateIntegrationEntityWithIncorrectPasswordTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminMenuSystem from module(s): magento/module-admin-notification

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -31,5 +31,9 @@
         <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="A total of 1 record(s) were deleted." stepKey="seeSuccessMessage"/>
         <waitForPageLoad stepKey="waitForCustomersGridIsLoaded"/>
+        <!-- Remove previous filters using Clear All -->
+        <waitForElementClickable selector="{{AdminCustomerFiltersSection.clearAll}}" stepKey="waitForClearAllFiltersClickable"/>
+        <click selector="{{AdminCustomerFiltersSection.clearAll}}" stepKey="clickClearAllFiltersAfterDeletion"/>
+        <waitForPageLoad stepKey="waitAfterClearingAllFilters"/>
     </actionGroup>
 </actionGroups>

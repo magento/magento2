@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Backend\Helper\Data;
 use Magento\Backend\Model\Session;
 use Magento\Framework\App\ActionFlag;
 use Magento\Framework\App\Request\Http;
+use Magento\Framework\App\Response\Http as ResponseHttp;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
@@ -25,7 +26,9 @@ use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Ui\Controller\Adminhtml\Index\Render;
 use Magento\Ui\Model\UiComponentTypeResolver;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
@@ -125,52 +128,30 @@ class RenderTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->requestMock = $this->getMockBuilder(Http::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->responseMock = $this->getMockBuilder(\Magento\Framework\App\Response\Http::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->uiFactoryMock = $this->getMockBuilder(UiComponentFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->authorizationMock = $this->getMockBuilder(AuthorizationInterface::class)
-            ->getMockForAbstractClass();
-        $this->sessionMock = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->actionFlagMock = $this->getMockBuilder(ActionFlag::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->helperMock = $this->getMockBuilder(Data::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->uiComponentContextMock = $this->getMockForAbstractClass(
+        $objectManager = new ObjectManager($this);
+        $objectManager->prepareObjectManager();
+
+        $this->requestMock = $this->createMock(Http::class);
+        $this->responseMock = $this->createMock(ResponseHttp::class);
+        $this->contextMock = $this->createMock(Context::class);
+        $this->uiFactoryMock = $this->createMock(UiComponentFactory::class);
+        $this->authorizationMock = $this->createMock(AuthorizationInterface::class);
+        $this->sessionMock = $this->createMock(Session::class);
+        $this->actionFlagMock = $this->createMock(ActionFlag::class);
+        $this->helperMock = $this->createMock(Data::class);
+        $this->uiComponentContextMock = $this->createMock(
             ContextInterface::class
         );
-        $this->dataProviderMock = $this->getMockForAbstractClass(
+        $this->dataProviderMock = $this->createMock(
             DataProviderInterface::class
         );
-        $this->uiComponentMock = $this->getMockForAbstractClass(
-            UiComponentInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['render']
+        $this->uiComponentMock = $this->createMock(UiComponentInterface::class);
+
+        $this->resultJsonFactoryMock = $this->createMock(
+            JsonFactory::class
         );
 
-        $this->resultJsonFactoryMock = $this->getMockBuilder(
-            JsonFactory::class
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
 
         $this->contextMock->expects($this->any())
             ->method('getRequest')
@@ -193,9 +174,7 @@ class RenderTest extends TestCase
         $this->uiComponentContextMock->expects($this->once())
             ->method('getDataProvider')
             ->willReturn($this->dataProviderMock);
-        $this->uiComponentTypeResolverMock = $this->getMockBuilder(UiComponentTypeResolver::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->uiComponentTypeResolverMock = $this->createMock(UiComponentTypeResolver::class);
         $this->escaperMock = $this->createMock(Escaper::class);
         $this->escaperMock->expects($this->any())
             ->method('escapeHtml')
@@ -235,10 +214,7 @@ class RenderTest extends TestCase
             ->method('appendBody')
             ->willThrowException(new \Exception('exception'));
 
-        $jsonResultMock = $this->getMockBuilder(Json::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['setData'])
-            ->getMock();
+        $jsonResultMock = $this->createPartialMock(Json::class, ['setData']);
 
         $this->resultJsonFactoryMock->expects($this->once())
             ->method('create')
@@ -322,8 +298,8 @@ class RenderTest extends TestCase
      * @param int $authCallCount
      *
      * @return void
-     * @dataProvider executeAjaxRequestWithoutPermissionsDataProvider
      */
+    #[DataProvider('executeAjaxRequestWithoutPermissionsDataProvider')]
     public function testExecuteAjaxRequestWithoutPermissions(
         array $dataProviderConfig,
         ?bool $isAllowed,
@@ -333,10 +309,7 @@ class RenderTest extends TestCase
         $renderedData = '<html>data</html>';
 
         if (false === $isAllowed) {
-            $jsonResultMock = $this->getMockBuilder(Json::class)
-                ->disableOriginalConstructor()
-                ->onlyMethods(['setStatusHeader', 'setData'])
-                ->getMock();
+            $jsonResultMock = $this->createPartialMock(Json::class, ['setStatusHeader', 'setData']);
 
             $jsonResultMock
                 ->method('setStatusHeader')
@@ -401,7 +374,7 @@ class RenderTest extends TestCase
     /**
      * @return array
      */
-    public function executeAjaxRequestWithoutPermissionsDataProvider(): array
+    public static function executeAjaxRequestWithoutPermissionsDataProvider(): array
     {
         $aclResource = 'Magento_Test::index_index';
         return [

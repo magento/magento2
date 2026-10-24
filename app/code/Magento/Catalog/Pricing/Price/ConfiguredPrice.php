@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Pricing\Price;
@@ -44,8 +44,8 @@ class ConfiguredPrice extends FinalPrice implements ConfiguredPriceInterface
         $quantity,
         CalculatorInterface $calculator,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
-        ItemInterface $item = null,
-        ConfiguredOptions $configuredOptions = null
+        ?ItemInterface $item = null,
+        ?ConfiguredOptions $configuredOptions = null
     ) {
         $this->item = $item;
         $this->configuredOptions = $configuredOptions ?: ObjectManager::getInstance()->get(ConfiguredOptions::class);
@@ -68,6 +68,7 @@ class ConfiguredPrice extends FinalPrice implements ConfiguredPriceInterface
      * Get value of configured options.
      *
      * @deprecated 102.0.4 ConfiguredOptions::getItemOptionsValue is used instead
+     * @see Updated deprecation doc annotations
      * @return float
      */
     protected function getOptionsValue(): float

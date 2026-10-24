@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,7 +10,6 @@ namespace Magento\OpenSearch\Test\Unit\Model\DataProvider\Base;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProviderInterface;
 use Magento\Elasticsearch\Model\Config;
 use Magento\Elasticsearch\Model\DataProvider\Base\Suggestions;
-use Magento\Elasticsearch\Model\DataProvider\Suggestions as SuggestionsDataProvider;
 use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
 use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -31,7 +30,7 @@ use Psr\Log\LoggerInterface;
 class SuggestionsTest extends TestCase
 {
     /**
-     * @var SuggestionsDataProvider
+     * @var Suggestions
      */
     private $model;
 
@@ -107,9 +106,7 @@ class SuggestionsTest extends TestCase
             ->onlyMethods(['getConnection'])
             ->getMock();
 
-        $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
 
         $this->searchIndexNameResolver = $this
             ->getMockBuilder(SearchIndexNameResolver::class)
@@ -117,25 +114,17 @@ class SuggestionsTest extends TestCase
             ->onlyMethods(['getIndexName'])
             ->getMock();
 
-        $this->storeManager = $this->getMockBuilder(StoreManager::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->storeManager = $this->createMock(StoreManager::class);
 
-        $this->fieldProvider = $this->getMockBuilder(FieldProviderInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->fieldProvider = $this->createMock(FieldProviderInterface::class);
 
-        $this->logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->logger = $this->createMock(LoggerInterface::class);
 
         $this->client = $this->getMockBuilder(SearchClient::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->query = $this->getMockBuilder(QueryInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->query = $this->createMock(QueryInterface::class);
 
         $objectManager = new ObjectManagerHelper($this);
 
@@ -199,9 +188,7 @@ class SuggestionsTest extends TestCase
             ->method('isElasticsearchEnabled')
             ->willReturn(true);
 
-        $store = $this->getMockBuilder(StoreInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $store = $this->createMock(StoreInterface::class);
 
         $store->expects($this->once())
             ->method('getId')

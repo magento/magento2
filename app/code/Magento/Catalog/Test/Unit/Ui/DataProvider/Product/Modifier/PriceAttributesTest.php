@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Modifier;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Ui\DataProvider\Product\Modifier\PriceAttributes;
 use Magento\Framework\Locale\CurrencyInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
@@ -58,8 +59,8 @@ class PriceAttributesTest extends TestCase
      * @param array $input
      * @param array $output
      * @return void
-     * @dataProvider modifyDataProvider
      */
+    #[DataProvider('modifyDataProvider')]
     public function testModifyData(array $input, array $output): void
     {
         $this->priceCurrency->method('format')
@@ -70,7 +71,7 @@ class PriceAttributesTest extends TestCase
     /**
      * @return array
      */
-    public function modifyDataProvider(): array
+    public static function modifyDataProvider(): array
     {
         return [
             [

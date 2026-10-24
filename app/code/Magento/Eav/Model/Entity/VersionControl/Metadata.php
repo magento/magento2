@@ -1,14 +1,17 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Eav\Model\Entity\VersionControl;
+
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+use Magento\Framework\Model\ResourceModel\Db\VersionControl\Metadata as ResourceModelMetaData;
 
 /**
  * Class Metadata represents a list of entity fields that are applicable for persistence operations
  */
-class Metadata extends \Magento\Framework\Model\ResourceModel\Db\VersionControl\Metadata
+class Metadata extends ResourceModelMetaData implements ResetAfterRequestInterface
 {
     /**
      * Returns list of entity fields that are applicable for persistence operations
@@ -35,5 +38,13 @@ class Metadata extends \Magento\Framework\Model\ResourceModel\Db\VersionControl\
         }
 
         return $this->metadataInfo[$entityClass];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->metadataInfo = [];
     }
 }

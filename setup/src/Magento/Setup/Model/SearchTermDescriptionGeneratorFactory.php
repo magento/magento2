@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Setup\Model;
 
@@ -69,11 +69,11 @@ class SearchTermDescriptionGeneratorFactory
     public function __construct(
         ObjectManagerInterface $objectManager,
         FixtureConfig $fixtureConfig,
-        DescriptionSentenceGeneratorFactory $descriptionSentenceGeneratorFactory = null,
-        DescriptionParagraphGeneratorFactory $descriptionParagraphGeneratorFactory = null,
-        DescriptionGeneratorFactory $descriptionGeneratorFactory = null,
-        DictionaryFactory $dictionaryFactory = null,
-        SearchTermManagerFactory $searchTermManagerFactory = null
+        ?DescriptionSentenceGeneratorFactory $descriptionSentenceGeneratorFactory = null,
+        ?DescriptionParagraphGeneratorFactory $descriptionParagraphGeneratorFactory = null,
+        ?DescriptionGeneratorFactory $descriptionGeneratorFactory = null,
+        ?DictionaryFactory $dictionaryFactory = null,
+        ?SearchTermManagerFactory $searchTermManagerFactory = null
     ) {
         $this->objectManager = $objectManager;
         $this->fixtureConfig = $fixtureConfig;

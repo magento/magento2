@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,6 +17,7 @@ use Magento\Framework\Lock\LockManagerInterface;
 use Magento\Framework\ObjectManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class LockBackendFactoryTest extends TestCase
 {
@@ -40,7 +41,7 @@ class LockBackendFactoryTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);
         $this->factory = new LockBackendFactory($this->objectManagerMock, $this->deploymentConfigMock);
     }
@@ -51,8 +52,15 @@ class LockBackendFactoryTest extends TestCase
         $this->expectExceptionMessage('Unknown locks provider: someProvider');
         $this->deploymentConfigMock->expects($this->exactly(2))
             ->method('get')
-            ->withConsecutive(['lock/provider', LockBackendFactory::LOCK_DB], ['lock/config', []])
-            ->willReturnOnConsecutiveCalls('someProvider', []);
+            ->willReturnCallback(
+                function ($arg) {
+                    if ($arg == 'lock/provider') {
+                        return 'someProvider';
+                    } elseif ($arg == 'lock/config') {
+                        return [];
+                    }
+                }
+            );
 
         $this->factory->create();
     }
@@ -60,16 +68,22 @@ class LockBackendFactoryTest extends TestCase
     /**
      * @param string $lockProvider
      * @param string $lockProviderClass
-     * @param array $config
-     * @dataProvider createDataProvider
-     */
+     * @param array $config     */
+    #[DataProvider('createDataProvider')]
     public function testCreate(string $lockProvider, string $lockProviderClass, array $config)
     {
-        $lockManagerMock = $this->getMockForAbstractClass(LockManagerInterface::class);
+        $lockManagerMock = $this->createMock(LockManagerInterface::class);
         $this->deploymentConfigMock->expects($this->exactly(2))
             ->method('get')
-            ->withConsecutive(['lock/provider', LockBackendFactory::LOCK_DB], ['lock/config', []])
-            ->willReturnOnConsecutiveCalls($lockProvider, $config);
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($lockProvider, $config) {
+                    if ($arg1 == 'lock/provider' && $arg2 == LockBackendFactory::LOCK_DB) {
+                        return $lockProvider;
+                    } elseif ($arg1 == 'lock/config' && empty($arg2)) {
+                        return $config;
+                    }
+                }
+            );
         $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->with($lockProviderClass, $config)
@@ -81,7 +95,7 @@ class LockBackendFactoryTest extends TestCase
     /**
      * @return array
      */
-    public function createDataProvider(): array
+    public static function createDataProvider(): array
     {
         $data = [
             'db' => [

@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
+
 declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Test\Unit\Model\Resolver;
@@ -16,6 +17,7 @@ use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address\Total;
 use Magento\QuoteGraphQl\Model\Cart\TotalsCollector;
 use Magento\QuoteGraphQl\Model\Resolver\CartPrices;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 
@@ -24,6 +26,7 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 class CartPricesTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var CartPrices
      */
@@ -76,24 +79,19 @@ class CartPricesTest extends TestCase
         $this->fieldMock = $this->createMock(Field::class);
         $this->resolveInfoMock = $this->createMock(ResolveInfo::class);
         $this->contextMock = $this->createMock(Context::class);
-        $this->quoteMock = $this->getMockBuilder(Quote::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getQuoteCurrencyCode'])
-            ->getMock();
-        $this->totalMock = $this->getMockBuilder(Total::class)
-            ->disableOriginalConstructor()
-            ->addMethods(
-                [
-                    'getSubtotal',
-                    'getSubtotalInclTax',
-                    'getGrandTotal',
-                    'getDiscountTaxCompensationAmount',
-                    'getDiscountAmount',
-                    'getDiscountDescription',
-                    'getAppliedTaxes'
-                ]
-            )
-            ->getMock();
+        $this->quoteMock = $this->createPartialMockWithReflection(Quote::class, ['getQuoteCurrencyCode']);
+        $this->totalMock = $this->createPartialMockWithReflection(
+            Total::class,
+            [
+                'getSubtotal',
+                'getSubtotalInclTax',
+                'getGrandTotal',
+                'getDiscountTaxCompensationAmount',
+                'getDiscountAmount',
+                'getDiscountDescription',
+                'getAppliedTaxes'
+            ]
+        );
         $this->cartPrices = new CartPrices(
             $this->totalsCollectorMock,
             $this->scopeConfigMock

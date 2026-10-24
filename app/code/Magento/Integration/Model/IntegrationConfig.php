@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Integration\Model;
@@ -51,7 +51,7 @@ class IntegrationConfig
     public function __construct(
         TypeIntegration $configCacheType,
         Reader $configReader,
-        SerializerInterface $serializer = null
+        ?SerializerInterface $serializer = null
     ) {
         $this->_configCacheType = $configCacheType;
         $this->_configReader = $configReader;

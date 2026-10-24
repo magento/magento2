@@ -1,0 +1,10 @@
+# Copyright 2021 Adobe
+# All Rights Reserved.
+
+type TestReadOutput {
+    str: String
+}
+
+type Query {
+   testGraphqlRead: TestReadOutput @resolver(class: "Magento\\TestModuleGraphQlBackpressure\\Model\\TestServiceResolver") @cache(cacheable: false)
+}

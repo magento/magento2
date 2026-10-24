@@ -1,13 +1,16 @@
 <?php
 /**
- * Default session storage
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Session;
 
-class Storage extends \Magento\Framework\DataObject implements StorageInterface
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+
+/**
+ * Default session storage
+ */
+class Storage extends \Magento\Framework\DataObject implements StorageInterface, ResetAfterRequestInterface
 {
     /**
      * Namespace of storage
@@ -15,6 +18,14 @@ class Storage extends \Magento\Framework\DataObject implements StorageInterface
      * @var string
      */
     protected $namespace;
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_data = [];
+    }
 
     /**
      * Constructor
@@ -29,19 +40,20 @@ class Storage extends \Magento\Framework\DataObject implements StorageInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function init(array $data)
     {
-        $namespace = $this->getNamespace();
+        $namespace = $this->getNamespace() ?? '';
         if (isset($data[$namespace])) {
             $this->setData($data[$namespace]);
         }
         $_SESSION[$namespace] = & $this->_data;
+        return $this;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getNamespace()
     {

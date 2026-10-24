@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 -->
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -256,7 +256,7 @@
     <route url="/V1/orders" method="POST">
         <service class="Magento\Sales\Api\OrderRepositoryInterface" method="save"/>
         <resources>
-            <resource ref="Magento_Sales::create" />
+            <resource ref="Magento_Sales::api_actions" />
         </resources>
     </route>
     <route url="/V1/transactions/:id" method="GET">

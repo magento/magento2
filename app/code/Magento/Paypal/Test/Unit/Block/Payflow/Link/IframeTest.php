@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,10 +10,12 @@ namespace Magento\Paypal\Test\Unit\Block\Payflow\Link;
 use Magento\Checkout\Model\Session;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\Framework\Module\Dir\Reader;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Payment\Helper\Data;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Paypal\Block\Payflow\Advanced\Iframe;
+use Magento\Paypal\Block\Payflow\Link\Iframe as LinkIframe;
 use Magento\Paypal\Helper\Hss;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Payment;
@@ -27,6 +29,8 @@ use PHPUnit\Framework\TestCase;
  */
 class IframeTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Context|MockObject
      */
@@ -76,10 +80,7 @@ class IframeTest extends TestCase
     {
         $this->contextMock = $this->createMock(Context::class);
         $this->checkoutSessionMock = $this->createMock(Session::class);
-        $this->orderFactoryMock = $this->getMockBuilder(OrderFactory::class)
-            ->addMethods(['getQuote'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->orderFactoryMock = $this->createPartialMockWithReflection(OrderFactory::class, ['getQuote']);
         $this->hssHelperMock = $this->createMock(Hss::class);
         $this->paymentDataMock = $this->createMock(Data::class);
         $this->quoteMock = $this->createPartialMock(Quote::class, ['getPayment', '__wakeup']);
@@ -122,8 +123,7 @@ class IframeTest extends TestCase
         $this->prepare();
 
         $expected = 'https://live.url';
-        $methodInstance = $this->getMockBuilder(MethodInterface::class)
-            ->getMockForAbstractClass();
+        $methodInstance = $this->createMock(MethodInterface::class);
         $methodInstance->expects($this->exactly(2))
             ->method('getConfigData')
             ->willReturnMap([
@@ -134,7 +134,7 @@ class IframeTest extends TestCase
             ->method('getMethodInstance')
             ->willReturn($methodInstance);
 
-        $block = new \Magento\Paypal\Block\Payflow\Link\Iframe(
+        $block = new LinkIframe(
             $this->contextMock,
             $this->orderFactoryMock,
             $this->checkoutSessionMock,
@@ -151,8 +151,7 @@ class IframeTest extends TestCase
         $this->prepare();
 
         $expected = 'https://test.url';
-        $methodInstance = $this->getMockBuilder(MethodInterface::class)
-            ->getMockForAbstractClass();
+        $methodInstance = $this->createMock(MethodInterface::class);
         $methodInstance->expects($this->exactly(2))
             ->method('getConfigData')
             ->willReturnMap([
@@ -163,7 +162,7 @@ class IframeTest extends TestCase
             ->method('getMethodInstance')
             ->willReturn($methodInstance);
 
-        $block = new \Magento\Paypal\Block\Payflow\Link\Iframe(
+        $block = new LinkIframe(
             $this->contextMock,
             $this->orderFactoryMock,
             $this->checkoutSessionMock,

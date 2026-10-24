@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Review\Model\ResourceModel\Review\Product;
 
@@ -21,22 +21,16 @@ use Magento\Framework\EntityManager\MetadataPool;
 class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 {
     /**
-     * Entities alias
-     *
      * @var array
      */
     protected $_entitiesAlias = [];
 
     /**
-     * Review store table
-     *
      * @var string
      */
     protected $_reviewStoreTable;
 
     /**
-     * Add store data flag
-     *
      * @var bool
      */
     protected $_addStoreDataFlag = false;
@@ -114,9 +108,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         \Magento\Customer\Api\GroupManagementInterface $groupManagement,
         \Magento\Review\Model\RatingFactory $ratingFactory,
         \Magento\Review\Model\Rating\Option\VoteFactory $voteFactory,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        ProductLimitationFactory $productLimitationFactory = null,
-        MetadataPool $metadataPool = null
+        ?\Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
+        ?ProductLimitationFactory $productLimitationFactory = null,
+        ?MetadataPool $metadataPool = null
     ) {
         $this->_ratingFactory = $ratingFactory;
         $this->_voteFactory = $voteFactory;
@@ -157,6 +151,17 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         $this->setRowIdFieldName('review_id');
         $this->_reviewStoreTable = $this->_resource->getTableName('review_store');
         $this->_initTables();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->_entitiesAlias = [];
+        $this->_addStoreDataFlag = false;
+        $this->_storesIds = [];
     }
 
     /**
@@ -229,7 +234,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param Select $select
      * @return $this
      */
-    protected function _applyStoresFilterToSelect(Select $select = null)
+    protected function _applyStoresFilterToSelect(?Select $select = null)
     {
         $connection = $this->getConnection();
         $storesIds = $this->_storesIds;

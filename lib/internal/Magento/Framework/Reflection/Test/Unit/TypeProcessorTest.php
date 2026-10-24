@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -19,6 +19,7 @@ use Magento\Framework\Reflection\Test\Unit\Fixture\UseClasses\SampleTwo\SampleFo
 use Magento\Framework\Reflection\Test\Unit\Fixture\UseSample;
 use Magento\Framework\Reflection\TypeProcessor;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -216,9 +217,8 @@ class TypeProcessorTest extends TestCase
         $this->assertSame([1, 2, 3, 4, 5], $this->typeProcessor->processSimpleAndAnyType($value, $type));
     }
 
-    /**
-     * @dataProvider processSimpleTypeExceptionProvider
-     */
+    /**     */
+    #[DataProvider('processSimpleTypeExceptionProvider')]
     public function testProcessSimpleTypeException($value, $type)
     {
         $this->expectException(SerializationException::class);
@@ -262,9 +262,8 @@ class TypeProcessorTest extends TestCase
      * Checks a case for different array param types.
      *
      * @param string $methodName
-     * @param string $type
-     * @dataProvider arrayParamTypeDataProvider
-     */
+     * @param string $type     */
+    #[DataProvider('arrayParamTypeDataProvider')]
     public function testGetArrayParamType(string $methodName, string $type)
     {
         $class = new ClassReflection(DataObject::class);
@@ -278,11 +277,11 @@ class TypeProcessorTest extends TestCase
      *
      * @return array
      */
-    public function arrayParamTypeDataProvider()
+    public static function arrayParamTypeDataProvider()
     {
         return [
-            ['method name' => 'addData', 'type' => 'array[]'],
-            ['method name' => 'addObjectList', 'type' => '\\' . TSampleInterface::class . '[]']
+            ['methodName' => 'addData', 'type' => 'array[]'],
+            ['methodName' => 'addObjectList', 'type' => '\\' . TSampleInterface::class . '[]']
         ];
     }
 
@@ -290,9 +289,8 @@ class TypeProcessorTest extends TestCase
      * Checks a case when method param has additional description.
      *
      * @param string $methodName
-     * @param array $descriptions
-     * @dataProvider methodParamsDataProvider
-     */
+     * @param array $descriptions     */
+    #[DataProvider('methodParamsDataProvider')]
     public function testGetParameterDescription(string $methodName, array $descriptions)
     {
         $class = new ClassReflection(DataObject::class);
@@ -312,11 +310,11 @@ class TypeProcessorTest extends TestCase
      *
      * @return array
      */
-    public function methodParamsDataProvider()
+    public static function methodParamsDataProvider()
     {
         return [
-            ['method name' => 'setName', 'descriptions' => ['Name of the attribute']],
-            ['method name' => 'setData', 'descriptions' => ['Key is used as index', null]],
+            ['methodName' => 'setName', 'descriptions' => ['Name of the attribute']],
+            ['methodName' => 'setData', 'descriptions' => ['Key is used as index', null]],
         ];
     }
 
@@ -330,11 +328,10 @@ class TypeProcessorTest extends TestCase
 
     /**
      * Checks a case when method has only `@inheritdoc` annotation.
-     *
-     * @dataProvider getReturnTypeWithInheritDocBlockDataProvider
-     * @param string $methodName
+     *     * @param string $methodName
      * @param array $returnTypeData
      */
+    #[DataProvider('getReturnTypeWithInheritDocBlockDataProvider')]
     public function testGetReturnTypeWithInheritDocBlock(string $methodName, array $returnTypeData)
     {
         $classReflection = new ClassReflection(TSample::class);
@@ -343,7 +340,7 @@ class TypeProcessorTest extends TestCase
         self::assertEquals($returnTypeData, $this->typeProcessor->getGetterReturnType($methodReflection));
     }
 
-    public function getReturnTypeWithInheritDocBlockDataProvider(): array
+    public static function getReturnTypeWithInheritDocBlockDataProvider(): array
     {
         return [
             [
@@ -412,7 +409,7 @@ class TypeProcessorTest extends TestCase
      *
      * @return array
      */
-    public function simpleAndComplexDataProvider(): array
+    public static function simpleAndComplexDataProvider(): array
     {
         return [
             ['string', true],
@@ -426,11 +423,10 @@ class TypeProcessorTest extends TestCase
 
     /**
      * Test simple type detection method
-     *
-     * @dataProvider simpleAndComplexDataProvider
-     * @param string $type
+     *     * @param string $type
      * @param bool $expectedValue
      */
+    #[DataProvider('simpleAndComplexDataProvider')]
     public function testIsSimpleType(string $type, bool $expectedValue)
     {
         self::assertEquals($expectedValue, $this->typeProcessor->isSimpleType($type));
@@ -441,7 +437,7 @@ class TypeProcessorTest extends TestCase
      *
      * @return array
      */
-    public function basicClassNameProvider(): array
+    public static function basicClassNameProvider(): array
     {
         return [
             ['SomeClass[]', 'SomeClass'],
@@ -455,11 +451,10 @@ class TypeProcessorTest extends TestCase
 
     /**
      * Extract basic class name
-     *
-     * @dataProvider basicClassNameProvider
-     * @param string $type
+     *     * @param string $type
      * @param string $expectedValue
      */
+    #[DataProvider('basicClassNameProvider')]
     public function testBasicClassName(string $type, string $expectedValue)
     {
         self::assertEquals($expectedValue, $this->typeProcessor->getBasicClassName($type));
@@ -470,7 +465,7 @@ class TypeProcessorTest extends TestCase
      *
      * @return array
      */
-    public function isFullyQualifiedClassNamesDataProvider(): array
+    public static function isFullyQualifiedClassNamesDataProvider(): array
     {
         return [
             ['SomeClass', false],
@@ -481,11 +476,10 @@ class TypeProcessorTest extends TestCase
 
     /**
      * Test fully qualified class name detector
-     *
-     * @dataProvider isFullyQualifiedClassNamesDataProvider
-     * @param string $type
+     *     * @param string $type
      * @param bool $expectedValue
      */
+    #[DataProvider('isFullyQualifiedClassNamesDataProvider')]
     public function testIsFullyQualifiedClassName(string $type, bool $expectedValue)
     {
         self::assertEquals($expectedValue, $this->typeProcessor->isFullyQualifiedClassName($type));
@@ -510,7 +504,7 @@ class TypeProcessorTest extends TestCase
      *
      * @return array
      */
-    public function resolveFullyQualifiedClassNamesDataProvider(): array
+    public static function resolveFullyQualifiedClassNamesDataProvider(): array
     {
         return [
             [UseSample::class, 'string', 'string'],
@@ -570,13 +564,12 @@ class TypeProcessorTest extends TestCase
 
     /**
      * Resolve fully qualified class names
-     *
-     * @dataProvider resolveFullyQualifiedClassNamesDataProvider
-     * @param string $className
+     *     * @param string $className
      * @param string $type
      * @param string $expectedValue
      * @throws \ReflectionException
      */
+    #[DataProvider('resolveFullyQualifiedClassNamesDataProvider')]
     public function testResolveFullyQualifiedClassNames(string $className, string $type, string $expectedValue)
     {
         $sourceClass = new ClassReflection($className);

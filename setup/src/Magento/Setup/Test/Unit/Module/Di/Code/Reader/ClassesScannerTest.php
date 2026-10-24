@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -31,7 +31,7 @@ class ClassesScannerTest extends TestCase
         $this->generation = realpath(__DIR__ . '/../../_files/var/generation');
         $mock = $this->getMockBuilder(DirectoryList::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['getPath']
             )->getMock();
         $mock->method('getPath')->willReturn($this->generation);
@@ -43,6 +43,6 @@ class ClassesScannerTest extends TestCase
         $pathToScan = str_replace('\\', '/', realpath(__DIR__ . '/../../') . '/_files/app/code/Magento/SomeModule');
         $actual = $this->model->getList($pathToScan);
         $this->assertIsArray($actual);
-        $this->assertCount(6, $actual);
+        $this->assertCount(7, $actual);
     }
 }

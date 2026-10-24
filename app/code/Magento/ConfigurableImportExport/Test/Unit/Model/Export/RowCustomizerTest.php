@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\ConfigurableImportExport\Test\Unit\Model\Export;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
@@ -42,16 +43,12 @@ class RowCustomizerTest extends TestCase
     /**
      * @var int
      */
-    private $productId = 11;
+    private static $productId = 11;
 
     protected function setUp(): void
     {
-        $this->productCollectionMock = $this->getMockBuilder(ProductCollection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->configurableProductTypeMock = $this->getMockBuilder(ConfigurableProductType::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->productCollectionMock = $this->createMock(ProductCollection::class);
+        $this->configurableProductTypeMock = $this->createMock(ConfigurableProductType::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->exportRowCustomizer = $this->objectManagerHelper->getObject(ExportRowCustomizer::class);
@@ -76,9 +73,8 @@ class RowCustomizerTest extends TestCase
     /**
      * @param array $expected
      * @param array $data
-     *
-     * @dataProvider addDataDataProvider
      */
+    #[DataProvider('addDataDataProvider')]
     public function testAddData(array $expected, array $data)
     {
         $this->initConfigurableData();
@@ -89,19 +85,19 @@ class RowCustomizerTest extends TestCase
     /**
      * @return array
      */
-    public function addDataDataProvider()
+    public static function addDataDataProvider()
     {
-        $expectedConfigurableData = $this->getExpectedConfigurableData();
-        $data = $expectedConfigurableData[$this->productId];
+        $expectedConfigurableData = self::getExpectedConfigurableData();
+        $data = $expectedConfigurableData[self::$productId];
 
         return [
             [
-                '$expected' => [
+                'expected' => [
                     'key_1' => 'value_1',
                     'key_2' => 'value_2',
                     'key_3' => 'value_3'
                 ],
-                '$data' => [
+                'data' => [
                     'data_row' => [
                         'key_1' => 'value_1',
                         'key_2' => 'value_2',
@@ -111,20 +107,20 @@ class RowCustomizerTest extends TestCase
                 ]
             ],
             [
-                '$expected' => [
+                'expected' => [
                     'key_1' => 'value_1',
                     'key_2' => 'value_2',
                     'key_3' => 'value_3',
                     'configurable_variations' => $data['configurable_variations'],
                     'configurable_variation_labels' => $data['configurable_variation_labels']
                 ],
-                '$data' => [
+                'data' => [
                     'data_row' => [
                         'key_1' => 'value_1',
                         'key_2' => 'value_2',
                         'key_3' => 'value_3'
                     ],
-                    'product_id' => $this->productId
+                    'product_id' => self::$productId
                 ]
             ]
         ];
@@ -133,9 +129,8 @@ class RowCustomizerTest extends TestCase
     /**
      * @param array $expected
      * @param array $data
-     *
-     * @dataProvider getAdditionalRowsCountDataProvider
      */
+    #[DataProvider('getAdditionalRowsCountDataProvider')]
     public function testGetAdditionalRowsCount(array $expected, array $data)
     {
         $this->initConfigurableData();
@@ -149,7 +144,7 @@ class RowCustomizerTest extends TestCase
     /**
      * @return array
      */
-    public function getAdditionalRowsCountDataProvider()
+    public static function getAdditionalRowsCountDataProvider()
     {
         return [
             [
@@ -212,7 +207,7 @@ class RowCustomizerTest extends TestCase
 
         $productMock->expects(static::any())
             ->method('getId')
-            ->willReturn($this->productId);
+            ->willReturn(self::$productId);
         $productMock->expects(static::any())
             ->method('getTypeInstance')
             ->willReturn($this->configurableProductTypeMock);
@@ -243,10 +238,10 @@ class RowCustomizerTest extends TestCase
      *
      * @return array
      */
-    private function getExpectedConfigurableData()
+    private static function getExpectedConfigurableData()
     {
         return [
-            $this->productId => [
+            self::$productId => [
                 'configurable_variations' => implode(
                     ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR,
                     [
@@ -280,9 +275,7 @@ class RowCustomizerTest extends TestCase
      */
     private function createProductMock()
     {
-        return $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->createMock(Product::class);
     }
 
     /**
@@ -296,8 +289,6 @@ class RowCustomizerTest extends TestCase
     {
         $reflection = new \ReflectionClass(get_class($object));
         $reflectionProperty = $reflection->getProperty($property);
-        $reflectionProperty->setAccessible(true);
-
         return $reflectionProperty->getValue($object);
     }
 }

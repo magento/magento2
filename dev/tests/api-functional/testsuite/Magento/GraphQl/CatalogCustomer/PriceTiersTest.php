@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -113,8 +113,8 @@ class PriceTiersTest extends GraphQlAbstract
         $response = $this->graphQlQuery($query);
         $itemTiers = $response['products']['items'][0]['price_tiers'];
         $this->assertCount(2, $itemTiers);
-        $this->assertEquals(round(8.25, 2), $this->getValueForQuantity(7, $itemTiers));
-        $this->assertEquals(round(7.25, 2), $this->getValueForQuantity(8, $itemTiers));
+        $this->assertEquals(8.25, $this->getValueForQuantity(7, $itemTiers));
+        $this->assertEquals(7.25, $this->getValueForQuantity(8, $itemTiers));
     }
 
     /**

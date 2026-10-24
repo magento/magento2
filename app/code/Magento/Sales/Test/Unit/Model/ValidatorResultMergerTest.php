@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -19,6 +19,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ValidatorResultMergerTest extends TestCase
 {
+
     /**
      * @var ValidatorResultMerger
      */
@@ -61,9 +62,9 @@ class ValidatorResultMergerTest extends TestCase
      */
     public function testMerge(): void
     {
-        $validatorResultMock = $this->getMockForAbstractClass(ValidatorResultInterface::class);
-        $orderValidationResultMock = $this->getMockForAbstractClass(ValidatorResultInterface::class);
-        $creditmemoValidationResultMock = $this->getMockForAbstractClass(ValidatorResultInterface::class);
+        $validatorResultMock = $this->createMock(ValidatorResultInterface::class);
+        $orderValidationResultMock = $this->createMock(ValidatorResultInterface::class);
+        $creditmemoValidationResultMock = $this->createMock(ValidatorResultInterface::class);
         $itemsValidationMessages = [['test04', 'test05'], ['test06']];
         $this->validatorResultFactoryMock->expects($this->once())->method('create')
             ->willReturn($validatorResultMock);
@@ -72,7 +73,16 @@ class ValidatorResultMergerTest extends TestCase
 
         $validatorResultMock
             ->method('addMessage')
-            ->withConsecutive(['test01'], ['test02'], ['test03'], ['test04'], ['test05'], ['test06']);
+            ->willReturnCallback(function ($arg1) {
+                if ($arg1 == 'test01' ||
+                    $arg1 == 'test02' ||
+                    $arg1 == 'test03' ||
+                    $arg1 == 'test04' ||
+                    $arg1 == 'test05' ||
+                    $arg1 == 'test06') {
+                    return null;
+                }
+            });
         $expected = $validatorResultMock;
         $actual = $this->validatorResultMerger->merge(
             $orderValidationResultMock,

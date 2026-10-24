@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCreateCMSPageLinkWidgetActionGroup"  extends="AdminCreateWidgetActionGroup">
+        <annotations>
+            <description>EXTENDS: AdminCreateWidgetActionGroup. Creates a CMS Page link widget.</description>
+        </annotations>
+        <waitForElementClickable selector="{{AdminNewWidgetSection.selectPage}}" stepKey="waitForSelectPageButtonToBeClickable"/>
+        <click selector="{{AdminNewWidgetSection.selectPage}}" stepKey="clickSelectPage"/>
+        <waitForPageLoad stepKey="WaitForPageLoad"/>
+        <waitForElementClickable selector="{{AdminNewWidgetSection.enableCookies}}" stepKey="waitForEnableCookiesToBeClickable"/>
+        <click selector="{{AdminNewWidgetSection.enableCookies}}" stepKey="clickenableCookies"/>
+        <waitForPageLoad stepKey="WaitForPageToLoad"/>
+    </actionGroup>
+</actionGroups>

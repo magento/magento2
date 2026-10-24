@@ -1,7 +1,7 @@
 <?php
 /**
- *  Copyright © Magento, Inc. All rights reserved.
- *  See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Framework\TestFramework\Test\Unit\Autoloader;
 
 use Magento\Framework\TestFramework\Unit\Autoloader\ExtensionAttributesGenerator;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ExtensionAttributesGeneratorTest extends TestCase
 {
@@ -30,10 +31,9 @@ class ExtensionAttributesGeneratorTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider generateNonExtensionAttributesDataProvider
-     * @param string $className
+    /**     * @param string $className
      */
+    #[DataProvider('generateNonExtensionAttributesDataProvider')]
     public function testGenerateNonExtensionAttributes($className)
     {
         $this->assertFalse($this->subject->generate($className));
@@ -42,7 +42,7 @@ class ExtensionAttributesGeneratorTest extends TestCase
     /**
      * @return array
      */
-    public function generateNonExtensionAttributesDataProvider()
+    public static function generateNonExtensionAttributesDataProvider()
     {
         return [
             'non-extension attribute class' => ['\My\SimpleClass'],

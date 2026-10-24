@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -49,15 +49,15 @@ class ImageProviderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->itemRepositoryMock = $this->getMockForAbstractClass(CartItemRepositoryInterface::class);
-        $this->itemPoolMock = $this->getMockForAbstractClass(ItemPoolInterface::class);
+        $this->itemRepositoryMock = $this->createMock(CartItemRepositoryInterface::class);
+        $this->itemPoolMock = $this->createMock(ItemPoolInterface::class);
         $this->customerItem = $this->getMockBuilder(DefaultItem::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->imageHelper = $this->getMockBuilder(\Magento\Catalog\Helper\Image::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->itemResolver = $this->getMockForAbstractClass(
+        $this->itemResolver = $this->createMock(
             \Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface::class
         );
         $this->model = new ImageProvider(

@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
@@ -17,6 +17,7 @@
                 <item name="newrelicreporting/general/account_id" xsi:type="string">1</item>
                 <item name="newrelicreporting/general/app_id" xsi:type="string">1</item>
                 <item name="newrelicreporting/general/api" xsi:type="string">1</item>
+                <item name="newrelicreporting/general/entity_guid" xsi:type="string">1</item>
                 <item name="newrelicreporting/general/insights_insert_key" xsi:type="string">1</item>
                 <item name="newrelicreporting/general/insights_api_url" xsi:type="string">1</item>
                 <item name="newrelicreporting/general/api_url" xsi:type="string">1</item>
@@ -49,8 +50,20 @@
     <type name="Magento\NewRelicReporting\Plugin\CommandPlugin">
         <arguments>
             <argument name="skipCommands" xsi:type="array">
-                <item xsi:type="boolean" name="cron:run">true</item>
+                <item xsi:type="boolean" name="server:run">true</item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Magento\NewRelicReporting\Model\Apm\Deployments">
+        <arguments>
+            <argument name="serializer" xsi:type="object">Magento\Framework\Serialize\Serializer\Json</argument>
+        </arguments>
+    </type>
+
+    <!-- NerdGraph Client Dependencies -->
+    <type name="Magento\NewRelicReporting\Model\NerdGraph\Client">
+        <arguments>
+            <argument name="serializer" xsi:type="object">Magento\Framework\Serialize\Serializer\Json</argument>
         </arguments>
     </type>
 </config>

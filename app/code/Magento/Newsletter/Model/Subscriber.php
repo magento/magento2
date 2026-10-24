@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Newsletter\Model;
 
@@ -187,13 +187,13 @@ class Subscriber extends AbstractModel
         CustomerRepositoryInterface $customerRepository,
         AccountManagementInterface $customerAccountManagement,
         StateInterface $inlineTranslation,
-        AbstractResource $resource = null,
-        AbstractDb $resourceCollection = null,
+        ?AbstractResource $resource = null,
+        ?AbstractDb $resourceCollection = null,
         array $data = [],
-        DateTime $dateTime = null,
-        CustomerInterfaceFactory $customerFactory = null,
-        DataObjectHelper $dataObjectHelper = null,
-        SubscriptionManagerInterface $subscriptionManager = null
+        ?DateTime $dateTime = null,
+        ?CustomerInterfaceFactory $customerFactory = null,
+        ?DataObjectHelper $dataObjectHelper = null,
+        ?SubscriptionManagerInterface $subscriptionManager = null
     ) {
         $this->_newsletterData = $newsletterData;
         $this->_scopeConfig = $scopeConfig;
@@ -353,7 +353,7 @@ class Subscriber extends AbstractModel
      */
     public function setStatusChanged($value)
     {
-        $this->_isStatusChanged = (boolean) $value;
+        $this->_isStatusChanged = (bool) $value;
         return $this;
     }
 

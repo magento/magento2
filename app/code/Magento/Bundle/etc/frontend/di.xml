@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
@@ -21,8 +21,5 @@
     </type>
     <type name="Magento\Catalog\ViewModel\Product\OptionsData">
         <plugin name="add_bundle_options_data" type="Magento\Bundle\Plugin\Catalog\ViewModel\Product\AddBundleOptionsData" />
-    </type>
-    <type name="Magento\Catalog\Helper\Product">
-        <plugin name="dont_show_if_child_products_disabled" type="Magento\Bundle\Plugin\Catalog\Helper\Product"/>
     </type>
 </config>

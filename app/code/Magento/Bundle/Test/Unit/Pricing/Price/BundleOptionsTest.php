@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Bundle\Test\Unit\Pricing\Price;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Bundle\Model\Option as BundleOption;
 use Magento\Bundle\Model\Product\Type as BundleProductType;
 use Magento\Bundle\Model\ResourceModel\Option\Collection as BundleOptionCollection;
@@ -23,6 +24,7 @@ use Magento\Framework\Pricing\Amount\AmountInterface;
 use Magento\Framework\Pricing\Amount\Base as BaseAmount;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Pricing\PriceInfo\Base as BasePriceInfo;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Tax\Helper\Data as TaxHelperData;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -34,6 +36,8 @@ use PHPUnit\Framework\TestCase;
  */
 class BundleOptionsTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var BundleOptions
      */
@@ -81,53 +85,37 @@ class BundleOptionsTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->priceInfoMock = $this->getMockBuilder(BasePriceInfo::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->saleableItemMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $priceCurrency = $this->getMockBuilder(PriceCurrencyInterface::class)
-            ->getMock();
+        $this->priceInfoMock = $this->createMock(BasePriceInfo::class);
+        $this->saleableItemMock = $this->createMock(Product::class);
+        $priceCurrency = $this->createMock(PriceCurrencyInterface::class);
         $priceCurrency->expects($this->any())->method('round')->willReturnArgument(0);
 
-        $this->selectionFactoryMock = $this->getMockBuilder(BundleSelectionFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->amountFactory = $this->getMockBuilder(AmountFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $factoryCallback = $this->returnCallback(
-            function ($fullAmount, $adjustments) {
-                return $this->createAmountMock(['amount' => $fullAmount, 'adjustmentAmounts' => $adjustments]);
-            }
+        $this->selectionFactoryMock = $this->createMock(BundleSelectionFactory::class);
+        $this->amountFactory = $this->createMock(AmountFactory::class);
+        $this->amountFactory->expects($this->any())->method('create')
+            ->willReturnCallback(
+                function ($fullAmount, $adjustments) {
+                    return $this->createAmountMock(['amount' => $fullAmount, 'adjustmentAmounts' => $adjustments]);
+                }
+            );
+        $this->baseCalculator = $this->createMock(AdjustmentCalculator::class);
+
+        $taxData = $this->createMock(TaxHelperData::class);
+
+        $this->selectionPriceListProviderMock = $this->createMock(SelectionPriceListProviderInterface::class);
+
+        $objectManagerHelper = new ObjectManagerHelper($this);
+        $this->bundleCalculatorMock = $objectManagerHelper->getObject(
+            BundleAdjustmentCalculator::class,
+            [
+                'calculator' => $this->baseCalculator,
+                'amountFactory' => $this->amountFactory,
+                'selectionFactory' => $this->selectionFactoryMock,
+                'taxHelper' => $taxData,
+                'priceCurrency' => $priceCurrency,
+                'selectionPriceListProvider' => $this->selectionPriceListProviderMock
+            ]
         );
-        $this->amountFactory->expects($this->any())->method('create')->will($factoryCallback);
-        $this->baseCalculator = $this->getMockBuilder(AdjustmentCalculator::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $taxData = $this->getMockBuilder(TaxHelperData::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->selectionPriceListProviderMock = $this->getMockBuilder(SelectionPriceListProviderInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-
-        $this->bundleCalculatorMock = $this->getMockBuilder(BundleAdjustmentCalculator::class)
-            ->setConstructorArgs(
-                [
-                    $this->baseCalculator,
-                    $this->amountFactory,
-                    $this->selectionFactoryMock,
-                    $taxData,
-                    $priceCurrency,
-                    $this->selectionPriceListProviderMock
-                ]
-            )
-            ->setMethods(['getOptionsAmount'])
-            ->getMock();
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->bundleOptions = $this->objectManagerHelper->getObject(
             BundleOptions::class,
@@ -139,11 +127,10 @@ class BundleOptionsTest extends TestCase
     }
 
     /**
-     * @dataProvider getOptionsDataProvider
      * @param array $selectionCollection
-     *
      * @return void
      */
+    #[DataProvider('getOptionsDataProvider')]
     public function testGetOptions(array $selectionCollection)
     {
         $this->prepareOptionMocks($selectionCollection);
@@ -161,9 +148,7 @@ class BundleOptionsTest extends TestCase
         $this->saleableItemMock->expects($this->atLeastOnce())
             ->method('getStoreId')
             ->willReturn(1);
-        $priceTypeMock = $this->getMockBuilder(BundleProductType::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $priceTypeMock = $this->createMock(BundleProductType::class);
         $priceTypeMock->expects($this->atLeastOnce())
             ->method('setStoreFilter')
             ->with(1, $this->saleableItemMock)
@@ -177,9 +162,7 @@ class BundleOptionsTest extends TestCase
             ->method('getSelectionsCollection')
             ->with($optionIds, $this->saleableItemMock)
             ->willReturn($selectionCollection);
-        $collection = $this->getMockBuilder(BundleOptionCollection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $collection = $this->createMock(BundleOptionCollection::class);
         $collection->expects($this->atLeastOnce())
             ->method('appendSelections')
             ->with($selectionCollection, true, false)
@@ -196,7 +179,7 @@ class BundleOptionsTest extends TestCase
     /**
      * @return array
      */
-    public function getOptionsDataProvider() : array
+    public static function getOptionsDataProvider() : array
     {
         return [
             [
@@ -206,32 +189,22 @@ class BundleOptionsTest extends TestCase
     }
 
     /**
-     * @dataProvider selectionAmountDataProvider
      *
      * @param float $selectionQty
      * @param float|bool $selectionAmount
      * @param bool $useRegularPrice
-     *
      * @return void
      */
+    #[DataProvider('selectionAmountDataProvider')]
     public function testGetOptionSelectionAmount(float $selectionQty, $selectionAmount, bool $useRegularPrice)
     {
-        $selection = $this->getMockBuilder(Product::class)
-            ->addMethods(['getSelectionQty'])
-            ->onlyMethods(['__wakeup'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $amountInterfaceMock = $this->getMockBuilder(AmountInterface::class)
-            ->getMockForAbstractClass();
+        $selection = $this->createPartialMockWithReflection(Product::class, ['getSelectionQty']);
+        $selection->method('getSelectionQty')->willReturn($selectionQty);
+        $amountInterfaceMock = $this->createAmountInterfaceMock();
         $amountInterfaceMock->expects($this->once())
             ->method('getValue')
             ->willReturn($selectionAmount);
-        $selection->expects($this->once())
-            ->method('getSelectionQty')
-            ->willReturn($selectionQty);
-        $priceMock = $this->getMockBuilder(BundleSelectionPrice::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $priceMock = $this->createMock(BundleSelectionPrice::class);
         $priceMock->expects($this->once())
             ->method('getAmount')
             ->willReturn($amountInterfaceMock);
@@ -250,7 +223,7 @@ class BundleOptionsTest extends TestCase
     /**
      * @return array
      */
-    public function selectionAmountDataProvider(): array
+    public static function selectionAmountDataProvider(): array
     {
         return [
             [1., 50.5, false],
@@ -267,12 +240,9 @@ class BundleOptionsTest extends TestCase
     private function createAmountMock(array $amountData)
     {
         /** @var BaseAmount|MockObject $amount */
-        $amount = $this->getMockBuilder(BaseAmount::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $amount->expects($this->any())->method('getAdjustmentAmounts')
-            ->willReturn($amountData['adjustmentAmounts'] ?? []);
-        $amount->expects($this->any())->method('getValue')->willReturn($amountData['amount']);
+        $amount = $this->createMock(BaseAmount::class);
+        $amount->method('getAdjustmentAmounts')->willReturn($amountData['adjustmentAmounts'] ?? []);
+        $amount->method('getValue')->willReturn($amountData['amount']);
 
         return $amount;
     }
@@ -287,8 +257,7 @@ class BundleOptionsTest extends TestCase
     {
         /** @var BundleOption|MockObject $option */
         $option = $this->createPartialMock(BundleOption::class, ['isMultiSelection', '__wakeup']);
-        $option->expects($this->any())->method('isMultiSelection')
-            ->willReturn($optionData['isMultiSelection']);
+        $option->method('isMultiSelection')->willReturn($optionData['isMultiSelection']);
         $selections = [];
         foreach ($optionData['selections'] as $selectionData) {
             $selections[] = $this->createSelectionMock($selectionData);
@@ -309,41 +278,37 @@ class BundleOptionsTest extends TestCase
      */
     private function createSelectionMock(array $selectionData)
     {
-        $selection = $this->getMockBuilder(Product::class)
-            ->setMethods(['isSalable', 'getAmount', 'getQuantity', 'getProduct', '__wakeup'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        /** @var Product $selection */
+        $selection = $this->createPartialMockWithReflection(
+            Product::class,
+            ['isSalable', 'getProduct']
+        );
 
-        // All items are saleable
-        $selection->expects($this->any())->method('isSalable')->willReturn(true);
+        $selection->method('isSalable')->willReturn(true);
         foreach ($selectionData['data'] as $key => $value) {
             $selection->setData($key, $value);
         }
         $amountMock = $this->createAmountMock($selectionData['amount']);
-        $selection->expects($this->any())->method('getAmount')->willReturn($amountMock);
-        $selection->expects($this->any())->method('getQuantity')->willReturn(1);
+        $selection->setData('amount', $amountMock);
+        $selection->setData('quantity', 1);
 
-        $innerProduct = $this->getMockBuilder(Product::class)
-            ->setMethods(['getSelectionCanChangeQty', '__wakeup'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $innerProduct->expects($this->any())->method('getSelectionCanChangeQty')->willReturn(true);
-        $selection->expects($this->any())->method('getProduct')->willReturn($innerProduct);
+        $innerProduct = $this->createPartialMockWithReflection(Product::class, ['getSelectionCanChangeQty']);
+        $innerProduct->method('getSelectionCanChangeQty')->willReturn(true);
+        $selection->method('getProduct')->willReturn($innerProduct);
 
         return $selection;
     }
 
     /**
-     * @dataProvider getTestDataForCalculation
      * @param array $optionList
      * @param array $expected
-     *
      * @return void
      */
+    #[DataProvider('getTestDataForCalculation')]
     public function testCalculation(array $optionList, array $expected)
     {
         $storeId = 1;
-        $this->saleableItemMock->expects($this->any())->method('getStoreId')->willReturn($storeId);
+        $this->saleableItemMock->method('getStoreId')->willReturn($storeId);
         $this->selectionFactoryMock->expects($this->any())->method('create')->willReturnArgument(1);
 
         $this->baseCalculator->expects($this->atLeastOnce())->method('getAmount')
@@ -354,21 +319,17 @@ class BundleOptionsTest extends TestCase
             $options[] = $this->createOptionMock($optionData);
         }
         /** @var BundleOptionCollection|MockObject $optionsCollection */
-        $optionsCollection = $this->getMockBuilder(BundleOptionCollection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $optionsCollection = $this->createMock(BundleOptionCollection::class);
         $optionsCollection->expects($this->atLeastOnce())->method('appendSelections')->willReturn($options);
 
         /** @var AbstractType|MockObject $typeMock */
-        $typeMock = $this->getMockBuilder(BundleProductType::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $typeMock = $this->createMock(BundleProductType::class);
         $typeMock->expects($this->any())->method('setStoreFilter')
             ->with($storeId, $this->saleableItemMock);
         $typeMock->expects($this->any())->method('getOptionsCollection')
             ->with($this->saleableItemMock)
             ->willReturn($optionsCollection);
-        $this->saleableItemMock->expects($this->any())->method('getTypeInstance')->willReturn($typeMock);
+        $this->saleableItemMock->method('getTypeInstance')->willReturn($typeMock);
 
         $this->assertEquals($expected['min'], $this->bundleOptions->calculateOptions($this->saleableItemMock));
         $this->assertEquals($expected['max'], $this->bundleOptions->calculateOptions($this->saleableItemMock, false));
@@ -377,7 +338,7 @@ class BundleOptionsTest extends TestCase
     /**
      * @return array
      */
-    public function getTestDataForCalculation(): array
+    public static function getTestDataForCalculation(): array
     {
         return [
             'first case' => [
@@ -469,5 +430,24 @@ class BundleOptionsTest extends TestCase
                 'expected' => ['min' => 70, 'max' => 220],
             ],
         ];
+    }
+
+    /**
+     * Create a mock that implements all AmountInterface abstract methods
+     *
+     * @return AmountInterface
+     */
+    private function createAmountInterfaceMock(): AmountInterface
+    {
+        $mock = $this->createMock(AmountInterface::class);
+
+        // Mock all abstract methods with default values
+        $mock->method('__toString')->willReturn('0');
+        $mock->method('getAdjustmentAmount')->willReturn(0.0);
+        $mock->method('getTotalAdjustmentAmount')->willReturn(0.0);
+        $mock->method('getAdjustmentAmounts')->willReturn([]);
+        $mock->method('hasAdjustment')->willReturn(false);
+
+        return $mock;
     }
 }

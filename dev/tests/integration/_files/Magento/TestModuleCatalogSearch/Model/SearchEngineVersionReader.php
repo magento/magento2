@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -24,13 +24,16 @@ class SearchEngineVersionReader
     private $versionInfo;
 
     /**
-     * Returns full search engine version e.g. 'elasticsearch7'
+     * Returns full search engine version e.g. 'elasticsearch8'
      *
      * @return string
      */
     public function getFullVersion(): string
     {
         $version = $this->getVersion();
+        if (strtolower($this->getDistribution()) == 'opensearch') {
+            $version = 1;
+        }
         return $this->getDistribution() . ($version === 1 ? '' : $version);
     }
 

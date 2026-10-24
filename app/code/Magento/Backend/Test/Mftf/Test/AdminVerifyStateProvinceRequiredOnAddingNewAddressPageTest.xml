@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -32,6 +32,8 @@
             <actionGroup ref="SetAdminAccountActionGroup" stepKey="setAdminAccountToUnitedStates">
                 <argument name="InterfaceLocaleByValue" value="en_US" />
             </actionGroup>
+            <!--Delete all customers via API-->
+            <helper class="Magento\Customer\Test\Mftf\Helper\CustomerApiHelper" method="deleteAllCustomersApi" stepKey="deleteAllCustomersViaApi"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
                 <argument name="indices" value=""/>
@@ -40,10 +42,8 @@
                 <argument name="tags" value=""/>
             </actionGroup>
         </after>
-
         <!-- Open Admin Store Configuration Page -->
         <actionGroup ref="AdminOpenStoreConfigPageActionGroup" stepKey="openStoreConfigPage" />
-
         <!--"Choose United Kingdom" as State Option Required and save configuration -->
         <conditionalClick selector="{{StateOptionsSection.stateOptions}}" dependentSelector="{{StateOptionsSection.countriesWithRequiredRegions}}" visible="false" stepKey="expandStateOptionsTab"/>
         <waitForAjaxLoad stepKey="waitForAjax"/>
@@ -51,7 +51,6 @@
         <selectOption selector="{{StateOptionsSection.countriesWithRequiredRegions}}" userInput="United Kingdom" stepKey="selectCountriesWithRequiredRegion"/>
         <click selector="#save" stepKey="saveStateOptionsConfig"/>
         <waitForPageLoad stepKey="waitForSavingConfig"/>
-
         <!-- create customer on storefront -->
         <actionGroup ref="StorefrontOpenCustomerAccountCreatePageActionGroup" stepKey="openCreateAccountPage"/>
         <actionGroup ref="ReloadPageActionGroup" stepKey="refreshPage"/>
@@ -59,16 +58,13 @@
             <argument name="customer" value="Simple_US_Customer"/>
         </actionGroup>
         <actionGroup ref="StorefrontClickCreateAnAccountCustomerAccountCreationFormActionGroup" stepKey="submitCreateAccountForm"/>
-
         <!-- Open AddressBook and set Country as "United Kingdom" -->
         <actionGroup ref="StorefrontCustomerGoToSidebarMenu" stepKey="goToAddressBookPage">
             <argument name="menu" value="Address Book"/>
         </actionGroup>
-
         <!-- Choose Country as "United Kingdom" -->
         <selectOption selector="{{StorefrontCustomerAddressFormSection.country}}" userInput="United Kingdom" stepKey="selectCountry"/>
         <click selector="{{StorefrontCustomerAddressFormSection.saveAddress}}" stepKey="saveCustomerAddress"/>
-
         <!-- Assert the error message -->
         <seeElement selector="{{StorefrontCustomerMessagesSection.assertErrorMessage}}" stepKey="assetErrorMessage"/>
     </test>

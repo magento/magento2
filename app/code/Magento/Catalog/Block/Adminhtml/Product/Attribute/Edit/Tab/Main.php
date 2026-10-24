@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Product attribute add/edit form main tab
- *
- * @author Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab;
 
@@ -90,10 +88,11 @@ class Main extends AbstractMain
 
         $additionalReadOnlyTypes = ['gallery' => __('Gallery')];
         $attributeObject = $this->getAttributeObject();
-        if (isset($additionalReadOnlyTypes[$attributeObject->getFrontendInput()])) {
+        $frontendInput = $attributeObject->getFrontendInput();
+        if ($frontendInput !== null && isset($additionalReadOnlyTypes[$frontendInput])) {
             $additionalTypes[] = [
-                'value' => $attributeObject->getFrontendInput(),
-                'label' => $additionalReadOnlyTypes[$attributeObject->getFrontendInput()],
+                'value' => $frontendInput,
+                'label' => $additionalReadOnlyTypes[$frontendInput],
             ];
         }
 

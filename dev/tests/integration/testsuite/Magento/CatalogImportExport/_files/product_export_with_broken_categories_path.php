@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types = 1);
 
@@ -32,7 +32,6 @@ $properties = [
 foreach ($properties as $key => $value) {
     if ($reflectionClass->hasProperty($key)) {
         $reflectionProperty = $reflectionClass->getProperty($key);
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($categoryLinkManagement, $value);
     }
 }

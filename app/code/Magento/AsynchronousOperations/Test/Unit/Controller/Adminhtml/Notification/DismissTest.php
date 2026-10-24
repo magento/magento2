@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -47,7 +47,7 @@ class DismissTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
         $this->notificationManagementMock = $this->createMock(BulkNotificationManagement::class);
-        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->requestMock = $this->createMock(RequestInterface::class);
         $this->resultFactoryMock = $this->createPartialMock(ResultFactory::class, ['create']);
 
         $this->jsonResultMock = $this->createMock(Json::class);
@@ -81,6 +81,11 @@ class DismissTest extends TestCase
             ->with(ResultFactory::TYPE_JSON, [])
             ->willReturn($this->jsonResultMock);
 
+        $this->jsonResultMock->expects($this->once())
+            ->method('setData')
+            ->with([''])
+            ->willReturn($this->jsonResultMock);
+
         $this->assertEquals($this->jsonResultMock, $this->model->execute());
     }
 
@@ -96,6 +101,11 @@ class DismissTest extends TestCase
         $this->resultFactoryMock->expects($this->once())
             ->method('create')
             ->with(ResultFactory::TYPE_JSON, [])
+            ->willReturn($this->jsonResultMock);
+
+        $this->jsonResultMock->expects($this->once())
+            ->method('setData')
+            ->with([''])
             ->willReturn($this->jsonResultMock);
 
         $this->notificationManagementMock->expects($this->once())

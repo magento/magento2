@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Ui\Component\Listing;
 
@@ -171,7 +171,7 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
                     $component->getData('config'),
                     [
                         'name' => $newAttributeCode,
-                        'dataType' => $attributeData[AttributeMetadata::BACKEND_TYPE],
+                        'dataType' => $attributeData[AttributeMetadata::FRONTEND_INPUT],
                         'visible' => (bool)$attributeData[AttributeMetadata::IS_VISIBLE_IN_GRID]
                     ]
                 );

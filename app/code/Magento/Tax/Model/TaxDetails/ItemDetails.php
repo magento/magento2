@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Tax\Model\TaxDetails;
 
@@ -265,7 +265,7 @@ class ItemDetails extends AbstractExtensibleModel implements TaxDetailsItemInter
      * @param \Magento\Tax\Api\Data\AppliedTaxInterface[] $appliedTaxes
      * @return $this
      */
-    public function setAppliedTaxes(array $appliedTaxes = null)
+    public function setAppliedTaxes(?array $appliedTaxes = null)
     {
         return $this->setData(self::KEY_APPLIED_TAXES, $appliedTaxes);
     }

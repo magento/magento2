@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Data\Argument\Interpreter;
 
@@ -30,7 +30,7 @@ class ArrayType implements InterpreterInterface
      * @param InterpreterInterface $itemInterpreter
      * @param SortItemsHelper|null $sortItemsHelper
      */
-    public function __construct(InterpreterInterface $itemInterpreter, SortItemsHelper $sortItemsHelper = null)
+    public function __construct(InterpreterInterface $itemInterpreter, ?SortItemsHelper $sortItemsHelper = null)
     {
         $this->itemInterpreter = $itemInterpreter;
         $this->sortItemsHelper = $sortItemsHelper ?: new \Magento\Framework\ObjectManager\Helper\SortItems();

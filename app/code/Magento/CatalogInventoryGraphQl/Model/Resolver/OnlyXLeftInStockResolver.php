@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\CatalogInventoryGraphQl\Model\Resolver;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\CatalogInventory\Model\Configuration;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -23,41 +24,37 @@ use Magento\Store\Model\ScopeInterface;
 class OnlyXLeftInStockResolver implements ResolverInterface
 {
     /**
-     * @var ScopeConfigInterface
+     * Configurable product type code
      */
-    private $scopeConfig;
-
-    /**
-     * @var StockRegistryInterface
-     */
-    private $stockRegistry;
+    private const PRODUCT_TYPE_CONFIGURABLE = "configurable";
 
     /**
      * @param ScopeConfigInterface $scopeConfig
      * @param StockRegistryInterface $stockRegistry
+     * @param ProductRepositoryInterface $productRepositoryInterface
      */
     public function __construct(
-        ScopeConfigInterface $scopeConfig,
-        StockRegistryInterface $stockRegistry
+        private readonly ScopeConfigInterface $scopeConfig,
+        private readonly StockRegistryInterface $stockRegistry,
+        private readonly ProductRepositoryInterface $productRepositoryInterface
     ) {
-        $this->scopeConfig = $scopeConfig;
-        $this->stockRegistry = $stockRegistry;
     }
 
     /**
      * @inheritdoc
      */
-    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
+    public function resolve(Field $field, $context, ResolveInfo $info, ?array $value = null, ?array $args = null)
     {
         if (!array_key_exists('model', $value) || !$value['model'] instanceof ProductInterface) {
             throw new LocalizedException(__('"model" value should be specified'));
         }
 
-        /* @var $product ProductInterface */
         $product = $value['model'];
-        $onlyXLeftQty = $this->getOnlyXLeftQty($product);
-
-        return $onlyXLeftQty;
+        if ($product->getTypeId() === self::PRODUCT_TYPE_CONFIGURABLE) {
+            $variant = $this->productRepositoryInterface->get($product->getSku());
+            return $this->getOnlyXLeftQty($variant);
+        }
+        return $this->getOnlyXLeftQty($product);
     }
 
     /**
@@ -73,7 +70,7 @@ class OnlyXLeftInStockResolver implements ResolverInterface
             Configuration::XML_PATH_STOCK_THRESHOLD_QTY,
             ScopeInterface::SCOPE_STORE
         );
-        if ($thresholdQty === 0) {
+        if ($thresholdQty === 0.0) {
             return null;
         }
 

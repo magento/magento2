@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -37,7 +37,7 @@ class DocRootLocator
      * @param ReadFactory $readFactory
      * @param Filesystem|null $filesystem
      */
-    public function __construct(RequestInterface $request, ReadFactory $readFactory, Filesystem $filesystem = null)
+    public function __construct(RequestInterface $request, ReadFactory $readFactory, ?Filesystem $filesystem = null)
     {
         $this->request = $request;
         $this->readFactory = $readFactory;

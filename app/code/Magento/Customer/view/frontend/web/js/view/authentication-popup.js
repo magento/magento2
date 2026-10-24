@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 define([
@@ -41,8 +41,27 @@ define([
             });
         },
 
-        /** Init popup login window */
+        /**
+         * Sets modal on given HTML element with on demand initialization.
+         */
         setModalElement: function (element) {
+            var cart = customerData.get('cart');
+
+            if (cart().isGuestCheckoutAllowed === false) {
+                this.createPopup(element);
+            } else {
+                cart.subscribe(function (cartData) {
+                    if (cartData.isGuestCheckoutAllowed === false) {
+                        this.createPopup(element);
+                    }
+                }, this);
+            }
+        },
+
+        /**
+         * Initializes authentication modal on given HTML element.
+         */
+        createPopup: function (element) {
             if (authenticationPopup.modalWindow == null) {
                 authenticationPopup.createPopUp(element);
             }

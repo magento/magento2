@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -72,7 +72,7 @@ class AttributeMetadataConverter
         ValidationRuleInterfaceFactory $validationRuleFactory,
         AttributeMetadataInterfaceFactory $attributeMetadataFactory,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
-        ScopeConfigInterface $scopeConfig = null
+        ?ScopeConfigInterface $scopeConfig = null
     ) {
         $this->optionFactory = $optionFactory;
         $this->validationRuleFactory = $validationRuleFactory;
@@ -137,16 +137,16 @@ class AttributeMetadataConverter
             ->setInputFilter((string)$attribute->getInputFilter())
             ->setStoreLabel($attribute->getStoreLabel())
             ->setValidationRules($validationRules)
-            ->setIsVisible((boolean)$attribute->getIsVisible())
-            ->setIsRequired((boolean)$attribute->getIsRequired())
+            ->setIsVisible((bool)$attribute->getIsVisible())
+            ->setIsRequired((bool)$attribute->getIsRequired())
             ->setMultilineCount((int)$attribute->getMultilineCount())
             ->setDataModel((string)$attribute->getDataModel())
             ->setOptions($options)
             ->setFrontendClass($attribute->getFrontend()->getClass())
             ->setFrontendLabel($attribute->getFrontendLabel())
             ->setNote((string)$attribute->getNote())
-            ->setIsSystem((boolean)$attribute->getIsSystem())
-            ->setIsUserDefined((boolean)$attribute->getIsUserDefined())
+            ->setIsSystem((bool)$attribute->getIsSystem())
+            ->setIsUserDefined((bool)$attribute->getIsUserDefined())
             ->setBackendType($attribute->getBackendType())
             ->setSortOrder((int)$attribute->getSortOrder())
             ->setIsUsedInGrid($attribute->getIsUsedInGrid())

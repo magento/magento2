@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,14 +13,17 @@ use Magento\Framework\App\ScopeInterface;
 use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\Locale\Format;
 use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Tests class for Number locale format
  */
 class FormatTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Format
      */
@@ -54,13 +57,19 @@ class FormatTest extends TestCase
         $this->currency = $this->getMockBuilder(Currency::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->scope = $this->getMockBuilder(ScopeInterface::class)
-            ->setMethods(['getCurrentCurrency'])
-            ->getMockForAbstractClass();
+        $this->scope = $this->createPartialMockWithReflection(
+            ScopeInterface::class,
+            [
+                'getCurrentCurrency',  // Custom method not in interface
+                'getCode',            // ScopeInterface methods
+                'getId',
+                'getScopeType',
+                'getScopeTypeName',
+                'getName'
+            ]
+        );
 
-        $this->scopeResolver = $this->getMockBuilder(ScopeResolverInterface::class)
-            ->setMethods(['getScope'])
-            ->getMockForAbstractClass();
+        $this->scopeResolver = $this->createMock(ScopeResolverInterface::class);
         $this->scopeResolver->expects($this->any())
             ->method('getScope')
             ->willReturn($this->scope);
@@ -82,9 +91,8 @@ class FormatTest extends TestCase
     /**
      * @param string $localeCode
      * @param string $currencyCode
-     * @param array $expectedResult
-     * @dataProvider getPriceFormatDataProvider
-     */
+     * @param array $expectedResult     */
+    #[DataProvider('getPriceFormatDataProvider')]
     public function testGetPriceFormat($localeCode, $currencyCode, array $expectedResult): void
     {
         $this->scope->expects($this->once())
@@ -101,7 +109,7 @@ class FormatTest extends TestCase
      *
      * @return array
      */
-    public function getPriceFormatDataProvider(): array
+    public static function getPriceFormatDataProvider(): array
     {
         $swissGroupSymbol = INTL_ICU_VERSION >= 59.1 ? '’' : '\'';
         return [
@@ -116,10 +124,9 @@ class FormatTest extends TestCase
      *
      * @param mixed $value
      * @param float $expected
-     * @param string $locale
-     * @dataProvider provideNumbers
-     */
-    public function testGetNumber(string $value, float $expected, string $locale = null): void
+     * @param string $locale     */
+    #[DataProvider('provideNumbers')]
+    public function testGetNumber(string $value, float $expected, ?string $locale = null): void
     {
         if ($locale !== null) {
             $this->localeResolver->method('getLocale')->willReturn($locale);
@@ -131,7 +138,7 @@ class FormatTest extends TestCase
      *
      * @return array
      */
-    public function provideNumbers(): array
+    public static function provideNumbers(): array
     {
         return [
             ['  2345.4356,1234', 23454356.1234],
