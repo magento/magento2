@@ -67,6 +67,10 @@ class TranslitTest extends TestCase
                 $isIconv
             ],
             ['™', 'tm', 'tm', $isIconv],
+            ['път към дома', 'pat kam doma', 'pat kam doma', $isIconv],
+            ['ПЪТ КЪМ ДОМА', 'pat kam doma', 'pat kam doma', $isIconv],
+            ['шофьор', 'shofyor', 'shofyor', $isIconv],
+            ['ШОФЬОР', 'shofyor', 'shofyor', $isIconv],
             ['লক্ষ্য এনালগ ওয়াচ টি ২০', 'laksoa enaalaga oyaoaca tai 20', 'laksoa enaalaga oyaoaca tai 20', $isIconv]
         ];
     }
