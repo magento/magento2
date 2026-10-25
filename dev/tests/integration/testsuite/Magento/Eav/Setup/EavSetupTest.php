@@ -15,8 +15,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 class EavSetupTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * Eav setup.
-     *
      * @var \Magento\Eav\Setup\EavSetup
      */
     private $eavSetup;
@@ -34,8 +32,6 @@ class EavSetupTest extends \PHPUnit\Framework\TestCase
      * Verify that add attribute work correct attribute_code.
      *
      * @param string $attributeCode
-     *
-     * 
      */
     #[DataProvider('addAttributeDataProvider')]
     public function testAddAttribute($attributeCode)
@@ -66,8 +62,6 @@ class EavSetupTest extends \PHPUnit\Framework\TestCase
      * Verify that add attribute throw exception if attribute_code is not valid.
      *
      * @param string|null $attributeCode
-     *
-     * 
      */
     #[DataProvider('addAttributeThrowExceptionDataProvider')]
     public function testAddAttributeThrowException($attributeCode)
@@ -99,14 +93,14 @@ class EavSetupTest extends \PHPUnit\Framework\TestCase
      * Verify that add attribute throw exception if attribute_code is not valid.
      *
      * @param string|null $attributeCode
-     *
-     * 
      */
     #[DataProvider('addInvalidAttributeThrowExceptionDataProvider')]
     public function testAddInvalidAttributeThrowException($attributeCode)
     {
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-        $this->expectExceptionMessage('Please use only letters (a-z or A-Z), numbers (0-9) or underscore (_) in this field,');
+        $this->expectExceptionMessage(
+            'Please use only letters (a-z or A-Z), numbers (0-9) or underscore (_) in this field,'
+        );
 
         $attributeData = $this->getAttributeData();
         $this->eavSetup->addAttribute(\Magento\Catalog\Model\Product::ENTITY, $attributeCode, $attributeData);
