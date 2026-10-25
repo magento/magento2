@@ -23,7 +23,7 @@ class CollectionTime extends Value
     /**
      * The path to config setting of schedule of collection data cron.
      */
-    public const CRON_SCHEDULE_PATH = 'crontab/default/jobs/analytics_collect_data/schedule/cron_expr';
+    public const CRON_SCHEDULE_PATH = 'crontab/analytics/jobs/analytics_collect_data/schedule/cron_expr';
 
     /**
      * @var WriterInterface

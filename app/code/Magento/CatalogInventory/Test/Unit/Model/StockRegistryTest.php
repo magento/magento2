@@ -30,7 +30,7 @@ class StockRegistryTest extends TestCase
     {
         $this->criteria = $this->getMockBuilder(StockItemCriteriaInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $criteriaFactory = $this->getMockBuilder(StockItemCriteriaInterfaceFactory::class)
             ->onlyMethods(['create'])

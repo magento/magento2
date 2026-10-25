@@ -28,9 +28,7 @@ class DefaultPriceTest extends TestCase
     protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManager($this);
-        $this->resourceMock = $this->getMockBuilder(ResourceConnection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resourceMock = $this->createMock(ResourceConnection::class);
         $this->model = $objectManagerHelper->getObject(
             DefaultPrice::class,
             [

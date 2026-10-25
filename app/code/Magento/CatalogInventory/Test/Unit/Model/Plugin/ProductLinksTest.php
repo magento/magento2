@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogInventory\Test\Unit\Model\Plugin;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Product\Link;
 use Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection;
 use Magento\CatalogInventory\Helper\Stock;
@@ -43,9 +44,7 @@ class ProductLinksTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider stockStatusDataProvider
-     */
+    #[DataProvider('stockStatusDataProvider')]
     public function testAfterGetProductCollectionShow($status, $callCount)
     {
         list($collectionMock, $subjectMock) = $this->buildMocks();

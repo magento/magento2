@@ -1,96 +1,104 @@
 <?php
 /**
- * Google AdWords Data Helper
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
+
 namespace Magento\GoogleAdwords\Helper;
+
+use Magento\Framework\App\Helper\AbstractHelper;
+use Magento\Framework\Registry;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * @api
  * @since 100.0.2
  */
-class Data extends \Magento\Framework\App\Helper\AbstractHelper
+class Data extends AbstractHelper
 {
     /**#@+
      * Google AdWords language codes
      */
-    const XML_PATH_LANGUAGES = 'google/adwords/languages';
+    public const XML_PATH_LANGUAGES = 'google/adwords/languages';
 
-    const XML_PATH_LANGUAGE_CONVERT = 'google/adwords/language_convert';
+    public const XML_PATH_LANGUAGE_CONVERT = 'google/adwords/language_convert';
 
     /**#@-*/
 
     /**#@+
      * Google AdWords conversion src
      */
-    const XML_PATH_CONVERSION_JS_SRC = 'google/adwords/conversion_js_src';
+    public const XML_PATH_CONVERSION_JS_SRC = 'google/adwords/conversion_js_src';
 
-    const XML_PATH_CONVERSION_IMG_SRC = 'google/adwords/conversion_img_src';
+    public const XML_PATH_CONVERSION_IMG_SRC = 'google/adwords/conversion_img_src';
 
     /**#@-*/
 
     /**
      * Google AdWords registry name for conversion value
      */
-    const CONVERSION_VALUE_REGISTRY_NAME = 'google_adwords_conversion_value';
+    public const CONVERSION_VALUE_REGISTRY_NAME = 'google_adwords_conversion_value';
 
     /**
      * Google AdWords registry name for conversion value currency
      */
-    const CONVERSION_VALUE_CURRENCY_REGISTRY_NAME = 'google_adwords_conversion_value_currency';
+    public const CONVERSION_VALUE_CURRENCY_REGISTRY_NAME = 'google_adwords_conversion_value_currency';
 
     /**
      * Default value for conversion value
      */
-    const CONVERSION_VALUE_DEFAULT = 0;
+    public const CONVERSION_VALUE_DEFAULT = 0;
 
     /**#@+
      * Google AdWords config data
      */
-    const XML_PATH_ACTIVE = 'google/adwords/active';
+    public const XML_PATH_ACTIVE = 'google/adwords/active';
 
-    const XML_PATH_CONVERSION_ID = 'google/adwords/conversion_id';
+    public const XML_PATH_CONVERSION_ID = 'google/adwords/conversion_id';
 
-    const XML_PATH_CONVERSION_LANGUAGE = 'google/adwords/conversion_language';
+    public const XML_PATH_CONVERSION_LANGUAGE = 'google/adwords/conversion_language';
 
-    const XML_PATH_CONVERSION_FORMAT = 'google/adwords/conversion_format';
+    public const XML_PATH_CONVERSION_FORMAT = 'google/adwords/conversion_format';
 
-    const XML_PATH_CONVERSION_COLOR = 'google/adwords/conversion_color';
+    public const XML_PATH_CONVERSION_COLOR = 'google/adwords/conversion_color';
 
-    const XML_PATH_CONVERSION_LABEL = 'google/adwords/conversion_label';
+    public const XML_PATH_CONVERSION_LABEL = 'google/adwords/conversion_label';
 
-    const XML_PATH_CONVERSION_VALUE_TYPE = 'google/adwords/conversion_value_type';
+    public const XML_PATH_CONVERSION_VALUE_TYPE = 'google/adwords/conversion_value_type';
 
-    const XML_PATH_CONVERSION_VALUE = 'google/adwords/conversion_value';
+    public const XML_PATH_CONVERSION_VALUE = 'google/adwords/conversion_value';
 
     /**
      * Google Adwords send order conversion value currency when using dynamic value
      */
-    const XML_PATH_SEND_CURRENCY = 'google/adwords/send_currency';
+    public const XML_PATH_SEND_CURRENCY = 'google/adwords/send_currency';
 
     /**#@-*/
 
     /**#@+
      * Conversion value types
      */
-    const CONVERSION_VALUE_TYPE_DYNAMIC = 1;
+    public const CONVERSION_VALUE_TYPE_DYNAMIC = 1;
 
-    const CONVERSION_VALUE_TYPE_CONSTANT = 0;
+    public const CONVERSION_VALUE_TYPE_CONSTANT = 0;
+
+    /**#@-*/
 
     /**#@-*/
 
-    /**#@-*/
+    /**
+     * @var Registry
+     */
     protected $_registry;
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Framework\Registry $registry
+     * @param Registry $registry
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Framework\Registry $registry
+        Registry $registry
     ) {
         parent::__construct($context);
         $this->_registry = $registry;
@@ -105,7 +113,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->scopeConfig->isSetFlag(
             self::XML_PATH_ACTIVE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         ) &&
             $this->getConversionId() &&
             $this->getConversionLanguage() &&
@@ -169,7 +177,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return (int)$this->scopeConfig->getValue(
             self::XML_PATH_CONVERSION_ID,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -182,7 +190,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->scopeConfig->getValue(
             self::XML_PATH_CONVERSION_LANGUAGE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -195,7 +203,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->scopeConfig->getValue(
             self::XML_PATH_CONVERSION_FORMAT,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -208,7 +216,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->scopeConfig->getValue(
             self::XML_PATH_CONVERSION_COLOR,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -221,7 +229,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->scopeConfig->getValue(
             self::XML_PATH_CONVERSION_LABEL,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -234,7 +242,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->scopeConfig->getValue(
             self::XML_PATH_CONVERSION_VALUE_TYPE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -255,9 +263,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getConversionValueConstant()
     {
-        return (double)$this->scopeConfig->getValue(
+        return (float)$this->scopeConfig->getValue(
             self::XML_PATH_CONVERSION_VALUE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -269,7 +277,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function getConversionValue()
     {
         if ($this->isDynamicConversionValue()) {
-            $conversionValue = (double)$this->_registry->registry(self::CONVERSION_VALUE_REGISTRY_NAME);
+            $conversionValue = (float)$this->_registry->registry(self::CONVERSION_VALUE_REGISTRY_NAME);
         } else {
             $conversionValue = $this->getConversionValueConstant();
         }
@@ -286,7 +294,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->scopeConfig->isSetFlag(
             self::XML_PATH_SEND_CURRENCY,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
     }
 

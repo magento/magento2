@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -195,16 +195,14 @@ class ProductTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->categoryIndexerMock = $this->getMockForAbstractClass(IndexerInterface::class);
+        $this->categoryIndexerMock = $this->createMock(IndexerInterface::class);
 
         $this->moduleManager = $this->createPartialMock(Manager::class, ['isEnabled']);
         $this->stockItemFactoryMock = $this->createPartialMock(
             StockItemInterfaceFactory::class,
             ['create']
         );
-        $this->dataObjectHelperMock = $this->getMockBuilder(DataObjectHelper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->dataObjectHelperMock = $this->createMock(DataObjectHelper::class);
         $this->productFlatProcessor = $this->createMock(Processor::class);
 
         $this->_priceInfoMock = $this->createMock(Base::class);
@@ -212,97 +210,60 @@ class ProductTest extends TestCase
         $this->productPriceProcessor = $this->createMock(\Magento\Catalog\Model\Indexer\Product\Price\Processor::class);
 
         $stateMock = $this->createPartialMock(State::class, ['getAreaCode']);
-        $stateMock->expects($this->any())
-            ->method('getAreaCode')
-            ->willReturn(FrontNameResolver::AREA_CODE);
+        $stateMock->method('getAreaCode')->willReturn(FrontNameResolver::AREA_CODE);
 
-        $eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $eventManagerMock = $this->createMock(ManagerInterface::class);
         $actionValidatorMock = $this->createMock(RemoveAction::class);
-        $actionValidatorMock->expects($this->any())->method('isAllowed')->willReturn(true);
-        $cacheInterfaceMock = $this->getMockForAbstractClass(CacheInterface::class);
+        $actionValidatorMock->method('isAllowed')->willReturn(true);
+        $cacheInterfaceMock = $this->createMock(CacheInterface::class);
 
         $contextMock = $this->createPartialMock(
             Context::class,
             ['getEventDispatcher', 'getCacheManager', 'getAppState', 'getActionValidator']
         );
-        $contextMock->expects($this->any())->method('getAppState')->willReturn($stateMock);
-        $contextMock->expects($this->any())->method('getEventDispatcher')->willReturn($eventManagerMock);
-        $contextMock->expects($this->any())
-            ->method('getCacheManager')
-            ->willReturn($cacheInterfaceMock);
-        $contextMock->expects($this->any())
-            ->method('getActionValidator')
-            ->willReturn($actionValidatorMock);
+        $contextMock->method('getAppState')->willReturn($stateMock);
+        $contextMock->method('getEventDispatcher')->willReturn($eventManagerMock);
+        $contextMock->method('getCacheManager')->willReturn($cacheInterfaceMock);
+        $contextMock->method('getActionValidator')->willReturn($actionValidatorMock);
 
-        $this->optionInstanceMock = $this->getMockBuilder(Option::class)
-            ->onlyMethods(['setProduct', '__wakeup', '__sleep'])
-            ->addMethods(['saveOptions'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->optionInstanceMock = $this->createMock(Option::class);
 
-        $this->resource = $this->getMockBuilder(ProductResourceModel::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resource = $this->createMock(ProductResourceModel::class);
 
-        $this->registry = $this->getMockBuilder(Registry::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->registry = $this->createMock(Registry::class);
 
-        $this->category = $this->getMockBuilder(Category::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->category = $this->createMock(Category::class);
 
-        $this->store = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->store = $this->createMock(Store::class);
 
-        $this->website = $this->getMockBuilder(Website::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->website = $this->createMock(Website::class);
 
-        $storeManager = $this->getMockBuilder(StoreManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $storeManager->expects($this->any())
-            ->method('getStore')
-            ->willReturn($this->store);
-        $storeManager->expects($this->any())
-            ->method('getWebsite')
-            ->willReturn($this->website);
+        $storeManager = $this->createMock(StoreManagerInterface::class);
+        $storeManager->method('getStore')->willReturn($this->store);
+        $storeManager->method('getWebsite')->willReturn($this->website);
         $this->indexerRegistryMock = $this->createPartialMock(
             IndexerRegistry::class,
             ['get']
         );
-        $this->categoryRepository = $this->getMockForAbstractClass(CategoryRepositoryInterface::class);
+        $this->categoryRepository = $this->createMock(CategoryRepositoryInterface::class);
 
         $this->_catalogProduct = $this->createPartialMock(
             \Magento\Catalog\Helper\Product::class,
             ['isDataForProductCategoryIndexerWasChanged']
         );
 
-        $this->imageCache = $this->getMockBuilder(Cache::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->imageCacheFactory = $this->getMockBuilder(CacheFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
+        $this->imageCache = $this->createMock(Cache::class);
+        $this->imageCacheFactory = $this->createPartialMock(CacheFactory::class, ['create']);
 
-        $this->productLinkFactory = $this->getMockBuilder(ProductLinkInterfaceFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
+        $this->productLinkFactory = $this->createPartialMock(ProductLinkInterfaceFactory::class, ['create']);
 
-        $this->mediaGalleryEntryFactoryMock =
-            $this->getMockBuilder(ProductAttributeMediaGalleryEntryInterfaceFactory::class)
-                ->onlyMethods(['create'])
-                ->disableOriginalConstructor()
-                ->getMock();
+        $this->mediaGalleryEntryFactoryMock = $this->createPartialMock(
+            ProductAttributeMediaGalleryEntryInterfaceFactory::class,
+            ['create']
+        );
 
-        $this->metadataServiceMock = $this->getMockForAbstractClass(ProductAttributeRepositoryInterface::class);
-        $this->attributeValueFactory = $this->getMockBuilder(AttributeValueFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->metadataServiceMock = $this->createMock(ProductAttributeRepositoryInterface::class);
+        $this->attributeValueFactory = $this->createMock(AttributeValueFactory::class);
         $this->linkTypeProviderMock = $this->createPartialMock(
             LinkTypeProvider::class,
             ['getLinkTypes']
@@ -379,7 +340,6 @@ class ProductTest extends TestCase
         $groupExtension = $this->objectManagerHelper->getObject(ProductLinkExtension::class);
         $reflectionOfExtension = new \ReflectionClass(ProductLinkExtension::class);
         $method = $reflectionOfExtension->getMethod('setData');
-        $method->setAccessible(true);
         $method->invokeArgs($groupExtension, ['qty', 1]);
 
         $outputGroupLink = $this->objectManagerHelper->getObject(Link::class);
@@ -402,10 +362,7 @@ class ProductTest extends TestCase
             });
 
         $expectedOutput = [$outputRelatedLink, $outputGroupLink];
-        $typeInstanceMock = $this->getMockBuilder(SimpleProductType::class)
-            ->addMethods(['"getSku"'])
-            ->getMock();
-        $typeInstanceMock->expects($this->atLeastOnce())->method('getSku')->willReturn("Simple Product 1");
+        $typeInstanceMock = $this->createMock(SimpleProductType::class);
         $this->model->setTypeInstance($typeInstanceMock);
 
         $productLink1 = $this->objectManagerHelper->getObject(Link::class);

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Code;
 
@@ -12,6 +12,7 @@ use Magento\Framework\Interception\Code\Generator as InterceptionGenerator;
 use Magento\Framework\ObjectManager\Code\Generator as DIGenerator;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 require_once __DIR__ . '/GeneratorTest/SourceClassWithNamespace.php';
 require_once __DIR__ . '/GeneratorTest/ParentClassWithNamespace.php';
@@ -110,8 +111,8 @@ class GeneratorTest extends TestCase
      * @param $className
      * @param $generateType
      * @param $expectedDataPath
-     * @dataProvider generateClassFactoryDataProvider
      */
+    #[DataProvider('generateClassFactoryDataProvider')]
     public function testGenerateClassFactory($className, $generateType, $expectedDataPath)
     {
         $factoryClassName = $className . $generateType;
@@ -162,8 +163,8 @@ class GeneratorTest extends TestCase
      * @param $className
      * @param $generateType
      * @param $expectedDataPath
-     * @dataProvider generateClassDataProvider
      */
+    #[DataProvider('generateClassDataProvider')]
     public function testGenerateClass($className, $generateType, $expectedDataPath)
     {
         $generateClassName = $className . $generateType;

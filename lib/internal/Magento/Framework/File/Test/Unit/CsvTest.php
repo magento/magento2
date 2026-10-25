@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -38,7 +38,6 @@ class CsvTest extends TestCase
         $expected = 4;
         $this->_model->setLineLength($expected);
         $lineLengthProperty = new \ReflectionProperty(Csv::class, '_lineLength');
-        $lineLengthProperty->setAccessible(true);
         $actual = $lineLengthProperty->getValue($this->_model);
         $this->assertEquals($expected, $actual);
     }

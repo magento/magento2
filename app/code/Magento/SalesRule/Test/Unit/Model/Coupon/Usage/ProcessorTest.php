@@ -18,8 +18,10 @@ use Magento\SalesRule\Model\Coupon\Usage\UpdateInfo;
 use Magento\SalesRule\Model\ResourceModel\Coupon\Usage;
 use Magento\SalesRule\Model\Rule;
 use Magento\SalesRule\Model\Rule\Customer;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\SalesRule\Model\Rule\CustomerFactory;
 use Magento\SalesRule\Model\RuleFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -28,6 +30,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ProcessorTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Processor
      */
@@ -100,8 +103,8 @@ class ProcessorTest extends TestCase
      * @param $isIncrement
      * @param $timesUsed
      * @return void
-     * @dataProvider dataProvider
      */
+    #[DataProvider('dataProvider')]
     public function testProcess($isIncrement, $timesUsed): void
     {
         $ruleId = 1;
@@ -133,11 +136,19 @@ class ProcessorTest extends TestCase
             ->with($customerId, $couponId, $isIncrement)
             ->willReturnSelf();
 
-        $customerRuleMock = $this->getMockBuilder(Customer::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['loadByCustomerRule', 'getId', 'hasData', 'save'])
-            ->addMethods(['getTimesUsed', 'setTimesUsed', 'setCustomerId', 'setRuleId'])
-            ->getMock();
+        $customerRuleMock = $this->createPartialMockWithReflection(
+            Customer::class,
+            [
+                'loadByCustomerRule',
+                'getId',
+                'hasData',
+                'save',
+                'getTimesUsed',
+                'setTimesUsed',
+                'setCustomerId',
+                'setRuleId'
+            ]
+        );
         $customerRuleMock->expects($this->once())->method('loadByCustomerRule')->with($customerId, $ruleId)
             ->willReturnSelf();
 
@@ -152,11 +163,10 @@ class ProcessorTest extends TestCase
         $customerRuleMock->expects($this->once())->method('save')->willReturnSelf();
         $this->ruleCustomerFactoryMock->expects($this->once())->method('create')->willReturn($customerRuleMock);
 
-        $ruleMock = $this->getMockBuilder(Rule::class)
-            ->onlyMethods(['load', 'getId', 'loadCouponCode', 'save'])
-            ->addMethods(['getTimesUsed', 'setTimesUsed'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $ruleMock = $this->createPartialMockWithReflection(
+            Rule::class,
+            ['load', 'getId', 'loadCouponCode', 'save', 'getTimesUsed', 'setTimesUsed']
+        );
         $ruleMock->expects($this->atLeastOnce())->method('load')->willReturnSelf();
         $ruleMock->expects($this->atLeastOnce())->method('getId')->willReturn(true);
         $ruleMock->expects($this->atLeastOnce())->method('loadCouponCode')->willReturnSelf();

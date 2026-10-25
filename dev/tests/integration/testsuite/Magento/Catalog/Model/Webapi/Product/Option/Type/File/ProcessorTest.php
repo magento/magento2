@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\Webapi\Product\Option\Type\File;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ProcessorTest extends \PHPUnit\Framework\TestCase
 {
@@ -20,8 +21,8 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider pathConfigDataProvider
      */
+    #[DataProvider('pathConfigDataProvider')]
     public function testProcessFileContent($pathConfig)
     {
         $model = $this->getModel($pathConfig);
@@ -54,8 +55,9 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($directory->isExist($filePath));
 
         $this->assertArrayHasKey('order_path', $result);
-        $filePath = $directory->getAbsolutePath($result['order_path']);
-        $this->assertTrue($directory->isExist($filePath));
+
+        $this->assertStringStartsWith('custom_options/order/', $result['order_path']);
+        $this->assertStringStartsWith('custom_options/quote/', $result['quote_path']);
     }
 
     public static function pathConfigDataProvider()

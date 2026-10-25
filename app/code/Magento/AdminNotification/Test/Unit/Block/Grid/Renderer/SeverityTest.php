@@ -16,11 +16,14 @@ use Magento\AdminNotification\Model\Inbox;
 use Magento\Backend\Block\Context;
 use Magento\Backend\Block\Widget\Grid\Column;
 use Magento\Framework\DataObject;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class SeverityTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * System under Test
      *
@@ -44,10 +47,7 @@ class SeverityTest extends TestCase
     public function testShouldRenderSeverity() : void
     {
         /** @var Column|MockObject $columnMock */
-        $columnMock = $this->getMockBuilder(Column::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getIndex'])
-            ->getMock();
+        $columnMock = $this->createPartialMockWithReflection(Column::class, ['getIndex']);
         $columnMock->expects($this->exactly(5))->method('getIndex')->willReturn('index');
         $this->sut->setColumn($columnMock);
         $dataObject = new DataObject();

@@ -123,7 +123,7 @@ class Sample_Proxy extends Sample implements \Magento\Framework\ObjectManager\No
     /**
      * {@inheritdoc}
      */
-    public function getConfig() : array
+    public function getConfig(): array
     {
         return $this->_getSubject()->getConfig();
     }
@@ -139,7 +139,7 @@ class Sample_Proxy extends Sample implements \Magento\Framework\ObjectManager\No
     /**
      * {@inheritdoc}
      */
-    public function getAttribute() : int|string
+    public function getAttribute(): int|string
     {
         return $this->_getSubject()->getAttribute();
     }

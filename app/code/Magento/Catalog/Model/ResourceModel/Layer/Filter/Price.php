@@ -383,7 +383,7 @@ class Price extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $priceExpr = $this->_getPriceExpression($select, false);
 
         if ($to !== '') {
-            $to = (double)$to;
+            $to = (float)$to;
             if ($from == $to) {
                 $to += self::MIN_POSSIBLE_PRICE;
             }

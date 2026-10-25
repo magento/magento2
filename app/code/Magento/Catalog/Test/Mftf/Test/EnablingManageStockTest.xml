@@ -25,6 +25,8 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
+            <!-- Delete all products via API using ProductApiHelper -->
+            <helper class="Magento\Catalog\Test\Mftf\Helper\ProductApiHelper" method="deleteAllProductsApi" stepKey="deleteAllProductsViaApi"/>
             <!-- Set ManageStock to Yes-->
             <magentoCLI command="config:set {{CatalogInventoryManageStockDisable.path}} 1" stepKey="manageStockEnable"/>
             <!--Logout From Admin Panel -->

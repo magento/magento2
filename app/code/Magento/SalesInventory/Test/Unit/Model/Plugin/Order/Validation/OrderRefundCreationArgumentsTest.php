@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\SalesInventory\Test\Unit\Model\Plugin\Order\Validation;
 
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Sales\Api\Data\CreditmemoCreationArgumentsExtensionInterface;
 use Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface;
 use Magento\Sales\Api\Data\CreditmemoInterface;
@@ -15,11 +16,14 @@ use Magento\Sales\Model\Order\Validation\RefundOrderInterface;
 use Magento\Sales\Model\ValidatorResultInterface;
 use Magento\SalesInventory\Model\Order\ReturnValidator;
 use Magento\SalesInventory\Model\Plugin\Order\Validation\OrderRefundCreationArguments;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class OrderRefundCreationArgumentsTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var OrderRefundCreationArguments
      */
@@ -62,41 +66,21 @@ class OrderRefundCreationArgumentsTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->returnValidatorMock = $this->getMockBuilder(ReturnValidator::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->creditmemoCreationArgumentsMock = $this->getMockBuilder(CreditmemoCreationArgumentsInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-
-        $this->extensionAttributesMock = $this->getMockBuilder(CreditmemoCreationArgumentsExtensionInterface::class)
-            ->addMethods(['getReturnToStockItems'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-
-        $this->validateResultMock = $this->getMockBuilder(ValidatorResultInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-
-        $this->refundOrderValidatorMock = $this->getMockBuilder(RefundOrderInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-
-        $this->orderMock = $this->getMockBuilder(OrderInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-
-        $this->creditmemoMock = $this->getMockBuilder(CreditmemoInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->returnValidatorMock = $this->createMock(ReturnValidator::class);
+        $this->creditmemoCreationArgumentsMock = $this->createMock(CreditmemoCreationArgumentsInterface::class);
+        $this->extensionAttributesMock = $this->createPartialMockWithReflection(
+            CreditmemoCreationArgumentsExtensionInterface::class,
+            ['getReturnToStockItems']
+        );
+        $this->validateResultMock = $this->createMock(ValidatorResultInterface::class);
+        $this->refundOrderValidatorMock = $this->createMock(RefundOrderInterface::class);
+        $this->orderMock = $this->createMock(OrderInterface::class);
+        $this->creditmemoMock = $this->createMock(CreditmemoInterface::class);
 
         $this->plugin = new OrderRefundCreationArguments($this->returnValidatorMock);
     }
 
-    /**
-     * @dataProvider dataProvider
-     */
+    #[DataProvider('dataProvider')]
     public function testAfterValidation($erroMessage)
     {
         $returnToStockItems = [1];

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\App\Utility;
 
@@ -93,7 +93,7 @@ class AggregateInvoker
             $dataSetName = '';
         }
         return $dataSetName . $exception->getMessage() . PHP_EOL
-        . \PHPUnit\Util\Filter::getFilteredStacktrace($exception);
+        . $exception->getTraceAsString();
     }
 
     /**

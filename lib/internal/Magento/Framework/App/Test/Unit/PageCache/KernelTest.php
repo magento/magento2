@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -23,6 +23,7 @@ use Magento\Framework\Stdlib\CookieDisablerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\PageCache\Model\Cache\Type;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -97,7 +98,7 @@ class KernelTest extends TestCase
         $this->httpResponseMock = $this->createMock(\Magento\Framework\App\Response\Http::class);
         $this->identifierMock = $this->createMock(Identifier::class);
         $this->requestMock = $this->createMock(Http::class);
-        $this->serializer = $this->getMockForAbstractClass(SerializerInterface::class);
+        $this->serializer = $this->createMock(SerializerInterface::class);
         $this->responseMock = $this->createMock(\Magento\Framework\App\Response\Http::class);
         $this->contextFactoryMock = $this->createPartialMock(ContextFactory::class, ['create']);
         $this->httpFactoryMock = $this->createPartialMock(HttpFactory::class, ['create']);
@@ -132,19 +133,12 @@ class KernelTest extends TestCase
 
         $reflection = new \ReflectionClass(Kernel::class);
         $reflectionProperty = $reflection->getProperty('fullPageCache');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->kernel, $this->fullPageCacheMock);
     }
 
-    /**
-     * @param string $id
-     * @param mixed $cache
-     * @param bool $isGet
-     * @param bool $isHead
-     *
-     * @return void
-     * @dataProvider dataProviderForResultWithCachedData
+    /**     * @return void
      */
+    #[DataProvider('dataProviderForResultWithCachedData')]
     public function testLoadWithCachedData($id, $cache, $isGet, $isHead): void
     {
         $this->serializer->expects($this->once())
@@ -211,15 +205,9 @@ class KernelTest extends TestCase
         ];
     }
 
-    /**
-     * @param string $id
-     * @param mixed $cache
-     * @param bool $isGet
-     * @param bool $isHead
-     *
-     * @return void
-     * @dataProvider dataProviderForResultWithoutCachedData
+    /**     * @return void
      */
+    #[DataProvider('dataProviderForResultWithoutCachedData')]
     public function testLoadWithoutCachedData($id, $cache, $isGet, $isHead): void
     {
         $this->requestMock->expects($this->once())->method('isGet')->willReturn($isGet);
@@ -249,12 +237,9 @@ class KernelTest extends TestCase
         ];
     }
 
-    /**
-     * @param $httpCode
-     *
-     * @return void
-     * @dataProvider testProcessSaveCacheDataProvider
+    /**     * @return void
      */
+    #[DataProvider('processSaveCacheDataProvider')]
     public function testProcessSaveCache($httpCode): void
     {
         $this->serializer->expects($this->once())
@@ -303,7 +288,7 @@ class KernelTest extends TestCase
     /**
      * @return array
      */
-    public static function testProcessSaveCacheDataProvider(): array
+    public static function processSaveCacheDataProvider(): array
     {
         return [
             [200],
@@ -311,15 +296,9 @@ class KernelTest extends TestCase
         ];
     }
 
-    /**
-     * @param string $cacheControlHeader
-     * @param int $httpCode
-     * @param bool $isGet
-     * @param bool $overrideHeaders
-     *
-     * @return void
-     * @dataProvider processNotSaveCacheProvider
+    /**     * @return void
      */
+    #[DataProvider('processNotSaveCacheProvider')]
     public function testProcessNotSaveCache($cacheControlHeader, $httpCode, $isGet, $overrideHeaders): void
     {
         $header = CacheControl::fromString("Cache-Control: $cacheControlHeader");

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Framework\File\Test\Unit;
 use Magento\Framework\File\Uploader;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\TargetDirectory;
@@ -61,9 +62,8 @@ class UploaderTest extends TestCase
     /**
      * @param string $fileName
      * @param string|bool $expectedCorrectedFileName
-     *
-     * @dataProvider getCorrectFileNameProvider
-     */
+     *     */
+    #[DataProvider('getCorrectFileNameProvider')]
     public function testGetCorrectFileName($fileName, $expectedCorrectedFileName)
     {
         $isExceptionExpected = $expectedCorrectedFileName === true;
@@ -114,9 +114,8 @@ class UploaderTest extends TestCase
     /**
      * @param string $extension
      * @param bool $isValid
-     *
-     * @dataProvider checkAllowedExtensionProvider
-     */
+     *     */
+    #[DataProvider('checkAllowedExtensionProvider')]
     public function testCheckAllowedExtension(bool $isValid, string $extension)
     {
         $this->assertEquals(

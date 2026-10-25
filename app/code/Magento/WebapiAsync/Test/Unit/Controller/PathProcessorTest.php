@@ -1,7 +1,7 @@
 <?php
-/***
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -13,6 +13,7 @@ use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Webapi\Controller\PathProcessor;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -38,7 +39,7 @@ class PathProcessorTest extends TestCase
 
     protected function setUp(): void
     {
-        $store = $this->getMockForAbstractClass(StoreInterface::class);
+        $store = $this->createMock(StoreInterface::class);
         $store->method('getId')->willReturn(2);
 
         $this->storeManagerMock = $this->createConfiguredMock(
@@ -50,19 +51,18 @@ class PathProcessorTest extends TestCase
         );
         $this->storeManagerMock->expects($this->once())->method('getStores');
 
-        $this->localeResolverMock = $this->getMockForAbstractClass(ResolverInterface::class);
+        $this->localeResolverMock = $this->createMock(ResolverInterface::class);
         $this->localeResolverMock->method('emulate')->with(2);
 
         $this->model = new PathProcessor($this->storeManagerMock, $this->localeResolverMock);
     }
 
     /**
-     * @dataProvider processPathDataProvider
-     *
      * @param string $storeCodeInPath
      * @param string $storeCodeSet
      * @param int $setCurrentStoreCallCtr
      */
+    #[DataProvider('processPathDataProvider')]
     public function testAllStoreCode($storeCodeInPath, $storeCodeSet, $setCurrentStoreCallCtr = 1)
     {
         $storeCodeInPath = !$storeCodeInPath ?: '/' . $storeCodeInPath; // add leading slash if store code not empty

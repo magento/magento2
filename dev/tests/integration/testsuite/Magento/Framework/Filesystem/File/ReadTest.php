@@ -2,12 +2,13 @@
 /**
  * Test for \Magento\Framework\Filesystem\File\Read
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Filesystem\File;
 
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ReadTest extends \PHPUnit\Framework\TestCase
 {
@@ -24,9 +25,9 @@ class ReadTest extends \PHPUnit\Framework\TestCase
      * Test for assertValid method
      * Expected exception for file that does not exist and file without access
      *
-     * @dataProvider providerNotValidFiles
      * @param string $path
      */
+    #[DataProvider('providerNotValidFiles')]
     public function testAssertValid($path)
     {
         $this->expectException(\Magento\Framework\Exception\FileSystemException::class);
@@ -47,11 +48,11 @@ class ReadTest extends \PHPUnit\Framework\TestCase
     /**
      * Test for read method
      *
-     * @dataProvider providerRead
      * @param string $path
      * @param int $length
      * @param string $expectedResult
      */
+    #[DataProvider('providerRead')]
     public function testRead($path, $length, $expectedResult)
     {
         $file = $this->getFileInstance($path);
@@ -72,10 +73,10 @@ class ReadTest extends \PHPUnit\Framework\TestCase
     /**
      * Test readAll
      *
-     * @dataProvider readAllProvider
      * @param string $path
      * @param string $content
      */
+    #[DataProvider('readAllProvider')]
     public function testReadAll($path, $content)
     {
         $file = $this->getFileInstance($path);
@@ -98,11 +99,11 @@ class ReadTest extends \PHPUnit\Framework\TestCase
     /**
      * Test readLine
      *
-     * @dataProvider readLineProvider
      * @param string $path
      * @param array $lines
      * @param int $length
      */
+    #[DataProvider('readLineProvider')]
     public function testReadLine($path, $lines, $length)
     {
         $file = $this->getFileInstance($path);
@@ -129,9 +130,9 @@ class ReadTest extends \PHPUnit\Framework\TestCase
     /**
      * Test for stat method
      *
-     * @dataProvider statProvider
      * @param string $path
      */
+    #[DataProvider('statProvider')]
     public function testStat($path)
     {
         $file = $this->getFileInstance($path);
@@ -169,7 +170,6 @@ class ReadTest extends \PHPUnit\Framework\TestCase
     /**
      * Test for readCsv method
      *
-     * @dataProvider providerCsv
      * @param string $path
      * @param int $length
      * @param string $delimiter
@@ -178,6 +178,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
      * @param array $expectedRow1
      * @param array $expectedRow2
      */
+    #[DataProvider('providerCsv')]
     public function testReadCsv($path, $length, $delimiter, $enclosure, $escape, $expectedRow1, $expectedRow2)
     {
         $file = $this->getFileInstance($path);
@@ -200,10 +201,10 @@ class ReadTest extends \PHPUnit\Framework\TestCase
     /**
      * Test for tell method
      *
-     * @dataProvider providerPosition
      * @param string $path
      * @param int $position
      */
+    #[DataProvider('providerPosition')]
     public function testTell($path, $position)
     {
         $file = $this->getFileInstance($path);
@@ -224,12 +225,12 @@ class ReadTest extends \PHPUnit\Framework\TestCase
     /**
      * Test for seek method
      *
-     * @dataProvider providerSeek
      * @param string $path
      * @param int $position
      * @param int $whence
      * @param int $tell
      */
+    #[DataProvider('providerSeek')]
     public function testSeek($path, $position, $whence, $tell)
     {
         $file = $this->getFileInstance($path);
@@ -254,11 +255,12 @@ class ReadTest extends \PHPUnit\Framework\TestCase
     /**
      * Test for eof method
      *
-     * @dataProvider providerEof
      * @param string $path
      * @param int $position
+     * @param bool $expected
      */
-    public function testEofFalse($path, $position)
+    #[DataProvider('providerEof')]
+    public function testEofFalse($path, $position, $expected)
     {
         $file = $this->getFileInstance($path);
         $file->seek($position);

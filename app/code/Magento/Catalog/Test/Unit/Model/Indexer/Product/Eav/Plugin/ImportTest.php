@@ -15,15 +15,11 @@ class ImportTest extends TestCase
 {
     public function testAfterImportSource()
     {
-        $eavProcessorMock = $this->getMockBuilder(Processor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $eavProcessorMock = $this->createMock(Processor::class);
         $eavProcessorMock->expects($this->once())
             ->method('markIndexerAsInvalid');
 
-        $subjectMock = $this->getMockBuilder(Import::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $subjectMock = $this->createMock(Import::class);
         $import = new \stdClass();
 
         $model = new \Magento\CatalogImportExport\Model\Indexer\Product\Eav\Plugin\Import($eavProcessorMock);

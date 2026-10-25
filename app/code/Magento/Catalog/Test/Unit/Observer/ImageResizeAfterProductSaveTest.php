@@ -12,6 +12,7 @@ use Magento\Catalog\Observer\ImageResizeAfterProductSave;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\Framework\App\State;
@@ -22,6 +23,8 @@ use Magento\Framework\DataObject;
 
 class ImageResizeAfterProductSaveTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Observer|MockObject
      */
@@ -70,30 +73,15 @@ class ImageResizeAfterProductSaveTest extends TestCase
         $this->imagePath = 'path/to/image.jpg';
         $images = [new DataObject(['file' => $this->imagePath])];
         $this->observerMock = $this->createMock(Observer::class);
-        $this->eventMock = $this->getMockBuilder(Event::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getProduct'])
-            ->getMock();
-        $this->productMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getId', 'getMediaGalleryImages'])
-            ->getMock();
-        $this->stateMock = $this->getMockBuilder(State::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['isAreaCodeEmulated'])
-            ->getMock();
-        $this->catalogMediaConfigMock = $this->getMockBuilder(CatalogMediaConfig::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getMediaUrlFormat'])
-            ->getMock();
-        $this->imageResizeSchedulerMock = $this->getMockBuilder(ImageResizeScheduler::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['schedule'])
-            ->getMock();
-        $this->imageResizeMock = $this->getMockBuilder(ImageResize::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['resizeFromImageName'])
-            ->getMock();
+        $this->eventMock = $this->createPartialMockWithReflection(
+            Event::class,
+            ['getProduct']
+        );
+        $this->productMock = $this->createPartialMock(Product::class, ['getId', 'getMediaGalleryImages']);
+        $this->stateMock = $this->createPartialMock(State::class, ['isAreaCodeEmulated']);
+        $this->catalogMediaConfigMock = $this->createPartialMock(CatalogMediaConfig::class, ['getMediaUrlFormat']);
+        $this->imageResizeSchedulerMock = $this->createPartialMock(ImageResizeScheduler::class, ['schedule']);
+        $this->imageResizeMock = $this->createPartialMock(ImageResize::class, ['resizeFromImageName']);
 
         $this->observerMock
             ->expects($this->once())
@@ -104,9 +92,7 @@ class ImageResizeAfterProductSaveTest extends TestCase
             ->method('getProduct')
             ->willReturn($this->productMock);
         $this->productMock
-            ->expects($this->any())
-            ->method('getId')
-            ->willReturn(null);
+            ->method('getId')->willReturn(null);
         $this->productMock
             ->expects($this->once())
             ->method('getMediaGalleryImages')

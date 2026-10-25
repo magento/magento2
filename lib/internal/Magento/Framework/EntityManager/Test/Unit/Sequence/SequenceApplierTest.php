@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -95,15 +95,9 @@ class SequenceApplierTest extends TestCase
         $this->entityMock = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->hydratorMock = $this->getMockBuilder(HydratorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->metadataMock = $this->getMockBuilder(EntityMetadataInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->sequenceMock = $this->getMockBuilder(SequenceInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->hydratorMock = $this->createMock(HydratorInterface::class);
+        $this->metadataMock = $this->createMock(EntityMetadataInterface::class);
+        $this->sequenceMock = $this->createMock(SequenceInterface::class);
 
         $this->sequenceApplier = $helper->getObject(
             SequenceApplier::class,

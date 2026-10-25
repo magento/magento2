@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\QuoteGraphQl\Model\GetDiscounts;
+use Magento\Quote\Model\Quote;
 
 /**
  * @inheritdoc
@@ -37,11 +38,13 @@ class Discounts implements ResolverInterface
         if (!isset($value['model'])) {
             throw new LocalizedException(__('"model" value should be specified'));
         }
+        /** @var Quote $quote */
         $quote = $value['model'];
-
+        $address = $quote->getIsVirtual() ? $quote->getBillingAddress() : $quote->getShippingAddress();
+        $discounts = $address->getExtensionAttributes()?->getDiscounts() ?? [];
         return $this->getDiscounts->execute(
             $quote,
-            $quote->getShippingAddress()->getExtensionAttributes()->getDiscounts() ?? []
+            $discounts
         );
     }
 }

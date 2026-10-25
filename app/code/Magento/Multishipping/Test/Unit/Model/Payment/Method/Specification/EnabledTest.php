@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Multishipping\Test\Unit\Model\Payment\Method\Specification;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Multishipping\Model\Payment\Method\Specification\Enabled;
 use Magento\Payment\Model\Config;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -26,7 +27,7 @@ class EnabledTest extends TestCase
     protected $objectManager;
 
     /**
-     * Payment config mock
+     * Mock object for payment config
      *
      * @var MockObject|Config
      */
@@ -43,8 +44,9 @@ class EnabledTest extends TestCase
      *
      * @param array $methodsInfo
      * @param bool $result
-     * @dataProvider methodsDataProvider
+     * @return void
      */
+    #[DataProvider('methodsDataProvider')]
     public function testIsSatisfiedBy($methodsInfo, $result)
     {
         $method = 'method-name';
@@ -75,7 +77,7 @@ class EnabledTest extends TestCase
      *
      * @return array
      */
-    public static function methodsDataProvider()
+    public static function methodsDataProvider(): array
     {
         return [
             [['allow_multiple_address' => 1], true],

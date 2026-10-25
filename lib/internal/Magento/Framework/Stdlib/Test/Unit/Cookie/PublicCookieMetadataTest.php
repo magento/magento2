@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Framework\Stdlib\Cookie\PublicCookieMetadata;
 use Magento\Framework\Stdlib\StringUtils;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test PublicCookieMetadata
@@ -34,9 +35,8 @@ class PublicCookieMetadataTest extends TestCase
     /**
      * @param StringUtils $setMethodName
      * @param StringUtils $getMethodName
-     * @param StringUtils $expectedValue
-     * @dataProvider getMethodData
-     */
+     * @param StringUtils $expectedValue     */
+    #[DataProvider('getMethodData')]
     public function testGetters($setMethodName, $getMethodName, $expectedValue)
     {
         $this->publicCookieMetadata->$setMethodName($expectedValue);
@@ -85,10 +85,9 @@ class PublicCookieMetadataTest extends TestCase
      * Test To Array
      *
      * @param array $metadata
-     * @param array $expected
-     * @dataProvider toArrayDataProvider
-     * @return void
+     * @param array $expected     * @return void
      */
+    #[DataProvider('toArrayDataProvider')]
     public function testToArray(array $metadata, array $expected): void
     {
         /** @var \Magento\Framework\Stdlib\Cookie\PublicCookieMetadata $object */

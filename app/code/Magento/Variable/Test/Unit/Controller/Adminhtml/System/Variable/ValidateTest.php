@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,19 +9,21 @@ namespace Magento\Variable\Test\Unit\Controller\Adminhtml\System\Variable;
 
 use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\View\Result\ForwardFactory;
-use Magento\Framework\App\RequestInterface;
-use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\App\Response\Http as ResponseHttp;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\View\Element\Messages;
+use Magento\Framework\View\Layout;
 use Magento\Framework\View\LayoutFactory;
-use Magento\Framework\View\LayoutInterface;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Variable\Controller\Adminhtml\System\Variable\Validate;
 use Magento\Variable\Model\Variable;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -30,18 +32,20 @@ use PHPUnit\Framework\TestCase;
  */
 class ValidateTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Variable|MockObject
      */
     protected $variableMock;
 
     /**
-     * @var LayoutInterface|MockObject
+     * @var Layout|MockObject
      */
     protected $layoutMock;
 
     /**
-     * @var RequestInterface|MockObject
+     * @var Http|MockObject
      */
     protected $requestMock;
 
@@ -78,10 +82,10 @@ class ValidateTest extends TestCase
         $messagesMock = $this->getMockBuilder(Messages::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->layoutMock = $this->getMockBuilder(LayoutInterface::class)
-            ->onlyMethods(['getMessagesBlock'])
-            ->addMethods(['initMessages'])
-            ->getMockForAbstractClass();
+        $this->layoutMock = $this->getMockBuilder(Layout::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getMessagesBlock', 'initMessages'])
+            ->getMock();
         $this->layoutMock->expects($this->any())
             ->method('getMessagesBlock')
             ->willReturn($messagesMock);
@@ -91,15 +95,15 @@ class ValidateTest extends TestCase
             ->getMock();
         $layoutFactoryMock->expects($this->any())->method('create')->willReturn($this->layoutMock);
 
-        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
+        $this->requestMock = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
-            ->addMethods(['getPost'])
-            ->getMockForAbstractClass();
-        $responseMock = $this->getMockBuilder(ResponseInterface::class)
-            ->addMethods(['setError', 'setHtmlMessage'])
-            ->getMockForAbstractClass();
-        $this->messageManagerMock = $this->getMockBuilder(ManagerInterface::class)
-            ->getMockForAbstractClass();
+            ->onlyMethods(['getPost', 'getParam'])
+            ->getMock();
+        $responseMock = $this->createPartialMockWithReflection(
+            ResponseHttp::class,
+            ['setError', 'setHtmlMessage']
+        );
+        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
         $contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -147,8 +151,8 @@ class ValidateTest extends TestCase
     /**
      * @param mixed $result
      * @param string[] $responseArray
-     * @dataProvider executeDataProvider
      */
+    #[DataProvider('executeDataProvider')]
     public function testExecute($result, $responseArray)
     {
         $getParamMap = [

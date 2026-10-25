@@ -164,4 +164,30 @@
             <argument name="customConditionProvider" xsi:type="object">CatalogRuleCustomConditionProvider</argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Model\Indexer\Product\Price">
+        <plugin name="recollect_quote_after_rule_change" type="Magento\CatalogRule\Plugin\Model\Indexer\RecollectQuoteAfterRuleChange"/>
+    </type>
+    <virtualType name="Magento\CatalogRule\Model\ResourceModel\Product\OptimizedCollectionFactory" type="Magento\Catalog\Model\ResourceModel\Product\CollectionFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">Magento\CatalogRule\Model\ResourceModel\Product\Collection</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\CatalogRule\Model\Rule">
+        <arguments>
+            <argument name="productCollectionFactory" xsi:type="object">Magento\CatalogRule\Model\ResourceModel\Product\OptimizedCollectionFactory</argument>
+        </arguments>
+    </type>
+
+    <virtualType name="Magento\CatalogRule\Model\Indexer\CatalogRuleBatchSizeManagement" type="Magento\Framework\Indexer\BatchSizeManagement">
+        <arguments>
+            <argument name="rowSizeEstimator" xsi:type="object">Magento\CatalogRule\Model\Indexer\CatalogRuleProductPriceRowSizeEstimator</argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Magento\CatalogRule\Model\Indexer\CatalogRuleInsertBatchSizeCalculator">
+        <arguments>
+            <argument name="batchSizeManagement" xsi:type="object">Magento\CatalogRule\Model\Indexer\CatalogRuleBatchSizeManagement</argument>
+            <argument name="defaultBatchSize" xsi:type="number">5000</argument>
+        </arguments>
+    </type>
 </config>

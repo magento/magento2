@@ -17,6 +17,7 @@ use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Layout;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ButtonTest extends TestCase
@@ -74,8 +75,8 @@ class ButtonTest extends TestCase
 
     /**
      * @covers \Magento\Backend\Block\Widget\Button::getAttributesHtml
-     * @dataProvider getAttributesHtmlDataProvider
      */
+    #[DataProvider('getAttributesHtmlDataProvider')]
     public function testGetAttributesHtml($data, $expect)
     {
         $this->_blockMock->setData($data);

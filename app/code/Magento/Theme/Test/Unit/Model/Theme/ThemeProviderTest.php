@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -62,13 +62,9 @@ class ThemeProviderTest extends TestCase
             ['create']
         );
         $this->themeFactory = $this->createPartialMock(\Magento\Theme\Model\ThemeFactory::class, ['create']);
-        $this->cache = $this->getMockBuilder(CacheInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->cache = $this->createMock(CacheInterface::class);
         $this->serializer = $this->createMock(Json::class);
-        $this->deploymentConfig = $this->getMockBuilder(DeploymentConfig::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->deploymentConfig = $this->createMock(DeploymentConfig::class);
         $this->themeProvider = $this->objectManager->getObject(
             ThemeProvider::class,
             [
@@ -222,9 +218,7 @@ class ThemeProviderTest extends TestCase
 
     public function testGetThemeCustomizations()
     {
-        $collection = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $collection = $this->createMock(Collection::class);
         $collection->expects($this->once())
             ->method('addAreaFilter')
             ->with(Area::AREA_FRONTEND)

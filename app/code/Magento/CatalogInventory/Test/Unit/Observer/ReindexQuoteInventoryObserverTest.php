@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogInventory\Test\Unit\Observer;
 
+use PHPUnit\Framework\Attributes\Test;
 use Magento\Catalog\Model\Indexer\Product\Price\Processor as PriceProcessor;
 use Magento\CatalogInventory\Model\Indexer\Stock\Processor as StockProcessor;
 use Magento\CatalogInventory\Observer\ItemsForReindex;
@@ -95,10 +96,10 @@ class ReindexQuoteInventoryObserverTest extends TestCase
     /**
      * Test execute should re-index quote stock items.
      *
-     * @test
      *
      * @return void
      */
+    #[Test]
     public function execute(): void
     {
         $this->observedObject->expects($this->once())
@@ -145,10 +146,10 @@ class ReindexQuoteInventoryObserverTest extends TestCase
     /**
      * Test execute should log error on exception.
      *
-     * @test
      *
      * @return void
      */
+    #[Test]
     public function executeShouldLogOnException(): void
     {
         $this->observedObject->expects($this->once())

@@ -10,6 +10,7 @@ namespace Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute;
 use Magento\Backend\Model\Session;
 use Magento\Catalog\Model\CategoryFactory;
 use Magento\TestFramework\TestCase\AbstractBackendController;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @covers \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute\Validate::execute
@@ -19,12 +20,12 @@ class ValidateTest extends AbstractBackendController
 {
     /**
      * @param array $attributes Request parameter.
-     * @dataProvider validateActionDataProvider
      *
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoDataFixture Magento/Catalog/_files/product_simple_duplicated.php
      * @magentoDbIsolation disabled
      */
+    #[DataProvider('validateActionDataProvider')]
     public function testValidateActionWithMassUpdate(array $attributes): void
     {
         $session = $this->_objectManager->get(Session::class);

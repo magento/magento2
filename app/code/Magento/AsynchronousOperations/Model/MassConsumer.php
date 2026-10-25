@@ -7,7 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\AsynchronousOperations\Model;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\MessageQueue\CallbackInvokerInterface;
+use Magento\Framework\MessageQueue\Consumer\ConfigInterface as ConsumerConfig;
 use Magento\Framework\MessageQueue\ConsumerConfigurationInterface;
 use Magento\Framework\MessageQueue\ConsumerInterface;
 use Magento\Framework\MessageQueue\EnvelopeInterface;
@@ -42,23 +44,31 @@ class MassConsumer implements ConsumerInterface
     private $registry;
 
     /**
+     * @var ConsumerConfig
+     */
+    private $consumerConfig;
+
+    /**
      * Initialize dependencies.
      *
      * @param CallbackInvokerInterface $invoker
      * @param ConsumerConfigurationInterface $configuration
      * @param MassConsumerEnvelopeCallbackFactory $massConsumerEnvelopeCallback
      * @param Registry $registry
+     * @param ConsumerConfig|null $consumerConfig
      */
     public function __construct(
         CallbackInvokerInterface $invoker,
         ConsumerConfigurationInterface $configuration,
         MassConsumerEnvelopeCallbackFactory $massConsumerEnvelopeCallback,
-        Registry $registry
+        Registry $registry,
+        ?ConsumerConfig $consumerConfig = null
     ) {
         $this->invoker = $invoker;
         $this->configuration = $configuration;
         $this->massConsumerEnvelopeCallback = $massConsumerEnvelopeCallback;
         $this->registry = $registry;
+        $this->consumerConfig = $consumerConfig ?: ObjectManager::getInstance()->get(ConsumerConfig::class);
     }
 
     /**

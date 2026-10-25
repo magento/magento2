@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\DB\Logger;
 
@@ -34,6 +34,11 @@ class LoggerProxy implements LoggerInterface, ResetAfterRequestInterface
      * Logger call stack param name
      */
     public const PARAM_CALL_STACK = 'include_stacktrace';
+
+    /**
+     * Logger call no index detection param name
+     */
+    public const PARAM_INDEX_CHECK = 'include_index_check';
 
     /**
      * File logger alias
@@ -93,6 +98,13 @@ class LoggerProxy implements LoggerInterface, ResetAfterRequestInterface
     private readonly bool $logCallStack;
 
     /**
+     * @var bool
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
+     */
+    private readonly bool $logIndexCheck;
+
+    /**
      * LoggerProxy constructor.
      * @param FileFactory $fileFactory
      * @param QuietFactory $quietFactory
@@ -100,6 +112,7 @@ class LoggerProxy implements LoggerInterface, ResetAfterRequestInterface
      * @param bool $logAllQueries
      * @param float $logQueryTime
      * @param bool $logCallStack
+     * @param bool $logIndexCheck
      */
     public function __construct(
         FileFactory $fileFactory,
@@ -107,7 +120,8 @@ class LoggerProxy implements LoggerInterface, ResetAfterRequestInterface
         $loggerAlias,
         $logAllQueries = true,
         $logQueryTime = 0.001,
-        $logCallStack = true
+        $logCallStack = true,
+        $logIndexCheck = false
     ) {
         $this->fileFactory = $fileFactory;
         $this->quietFactory = $quietFactory;
@@ -115,6 +129,7 @@ class LoggerProxy implements LoggerInterface, ResetAfterRequestInterface
         $this->logAllQueries = $logAllQueries;
         $this->logQueryTime = $logQueryTime;
         $this->logCallStack = $logCallStack;
+        $this->logIndexCheck = $logIndexCheck;
     }
 
     /**
@@ -132,6 +147,7 @@ class LoggerProxy implements LoggerInterface, ResetAfterRequestInterface
                             'logAllQueries' => $this->logAllQueries,
                             'logQueryTime' => $this->logQueryTime,
                             'logCallStack' => $this->logCallStack,
+                            'logIndexCheck' => $this->logIndexCheck,
                         ]
                     );
                     break;

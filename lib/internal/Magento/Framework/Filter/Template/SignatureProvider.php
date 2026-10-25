@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,10 @@ use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
  * Provides a signature which should be used to sign deferred directives
  * (directives that should be processed in scope of a parent template
  * instead of own scope, e.g. {{inlinecss}}).
+ *
+ * @deprecated Signature-based deferral was superseded by out-of-band deferral via
+ *             \Magento\Framework\Filter\Template\DeferredDirectiveRegistry.
+ * @see \Magento\Framework\Filter\Template\DeferredDirectiveRegistry
  */
 class SignatureProvider implements ResetAfterRequestInterface
 {

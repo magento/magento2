@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -46,7 +46,7 @@ class ConfigTest extends TestCase
 
         $this->webapiCacheMock = $this->createMock(Webapi::class);
         $this->configMock = $this->createMock(WebapiConfig::class);
-        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
 
         $this->config = $objectManager->getObject(
             Config::class,

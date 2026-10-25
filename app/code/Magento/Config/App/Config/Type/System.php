@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Config\App\Config\Type;
@@ -15,6 +15,7 @@ use Magento\Framework\App\Config\Spi\PostProcessorInterface;
 use Magento\Framework\App\Config\Spi\PreProcessorInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ScopeInterface;
+use Magento\Framework\Cache\CacheConstants;
 use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\Cache\LockGuardedCacheLoader;
 use Magento\Framework\Encryption\Encryptor;
@@ -459,7 +460,7 @@ class System implements ConfigTypeInterface
         $this->data = [];
         if (!$this->cacheState->isEnabled(Config::TYPE_IDENTIFIER)) {
             // Note: If cache is disabled, we still clean cache in case it will be enabled later
-            $this->cache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, [self::CACHE_TAG]);
+            $this->cache->clean(CacheConstants::CLEANING_MODE_MATCHING_TAG, [self::CACHE_TAG]);
             return;
         }
         $this->lockQuery->lockedCleanData(self::$lockName, $cleanAction);

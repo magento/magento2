@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Ui\Component\Form\Element\Multiline;
 use Magento\Ui\Component\Form\Field;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -47,11 +48,8 @@ class MultilineTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->uiComponentFactoryMock = $this->getMockBuilder(UiComponentFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->contextMock = $this->getMockBuilder(ContextInterface::class)
-            ->getMockForAbstractClass();
+        $this->uiComponentFactoryMock = $this->createMock(UiComponentFactory::class);
+        $this->contextMock = $this->createMock(ContextInterface::class);
         $this->multiline = new Multiline(
             $this->contextMock,
             $this->uiComponentFactoryMock
@@ -64,13 +62,11 @@ class MultilineTest extends TestCase
      * @param array $data
      * @return void
      *
-     * @dataProvider prepareDataProvider
      */
+    #[DataProvider('prepareDataProvider')]
     public function testPrepare(array $data)
     {
-        $processor = $this->getMockBuilder(Processor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $processor = $this->createMock(Processor::class);
         $this->contextMock->expects($this->atLeastOnce())->method('getProcessor')->willReturn($processor);
         $this->uiComponentFactoryMock->expects($this->exactly($data['config']['size']))
             ->method('create')
@@ -91,8 +87,7 @@ class MultilineTest extends TestCase
      */
     protected function getComponentMock($exactly)
     {
-        $componentMock = $this->getMockBuilder(UiComponentInterface::class)
-            ->getMockForAbstractClass();
+        $componentMock = $this->createMock(UiComponentInterface::class);
 
         $componentMock->expects($this->exactly($exactly))
             ->method('prepare');

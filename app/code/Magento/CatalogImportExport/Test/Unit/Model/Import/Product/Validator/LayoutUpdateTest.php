@@ -34,7 +34,7 @@ class LayoutUpdateTest extends TestCase
     protected function setUp(): void
     {
         $validatorFactory = $this->createMock(ValidatorFactory::class);
-        $validationState = $this->getMockForAbstractClass(ValidationStateInterface::class);
+        $validationState = $this->createMock(ValidationStateInterface::class);
         $this->layoutValidator = $this->createMock(Validator::class);
         $validatorFactory->method('create')
             ->with(['validationState' => $validationState])

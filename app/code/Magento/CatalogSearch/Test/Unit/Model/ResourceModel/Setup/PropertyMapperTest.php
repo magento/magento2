@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace Magento\CatalogSearch\Test\Unit\Model\ResourceModel\Setup;
 
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\CatalogSearch\Model\ResourceModel\Setup\PropertyMapper;
 use PHPUnit\Framework\TestCase;
 
@@ -44,14 +46,13 @@ class PropertyMapperTest extends TestCase
     }
 
     /**
-     * @dataProvider caseProvider
      *
-     * @test
      *
      * @param array $input
      * @param array $result
      * @return void
      */
+    #[DataProvider('caseProvider')]
     public function testMapCorrectlyMapsValue(array $input, array $result): void
     {
         //Second parameter doesn't matter as it is not used

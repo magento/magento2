@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogSearch\Test\Unit\Model\Search\Request;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\CatalogSearch\Model\Search\Request\MatchQueriesModifier;
 use PHPUnit\Framework\TestCase;
 
@@ -21,8 +22,8 @@ class MatchQueriesModifierTest extends TestCase
      * @param array $queries
      * @param array $requests
      * @param array $expected
-     * @dataProvider modifyDataProvider
      */
+    #[DataProvider('modifyDataProvider')]
     public function testModify(array $queries, array $requests, array $expected): void
     {
         $model = new MatchQueriesModifier($queries);

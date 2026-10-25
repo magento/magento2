@@ -18,10 +18,11 @@ use Magento\Customer\Model\Session;
 use Magento\Customer\Model\Url;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\ActionFlag;
+use Magento\Framework\App\Request\Http as RequestHttp;
 use Magento\Framework\App\Response\Http;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Message\ManagerInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -30,13 +31,15 @@ use PHPUnit\Framework\TestCase;
  */
 class CheckUserLoginObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var Data|MockObject */
     protected $helperMock;
 
     /** @var ActionFlag|MockObject */
     protected $actionFlagMock;
 
-    /* @var \Magento\Framework\Message\ManagerInterface|MockObject */
+    /** @var ManagerInterface|MockObject */
     protected $messageManagerMock;
 
     /** @var Session|MockObject */
@@ -65,36 +68,30 @@ class CheckUserLoginObserverTest extends TestCase
     {
         $this->helperMock = $this->createMock(Data::class);
         $this->actionFlagMock = $this->createMock(ActionFlag::class);
-        $this->messageManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
-        $this->customerSessionMock = $this->getMockBuilder(Session::class)
-            ->addMethods(['setUsername', 'getBeforeAuthUrl'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
+        $this->customerSessionMock = $this->createPartialMockWithReflection(
+            Session::class,
+            ['setUsername', 'getBeforeAuthUrl']
+        );
         $this->captchaStringResolverMock = $this->createMock(CaptchaStringResolver::class);
         $this->customerUrlMock = $this->createMock(Url::class);
-        $this->customerRepositoryMock = $this->getMockForAbstractClass(CustomerRepositoryInterface::class);
-        $this->authenticationMock = $this->getMockForAbstractClass(AuthenticationInterface::class);
+        $this->customerRepositoryMock = $this->createMock(CustomerRepositoryInterface::class);
+        $this->authenticationMock = $this->createMock(AuthenticationInterface::class);
 
-        $objectManager = new ObjectManager($this);
-        $this->observer = $objectManager->getObject(
-            CheckUserLoginObserver::class,
-            [
-                'helper' => $this->helperMock,
-                'actionFlag' => $this->actionFlagMock,
-                'messageManager' => $this->messageManagerMock,
-                'customerSession' => $this->customerSessionMock,
-                'captchaStringResolver' => $this->captchaStringResolverMock,
-                'customerUrl' => $this->customerUrlMock,
-            ]
+        $this->observer = new CheckUserLoginObserver(
+            $this->helperMock,
+            $this->actionFlagMock,
+            $this->messageManagerMock,
+            $this->customerSessionMock,
+            $this->captchaStringResolverMock,
+            $this->customerUrlMock
         );
 
         $reflection = new \ReflectionClass(get_class($this->observer));
         $reflectionProperty = $reflection->getProperty('authentication');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->observer, $this->authenticationMock);
 
         $reflectionProperty2 = $reflection->getProperty('customerRepository');
-        $reflectionProperty2->setAccessible(true);
         $reflectionProperty2->setValue($this->observer, $this->customerRepositoryMock);
     }
 
@@ -133,7 +130,7 @@ class CheckUserLoginObserverTest extends TestCase
             ->method('setRedirect')
             ->with($redirectUrl);
 
-        $request = $this->createMock(\Magento\Framework\App\Request\Http::class);
+        $request = $this->createMock(RequestHttp::class);
         $request->expects($this->any())
             ->method('getPost')
             ->with('login')

@@ -68,7 +68,7 @@ class IndexerTest extends TestCase
             Indexer::class,
             ['isAddChildData']
         );
-        $flatHelperMock->expects($this->any())->method('isAddChildData')->willReturn(true);
+        $flatHelperMock->method('isAddChildData')->willReturn(true);
 
         $eavConfigMock = $this->createMock(Config::class);
 
@@ -81,7 +81,7 @@ class IndexerTest extends TestCase
 
         $eavFactoryMock = $this->createPartialMock(AttributeFactory::class, ['create']);
 
-        $this->_storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->_storeManagerMock = $this->createMock(StoreManagerInterface::class);
 
         $this->_connectionMock = $this->createPartialMock(
             Mysql::class,
@@ -127,11 +127,7 @@ class IndexerTest extends TestCase
      */
     public function testDeleteAbandonedStoreFlatTables()
     {
-        $this->_changelogMock->expects(
-            $this->any()
-        )->method(
-            'getName'
-        )->willReturn(
+        $this->_changelogMock->method('getName')->willReturn(
             'catalog_product_flat_cl'
         );
 
@@ -165,11 +161,7 @@ class IndexerTest extends TestCase
      */
     public function testDeleteNoStoresTables()
     {
-        $this->_changelogMock->expects(
-            $this->any()
-        )->method(
-            'getName'
-        )->willReturn(
+        $this->_changelogMock->method('getName')->willReturn(
             'catalog_product_flat_cl'
         );
 
@@ -209,11 +201,7 @@ class IndexerTest extends TestCase
      */
     public function testDeleteCl()
     {
-        $this->_changelogMock->expects(
-            $this->any()
-        )->method(
-            'getName'
-        )->willReturn(
+        $this->_changelogMock->method('getName')->willReturn(
             'catalog_product_flat_cl'
         );
 

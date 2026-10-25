@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,9 +14,12 @@ use Magento\Framework\DataObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class NorouteTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var \Magento\Framework\Controller\Noroute
      */
@@ -41,12 +44,11 @@ class NorouteTest extends TestCase
     {
         $helper = new ObjectManager($this);
         $this->_requestMock = $this->createMock(Http::class);
-        $this->_viewMock = $this->getMockForAbstractClass(ViewInterface::class);
-        $this->_statusMock =
-            $this->getMockBuilder(DataObject::class)
-                ->addMethods(['getLoaded', 'getForwarded'])
-                ->disableOriginalConstructor()
-                ->getMock();
+        $this->_viewMock = $this->createMock(ViewInterface::class);
+        $this->_statusMock = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['getLoaded', 'getForwarded']
+        );
         $this->_controller = $helper->getObject(
             Index::class,
             ['request' => $this->_requestMock, 'view' => $this->_viewMock]

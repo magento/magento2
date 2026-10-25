@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use PHPUnit\Framework\TestCase;
 
 class GridPoolTest extends TestCase
 {
+
     /**
      * @var GridPool
      */
@@ -48,7 +49,7 @@ class GridPoolTest extends TestCase
         $this->invoiceGridMock = $this->createMock(Grid::class);
         $this->shipmentGridMock = $this->createMock(Grid::class);
         $this->creditmemoGridMock = $this->createMock(Grid::class);
-        $this->statementMock = $this->getMockForAbstractClass(\Zend_Db_Statement_Interface::class);
+        $this->statementMock = $this->createMock(\Zend_Db_Statement_Interface::class);
         $grids = [
             'order_grid' => $this->orderGridMock,
             'invoice_grid' => $this->invoiceGridMock,

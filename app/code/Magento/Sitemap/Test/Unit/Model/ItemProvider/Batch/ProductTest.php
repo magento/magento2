@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Sitemap\Test\Unit\Model\ItemProvider\Batch;
 
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Sitemap\Model\ItemProvider\Batch\Product;
 use Magento\Sitemap\Model\ItemProvider\ConfigReaderInterface;
 use Magento\Sitemap\Model\ResourceModel\Catalog\Batch\ProductFactory as BatchProductFactory;
@@ -16,6 +17,7 @@ use PHPUnit\Framework\TestCase;
 
 class ProductTest extends TestCase
 {
+    use MockCreationTrait;
     /** @var ConfigReaderInterface|MockObject */
     private $configReader;
 
@@ -44,9 +46,7 @@ class ProductTest extends TestCase
     public function testGetItemsReturnsEmptyArrayWhenCollectionIsFalse()
     {
         $storeId = 1;
-        $batchProduct = $this->getMockBuilder(\stdClass::class)
-            ->addMethods(['getCollectionArray'])
-            ->getMock();
+        $batchProduct = $this->createPartialMockWithReflection(\stdClass::class, ['getCollectionArray']);
         $batchProduct->expects($this->once())
             ->method('getCollectionArray')
             ->with($storeId)
@@ -72,16 +72,12 @@ class ProductTest extends TestCase
             'images' => ['img1.jpg', 'img2.jpg']
         ];
 
-        $productObj = $this->getMockBuilder(\stdClass::class)
-            ->addMethods(['getUrl', 'getUpdatedAt', 'getImages'])
-            ->getMock();
+        $productObj = $this->createPartialMockWithReflection(\stdClass::class, ['getUrl', 'getUpdatedAt', 'getImages']);
         $productObj->expects($this->once())->method('getUrl')->willReturn($itemData['url']);
         $productObj->expects($this->once())->method('getUpdatedAt')->willReturn($itemData['updatedAt']);
         $productObj->expects($this->once())->method('getImages')->willReturn($itemData['images']);
 
-        $batchProduct = $this->getMockBuilder(\stdClass::class)
-            ->addMethods(['getCollectionArray'])
-            ->getMock();
+        $batchProduct = $this->createPartialMockWithReflection(\stdClass::class, ['getCollectionArray']);
         $batchProduct->expects($this->once())
             ->method('getCollectionArray')
             ->with($storeId)

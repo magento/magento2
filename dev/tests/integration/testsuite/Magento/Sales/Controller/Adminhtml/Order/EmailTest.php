@@ -55,6 +55,7 @@ class EmailTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     }
 
     /**
+     * @magentoConfigFixture current_store sales_email/order/enabled 1
      * @return void
      */
     public function testSendOrderEmail(): void

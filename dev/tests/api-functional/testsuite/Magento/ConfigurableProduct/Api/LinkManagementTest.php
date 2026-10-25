@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,16 +12,17 @@ use Magento\Eav\Model\AttributeRepository;
 use Magento\Eav\Model\Entity\Attribute\Option;
 use Magento\Framework\Webapi\Rest\Request;
 use Magento\TestFramework\TestCase\WebapiAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class LinkManagementTest for testing ConfigurableProduct to SimpleProduct link functionality
  */
 class LinkManagementTest extends WebapiAbstract
 {
-    const SERVICE_NAME = 'configurableProductLinkManagementV1';
-    const OPTION_SERVICE_NAME = 'configurableProductOptionRepositoryV1';
-    const SERVICE_VERSION = 'V1';
-    const RESOURCE_PATH = '/V1/configurable-products';
+    public const SERVICE_NAME = 'configurableProductLinkManagementV1';
+    public const OPTION_SERVICE_NAME = 'configurableProductOptionRepositoryV1';
+    public const SERVICE_VERSION = 'V1';
+    public const RESOURCE_PATH = '/V1/configurable-products';
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
@@ -428,8 +428,6 @@ class LinkManagementTest extends WebapiAbstract
     }
 
     /**
-     * @dataProvider errorsDataProvider
-     *
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
      * @magentoApiDataFixture Magento/Catalog/_files/second_product_simple.php
      *
@@ -438,6 +436,7 @@ class LinkManagementTest extends WebapiAbstract
      * @param string $errorMessage
      * @return void
      */
+    #[DataProvider('errorsDataProvider')]
     public function testAddChildWithError(string $parentSku, string $childSku, string $errorMessage): void
     {
         $this->expectException(\Exception::class);
@@ -452,20 +451,20 @@ class LinkManagementTest extends WebapiAbstract
     {
         return [
             'simple_instead_of_configurable' => [
-                'parentSku' => 'simple2',
-                'childSku' => 'configurable',
-                'errorMessage' => (string)__("The parent product doesn't have configurable product options."),
+                'simple2', // parentSku
+                'configurable', // childSku
+                (string)__("The parent product doesn't have configurable product options."), // errorMessage
             ],
             'simple_with_empty_configurable_attribute_value' => [
-                'parentSku' => 'configurable',
-                'childSku' => 'simple2',
-                'errorMessage' => TESTS_WEB_API_ADAPTER === self::ADAPTER_SOAP
+                'configurable', // parentSku
+                'simple2', // childSku
+                TESTS_WEB_API_ADAPTER === self::ADAPTER_SOAP
                     ? (string)__(
                         'The child product doesn\'t have the "%1" attribute value. Verify the value and try again.'
                     )
                     : (string)__(
                         'The child product doesn\'t have the \\"%1\\" attribute value. Verify the value and try again.'
-                    ),
+                    ), // errorMessage
             ],
         ];
     }

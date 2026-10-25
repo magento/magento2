@@ -269,6 +269,8 @@ return [
         Magento\TestFramework\ObjectManager\Config::class => null,
         Magento\Framework\Escaper::class => null,
         Magento\Framework\Css\PreProcessor\Adapter\CssInliner::class => null, // FIXME
+        \Magento\Framework\DB\Adapter\SqlVersionProvider::class => null,
+        \Magento\Framework\Setup\Declaration\Schema\Dto\Factories\Table::class => null,
     ],
     '*-fromConstructed' => [
         // phpcs:disable Generic.Files.LineLength.TooLong
@@ -549,6 +551,50 @@ return [
         Magento\Framework\MessageQueue\Topology\Config\QueueConfigItem\DataMapper::class => null,
         // phpcs:enable Generic.Files.LineLength.TooLong
     ],
-    '' => [
+    // Skip both AMQP and STOMP message queue objects for placeOrder operations
+    // This allows the test to work regardless of which message queue system is active
+    'placeOrder' => [
+        // AMQP message queue objects
+        \Magento\Framework\Amqp\ConfigPool::class => null,
+        \Magento\Framework\Amqp\Config::class => null,
+        \Magento\Framework\Amqp\Exchange::class => null,
+        \Magento\Framework\MessageQueue\Publisher::class => null,
+        PhpAmqpLib\Connection\AMQPStreamConnection::class => null,
+        PhpAmqpLib\Connection\AMQPSSLConnection::class => null,
+        // STOMP message queue objects
+        \Magento\Framework\Stomp\ConfigPool::class => null,
+        \Magento\Framework\Stomp\Config::class => null,
+        \Magento\Framework\Stomp\Queue::class => null,
+        \Magento\Framework\Stomp\StompClient::class => null,
+        \Magento\Framework\MessageQueue\QueueRepository::class => null,
+        Stomp\StatefulStomp::class => null,
+        \Magento\ProductVideo\Model\ResourceModel\Video::class => null,
+        \Magento\ProductVideo\Model\Plugin\ExternalVideoResourceBackend::class => null,
+    ],
+    'placeOrder-fromConstructed' => [
+        // AMQP message queue objects
+        \Magento\Framework\Amqp\ConfigPool::class => null,
+        \Magento\Framework\Amqp\Config::class => null,
+        \Magento\Framework\Amqp\Exchange::class => null,
+        \Magento\Framework\MessageQueue\Publisher::class => null,
+        PhpAmqpLib\Connection\AMQPStreamConnection::class => null,
+        PhpAmqpLib\Connection\AMQPSSLConnection::class => null,
+        // STOMP message queue objects
+        \Magento\Framework\Stomp\ConfigPool::class => null,
+        \Magento\Framework\Stomp\Config::class => null,
+        \Magento\Framework\Stomp\Queue::class => null,
+        \Magento\Framework\Stomp\StompClient::class => null,
+        \Magento\Framework\MessageQueue\QueueRepository::class => null,
+        \Stomp\StatefulStomp::class => null,
+    ],
+    'applyCouponToCart' => [
+        \Magento\ProductVideo\Model\ResourceModel\Video::class => null,
+        \Magento\ProductVideo\Model\Plugin\ExternalVideoResourceBackend::class => null,
+        \Magento\PageBuilder\Plugin\Catalog\Model\Product\Attribute\RepositoryPlugin::class => null,
+    ],
+    'mergeCarts' => [
+        \Magento\ProductVideo\Model\ResourceModel\Video::class => null,
+        \Magento\ProductVideo\Model\Plugin\ExternalVideoResourceBackend::class => null,
+        \Magento\PageBuilder\Plugin\Catalog\Model\Product\Attribute\RepositoryPlugin::class => null,
     ],
 ];

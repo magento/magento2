@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -22,6 +22,7 @@ use Magento\Wishlist\Model\Wishlist;
 use Magento\Wishlist\Model\WishlistFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -78,37 +79,24 @@ class RssTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->wishlistFactoryMock = $this->getMockBuilder(WishlistFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
+        $this->wishlistFactoryMock = $this->createPartialMock(WishlistFactory::class, ['create']);
 
-        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->getMock();
+        $this->requestMock = $this->createMock(RequestInterface::class);
 
-        $this->urlDecoderMock = $this->getMockBuilder(DecoderInterface::class)
-            ->getMock();
+        $this->urlDecoderMock = $this->createMock(DecoderInterface::class);
 
-        $this->customerFactoryMock = $this->getMockBuilder(CustomerInterfaceFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
+        $this->customerFactoryMock = $this->createPartialMock(CustomerInterfaceFactory::class, ['create']);
 
-        $this->customerSessionMock = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->customerSessionMock = $this->createMock(Session::class);
 
-        $this->customerRepositoryMock = $this->getMockBuilder(CustomerRepositoryInterface::class)
-            ->getMock();
+        $this->customerRepositoryMock = $this->createMock(CustomerRepositoryInterface::class);
 
-        $this->moduleManagerMock = $this->getMockBuilder(Manager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->moduleManagerMock = $this->createMock(Manager::class);
 
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->getMock();
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
 
         $objectManager = new ObjectManager($this);
+        $objectManager->prepareObjectManager();
 
         $this->model = $objectManager->getObject(
             Rss::class,
@@ -132,9 +120,7 @@ class RssTest extends TestCase
     {
         $wishlistId = 1;
 
-        $wishlist = $this->getMockBuilder(Wishlist::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $wishlist = $this->createMock(Wishlist::class);
         $this->wishlistFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($wishlist);
@@ -162,9 +148,7 @@ class RssTest extends TestCase
         $customerId = 1;
         $data = $customerId . ',2';
 
-        $wishlist = $this->getMockBuilder(Wishlist::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $wishlist = $this->createMock(Wishlist::class);
         $this->wishlistFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($wishlist);
@@ -187,9 +171,7 @@ class RssTest extends TestCase
             ->method('getCustomerId')
             ->willReturn(0);
 
-        $customer = $this->getMockBuilder(CustomerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $customer = $this->createMock(CustomerInterface::class);
         $this->customerFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($customer);
@@ -230,9 +212,7 @@ class RssTest extends TestCase
             ->method('getCustomerId')
             ->willReturn($customerId);
 
-        $customer = $this->getMockBuilder(CustomerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $customer = $this->createMock(CustomerInterface::class);
 
         $this->customerRepositoryMock->expects($this->once())
             ->method('getById')
@@ -253,8 +233,8 @@ class RssTest extends TestCase
      * @param bool $result
      *
      * @return void
-     * @dataProvider dataProviderIsRssAllow
      */
+    #[DataProvider('dataProviderIsRssAllow')]
     public function testIsRssAllow(
         bool $isModuleEnabled,
         bool $isWishlistActive,

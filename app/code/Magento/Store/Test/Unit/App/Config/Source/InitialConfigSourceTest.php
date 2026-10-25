@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\DataObject;
 use Magento\Store\App\Config\Source\InitialConfigSource;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject as Mock;
 use PHPUnit\Framework\TestCase;
 
@@ -65,8 +66,8 @@ class InitialConfigSourceTest extends TestCase
      * @param string $path
      * @param array $data
      * @param string|array $expected
-     * @dataProvider getDataProvider
      */
+    #[DataProvider('getDataProvider')]
     public function testGet($path, $data, $expected)
     {
         $this->readerMock->expects($this->once())

@@ -45,7 +45,7 @@ class LinkTest extends TestCase
         $objectManager = new ObjectManager($this);
         $this->resource = $this->createMock(ResourceConnection::class);
         $this->connection =
-            $this->getMockForAbstractClass(AdapterInterface::class);
+            $this->createMock(AdapterInterface::class);
 
         $this->model = $objectManager->getObject(
             Link::class,
@@ -157,7 +157,7 @@ class LinkTest extends TestCase
         // method flow
         $this->prepareAdapter();
         $this->dbSelect->expects($this->once())->method('from')->willReturn($this->dbSelect);
-        $this->dbSelect->expects($this->any())->method('where')->willReturn($this->dbSelect);
+        $this->dbSelect->method('where')->willReturn($this->dbSelect);
 
         $this->connection->expects(
             $this->once()

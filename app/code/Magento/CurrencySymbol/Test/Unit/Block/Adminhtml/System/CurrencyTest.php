@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,9 +15,11 @@ use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\BlockInterface;
 use Magento\Framework\View\LayoutInterface;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class CurrencyTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * Stub currency option link url
      */
@@ -50,23 +52,12 @@ class CurrencyTest extends TestCase
      */
     public function testPrepareLayout(): void
     {
-        $childBlockMock = $this->getMockBuilder(BlockInterface::class)
-            ->addMethods(['addChild'])
-            ->onlyMethods(['toHtml'])
-            ->getMockForAbstractClass();
+        $childBlockMock = $this->createPartialMockWithReflection(BlockInterface::class, ['addChild', 'toHtml']);
 
-        $blockMock = $this->getMockForAbstractClass(BlockInterface::class);
+        $blockMock = $this->createMock(BlockInterface::class);
 
-        /** @var LayoutInterface|MockObject $layoutMock */
-        $layoutMock = $this->getMockForAbstractClass(
-            LayoutInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['getBlock', 'createBlock']
-        );
+        /** @var LayoutInterface $layoutMock */
+        $layoutMock = $this->createMock(LayoutInterface::class);
 
         $layoutMock->expects($this->any())->method('getBlock')->willReturn($childBlockMock);
         $layoutMock->expects($this->any())->method('createBlock')->willReturn($blockMock);

@@ -31,7 +31,7 @@ class StateTest extends TestCase
 
         $indexerMock = $this->createMock(Indexer::class);
         $flatIndexerHelperMock = $this->createMock(\Magento\Catalog\Helper\Product\Flat\Indexer::class);
-        $configMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $configMock = $this->createMock(ScopeConfigInterface::class);
         $this->_model = $this->_objectManager->getObject(
             State::class,
             [

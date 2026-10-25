@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\ScopeInterface;
 use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\App\ScopeResolverPool;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Theme\Block\Adminhtml\Design\Config\Edit\Scope;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -38,8 +39,16 @@ class ScopeTest extends TestCase
      */
     protected $request;
 
+    /**
+     * @var ObjectManager
+     */
+    protected $objectManager;
+
     protected function setUp(): void
     {
+        $this->objectManager = new ObjectManager($this);
+        $this->objectManager->prepareObjectManager();
+        
         $this->initContext();
 
         $this->scopeResolverPool = $this->getMockBuilder(ScopeResolverPool::class)
@@ -65,14 +74,12 @@ class ScopeTest extends TestCase
                 ['scope_id', null, $scopeId],
             ]);
 
-        $scopeObject = $this->getMockBuilder(ScopeInterface::class)
-            ->getMockForAbstractClass();
+        $scopeObject = $this->createMock(ScopeInterface::class);
         $scopeObject->expects($this->once())
             ->method('getScopeTypeName')
             ->willReturn($scopeTypeName);
 
-        $scopeResolver = $this->getMockBuilder(ScopeResolverInterface::class)
-            ->getMockForAbstractClass();
+        $scopeResolver = $this->createMock(ScopeResolverInterface::class);
         $scopeResolver->expects($this->once())
             ->method('getScope')
             ->with($scopeId)

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,11 +9,14 @@ namespace Magento\Review\Test\Unit\Helper\Action;
 
 use Magento\Backend\Model\Session;
 use Magento\Framework\App\Helper\Context;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Review\Helper\Action\Pager;
 use PHPUnit\Framework\TestCase;
 
 class PagerTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var Pager */
     protected $_helper = null;
 
@@ -22,30 +25,17 @@ class PagerTest extends TestCase
      */
     protected function setUp(): void
     {
-        $sessionMock = $this->getMockBuilder(
-            Session::class
-        )->disableOriginalConstructor()
-            ->addMethods(['setData'])
-            ->onlyMethods(
-                ['getData']
-            )->getMock();
-        $sessionMock->expects(
-            $this->any()
-        )->method(
-            'setData'
-        )->with(
-            'search_result_idsreviews',
-            $this->anything()
+        $sessionMock = $this->createPartialMockWithReflection(
+            Session::class,
+            ['setData', 'getData']
         );
-        $sessionMock->expects(
-            $this->any()
-        )->method(
-            'getData'
-        )->with(
-            'search_result_idsreviews'
-        )->willReturn(
-            [3, 2, 6, 5]
-        );
+        $sessionMock->expects($this->any())
+            ->method('setData')
+            ->with('search_result_idsreviews', $this->anything());
+        $sessionMock->expects($this->any())
+            ->method('getData')
+            ->with('search_result_idsreviews')
+            ->willReturn([3, 2, 6, 5]);
 
         $contextMock = $this->createPartialMock(
             Context::class,

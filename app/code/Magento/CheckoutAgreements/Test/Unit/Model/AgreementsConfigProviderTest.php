@@ -57,7 +57,7 @@ class AgreementsConfigProviderTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $agreementsRepositoryMock = $this->createMock(
             CheckoutAgreementsRepositoryInterface::class
         );
@@ -111,7 +111,7 @@ class AgreementsConfigProviderTest extends TestCase
             ->with(AgreementsProvider::PATH_ENABLED, ScopeInterface::SCOPE_STORE)
             ->willReturn(true);
 
-        $agreement = $this->getMockForAbstractClass(AgreementInterface::class);
+        $agreement = $this->createMock(AgreementInterface::class);
         $searchCriteriaMock = $this->createMock(SearchCriteria::class);
         $this->agreementsFilterMock->expects($this->once())
             ->method('buildSearchCriteria')
@@ -165,7 +165,7 @@ class AgreementsConfigProviderTest extends TestCase
             ->with(AgreementsProvider::PATH_ENABLED, ScopeInterface::SCOPE_STORE)
             ->willReturn(true);
 
-        $agreement = $this->getMockForAbstractClass(AgreementInterface::class);
+        $agreement = $this->createMock(AgreementInterface::class);
         $searchCriteriaMock = $this->createMock(SearchCriteria::class);
         $this->agreementsFilterMock->expects($this->once())
             ->method('buildSearchCriteria')

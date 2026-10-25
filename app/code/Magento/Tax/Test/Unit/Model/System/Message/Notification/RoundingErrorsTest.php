@@ -1,16 +1,16 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Tax\Test\Unit\Model\System\Message\Notification;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\UrlInterface;
-use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\Data\WebsiteInterface;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Tax\Model\Calculation;
 use Magento\Tax\Model\Config as TaxConfig;
@@ -23,6 +23,8 @@ use PHPUnit\Framework\TestCase;
  */
 class RoundingErrorsTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var RoundingErrorsNotification
      */
@@ -47,35 +49,27 @@ class RoundingErrorsTest extends TestCase
     {
         parent::setUp();
 
-        $websiteMock = $this->getMockForAbstractClass(WebsiteInterface::class);
+        $websiteMock = $this->createMock(WebsiteInterface::class);
         $websiteMock->expects($this->any())->method('getName')->willReturn('testWebsiteName');
-        $storeMock = $this->getMockForAbstractClass(
-            StoreInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
+        $storeMock = $this->createPartialMockWithReflection(
+            Store::class,
             ['getWebsite', 'getName']
         );
         $storeMock->expects($this->any())->method('getName')->willReturn('testStoreName');
         $storeMock->expects($this->any())->method('getWebsite')->willReturn($websiteMock);
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->storeManagerMock->expects($this->any())->method('getStores')->willReturn([$storeMock]);
 
-        $this->urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
         $this->taxConfigMock = $this->createMock(TaxConfig::class);
-        $this->roundingErrorsNotification = (new ObjectManager($this))->getObject(
-            RoundingErrorsNotification::class,
-            [
-                'storeManager' => $this->storeManagerMock,
-                'urlBuilder' => $this->urlBuilderMock,
-                'taxConfig' => $this->taxConfigMock,
-            ]
+        $this->roundingErrorsNotification = new RoundingErrorsNotification(
+            $this->storeManagerMock,
+            $this->urlBuilderMock,
+            $this->taxConfigMock
         );
     }
 
-    public function testIsDisplayedNotDisplayedUnitBased()
+    public function testIsDisplayedNotDisplayedUnitBased(): void
     {
         $this->taxConfigMock->expects($this->any())->method('isWrongDisplaySettingsIgnored')->willReturn(false);
 
@@ -98,7 +92,7 @@ class RoundingErrorsTest extends TestCase
         $this->assertFalse($this->roundingErrorsNotification->isDisplayed());
     }
 
-    public function testIsDisplayedNotDisplayed()
+    public function testIsDisplayedNotDisplayed(): void
     {
         $this->taxConfigMock->expects($this->any())->method('isWrongDisplaySettingsIgnored')->willReturn(false);
 
@@ -120,13 +114,13 @@ class RoundingErrorsTest extends TestCase
         $this->assertFalse($this->roundingErrorsNotification->isDisplayed());
     }
 
-    public function testIsDisplayedIgnoreWrongConfiguration()
+    public function testIsDisplayedIgnoreWrongConfiguration(): void
     {
         $this->taxConfigMock->expects($this->any())->method('isWrongDisplaySettingsIgnored')->willReturn(true);
         $this->assertFalse($this->roundingErrorsNotification->isDisplayed());
     }
 
-    public function testGetText()
+    public function testGetText(): void
     {
         $this->taxConfigMock->expects($this->any())->method('isWrongDisplaySettingsIgnored')->willReturn(false);
 
@@ -143,5 +137,33 @@ class RoundingErrorsTest extends TestCase
             . '<a href="http://example.com">ignore this notification</a></p>',
             $this->roundingErrorsNotification->getText()
         );
+    }
+
+    /**
+     * The website-scoped calculation algorithm must be resolved once per website.
+     */
+    public function testAlgorithmResolvedOncePerWebsiteAndSkipsUnitBased(): void
+    {
+        $websiteId = 1;
+        $storeMocks = [];
+        foreach (['storeA', 'storeB', 'storeC'] as $storeName) {
+            $store = $this->createPartialMockWithReflection(
+                Store::class,
+                ['getWebsiteId', 'getName']
+            );
+            $store->expects($this->any())->method('getWebsiteId')->willReturn($websiteId);
+            $store->expects($this->any())->method('getName')->willReturn($storeName);
+            $storeMocks[] = $store;
+        }
+        $storeManager = $this->createMock(StoreManagerInterface::class);
+        $storeManager->expects($this->any())->method('getStores')->willReturn($storeMocks);
+        $taxConfig = $this->createMock(TaxConfig::class);
+        $taxConfig->expects($this->any())->method('isWrongDisplaySettingsIgnored')->willReturn(false);
+        $taxConfig->expects($this->once())
+            ->method('getAlgorithm')
+            ->willReturn(Calculation::CALC_UNIT_BASE);
+        $taxConfig->expects($this->never())->method('getPriceDisplayType');
+        $notification = new RoundingErrorsNotification($storeManager, $this->urlBuilderMock, $taxConfig);
+        $this->assertFalse($notification->isDisplayed());
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -34,10 +34,10 @@ class DataProviderTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->helper = $this->getMockBuilder(Data::class)
-            ->onlyMethods(['isGoogleExperimentActive'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->helper = $this->createPartialMock(
+            Data::class,
+            ['isGoogleExperimentActive']
+        );
         $this->subject = $this->createMock(
             NewCategoryDataProvider::class
         );

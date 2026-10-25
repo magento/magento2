@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -31,9 +31,7 @@ class AttributeProviderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->eavConfig = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->eavConfig = $this->createMock(Config::class);
         $this->object = new AttributeProvider(
             $this->eavConfig
         );
@@ -59,17 +57,11 @@ class AttributeProviderTest extends TestCase
         $attrFrontendInput = 'int';
 
         /** @var Type|MockObject $collectionMock $entityType */
-        $entityType = $this->getMockBuilder(Type::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $entityType = $this->createMock(Type::class);
         /** @var Collection|MockObject $collectionMock */
-        $collectionMock = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $collectionMock = $this->createMock(Collection::class);
         /** @var \Magento\Customer\Model\ResourceModel\Customer|MockObject $entity */
-        $entity = $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\Customer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $entity = $this->createMock(\Magento\Customer\Model\ResourceModel\Customer::class);
         /** @var Attribute|MockObject $attribute */
         $attribute = $this->getMockBuilder(Attribute::class)
             ->disableOriginalConstructor()
@@ -162,17 +154,11 @@ class AttributeProviderTest extends TestCase
         $attrFrontendInput = 'text';
 
         /** @var Type|MockObject $collectionMock $entityType */
-        $entityType = $this->getMockBuilder(Type::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $entityType = $this->createMock(Type::class);
         /** @var Collection|MockObject $collectionMock */
-        $collectionMock = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $collectionMock = $this->createMock(Collection::class);
         /** @var \Magento\Customer\Model\ResourceModel\Customer|MockObject $entity */
-        $entity = $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\Customer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $entity = $this->createMock(\Magento\Customer\Model\ResourceModel\Customer::class);
         /** @var Attribute|MockObject $attribute */
         $attribute = $this->getMockBuilder(Attribute::class)
             ->disableOriginalConstructor()
@@ -265,17 +251,11 @@ class AttributeProviderTest extends TestCase
         $attrFrontendInput = 'text';
 
         /** @var Type|MockObject $collectionMock $entityType */
-        $entityType = $this->getMockBuilder(Type::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $entityType = $this->createMock(Type::class);
         /** @var Collection|MockObject $collectionMock */
-        $collectionMock = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $collectionMock = $this->createMock(Collection::class);
         /** @var \Magento\Customer\Model\ResourceModel\Customer|MockObject $entity */
-        $entity = $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\Customer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $entity = $this->createMock(\Magento\Customer\Model\ResourceModel\Customer::class);
         /** @var Attribute|MockObject $attribute */
         $attribute = $this->getMockBuilder(Attribute::class)
             ->disableOriginalConstructor()

@@ -81,8 +81,13 @@ class CollectionTest extends TestCase
         /** @var Collection $gridCollection */
         $gridCollection = Bootstrap::getObjectManager()
             ->get(Collection::class);
+        $filterDate = new \DateTime($filterDate);
+        $filterDate->setTimezone(new \DateTimeZone($timeZone->getConfigTimezone()));
         $convertedDate = $timeZone->convertConfigTimeToUtc($filterDate);
-        $collection = $gridCollection->addFieldToFilter('created_at', ['qteq' => $filterDate]);
+        $collection = $gridCollection->addFieldToFilter(
+            'created_at',
+            ['qteq' => $filterDate->format('Y-m-d H:i:s')]
+        );
         $expectedSelect = "WHERE (((`main_table`.`created_at` = '{$convertedDate}')))";
 
         $this->assertStringContainsString($expectedSelect, $collection->getSelectSql(true));

@@ -80,7 +80,7 @@ class CustomerAuthUpdateTest extends TestCase
 
         $customerSecureMock = $this->createMock(CustomerSecure::class);
 
-        $dbAdapter = $this->getMockForAbstractClass(AdapterInterface::class);
+        $dbAdapter = $this->createMock(AdapterInterface::class);
 
         $this->customerRegistry->expects($this->once())
             ->method('retrieveSecureData')

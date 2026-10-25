@@ -1,8 +1,8 @@
 <?php
 // phpcs:ignoreFile
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\TestFramework\Integrity\Library;

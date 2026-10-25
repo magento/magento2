@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -15,6 +15,7 @@ use Magento\Framework\App\Area;
 use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Translation\Model\Inline\Parser;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
@@ -44,15 +45,8 @@ class InlineParserTest extends TestCase
 
     /**
      * Process ajax post test
-     *
-     * @dataProvider processAjaxPostDataProvider
-     *
-     * @param string $originalText
-     * @param string $translatedText
-     * @param string $area
-     * @param bool|null $isPerStore
-     * @return void
      */
+    #[DataProvider('processAjaxPostDataProvider')]
     public function testProcessAjaxPost(
         string $originalText,
         string $translatedText,
@@ -83,8 +77,6 @@ class InlineParserTest extends TestCase
 
     /**
      * Data provider for testProcessAjaxPost
-     *
-     * @return array
      */
     public static function processAjaxPostDataProvider(): array
     {
@@ -98,24 +90,17 @@ class InlineParserTest extends TestCase
 
     /**
      * Set get is json test
-     *
-     * @dataProvider allowedAreasDataProvider
-     *
-     * @param string $area
-     * @return void
      */
+    #[DataProvider('allowedAreasDataProvider')]
     public function testSetGetIsJson(string $area): void
     {
         Bootstrap::getObjectManager()->get(State::class)
             ->setAreaCode($area);
 
         $isJsonProperty = new \ReflectionProperty(get_class($this->model), '_isJson');
-        $isJsonProperty->setAccessible(true);
-
         $this->assertFalse($isJsonProperty->getValue($this->model));
 
         $setIsJsonMethod = new \ReflectionMethod($this->model, 'setIsJson');
-        $setIsJsonMethod->setAccessible(true);
         $setIsJsonMethod->invoke($this->model, true);
 
         $this->assertTrue($isJsonProperty->getValue($this->model));
@@ -123,8 +108,6 @@ class InlineParserTest extends TestCase
 
     /**
      * Data provider for testSetGetIsJson
-     *
-     * @return array
      */
     public static function allowedAreasDataProvider(): array
     {

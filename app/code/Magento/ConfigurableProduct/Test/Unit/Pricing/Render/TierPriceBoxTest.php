@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -70,13 +70,11 @@ class TierPriceBoxTest extends TestCase
     {
         $this->context = $this->createPartialMock(Context::class, []);
         $this->saleableItem = $this->createPartialMock(Product::class, ['getPriceInfo']);
-        $this->price = $this->getMockForAbstractClass(PriceInterface::class);
+        $this->price = $this->createMock(PriceInterface::class);
         $this->rendererPool = $this->createPartialMock(RendererPool::class, []);
         $this->salableResolver = $this->createPartialMock(SalableResolverInterface::class, ['isSalable']);
-        $this->minimalPriceCalculator = $this->getMockForAbstractClass(MinimalPriceCalculatorInterface::class);
-        $this->configurableOptionsProvider = $this->getMockForAbstractClass(
-            ConfigurableOptionsProviderInterface::class
-        );
+        $this->minimalPriceCalculator = $this->createMock(MinimalPriceCalculatorInterface::class);
+        $this->configurableOptionsProvider = $this->createMock(ConfigurableOptionsProviderInterface::class);
 
         $this->model = (new ObjectManager($this))->getObject(
             TierPriceBox::class,
@@ -105,7 +103,7 @@ class TierPriceBoxTest extends TestCase
             ->method('isMinimalPriceLessMsrp')
             ->willReturn(true);
 
-        $priceInfoMock = $this->getMockForAbstractClass(PriceInfoInterface::class);
+        $priceInfoMock = $this->createMock(PriceInfoInterface::class);
         $priceInfoMock->expects($this->once())
             ->method('getPrice')
             ->willReturn($msrpPriceMock);

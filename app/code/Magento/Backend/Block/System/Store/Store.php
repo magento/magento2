@@ -9,7 +9,6 @@ namespace Magento\Backend\Block\System\Store;
  * Adminhtml store content block
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Store extends \Magento\Backend\Block\Widget\Grid\Container

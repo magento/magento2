@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\LayeredNavigation\Block\Navigation\AbstractFiltersTest;
 use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
 use Magento\Catalog\Model\Layer\Filter\Item;
 use Magento\Store\Model\Store;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Provides price filter tests for configurable in navigation block on category page.
@@ -47,11 +48,11 @@ class PriceFilterTest extends AbstractFiltersTest
      * @magentoDataFixture Magento/Catalog/_files/category_product.php
      * @magentoConfigFixture current_store catalog/layered_navigation/price_range_calculation manual
      * @magentoConfigFixture current_store catalog/layered_navigation/price_range_step 10
-     * @dataProvider getFiltersDataProvider
      * @param array $products
      * @param array $expectation
      * @return void
      */
+    #[DataProvider('getFiltersDataProvider')]
     public function testGetFilters(array $products, array $expectation): void
     {
         $this->updateProductData($products);

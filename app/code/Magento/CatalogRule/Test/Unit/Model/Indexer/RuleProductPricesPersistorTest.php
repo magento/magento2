@@ -48,18 +48,10 @@ class RuleProductPricesPersistorTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->dateTimeMock = $this->getMockBuilder(DateTime::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->resourceMock = $this->getMockBuilder(ResourceConnection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->activeTableSwitcherMock = $this->getMockBuilder(ActiveTableSwitcher::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->tableSwapperMock = $this->getMockForAbstractClass(
-            IndexerTableSwapperInterface::class
-        );
+        $this->dateTimeMock = $this->createMock(DateTime::class);
+        $this->resourceMock = $this->createMock(ResourceConnection::class);
+        $this->activeTableSwitcherMock = $this->createMock(ActiveTableSwitcher::class);
+        $this->tableSwapperMock = $this->createMock(IndexerTableSwapperInterface::class);
         $this->model = new RuleProductPricesPersistor(
             $this->dateTimeMock,
             $this->resourceMock,
@@ -96,9 +88,7 @@ class RuleProductPricesPersistorTest extends TestCase
             ->with('catalogrule_product_price')
             ->willReturn($tableName);
 
-        $connectionMock = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $connectionMock = $this->createMock(AdapterInterface::class);
         $this->resourceMock->expects($this->once())->method('getConnection')->willReturn($connectionMock);
         $this->resourceMock
             ->method('getTableName')
@@ -164,9 +154,7 @@ class RuleProductPricesPersistorTest extends TestCase
                 }
             );
 
-        $connectionMock = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $connectionMock = $this->createMock(AdapterInterface::class);
         $connectionMock->expects($this->once())
             ->method('insertOnDuplicate')
             ->with($tableName, $priceData)

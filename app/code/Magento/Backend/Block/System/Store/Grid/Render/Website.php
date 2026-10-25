@@ -7,13 +7,11 @@ namespace Magento\Backend\Block\System\Store\Grid\Render;
 
 /**
  * Store render website
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Website extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function render(\Magento\Framework\DataObject $row)
     {

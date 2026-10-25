@@ -7,11 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Product;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Helper\Category;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Url;
 use Magento\Catalog\Model\Product\Url as ProductUrl;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\Filter\FilterManager;
 use Magento\Framework\Session\SidResolverInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -25,8 +29,10 @@ use PHPUnit\Framework\TestCase;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
+#[CoversClass(\Magento\Catalog\Model\Product\Url::class)]
 class UrlTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Url
      */
@@ -64,34 +70,34 @@ class UrlTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->filter = $this->getMockBuilder(
-            FilterManager::class
-        )->disableOriginalConstructor()
-            ->addMethods(['translitUrl'])
-            ->getMock();
+        $filterData = [];
+        $this->filter = $this->createPartialMockWithReflection(
+            FilterManager::class,
+            ['translitUrl', 'setTranslitUrlResult']
+        );
+        $filter = $this->filter;
+        $this->filter->method('translitUrl')->willReturnCallback(function ($value) use (&$filterData) {
+            return $filterData['translitUrl'] ?? $value;
+        });
+        $this->filter->method('setTranslitUrlResult')->willReturnCallback(
+            function ($value) use (&$filterData, $filter) {
+                $filterData['translitUrl'] = $value;
+                return $filter;
+            }
+        );
 
-        $this->urlFinder = $this->getMockBuilder(
-            UrlFinderInterface::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        $this->urlFinder = $this->createMock(UrlFinderInterface::class);
 
-        $this->url = $this->getMockBuilder(
-            \Magento\Framework\Url::class
-        )->disableOriginalConstructor()
-            ->onlyMethods(
-                ['setScope', 'getUrl']
-            )->getMock();
+        $this->url = $this->createPartialMock(\Magento\Framework\Url::class, ['setScope', 'getUrl']);
 
-        $this->sidResolver = $this->getMockForAbstractClass(SidResolverInterface::class);
+        $this->sidResolver = $this->createMock(SidResolverInterface::class);
 
         $store = $this->createPartialMock(Store::class, ['getId']);
-        $store->expects($this->any())->method('getId')->willReturn(1);
-        $storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $storeManager->expects($this->any())->method('getStore')->willReturn($store);
+        $store->method('getId')->willReturn(1);
+        $storeManager = $this->createMock(StoreManagerInterface::class);
+        $storeManager->method('getStore')->willReturn($store);
 
-        $urlFactory = $this->getMockBuilder(UrlFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $urlFactory = $this->createMock(UrlFactory::class);
         $urlFactory->method('create')
             ->willReturn($this->url);
 
@@ -119,21 +125,13 @@ class UrlTest extends TestCase
         $strIn = 'Some string';
         $resultString = 'some';
 
-        $this->filter->expects(
-            $this->once()
-        )->method(
-            'translitUrl'
-        )->with(
-            $strIn
-        )->willReturn(
-            $resultString
-        );
+        $this->filter->setTranslitUrlResult($resultString);
 
         $this->scopeConfig->expects($this->once())
             ->method('getValue')
             ->with(
                 \Magento\Catalog\Helper\Product::XML_PATH_APPLY_TRANSLITERATION_TO_URL,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                ScopeInterface::SCOPE_STORE
             )->willReturn(true);
         $this->assertEquals($resultString, $this->model->formatUrlKey($strIn));
     }
@@ -150,16 +148,12 @@ class UrlTest extends TestCase
             ->method('getValue')
             ->with(
                 \Magento\Catalog\Helper\Product::XML_PATH_APPLY_TRANSLITERATION_TO_URL,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                ScopeInterface::SCOPE_STORE
             )->willReturn(false);
         $this->assertEquals($resultString, $this->model->formatUrlKey($strIn));
     }
 
     /**
-     * @dataProvider getUrlDataProvider
-     * @covers \Magento\Catalog\Model\Product\Url::getUrl
-     * @covers \Magento\Catalog\Model\Product\Url::getUrlInStore
-     * @covers \Magento\Catalog\Model\Product\Url::getProductUrl
      *
      * @param $getUrlMethod
      * @param $routePath
@@ -172,6 +166,7 @@ class UrlTest extends TestCase
      * @param $productUrlKey
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
+    #[DataProvider('getUrlDataProvider')]
     public function testGetUrl(
         $getUrlMethod,
         $routePath,
@@ -183,33 +178,58 @@ class UrlTest extends TestCase
         $productId,
         $productUrlKey
     ) {
-        $product = $this->getMockBuilder(
-            Product::class
-        )->disableOriginalConstructor()
-            ->addMethods(['getUrlKey', 'setRequestPath', 'hasUrlDataObject', 'getDoNotUseCategoryId'])
-            ->onlyMethods(
-                [
-                    'getStoreId',
-                    'getEntityId',
-                    'getId',
-                    'getRequestPath',
-                    'getCategoryId'
-                ]
-            )->getMock();
-        $product->expects($this->any())->method('getStoreId')->willReturn($storeId);
-        $product->expects($this->any())->method('getCategoryId')->willReturn($categoryId);
-        $product->expects($this->any())->method('getRequestPath')->willReturn($requestPathProduct);
-        $product->expects($this->any())
-            ->method('setRequestPath')
-            ->with(false)->willReturnSelf();
-        $product->expects($this->any())->method('getId')->willReturn($productId);
-        $product->expects($this->any())->method('getUrlKey')->willReturn($productUrlKey);
+        $product = $this->createPartialMockWithReflection(
+            Product::class,
+            ['setStoreId', 'getStoreId', 'setCategoryId', 'getCategoryId', 'setRequestPath',
+             'getRequestPath', 'setId', 'getId', 'setUrlKey', 'getUrlKey']
+        );
+        $productData = [];
+        $product->method('setStoreId')->willReturnCallback(function ($v) use (&$productData, $product) {
+            $productData['store_id'] = $v;
+            return $product;
+        });
+        $product->method('getStoreId')->willReturnCallback(function () use (&$productData) {
+            return $productData['store_id'] ?? null;
+        });
+        $product->method('setCategoryId')->willReturnCallback(function ($v) use (&$productData, $product) {
+            $productData['category_id'] = $v;
+            return $product;
+        });
+        $product->method('getCategoryId')->willReturnCallback(function () use (&$productData) {
+            return $productData['category_id'] ?? null;
+        });
+        $product->method('setRequestPath')->willReturnCallback(function ($v) use (&$productData, $product) {
+            $productData['request_path'] = $v;
+            return $product;
+        });
+        $product->method('getRequestPath')->willReturnCallback(function () use (&$productData) {
+            return $productData['request_path'] ?? null;
+        });
+        $product->method('setId')->willReturnCallback(function ($v) use (&$productData, $product) {
+            $productData['id'] = $v;
+            return $product;
+        });
+        $product->method('getId')->willReturnCallback(function () use (&$productData) {
+            return $productData['id'] ?? null;
+        });
+        $product->method('setUrlKey')->willReturnCallback(function ($v) use (&$productData, $product) {
+            $productData['url_key'] = $v;
+            return $product;
+        });
+        $product->method('getUrlKey')->willReturnCallback(function () use (&$productData) {
+            return $productData['url_key'] ?? null;
+        });
+        $product->setStoreId($storeId);
+        $product->setCategoryId($categoryId);
+        $product->setRequestPath($requestPathProduct);
+        $product->setId($productId);
+        $product->setUrlKey($productUrlKey);
         $this->url->expects($this->any())->method('setScope')->with($storeId)->willReturnSelf();
         $this->url->expects($this->any())
             ->method('getUrl')
             ->with($routePath, $routeParamsUrl)
             ->willReturn($requestPathProduct);
-        $this->urlFinder->expects($this->any())->method('findOneByData')->willReturn(false);
+        $this->urlFinder->method('findOneByData')->willReturn(false);
 
         switch ($getUrlMethod) {
             case 'getUrl':

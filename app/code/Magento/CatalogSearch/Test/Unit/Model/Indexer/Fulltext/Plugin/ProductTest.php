@@ -52,26 +52,19 @@ class ProductTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->productMock = $this->getMockBuilder(ProductModel::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->subjectMock = $this->getMockBuilder(ProductResourceModel::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $connection = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->productMock = $this->createMock(ProductModel::class);
+
+        $this->subjectMock = $this->createMock(ProductResourceModel::class);
+
+        $connection = $this->createMock(AdapterInterface::class);
         $this->subjectMock->method('getConnection')->willReturn($connection);
 
-        $this->indexerMock = $this->getMockBuilder(IndexerInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['__wakeup'])
-            ->onlyMethods(['getId', 'getState'])
-            ->getMockForAbstractClass();
-        $this->indexerRegistryMock = $this->getMockBuilder(IndexerRegistry::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['get'])
-            ->getMock();
+        $this->indexerMock = $this->createStub(IndexerInterface::class);
+
+        $this->indexerRegistryMock = $this->createPartialMock(
+            IndexerRegistry::class,
+            ['get']
+        );
 
         $this->proceed = function () {
             return $this->subjectMock;

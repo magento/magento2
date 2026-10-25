@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Sales\Model\Order\Email\Sender;
@@ -44,7 +44,6 @@ class CreditmemoSenderTest extends TestCase
 
         $reflection = new \ReflectionClass(get_class($this->logger));
         $reflectionProperty = $reflection->getProperty('minimumErrorLevel');
-        $reflectionProperty->setAccessible(true);
         $this->minErrorDefaultValue = $reflectionProperty->getValue($this->logger);
         $reflectionProperty->setValue($this->logger, 400);
         $this->logger->clearMessages();
@@ -209,7 +208,6 @@ class CreditmemoSenderTest extends TestCase
     protected function tearDown(): void
     {
         $reflectionProperty = new \ReflectionProperty(get_class($this->logger), 'minimumErrorLevel');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->logger, $this->minErrorDefaultValue);
     }
 }

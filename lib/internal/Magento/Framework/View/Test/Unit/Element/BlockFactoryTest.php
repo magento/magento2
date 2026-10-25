@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit\Element;
 
+use Magento\Framework\ObjectManager\ConfigInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\BlockFactory;
@@ -27,15 +28,26 @@ class BlockFactoryTest extends TestCase
      */
     protected $objectManagerMock;
 
+    /**
+     * @var ConfigInterface|MockObject
+     */
+    protected $objectManagerConfigMock;
+
     protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManager($this);
 
-        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->objectManagerConfigMock = $this->createMock(ConfigInterface::class);
+        $this->objectManagerConfigMock->method('getPreference')->willReturnArgument(0);
+        $this->objectManagerConfigMock->method('getInstanceType')->willReturnArgument(0);
 
         $this->blockFactory = $objectManagerHelper->getObject(
             BlockFactory::class,
-            ['objectManager' => $this->objectManagerMock]
+            [
+                'objectManager' => $this->objectManagerMock,
+                'objectManagerConfig' => $this->objectManagerConfigMock,
+            ]
         );
     }
 

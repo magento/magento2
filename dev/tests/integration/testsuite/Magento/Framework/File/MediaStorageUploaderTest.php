@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Framework\File;
 use Magento\Customer\Model\FileProcessor;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\Driver\File;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for \Magento\MediaStorage\Model\File\Uploader
@@ -130,11 +131,11 @@ class MediaStorageUploaderTest extends \PHPUnit\Framework\TestCase
      *
      * @magentoConfigFixture system/media_gallery/enabled 1
      * @magentoAppArea adminhtml
-     * @dataProvider dirCodeDataProvider
      *
      * @param string $directoryCode
      * @return void
      */
+    #[DataProvider('dirCodeDataProvider')]
     public function testUploadFileWhenOldMediaGalleryDisabled(string $directoryCode): void
     {
         $destinationDirectory = $this->filesystem->getDirectoryWrite($directoryCode);
@@ -206,5 +207,18 @@ class MediaStorageUploaderTest extends \PHPUnit\Framework\TestCase
         ];
 
         return $this->uploaderFactory->create(['fileId' => $type]);
+    }
+}
+
+/**
+ * Mocking of std function to test validation
+ *
+ * @param string $name
+ * @return bool
+ */
+if (!function_exists(__NAMESPACE__ . '\is_uploaded_file')) {
+    function is_uploaded_file($name)
+    {
+        return ($name == 'text.txt') ? false : true;
     }
 }

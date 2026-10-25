@@ -27,13 +27,11 @@ class SimpleTest extends TestCase
     protected function setUp(): void
     {
         $objectHelper = new ObjectManager($this);
-        $eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
+        $eventManager = $this->createMock(ManagerInterface::class);
         $fileStorageDbMock = $this->createMock(Database::class);
-        $filesystem = $this->getMockBuilder(Filesystem::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $filesystem = $this->createMock(Filesystem::class);
         $coreRegistry = $this->createMock(Registry::class);
-        $logger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $logger = $this->createMock(LoggerInterface::class);
         $productFactoryMock = $this->createMock(ProductFactory::class);
         $this->_model = $objectHelper->getObject(
             Simple::class,

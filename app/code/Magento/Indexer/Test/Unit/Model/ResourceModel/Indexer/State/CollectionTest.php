@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -28,10 +28,10 @@ class CollectionTest extends TestCase
 
     public function testConstruct()
     {
-        $entityFactoryMock = $this->getMockForAbstractClass(EntityFactoryInterface::class);
-        $loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
-        $fetchStrategyMock = $this->getMockForAbstractClass(FetchStrategyInterface::class);
-        $managerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $entityFactoryMock = $this->createMock(EntityFactoryInterface::class);
+        $loggerMock = $this->createMock(LoggerInterface::class);
+        $fetchStrategyMock = $this->createMock(FetchStrategyInterface::class);
+        $managerMock = $this->createMock(ManagerInterface::class);
         $connectionMock = $this->createMock(Mysql::class);
         $selectRendererMock = $this->createMock(SelectRenderer::class);
         $resourceMock = $this->createMock(FlagResource::class);

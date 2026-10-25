@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Ui\Test\Unit\Component\Control;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Framework\View\Layout;
@@ -18,6 +19,8 @@ use PHPUnit\Framework\TestCase;
 
 class ContainerTest extends TestCase
 {
+    use MockCreationTrait;
+
     public function testToHtml()
     {
         $data = [];
@@ -31,10 +34,10 @@ class ContainerTest extends TestCase
 
         $contextMock = $this->createMock(Context::class);
 
-        $eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $eventManagerMock = $this->createMock(ManagerInterface::class);
         $contextMock->expects($this->any())->method('getEventManager')->willReturn($eventManagerMock);
 
-        $scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $scopeConfigMock->expects($this->any())->method('getValue')->withAnyParameters()->willReturn(false);
         $contextMock->expects($this->any())->method('getScopeConfig')->willReturn($scopeConfigMock);
 
@@ -45,18 +48,17 @@ class ContainerTest extends TestCase
             ->willReturn($blockButtonMock);
         $contextMock->expects($this->any())->method('getLayout')->willReturn($layoutMock);
 
-        $itemMock = $this->getMockBuilder(Item::class)
-            ->addMethods(['getId'])
-            ->onlyMethods(['getData'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $itemMock = $this->createPartialMockWithReflection(
+            Item::class,
+            ['getData', 'getId']
+        );
         $itemMock->expects($this->any())->method('getData')->willReturn($data);
         $itemMock->expects($this->any())->method('getId')->willReturn($id);
 
-        $abstractContextMock = $this->getMockBuilder(AbstractBlock::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getNameInLayout'])
-            ->getMockForAbstractClass();
+        $abstractContextMock = $this->createPartialMock(
+            AbstractBlock::class,
+            ['getNameInLayout']
+        );
         $abstractContextMock->expects($this->any())->method('getNameInLayout')->willReturn($nameInLayout);
 
         $container = new Container($contextMock);

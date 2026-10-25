@@ -35,10 +35,7 @@ class PermissionsTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->mockAuthorization = $this->getMockBuilder(Authorization::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['isAllowed'])
-            ->getMock();
+        $this->mockAuthorization = $this->createPartialMock(Authorization::class, ['isAllowed']);
 
         $this->permissions = new Permissions($this->mockAuthorization);
     }

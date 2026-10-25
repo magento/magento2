@@ -11,37 +11,27 @@ namespace Magento\Backend\Block\Dashboard;
  * Adminhtml dashboard google chart block
  * @deprecated dashboard graphs were migrated to dynamic chart.js solution
  * @see dashboard.chart.amounts and dashboard.chart.orders in adminhtml_dashboard_index.xml
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
 {
-    const API_URL = 'https://image-charts.com/chart';
+    public const API_URL = 'https://image-charts.com/chart';
 
     /**
-     * All series
-     *
      * @var array
      */
     protected $_allSeries = [];
 
     /**
-     * Axis labels
-     *
      * @var array
      */
     protected $_axisLabels = [];
 
     /**
-     * Axis maps
-     *
      * @var array
      */
     protected $_axisMaps = [];
 
     /**
-     * Data rows
-     *
      * @var array
      */
     protected $_dataRows = [];
@@ -78,6 +68,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
      * Google chart api data encoding
      *
      * @deprecated 101.0.2 since the Google Image Charts API not accessible from March 14, 2019
+     * @see Nothing
      * @var string
      */
     protected $_encoding = 'e';
@@ -244,7 +235,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
             }
             foreach ($this->getAllSeries() as $index => $serie) {
                 if (in_array($d, $this->_axisLabels['x'])) {
-                    $datas[$index][] = (double)array_shift($this->_allSeries[$index]);
+                    $datas[$index][] = (float)array_shift($this->_allSeries[$index]);
                 } else {
                     $datas[$index][] = 0;
                 }

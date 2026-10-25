@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,16 +17,19 @@ use Magento\Elasticsearch\Model\Indexer\Fulltext\Plugin\Category\Product\Attribu
 use Magento\Elasticsearch\Model\Indexer\IndexerHandler;
 use Magento\Framework\Indexer\DimensionProviderInterface;
 use Magento\Framework\Indexer\IndexerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Rule\InvokedCount as InvokedCountMatcher;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Tests for catalog search indexer plugin.
  */
 class AttributeTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Config|MockObject
      */
@@ -61,8 +64,7 @@ class AttributeTest extends TestCase
 
         $this->configMock = $this->createMock(Config::class);
         $this->indexerProcessorMock = $this->createMock(Processor::class);
-        $this->dimensionProviderMock = $this->getMockBuilder(DimensionProviderInterface::class)
-            ->getMockForAbstractClass();
+        $this->dimensionProviderMock = $this->createMock(DimensionProviderInterface::class);
         $this->indexerHandlerFactoryMock = $this->createMock(IndexerHandlerFactory::class);
 
         $this->attributePlugin = (new ObjectManager($this))->getObject(
@@ -83,9 +85,8 @@ class AttributeTest extends TestCase
      * @param bool $isElasticsearchEnabled
      * @param array $dimensions
      * @return void
-     * @dataProvider afterSaveDataProvider
-     *
      */
+    #[DataProvider('afterSaveDataProvider')]
     public function testAfterSave(bool $isNewObject, bool $isElasticsearchEnabled, array $dimensions): void
     {
         /** @var AttributeModel|MockObject $attributeMock */
@@ -105,14 +106,26 @@ class AttributeTest extends TestCase
         $indexerData = ['indexer_example_data'];
 
         /** @var IndexerInterface|MockObject $indexerMock */
-        $indexerMock = $this->getMockBuilder(IndexerInterface::class)
-            ->addMethods(['getData'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-
-        $indexerMock->expects($this->getExpectsCount($isNewObject, $isElasticsearchEnabled))
-            ->method('getData')
-            ->willReturn($indexerData);
+        $indexerMock = $this->createPartialMockWithReflection(
+            IndexerInterface::class,
+            ['getData', 'setData', 'load', 'getId', 'isScheduled', 'getViewId', 'getActionClass',
+             'getTitle', 'getDescription', 'getFields', 'getSources', 'getDependencies', 'getHandlers',
+             'getState', 'setState', 'getStatus', 'setStatus', 'getView', 'getLatestUpdated',
+             'invalidate', 'reindexAll', 'reindexRow', 'reindexList', 'isInvalid', 'isValid',
+             'isWorking', 'setScheduled']
+        );
+        $data = [];
+        $indexerMock->method('getData')->willReturnCallback(function () use (&$data) {
+            return $data;
+        });
+        $indexerMock->method('setData')->willReturnCallback(function ($newData) use (&$data, $indexerMock) {
+            $data = $newData;
+            return $indexerMock;
+        });
+        $indexerMock->method('load')->willReturnSelf();
+        $indexerMock->method('getId')->willReturn('test_indexer');
+        $indexerMock->method('isScheduled')->willReturn(false);
+        $indexerMock->setData($indexerData);
 
         $this->indexerProcessorMock->expects($this->once())
             ->method('getIndexer')

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -16,6 +16,7 @@ use Magento\Quote\Api\CartManagementInterface;
 use Magento\Quote\Api\GuestCartManagementInterface;
 use Magento\Quote\Model\Backpressure\OrderLimitConfigManager;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -88,12 +89,12 @@ class BackpressureTest extends TestCase
      * @param string $endpoint
      * @param int $expectedLimit
      * @return void
-     * @dataProvider getConfiguredCases
      * @magentoConfigFixture current_store sales/backpressure/enabled 1
      * @magentoConfigFixture current_store sales/backpressure/limit 100
      * @magentoConfigFixture current_store sales/backpressure/guest_limit 50
      * @magentoConfigFixture current_store sales/backpressure/period 60
      */
+    #[DataProvider('getConfiguredCases')]
     public function testConfigured(
         int $identityType,
         string $identity,

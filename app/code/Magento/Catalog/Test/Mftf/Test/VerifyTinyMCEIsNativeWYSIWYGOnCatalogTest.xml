@@ -45,6 +45,9 @@
         <see userInput="Hello World!" selector="{{StorefrontCategoryMainSection.CatalogDescription}}" stepKey="assertCatalogDescription"/>
         <after>
             <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="AdminDeleteCategoryByNameActionGroup" stepKey="deleteCategory">
+                <argument name="categoryName" value="{{SimpleSubCategory.name}}"/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
     </test>

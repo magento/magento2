@@ -1,6 +1,6 @@
-// /**
-//  * Copyright © Magento, Inc. All rights reserved.
-//  * See COPYING.txt for license details.
+//  /**
+//  * Copyright 2015 Adobe
+//  * All Rights Reserved.
 //  */
 
 //
@@ -72,6 +72,11 @@
     @media all and (max-width: (@screen__l - 1)),
     print {
         .media-width('max', @screen__l);
+    }
+
+    @media all and (min-width: (@screen__l)),
+    print {
+        .media-width('min', @screen__l);
     }
 
     @media all and (min-width: @screen__xl),

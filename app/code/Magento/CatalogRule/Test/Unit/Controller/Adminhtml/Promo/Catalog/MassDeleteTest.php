@@ -63,18 +63,15 @@ class MassDeleteTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->onlyMethods(['getParam'])
-            ->getMockForAbstractClass();
+        $this->requestMock = $this->createMock(RequestInterface::class);
         $this->contextMock = $this->createMock(Context::class);
 
-        $this->messageManagerMock = $this->getMockBuilder(ManagerInterface::class)
-            ->getMockForAbstractClass();
+        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
 
-        $this->resultRedirectMock = $this->getMockBuilder(Redirect::class)
-            ->onlyMethods(['setPath'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resultRedirectMock = $this->createPartialMock(
+            Redirect::class,
+            ['setPath']
+        );
 
         $this->resultFactory = $this->createMock(ResultFactory::class);
         $this->resultFactory->method('create')->willReturn($this->resultRedirectMock);
@@ -93,7 +90,7 @@ class MassDeleteTest extends TestCase
         $this->requestMock->expects(self::any())
             ->method('getParam')
             ->willReturn($data);
-        $catalogRuleMock = $this->getMockForAbstractClass(RuleInterface::class);
+        $catalogRuleMock = $this->createMock(RuleInterface::class);
         $this->catalogRuleRepositoryMock->expects($this->once())
             ->method('deleteById')
             ->with(1)

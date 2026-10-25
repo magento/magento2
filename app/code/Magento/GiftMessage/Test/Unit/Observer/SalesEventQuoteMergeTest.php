@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -9,13 +9,16 @@ declare(strict_types=1);
 namespace Magento\GiftMessage\Test\Unit\Observer;
 
 use Magento\Framework\Event\Observer;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\GiftMessage\Observer\SalesEventQuoteMerge;
 use Magento\Quote\Model\Quote;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class SalesEventQuoteMergeTest extends TestCase
 {
+    use MockCreationTrait;
 
     /**
      * @var SalesEventQuoteMerge
@@ -32,26 +35,25 @@ class SalesEventQuoteMergeTest extends TestCase
     }
 
     /**
-     * @dataProvider dataProviderGiftMessageId
-     *
      * @param null|int $giftMessageId
      *
      * @return void
      */
+    #[DataProvider('dataProviderGiftMessageId')]
     public function testExecute($giftMessageId): void
     {
-        $sourceQuoteMock = $this->getMockBuilder(Quote::class)
-            ->addMethods(['getGiftMessageId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $sourceQuoteMock = $this->createPartialMockWithReflection(
+            Quote::class,
+            ['getGiftMessageId']
+        );
         $sourceQuoteMock->expects($this->once())
             ->method('getGiftMessageId')
             ->willReturn($giftMessageId);
 
-        $targetQuoteMock = $this->getMockBuilder(Quote::class)
-            ->addMethods(['setGiftMessageId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $targetQuoteMock = $this->createPartialMockWithReflection(
+            Quote::class,
+            ['setGiftMessageId']
+        );
 
         if ($giftMessageId) {
             $targetQuoteMock->expects($this->once())

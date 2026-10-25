@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Service;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Pricing\SpecialPriceService;
 use PHPUnit\Framework\TestCase;
 
@@ -52,10 +53,10 @@ class SpecialPriceServiceTest extends TestCase
     }
 
     /**
-     * @dataProvider executeDataProvider
      * @param mixed $dateTo
      * @param mixed $expected
      */
+    #[DataProvider('executeDataProvider')]
     public function testExecute(mixed $dateTo, mixed $expected): void
     {
         $result = $this->specialPriceService->execute($dateTo);

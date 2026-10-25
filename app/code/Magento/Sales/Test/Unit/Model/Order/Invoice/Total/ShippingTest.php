@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,15 +16,19 @@ use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\Invoice\CommentFactory;
 use Magento\Sales\Model\Order\Invoice\Total\Shipping;
 use Magento\Sales\Model\OrderFactory;
+use Magento\Sales\Model\ResourceModel\Order\Invoice\Comment\CollectionFactory as CommentCollectionFactory;
 use Magento\Sales\Model\ResourceModel\Order\Invoice\Item\CollectionFactory;
+use Magento\Sales\Model\ResourceModel\OrderFactory as OrderResourceFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ShippingTest extends TestCase
 {
+
     /**
      * @var Shipping
      */
@@ -36,11 +40,11 @@ class ShippingTest extends TestCase
     }
 
     /**
-     * @dataProvider collectWithNoOrZeroPrevInvoiceDataProvider
      * @param array $prevInvoicesData
      * @param float $orderShipping
      * @param float $expectedShipping
      */
+    #[DataProvider('collectWithNoOrZeroPrevInvoiceDataProvider')]
     public function testCollectWithNoOrZeroPrevInvoice(array $prevInvoicesData, $orderShipping, $expectedShipping)
     {
         $invoice = $this->createInvoiceStub($prevInvoicesData, $orderShipping);
@@ -93,7 +97,7 @@ class ShippingTest extends TestCase
         $order = $this->getMockBuilder(Order::class)
             ->onlyMethods(['getInvoiceCollection', 'getShippingAmount'])
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $order->expects($this->any())
             ->method('getInvoiceCollection')
             ->willReturn($this->getInvoiceCollection($prevInvoicesData));
@@ -101,9 +105,7 @@ class ShippingTest extends TestCase
             ->method('getShippingAmount')
             ->willReturn($orderShipping);
         /** @var \Magento\Sales\Model\Order\Invoice|MockObject $invoice */
-        $invoice = $this->getMockBuilder(Invoice::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $invoice = $this->createMock(Invoice::class);
         $invoice->expects($this->any())
             ->method('getOrder')
             ->willReturn($order);
@@ -126,7 +128,7 @@ class ShippingTest extends TestCase
         $arguments = [
             'orderFactory' => $this->createMock(OrderFactory::class),
             'orderResourceFactory' => $this->createMock(
-                \Magento\Sales\Model\ResourceModel\OrderFactory::class
+                OrderResourceFactory::class
             ),
             'calculatorFactory' => $this->createMock(
                 CalculatorFactory::class
@@ -138,7 +140,7 @@ class ShippingTest extends TestCase
                 CommentFactory::class
             ),
             'commentCollectionFactory' => $this->createMock(
-                \Magento\Sales\Model\ResourceModel\Order\Invoice\Comment\CollectionFactory::class
+                CommentCollectionFactory::class
             ),
         ];
         foreach ($invoicesData as $oneInvoiceData) {

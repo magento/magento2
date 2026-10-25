@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -13,6 +13,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\GoogleGtag\Model\Config\GtagConfig as GtagConfig;
 use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -57,10 +58,10 @@ class GtagConfigTest extends TestCase
      */
     protected function setUp(): void
     {
-        self::$scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->onlyMethods(['getValue', 'isSetFlag'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        self::$scopeConfigMock = $this->createPartialMock(
+            ScopeConfigInterface::class,
+            ['getValue', 'isSetFlag']
+        );
 
         $objectManager = new ObjectManager($this);
         $this->gtagConfig = $objectManager->getObject(
@@ -82,8 +83,8 @@ class GtagConfigTest extends TestCase
      * @param string $testAccountId
      * @param bool $result
      * @return void
-     * @dataProvider gaDataProvider
      */
+    #[DataProvider('gaDataProvider')]
     public function testIsGoogleAnalyticsAvailable(
         $flagGaActive,
         $testMeasurementId,
@@ -128,8 +129,8 @@ class GtagConfigTest extends TestCase
      * @param string $testTrackingId
      * @param string $result
      * @return void
-     * @dataProvider dataGetMeasurementId
      */
+    #[DataProvider('dataGetMeasurementId')]
     public function testGetMeasurementId($testMeasurementId, $result): void
     {
         self::$scopeConfigMock
@@ -159,8 +160,8 @@ class GtagConfigTest extends TestCase
      * @param bool $returnValue
      *
      * @return void
-     * @dataProvider dataProviderForTestIsActive
      */
+    #[DataProvider('dataProviderForTestIsActive')]
     public function testIsGoogleAdwordsActive($isActive, $returnConfigValue, $returnValue): void
     {
         self::$scopeConfigMock->expects(
@@ -172,7 +173,11 @@ class GtagConfigTest extends TestCase
         )->willReturn(
             $isActive
         );
-        self::$scopeConfigMock->method('getValue')->with($this->isType('string'))->willReturnCallback(
+        self::$scopeConfigMock->method('getValue')->with(
+            $this->callback(function ($value) {
+                return is_string($value);
+            })
+        )->willReturnCallback(
             function () use ($returnConfigValue) {
                 return $returnConfigValue;
             }
@@ -198,8 +203,8 @@ class GtagConfigTest extends TestCase
      * @param string $returnValue
      *
      * @return void
-     * @dataProvider dataProviderForTestStoreConfig
      */
+    #[DataProvider('dataProviderForTestStoreConfig')]
     public function testGetStoreConfigValue($method, $xmlPath, $returnValue): void
     {
         self::$scopeConfigMock->expects(

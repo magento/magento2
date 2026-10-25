@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Setup\Test\Unit\Module\I18n\Parser\Adapter\Php\Tokenizer;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\Token;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @covers \Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\Token
@@ -32,8 +33,8 @@ class TokenTest extends TestCase
      * @param int $name
      * @param string $value
      * @param bool $result
-     * @dataProvider testIsNewDataProvider
      */
+    #[DataProvider('isNewDataProvider')]
     public function testIsNew($name, $value, $result)
     {
         $token = $this->createToken($name, $value);
@@ -46,8 +47,8 @@ class TokenTest extends TestCase
      * @param int $name
      * @param string $value
      * @param bool $result
-     * @dataProvider testIsNamespaceSeparatorDataProvider
      */
+    #[DataProvider('isNamespaceSeparatorDataProvider')]
     public function testIsNamespaceSeparator($name, $value, $result)
     {
         $token = $this->createToken($name, $value);
@@ -60,8 +61,8 @@ class TokenTest extends TestCase
      * @param int $name
      * @param string $value
      * @param bool $result
-     * @dataProvider testIsIdentifierDataProvider
      */
+    #[DataProvider('isIdentifierDataProvider')]
     public function testIsIdentifier($name, $value, $result)
     {
         $token = $this->createToken($name, $value);
@@ -71,7 +72,7 @@ class TokenTest extends TestCase
     /**
      * @return array
      */
-    public static function testIsNewDataProvider()
+    public static function isNewDataProvider()
     {
         return [
             'new' => ['name' => T_NEW, 'value' => 'new', 'result' => true],
@@ -83,7 +84,7 @@ class TokenTest extends TestCase
     /**
      * @return array
      */
-    public static function testIsNamespaceSeparatorDataProvider()
+    public static function isNamespaceSeparatorDataProvider()
     {
         return [
             'new' => ['name' => T_NEW, 'value' => 'new', 'result' => false],
@@ -95,7 +96,7 @@ class TokenTest extends TestCase
     /**
      * @return array
      */
-    public static function testIsIdentifierDataProvider()
+    public static function isIdentifierDataProvider()
     {
         return [
             'new' => ['name' => T_NEW, 'value' => 'new', 'result' => false],

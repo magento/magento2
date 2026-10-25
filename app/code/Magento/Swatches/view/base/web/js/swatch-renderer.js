@@ -443,9 +443,11 @@ define([
                     listLabel = 'aria-labelledby="' + controlLabelId + '"';
                 }
 
+                let checkIsRequiredAttrClass = 'required';
+
                 // Create new control
                 container.append(
-                    '<div class="' + classes.attributeClass + ' ' + item.code + '" ' +
+                    '<div class="' + classes.attributeClass + ' ' + item.code + ' ' + checkIsRequiredAttrClass + '" ' +
                          'data-attribute-code="' + item.code + '" ' +
                          'data-attribute-id="' + item.id + '">' +
                         label +

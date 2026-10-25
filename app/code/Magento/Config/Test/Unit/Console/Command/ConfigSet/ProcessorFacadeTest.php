@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -22,6 +22,7 @@ use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\ValidatorException;
 use PHPUnit\Framework\MockObject\MockObject as Mock;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -72,27 +73,17 @@ class ProcessorFacadeTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->scopeValidatorMock = $this->getMockBuilder(ValidatorInterface::class)
-            ->getMockForAbstractClass();
-        $this->pathValidatorMock = $this->getMockBuilder(PathValidator::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->configSetProcessorFactoryMock = $this->getMockBuilder(ConfigSetProcessorFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->processorMock = $this->getMockBuilder(ConfigSetProcessorInterface::class)
-            ->getMockForAbstractClass();
+        $this->scopeValidatorMock = $this->createMock(ValidatorInterface::class);
+        $this->pathValidatorMock = $this->createMock(PathValidator::class);
+        $this->configSetProcessorFactoryMock = $this->createMock(ConfigSetProcessorFactory::class);
+        $this->processorMock = $this->createMock(ConfigSetProcessorInterface::class);
 
         $this->configSetProcessorFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->processorMock);
 
-        $this->hashMock = $this->getMockBuilder(Hash::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->configMock = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->hashMock = $this->createMock(Hash::class);
+        $this->configMock = $this->createMock(Config::class);
 
         $this->model = new ProcessorFacade(
             $this->scopeValidatorMock,
@@ -138,8 +129,8 @@ class ProcessorFacadeTest extends TestCase
 
     /**
      * @param LocalizedException $exception
-     * @dataProvider processWithValidatorExceptionDataProvider
      */
+    #[DataProvider('processWithValidatorExceptionDataProvider')]
     public function testProcessWithValidatorException(LocalizedException $exception)
     {
         $this->expectException(ValidatorException::class);

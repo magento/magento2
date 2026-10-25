@@ -38,6 +38,7 @@
 
         </before>
         <after>
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrdersGridFiltersAfter" before="logoutFromAdmin"/>
             <magentoCLI command="config:set customer/create_account/auto_group_assign 0" stepKey="disableAutoGroupAssign"/>
 
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>

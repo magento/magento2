@@ -11,14 +11,14 @@ use Magento\CatalogRule\Controller\RegistryConstants;
 class GenericButton
 {
     /**
-     * Url Builder
+     * Service for generating URLs
      *
      * @var \Magento\Framework\UrlInterface
      */
     protected $urlBuilder;
 
     /**
-     * Registry
+     * Application data storage
      *
      * @var \Magento\Framework\Registry
      */

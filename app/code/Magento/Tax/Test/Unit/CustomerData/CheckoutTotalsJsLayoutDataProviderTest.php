@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Tax\Test\Unit\CustomerData;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Tax\CustomerData\CheckoutTotalsJsLayoutDataProvider;
 use Magento\Tax\Model\Config as TaxConfig;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -49,13 +50,12 @@ class CheckoutTotalsJsLayoutDataProviderTest extends TestCase
     /**
      * Test getData() with dataset getDataDataProvider
      *
-     * @param int $displayCartSubtotalInclTax
-     * @param int $displayCartSubtotalExclTax
+     * @param int|string $displayCartSubtotalInclTax
+     * @param int|string $displayCartSubtotalExclTax
      * @param array $expected
-     * @return void
-     * @dataProvider getDataDataProvider
      */
-    public function testGetData($displayCartSubtotalInclTax, $displayCartSubtotalExclTax, $expected)
+    #[DataProvider('getDataDataProvider')]
+    public function testGetData($displayCartSubtotalInclTax, $displayCartSubtotalExclTax, array $expected): void
     {
         $this->taxConfigMock->expects($this->any())->method('displayCartSubtotalInclTax')
             ->willReturn($displayCartSubtotalInclTax);
@@ -68,9 +68,9 @@ class CheckoutTotalsJsLayoutDataProviderTest extends TestCase
     /**
      * Dataset for test getData()
      *
-     * @return array
+     * @return array<string, array<int, string|array<string, mixed>>>
      */
-    public static function getDataDataProvider()
+    public static function getDataDataProvider(): array
     {
         return [
             'Test with settings display cart incl and excl is Yes' => [

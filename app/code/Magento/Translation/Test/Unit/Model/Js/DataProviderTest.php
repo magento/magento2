@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -20,6 +20,7 @@ use Magento\Translation\Model\Js\Config;
 use Magento\Translation\Model\Js\DataProvider as ModelDataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Verify data provider translation
@@ -94,8 +95,8 @@ class DataProviderTest extends TestCase
      * @param array $config
      *
      * @return void
-     * @dataProvider configDataProvider
      */
+    #[DataProvider('configDataProvider')]
     public function testGetData(array $config): void
     {
         $themePath = 'blank';
@@ -153,8 +154,8 @@ class DataProviderTest extends TestCase
      * @param array $config
      *
      * @return void
-     * @dataProvider configDataProvider
      */
+    #[DataProvider('configDataProvider')]
     public function testGetDataThrowingException(array $config): void
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');

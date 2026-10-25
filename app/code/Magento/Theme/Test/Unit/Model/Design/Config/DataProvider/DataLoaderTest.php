@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,7 +9,9 @@ namespace Magento\Theme\Test\Unit\Model\Design\Config\DataProvider;
 
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\App\Request\Http;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Theme\Api\Data\DesignConfigDataInterface;
+use Magento\Theme\Api\Data\DesignConfigExtensionInterface;
 use Magento\Theme\Api\Data\DesignConfigInterface;
 use Magento\Theme\Api\DesignConfigRepositoryInterface;
 use Magento\Theme\Model\Design\Config\DataProvider\DataLoader;
@@ -18,6 +20,8 @@ use PHPUnit\Framework\TestCase;
 
 class DataLoaderTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var DataLoader
      */
@@ -49,7 +53,7 @@ class DataLoaderTest extends TestCase
     protected $designConfigData;
 
     /**
-     * @var \Magento\Theme\Api\Data\DesignConfigExtensionInterface|MockObject
+     * @var DesignConfigExtensionInterface|MockObject
      */
     protected $designConfigExtension;
 
@@ -58,17 +62,14 @@ class DataLoaderTest extends TestCase
         $this->request = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->dataPersistor = $this->getMockBuilder(DataPersistorInterface::class)
-            ->getMockForAbstractClass();
-        $this->designConfigRepository = $this->getMockBuilder(DesignConfigRepositoryInterface::class)
-            ->getMockForAbstractClass();
-        $this->designConfig = $this->getMockBuilder(DesignConfigInterface::class)
-            ->getMockForAbstractClass();
-        $this->designConfigData = $this->getMockBuilder(DesignConfigDataInterface::class)
-            ->getMockForAbstractClass();
-        $this->designConfigExtension = $this->getMockBuilder(
-            \Magento\Theme\Api\Data\DesignConfigExtensionInterface::class
-        )->addMethods(['getDesignConfigData'])->getMockForAbstractClass();
+        $this->dataPersistor = $this->createMock(DataPersistorInterface::class);
+        $this->designConfigRepository = $this->createMock(DesignConfigRepositoryInterface::class);
+        $this->designConfig = $this->createMock(DesignConfigInterface::class);
+        $this->designConfigData = $this->createMock(DesignConfigDataInterface::class);
+        $this->designConfigExtension = $this->createPartialMockWithReflection(
+            DesignConfigExtensionInterface::class,
+            ['getDesignConfigData']
+        );
 
         $this->model = new DataLoader(
             $this->request,

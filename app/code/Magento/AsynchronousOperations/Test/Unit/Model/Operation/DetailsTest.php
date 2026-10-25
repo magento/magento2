@@ -27,7 +27,7 @@ class DetailsTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->bulkStatusMock = $this->getMockForAbstractClass(BulkStatusInterface::class);
+        $this->bulkStatusMock = $this->createMock(BulkStatusInterface::class);
         $this->model = new Details($this->bulkStatusMock);
     }
 

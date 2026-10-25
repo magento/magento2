@@ -11,6 +11,7 @@ namespace Magento\Csp\Test\Unit\Model\Collector\CspWhitelistXml;
 use Magento\Framework\Filesystem;
 use Magento\Framework\View\Design\Theme\CustomizationInterface;
 use Magento\Framework\View\Design\ThemeInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Magento\Framework\Config\FileResolverInterface;
 use Magento\Csp\Model\Collector\CspWhitelistXml\FileResolver;
@@ -69,45 +70,28 @@ class FileResolverTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->moduleFileResolverMock = $this->getMockBuilder(FileResolverInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->designMock = $this->getMockBuilder(DesignInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->themeInterFaceMock = $this->getMockBuilder(ThemeInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->moduleFileResolverMock = $this->createMock(FileResolverInterface::class);
+        $this->designMock = $this->createMock(DesignInterface::class);
+        $this->themeInterFaceMock = $this->createMock(ThemeInterface::class);
 
         $this->designMock->expects($this->once())
             ->method('getDesignTheme')
             ->willReturn($this->themeInterFaceMock);
 
-        $this->customizationFactoryMock = $this->getMockBuilder(CustomizationInterfaceFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
-
-        $this->customizationInterfaceMock = $this->getMockBuilder(CustomizationInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
+        $this->customizationFactoryMock = $this->createPartialMock(
+            CustomizationInterfaceFactory::class,
+            ['create']
+        );
+        $this->customizationInterfaceMock = $this->createMock(CustomizationInterface::class);
         $this->filesystemMock = $this->createPartialMock(Filesystem::class, ['getDirectoryRead']);
-
-        $this->readInterfaceMock = $this->getMockBuilder(ReadInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->readInterfaceMock = $this->createMock(ReadInterface::class);
 
         $this->filesystemMock->expects($this->once())
             ->method('getDirectoryRead')
             ->with(DirectoryList::ROOT)
             ->willReturn($this->readInterfaceMock);
 
-        $this->iteratorFactoryMock = $this->getMockBuilder(CompositeFileIteratorFactory::class)
-        ->disableOriginalConstructor()
-        ->getMock();
+        $this->iteratorFactoryMock = $this->createMock(CompositeFileIteratorFactory::class);
 
         $this->model = new FileResolver(
             $this->moduleFileResolverMock,
@@ -127,8 +111,8 @@ class FileResolverTest extends TestCase
      * @param string $themeFilesPath
      *
      * @return void
-     * @dataProvider providerGetFrontend
      */
+    #[DataProvider('providerGetFrontend')]
     public function testGetFrontend(string $scope, string $fileName, array $fileList, string $themeFilesPath): void
     {
         $this->moduleFileResolverMock->expects($this->once())
@@ -171,8 +155,8 @@ class FileResolverTest extends TestCase
      * @param array $fileList
      *
      * @return void
-     * @dataProvider providerGetGlobal
      */
+    #[DataProvider('providerGetGlobal')]
     public function testGetGlobal(string $scope, string $fileName, array $fileList): void
     {
         $this->moduleFileResolverMock->expects($this->once())

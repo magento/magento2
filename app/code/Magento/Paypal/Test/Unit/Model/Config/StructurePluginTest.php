@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Config\Model\Config\Structure\ElementInterface as ElementConfigStruc
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Paypal\Helper\Backend as BackendHelper;
 use Magento\Paypal\Model\Config\StructurePlugin as ConfigStructurePlugin;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -50,17 +51,10 @@ class StructurePluginTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->configScopeDefinerMock = $this->getMockBuilder(ConfigScopeDefiner::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->backendHelperMock = $this->getMockBuilder(BackendHelper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->configStructureMock = $this->getMockBuilder(ConfigStructure::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->elementConfigStructureMock = $this->getMockBuilder(ElementConfigStructure::class)
-            ->getMockForAbstractClass();
+        $this->configScopeDefinerMock = $this->createMock(ConfigScopeDefiner::class);
+        $this->backendHelperMock = $this->createMock(BackendHelper::class);
+        $this->configStructureMock = $this->createMock(ConfigStructure::class);
+        $this->elementConfigStructureMock = $this->createMock(ElementConfigStructure::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->plugin = $this->objectManagerHelper->getObject(
@@ -91,9 +85,8 @@ class StructurePluginTest extends TestCase
     /**
      * @param array $pathParts
      * @param bool $returnResult
-     *
-     * @dataProvider aroundGetElementByPathPartsNonPaymentDataProvider
      */
+    #[DataProvider('aroundGetElementByPathPartsNonPaymentDataProvider')]
     public function testAroundGetElementByPathPartsNonPayment($pathParts, $returnResult)
     {
         $result = $returnResult ? $this->elementConfigStructureMock : null;
@@ -123,9 +116,8 @@ class StructurePluginTest extends TestCase
     /**
      * @param array $pathParts
      * @param string $countryCode
-     *
-     * @dataProvider aroundGetElementByPathPartsDataProvider
      */
+    #[DataProvider('aroundGetElementByPathPartsDataProvider')]
     public function testAroundGetElementByPathPartsNoResult($pathParts, $countryCode)
     {
         $proceed = function () {
@@ -144,9 +136,8 @@ class StructurePluginTest extends TestCase
     /**
      * @param array $pathParts
      * @param string $countryCode
-     *
-     * @dataProvider aroundGetElementByPathPartsDataProvider
      */
+    #[DataProvider('aroundGetElementByPathPartsDataProvider')]
     public function testAroundGetElementByPathParts($pathParts, $countryCode)
     {
         $result = $this->elementConfigStructureMock;

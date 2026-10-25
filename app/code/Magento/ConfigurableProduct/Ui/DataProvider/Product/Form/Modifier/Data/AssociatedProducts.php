@@ -250,15 +250,17 @@ class AssociatedProducts
                 if (!isset($attributes[$attribute->getAttributeId()])) {
                     $attributes[$attribute->getAttributeId()] = $this->buildAttributeDetails($attribute);
                 }
+                $valueId = $attributeComposition['value_id'];
                 $variationOption = [
                     'attribute_code' => $attribute->getAttributeCode(),
                     'attribute_label' => $attribute->getStoreLabel(0),
-                    'id' => $attributeComposition['value_id'],
+                    'id' => $valueId,
                     'label' => $attributeComposition['label'],
-                    'value' => $attributeComposition['value_id']
+                    'value' => $valueId
                 ];
-                $attributes[$attribute->getAttributeId()]['chosen'][$attributeComposition['value_id']] =
-                    $variationOption;
+                if ($valueId !== null) {
+                    $attributes[$attribute->getAttributeId()]['chosen'][$valueId] = $variationOption;
+                }
             }
             $productMatrix[] = $this->buildChildProductDetails($product, $childProductOptions);
         }

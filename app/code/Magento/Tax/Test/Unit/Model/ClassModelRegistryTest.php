@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -35,7 +35,7 @@ class ClassModelRegistryTest extends TestCase
      */
     private $classModelMock;
 
-    const CLASS_MODEL = 1;
+    private const CLASS_MODEL = 1;
 
     protected function setUp(): void
     {

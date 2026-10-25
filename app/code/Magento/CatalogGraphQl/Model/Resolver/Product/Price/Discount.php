@@ -72,7 +72,10 @@ class Discount
      */
     private function getPriceDifferenceAsPercent(float $regularPrice, float $finalPrice): float
     {
-        $difference = $this->getPriceDifferenceAsValue($regularPrice, $finalPrice);
+        $difference = $regularPrice - $finalPrice;
+        if ($difference <= $this->zeroThreshold) {
+            return 0;
+        }
 
         if ($difference <= $this->zeroThreshold || $regularPrice <= $this->zeroThreshold) {
             return 0;

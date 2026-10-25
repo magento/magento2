@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponent\Processor;
 use Magento\Ui\Component\MassAction;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class MassActionTest extends TestCase
@@ -33,8 +34,7 @@ class MassActionTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->contextMock = $this->getMockBuilder(ContextInterface::class)
-            ->getMockForAbstractClass();
+        $this->contextMock = $this->createMock(ContextInterface::class);
     }
 
     /**
@@ -63,13 +63,11 @@ class MassActionTest extends TestCase
      * @param string $componentName
      * @param array $componentData
      * @return void
-     * @dataProvider getPrepareDataProvider
      */
+    #[DataProvider('getPrepareDataProvider')]
     public function testPrepare($componentName, $componentData)
     {
-        $processor = $this->getMockBuilder(Processor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $processor = $this->createMock(Processor::class);
         $this->contextMock->expects($this->atLeastOnce())->method('getProcessor')->willReturn($processor);
         /** @var \Magento\Ui\Component\Action $action */
         $action = $this->objectManager->getObject(

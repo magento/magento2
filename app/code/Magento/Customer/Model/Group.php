@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Model;
 
@@ -17,13 +17,13 @@ namespace Magento\Customer\Model;
  */
 class Group extends \Magento\Framework\Model\AbstractModel
 {
-    const NOT_LOGGED_IN_ID = 0;
+    public const NOT_LOGGED_IN_ID = 0;
 
-    const CUST_GROUP_ALL = 32000;
+    public const CUST_GROUP_ALL = 32000;
 
-    const ENTITY = 'customer_group';
+    public const ENTITY = 'customer_group';
 
-    const GROUP_CODE_MAX_LENGTH = 32;
+    public const GROUP_CODE_MAX_LENGTH = 32;
 
     /**
      * Prefix of model events names
@@ -92,6 +92,8 @@ class Group extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Initialize model
+     *
      * @return void
      */
     protected function _construct()
@@ -172,7 +174,7 @@ class Group extends \Magento\Framework\Model\AbstractModel
      */
     protected function _prepareData()
     {
-        $this->setCode(substr($this->getCode(), 0, self::GROUP_CODE_MAX_LENGTH));
+        $this->setCode(mb_substr($this->getCode(), 0, self::GROUP_CODE_MAX_LENGTH));
         return $this;
     }
 }

@@ -65,10 +65,10 @@ class InlineEditTest extends TestCase
     {
         $helper = new ObjectManager($this);
 
-        $this->request = $this->getMockForAbstractClass(RequestInterface::class);
-        $this->messageManager = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->request = $this->createMock(RequestInterface::class);
+        $this->messageManager = $this->createMock(ManagerInterface::class);
         $this->messageCollection = $this->createMock(Collection::class);
-        $this->message = $this->getMockForAbstractClass(MessageInterface::class);
+        $this->message = $this->createMock(MessageInterface::class);
         $this->cmsPage = $this->createMock(Page::class);
         $this->context = $helper->getObject(
             Context::class,
@@ -78,7 +78,7 @@ class InlineEditTest extends TestCase
             ]
         );
         $this->dataProcessor = $this->createMock(PostDataProcessor::class);
-        $this->pageRepository = $this->getMockForAbstractClass(PageRepositoryInterface::class);
+        $this->pageRepository = $this->createMock(PageRepositoryInterface::class);
         $this->resultJson = $this->createMock(Json::class);
         $this->jsonFactory = $this->createPartialMock(
             JsonFactory::class,

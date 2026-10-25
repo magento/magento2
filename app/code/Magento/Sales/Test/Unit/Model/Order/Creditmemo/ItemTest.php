@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,9 +12,11 @@ use Magento\Sales\Api\Data\CreditmemoItemInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Creditmemo;
 use Magento\Sales\Model\Order\Creditmemo\Item;
+use Magento\Sales\Model\Order\Item as OrderItem;
 use Magento\Sales\Model\Order\ItemFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ItemTest extends TestCase
 {
@@ -43,33 +45,25 @@ class ItemTest extends TestCase
 
     public function testGetOrderItemExist()
     {
-        $orderItemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $orderItemMock = $this->createMock(OrderItem::class);
         $this->item->setOrderItem($orderItemMock);
         $result = $this->item->getOrderItem();
-        $this->assertInstanceOf(\Magento\Sales\Model\Order\Item::class, $result);
+        $this->assertInstanceOf(OrderItem::class, $result);
     }
 
     public function testGetOrderItemFromCreditmemo()
     {
         $orderItemId = 1;
 
-        $orderItemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $orderItemMock = $this->createMock(OrderItem::class);
 
-        $orderMock = $this->getMockBuilder(Order::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $orderMock = $this->createMock(Order::class);
         $orderMock->expects($this->once())
             ->method('getItemById')
             ->with($orderItemId)
             ->willReturn($orderItemMock);
 
-        $creditmemoMock = $this->getMockBuilder(Creditmemo::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $creditmemoMock = $this->createMock(Creditmemo::class);
         $creditmemoMock->expects($this->once())
             ->method('getOrder')
             ->willReturn($orderMock);
@@ -77,16 +71,14 @@ class ItemTest extends TestCase
         $this->item->setData(CreditmemoItemInterface::ORDER_ITEM_ID, $orderItemId);
         $this->item->setCreditmemo($creditmemoMock);
         $result = $this->item->getOrderItem();
-        $this->assertInstanceOf(\Magento\Sales\Model\Order\Item::class, $result);
+        $this->assertInstanceOf(OrderItem::class, $result);
     }
 
     public function testGetOrderItemFromFactory()
     {
         $orderItemId = 1;
 
-        $orderItemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $orderItemMock = $this->createMock(OrderItem::class);
         $orderItemMock->expects($this->once())
             ->method('load')
             ->with($orderItemId)
@@ -98,7 +90,7 @@ class ItemTest extends TestCase
 
         $this->item->setData(CreditmemoItemInterface::ORDER_ITEM_ID, $orderItemId);
         $result = $this->item->getOrderItem();
-        $this->assertInstanceOf(\Magento\Sales\Model\Order\Item::class, $result);
+        $this->assertInstanceOf(OrderItem::class, $result);
     }
 
     public function testSetQty()
@@ -110,9 +102,7 @@ class ItemTest extends TestCase
 
     public function testRegister()
     {
-        $orderItemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $orderItemMock = $this->createMock(OrderItem::class);
         $orderItemMock->expects($this->once())
             ->method('getQtyRefunded')
             ->willReturn(1);
@@ -161,7 +151,7 @@ class ItemTest extends TestCase
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionMessage('We found an invalid quantity to refund item "test".');
-        $orderItemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
+        $orderItemMock = $this->getMockBuilder(OrderItem::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['getQtyRefunded'])
             ->getMock();
@@ -177,9 +167,7 @@ class ItemTest extends TestCase
 
     public function testCancel()
     {
-        $orderItemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $orderItemMock = $this->createMock(OrderItem::class);
         $orderItemMock->expects($this->once())
             ->method('getQtyRefunded')
             ->willReturn(1);
@@ -218,14 +206,10 @@ class ItemTest extends TestCase
         $this->assertInstanceOf(Item::class, $result);
     }
 
-    /**
-     * @dataProvider calcRowTotalDataProvider
-     */
+    #[DataProvider('calcRowTotalDataProvider')]
     public function testCalcRowTotal($qty)
     {
-        $creditmemoMock = $this->getMockBuilder(Creditmemo::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $creditmemoMock = $this->createMock(Creditmemo::class);
         $creditmemoMock->expects($this->exactly(4))
             ->method('roundPrice')
             ->willReturnCallback(function ($arg) {
@@ -242,9 +226,7 @@ class ItemTest extends TestCase
         $expectedRowTotal = ($rowInvoiced - $amountRefunded) / $qtyAvailable * $qty;
         $expectedRowTotal = round($expectedRowTotal, 2);
 
-        $orderItemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $orderItemMock = $this->createMock(OrderItem::class);
         $orderItemMock->expects($this->once())
             ->method('getQtyInvoiced')
             ->willReturn($qtyInvoiced);

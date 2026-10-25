@@ -5,6 +5,10 @@
  */
 namespace Magento\Checkout\Model;
 
+use Magento\Checkout\Api\Data\ShippingInformationInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Quote\Model\GuestCart\GetGuestCart;
+
 class GuestShippingInformationManagement implements \Magento\Checkout\Api\GuestShippingInformationManagementInterface
 {
     /**
@@ -18,16 +22,24 @@ class GuestShippingInformationManagement implements \Magento\Checkout\Api\GuestS
     protected $shippingInformationManagement;
 
     /**
+     * @var GetGuestCart|null
+     */
+    private $getGuestCart;
+
+    /**
      * @param \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory
      * @param \Magento\Checkout\Api\ShippingInformationManagementInterface $shippingInformationManagement
+     * @param GetGuestCart|null $getGuestCart
      * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory,
-        \Magento\Checkout\Api\ShippingInformationManagementInterface $shippingInformationManagement
+        \Magento\Checkout\Api\ShippingInformationManagementInterface $shippingInformationManagement,
+        ?GetGuestCart $getGuestCart = null
     ) {
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
         $this->shippingInformationManagement = $shippingInformationManagement;
+        $this->getGuestCart = $getGuestCart ?? ObjectManager::getInstance()->get(GetGuestCart::class);
     }
 
     /**
@@ -35,10 +47,11 @@ class GuestShippingInformationManagement implements \Magento\Checkout\Api\GuestS
      */
     public function saveAddressInformation(
         $cartId,
-        \Magento\Checkout\Api\Data\ShippingInformationInterface $addressInformation
+        ShippingInformationInterface $addressInformation
     ) {
         /** @var $quoteIdMask \Magento\Quote\Model\QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
+        $this->getGuestCart->execute($cartId, (int) $quoteIdMask->getQuoteId());
         return $this->shippingInformationManagement->saveAddressInformation(
             (int) $quoteIdMask->getQuoteId(),
             $addressInformation

@@ -44,6 +44,7 @@ class DependencyTest extends TestCase
             'Setup\Console\CompilerPreparation',
             'Setup\Model\ObjectManagerProvider',
             'Setup\Mvc\Bootstrap\InitParamListener',
+            'Setup\Module',
             'Store\Model\ScopeInterface',
             'Store\Model\StoreManagerInterface',
             'Directory\Model\CurrencyFactory',

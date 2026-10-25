@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Eav\Model\Entity\Attribute;
 use Magento\Eav\Model\Entity\Attribute\Backend\ArrayBackend;
 use Magento\Framework\DataObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ArrayBackendTest extends TestCase
 {
@@ -35,11 +36,11 @@ class ArrayBackendTest extends TestCase
     }
 
     /**
-     * @dataProvider validateDataProvider
      * @param array $productData
      * @param bool $hasData
      * @param string|int|float|null $expectedValue
      */
+    #[DataProvider('validateDataProvider')]
     public function testValidate(array $productData, bool $hasData, $expectedValue)
     {
         $this->_attribute->expects($this->atLeastOnce())
@@ -112,11 +113,11 @@ class ArrayBackendTest extends TestCase
     }
 
     /**
-     * @dataProvider beforeSaveDataProvider
      * @param array $productData
      * @param string $defaultValue
      * @param string $expectedValue
      */
+    #[DataProvider('beforeSaveDataProvider')]
     public function testBeforeSave(
         array $productData,
         string $defaultValue,

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -20,6 +20,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -72,7 +73,6 @@ class ItemTest extends TestCase
     }
 
     /**
-     * @dataProvider updateSetOutOfStockDataProvider
      * @magentoDataFixture Magento/Catalog/_files/product_simple_duplicated.php
      * @magentoDataFixture Magento/Catalog/_files/product_simple_backorders_no.php
      * @magentoConfigFixture current_store cataloginventory/item_options/min_qty 105
@@ -82,6 +82,7 @@ class ItemTest extends TestCase
      * @param array $expectedStockItems
      * @return void
      */
+    #[DataProvider('updateSetOutOfStockDataProvider')]
     public function testUpdateSetOutOfStock(int $backorders, array $expectedStockItems): void
     {
         $this->stockIndexerProcessor->reindexAll();
@@ -131,7 +132,6 @@ class ItemTest extends TestCase
     }
 
     /**
-     * @dataProvider updateUpdateSetInStockDataProvider
      * @magentoDataFixture Magento/Catalog/_files/out_of_stock_product_with_category.php
      * @magentoDataFixture Magento/Catalog/_files/product_simple_out_of_stock.php
      * @magentoConfigFixture current_store cataloginventory/item_options/min_qty 50
@@ -140,6 +140,7 @@ class ItemTest extends TestCase
      * @param array $expectedStockItems
      * @return void
      */
+    #[DataProvider('updateUpdateSetInStockDataProvider')]
     public function testUpdateSetInStock(int $manageStock, array $expectedStockItems): void
     {
         $this->updateProductsStockItem([
@@ -197,12 +198,12 @@ class ItemTest extends TestCase
     }
 
     /**
-     * @dataProvider updateLowStockDateDataProvider
      * @magentoDataFixture Magento/Catalog/_files/product_simple_with_url_key.php
      * @param int $manageStock
      * @param array $expectedLowStockDate
      * @return void
      */
+    #[DataProvider('updateLowStockDateDataProvider')]
     public function testLowStockDate(int $manageStock, array $expectedLowStockDate): void
     {
         $this->updateProductsStockItem([

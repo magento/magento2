@@ -44,4 +44,7 @@
         <data key="label">No</data>
         <data key="value">0</data>
     </entity>
+    <entity name="ErrorMessageAfterAddingCoupon">
+        <data key="text">The shipping method is missing. Select the shipping method and try again.</data>
+    </entity>
 </entities>

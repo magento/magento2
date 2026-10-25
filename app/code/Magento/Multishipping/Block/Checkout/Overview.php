@@ -234,9 +234,18 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
     public function getShippingPriceInclTax($address)
     {
         $rate = $address->getShippingRateByCode($address->getShippingMethod());
-        $exclTax = $rate->getPrice();
-        $taxAmount = $address->getShippingTaxAmount();
-        return $this->formatPrice($exclTax + $taxAmount);
+        $store = $this->getQuote()->getStore();
+        $baseCode = $store->getBaseCurrencyCode();
+        $currentCode = $store->getCurrentCurrencyCode();
+        if ($baseCode === $currentCode) {
+            $displayAmount = (float)$rate->getPrice() + (float)$address->getShippingTaxAmount();
+            return $this->formatPrice($displayAmount);
+        }
+        $baseAmount = (float)$rate->getPrice();
+        $baseTaxAmount = $address->getBaseShippingTaxAmount();
+        $baseTaxAmount = $baseTaxAmount !== null ? (float)$baseTaxAmount : 0.0;
+        $converted = $store->getBaseCurrency()->convert($baseAmount + $baseTaxAmount, $currentCode);
+        return $this->formatPrice($converted);
     }
 
     /**
@@ -248,8 +257,15 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
     public function getShippingPriceExclTax($address)
     {
         $rate = $address->getShippingRateByCode($address->getShippingMethod());
-        $shippingAmount = $rate->getPrice();
-        return $this->formatPrice($shippingAmount);
+        $store = $this->getQuote()->getStore();
+        $baseCode = $store->getBaseCurrencyCode();
+        $currentCode = $store->getCurrentCurrencyCode();
+        if ($baseCode === $currentCode) {
+            return $this->formatPrice((float)$rate->getPrice());
+        }
+        $baseAmount = (float)$rate->getPrice();
+        $converted = $store->getBaseCurrency()->convert($baseAmount, $currentCode);
+        return $this->formatPrice($converted);
     }
 
     /**

@@ -7,20 +7,23 @@
 namespace Magento\CatalogUrlRewriteGraphQl\Test\Unit\Model\Resolver;
 
 use Magento\CatalogUrlRewriteGraphQl\Model\Resolver\ProductUrlSuffix;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\GraphQl\Model\Query\ContextExtensionInterface;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * Test for \Magento\CatalogUrlRewriteGraphQl\Model\Resolver\ProductUrlSuffix.
  */
 class ProductUrlSuffixTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ScopeConfigInterface|MockObject
      */
@@ -61,41 +64,20 @@ class ProductUrlSuffixTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->contextMock = $this->getMockBuilder(ContextInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(
-                [
-                    'getExtensionAttributes'
-                ]
-            )
-            ->getMockForAbstractClass();
+        $this->contextMock = $this->createMock(ContextInterface::class);
 
-        $this->contextExtensionMock = $this->getMockBuilder(ContextExtensionInterface::class)
-            ->addMethods(
-                [
-                    'getStore'
-                ]
-            )
-            ->getMockForAbstractClass();
+        $this->contextExtensionMock = $this->createPartialMockWithReflection(
+            ContextExtensionInterface::class,
+            ['getStore']
+        );
 
-        $this->storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->onlyMethods(
-                [
-                    'getId'
-                ]
-            )
-            ->getMockForAbstractClass();
+        $this->storeMock = $this->createMock(StoreInterface::class);
 
-        $this->fieldMock = $this->getMockBuilder(Field::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->fieldMock = $this->createMock(Field::class);
 
-        $this->resolveInfoMock = $this->getMockBuilder(ResolveInfo::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resolveInfoMock = $this->createMock(ResolveInfo::class);
 
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->getMockForAbstractClass();
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
 
         $this->resolver = new ProductUrlSuffix(
             $this->scopeConfigMock

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -27,6 +27,7 @@ use Magento\MediaStorage\Helper\File\Storage\Database;
 use Magento\Theme\Model\Design\Backend\File;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -68,35 +69,21 @@ class FileTest extends TestCase
         $requestData = $this->getMockObjectForAbstractClass(
             RequestDataInterface::class
         );
-        $filesystem = $this->getMockBuilder(Filesystem::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->mediaDirectory = $this->getMockBuilder(
-            WriteInterface::class
-        )
-            ->getMockForAbstractClass();
+        $filesystem = $this->createMock(Filesystem::class);
+        $this->mediaDirectory = $this->createMock(WriteInterface::class);
         $filesystem->expects($this->once())
             ->method('getDirectoryWrite')
             ->with(DirectoryList::MEDIA)
             ->willReturn($this->mediaDirectory);
-        $this->urlBuilder = $this->getMockBuilder(UrlInterface::class)
-            ->getMockForAbstractClass();
-        $this->ioFileSystem = $this->getMockBuilder(IoFileSystem::class)
-            ->getMockForAbstractClass();
-        $this->mime = $this->getMockBuilder(Mime::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->urlBuilder = $this->createMock(UrlInterface::class);
+        $this->ioFileSystem = $this->createMock(IoFileSystem::class);
+        $this->mime = $this->createMock(Mime::class);
 
-        $this->databaseHelper = $this->getMockBuilder(Database::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->databaseHelper = $this->createMock(Database::class);
 
-        $abstractResource = $this->getMockBuilder(AbstractResource::class)
-            ->getMockForAbstractClass();
+        $abstractResource = $this->createMock(AbstractResource::class);
 
-        $abstractDb = $this->getMockBuilder(AbstractDb::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $abstractDb = $this->createMock(AbstractDb::class);
         $this->fileBackend = new File(
             $context,
             $registry,
@@ -138,12 +125,10 @@ class FileTest extends TestCase
      */
     private function getMockObject(string $class, array $methods = []): \PHPUnit\Framework\MockObject\MockObject
     {
-        $builder =  $this->getMockBuilder($class)
-            ->disableOriginalConstructor();
         if (count($methods)) {
-            $builder->onlyMethods($methods);
+            return $this->createPartialMock($class, $methods);
         }
-        return  $builder->getMock();
+        return $this->createMock($class);
     }
 
     /**
@@ -154,8 +139,7 @@ class FileTest extends TestCase
      */
     private function getMockObjectForAbstractClass(string $class): \PHPUnit\Framework\MockObject\MockObject
     {
-        return  $this->getMockBuilder($class)
-            ->getMockForAbstractClass();
+        return $this->createMock($class);
     }
 
     /**
@@ -227,10 +211,10 @@ class FileTest extends TestCase
     /**
      * Test for beforeSave method.
      *
-     * @dataProvider beforeSaveDataProvider
      * @param string $fileName
      * @throws LocalizedException
      */
+    #[DataProvider('beforeSaveDataProvider')]
     public function testBeforeSave(string $fileName)
     {
         $expectedFileName = basename($fileName);
@@ -335,14 +319,13 @@ class FileTest extends TestCase
      *
      * @param string $path
      * @param string $filename
-     * @dataProvider getRelativeMediaPathDataProvider
      * @throws \ReflectionException
      */
+    #[DataProvider('getRelativeMediaPathDataProvider')]
     public function testGetRelativeMediaPath(string $path, string $filename)
     {
         $reflection = new \ReflectionClass($this->fileBackend);
         $method = $reflection->getMethod('getRelativeMediaPath');
-        $method->setAccessible(true);
         $this->assertEquals(
             $filename,
             $method->invoke($this->fileBackend, $path . $filename)

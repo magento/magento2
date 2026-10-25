@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -43,9 +43,7 @@ class RangeTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->fieldMapper = $this->getMockBuilder(FieldMapperInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->fieldMapper = $this->createMock(FieldMapperInterface::class);
 
         $this->filterInterface = $this->getMockBuilder(RangeFilterRequest::class)
             ->disableOriginalConstructor()

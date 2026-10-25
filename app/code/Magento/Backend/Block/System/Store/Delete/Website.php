@@ -7,13 +7,11 @@ namespace Magento\Backend\Block\System\Store\Delete;
 
 /**
  * Adminhtml store delete group block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Website extends \Magento\Backend\Block\Template
 {
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     protected function _prepareLayout()
     {

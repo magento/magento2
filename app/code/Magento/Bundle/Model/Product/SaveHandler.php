@@ -141,10 +141,7 @@ class SaveHandler implements ExtensionInterface
         $links = $option->getProductLinks();
         if (!empty($links)) {
             foreach ($links as $link) {
-                $linkCanBeDeleted = $this->checkOptionLinkIfExist->execute($entitySku, $option, $link);
-                if ($linkCanBeDeleted) {
-                    $this->productLinkManagement->removeChild($entitySku, $option->getId(), $link->getSku());
-                }
+                $this->productLinkManagement->removeChild($entitySku, $option->getId(), $link->getSku());
             }
         }
     }

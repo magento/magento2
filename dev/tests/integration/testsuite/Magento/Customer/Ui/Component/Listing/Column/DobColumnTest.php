@@ -10,6 +10,7 @@ namespace Magento\Customer\Ui\Component\Listing\Column;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\Component\ComponentRegistrar;
 
 class DobColumnTest extends TestCase
 {
@@ -36,7 +37,9 @@ class DobColumnTest extends TestCase
      */
     public function testDobColumnDoesNotHaveDateFormatInXml(): void
     {
-        $xmlPath = BP . '/app/code/Magento/Customer/view/adminhtml/ui_component/customer_listing.xml';
+        $componentRegistrar = Bootstrap::getObjectManager()->get(ComponentRegistrar::class);
+        $moduleDir = $componentRegistrar->getPath(ComponentRegistrar::MODULE, 'Magento_Customer');
+        $xmlPath = $moduleDir . '/view/adminhtml/ui_component/customer_listing.xml';
         $this->assertFileExists($xmlPath, 'Customer listing XML file should exist');
 
         $xmlContent = file_get_contents($xmlPath);

@@ -46,10 +46,7 @@ class GetProductChildIdsTest extends TestCase
     {
         $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->getChildProductFromStoreIdMock = $this->createMock(GetStoreSpecificProductChildIds::class);
-        $this->productRepositoryMock = $this->getMockBuilder(ProductRepositoryInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getById'])
-            ->getMockForAbstractClass();
+        $this->productRepositoryMock = $this->createMock(ProductRepositoryInterface::class);
 
         $this->plugin = new GetProductChildIds(
             $this->storeManagerMock,
@@ -90,15 +87,11 @@ class GetProductChildIdsTest extends TestCase
             ->willReturn($storeMock);
 
         $productMock = $this->createMock(Product::class);
-        $productMock->expects($this->any())
-            ->method('isVisibleInSiteVisibility')
-            ->willReturn(true);
+        $productMock->method('isVisibleInSiteVisibility')->willReturn(true);
         $productMock->expects($this->once())
             ->method('getData')
             ->willReturn(['entity_id' => 1]);
-        $productMock->expects($this->any())
-            ->method('getWebsiteIds')
-            ->willReturn([2]);
+        $productMock->method('getWebsiteIds')->willReturn([2]);
 
         $this->productRepositoryMock->expects($this->once())
             ->method('getById')
@@ -110,32 +103,20 @@ class GetProductChildIdsTest extends TestCase
             ->with(['entity_id' => 1], $websiteId)
             ->willReturn([2, 3]);
 
-        $childProductMock1 = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['isVisibleInSiteVisibility', 'getWebsiteIds'])
-            ->getMock();
-        $childProductMock1->expects($this->any())
-            ->method('isVisibleInSiteVisibility')
-            ->willReturn(true);
-        $childProductMock1->expects($this->any())
-            ->method('getWebsiteIds')
-            ->willReturn([2]);
+        $childProductMock1 = $this->createPartialMock(Product::class, ['isVisibleInSiteVisibility', 'getWebsiteIds']);
+        $childProductMock1->method('isVisibleInSiteVisibility')->willReturn(true);
+        $childProductMock1->method('getWebsiteIds')->willReturn([2]);
 
-        $childProductMock2 = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['isVisibleInSiteVisibility', 'getWebsiteIds'])
-            ->getMock();
-        $childProductMock2->expects($this->any())
-            ->method('isVisibleInSiteVisibility')
-            ->willReturn(false);
+        $childProductMock2 = $this->createPartialMock(Product::class, ['isVisibleInSiteVisibility', 'getWebsiteIds']);
+        $childProductMock2->method('isVisibleInSiteVisibility')->willReturn(false);
 
         $this->productRepositoryMock->expects($this->any())
             ->method('getById')
-            ->will($this->returnCallback(
+            ->willReturnCallback(
                 function ($id) use ($childProductMock1, $childProductMock2) {
                     return $id === 2 ? $childProductMock1 : $childProductMock2;
                 }
-            ));
+            );
 
         $result = $this->plugin->beforePrepareProductIndex(
             $dataProviderMock,

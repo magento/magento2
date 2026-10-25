@@ -581,7 +581,12 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
          * for the same requests and products with the same relevance
          * NOTE: this does not replace existing orders but ADDs one more
          */
-        $this->setOrder('entity_id', Select::SQL_ASC);
+        $defaultSortOrder = $this->_scopeConfig->getValue(
+            'catalog/frontend/default_sort_by_order',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+        $sortOrder = ($defaultSortOrder == self::SORT_ORDER_ASC) ? Select::SQL_ASC : Select::SQL_DESC;
+        $this->setOrder('entity_id', $sortOrder);
         return parent::_beforeLoad();
     }
 

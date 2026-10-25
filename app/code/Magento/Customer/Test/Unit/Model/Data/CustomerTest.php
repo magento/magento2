@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Customer\Test\Unit\Model\Data;
 
 use Magento\Customer\Model\Data\Customer;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -47,10 +48,10 @@ class CustomerTest extends TestCase
      * @param array|string $options
      * @param array $expectedResult
      *
-     * @dataProvider getCreatedInDataProvider
      *
      * @return void
      */
+    #[DataProvider('getCreatedInDataProvider')]
     public function testGetCreatedIn($options, $expectedResult)
     {
         $optionsCount = count($options);

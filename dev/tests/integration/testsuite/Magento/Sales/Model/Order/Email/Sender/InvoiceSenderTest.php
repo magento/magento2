@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -77,7 +77,6 @@ class InvoiceSenderTest extends TestCase
 
         $reflection = new \ReflectionClass(get_class($this->logger));
         $reflectionProperty = $reflection->getProperty('minimumErrorLevel');
-        $reflectionProperty->setAccessible(true);
         $this->minErrorDefaultValue = $reflectionProperty->getValue($this->logger);
         $reflectionProperty->setValue($this->logger, 400);
         $this->logger->clearMessages();
@@ -253,7 +252,6 @@ class InvoiceSenderTest extends TestCase
     protected function tearDown(): void
     {
         $reflectionProperty = new \ReflectionProperty(get_class($this->logger), 'minimumErrorLevel');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->logger, $this->minErrorDefaultValue);
     }
 }

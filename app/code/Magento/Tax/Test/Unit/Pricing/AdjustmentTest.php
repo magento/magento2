@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,8 +10,8 @@ namespace Magento\Tax\Test\Unit\Pricing;
 use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Tax\Helper\Data;
 use Magento\Tax\Pricing\Adjustment;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
-
 use PHPUnit\Framework\TestCase;
 
 class AdjustmentTest extends TestCase
@@ -48,16 +48,13 @@ class AdjustmentTest extends TestCase
         $this->adjustment = new Adjustment($this->taxHelper, $this->catalogHelper, $this->sortOrder);
     }
 
-    public function testGetAdjustmentCode()
+    public function testGetAdjustmentCode(): void
     {
         $this->assertEquals(Adjustment::ADJUSTMENT_CODE, $this->adjustment->getAdjustmentCode());
     }
 
-    /**
-     * @param bool $expectedResult
-     * @dataProvider isIncludedInBasePriceDataProvider
-     */
-    public function testIsIncludedInBasePrice($expectedResult)
+    #[DataProvider('isIncludedInBasePriceDataProvider')]
+    public function testIsIncludedInBasePrice(bool $expectedResult): void
     {
         $this->taxHelper->expects($this->once())
             ->method('priceIncludesTax')
@@ -68,16 +65,17 @@ class AdjustmentTest extends TestCase
     /**
      * @return array
      */
-    public static function isIncludedInBasePriceDataProvider()
+    public static function isIncludedInBasePriceDataProvider(): array
     {
         return [[true], [false]];
     }
 
-    /**
-     * @dataProvider isIncludedInDisplayPriceDataProvider
-     */
-    public function testIsIncludedInDisplayPrice($displayPriceIncludingTax, $displayBothPrices, $expectedResult)
-    {
+    #[DataProvider('isIncludedInDisplayPriceDataProvider')]
+    public function testIsIncludedInDisplayPrice(
+        bool $displayPriceIncludingTax,
+        bool $displayBothPrices,
+        bool $expectedResult
+    ): void {
         $this->taxHelper->expects($this->once())
             ->method('displayPriceIncludingTax')
             ->willReturn($displayPriceIncludingTax);
@@ -93,7 +91,7 @@ class AdjustmentTest extends TestCase
     /**
      * @return array
      */
-    public static function isIncludedInDisplayPriceDataProvider()
+    public static function isIncludedInDisplayPriceDataProvider(): array
     {
         return [
             [false, false, false],
@@ -103,16 +101,10 @@ class AdjustmentTest extends TestCase
         ];
     }
 
-    /**
-     * @param float $amount
-     * @param bool $isPriceIncludesTax
-     * @param float $price
-     * @param float $expectedResult
-     * @dataProvider extractAdjustmentDataProvider
-     */
-    public function testExtractAdjustment($isPriceIncludesTax, $amount, $price, $expectedResult)
+    #[DataProvider('extractAdjustmentDataProvider')]
+    public function testExtractAdjustment(bool $isPriceIncludesTax, $amount, $price, float $expectedResult): void
     {
-        $object = $this->getMockForAbstractClass(SaleableInterface::class);
+        $object = $this->createMock(SaleableInterface::class);
 
         $this->taxHelper->expects($this->any())
             ->method('priceIncludesTax')
@@ -132,7 +124,7 @@ class AdjustmentTest extends TestCase
     /**
      * @return array
      */
-    public static function extractAdjustmentDataProvider()
+    public static function extractAdjustmentDataProvider(): array
     {
         return [
             [false, 'not_important', 'not_important', 0.00],
@@ -142,17 +134,10 @@ class AdjustmentTest extends TestCase
         ];
     }
 
-    /**
-     * @param bool $isPriceIncludesTax
-     * @param float $amount
-     * @param float $price
-     * @param $expectedResult
-     * @dataProvider applyAdjustmentDataProvider
-     */
-    public function testApplyAdjustment($amount, $price, $expectedResult)
+    #[DataProvider('applyAdjustmentDataProvider')]
+    public function testApplyAdjustment(float $amount, float $price, float $expectedResult): void
     {
-        $object = $this->getMockBuilder(SaleableInterface::class)
-            ->getMock();
+        $object = $this->createMock(SaleableInterface::class);
 
         $this->catalogHelper->expects($this->any())
             ->method('getTaxPrice')
@@ -165,7 +150,7 @@ class AdjustmentTest extends TestCase
     /**
      * @return array
      */
-    public static function applyAdjustmentDataProvider()
+    public static function applyAdjustmentDataProvider(): array
     {
         return [
             [1.1, 2.2, 2.2],
@@ -174,12 +159,8 @@ class AdjustmentTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider isExcludedWithDataProvider
-     * @param string $adjustmentCode
-     * @param bool $expectedResult
-     */
-    public function testIsExcludedWith($adjustmentCode, $expectedResult)
+    #[DataProvider('isExcludedWithDataProvider')]
+    public function testIsExcludedWith(string $adjustmentCode, bool $expectedResult): void
     {
         $this->assertEquals($expectedResult, $this->adjustment->isExcludedWith($adjustmentCode));
     }
@@ -187,7 +168,7 @@ class AdjustmentTest extends TestCase
     /**
      * @return array
      */
-    public static function isExcludedWithDataProvider()
+    public static function isExcludedWithDataProvider(): array
     {
         return [
             [Adjustment::ADJUSTMENT_CODE, true],
@@ -195,7 +176,7 @@ class AdjustmentTest extends TestCase
         ];
     }
 
-    public function testGetSortOrder()
+    public function testGetSortOrder(): void
     {
         $this->assertEquals($this->sortOrder, $this->adjustment->getSortOrder());
     }

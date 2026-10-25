@@ -119,7 +119,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         $this->load();
 
         $options = [];
-        if (isset($this->_optionsByItem[$itemId])) {
+        // PHP 8.5 Compatibility: Check for null before using as array offset
+        if ($itemId !== null && isset($this->_optionsByItem[$itemId])) {
             foreach ($this->_optionsByItem[$itemId] as $optionId) {
                 $options[] = $this->_items[$optionId];
             }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -88,14 +88,14 @@ class PriceTest extends TestCase
         $this->productMock = $this->createMock(Product::class);
         $this->contextMock = $this->createMock(Context::class);
         $this->customerSessionMock = $this->createMock(Session::class);
-        $this->productRepositoryMock = $this->getMockForAbstractClass(ProductRepositoryInterface::class);
+        $this->productRepositoryMock = $this->createMock(ProductRepositoryInterface::class);
         $this->resultFactoryMock->expects($this->any())
             ->method('create')
             ->with(ResultFactory::TYPE_REDIRECT)
             ->willReturn($this->resultRedirectMock);
-        $this->contextMock->expects($this->any())->method('getRequest')->willReturn($this->requestMock);
-        $this->contextMock->expects($this->any())->method('getResultFactory')->willReturn($this->resultFactoryMock);
-        $this->contextMock->expects($this->any())->method('getMessageManager')->willReturn($this->messageManagerMock);
+        $this->contextMock->method('getRequest')->willReturn($this->requestMock);
+        $this->contextMock->method('getResultFactory')->willReturn($this->resultFactoryMock);
+        $this->contextMock->method('getMessageManager')->willReturn($this->messageManagerMock);
 
         $this->priceController = $this->objectManager->getObject(
             Price::class,
@@ -115,7 +115,7 @@ class PriceTest extends TestCase
             ->method('getById')
             ->with($productId)
             ->willReturn($this->productMock);
-        $this->productMock->expects($this->any())->method('isVisibleInCatalog')->willReturn(false);
+        $this->productMock->method('isVisibleInCatalog')->willReturn(false);
         $this->messageManagerMock->expects($this->once())
             ->method('addErrorMessage')
             ->with(__("The product wasn't found. Verify the product and try again."));

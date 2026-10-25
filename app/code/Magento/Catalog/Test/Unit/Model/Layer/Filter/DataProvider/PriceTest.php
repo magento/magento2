@@ -7,12 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Layer\Filter\DataProvider;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Layer;
 use Magento\Catalog\Model\Layer\Filter\DataProvider\Price;
+use Magento\Catalog\Model\ResourceModel\Layer\Filter\Price as PriceResource;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Store\Model\ScopeInterface;
 
@@ -24,6 +27,7 @@ use PHPUnit\Framework\TestCase;
  */
 class PriceTest extends TestCase
 {
+    use MockCreationTrait;
     /** @var  Collection|MockObject */
     private $productCollection;
 
@@ -36,7 +40,7 @@ class PriceTest extends TestCase
     /** @var ScopeConfigInterface|MockObject */
     private $scopeConfig;
 
-    /** @var \Magento\Catalog\Model\ResourceModel\Layer\Filter\Price|MockObject */
+    /** @var PriceResource|MockObject */
     private $resource;
 
     /**
@@ -46,29 +50,15 @@ class PriceTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->productCollection = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getMaxPrice'])
-            ->getMock();
-        $this->layer = $this->getMockBuilder(Layer::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getProductCollection'])
-            ->getMock();
-        $this->layer->expects($this->any())
-            ->method('getProductCollection')
-            ->willReturn($this->productCollection);
-        $this->coreRegistry = $this->getMockBuilder(Registry::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['registry'])
-            ->getMock();
-        $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getValue'])
-            ->getMockForAbstractClass();
-        $this->resource = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Layer\Filter\Price::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getCount'])
-            ->getMock();
+        $this->productCollection = $this->createPartialMock(Collection::class, ['getMaxPrice']);
+        $this->layer = $this->createPartialMock(Layer::class, ['getProductCollection']);
+        $this->layer->method('getProductCollection')->willReturn($this->productCollection);
+        $this->coreRegistry = $this->createPartialMock(Registry::class, ['registry']);
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $this->resource = $this->createPartialMock(
+            PriceResource::class,
+            ['getCount']
+        );
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->target = $objectManagerHelper->getObject(
             Price::class,
@@ -115,14 +105,12 @@ class PriceTest extends TestCase
     public function testGetPriceRangeWithRangeInFilter()
     {
         /** @var Category|MockObject $category */
-        $category = $this->getMockBuilder(Category::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getFilterPriceRange'])
-            ->getMock();
-        $priceRange = 10;
-        $category->expects($this->once())
-            ->method('getFilterPriceRange')
-            ->willReturn($priceRange);
+        $category = $this->createPartialMockWithReflection(
+            Category::class,
+            ['getFilterPriceRange']
+        );
+        $category->method('getFilterPriceRange')->willReturn(10);
+        
         $this->coreRegistry->expects($this->once())
             ->method('registry')
             ->with('current_category_filter')
@@ -133,14 +121,12 @@ class PriceTest extends TestCase
     public function testGetPriceRangeWithRangeCalculation()
     {
         /** @var Category|MockObject $category */
-        $category = $this->getMockBuilder(Category::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getFilterPriceRange'])
-            ->getMock();
-        $priceRange = 0;
-        $category->expects($this->once())
-            ->method('getFilterPriceRange')
-            ->willReturn($priceRange);
+        $category = $this->createPartialMockWithReflection(
+            Category::class,
+            ['getFilterPriceRange']
+        );
+        $category->method('getFilterPriceRange')->willReturn(0);
+        
         $this->coreRegistry->expects($this->once())
             ->method('registry')
             ->with('current_category_filter')
@@ -162,10 +148,10 @@ class PriceTest extends TestCase
     }
 
     /**
-     * @dataProvider validateFilterDataProvider
      * @param $filter
      * @param $expectedResult
      */
+    #[DataProvider('validateFilterDataProvider')]
     public function testValidateFilter($filter, $expectedResult)
     {
         $this->assertSame($expectedResult, $this->target->validateFilter($filter));

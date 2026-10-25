@@ -72,3 +72,4 @@ Conditions,Conditions
 "Widget ID","Widget ID"
 "Inserting a widget does not create a widget instance.","Inserting a widget does not create a widget instance."
 "Are you sure you want to delete the selected widget(s)?","Are you sure you want to delete the selected widget(s)?"
+"The specified template "%1" is not allowed for this widget type.","The specified template "%1" is not allowed for this widget type."

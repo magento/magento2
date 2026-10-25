@@ -11,6 +11,7 @@ use Magento\Framework\Api\ExtensionAttributesInterface;
 use Magento\Framework\Event\Manager;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Matcher\MethodInvokedAtIndex;
 use Magento\Quote\Api\Data\ShippingAssignmentInterface;
 use Magento\Quote\Api\Data\ShippingInterface;
@@ -36,6 +37,7 @@ use PHPUnit\Framework\TestCase;
  */
 class DiscountTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Discount
      */
@@ -97,8 +99,8 @@ class DiscountTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $this->eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
         $this->discountInterfaceFactoryMock = $this->createMock(RuleDiscountInterfaceFactory::class);
         $this->discountDataInterfaceFactoryMock = $this->createMock(DiscountDataInterfaceFactory::class);
         $this->rulesApplierMock = $this->createMock(RulesApplier::class);
@@ -124,7 +126,7 @@ class DiscountTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->eventManagerMock = $this->createMock(Manager::class);
-        $priceCurrencyMock = $this->getMockForAbstractClass(PriceCurrencyInterface::class);
+        $priceCurrencyMock = $this->createMock(PriceCurrencyInterface::class);
         $priceCurrencyMock->expects($this->any())
             ->method('round')
             ->willReturnCallback(
@@ -133,16 +135,21 @@ class DiscountTest extends TestCase
                 }
             );
 
-        $this->addressMock = $this->getMockBuilder(Address::class)
-            ->addMethods(['getShippingAmount'])
-            ->onlyMethods(
-                ['getQuote','getAllItems','getExtensionAttributes','getCustomAttributesCodes','setBaseDiscountAmount']
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
-        $addressExtension = $this->getMockBuilder(
-            ExtensionAttributesInterface::class
-        )->addMethods(['setDiscounts', 'getDiscounts'])->getMockForAbstractClass();
+        $this->addressMock = $this->createPartialMockWithReflection(
+            Address::class,
+            [
+                'getShippingAmount',
+                'getQuote',
+                'getAllItems',
+                'getExtensionAttributes',
+                'getCustomAttributesCodes',
+                'setBaseDiscountAmount'
+            ]
+        );
+        $addressExtension = $this->createPartialMockWithReflection(
+            ExtensionAttributesInterface::class,
+            ['setDiscounts', 'getDiscounts']
+        );
         $addressExtension->method('getDiscounts')->willReturn([]);
         $addressExtension->expects($this->any())
             ->method('setDiscounts')
@@ -154,9 +161,9 @@ class DiscountTest extends TestCase
             ->method('getCustomAttributesCodes')
             ->willReturn([]);
 
-        $shipping = $this->getMockForAbstractClass(ShippingInterface::class);
+        $shipping = $this->createMock(ShippingInterface::class);
         $shipping->expects($this->any())->method('getAddress')->willReturn($this->addressMock);
-        $this->shippingAssignmentMock = $this->getMockForAbstractClass(ShippingAssignmentInterface::class);
+        $this->shippingAssignmentMock = $this->createMock(ShippingAssignmentInterface::class);
         $this->shippingAssignmentMock->expects($this->any())->method('getShipping')->willReturn($shipping);
         $this->discountFactory = $this->createPartialMock(
             DataFactory::class,
@@ -186,14 +193,14 @@ class DiscountTest extends TestCase
      */
     public function testCollectItemNoDiscount(): void
     {
-        $itemNoDiscount = $this->getMockBuilder(Item::class)
-            ->addMethods(['getNoDiscount'])
-            ->onlyMethods(['getExtensionAttributes', 'getParentItem', 'getId', 'getAddress'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $itemExtension = $this->getMockBuilder(
-            ExtensionAttributesInterface::class
-        )->addMethods(['setDiscounts', 'getDiscounts'])->getMockForAbstractClass();
+        $itemNoDiscount = $this->createPartialMockWithReflection(
+            Item::class,
+            ['getNoDiscount', 'getExtensionAttributes', 'getParentItem', 'getId', 'getAddress']
+        );
+        $itemExtension = $this->createPartialMockWithReflection(
+            ExtensionAttributesInterface::class,
+            ['setDiscounts', 'getDiscounts']
+        );
         $itemExtension->method('getDiscounts')->willReturn([]);
         $itemExtension->expects($this->any())
             ->method('setDiscounts')
@@ -210,10 +217,10 @@ class DiscountTest extends TestCase
             ->willReturn([$this->rule]);
         $this->rule->expects($this->any())->method('getSimpleAction')
             ->willReturn(null);
-        $storeMock = $this->getMockBuilder(Store::class)
-            ->addMethods(['getStore'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $storeMock = $this->createPartialMockWithReflection(
+            Store::class,
+            ['getStore']
+        );
         $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($storeMock);
         $quoteMock = $this->getMockBuilder(Quote::class)
             ->onlyMethods(['getAllAddresses', 'getStoreId'])
@@ -226,14 +233,10 @@ class DiscountTest extends TestCase
         $this->addressMock->expects($this->any())->method('getShippingAmount')->willReturn(true);
         $this->addressMock->expects($this->atLeastOnce())->method('setBaseDiscountAmount')->with(0)->willReturnSelf();
 
-        $totalMock = $this->getMockBuilder(Total::class)
-            ->addMethods(
-                [
-                    'getBaseDiscountAmount'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $totalMock = $this->createPartialMockWithReflection(
+            Total::class,
+            ['getBaseDiscountAmount']
+        );
         $totalMock->expects($this->any())->method('getBaseDiscountAmount')->willReturn(0.0);
 
         $this->assertInstanceOf(
@@ -247,11 +250,10 @@ class DiscountTest extends TestCase
      */
     public function testCollectItemHasParent(): void
     {
-        $itemWithParentId = $this->getMockBuilder(Item::class)
-            ->addMethods(['getNoDiscount'])
-            ->onlyMethods(['getParentItem', 'getId', 'getExtensionAttributes', 'getAddress'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $itemWithParentId = $this->createPartialMockWithReflection(
+            Item::class,
+            ['getNoDiscount', 'getParentItem', 'getId', 'getExtensionAttributes', 'getAddress']
+        );
         $itemWithParentId->expects($this->once())->method('getNoDiscount')->willReturn(false);
         $itemWithParentId->expects($this->any())->method('getId')->willReturn(1);
         $itemWithParentId->expects($this->any())->method('getParentItem')->willReturn(true);
@@ -268,10 +270,10 @@ class DiscountTest extends TestCase
         $this->rule->expects($this->any())->method('getSimpleAction')
             ->willReturn(null);
 
-        $storeMock = $this->getMockBuilder(Store::class)
-            ->addMethods(['getStore'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $storeMock = $this->createPartialMockWithReflection(
+            Store::class,
+            ['getStore']
+        );
         $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($storeMock);
 
         $quoteMock = $this->getMockBuilder(Quote::class)
@@ -285,14 +287,10 @@ class DiscountTest extends TestCase
         $this->addressMock->expects($this->any())->method('getShippingAmount')->willReturn(true);
         $this->addressMock->expects($this->atLeastOnce())->method('setBaseDiscountAmount')->with(0)->willReturnSelf();
         $this->shippingAssignmentMock->expects($this->any())->method('getItems')->willReturn([$itemWithParentId]);
-        $totalMock = $this->getMockBuilder(Total::class)
-            ->addMethods(
-                [
-                    'getBaseDiscountAmount'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $totalMock = $this->createPartialMockWithReflection(
+            Total::class,
+            ['getBaseDiscountAmount']
+        );
         $totalMock->expects($this->any())->method('getBaseDiscountAmount')->willReturn(0.0);
 
         $this->assertInstanceOf(
@@ -306,27 +304,23 @@ class DiscountTest extends TestCase
      */
     public function testCollectItemHasNoChildren(): void
     {
-        $itemWithChildren = $this->getMockBuilder(Item::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(
-                [
-                    'getParentItem',
-                    'isChildrenCalculated',
-                    'getChildren',
-                    'getExtensionAttributes',
-                    'getId',
-                    'getAddress',
-                ]
-            )->addMethods(
-                [
-                    'getNoDiscount',
-                    'getHasChildren',
-                ]
-            )
-            ->getMock();
-        $itemExtension = $this->getMockBuilder(
-            ExtensionAttributesInterface::class
-        )->addMethods(['setDiscounts', 'getDiscounts', 'getId'])->getMock();
+        $itemWithChildren = $this->createPartialMockWithReflection(
+            Item::class,
+            [
+                'getParentItem',
+                'isChildrenCalculated',
+                'getChildren',
+                'getExtensionAttributes',
+                'getId',
+                'getAddress',
+                'getNoDiscount',
+                'getHasChildren',
+            ]
+        );
+        $itemExtension = $this->createPartialMockWithReflection(
+            ExtensionAttributesInterface::class,
+            ['setDiscounts', 'getDiscounts', 'getId']
+        );
         $itemExtension->method('getDiscounts')->willReturn([]);
         $itemExtension->expects($this->any())
             ->method('setDiscounts')
@@ -351,10 +345,10 @@ class DiscountTest extends TestCase
         $this->rule->expects($this->any())->method('getSimpleAction')
             ->willReturn(null);
 
-        $storeMock = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getStore'])
-            ->getMock();
+        $storeMock = $this->createPartialMockWithReflection(
+            Store::class,
+            ['getStore']
+        );
         $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($storeMock);
 
         $quoteMock = $this->getMockBuilder(Quote::class)
@@ -368,14 +362,10 @@ class DiscountTest extends TestCase
         $this->addressMock->expects($this->atLeastOnce())->method('setBaseDiscountAmount')->with(0)->willReturnSelf();
         $this->shippingAssignmentMock->expects($this->any())->method('getItems')->willReturn([$itemWithChildren]);
 
-        $totalMock = $this->getMockBuilder(Total::class)
-            ->addMethods(
-                [
-                    'getBaseDiscountAmount'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $totalMock = $this->createPartialMockWithReflection(
+            Total::class,
+            ['getBaseDiscountAmount']
+        );
         $totalMock->expects($this->any())->method('getBaseDiscountAmount')->willReturn(0.0);
 
         $this->assertInstanceOf(
@@ -399,10 +389,10 @@ class DiscountTest extends TestCase
         ];
 
         $quoteMock = $this->createMock(Quote::class);
-        $totalMock = $this->getMockBuilder(Total::class)
-            ->addMethods(['getDiscountAmount', 'getDiscountDescription', 'getBaseDiscountAmount'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $totalMock = $this->createPartialMockWithReflection(
+            Total::class,
+            ['getDiscountAmount', 'getDiscountDescription', 'getBaseDiscountAmount']
+        );
 
         $totalMock->expects($this->any())->method('getBaseDiscountAmount')->willReturn(0.0);
         $totalMock->expects($this->once())->method('getDiscountAmount')->willReturn($discountAmount);
@@ -419,14 +409,10 @@ class DiscountTest extends TestCase
         $storeId = 1;
         $quote = $this->createMock(Quote::class);
         $quote->expects($this->once())->method('getStoreId')->willReturn($storeId);
-        $total = $this->getMockBuilder(Total::class)
-            ->addMethods(
-                [
-                    'getBaseDiscountAmount'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $total = $this->createPartialMockWithReflection(
+            Total::class,
+            ['getBaseDiscountAmount']
+        );
         $total->expects($this->any())->method('getBaseDiscountAmount')->willReturn(-20.00);
 
         $store = $this->createMock(Store::class);
@@ -441,29 +427,28 @@ class DiscountTest extends TestCase
         $this->validatorMock->expects($this->once())->method('getRules')
             ->with($this->addressMock)
             ->willReturn([$rule1, $rule2]);
-        $item = $this->getMockBuilder(Item::class)
-            ->addMethods(['getNoDiscount', 'getBaseDiscountAmount'])
-            ->onlyMethods(
-                [
-                    'getParentItem',
-                    'getId',
-                    'getExtensionAttributes',
-                    'getAddress',
-                    'getChildren',
-                    'isChildrenCalculated'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $item = $this->createPartialMockWithReflection(
+            Item::class,
+            [
+                'getNoDiscount',
+                'getBaseDiscountAmount',
+                'getParentItem',
+                'getId',
+                'getExtensionAttributes',
+                'getAddress',
+                'getChildren',
+                'isChildrenCalculated'
+            ]
+        );
         $item->expects($this->any())->method('getNoDiscount')->willReturn(false);
         $item->expects($this->any())->method('getId')->willReturn(1);
         $item->expects($this->any())->method('getParentItem')->willReturn(false);
         $item->expects($this->any())->method('getExtensionAttributes')->willReturn(false);
         $item->expects($this->once())->method('getAddress')->willReturn($this->addressMock);
-        $child = $this->getMockBuilder(Item::class)
-            ->addMethods(['getBaseDiscountAmount'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $child = $this->createPartialMockWithReflection(
+            Item::class,
+            ['getBaseDiscountAmount']
+        );
         $item->expects($this->any())->method('getChildren')->willReturn([$child]);
         $item->expects($this->any())->method('isChildrenCalculated')->willReturn(true);
         $index = 1;

@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\Framework\App\Test\Unit;
 
 use Magento\Framework\App\ErrorHandler;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ErrorHandlerTest extends TestCase
@@ -23,13 +24,9 @@ class ErrorHandlerTest extends TestCase
         $this->object = new ErrorHandler();
     }
 
-    /**
-     * @param int $errorNo
-     * @param string $errorStr
-     * @param string $errorFile
-     * @param bool $expectedResult
-     * @dataProvider handlerProvider
+    /**     * @param bool $expectedResult
      */
+    #[DataProvider('handlerProvider')]
     public function testHandler($errorNo, $errorStr, $errorFile, $expectedResult)
     {
         $this->assertEquals($expectedResult, $this->object->handler($errorNo, $errorStr, $errorFile, 11));
@@ -46,13 +43,9 @@ class ErrorHandlerTest extends TestCase
         ];
     }
 
-    /**
-     * Test handler() method with 'false' result
-     *
-     * @param int $errorNo
-     * @param string $errorPhrase
-     * @dataProvider handlerProviderException
+    /**     * @param string $errorPhrase
      */
+    #[DataProvider('handlerProviderException')]
     public function testHandlerException($errorNo, $errorPhrase)
     {
         $errorStr = 'test_string';

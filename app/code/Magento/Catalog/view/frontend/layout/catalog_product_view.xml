@@ -129,6 +129,7 @@
                     <arguments>
                         <argument name="gallery_options" xsi:type="object">Magento\Catalog\Block\Product\View\GalleryOptions</argument>
                         <argument name="imageHelper" xsi:type="object">Magento\Catalog\Helper\Image</argument>
+                        <argument name="view_model" xsi:type="object">Magento\Catalog\ViewModel\Product\Gallery</argument>
                     </arguments>
                 </block>
                 <container name="skip_gallery_after.wrapper" htmlTag="div" htmlClass="action-skip-wrapper">

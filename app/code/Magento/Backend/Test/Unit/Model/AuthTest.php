@@ -13,11 +13,14 @@ use Magento\Framework\Data\Collection\ModelFactory;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class AuthTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Auth
      */
@@ -38,17 +41,21 @@ class AuthTest extends TestCase
      */
     protected $_modelFactoryMock;
 
+    /**
+     * @var ObjectManager
+     */
+    private $objectManager;
+
     protected function setUp(): void
     {
-        $this->_eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
-        $this->_credentialStorage = $this->getMockBuilder(
-            StorageInterface::class
-        )
-            ->addMethods(['getId'])
-            ->getMockForAbstractClass();
+        $this->objectManager = new ObjectManager($this);
+        $this->_eventManagerMock = $this->createMock(ManagerInterface::class);
+        $this->_credentialStorage = $this->createPartialMockWithReflection(
+            StorageInterface::class,
+            ['getId', 'login', 'authenticate', 'reload', 'logout', 'hasAvailableResources', 'setHasAvailableResources']
+        );
         $this->_modelFactoryMock = $this->createMock(ModelFactory::class);
-        $objectManager = new ObjectManager($this);
-        $this->_model = $objectManager->getObject(
+        $this->_model = $this->objectManager->getObject(
             Auth::class,
             [
                 'eventManager' => $this->_eventManagerMock,

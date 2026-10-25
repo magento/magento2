@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Config\Test\Unit\Model\Config\Backend\Email;
 use Magento\Config\Model\Config\Backend\Email\Sender;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class SenderTest extends TestCase
@@ -26,11 +27,11 @@ class SenderTest extends TestCase
     }
 
     /**
-     * @dataProvider beforeSaveDataProvider
      * @param string|null $value
      * @param string|bool $expectedValue false if exception to be thrown
      * @return void
      */
+    #[DataProvider('beforeSaveDataProvider')]
     public function testBeforeSave($value, $expectedValue)
     {
         $this->model->setValue($value);

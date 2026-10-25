@@ -32,16 +32,16 @@ class DeploymentConfig
     /**
      * Configuration data
      *
-     * @var array
+     * @var array|null
      */
-    private $data = [];
+    private ?array $data = null;
 
     /**
      * Flattened data
      *
-     * @var array
+     * @var array|null
      */
-    private $flatData = [];
+    private ?array $flatData = null;
 
     /**
      * Injected configuration data
@@ -51,18 +51,6 @@ class DeploymentConfig
     private $overrideData;
 
     /**
-     * @var array
-     */
-    private $envOverrides = [];
-
-    /**
-     * @var array
-     */
-    private $readerLoad = [];
-
-    /**
-     * Constructor
-     *
      * Data can be optionally injected in the constructor. This object's public interface is intentionally immutable
      *
      * @param DeploymentConfig\Reader $reader
@@ -85,19 +73,11 @@ class DeploymentConfig
      */
     public function get($key = null, $defaultValue = null)
     {
+        $this->loadFlatData();
         if ($key === null) {
-            if (empty($this->flatData)) {
-                $this->reloadData();
-            }
             return $this->flatData;
         }
-        $result = $this->getByKey($key);
-        if ($result === null) {
-            if (empty($this->flatData) || count($this->getAllEnvOverrides())) {
-                $this->reloadData();
-            }
-            $result = $this->getByKey($key);
-        }
+        $result = $this->getByKey($key) ?? $this->getEnvVar($key);
         return $result ?? $defaultValue;
     }
 
@@ -123,17 +103,11 @@ class DeploymentConfig
      */
     public function getConfigData($key = null)
     {
+        $this->loadData();
         if ($key === null) {
-            if (empty($this->data)) {
-                $this->reloadInitialData();
-            }
             return $this->data;
         }
         $result = $this->getConfigDataByKey($key);
-        if ($result === null) {
-            $this->reloadInitialData();
-            $result = $this->getConfigDataByKey($key);
-        }
         return $result;
     }
 
@@ -144,8 +118,8 @@ class DeploymentConfig
      */
     public function resetData()
     {
-        $this->data = [];
-        $this->flatData = [];
+        $this->data = null;
+        $this->flatData = null;
     }
 
     /**
@@ -181,16 +155,19 @@ class DeploymentConfig
      * @throws FileSystemException
      * @throws RuntimeException
      */
-    private function reloadInitialData(): void
+    private function loadData(): void
     {
-        if (empty($this->readerLoad) || empty($this->data) || empty($this->flatData)) {
-            $this->readerLoad = $this->reader->load();
+        if (null !== $this->data) {
+            return;
         }
+
+        $data = $this->reader->load();
         $this->data = array_replace(
-            $this->readerLoad,
+            $data,
             $this->overrideData ?? [],
             $this->getEnvOverride()
         );
+        $this->flatData = null;
     }
 
     /**
@@ -200,12 +177,31 @@ class DeploymentConfig
      * @throws FileSystemException
      * @throws RuntimeException
      */
-    private function reloadData(): void
+    private function loadFlatData(): void
     {
-        $this->reloadInitialData();
+        $this->loadData();
+        if (null !== $this->flatData) {
+            return;
+        }
+
         // flatten data for config retrieval using get()
         $this->flatData = $this->flattenParams($this->data);
-        $this->flatData = $this->getAllEnvOverrides() + $this->flatData;
+        $this->flatData = $this->getEnvVars() + $this->flatData;
+    }
+
+    /**
+     * Normalize environment variable
+     *
+     * @param string $value
+     * @return string|bool
+     */
+    private function normalizeEnvVar(string $value): string|bool
+    {
+        return match ($value) {
+            'true', 'TRUE' => true,
+            'false', 'FALSE' => false,
+            default => $value,
+        };
     }
 
     /**
@@ -213,27 +209,35 @@ class DeploymentConfig
      *
      * @return array
      */
-    private function getAllEnvOverrides(): array
+    private function getEnvVars(): array
     {
-        if (empty($this->envOverrides)) {
-            // allow reading values from env variables by convention
-            // MAGENTO_DC_{path}, like db/connection/default/host =>
-            // can be overwritten by MAGENTO_DC_DB__CONNECTION__DEFAULT__HOST
-            foreach (getenv() as $key => $value) {
-                if (false !== \strpos($key, self::MAGENTO_ENV_PREFIX)
-                    && $key !== self::OVERRIDE_KEY
-                ) {
-                    // convert MAGENTO_DC_DB__CONNECTION__DEFAULT__HOST into db/connection/default/host
-                    $flatKey = strtolower(str_replace([self::MAGENTO_ENV_PREFIX, '__'], ['', '/'], $key));
-                    $this->envOverrides[$flatKey] = match ($value) {
-                        'true', 'TRUE' => true,
-                        'false', 'FALSE' => false,
-                        default => $value,
-                    };
-                }
+        $envVars = [];
+        // allow reading values from env variables by convention
+        // MAGENTO_DC_{path}, like db/connection/default/host =>
+        // can be overwritten by MAGENTO_DC_DB__CONNECTION__DEFAULT__HOST
+        foreach (getenv() as $key => $value) {
+            if (false !== \strpos($key, self::MAGENTO_ENV_PREFIX) && $key !== self::OVERRIDE_KEY) {
+                // convert MAGENTO_DC_DB__CONNECTION__DEFAULT__HOST into db/connection/default/host
+                $flatKey = strtolower(str_replace([self::MAGENTO_ENV_PREFIX, '__'], ['', '/'], $key));
+                $envVars[$flatKey] = $this->normalizeEnvVar($value);
             }
         }
-        return $this->envOverrides;
+
+        return $envVars;
+    }
+
+    /**
+     * Get environment variable
+     *
+     * @param string $key
+     * @return string|bool|null
+     */
+    private function getEnvVar(string $key): string|bool|null
+    {
+        $envVar = self::MAGENTO_ENV_PREFIX . str_replace('/', '__', strtoupper($key));
+        $value = getenv($envVar);
+
+        return $value !== false ? $this->normalizeEnvVar($value) : null;
     }
 
     /**
@@ -286,10 +290,10 @@ class DeploymentConfig
     /**
      * Returns flat data by key
      *
-     * @param string|null $key
+     * @param string $key
      * @return mixed|null
      */
-    private function getByKey(?string $key)
+    private function getByKey(string $key)
     {
         if (array_key_exists($key, $this->flatData) && $this->flatData[$key] === null) {
             return '';

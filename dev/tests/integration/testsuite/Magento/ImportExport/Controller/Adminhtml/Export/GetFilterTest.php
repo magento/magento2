@@ -59,22 +59,22 @@ class GetFilterTest extends AbstractBackendController
     {
         return [
             'catalog_product' => [
-                'entityType' => 'catalog_product',
-                'expectedFilters' => [
+                'catalog_product',
+                [
                     'export_filter[sku]',
                     'export_filter[website_ids][]'
                 ]
             ],
             'advanced_pricing' => [
-                'entityType' => 'advanced_pricing',
-                'expectedFilters' => [
+                'advanced_pricing',
+                [
                     'export_filter[sku]',
                     'export_filter[website_ids][]'
                 ]
             ],
             'customer' => [
-                'entityType' => 'customer',
-                'expectedFilters' => [
+                'customer',
+                [
                     'export_filter[email]',
                 ]
             ]

@@ -165,37 +165,34 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
      */
     private function sanitizeProductAttributes($attributesData)
     {
+        $normalised = [];
         foreach ($attributesData as $attributeCode => $value) {
             if ($attributeCode === ProductAttributeInterface::CODE_HAS_WEIGHT) {
+                $normalised[$attributeCode] = $value;
                 continue;
             }
-
             $attribute = $this->eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $attributeCode);
-
             if (!$attribute->getAttributeId()) {
-                unset($attributesData[$attributeCode]);
                 continue;
             }
+            $canonicalCode = $attribute->getAttributeCode();
 
             if ($attribute->getBackendType() === 'datetime') {
-                $attributesData[$attributeCode] = $this->filterDate(
+                $value = $this->filterDate(
                     $value,
                     $attribute->getFrontendInput() === 'datetime'
                 );
             } elseif ($attribute->getFrontendInput() === 'multiselect') {
-                // Check if 'Change' checkbox has been checked by admin for this attribute
-                $isChanged = (bool)$this->getRequest()->getPost('toggle_' . $attributeCode);
+                $isChanged = (bool)$this->getRequest()->getPost('toggle_' . $canonicalCode);
                 if (!$isChanged) {
-                    unset($attributesData[$attributeCode]);
                     continue;
                 }
-                if (is_array($value)) {
-                    $value = implode(',', $value);
-                }
-                $attributesData[$attributeCode] = $value;
+                $value = is_array($value) ? implode(',', $value) : $value;
             }
+
+            $normalised[$canonicalCode] = $value;
         }
-        return $attributesData;
+        return $normalised;
     }
 
     /**
@@ -229,9 +226,22 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
         $product = $this->productFactory->create();
         $product->setData($attributesData);
 
-        foreach (array_keys($attributesData) as $attributeCode) {
-            $attribute = $this->eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $attributeCode);
-            $attribute->getBackend()->validate($product);
+        // Ensure Special Price From Date cannot exceed To Date during mass update
+        if (array_key_exists('special_from_date', $attributesData)
+            || array_key_exists('special_to_date', $attributesData)) {
+            $this->eavConfig
+                ->getAttribute(\Magento\Catalog\Model\Product::ENTITY, 'special_from_date')
+                ->setMaxValue($product->getSpecialToDate());
+        }
+
+        try {
+            foreach (array_keys($attributesData) as $attributeCode) {
+                $attribute = $this->eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $attributeCode);
+                $attribute->getBackend()->validate($product);
+            }
+        } catch (\Magento\Eav\Model\Entity\Attribute\Exception $e) {
+            // Re-throw as LocalizedException so the specific validation message is displayed
+            throw new LocalizedException(__($e->getMessage()));
         }
     }
 
