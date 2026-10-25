@@ -6,7 +6,9 @@
 
 namespace Magento\Eav\Setup;
 
+use Magento\Catalog\Model\Product;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
@@ -148,85 +150,148 @@ class EavSetupTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Verify that addAttributeToGroup adds the attribute to the specified group and its attribute set.
+     * Verify that addAttributeToGroup assigns the attribute to the given group.
      */
     public function testAddAttributeToGroup(): void
     {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var ModuleDataSetupInterface $setup */
-        $setup = $objectManager->create(ModuleDataSetupInterface::class);
+        $this->addAttributeWithGroup('eav_setup_test_add_to_group', 'eav_setup_test_add_group');
+        $this->assertSame([], $this->getGroupAssignments('eav_setup_test_add_to_group', 'eav_setup_test_add_group'));
 
-        $attributeData = $this->getAttributeData();
-        $uniqueAttributeName = 'db24abf125674bceabbbd9977bfc4ada';
-        $uniqueGroupName = '64a9ed905ca74cbd86533600a3604d43';
-        $this->eavSetup->addAttribute(\Magento\Catalog\Model\Product::ENTITY, $uniqueAttributeName, $attributeData);
-        $this->eavSetup->addAttributeGroup(\Magento\Catalog\Model\Product::ENTITY, 'Default', $uniqueGroupName);
+        $this->eavSetup->addAttributeToGroup(
+            Product::ENTITY,
+            'Default',
+            'eav_setup_test_add_group',
+            'eav_setup_test_add_to_group'
+        );
 
-        $entityTypeId = $this->eavSetup->getEntityTypeId(\Magento\Catalog\Model\Product::ENTITY);
-        $setId = $this->eavSetup->getAttributeSetId(\Magento\Catalog\Model\Product::ENTITY, 'Default');
-        $groupId = $this->eavSetup->getAttributeGroupId(\Magento\Catalog\Model\Product::ENTITY, $setId, $uniqueGroupName);
-        $attributeId = $this->eavSetup->getAttributeId(\Magento\Catalog\Model\Product::ENTITY, $uniqueAttributeName);
-        $select = $setup->getConnection()->select()
-            ->from($setup->getTable('eav_entity_attribute'))
-            ->where('entity_type_id = ?', $entityTypeId)
-            ->where('attribute_set_id = ?', $setId)
-            ->where('attribute_group_id = ?', $groupId)
-            ->where('attribute_id = ?', $attributeId);
-
-        // Make sure that the attribute is not assigned to the group already.
-        $row = $select->query()->fetch();
-        $this->assertFalse($row);
-
-        // The actual action
-        $this->eavSetup->addAttributeToGroup($entityTypeId, $setId, $groupId, $attributeId);
-
-        $row = $select->query()->fetch();
-        $this->assertIsArray($row);
-        $this->assertSame($entityTypeId, $row['entity_type_id']);
-        $this->assertSame($setId, $row['attribute_set_id']);
-        $this->assertSame($groupId, $row['attribute_group_id']);
-        $this->assertSame($attributeId, $row['attribute_id']);
+        $this->assertCount(1, $this->getGroupAssignments('eav_setup_test_add_to_group', 'eav_setup_test_add_group'));
     }
 
     /**
-     * Verify that testRemoveAttributeFromGroup removes the attribute from the specified group and attribute set.
+     * Verify that removeAttributeFromGroup removes the assignment when called with codes and names or with IDs.
+     *
+     * @param string $attributeCode
+     * @param string $groupName
+     * @param bool $useIds
      */
-    public function testRemoveAttributeFromGroup(): void
+    #[DataProvider('removeAttributeFromGroupDataProvider')]
+    public function testRemoveAttributeFromGroup(string $attributeCode, string $groupName, bool $useIds): void
     {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var ModuleDataSetupInterface $setup */
-        $setup = $objectManager->create(ModuleDataSetupInterface::class);
+        $this->addAttributeWithGroup($attributeCode, $groupName);
+        $this->eavSetup->addAttributeToGroup(Product::ENTITY, 'Default', $groupName, $attributeCode);
+        $this->assertCount(1, $this->getGroupAssignments($attributeCode, $groupName));
 
-        $attributeData = $this->getAttributeData();
-        $uniqueAttributeName = 'e0db51820df24b6fb6a181571aab8823';
-        $uniqueGroupName = 'c6771ccb1ab549378a87ecd6cb1d1352';
-        $this->eavSetup->addAttribute(\Magento\Catalog\Model\Product::ENTITY, $uniqueAttributeName, $attributeData);
-        $this->eavSetup->addAttributeGroup(\Magento\Catalog\Model\Product::ENTITY, 'Default', $uniqueGroupName);
+        $arguments = [Product::ENTITY, 'Default', $groupName, $attributeCode];
+        if ($useIds) {
+            $entityTypeId = $this->eavSetup->getEntityTypeId(Product::ENTITY);
+            $setId = $this->eavSetup->getAttributeSetId($entityTypeId, 'Default');
+            $arguments = [
+                $entityTypeId,
+                $setId,
+                $this->eavSetup->getAttributeGroupId($entityTypeId, $setId, $groupName),
+                $this->eavSetup->getAttributeId($entityTypeId, $attributeCode),
+            ];
+        }
+        $this->assertSame($this->eavSetup, $this->eavSetup->removeAttributeFromGroup(...$arguments));
 
-        $entityTypeId = $this->eavSetup->getEntityTypeId(\Magento\Catalog\Model\Product::ENTITY);
-        $setId = $this->eavSetup->getAttributeSetId(\Magento\Catalog\Model\Product::ENTITY, 'Default');
-        $groupId = $this->eavSetup->getAttributeGroupId(\Magento\Catalog\Model\Product::ENTITY, $setId, $uniqueGroupName);
-        $attributeId = $this->eavSetup->getAttributeId(\Magento\Catalog\Model\Product::ENTITY, $uniqueAttributeName);
-        $this->eavSetup->addAttributeToGroup($entityTypeId, $setId, $groupId, $attributeId);
+        $this->assertSame([], $this->getGroupAssignments($attributeCode, $groupName));
+        $this->assertSame($this->eavSetup, $this->eavSetup->removeAttributeFromGroup(...$arguments));
+    }
 
+    /**
+     * Data provider for testRemoveAttributeFromGroup().
+     *
+     * @return array
+     */
+    public static function removeAttributeFromGroupDataProvider(): array
+    {
+        return [
+            'codes and names' => ['eav_setup_test_remove_by_code', 'eav_setup_test_remove_by_code_group', false],
+            'IDs' => ['eav_setup_test_remove_by_id', 'eav_setup_test_remove_by_id_group', true],
+        ];
+    }
+
+    /**
+     * Verify that removeAttributeFromGroup keeps other assignments of the group.
+     */
+    public function testRemoveAttributeFromGroupKeepsOtherAttributes(): void
+    {
+        $this->addAttributeWithGroup('eav_setup_test_removed', 'eav_setup_test_shared_group');
+        $this->eavSetup->addAttribute(Product::ENTITY, 'eav_setup_test_kept', $this->getAttributeData());
+        foreach (['eav_setup_test_removed', 'eav_setup_test_kept'] as $attributeCode) {
+            $this->eavSetup->addAttributeToGroup(
+                Product::ENTITY,
+                'Default',
+                'eav_setup_test_shared_group',
+                $attributeCode
+            );
+        }
+
+        $this->eavSetup->removeAttributeFromGroup(
+            Product::ENTITY,
+            'Default',
+            'eav_setup_test_shared_group',
+            'eav_setup_test_removed'
+        );
+
+        $this->assertSame([], $this->getGroupAssignments('eav_setup_test_removed', 'eav_setup_test_shared_group'));
+        $this->assertCount(1, $this->getGroupAssignments('eav_setup_test_kept', 'eav_setup_test_shared_group'));
+    }
+
+    /**
+     * Verify that an unknown group is not resolved to the default group of the attribute set.
+     */
+    public function testRemoveAttributeFromUnknownGroupKeepsDefaultGroupAssignment(): void
+    {
+        $this->eavSetup->addAttribute(Product::ENTITY, 'eav_setup_test_default_group', $this->getAttributeData());
+        $entityTypeId = $this->eavSetup->getEntityTypeId(Product::ENTITY);
+        $setId = $this->eavSetup->getAttributeSetId($entityTypeId, 'Default');
+        $defaultGroupId = $this->eavSetup->getDefaultAttributeGroupId($entityTypeId, $setId);
+        $this->eavSetup->addAttributeToGroup($entityTypeId, $setId, $defaultGroupId, 'eav_setup_test_default_group');
+        $this->assertCount(1, $this->getGroupAssignments('eav_setup_test_default_group', $defaultGroupId));
+
+        $this->eavSetup->removeAttributeFromGroup(
+            Product::ENTITY,
+            'Default',
+            'eav_setup_test_unknown_group',
+            'eav_setup_test_default_group'
+        );
+
+        $this->assertCount(1, $this->getGroupAssignments('eav_setup_test_default_group', $defaultGroupId));
+    }
+
+    /**
+     * Add an attribute and a group to the default product attribute set.
+     *
+     * @param string $attributeCode
+     * @param string $groupName
+     */
+    private function addAttributeWithGroup(string $attributeCode, string $groupName): void
+    {
+        $this->eavSetup->addAttribute(Product::ENTITY, $attributeCode, $this->getAttributeData());
+        $this->eavSetup->addAttributeGroup(Product::ENTITY, 'Default', $groupName);
+    }
+
+    /**
+     * Get the rows assigning the attribute to the group of the default product attribute set.
+     *
+     * @param string $attributeCode
+     * @param int|string $groupId
+     * @return array
+     */
+    private function getGroupAssignments(string $attributeCode, int|string $groupId): array
+    {
+        $entityTypeId = $this->eavSetup->getEntityTypeId(Product::ENTITY);
+        $setId = $this->eavSetup->getAttributeSetId($entityTypeId, 'Default');
+        $setup = Bootstrap::getObjectManager()->get(ModuleDataSetupInterface::class);
         $select = $setup->getConnection()->select()
             ->from($setup->getTable('eav_entity_attribute'))
             ->where('entity_type_id = ?', $entityTypeId)
             ->where('attribute_set_id = ?', $setId)
-            ->where('attribute_group_id = ?', $groupId)
-            ->where('attribute_id = ?', $attributeId);
+            ->where('attribute_group_id = ?', $this->eavSetup->getAttributeGroupId($entityTypeId, $setId, $groupId))
+            ->where('attribute_id = ?', $this->eavSetup->getAttributeId($entityTypeId, $attributeCode));
 
-        // Make sure that the attribute is assigned to the group.
-        $row = $select->query()->fetch();
-        $this->assertIsArray($row);
-        $this->assertNotEmpty($row['entity_attribute_id']);
-
-        // The actual action
-        $this->eavSetup->removeAttributeFromGroup($entityTypeId, $setId, $groupId, $attributeId);
-
-        // Make sure that the attribute was removed from the group
-        $row = $select->query()->fetch();
-        $this->assertFalse($row);
+        return $setup->getConnection()->fetchAll($select);
     }
 
     /**

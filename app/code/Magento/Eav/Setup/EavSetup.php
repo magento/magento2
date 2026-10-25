@@ -1348,38 +1348,37 @@ class EavSetup
     }
 
     /**
-     * Remove an attribute from a group and an attribute set.
+     * Remove attribute from group
      *
+     * Unlike addAttributeToGroup(), an unknown group is not replaced with the default group of the set.
+     * Nothing is removed when the group, the attribute or the assignment does not exist.
+     *
+     * @param int|string $entityTypeId
+     * @param int|string $setId
+     * @param int|string $groupId
+     * @param int|string $attributeId
      * @return $this
+     * @throws LocalizedException
      */
-    public function removeAttributeFromGroup(int|string $entityTypeId, int|string $setId, int|string $groupId, int|string $attributeId): static
+    public function removeAttributeFromGroup($entityTypeId, $setId, $groupId, $attributeId)
     {
         $entityTypeId = $this->getEntityTypeId($entityTypeId);
         $setId = $this->getAttributeSetId($entityTypeId, $setId);
-        $groupId = $this->getAttributeGroupId($entityTypeId, $setId, $groupId);
+        $groupId = $this->getAttributeGroup($entityTypeId, $setId, $groupId, 'attribute_group_id');
         $attributeId = $this->getAttributeId($entityTypeId, $attributeId);
-
-        $table = $this->setup->getTable('eav_entity_attribute');
-        $select = $this->setup->getConnection()->select()->from($table)
-            ->where('entity_type_id = :entity_type_id')
-            ->where('attribute_set_id = :attribute_set_id')
-            ->where('attribute_group_id = :attribute_group_id')
-            ->where('attribute_id = :attribute_id');
-
-        $row = $this->setup->getConnection()->fetchRow($select, [
-            'entity_type_id' => $entityTypeId,
-            'attribute_set_id' => $setId,
-            'attribute_group_id' => $groupId,
-            'attribute_id' => $attributeId,
-        ]);
-
-        if (false === $row) {
+        if (!is_numeric($groupId) || !is_numeric($attributeId)) {
             return $this;
         }
 
-        $this->setup->getConnection()->delete($table, [
-            'entity_attribute_id = ?' => $row['entity_attribute_id'],
-        ]);
+        $this->setup->getConnection()->delete(
+            $this->setup->getTable('eav_entity_attribute'),
+            [
+                'entity_type_id = ?' => (int)$entityTypeId,
+                'attribute_set_id = ?' => (int)$setId,
+                'attribute_group_id = ?' => (int)$groupId,
+                'attribute_id = ?' => (int)$attributeId,
+            ]
+        );
 
         return $this;
     }
