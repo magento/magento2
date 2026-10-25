@@ -119,6 +119,34 @@ class EavSetupTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Verify that a rejected attribute code does not make the next valid attribute code fail.
+     */
+    public function testAddAttributeAfterInvalidAttributeCode(): void
+    {
+        $attributeData = $this->getAttributeData();
+        try {
+            $this->eavSetup->addAttribute(
+                \Magento\Catalog\Model\Product::ENTITY,
+                'attribute.with.dots',
+                $attributeData
+            );
+            $this->fail('An invalid attribute code must be rejected.');
+        } catch (\Magento\Framework\Exception\LocalizedException $exception) {
+            $this->assertStringContainsString('Please use only letters', $exception->getMessage());
+        }
+
+        $this->eavSetup->addAttribute(
+            \Magento\Catalog\Model\Product::ENTITY,
+            'eav_setup_test_after_invalid',
+            $attributeData
+        );
+
+        $this->assertNotEmpty(
+            $this->eavSetup->getAttributeId(\Magento\Catalog\Model\Product::ENTITY, 'eav_setup_test_after_invalid')
+        );
+    }
+
+    /**
      * Get simple attribute data.
      */
     private function getAttributeData()
