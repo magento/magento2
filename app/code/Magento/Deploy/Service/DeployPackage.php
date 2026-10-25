@@ -7,15 +7,19 @@ namespace Magento\Deploy\Service;
 
 use Magento\Deploy\Package\Package;
 use Magento\Deploy\Package\PackageFile;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\State as AppState;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Locale\ResolverInterface as LocaleResolver;
+use Magento\Framework\Translate\Js\Config as JsTranslationConfig;
 use Magento\Framework\View\Asset\ContentProcessorException;
 use Magento\Deploy\Console\InputValidator;
 use Psr\Log\LoggerInterface;
 
 /**
  * Deploy package service
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DeployPackage
 {
@@ -66,23 +70,39 @@ class DeployPackage
     private $errorsCount = 0;
 
     /**
+     * @var JsTranslationConfig
+     */
+    private $jsTranslationConfig;
+
+    /**
+     * Whether the package being deployed resolves the same LESS/CSS sources as its parent
+     *
+     * @var bool
+     */
+    private $styleSourcesMatchParent = false;
+
+    /**
      * DeployPackage constructor
      *
      * @param AppState $appState
      * @param LocaleResolver $localeResolver
      * @param DeployStaticFile $deployStaticFile
      * @param LoggerInterface $logger
+     * @param JsTranslationConfig|null $jsTranslationConfig
      */
     public function __construct(
         AppState $appState,
         LocaleResolver $localeResolver,
         DeployStaticFile $deployStaticFile,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        ?JsTranslationConfig $jsTranslationConfig = null
     ) {
         $this->appState = $appState;
         $this->localeResolver = $localeResolver;
         $this->deployStaticFile = $deployStaticFile;
         $this->logger = $logger;
+        $this->jsTranslationConfig = $jsTranslationConfig
+            ?? ObjectManager::getInstance()->get(JsTranslationConfig::class);
     }
 
     /**
@@ -119,6 +139,11 @@ class DeployPackage
     {
         $this->count = 0;
         $this->errorsCount = 0;
+        $parentPackage = $package->getParent();
+        // In developer mode the Less processor embeds a source map with package specific paths
+        $this->styleSourcesMatchParent = $parentPackage
+            && $this->appState->getMode() !== AppState::MODE_DEVELOPER
+            && $this->getStyleSources($package) === $this->getStyleSources($parentPackage);
         $this->register($package, null, $skipLogging);
 
         /** @var PackageFile $file */
@@ -202,6 +227,10 @@ class DeployPackage
     /**
      * Check if file can be copied from parent package
      *
+     * Copying is opt-in through the copy_from_parent param. A parent set by another strategy, such as the closest
+     * ancestor in compact deploy, can hold output that was rewritten for its own scope.
+     *
+     * @see \Magento\Deploy\Strategy\QuickDeploy::addToQueue()
      * @param PackageFile $file
      * @param Package $package
      * @param Package $parentPackage
@@ -210,14 +239,81 @@ class DeployPackage
     private function checkIfCanCopy(PackageFile $file, Package $package, ?Package $parentPackage = null)
     {
         return $parentPackage
+            && $package->getParam('copy_from_parent')
             && $file->getOrigPackage() !== $package
-            && (
-                $file->getArea() !== $package->getArea()
-                || $file->getTheme() !== $package->getTheme()
-                || $file->getLocale() !== $package->getLocale()
-            )
-            && $file->getOrigPackage() === $parentPackage
-            && $this->deployStaticFile->readFile($file->getDeployedFileId(), $parentPackage->getPath());
+            && $this->isOutputPackageIndependent($file, $package)
+            && $this->hasSameSourceInParent($file, $parentPackage)
+            && $this->deployStaticFile->fileExists($file->getDeployedFileId(), $parentPackage->getPath());
+    }
+
+    /**
+     * Check if parent package resolves the given file to the same source file
+     *
+     * @param PackageFile $file
+     * @param Package $parentPackage
+     * @return bool
+     */
+    private function hasSameSourceInParent(PackageFile $file, Package $parentPackage): bool
+    {
+        $parentFile = $parentPackage->getFile($file->getFileId());
+        return $parentFile
+            && $file->getSourcePath()
+            && $parentFile->getSourcePath() === $file->getSourcePath();
+    }
+
+    /**
+     * Check if processing the file gives the same result in the package and in its parent
+     *
+     * @param PackageFile $file
+     * @param Package $package
+     * @return bool
+     */
+    private function isOutputPackageIndependent(PackageFile $file, Package $package): bool
+    {
+        return match ($file->getExtension()) {
+            // Compiled CSS depends on the whole @import graph resolved through theme and locale fallback, so the
+            // full set of style sources decides. The file scope says nothing here: the Less and Css pre-processors
+            // re-scope an inherited root to the package whenever the package holds any of its imports, which
+            // aggregation guarantees.
+            'less', 'css' => $this->styleSourcesMatchParent,
+            // The embedded translation strategy writes theme and locale specific phrases into every JS file.
+            // The framework Translate\Js\Config only exposes dictionaryEnabled(), so the "none" strategy also
+            // gives false here. That is merely conservative, JS is not rewritten under "none". The Translation
+            // module's isEmbeddedStrategy() is out of reach without a dependency Deploy does not have.
+            'js' => $this->isCollectedForOtherScope($file, $package)
+                && $this->jsTranslationConfig->dictionaryEnabled(),
+            default => $this->isCollectedForOtherScope($file, $package),
+        };
+    }
+
+    /**
+     * Check if the file was collected for another area, theme or locale than the package
+     *
+     * @param PackageFile $file
+     * @param Package $package
+     * @return bool
+     */
+    private function isCollectedForOtherScope(PackageFile $file, Package $package): bool
+    {
+        return $file->getArea() !== $package->getArea()
+            || $file->getTheme() !== $package->getTheme()
+            || $file->getLocale() !== $package->getLocale();
+    }
+
+    /**
+     * Get source paths of all LESS and CSS files of the package, keyed by file id
+     *
+     * @param Package $package
+     * @return array
+     */
+    private function getStyleSources(Package $package): array
+    {
+        $sources = [];
+        foreach (array_merge($package->getFilesByType('less'), $package->getFilesByType('css')) as $fileId => $file) {
+            $sources[$fileId] = $file->getSourcePath();
+        }
+        ksort($sources);
+        return $sources;
     }
 
     /**
