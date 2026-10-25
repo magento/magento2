@@ -57,7 +57,10 @@ class FileFactory
      *
      * @param string $fileName
      * @param string|array $content set to null to avoid starting output, $contentLength should be set explicitly in
-     *                              that case
+     *                              that case. An array takes 'type' ('filename' or 'string') and 'value', plus
+     *                              optional 'rm' to delete the file after sending and optional boolean
+     *                              'attachment' (default true); false omits the attachment Content-Disposition
+     *                              header so the browser can display the file inline
      * @param string $baseDir
      * @param string $contentType
      * @param int $contentLength explicit content length, if strlen($content) isn't applicable
@@ -108,7 +111,7 @@ class FileFactory
                 'contentLength' => $contentLength,
                 'directoryCode' => $baseDir,
                 'remove' => is_array($content) && !empty($content['rm']),
-                'attachment' => $content['attachment'] ?? true
+                'attachment' => !is_array($content) || (bool)($content['attachment'] ?? true)
             ]
         ]);
     }
