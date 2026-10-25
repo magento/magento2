@@ -13,6 +13,7 @@
     </head>
     <body>
         <referenceBlock name="head.critical">
+            <!-- Set a "file_path" string argument on critical_css_block to use another critical CSS file for a handle -->
             <block name="critical_css_block" as="critical_css" template="Magento_Theme::html/header/criticalCss.phtml" ifconfig="dev/css/use_css_critical_path">
                 <arguments>
                     <argument name="criticalCssViewModel" xsi:type="object">Magento\Theme\Block\Html\Header\CriticalCss</argument>

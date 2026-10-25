@@ -5,11 +5,17 @@
  */
 
 /**
+ * @var \Magento\Framework\View\Element\Template $block
  * @var \Magento\Theme\Block\Html\Header\CriticalCss $criticalCssViewModel
  */
 ?>
-<?php $criticalCssViewModel = $block->getData('criticalCssViewModel'); ?>
+<?php
+$criticalCssViewModel = $block->getData('criticalCssViewModel');
+$filePath = $block->getData('file_path');
+?>
 
 <style type="text/css" data-type="criticalCss">
-    <?= /* @noEscape */ $criticalCssViewModel->getCriticalCssData() ?>
+    <?= /* @noEscape */ is_string($filePath) && $filePath !== ''
+        ? $criticalCssViewModel->getCriticalCssDataByPath($filePath)
+        : $criticalCssViewModel->getCriticalCssData() ?>
 </style>
